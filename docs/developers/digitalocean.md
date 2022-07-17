@@ -8,7 +8,11 @@ sidebar_label: DigitalOcean
 
 Start by making sure that you've gone through [our notes of some things to consider before deploying](before_deploying).
 
-**Warning:** This documentation is incomplete; it lacks platform-specific guidelines. However, most of the steps you'll need to follow are identical to [what you'll need to do on Heroku](./heroku) because use Docker images for deployment there as well. Deploying to DigitalOcean is more convenient because you can pull Docker images straight from Docker Hub without having to use an intermediary container registry.
+**Warning:** Documentation for deployment to DigitalOcean is incomplete; it lacks platform-specific guidelines.
+
+However, most of the steps you'll need to follow are identical to [what you'll need to do on Heroku](./heroku). This is because we use Docker images for deployment there as well.
+
+Deploying to DigitalOcean is more convenient than Heroku because you can pull Docker images straight from Docker Hub without having to use an intermediary container registry.
 
 ## Deploy using images from Docker Hub
 

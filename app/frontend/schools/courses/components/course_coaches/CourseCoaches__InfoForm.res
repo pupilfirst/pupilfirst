@@ -51,7 +51,7 @@ module CoachInfoQuery = %graphql(`
 let loadCoachStudents = (courseId, coachId, send) => {
   let filterString =
     Webapi.Url.URLSearchParams.makeWithArray([
-      ("personal_coach", coachId),
+      ("personal_coach", `${coachId};`),
     ])->Webapi.Url.URLSearchParams.toString
 
   CoachInfoQuery.fetch({courseId, coachId, filterString})

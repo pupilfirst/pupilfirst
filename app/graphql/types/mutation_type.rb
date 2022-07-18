@@ -100,8 +100,8 @@ module Types
     field :update_course_author,
           mutation: Mutations::UpdateCourseAuthor,
           null: false
-    field :delete_coach_team_enrollment,
-          mutation: Mutations::DeleteCoachTeamEnrollment,
+    field :delete_coach_student_enrollment,
+          mutation: Mutations::DeleteCoachStudentEnrollment,
           null: false
     field :create_topic, mutation: Mutations::CreateTopic, null: false
     field :update_topic, mutation: Mutations::UpdateTopic, null: false

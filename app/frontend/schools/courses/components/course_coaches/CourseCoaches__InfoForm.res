@@ -5,7 +5,7 @@ let str = React.string
 let tr = I18n.t(~scope="components.CourseCoaches__InfoForm")
 
 type rec state = {
-  teams: array<Team.t>,
+  students: array<Student.t>,
   loading: bool,
   stats: stats,
 }
@@ -15,31 +15,28 @@ and stats = {
 }
 
 let initialStats = {reviewedSubmissions: 0, pendingSubmissions: 0}
-let initialState = {teams: [], loading: true, stats: initialStats}
+let initialState = {students: [], loading: true, stats: initialStats}
 
 type action =
-  | LoadCoachInfo(array<Team.t>, stats)
-  | RemoveTeam(string)
+  | LoadCoachInfo(array<Student.t>, stats)
+  | RemoveStudent(string)
 
 let reducer = (state, action) =>
   switch action {
-  | LoadCoachInfo(teams, stats) => {teams: teams, stats: stats, loading: false}
-  | RemoveTeam(id) => {
+  | LoadCoachInfo(students, stats) => {students, stats, loading: false}
+  | RemoveStudent(id) => {
       ...state,
-      teams: state.teams |> Js.Array.filter(team => Team.id(team) != id),
+      students: state.students |> Js.Array.filter(student => Student.id(student) != id),
     }
   }
 
 module CoachInfoQuery = %graphql(`
-    query CoachInfoQuery($courseId: ID!, $coachId: ID!, $coachNotes: CoachNoteFilter!) {
-      teams(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, first: 100, tags: []) {
+    query CoachInfoQuery($courseId: ID!, $coachId: ID!, $filterString: String!) {
+      courseStudents(courseId: $courseId, filterString: $filterString, first: 100 ) {
         nodes {
           id,
-          name,
-          students {
-            user {
-              name
-            }
+          user {
+            name
           }
         }
       }
@@ -51,27 +48,37 @@ module CoachInfoQuery = %graphql(`
     }
   `)
 
-let loadCoachTeams = (courseId, coachId, send) =>
-  CoachInfoQuery.make({courseId: courseId, coachId: coachId, coachNotes: #IgnoreCoachNotes})
-  |> Js.Promise.then_(result => {
+let loadCoachStudents = (courseId, coachId, send) => {
+  let filterString =
+    Webapi.Url.URLSearchParams.makeWithArray([
+      ("personal_coach", coachId),
+    ])->Webapi.Url.URLSearchParams.toString
+
+  CoachInfoQuery.fetch({courseId, coachId, filterString})
+  |> Js.Promise.then_((result: CoachInfoQuery.t) => {
     let stats = {
-      reviewedSubmissions: result["coachStats"]["reviewedSubmissions"],
-      pendingSubmissions: result["coachStats"]["pendingSubmissions"],
+      reviewedSubmissions: result.coachStats.reviewedSubmissions,
+      pendingSubmissions: result.coachStats.pendingSubmissions,
     }
 
-    send(LoadCoachInfo(Team.makeArrayFromJs(result["teams"]["nodes"]), stats))
+    send(
+      LoadCoachInfo(
+        result.courseStudents.nodes->Js.Array2.map(s => Student.make(~id=s.id, ~name=s.user.name)),
+        stats,
+      ),
+    )
     Js.Promise.resolve()
   })
   |> ignore
-
-let removeTeamEnrollment = (send, teamId) => send(RemoveTeam(teamId))
+}
+let removeStudentEnrollment = (send, studentId) => send(RemoveStudent(studentId))
 
 @react.component
 let make = (~courseId, ~coach) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   React.useEffect1(() => {
-    loadCoachTeams(courseId, coach |> CourseCoach.id, send)
+    loadCoachStudents(courseId, coach |> CourseCoach.id, send)
     None
   }, [courseId])
   <div className="mx-auto">
@@ -99,7 +106,8 @@ let make = (~courseId, ~coach) => {
           </div>
         : <div className="py-3 flex mt-4">
             <div
-              className="w-full mr-2 rounded-lg shadow px-5 py-6" ariaLabel=tr("revied_submissions")>
+              className="w-full mr-2 rounded-lg shadow px-5 py-6"
+              ariaLabel={tr("revied_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("revied_submissions") |> str} </span>
                 <span className="text-2xl font-semibold">
@@ -108,7 +116,8 @@ let make = (~courseId, ~coach) => {
               </div>
             </div>
             <div
-              className="w-full ml-2 rounded-lg shadow px-5 py-6" ariaLabel=tr("pending_submissions")>
+              className="w-full ml-2 rounded-lg shadow px-5 py-6"
+              ariaLabel={tr("pending_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("pending_submissions") |> str} </span>
                 <span className="text-2xl font-semibold">
@@ -118,25 +127,25 @@ let make = (~courseId, ~coach) => {
             </div>
           </div>}
       <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
-        { tr("students_assigned") |> str}
+        {tr("students_assigned") |> str}
       </span>
       {state.loading
         ? <div className="max-w-2xl mx-auto p-3">
             {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.paragraph())}
           </div>
         : <div>
-            {state.teams |> ArrayUtils.isEmpty
+            {state.students |> ArrayUtils.isEmpty
               ? <div
                   className="border border-gray-300 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
                   {tr("no_students_assigned") |> str}
                 </div>
-              : state.teams
-                |> Array.map(team =>
-                  <CourseCoaches__InfoFormTeam
-                    key={Team.id(team)}
-                    team
+              : state.students
+                |> Array.map(student =>
+                  <CourseCoaches__InfoFormStudent
+                    key={Student.id(student)}
+                    student
                     coach
-                    removeTeamEnrollmentCB={removeTeamEnrollment(send)}
+                    removeStudentEnrollmentCB={removeStudentEnrollment(send)}
                   />
                 )
                 |> React.array}

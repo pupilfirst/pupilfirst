@@ -17,6 +17,12 @@ class CourseStudentsResolver < ApplicationQuery
 
     scope = scope.where(level_id: level.id) if level.present?
     scope = scope.where(cohort_id: cohort.id) if cohort.present?
+    scope =
+      scope
+        .joins(:faculty_founder_enrollments)
+        .where(
+          { faculty_founder_enrollments: { faculty_id: faculty.id } }
+        ) if personal_coach.present?
     scope = scope.where('users.name ILIKE ?', "%#{filter[:name]}%") if filter[
       :name
     ].present?
@@ -50,6 +56,15 @@ class CourseStudentsResolver < ApplicationQuery
     end
 
     course.cohorts.find_by(id: id_from_filter_value(filter[:cohort]))
+  end
+
+  def personal_coach
+    if filter[:personal_coach].blank? ||
+         id_from_filter_value(filter[:personal_coach]).blank?
+      return
+    end
+
+    course.faculty.find_by(id: id_from_filter_value(filter[:personal_coach]))
   end
 
   def level

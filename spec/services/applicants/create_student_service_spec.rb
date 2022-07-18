@@ -7,7 +7,7 @@ describe Applicants::CreateStudentService do
   let(:school) { course.school }
   let!(:level_one) { create :level, course: course }
   let(:applicant) { create :applicant, course: course }
-  let(:tags) { Faker::Lorem.words }
+  let(:tags) { Faker::Lorem.words.uniq }
 
   describe '#create' do
     it 'create a student account for the applicant' do

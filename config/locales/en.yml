@@ -1523,6 +1523,9 @@ en:
       mark_solution: Mark as solution
       mark_solution_confirm: Are you sure you want to mark this post as solution?
       marked_solution_icon: Marked as solution icon
+      show_replies_button:
+        one: 1 Reply
+        other: "%{count} Replies"
       new_reply_button: Reply
       options_post: Options for post
       replies_post: Replies to post

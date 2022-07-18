@@ -92,7 +92,7 @@ let searchForSimilarTopics = (send, title, communityId, ()) => {
     title: trimmedTitle,
   })
   |> Js.Promise.then_(result => {
-    let suggestions = result["similarTopics"] |> Array.map(TopicSuggestion.makeFromJs)
+    let suggestions = result["similarTopics"]->Js.Array2.map(TopicSuggestion.makeFromJs)
     send(FinishSearching(trimmedTitle, suggestions))
     Js.Promise.resolve()
   })
@@ -189,8 +189,7 @@ let suggestions = state => {
         {state.searching
           ? <span className="ml-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
           : React.null}
-        {suggestions
-        |> Array.map(suggestion => {
+        {suggestions->Js.Array2.map(suggestion => {
           let askedOn =
             suggestion->TopicSuggestion.createdAt->DateFns.formatPreset(~short=true, ~year=true, ())
           let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
@@ -222,8 +221,7 @@ let suggestions = state => {
               {answersText |> str}
             </div>
           </a>
-        })
-        |> React.array}
+        }) |> React.array}
       </div>
     : React.null
 }
@@ -323,15 +321,20 @@ let make = (~communityId, ~target, ~topicCategories) => {
                       className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       onChange={handleSelectTopicCategory(send, topicCategories)}>
                       {topicCategories
-                      |> Array.map(category =>
-                        <option value={TopicCategory.id(category)}>
+                      ->Js.Array2.map(category =>
+                        <option key={TopicCategory.id(category)} value={TopicCategory.id(category)}>
                           {TopicCategory.name(category) |> str}
                         </option>
                       )
-                      |> Array.append([
-                        <option value="not_selected"> {tr("not_selected") |> str} </option>,
-                      ])
-                      |> React.array}
+                      ->Js.Array2.concat(
+                        [
+                          <option key="not_selected" value="not_selected">
+                            {tr("not_selected") |> str}
+                          </option>,
+                        ],
+                        _,
+                      )
+                      ->React.array}
                     </select>
                   </div>,
                   ArrayUtils.isEmpty(topicCategories),

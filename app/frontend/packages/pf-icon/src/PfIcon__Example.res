@@ -138,11 +138,11 @@ module Example = {
     "eye-regular",
     "eye-solid",
     "file-light",
+    "file-regular",
+    "file-solid",
     "file-music-light",
     "file-music-regular",
     "file-music-solid",
-    "file-regular",
-    "file-solid",
     "globe-light",
     "globe-regular",
     "globe-solid",
@@ -326,7 +326,7 @@ module Example = {
         <h1 className="text-center text-2xl font-bold text-gray-700"> {"pf-icon" |> str} </h1>
         <a
           className="flex items-center cursor-pointer hover:text-gray-600"
-          href="https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon"
+          href="https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon"
           target="_blank">
           <img
             className="w-8 h-8"

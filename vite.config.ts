@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
-import RubyPlugin from 'vite-plugin-ruby'
+import rubyPlugin from 'vite-plugin-ruby'
+import babel from 'vite-plugin-babel'
 
 export default defineConfig({
   plugins: [
-    RubyPlugin(),
+    rubyPlugin(),
+    babel(),
   ],
 })

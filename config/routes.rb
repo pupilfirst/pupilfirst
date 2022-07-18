@@ -183,8 +183,6 @@ Rails.application.routes.draw do
 
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
-    get '/:id(/:slug)', action: 'show', as: 'coach'
-    get '/filter/:active_tab', action: 'index'
   end
 
   # Founder show

@@ -11,10 +11,6 @@ tmp
 # Ignore uploaded files in development.
 storage
 
-public/assets
-public/uploads
-public/vite-dev
-public/vite-test
 **/node_modules
 coverage
 tags
@@ -30,11 +26,13 @@ tags
 # Ignore dotenv files.
 .env*
 
-# Ignore public packs.
-public/packs
-public/packs-test
+# Ignore artifacts in public folder.
+public/assets
+public/uploads
+public/vite-dev
+public/vite-test
 
-# Ignore these associated with reason-react and bsb
+# Ignore these associated with ReScript
 .merlin
 lib/bs
 npm-debug.log
@@ -64,7 +62,9 @@ app/frontend/locales.json
 yarn-*.log*
 .yarn-integrity
 .yarnrc.yml
-**/.yarn
+.yarn/*
+
+# We still need the releases folder to let yarn work properly.
 !.yarn/releases
 
 # Example files

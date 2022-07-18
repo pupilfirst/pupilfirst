@@ -29,6 +29,9 @@
       defaultLocale: '<%= I18n.default_locale %>',
       locale: '<%= I18n.locale %>'
       }
+      // Prevent Prism from automatically highlighting all code elements on the page.
+      window.Prism = window.Prism || {};
+      Prism.manual = true;
     <% end %>
     <%= yield :head %>
     <% if Rails.env.test? %>

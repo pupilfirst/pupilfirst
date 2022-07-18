@@ -31,9 +31,9 @@ let unsafeLevelNumber = (levels, componentName, levelId) =>
   )
 
 let make = (~id, ~name, ~number) => {
-  id,
-  name,
-  number,
+  id: id,
+  name: name,
+  number: number,
 }
 
 let makeFromJs = level => {

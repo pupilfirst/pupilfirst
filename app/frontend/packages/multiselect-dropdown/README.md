@@ -90,7 +90,7 @@ See this code, and a more advanced version, in action here: https://multiselect-
 
 ### Other examples
 
-- [Real world Usage in Pupilfirst](https://github.com/pupilfirst/pupilfirst/blob/master/app/javascript/courses/review/CoursesReview__Root.res)
+- [Real world Usage in Pupilfirst](https://github.com/pupilfirst/pupilfirst/blob/master/app/frontend/courses/review/CoursesReview__Root.res)
 
 ## Usage
 

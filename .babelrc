@@ -1,0 +1,36 @@
+{
+  "plugins": [
+    [
+      "prismjs",
+      {
+        "languages": [
+          "javascript",
+          "jsx",
+          "json",
+          "markup",
+          "css",
+          "scss",
+          "sql",
+          "python",
+          "java",
+          "bash",
+          "csharp",
+          "php",
+          "typescript",
+          "tsx",
+          "cpp",
+          "c",
+          "go",
+          "kotlin",
+          "ruby",
+          "erb",
+          "reason",
+          "markdown",
+          "yaml",
+          "latex"
+        ],
+        "plugins": ["line-numbers", "custom-class", "diff-highlight"]
+      }
+    ]
+  ]
+}

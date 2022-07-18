@@ -10,7 +10,7 @@ module ContentBlockCreatable
   end
 
   def target
-    @target ||= Target.find_by(id: target_id)
+    @target ||= Target.find_by(id: @params[:target_id])
   end
 
   def target_version
@@ -20,16 +20,15 @@ module ContentBlockCreatable
   def above_content_block
     @above_content_block ||=
       begin
-        if above_content_block_id.present?
-          content_blocks.find_by(id: above_content_block_id)
+        if @params[:above_content_block_id].present?
+          content_blocks.find_by(id: @params[:above_content_block_id])
         end
       end
   end
 
   def shift_content_blocks_below(content_block)
     content_blocks
-      .where
-      .not(id: content_block.id)
+      .where.not(id: content_block.id)
       .where('sort_index >= ?', sort_index)
       .update_all('sort_index = sort_index + 1') # rubocop:disable Rails/SkipsModelValidations
   end

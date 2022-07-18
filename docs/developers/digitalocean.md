@@ -16,9 +16,7 @@ Deploying to DigitalOcean is more convenient than Heroku because you can pull Do
 
 ## Deploy using images from Docker Hub
 
-Docker images for the LMS can be found on [our official Docker Hub account](https://hub.docker.com/r/pupilfirst/pupilfirst).
-
-These images are automatically built using Github CI on [our Github repo](https://github.com/pupilfirst/pupilfirst).
+[Docker images for the LMS](./docker) can be found on [our official Docker Hub account](https://hub.docker.com/r/pupilfirst/pupilfirst).
 
 These images are ideal for quickly and easily deploying the LMS to
 [Digital Ocean's App Platform](https://www.digitalocean.com/products/app-platform).

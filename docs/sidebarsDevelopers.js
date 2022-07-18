@@ -15,6 +15,7 @@ module.exports = {
       "heroku",
       "digitalocean",
       "configuration",
+      "docker",
       "upgrading",
     ],
   },

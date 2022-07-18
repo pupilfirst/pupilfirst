@@ -28,7 +28,7 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
 
 ## Deployment using Docker
 
-The Heroku Container Registry allows us to deploy our Docker images to Heroku. To access the Heroku Container Registry, we first need to log into it:
+The Heroku Container Registry allows us to deploy [our Docker images](./docker) to Heroku. To access the Heroku Container Registry, we first need to log into it:
 
 ```bash
 heroku container:login

@@ -73,8 +73,8 @@ class SubmissionsResolver < ApplicationQuery
     stage_4 =
       if course.faculty.exists?(id: personal_coach_id)
         stage_3
-          .joins(founders: { startup: :faculty_startup_enrollments })
-          .where(faculty_startup_enrollments: { faculty_id: personal_coach_id })
+          .joins(founders: :faculty_student_enrollments)
+          .where(faculty_student_enrollments: { faculty_id: personal_coach_id })
       else
         stage_3
       end
@@ -118,25 +118,21 @@ class SubmissionsResolver < ApplicationQuery
     end
   end
 
-  def teams
-    @teams ||= include_inactive ? course.startups : course.startups.active
-  end
-
-  def course_teams
-    if search.present?
-      teams_with_users = teams.joins(founders: :user)
-
-      teams_with_users
-        .where('users.name ILIKE ?', "%#{search}%")
-        .or(teams_with_users.where('startups.name ILIKE ?', "%#{search}%"))
-        .or(teams_with_users.where('users.email ILIKE ?', "%#{search}%"))
-    else
-      teams
-    end
-  end
-
   def students
-    @students ||= Founder.where(startup_id: course_teams)
+    @students ||=
+      begin
+        scope = include_inactive ? course.founders : course.founders.active
+
+        if search.present?
+          students_with_users = scope.joins(founders: :user)
+
+          students_with_users
+            .where('users.name ILIKE ?', "%#{search}%")
+            .or(students_with_users.where('users.email ILIKE ?', "%#{search}%"))
+        else
+          scope
+        end
+      end
   end
 
   def allow_token_auth?

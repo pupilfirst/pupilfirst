@@ -29,8 +29,6 @@ class Founder < ApplicationRecord
             left_joins(:cohort)
               .where('cohorts.ends_at > ?', Time.zone.now)
               .or(left_joins(:cohort).where(cohorts: { ends_at: nil }))
-              .where('access_ends_at > ?', Time.zone.now)
-              .or(where(access_ends_at: nil))
           )
         }
   scope :active, -> { access_active.not_dropped_out }

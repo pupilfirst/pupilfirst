@@ -74,7 +74,7 @@ module Students
       return false if @student.user.school_admin.present?
 
       coach = @student.user.faculty
-      return false if coach.present? && team.course.in?(coach.courses)
+      return false if coach.present? && course.in?(coach.courses)
 
       true
     end
@@ -158,11 +158,11 @@ module Students
     end
 
     def current_level
-      @current_level ||= team.level
+      @current_level ||= @student.level
     end
 
     def course
-      @course ||= team.course
+      @course ||= @student.course
     end
   end
 end

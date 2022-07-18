@@ -15,7 +15,7 @@ module Courses
       if current_student.present?
         {
           submissions: submissions,
-          team: team_details,
+          student: student_details,
           coaches: faculty.map(&:attributes),
           users: users,
           evaluation_criteria: evaluation_criteria,
@@ -26,7 +26,7 @@ module Courses
       else
         {
           submissions: [],
-          team: team_details_for_preview_mode,
+          student: student_details_for_preview_mode,
           coaches: [],
           users: [],
           evaluation_criteria: [],
@@ -72,7 +72,7 @@ module Courses
       end
     end
 
-    def team_details_for_preview_mode
+    def student_details_for_preview_mode
       {
         name: current_user&.name || 'John Doe',
         level_id: levels.first.id,
@@ -80,12 +80,8 @@ module Courses
       }
     end
 
-    def team_details
-      current_student.startup.attributes.slice(
-        'name',
-        'access_ends_at',
-        'level_id'
-      )
+    def student_details
+      current_student.attributes.slice('access_ends_at', 'level_id')
     end
 
     def course_details
@@ -194,13 +190,17 @@ module Courses
         end
     end
 
-    def team_members
+    def team_members_user_ids
       @team_members ||=
-        current_student.startup.founders.select(:id, :user_id).load
+        if current_student.team.present?
+          current_student.team.founders.pluck(:user_id)
+        else
+          [current_student.user_id]
+        end
     end
 
     def users
-      user_ids = (team_members.pluck(:user_id) + faculty.pluck(:user_id)).uniq
+      user_ids = (team_members_user_ids + faculty.pluck(:user_id)).uniq
 
       User
         .where(id: user_ids)

@@ -9,7 +9,7 @@ let decodeProps = json => {
     field("targetGroups", array(TargetGroup.decode), json),
     field("targets", array(Target.decode), json),
     field("submissions", array(LatestSubmission.decode), json),
-    field("team", Team.decode, json),
+    field("student", Student.decode, json),
     field("coaches", array(Coach.decode), json),
     field("users", array(User.decode), json),
     field("evaluationCriteria", array(EvaluationCriterion.decode), json),
@@ -27,7 +27,7 @@ Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], (
     targetGroups,
     targets,
     submissions,
-    team,
+    student,
     coaches,
     users,
     evaluationCriteria,
@@ -47,7 +47,7 @@ Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], (
         targetGroups
         targets
         submissions
-        team
+        student
         coaches
         users
         evaluationCriteria

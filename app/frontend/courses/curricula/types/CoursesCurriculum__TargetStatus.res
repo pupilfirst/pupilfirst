@@ -1,5 +1,5 @@
 module Course = CoursesCurriculum__Course
-module Team = CoursesCurriculum__Team
+module Student = CoursesCurriculum__Student
 module Target = CoursesCurriculum__Target
 module Level = CoursesCurriculum__Level
 module TargetGroup = CoursesCurriculum__TargetGroup
@@ -58,28 +58,29 @@ let makePending = targets =>
 let lockTargets = (targets, reason) =>
   targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Locked(reason)})
 
-let allTargetsComplete = (targetCache, targetIds) => targetIds->Belt.Array.every(targetId => {
+let allTargetsComplete = (targetCache, targetIds) =>
+  targetIds->Belt.Array.every(targetId => {
     Js.Array.find(ct => ct.targetId == targetId, targetCache)->Belt.Option.mapWithDefault(
       true,
       target => target.submissionStatus == SubmissionCompleted,
     )
   })
 
-let compute = (preview, team, course, levels, targetGroups, targets, submissions) =>
+let compute = (preview, student, course, levels, targetGroups, targets, submissions) =>
   /* Eliminate the two course ended and student access ended conditions. */
   if preview {
     makePending(targets)
   } else if course |> Course.endsAt |> isPast {
     lockTargets(targets, CourseLocked)
-  } else if team |> Team.accessEndsAt |> isPast {
+  } else if student |> Student.accessEndsAt |> isPast {
     lockTargets(targets, AccessLocked)
   } else {
     /* Cache level number of the student. */
     let studentLevelNumber =
       levels
       |> ArrayUtils.unsafeFind(
-        l => l |> Level.id == Team.levelId(team),
-        "Could not student's level with ID " ++ Team.levelId(team),
+        l => l |> Level.id == Student.levelId(student),
+        "Could not student's level with ID " ++ Student.levelId(student),
       )
       |> Level.number
 
@@ -101,7 +102,9 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
         levels
         |> ArrayUtils.unsafeFind(
           l => l |> Level.id == (targetGroup |> TargetGroup.levelId),
-          "Could not find level with ID " ++ (Team.levelId(team) ++ " to create target cache"),
+          "Could not find level with ID " ++
+          (Student.levelId(student) ++
+          " to create target cache"),
         )
         |> Level.number
 
@@ -120,11 +123,11 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
       }
 
       {
-        targetId: targetId,
+        targetId,
         targetReviewed: target |> Target.reviewed,
-        levelNumber: levelNumber,
-        milestone: milestone,
-        submissionStatus: submissionStatus,
+        levelNumber,
+        milestone,
+        submissionStatus,
         prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }
     })
@@ -145,7 +148,7 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
         }
       }
 
-      {targetId: ct.targetId, status: status}
+      {targetId: ct.targetId, status}
     })
   }
 

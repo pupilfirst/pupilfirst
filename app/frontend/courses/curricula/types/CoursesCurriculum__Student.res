@@ -1,6 +1,5 @@
 type t = {
   @live
-  name: string,
   levelId: string,
   accessEndsAt: option<Js.Date.t>,
 }
@@ -8,7 +7,6 @@ type t = {
 let decode = json => {
   open Json.Decode
   {
-    name: json |> field("name", string),
     levelId: json |> field("levelId", string),
     accessEndsAt: (json |> optional(field("accessEndsAt", string)))
       ->Belt.Option.map(DateFns.parseISO),

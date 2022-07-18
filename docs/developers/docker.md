@@ -24,18 +24,28 @@ Once an image has been built, you can run it locally, and even inspect its conte
 docker run -it --entrypoint bash pupilfirst
 ```
 
-Once you've confirmed that your image is functioning properly, you can _push_ the local image to your target container registry, such as [Docker Hub](https://hub.docker.com), [Heroku Container Registry](https://devcenter.heroku.com/articles/container-registry-and-runtime), or [DigitalOcean Container Registry](https://docs.digitalocean.com/products/container-registry/).
+Once you've confirmed that your image is functioning properly, you can add new tags to the local image and _push_ it to your target container registry, such as [Docker Hub](https://hub.docker.com), [Heroku Container Registry](https://devcenter.heroku.com/articles/container-registry-and-runtime), or [DigitalOcean Container Registry](https://docs.digitalocean.com/products/container-registry/).
+
+First, add new tags to your local image:
 
 ```bash
-# Docker Hub
-docker push USERNAME/pupilfirst:latest
+# Let's use Heroku as an example.
+docker tag pupilfirst registry.heroku.com/APP_NAME/web
+docker tag pupilfirst registry.heroku.com/APP_NAME/worker
+```
 
+Once the tags are in place, you can use the `push` command:
+
+```bash
 # Heroku Container Registry
 docker push registry.heroku.com/APP_NAME/web
 docker push registry.heroku.com/APP_NAME/worker
 
 # DigitalOcean Container Registry
 docker push registry.digitalocean.com/REGISTRY/pupilfirst:latest
+
+# Docker Hub
+docker push USERNAME/pupilfirst:latest
 ```
 
-You will need to perform additional steps beforehand to be allowed to push to these repositories; please refer their documentation for more information.
+You will need to perform additional steps beforehand to be allowed to push to these container registries; please browse their documentation for more information.

@@ -897,35 +897,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "ENUM",
-          "name": "CoachNoteFilter",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
-            {
-              "name": "WithCoachNotes",
-              "description": "To select students who have saved notes from coaches",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "WithoutCoachNotes",
-              "description": "To select students who do not have any notes from coaches",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "IgnoreCoachNotes",
-              "description": "To select students regardless of whether they have coach notes or not",
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "CoachStats",
           "description": null,
@@ -12432,71 +12403,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "coachNotes",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "CoachNoteFilter",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "tags",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "SCALAR",
-                          "name": "String",
-                          "ofType": null
-                        }
-                      }
-                    }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "levelId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "coachId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "search",
+                  "name": "filterString",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

@@ -46,7 +46,7 @@ type editorAction =
   | ShowForm(option<string>)
 
 type state = {
-  loading: Loading.t,
+  loading: LoadingV2.t,
   courses: Pagination.t,
   filterString: string,
   filter: filter,
@@ -74,7 +74,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateSelectedCourse(selectedCourse) => {
       ...state,
-      selectedCourse: selectedCourse,
+      selectedCourse,
     }
   | SetSearchString(string) => {
       ...state,
@@ -86,7 +86,7 @@ let reducer = (state, action) =>
     }
   | ReloadCourses => {
       ...state,
-      loading: Reloading,
+      loading: LoadingV2.setReloading(state.loading),
       reloadCourses: !state.reloadCourses,
     }
   | UnsetSearchString => {
@@ -130,20 +130,19 @@ let reducer = (state, action) =>
       },
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
-  | BeginReloading => {...state, loading: Reloading}
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
-    | Reloading => newCourses
-    | NotLoading => newCourses
+    | Reloading(_) => newCourses
     }
 
     {
       ...state,
       courses: Pagination.make(courses, hasNextPage, endCursor),
-      loading: NotLoading,
-      totalEntriesCount: totalEntriesCount,
+      loading: LoadingV2.setNotLoading(state.loading),
+      totalEntriesCount,
     }
   | UpdateCourse(course) =>
     let newCourses = Pagination.update(state.courses, Course.updateList(course))
@@ -160,7 +159,8 @@ let courseLink = (href, title, icon) =>
     key=href
     href
     className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-    <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
+    <i className=icon />
+    <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
 let courseLinks = course => {
@@ -457,7 +457,7 @@ let make = () => {
     {
       courses: Pagination.Unloaded,
       totalEntriesCount: 0,
-      loading: NotLoading,
+      loading: LoadingV2.empty(),
       filterString: "",
       filter: {
         name: None,
@@ -565,18 +565,20 @@ let make = () => {
                   {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.imageCard())}
                 </div>
               </div>
-            | NotLoading =>
-              <div className="px-5 pb-6">
-                <button
-                  className="btn btn-primary-ghost cursor-pointer w-full"
-                  onClick={_ => {
-                    send(BeginLoadingMore)
-                    loadCourses(None, state, Some(cursor), send)
-                  }}>
-                  {t("button_load_more")->str}
-                </button>
-              </div>
-            | Reloading => React.null
+            | Reloading(times) =>
+              ReactUtils.nullUnless(
+                <div className="px-5 pb-6">
+                  <button
+                    className="btn btn-primary-ghost cursor-pointer w-full"
+                    onClick={_ => {
+                      send(BeginLoadingMore)
+                      loadCourses(None, state, Some(cursor), send)
+                    }}>
+                    {t("button_load_more")->str}
+                  </button>
+                </div>,
+                ArrayUtils.isEmpty(times),
+              )
             }}
           </div>
         | FullyLoaded(courses) => <div> {showCourses(courses, state)} </div>

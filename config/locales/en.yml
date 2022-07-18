@@ -1089,6 +1089,9 @@ en:
     Notifications__Root:
       close: "Close "
       show_notifications: Show Notifications
+    Pagination:
+      fully_loaded_text: Showing all %{total} %{name}
+      partially_loaded_text: Showing %{loaded} of %{total} %{name}
     SA_Coaches_CoachEditor:
       add_coach: Add New Coach
       affiliation: Affiliation
@@ -1520,13 +1523,13 @@ en:
       mark_solution: Mark as solution
       mark_solution_confirm: Are you sure you want to mark this post as solution?
       marked_solution_icon: Marked as solution icon
-      show_replies_button:
-        one: 1 Reply
-        other: "%{count} Replies"
       new_reply_button: Reply
       options_post: Options for post
       replies_post: Replies to post
       show_replies: Show replies of post
+      show_replies_button:
+        one: 1 Reply
+        other: "%{count} Replies"
       solution: Solution
       solution_icon_label: Solution
       unmark_solution: Unmark as solution
@@ -1902,11 +1905,7 @@ en:
     create_coach_note:
       note_added_notification: Note added successfully
     create_cohort:
-     success_notification: Cohort created successfully.
-    update_cohort:
-      success_notification: Cohort updated successfully.
-    merge_cohort:
-      success_notification: Cohorts merged successfully.
+      success_notification: Cohort created successfully.
     create_community:
       community_created_notification: Community created successfully
     create_course:
@@ -1965,12 +1964,12 @@ en:
       deletion_init_notification: Account Deletion Initiated
     issue_certificate:
       success_notification: Certificate issued successfully!
-    re_activate_student:
-      success_notification: Student re-activated successfully!
     lock_topic:
       success_notification: This topic has been locked. No new replies will be accepted.
     mark_post_as_solution:
       reply_marked_notification: Reply marked as solution successfully
+    merge_cohort:
+      success_notification: Cohorts merged successfully.
     merge_levels:
       merge_complete_notification: Merge complete!
     quiz:
@@ -1978,6 +1977,8 @@ en:
       question: Question
       your_answer: Your Answer
       your_correct_answer: Your Correct Answer
+    re_activate_student:
+      success_notification: Student re-activated successfully!
     reassign_reviewer:
       submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.
@@ -2002,10 +2003,10 @@ en:
       reply_unmarked_notification: Reply unmarked as solution!
     update_certificate:
       success_notification: Certificate details have been updated.
+    update_cohort:
+      success_notification: Cohort updated successfully.
     update_course:
       success_notification: Course updated successfully!
-    update_student_details:
-      success_notification: Student updated successfully
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated
@@ -2017,6 +2018,8 @@ en:
       review_updated_notification: Review checklist updated successfully
     update_school:
       details_updated_notification: Details updated successfully!
+    update_student_details:
+      success_notification: Student updated successfully
     update_target:
       checklist_items_exceeded_error: Checklist should have less than 15 items
       evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target

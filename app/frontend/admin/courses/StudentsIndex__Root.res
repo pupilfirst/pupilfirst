@@ -12,26 +12,16 @@ type state = {
   loading: LoadingV2.t,
   students: PagedStudents.t,
   levels: array<Level.t>,
-  filterInput: string,
   totalEntriesCount: int,
-  filterLoading: bool,
-  filter: Filter.t,
 }
 
 type action =
-  | UnsetSearchString
-  | UpdateFilterInput(string)
   | LoadStudents(option<string>, bool, array<StudentInfo.t>, int)
   | BeginLoadingMore
   | BeginReloading
 
 let reducer = (state, action) =>
   switch action {
-  | UnsetSearchString => {
-      ...state,
-      filterInput: "",
-    }
-  | UpdateFilterInput(filterInput) => {...state, filterInput}
   | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
@@ -47,8 +37,6 @@ let reducer = (state, action) =>
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
   }
-
-// let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
 module CourseStudentsQuery = %graphql(`
     query CourseStudentsQuery($courseId: ID!, $after: String, $filterString: String) {
@@ -86,7 +74,7 @@ module CourseStudentsQuery = %graphql(`
     }
   `)
 
-let getStudents = (send, courseId, cursor, filter, params) => {
+let getStudents = (send, courseId, cursor, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
 
   CourseStudentsQuery.makeVariables(
@@ -114,15 +102,12 @@ let computeInitialState = () => {
   loading: LoadingV2.empty(),
   students: Unloaded,
   levels: [],
-  filterLoading: false,
-  filterInput: "",
   totalEntriesCount: 0,
-  filter: Filter.empty(),
 }
 
-let reloadStudents = (courseId, filter, send, params) => {
+let reloadStudents = (courseId, send, params) => {
   send(BeginReloading)
-  getStudents(send, courseId, None, filter, params)
+  getStudents(send, courseId, None, params)
 }
 
 // let pageTitle = (courses, courseId) => {
@@ -221,7 +206,12 @@ let studentsList = (students, courseId, params) => {
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
+    CourseResourcesFilter.makeFilter(
+      "include_inactive_students",
+      "Include",
+      Custom("Inactive Students"),
+      "orange",
+    ),
     CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
@@ -240,7 +230,7 @@ let make = (~courseId, ~search) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let params = Webapi.Url.URLSearchParams.make(search)
   React.useEffect1(() => {
-    reloadStudents(courseId, state.filter, send, params)
+    reloadStudents(courseId, send, params)
     None
   }, [search])
 
@@ -293,7 +283,7 @@ let make = (~courseId, ~search) => {
                         className="btn btn-primary-ghost cursor-pointer w-full"
                         onClick={_ => {
                           send(BeginLoadingMore)
-                          getStudents(send, courseId, Some(cursor), state.filter, params)
+                          getStudents(send, courseId, Some(cursor), params)
                         }}>
                         {"Load More"->str}
                       </button>
@@ -305,15 +295,7 @@ let make = (~courseId, ~search) => {
             | FullyLoaded(students) => <div> {studentsList(students, courseId, params)} </div>
             }}
           </div>
-          {switch state.students {
-          | Unloaded => React.null
-          | _ =>
-            let loading = switch state.loading {
-            | Reloading(times) => ArrayUtils.isNotEmpty(times)
-            | LoadingMore => false
-            }
-            <LoadingSpinner loading />
-          }}
+          {PagedStudents.showLoading(state.students, state.loading)}
         </div>
       </div>
     </div>

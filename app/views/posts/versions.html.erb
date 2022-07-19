@@ -1,14 +1,7 @@
 <% presenter = Posts::VersionsPresenter.new(self, @post) %>
-
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
-  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
 <% end %>
-
-<% content_for(:tail) do %>
-  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
-<% end %>
-
 <div class="bg-gray-50 px-3 py-4">
   <div class="mb-2 container max-w-3xl mx-auto">
     <div class="border-b pb-3">
@@ -18,7 +11,7 @@
       <% end %>
     </div>
     <div class="mt-5 inline-block bg-gray-50 border rounded px-2 pb-1 ml-8 md:ml-19">
-    <span class="text-xs font-semibold text-gray-900"><%= t(".edit_history") %></span>
+      <span class="text-xs font-semibold text-gray-900"><%= t(".edit_history") %></span>
     </div>
     <div class="flex items-start mt-4">
       <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-center text-gray-500"><%= presenter.version_number_for_post %></div>
@@ -41,7 +34,6 @@
           <% end %>
         </div>
       </div>
-
     </div>
     <% presenter.versions.order(created_at: :desc).each_with_index do |version, index| %>
       <div class="flex items-start mt-4">
@@ -52,9 +44,9 @@
           </div>
           <div class="mt-4 text-xs">
             <% if index == (presenter.versions_count - 1) %>
-            <span><%= t(".created_by") %></span>
+              <span><%= t(".created_by") %></span>
             <% else %>
-            <span><%= t(".edited_by") %></span>
+              <span><%= t(".edited_by") %></span>
             <% end %>
             <span class="font-semibold"><%= version.user&.name|| 'Unknown' %></span>
             <span><%= presenter.updated_at(version) %></span>

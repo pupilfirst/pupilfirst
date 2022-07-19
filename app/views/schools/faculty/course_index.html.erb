@@ -1,16 +1,8 @@
 <% content_for(:head) do %>
   <title><%= @course.name %> | <%= t(".title") %></title>
-  <%= stylesheet_pack_tag 'SchoolsCoachesCourseIndexPack', media: 'all' %>
 <% end %>
-
-<% content_for(:tail) do %>
-  <%= javascript_pack_tag 'SchoolsCoachesCourseIndexPack', nonce: true %>
-<% end %>
-
 <% @presenter = Schools::FacultyModule::CourseIndexPresenter.new(self, @course) %>
-
 <script type="application/json" id="course-coaches__props">
   <%= @presenter.props_to_json.html_safe %>
 </script>
-
 <div id="sa-coaches-enrollment-panel" class="flex flex-1 h-full"></div>

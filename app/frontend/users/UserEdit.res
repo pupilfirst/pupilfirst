@@ -327,7 +327,6 @@ let make = (
                 {ts("preferred_name") |> str}
               </label>
               <input
-                autoFocus=true
                 id="user_preferred_name"
                 name="preferred_name"
                 value={state.preferredName}

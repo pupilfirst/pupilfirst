@@ -212,6 +212,6 @@ class User < ApplicationRecord
   end
 
   def name
-    preferred_name || fullname
+    preferred_name.presence || fullname
   end
 end

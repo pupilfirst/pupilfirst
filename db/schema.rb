@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_03_002652) do
+ActiveRecord::Schema.define(version: 2022_07_15_123411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -465,6 +465,7 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.string "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sort_index", default: 0, null: false
     t.index ["school_id", "kind"], name: "index_school_links_on_school_id_and_kind"
   end
 
@@ -720,7 +721,7 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.boolean "sign_out_at_next_request"
     t.datetime "confirmed_at"
     t.datetime "login_token_generated_at"
-    t.string "name"
+    t.string "fullname"
     t.string "title"
     t.text "about"
     t.bigint "school_id"
@@ -739,6 +740,7 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.jsonb "webpush_subscription", default: {}
     t.string "login_token_digest"
     t.datetime "last_seen_at"
+    t.string "preferred_name"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

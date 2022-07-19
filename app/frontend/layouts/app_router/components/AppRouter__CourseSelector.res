@@ -10,7 +10,9 @@ let selected = currentCourse =>
       <i className="fas fa-book" />
       <span className="truncate ml-2 text-left"> {Course.name(currentCourse)->str} </span>
     </span>
-    <span className="w-1/6 text-right"> <i className="fas fa-chevron-down text-sm" /> </span>
+    <span className="w-1/6 text-right">
+      <i className="fas fa-chevron-down text-sm" />
+    </span>
   </button>
 
 let contents = (courses, currentCourse, selectedPage) => {
@@ -20,7 +22,7 @@ let contents = (courses, currentCourse, selectedPage) => {
         className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-normal focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
         key={course->Course.id}
         href={Page.canAccessPage(selectedPage, course)
-          ? Page.path(Page.changeId(selectedPage, Course.id(course)))
+          ? Page.path(Page.changeCourseId(selectedPage, Course.id(course)))
           : Page.path(Page.Student__Curriculum(Course.id(course)))}>
         {Course.name(course)->str}
       </a>,

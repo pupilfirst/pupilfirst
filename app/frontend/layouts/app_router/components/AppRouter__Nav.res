@@ -35,6 +35,7 @@ let renderLinks = (courses, selectedPage) => {
           | Student__Students(_) => (t("students"), "i-users-light")
           | Student__Review(_) => (t("review"), "i-clipboard-check-light")
           | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-light")
+          | Student__StudentsReport(_)
           | Student__SubmissionShow(_) => ("", "")
           }
           <a
@@ -97,6 +98,7 @@ let renderLinksMobile = (courses, selectedPage) => {
         | Student__Students(_) => (t("students"), "i-users-regular")
         | Student__Review(_) => (t("review"), "i-clipboard-check-regular")
         | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-regular")
+        | Student__StudentsReport(_)
         | Student__SubmissionShow(_) => ("", "")
         }
         <a
@@ -107,7 +109,8 @@ let renderLinksMobile = (courses, selectedPage) => {
               ? "text-primary-500 bg-gray-50"
               : "hover:text-primary-500 hover:bg-gray-50"
           )}>
-          <Icon className={`if ${icon} text-lg if-fw`} /> <div className="pt-1"> {str(title)} </div>
+          <Icon className={`if ${icon} text-lg if-fw`} />
+          <div className="pt-1"> {str(title)} </div>
         </a>
       }, Page.activeLinks(currentCourse))->React.array} </div>
   | None => React.null
@@ -120,7 +123,8 @@ let showLink = (icon, href) => {
       rel="nofollow"
       className="flex justify-center items-center text-xs text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {t("sign_out")->str} </p>
+      <FaIcon classes={"fas fw fa-" ++ icon} />
+      <p className="ml-2"> {t("sign_out")->str} </p>
     </a>
   </div>
 }

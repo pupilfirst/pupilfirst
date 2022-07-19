@@ -1,4 +1,4 @@
-module Level = CoursesStudents__Level
+module Level = Shared__Level
 module DistributionInLevel = CoursesStudents__DistributionInLevel
 module Course = CoursesStudents__Course
 module Coach = UserProxy

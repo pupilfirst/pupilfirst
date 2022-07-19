@@ -25,6 +25,14 @@ let make = (~school, ~courses, ~currentUser) => {
       <CoursesReview__SubmissionsRoot submissionId currentUser={User.defaultUser(currentUser)} />,
       Student__SubmissionShow(submissionId),
     )
+  | list{"courses", courseId, "students"} => (
+      <CoursesStudents__Root courseId />,
+      Student__Students(courseId),
+    )
+  | list{"students", studentId, "report"} => (
+      <CoursesStudents__StudentOverlay studentId userId={User.id(User.defaultUser(currentUser))} />,
+      Student__StudentsReport(studentId),
+    )
   | _ =>
     Rollbar.critical(
       "Unknown path encountered by app router: " ++ Js.Array.joinWith("/", Array.of_list(url.path)),

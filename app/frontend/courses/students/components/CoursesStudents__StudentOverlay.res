@@ -56,6 +56,12 @@ module StudentDetailsQuery = %graphql(`
           }
           accessEndsAt
           droppedOutAt
+          course {
+            id
+            levels {
+              ...LevelFragment
+            }
+          }
         }
         totalTargets
         targetsCompleted
@@ -100,7 +106,7 @@ module StudentDetailsQuery = %graphql(`
     }
   `)
 
-let getStudentDetails = (studentId, setState, ()) => {
+let getStudentDetails = (studentId, setState) => {
   setState(state => {...state, studentData: Loading})
   StudentDetailsQuery.fetch({studentId: studentId})
   |> Js.Promise.then_((response: StudentDetailsQuery.t) => {
@@ -143,6 +149,8 @@ let getStudentDetails = (studentId, setState, ()) => {
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
       ~completedLevelIds=response.studentDetails.completedLevelIds,
+      ~courseId=response.studentDetails.student.course.id,
+      ~levels=response.studentDetails.student.course.levels->Js.Array2.map(Level.makeFromFragment),
       ~student=StudentInfo.make(
         ~id=s.id,
         ~taggings=s.taggings,
@@ -178,8 +186,6 @@ let getStudentDetails = (studentId, setState, ()) => {
     Js.Promise.resolve()
   })
   |> ignore
-
-  None
 }
 
 let updateSubmissions = (setState, submissions) => setState(state => {...state, submissions})
@@ -482,8 +488,12 @@ let inactiveWarning = student => {
   , React.null)
 }
 
+let onAddCoachNotesCB = (studentId, setState, _) => {
+  getStudentDetails(studentId, setState)
+}
+
 @react.component
-let make = (~courseId, ~studentId, ~levels, ~userId, ~onAddCoachNotesCB) => {
+let make = (~studentId, ~userId) => {
   let (state, setState) = React.useState(() => initialState)
 
   React.useEffect0(() => {
@@ -491,7 +501,10 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~onAddCoachNotesCB) => {
     Some(() => ScrollLock.deactivate())
   })
 
-  React.useEffect1(getStudentDetails(studentId, setState), [studentId])
+  React.useEffect1(() => {
+    getStudentDetails(studentId, setState)
+    None
+  }, [studentId])
 
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
@@ -505,7 +518,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~onAddCoachNotesCB) => {
               <button
                 ariaLabel={t("close_student_report")}
                 title={t("close_student_report")}
-                onClick={_ => closeOverlay(courseId)}
+                onClick={_ => closeOverlay(StudentDetails.courseId(studentDetails))}
                 className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <Icon className="if i-times-regular text-xl lg:text-2xl" />
               </button>
@@ -529,7 +542,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~onAddCoachNotesCB) => {
             </div>
             {levelProgressBar(
               student->StudentInfo.level->Shared__Level.id,
-              levels,
+              StudentDetails.levels(studentDetails),
               studentDetails->StudentDetails.completedLevelIds,
             )}
             <div className="mb-8">
@@ -599,14 +612,18 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~onAddCoachNotesCB) => {
                   studentId
                   hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
                   coachNotes={studentDetails |> StudentDetails.coachNotes}
-                  addNoteCB={addNote(setState, studentDetails, onAddCoachNotesCB)}
+                  addNoteCB={addNote(
+                    setState,
+                    studentDetails,
+                    onAddCoachNotesCB(studentId, setState),
+                  )}
                   userId
                   removeNoteCB={removeNote(setState, studentDetails)}
                 />
               | Submissions =>
                 <CoursesStudents__SubmissionsList
                   studentId
-                  levels
+                  levels={studentDetails->StudentDetails.levels}
                   submissions=state.submissions
                   updateSubmissionsCB={updateSubmissions(setState)}
                 />

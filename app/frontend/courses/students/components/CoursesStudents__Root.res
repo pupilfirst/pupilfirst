@@ -15,6 +15,8 @@ module Item = {
 
 module PagedStudents = Pagination.Make(Item)
 
+// state.loadLevels is used to load the levels for the current course.
+// The GraphQL query skips loading the levels if the loadLevels is not set to true, this is ensures that levels are loaded only once.
 type state = {
   loading: LoadingV2.t,
   students: PagedStudents.t,
@@ -22,6 +24,8 @@ type state = {
   totalEntriesCount: int,
   reloadDistributionAt: option<Js.Date.t>,
   studentDistribution: array<DistributionInLevel.t>,
+  levels: array<Level.t>,
+  loadLevels: bool,
 }
 
 type action =
@@ -33,6 +37,7 @@ type action =
       array<StudentInfo.t>,
       int,
       option<array<DistributionInLevel.t>>,
+      option<array<Level.t>>,
     )
   | BeginLoadingMore
   | BeginReloading
@@ -44,7 +49,14 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput}
-  | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount, studentDistribution) =>
+  | LoadStudents(
+      endCursor,
+      hasNextPage,
+      students,
+      totalEntriesCount,
+      studentDistribution,
+      levels,
+    ) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
     | Reloading(_) => students
@@ -57,6 +69,7 @@ let reducer = (state, action) =>
       totalEntriesCount,
       reloadDistributionAt: None,
       studentDistribution: Belt.Option.getWithDefault(studentDistribution, []),
+      levels: Belt.Option.getWithDefault(levels, state.levels),
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {
@@ -72,7 +85,7 @@ module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 
 module StudentsQuery = %graphql(`
-    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!) {
+    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!, $loadLevels: Boolean!) {
       courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after, ) {
         nodes {
           id,
@@ -97,6 +110,11 @@ module StudentsQuery = %graphql(`
         }
         totalCount
       }
+      course(id: $courseId) @include(if: $loadLevels) {
+       levels {
+          ...LevelFragment
+        }
+      }
       studentDistribution(courseId: $courseId, filterString: $filterString) @skip(if: $skipIfLoadingMore) {
         id
         number
@@ -107,7 +125,7 @@ module StudentsQuery = %graphql(`
     }
   `)
 
-let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
+let getStudents = (send, courseId, cursor, ~loadingMore=false, ~loadLevels=false, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
 
   StudentsQuery.makeVariables(
@@ -115,6 +133,7 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
     ~after=?cursor,
     ~filterString=?Some(filterString),
     ~skipIfLoadingMore={loadingMore},
+    ~loadLevels,
     (),
   )
   |> StudentsQuery.fetch
@@ -154,6 +173,9 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
         students,
         response.courseStudents.totalCount,
         studentDistribution,
+        response.course->Belt.Option.map(c =>
+          c.levels->Js.Array2.map(Shared__Level.makeFromFragment)
+        ),
       ),
     )
     Js.Promise.resolve()
@@ -187,15 +209,13 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
   reloadDistributionAt: None,
   studentDistribution: [],
+  levels: [],
+  loadLevels: true,
 }
 
-let reloadStudents = (courseId, params, send) => {
+let reloadStudents = (courseId, params, ~loadLevels=false, send) => {
   send(BeginReloading)
-  getStudents(send, courseId, None, params)
-}
-
-let onAddCoachNote = (courseId, params, send, ()) => {
-  reloadStudents(courseId, params, send)
+  getStudents(send, courseId, None, ~loadLevels, params)
 }
 
 let onSelect = (key, value, params) => {
@@ -210,29 +230,28 @@ let selectLevel = (levels, params, levelId) => {
   onSelect("level", level->Level.name, params)
 }
 
-@react.component
-let make = (~levels, ~course, ~userId) => {
-  let (state, send) = React.useReducer(reducer, computeInitialState())
+let showStudents = (state, students) => {
+  <div>
+    <CoursesStudents__StudentsList students />
+    {PagedStudents.showStats(state.totalEntriesCount, Array.length(students), "Students")}
+  </div>
+}
 
-  let courseId = course |> Course.id
+@react.component
+let make = (~courseId) => {
+  let (state, send) = React.useReducer(reducer, computeInitialState())
 
   let url = RescriptReactRouter.useUrl()
   let params = Webapi.Url.URLSearchParams.make(url.search)
 
   React.useEffect1(() => {
-    reloadStudents(courseId, params, send)
+    reloadStudents(courseId, params, send, ~loadLevels=state.loadLevels)
     None
   }, [url.search])
 
-  <div role="main" ariaLabel="Students">
-    {switch url.path {
-    | list{"students", studentId, "report"} =>
-      <CoursesStudents__StudentOverlay
-        courseId studentId levels userId onAddCoachNotesCB={onAddCoachNote(courseId, params, send)}
-      />
-    | _ => React.null
-    }}
-    <div className="bg-gray-50 pt-8 pb-8 px-3 -mt-7">
+  <div role="main" ariaLabel="Students" className="flex-1 flex flex-col">
+    <div className="hidden md:block h-16" />
+    <div className="bg-gray-50 mt-16">
       <CoursesStudents__StudentDistribution
         params={params} studentDistribution={state.studentDistribution}
       />
@@ -246,7 +265,7 @@ let make = (~levels, ~course, ~userId) => {
         | Unloaded => SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.userCard())
         | PartiallyLoaded(students, cursor) =>
           <div>
-            <CoursesStudents__StudentsList students />
+            {showStudents(state, students)}
             {switch state.loading {
             | LoadingMore => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
             | Reloading(times) =>
@@ -263,18 +282,10 @@ let make = (~levels, ~course, ~userId) => {
               )
             }}
           </div>
-        | FullyLoaded(students) => <CoursesStudents__StudentsList students />
+        | FullyLoaded(students) => showStudents(state, students)
         }}
       </div>
     </div>
-    {switch state.students {
-    | Unloaded => React.null
-    | _ =>
-      let loading = switch state.loading {
-      | Reloading(times) => ArrayUtils.isNotEmpty(times)
-      | LoadingMore => false
-      }
-      <LoadingSpinner loading />
-    }}
+    {PagedStudents.showLoading(state.students, state.loading)}
   </div>
 }

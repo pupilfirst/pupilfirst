@@ -17,7 +17,7 @@ module Types
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :highlights, [Types::CourseHighlightType], null: false
     field :processing_url, String, null: true
-
+    field :levels, [Types::LevelType], null: false
     field :student_tags, [String], null: false do
       def authorized?(_object, _args, context)
         context[:current_school_admin].present?
@@ -65,6 +65,20 @@ module Types
             .each do |cohort|
               loader.call(cohort.course_id) do |memo|
                 memo |= [cohort].compact # rubocop:disable Lint/UselessAssignment
+              end
+            end
+        end
+    end
+
+    def levels
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: []) do |course_ids, loader|
+          Level
+            .where(course_id: course_ids)
+            .each do |level|
+              loader.call(level.course_id) do |memo|
+                memo |= [level].compact # rubocop:disable Lint/UselessAssignment
               end
             end
         end

@@ -21,6 +21,8 @@ type t = {
   completedLevelIds: array<string>,
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
+  levels: array<Shared__Level.t>,
+  courseId: string,
 }
 
 let student = t => t.student
@@ -33,9 +35,13 @@ let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
 
+let levels = t => t.levels
+
+let courseId = t => t.courseId
+
 let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
-  evaluationCriterionId: evaluationCriterionId,
-  grade: grade,
+  evaluationCriterionId,
+  grade,
 }
 
 let totalTargets = t => t.totalTargets |> float_of_int
@@ -96,7 +102,7 @@ let computeAverageQuizScore = quizScores => {
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
-let makeTeam = (~id, ~name, ~students) => {id: id, name: name, students: students}
+let makeTeam = (~id, ~name, ~students) => {id, name, students}
 
 let make = (
   ~id,
@@ -110,16 +116,20 @@ let make = (
   ~completedLevelIds,
   ~student,
   ~team,
+  ~levels,
+  ~courseId,
 ) => {
-  id: id,
-  coachNotes: coachNotes,
-  hasArchivedNotes: hasArchivedNotes,
-  evaluationCriteria: evaluationCriteria,
-  totalTargets: totalTargets,
-  targetsCompleted: targetsCompleted,
-  quizScores: quizScores,
-  averageGrades: averageGrades,
-  completedLevelIds: completedLevelIds,
-  student: student,
-  team: team,
+  id,
+  coachNotes,
+  hasArchivedNotes,
+  evaluationCriteria,
+  totalTargets,
+  targetsCompleted,
+  quizScores,
+  averageGrades,
+  completedLevelIds,
+  student,
+  team,
+  levels,
+  courseId,
 }

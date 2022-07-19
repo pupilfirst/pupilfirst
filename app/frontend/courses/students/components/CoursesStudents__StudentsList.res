@@ -80,7 +80,8 @@ let showStudent = student => {
             </span>
           </div>
           <div className="text-gray-600 font-semibold text-xs leading-snug flex items-start">
-            {userTags(student)} {studentTags(student)}
+            {userTags(student)}
+            {studentTags(student)}
           </div>
         </div>
       </div>

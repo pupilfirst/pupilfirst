@@ -10,6 +10,7 @@ type t =
   | Student__Students(courseId)
   | Student__Leaderboard(courseId)
   | Student__SubmissionShow(id)
+  | Student__StudentsReport(id)
 
 let showSideNav = t => {
   switch t {
@@ -18,6 +19,7 @@ let showSideNav = t => {
   | Student__Students(_id)
   | Student__Report(_id)
   | Student__Leaderboard(_id) => true
+  | Student__StudentsReport(_id)
   | Student__SubmissionShow(_id) => false
   }
 }
@@ -30,7 +32,9 @@ let courseId = t =>
   | Student__Report(courseId)
   | Student__Leaderboard(courseId) =>
     Some(courseId)
-  | Student__SubmissionShow(_id) => None
+  | Student__StudentsReport(_id)
+  | Student__SubmissionShow(_id) =>
+    None
   }
 
 let path = t => {
@@ -41,6 +45,7 @@ let path = t => {
   | Student__Review(courseId) => `/courses/${courseId}/review`
   | Student__Leaderboard(courseId) => `/courses/${courseId}/leaderboard`
   | Student__SubmissionShow(submissionId) => `/submissions/${submissionId}/review`
+  | Student__StudentsReport(studentId) => `/students/${studentId}/report`
   }
 }
 
@@ -57,19 +62,19 @@ let activeLinks = currentCourse => {
     : linksForStudents
 }
 
-let changeId = (t, id) => {
+let changeCourseId = (t, id) => {
   switch t {
   | Student__Curriculum(_id) => Student__Curriculum(id)
   | Student__Report(_id) => Student__Report(id)
   | Student__Students(_id) => Student__Students(id)
   | Student__Review(_id) => Student__Review(id)
   | Student__Leaderboard(_id) => Student__Leaderboard(id)
-  | Student__SubmissionShow(_id) => Student__SubmissionShow(id)
+  | others => others
   }
 }
 
 let canAccessPage = (t, course) => {
   Belt.Option.isSome(
-    Js.Array.find(l => l == changeId(t, AppRouter__Course.id(course)), activeLinks(course)),
+    Js.Array.find(l => l == changeCourseId(t, AppRouter__Course.id(course)), activeLinks(course)),
   )
 }

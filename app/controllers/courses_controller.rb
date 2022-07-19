@@ -72,7 +72,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/students
   def students
     @course = authorize(find_course)
-    render layout: 'student_course'
+    render html: '', layout: 'app_router'
   end
 
   # GET /courses/:id/report

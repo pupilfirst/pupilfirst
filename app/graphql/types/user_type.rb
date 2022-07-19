@@ -4,6 +4,10 @@ module Types
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
+    field :fullname, String, null:false
+    field :preferred_name, String, null:true
+
+    delegate :name, to: :object
 
     def avatar_url
       BatchLoader::GraphQL

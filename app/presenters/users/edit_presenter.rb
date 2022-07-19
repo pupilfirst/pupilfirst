@@ -7,7 +7,8 @@ module Users
     def props
       {
         current_user_id: current_user.id,
-        name: current_user.name,
+        fullname: current_user.fullname,
+        preferred_name: current_user.preferred_name||'',
         about: current_user.about || '',
         locale: current_user.locale,
         available_locales: Rails.application.secrets.locale[:available],

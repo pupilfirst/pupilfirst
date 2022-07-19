@@ -69,9 +69,9 @@ class User < ApplicationRecord
   before_save :capitalize_name_fragments
 
   def capitalize_name_fragments
-    return unless name_changed?
+    return unless fullname_changed?
 
-    self.name =
+    self.fullname =
       name
         .split
         .map do |name_fragment|
@@ -209,5 +209,9 @@ class User < ApplicationRecord
     else
       title.presence || affiliation.presence
     end
+  end
+
+  def name
+    preferred_name || fullname
   end
 end

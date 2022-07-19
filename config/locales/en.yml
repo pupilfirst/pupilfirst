@@ -1889,6 +1889,12 @@ en:
         founder: All Founders
         team: Team
   mutations:
+    create_team:
+      success_notification: Team created successfully
+    update_team:
+      success_notification: Team updated successfully
+    destroy_team:
+      success_notification: Team deleted successfully
     archive_coach_note:
       note_removed_notification: Note removed successfully
     archive_course:

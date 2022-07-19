@@ -184,5 +184,8 @@ module Types
     field :create_cohort, mutation: Mutations::CreateCohort, null: false
     field :update_cohort, mutation: Mutations::UpdateCohort, null: false
     field :merge_cohort, mutation: Mutations::MergeCohort, null: false
+    field :create_team, mutation: Mutations::CreateTeam, null: false
+    field :update_team, mutation: Mutations::UpdateTeam, null: false
+    field :destroy_team, mutation: Mutations::DestroyTeam, null: false
   end
 end

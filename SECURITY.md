@@ -35,6 +35,8 @@ say that you’re trying to get a hold of someone from the development team.
 3. A draft security advisory is prepared on Github, including details of the fix and advice on how to apply the fix.
 4. The security advisory and the fix is released to the public at the same time.
 
+We currently do not offer any monetary compensation for security-related disclosures.
+
 ## Improving the security policy
 
 If you have any suggestions to improve this policy, please send an email to security@pupilfirst.org.

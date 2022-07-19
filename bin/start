@@ -1,0 +1,16 @@
+beginswith() { case $2 in "$1"*) true;; *) false;; esac; }
+
+if ( [ "$PROCESS_TYPE" = "worker" ] || beginswith worker "$DYNO" ); then
+  if [ "$WORKER_MIGRATE" = "true" ]; then
+    bundle exec rails db:migrate
+  fi
+
+  if [ "$WORKER_SETUP_CRON" = "true" ]; then
+    bundle exec whenever --update-crontab
+    service cron start
+  fi
+
+  bundle exec rake jobs:work
+else
+  bundle exec puma -C config/puma.rb
+fi

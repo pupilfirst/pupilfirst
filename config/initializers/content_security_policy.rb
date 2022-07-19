@@ -55,7 +55,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def connect_sources
     sources = [rollbar_csp[:connect], *vimeo_csp[:connect]]
-    sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
+    sources += %w[ws://localhost:3036 ws://school.localhost:3036 ws://www.school.localhost:3036] if Rails.env.development?
     sources
   end
 
@@ -80,8 +80,23 @@ Rails.application.config.content_security_policy do |policy|
   policy.default_src :none
   policy.img_src '*', :data, :blob
   policy.script_src :strict_dynamic, :unsafe_eval, :unsafe_inline, 'https:', 'http:'
+
+  # Allow @vite/client to hot reload javascript changes in development
+  policy.script_src(*policy.script_src, :unsafe_eval, "http://#{ ViteRuby.config.host_with_port }") if Rails.env.development?
+
+  # You may need to enable this in production as well depending on your setup.
+  policy.script_src(*policy.script_src, :blob) if Rails.env.test?
+
   policy.style_src :self, :unsafe_inline, *style_sources
+
+  # Allow @vite/client to hot reload style changes in development
+  policy.style_src(*policy.style_src, :unsafe_inline) if Rails.env.development?
+
   policy.connect_src :self, *connect_sources
+
+  # Allow @vite/client to hot reload changes in development
+  policy.connect_src(*policy.connect_src, "ws://#{ ViteRuby.config.host_with_port }") if Rails.env.development?
+
   policy.font_src :self, *font_sources
   policy.child_src(*child_sources)
   policy.frame_src :self, :data, *frame_sources

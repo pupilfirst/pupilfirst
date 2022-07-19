@@ -6,16 +6,11 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "app/javascript/packages/*"
+      "app/frontend/packages/*"
     ]
   },
   "dependencies": {
-    "@babel/core": "^7.17.10",
-    "@babel/plugin-proposal-class-properties": "^7.14.5",
-    "@babel/plugin-transform-runtime": "^7.15.0",
-    "@babel/preset-env": "^7.17.10",
-    "@babel/preset-react": "^7.14.5",
-    "@babel/runtime": "^7.15.4",
+    "@babel/core": "^7.18.6",
     "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#esm",
     "@emoji-mart/data": "^1.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -24,17 +19,12 @@
     "@pnotify/mobile": "^5.2.0",
     "@prettier/plugin-ruby": "^1.6.1",
     "@rails/ujs": "^6.1.6",
-    "@rails/webpacker": "^5.4.3",
     "@reasonml-community/graphql-ppx": "^1.2.3",
     "@rescript/react": "^0.10.3",
     "animate.css": "3.7.2",
     "autoprefixer": "^10.3.4",
-    "autosize": "^4.0.4",
-    "babel-loader": "^8.2.5",
+    "autosize": "^5.0.1",
     "babel-plugin-prismjs": "^2.1.0",
-    "babel-plugin-react-css-modules": "^5.2.6",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "babel-preset-react": "^6.24.1",
     "blob-polyfill": "^5.0.20210201",
     "bs-fetch": "^0.6.2",
     "bs-webapi": "^0.19.1",
@@ -57,16 +47,17 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-task-checkbox": "^1.0.6",
     "node-gyp": "^9.0.0",
-    "pluralize": "^8.0.0",
     "pnotify": "^5.2.0",
     "postcss": "^8.3.6",
-    "postcss-loader": "^4.3.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^14.1.0",
+    "postcss-preset-env": "^7.6.0",
     "prettier": "^2.4.1",
     "prismjs": "^1.25.0",
     "prop-types": "^15.7.2",
-    "qrcode.react": "^1.0.1",
+    "qrcode.react": "^3.0.2",
     "react": "^16.8.6",
-    "react-csv-reader": "^3.3.1",
+    "react-csv-reader": "https://github.com/pupilfirst/react-csv-reader#esm",
     "react-datepicker": "^4.2.1",
     "react-dom": "^16.8.6",
     "react-helmet": "^6.1.0",
@@ -76,10 +67,9 @@
     "stylelint-config-recommended": "^5.0.0",
     "tailwindcss": "^2.2.19",
     "tus-js-client": "^2.3.1",
-    "webpack": "4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3",
-    "webpack-merge": "^5.8.0"
+    "vite": "^2.9.1",
+    "vite-plugin-babel": "^1.1.0",
+    "vite-plugin-ruby": "^3.0.9"
   },
   "resolutions": {
     "fstream": "^1.0.12",
@@ -93,8 +83,7 @@
   },
   "scripts": {
     "re:build": "rescript",
-    "re:watch": "rescript clean && rescript build -w",
-    "wds": "TAILWIND_MODE=watch bin/webpack-dev-server"
+    "re:watch": "rescript clean && rescript build -w"
   },
   "packageManager": "yarn@3.2.1"
 }

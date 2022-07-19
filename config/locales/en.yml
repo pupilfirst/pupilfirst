@@ -1581,6 +1581,7 @@ en:
       manage_account: Manage your account in this school
       name_error: Name can't be blank
       name_placeholder: Type your name
+      preferred_name_placeholder: Type your preferred name
       new_password: New password
       new_password_placeholder: Type new password
       notifications: Notifications
@@ -2181,6 +2182,7 @@ en:
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     name: Name
+    preferred_name: Preferred name
     name_email: Name or Email
     no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None

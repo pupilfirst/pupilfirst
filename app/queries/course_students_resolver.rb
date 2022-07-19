@@ -12,7 +12,7 @@ class CourseStudentsResolver < ApplicationQuery
 
   def students
     scope = course.founders
-    scope = scope.active unless filter[:include_inactive_students].present?
+    scope = scope.active if filter[:include_inactive_students].blank?
     scope = scope.joins(:user) if filter[:name].present? ||
       filter[:email].present? || filter[:user_tags].present?
 
@@ -115,6 +115,6 @@ class CourseStudentsResolver < ApplicationQuery
 
     # Extract the ID from the filter value string, which is in the form of 'id;name_of_the_object
     # e.g. '123;1, Getting Started with Regular Expressions'
-    string[/(?<id>(.+?);)/, 'id']&.gsub(';', '')
+    string[/(?<id>.+?);/, 'id']
   end
 end

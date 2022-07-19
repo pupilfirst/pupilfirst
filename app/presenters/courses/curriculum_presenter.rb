@@ -191,7 +191,7 @@ module Courses
     end
 
     def team_members_user_ids
-      @team_members ||=
+      @team_members_user_ids ||=
         if current_student.team.present?
           current_student.team.founders.pluck(:user_id)
         else

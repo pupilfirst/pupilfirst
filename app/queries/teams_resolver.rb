@@ -7,7 +7,7 @@ class TeamsResolver < ApplicationQuery
   def teams
     scope = course.teams
 
-    scope = scope.active unless filter[:include_inactive_teams].present?
+    scope = scope.active if filter[:include_inactive_teams].blank?
     scope = scope.where(cohort_id: cohort.id) if cohort.present?
     scope = scope.where('teams.name ILIKE ?', "%#{filter[:name]}%") if filter[
       :name
@@ -40,6 +40,6 @@ class TeamsResolver < ApplicationQuery
 
     # Extract the ID from the filter value string, which is in the form of 'id;name_of_the_object
     # e.g. '123;1, Getting Started with Regular Expressions'
-    string[/(?<id>(.+?);)/, 'id']&.gsub(';', '')
+    string[/(?<id>.+?);/, 'id']
   end
 end

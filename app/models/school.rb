@@ -3,6 +3,7 @@ class School < ApplicationRecord
   has_many :courses, dependent: :restrict_with_error
   has_many :cohorts, through: :courses
   has_many :founders, through: :users
+  has_many :teams, through: :courses
   has_many :faculty, through: :users
   has_many :school_admins, dependent: :destroy
   has_many :domains, dependent: :destroy

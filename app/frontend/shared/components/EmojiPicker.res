@@ -17,8 +17,7 @@ type args = {
 
 @module("emoji-mart") @new external picker: args => unit = "Picker"
 
-type data
-@module external data: Js.Json.t = "@emoji-mart/data"
+@module("@emoji-mart/data") external data: Js.Json.t = "default"
 
 let emojiDivClassName = isOpen => {
   switch isOpen {

@@ -11,15 +11,7 @@ module Mutations
                  maximum: 50
                }
              }
-    argument :student_ids,
-             [ID],
-             required: true,
-             validates: {
-               length: {
-                 minimum: 2
-               },
-               allow_blank: false
-             }
+    argument :student_ids, [ID], required: true
 
     description 'Update a new team'
 
@@ -48,16 +40,19 @@ module Mutations
       def size_grater_than_two
         return if @value[:student_ids].count > 2
 
-        'One or more of the entries have invalid strings'
+        'The team should have at least two students'
       end
 
       def students_should_belong_to_the_same_cohort
-        if @team.cohort.founders.where(id: @value[:student_ids]).count ==
-             @value[:student_ids].count
+        if @team
+             .cohort
+             .founders
+             .where(id: @value[:student_ids], team_id: nil)
+             .count == @value[:student_ids].count
           return
         end
 
-        'One or more of the students do not belong to the same cohort'
+        'Each student should belong to the same cohort and should not be in a team'
       end
     end
 

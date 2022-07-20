@@ -53,65 +53,86 @@ let reducer = (state, action) =>
     }
   }
 
-// let createCohort = (state, send, courseId) => {
-//   send(SetSaving)
+module TeamFragment = Team.Fragment
 
-//   let variables = CreateCohortsQuery.makeVariables(
-//     ~name=state.name,
-//     ~description=state.description,
-//     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
-//     ~courseId,
-//     (),
-//   )
+module CreateTeamQuery = %graphql(`
+    mutation CreateTeamQuery($name: String!, $studentIds: [ID!]!, $cohortId: ID!) {
+      createTeam(cohortId: $cohortId, name: $name, studentIds: $studentIds) {
+        team {
+          ...TeamFragment
+        }
+      }
+    }
+  `)
 
-//   CreateCohortsQuery.fetch(variables)
-//   |> Js.Promise.then_((result: CreateCohortsQuery.t) => {
-//     switch result.createCohort.cohort {
-//     | Some(_cohort) => {
-//         send(ClearSaving)
-//         RescriptReactRouter.push(`/school/courses/${courseId}/cohorts`)
-//       }
+module UpdateTeamQuery = %graphql(`
+    mutation CreateTeamQuery($name: String!, $studentIds: [ID!]!, $teamId: ID!) {
+      updateTeam(teamId: $teamId, name: $name, studentIds: $studentIds) {
+        team {
+          ...TeamFragment
+        }
+      }
+    }
+  `)
 
-//     | None => send(ClearSaving)
-//     }
+let createTeam = (state, send, cohortId, courseId) => {
+  send(SetSaving)
 
-//     Js.Promise.resolve()
-//   })
-//   |> Js.Promise.catch(error => {
-//     Js.log(error)
-//     send(ClearSaving)
-//     Js.Promise.resolve()
-//   })
-//   |> ignore
-// }
+  let variables = CreateTeamQuery.makeVariables(
+    ~name=state.name,
+    ~studentIds=state.selectedStudent->Js.Array2.map(UserProxy.id),
+    ~cohortId,
+    (),
+  )
 
-// let updateCohort = (state, send, cohortId) => {
-//   send(SetSaving)
+  CreateTeamQuery.fetch(variables)
+  |> Js.Promise.then_((result: CreateTeamQuery.t) => {
+    switch result.createTeam.team {
+    | Some(_team) => {
+        send(ClearSaving)
+        Js.log("HERE")
+        RescriptReactRouter.push(`/school/courses/${courseId}/teams`)
+      }
 
-//   let variables = UpdateCohortsQuery.makeVariables(
-//     ~name=state.name,
-//     ~description=state.description,
-//     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
-//     ~cohortId,
-//     (),
-//   )
+    | None => send(ClearSaving)
+    }
 
-//   UpdateCohortsQuery.fetch(variables)
-//   |> Js.Promise.then_((result: UpdateCohortsQuery.t) => {
-//     switch result.updateCohort.cohort {
-//     | Some(_cohort) => send(ClearSaving)
-//     | None => send(ClearSaving)
-//     }
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(ClearSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
 
-//     Js.Promise.resolve()
-//   })
-//   |> Js.Promise.catch(error => {
-//     Js.log(error)
-//     send(ClearSaving)
-//     Js.Promise.resolve()
-//   })
-//   |> ignore
-// }
+let updateTeam = (state, send, teamId) => {
+  send(SetSaving)
+
+  let variables = UpdateTeamQuery.makeVariables(
+    ~name=state.name,
+    ~studentIds=state.selectedStudent->Js.Array2.map(UserProxy.id),
+    ~teamId,
+    (),
+  )
+
+  UpdateTeamQuery.fetch(variables)
+  |> Js.Promise.then_((result: UpdateTeamQuery.t) => {
+    switch result.updateTeam.team {
+    | Some(_team) => send(ClearSaving)
+    | None => send(ClearSaving)
+    }
+
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(ClearSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
 
 let computeInitialState = team =>
   switch team {
@@ -218,7 +239,7 @@ let make = (~courseId, ~team=?) => {
             selectables={state.cohorts}
             selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
             onSelect={u => send(SetSelectedCohort(u))}
-            disabled={state.selectedStudent->ArrayUtils.isNotEmpty}
+            disabled={state.selectedStudent->ArrayUtils.isNotEmpty || Belt.Option.isSome(team)}
             loading={state.loading}
           />
         </div>
@@ -232,26 +253,26 @@ let make = (~courseId, ~team=?) => {
               onSelect={selectedStudent(send)}
               onDeselect={deSelectStudent(send)}
             />
+            {switch team {
+            | Some(team) =>
+              <button
+                className="btn btn-primary btn-large w-full mt-6"
+                disabled={disabled(state)}
+                onClick={_e => updateTeam(state, send, Team.id(team))}>
+                {"Update Team"->str}
+              </button>
+            | None =>
+              <button
+                className="btn btn-primary btn-large w-full mt-6"
+                type_="submit"
+                disabled={disabled(state)}
+                onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
+                {"Add new cohort"->str}
+              </button>
+            }}
           </div>
         | None => React.null
         }}
-        // {switch team {
-        // | Some(team) =>
-        //   <button
-        //     className="btn btn-primary btn-large w-full mt-6"
-        //     disabled={disabled(state)}
-        //     onClick={_e => updateCohort(state, send, Cohort.id(cohort))}>
-        //     {"Update cohort"->str}
-        //   </button>
-        // | None =>
-        //   <button
-        //     className="btn btn-primary btn-large w-full mt-6"
-        //     type_="submit"
-        //     disabled={disabled(state)}
-        //     onClick={_e => createCohort(state, send, courseId)}>
-        //     {"Add new cohort"->str}
-        //   </button>
-        // }}
       </div>
     </div>
   </DisablingCover>

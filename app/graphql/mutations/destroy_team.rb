@@ -22,12 +22,12 @@ module Mutations
     def destroy_team
       Team.transaction do
         team.founders.each { |student| student.update!(team: nil) }
-        team.destroy!
+        team.reload.destroy!
       end
     end
 
     def team
-      @team ||= current_school.cohorts.find(@params[:team_id])
+      @team ||= current_school.teams.find(@params[:team_id])
     end
 
     def resource_school

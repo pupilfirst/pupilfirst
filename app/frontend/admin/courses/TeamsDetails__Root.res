@@ -1,19 +1,15 @@
+open TeamsEditor__Types
+
 let str = React.string
 
-// MOCK DATA
-
-type cohort = {
-  id: string,
-  name: string
+let teamDetailsSkeleton = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.button()}
+  </div>
 }
-
-let cohorts = [
-  {id:"1", name: "Cohort 1"},
-  {id:"2", name: "Cohort 2"},
-  {id:"3", name: "Cohort 3"}
-]
-
-// ----------------
 
 let pageLinks = (courseId, studentId) => [
   School__PageHeader.makeLink(
@@ -29,86 +25,50 @@ let pageLinks = (courseId, studentId) => [
     ~selected=false,
   ),
 ]
+type state = Unloaded | Loading | Loaded(Team.t)
 
-let formInvalid = (teamName, selectedCohort) =>
-  teamName == "" || selectedCohort == ""
+module TeamFragment = Team.Fragment
 
+module TeamDetailsDataQuery = %graphql(`
+  query TeamDetailsDataQuery($id: ID!) {
+    team(id: $id) {
+      ...TeamFragment
+    }
+  }
+`)
+
+let loadData = (id, setState) => {
+  setState(_ => Loading)
+  TeamDetailsDataQuery.fetch({
+    id: id,
+  })
+  |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
+    setState(_ => Loaded(response.team->Team.makeFromFragment))
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
 
 @react.component
 let make = (~courseId, ~studentId) => {
-  let (teamName, setTeamName) = React.useState(_ => "")
-  let (selectedCohort, setSelectedCohort) = React.useState(_ => "")
+  let (state, setState) = React.useState(() => Unloaded)
+
+  React.useEffect1(() => {
+    loadData(studentId, setState)
+    None
+  }, [studentId])
 
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/teams`}
       title="Edit Team"
-      description={"Edit team {team name}"}
+      description={"Edit team details"}
       links={pageLinks(courseId, studentId)}
     />
-    <form className="max-w-5xl mx-auto px-2">
-      <div className="mt-8">
-        <label
-          className="block text-sm font-semibold mb-2"
-          htmlFor="teamName">
-          {"Team name" |> str}
-        </label>
-        <input
-          value={teamName}
-          onChange={event => setTeamName(ReactEvent.Form.target(event)["value"])}
-          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
-          id="teamName"
-          type_="text"
-          placeholder="eg, Avengers"
-        />
-        // <School__InputGroupError
-        //   message="Enter a valid team name"
-        //   active={}
-        // />
-      </div>
-      <div className="mt-6">
-        <label
-          className="block text-sm font-semibold mb-2"
-          htmlFor="cohort">
-          {"Select cohort" |> str}
-        </label>
-        <select
-          id="cohort"
-          value={selectedCohort}
-          onChange={event => {
-            setSelectedCohort(ReactEvent.Form.target(event)["value"])
-          }}
-          className="select appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
-          {cohorts
-          ->Js.Array2.map(cohort =>
-            <option key=cohort.id value=cohort.id ariaSelected={selectedCohort===cohort.id}>
-              {cohort.name->str}
-            </option>
-          )
-          ->React.array}
-          </select>
-        // <School__InputGroupError
-        //   message="Select a cohort"
-        //   active={}
-        // />
-
-        {
-          selectedCohort != ""
-          ? {
-            <div>
-              <p>{"Replace with student selector" -> str}</p>
-              <button
-                // onClick={}
-                disabled={formInvalid(teamName, selectedCohort)}
-                className="btn btn-primary w-full mt-6"
-
-                >{"Update team details" -> str}
-            </button>
-          </div>
-          }
-          : React.null
-        }
-      </div>
-    </form>
+    {switch state {
+    | Unloaded => str("Should Load data")
+    | Loading => teamDetailsSkeleton()
+    | Loaded(team) => <AdminCoursesShared__TeamEditor courseId team />
+    }}
   </div>
 }

@@ -15,8 +15,6 @@ module Item = {
 
 module PagedStudents = Pagination.Make(Item)
 
-// state.loadLevels is used to load the levels for the current course.
-// The GraphQL query skips loading the levels if the loadLevels is not set to true, this is ensures that levels are loaded only once.
 type state = {
   loading: LoadingV2.t,
   students: PagedStudents.t,
@@ -24,8 +22,6 @@ type state = {
   totalEntriesCount: int,
   reloadDistributionAt: option<Js.Date.t>,
   studentDistribution: array<DistributionInLevel.t>,
-  levels: array<Level.t>,
-  loadLevels: bool,
 }
 
 type action =
@@ -37,7 +33,6 @@ type action =
       array<StudentInfo.t>,
       int,
       option<array<DistributionInLevel.t>>,
-      option<array<Level.t>>,
     )
   | BeginLoadingMore
   | BeginReloading
@@ -49,14 +44,7 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput}
-  | LoadStudents(
-      endCursor,
-      hasNextPage,
-      students,
-      totalEntriesCount,
-      studentDistribution,
-      levels,
-    ) =>
+  | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount, studentDistribution) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
     | Reloading(_) => students
@@ -69,7 +57,6 @@ let reducer = (state, action) =>
       totalEntriesCount,
       reloadDistributionAt: None,
       studentDistribution: Belt.Option.getWithDefault(studentDistribution, []),
-      levels: Belt.Option.getWithDefault(levels, state.levels),
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {
@@ -85,7 +72,7 @@ module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 
 module StudentsQuery = %graphql(`
-    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!, $loadLevels: Boolean!) {
+    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!) {
       courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after, ) {
         nodes {
           id,
@@ -110,11 +97,6 @@ module StudentsQuery = %graphql(`
         }
         totalCount
       }
-      course(id: $courseId) @include(if: $loadLevels) {
-       levels {
-          ...LevelFragment
-        }
-      }
       studentDistribution(courseId: $courseId, filterString: $filterString) @skip(if: $skipIfLoadingMore) {
         id
         number
@@ -125,7 +107,7 @@ module StudentsQuery = %graphql(`
     }
   `)
 
-let getStudents = (send, courseId, cursor, ~loadingMore=false, ~loadLevels=false, params) => {
+let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
 
   StudentsQuery.makeVariables(
@@ -133,7 +115,6 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, ~loadLevels=false
     ~after=?cursor,
     ~filterString=?Some(filterString),
     ~skipIfLoadingMore={loadingMore},
-    ~loadLevels,
     (),
   )
   |> StudentsQuery.fetch
@@ -173,9 +154,6 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, ~loadLevels=false
         students,
         response.courseStudents.totalCount,
         studentDistribution,
-        response.course->Belt.Option.map(c =>
-          c.levels->Js.Array2.map(Shared__Level.makeFromFragment)
-        ),
       ),
     )
     Js.Promise.resolve()
@@ -209,13 +187,11 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
   reloadDistributionAt: None,
   studentDistribution: [],
-  levels: [],
-  loadLevels: true,
 }
 
-let reloadStudents = (courseId, params, ~loadLevels=false, send) => {
+let reloadStudents = (courseId, params, send) => {
   send(BeginReloading)
-  getStudents(send, courseId, None, ~loadLevels, params)
+  getStudents(send, courseId, None, params)
 }
 
 let onSelect = (key, value, params) => {
@@ -245,9 +221,9 @@ let make = (~courseId) => {
   let params = Webapi.Url.URLSearchParams.make(url.search)
 
   React.useEffect1(() => {
-    reloadStudents(courseId, params, send, ~loadLevels=state.loadLevels)
+    reloadStudents(courseId, params, send)
     None
-  }, [url.search])
+  }, [courseId, url.search])
 
   <div role="main" ariaLabel="Students" className="flex-1 flex flex-col">
     <div className="hidden md:block h-16" />

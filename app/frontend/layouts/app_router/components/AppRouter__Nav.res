@@ -6,12 +6,18 @@ open AppRouter__Types
 
 let str = React.string
 
+let showLink = (id, selectedPage, page, classes, title, contents) => {
+  Page.useSPA(selectedPage, Page.SelectedCourse(id, page))
+    ? <Link href={Page.coursePath(id, page)} className=classes title> {contents} </Link>
+    : <a href={Page.coursePath(id, page)} className=classes title> {contents} </a>
+}
+
 let renderLinks = (courses, selectedPage) => {
-  switch Page.courseId(selectedPage) {
-  | Some(currentCourseId) =>
+  switch selectedPage {
+  | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
-      course => Course.id(course) == currentCourseId,
-      "Could not find currentCourse with ID " ++ currentCourseId,
+      course => Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
       courses,
     )
 
@@ -26,41 +32,47 @@ let renderLinks = (courses, selectedPage) => {
         }}
       </div>
       <div className="mt-4">
-        <AppRouter__CourseSelector courses selectedPage currentCourseId />
+        <AppRouter__CourseSelector courses coursePage currentCourse selectedPage />
       </div>
       <div className="mt-4 space-y-3"> {Js.Array.map(link => {
           let (title, icon) = switch link {
-          | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-light")
-          | Student__Report(_) => (t("report"), "i-graph-up-light")
-          | Student__Students(_) => (t("students"), "i-users-light")
-          | Student__Review(_) => (t("review"), "i-clipboard-check-light")
-          | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-light")
-          | Student__StudentsReport(_)
-          | Student__SubmissionShow(_) => ("", "")
+          | Page.Curriculum => (t("curriculum"), "i-journal-text-light")
+          | Report => (t("report"), "i-graph-up-light")
+          | Students => (t("students"), "i-users-light")
+          | Review => (t("review"), "i-clipboard-check-light")
+          | Leaderboard => (t("leaderboard"), "i-tachometer-alt-light")
           }
-          <a
-            key=title
-            href={Page.path(link)}
-            className={"flex relative items-center p-3 rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 " ++ (
-              link == selectedPage
+
+          let classes =
+            "flex relative items-center p-3 rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 " ++ (
+              link == coursePage
                 ? "text-primary-500 bg-gray-50 before:block before:bg-primary-500 before:w-1 before:absolute before:left-0 before:top-1/2 before:h-3/4 before:rounded-r-md before:transform before:-translate-y-1/2"
                 : "hover:text-primary-500 hover:bg-gray-50"
-            )}>
-            <Icon className={`if ${icon} text-xl if-fw`} />
-            <div className="pl-3"> {str(title)} </div>
-          </a>
+            )
+
+          showLink(
+            courseId,
+            selectedPage,
+            link,
+            classes,
+            title,
+            [
+              <Icon key="icon" className={`if ${icon} text-xl if-fw`} />,
+              <div key="title" className="pl-3"> {str(title)} </div>,
+            ]->React.array,
+          )
         }, Page.activeLinks(currentCourse))->React.array} </div>
     </div>
-  | None => React.null
+  | _ => React.null
   }
 }
 
 let courseSelector = (courses, selectedPage) => {
-  switch Page.courseId(selectedPage) {
-  | Some(currentCourseId) =>
+  switch selectedPage {
+  | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
-      course => Course.id(course) == currentCourseId,
-      "Could not find currentCourse with ID " ++ currentCourseId,
+      course => Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
       courses,
     )
 
@@ -75,45 +87,52 @@ let courseSelector = (courses, selectedPage) => {
         }}
       </div>
       <div className="-mt-11 pb-2 md:pb-0 md:mt-4 px-2">
-        <AppRouter__CourseSelector courses selectedPage currentCourseId />
+        <AppRouter__CourseSelector courses coursePage currentCourse selectedPage />
       </div>
     </div>
-  | None => React.null
+  | _ => React.null
   }
 }
 
 let renderLinksMobile = (courses, selectedPage) => {
-  switch Page.courseId(selectedPage) {
-  | Some(currentCourseId) =>
+  switch selectedPage {
+  | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
-      course => Course.id(course) == currentCourseId,
-      "Could not find currentCourse with ID " ++ currentCourseId,
+      course => Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
       courses,
     )
 
     <div className="flex"> {Js.Array.map(link => {
         let (title, icon) = switch link {
-        | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-regular")
-        | Student__Report(_) => (t("report"), "i-graph-up-regular")
-        | Student__Students(_) => (t("students"), "i-users-regular")
-        | Student__Review(_) => (t("review"), "i-clipboard-check-regular")
-        | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-regular")
-        | Student__StudentsReport(_)
-        | Student__SubmissionShow(_) => ("", "")
+        | Page.Curriculum => (t("curriculum"), "i-journal-text-regular")
+        | Report => (t("report"), "i-graph-up-regular")
+        | Students => (t("students"), "i-users-regular")
+        | Review => (t("review"), "i-clipboard-check-regular")
+        | Leaderboard => (t("leaderboard"), "i-tachometer-alt-regular")
         }
-        <a
-          key=title
-          href={Page.path(link)}
-          className={"flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold " ++ (
-            link == selectedPage
+
+        let classes = {
+          "flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold " ++ (
+            coursePage == link
               ? "text-primary-500 bg-gray-50"
               : "hover:text-primary-500 hover:bg-gray-50"
-          )}>
-          <Icon className={`if ${icon} text-lg if-fw`} />
-          <div className="pt-1"> {str(title)} </div>
-        </a>
+          )
+        }
+
+        showLink(
+          courseId,
+          selectedPage,
+          link,
+          classes,
+          title,
+          [
+            <Icon key="icon" className={`if ${icon} text-lg if-fw`} />,
+            <div key="title" className="pt-1"> {str(title)} </div>,
+          ]->React.array,
+        )
       }, Page.activeLinks(currentCourse))->React.array} </div>
-  | None => React.null
+  | _ => React.null
   }
 }
 

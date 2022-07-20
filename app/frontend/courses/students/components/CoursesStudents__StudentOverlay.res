@@ -432,7 +432,7 @@ let coachInfo = studentDetails => {
 
 let navigateToStudent = (setState, _event) => setState(_ => initialState)
 
-let otherTeamMembers = (setState, studentId, studentDetails) =>
+let otherTeamMembers = (setState, studentDetails) =>
   switch studentDetails->StudentDetails.team {
   | Some(team) =>
     <div className="block mb-8">
@@ -570,7 +570,7 @@ let make = (~studentId, ~userId) => {
                 </div>
               : React.null}
             {coachInfo(studentDetails)}
-            {otherTeamMembers(setState, studentId, studentDetails)}
+            {otherTeamMembers(setState, studentDetails)}
           </div>
           <div
             className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">

@@ -14,7 +14,6 @@ type coursePages =
   | Applicants
   | Teams
   | Cohorts
-  | Calendar
 
 type settingsPages =
   | Customization
@@ -55,7 +54,6 @@ let isSPA = t => {
     | EvaluationCriteria
     | CourseExports
     | Authors
-    | Calendar
     | Certificates
     | Applicants => false
     }
@@ -90,7 +88,6 @@ let path = t => {
     | Applicants => `/school/courses/${courseId}/applicants`
     | Teams => `/school/courses/${courseId}/teams`
     | Cohorts => `/school/courses/${courseId}/cohorts`
-    | Calendar => `/school/courses/${courseId}/calendar`
     }
   | Communities => "/school/communities"
   }
@@ -118,7 +115,6 @@ let name = t => {
     | Applicants => "Applicants"
     | Teams => "Teams"
     | Cohorts => "Cohorts"
-    | Calendar => "Calendar"
     }
   | Communities => "Communities"
   }

@@ -19,7 +19,7 @@ let make = (~school, ~courses, ~currentUser) => {
         currentCoachId={Belt.Option.getWithDefault(User.coachId(User.defaultUser(currentUser)), "")}
         courses
       />,
-      Student__Review(courseId),
+      SelectedCourse(courseId, Review),
     )
   | list{"submissions", submissionId, "review"} => (
       <CoursesReview__SubmissionsRoot submissionId currentUser={User.defaultUser(currentUser)} />,
@@ -27,7 +27,7 @@ let make = (~school, ~courses, ~currentUser) => {
     )
   | list{"courses", courseId, "students"} => (
       <CoursesStudents__Root courseId />,
-      Student__Students(courseId),
+      SelectedCourse(courseId, Students),
     )
   | list{"students", studentId, "report"} => (
       <CoursesStudents__StudentOverlay studentId userId={User.id(User.defaultUser(currentUser))} />,

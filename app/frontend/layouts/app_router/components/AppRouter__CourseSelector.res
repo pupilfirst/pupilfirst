@@ -15,35 +15,34 @@ let selected = currentCourse =>
     </span>
   </button>
 
-let contents = (courses, currentCourse, selectedPage) => {
-  Js.Array.map(
-    course =>
-      <a
-        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-normal focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
-        key={course->Course.id}
-        href={Page.canAccessPage(selectedPage, course)
-          ? Page.path(Page.changeCourseId(selectedPage, Course.id(course)))
-          : Page.path(Page.Student__Curriculum(Course.id(course)))}>
-        {Course.name(course)->str}
-      </a>,
-    Js.Array.filter(
-      course => Course.id(course) != Course.id(currentCourse) && !Course.accessEnded(course),
-      courses,
-    ),
-  )
+let showLink = (id, selectedPage, coursePage, classes, contents) => {
+  Page.useSPA(selectedPage, Page.SelectedCourse(id, coursePage))
+    ? <Link href={Page.coursePath(id, coursePage)} className=classes> {contents} </Link>
+    : <a href={Page.coursePath(id, coursePage)} className=classes> {contents} </a>
+}
+
+let contents = (courses, currentCourse, coursePage, selectedPage) => {
+  Js.Array.map(course => {
+    let href = {
+      Page.canAccessPage(coursePage, course)
+        ? Page.coursePath(Course.id(course), coursePage)
+        : Page.coursePath(Course.id(course), Page.Curriculum)
+    }
+    let classes = "block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-normal focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+    Page.useSPA(selectedPage, Page.SelectedCourse(Course.id(course), coursePage))
+      ? <Link href className=classes> {Course.name(course)->str} </Link>
+      : <a href className=classes> {Course.name(course)->str} </a>
+  }, Js.Array.filter(
+    course => Course.id(course) != Course.id(currentCourse) && !Course.accessEnded(course),
+    courses,
+  ))
 }
 
 @react.component
-let make = (~courses, ~selectedPage, ~currentCourseId) => {
-  let currentCourse = ArrayUtils.unsafeFind(
-    course => Course.id(course) == currentCourseId,
-    "Could not find currentCourse with ID " ++ currentCourseId,
-    courses,
-  )
-
+let make = (~courses, ~selectedPage, ~coursePage, ~currentCourse) => {
   <Dropdown
     className="w-full md:text-base"
     selected={selected(currentCourse)}
-    contents={contents(courses, currentCourse, selectedPage)}
+    contents={contents(courses, currentCourse, coursePage, selectedPage)}
   />
 }

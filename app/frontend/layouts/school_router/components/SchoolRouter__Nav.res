@@ -130,7 +130,6 @@ let secondaryNavLinks = (selectedPage, courseId, currentUser) => {
     Applicants,
     Teams,
     Authors,
-    Calendar,
     Certificates,
     CourseCoaches,
     EvaluationCriteria,
@@ -213,19 +212,17 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                     className="px-2 pt-3 pb-1 text-xs font-semibold text-gray-400 border-t-2 border-gray-100">
                     {"Courses"->str}
                   </div>
-                  {Js.Array.map(
-                    course =>
-                      <li key={Course.id(course)}>
-                        <a
-                          ariaLabel={Course.name(course)}
-                          href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
-                          className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
-                          <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
-                          {str(Course.name(course))}
-                        </a>
-                      </li>,
-                    Js.Array.filter(course => !Course.ended(course), courses),
-                  )->React.array}
+                  {Js.Array.map(course =>
+                    <li key={Course.id(course)}>
+                      <a
+                        ariaLabel={Course.name(course)}
+                        href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
+                        className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
+                        <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
+                        {str(Course.name(course))}
+                      </a>
+                    </li>
+                  , Js.Array.filter(course => !Course.ended(course), courses))->React.array}
                 </ul>,
                 Page.shrunk(selectedPage),
               )}

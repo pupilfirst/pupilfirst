@@ -432,13 +432,14 @@ let coachInfo = studentDetails => {
 
 let navigateToStudent = (setState, _event) => setState(_ => initialState)
 
-let otherTeamMembers = (setState, studentDetails) =>
+let otherTeamMembers = (setState, studentId, studentDetails) =>
   switch studentDetails->StudentDetails.team {
   | Some(team) =>
     <div className="block mb-8">
       <h6 className="font-semibold"> {t("other_team_members") |> str} </h6>
       {team
       ->StudentDetails.students
+      ->Js.Array2.filter(student => StudentInfo.id(student) != studentId)
       ->Js.Array2.map(student => {
         let path = "/students/" ++ (student->StudentInfo.id ++ "/report")
 
@@ -570,7 +571,7 @@ let make = (~studentId, ~userId) => {
                 </div>
               : React.null}
             {coachInfo(studentDetails)}
-            {otherTeamMembers(setState, studentDetails)}
+            {otherTeamMembers(setState, studentId, studentDetails)}
           </div>
           <div
             className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">

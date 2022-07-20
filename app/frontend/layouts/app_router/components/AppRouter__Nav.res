@@ -8,8 +8,8 @@ let str = React.string
 
 let showLink = (id, selectedPage, page, classes, title, contents) => {
   Page.useSPA(selectedPage, Page.SelectedCourse(id, page))
-    ? <Link href={Page.coursePath(id, page)} className=classes title> {contents} </Link>
-    : <a href={Page.coursePath(id, page)} className=classes title> {contents} </a>
+    ? <Link key=title href={Page.coursePath(id, page)} className=classes title> {contents} </Link>
+    : <a key=title href={Page.coursePath(id, page)} className=classes title> {contents} </a>
 }
 
 let renderLinks = (courses, selectedPage) => {
@@ -34,7 +34,9 @@ let renderLinks = (courses, selectedPage) => {
       <div className="mt-4">
         <AppRouter__CourseSelector courses coursePage currentCourse selectedPage />
       </div>
-      <div className="mt-4 space-y-3"> {Js.Array.map(link => {
+      <div className="mt-4 space-y-3">
+        {Page.activeLinks(currentCourse)
+        ->Js.Array2.map(link => {
           let (title, icon) = switch link {
           | Page.Curriculum => (t("curriculum"), "i-journal-text-light")
           | Report => (t("report"), "i-graph-up-light")
@@ -61,7 +63,9 @@ let renderLinks = (courses, selectedPage) => {
               <div key="title" className="pl-3"> {str(title)} </div>,
             ]->React.array,
           )
-        }, Page.activeLinks(currentCourse))->React.array} </div>
+        })
+        ->React.array}
+      </div>
     </div>
   | _ => React.null
   }
@@ -103,7 +107,9 @@ let renderLinksMobile = (courses, selectedPage) => {
       courses,
     )
 
-    <div className="flex"> {Js.Array.map(link => {
+    <div className="flex">
+      {Page.activeLinks(currentCourse)
+      ->Js.Array2.map(link => {
         let (title, icon) = switch link {
         | Page.Curriculum => (t("curriculum"), "i-journal-text-regular")
         | Report => (t("report"), "i-graph-up-regular")
@@ -131,7 +137,9 @@ let renderLinksMobile = (courses, selectedPage) => {
             <div key="title" className="pt-1"> {str(title)} </div>,
           ]->React.array,
         )
-      }, Page.activeLinks(currentCourse))->React.array} </div>
+      })
+      ->React.array}
+    </div>
   | _ => React.null
   }
 }

@@ -1764,6 +1764,9 @@ ru:
       submission_graded_error: Работа уже оценена
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
+    create_school_link:
+      success_notification: добавлена пользовательская ссылка.
+      blank_title_error: Требуется заголовок
     create_student_from_applicant:
       success_notification: Студент успешно создан.
     create_submission:

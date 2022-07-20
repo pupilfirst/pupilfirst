@@ -1927,6 +1927,9 @@ en:
       reply_added_notification: Reply added successfully
     create_quiz_submission:
       responses_saved_notification: Your responses have been saved.
+    create_school_link:
+      success_notification: A custom link has been added.
+      blank_title_error: A title is required
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:

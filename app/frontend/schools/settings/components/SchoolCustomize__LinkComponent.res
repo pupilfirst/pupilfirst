@@ -29,9 +29,9 @@ module DestroySchoolLinkQuery = %graphql(`
   }
   `)
 
-module SortSchoolLinkQuery = %graphql(`
-  mutation SortSchoolLinksMutation($id: ID!,$direction: MoveDirection!) {
-    sortSchoolLinks(id:$id,direction:$direction) {
+module MoveSchoolLinkQuery = %graphql(`
+  mutation MoveSchoolLinkMutation($id: ID!,$direction: MoveDirection!) {
+    moveSchoolLink(id:$id,direction:$direction) {
       success
     }
   }
@@ -39,8 +39,8 @@ module SortSchoolLinkQuery = %graphql(`
 
 let handleMoveLink = (~id, ~kind, ~direction: Customizations.direction, ~send, ~moveLinkCB) => {
   send(SetUpdating(true))
-  SortSchoolLinkQuery.make({
-    id: id,
+  MoveSchoolLinkQuery.make({
+    id,
     direction: switch direction {
     | Up => #Up
     | Down => #Down
@@ -81,7 +81,7 @@ module UpdateSchoolLinkQuery = %graphql(`
 
 let handleLinkEdit = (~send, ~updateLinkCB, ~id, ~title: string, ~url) => {
   send(SetUpdating(true))
-  UpdateSchoolLinkQuery.make({id: id, title: Some(title), url: url})
+  UpdateSchoolLinkQuery.make({id, title: Some(title), url})
   |> Js.Promise.then_(_ => {
     send(SetUpdating(false))
     send(SetEditing(false))
@@ -94,8 +94,8 @@ let handleLinkEdit = (~send, ~updateLinkCB, ~id, ~title: string, ~url) => {
 
 let initialState = (title: string, url: string) => {
   {
-    title: title,
-    url: url,
+    title,
+    url,
     editing: false,
     error: false,
     updating: false,
@@ -104,11 +104,11 @@ let initialState = (title: string, url: string) => {
 
 let reducer = (state, action) => {
   switch action {
-  | SetEditing(editing) => {...state, editing: editing}
-  | UpdateTitle(title) => {...state, title: title}
-  | UpdateUrl(url) => {...state, url: url}
-  | SetError(error) => {...state, error: error}
-  | SetUpdating(updating) => {...state, updating: updating}
+  | SetEditing(editing) => {...state, editing}
+  | UpdateTitle(title) => {...state, title}
+  | UpdateUrl(url) => {...state, url}
+  | SetError(error) => {...state, error}
+  | SetUpdating(updating) => {...state, updating}
   }
 }
 
@@ -118,7 +118,8 @@ module LinkEditor = {
     <>
       {switch kind {
       | SchoolLinks.HeaderLink
-      | FooterLink => <>
+      | FooterLink =>
+        <>
           <input
             value=state.title
             required=true
@@ -181,7 +182,8 @@ let make = (
           : <div className="pl-3">
               {switch kind {
               | HeaderLink
-              | FooterLink => <>
+              | FooterLink =>
+                <>
                   <span className="inline-block mr-2 font-semibold"> {title |> str} </span>
                   <PfIcon className="if i-link-regular if-fw mr-1" />
                   <code> {url |> str} </code>

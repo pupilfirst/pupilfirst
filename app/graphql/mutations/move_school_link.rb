@@ -1,5 +1,5 @@
 module Mutations
-  class SortSchoolLinks < ApplicationQuery
+  class MoveSchoolLink < ApplicationQuery
     class SchoolLinkMustBePresent < GraphQL::Schema::Validator
       def validate(_object, _context, value)
         id = value[:id]
@@ -29,10 +29,10 @@ module Mutations
         I18n.t('mutations.update_school_link.success_notification')
       )
 
-      { success: sort_school_links }
+      { success: move_school_link }
     end
 
-    def sort_school_links
+    def move_school_link
       direction = @params[:direction]
       ordered_school_links =
         SchoolLink.where(kind: school_link.kind).order(sort_index: :ASC).to_a

@@ -299,9 +299,11 @@ let controls = (disabled, value, state, send, onChange) => {
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
   let valueReference = React.useRef(value)
+  valueReference.current = value
 
   let (currentSelectionStart, _) = state.selection
   let selectionStart = React.useRef(currentSelectionStart)
+  selectionStart.current = currentSelectionStart
 
   let handleEmojiChange = (e: EmojiPicker.emojiEvent) => {
     onChange(valueReference.current |> insertAt(e.native, selectionStart.current))

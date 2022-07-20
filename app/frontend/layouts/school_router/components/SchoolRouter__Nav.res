@@ -25,7 +25,7 @@ let showUserLink = () => {
 
 let showUser = user => {
   <div className="mt-3">
-    <div className="p-3 flex w-full items-center bg-gray-50 rounded-md ">
+    <div className="p-3 flex w-full items-center bg-gray-50 rounded-md">
       <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
         {User.avatarUrl(user)->Belt.Option.mapWithDefault(
           <Avatar
@@ -82,14 +82,10 @@ let bottomLink = (path, shrunk, iconClasses, text) => {
   </li>
 }
 
-let topNavButtonContents = (selectedPage, page) => {
+let topNavButtonContents = page => {
   [
     <PfIcon key="icon" className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
-    {
-      Page.shrunk(selectedPage)
-        ? <span key="content" className="ml-2"> {Page.name(page)->str} </span>
-        : <span key="content" className="ml-2"> {Page.name(page)->str} </span>
-    },
+    <span key="content" className="ml-2"> {Page.name(page)->str} </span>,
   ]->React.array
 }
 
@@ -105,7 +101,7 @@ let topLink = (selectedPage, page) => {
     defaultClasses ++ (selectedPage == page ? " school-admin-navbar__primary-nav-link--active" : "")
   let title = Page.shrunk(selectedPage) ? Some(Page.name(page)) : None
 
-  showLink(selectedPage, page, classes, title, topNavButtonContents(selectedPage, page))
+  showLink(selectedPage, page, classes, title, topNavButtonContents(page))
 }
 
 let secondaryNavOption = (selectedPage, page) => {

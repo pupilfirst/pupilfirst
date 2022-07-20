@@ -46,10 +46,8 @@ let renderLinks = (courses, selectedPage) => {
           }
 
           let classes =
-            "flex relative items-center p-3 rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 " ++ (
-              link == coursePage
-                ? "text-primary-500 bg-gray-50 before:block before:bg-primary-500 before:w-1 before:absolute before:left-0 before:top-1/2 before:h-3/4 before:rounded-r-md before:transform before:-translate-y-1/2"
-                : "hover:text-primary-500 hover:bg-gray-50"
+            "app-router-navbar__primary-nav-link py-3 px-2 mb-1 " ++ (
+              link == coursePage ? "app-router-navbar__primary-nav-link--active" : ""
             )
 
           showLink(
@@ -148,7 +146,7 @@ let showLink = (icon, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="flex justify-center items-center text-xs text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
+      className="flex justify-center items-center text-xs text-gray-800 bg-gray-200 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>
       <FaIcon classes={"fas fw fa-" ++ icon} />
       <p className="ml-2"> {t("sign_out")->str} </p>
@@ -163,17 +161,17 @@ let links = () => {
 let showUser = user => {
   switch user {
   | Some(user) =>
-    <div className="px-4 pt-6">
-      <div className="flex w-full items-center p-2 bg-gray-50 rounded-md">
+    <div className="mt-3 mx-3">
+      <div className="p-3 flex w-full items-center bg-gray-50 rounded-md">
         <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
           {User.avatarUrl(user)->Belt.Option.mapWithDefault(
             <Avatar
               name={User.name(user)}
-              className="flex w-10 h-10 border border-gray-300 object-contain object-center rounded-full text-tiny flex-shrink-0"
+              className="w-8 h-8 border border-gray-300 object-contain object-center rounded-full"
             />,
             src =>
               <img
-                className="flex w-10 h-10 border border-gray-300 object-cover object-center rounded-full text-tiny"
+                className="w-9 h-9 border border-gray-300 object-cover object-center rounded-full"
                 src
                 alt={User.name(user)}
               />,
@@ -225,7 +223,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="md:hidden"> {courseSelector(courses, selectedPage)} </div>
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
-        <div className="flex flex-col h-0 flex-1 border-r bg-white">
+        <div className="flex flex-col flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
             {showUser(currentUser)}
@@ -233,7 +231,9 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </div>
       </div>
     </div>,
-    <div className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t" key="mobile-links">
+    <div
+      className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t z-50"
+      key="mobile-links">
       {renderLinksMobile(courses, selectedPage)}
     </div>,
   ]->React.array

@@ -225,43 +225,50 @@ let make = (~courseId) => {
     None
   }, [courseId, url.search])
 
-  <div role="main" ariaLabel="Students" className="flex-1 flex flex-col">
-    <div className="hidden md:block h-16" />
-    <div className="bg-gray-50 mt-16">
-      <CoursesStudents__StudentDistribution
-        params={params} studentDistribution={state.studentDistribution}
-      />
-      <div className="w-full py-4 bg-gray-50 relative md:sticky md:top-0 z-10">
-        <div className="max-w-3xl mx-auto bg-gray-50 sticky md:static md:top-0">
+  <div role="main" ariaLabel="Students" className="flex-1 flex flex-col overflow-y-auto">
+    <div className="w-full md:w-4/5 px-4 mt-8 md:mt-25 mx-auto">
+      <div className="bg-gray-50 w-full">
+        <h1 className="text-2xl font-semibold"> {"Students"->str} </h1>
+        <div className="p-5 bg-gray-100 rounded-lg mt-6">
+          <p className="text-gray-600 text-sm font-medium">
+            {"Level Wise distribution of students"->str}
+          </p>
+          <CoursesStudents__StudentDistribution
+            params={params} studentDistribution={state.studentDistribution}
+          />
+        </div>
+        <div
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 relative md:sticky md:top-16 z-10">
+          <p className="uppercase pb-2 text-xs font-semibold"> {"Filter students by"->str} </p>
           <CourseResourcesFilter courseId filters={makeFilters()} search={url.search} />
         </div>
+        <div className="my-6">
+          {switch state.students {
+          | Unloaded => SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.userCard())
+          | PartiallyLoaded(students, cursor) =>
+            <div>
+              {showStudents(state, students)}
+              {switch state.loading {
+              | LoadingMore => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
+              | Reloading(times) =>
+                ReactUtils.nullUnless(
+                  <button
+                    className="btn btn-primary-ghost cursor-pointer w-full mt-4"
+                    onClick={_ => {
+                      send(BeginLoadingMore)
+                      getStudents(send, courseId, Some(cursor), params, ~loadingMore=true)
+                    }}>
+                    {ts("load_more")->str}
+                  </button>,
+                  ArrayUtils.isEmpty(times),
+                )
+              }}
+            </div>
+          | FullyLoaded(students) => showStudents(state, students)
+          }}
+        </div>
       </div>
-      <div className=" max-w-3xl mx-auto">
-        {switch state.students {
-        | Unloaded => SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.userCard())
-        | PartiallyLoaded(students, cursor) =>
-          <div>
-            {showStudents(state, students)}
-            {switch state.loading {
-            | LoadingMore => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
-            | Reloading(times) =>
-              ReactUtils.nullUnless(
-                <button
-                  className="btn btn-primary-ghost cursor-pointer w-full mt-4"
-                  onClick={_ => {
-                    send(BeginLoadingMore)
-                    getStudents(send, courseId, Some(cursor), params, ~loadingMore=true)
-                  }}>
-                  {ts("load_more")->str}
-                </button>,
-                ArrayUtils.isEmpty(times),
-              )
-            }}
-          </div>
-        | FullyLoaded(students) => showStudents(state, students)
-        }}
-      </div>
+      {PagedStudents.showLoading(state.students, state.loading)}
     </div>
-    {PagedStudents.showLoading(state.students, state.loading)}
   </div>
 }

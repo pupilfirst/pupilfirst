@@ -239,7 +239,7 @@ let make = (~courseId, ~team=?) => {
             selectables={state.cohorts}
             selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
             onSelect={u => send(SetSelectedCohort(u))}
-            disabled={state.selectedStudent->ArrayUtils.isNotEmpty}
+            disabled={state.selectedStudent->ArrayUtils.isNotEmpty || Belt.Option.isSome(team)}
             loading={state.loading}
           />
         </div>

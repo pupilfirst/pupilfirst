@@ -2,7 +2,7 @@ open TeamsEditor__Types
 
 let str = React.string
 
-let cohortDetailsSkeleton = () => {
+let teamDetailsSkeleton = () => {
   <div className="max-w-5xl mx-auto px-2 mt-8">
     {SkeletonLoading.input()}
     {SkeletonLoading.input()}
@@ -67,7 +67,7 @@ let make = (~courseId, ~studentId) => {
     />
     {switch state {
     | Unloaded => str("Should Load data")
-    | Loading => cohortDetailsSkeleton()
+    | Loading => teamDetailsSkeleton()
     | Loaded(team) => <AdminCoursesShared__TeamEditor courseId team />
     }}
   </div>

@@ -75,6 +75,12 @@ let makeFilters = () => {
       "orange",
     ),
     CourseResourcesFilter.makeFilter("name", "Search by Team Name", Search, "gray"),
+    CourseResourcesFilter.makeFilter(
+      "sort_by",
+      "Sort By",
+      Sort(["Name", "First Created", "Last Created"]),
+      "gray",
+    ),
   ]
 }
 

@@ -6,6 +6,7 @@ type filterType =
   | DataLoad(resource)
   | Search
   | Custom(string)
+  | Sort(array<string>)
 
 type filter = {
   key: string,
@@ -138,6 +139,8 @@ let unselected = (state, filters: array<filter>) => {
         ? []
         : [Selectable.make(config.key, state.filterInput, Some(config.label), config.color)]
     | Custom(value) => [Selectable.make(config.key, value, Some(config.label), config.color)]
+    | Sort(value) =>
+      value->Js.Array2.map(v => Selectable.make(config.key, v, Some(config.label), config.color))
     }
   })
   ->ArrayUtils.flattenV2

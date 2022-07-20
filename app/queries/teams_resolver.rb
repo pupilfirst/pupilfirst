@@ -13,6 +13,8 @@ class TeamsResolver < ApplicationQuery
       :name
     ].present?
 
+    scope = scope.order("#{sort_by_string}") if filter[:sort_by].present?
+
     scope
   end
 
@@ -33,6 +35,19 @@ class TeamsResolver < ApplicationQuery
   def filter
     @filter ||=
       URI.decode_www_form(filter_string.presence || '').to_h.symbolize_keys
+  end
+
+  def sort_by_string
+    case filter[:sort_by]
+    when 'Name'
+      'teams.name ASC'
+    when 'First Created'
+      'created_at ASC'
+    when 'Last Created'
+      'created_at DESC'
+    else
+      raise "#{filter[:sort_by]} is not a valid sort criterion"
+    end
   end
 
   def id_from_filter_value(string)

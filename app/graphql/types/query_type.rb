@@ -90,6 +90,10 @@ module Types
       argument :filter_string, String, required: false
     end
 
+    resolved_field :team, Types::TeamType, null: false do
+      argument :id, ID, required: true
+    end
+
     resolved_field :student_details, Types::StudentDetailsType, null: false do
       argument :student_id, ID, required: true
     end

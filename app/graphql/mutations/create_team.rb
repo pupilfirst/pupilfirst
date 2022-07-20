@@ -11,15 +11,7 @@ module Mutations
                  maximum: 50
                }
              }
-    argument :student_ids,
-             [ID],
-             required: true,
-             validates: {
-               length: {
-                 minimum: 2
-               },
-               allow_blank: false
-             }
+    argument :student_ids, [ID], required: true
 
     description 'Create a new team'
 
@@ -32,7 +24,7 @@ module Mutations
         I18n.t('mutations.create_team.success_notification')
       )
 
-      { cohort: create_cohort }
+      { team: create_team }
     end
 
     class ValidateTeamCreatable < GraphQL::Schema::Validator
@@ -47,18 +39,20 @@ module Mutations
       end
 
       def size_grater_than_two
-        return if @value[:student_ids].count > 2
+        return if @value[:student_ids].count >= 2
 
-        'One or more of the entries have invalid strings'
+        'You need to add more than two students to create a team'
       end
 
       def students_should_belong_to_the_same_cohort
-        if @cohort.founders.where(id: @value[:student_ids]).count ==
-             @value[:student_ids].count
+        if @cohort
+             .founders
+             .where(id: @value[:student_ids], team_id: nil)
+             .count == @value[:student_ids].count
           return
         end
 
-        'One or more of the students do not belong to the same cohort'
+        'Each student should belong to the same cohort and should not be in a team'
       end
     end
 
@@ -68,11 +62,12 @@ module Mutations
 
     def create_team
       Team.transaction do
-        team = cohort.teams.create!(name: @params[:name])
+        team = cohort.teams.create!(name: @params[:name], cohort: cohort)
 
         students.each { |student| student.update!(team: team) }
+
+        team
       end
-      team
     end
 
     def students

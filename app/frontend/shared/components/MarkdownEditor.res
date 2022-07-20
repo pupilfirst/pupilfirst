@@ -56,7 +56,7 @@ let reducer = (state, action) =>
       Fullscreen(#Preview)
     | Fullscreen(#Preview) => Fullscreen(#Editor)
     }
-    {...state, mode: mode}
+    {...state, mode}
   | ClickSplit =>
     let mode = switch state.mode {
     | Windowed(_) => Fullscreen(#Split)
@@ -65,7 +65,7 @@ let reducer = (state, action) =>
       Fullscreen(#Split)
     | Fullscreen(#Split) => Fullscreen(#Editor)
     }
-    {...state, mode: mode}
+    {...state, mode}
   | ClickFullscreen =>
     let mode = switch state.mode {
     | Windowed(#Editor) => Fullscreen(#Editor)
@@ -74,8 +74,8 @@ let reducer = (state, action) =>
     | Fullscreen(#Preview) => Windowed(#Preview)
     | Fullscreen(#Split) => Windowed(#Editor)
     }
-    {...state, mode: mode}
-  | SetSelection(selection) => {...state, selection: selection}
+    {...state, mode}
+  | SetSelection(selection) => {...state, selection}
   | BumpSelection(offset) =>
     let (selectionStart, selectionEnd) = state.selection
     {...state, selection: (selectionStart + offset, selectionEnd + offset)}
@@ -89,11 +89,11 @@ let reducer = (state, action) =>
     | Fullscreen(#Split) =>
       Windowed(#Editor)
     }
-    {...state, mode: mode}
+    {...state, mode}
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
-  | SelectFile(currentFileName) => {...state, currentFileName: currentFileName}
+  | SelectFile(currentFileName) => {...state, currentFileName}
   | ClearFile => {...state, currentFileName: None}
   }
 
@@ -106,8 +106,8 @@ let computeInitialState = ((value, textareaId, mode)) => {
   let length = value |> String.length
 
   {
-    id: id,
-    mode: mode,
+    id,
+    mode,
     selection: (length, length),
     uploadState: ReadyToUpload(None),
     currentFileName: None,
@@ -295,7 +295,17 @@ let controlsContainerClasses = mode =>
 let controls = (disabled, value, state, send, onChange) => {
   let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
   let {mode} = state
+
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
+
+  let valueReference = React.useRef(value)
+
+  let (currentSelectionStart, _) = state.selection
+  let selectionStart = React.useRef(currentSelectionStart)
+
+  let handleEmojiChange = (e: EmojiPicker.emojiEvent) => {
+    onChange(valueReference.current |> insertAt(e.native, selectionStart.current))
+  }
 
   <div className={controlsContainerClasses(state.mode)}>
     {switch mode {
@@ -329,6 +339,11 @@ let controls = (disabled, value, state, send, onChange) => {
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
+        <EmojiPicker
+          onChange={handleEmojiChange}
+          className={buttonClasses ++ "border-l border-gray-400 hidden md:block"}
+          title={t("emoji_picker")}
+        />
       </div>
     }}
     <div className="py-1">
@@ -529,15 +544,20 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
             {switch error {
             | Some(error) =>
               <span className="text-red-500">
-                <i className="fas fa-exclamation-triangle mr-2" /> {error |> str}
+                <i className="fas fa-exclamation-triangle mr-2" />
+                {error |> str}
               </span>
             | None =>
-              <span> <i className="far fa-file-image mr-2" /> {t("attach_file_label")->str} </span>
+              <span>
+                <i className="far fa-file-image mr-2" />
+                {t("attach_file_label")->str}
+              </span>
             }}
           </label>
         | Uploading =>
           <span className="text-xs px-3 py-2 flex-grow cursor-wait">
-            <i className="fas fa-spinner fa-pulse mr-2" /> {t("file_upload_wait")->str}
+            <i className="fas fa-spinner fa-pulse mr-2" />
+            {t("file_upload_wait")->str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}

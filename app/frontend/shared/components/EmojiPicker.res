@@ -34,10 +34,10 @@ let make = (~className, ~title, ~onChange) => {
 
   React.useEffect0(() => {
     picker({
-      title: title,
-      ref: ref,
+      title,
+      ref,
       theme: "light",
-      data: data,
+      data,
       onEmojiSelect: event => {
         onChange(event)
         setIsOpen(_ => false)

@@ -64,9 +64,7 @@ let studentDistributionSkeleton =
 
 @react.component
 let make = (~studentDistribution, ~params) => {
-  <div
-    ariaLabel="Students level-wise distribution"
-    className="w-full pt-8 max-w-3xl mx-auto hidden md:block">
+  <div ariaLabel="Students level-wise distribution" className="w-full py-4">
     {
       let totalStudentsInCourse =
         studentDistribution |> Array.fold_left(

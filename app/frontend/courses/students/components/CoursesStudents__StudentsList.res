@@ -22,7 +22,9 @@ let userTags = student => {
         {tags
         |> Js.Array.map(tag =>
           <div
-            className="bg-blue-100 rounded mt-1 mr-1 py-px px-2 text-tiny text-gray-900" key={tag}>
+            className="bg-blue-100 mt-1 mr-1 py-px px-2 text-tiny rounded-lg font-semibold text-gray-900
+            "
+            key={tag}>
             {str(tag)}
           </div>
         )
@@ -37,7 +39,8 @@ let studentTags = student => {
         {StudentInfo.taggings(student)
         |> Js.Array.map(tag =>
           <div
-            className="bg-gray-300 rounded mt-1 mr-1 py-px px-2 text-tiny text-gray-900" key={tag}>
+            className="bg-gray-100 rounded-lg font-semibold mt-1 mr-1 py-px px-2 text-tiny text-gray-900"
+            key={tag}>
             {str(tag)}
           </div>
         )
@@ -52,7 +55,7 @@ let showStudent = student => {
     key={student->StudentInfo.id}
     ariaLabel={"student: " ++ student->StudentInfo.user->UserDetails.name}
     className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
-    <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
+    <div className="flex flex-col justify-center md:flex-row ">
       <div className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
         {CoursesStudents__PersonalCoaches.avatar(
           student->StudentInfo.user->UserDetails.avatarUrl,
@@ -62,11 +65,12 @@ let showStudent = student => {
           <p className="font-semibold inline-block leading-snug">
             {student->StudentInfo.user->UserDetails.name->str}
           </p>
-          <div className="py-px text-gray-600 text-xs leading-snug flex items-start">
+          <div
+            className="py-px text-gray-600 text-xs leading-snug flex flex-col sm:flex-row sm:items-center">
             <span className="font-semibold pr-2">
               {student->StudentInfo.user->UserDetails.fullTitle->str}
             </span>
-            <span className="pl-2 border-l border-gray-400 italic">
+            <span className="sm:pl-2 sm:border-l border-gray-400 italic">
               {switch student->StudentInfo.user->UserDetails.lastSeenAt {
               | Some(date) =>
                 t(
@@ -88,7 +92,7 @@ let showStudent = student => {
     </div>
     <div
       ariaLabel={"student level info:" ++ student->StudentInfo.id}
-      className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
+      className="flex items-center justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__PersonalCoaches
         title={<div className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
           {tr("personal_coaches") |> str}

@@ -1,4 +1,5 @@
 exception UnknownKindOfLink(string)
+open Js.Array2
 
 type schoolStrings = {
   address: option<string>,
@@ -31,7 +32,7 @@ type link =
 type t = {
   schoolStrings: schoolStrings,
   schoolImages: schoolImages,
-  links: list<link>,
+  links: array<link>,
 }
 
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg
@@ -47,7 +48,7 @@ let privacyPolicy = t => t.schoolStrings.privacyPolicy
 let termsAndConditions = t => t.schoolStrings.termsAndConditions
 
 let headerLinks = t =>
-  t.links |> List.filter(l =>
+  t.links->filter(l =>
     switch l {
     | HeaderLink(_, _, _, _) => true
     | FooterLink(_, _, _, _) => false
@@ -56,7 +57,7 @@ let headerLinks = t =>
   )
 
 let footerLinks = t =>
-  t.links |> List.filter(l =>
+  t.links->filter(l =>
     switch l {
     | HeaderLink(_, _, _, _) => false
     | FooterLink(_, _, _, _) => true
@@ -65,7 +66,7 @@ let footerLinks = t =>
   )
 
 let socialLinks = t =>
-  t.links |> List.filter(l =>
+  t.links->filter(l =>
     switch l {
     | HeaderLink(_, _, _, _) => false
     | FooterLink(_, _, _, _) => false
@@ -74,7 +75,7 @@ let socialLinks = t =>
   )
 
 let unpackLinks = links =>
-  links |> List.map(l =>
+  links->map(l =>
     switch l {
     | HeaderLink(id, title, url, sortIndex)
     | FooterLink(id, title, url, sortIndex) => (id, title, url, sortIndex)
@@ -82,11 +83,11 @@ let unpackLinks = links =>
     }
   )
 
-let addLink = (link, t) => {...t, links: \"@"(t.links, list{link})}
+let addLink = (link, t) => {...t, links: t.links->concat([link])}
 
 let removeLink = (linkId, t) => {
   ...t,
-  links: t.links |> List.filter(l =>
+  links: t.links->filter(l =>
     switch l {
     | HeaderLink(id, _, _, _)
     | FooterLink(id, _, _, _) =>
@@ -98,7 +99,7 @@ let removeLink = (linkId, t) => {
 
 let updateLink = (linkId, newTitle, newUrl, t) => {
   ...t,
-  links: t.links |> List.map(l =>
+  links: t.links->map(l =>
     switch l {
     | HeaderLink(id, title, url, sortIndex) =>
       id == linkId
@@ -124,7 +125,7 @@ let sortFunc = link =>
   }
 
 let optionalString = s =>
-  switch s |> String.trim {
+  switch s->String.trim {
   | "" => None
   | nonEmptyString => Some(nonEmptyString)
   }
@@ -133,7 +134,7 @@ let updatePrivacyPolicy = (privacyPolicy, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    privacyPolicy: privacyPolicy |> optionalString,
+    privacyPolicy: privacyPolicy->optionalString,
   },
 }
 
@@ -141,7 +142,7 @@ let updateTermsAndConditions = (termsAndConditions, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    termsAndConditions: termsAndConditions |> optionalString,
+    termsAndConditions: termsAndConditions->optionalString,
   },
 }
 
@@ -149,7 +150,7 @@ let updateAddress = (address, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    address: address |> optionalString,
+    address: address->optionalString,
   },
 }
 
@@ -157,7 +158,7 @@ let updateEmailAddress = (emailAddress, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    emailAddress: emailAddress |> optionalString,
+    emailAddress: emailAddress->optionalString,
   },
 }
 
@@ -223,52 +224,44 @@ let decode = json => {
     schoolStrings: json |> field("strings", decodeStrings),
     schoolImages: json |> field("images", decodeImages),
     links: json
-    |> field("links", list(decodeLink))
-    |> List.sort((l1, l2) => sortFunc(l1) - sortFunc(l2)),
+    |> field("links", array(decodeLink))
+    |> Js.Array.sortInPlaceWith((l1, l2) => sortFunc(l1) - sortFunc(l2)),
   }
 }
 
-let reindex = links =>
-  links |> List.mapi((sortIndex, link) =>
-    switch link {
-    | HeaderLink(id, title, url, _) => HeaderLink(id, title, url, sortIndex)
-    | FooterLink(id, title, url, _) => FooterLink(id, title, url, sortIndex)
-    | SocialLink(id, url, _) => SocialLink(id, url, sortIndex)
-    }
-  )
-
 let moveLink = (linkId, kind: SchoolCustomize__Links.kind, direction, t) => {
-  // find link
-  let link = t.links |> List.find(l =>
-    switch l {
-    | HeaderLink(id, _, _, _)
-    | FooterLink(id, _, _, _)
-    | SocialLink(id, _, _) =>
-      id == linkId
-    }
-  )
   // find links of similar kind
-  let similarKindLinks = t |> switch kind {
+  let similarKindLinks = t->switch kind {
   | HeaderLink => headerLinks
   | SocialLink => socialLinks
   | FooterLink => footerLinks
   }
 
-  // swap links
-  let swapedLinks = similarKindLinks |> switch direction {
-  | Up => ListUtils.swapUp(link)
-  | Down => ListUtils.swapDown(link)
-  }
+  let linkIndex =
+    similarKindLinks
+    ->map(l =>
+      switch l {
+      | HeaderLink(id, _, _, _)
+      | FooterLink(id, _, _, _)
+      | SocialLink(id, _, _) => id
+      }
+    )
+    ->indexOf(linkId)
 
+  // swap links
+  let swapedLinks = similarKindLinks->switch direction {
+  | Up => ArrayUtils.swapUp(linkIndex)
+  | Down => ArrayUtils.swapDown(linkIndex)
+  }
   // find links of different kind
   let differentKindLinks = switch kind {
-  | HeaderLink => List.concat(list{socialLinks(t), footerLinks(t)})
-  | SocialLink => List.concat(list{headerLinks(t), footerLinks(t)})
-  | FooterLink => List.concat(list{socialLinks(t), headerLinks(t)})
+  | HeaderLink => socialLinks(t)->concat(footerLinks(t))
+  | SocialLink => headerLinks(t)->concat(footerLinks(t))
+  | FooterLink => socialLinks(t)->concat(headerLinks(t))
   }
 
   // combile links
-  let updatedLinks = List.concat(list{differentKindLinks, swapedLinks})
+  let updatedLinks = differentKindLinks->concat(swapedLinks)
   {
     ...t,
     links: updatedLinks,

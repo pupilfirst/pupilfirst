@@ -39,7 +39,7 @@ module MoveSchoolLinkQuery = %graphql(`
 
 let handleMoveLink = (~id, ~kind, ~direction: Customizations.direction, ~send, ~moveLinkCB) => {
   send(SetUpdating(true))
-  MoveSchoolLinkQuery.make({
+  MoveSchoolLinkQuery.fetch({
     id,
     direction: switch direction {
     | Up => #Up
@@ -56,9 +56,9 @@ let handleMoveLink = (~id, ~kind, ~direction: Customizations.direction, ~send, ~
 }
 
 let handleDelete = (deleting, disableDeleteCB, removeLinkCB, id, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
 
-  if deleting |> List.mem(id) {
+  if deleting->Js.Array2.includes(id) {
     ()
   } else {
     disableDeleteCB(id)
@@ -248,7 +248,7 @@ let make = (
                 title={"Delete " ++ url}
                 onClick={handleDelete(deleting, disableDeleteCB, removeLinkCB, id)}
                 className="p-3 hover:text-red-500 hover:bg-red-50 focus:bg-red-50 focus:text-red-500">
-                <FaIcon classes={deleteIconClasses(deleting |> List.mem(id))} />
+                <FaIcon classes={deleteIconClasses(deleting->Js.Array2.includes(id))} />
               </button>
             </div>}
       </div>

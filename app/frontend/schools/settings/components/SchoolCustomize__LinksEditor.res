@@ -18,7 +18,7 @@ type state = {
   urlInvalid: bool,
   formDirty: bool,
   adding: bool,
-  deleting: list<SchoolCustomize__Customizations.linkId>,
+  deleting: array<Customizations.linkId>,
 }
 
 type action =
@@ -28,14 +28,14 @@ type action =
   | DisableForm
   | EnableForm
   | ClearForm
-  | DisableDelete(SchoolCustomize__Customizations.linkId)
+  | DisableDelete(Customizations.linkId)
 
 let handleKindChange = (send, kind, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
   send(UpdateKind(kind))
 }
 
-let isTitleInvalid = title => title |> String.trim |> String.length == 0
+let isTitleInvalid = title => title->String.trim->String.length == 0
 
 let handleTitleChange = (send, event) => {
   let title = ReactEvent.Form.target(event)["value"]
@@ -47,7 +47,7 @@ let handleTitleChange = (send, event) => {
 
 let handleUrlChange = (send, event) => {
   let url = ReactEvent.Form.target(event)["value"]
-  send(UpdateUrl(url, url |> UrlUtils.isInvalid(false)))
+  send(UpdateUrl(url, url |> UrlUtils.isInvalid(false, _)))
 }
 
 module DestroySchoolLinkQuery = %graphql(`
@@ -59,9 +59,9 @@ module DestroySchoolLinkQuery = %graphql(`
   `)
 
 let handleDelete = (state, send, removeLinkCB, id, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
 
-  if state.deleting |> List.mem(id) {
+  if state.deleting->Js.Array2.includes(id) {
     ()
   } else {
     send(DisableDelete(id))
@@ -124,7 +124,7 @@ let displayNewLink = (state: state, addLinkCB, id) =>
   | HeaderLink => Customizations.HeaderLink(id, state.title, state.url, 0)
   | FooterLink => Customizations.FooterLink(id, state.title, state.url, 0)
   | SocialLink => Customizations.SocialLink(id, state.url, 0)
-  } |> addLinkCB
+  }->addLinkCB
 
 module CreateLinkError = {
   type t = [#InvalidUrl | #InvalidLengthTitle | #InvalidKind | #BlankTitle]
@@ -141,7 +141,7 @@ module CreateLinkError = {
 module CreateLinkErrorHandler = GraphqlErrorHandler.Make(CreateLinkError)
 
 let handleAddLink = (state, send, addLinkCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
 
   if addLinkDisabled(state) {
     ()
@@ -159,6 +159,7 @@ let handleAddLink = (state, send, addLinkCB, event) => {
       | #SchoolLink(schoolLink) =>
         schoolLink["id"] |> displayNewLink(state, addLinkCB)
         send(ClearForm)
+        Notification.success(ts("notifications.done_exclamation"), t("done_notification_body"))
         Js.Promise.resolve()
       | #Errors(errors) => Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
       }
@@ -173,16 +174,16 @@ let linksTitle = kind =>
   | HeaderLink => t("header_links")
   | FooterLink => t("sitemap_links")
   | SocialLink => t("social_links")
-  } |> str
+  }->str
 
 let unpackLinks = (kind, customizations) =>
   customizations
-  |> switch kind {
+  ->switch kind {
   | HeaderLink => Customizations.headerLinks
   | FooterLink => Customizations.footerLinks
   | SocialLink => Customizations.socialLinks
   }
-  |> Customizations.unpackLinks
+  ->Customizations.unpackLinks
 
 let initialState = kind => {
   kind,
@@ -192,7 +193,7 @@ let initialState = kind => {
   urlInvalid: false,
   formDirty: false,
   adding: false,
-  deleting: list{},
+  deleting: [],
 }
 
 let reducer = (state, action) =>
@@ -215,7 +216,7 @@ let reducer = (state, action) =>
   | ClearForm => {...state, adding: false, title: "", url: ""}
   | DisableDelete(linkId) => {
       ...state,
-      deleting: list{linkId, ...state.deleting},
+      deleting: state.deleting->Js.Array2.copy->Js.Array2.concat([linkId]),
     }
   }
 
@@ -229,14 +230,14 @@ let showLinks = (
   links,
 ) => {
   switch links {
-  | list{} =>
+  | [] =>
     <div
       className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
-      {"There are no custom links here. Add some?" |> str}
+      {"There are no custom links here. Add some?"->str}
     </div>
   | links =>
     links
-    |> List.mapi((index, (id, title, url, _)) =>
+    ->Js.Array2.mapi(((id, title, url, _), index) =>
       <SchoolCustomize__LinkComponent
         key=id
         id
@@ -249,11 +250,10 @@ let showLinks = (
         disableDeleteCB
         deleting
         index
-        total={List.length(links)}
+        total={links->Js.Array2.length}
       />
     )
-    |> Array.of_list
-    |> React.array
+    ->React.array
   }
 }
 
@@ -267,11 +267,11 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
 
   <div className="mt-8 mx-8 pb-6">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("manage_links") |> str}
+      {t("manage_links")->str}
     </h5>
     <div className="mt-3">
       <label className="inline-block tracking-wide text-xs font-semibold">
-        {t("location_link") |> str}
+        {t("location_link")->str}
       </label>
       <div role="tablist" className="flex bg-white border border-t-0 rounded-t mt-2">
         <button
@@ -281,7 +281,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           title={t("show_header_title")}
           className={kindClasses(state.kind == HeaderLink)}
           onClick={handleKindChange(send, HeaderLink)}>
-          {"Header" |> str}
+          {"Header"->str}
         </button>
         <button
           role="tab"
@@ -290,7 +290,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           title={t("footer_link_title")}
           className={kindClasses(state.kind == FooterLink) ++ " border-l"}
           onClick={handleKindChange(send, FooterLink)}>
-          {"Footer Sitemap" |> str}
+          {"Footer Sitemap"->str}
         </button>
         <button
           role="tab"
@@ -299,7 +299,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           title={t("social_links_title")}
           className={kindClasses(state.kind == SocialLink) ++ " border-l"}
           onClick={handleKindChange(send, SocialLink)}>
-          {"Social" |> str}
+          {"Social"->str}
         </button>
       </div>
     </div>
@@ -318,11 +318,11 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
       )}
       <DisablingCover disabled=state.adding>
         <div className="flex mt-3" key="sc-links-editor__form-body">
-          {if state |> titleInputVisible {
+          {if state->titleInputVisible {
             <div className="flex-grow mr-4">
               <label
                 className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-title">
-                {t("title") |> str}
+                {t("title")->str}
               </label>
               <input
                 autoFocus=true
@@ -344,7 +344,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           <div className="flex-grow">
             <label
               className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-full-url">
-              {t("full_url") |> str}
+              {t("full_url")->str}
             </label>
             <input
               className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
@@ -363,7 +363,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
             disabled={addLinkDisabled(state)}
             onClick={handleAddLink(state, send, addLinkCB)}
             className="btn btn-primary btn-large mt-6">
-            {state.adding |> addLinkText |> str}
+            {state.adding->addLinkText->str}
           </button>
         </div>
       </DisablingCover>

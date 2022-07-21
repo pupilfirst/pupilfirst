@@ -84,15 +84,14 @@ let showStudent = student => {
             </span>
           </div>
           <div className="text-gray-600 font-semibold text-xs leading-snug flex items-start">
-            {userTags(student)}
-            {studentTags(student)}
+            {userTags(student)} {studentTags(student)}
           </div>
         </div>
       </div>
     </div>
     <div
       ariaLabel={"student level info:" ++ student->StudentInfo.id}
-      className="flex items-center justify-end md:justify-between p-3 md:p-4">
+      className="flex items-center gap-6 justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__PersonalCoaches
         title={<div className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
           {tr("personal_coaches") |> str}

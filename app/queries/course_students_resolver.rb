@@ -24,6 +24,7 @@ class CourseStudentsResolver < ApplicationQuery
         .where(
           { faculty_founder_enrollments: { faculty_id: faculty.id } }
         ) if personal_coach.present?
+    scope = scope.where(team_id: nil) if filter[:not_teamed_up].present?
     scope = scope.where('users.name ILIKE ?', "%#{filter[:name]}%") if filter[
       :name
     ].present?

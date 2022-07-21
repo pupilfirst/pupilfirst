@@ -13,15 +13,15 @@ let make = (~school, ~courses, ~currentUser) => {
   let url = RescriptReactRouter.useUrl()
 
   let (selectedPage: Page.t, component) = switch url.path {
-  | list{"school"} => (Overview, None)
   | list{"school", "coaches"} => (SchoolCoaches, None)
   | list{"school", "customize"} => (Settings(Customization), None)
+  | list{"school"}
   | list{"school", "courses"}
-  | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root />))
-  | list{"school", "courses", _courseId} => (Courses, Some(<CourseEditor__Root />))
+  | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root school />))
+  | list{"school", "courses", _courseId} => (Courses, Some(<CourseEditor__Root school />))
   | list{"school", "courses", _courseId, "details" | "images" | "actions"} => (
       Courses,
-      Some(<CourseEditor__Root />),
+      Some(<CourseEditor__Root school />),
     )
   | list{"school", "courses", courseId, ...tail} => {
       let (coursePage: Page.coursePages, courseComponent) = switch tail {

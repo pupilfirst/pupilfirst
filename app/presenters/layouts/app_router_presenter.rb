@@ -22,6 +22,7 @@ module Layouts
         name: school_name,
         logo_url: logo_url,
         icon_url: icon_url,
+        cover_image_url: cover_image_url,
         links: nav_links
       }
     end
@@ -252,6 +253,12 @@ module Layouts
     def logo_url
       if current_school.logo_on_light_bg.attached?
         view.rails_public_blob_url(current_school.logo_variant(:high))
+      end
+    end
+
+    def cover_image_url
+      if current_school.cover_image.attached?
+        view.rails_public_blob_url(current_school.cover_image_variant(:high))
       end
     end
 

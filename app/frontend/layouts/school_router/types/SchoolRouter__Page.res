@@ -20,7 +20,6 @@ type settingsPages =
   | Admins
 
 type t =
-  | Overview
   | SchoolCoaches
   | Settings(settingsPages)
   | Courses
@@ -29,7 +28,6 @@ type t =
 
 let shrunk = t => {
   switch t {
-  | Overview
   | SchoolCoaches
   | Courses
   | Communities => false
@@ -40,7 +38,6 @@ let shrunk = t => {
 
 let isSPA = t => {
   switch t {
-  | Overview
   | SchoolCoaches
   | Communities => false
   | Settings(_settingsPages) => false
@@ -68,7 +65,6 @@ let useSPA = (selectedPage, page) => {
 
 let path = t => {
   switch t {
-  | Overview => "/school"
   | SchoolCoaches => "/school/coaches"
   | Settings(settingsPages) =>
     switch settingsPages {
@@ -95,7 +91,6 @@ let path = t => {
 
 let name = t => {
   switch t {
-  | Overview => "Overview"
   | SchoolCoaches => "Coaches"
   | Settings(settingsPages) =>
     switch settingsPages {
@@ -122,7 +117,6 @@ let name = t => {
 
 let icon = t => {
   switch t {
-  | Overview => "school"
   | SchoolCoaches => "users"
   | Settings(_settingsPages) => "cog"
   | Courses => "journal-text"

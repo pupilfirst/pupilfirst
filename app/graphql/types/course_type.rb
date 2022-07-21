@@ -1,5 +1,11 @@
 module Types
   class CourseType < Types::BaseObject
+    authorize_school_admin =
+      proc do
+        def authorized?(_object, _args, context)
+          context[:current_school_admin].present?
+        end
+      end
     connection_type_class Types::PupilfirstConnection
     field :id, ID, null: false
     field :name, String, null: false
@@ -18,28 +24,59 @@ module Types
     field :highlights, [Types::CourseHighlightType], null: false
     field :processing_url, String, null: true
     field :levels, [Types::LevelType], null: false
-    field :student_tags, [String], null: false do
-      def authorized?(_object, _args, context)
-        context[:current_school_admin].present?
-      end
+    field :student_tags, [String], null: false, &authorize_school_admin
+    field :coaches, [Types::UserProxyType], &authorize_school_admin
+    field :cohorts, [Types::CohortType], null: false, &authorize_school_admin
+    field :certificates,
+          [Types::CertificateType],
+          null: false,
+          &authorize_school_admin
+    field :coaches_count, Integer, null: false, &authorize_school_admin
+    field :cohorts_count, Integer, null: false, &authorize_school_admin
+    field :levels_count, Integer, null: false, &authorize_school_admin
+
+    def levels_count
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: 0) do |course_ids, loader|
+          Level
+            .where(course_id: course_ids)
+            .group(:course_id)
+            .count
+            .each do |(course_ids, levels_count)|
+              loader.call(course_ids, levels_count)
+            end
+        end
     end
 
-    field :coaches, [Types::UserProxyType], null: false do
-      def authorized?(_object, _args, context)
-        context[:current_school_admin].present?
-      end
+    def coaches_count
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: 0) do |course_ids, loader|
+          Faculty
+            .joins(faculty_cohort_enrollments: :cohort)
+            .where(cohort: { course_id: course_ids })
+            .distinct
+            .group(:course_id)
+            .count
+            .each do |(course_id, coaches_count)|
+              loader.call(course_id, coaches_count)
+            end
+        end
     end
 
-    field :cohorts, [Types::CohortType], null: false do
-      def authorized?(_object, _args, context)
-        context[:current_school_admin].present?
-      end
-    end
-
-    field :certificates, [Types::CertificateType], null: false do
-      def authorized?(_object, _args, context)
-        context[:current_school_admin].present?
-      end
+    def cohorts_count
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: 0) do |course_ids, loader|
+          Cohort
+            .where(course_id: course_ids)
+            .group(:course_id)
+            .count
+            .each do |(course_id, cohorts_count)|
+              loader.call(course_id, cohorts_count)
+            end
+        end
     end
 
     def certificates

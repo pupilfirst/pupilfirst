@@ -198,7 +198,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </div>
         {ReactUtils.nullIf(
           <ul>
-            {[Page.Courses, Overview, SchoolCoaches, Communities, Settings(Customization)]
+            {[Page.Courses, SchoolCoaches, Communities, Settings(Customization)]
             ->Js.Array2.map(page => <li key={Page.name(page)}> {topLink(selectedPage, page)} </li>)
             ->React.array}
             <li>

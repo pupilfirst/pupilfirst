@@ -54,7 +54,7 @@ Rails.application.routes.draw do
 
   resources :notifications, only: %i[show]
 
-  resource :school, only: %i[show update] do
+  resource :school, only: [] do
     get 'customize'
     get 'admins'
     post 'images'
@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
   namespace :school, module: 'schools' do
     [
+      '/',
       'courses',
       'courses/new',
       'courses/:course_id',

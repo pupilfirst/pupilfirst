@@ -220,5 +220,7 @@ module Types
       argument :course_id, ID, required: true
       argument :resources, [Types::CourseResourceType], required: true
     end
+
+    resolved_field :school_stats, Types::SchoolStatsType, null: false
   end
 end

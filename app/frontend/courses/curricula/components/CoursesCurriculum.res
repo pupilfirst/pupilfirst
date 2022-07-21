@@ -37,7 +37,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     <Link
       props={"data-target-id": targetId}
       href={"/targets/" ++ targetId}
-      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg"
+      className="p-6 flex grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg"
       ariaLabel={"Select Target: " ++
       (Target.title(target) ++
       ", Status: " ++

@@ -44,7 +44,7 @@ let avatarClasses = size => {
   (mdSize ++
   (" md:h-" ++
   (mdSize ++
-  " text-xs border border-white rounded-full overflow-hidden flex-shrink-0 object-cover")))))))
+  " text-xs border border-white rounded-full overflow-hidden shrink-0 object-cover")))))))
 }
 
 let avatar = (~size=("10", "10"), avatarUrl, name) =>
@@ -67,7 +67,7 @@ let make = (~entry, ~markNotificationCB) => {
     ariaLabel={"Notification " ++ Entry.id(entry)}>
     <div className="flex justify-between items-center">
       <div className="flex-1 flex items-center relative">
-        <div className="flex-shrink-0 inline-block relative">
+        <div className="shrink-0 inline-block relative">
           {switch Entry.actor(entry) {
           | Some(actor) => avatar(User.avatarUrl(actor), User.name(actor))
           | None => React.null
@@ -83,7 +83,7 @@ let make = (~entry, ~markNotificationCB) => {
             </a>
           : <div className="ml-4"> {str(Entry.message(entry))} </div>}
       </div>
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <span className="notifications__entry-card-time block text-xs text-gray-400">
           <span className="hidden md:inline-block md:pl-4">
             {Entry.createdAt(entry)->DateFns.format("HH:mm") |> str}

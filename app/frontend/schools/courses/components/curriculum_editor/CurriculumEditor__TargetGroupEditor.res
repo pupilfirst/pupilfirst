@@ -277,12 +277,12 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
               </div>
               {levelEditor(state, levels, send)}
               <div className="mt-5">
-                <div className="flex items-center flex-shrink-0">
+                <div className="flex items-center shrink-0">
                   <label className="block tracking-wide text-xs font-semibold mr-3">
                     {tr("milestone_q") |> str}
                   </label>
                   <div
-                    className="milestone flex-shrink-0 overflow-hidden">
+                    className="milestone shrink-0 overflow-hidden">
                     <button
                       onClick={_event => {
                         ReactEvent.Mouse.preventDefault(_event)
@@ -312,7 +312,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                       {tr("group_archived_q") |> str}
                     </label>
                     <div
-                      className="toggle-button__group archived inline-flex flex-shrink-0 overflow-hidden">
+                      className="toggle-button__group archived inline-flex shrink-0 overflow-hidden">
                       <button
                         onClick={_event => {
                           ReactEvent.Mouse.preventDefault(_event)

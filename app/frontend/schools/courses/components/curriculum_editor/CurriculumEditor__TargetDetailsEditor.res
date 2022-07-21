@@ -910,7 +910,7 @@ let make = (
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
                   {t("target_reviewed_by_coach") |> str}
                 </label>
-                <div id="evaluated" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+                <div id="evaluated" className="flex toggle-button__group shrink-0 rounded-lg">
                   <button
                     onClick={updateMethodOfCompletion(Evaluated, send)}
                     className={booleanButtonClasses(targetEvaluated(state.methodOfCompletion))}>
@@ -1058,14 +1058,14 @@ let make = (
             </div>
             <div className="bg-white border-t sticky bottom-0 py-5">
               <div className="flex max-w-3xl mx-auto px-3 justify-between items-center">
-                <div className="flex items-center flex-shrink-0">
+                <div className="flex items-center shrink-0">
                   <label
                     className="block tracking-wide text-sm font-semibold mr-3" htmlFor="archived">
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
                     {t("target_visibility") |> str}
                   </label>
                   <div
-                    id="visibility" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+                    id="visibility" className="flex toggle-button__group shrink-0 rounded-lg">
                     {[TargetDetails.Live, Archived, Draft]
                     |> Js.Array.mapi((visibility, index) =>
                       <button

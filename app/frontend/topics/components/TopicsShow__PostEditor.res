@@ -150,13 +150,13 @@ let replyToUserInfo = user => {
     {switch avatarUrl {
     | Some(avatarUrl) =>
       <img
-        className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
+        className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
         src=avatarUrl
       />
     | None =>
       <Avatar
         name
-        className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
+        className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
       />
     }}
     <span className="text-xs font-semibold ml-2"> {name |> str} </span>

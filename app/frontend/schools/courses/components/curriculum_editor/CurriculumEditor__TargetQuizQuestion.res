@@ -57,7 +57,7 @@ let make = (
       <div className="quiz-maker__question-remove-button invisible">
         {questionCanBeRemoved
           ? <button
-              className="flex items-center flex-shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-600 text-xs"
+              className="flex items-center shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-600 text-xs"
               type_="button"
               title={t("remove_question")}
               onClick={event => {

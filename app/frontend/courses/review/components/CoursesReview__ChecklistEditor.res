@@ -231,7 +231,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                           <div className="flex">
                             <label
                               title={t("disabled")}
-                              className="flex-shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
+                              className="shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                             />
                             <div className="w-full bg-gray-50 relative">
                               <div
@@ -345,7 +345,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
                       <span
                         title={t("add_result")}
-                        className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2"
+                        className="checklist-editor__add-result-btn-check shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2"
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">

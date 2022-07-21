@@ -5,7 +5,7 @@ let str = React.string
 let t = I18n.t(~scope="components.CoursesReport__Overview")
 
 let avatar = (avatarUrl, name) => {
-  let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
+  let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
   switch avatarUrl {
   | Some(avatarUrl) => <img className=avatarClasses src=avatarUrl />
   | None => <Avatar name className=avatarClasses />

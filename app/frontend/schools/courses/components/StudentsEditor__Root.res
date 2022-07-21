@@ -163,7 +163,7 @@ module Sortable = {
 module StudentsSorter = Sorter.Make(Sortable)
 
 let studentsSorter = (send, filter) =>
-  <div className="ml-2 flex-shrink-0">
+  <div className="ml-2 shrink-0">
     <label className="block text-tiny uppercase font-semibold">
       {t("sort_criterion_label") |> str}
     </label>

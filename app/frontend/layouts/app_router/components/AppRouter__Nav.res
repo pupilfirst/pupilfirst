@@ -134,11 +134,11 @@ let showUser = user => {
   | Some(user) =>
     <div className="px-4 pt-6">
       <div className="flex w-full items-center p-2 bg-gray-50 rounded-md">
-        <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
+        <div className="flex items-center justify-center rounded-full text-center shrink-0">
           {User.avatarUrl(user)->Belt.Option.mapWithDefault(
             <Avatar
               name={User.name(user)}
-              className="flex w-10 h-10 border border-gray-300 object-contain object-center rounded-full text-tiny flex-shrink-0"
+              className="flex w-10 h-10 border border-gray-300 object-contain object-center rounded-full text-tiny shrink-0"
             />,
             src =>
               <img
@@ -181,11 +181,11 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
             </div>
           </div>
         </div>
-        <div className="flex-shrink-0 w-14" />
+        <div className="shrink-0 w-14" />
       </div>,
       sidebarOpen,
     ),
-    <div className="flex flex-shrink-0" key="main">
+    <div className="flex shrink-0" key="main">
       <div className="flex flex-1 flex-col">
         <div
           className="px-4 py-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">

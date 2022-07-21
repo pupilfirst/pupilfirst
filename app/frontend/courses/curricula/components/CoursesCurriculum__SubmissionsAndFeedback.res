@@ -75,10 +75,10 @@ let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
       {statusBar(~color=passed ? "green" : "red", ~text=passed ? tr("completed") : tr("rejected"))}
     </div>
     <div className="bg-white flex border-t flex-wrap items-center py-4">
-      <div className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-6">
+      <div className="w-full md:w-1/2 shrink-0 justify-center hidden md:flex border-l px-6">
         {submissionStatusIcon(~passed)}
       </div>
-      <div className="w-full md:w-1/2 flex-shrink-0 md:order-first px-4 md:px-6">
+      <div className="w-full md:w-1/2 shrink-0 md:order-first px-4 md:px-6">
         <h5 className="pb-1 border-b"> {tr("grading") |> str} </h5>
         <div className="mt-3">
           {grades
@@ -133,7 +133,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
             className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
             <div
               className="flex items-center justify-center font-semibold text-sm pl-2 pr-3 py-1 bg-orange-100 text-orange-600 rounded">
-              <span className="fa-stack text-orange-400 mr-2 flex-shrink-0">
+              <span className="fa-stack text-orange-400 mr-2 shrink-0">
                 <i className="fas fa-circle fa-stack-2x" />
                 <i className="fas fa-hourglass-half fa-stack-1x fa-inverse" />
               </span>
@@ -185,7 +185,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           <div className="bg-white border-t p-4 md:p-6" key={feedback |> Feedback.id}>
             <div className="flex items-center">
               <div
-                className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
                 coachAvatar
               </div>
               <div>

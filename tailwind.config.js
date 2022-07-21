@@ -1,8 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  mode: "jit",
-  purge: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx"],
+  content: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx"],
   theme: {
     colors: {
       transparent: "transparent",
@@ -117,7 +116,6 @@ module.exports = {
       },
       screens: {
         "2xl": "1824px",
-        // => @media (min-width: 1824px) { ... }
       },
     },
   },

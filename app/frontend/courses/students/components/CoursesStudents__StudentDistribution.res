@@ -24,7 +24,7 @@ let stylingForLevelPills = percentageStudents => {
     (),
   )
   if 0.0 <= percentageStudents && percentageStudents < 5.0 {
-    ("w-8 flex-shrink-0", emptyStyle, "bg-green-200 text-green-800")
+    ("w-8 shrink-0", emptyStyle, "bg-green-200 text-green-800")
   } else if 5.0 <= percentageStudents && percentageStudents < 20.0 {
     ("", styleWithWidth, "bg-green-300 text-green-800")
   } else if 20.0 <= percentageStudents && percentageStudents < 40.0 {

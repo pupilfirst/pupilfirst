@@ -66,7 +66,7 @@ let make = (~team, ~coach, ~removeTeamEnrollmentCB) => {
           </div>
         : React.null}
     </div>
-    <div className="w-10 text-center flex-shrink-0 hover:text-gray-900 hover:bg-gray-50">
+    <div className="w-10 text-center shrink-0 hover:text-gray-900 hover:bg-gray-50">
       <button
         title={ts("delete") ++ " " ++ Team.name(team)}
         onClick={deleteTeamEnrollment(team, coach, setDeleting, removeTeamEnrollmentCB)}

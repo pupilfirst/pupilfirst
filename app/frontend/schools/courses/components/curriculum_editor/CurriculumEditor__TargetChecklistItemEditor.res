@@ -220,7 +220,7 @@ let make = (
           rows=2
           name={"checklist-item-" ++ ((index + 1 |> string_of_int) ++ "-title")}
           placeholder={t("describe_step")}
-          className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none resize-y rounded-md"
+          className="grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none resize-y rounded-md"
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
           value={checklistItem |> ChecklistItem.title}
         />
@@ -247,7 +247,7 @@ let make = (
     </div>
     <div
       ariaLabel={t("controls_checklist") ++ " " ++ (index + 1 |> string_of_int)}
-      className="-mr-10 flex-shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
+      className="-mr-10 shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
         ~icon="fa-arrow-up",
         ~title=t("move_up"),

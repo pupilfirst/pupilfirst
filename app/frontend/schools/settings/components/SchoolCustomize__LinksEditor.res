@@ -307,7 +307,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
       <DisablingCover disabled=state.adding>
         <div className="flex mt-3" key="sc-links-editor__form-body">
           {if state |> titleInputVisible {
-            <div className="flex-grow mr-4">
+            <div className="grow mr-4">
               <label
                 className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-title">
                 {t("title") |> str}
@@ -329,7 +329,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
           } else {
             React.null
           }}
-          <div className="flex-grow">
+          <div className="grow">
             <label
               className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-full-url">
               {t("full_url") |> str}

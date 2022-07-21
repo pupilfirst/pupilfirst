@@ -182,7 +182,7 @@ let showTeam = (team, levels, teamCoaches) =>
             />
           </div>
         </div>
-        <div ariaLabel={"team level info: " ++ (team |> TeamInfo.id)} className="flex-shrink-0">
+        <div ariaLabel={"team level info: " ++ (team |> TeamInfo.id)} className="shrink-0">
           {levelInfo(team |> TeamInfo.levelId, levels)}
         </div>
       </div>

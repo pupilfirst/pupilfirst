@@ -43,7 +43,11 @@ module QueryAuthorizeStudent
   end
 
   def students
-    target.individual_target? ? [student] : student.team.founders
+    if target.team_target? && student.team.exists?
+      student.team.founders
+    else
+      [student]
+    end
   end
 
   def ensure_submittability

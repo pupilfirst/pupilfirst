@@ -75,18 +75,6 @@ class TimelineEvent < ApplicationRecord
     { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
   end
 
-  # TODO: Remove TimelineEvent#startup when possible.
-  def startup
-    first_founder = founders.first
-
-    if first_founder.blank?
-      raise "TimelineEvent##{id} does not have any linked founders"
-    end
-
-    # TODO: This is a hack. Remove TimelineEvent#startup method after all of its usages have been deleted.
-    first_founder.startup
-  end
-
   def founder
     founders.first
   end

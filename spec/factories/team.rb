@@ -1,6 +1,9 @@
+# Todo: To be updated
 FactoryBot.define do
-  factory :startup do
-    sequence(:name) { |n| Faker::Lorem.words(number: rand(2..3)).push(n).join(' ') }
+  factory :team_with_students do
+    sequence(:name) do |n|
+      Faker::Lorem.words(number: rand(2..3)).push(n).join(' ')
+    end
     level { create :level, :one }
 
     after(:build) do |startup|
@@ -12,7 +15,9 @@ FactoryBot.define do
 
   # Use this factory to get an empty startup.
   factory :team, class: 'Startup' do
-    sequence(:name) { |n| Faker::Lorem.words(number: rand(1..3)).push(n).join(' ') }
+    sequence(:name) do |n|
+      Faker::Lorem.words(number: rand(1..3)).push(n).join(' ')
+    end
     level { create :level, :one }
   end
 end

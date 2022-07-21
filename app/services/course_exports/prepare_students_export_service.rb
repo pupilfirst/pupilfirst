@@ -155,7 +155,7 @@ module CourseExports
             student.level.number,
             user.title,
             user.affiliation,
-            student.startup.tags.order(:name).pluck(:name).join(', '),
+            student.tags.order(:name).pluck(:name).join(', '),
             last_seen_at(user)
           ] + average_grades_for_student(student)
         end

@@ -1,13 +1,12 @@
 FactoryBot.define do
-  factory :faculty_startup_enrollment do
-    safe_to_create { true }
+  factory :faculty_student_enrollment do
     faculty
-    startup
+    founder
   end
 
   trait :with_course_enrollment do
     after(:create) do |enrollment|
-      course = enrollment.startup.course
+      course = enrollment.cohort.course
       coach = enrollment.faculty
 
       if FacultyCourseEnrollment.where(faculty: coach, course: course).blank?

@@ -24,13 +24,8 @@ class TimelineEventFilePolicy < ApplicationPolicy
     # At least one of the student profiles must be non-exited AND non-ended (course AND access).
     user
       .founders
-      .includes(:startup, :course)
-      .any? do |founder|
-        !(
-          founder.dropped_out_at? || founder.access_ended? ||
-            founder.course.ended?
-        )
-      end
+      .includes(:cohort)
+      .any? { |founder| !(founder.dropped_out_at? || founder.access_ended?) }
   end
 
   private
@@ -41,7 +36,7 @@ class TimelineEventFilePolicy < ApplicationPolicy
     # Current user is a coach if he has been linked as reviewer to entire course holding this TEF.
     return true if current_coach.courses.exists?(id: course)
 
-    # Current user is a coach if he has been linked as reviewer directly to any startup that TE founders are currently
+    # Current user is a coach if he has been linked as reviewer directly to any student that TE founders are currently
     # a part of.
     current_coach.founders.exists?(id: founders)
   end

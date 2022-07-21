@@ -147,7 +147,7 @@ point. To compile ReScript code again (if you've made changes), you can either d
 
     bundle exec rails server
 
-## Run Vite Dev Server
+## Run Vite dev server
 
 **Optional:** Start the Vite development server with:
 
@@ -159,6 +159,14 @@ With the Rails server running, visit the school using your browser at `http://lo
 
 You should be able to sign in as `admin@example.com` (use the _Continue as Developer_ option on the sign-in page), to
 test access to all interfaces. Test data has been seeded to the development database to make this process easier.
+
+### Test new features without the dev server running
+
+All pages should work with or without `bin/vite dev` server running. If you're planning to change any JS code, leaving it running is the best option. However, we need to make sure that we manually test whether all pages function without the dev server running. This is because the dev server builds browser-native ESM with [esbuild](https://esbuild.github.io/), but the full build process uses [rollup.js](https://rollupjs.org/guide/en/). There are subtle differences in the way these two tools interact with old non-ESM JS packages. Use of newer JS packages should not cause any issues.
+
+### Debugging when not running the Vite dev server
+
+If you encounter issues when running sans dev server, you can disable code obfuscation by setting `build: { minify: false }` in the `vite.config.ts` file.
 
 ## Code formatting
 

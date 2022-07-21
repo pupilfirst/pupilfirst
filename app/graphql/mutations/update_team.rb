@@ -38,17 +38,24 @@ module Mutations
       end
 
       def size_grater_than_two
-        return if @value[:student_ids].count > 2
+        return if @value[:student_ids].count >= 2
 
         'The team should have at least two students'
       end
 
       def students_should_belong_to_the_same_cohort
+        old_team_member_ids = @team.founders.pluck(:id).map(&:to_s)
+        new_temp_student_ids = @value[:student_ids] - old_team_member_ids
+
+        # binding.pry
+
+        return if new_temp_student_ids.empty?
+
         if @team
              .cohort
              .founders
-             .where(id: @value[:student_ids], team_id: nil)
-             .count == @value[:student_ids].count
+             .where(id: new_temp_student_ids, team_id: nil)
+             .count == new_temp_student_ids.count
           return
         end
 
@@ -65,7 +72,11 @@ module Mutations
         team.update!(name: @params[:name]) if @params[:name] != team.name
 
         # Remove old team members
-        team.founders.where.not(id: @params[:student_ids]).destroy_all
+        team
+          .founders
+          .where.not(id: @params[:student_ids])
+          .each { |student| student.update!(team_id: nil) }
+
         old_team = team.founders.pluck(:id)
 
         students.map do |student|
@@ -81,8 +92,12 @@ module Mutations
       @students ||= cohort.founders.where(id: @params[:student_ids])
     end
 
+    def cohort
+      @cohort ||= team.cohort
+    end
+
     def team
-      @team ||= current_school.cohorts.find(@params[:team_id])
+      @team ||= current_school.teams.find_by(id: @params[:team_id])
     end
 
     def resource_school

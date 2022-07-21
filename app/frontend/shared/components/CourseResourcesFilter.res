@@ -180,7 +180,13 @@ let onDeselect = (params, selectable) => {
 }
 
 @react.component
-let make = (~courseId, ~filters: array<filter>, ~search) => {
+let make = (
+  ~courseId,
+  ~filters: array<filter>,
+  ~search,
+  ~placeholder="Filter Resources",
+  ~hint="...or start typing to filter by student using their name or email address",
+) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let params = Webapi.Url.URLSearchParams.make(search)
 
@@ -197,9 +203,9 @@ let make = (~courseId, ~filters: array<filter>, ~search) => {
     onDeselect={onDeselect(params)}
     value=state.filterInput
     onChange={filterInput => send(UpdateFilterInput(filterInput))}
-    placeholder={"Filter Resources"}
+    placeholder
     loading={state.filterLoading}
     defaultOptions={unselected(state, filters)}
-    hint={"...or start typing to filter by student using their name or email address"}
+    hint
   />
 }

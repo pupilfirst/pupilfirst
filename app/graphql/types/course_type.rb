@@ -25,7 +25,7 @@ module Types
     field :processing_url, String, null: true
     field :levels, [Types::LevelType], null: false
     field :student_tags, [String], null: false, &authorize_school_admin
-    field :coaches, [Types::UserProxyType], &authorize_school_admin
+    field :coaches, [Types::UserProxyType], null: false, &authorize_school_admin
     field :cohorts, [Types::CohortType], null: false, &authorize_school_admin
     field :certificates,
           [Types::CertificateType],

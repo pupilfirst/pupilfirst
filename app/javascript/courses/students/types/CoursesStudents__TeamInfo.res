@@ -4,6 +4,7 @@ type student = {
   title: string,
   avatarUrl: option<string>,
   userTags: array<string>,
+  lastSeenAt: option<Js.Date.t>,
 }
 
 type t = {
@@ -40,6 +41,8 @@ let studentAvatarUrl = student => student.avatarUrl
 
 let studentTags = (student: student) => student.userTags
 
+let lastSeenAt = student => student.lastSeenAt
+
 let droppedOutAt = t => t.droppedOutAt
 
 let accessEndsAt = t => t.accessEndsAt
@@ -50,12 +53,13 @@ let studentWithId = (studentId, t) =>
     "Could not find student with ID " ++ (studentId ++ (" in team with ID " ++ t.id)),
   )
 
-let makeStudent = (~id, ~name, ~title, ~avatarUrl, ~userTags) => {
+let makeStudent = (~id, ~name, ~title, ~avatarUrl, ~userTags, ~lastSeenAt) => {
   id: id,
   name: name,
   title: title,
   avatarUrl: avatarUrl,
   userTags: userTags,
+  lastSeenAt: lastSeenAt,
 }
 
 let make = (
@@ -87,6 +91,7 @@ let makeFromJS = teamDetails => {
         ~title=student["title"],
         ~avatarUrl=student["avatarUrl"],
         ~userTags=student["userTags"],
+        ~lastSeenAt=student["lastSeenAt"]->Belt.Option.map(DateFns.decodeISO),
       ),
     teamDetails["students"],
   )

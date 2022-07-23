@@ -4,6 +4,7 @@ module Types
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
+    field :last_seen_at, GraphQL::Types::ISO8601DateTime, null: true
     field :user_tags, [String], null: false
 
     def avatar_url
@@ -22,6 +23,16 @@ module Types
                 loader.call(user.id, url)
               end
             end
+        end
+    end
+
+    def last_seen_at
+      BatchLoader::GraphQL
+        .for(object.user_id)
+        .batch do |user_ids, loader|
+          User
+            .where(id: user_ids)
+            .each { |user| loader.call(user.id, user.last_seen_at || user.current_sign_in_at) }
         end
     end
 

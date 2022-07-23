@@ -8,6 +8,7 @@ class TimelineEventsController < ApplicationController
     render html: '', layout: 'app_router'
   end
 
+  # GET /submissions/:id
   def show
     @submission = authorize(TimelineEvent.find(params[:id]))
     render layout: 'student'

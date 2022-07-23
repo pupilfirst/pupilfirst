@@ -1,4 +1,4 @@
 {
-  "packages": ["app/javascript/packages/*"],
+  "packages": ["app/frontend/packages/*"],
   "version": "independent"
 }

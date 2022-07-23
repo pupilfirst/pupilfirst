@@ -1,0 +1,47 @@
+{
+  "name": "@pupilfirst/multiselect-inline",
+  "version": "1.2.1",
+  "description": "A multi-select inline dropdown component for ReasonReact projects",
+  "keywords": [
+    "Reason",
+    "React",
+    "Tailwind",
+    "UI",
+    "Pupilfirst"
+  ],
+  "contributors": [
+    "Bodhish Thomas <bodhish@gmail.com>",
+    "Hari Gopal <mail@harigopal.in>",
+    "Mahesh Krishna Kumar <maheshcet@gmail.com>",
+    "Vinu T. V. <vinutv91@gmail.com>"
+  ],
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-inline",
+  "license": "MIT",
+  "main": "components/MultiselectInline.re",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-inline"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "rescript": "9.1.4",
+    "tailwindcss": "^1.1.4"
+  },
+  "dependencies": {
+    "@pupilfirst/pf-icon": "^1.2.0",
+    "@rescript/react": "^0.10.3",
+    "bs-webapi": "^0.19.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "re:build": "rescript",
+    "re:watch": "rescript clean && rescript build -w"
+  }
+}

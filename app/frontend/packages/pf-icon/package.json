@@ -1,0 +1,44 @@
+{
+  "name": "@pupilfirst/pf-icon",
+  "version": "1.2.0",
+  "description": "Pupilfirst Icons",
+  "keywords": [
+    "Icons",
+    "Pupilfirst",
+    "ReasonReact",
+    "ReasonMl"
+  ],
+  "contributors": [
+    "Bodhish Thomas <bodhish@gmail.com>",
+    "Hari Gopal <mail@harigopal.in>",
+    "Mahesh Krishna Kumar <maheshcet@gmail.com>",
+    "Vinu T. V. <vinutv91@gmail.com>"
+  ],
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon",
+  "license": "MIT",
+  "main": "/src/iconFirst.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "rescript": "9.1.4",
+    "tailwindcss": "^1.1.4"
+  },
+  "dependencies": {
+    "@rescript/react": "^0.10.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "re:build": "rescript",
+    "re:watch": "rescript clean && rescript build -w"
+  }
+}

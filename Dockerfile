@@ -10,7 +10,7 @@ RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
 
-# We need NodeJS for precompiling assets.
+# We need NodeJS & Yarn for precompiling assets.
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 RUN apt-get install -y nodejs
 
@@ -20,20 +20,25 @@ COPY yarn.lock .
 COPY .yarnrc.docker.yml .yarnrc.yml
 COPY .yarn/releases .yarn/releases
 RUN corepack enable
+
+# Remove checksums on problematic JS packages.
+RUN sed '/83bc7758ab676cbb6cf1d12e23cb8125cb0c5c07c62d4e6fcaf6f9194cfafca675c4309e66a39594c60e176d3114bd45b09c9218721d42650554d17c84579d33/d' yarn.lock > yarn.lock
+
 RUN yarn install
 
 # Copy over remaining files and set up for precompilation.
 COPY . /build
 
+# Some basic keys required by Rails.
 ENV RAILS_ENV="production"
 ENV DB_ADAPTER="nulldb"
 ENV SECRET_KEY_BASE="1fe25dabb16153b60531917dce0f70e385be7e4f2581e62f10d91a94999de04225b3363b95bbc2b5967902d60be5dc85ae7661f13d325dcdc44dce4b7756c55e"
 
 # AWS requires a lot of keys to initialize.
-ENV AWS_ACCESS_KEY_ID=access_key_id_from_aws
-ENV AWS_SECRET_ACCESS_KEY=secret_access_key_from_aws
+ENV AWS_ACCESS_KEY_ID=dummy_access_key
+ENV AWS_SECRET_ACCESS_KEY=dummy_secret_access_key
 ENV AWS_REGION=us-east-1
-ENV AWS_BUCKET=bucket_name_from_aws
+ENV AWS_BUCKET=dummy_bucket_name
 
 # Export the locales.json file.
 RUN bundle exec i18n export
@@ -41,8 +46,10 @@ RUN bundle exec i18n export
 # Compile ReScript files to JS.
 RUN yarn run re:build
 
-# Before precompiling, let's remove bin/yarn to prevent reinstallation of deps via yarn.
-RUN rm bin/yarn
+# Remove checksums (again) on problematic JS packages because...
+RUN sed '/83bc7758ab676cbb6cf1d12e23cb8125cb0c5c07c62d4e6fcaf6f9194cfafca675c4309e66a39594c60e176d3114bd45b09c9218721d42650554d17c84579d33/d' yarn.lock > yarn.lock
+
+# ...the assets:precompile step will run `yarn install` again.
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
@@ -66,14 +73,16 @@ RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
 # Let's also upgrade bundler to the same version used in the build.
-RUN gem install bundler -v '2.2.33'
+RUN gem install bundler -v '2.3.11'
 
 WORKDIR /app
 COPY . /app
 
-# We'll copy over the precompiled assets, and the vendored gems.
+# We'll copy over the precompiled assets, public images, and the vendored gems.
 COPY --from=0 /build/public/assets public/assets
-COPY --from=0 /build/public/packs public/packs
+COPY --from=0 /build/public/vite public/vite
+COPY --from=0 /build/public/images public/images
+COPY --from=0 /build/public/favicon.png public/favicon.png
 COPY --from=0 /build/vendor vendor
 
 # Now we can set up bundler again, using the copied over gems.

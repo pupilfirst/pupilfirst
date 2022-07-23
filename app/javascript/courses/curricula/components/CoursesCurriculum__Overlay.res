@@ -638,7 +638,7 @@ let make = (
       <div className="course-overlay__skeleton-body-container max-w-3xl w-full pb-4 mx-auto">
         <div className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
           <div
-            className="course-overlay__skeleton-line-placeholder-md mt-4 w-2/4 skeleton-animate"
+            className="course-overlay__skeleton-line-placeholder-md mt-4 w-1/2 skeleton-animate"
           />
           <div className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate" />
           <div className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate" />

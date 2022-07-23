@@ -13,7 +13,10 @@ class StartupMailer < SchoolMailer
     @school = startup_feedback.timeline_event.founders.first.school
 
     subject =
-      "New feedback from #{startup_feedback.faculty.name} on your submission"
+      I18n.t(
+        'mailers.startup.feedback_as_email.subject',
+        startup_feedback: startup_feedback.faculty.name
+      )
     simple_mail(send_to, subject)
   end
 end

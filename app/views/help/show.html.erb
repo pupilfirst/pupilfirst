@@ -1,5 +1,5 @@
 <% content_for(:head) do %>
-  <title>Help</title>
+  <title><%= t('.title') %></title>
   <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
 <% end %>
 
@@ -7,7 +7,7 @@
   <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
 
-<div class="bg-gray-100 py-8">
+<div class="bg-gray-50 py-8">
   <div class="container mx-auto px-3 max-w-6xl">
     <div class="max-w-3xl mx-auto">
       <div class="convert-markdown" data-json-props="<%= { markdown: @markdown, profile: "permissive" }.to_json %>">

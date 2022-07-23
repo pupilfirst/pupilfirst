@@ -3,8 +3,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
 
-module AssignReviewerMutation = %graphql(
-  `
+module AssignReviewerMutation = %graphql(`
     mutation AssignReviewerMutation($submissionId: ID!) {
       assignReviewer(submissionId: $submissionId){
         reviewer{
@@ -12,11 +11,9 @@ module AssignReviewerMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module ReassignReviewerMutation = %graphql(
-  `
+module ReassignReviewerMutation = %graphql(`
     mutation ReassignReviewerMutation($submissionId: ID!) {
       reassignReviewer(submissionId: $submissionId){
         reviewer{
@@ -24,8 +21,7 @@ module ReassignReviewerMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
@@ -67,17 +63,17 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
     <div>
       {switch SubmissionDetails.reviewer(submissionDetails) {
       | Some(reviewer) => [
-          <div className="inline-flex bg-gray-200 px-3 py-2 mt-2 rounded-md">
+          <div className="inline-flex bg-gray-50 px-3 py-2 mt-2 rounded-md">
             {switch UserProxy.avatarUrl(Reviewer.user(reviewer)) {
             | Some(avatarUrl) =>
               <img
-                className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+                className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
                 src=avatarUrl
               />
             | None =>
               <Avatar
                 name={UserProxy.name(Reviewer.user(reviewer))}
-                className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+                className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
               />
             }}
             <div className="ml-2">
@@ -119,8 +115,8 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
       | None => [
           <div className="flex items-center justify-center">
             <div
-              className="h-24 w-24 md:h-30 md:w-30 rounded-full bg-gray-300 flex items-center justify-center">
-              <Icon className="if i-eye-solid text-gray-800 text-4xl" />
+              className="h-24 w-24 md:h-30 md:w-30 rounded-xl bg-gray-100 flex items-center justify-center">
+              <Icon className="if i-eye-solid text-gray-400 text-4xl" />
             </div>
           </div>,
           <div className="flex items-center justify-center mt-4">

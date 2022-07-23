@@ -12,7 +12,7 @@ module Mutations
         ::Targets::UpdateService.new(target).execute(target_params)
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.update_target.success_notification')
       )
       { sort_index: updated_target.sort_index }

@@ -69,7 +69,7 @@ let make = (
               onCancel()
             }}
             type_="button"
-            className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-100 hover:text-gray-600 focus:outline-none">
+            className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-gray-600 focus:outline-none">
             {cancelButtonText |> str}
           </button>
         </span>

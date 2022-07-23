@@ -1,11 +1,11 @@
-%bs.raw(`require("./CoursesReport__Overview.css")`)
+%raw(`require("./CoursesReport__Overview.css")`)
 
 open CoursesReport__Types
 let str = React.string
 let t = I18n.t(~scope="components.CoursesReport__Overview")
 
 let avatar = (avatarUrl, name) => {
-  let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+  let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
   switch avatarUrl {
   | Some(avatarUrl) => <img className=avatarClasses src=avatarUrl />
   | None => <Avatar name className=avatarClasses />
@@ -64,19 +64,19 @@ let targetsCompletionStatus = overview => {
     <div className="courses-report-overview__doughnut-chart-container bg-white flex items-center">
       <div> {doughnutChart("purple", targetCompletionPercent)} </div>
       <div className="ml-4">
-        <p className="text-sm text-gray-700 font-semibold mt-1">
+        <p className="text-sm text-gray-600 font-semibold mt-1">
           {t(
             ~variables=[("targetsCount", string_of_int(incompleteTargets))],
             "incomplete_targets",
           ) |> str}
         </p>
-        <p className="text-sm text-gray-700 font-semibold mt-1">
+        <p className="text-sm text-gray-600 font-semibold mt-1">
           {t(
             ~variables=[("targetsCount", string_of_int(targetsPendingReview))],
             "targets_pending_review",
           ) |> str}
         </p>
-        <p className="text-sm text-gray-700 font-semibold mt-1">
+        <p className="text-sm text-gray-600 font-semibold mt-1">
           {t(
             ~variables=[("targetsCount", string_of_int(int_of_float(targetsCompleted)))],
             "targets_completed",
@@ -95,7 +95,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
         <div> {doughnutChart("pink", score |> int_of_float |> string_of_int)} </div>
         <div className="ml-4">
           <p className="text-sm font-semibold mt-3"> {t("average_quiz_score") |> str} </p>
-          <p className="text-sm text-gray-700 font-semibold leading-tight mt-1">
+          <p className="text-sm text-gray-600 font-semibold leading-tight mt-1">
             {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
             t("attempted") |> str}
           </p>
@@ -108,7 +108,9 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
 let averageGradeCharts = (
   evaluationCriteria: array<CoursesReport__EvaluationCriterion.t>,
   averageGrades: array<StudentOverview.averageGrade>,
-) => averageGrades |> Array.map(grade => {
+) =>
+  averageGrades
+  |> Array.map(grade => {
     let criterion = StudentOverview.evaluationCriterionForGrade(grade, evaluationCriteria)
     let passGrade = criterion |> CoursesReport__EvaluationCriterion.passGrade |> float_of_int
     let averageGrade = grade |> StudentOverview.gradeValue
@@ -148,7 +150,8 @@ let averageGradeCharts = (
         </p>
       </div>
     </div>
-  }) |> React.array
+  })
+  |> React.array
 let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
   let reached =
     levelNumber <= currentLevelNumber ? "courses-report-overview__student-level--reached" : ""
@@ -189,7 +192,9 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
         className={"courses-report-overview__student-level-progress flex w-full " ++ (
           courseCompleted ? "courses-report-overview__student-level-progress--completed" : ""
         )}>
-        {applicableLevels |> Level.sort |> Array.map(level => {
+        {applicableLevels
+        |> Level.sort
+        |> Array.map(level => {
           let levelNumber = level |> Level.number
           let levelCompleted = levelsCompleted |> Array.mem(level |> Level.id)
 
@@ -201,7 +206,8 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
               {levelNumber |> string_of_int |> str}
             </span>
           </li>
-        }) |> React.array}
+        })
+        |> React.array}
       </ul>
     </div>
   </div>

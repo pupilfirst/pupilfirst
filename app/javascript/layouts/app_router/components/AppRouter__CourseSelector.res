@@ -5,7 +5,7 @@ open AppRouter__Types
 let selected = currentCourse =>
   <button
     title={Course.name(currentCourse)}
-    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-200 appearance-none flex items-center justify-between hover:bg-gray-200 focus:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ">
+    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-50 appearance-none flex items-center justify-between hover:bg-gray-50 focus:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
       <span className="truncate ml-2 text-left"> {Course.name(currentCourse)->str} </span>
@@ -17,7 +17,7 @@ let contents = (courses, currentCourse, selectedPage) => {
   Js.Array.map(
     course =>
       <a
-        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-normal focus:ring-2 focus:ring-inset focus:ring-indigo-500 "
+        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-normal focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
         key={course->Course.id}
         href={Page.canAccessPage(selectedPage, course)
           ? Page.path(Page.changeId(selectedPage, Course.id(course)))

@@ -11,7 +11,7 @@ module Mutations
       mutator = AutoVerifySubmissionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.auto_verify_submission.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.auto_verify_submission.success_notification'))
         { submission: mutator.create_submission, level_up_eligibility: mutator.level_up_eligibility }
       else
         mutator.notify_errors

@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__AutoVerify")
+let ts = I18n.t(~scope="shared")
+
 open CoursesCurriculum__Types
 module TargetStatus = CoursesCurriculum__TargetStatus
 
@@ -66,8 +69,8 @@ let previewLinkToComplete = link =>
   <a
     href=link
     target="_blank"
-    className="block text-primary-500 w-full text-center bg-gray-200 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
-    <span> <FaIcon classes="fas fa-external-link-alt mr-2" /> {"Visit Link " |> str} </span>
+    className="block text-primary-500 w-full text-center bg-gray-50 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
+    <span> <FaIcon classes="fas fa-external-link-alt mr-2" /> {tr("visit_link") |> str} </span>
   </a>
 
 let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, preview) =>
@@ -80,9 +83,9 @@ let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, pr
       className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
       onClick={createAutoVerifySubmission(target, linkToComplete, setSaving, addSubmissionCB)}>
       {switch (saving, linkToComplete) {
-      | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")
-      | (false, Some(_)) => completeButtonText("Visit Link To Complete", "fas fa-external-link-alt")
-      | (false, None) => completeButtonText("Mark As Complete", "fas fa-check-square")
+      | (true, _) => completeButtonText(tr("saving"), "fas fa-spinner fa-spin")
+      | (false, Some(_)) => completeButtonText(tr("visit_complete"), "fas fa-external-link-alt")
+      | (false, None) => completeButtonText(tr("mark_complete"), "fas fa-check-square")
       }}
     </button>
   }
@@ -99,7 +102,7 @@ let statusBar = (string, linkToComplete) => {
     </div>
   let visitLink = link =>
     <a className="text-right w-full" href=link target="_blank">
-      <i className="fas fa-external-link-alt mr-2" /> {"Visit Link" |> str}
+      <i className="fas fa-external-link-alt mr-2" /> {tr("visit_link") |> str}
     </a>
 
   <div className=defaultClasses>
@@ -113,8 +116,8 @@ let statusBar = (string, linkToComplete) => {
 
 let completionInstructionText = linkToComplete =>
   switch linkToComplete {
-  | Some(_) => "Before visiting the link..."
-  | None => "Before marking as complete..."
+  | Some(_) => tr("before_visiting")
+  | None => tr("before_marking")
   }
 
 @react.component
@@ -129,7 +132,7 @@ let make = (~target, ~targetDetails, ~targetStatus, ~addSubmissionCB, ~preview) 
       {switch targetStatus |> TargetStatus.status {
       | Pending => autoVerify(target, linkToComplete, saving, setSaving, addSubmissionCB, preview)
       | Locked(_) => React.null
-      | _ => statusBar("Completed", linkToComplete)
+      | _ => statusBar(ts("completed"), linkToComplete)
       }}
     </div>,
   ] |> React.array

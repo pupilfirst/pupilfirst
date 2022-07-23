@@ -6,13 +6,11 @@
 %>
 
 <% content_for :salutation do %>
-  Hello <%= addressee_name %>,
+  <%= t("shared.salutation_name", name: addressee_name) %>
 <% end %>
 
 <% content_for :body do %>
-  <p><%= author_name %> has posted a reply to something you said on the <%= community_name %> community.</p>
-
-  <p>You can <%= link_to "view the reply on the #{community_name} community", topic_url(topic) %>.
+  <%= t("mailers.user.new_post.body.main_html", author_name: author_name, community_name: community_name, link_to: link_to(t("mailers.user.new_post.body.link_to", community_name: community_name), topic_url(topic))) %>
 
   <%= render 'mailers/link_fallback', url: topic_url(topic) %>
 <% end %>

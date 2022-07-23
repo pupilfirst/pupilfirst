@@ -1,39 +1,42 @@
 @import "custom_styles";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;800;900&display=swap");
 
 @layer components {
   .theme-pupilfirst {
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #3b82f6;
-    --color-primary-600: #2563eb;
-    --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
-    --color-primary-900: #1e3a8a;
+    --color-primary-50: #f8f5fc;
+    --color-primary-100: #f0eafb;
+    --color-primary-200: #d3bff3;
+    --color-primary-300: #b08ee6;
+    --color-primary-400: #976ae2;
+    --color-primary-500: #6025c0;
+    --color-primary-600: #4d1e9a;
+    --color-primary-700: #380d80;
+    --color-primary-800: #35156b;
+    --color-primary-900: #1f0d40;
 
-    --color-secondary-100: #e0f2fe;
-    --color-secondary-200: #bae6fd;
-    --color-secondary-300: #7dd3fc;
-    --color-secondary-400: #38bdf8;
-    --color-secondary-500: #0ea5e9;
-    --color-secondary-600: #0284c7;
-    --color-secondary-700: #0369a1;
-    --color-secondary-800: #075985;
-    --color-secondary-900: #0c4a6e;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
 
-    --color-gray-50: #f8fafc;
-    --color-gray-100: #f1f5f9;
-    --color-gray-200: #e2e8f0;
-    --color-gray-300: #cbd5e1;
-    --color-gray-400: #94a3b8;
-    --color-gray-500: #64748b;
-    --color-gray-600: #475569;
-    --color-gray-700: #334155;
-    --color-gray-800: #1e293b;
-    --color-gray-900: #0f172a;
+    --color-focus-50: #eef2ff;
+    --color-focus-100: #e0e7ff;
+    --color-focus-200: #c7d2fe;
+    --color-focus-300: #a5b4fc;
+    --color-focus-400: #818cf8;
+    --color-focus-500: #6366f1;
+    --color-focus-600: #4f46e5;
+    --color-focus-700: #4338ca;
+    --color-focus-800: #3730a3;
+    --color-focus-900: #312e81;
 
-    --font-family-sans: "Open Sans", sans-serif;
+    --font-family-sans: "Inter", sans-serif;
   }
 
   html {

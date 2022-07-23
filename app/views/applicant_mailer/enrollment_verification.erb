@@ -2,31 +2,30 @@
   school_name = @school.name
   login_url = enroll_applicants_url(@applicant.original_login_token)
   course_name = @applicant.course.name
+  applicant_name = @applicant.name
 %>
 
 <% content_for :title do %>
-  Welcome to <%= course_name %>
+  <%= t("mailers.applicant.enrollment_verification.title", course_name: course_name) %>
 <% end %>
 
 <% content_for :subtitle do %>
-  Use this <strong>one-time link</strong> to verify your email address and sign into <%= school_name %>!
+  <%= t("mailers.applicant.enrollment_verification.subtitle", school_name: school_name) %>
 <% end %>
 
 <% content_for :title_button_text do %>
-  Activate your account and sign in
+  <%= t("mailers.applicant.enrollment_verification.title_button_text") %>
 <% end %>
 
 <% content_for(:title_button_link, login_url) %>
 
 <% content_for :salutation do %>
-  Hello,
+  <%= t("shared.salutation", name: applicant_name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    To activate your <%= school_name %> account, and enroll to the <%= course_name %> course, please verify your email
-    address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to
-    create an account at <%= school_name %>.
+  <%= t("mailers.applicant.enrollment_verification.body", school_name: school_name, course_name: course_name) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

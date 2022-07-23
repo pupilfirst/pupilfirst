@@ -101,10 +101,10 @@ let selectableTabs = targetDetails =>
   TargetDetails.communities(targetDetails) == [] ? [Learn] : [Learn, Discuss]
 
 let tabClasses = (selection, tab) =>
-  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" ++ (
+  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" ++ (
     tab == selection
       ? " course-overlay__body-tab-item--selected"
-      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 focus:text-primary-400 focus:bg-gray-200 cursor-pointer"
+      : " bg-gray-50 hover:text-primary-400 hover:bg-gray-50 focus:text-primary-400 focus:bg-gray-50 cursor-pointer"
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
@@ -285,7 +285,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           href={"/targets/" ++ (target |> Target.id)}
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
-          className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
+          className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
           <span className="font-semibold text-left leading-snug">
             {target |> Target.title |> str}
           </span>
@@ -342,7 +342,7 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
     </button>
   })
@@ -495,7 +495,7 @@ let navigationLink = (direction, url, send) => {
   <Link
     href=url
     onClick={performQuickNavigation(send)}
-    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {text |> str} </span>
     {arrow(rightIcon)}
@@ -524,7 +524,7 @@ let quickNavigationLinks = (targetDetails, send) => {
       <div className="w-1/3 mx-2">
         <button
           onClick=scrollOverlayToTop
-          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50">
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
@@ -575,7 +575,7 @@ let make = (
   <div
     id="target-overlay"
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="bg-gray-100 border-b border-gray-400 px-3">
+    <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
         {handleLocked(target, targets, targetStatus, statusOfTargets, send)}

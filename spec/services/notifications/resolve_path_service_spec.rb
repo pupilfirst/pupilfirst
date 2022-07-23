@@ -7,7 +7,11 @@ describe Notifications::ResolvePathService do
   describe '#resolve' do
     context 'when its a topic created notification' do
       let(:topic) { create :topic }
-      let!(:notification) { create :notification, event: Notification.events[:topic_created], notifiable: topic }
+      let!(:notification) do
+        create :notification,
+               event: Notification.events[:topic_created],
+               notifiable: topic
+      end
 
       it 'resolves topic path' do
         path = subject.resolve
@@ -17,7 +21,11 @@ describe Notifications::ResolvePathService do
 
     context 'when its a post created notification' do
       let(:topic) { create :topic, :with_first_post }
-      let!(:notification) { create :notification, event: Notification.events[:post_created], notifiable: topic.posts.first }
+      let!(:notification) do
+        create :notification,
+               event: Notification.events[:post_created],
+               notifiable: topic.posts.first
+      end
 
       it 'resolves topic path' do
         path = subject.resolve

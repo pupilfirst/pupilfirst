@@ -1279,7 +1279,7 @@ feature 'Submission review overlay', js: true do
         click_button 'Next'
 
         expect(page).to have_current_path(
-          "#{review_timeline_event_path(submission_reviewed_old)}?sortCriterion=SubmittedAt&sortDirection=Descending"
+          "#{review_timeline_event_path(submission_reviewed_old)}?sortCriterion=SubmittedAt"
         )
       end
     end

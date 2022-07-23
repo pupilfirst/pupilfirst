@@ -10,7 +10,7 @@ type t = {
   reviewingCoachId: option<string>,
   targetId: option<string>,
   sortCriterion: sortCriterion,
-  sortDirection: sortDirection,
+  sortDirection: option<sortDirection>,
   tab: option<selectedTab>,
   includeInactive: bool,
 }
@@ -26,6 +26,17 @@ let assignedCoachId = t => t.assignedCoachId
 let personalCoachId = t => t.personalCoachId
 let reviewingCoachId = t => t.reviewingCoachId
 
+let defaultDirection = t => {
+  switch t.sortDirection {
+  | Some(direction) => direction
+  | None =>
+    switch t.tab {
+    | Some(tab) if tab == #Pending => #Ascending
+    | _ => #Descending
+    }
+  }
+}
+
 let makeFromQueryParams = search => {
   let params = Webapi.Url.URLSearchParams.make(search)
 
@@ -38,26 +49,22 @@ let makeFromQueryParams = search => {
     reviewingCoachId: get("reviewingCoachId", params),
     targetId: get("targetId", params),
     tab: switch get("tab", params) {
-    | Some(t) when t == "Pending" => Some(#Pending)
-    | Some(t) when t == "Reviewed" => Some(#Reviewed)
+    | Some(t) if t == "Pending" => Some(#Pending)
+    | Some(t) if t == "Reviewed" => Some(#Reviewed)
     | _ => None
     },
     sortCriterion: switch get("sortCriterion", params) {
-    | Some(criterion) when criterion == "EvaluatedAt" => #EvaluatedAt
-    | Some(criterion) when criterion == "SubmittedAt" => #SubmittedAt
+    | Some(criterion) if criterion == "EvaluatedAt" => #EvaluatedAt
+    | Some(criterion) if criterion == "SubmittedAt" => #SubmittedAt
     | _ => #SubmittedAt
     },
     sortDirection: switch get("sortDirection", params) {
-    | Some(direction) when direction == "Descending" => #Descending
-    | Some(direction) when direction == "Ascending" => #Ascending
-    | _ =>
-      switch get("tab", params) {
-      | Some(t) when t == "Pending" => #Ascending
-      | _ => #Descending
-      }
+    | Some(direction) if direction == "Descending" => Some(#Descending)
+    | Some(direction) if direction == "Ascending" => Some(#Ascending)
+    | _ => None
     },
     includeInactive: switch get("includeInactive", params) {
-    | Some(t) when t == "true" => true
+    | Some(t) if t == "true" => true
     | _ => false
     },
   }
@@ -69,16 +76,19 @@ let toQueryString = filter => {
   | #SubmittedAt => "SubmittedAt"
   }
 
-  let sortDirection = switch filter.sortDirection {
-  | #Descending => "Descending"
-  | #Ascending => "Ascending"
+  let filterDict = Js.Dict.fromArray([("sortCriterion", sortCriterion)])
+
+  switch filter.sortDirection {
+  | Some(direction) => Js.Dict.set(
+      filterDict,
+      "sortDirection",
+      switch direction {
+      | #Descending => "Descending"
+      | #Ascending => "Ascending"
+      },
+    )
+  | _ => ()
   }
-
-  let filterDict = Js.Dict.fromArray([
-    ("sortCriterion", sortCriterion),
-    ("sortDirection", sortDirection),
-  ])
-
   Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))
   Belt.Option.forEach(filter.targetId, targetId => Js.Dict.set(filterDict, "targetId", targetId))
   Belt.Option.forEach(filter.levelId, levelId => Js.Dict.set(filterDict, "levelId", levelId))

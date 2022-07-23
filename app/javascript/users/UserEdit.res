@@ -160,7 +160,7 @@ let updateUser = (state, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(StartSaving)
 
-  UpdateUserQuery.make(
+  let variables = UpdateUserQuery.makeVariables(
     ~name=state.name,
     ~about=state.about,
     ~locale=state.locale,
@@ -170,9 +170,10 @@ let updateUser = (state, send, event) => {
     ~dailyDigest=state.dailyDigest,
     (),
   )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["updateUser"]["success"]
+
+  UpdateUserQuery.fetch(variables)
+  |> Js.Promise.then_((result: UpdateUserQuery.t) => {
+    result.updateUser.success
       ? {
           let hasCurrentPassword = state.newPassword |> String.length > 0
           send(FinishSaving(hasCurrentPassword))
@@ -191,10 +192,9 @@ let updateUser = (state, send, event) => {
 let initiateAccountDeletion = (state, send) => {
   send(StartDeletingAccount)
 
-  InitiateAccountDeletionQuery.make(~email=state.emailForAccountDeletion, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["initiateAccountDeletion"]["success"]
+  InitiateAccountDeletionQuery.fetch({email: state.emailForAccountDeletion})
+  |> Js.Promise.then_((result: InitiateAccountDeletionQuery.t) => {
+    result.initiateAccountDeletion.success
       ? send(FinishAccountDeletion)
       : send(FinishAccountDeletion)
     Js.Promise.resolve()

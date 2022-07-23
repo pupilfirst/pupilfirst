@@ -38,7 +38,7 @@ module CreateStudentFromApplicant = %graphql(`
 let updateCourse = (state, send, updateApplicantCB, applicant) => {
   send(StartSaving)
 
-  let updateCourseQuery = CreateStudentFromApplicant.make(
+  let variables = CreateStudentFromApplicant.makeVariables(
     ~applicantId=Applicant.id(applicant),
     ~accessEndsAt=?state.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
     ~title=state.title,
@@ -48,10 +48,9 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
     (),
   )
 
-  updateCourseQuery
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["createStudentFromApplicant"]["success"] ? updateApplicantCB() : send(FailSaving)
+  CreateStudentFromApplicant.fetch(variables)
+  |> Js.Promise.then_((result: CreateStudentFromApplicant.t) => {
+    result.createStudentFromApplicant.success ? updateApplicantCB() : send(FailSaving)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {

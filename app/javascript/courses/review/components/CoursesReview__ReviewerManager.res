@@ -25,8 +25,7 @@ module ReassignReviewerMutation = %graphql(`
 
 let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  AssignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  AssignReviewerMutation.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     updateReviewerCB(Some(UserProxy.makeFromJs(response["assignReviewer"]["reviewer"])))
     setSaving(_ => false)
@@ -41,8 +40,7 @@ let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
 
 let reassignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  ReassignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  ReassignReviewerMutation.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     updateReviewerCB(Some(UserProxy.makeFromJs(response["reassignReviewer"]["reviewer"])))
     setSaving(_ => false)

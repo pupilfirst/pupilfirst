@@ -101,8 +101,7 @@ let make = (
   let handleCreateTarget = (title, targetGroupId) => {
     send(UpdateTargetSaving)
 
-    CreateTargetMutation.make(~title, ~targetGroupId, ())
-    |> GraphqlQuery.sendQuery
+    CreateTargetMutation.make({title: title, targetGroupId: targetGroupId})
     |> Js.Promise.then_(response => {
       switch response["createTarget"]["target"] {
       | Some(target) => handleResponseCB(target)

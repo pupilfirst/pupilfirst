@@ -184,10 +184,9 @@ module NotificationsQuery = %graphql(`
 let markAllNotifications = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving)
-  MarkAllNotificationsQuery.make()
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["markAllNotifications"]["success"] ? send(MarkAllNotifications) : send(ClearSaving)
+  MarkAllNotificationsQuery.fetch()
+  |> Js.Promise.then_((response: MarkAllNotificationsQuery.t) => {
+    response.markAllNotifications.success ? send(MarkAllNotifications) : send(ClearSaving)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
@@ -197,15 +196,15 @@ let markAllNotifications = (send, event) => {
   |> ignore
 }
 
-let getEntries = (send, cursor, filter) =>
-  NotificationsQuery.make(
+let getEntries = (send, cursor, filter) => {
+  let variables = NotificationsQuery.makeVariables(
     ~status=?filter.status,
     ~after=?cursor,
     ~search=?filter.title,
     ~event=?filter.event,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  NotificationsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let newNotifications =
       response["notifications"]["nodes"] |> Js.Array.map(topicData => Entry.makeFromJS(topicData))
@@ -222,6 +221,7 @@ let getEntries = (send, cursor, filter) =>
     Js.Promise.resolve()
   })
   |> ignore
+}
 
 let markNotification = (send, notificationId) => send(MarkNotification(notificationId))
 

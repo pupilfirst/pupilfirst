@@ -64,7 +64,6 @@ let deleteSubscription = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving)
   DeleteWebPushSubscriptionMutation.make()
-  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     response["deleteWebPushSubscription"]["success"]
       ? send(SetStatusUnSubscribed)
@@ -80,13 +79,11 @@ let deleteSubscription = (send, event) => {
 
 let saveSubscription = (subscription, send) => {
   send(SetSaving)
-  CreateWebPushSubscriptionMutation.make(
-    ~endpoint=subscription.endpoint,
-    ~p256dh=subscription.p256dh,
-    ~auth=subscription.auth,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
+  CreateWebPushSubscriptionMutation.make({
+    endpoint: subscription.endpoint,
+    p256dh: subscription.p256dh,
+    auth: subscription.auth,
+  })
   |> Js.Promise.then_(response => {
     response["createWebPushSubscription"]["success"] ? send(SetStatusSubscribed) : send(ClearSaving)
     Js.Promise.resolve()

@@ -75,11 +75,28 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
 
-  let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
-  |> GraphqlQuery.sendQuery
+  let students =
+    Js.Array.map(
+      t =>
+        Js.Array.map(
+          s =>
+            CreateStudentsQuery.makeInputObjectStudentEnrollmentInput(
+              ~name=StudentInfo.name(s),
+              ~email=StudentInfo.email(s),
+              ~title=StudentInfo.title(s),
+              ~affiliation=StudentInfo.affiliation(s),
+              ~teamName=TeamInfo.name(t),
+              ~tags=TeamInfo.tags(t),
+              (),
+            ),
+          TeamInfo.students(t),
+        ),
+      state.teamsToAdd,
+    ) |> ArrayUtils.flattenV2
+
+  CreateStudentsQuery.make({courseId: courseId, notifyStudents: notifyStudents, students: students})
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
     | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)

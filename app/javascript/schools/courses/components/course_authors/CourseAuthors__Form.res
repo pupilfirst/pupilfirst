@@ -25,8 +25,9 @@ module UpdateCourseAuthorQuery = %graphql(`
 
 let createCourseAuthorQuery = (courseId, rootPath, email, name, setSaving, addAuthorCB) => {
   setSaving(_ => true)
-  CreateCourseAuthorQuery.make(~courseId, ~email, ~name, ())
-  |> GraphqlQuery.sendQuery
+
+  let variables = CreateCourseAuthorQuery.makeVariables(~courseId, ~email, ~name, ())
+  CreateCourseAuthorQuery.make(variables)
   |> Js.Promise.then_(response => {
     switch response["createCourseAuthor"]["courseAuthor"] {
     | Some(courseAuthor) =>
@@ -49,10 +50,9 @@ let createCourseAuthorQuery = (courseId, rootPath, email, name, setSaving, addAu
 let updateCourseAuthorQuery = (rootPath, author, name, setSaving, updateAuthorCB) => {
   setSaving(_ => true)
   let id = author |> Author.id
-  UpdateCourseAuthorQuery.make(~id, ~name, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    if response["updateCourseAuthor"]["success"] {
+  UpdateCourseAuthorQuery.fetch({id: id, name: name})
+  |> Js.Promise.then_((response: UpdateCourseAuthorQuery.t) => {
+    if response.updateCourseAuthor.success {
       updateAuthorCB(author |> Author.updateName(name))
       RescriptReactRouter.push(rootPath)
     } else {

@@ -95,16 +95,14 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
 
     switch community {
     | Some(community) =>
-      UpdateCommunityQuery.make(
-        ~id=community |> Community.id,
-        ~name,
-        ~targetLinkable,
-        ~courseIds,
-        (),
-      )
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        let communityId = response["updateCommunity"]["communityId"]
+      UpdateCommunityQuery.fetch({
+        id: community |> Community.id,
+        name: name,
+        targetLinkable: targetLinkable,
+        courseIds: courseIds,
+      })
+      |> Js.Promise.then_((response: UpdateCommunityQuery.t) => {
+        let communityId = response.updateCommunity.communityId
         let topicCategories = Community.topicCategories(community)
         switch communityId {
         | Some(id) =>
@@ -120,10 +118,13 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
       })
       |> ignore
     | None =>
-      CreateCommunityQuery.make(~name, ~targetLinkable, ~courseIds, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        switch response["createCommunity"]["id"] {
+      CreateCommunityQuery.fetch({
+        name: name,
+        targetLinkable: targetLinkable,
+        courseIds: courseIds,
+      })
+      |> Js.Promise.then_((response: CreateCommunityQuery.t) => {
+        switch response.createCommunity.id {
         | Some(id) =>
           let newCommunity = Community.create(
             ~id,

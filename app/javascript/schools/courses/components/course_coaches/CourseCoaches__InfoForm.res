@@ -50,8 +50,7 @@ module CoachInfoQuery = %graphql(`
   `)
 
 let loadCoachTeams = (courseId, coachId, send) =>
-  CoachInfoQuery.make(~courseId, ~coachId, ~coachNotes=#IgnoreCoachNotes, ())
-  |> GraphqlQuery.sendQuery
+  CoachInfoQuery.make({courseId: courseId, coachId: coachId, coachNotes: #IgnoreCoachNotes})
   |> Js.Promise.then_(result => {
     let stats = {
       reviewedSubmissions: result["coachStats"]["reviewedSubmissions"],

@@ -2157,10 +2157,10 @@ ru:
           asked: спросил %{days_ago} дней назад.
           assigned: (%{stats} назначено вам)
           assigned_none: (из которых ни один не назначен вам)
-          control_emails: Вы можете управлять этими электронными письмами с %{link_to}.
+          control_emails_html: Вы можете управлять этими электронными письмами с %{link_to}.
           latest_topics: "Последние темы, опубликованные в ваших сообществах:"
           link_to: страница редактирования вашего профиля
-          main_html: "Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения в %{courses_number} курсах, в которых вы являетесь ментором:"
+          main_html: "Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения на некоторых курсах, в которых вы являетесь тренером."
           older: "Старые, популярные темы, в которых появились новые действия:"
           replies: ответов
           views: просмотров

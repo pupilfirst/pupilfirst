@@ -147,7 +147,7 @@ point. To compile ReScript code again (if you've made changes), you can either d
 
     bundle exec rails server
 
-## Run Vite Dev Server
+## Run Vite dev server
 
 **Optional:** Start the Vite development server with:
 
@@ -159,6 +159,76 @@ With the Rails server running, visit the school using your browser at `http://lo
 
 You should be able to sign in as `admin@example.com` (use the _Continue as Developer_ option on the sign-in page), to
 test access to all interfaces. Test data has been seeded to the development database to make this process easier.
+
+### Test new features without the dev server running
+
+All pages should work with or without `bin/vite dev` server running. If you're planning to change any JS code, leaving it running is the best option. However, we need to make sure that we manually test whether all pages function without the dev server running. This is because the dev server builds browser-native ESM with [esbuild](https://esbuild.github.io/), but the full build process uses [rollup.js](https://rollupjs.org/guide/en/). There are subtle differences in the way these two tools interact with old non-ESM JS packages. Use of newer JS packages should not cause any issues.
+
+### Debugging when not running the Vite dev server
+
+If you encounter issues when running sans dev server, you can disable code obfuscation by setting `build: { minify: false }` in the `vite.config.ts` file.
+
+## Code formatting
+
+If you're planning to edit the LMS's code and send pull requests, please make sure that your code is properly formatted.
+
+We recommend using Visual Studio Code with the following extensions...
+
+- [ERB Formatter/Beautify](https://marketplace.visualstudio.com/items?itemName=aliariff.vscode-erb-beautify)
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [rescript-vscode](https://marketplace.visualstudio.com/items?itemName=chenglou92.rescript-vscode)
+- [Ruby](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- [YAML Sort](https://marketplace.visualstudio.com/items?itemName=PascalReitermann93.vscode-yaml-sort)
+
+...with the following settings:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "files.autoSave": "onFocusChange",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "ruby.format": false,
+  "ruby.useLanguageServer": true,
+  "vscode-yaml-sort.quotingType": "\"",
+  "vscode-yaml-sort.useLeadingDashes": false,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[erb]": {
+    "editor.defaultFormatter": "aliariff.vscode-erb-beautify"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
+
+When editing YAML files (especially translations) please use the [YAML Sort extension](https://marketplace.visualstudio.com/items?itemName=PascalReitermann93.vscode-yaml-sort) to sort keys.
+
+## Versioning
+
+The version number for the LMS is stored in _two_ locations. Both must be updated when bumping the version:
+
+- `Pupilfirst::Application::VERSION` in `config/application.rb`
+- `env.PF_VERSION` in `.github/workflows/ci.yml`
+
+The version number **must** be bumped when a breaking change is introduced. A breaking change is classified as any change that a LMS instance maintainer should be aware of when upgrading. Such changes should also be documented in the [Upgrading Guide](./upgrading).
 
 ## Enabling multitenancy
 
@@ -185,7 +255,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 
 1. Create a new Nginx server configuration file...
 
-   - `/usr/local/etc/nginx/servers/pupilfirst` (macOS)
+   - `/opt/homebrew/etc/nginx/servers/pupilfirst` (macOS)
    - `/etc/nginx/sites-enabled/pupilfirst` (Linux)
 
    ...and save the following configuration inside it:

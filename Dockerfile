@@ -81,8 +81,6 @@ COPY . /app
 # We'll copy over the precompiled assets, public images, and the vendored gems.
 COPY --from=0 /build/public/assets public/assets
 COPY --from=0 /build/public/vite public/vite
-COPY --from=0 /build/public/images public/images
-COPY --from=0 /build/public/favicon.png public/favicon.png
 COPY --from=0 /build/vendor vendor
 
 # Now we can set up bundler again, using the copied over gems.
@@ -101,4 +99,4 @@ RUN chmod +x /tini
 ENTRYPOINT ["/tini", "--"]
 
 # Run under tini to ensure proper signal handling.
-CMD [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]
+CMD bin/start

@@ -11,10 +11,6 @@ tmp
 # Ignore uploaded files in development.
 storage
 
-public/assets
-public/uploads
-public/vite-dev
-public/vite-test
 **/node_modules
 coverage
 tags
@@ -30,7 +26,9 @@ tags
 # Ignore dotenv files.
 .env*
 
-# Ignore Vite artifacts in public folder.
+# Ignore artifacts in public folder.
+public/assets
+public/uploads
 public/vite-dev
 public/vite-test
 

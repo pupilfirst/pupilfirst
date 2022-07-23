@@ -13,6 +13,8 @@
   [open a new one](https://github.com/pupilfirst/pupilfirst/issues/new). Be sure to include a **title and clear
   description**, and as much relevant information as possible.
 
+- If you're unsure about any detail and would like to discuss the matter, please [open a discussion thread](https://github.com/pupilfirst/pupilfirst/discussions), or reach out to our team on [our Discord server](https://discord.gg/Sh67Tca).
+
 ### Did you write a patch that fixes a bug?
 
 - Open a new GitHub pull request with the patch.
@@ -23,9 +25,7 @@
 
 - Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
-- Before submitting, please make sure that your code is properly formatted. For Ruby code, that usually means following
-  the settings in `.editorconfig` and making sure that Rubocop doesn't complain. For ReasonML, it's simpler - just make
-  sure that your development environment is set up correctly so that `refmt` auto-formats code.
+- Before submitting, please [make sure that your code is properly formatted](https://docs.pupilfirst.com/developers/development_setup#code-formatting).
 
 ### Do you intend to add a new feature or change an existing one?
 

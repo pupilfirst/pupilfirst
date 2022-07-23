@@ -156,12 +156,12 @@ Rails.application.configure do
   config.middleware.insert_before 0, Rack::Cors do
     allow do
       origins '*'
-      resource '/assets/*', methods: :get, headers: :any
+      resource '/vite/assets/*', methods: :get, headers: :any
     end
 
     allow do
       origins '*'
-      resource '/assets/**/*', methods: :get, headers: :any
+      resource '/vite/assets/**/*', methods: :get, headers: :any
     end
   end
 

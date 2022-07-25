@@ -1,4 +1,3 @@
-open SchoolCustomize__Types.SchoolLinks
 open SchoolCustomize__Types
 
 %%raw(`import "./SchoolCustomize__LinksEditor.css"`)
@@ -170,7 +169,7 @@ let handleAddLink = (state, send, addLinkCB, event) => {
 
 let linksTitle = kind =>
   switch kind {
-  | HeaderLink => t("header_links")
+  | SchoolLinks.HeaderLink => t("header_links")
   | FooterLink => t("sitemap_links")
   | SocialLink => t("social_links")
   }->str
@@ -178,7 +177,7 @@ let linksTitle = kind =>
 let unpackLinks = (kind, customizations) =>
   customizations
   ->switch kind {
-  | HeaderLink => Customizations.headerLinks
+  | SchoolLinks.HeaderLink => Customizations.headerLinks
   | FooterLink => Customizations.footerLinks
   | SocialLink => Customizations.socialLinks
   }

@@ -59,7 +59,7 @@ feature 'School Customization', js: true do
       fill_in 'Full URL', with: "http://example.com/#{link_number}"
       click_button 'Add a New Link'
       expect(page).to have_selector(
-        "button[title='Delete http://example.com/#{link_number}']"
+        "button[aria-label='Delete http://example.com/#{link_number}']"
       )
       dismiss_notification
     end
@@ -79,7 +79,7 @@ feature 'School Customization', js: true do
     fill_in 'Title', with: 'Test Link 5'
     fill_in 'Full URL', with: 'http://example.com/5'
     click_button 'Add a New Link'
-    expect(page).to have_selector("button[title='Delete http://example.com/5']")
+    expect(page).to have_selector("button[aria-label='Delete http://example.com/5']")
     dismiss_notification
 
     find('button[title="Close Editor"]').click
@@ -99,9 +99,9 @@ feature 'School Customization', js: true do
     find('button[title="Edit header links"]').click
 
     (1..5).each do |link_number|
-      find("button[title='Delete http://example.com/#{link_number}']").click
+      find("button[aria-label='Delete http://example.com/#{link_number}']").click
       expect(page).not_to have_selector(
-        "button[title='Delete http://example.com/#{link_number}']"
+        "button[aria-label='Delete http://example.com/#{link_number}']"
       )
     end
 
@@ -113,9 +113,9 @@ feature 'School Customization', js: true do
     fill_in 'Full URL', with: 'http://example.com/footer'
     click_button 'Add a New Link'
     dismiss_notification
-
+    sleep 0.1
     expect(page).to have_selector(
-      "button[title='Delete http://example.com/footer']"
+      "button[aria-label='Delete http://example.com/footer']"
     )
 
     find("button[title='View and edit social media links']").click
@@ -124,7 +124,7 @@ feature 'School Customization', js: true do
     click_button 'Add a New Link'
     dismiss_notification
 
-    expect(page).to have_selector("button[title='Delete http://twitter.com']")
+    expect(page).to have_selector("button[aria-label='Delete http://twitter.com']")
 
     find('button[title="Close Editor"]').click
 
@@ -228,56 +228,40 @@ feature 'School Customization', js: true do
     expect(page).to have_text('Please sign in to continue.')
   end
 
-  scenario 'school admin rearrange and edit link title, url' do
-    # sign in user
-    sign_in_user school_admin.user, referrer: customize_school_path
-    expect(page).to have_content('You can customize links on the header.')
+  context 'there are already existing links in the school' do
+    let!(:school_header_link_1) { create :school_link, kind: SchoolLink::KIND_HEADER, school: school, sort_index: 0 }
+    let!(:school_header_link_2) { create :school_link, kind: SchoolLink::KIND_HEADER, school: school, sort_index: 1 }
+    let!(:school_header_link_3) { create :school_link, kind: SchoolLink::KIND_HEADER, school: school, sort_index: 2 }
 
-    # Add four links and check that they're all displayed.
-    find('button[title="Edit header links"]').click
+    scenario 'admin updates and changes order of links' do
+      sign_in_user school_admin.user, referrer: customize_school_path
+      find('button[title="Edit header links"]').click
+      # rearrange links
+      # move first link down
+      within("div[data-school-link-id='#{school_header_link_1.id}']") do
+        expect(page).to have_selector("button[title='Move Up']")
+        expect(page).to have_selector("button[title='Move Down']")
 
-    (1..4).each do |link_number|
-      fill_in 'Title', with: "Test Link #{link_number}"
-      fill_in 'Full URL', with: "http://example.com/#{link_number}"
-      click_button 'Add a New Link'
-      expect(page).to have_selector(
-        "button[title='Delete http://example.com/#{link_number}']"
-      )
-      expect(page).to have_selector(
-        "button[title='Edit http://example.com/#{link_number}']"
-      )
-      dismiss_notification
+        find("button[title='Move Down']").click
+        sleep 0.1
+        expect(SchoolLink.find_by(id: school_header_link_1.id).sort_index).to eq(1)
+
+        find("button[title='Move Up']").click
+        sleep 0.1
+        expect(SchoolLink.find_by(id: school_header_link_1.id).sort_index).to eq(0)
+
+        find("button[title='Edit']").click
+        fill_in "link-title-#{school_header_link_1.id}", with: 'Test Link 1 updated'
+        fill_in "link-url-#{school_header_link_1.id}",
+                with: 'http://example.com/1/updated'
+
+        find("button[title='Update']").click
+        sleep 0.1
+        updated_school_header_link = SchoolLink.find_by(id: school_header_link_1.id)
+
+        expect(updated_school_header_link.title).to eq('Test Link 1 updated')
+        expect(updated_school_header_link.url).to eq('http://example.com/1/updated')
+      end
     end
-
-    # rearrange links
-    # move first link down
-    expect(page).to have_selector(
-      "button[title='Move Up http://example.com/1']"
-    )
-    expect(page).to have_selector(
-      'button[title="Move Down http://example.com/1"]'
-    )
-
-    find('button[title="Move Down http://example.com/1"]').click
-    sort_index_1_link = school.school_links.where(url: 'http://example.com/1')
-    expect(sort_index_1_link.first.sort_index).to eq(1)
-
-    find('button[title="Move Up http://example.com/1"]').click
-    sort_index_0_link = school.school_links.where(url: 'http://example.com/1')
-    expect(sort_index_0_link.first.sort_index).to eq(0)
-
-    # edit title and url of first link
-    find('button[title="Edit http://example.com/1"]').click
-    fill_in 'link-title-http://example.com/1', with: 'Test Link 1 updated'
-    fill_in 'link-url-http://example.com/1',
-            with: 'http://example.com/1/updated'
-
-    find('button[title="Update http://example.com/1"]').click
-
-    find('button[title="Update http://example.com/1"]').click
-    updated_header_links =
-      school.school_links.where(kind: SchoolLink::KIND_HEADER)
-    expect(updated_header_links.first.title).to eq('Test Link 1 updated')
-    expect(updated_header_links.first.url).to eq('http://example.com/1/updated')
   end
 end

@@ -159,7 +159,6 @@ let handleAddLink = (state, send, addLinkCB, event) => {
       | #SchoolLink(schoolLink) =>
         schoolLink["id"] |> displayNewLink(state, addLinkCB)
         send(ClearForm)
-        Notification.success(ts("notifications.done_exclamation"), t("done_notification_body"))
         Js.Promise.resolve()
       | #Errors(errors) => Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
       }
@@ -186,7 +185,7 @@ let unpackLinks = (kind, customizations) =>
   ->Customizations.unpackLinks
 
 let initialState = kind => {
-  kind,
+  kind: kind,
   title: "",
   url: "",
   titleInvalid: false,
@@ -198,16 +197,16 @@ let initialState = kind => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateKind(kind) => {...state, kind, formDirty: true}
+  | UpdateKind(kind) => {...state, kind: kind, formDirty: true}
   | UpdateTitle(title, invalid) => {
       ...state,
-      title,
+      title: title,
       titleInvalid: invalid,
       formDirty: true,
     }
   | UpdateUrl(url, invalid) => {
       ...state,
-      url,
+      url: url,
       urlInvalid: invalid,
       formDirty: true,
     }

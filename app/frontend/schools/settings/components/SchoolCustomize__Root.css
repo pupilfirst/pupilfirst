@@ -1,0 +1,41 @@
+.school-customize__header-links > :first-child {
+  @apply ml-0;
+}
+
+.school-customize__cover-default {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.school-customize__about {
+  background-image: url("~/home/assets/about-background.svg");
+  background-blend-mode: soft-light;
+}
+
+.school-customize__footer-top-container {
+  background-color: theme(colors.gray.100);
+}
+
+.school-customize__footer-bottom-container {
+  background-color: theme(colors.gray.200);
+}
+
+.school-customize__featured-courses-header:before {
+  position: absolute;
+  content: "";
+  width: 60px;
+  height: 5px;
+  border-radius: 20px;
+  background-color: theme(colors.primary.500);
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.school-customize__featured-courses-empty-placeholder {
+  min-height: 18rem;
+  background-image: url("~/schools/settings/components/images/no-courses-icon.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}

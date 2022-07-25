@@ -1,0 +1,49 @@
+{
+  "name": "@pupilfirst/multiselect-dropdown",
+  "version": "1.1.0",
+  "description": "Tailwind styled Reason React multiselect dropdown component",
+  "keywords": [
+    "Reason",
+    "React",
+    "Search",
+    "Tailwind",
+    "UI",
+    "Pupilfirst"
+  ],
+  "contributors": [
+    "Bodhish Thomas <bodhish@gmail.com>",
+    "Hari Gopal <mail@harigopal.in>",
+    "Mahesh Krishna Kumar <maheshcet@gmail.com>",
+    "Vinu T. V. <vinutv91@gmail.com>"
+  ],
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-dropdown",
+  "license": "MIT",
+  "main": "components/MultiselectDropdown.re",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-dropdown"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "rescript": "9.1.4",
+    "tailwindcss": "^1.9.6"
+  },
+  "dependencies": {
+    "@pupilfirst/pf-icon": "^1.2.0",
+    "@rescript/react": "^0.10.3",
+    "bs-webapi": "^0.19.1",
+    "fuse.js": "^6.4.6",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "re:build": "rescript",
+    "re:watch": "rescript clean && rescript build -w"
+  }
+}

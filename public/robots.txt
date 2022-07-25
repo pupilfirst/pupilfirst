@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /r/
-Disallow: /library/*/download
-Disallow: /students/*/e/

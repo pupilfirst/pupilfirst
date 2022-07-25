@@ -1,6 +1,6 @@
 ---
 translations:
-  - file: app/javascript/locales.json
+  - file: app/frontend/locales.json
     patterns:
       - "*.components.*"
       - "*.shared.*"

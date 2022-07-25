@@ -1,8 +1,6 @@
 <% presenter = Courses::LeaderboardPresenter.new(self, @course, @on) %>
-
 <% content_for(:head) do %>
   <title>Leaderboard | <%= presenter.school_name %></title>
-  <%= stylesheet_pack_tag 'courses/leaderboard', 'data-turbolinks-track': 'reload' %>
 <% end %>
 <% content_for(:inner_wrapper) do %>
   <div class="bg-gray-50 pt-11 pb-8 -mt-7">
@@ -27,16 +25,13 @@
                       <%= render 'topper_avatar', student: student %>
                     <% end %>
                   <% end %>
-
                   <% if presenter.toppers.count > 3 %>
                     <div class="leaderboard__winner-avatar flex items-center justify-center font-bold bg-gray-300">
                       +<%= presenter.toppers.count - 2 %>
                     </div>
                   <% end %>
                 </div>
-
                 <h4 class="leaderboard__winner-title pb-3 mt-3 font-normal leading-snug text-primary-900"><%= presenter.heading %></h4>
-
                 <div class="leaderboard__students-count-container bg-gray-50 flex mx-auto overflow-hidden border rounded-lg justify-center">
                   <div class="w-1/2 px-2 pt-2 pb-1" data-t='active students count'>
                     <p class="text-xs"><%= t(".active_students") %></p>
@@ -55,7 +50,7 @@
                   </a>
                 <% end %>
                 <span class="bg-white px-6 py-2 text-sm flex items-center flex-shrink-0 h-full mx-1 md:mx-2 font-semibold border border-gray-300 rounded-lg">
-                <%= presenter.start_date %> - <%= presenter.end_date %>
+                  <%= presenter.start_date %> - <%= presenter.end_date %>
                 </span>
                 <% if presenter.next_page? %>
                   <a class="text-primary bg-white hover:bg-primary-100 hover:text-primary-600 hover:border-primary-300 hover:shadow-md focus:bg-primary-600 focus:text-white focus:shadow-inner px-4 py-2 h-full flex items-center justify-center border border-gray-300 rounded-lg" href="<%= presenter.next_page_link %>">
@@ -77,42 +72,38 @@
         <div class="leaderboard__table-container w-full bg-white border-t border-b md:border border-gray-300 scrolling-touch shadow-lg overflow-x-auto lg:overflow-hidden lg:rounded-lg">
           <table class="w-full mb-2 border-collapse relative">
             <thead class="bg-gray-50">
-            <tr>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".rank") %></th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".change") %></th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b text-left"><%= t(".student") %></th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".level") %></th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".score") %></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <% presenter.students.each do |student| %>
-              <tr class="<%= student.current_student? ? 'leaderboard__current-student-row shadow-lg' : 'leaderboard__student-row' %>">
-                <td class="py-3 px-3 border-b font-bold text-center">
-                  <span><%= student.rank %></span>
-                </td>
-
-                <td class="py-3 px-3 border-b font-semibold text-sm text-center">
-                  <% if student.delta.blank? %>
-                    <span class="leaderboard__rank-change-new"><%= t(".new_new") %></span>
-                  <% else %>
-                    <span class="leaderboard__rank-change-icon inline-block mr-1">
-                      <%= presenter.rank_change_icon(student.delta) %>
-                    </span>
-                  <% end %>
-
-                  <span class="leaderboard__rank-delta font-semibold"><%= presenter.format_delta(student.delta) %></span>
-                </td>
-
-                <td class="py-3 px-3 border-b text-left text-sm">
-                  <span class="font-semibold inline-block leading-tight"><%= student.name %></span>
-                  <span class="leaderboard__student-affiliation block text-xs text-gray-600 leading-tight"> <%= student.user.affiliation %></span>
-                </td>
-                <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.level_number %></td>
-                <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.score %></td>
+              <tr>
+                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".rank") %></th>
+                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".change") %></th>
+                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b text-left"><%= t(".student") %></th>
+                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".level") %></th>
+                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".score") %></th>
               </tr>
-            <% end %>
+            </thead>
+            <tbody>
+              <% presenter.students.each do |student| %>
+                <tr class="<%= student.current_student? ? 'leaderboard__current-student-row shadow-lg' : 'leaderboard__student-row' %>">
+                  <td class="py-3 px-3 border-b font-bold text-center">
+                    <span><%= student.rank %></span>
+                  </td>
+                  <td class="py-3 px-3 border-b font-semibold text-sm text-center">
+                    <% if student.delta.blank? %>
+                      <span class="leaderboard__rank-change-new"><%= t(".new_new") %></span>
+                    <% else %>
+                      <span class="leaderboard__rank-change-icon inline-block mr-1">
+                        <%= presenter.rank_change_icon(student.delta) %>
+                      </span>
+                    <% end %>
+                    <span class="leaderboard__rank-delta font-semibold"><%= presenter.format_delta(student.delta) %></span>
+                  </td>
+                  <td class="py-3 px-3 border-b text-left text-sm">
+                    <span class="font-semibold inline-block leading-tight"><%= student.name %></span>
+                    <span class="leaderboard__student-affiliation block text-xs text-gray-600 leading-tight"> <%= student.user.affiliation %></span>
+                  </td>
+                  <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.level_number %></td>
+                  <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.score %></td>
+                </tr>
+              <% end %>
             </tbody>
           </table>
         </div>

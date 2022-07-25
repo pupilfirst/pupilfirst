@@ -98,6 +98,36 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.index ["email"], name: "index_bounce_reports_on_email", unique: true
   end
 
+  create_table "calendar_cohorts", force: :cascade do |t|
+    t.bigint "calendar_id"
+    t.bigint "cohort_id"
+    t.index ["calendar_id"], name: "index_calendar_cohorts_on_calendar_id"
+    t.index ["cohort_id"], name: "index_calendar_cohorts_on_cohort_id"
+  end
+
+  create_table "calendar_events", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "calendar_id"
+    t.string "color"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "link_url"
+    t.string "link_title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.bigint "course_id"
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_calendars_on_course_id"
+  end
+
   create_table "certificates", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.string "qr_corner", null: false
@@ -122,6 +152,16 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.index ["archived_at"], name: "index_coach_notes_on_archived_at"
     t.index ["author_id"], name: "index_coach_notes_on_author_id"
     t.index ["student_id"], name: "index_coach_notes_on_student_id"
+  end
+
+  create_table "cohorts", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "ends_at"
+    t.bigint "course_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_cohorts_on_course_id"
   end
 
   create_table "communities", force: :cascade do |t|
@@ -192,6 +232,8 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.boolean "public_preview", default: false
     t.string "processing_url"
     t.jsonb "highlights", default: []
+    t.bigint "default_cohort_id"
+    t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -256,6 +298,15 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
 
+  create_table "faculty_cohort_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "cohort_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cohort_id", "faculty_id"], name: "index_faculty_cohort_enrollments_on_cohort_id_and_faculty_id", unique: true
+    t.index ["faculty_id"], name: "index_faculty_cohort_enrollments_on_faculty_id"
+  end
+
   create_table "faculty_course_enrollments", force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "course_id"
@@ -263,6 +314,15 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.datetime "updated_at", null: false
     t.index ["course_id", "faculty_id"], name: "index_faculty_course_enrollments_on_course_id_and_faculty_id", unique: true
     t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
+  end
+
+  create_table "faculty_founder_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "founder_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["faculty_id"], name: "index_faculty_founder_enrollments_on_faculty_id"
+    t.index ["founder_id", "faculty_id"], name: "index_faculty_founder_enrollments_on_founder_id_and_faculty_id", unique: true
   end
 
   create_table "faculty_startup_enrollments", force: :cascade do |t|
@@ -309,6 +369,14 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.boolean "dashboard_toured"
     t.integer "resume_file_id"
     t.boolean "excluded_from_leaderboard", default: false
+    t.datetime "access_ends_at"
+    t.datetime "dropped_out_at"
+    t.bigint "cohort_id"
+    t.bigint "level_id"
+    t.bigint "team_id"
+    t.index ["cohort_id"], name: "index_founders_on_cohort_id"
+    t.index ["level_id"], name: "index_founders_on_level_id"
+    t.index ["team_id"], name: "index_founders_on_team_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
@@ -616,6 +684,14 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.bigint "cohort_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cohort_id"], name: "index_teams_on_cohort_id"
+  end
+
   create_table "text_versions", force: :cascade do |t|
     t.text "value"
     t.string "versionable_type"
@@ -778,6 +854,7 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "applicants", "courses"
   add_foreign_key "certificates", "courses"
+  add_foreign_key "cohorts", "courses"
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
@@ -785,12 +862,20 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"
   add_foreign_key "course_exports", "users"
+  add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
+  add_foreign_key "faculty_cohort_enrollments", "cohorts"
+  add_foreign_key "faculty_cohort_enrollments", "faculty"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
+  add_foreign_key "faculty_founder_enrollments", "faculty"
+  add_foreign_key "faculty_founder_enrollments", "founders"
   add_foreign_key "faculty_startup_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "startups"
+  add_foreign_key "founders", "cohorts"
+  add_foreign_key "founders", "levels"
+  add_foreign_key "founders", "teams"
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
@@ -816,6 +901,7 @@ ActiveRecord::Schema.define(version: 2022_07_19_180225) do
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_versions", "targets"
+  add_foreign_key "teams", "cohorts"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"

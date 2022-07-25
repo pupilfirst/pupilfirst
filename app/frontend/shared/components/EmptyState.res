@@ -1,8 +1,8 @@
 let str = React.string
 
-let renderImage = (imageSrc, alt) =>
-  switch imageSrc {
-  | Some(imageSrc) => <img className="mb-8 max-w-xs" src={imageSrc} alt={alt} />
+let renderImage = image =>
+  switch image {
+  | Some(image) => image
   | None => React.null
   }
 
@@ -16,10 +16,10 @@ let renderActions = (primary, secondary) =>
   }
 
 @react.component
-let make = (~title, ~description, ~imageSrc=?, ~primaryAction=?, ~secondaryAction=?) =>
+let make = (~title, ~description, ~image=?, ~primaryAction=?, ~secondaryAction=?) =>
   <div className="grid place-items-center p-6 max-w-xl">
-    {renderImage(imageSrc, title)}
-    <p className="text-lg font-bold mb-3"> {title->str} </p>
+    {renderImage(image)}
+    <p className="text-lg font-bold mt-4"> {title->str} </p>
     <p className="text-sm text-center text-gray-700"> {description->str} </p>
     {renderActions(primaryAction, secondaryAction)}
   </div>

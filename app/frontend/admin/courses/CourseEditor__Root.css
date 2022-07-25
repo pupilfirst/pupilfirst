@@ -11,6 +11,3 @@
 .course-editor-course__title {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-.course-editor-course__description {
-  min-height: 4.5rem;
-}

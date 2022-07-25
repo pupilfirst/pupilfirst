@@ -83,7 +83,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateSelectedCourse(selectedCourse) => {
       ...state,
-      selectedCourse,
+      selectedCourse: selectedCourse,
     }
   | SetSearchString(string) => {
       ...state,
@@ -140,7 +140,7 @@ let reducer = (state, action) =>
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
-  | UpdateFilterString(filterString) => {...state, filterString}
+  | UpdateFilterString(filterString) => {...state, filterString: filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount, schoolSummary) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
@@ -151,7 +151,7 @@ let reducer = (state, action) =>
       ...state,
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount,
+      totalEntriesCount: totalEntriesCount,
       schoolStats: Belt.Option.getWithDefault(schoolSummary, state.schoolStats),
     }
   | UpdateCourse(course) =>
@@ -169,8 +169,7 @@ let courseLink = (href, title, icon) =>
     key=href
     href
     className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-    <i className=icon />
-    <span className="font-semibold ml-2"> {title->str} </span>
+    <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
 let courseLinks = course => {
@@ -360,7 +359,7 @@ let dropdownSelected =
 
 let showCourse = course => {
   <Spread key={Course.id(course)} props={"data-submission-id": Course.name(course)}>
-    <div className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+    <div className="w-full">
       <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
         <div>
           <div className="relative">
@@ -399,9 +398,26 @@ let showCourse = course => {
             </div>,
             Belt.Option.isSome(Course.archivedAt(course)),
           )}
-          <div
-            className="course-editor-course__description text-sm px-4 pt-2 w-full leading-relaxed">
-            {str(Course.description(course))}
+          <p className="text-sm px-4 py-2 text-gray-600"> {str(Course.description(course))} </p>
+        </div>
+        <div className="flex gap-6 flex-wrap p-4">
+          <div className="flex-1">
+            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
+            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+              {Course.cohortsCount(course)->string_of_int->str}
+            </p>
+          </div>
+          <div className="flex-1">
+            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
+            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+              {Course.coachesCount(course)->string_of_int->str}
+            </p>
+          </div>
+          <div className="flex-1">
+            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
+            <p className="pr-3 mt-2 font-semibold">
+              {Course.levelsCount(course)->string_of_int->str}
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-5 gap-4 p-4">
@@ -422,26 +438,6 @@ let showCourse = course => {
             Belt.Option.isSome(Course.archivedAt(course)),
           )}
         </div>
-        <div className="flex justify-around gap-6 flex-wrap p-4">
-          <div>
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
-            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
-              {Course.cohortsCount(course)->string_of_int->str}
-            </p>
-          </div>
-          <div>
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
-            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
-              {Course.coachesCount(course)->string_of_int->str}
-            </p>
-          </div>
-          <div>
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
-            <p className="pr-3 mt-2 font-semibold">
-              {Course.levelsCount(course)->string_of_int->str}
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   </Spread>
@@ -457,7 +453,42 @@ let showCourses = (courses, state) => {
             {t("empty_courses")->str}
           </h4>
         </div>
-      : <div className="flex flex-wrap">
+      : <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+          <div
+            className="border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
+            <EmptyState
+              title={t("add_new_course")}
+              description={"Let's create another course."}
+              primaryAction={<button
+                className="btn btn-primary btn-lg"
+                onClick={_ => {
+                  RescriptReactRouter.push("/school/courses/new")
+                }}>
+                <PfIcon className="if i-plus-circle-regular if-fw" />
+                <span className="font-semibold ml-1"> {str(t("add_new_course"))} </span>
+              </button>}
+              image={<svg
+                width="150"
+                height="150"
+                viewBox="0 0 150 150"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="75" cy="75" r="75" fill="url(#paint0_linear_1452_24450)" />
+                <defs>
+                  <linearGradient
+                    id="paint0_linear_1452_24450"
+                    x1="17.246"
+                    y1="2.47079e-06"
+                    x2="179.679"
+                    y2="180.08"
+                    gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#D0D0D0" />
+                    <stop offset="1" stopColor="#D0D0D0" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>}
+            />
+          </div>
           {Js.Array.map(course => showCourse(course), courses)->React.array}
         </div>}
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
@@ -622,16 +653,8 @@ let make = (~school) => {
           </div>
         </div>
       </div>
-      <div className="items-center justify-between max-w-4xl mx-auto mt-8 w-full px-10">
-        <button
-          className="w-full flex items-center justify-center relative bg-white border-dashed text-primary-500 border-2 border-primary-300  hover:text-primary-600 hover:shadow-md hover:border-primary-300 focus:outline-none focus:bg-gray-50 focus:text-primary-600 focus:shadow-md focus:border-primary-300 p-6 rounded-lg cursor-pointer"
-          onClick={_ => RescriptReactRouter.push("/school/courses/new")}>
-          <i className="fas fa-plus-circle text-lg" />
-          <span className="font-semibold ml-2"> {str(t("add_new_course"))} </span>
-        </button>
-      </div>
       <div className="max-w-4xl mx-auto w-full">
-        <div className="w-full sticky top-0 z-30 mt-4 px-10">
+        <div className="w-full sticky top-0 z-30 mt-4 px-6">
           <label
             htmlFor="search_courses"
             className="block text-tiny font-semibold uppercase pl-px text-left">

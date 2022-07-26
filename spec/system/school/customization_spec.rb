@@ -79,7 +79,9 @@ feature 'School Customization', js: true do
     fill_in 'Title', with: 'Test Link 5'
     fill_in 'Full URL', with: 'http://example.com/5'
     click_button 'Add a New Link'
-    expect(page).to have_selector("button[aria-label='Delete http://example.com/5']")
+    expect(page).to have_selector(
+      "button[aria-label='Delete http://example.com/5']"
+    )
     dismiss_notification
 
     find('button[title="Close Editor"]').click
@@ -99,7 +101,8 @@ feature 'School Customization', js: true do
     find('button[title="Edit header links"]').click
 
     (1..5).each do |link_number|
-      find("button[aria-label='Delete http://example.com/#{link_number}']").click
+      find("button[aria-label='Delete http://example.com/#{link_number}']")
+        .click
       expect(page).not_to have_selector(
         "button[aria-label='Delete http://example.com/#{link_number}']"
       )
@@ -124,7 +127,9 @@ feature 'School Customization', js: true do
     click_button 'Add a New Link'
     dismiss_notification
 
-    expect(page).to have_selector("button[aria-label='Delete http://twitter.com']")
+    expect(page).to have_selector(
+      "button[aria-label='Delete http://twitter.com']"
+    )
 
     find('button[title="Close Editor"]').click
 
@@ -229,38 +234,58 @@ feature 'School Customization', js: true do
   end
 
   context 'there are already existing links in the school' do
-    let!(:school_header_link_1) { create :school_link, kind: SchoolLink::KIND_HEADER, school: school, sort_index: 0 }
-    let!(:school_header_link_2) { create :school_link, kind: SchoolLink::KIND_HEADER, school: school, sort_index: 1 }
-    let!(:school_header_link_3) { create :school_link, kind: SchoolLink::KIND_HEADER, school: school, sort_index: 2 }
+    let!(:school_header_link_1) do
+      create :school_link,
+             kind: SchoolLink::KIND_HEADER,
+             school: school,
+             sort_index: 0
+    end
+    let!(:school_header_link_2) do
+      create :school_link,
+             kind: SchoolLink::KIND_HEADER,
+             school: school,
+             sort_index: 1
+    end
+    let!(:school_header_link_3) do
+      create :school_link,
+             kind: SchoolLink::KIND_HEADER,
+             school: school,
+             sort_index: 2
+    end
 
     scenario 'admin updates and changes order of links' do
       sign_in_user school_admin.user, referrer: customize_school_path
       find('button[title="Edit header links"]').click
-      # rearrange links
-      # move first link down
+
       within("div[data-school-link-id='#{school_header_link_1.id}']") do
         expect(page).to have_selector("button[title='Move Up']")
         expect(page).to have_selector("button[title='Move Down']")
 
+        # move first link down
         find("button[title='Move Down']").click
         sleep 0.1
-        expect(SchoolLink.find_by(id: school_header_link_1.id).sort_index).to eq(1)
+        expect(school_header_link_1.reload.sort_index).to eq(1)
+        expect(school_header_link_2.reload.sort_index).to eq(0)
+        expect(school_header_link_3.reload.sort_index).to eq(2)
 
         find("button[title='Move Up']").click
         sleep 0.1
-        expect(SchoolLink.find_by(id: school_header_link_1.id).sort_index).to eq(0)
+        expect(school_header_link_1.reload.sort_index).to eq(0)
+        expect(school_header_link_2.reload.sort_index).to eq(1)
+        expect(school_header_link_3.reload.sort_index).to eq(2)
 
+        # update link
         find("button[title='Edit']").click
-        fill_in "link-title-#{school_header_link_1.id}", with: 'Test Link 1 updated'
+        fill_in "link-title-#{school_header_link_1.id}",
+                with: 'Test Link 1 updated'
         fill_in "link-url-#{school_header_link_1.id}",
                 with: 'http://example.com/1/updated'
 
         find("button[title='Update']").click
         sleep 0.1
-        updated_school_header_link = SchoolLink.find_by(id: school_header_link_1.id)
 
-        expect(updated_school_header_link.title).to eq('Test Link 1 updated')
-        expect(updated_school_header_link.url).to eq('http://example.com/1/updated')
+        expect(school_header_link_1.reload.title).to eq('Test Link 1 updated')
+        expect(school_header_link_1.url).to eq('http://example.com/1/updated')
       end
     end
   end

@@ -273,7 +273,9 @@ feature 'School Customization', js: true do
         expect(school_header_link_1.reload.sort_index).to eq(0)
         expect(school_header_link_2.reload.sort_index).to eq(1)
         expect(school_header_link_3.reload.sort_index).to eq(2)
+      end
 
+      within("div[data-school-link-id='#{school_header_link_1.id}']") do
         # update link
         find("button[title='Edit']").click
         fill_in "link-title-#{school_header_link_1.id}",
@@ -282,11 +284,13 @@ feature 'School Customization', js: true do
                 with: 'http://example.com/1/updated'
 
         find("button[title='Update']").click
-        sleep 0.1
-
-        expect(school_header_link_1.reload.title).to eq('Test Link 1 updated')
-        expect(school_header_link_1.url).to eq('http://example.com/1/updated')
       end
+
+      expect(page).to have_content('Link updated successfully!')
+      dismiss_notification
+
+      expect(school_header_link_1.reload.title).to eq('Test Link 1 updated')
+      expect(school_header_link_1.url).to eq('http://example.com/1/updated')
     end
   end
 end

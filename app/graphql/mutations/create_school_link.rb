@@ -4,7 +4,9 @@ module Mutations
       def validate(_object, _context, value)
         title = value[:title]
         kind = value[:kind]
-        return  I18n.t('mutations.create_school_link.blank_title_error') if title.blank? && kind != SchoolLink::KIND_SOCIAL
+        if title.blank? && kind != SchoolLink::KIND_SOCIAL
+          return I18n.t('mutations.create_school_link.blank_title_error')
+        end
       end
     end
 
@@ -14,7 +16,7 @@ module Mutations
     argument :title, String, required: false
     argument :url, String, required: true
 
-    description "Create a school link."
+    description 'Create a school link.'
 
     field :school_link, Types::SchoolLink, null: true
 
@@ -47,7 +49,7 @@ module Mutations
         when SchoolLink::KIND_HEADER, SchoolLink::KIND_FOOTER
           { title: @params[:title], url: @params[:url] }
         when SchoolLink::KIND_SOCIAL
-          {  url: @params[:url] }
+          { url: @params[:url] }
         else
           raise "Unknown kind '#{kind}' encountered!"
         end

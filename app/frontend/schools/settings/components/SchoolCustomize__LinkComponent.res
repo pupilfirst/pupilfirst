@@ -39,7 +39,7 @@ module MoveSchoolLinkQuery = %graphql(`
 
 let handleMoveLink = (~id, ~kind, ~direction: Customizations.direction, ~send, ~moveLinkCB) => {
   send(SetUpdating(true))
-  MoveSchoolLinkQuery.fetch({
+  MoveSchoolLinkQuery.fetch(~notify=false,{
     id: id,
     direction: switch direction {
     | Up => #Up

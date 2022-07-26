@@ -41,9 +41,7 @@ and about = option<string>
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch logoOnLightBg {
   | Some(logo) =>
-    <div className="max-w-xs">
-      <img className="h-12" src={logo |> Customizations.url} />
-    </div>
+    <div className="max-w-xs"> <img className="h-12" src={logo |> Customizations.url} /> </div>
   | None => <span className="text-2xl font-bold"> {schoolName->str} </span>
   }
 
@@ -122,8 +120,7 @@ let emailAddress = email =>
   switch email {
   | Some(email) =>
     <div className="text-xs font-semibold mt-4">
-      {"Reach us at "->str}
-      <span className="font-bold"> {email->str} </span>
+      {(t("reach_us_at") ++ ": ")->str} <span className="font-bold"> {email->str} </span>
     </div>
   | None =>
     <div
@@ -205,9 +202,9 @@ let editor = (state, send, authenticityToken) =>
 
 let initialState = (customizations, schoolName, schoolAbout) => {
   visibleEditor: None,
-  customizations,
-  schoolName,
-  schoolAbout,
+  customizations: customizations,
+  schoolName: schoolName,
+  schoolAbout: schoolAbout,
 }
 
 let reducer = (state, action) =>
@@ -253,8 +250,8 @@ let reducer = (state, action) =>
     }
   | UpdateSchoolDetails(schoolName, schoolAbout) => {
       ...state,
-      schoolName,
-      schoolAbout,
+      schoolName: schoolName,
+      schoolAbout: schoolAbout,
       visibleEditor: None,
     }
   }
@@ -273,7 +270,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
   )
   <div>
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
-      <div className="font-bold"> {"Home Page"->str} </div>
+      <h1 className="font-bold"> {t("homepage")->str} </h1>
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-50 rounded p-2">
           {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}

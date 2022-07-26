@@ -117,7 +117,7 @@ let updateLink = (linkId, newTitle, newUrl, t) => {
 
 type direction = Up | Down
 
-let sortFunc = link =>
+let sortIndexOfLink = link =>
   switch link {
   | HeaderLink(_, _, _, sortIndex)
   | FooterLink(_, _, _, sortIndex)
@@ -225,7 +225,7 @@ let decode = json => {
     schoolImages: json |> field("images", decodeImages),
     links: json
     |> field("links", array(decodeLink))
-    |> Js.Array.sortInPlaceWith((l1, l2) => sortFunc(l1) - sortFunc(l2)),
+    |> Js.Array.sortInPlaceWith((l1, l2) => sortIndexOfLink(l1) - sortIndexOfLink(l2)),
   }
 }
 

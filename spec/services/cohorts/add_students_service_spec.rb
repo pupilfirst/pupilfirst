@@ -1,18 +1,42 @@
 require 'rails_helper'
 
 describe Cohorts::AddStudentsService do
-  subject { described_class.new(course, notify: notify) }
+  subject { described_class.new(cohort, notify: notify) }
 
   let!(:course) { create :course }
+  let!(:cohort) { create :cohort, course: course }
   let!(:level_1) { create :level, :one, course: course }
-  let!(:student_1_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email) }
-  let!(:student_2_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, title: Faker::Lorem.words(number: 2).join(' '), tags: ['Tag 1', 'Tag 2']) }
-  let!(:student_3_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'new_team', tags: ["Tag 3"]) }
-  let!(:student_4_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'new_team', tags: ["Tag 4"]) }
+  let!(:student_1_data) do
+    OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email)
+  end
+  let!(:student_2_data) do
+    OpenStruct.new(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      title: Faker::Lorem.words(number: 2).join(' '),
+      tags: ['Tag 1', 'Tag 2']
+    )
+  end
+  let!(:student_3_data) do
+    OpenStruct.new(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      team_name: 'new_team',
+      tags: ['Tag 3']
+    )
+  end
+  let!(:student_4_data) do
+    OpenStruct.new(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      team_name: 'new_team',
+      tags: ['Tag 4']
+    )
+  end
   let!(:notify) { true }
 
   describe '#add' do
-    it 'add given list of students to the course' do
+    it 'add given list of students to the cohort' do
       students_data = [
         student_1_data,
         student_2_data,
@@ -20,16 +44,20 @@ describe Cohorts::AddStudentsService do
         student_4_data
       ]
 
-      expect { subject.add(students_data) }.to change { course.founders.count }
+      expect { subject.add(students_data) }.to change { cohort.founders.count }
         .by(4)
-      expect(course.startups.count).to eq(3)
+      expect(cohort.teams.count).to eq(1)
 
       # Check attributes are saved correctly for students
       student_2_user = User.find_by(email: student_2_data.email)
       expect(student_2_user.name).to eq(student_2_data.name)
       expect(student_2_user.title).to eq(student_2_data.title)
-      expect(student_2_user.founders.first.startup.tag_list).to match_array(['Tag 1', 'Tag 2'])
-      expect(course.school.founder_tag_list).to match_array(['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4'])
+      expect(student_2_user.founders.first.tag_list).to match_array(
+        ['Tag 1', 'Tag 2']
+      )
+      expect(cohort.school.founder_tag_list).to match_array(
+        ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4']
+      )
 
       # Email notifications
       open_email(student_1_data.email)
@@ -37,14 +65,15 @@ describe Cohorts::AddStudentsService do
       email_subject = current_email.subject
 
       expect(email_subject).to eq(
-        "You have been added as a student in #{course.school.name}"
+        "You have been added as a student in #{cohort.school.name}"
       )
 
       # Check if students are teamed up correctly
-      new_team = Startup.find_by(name: 'new_team')
+      new_team = Team.find_by(name: 'new_team')
 
-      expect(new_team.founders.map { |f| f.email }).to match_array([student_3_data.email, student_4_data.email])
-      expect(new_team.tag_list).to match_array(["Tag 3", "Tag 4"])
+      expect(new_team.founders.map { |f| f.email }).to match_array(
+        [student_3_data.email, student_4_data.email]
+      )
     end
 
     it 'returns the IDs of newly added students' do
@@ -88,7 +117,7 @@ describe Cohorts::AddStudentsService do
       allow(notification_service).to receive(:execute)
       subject =
         described_class.new(
-          course,
+          cohort,
           notify: notify,
           notification_service: notification_service
         )
@@ -99,14 +128,14 @@ describe Cohorts::AddStudentsService do
           course,
           :student_added,
           student,
-          course
+          cohort
         )
       end
     end
 
     context 'course already has students' do
-      let!(:persisted_team_1) { create :startup, level: level_1 }
-      let!(:persisted_team_2) { create :startup, level: level_1 }
+      let!(:persisted_team_1) { create :team_with_students, cohort: cohort }
+      let!(:persisted_team_2) { create :team_with_students, cohort: cohort }
       let!(:student_1) { persisted_team_1.founders.first }
       let!(:student_2) { persisted_team_2.founders.first }
       let!(:data_with_existing_student_email) do
@@ -128,10 +157,10 @@ describe Cohorts::AddStudentsService do
         ]
 
         expect { subject.add(students_data) }.to change {
-          course.founders.count
+          cohort.founders.count
         }.by(2)
-        expect(student_1.reload.startup).to eq(persisted_team_1)
-        expect(student_2.reload.startup).to eq(persisted_team_2)
+        expect(student_1.reload.team).to eq(persisted_team_1)
+        expect(student_2.reload.team).to eq(persisted_team_2)
       end
     end
 
@@ -153,7 +182,7 @@ describe Cohorts::AddStudentsService do
         ]
 
         expect { subject.add(students_data) }.to change {
-          course.founders.count
+          cohort.founders.count
         }.by(1)
         expect(user.reload.name).to eq(name)
         expect(user.title).to eq(title)
@@ -170,15 +199,13 @@ describe Cohorts::AddStudentsService do
         )
       end
 
-      it 'onboards the student as a "standard" student' do
+      it 'onboards the student as a "standard" student without a team' do
         expect { subject.add([student_data]) }.to change {
-          course.founders.count
+          cohort.founders.count
         }.by(1)
 
-        student_user = User.find_by(email: student_data.email)
-        expect(student_user.founders.first.startup.name).to eq(
-          student_user.name
-        )
+        expect { subject.add([student_data]) }.to change { cohort.teams.count }
+          .by(0)
       end
     end
 
@@ -189,7 +216,7 @@ describe Cohorts::AddStudentsService do
         students_data = [student_1_data, student_2_data]
 
         expect { subject.add(students_data) }.to change {
-          course.founders.count
+          cohort.founders.count
         }.by(2)
 
         open_email(student_1_data.email)

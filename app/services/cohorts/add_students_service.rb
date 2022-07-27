@@ -20,7 +20,7 @@ module Cohorts
       new_students = sanitize_students(unpersisted_students(student_list))
 
       students =
-        Course.transaction do
+        Cohort.transaction do
           students =
             new_students.map { |student_data| create_new_student(student_data) }
 
@@ -40,7 +40,7 @@ module Cohorts
           course,
           :student_added,
           student.user,
-          course
+          @cohort
         )
       end
 
@@ -100,9 +100,6 @@ module Cohorts
       )
 
       team = find_or_create_team(student)
-      if student.tags.present?
-        team.update!(tag_list: (team.tags + student.tags).uniq)
-      end
 
       # Finally, create a student profile for the user.
       Founder.create!(

@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :founder do
     user
-    startup
     dashboard_toured { true }
 
     trait(:connected_to_slack) do
@@ -13,6 +12,7 @@ FactoryBot.define do
 
   factory :student, class: 'Founder' do
     user
-    startup { create :team }
+    cohort
+    level
   end
 end

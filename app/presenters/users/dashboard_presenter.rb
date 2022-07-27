@@ -1,7 +1,7 @@
 module Users
   class DashboardPresenter < ApplicationPresenter
     def page_title
-      I18n.t("shared.dashboard") ++ " | #{current_school.name}"
+      I18n.t('shared.dashboard') + +" | #{current_school.name}"
     end
 
     def props
@@ -106,9 +106,9 @@ module Users
             active_courses =
               Course
                 .live
-                .joins(startups: [founders: :user])
+                .joins(cohorts: [founders: :user])
                 .where(users: { id: current_user })
-                .where(startups: { dropped_out_at: nil })
+                .where(founders: { dropped_out_at: nil })
             communities_in_school
               .joins(:courses)
               .where(courses: { id: active_courses })

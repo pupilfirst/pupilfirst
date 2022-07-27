@@ -72,7 +72,7 @@ feature 'User signing in by supplying email address', js: true do
     context 'when user visits the reset password page' do
       let(:password) { Faker::Internet.password }
 
-      before { create :founder, user: user }
+      before { create :student, user: user }
 
       scenario 'allow to change password with a valid token' do
         user.regenerate_reset_password_token

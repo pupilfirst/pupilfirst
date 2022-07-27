@@ -7,11 +7,10 @@ Rails.application.routes.draw do
 
   direct :rails_public_blob do |blob|
     if Rails.env.development? || Rails.env.test? || ENV['CLOUDFRONT_HOST'].blank?
-      route =
-        if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
+      route = if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
         else
-         :rails_blob
+          :rails_blob
         end
       route_for(route, blob, only_path: true)
     else
@@ -41,8 +40,7 @@ Rails.application.routes.draw do
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
-  get 'users/update_email',controller: 'users', action:'update_email'
-  post 'users/update_email',controller: 'users', action:'send_update_email_token_email',as: 'update_email'
+  get 'users/update_email', controller: 'users', action: 'update_email', as: 'update_email'
 
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'

@@ -61,16 +61,19 @@ class UsersController < ApplicationController
       Users::ValidateUpdateEmailTokenService.new(params[:token], current_school)
         .authenticate
 
-    if user.present?
-      old_email = user.email
-      new_email = user.temp_new_email
+    if user.present? && user.temp_new_email.present?
+      @old_email = user.email
+      @new_email = user.temp_new_email
+      @token = params[:token]
 
       # Update user email
       user.update!(
-        email: new_email,
+        email: @new_email,
         update_email_token: nil,
-        temp_new_email: nil
+        temp_new_email: nil,
       )
+
+      create_audit_record
 
       # Send success email to user
       UserMailer.confirm_email_update(user.name, user.email, current_school)
@@ -81,14 +84,26 @@ class UsersController < ApplicationController
         .school_admins
         .where.not(user_id: user.id)
         .each do |admin|
-          SchoolAdminMailer.email_updated_notification(admin, user, old_email)
-            .deliver_now
-        end
+        SchoolAdminMailer.email_updated_notification(admin, user, old_email)
+          .deliver_later
+      end
 
       redirect_to edit_user_path
     else
       flash[:error] = t('.link_expired')
       redirect_to edit_user_path
     end
+  end
+
+  def create_audit_record
+    AuditRecord.create!(
+      audit_type: AuditRecord::TYPE_UPDATE_EMAIL,
+      school_id: current_school.id,
+      metadata: {
+        user_id: current_user.id,
+        email: @new_email,
+        old_email: @old_email,
+      },
+    )
   end
 end

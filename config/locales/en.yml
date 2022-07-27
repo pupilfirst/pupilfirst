@@ -2183,6 +2183,7 @@ en:
     draft: Draft
     edit: Edit
     email: Email
+    email_exists_error: An email address is already being used.
     empty: Empty
     fail: Fail
     file_invalid: Please select a file with a size less than 5 MB.
@@ -2251,6 +2252,8 @@ en:
     show:
       submitted_on: Submitted on
   users:
+    edit:
+      title: Edit User
     delete_account:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User

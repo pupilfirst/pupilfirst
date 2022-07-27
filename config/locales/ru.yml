@@ -1982,6 +1982,7 @@ ru:
     edit: Редактировать
     email: Почта
     email_error: Введите действительную почту
+    email_exists_error: Адрес электронной почты уже используется.
     email_placeholder: Добавьте почту здесь
     empty: Пусто
     fail: Провал

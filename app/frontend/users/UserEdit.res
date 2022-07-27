@@ -116,6 +116,14 @@ module InitiateAccountDeletionQuery = %graphql(`
      }
    `)
 
+module SendEmailUpdateTokenQuery = %graphql(`
+   mutation SendUpdateEmailToken($newEmail: String! ) {
+     sendUpdateEmailToken(newEmail: $newEmail ) {
+        success
+       }
+     }
+   `)
+
 let uploadAvatar = (send, formData) => {
   open Json.Decode
   Api.sendFormData(
@@ -130,23 +138,23 @@ let uploadAvatar = (send, formData) => {
   )
 }
 
-let updateEmail = (send, email, payload) => {
-  Api.sendPayload(
-    "/users/update_email",
-    payload,
-    _ => {
-      Notification.success(
-        ts("notifications.done_exclamation"),
-        t("update_email_token_sent_notification"),
-      )
-      send(SetDisableUpdateEmail(true))
-    },
-    () => {
-      send(SetDisableUpdateEmail(true))
-      send(UpdateEmail(email))
-    },
-    Fetch.Post,
-  )
+let updateEmail = (send, email, newEmail) => {
+  SendEmailUpdateTokenQuery.fetch({newEmail: newEmail})
+  |> Js.Promise.then_(_ => {
+    Notification.success(
+      ts("notifications.done_exclamation"),
+      t("update_email_token_sent_notification"),
+    )
+    send(SetDisableUpdateEmail(true))
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_ => {
+    send(SetDisableUpdateEmail(true))
+    send(UpdateEmail(email))
+    Js.Promise.resolve()
+  })
+  |> ignore
+  ()
 }
 
 let submitAvatarForm = (send, formId) => {
@@ -320,11 +328,7 @@ let make = (
   let handleUpdateEmailFormSubmit = evt => {
     evt |> ReactEvent.Form.preventDefault
     send(SetDisableUpdateEmail(false))
-
-    let payload = Js.Dict.empty()
-    Js.Dict.set(payload, "new_email", state.email |> Js.Json.string)
-    Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
-    updateEmail(send, email, payload)
+    updateEmail(send, email, state.email)
   }
 
   <div className="container mx-auto px-3 py-8 max-w-5xl">
@@ -433,7 +437,7 @@ let make = (
                   ? <button
                       className="btn btn-primary"
                       onClick={evt => send(SetDisableUpdateEmail(false))}>
-                      {"Edit" |> str}
+                      {ts("edit") |> str}
                     </button>
                   : <div className="flex gap-2">
                       <button
@@ -443,13 +447,13 @@ let make = (
 
                           send(UpdateEmail(email))
                         }}>
-                        {"Cancel" |> str}
+                        {ts("cancel") |> str}
                       </button>
                       <button
                         className="btn btn-primary"
                         disabled={state.email |> EmailUtils.isInvalid(false) ||
                           state.email == email}>
-                        {"Update" |> str}
+                        {ts("update") |> str}
                       </button>
                     </div>}
               </div>

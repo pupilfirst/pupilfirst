@@ -20,14 +20,22 @@ class SchoolAdminMailerPreview < ActionMailer::Preview
 
     report_attachment = {
       mime_type: 'text/csv',
-      content: "Sl. No,Email\n1, test@hey.com\n"
+      content: "Sl. No,Email\n1, test@hey.com\n",
     }
 
     SchoolAdminMailer.students_bulk_import_complete(
       school_admin,
       course,
       report_params,
-      report_attachment: report_attachment
+      report_attachment: report_attachment,
     )
+  end
+
+  def email_updated_notification
+    school_admin = SchoolAdmin.first
+    user = User.new(name: Faker::Name.name)
+    user.email = Faker::Internet.email(name: user.name)
+    old_email = 'old_email@email.com'
+    SchoolAdminMailer.email_updated_notification(school_admin, user, old_email)
   end
 end

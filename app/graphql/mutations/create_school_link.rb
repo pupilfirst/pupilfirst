@@ -44,7 +44,7 @@ module Mutations
 
       data[:kind] = @params[:kind]
       data[:sort_index] =
-        SchoolLink.where(kind: kind, school: resource_school).maximum(:sort_index).to_i + 1
+        SchoolLink.where(kind: @params[:kind], school: resource_school).maximum(:sort_index).to_i + 1
 
       current_school.school_links.create!(data)
     end

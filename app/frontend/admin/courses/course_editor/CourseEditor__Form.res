@@ -702,8 +702,8 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
           <h5 className="uppercase text-center p-6">
             {(
               course == None
-                ? t("button_text.add_new_course")
-                : t("button_text.edit_course_details")
+                ? t("title.add_new_course")
+                : t("title.edit_course_details")
             )->str}
           </h5>
           {ReactUtils.nullUnless(

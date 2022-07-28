@@ -270,7 +270,7 @@ en:
         archive_message: Are you sure you want to archive the course?
         clone_course_message: Are you sure you want to make a copy of the course?
         unarchive_message: Are you sure you want to unarchive the course?
-      button_text:
+      title:
         add_new_course: Add New Course
         edit_course_details: Edit Course Details
       course_about:

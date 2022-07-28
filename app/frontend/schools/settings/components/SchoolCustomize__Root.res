@@ -8,7 +8,7 @@ let t = I18n.t(~scope="components.SchoolCustomize__Root")
 let ts = I18n.ts
 
 type editor =
-  | LinksEditor(SchoolLinks.kind)
+  | LinksEditor(SchoolCustomize__LinkComponent.kind)
   | DetailsEditor
   | ImagesEditor
   | ContactsEditor
@@ -27,7 +27,7 @@ type rec action =
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
   | UpdateLink(Customizations.linkId, string, Customizations.url)
-  | MoveLink(Customizations.linkId, SchoolCustomize__Links.kind, Customizations.direction)
+  | MoveLink(Customizations.linkId, SchoolCustomize__LinkComponent.kind, Customizations.direction)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
@@ -69,6 +69,7 @@ let headerLinks = links => {
     ->React.array
   }
 }
+
 
 let sitemap = links =>
   switch links {
@@ -207,6 +208,46 @@ let initialState = (customizations, schoolName, schoolAbout) => {
   schoolAbout: schoolAbout,
 }
 
+let moveLink = (linkId, kind, direction, t) => {
+  // find links of similar kind
+  let similarKindLinks = switch kind {
+  | SchoolCustomize__LinkComponent.HeaderLink => Customizations.filterLinks(~header=true, t)
+  | SocialLink => Customizations.filterLinks(~social=true, t)
+  | FooterLink => Customizations.filterLinks(~footer=true, t)
+  }
+
+  let linkIndex =
+    similarKindLinks
+    ->Js.Array2.map(l =>
+      switch l {
+      | HeaderLink(id, _, _, _)
+      | FooterLink(id, _, _, _)
+      | SocialLink(id, _, _) => id
+      }
+    )
+    ->Js.Array2.indexOf(linkId)
+
+  // swap links
+  let swapedLinks = similarKindLinks->switch direction {
+  | Customizations.Up => ArrayUtils.swapUp(linkIndex)
+  | Down => ArrayUtils.swapDown(linkIndex)
+  }
+  // find links of different kind
+  let differentKindLinks = switch kind {
+  | HeaderLink => Customizations.filterLinks(~social=true, ~footer=true, t) 
+  | SocialLink => Customizations.filterLinks(~header=true, ~footer=true, t)   
+  | FooterLink => Customizations.filterLinks(~social=true, ~header=true, t)  
+  }
+
+  // combile links
+  let updatedLinks = differentKindLinks->Js.Array2.concat(swapedLinks)
+  {
+    ...t,
+    links: updatedLinks,
+  }
+}
+
+
 let reducer = (state, action) =>
   switch action {
   | ShowEditor(editor) => {...state, visibleEditor: Some(editor)}
@@ -225,7 +266,7 @@ let reducer = (state, action) =>
     }
   | MoveLink(id, kind, direction) => {
       ...state,
-      customizations: state.customizations |> Customizations.moveLink(id, kind, direction),
+      customizations: state.customizations |> moveLink(id, kind, direction),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,
@@ -280,7 +321,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             className="school-customize__header-links flex items-center bg-gray-50 rounded px-3 py-2 h-full">
             {headerLinks(
-              state.customizations |> Customizations.headerLinks |> Customizations.unpackLinks,
+              state.customizations |> Customizations.filterLinks(~header=true) |> Customizations.unpackLinks,
             )}
             {editIcon("ml-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
           </div>
@@ -365,7 +406,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 )}
               </div>
               {sitemap(
-                state.customizations |> Customizations.footerLinks |> Customizations.unpackLinks,
+                state.customizations |> Customizations.filterLinks(~footer=true) |> Customizations.unpackLinks,
               )}
             </div>
           </div>
@@ -383,7 +424,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                     )}
                   </div>
                   {socialLinks(
-                    state.customizations->Customizations.socialLinks->Customizations.unpackLinks,
+                    state.customizations->Customizations.filterLinks(~social=true)->Customizations.unpackLinks,
                   )}
                 </div>
               </div>

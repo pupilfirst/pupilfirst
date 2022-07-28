@@ -1,5 +1,7 @@
 open SchoolCustomize__Types
 
+type kind = HeaderLink | FooterLink | SocialLink
+
 type action =
   | SetEditing(bool)
   | UpdateTitle(string)
@@ -117,7 +119,7 @@ module LinkEditor = {
   let make = (~id, ~kind, ~send, ~state) => {
     <>
       {switch kind {
-      | SchoolLinks.HeaderLink
+      | HeaderLink
       | FooterLink => <>
           <input
             value=state.title

@@ -7,7 +7,7 @@ let str = React.string
 let t = I18n.t(~scope="components.SchoolCustomize__LinkEditor")
 let ts = I18n.t(~scope="shared")
 
-type kind = SchoolLinks.kind
+type kind = SchoolCustomize__LinkComponent.kind
 
 type state = {
   kind: kind,
@@ -169,17 +169,16 @@ let handleAddLink = (state, send, addLinkCB, event) => {
 
 let linksTitle = kind =>
   switch kind {
-  | SchoolLinks.HeaderLink => t("header_links")
+  | SchoolCustomize__LinkComponent.HeaderLink => t("header_links")
   | FooterLink => t("sitemap_links")
   | SocialLink => t("social_links")
   }->str
 
 let unpackLinks = (kind, customizations) =>
-  customizations
-  ->switch kind {
-  | SchoolLinks.HeaderLink => Customizations.headerLinks
-  | FooterLink => Customizations.footerLinks
-  | SocialLink => Customizations.socialLinks
+  switch kind {
+  | SchoolCustomize__LinkComponent.HeaderLink => Customizations.filterLinks(~header=true, customizations)
+  | FooterLink =>  Customizations.filterLinks(~footer=true, customizations)
+  | SocialLink =>  Customizations.filterLinks(~social=true, customizations)
   }
   ->Customizations.unpackLinks
 

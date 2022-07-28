@@ -1,2 +1,2 @@
 module Customizations = SchoolCustomize__Customizations
-module SchoolLinks = SchoolCustomize__Links
+

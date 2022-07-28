@@ -62,38 +62,38 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: false}
   | UpdateName(name, hasNameError) => {
       ...state,
-      name,
-      hasNameError,
+      name: name,
+      hasNameError: hasNameError,
       dirty: true,
     }
   | UpdateDescription(description, hasDescriptionError) => {
       ...state,
-      description,
-      hasDescriptionError,
+      description: description,
+      hasDescriptionError: hasDescriptionError,
       dirty: true,
     }
   | UpdateEndsAt(date) => {...state, endsAt: date, dirty: true}
-  | UpdatePublicSignup(publicSignup) => {...state, publicSignup, dirty: true}
-  | UpdatePublicPreview(publicPreview) => {...state, publicPreview, dirty: true}
-  | UpdateAbout(about) => {...state, about, dirty: true}
-  | UpdateFeatured(featured) => {...state, featured, dirty: true}
+  | UpdatePublicSignup(publicSignup) => {...state, publicSignup: publicSignup, dirty: true}
+  | UpdatePublicPreview(publicPreview) => {...state, publicPreview: publicPreview, dirty: true}
+  | UpdateAbout(about) => {...state, about: about, dirty: true}
+  | UpdateFeatured(featured) => {...state, featured: featured, dirty: true}
   | UpdateProgressionBehavior(progressionBehavior) => {
       ...state,
-      progressionBehavior,
+      progressionBehavior: progressionBehavior,
       dirty: true,
     }
   | UpdateProgressionLimit(progressionLimit) => {
       ...state,
       progressionBehavior: #Limited,
-      progressionLimit,
+      progressionLimit: progressionLimit,
       dirty: true,
     }
-  | UpdateHighlights(highlights) => {...state, highlights, dirty: true}
+  | UpdateHighlights(highlights) => {...state, highlights: highlights, dirty: true}
   | SetHasProcessingUrl => {...state, hasProcessingUrl: true, dirty: true}
   | ClearHasProcessingUrl => {...state, hasProcessingUrl: false, dirty: true}
   | UpdateProcessingUrl(processingUrl) => {
       ...state,
-      processingUrl,
+      processingUrl: processingUrl,
       dirty: true,
     }
   }
@@ -697,9 +697,9 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
-      <div className="pt-6 border-b border-gray-300 bg-gray-50">
+      <div className="border-b border-gray-300 bg-gray-50">
         <div className="max-w-2xl mx-auto">
-          <h5 className="uppercase text-center">
+          <h5 className="uppercase text-center p-6">
             {(
               course == None
                 ? t("button_text.add_new_course")
@@ -707,7 +707,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
             )->str}
           </h5>
           {ReactUtils.nullUnless(
-            <div className="w-full pt-6">
+            <div className="w-full">
               <div
                 role="tablist"
                 className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">

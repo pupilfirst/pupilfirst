@@ -32,32 +32,27 @@ module Mutations
     end
 
     def create_school_link
-      current_school.school_links.create!(create_school_link_data)
+      data =
+        case @params[:kind]
+        when SchoolLink::KIND_HEADER, SchoolLink::KIND_FOOTER
+          { title: @params[:title], url: @params[:url] }
+        when SchoolLink::KIND_SOCIAL
+          { url: @params[:url] }
+        else
+          raise "Unknown kind '#{@params[:kind]}' encountered!"
+        end
+
+      data[:kind] = @params[:kind]
+      data[:sort_index] =
+        SchoolLink.where(kind: kind, school: resource_school).count
+
+      current_school.school_links.create!(data)
     end
 
     private
 
     def resource_school
       current_school
-    end
-
-    def create_school_link_data
-      kind = @params[:kind]
-      sort_index = SchoolLink.where(kind: kind).count
-      data =
-        case kind
-        when SchoolLink::KIND_HEADER, SchoolLink::KIND_FOOTER
-          { title: @params[:title], url: @params[:url] }
-        when SchoolLink::KIND_SOCIAL
-          { url: @params[:url] }
-        else
-          raise "Unknown kind '#{kind}' encountered!"
-        end
-
-      data[:kind] = kind
-      data[:sort_index] = sort_index
-
-      data
     end
   end
 end

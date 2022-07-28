@@ -31,7 +31,7 @@ module Mutations
     end
 
     def update_school_link
-      school_link.update!(school_link_data)
+      school_link.update!(title: @params[:title], url: @params[:url])
     end
 
     private
@@ -42,10 +42,6 @@ module Mutations
 
     def resource_school
       school_link&.school
-    end
-
-    def school_link_data
-      { title: @params[:title], url: @params[:url] }
     end
   end
 end

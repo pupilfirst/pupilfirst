@@ -145,18 +145,22 @@ let secondaryNav = (courses, currentUser, selectedPage) =>
     <div
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
-      <ul className="p-4">
+      <div className="p-4">
         {secondaryNavOption(selectedPage, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, Page.Settings(Admins))}
-      </ul>
+      </div>
     </div>
   | SelectedCourse(courseId, _courseSelection) =>
     <div
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
-      <div className="p-4">
-        <SchoolRouter__CoursesDropdown courses currentCourseId=courseId />
-        {secondaryNavLinks(selectedPage, courseId, currentUser)->React.array}
+      <div>
+        <div className="p-4">
+          <SchoolRouter__CoursesDropdown courses currentCourseId=courseId />
+        </div>
+        <div className="border-t px-4">
+          {secondaryNavLinks(selectedPage, courseId, currentUser)->React.array}
+        </div>
       </div>
     </div>
   | _ => React.null

@@ -12,9 +12,8 @@
 
 .school-admin-navbar__primary-nav--shrunk
   .school-admin-navbar__primary-nav-link {
-  @apply flex flex-col text-gray-800 font-medium items-center justify-center;
+  @apply flex flex-col text-gray-800 font-medium items-center justify-center text-tiny;
   position: relative;
-  font-size: 8px;
   padding: 8px;
 }
 
@@ -80,8 +79,8 @@
 
 .school-admin-navbar__notifications-unread-bullet {
   @apply absolute block h-2 w-2 rounded-full border border-white bg-red-500;
-  top: 16px;
-  right: 30px;
+  top: 6px;
+  right: 12px;
 }
 
 .school-admin-navbar__notifications-unread-bullet::before {

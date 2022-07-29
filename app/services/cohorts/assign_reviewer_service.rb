@@ -13,9 +13,7 @@ module Cohorts
       return if faculty.cohorts.exists?(id: @cohort)
 
       enrollment =
-        FacultyCohortEnrollment.transaction do
-          FacultyCohortEnrollment.create!(faculty: faculty, cohort: @cohort)
-        end
+        FacultyCohortEnrollment.create!(faculty: faculty, cohort: @cohort)
 
       if @notify
         faculty.user.regenerate_login_token

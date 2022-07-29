@@ -47,8 +47,6 @@ module Mutations
         old_team_member_ids = @team.founders.pluck(:id).map(&:to_s)
         new_temp_student_ids = @value[:student_ids] - old_team_member_ids
 
-        # binding.pry
-
         return if new_temp_student_ids.empty?
 
         if @team

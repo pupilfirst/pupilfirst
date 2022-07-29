@@ -6,11 +6,11 @@ FactoryBot.define do
 
   trait :with_course_enrollment do
     after(:create) do |enrollment|
-      course = enrollment.cohort.course
+      cohort = enrollment.cohort
       coach = enrollment.faculty
 
-      if FacultyCourseEnrollment.where(faculty: coach, course: course).blank?
-        create :faculty_course_enrollment, faculty: coach, course: course
+      if FacultyCohortEnrollment.where(faculty: coach, cohort: cohort).blank?
+        create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
       end
     end
   end

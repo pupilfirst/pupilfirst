@@ -8,9 +8,11 @@ describe Courses::AssignReviewerService do
 
   describe '#assign' do
     it 'assigns the faculty to the course' do
-      expect { subject.assign(faculty) }.to(change { FacultyCourseEnrollment.count }.from(0).to(1))
+      expect { subject.assign(faculty) }.to(
+        change { FacultyCohortEnrollment.count }.from(0).to(1)
+      )
 
-      enrollment = FacultyCourseEnrollment.first
+      enrollment = FacultyCohortEnrollment.first
 
       expect(enrollment.faculty).to eq(faculty)
       expect(enrollment.course).to eq(course)
@@ -22,17 +24,23 @@ describe Courses::AssignReviewerService do
       end
 
       it 'does nothing' do
-        expect { subject.assign(faculty) }.not_to(change { FacultyCourseEnrollment.count })
+        expect { subject.assign(faculty) }.not_to(
+          change { FacultyCohortEnrollment.count }
+        )
       end
     end
 
     context 'if the faculty is in a different school' do
       let(:new_school) { create :school }
-      let(:faculty_user_in_new_school) { create :user, school_id: new_school.id }
+      let(:faculty_user_in_new_school) do
+        create :user, school_id: new_school.id
+      end
       let(:faculty) { create :faculty, user: faculty_user_in_new_school }
 
       it 'raises exception' do
-        expect { subject.assign(faculty) }.to raise_exception('Faculty must in same school as course')
+        expect { subject.assign(faculty) }.to raise_exception(
+          'Faculty must in same school as course'
+        )
       end
     end
   end

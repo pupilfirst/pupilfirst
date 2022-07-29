@@ -30,7 +30,7 @@ let reducer = (state, action) =>
     {
       teams: PagedTeams.make(updatedTeams, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount,
+      totalEntriesCount: totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -75,20 +75,12 @@ let makeFilters = () => {
       "orange",
     ),
     CourseResourcesFilter.makeFilter("name", "Search by Team Name", Search, "gray"),
-    CourseResourcesFilter.makeFilter(
-      "sort_by",
-      "Sort By",
-      Sort(["Name", "First Created", "Last Created"]),
-      "gray",
-    ),
   ]
 }
 
 let studentCard = student =>
   <div className="flex gap-4 items-center p-4 rounded-lg bg-white border border-gray-200 ">
-    <div>
-      <Avatar name={UserProxy.name(student)} className="w-10 h-10 rounded-full" />
-    </div>
+    <div> <Avatar name={UserProxy.name(student)} className="w-10 h-10 rounded-full" /> </div>
     <div>
       <p className="text-sm font-semibold"> {UserProxy.name(student)->str} </p>
       <div className="text-xs"> {UserProxy.fullTitle(student)->str} </div>
@@ -109,15 +101,14 @@ let getTeams = (send, courseId, cursor, params) => {
           Team.make(
             ~id=t.id,
             ~name=t.name,
-            ~students=t.students->Js.Array2.map(
-              s =>
-                UserProxy.make(
-                  ~id=s.id,
-                  ~name=s.user.name,
-                  ~avatarUrl=s.user.avatarUrl,
-                  ~fullTitle=s.user.fullTitle,
-                  ~userId=s.user.id,
-                ),
+            ~students=t.students->Js.Array2.map(s =>
+              UserProxy.make(
+                ~id=s.id,
+                ~name=s.user.name,
+                ~avatarUrl=s.user.avatarUrl,
+                ~fullTitle=s.user.fullTitle,
+                ~userId=s.user.id,
+              )
             ),
             ~cohort=Cohort.makeFromFragment(t.cohort),
           )
@@ -164,9 +155,7 @@ let showTeams = (state, courseId, teams) => {
               <Link
                 href={`/school/courses/${courseId}/teams/${Team.id(team)}/details`}
                 className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-                <span className="inline-block pr-2">
-                  <i className="fas fa-edit" />
-                </span>
+                <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
                 <span> {"Edit"->str} </span>
               </Link>
             </div>
@@ -190,9 +179,7 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet>
-      <title> {str("Teams Index")} </title>
-    </Helmet>
+    <Helmet> <title> {str("Teams Index")} </title> </Helmet>
     <div>
       <div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
@@ -212,7 +199,16 @@ let make = (~courseId, ~search) => {
             <div className="border rounded-lg mx-auto bg-white ">
               <div>
                 <div className="flex w-full items-start p-4">
-                  <CourseResourcesFilter courseId filters={makeFilters()} search={search} />
+                  <CourseResourcesFilter
+                    courseId
+                    filters={makeFilters()}
+                    search={search}
+                    sorter={CourseResourcesFilter.makeSorter(
+                      "sort_by",
+                      ["Name", "First Created", "Last Created"],
+                      "Name",
+                    )}
+                  />
                 </div>
               </div>
             </div>

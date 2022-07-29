@@ -5,7 +5,7 @@ open SchoolRouter__Types
 let selected = currentCourse =>
   <button
     title={Course.name(currentCourse)}
-    className="border-b border-gray-200 rounded w-full appearance-none flex items-center justify-between hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2">
+    className="rounded w-full appearance-none flex items-center justify-between hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-3">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
       <span className="truncate ml-2 text-left"> {Course.name(currentCourse)->str} </span>

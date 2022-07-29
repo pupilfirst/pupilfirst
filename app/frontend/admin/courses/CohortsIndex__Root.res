@@ -121,7 +121,7 @@ let cohortsList = (cohorts, courseId) => {
   <div className="space-y-4">
     {cohorts
     ->Js.Array2.map(cohort =>
-      <div className="p-6 bg-white rounded-lg">
+      <div className="p-6 bg-white rounded-lg shadow">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold"> {cohort.name->str} </h2>

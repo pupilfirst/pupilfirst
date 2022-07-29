@@ -92,7 +92,29 @@ let make = (~school, ~courses, ~currentUser) => {
       <div className="flex school-admin-navbar flex-shrink-0">
         {<SchoolRouter__Nav school courses selectedPage currentUser />}
       </div>
-      <div role="main" className="overflow-y-scroll flex-1 flex flex-col"> {page} </div>
+      <div className="flex flex-col flex-1">
+        <div className="flex justify-between p-4 bg-white border-b">
+          <div>
+            <h2 className="font-semibold leading-tight">{("Cohorts")->str}</h2>
+            <div className="flex items-center space-x-2 mt-1">
+              <a className="text-sm rounded text-gray-600 underline hover:bg-primary-50 hover:text-primary-500 transition" href="#">{("Courses")->str}</a>
+              <p className="text-gray-400">{("/")->str}</p>
+              <a className="text-sm rounded text-gray-600 underline hover:bg-primary-50 hover:text-primary-500 transition" href="#">{("Web Dev 101")->str}</a>
+              <p className="text-gray-400">{("/")->str}</p>
+              <p className="text-sm text-primary-500 font-medium">{("Cohorts")->str}</p>
+            </div>
+          </div>
+          <div className="relative">
+            <Notifications__Root
+              wrapperClasses=""
+              iconClasses="school-admin-navbar__notifications-unread-bullet"
+              buttonClasses="w-full flex items-center bg-gray-50 rounded relative text-gray-800 text-sm p-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
+              hasNotifications={User.hasNotifications(currentUser)}
+            />
+          </div>
+        </div>
+        <div role="main" className="overflow-y-scroll flex-1 flex flex-col"> {page} </div>
+      </div>
     </div>
   | None => <SchoolRouter__Nav school courses selectedPage currentUser />
   }

@@ -400,27 +400,35 @@ let showCourse = course => {
           )}
           <p className="text-sm px-4 py-2 text-gray-600"> {str(Course.description(course))} </p>
         </div>
-        <div className="flex gap-6 flex-wrap p-4">
-          <div className="flex-1">
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
-            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+        <div className="grid grid-cols-3 divide-x py-4 divide-gray-300 ">
+          <div className="flex-1 px-4">
+            <p className="text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
+            <p className="mt-1 text-lg font-semibold">
               {Course.cohortsCount(course)->string_of_int->str}
             </p>
           </div>
-          <div className="flex-1">
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
-            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+          <div className="flex-1 px-4">
+            <p className="text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
+            <p className="mt-1 text-lg font-semibold">
               {Course.coachesCount(course)->string_of_int->str}
             </p>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 px-4">
             <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
-            <p className="pr-3 mt-2 font-semibold">
+            <p className="mt-1 text-lg font-semibold">
               {Course.levelsCount(course)->string_of_int->str}
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-5 gap-4 p-4">
+        <div className="grid grid-cols-6 gap-4 p-4">
+          <button
+            title={ts("View Course")}
+            className="col-span-3 btn btn-primary px-4 py-2 bg-primary-50 rounded text-sm cursor-pointer">
+            <div>
+              <FaIcon classes="far fa-edit mr-3" />
+              <span className="font-semibold"> {str(("View Course"))} </span>
+            </div>
+          </button>
           <button
             title={ts("edit") ++ " " ++ Course.name(course)}
             className="col-span-3 btn btn-default px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"
@@ -431,12 +439,13 @@ let showCourse = course => {
               <span className="font-semibold"> {str(t("edit_course_details"))} </span>
             </div>
           </button>
-          {ReactUtils.nullIf(
-            <Dropdown
-              className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
-            />,
-            Belt.Option.isSome(Course.archivedAt(course)),
-          )}
+
+          // {ReactUtils.nullIf(
+          //   <Dropdown
+          //     className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
+          //   />,
+          //   Belt.Option.isSome(Course.archivedAt(course)),
+          // )}
         </div>
       </div>
     </div>
@@ -455,7 +464,7 @@ let showCourses = (courses, state) => {
         </div>
       : <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
           <div
-            className="border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
+            className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
             <EmptyState
               title={t("add_new_course")}
               description={"Let's create another course."}
@@ -556,7 +565,7 @@ let make = (~school) => {
     None
   }, (state.filter, state.reloadCourses))
 
-  <div className="flex flex-1 h-full bg-gray-50 overflow-y-scroll">
+  <div className="flex flex-1 h-full bg-gray-50">
     {switch (state.courses, editorAction) {
     | (Unloaded, _)
     | (_, Hidden) => React.null
@@ -603,9 +612,9 @@ let make = (~school) => {
           </div>
           <div className="w-full bg-white p-6">
             <div className="flex items-center max-w-4xl 2xl:max-w-5xl mx-auto justify-between">
-              <div className="flex gap-6">
+              <div className="flex gap-6 px-6">
                 <div
-                  className="school-overview__logo-container flex items-center bg-white p-3 border-2 border-white ring-1 ring-gray-100 rounded-full -mt-16 overflow-hidden">
+                  className="school-overview__logo-container flex items-center bg-white p-3 border-4 border-white shadow-md ring-1 ring-gray-100 rounded-full -mt-16 overflow-hidden">
                   {switch School.logoUrl(school) {
                   | Some(url) =>
                     <img

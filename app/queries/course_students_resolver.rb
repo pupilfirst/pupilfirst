@@ -1,5 +1,6 @@
 class CourseStudentsResolver < ApplicationQuery
   include AuthorizeReviewer
+  include FilterUtils
 
   property :course_id
   property :filter_string
@@ -45,6 +46,10 @@ class CourseStudentsResolver < ApplicationQuery
               .select(:id)
         }
       ) if filter[:user_tags].present?
+
+    scope = scope.includes(:user).order("#{sort_by_string}") if filter[:sort_by]
+      .present?
+
     scope
   end
 
@@ -81,41 +86,16 @@ class CourseStudentsResolver < ApplicationQuery
     @course ||= Course.find(course_id)
   end
 
-  def sort_direction_string
-    case filter[:sort_direction]
-    when 'Ascending'
-      'ASC'
-    when 'Descending'
-      'DESC'
-    else
-      raise "#{filter[:sort_direction]} is not a valid sort direction"
-    end
-  end
-
   def sort_by_string
     case filter[:sort_by]
-    when 'name'
-      'users.name'
-    when 'created_at'
-      'created_at'
-    when 'updated_at'
-      'updated_at'
+    when 'Name'
+      'users.name ASC'
+    when 'First Created'
+      'founders.created_at ASC'
+    when 'Last Created'
+      'founders.created_at DESC'
     else
       raise "#{filter[:sort_by]} is not a valid sort criterion"
     end
-  end
-
-  def filter
-    @filter ||=
-      URI.decode_www_form(filter_string.presence || '').to_h.symbolize_keys
-  end
-
-  # Todo: Should get this reviewed
-  def id_from_filter_value(string)
-    return unless string
-
-    # Extract the ID from the filter value string, which is in the form of 'id;name_of_the_object
-    # e.g. '123;1, Getting Started with Regular Expressions'
-    string[/(?<id>.+?);/, 'id']
   end
 end

@@ -32,7 +32,7 @@ let reducer = (state, action) =>
       ...state,
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount,
+      totalEntriesCount: totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -235,9 +235,7 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet>
-      <title> {str("Students Index")} </title>
-    </Helmet>
+    <Helmet> <title> {str("Students Index")} </title> </Helmet>
     <div>
       <div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
@@ -260,8 +258,16 @@ let make = (~courseId, ~search) => {
             <div className="border rounded-lg mx-auto bg-white ">
               <div>
                 <div className="flex w-full items-start p-4">
-                  <CourseResourcesFilter courseId filters={makeFilters()} search={search} />
-                  {"sorter"->str}
+                  <CourseResourcesFilter
+                    courseId
+                    filters={makeFilters()}
+                    search={search}
+                    sorter={CourseResourcesFilter.makeSorter(
+                      "sort_by",
+                      ["Name", "First Created", "Last Created"],
+                      "Name",
+                    )}
+                  />
                 </div>
               </div>
             </div>

@@ -11273,7 +11273,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "search",
+                  "name": "filterString",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

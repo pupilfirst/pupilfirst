@@ -23,14 +23,7 @@ class Founder < ApplicationRecord
   belongs_to :team, optional: true
 
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }
-  scope :access_active,
-        -> {
-          (
-            left_joins(:cohort)
-              .where('cohorts.ends_at > ?', Time.zone.now)
-              .or(left_joins(:cohort).where(cohorts: { ends_at: nil }))
-          )
-        }
+  scope :access_active, -> { (where(cohort: Cohort.active)) }
   scope :active, -> { access_active.not_dropped_out }
 
   delegate :email,

@@ -1,5 +1,6 @@
 class TeamsResolver < ApplicationQuery
   include AuthorizeReviewer
+  include FilterUtils
 
   property :course_id
   property :filter_string
@@ -32,11 +33,6 @@ class TeamsResolver < ApplicationQuery
     course.cohorts.find_by(id: id_from_filter_value(filter[:cohort]))
   end
 
-  def filter
-    @filter ||=
-      URI.decode_www_form(filter_string.presence || '').to_h.symbolize_keys
-  end
-
   def sort_by_string
     case filter[:sort_by]
     when 'Name'
@@ -48,13 +44,5 @@ class TeamsResolver < ApplicationQuery
     else
       raise "#{filter[:sort_by]} is not a valid sort criterion"
     end
-  end
-
-  def id_from_filter_value(string)
-    return unless string
-
-    # Extract the ID from the filter value string, which is in the form of 'id;name_of_the_object
-    # e.g. '123;1, Getting Started with Regular Expressions'
-    string[/(?<id>.+?);/, 'id']
   end
 end

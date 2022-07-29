@@ -54,8 +54,8 @@ let reducer = (state, action) =>
   }
 
 module CourseCohortsQuery = %graphql(`
-    query CourseCohortsQuery($courseId: ID!, $search: String, $after: String) {
-      cohorts(courseId: $courseId, search: $search, first: 20, after: $after) {
+    query CourseCohortsQuery($courseId: ID!, $filterString: String, $after: String) {
+      cohorts(courseId: $courseId, filterString: $filterString, first: 20, after: $after) {
         nodes {
           id
           name
@@ -73,8 +73,9 @@ module CourseCohortsQuery = %graphql(`
     }
   `)
 
-let getCohorts = (send, courseId, cursor, state) => {
-  CourseCohortsQuery.makeVariables(~courseId, ~after=?cursor, ~search=state.filterInput, ())
+let getCohorts = (send, courseId, cursor, params) => {
+  let filterString = Webapi.Url.URLSearchParams.toString(params)
+  CourseCohortsQuery.makeVariables(~courseId, ~after=?cursor, ~filterString=?Some(filterString), ())
   |> CourseCohortsQuery.fetch
   |> Js.Promise.then_((response: CourseCohortsQuery.t) => {
     send(
@@ -105,14 +106,19 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
 }
 
-let reloadStudents = (courseId, send, state) => {
+let reloadStudents = (courseId, send, params) => {
   send(BeginReloading)
-  getCohorts(send, courseId, None, state)
+  getCohorts(send, courseId, None, params)
 }
 
 let makeFilters = () => {
   [
-    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Cohorts"), "orange"),
+    CourseResourcesFilter.makeFilter(
+      "include_inactive_cohorts",
+      "Include",
+      Custom("Inactive Cohorts"),
+      "orange",
+    ),
     CourseResourcesFilter.makeFilter("name", "Search by Team Name", Search, "gray"),
   ]
 }
@@ -169,9 +175,10 @@ let cohortsList = (cohorts, courseId) => {
 
 @react.component
 let make = (~courseId, ~search) => {
+  let params = Webapi.Url.URLSearchParams.make(search)
   let (state, send) = React.useReducer(reducer, computeInitialState())
   React.useEffect1(() => {
-    reloadStudents(courseId, send, state)
+    reloadStudents(courseId, send, params)
     None
   }, [search])
 
@@ -200,7 +207,16 @@ let make = (~courseId, ~search) => {
             <div className="border rounded-lg mx-auto bg-white ">
               <div>
                 <div className="flex w-full items-start p-4">
-                  <CourseResourcesFilter courseId filters={makeFilters()} search={search} />
+                  <CourseResourcesFilter
+                    courseId
+                    filters={makeFilters()}
+                    search={search}
+                    sorter={CourseResourcesFilter.makeSorter(
+                      "sort_by",
+                      ["Name", "First Created", "Last Created", "Last Ending"],
+                      "Name",
+                    )}
+                  />
                 </div>
               </div>
             </div>
@@ -222,7 +238,7 @@ let make = (~courseId, ~search) => {
                         className="btn btn-primary-ghost cursor-pointer w-full"
                         onClick={_ => {
                           send(BeginLoadingMore)
-                          getCohorts(send, courseId, Some(cursor), state)
+                          getCohorts(send, courseId, Some(cursor), params)
                         }}>
                         {"Load More"->str}
                       </button>

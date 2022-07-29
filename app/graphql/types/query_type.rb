@@ -48,7 +48,7 @@ module Types
 
     resolved_field :cohorts, Types::CohortType.connection_type, null: false do
       argument :course_id, ID, required: true
-      argument :search, String, required: false
+      argument :filter_string, String, required: false
     end
 
     resolved_field :content_blocks, [Types::ContentBlockType], null: false do

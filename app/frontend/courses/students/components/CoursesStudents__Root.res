@@ -43,7 +43,7 @@ let reducer = (state, action) =>
       ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
   | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount, studentDistribution) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
@@ -54,7 +54,7 @@ let reducer = (state, action) =>
       ...state,
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount,
+      totalEntriesCount: totalEntriesCount,
       reloadDistributionAt: None,
       studentDistribution: Belt.Option.getWithDefault(studentDistribution, []),
     }
@@ -136,15 +136,14 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
 
     let studentDistribution =
       response.studentDistribution->Belt.Option.map(p =>
-        p->Js.Array2.map(
-          d =>
-            DistributionInLevel.make(
-              ~id=d.id,
-              ~number=d.number,
-              ~studentsInLevel=d.studentsInLevel,
-              ~unlocked=d.unlocked,
-              ~filterName=d.filterName,
-            ),
+        p->Js.Array2.map(d =>
+          DistributionInLevel.make(
+            ~id=d.id,
+            ~number=d.number,
+            ~studentsInLevel=d.studentsInLevel,
+            ~unlocked=d.unlocked,
+            ~filterName=d.filterName,
+          )
         )
       )
     send(
@@ -240,7 +239,16 @@ let make = (~courseId) => {
         <div
           className="p-5 mt-6 bg-white rounded-md border border-gray-300 relative md:sticky md:top-16 z-10">
           <p className="uppercase pb-2 text-xs font-semibold"> {"Filter students by"->str} </p>
-          <CourseResourcesFilter courseId filters={makeFilters()} search={url.search} />
+          <CourseResourcesFilter
+            courseId
+            filters={makeFilters()}
+            search={url.search}
+            sorter={CourseResourcesFilter.makeSorter(
+              "sort_by",
+              ["Name", "First Created", "Last Created"],
+              "Name",
+            )}
+          />
         </div>
         <div className="my-6">
           {switch state.students {

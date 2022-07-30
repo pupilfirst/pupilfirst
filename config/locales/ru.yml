@@ -1170,6 +1170,10 @@ ru:
       manage_images: Управление изображениями
       update_images: Обновить Изображения
       updated_notification: Изображения успешно обновлены.
+    SchoolCustomize__LinkComponent:
+      move_down: Move Down
+      move_up: Move Up
+      cancel_editing: Cancel Editing
     SchoolCustomize__LinkEditor:
       add_new_link: Добавить Новую Ссылку
       adding_new_link: Добавление новой ссылки...

@@ -1,5 +1,8 @@
 open SchoolCustomize__Types
 
+let t = I18n.t(~scope="components.SchoolCustomize__LinkComponent")
+let ts = I18n.t(~scope="shared")
+
 type kind = HeaderLink | FooterLink | SocialLink
 
 type action =
@@ -41,13 +44,16 @@ module MoveSchoolLinkQuery = %graphql(`
 
 let handleMoveLink = (~id, ~kind, ~direction: Customizations.direction, ~send, ~moveLinkCB) => {
   send(SetUpdating(true))
-  MoveSchoolLinkQuery.fetch(~notify=false,{
-    id: id,
-    direction: switch direction {
-    | Up => #Up
-    | Down => #Down
+  MoveSchoolLinkQuery.fetch(
+    ~notify=false,
+    {
+      id: id,
+      direction: switch direction {
+      | Up => #Up
+      | Down => #Down
+      },
     },
-  })
+  )
   |> Js.Promise.then_(_ => {
     send(SetUpdating(false))
     moveLinkCB(id, kind, direction)
@@ -197,8 +203,8 @@ let make = (
           {state.editing
             ? <div>
                 <button
-                  ariaLabel={"Cancel Editing " ++ title}
-                  title={"Cancel Editing"}
+                  ariaLabel={t("cancel_editing") ++ " " ++ title}
+                  title={t("cancel_editing")}
                   onClick={e => {
                     send(SetEditing(false))
                     send(UpdateTitle(title))
@@ -209,8 +215,8 @@ let make = (
                   <PfIcon className="if i-times-solid if-fw text-base" />
                 </button>
                 <button
-                  ariaLabel={"Update " ++ url}
-                  title={"Update"}
+                  ariaLabel={ts("update") ++ " " ++ url}
+                  title={ts("update")}
                   disabled={state.error}
                   onClick={e =>
                     if !state.error {
@@ -222,31 +228,31 @@ let make = (
               </div>
             : <div>
                 <button
-                  ariaLabel={"Move Down " ++ url}
-                  title={"Move Down"}
+                  ariaLabel={t("move_down") ++ " " ++ url}
+                  title={t("move_down")}
                   onClick={e => handleMoveLink(~id, ~kind, ~direction=Down, ~moveLinkCB, ~send)}
                   disabled={index == total - 1}
                   className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                   <FaIcon classes="fas fa-arrow-down" />
                 </button>
                 <button
-                  ariaLabel={"Move Up " ++ url}
-                  title={"Move Up"}
+                  ariaLabel={t("move_up") ++ " " ++ url}
+                  title={t("move_up")}
                   disabled={index == 0}
                   onClick={e => handleMoveLink(~id, ~kind, ~direction=Up, ~moveLinkCB, ~send)}
                   className={"p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500"}>
                   <FaIcon classes="fas fa-arrow-up" />
                 </button>
                 <button
-                  ariaLabel={"Edit " ++ url}
-                  title={"Edit"}
+                  ariaLabel={ts("edit") ++ " " ++ url}
+                  title={ts("edit")}
                   onClick={e => send(SetEditing(true))}
                   className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                   <FaIcon classes="fas fa-edit" />
                 </button>
                 <button
-                  ariaLabel={"Delete " ++ url}
-                  title={"Delete"}
+                  ariaLabel={ts("delete") ++ " " ++ url}
+                  title={ts("delete")}
                   onClick={handleDelete(deleting, disableDeleteCB, removeLinkCB, id)}
                   className="p-3 hover:text-red-500 hover:bg-red-50 focus:bg-red-50 focus:text-red-500">
                   <FaIcon classes={deleteIconClasses(deleting->Js.Array2.includes(id))} />

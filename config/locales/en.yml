@@ -1241,6 +1241,10 @@ en:
       manage_images: Manage Images
       update_images: Update Images
       updated_notification: Images have been updated successfully.
+    SchoolCustomize__LinkComponent:
+      move_down: Move Down
+      move_up: Move Up
+      cancel_editing: Cancel Editing
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...

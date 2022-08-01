@@ -171,7 +171,7 @@ let makeFilters = () => {
       "student_tags",
       "Student Tags",
       DataLoad(#StudentTag),
-      "indigo",
+      "focusColor",
     ),
     CourseResourcesFilter.makeFilter("user_tags", "User Tags", DataLoad(#UserTag), "blue"),
     CourseResourcesFilter.makeFilter("email", "Search by Email", Search, "gray"),

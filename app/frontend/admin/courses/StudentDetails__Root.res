@@ -258,7 +258,7 @@ module Editor = {
             autoFocus=true
             value=state.student.name
             onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
             id="name"
             type_="text"
             placeholder={t("student_name_placeholder")}
@@ -277,7 +277,7 @@ module Editor = {
           <input
             value=state.student.title
             onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
             id="title"
             type_="text"
             placeholder={t("title_placeholder")}
@@ -296,7 +296,7 @@ module Editor = {
           <input
             value=state.student.affiliation
             onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
             id="affiliation"
             type_="text"
             placeholder={t("affiliation_placeholder")}
@@ -330,7 +330,7 @@ module Editor = {
                 {state.student.usetTaggings
                 ->Js.Array2.map(tag =>
                   <div
-                    className="bg-blue-100 border border-blue-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900"
+                    className="bg-blue-100 text-blue-700 border border-blue-500 rounded-full px-3 py-2 mt-1 mr-1 text-xs text-gray-900"
                     key={tag}>
                     {str(tag)}
                   </div>
@@ -488,7 +488,7 @@ let make = (~courseId, ~studentId) => {
       description={"Update student details"}
       links={pageLinks(courseId, studentId)}
     />
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto px-2">
       {switch state {
       | Unloaded => str("Should Load data")
       | Loading => studentDetailsSkeleton()

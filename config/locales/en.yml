@@ -90,10 +90,6 @@ en:
       topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
       unable_find_id: "Unable to find topic category with ID: "
     CourseApplicants__EditForm:
-      access_ends_at:
-        help: If set, students will not be able to complete targets after this date.
-        help_url: https://docs.pupilfirst.com/users/students#editing-student-details
-        label: Student's Access Ends On
       add_as_student_button: Add as Student
       affiliation:
         label: Affiliation
@@ -1447,11 +1443,6 @@ en:
       team: Team
       try_removing_filter: Try removing the search filter options.
     StudentsEditor__UpdateDetailsForm:
-      access_ends_at:
-        help: If set, students will not be able to complete targets after this date.
-        help_url: https://docs.pupilfirst.com/users/students#editing-student-details
-        label_student: Student's Access Ends On
-        label_team: Team's Access Ends On
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
       name: Name

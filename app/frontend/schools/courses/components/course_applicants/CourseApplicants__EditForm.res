@@ -12,7 +12,6 @@ type state = {
   hasNameError: bool,
   hasEmailError: bool,
   tagsToApply: array<string>,
-  accessEndsAt: option<Js.Date.t>,
   saving: bool,
   notifyStudent: bool,
 }
@@ -22,14 +21,13 @@ type action =
   | UpdateAffiliation(string)
   | AddTag(string)
   | RemoveTag(string)
-  | UpdateAccessEndsAt(option<Js.Date.t>)
   | StartSaving
   | FailSaving
   | ToggleNotifyStudent
 
 module CreateStudentFromApplicant = %graphql(`
-  mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $accessEndsAt: ISO8601DateTime, $title: String, $affiliation: String, $tags: [String!]!) {
-    createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, accessEndsAt: $accessEndsAt, title: $title, affiliation: $affiliation, tags: $tags) {
+  mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $title: String, $affiliation: String, $tags: [String!]!) {
+    createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, title: $title, affiliation: $affiliation, tags: $tags) {
       success
     }
   }
@@ -40,7 +38,6 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
 
   let variables = CreateStudentFromApplicant.makeVariables(
     ~applicantId=Applicant.id(applicant),
-    ~accessEndsAt=?state.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
     ~title=state.title,
     ~affiliation=state.affiliation,
     ~notifyStudent=state.notifyStudent,
@@ -69,7 +66,6 @@ let initialState = applicant => {
   hasNameError: false,
   hasEmailError: false,
   tagsToApply: Applicant.tags(applicant),
-  accessEndsAt: None,
   notifyStudent: true,
   saving: false,
 }
@@ -86,7 +82,6 @@ let reducer = (state, action) =>
       ...state,
       tagsToApply: Js.Array.filter(t => t != tag, state.tagsToApply),
     }
-  | UpdateAccessEndsAt(accessEndsAt) => {...state, accessEndsAt: accessEndsAt}
   | StartSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | ToggleNotifyStudent => {...state, notifyStudent: !state.notifyStudent}
@@ -168,20 +163,6 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
         id="affiliation"
         type_="text"
         placeholder={t("affiliation.placeholder")}
-      />
-    </div>
-    <div className="mt-5">
-      <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-        {t("access_ends_at.label")->str}
-      </label>
-      {optionalText()}
-      <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
-        {t("access_ends_at.help")->str}
-      </HelpIcon>
-      <DatePicker
-        onChange={date => send(UpdateAccessEndsAt(date))}
-        selected=?state.accessEndsAt
-        id="access-ends-at-input"
       />
     </div>
     <div className="mt-5">

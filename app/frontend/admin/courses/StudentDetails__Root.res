@@ -488,7 +488,7 @@ let make = (~courseId, ~studentId) => {
       description={"Update student details"}
       links={pageLinks(courseId, studentId)}
     />
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto px-2">
       {switch state {
       | Unloaded => str("Should Load data")
       | Loading => studentDetailsSkeleton()

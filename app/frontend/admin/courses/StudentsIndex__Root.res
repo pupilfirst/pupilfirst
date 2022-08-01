@@ -141,8 +141,8 @@ let studentsList = (students, courseId, params) => {
     {students
     ->Js.Array2.map(student => {
       <div key={StudentInfo.id(student)} className="h-full flex items-center bg-white">
-        <div className="flex flex-1 items-center text-left justify-between rounded-md shadow">
-          <div className="flex py-4 px-4">
+        <div className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
+          <div className="flex">
             <div className="text-sm flex items-center space-x-4">
               <img
                 className="inline-block h-12 w-12 rounded-full"
@@ -188,8 +188,9 @@ let studentsList = (students, courseId, params) => {
           </div>
           <div>
             <Link
+              ariaLabel={`Edit ${User.name(StudentInfo.user(student))}'s profile`}
               href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/details`}
-              className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between">
+              className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
               <span className="inline-flex items-center p-2">
                 <PfIcon className="if i-edit-regular if-fw" />
                 <span className="ml-2"> {"Edit"->str} </span>

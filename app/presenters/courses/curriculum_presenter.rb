@@ -76,12 +76,16 @@ module Courses
       {
         name: current_user&.name || 'John Doe',
         level_id: levels.first.id,
-        access_ends_at: nil
+        ends_at: nil
       }
     end
 
     def student_details
-      current_student.attributes.slice('access_ends_at', 'level_id')
+      {
+        name: current_student.name,
+        level_id: current_student.level_id,
+        ends_at: current_student.cohort.ends_at
+      }
     end
 
     def course_details

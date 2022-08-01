@@ -89,7 +89,6 @@ module StudentsQuery = %graphql(`
           personalCoaches {
             ...UserProxyFragment
           }
-          accessEndsAt
           droppedOutAt
         }
         pageInfo{
@@ -128,7 +127,6 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
           ~user=UserDetails.makeFromFragment(s.user),
           ~level=Shared__Level.makeFromFragment(s.level),
           ~cohort=Cohort.makeFromFragment(s.cohort),
-          ~accessEndsAt=s.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
           ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
           ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
         )

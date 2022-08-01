@@ -8,7 +8,6 @@ module Mutations
     argument :title, String, required: true
     argument :affiliation, String, required: false
     argument :taggings, [String], required: true
-    argument :access_ends_at, GraphQL::Types::ISO8601DateTime, required: false
 
     description 'Update details of a student'
 
@@ -89,11 +88,7 @@ module Mutations
           affiliation: @params[:affiliation]
         )
 
-        student.update!(
-          access_ends_at: @params[:access_ends_at],
-          tag_list: @params[:taggings],
-          cohort: cohort
-        )
+        student.update!(tag_list: @params[:taggings], cohort: cohort)
 
         resource_school.founder_tag_list << @params[:taggings]
         resource_school.save!

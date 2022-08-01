@@ -258,7 +258,7 @@ module Layouts
 
     def cover_image_url
       if current_school.cover_image.attached?
-        view.rails_public_blob_url(current_school.cover_image_variant(:high))
+        view.rails_public_blob_url(current_school.cover_image)
       end
     end
 

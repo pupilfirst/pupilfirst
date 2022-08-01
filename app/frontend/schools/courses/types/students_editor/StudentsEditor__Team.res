@@ -3,7 +3,6 @@ type t = {
   name: string,
   coachIds: array<string>,
   levelId: string,
-  accessEndsAt: option<Js.Date.t>,
   teamTags: array<string>,
   students: array<StudentsEditor__Student.t>,
 }
@@ -14,8 +13,6 @@ let name = t => t.name
 
 let coachIds = t => t.coachIds
 
-let accessEndsAt = t => t.accessEndsAt
-
 let levelId = t => t.levelId
 
 let tags = t => t.teamTags
@@ -24,14 +21,13 @@ let students = t => t.students
 
 let isSingleStudent = t => t.students |> Array.length == 1
 
-let make = (~id, ~name, ~teamTags, ~students, ~coachIds, ~levelId, ~accessEndsAt) => {
+let make = (~id, ~name, ~teamTags, ~students, ~coachIds, ~levelId) => {
   id: id,
   name: name,
   teamTags: teamTags,
   students: students,
   coachIds: coachIds,
   levelId: levelId,
-  accessEndsAt: accessEndsAt,
 }
 
 let makeFromJS = teamDetails => Js.Array.map(team => {
@@ -48,11 +44,10 @@ let makeFromJS = teamDetails => Js.Array.map(team => {
       ~levelId=team["levelId"],
       ~students,
       ~coachIds,
-      ~accessEndsAt=team["accessEndsAt"]->Belt.Option.map(DateFns.decodeISO),
     )
   }, teamDetails)
 
-let update = (~name, ~teamTags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
+let update = (~name, ~teamTags, ~student, ~coachIds, ~team) => {
   let students =
     team.students |> Array.map(s =>
       s |> StudentsEditor__Student.id == (student |> StudentsEditor__Student.id) ? student : s
@@ -62,7 +57,6 @@ let update = (~name, ~teamTags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
     name: name,
     teamTags: teamTags,
     coachIds: coachIds,
-    accessEndsAt: accessEndsAt,
     students: students,
   }
 }
@@ -74,8 +68,6 @@ let unsafeFind = (teams, componentName, teamId) =>
     team => team.id == teamId,
     "Unable to find team with id: " ++ (teamId ++ ("in StudentdEditor__" ++ componentName)),
   )
-
-let active = t => t.accessEndsAt->Belt.Option.mapWithDefault(true, DateFns.isFuture)
 
 let updateStudent = (t, student) => {
   ...t,

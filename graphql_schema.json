@@ -6811,18 +6811,6 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "accessEndsAt",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ISO8601DateTime",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "tags",
                   "description": null,
                   "type": {
@@ -9859,18 +9847,6 @@
                         }
                       }
                     }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "accessEndsAt",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ISO8601DateTime",
-                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -13488,20 +13464,6 @@
           "name": "Student",
           "description": null,
           "fields": [
-            {
-              "name": "accessEndsAt",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "cohort",
               "description": null,

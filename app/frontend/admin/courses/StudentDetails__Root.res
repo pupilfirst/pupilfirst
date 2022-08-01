@@ -16,7 +16,6 @@ type student = {
   usetTaggings: array<string>,
   title: string,
   affiliation: string,
-  accessEndsAt: option<Js.Date.t>,
   coachIds: array<string>,
   cohort: Cohort.t,
 }
@@ -37,7 +36,6 @@ module Editor = {
     | UpdateTitle(string)
     | UpdateAffiliation(string)
     | UpdateSaving(bool)
-    | UpdateAccessEndsAt(option<Js.Date.t>)
     | UpdateCohort(Cohort.t)
 
   let stringInputInvalid = s => String.length(s) < 2
@@ -51,27 +49,14 @@ module Editor = {
 
   let handleErrorCB = (send, ()) => send(UpdateSaving(false))
 
-  let successMessage = (accessEndsAt, isSingleFounder) =>
-    switch accessEndsAt {
-    | Some(date) =>
-      switch (date->DateFns.isPast, isSingleFounder) {
-      | (true, true) => t("student_updated_moved")
-      | (true, false) => t("team_updated_moved")
-      | (false, true)
-      | (false, false) =>
-        t("student_updated")
-      }
-    | None => t("student_updated")
-    }
-
   let enrolledCoachIds = coaches =>
     coaches
     ->Js.Array2.filter(((_, _, selected)) => selected == true)
     ->Js.Array2.map(((key, _, _)) => key)
 
   module UpdateStudentDetailsQuery = %graphql(`
-    mutation UpdateStudentDetailsQuery($id: ID!, $cohortId: ID!, $coachIds: [ID!]!, $name: String!, $title: String!, $affiliation: String, $taggings: [String!]!, $accessEndsAt: ISO8601DateTime, ) {
-      updateStudentDetails(id: $id, cohortId: $cohortId, coachIds: $coachIds, name: $name, title: $title, affiliation: $affiliation, taggings: $taggings, accessEndsAt: $accessEndsAt) {
+    mutation UpdateStudentDetailsQuery($id: ID!, $cohortId: ID!, $coachIds: [ID!]!, $name: String!, $title: String!, $affiliation: String, $taggings: [String!]!) {
+      updateStudentDetails(id: $id, cohortId: $cohortId, coachIds: $coachIds, name: $name, title: $title, affiliation: $affiliation, taggings: $taggings) {
         success
       }
     }
@@ -81,7 +66,6 @@ module Editor = {
     send(UpdateSaving(true))
     let variables = UpdateStudentDetailsQuery.makeVariables(
       ~id=studentId,
-      ~accessEndsAt=?state.student.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
       ~cohortId=Cohort.id(state.student.cohort),
       ~name=state.student.name,
       ~title=state.student.title,
@@ -218,13 +202,6 @@ module Editor = {
         },
       }
     | UpdateSaving(bool) => {...state, saving: bool}
-    | UpdateAccessEndsAt(accessEndsAt) => {
-        ...state,
-        student: {
-          ...state.student,
-          accessEndsAt: accessEndsAt,
-        },
-      }
     | UpdateCohort(cohort) => {
         ...state,
         student: {
@@ -351,20 +328,6 @@ module Editor = {
             allowNewTags=true
           />
         </div>
-        <div className="mt-5">
-          <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-            {t("access_ends_at.label_student")->str}
-          </label>
-          <span className="ml-1 text-xs"> {ts("optional_braces")->str} </span>
-          <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
-            {t("access_ends_at.help")->str}
-          </HelpIcon>
-          <DatePicker
-            onChange={date => send(UpdateAccessEndsAt(date))}
-            selected=?state.student.accessEndsAt
-            id="access-ends-at-input"
-          />
-        </div>
       </div>
       <div className="my-5 w-auto">
         <button
@@ -394,7 +357,6 @@ module StudentDetailsDataQuery = %graphql(`
   query StudentDetailsDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
       taggings
-      accessEndsAt
       cohort {
         ...CohortFragment
       }
@@ -432,7 +394,6 @@ let loadData = (studentId, setState) => {
         taggings: response.student.taggings,
         title: response.student.user.title,
         affiliation: Belt.Option.getWithDefault(response.student.user.affiliation, ""),
-        accessEndsAt: response.student.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
         coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
         cohort: response.student.cohort->Cohort.makeFromFragment,
         usetTaggings: response.student.user.taggings,

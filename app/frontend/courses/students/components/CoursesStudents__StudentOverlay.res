@@ -54,7 +54,6 @@ module StudentDetailsQuery = %graphql(`
           personalCoaches {
             ...UserProxyFragment
           }
-          accessEndsAt
           droppedOutAt
           course {
             id
@@ -89,7 +88,6 @@ module StudentDetailsQuery = %graphql(`
             personalCoaches {
               ...UserProxyFragment
             }
-            accessEndsAt
             droppedOutAt
           }
         }
@@ -157,7 +155,6 @@ let getStudentDetails = (studentId, setState) => {
         ~user=UserDetails.makeFromFragment(s.user),
         ~level=Shared__Level.makeFromFragment(s.level),
         ~cohort=Cohort.makeFromFragment(s.cohort),
-        ~accessEndsAt=s.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
         ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
         ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
       ),
@@ -165,18 +162,16 @@ let getStudentDetails = (studentId, setState) => {
         StudentDetails.makeTeam(
           ~id=team.id,
           ~name=team.name,
-          ~students=team.students->Js.Array2.map(
-            s =>
-              StudentInfo.make(
-                ~id=s.id,
-                ~taggings=s.taggings,
-                ~user=UserDetails.makeFromFragment(s.user),
-                ~level=Shared__Level.makeFromFragment(s.level),
-                ~cohort=Cohort.makeFromFragment(s.cohort),
-                ~accessEndsAt=s.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
-                ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
-                ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
-              ),
+          ~students=team.students->Js.Array2.map(s =>
+            StudentInfo.make(
+              ~id=s.id,
+              ~taggings=s.taggings,
+              ~user=UserDetails.makeFromFragment(s.user),
+              ~level=Shared__Level.makeFromFragment(s.level),
+              ~cohort=Cohort.makeFromFragment(s.cohort),
+              ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+              ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+            )
           ),
         )
       ),
@@ -188,7 +183,8 @@ let getStudentDetails = (studentId, setState) => {
   |> ignore
 }
 
-let updateSubmissions = (setState, submissions) => setState(state => {...state, submissions})
+let updateSubmissions = (setState, submissions) =>
+  setState(state => {...state, submissions: submissions})
 
 let doughnutChart = (color, percentage) =>
   <svg viewBox="0 0 36 36" className={"student-overlay__doughnut-chart " ++ color}>
@@ -325,7 +321,8 @@ let showSocialLinks = socialLinks =>
     |> React.array}
   </div>
 
-let setSelectedTab = (selectedTab, setState) => setState(state => {...state, selectedTab})
+let setSelectedTab = (selectedTab, setState) =>
+  setState(state => {...state, selectedTab: selectedTab})
 
 let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
   let reached = levelNumber <= currentLevelNumber ? "student-overlay__student-level--reached" : ""
@@ -356,8 +353,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
       <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
       {courseCompleted
         ? <p className="text-green-600 font-semibold">
-            {`🎉` |> str}
-            <span className="text-xs ml-px"> {t("course_completed") |> str} </span>
+            {`🎉` |> str} <span className="text-xs ml-px"> {t("course_completed") |> str} </span>
           </p>
         : React.null}
     </div>
@@ -461,7 +457,10 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
   }
 
 let inactiveWarning = student => {
-  let warning = switch (student->StudentInfo.droppedOutAt, student->StudentInfo.accessEndsAt) {
+  let warning = switch (
+    student->StudentInfo.droppedOutAt,
+    Cohort.endsAt(StudentInfo.cohort(student)),
+  ) {
   | (Some(droppedOutAt), _) =>
     Some(
       t(
@@ -469,11 +468,11 @@ let inactiveWarning = student => {
         "dropped_out_at",
       ),
     )
-  | (None, Some(accessEndsAt)) =>
-    accessEndsAt->DateFns.isPast
+  | (None, Some(endsAt)) =>
+    endsAt->DateFns.isPast
       ? Some(
           t(
-            ~variables=[("date", accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
+            ~variables=[("date", endsAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
             "access_ended_at",
           ),
         )
@@ -481,12 +480,14 @@ let inactiveWarning = student => {
   | (None, None) => None
   }
 
-  warning |> OptionUtils.mapWithDefault(warning =>
-    <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
-      <i className="fas fa-exclamation-triangle" />
-      <span className="ml-2"> {warning |> str} </span>
-    </div>
-  , React.null)
+  warning |> OptionUtils.mapWithDefault(
+    warning =>
+      <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
+        <i className="fas fa-exclamation-triangle" />
+        <span className="ml-2"> {warning |> str} </span>
+      </div>,
+    React.null,
+  )
 }
 
 let onAddCoachNotesCB = (studentId, setState, _) => {
@@ -641,8 +642,7 @@ let make = (~studentId, ~userId) => {
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.userDetails())}
         </div>
         <div className="w-full relative md:w-3/5 bg-gray-50 md:border-l p-4 md:p-8 2xl:p-16">
-          {SkeletonLoading.contents()}
-          {SkeletonLoading.userDetails()}
+          {SkeletonLoading.contents()} {SkeletonLoading.userDetails()}
         </div>
       </div>
     }}

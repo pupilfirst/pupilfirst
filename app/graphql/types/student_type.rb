@@ -4,7 +4,6 @@ module Types
     field :taggings, [String], null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
     field :level, Types::LevelType, null: false
-    field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
     field :user, Types::UserType, null: false
     field :personal_coaches, [Types::UserProxyType], null: false

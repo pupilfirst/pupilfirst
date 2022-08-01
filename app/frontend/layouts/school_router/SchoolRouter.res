@@ -95,21 +95,24 @@ let make = (~school, ~courses, ~currentUser) => {
       <div className="flex flex-col flex-1">
         <div className="flex justify-between p-4 bg-white border-b">
           <div>
-            <h2 className="font-semibold leading-tight"> {"Cohorts"->str} </h2>
             <div className="flex items-center space-x-2 mt-1">
-              <a
-                className="text-sm rounded text-gray-600 underline hover:bg-primary-50 hover:text-primary-500 transition"
-                href="#">
-                {"Courses"->str}
-              </a>
-              <p className="text-gray-400"> {"/"->str} </p>
-              <a
-                className="text-sm rounded text-gray-600 underline hover:bg-primary-50 hover:text-primary-500 transition"
-                href="#">
-                {"Web Dev 101"->str}
-              </a>
-              <p className="text-gray-400"> {"/"->str} </p>
-              <p className="text-sm text-primary-500 font-medium"> {"Cohorts"->str} </p>
+              {switch selectedPage {
+              | Page.Settings(_settingsSelection) => React.null
+              | SelectedCourse(courseId, _courseSelection) =>
+                <div> <SchoolRouter__CoursesDropdown courses currentCourseId=courseId /> </div>
+              | _ => React.null
+              }}
+              {switch url.path {
+              | list{"school", "courses", courseId, primaryPage, ...tale} =>
+                switch tale {
+                | list{_resourceId, secondaryPage, ..._tale} =>
+                  `${primaryPage}/${secondaryPage}`->str
+                | _ => primaryPage->str
+                }
+              | list{"school"} => "school"->str
+              | list{"school", page, ..._tale} => page->str
+              | _ => React.null
+              }}
             </div>
           </div>
           <div className="relative">

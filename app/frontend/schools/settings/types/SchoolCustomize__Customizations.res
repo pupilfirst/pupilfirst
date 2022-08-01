@@ -209,4 +209,3 @@ let decode = json => {
     |> Js.Array.sortInPlaceWith((l1, l2) => sortIndexOfLink(l1) - sortIndexOfLink(l2)),
   }
 }
-

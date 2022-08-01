@@ -70,7 +70,6 @@ let headerLinks = links => {
   }
 }
 
-
 let sitemap = links =>
   switch links {
   | [] =>
@@ -234,9 +233,9 @@ let moveLink = (linkId, kind, direction, t) => {
   }
   // find links of different kind
   let differentKindLinks = switch kind {
-  | HeaderLink => Customizations.filterLinks(~social=true, ~footer=true, t) 
-  | SocialLink => Customizations.filterLinks(~header=true, ~footer=true, t)   
-  | FooterLink => Customizations.filterLinks(~social=true, ~header=true, t)  
+  | HeaderLink => Customizations.filterLinks(~social=true, ~footer=true, t)
+  | SocialLink => Customizations.filterLinks(~header=true, ~footer=true, t)
+  | FooterLink => Customizations.filterLinks(~social=true, ~header=true, t)
   }
 
   // combile links
@@ -246,7 +245,6 @@ let moveLink = (linkId, kind, direction, t) => {
     links: updatedLinks,
   }
 }
-
 
 let reducer = (state, action) =>
   switch action {
@@ -321,7 +319,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             className="school-customize__header-links flex items-center bg-gray-50 rounded px-3 py-2 h-full">
             {headerLinks(
-              state.customizations |> Customizations.filterLinks(~header=true) |> Customizations.unpackLinks,
+              state.customizations
+              |> Customizations.filterLinks(~header=true)
+              |> Customizations.unpackLinks,
             )}
             {editIcon("ml-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
           </div>
@@ -406,7 +406,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 )}
               </div>
               {sitemap(
-                state.customizations |> Customizations.filterLinks(~footer=true) |> Customizations.unpackLinks,
+                state.customizations
+                |> Customizations.filterLinks(~footer=true)
+                |> Customizations.unpackLinks,
               )}
             </div>
           </div>
@@ -424,7 +426,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                     )}
                   </div>
                   {socialLinks(
-                    state.customizations->Customizations.filterLinks(~social=true)->Customizations.unpackLinks,
+                    state.customizations
+                    ->Customizations.filterLinks(~social=true)
+                    ->Customizations.unpackLinks,
                   )}
                 </div>
               </div>

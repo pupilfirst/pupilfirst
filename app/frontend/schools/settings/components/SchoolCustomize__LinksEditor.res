@@ -176,11 +176,11 @@ let linksTitle = kind =>
 
 let unpackLinks = (kind, customizations) =>
   switch kind {
-  | SchoolCustomize__LinkComponent.HeaderLink => Customizations.filterLinks(~header=true, customizations)
-  | FooterLink =>  Customizations.filterLinks(~footer=true, customizations)
-  | SocialLink =>  Customizations.filterLinks(~social=true, customizations)
-  }
-  ->Customizations.unpackLinks
+  | SchoolCustomize__LinkComponent.HeaderLink =>
+    Customizations.filterLinks(~header=true, customizations)
+  | FooterLink => Customizations.filterLinks(~footer=true, customizations)
+  | SocialLink => Customizations.filterLinks(~social=true, customizations)
+  }->Customizations.unpackLinks
 
 let initialState = kind => {
   kind: kind,

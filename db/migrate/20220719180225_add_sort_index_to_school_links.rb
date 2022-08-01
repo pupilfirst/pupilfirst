@@ -3,9 +3,9 @@ class AddSortIndexToSchoolLinks < ActiveRecord::Migration[6.1]
     add_column :school_links, :sort_index, :integer, default: 0, null: false
 
     kinds = SchoolLink::VALID_KINDS
-    
+
     SchoolLink.reset_column_information
-    
+
     School
       .joins(:school_links)
       .distinct

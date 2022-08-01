@@ -46,9 +46,9 @@ module Schools
     end
 
     def school_links
-      current_school
-        .school_links
-        .as_json(only: %i[kind id title url sort_index])
+      current_school.school_links.as_json(
+        only: %i[kind id title url sort_index]
+      )
     end
   end
 end

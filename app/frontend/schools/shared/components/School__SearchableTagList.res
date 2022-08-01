@@ -79,12 +79,12 @@ let make = (
           tag =>
             <div
               key=tag
-              className="flex items-center bg-gray-50 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-              <span className="px-2 py-px"> {tag |> str} </span>
+              className="flex items-center bg-gray-50 border border-gray-500 rounded-full mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+              <p className="inline-block px-3"> {tag |> str} </p>
               <button
                 ariaLabel={t("remove_tag") ++ " " ++ tag}
                 title={t("remove_tag") ++ " " ++ tag}
-                className="flex items-center px-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-300"
+                className="flex items-center px-3 py-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-50 focus:outline-none focus:text-red-500 focus:bg-red-50 border-l border-gray-300"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
               </button>

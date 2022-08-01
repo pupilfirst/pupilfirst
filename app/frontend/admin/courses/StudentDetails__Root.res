@@ -330,7 +330,7 @@ module Editor = {
                 {state.student.usetTaggings
                 ->Js.Array2.map(tag =>
                   <div
-                    className="bg-blue-100 border border-blue-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900"
+                    className="bg-blue-100 text-blue-700 border border-blue-500 rounded-full px-3 py-2 mt-1 mr-1 text-xs text-gray-900"
                     key={tag}>
                     {str(tag)}
                   </div>

@@ -39,7 +39,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
 
   class FacultyStartupEnrollment < ApplicationRecord
     belongs_to :faculty
-    belongs_to :founder
+    belongs_to :startup
   end
 
   class FacultyCohortEnrollment < ApplicationRecord
@@ -77,7 +77,6 @@ class AddCohorts < ActiveRecord::Migration[6.1]
     end
 
     add_reference :courses, :default_cohort, foreign_key: { to_table: :cohorts }
-    add_column :founders, :access_ends_at, :datetime
     add_column :founders, :dropped_out_at, :datetime
     add_reference :founders, :cohort, foreign_key: true, index: true
     add_reference :founders, :level, foreign_key: true, index: true
@@ -108,8 +107,12 @@ class AddCohorts < ActiveRecord::Migration[6.1]
     Founder.reset_column_information
     Course.reset_column_information
 
-    Course.all.each do |course|
-      cohort =
+    courses_count = Course.all.count
+    total_startups = Startup.count
+    n_updated_startups = 0
+    Course.all.each_with_index do |course, index|
+      puts "Setting up cohorts #{index + 1}/#{courses_count} :#{course.name}"
+      default_cohort =
         Cohort.create!(
           name: 'Default cohort',
           description: "Default cohort for #{course.name}",
@@ -120,30 +123,48 @@ class AddCohorts < ActiveRecord::Migration[6.1]
       course
         .startups
         .includes(:founders)
-        .each do |startup|
-          if startup.founders.count > 1
-            team = Team.create!(name: startup.name, cohort_id: cohort.id)
-          end
+        .group_by { |x| x.access_ends_at&.to_date }
+        .each do |ends_at, startups|
+          cohort =
+            if ends_at.nil?
+              default_cohort
+            else
+              Cohort.create!(
+                name: "Batch ended on #{ends_at}",
+                description:
+                  "Cohort created automatically for students whose access_ends_at was #{ends_at}",
+                ends_at: ends_at,
+                course_id: course.id
+              )
+            end
+          startup_count = startups.count
 
-          startup.founders.each do |student|
-            student.update!(
-              level_id: student.startup.level_id,
-              cohort_id: cohort.id,
-              access_ends_at: student.startup.access_ends_at,
-              dropped_out_at: student.startup.dropped_out_at,
-              team_id: team&.id
-            )
+          startups.each_with_index do |startup, i_s|
+            n_updated_startups += 1
+            puts "Setting up cohorts #{index + 1}/#{courses_count} :#{course.name} | #{i_s + 1}/#{startup_count} | Total: #{n_updated_startups * 100 / total_startups}%"
+            if startup.founders.count > 1
+              team = Team.create!(name: startup.name, cohort_id: cohort.id)
+            end
+
+            startup.founders.each do |student|
+              student.update!(
+                level_id: student.startup.level_id,
+                cohort_id: cohort.id,
+                dropped_out_at: student.startup.dropped_out_at,
+                team_id: team&.id
+              )
+            end
           end
         end
 
       course.faculty_course_enrollments.each do |enrollment|
         FacultyCohortEnrollment.create!(
           faculty_id: enrollment.faculty_id,
-          cohort_id: cohort.id
+          cohort_id: default_cohort.id
         )
       end
 
-      course.update!(default_cohort_id: cohort.id)
+      course.update!(default_cohort_id: default_cohort.id)
     end
 
     FacultyStartupEnrollment.all.each do |enrollment|
@@ -153,7 +174,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
         .each do |founder|
           FacultyFounderEnrollment.create!(
             faculty_id: enrollment.faculty_id,
-            founder_id: enrollment.founder.id
+            founder_id: founder.id
           )
         end
     end

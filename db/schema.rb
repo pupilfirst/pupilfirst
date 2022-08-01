@@ -339,7 +339,6 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.boolean "dashboard_toured"
     t.integer "resume_file_id"
     t.boolean "excluded_from_leaderboard", default: false
-    t.datetime "access_ends_at"
     t.datetime "dropped_out_at"
     t.bigint "cohort_id"
     t.bigint "level_id"

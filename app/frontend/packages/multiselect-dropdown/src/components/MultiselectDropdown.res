@@ -69,11 +69,12 @@ module Make = (Selectable: Selectable) => {
     | _ => "text-orange-800"
     }
 
-
     "rounded text-sm text-left font-semibold overflow-hidden " ++
-    (bgColor ++ " " ++ textColor ++ " " ++ (
-      showHover ? "px-2 py-px hover:saturate-50 focus:saturate-50"  : "inline-flex"
-    ))
+    (bgColor ++
+    " " ++
+    textColor ++
+    " " ++
+    (showHover ? "px-2 py-px hover:saturate-50 focus:saturate-50" : "inline-flex"))
   }
 
   let applyFilter = (selection, onSelect, id, event) => {
@@ -236,14 +237,14 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-300 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
+          className="flex flex-wrap items-center text-sm bg-white border border-gray-300 rounded-md w-full p-3 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-600 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
+            className="flex-grow appearance-none bg-transparent border-none text-gray-600 leading-snug focus:outline-none placeholder-gray-500"
             id=inputId
             type_="search"
             role="combobox"

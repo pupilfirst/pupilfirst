@@ -190,7 +190,7 @@ let selected = (sorter: sorter, params) => {
   let value =
     Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
   <button
-    className="p-2 ml-2 cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-lg  hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    className="p-3 w-28 text-left truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     {value->str}
   </button>
 }
@@ -200,7 +200,7 @@ let contents = (sorter, params) => {
     <button
       key=sort
       title={"select" ++ " " ++ sort}
-      className="w-24 cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
+      className="w-full cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       onClick={_e => setParams(sorter.key, sort, params)}>
       {sort->str}
     </button>
@@ -225,26 +225,32 @@ let make = (
     None
   }, [courseId])
 
-  <>
-    <Multiselect
-      id
-      unselected={unselected(state, filters)}
-      selected={selectedFromQueryParams(params, filters)}
-      onSelect={onSelect(params, send)}
-      onDeselect={onDeselect(params)}
-      value=state.filterInput
-      onChange={filterInput => send(UpdateFilterInput(filterInput))}
-      placeholder
-      loading={state.filterLoading}
-      defaultOptions={unselected(state, filters)}
-      hint
-    />
+  <div className="w-full flex gap-3">
+    <div className="flex-1">
+      <p className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </p>
+      <Multiselect
+        id
+        unselected={unselected(state, filters)}
+        selected={selectedFromQueryParams(params, filters)}
+        onSelect={onSelect(params, send)}
+        onDeselect={onDeselect(params)}
+        value=state.filterInput
+        onChange={filterInput => send(UpdateFilterInput(filterInput))}
+        placeholder
+        loading={state.filterLoading}
+        defaultOptions={unselected(state, filters)}
+        hint
+      />
+    </div>
     {switch sorter {
     | Some(sorter) =>
-      <Dropdown2
-        selected={selected(sorter, params)} contents={contents(sorter, params)} right=true
-      />
+      <div>
+        <p className="text-xs uppercase font-medium pb-2"> {"Sort by"->str} </p>
+        <Dropdown2
+          selected={selected(sorter, params)} contents={contents(sorter, params)} right=true
+        />
+      </div>
     | None => React.null
     }}
-  </>
+  </div>
 }

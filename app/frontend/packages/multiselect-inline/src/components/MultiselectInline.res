@@ -42,6 +42,7 @@ module Make = (Selectable: Selectable) => {
     | "yellow" => "bg-yellow-200"
     | "blue" => "bg-blue-200"
     | "gray" => "bg-gray-200"
+    | "focusColor" => "bg-focusColor-200"
     | _ => "bg-orange-200"
     }
 

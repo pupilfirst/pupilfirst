@@ -178,6 +178,11 @@ class AddCohorts < ActiveRecord::Migration[6.1]
           )
         end
     end
+
+    drop_table :faculty_course_enrollments
+    drop_table :faculty_startup_enrollments
+    drop_table :startups
+    remove_column :courses, :ends_at
   end
 
   def down

@@ -9,7 +9,7 @@ module Image = {
   let url = t => t.url
   let filename = t => t.filename
 
-  let make = (url, filename) => {url, filename}
+  let make = (url, filename) => {url: url, filename: filename}
 
   let decode = json => {
     open Json.Decode
@@ -31,11 +31,11 @@ module Highlight = {
   let icon = t => t.icon
   let description = t => t.description
 
-  let make = (title, description, icon) => {title, description, icon}
+  let make = (title, description, icon) => {title: title, description: description, icon: icon}
 
-  let updateTitle = (t, title) => {...t, title}
-  let updateDescription = (t, description) => {...t, description}
-  let updateIcon = (t, icon) => {...t, icon}
+  let updateTitle = (t, title) => {...t, title: title}
+  let updateDescription = (t, description) => {...t, description: description}
+  let updateIcon = (t, icon) => {...t, icon: icon}
 
   let decode = json => {
     open Json.Decode
@@ -67,7 +67,6 @@ type t = {
   id: string,
   name: string,
   description: string,
-  endsAt: option<Js.Date.t>,
   about: option<string>,
   publicSignup: bool,
   publicPreview: bool,
@@ -86,8 +85,6 @@ type t = {
 let name = t => t.name
 
 let id = t => t.id
-
-let endsAt = t => t.endsAt
 
 let about = t => t.about
 
@@ -156,14 +153,13 @@ let addImages = (~coverUrl, ~thumbnailUrl, ~coverFilename, ~thumbnailFilename, t
   },
 }
 
-let replaceImages = (cover, thumbnail, t) => {...t, cover, thumbnail}
+let replaceImages = (cover, thumbnail, t) => {...t, cover: cover, thumbnail: thumbnail}
 
 module Fragment = %graphql(`
   fragment CourseFragment on Course {
     id
     name
     description
-    endsAt
     about
     publicSignup
     publicPreview
@@ -192,7 +188,6 @@ module Fragment = %graphql(`
   `)
 
 let makeFromFragment = (course: Fragment.t) => {
-  let endsAt = Belt.Option.map(course.endsAt, DateFns.decodeISO)
   let archivedAt = Belt.Option.map(course.archivedAt, DateFns.decodeISO)
 
   let progressionBehavior = switch course.progressionBehavior {
@@ -209,15 +204,14 @@ let makeFromFragment = (course: Fragment.t) => {
     id: course.id,
     name: course.name,
     description: course.description,
-    endsAt,
     about: course.about,
     publicSignup: course.publicSignup,
     publicPreview: course.publicPreview,
     thumbnail: course.thumbnail->Belt.Option.map(image => Image.make(image.url, image.filename)),
     cover: course.cover->Belt.Option.map(image => Image.make(image.url, image.filename)),
     featured: course.featured,
-    progressionBehavior,
-    archivedAt,
+    progressionBehavior: progressionBehavior,
+    archivedAt: archivedAt,
     highlights: course.highlights->Js.Array2.map(c =>
       Highlight.make(c.title, c.description, c.icon)
     ),

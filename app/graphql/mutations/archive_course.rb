@@ -34,10 +34,7 @@ module Mutations
 
     def archive_course
       Course.transaction do
-        course.update!(
-          archived_at: Time.zone.now,
-          ends_at: course.ends_at.presence || Time.zone.now
-        )
+        course.update!(archived_at: Time.zone.now)
 
         course.cohorts.active.update_all(ends_at: course.ends_at) # rubocop:disable Rails/SkipsModelValidations
       end

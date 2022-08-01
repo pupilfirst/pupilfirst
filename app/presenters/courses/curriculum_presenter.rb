@@ -92,7 +92,6 @@ module Courses
       details =
         @course.attributes.slice(
           'id',
-          'ends_at',
           'progression_behavior',
           'progression_limit'
         )

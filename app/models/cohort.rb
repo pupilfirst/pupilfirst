@@ -10,4 +10,8 @@ class Cohort < ApplicationRecord
         -> { where('ends_at > ?', Time.zone.now).or(where(ends_at: nil)) }
 
   normalize_attribute :description
+
+  def ended?
+    ends_at.present? && ends_at.past?
+  end
 end

@@ -280,10 +280,6 @@ en:
         error_message: A description is required (2-150 characters)
         label: Course description
         placeholder: Short description for this course
-      course_end_date:
-        help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
-        help_url: https://docs.pupilfirst.com/users/courses
-        label: Course end date
       course_highlights:
         label: Course Highlights
       course_name:

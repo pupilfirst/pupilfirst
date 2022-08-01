@@ -23,16 +23,9 @@ class CoursesResolver < ApplicationQuery
   def filter_by_status
     case status
     when 'Active'
-      current_school
-        .courses
-        .live
-        .where('ends_at > ?', Time.now)
-        .or(current_school.courses.live.where(ends_at: nil))
+      current_school.courses.active
     when 'Ended'
-      current_school
-        .courses
-        .where('ends_at < ?', Time.now)
-        .where(archived_at: nil)
+      current_school.courses.ended
     when 'Archived'
       current_school.courses.archived
     else

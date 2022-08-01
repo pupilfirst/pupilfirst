@@ -148,6 +148,7 @@ module Layouts
       courses_with_student_profile.detect { |c| c.id == course_id }.present?
     end
 
+    # Todo: Bodhi, This needs to change
     def student_access_end(course_id)
       course_with_student =
         courses_with_student_profile.detect { |c| c.id == course_id }

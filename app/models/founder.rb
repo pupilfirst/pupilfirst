@@ -62,7 +62,7 @@ class Founder < ApplicationRecord
   end
 
   def access_ended?
-    (cohort.ends_at.present? && cohort.ends_at.past?)
+    cohort.ended?
   end
 
   def team_student_ids

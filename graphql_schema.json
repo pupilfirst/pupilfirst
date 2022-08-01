@@ -1612,20 +1612,6 @@
               "deprecationReason": null
             },
             {
-              "name": "endsAt",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "ISO8601DateTime",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "featured",
               "description": null,
               "args": [
@@ -5822,18 +5808,6 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "endsAt",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ISO8601DateTime",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "about",
                   "description": null,
                   "type": {
@@ -9032,18 +9006,6 @@
                       "name": "String",
                       "ofType": null
                     }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "endsAt",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ISO8601DateTime",
-                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,

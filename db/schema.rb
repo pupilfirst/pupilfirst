@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_03_002652) do
+ActiveRecord::Schema.define(version: 2022_07_19_180225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -189,7 +189,6 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "school_id"
-    t.datetime "ends_at"
     t.string "description"
     t.boolean "enable_leaderboard", default: false
     t.boolean "public_signup", default: false
@@ -277,15 +276,6 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.index ["faculty_id"], name: "index_faculty_cohort_enrollments_on_faculty_id"
   end
 
-  create_table "faculty_course_enrollments", force: :cascade do |t|
-    t.bigint "faculty_id"
-    t.bigint "course_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_id", "faculty_id"], name: "index_faculty_course_enrollments_on_course_id_and_faculty_id", unique: true
-    t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
-  end
-
   create_table "faculty_founder_enrollments", force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "founder_id"
@@ -293,15 +283,6 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["faculty_id"], name: "index_faculty_founder_enrollments_on_faculty_id"
     t.index ["founder_id", "faculty_id"], name: "index_faculty_founder_enrollments_on_founder_id_and_faculty_id", unique: true
-  end
-
-  create_table "faculty_startup_enrollments", force: :cascade do |t|
-    t.bigint "faculty_id"
-    t.bigint "startup_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_faculty_startup_enrollments_on_faculty_id"
-    t.index ["startup_id", "faculty_id"], name: "index_faculty_startup_enrollments_on_startup_id_and_faculty_id", unique: true
   end
 
   create_table "features", id: :serial, force: :cascade do |t|
@@ -502,6 +483,7 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.string "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sort_index", default: 0, null: false
     t.index ["school_id", "kind"], name: "index_school_links_on_school_id_and_kind"
   end
 
@@ -534,16 +516,6 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
     t.integer "timeline_event_id"
     t.index ["faculty_id"], name: "index_startup_feedback_on_faculty_id"
     t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id"
-  end
-
-  create_table "startups", id: :serial, force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "name"
-    t.integer "level_id"
-    t.datetime "access_ends_at"
-    t.datetime "dropped_out_at"
-    t.index ["level_id"], name: "index_startups_on_level_id"
   end
 
   create_table "submission_reports", force: :cascade do |t|
@@ -835,12 +807,8 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"
-  add_foreign_key "faculty_course_enrollments", "courses"
-  add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_founder_enrollments", "faculty"
   add_foreign_key "faculty_founder_enrollments", "founders"
-  add_foreign_key "faculty_startup_enrollments", "faculty"
-  add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "cohorts"
   add_foreign_key "founders", "levels"
   add_foreign_key "founders", "teams"
@@ -863,7 +831,6 @@ ActiveRecord::Schema.define(version: 2022_06_03_002652) do
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
-  add_foreign_key "startups", "levels"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"

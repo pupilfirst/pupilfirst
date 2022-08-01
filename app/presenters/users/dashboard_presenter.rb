@@ -135,7 +135,7 @@ module Users
             thumbnail_url: course.thumbnail_url,
             linked_communities: course.communities.pluck(:id).map(&:to_s),
             access_ended: student_access_end(course.id),
-            ended: course.ended?
+            ended: course.cohorts.active.exists?
           }
         end
     end

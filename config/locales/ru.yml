@@ -77,9 +77,6 @@ ru:
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
       unable_find_id: "Не удалось найти категорию темы с ID: "
     CourseApplicants__EditForm:
-      access_ends_at:
-        help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
-        label: Доступ студента заканчивается
       add_as_student_button: Добавить как студента
       affiliation:
         label: Принадлежность

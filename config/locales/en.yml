@@ -211,6 +211,10 @@ en:
       search_coaches_empty: No coaches selected
       search_coaches_placeholder: Search coaches
       select_coaches: Select coaches
+      select_cohorts: Select Cohorts
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
     CourseCoaches__InfoForm:
       no_students_assigned: There are no students assigned to this coach. You can assign coaches directly while editing the student details.
       pending_submissions: Pending Submissions
@@ -1775,8 +1779,6 @@ en:
         subject: You have been added as an author in %{course_name}
     course_enrollement:
       added_coach_html: You have been added as a coach in the course <strong>%{course_name}</strong>, on %{school_name}. This gives you the ability to review submissions from students, assign grades, and give them feedback on their work.
-      can_sign_html: You can now %{link_to}.
-      link_to: sign into %{school_name} and view your students' submissions
     course_export:
       prepared:
         body:

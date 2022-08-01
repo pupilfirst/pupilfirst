@@ -1,12 +1,12 @@
 module Cohorts
   class UnassignReviewerService
-    def initialize(cohorts)
-      @cohorts = cohorts
+    def initialize(course)
+      @course = course
     end
 
     def unassign(faculty)
       Faculty.transaction do
-        students_in_cohorts = Founder.where(cohorts: @cohorts)
+        students_in_cohorts = Founder.where(cohorts: @course.cohorts)
 
         # Remove links to all students in course, if any.
         faculty
@@ -16,8 +16,8 @@ module Cohorts
 
         faculty
           .faculty_cohort_enrollments
-          .where(cohort: @cohorts)
-          .each { |enrollment| enrollment.destroy! }
+          .where(cohort: @course.cohorts)
+          .each(&:destroy!)
       end
     end
   end

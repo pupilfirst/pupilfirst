@@ -46,7 +46,7 @@ module Schools
           policy_class: Schools::CoursePolicy
         )
 
-      ::Courses::UnassignReviewerService.new(course).unassign(coach)
+      ::Cohorts::UnassignReviewerService.new(course).unassign(coach)
 
       render json: { coach_id: coach.id.to_s, error: nil }
     end
@@ -60,8 +60,12 @@ module Schools
       coaches =
         current_school.faculty.where(id: params[:coach_ids]).includes(:school)
 
+      cohorts = course.cohorts.where(id: params[:cohort_ids])
+
       coaches.each do |coach|
-        ::Courses::AssignReviewerService.new(course, notify: true).assign(coach)
+        ::Cohorts::ManageReviewerService
+          .new(course, cohorts, notify: true)
+          .assign(coach)
       end
 
       course_coaches =

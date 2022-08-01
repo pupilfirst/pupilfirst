@@ -1241,6 +1241,10 @@ en:
       manage_images: Manage Images
       update_images: Update Images
       updated_notification: Images have been updated successfully.
+    SchoolCustomize__LinkComponent:
+      move_down: Move Down
+      move_up: Move Up
+      cancel_editing: Cancel Editing
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...
@@ -1288,6 +1292,8 @@ en:
       edit_terms: Edit Terms & Conditions
       featured_courses: Featured Courses
       hello_welcome: Hello, welcome to
+      homepage: Home Page
+      reach_us_at: React us at
       icon: Icon
       privacy_policy: Privacy Policy
       sitemap: Sitemap
@@ -1928,6 +1934,9 @@ en:
       reply_added_notification: Reply added successfully
     create_quiz_submission:
       responses_saved_notification: Your responses have been saved.
+    create_school_link:
+      success_notification: A custom link has been added.
+      blank_title_error: A title is required
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -1998,6 +2007,9 @@ en:
       success_notification: Certificate details have been updated.
     update_course:
       success_notification: Course updated successfully!
+    update_school_link:
+      success_notification: Link updated successfully!
+      link_not_found_error: Unable to find link!
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated

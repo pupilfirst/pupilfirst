@@ -61,16 +61,16 @@ class UsersController < ApplicationController
       Users::ValidateUpdateEmailTokenService.new(params[:token], current_school)
         .authenticate
 
-    if user.present? && user.temp_new_email.present?
+    if user.present? && user.new_email.present?
       @old_email = user.email
-      @new_email = user.temp_new_email
+      @new_email = user.new_email
       @token = params[:token]
 
       # Update user email
       user.update!(
         email: @new_email,
         update_email_token: nil,
-        temp_new_email: nil,
+        new_email: nil,
       )
 
       create_audit_record

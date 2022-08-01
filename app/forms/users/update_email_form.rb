@@ -4,7 +4,7 @@ module Users
     validate :user_must_exist
 
     def save
-      @user.update!(email: temp_new_email, update_email_token: nil)
+      @user.update!(email: new_email, update_email_token: nil)
     end
 
     def user

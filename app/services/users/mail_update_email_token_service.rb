@@ -14,7 +14,7 @@ module Users
 
       @user.update!(
         update_email_token_sent_at: Time.zone.now,
-        temp_new_email: @new_email
+        new_email: @new_email
       )
 
       url_options = {

@@ -45,16 +45,35 @@ module Make = (Selectable: Selectable) => {
   }
 
   let tagPillClasses = (color, showHover) => {
-    let bgColor200 = "bg-" ++ (color ++ "-200 ")
-    let bgColor300 = "bg-" ++ (color ++ "-300 ")
-    let textColor800 = "text-" ++ (color ++ "-800 ")
-    let textColor900 = "text-" ++ (color ++ "-900 ")
+    let bgColor = switch color {
+    | "primary" => "bg-primary-200"
+    | "orange" => "bg-orange-200"
+    | "green" => "bg-green-200"
+    | "red" => "bg-red-200"
+    | "yellow" => "bg-yellow-200"
+    | "blue" => "bg-blue-200"
+    | "gray" => "bg-gray-200"
+    | "focusColor" => "bg-focusColor-200"
+    | _ => "bg-orange-200"
+    }
+
+    let textColor = switch color {
+    | "primary" => "text-primary-800"
+    | "orange" => "text-orange-800"
+    | "green" => "text-green-800"
+    | "red" => "text-red-800"
+    | "yellow" => "text-yellow-800"
+    | "blue" => "text-blue-800"
+    | "gray" => "text-gray-800"
+    | "focusColor" => "text-focusColor-800"
+    | _ => "text-orange-800"
+    }
+
 
     "rounded text-sm text-left font-semibold overflow-hidden " ++
-    (bgColor200 ++
-    (textColor800 ++ (
-      showHover ? "px-2 py-px hover:" ++ (bgColor300 ++ ("hover:" ++ textColor900)) : "inline-flex"
-    )))
+    (bgColor ++ " " ++ textColor ++ " " ++ (
+      showHover ? "px-2 py-px hover:saturate-50 focus:saturate-50"  : "inline-flex"
+    ))
   }
 
   let applyFilter = (selection, onSelect, id, event) => {

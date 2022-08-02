@@ -145,6 +145,16 @@ let contents = () =>
     </div>
   </div>
 
+let coursePage = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {heading()}
+    <div className="flex items-end gap-4">
+      <div className="w-3/4"> {input()} </div> <div className="w-1/4"> {button()} </div>
+    </div>
+    <div className="w-1/4"> {button()} </div>
+  </div>
+}
+
 let multiple = (~count, ~element) =>
   Array.make(count, element)
   |> Array.mapi((key, element) => <div key={key |> string_of_int}> element </div>)

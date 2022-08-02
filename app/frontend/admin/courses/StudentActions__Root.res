@@ -4,6 +4,7 @@ let t = I18n.t(~scope="components.StudentsEditor__ActionsForm")
 let str = React.string
 
 type student = {
+  name: string,
   issuedCertificates: array<IssuedCertificate.t>,
   droppedOutAt: option<Js.Date.t>,
 }
@@ -390,6 +391,7 @@ module Editor = {
 
 type baseData = {
   student: student,
+  courseId: string,
   certificates: array<Certificate.t>,
 }
 
@@ -400,11 +402,15 @@ module CertificateFragment = Certificate.Fragment
 module StudentActionsDataQuery = %graphql(`
   query StudentActionsDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
+      user {
+        name
+      }
       droppedOutAt
       issuedCertificates{
         ...IssuedCertificateFragment
       }
       course {
+        id
         certificates{
           ...CertificateFragment
         }
@@ -413,33 +419,22 @@ module StudentActionsDataQuery = %graphql(`
   }
   `)
 
-let studentActionSkeleton = () => {
-  <div className="max-w-5xl mx-auto px-2 mt-8">
-    {SkeletonLoading.heading()}
-    <div className="flex items-end gap-4">
-      <div className="w-3/4"> {SkeletonLoading.input()} </div>
-      <div className="w-1/4"> {SkeletonLoading.button()} </div>
-    </div>
-    <div className="w-1/4"> {SkeletonLoading.button()} </div>
-  </div>
-}
-
-let pageLinks = (courseId, studentId) => [
+let pageLinks = studentId => [
   School__PageHeader.makeLink(
-    ~href={`/school/courses/${courseId}/students/${studentId}/details`},
+    ~href={`/school/students/${studentId}/details`},
     ~title="Details",
     ~icon="fas fa-edit",
     ~selected=false,
   ),
   School__PageHeader.makeLink(
-    ~href=`/school/courses/${courseId}/students/${studentId}/actions`,
+    ~href=`/school/students/${studentId}/actions`,
     ~title="Actions",
     ~icon="fas fa-cog",
     ~selected=true,
   ),
 ]
 
-let loadData = (studentId, setState) => {
+let loadData = (studentId, setState, setSelectedCourseCB) => {
   setState(_ => Loading)
   StudentActionsDataQuery.fetch({
     studentId: studentId,
@@ -447,6 +442,7 @@ let loadData = (studentId, setState) => {
   |> Js.Promise.then_((response: StudentActionsDataQuery.t) => {
     setState(_ => Loaded({
       student: {
+        name: response.student.user.name,
         droppedOutAt: response.student.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
         issuedCertificates: response.student.issuedCertificates->Js.Array2.map(
           IssuedCertificate.makeFromFragment,
@@ -455,37 +451,45 @@ let loadData = (studentId, setState) => {
       certificates: response.student.course.certificates->Js.Array2.map(
         Certificate.makeFromFragment,
       ),
+      courseId: response.student.course.id,
     }))
+    setSelectedCourseCB(response.student.course.id)
     Js.Promise.resolve()
   })
   |> ignore
 }
 
 @react.component
-let make = (~courseId, ~studentId) => {
+let make = (~studentId) => {
   let (state, setState) = React.useState(() => Unloaded)
+  let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
   React.useEffect1(() => {
-    loadData(studentId, setState)
+    loadData(studentId, setState, courseContext.setSelectedCourseCB)
     None
   }, [studentId])
 
-  <div>
-    <School__PageHeader
-      exitUrl={`/school/courses/${courseId}/students`}
-      title="Edit Student"
-      description={"Actions for the student"}
-      links={pageLinks(courseId, studentId)}
-    />
-    <div className="max-w-5xl mx-auto px-2">
-      {switch state {
-      | Unloaded => str("Should Load data")
-      | Loading => studentActionSkeleton()
-      | Loaded(baseData) =>
-        <Editor
-          studentData={baseData.student} certificates={baseData.certificates} studentId={studentId}
+  {
+    switch state {
+    | Unloaded
+    | Loading =>
+      SkeletonLoading.coursePage()
+    | Loaded(baseData) =>
+      <div>
+        <School__PageHeader
+          exitUrl={`/school/courses/${baseData.courseId}/students`}
+          title={`Edit ${baseData.student.name}`}
+          description={"Actions for the student"}
+          links={pageLinks(studentId)}
         />
-      }}
-    </div>
-  </div>
+        <div className="max-w-5xl mx-auto px-2">
+          <Editor
+            studentData={baseData.student}
+            certificates={baseData.certificates}
+            studentId={studentId}
+          />
+        </div>
+      </div>
+    }
+  }
 }

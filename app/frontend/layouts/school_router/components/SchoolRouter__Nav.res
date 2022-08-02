@@ -118,7 +118,7 @@ let secondaryNavOption = (selectedPage, page) => {
   </div>
 }
 
-let secondaryNavLinks = (selectedPage, courseId, currentUser) => {
+let secondaryNavLinks = (selectedPage, currentUser) => {
   let navOptionsAdmin = [
     Page.Curriculum,
     Cohorts,
@@ -135,11 +135,11 @@ let secondaryNavLinks = (selectedPage, courseId, currentUser) => {
   let navOptionsAuthor = [Page.Curriculum, EvaluationCriteria]
 
   (User.isAuthor(currentUser) ? navOptionsAuthor : navOptionsAdmin)->Js.Array2.map(page =>
-    secondaryNavOption(selectedPage, SelectedCourse(courseId, page))
+    secondaryNavOption(selectedPage, SelectedCourse(page))
   )
 }
 
-let secondaryNav = (courses, currentUser, selectedPage) =>
+let secondaryNav = (currentUser, selectedPage) =>
   switch selectedPage {
   | Page.Settings(_settingsSelection) =>
     <div
@@ -150,16 +150,13 @@ let secondaryNav = (courses, currentUser, selectedPage) =>
         {secondaryNavOption(selectedPage, Page.Settings(Admins))}
       </div>
     </div>
-  | SelectedCourse(courseId, _courseSelection) =>
+  | SelectedCourse(_courseSelection) =>
     <div
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <div>
-        <div className="p-4">
-          <SchoolRouter__CoursesDropdown courses currentCourseId=courseId />
-        </div>
         <div className="border-t px-4">
-          {secondaryNavLinks(selectedPage, courseId, currentUser)->React.array}
+          {secondaryNavLinks(selectedPage, currentUser)->React.array}
         </div>
       </div>
     </div>
@@ -212,17 +209,19 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                     className="px-2 pt-3 pb-1 text-xs font-semibold text-gray-400 border-t-2 border-gray-100">
                     {"Courses"->str}
                   </div>
-                  {Js.Array.map(course =>
-                    <li key={Course.id(course)}>
-                      <a
-                        ariaLabel={Course.name(course)}
-                        href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
-                        className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
-                        <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
-                        {str(Course.name(course))}
-                      </a>
-                    </li>
-                  , Js.Array.filter(course => !Course.ended(course), courses))->React.array}
+                  {Js.Array.map(
+                    course =>
+                      <li key={Course.id(course)}>
+                        <a
+                          ariaLabel={Course.name(course)}
+                          href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
+                          className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
+                          <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
+                          {str(Course.name(course))}
+                        </a>
+                      </li>,
+                    Js.Array.filter(course => !Course.ended(course), courses),
+                  )->React.array}
                 </ul>,
                 Page.shrunk(selectedPage),
               )}
@@ -255,6 +254,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </li>
       </ul>
     </div>,
-    secondaryNav(courses, currentUser, selectedPage),
+    secondaryNav(currentUser, selectedPage),
   ]->React.array
 }

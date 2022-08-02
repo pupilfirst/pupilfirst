@@ -88,7 +88,7 @@ let path = (~courseId=?, t) => {
     }
   | Courses => "/school/courses"
   | SelectedCourse(coursePage) =>
-    courseId->Belt.Option.mapWithDefault("", id => coursePath(coursePage, id))
+    courseId->Belt.Option.mapWithDefault("#", id => coursePath(coursePage, id))
   | Communities => "/school/communities"
   }
 }

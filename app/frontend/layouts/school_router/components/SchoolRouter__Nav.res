@@ -89,22 +89,24 @@ let topNavButtonContents = page => {
   ]->React.array
 }
 
-let showLink = (selectedPage, page, classes, title, contents) => {
+let showLink = (selectedPage, selectedCourse, page, classes, title, contents) => {
+  let courseId = selectedCourse->Belt.Option.map(Course.id)
+  let disabled = courseId->Belt.Option.isNone
   Page.useSPA(selectedPage, page)
-    ? <Link href={Page.path(page)} className=classes ?title> {contents} </Link>
-    : <a href={Page.path(page)} className=classes ?title> {contents} </a>
+    ? <Link disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </Link>
+    : <a disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </a>
 }
 
-let topLink = (selectedPage, page) => {
+let topLink = (selectedPage, selectedCourse, page) => {
   let defaultClasses = "school-admin-navbar__primary-nav-link py-3 px-2 mb-1"
   let classes =
     defaultClasses ++ (selectedPage == page ? " school-admin-navbar__primary-nav-link--active" : "")
   let title = Page.shrunk(selectedPage) ? Some(Page.name(page)) : None
 
-  showLink(selectedPage, page, classes, title, topNavButtonContents(page))
+  showLink(selectedPage, selectedCourse, page, classes, title, topNavButtonContents(page))
 }
 
-let secondaryNavOption = (selectedPage, page) => {
+let secondaryNavOption = (selectedPage, selectedCourse, page) => {
   let defaultClasses = "flex text-sm py-3 px-4 hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500 rounded items-center my-1"
   let classes =
     defaultClasses ++ (
@@ -114,11 +116,11 @@ let secondaryNavOption = (selectedPage, page) => {
     )
 
   <div key={Page.name(page)}>
-    {showLink(selectedPage, page, classes, None, Page.name(page)->str)}
+    {showLink(selectedPage, selectedCourse, page, classes, None, Page.name(page)->str)}
   </div>
 }
 
-let secondaryNavLinks = (selectedPage, currentUser) => {
+let secondaryNavLinks = (selectedPage, selectedCourse, currentUser) => {
   let navOptionsAdmin = [
     Page.Curriculum,
     Cohorts,
@@ -135,19 +137,19 @@ let secondaryNavLinks = (selectedPage, currentUser) => {
   let navOptionsAuthor = [Page.Curriculum, EvaluationCriteria]
 
   (User.isAuthor(currentUser) ? navOptionsAuthor : navOptionsAdmin)->Js.Array2.map(page =>
-    secondaryNavOption(selectedPage, SelectedCourse(page))
+    secondaryNavOption(selectedPage, selectedCourse, SelectedCourse(page))
   )
 }
 
-let secondaryNav = (currentUser, selectedPage) =>
+let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   switch selectedPage {
   | Page.Settings(_settingsSelection) =>
     <div
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <div className="p-4">
-        {secondaryNavOption(selectedPage, Page.Settings(Customization))}
-        {secondaryNavOption(selectedPage, Page.Settings(Admins))}
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
       </div>
     </div>
   | SelectedCourse(_courseSelection) =>
@@ -156,7 +158,7 @@ let secondaryNav = (currentUser, selectedPage) =>
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <div>
         <div className="border-t px-4">
-          {secondaryNavLinks(selectedPage, currentUser)->React.array}
+          {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}
         </div>
       </div>
     </div>
@@ -165,6 +167,7 @@ let secondaryNav = (currentUser, selectedPage) =>
 
 @react.component
 let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
+  let selectedCourse = React.useContext(SchoolRouter__CourseContext.context).selectedCourse
   [
     <div key="main-nav" className={containerClasses(Page.shrunk(selectedPage))}>
       <div>
@@ -200,7 +203,9 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         {ReactUtils.nullIf(
           <ul>
             {[Page.Courses, SchoolCoaches, Communities, Settings(Customization)]
-            ->Js.Array2.map(page => <li key={Page.name(page)}> {topLink(selectedPage, page)} </li>)
+            ->Js.Array2.map(page =>
+              <li key={Page.name(page)}> {topLink(selectedPage, selectedCourse, page)} </li>
+            )
             ->React.array}
             <li>
               {ReactUtils.nullIf(
@@ -254,6 +259,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </li>
       </ul>
     </div>,
-    secondaryNav(currentUser, selectedPage),
+    secondaryNav(currentUser, selectedCourse, selectedPage),
   ]->React.array
 }

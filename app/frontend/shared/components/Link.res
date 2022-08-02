@@ -37,11 +37,19 @@ let make = (
   ~onClick=?,
   ~title=?,
   ~children,
+  ~disabled=false,
   ~props=?,
 ) => {
   let switchProps = Belt.Option.getWithDefault(props, Js.Obj.empty())
   <Spread props={switchProps}>
-    <a href ?ariaLabel ?className ?id ?title onClick={handleOnClick(href, confirm, onClick)}>
+    <a
+      href
+      ?ariaLabel
+      ?className
+      ?id
+      ?title
+      onClick={handleOnClick(href, confirm, onClick)}
+      disabled>
       children
     </a>
   </Spread>

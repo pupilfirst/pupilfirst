@@ -92,9 +92,14 @@ let topNavButtonContents = page => {
 let showLink = (selectedPage, selectedCourse, page, classes, title, contents) => {
   let courseId = selectedCourse->Belt.Option.map(Course.id)
   let disabled = courseId->Belt.Option.isNone
-  Page.useSPA(selectedPage, page)
-    ? <Link disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </Link>
-    : <a disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </a>
+
+  Page.path(~courseId?, page) != "#"
+    ? Page.useSPA(selectedPage, page)
+        ? <Link disabled href={Page.path(~courseId?, page)} className=classes ?title>
+            {contents}
+          </Link>
+        : <a disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </a>
+    : SkeletonLoading.singleLink()
 }
 
 let topLink = (selectedPage, selectedCourse, page) => {

@@ -381,7 +381,7 @@ module StudentDetailsDataQuery = %graphql(`
   }
   `)
 
-let loadData = (studentId, setState, setSelectedCourseCB) => {
+let loadData = (studentId, setState, setCourseId) => {
   setState(_ => Loading)
   StudentDetailsDataQuery.fetch({studentId: studentId})
   |> Js.Promise.then_((response: StudentDetailsDataQuery.t) => {
@@ -400,7 +400,7 @@ let loadData = (studentId, setState, setSelectedCourseCB) => {
       tags: response.student.course.studentTags,
       courseCoaches: response.student.course.coaches->Js.Array2.map(Coach.makeFromFragment),
     }))
-    setSelectedCourseCB(response.student.course.id)
+    setCourseId(response.student.course.id)
     Js.Promise.resolve()
   })
   |> ignore
@@ -427,7 +427,7 @@ let make = (~studentId) => {
   let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
   React.useEffect1(() => {
-    loadData(studentId, setState, courseContext.setSelectedCourseCB)
+    loadData(studentId, setState, courseContext.setCourseId)
     None
   }, [studentId])
 

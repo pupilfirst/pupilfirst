@@ -109,6 +109,12 @@ module Schools
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
     end
 
+    def student_details
+      @student =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @resource = { course_id: student.course_id }
+    end
+
     # GET /school/courses/:id/certificates
     def certificates
       @course =

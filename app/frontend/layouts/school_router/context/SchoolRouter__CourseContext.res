@@ -1,11 +1,11 @@
 type contextType = {
   selectedCourse: option<AppRouter__Course.t>,
-  setSelectedCourseCB: string => unit,
+  setCourseId: string => unit,
 }
 
 let context = React.createContext({
   selectedCourse: None,
-  setSelectedCourseCB: _ => (),
+  setCourseId: _ => (),
 })
 
 module Provider = {

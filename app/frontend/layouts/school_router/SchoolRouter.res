@@ -8,9 +8,48 @@ let classNames = (default, trueClasses, falseClasses, bool) => {
   default ++ " " ++ (bool ? trueClasses : falseClasses)
 }
 
-let setSelectedCourseCB = (setSelectedCourse, courses, currentCourseId) => {
+let findAndSetSelectedCourse = (setSelectedCourse, courses, currentCourseId) => {
   let currentCourse = courses->Js.Array2.find(c => Course.id(c) == currentCourseId)
   setSelectedCourse(_ => currentCourse)
+}
+
+let breadcrumbs = (path, courses, currentUser) => {
+  <div className="flex justify-between p-4 bg-white border-b">
+    <div>
+      <div className="flex items-center space-x-2 mt-1">
+        {
+          // Experimental and this logic needs to be refactored
+          switch path {
+          | list{"school", "courses", _courseId, primaryPage, ...tale} =>
+            <div className="flex items-center space-x-2">
+              <div> <SchoolRouter__CoursesDropdown courses /> </div>
+              {switch tale {
+              | list{_resourceId, secondaryPage, ..._tale} =>
+                <div> {`${primaryPage}/${secondaryPage}`->str} </div>
+              | _ => primaryPage->str
+              }}
+            </div>
+          | list{"school", primaryPage, _resourceId, secondaryPage} =>
+            <div className="flex items-center space-x-2">
+              <div> <SchoolRouter__CoursesDropdown courses /> </div>
+              <div> {`${primaryPage}/${secondaryPage}`->str} </div>
+            </div>
+          | list{"school"} => "school"->str
+          | list{"school", page, ..._tale} => page->str
+          | _ => React.null
+          }
+        }
+      </div>
+    </div>
+    <div className="relative">
+      <Notifications__Root
+        wrapperClasses=""
+        iconClasses="school-admin-navbar__notifications-unread-bullet"
+        buttonClasses="w-full flex items-center bg-gray-50 rounded relative text-gray-800 text-sm p-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
+        hasNotifications={User.hasNotifications(currentUser)}
+      />
+    </div>
+  </div>
 }
 
 @react.component
@@ -21,7 +60,7 @@ let make = (~school, ~courses, ~currentUser) => {
   React.useEffect1(() => {
     switch url.path {
     | list{"school", "courses", courseId, ..._tale} =>
-      setSelectedCourseCB(setSelectedCourse, courses, courseId)
+      findAndSetSelectedCourse(setSelectedCourse, courses, courseId)
     | _ => setSelectedCourse(_ => None)
     }
     None
@@ -109,60 +148,30 @@ let make = (~school, ~courses, ~currentUser) => {
     )
     raise(UnknownPathEncountered(url.path))
   }
-  switch component {
-  | Some(page) =>
-    <SchoolRouter__CourseContext.Provider
-      value={(
-        {
-          selectedCourse: selectedCourse,
-          setSelectedCourseCB: setSelectedCourseCB(setSelectedCourse, courses),
-        }: SchoolRouter__CourseContext.contextType
-      )}>
+  <SchoolRouter__CourseContext.Provider
+    value={(
+      {
+        selectedCourse: selectedCourse,
+        setCourseId: findAndSetSelectedCourse(setSelectedCourse, courses),
+      }: SchoolRouter__CourseContext.contextType
+    )}>
+    {switch component {
+    | Some(page) =>
       <div className="antialiased flex h-screen overflow-hidden bg-gray-50 ">
         <div className="flex school-admin-navbar flex-shrink-0">
           {<SchoolRouter__Nav school courses selectedPage currentUser />}
         </div>
         <div className="flex flex-col flex-1">
-          <div className="flex justify-between p-4 bg-white border-b">
-            <div>
-              <div className="flex items-center space-x-2 mt-1">
-                {
-                  // Experimental and this logic needs to be refactored
-                  switch url.path {
-                  | list{"school", "courses", _courseId, primaryPage, ...tale} =>
-                    <div className="flex items-center space-x-2">
-                      <div> <SchoolRouter__CoursesDropdown courses /> </div>
-                      {switch tale {
-                      | list{_resourceId, secondaryPage, ..._tale} =>
-                        <div> {`${primaryPage}/${secondaryPage}`->str} </div>
-                      | _ => primaryPage->str
-                      }}
-                    </div>
-                  | list{"school", primaryPage, _resourceId, secondaryPage} =>
-                    <div className="flex items-center space-x-2">
-                      <div> <SchoolRouter__CoursesDropdown courses /> </div>
-                      <div> {`${primaryPage}/${secondaryPage}`->str} </div>
-                    </div>
-                  | list{"school"} => "school"->str
-                  | list{"school", page, ..._tale} => page->str
-                  | _ => React.null
-                  }
-                }
-              </div>
-            </div>
-            <div className="relative">
-              <Notifications__Root
-                wrapperClasses=""
-                iconClasses="school-admin-navbar__notifications-unread-bullet"
-                buttonClasses="w-full flex items-center bg-gray-50 rounded relative text-gray-800 text-sm p-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
-                hasNotifications={User.hasNotifications(currentUser)}
-              />
-            </div>
-          </div>
+          {breadcrumbs(url.path, courses, currentUser)}
           <div role="main" className="overflow-y-scroll flex-1 flex flex-col"> {page} </div>
         </div>
       </div>
-    </SchoolRouter__CourseContext.Provider>
-  | None => <SchoolRouter__Nav school courses selectedPage currentUser />
-  }
+
+    | None =>
+      [
+        <SchoolRouter__Nav school courses selectedPage currentUser key="nav-bar" />,
+        <div key="breadcrumbs" className=""> {breadcrumbs(url.path, courses, currentUser)} </div>,
+      ]->React.array
+    }}
+  </SchoolRouter__CourseContext.Provider>
 }

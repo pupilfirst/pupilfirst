@@ -128,6 +128,12 @@ let button = () =>
     </div>
   </div>
 
+let singleLink = () => {
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-placeholder__line-md mt-4 skeleton-animate" />
+  </div>
+}
+
 let contents = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">

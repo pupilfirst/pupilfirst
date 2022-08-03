@@ -41,7 +41,6 @@ type state = {
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string, bool)
-  | UpdateEndsAt(option<Js.Date.t>)
   | StartSaving
   | FailSaving
   | UpdateAbout(string)
@@ -71,7 +70,6 @@ let reducer = (state, action) =>
       hasDescriptionError: hasDescriptionError,
       dirty: true,
     }
-  | UpdateEndsAt(date) => {...state, dirty: true}
   | UpdatePublicSignup(publicSignup) => {...state, publicSignup: publicSignup, dirty: true}
   | UpdatePublicPreview(publicPreview) => {...state, publicPreview: publicPreview, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}

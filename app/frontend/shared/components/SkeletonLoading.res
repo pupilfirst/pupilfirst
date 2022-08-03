@@ -128,6 +128,12 @@ let button = () =>
     </div>
   </div>
 
+let singleLink = () => {
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-placeholder__line-md mt-4 skeleton-animate" />
+  </div>
+}
+
 let contents = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">
@@ -144,6 +150,16 @@ let contents = () =>
       <div className="skeleton-placeholder__line-sm mt-4 w-2/3 skeleton-animate" />
     </div>
   </div>
+
+let coursePage = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {heading()}
+    <div className="flex items-end gap-4">
+      <div className="w-3/4"> {input()} </div> <div className="w-1/4"> {button()} </div>
+    </div>
+    <div className="w-1/4"> {button()} </div>
+  </div>
+}
 
 let multiple = (~count, ~element) =>
   Array.make(count, element)

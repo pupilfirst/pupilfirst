@@ -136,12 +136,13 @@ let showTag = (~value=?, key, text, color, params) => {
   </button>
 }
 
-let studentsList = (students, courseId, params) => {
+let studentsList = (students, params) => {
   <div className="space-y-4">
     {students
     ->Js.Array2.map(student => {
       <div key={StudentInfo.id(student)} className="h-full flex items-center bg-white">
-        <div className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
+        <div
+          className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex">
             <div className="text-sm flex items-center space-x-4">
               <img
@@ -151,7 +152,7 @@ let studentsList = (students, courseId, params) => {
               />
               <div>
                 <Link
-                  href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/edit`}
+                  href={`/school/students/${StudentInfo.id(student)}/details`}
                   className="font-semibold inline-block hover:underline hover:text-primary-500 transition ">
                   {User.name(StudentInfo.user(student))->str}
                 </Link>
@@ -189,7 +190,7 @@ let studentsList = (students, courseId, params) => {
           <div>
             <Link
               ariaLabel={`Edit ${User.name(StudentInfo.user(student))}'s profile`}
-              href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/details`}
+              href={`/school/students/${StudentInfo.id(student)}/details`}
               className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
               <span className="inline-flex items-center p-2">
                 <PfIcon className="if i-edit-regular if-fw" />
@@ -279,7 +280,7 @@ let make = (~courseId, ~search) => {
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
             | PartiallyLoaded(students, cursor) =>
               <div>
-                {studentsList(students, courseId, params)}
+                {studentsList(students, params)}
                 {switch state.loading {
                 | LoadingMore =>
                   <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -299,7 +300,7 @@ let make = (~courseId, ~search) => {
                   )
                 }}
               </div>
-            | FullyLoaded(students) => <div> {studentsList(students, courseId, params)} </div>
+            | FullyLoaded(students) => <div> {studentsList(students, params)} </div>
             }}
           </div>
           {PagedStudents.showLoading(state.students, state.loading)}

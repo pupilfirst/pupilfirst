@@ -3,6 +3,6 @@
 <% end %>
 <% presenter = Schools::CustomizePresenter.new(self) %>
 <script type="application/json" id="school-customize-data">
-  <%= presenter.json_props.html_safe %>
+  <%= presenter.props_to_json.html_safe %>
 </script>
 <div id="school-customize" class="w-full overflow-y-auto"></div>

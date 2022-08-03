@@ -21,16 +21,17 @@ type schoolImages = {
 type linkId = string
 type title = string
 type url = string
+type sortIndex = int
 
 type link =
-  | HeaderLink(linkId, title, url)
-  | FooterLink(linkId, title, url)
-  | SocialLink(linkId, url)
+  | HeaderLink(linkId, title, url, sortIndex)
+  | FooterLink(linkId, title, url, sortIndex)
+  | SocialLink(linkId, url, sortIndex)
 
 type t = {
   schoolStrings: schoolStrings,
   schoolImages: schoolImages,
-  links: list<link>,
+  links: array<link>,
 }
 
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg
@@ -45,54 +46,67 @@ let emailAddress = t => t.schoolStrings.emailAddress
 let privacyPolicy = t => t.schoolStrings.privacyPolicy
 let termsAndConditions = t => t.schoolStrings.termsAndConditions
 
-let headerLinks = t => t.links |> List.filter(l =>
+let filterLinks = (~header=false, ~footer=false, ~social=false, t) =>
+  t.links->Js.Array2.filter(l =>
     switch l {
-    | HeaderLink(_, _, _) => true
-    | FooterLink(_, _, _) => false
-    | SocialLink(_, _) => false
+    | HeaderLink(_, _, _, _) => header
+    | FooterLink(_, _, _, _) => footer
+    | SocialLink(_, _, _) => social
     }
   )
 
-let footerLinks = t => t.links |> List.filter(l =>
+let unpackLinks = links =>
+  links->Js.Array2.map(l =>
     switch l {
-    | HeaderLink(_, _, _) => false
-    | FooterLink(_, _, _) => true
-    | SocialLink(_, _) => false
+    | HeaderLink(id, title, url, sortIndex)
+    | FooterLink(id, title, url, sortIndex) => (id, title, url, sortIndex)
+    | SocialLink(id, url, sortIndex) => (id, "", url, sortIndex)
     }
   )
 
-let socialLinks = t => t.links |> List.filter(l =>
-    switch l {
-    | HeaderLink(_, _, _) => false
-    | FooterLink(_, _, _) => false
-    | SocialLink(_, _) => true
-    }
-  )
-
-let unpackLinks = links => links |> List.map(l =>
-    switch l {
-    | HeaderLink(id, title, url)
-    | FooterLink(id, title, url) => (id, title, url)
-    | SocialLink(id, url) => (id, "", url)
-    }
-  )
-
-let addLink = (link, t) => {...t, links: \"@"(t.links, list{link})}
+let addLink = (link, t) => {...t, links: t.links->Js.Array2.concat([link])}
 
 let removeLink = (linkId, t) => {
   ...t,
-  links: t.links |> List.filter(l =>
+  links: t.links->Js.Array2.filter(l =>
     switch l {
-    | HeaderLink(id, _, _)
-    | FooterLink(id, _, _) =>
+    | HeaderLink(id, _, _, _)
+    | FooterLink(id, _, _, _) =>
       id != linkId
-    | SocialLink(id, _) => id != linkId
+    | SocialLink(id, _, _) => id != linkId
     }
   ),
 }
 
+let updateLink = (linkId, newTitle, newUrl, t) => {
+  ...t,
+  links: t.links->Js.Array2.map(l =>
+    switch l {
+    | HeaderLink(id, title, url, sortIndex) =>
+      id == linkId
+        ? HeaderLink(id, newTitle, newUrl, sortIndex)
+        : HeaderLink(id, title, url, sortIndex)
+    | FooterLink(id, title, url, sortIndex) =>
+      id == linkId
+        ? FooterLink(id, newTitle, newUrl, sortIndex)
+        : FooterLink(id, title, url, sortIndex)
+    | SocialLink(id, url, sortIndex) =>
+      id == linkId ? SocialLink(id, newUrl, sortIndex) : SocialLink(id, url, sortIndex)
+    }
+  ),
+}
+
+type direction = Up | Down
+
+let sortIndexOfLink = link =>
+  switch link {
+  | HeaderLink(_, _, _, sortIndex)
+  | FooterLink(_, _, _, sortIndex)
+  | SocialLink(_, _, sortIndex) => sortIndex
+  }
+
 let optionalString = s =>
-  switch s |> String.trim {
+  switch s->String.trim {
   | "" => None
   | nonEmptyString => Some(nonEmptyString)
   }
@@ -101,7 +115,7 @@ let updatePrivacyPolicy = (privacyPolicy, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    privacyPolicy: privacyPolicy |> optionalString,
+    privacyPolicy: privacyPolicy->optionalString,
   },
 }
 
@@ -109,7 +123,7 @@ let updateTermsAndConditions = (termsAndConditions, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    termsAndConditions: termsAndConditions |> optionalString,
+    termsAndConditions: termsAndConditions->optionalString,
   },
 }
 
@@ -117,7 +131,7 @@ let updateAddress = (address, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    address: address |> optionalString,
+    address: address->optionalString,
   },
 }
 
@@ -125,7 +139,7 @@ let updateEmailAddress = (emailAddress, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    emailAddress: emailAddress |> optionalString,
+    emailAddress: emailAddress->optionalString,
   },
 }
 
@@ -159,9 +173,14 @@ let decodeStrings = json => {
 }
 
 let decodeLink = json => {
-  let (kind, id, url) = {
+  let (kind, id, url, sortIndex) = {
     open Json.Decode
-    (field("kind", string, json), field("id", string, json), field("url", string, json))
+    (
+      field("kind", string, json),
+      field("id", string, json),
+      field("url", string, json),
+      field("sortIndex", int, json),
+    )
   }
 
   let title = switch kind {
@@ -173,9 +192,9 @@ let decodeLink = json => {
   }
 
   switch kind {
-  | "header" => HeaderLink(id, title, url)
-  | "footer" => FooterLink(id, title, url)
-  | "social" => SocialLink(id, url)
+  | "header" => HeaderLink(id, title, url, sortIndex)
+  | "footer" => FooterLink(id, title, url, sortIndex)
+  | "social" => SocialLink(id, url, sortIndex)
   | unknownKind => raise(UnknownKindOfLink(unknownKind))
   }
 }
@@ -185,6 +204,8 @@ let decode = json => {
   {
     schoolStrings: json |> field("strings", decodeStrings),
     schoolImages: json |> field("images", decodeImages),
-    links: json |> field("links", list(decodeLink)),
+    links: json
+    |> field("links", array(decodeLink))
+    |> Js.Array.sortInPlaceWith((l1, l2) => sortIndexOfLink(l1) - sortIndexOfLink(l2)),
   }
 }

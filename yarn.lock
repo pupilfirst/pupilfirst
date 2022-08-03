@@ -12086,7 +12086,7 @@ __metadata:
     prop-types: ^15.7.2
     react: ^16.0.0
     react-dom: ^16.0.0
-  checksum: 83bc7758ab676cbb6cf1d12e23cb8125cb0c5c07c62d4e6fcaf6f9194cfafca675c4309e66a39594c60e176d3114bd45b09c9218721d42650554d17c84579d33
+  checksum: adc71cbffedea0c0a2d67bd8d8cf941ccdd30baad8ee579519e995d2ea8844e83d12d3a4d1d084be30979b023ad069de8c2b6699f3b66755cbfc97864fb4f665
   languageName: node
   linkType: hard
 

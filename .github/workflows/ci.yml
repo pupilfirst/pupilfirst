@@ -12,6 +12,7 @@ on:
 env:
   PF_IMAGE_NAME: pupilfirst
   PF_VERSION: "2022.2"
+  YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
     runs-on: ubuntu-18.04

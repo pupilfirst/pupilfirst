@@ -99,15 +99,15 @@ let cohortActionSkeleton = () => {
   </div>
 }
 
-let pageLinks = (courseId, cohortId) => [
+let pageLinks = cohortId => [
   School__PageHeader.makeLink(
-    ~href={`/school/courses/${courseId}/cohorts/${cohortId}/details`},
+    ~href={`/school/cohorts/${cohortId}/details`},
     ~title="Details",
     ~icon="fas fa-edit",
     ~selected=false,
   ),
   School__PageHeader.makeLink(
-    ~href=`/school/courses/${courseId}/cohorts/${cohortId}/actions`,
+    ~href=`/school/cohorts/${cohortId}/actions`,
     ~title="Actions",
     ~icon="fas fa-cog",
     ~selected=true,
@@ -124,54 +124,69 @@ type state = Unloaded | Loading | Loaded(data)
 module CohortFragment = Cohort.Fragment
 
 module CohortDetailsDataQuery = %graphql(`
-  query CohortDetailsDataQuery($id: ID!, $courseId: ID!) {
+  query CohortDetailsDataQuery($id: ID!) {
     cohort(id: $id) {
-      ...CohortFragment
-    }
-    course(id: $courseId) {
-      cohorts {
-        ...CohortFragment
+      id
+      name
+      description
+      endsAt
+      courseId
+      course {
+        cohorts {
+          ...CohortFragment
+        }
       }
     }
   }
 `)
 
-let loadData = (id, courseId, setState) => {
+let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
   CohortDetailsDataQuery.fetch({
     id: id,
-    courseId: courseId,
   })
   |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
     setState(_ => Loaded({
-      cohort: response.cohort->Cohort.makeFromFragment,
-      cohorts: response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+      cohort: Cohort.make(
+        ~id=response.cohort.id,
+        ~name=response.cohort.name,
+        ~description=response.cohort.description,
+        ~endsAt=response.cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
+        ~courseId=response.cohort.courseId,
+      ),
+      cohorts: response.cohort.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
     }))
+    setCourseId(response.cohort.courseId)
     Js.Promise.resolve()
   })
   |> ignore
 }
 
 @react.component
-let make = (~courseId, ~cohortId) => {
+let make = (~cohortId) => {
   let (state, setState) = React.useState(() => Unloaded)
-
+  let courseContext = React.useContext(SchoolRouter__CourseContext.context)
+  let courseId = "1"
   React.useEffect1(() => {
-    loadData(cohortId, courseId, setState)
+    loadData(cohortId, setState, courseContext.setCourseId)
     None
   }, [cohortId])
 
-  <div>
-    <School__PageHeader
-      exitUrl={`/school/courses/${courseId}/cohorts`}
-      title="Edit Cohort"
-      description={"Actions for the cohort."}
-      links={pageLinks(courseId, cohortId)}
-    />
-    {switch state {
-    | Unloaded => str("Should Load data")
-    | Loading => cohortActionSkeleton()
-    | Loaded(data) => <Editor cohorts=data.cohorts cohort=data.cohort courseId />
-    }}
-  </div>
+  {
+    switch state {
+    | Unloaded
+    | Loading =>
+      SkeletonLoading.coursePage()
+    | Loaded(data) =>
+      <div>
+        <School__PageHeader
+          exitUrl={`/school/courses/${courseId}/cohorts`}
+          title={`Edit ${Cohort.name(data.cohort)}`}
+          description={"Actions for the cohort."}
+          links={pageLinks(cohortId)}
+        />
+        <Editor cohorts=data.cohorts cohort=data.cohort courseId={Cohort.courseId(data.cohort)} />
+      </div>
+    }
+  }
 }

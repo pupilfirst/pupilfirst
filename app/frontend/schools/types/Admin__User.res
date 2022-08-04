@@ -36,3 +36,26 @@ let makeFromJs = jsObject =>
     ~affiliation=jsObject["affiliation"],
     ~taggings=jsObject["taggings"],
   )
+
+module Fragment = %graphql(`
+  fragment AdminUserFragment on User {
+    id
+    name
+    title
+    affiliation
+    email
+    avatarUrl
+    taggings
+    lastSeenAt
+  }
+`)
+
+let makeFromFragment = (user: Fragment.t) => {
+  id: user.id,
+  name: user.name,
+  title: user.title,
+  affiliation: user.affiliation,
+  email: user.email,
+  avatarUrl: user.avatarUrl,
+  taggings: user.taggings,
+}

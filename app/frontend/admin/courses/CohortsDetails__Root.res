@@ -9,15 +9,15 @@ let cohortDetailsSkeleton = () => {
   </div>
 }
 
-let pageLinks = (courseId, cohortId) => [
+let pageLinks = cohortId => [
   School__PageHeader.makeLink(
-    ~href={`/school/courses/${courseId}/cohorts/${cohortId}/details`},
+    ~href={`/school/cohorts/${cohortId}/details`},
     ~title="Details",
     ~icon="fas fa-edit",
     ~selected=true,
   ),
   School__PageHeader.makeLink(
-    ~href=`/school/courses/${courseId}/cohorts/${cohortId}/actions`,
+    ~href=`/school/cohorts/${cohortId}/actions`,
     ~title="Actions",
     ~icon="fas fa-cog",
     ~selected=false,
@@ -36,38 +36,45 @@ module CohortDetailsDataQuery = %graphql(`
   }
 `)
 
-let loadData = (id, setState) => {
+let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
   CohortDetailsDataQuery.fetch({
     id: id,
   })
   |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
     setState(_ => Loaded(response.cohort->Cohort.makeFromFragment))
+    setCourseId(response.cohort.courseId)
     Js.Promise.resolve()
   })
   |> ignore
 }
 
 @react.component
-let make = (~courseId, ~cohortId) => {
+let make = (~cohortId) => {
   let (state, setState) = React.useState(() => Unloaded)
+  let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
   React.useEffect1(() => {
-    loadData(cohortId, setState)
+    loadData(cohortId, setState, courseContext.setCourseId)
     None
   }, [cohortId])
 
-  <div>
-    <School__PageHeader
-      exitUrl={`/school/courses/${courseId}/cohorts`}
-      title="Edit Cohort"
-      description={"Update cohort details"}
-      links={pageLinks(courseId, cohortId)}
-    />
-    {switch state {
-    | Unloaded => str("Should Load data")
-    | Loading => cohortDetailsSkeleton()
-    | Loaded(cohort) => <AdminCoursesShared__CohortsEditor courseId cohort />
-    }}
-  </div>
+  {
+    switch state {
+    | Unloaded
+    | Loading =>
+      SkeletonLoading.coursePage()
+    | Loaded(cohort) =>
+      let courseId = Cohort.courseId(cohort)
+      <div>
+        <School__PageHeader
+          exitUrl={`/school/courses/${courseId}/cohorts`}
+          title={`Edit ${Cohort.name(cohort)}`}
+          description={"Update cohort details"}
+          links={pageLinks(cohortId)}
+        />
+        <AdminCoursesShared__CohortsEditor courseId cohort />
+      </div>
+    }
+  }
 }

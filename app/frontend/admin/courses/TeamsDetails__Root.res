@@ -17,12 +17,7 @@ let pageLinks = studentId => [
   ),
 ]
 
-type baseData = {
-  courseId: string,
-  team: Team.t,
-}
-
-type state = Unloaded | Loading | Loaded(baseData)
+type state = Unloaded | Loading | Loaded(Team.t)
 
 module TeamFragment = Team.Fragment
 
@@ -30,11 +25,6 @@ module TeamDetailsDataQuery = %graphql(`
   query TeamDetailsDataQuery($id: ID!) {
     team(id: $id) {
       ...TeamFragment
-    }
-    teamInfo: team(id: $id) {
-      cohort {
-        courseId
-      }
     }
   }
 `)
@@ -45,11 +35,8 @@ let loadData = (id, setState, setCourseId) => {
     id: id,
   })
   |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
-    setState(_ => Loaded({
-      team: response.team->Team.makeFromFragment,
-      courseId: response.teamInfo.cohort.courseId,
-    }))
-    setCourseId(response.teamInfo.cohort.courseId)
+    setState(_ => Loaded(response.team->Team.makeFromFragment))
+    setCourseId(response.team.cohort.courseId)
     Js.Promise.resolve()
   })
   |> ignore
@@ -67,17 +54,19 @@ let make = (~studentId) => {
 
   {
     switch state {
-    | Unloaded => str("Should Load data")
-    | Loading => SkeletonLoading.coursePage()
-    | Loaded(baseData) =>
+    | Unloaded
+    | Loading =>
+      SkeletonLoading.coursePage()
+    | Loaded(team) =>
+      let courseId = Team.cohort(team)->Cohort.courseId
       <div>
         <School__PageHeader
-          exitUrl={`/school/courses/${baseData.courseId}/teams`}
-          title={`Edit ${Team.name(baseData.team)}`}
+          exitUrl={`/school/courses/${courseId}/teams`}
+          title={`Edit ${Team.name(team)}`}
           description={"Edit team details"}
           links={pageLinks(studentId)}
         />
-        <AdminCoursesShared__TeamEditor courseId={baseData.courseId} team={baseData.team} />
+        <AdminCoursesShared__TeamEditor courseId={courseId} team={team} />
       </div>
     }
   }

@@ -31,14 +31,3 @@ let make = (~id, ~user, ~taggings, ~level, ~cohort, ~droppedOutAt, ~personalCoac
   cohort: cohort,
   personalCoaches: personalCoaches,
 }
-
-let makeFromJs = jsObject =>
-  make(
-    ~id=jsObject["id"],
-    ~user=UserDetails.makeFromJs(jsObject["user"]),
-    ~taggings=jsObject["taggings"],
-    ~level=Shared__Level.makeFromJs(jsObject["level"]),
-    ~droppedOutAt=jsObject["droppedOutAt"]->Belt.Option.map(DateFns.parseISO),
-    ~cohort=Cohort.makeFromJs(jsObject["cohort"]),
-    ~personalCoaches=jsObject["personalCoaches"]->Js.Array2.map(UserProxy.makeFromJs),
-  )

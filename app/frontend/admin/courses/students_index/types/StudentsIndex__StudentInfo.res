@@ -19,12 +19,3 @@ let make = (~id, ~taggings, ~user, ~level, ~cohort) => {
   level: level,
   cohort: cohort,
 }
-
-let makeFromJS = studentDetails =>
-  make(
-    ~id=studentDetails["id"],
-    ~taggings=studentDetails["taggings"],
-    ~user=Admin__User.makeFromJs(studentDetails["user"]),
-    ~level=Shared__Level.makeFromJs(studentDetails["level"]),
-    ~cohort=Cohort.makeFromJs(studentDetails["cohort"]),
-  )

@@ -93,18 +93,18 @@ let make = (~school, ~courses, ~currentUser) => {
       SelectedCourse(Teams),
       Some(<TeamsActions__Root studentId />),
     )
+  | list{"school", "cohorts", cohortId, "details"} => (
+      SelectedCourse(Cohorts),
+      Some(<CohortsDetails__Root cohortId />),
+    )
+  | list{"school", "cohorts", cohortId, "actions"} => (
+      SelectedCourse(Cohorts),
+      Some(<CohortsActions__Root cohortId />),
+    )
   | list{"school", "courses", courseId, ...tail} => {
       let (coursePage: Page.coursePages, courseComponent) = switch tail {
       | list{"cohorts"} => (Cohorts, Some(<CohortsIndex__Root courseId search={url.search} />))
       | list{"cohorts", "new"} => (Cohorts, Some(<CohortsCreator__Root courseId />))
-      | list{"cohorts", cohortId, "details"} => (
-          Cohorts,
-          Some(<CohortsDetails__Root courseId cohortId />),
-        )
-      | list{"cohorts", cohortId, "actions"} => (
-          Cohorts,
-          Some(<CohortsActions__Root courseId cohortId />),
-        )
       | list{"students"} => (Students, Some(<StudentsIndex__Root courseId search={url.search} />))
       | list{"students", "new"} => (Students, Some(<StudentCreator__Root courseId />))
       | list{"students", "import"} => (Students, Some(<StudentBulkImport__Root courseId />))

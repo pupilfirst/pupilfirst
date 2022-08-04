@@ -123,7 +123,7 @@ let makeFilters = () => {
   ]
 }
 
-let cohortsList = (cohorts, courseId) => {
+let cohortsList = cohorts => {
   <div className="space-y-4">
     {cohorts
     ->Js.Array2.map(cohort =>
@@ -138,7 +138,7 @@ let cohortsList = (cohorts, courseId) => {
           </div>
           <div>
             <Link
-              href={`/school/courses/${courseId}/cohorts/${cohort.id}/details`}
+              href={`/school/cohorts/${cohort.id}/details`}
               className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
               <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
               <span> {"Edit"->str} </span>
@@ -227,7 +227,7 @@ let make = (~courseId, ~search) => {
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
             | PartiallyLoaded(cohorts, cursor) =>
               <div>
-                {cohortsList(cohorts, courseId)}
+                {cohortsList(cohorts)}
                 {switch state.loading {
                 | LoadingMore =>
                   <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -247,7 +247,7 @@ let make = (~courseId, ~search) => {
                   )
                 }}
               </div>
-            | FullyLoaded(cohorts) => <div> {cohortsList(cohorts, courseId)} </div>
+            | FullyLoaded(cohorts) => <div> {cohortsList(cohorts)} </div>
             }}
           </div>
         </div>

@@ -8,6 +8,18 @@ module Types
     field :students_count, Integer, null: false
     field :coaches_count, Integer, null: false
     field :course_id, String, null: false
+    field :course, Types::CourseType, null: false
+
+    def course
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch do |cohort_ids, loader|
+          Cohort
+            .joins(:course)
+            .where(id: cohort_ids)
+            .each { |cohort| loader.call(cohort.id, cohort.course) }
+        end
+    end
 
     def students_count
       BatchLoader::GraphQL

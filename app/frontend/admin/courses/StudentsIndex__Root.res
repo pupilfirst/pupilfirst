@@ -38,6 +38,10 @@ let reducer = (state, action) =>
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
   }
 
+module LevelFragment = Shared__Level.Fragment
+module CohortFragment = Cohort.Fragment
+module AdminUserFragment = Admin__User.Fragment
+
 module CourseStudentsQuery = %graphql(`
     query CourseStudentsQuery($courseId: ID!, $after: String, $filterString: String) {
       courseStudents(courseId: $courseId, filterString: $filterString,first: 20, after: $after) {
@@ -45,24 +49,13 @@ module CourseStudentsQuery = %graphql(`
           id
           taggings
           user {
-            id
-            name
-            email
-            avatarUrl
-            title
-            affiliation
-            taggings
+            ...AdminUserFragment
           }
           level {
-            id
-            name
-            number
+            ...LevelFragment
           }
           cohort {
-            id
-            name
-            description
-            endsAt
+            ...CohortFragment
           }
         }
         pageInfo {
@@ -83,14 +76,22 @@ let getStudents = (send, courseId, cursor, params) => {
     ~filterString=?Some(filterString),
     (),
   )
-  |> CourseStudentsQuery.make
-  |> Js.Promise.then_(response => {
+  |> CourseStudentsQuery.fetch
+  |> Js.Promise.then_((response: CourseStudentsQuery.t) => {
     send(
       LoadStudents(
-        response["courseStudents"]["pageInfo"]["endCursor"],
-        response["courseStudents"]["pageInfo"]["hasNextPage"],
-        Js.Array.map(StudentInfo.makeFromJS, response["courseStudents"]["nodes"]),
-        response["courseStudents"]["totalCount"],
+        response.courseStudents.pageInfo.endCursor,
+        response.courseStudents.pageInfo.hasNextPage,
+        response.courseStudents.nodes->Js.Array2.map(studentDetails =>
+          StudentInfo.make(
+            ~id=studentDetails.id,
+            ~taggings=studentDetails.taggings,
+            ~user=Admin__User.makeFromFragment(studentDetails.user),
+            ~level=Shared__Level.makeFromFragment(studentDetails.level),
+            ~cohort=Cohort.makeFromFragment(studentDetails.cohort),
+          )
+        ),
+        response.courseStudents.totalCount,
       ),
     )
     Js.Promise.resolve()

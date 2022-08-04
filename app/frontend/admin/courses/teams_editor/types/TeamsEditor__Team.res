@@ -35,6 +35,7 @@ module Fragment = %graphql(`
       name
       description
       endsAt
+      courseId
     }
   }
 
@@ -58,5 +59,6 @@ let makeFromFragment = (team: Fragment.t) =>
       ~name=team.cohort.name,
       ~description=team.cohort.description,
       ~endsAt=team.cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
+      ~courseId=team.cohort.courseId,
     ),
   )

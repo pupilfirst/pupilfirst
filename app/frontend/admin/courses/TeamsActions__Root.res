@@ -17,15 +17,10 @@ let pageLinks = studentId => [
   ),
 ]
 
-type baseData = {
-  courseId: string,
-  team: Team.t,
-}
-
-type pageData = Unloaded | Loading | Loaded(baseData)
+type baseData = Unloaded | Loading | Loaded(Team.t)
 
 type state = {
-  pageData: pageData,
+  baseData: baseData,
   saving: bool,
 }
 
@@ -36,28 +31,20 @@ module TeamDetailsDataQuery = %graphql(`
     team(id: $id) {
       ...TeamFragment
     }
-    teamInfo: team(id: $id) {
-      cohort {
-        courseId
-      }
-    }
   }
 `)
 
 let loadData = (id, setState, setCourseId) => {
-  setState(state => {...state, pageData: Loading})
+  setState(state => {...state, baseData: Loading})
   TeamDetailsDataQuery.fetch({
     id: id,
   })
   |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
     setState(state => {
       ...state,
-      pageData: Loaded({
-        team: response.team->Team.makeFromFragment,
-        courseId: response.teamInfo.cohort.courseId,
-      }),
+      baseData: Loaded(response.team->Team.makeFromFragment),
     })
-    setCourseId(response.teamInfo.cohort.courseId)
+    setCourseId(response.team.cohort.courseId)
     Js.Promise.resolve()
   })
   |> ignore
@@ -91,7 +78,7 @@ let destroyTeam = (setState, courseId, teamId) => {
 
 @react.component
 let make = (~studentId) => {
-  let (state, setState) = React.useState(() => {pageData: Unloaded, saving: false})
+  let (state, setState) = React.useState(() => {baseData: Unloaded, saving: false})
   let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
   React.useEffect1(() => {
@@ -100,27 +87,26 @@ let make = (~studentId) => {
   }, [studentId])
 
   <div>
-    {switch state.pageData {
+    {switch state.baseData {
     | Unloaded
     | Loading =>
       SkeletonLoading.coursePage()
-    | Loaded(baseData) =>
+    | Loaded(team) =>
+      let courseId = Team.cohort(team)->Cohort.courseId
       <div>
         <School__PageHeader
-          exitUrl={`/school/courses/${baseData.courseId}/teams`}
-          title={`Edit ${Team.name(baseData.team)}`}
+          exitUrl={`/school/courses/${courseId}/teams`}
+          title={`Edit ${Team.name(team)}`}
           description={"Team actions"}
           links={pageLinks(studentId)}
         />
         <div className="max-w-5xl mx-auto px-2">
-          <h2 className="text-lg font-semibold mt-8">
-            {`Delete ${Team.name(baseData.team)}`->str}
-          </h2>
+          <h2 className="text-lg font-semibold mt-8"> {`Delete ${Team.name(team)}`->str} </h2>
           <p className="text-sm text-gray-500">
             {"Delete will remove all the students from the team and delete the team"->str}
           </p>
           <button
-            onClick={_ => destroyTeam(setState, baseData.courseId, Team.id(baseData.team))}
+            onClick={_ => destroyTeam(setState, courseId, Team.id(team))}
             className="btn btn-danger mt-4">
             {"Delete team"->str}
           </button>

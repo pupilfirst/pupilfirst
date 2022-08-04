@@ -426,7 +426,7 @@ let showCourse = course => {
             className="col-span-3 btn btn-primary px-4 py-2 bg-primary-50 rounded text-sm cursor-pointer">
             <div>
               <FaIcon classes="far fa-edit mr-3" />
-              <span className="font-semibold"> {str(("View Course"))} </span>
+              <span className="font-semibold"> {str("View Course")} </span>
             </div>
           </button>
           <button
@@ -557,7 +557,8 @@ let make = (~school) => {
 
   React.useEffect2(() => {
     switch url.path {
-    | list{"school"} => loadCourses(None, state, None, send, ~skipSchoolStatsLoad=false)
+    | list{"school"} | list{"school", "courses", "new", ..._} =>
+      loadCourses(None, state, None, send, ~skipSchoolStatsLoad=false)
     | list{"school", "courses", courseId, ..._} =>
       loadCourses(Some(courseId), state, None, send, ~skipSchoolStatsLoad=false)
     | _ => loadCourses(None, state, None, send)

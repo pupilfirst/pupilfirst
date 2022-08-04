@@ -1,6 +1,6 @@
 <% presenter = ErrorPresenter.new(self) %>
 <% content_for(:head) do %>
-  <title>Pupilfirst | <%= t("errors.#{params[:error_type]}.title") %></title>
+  <title>Pupilfirst | <%= t("errors.#{params[:error_type]}.title", default: 'Error') %></title>
   <%= vite_javascript_tag 'error', nonce: true %>
 <% end %>
 <% content_for(:wrapper) do %>

@@ -173,6 +173,19 @@ let cohortsList = cohorts => {
   </div>
 }
 
+let renderLoadMore = (send, courseId, params, cursor) => {
+  <div className="pb-6">
+    <button
+      className="btn btn-primary-ghost cursor-pointer w-full"
+      onClick={_ => {
+        send(BeginLoadingMore)
+        getCohorts(send, courseId, Some(cursor), params)
+      }}>
+      {"Load More"->str}
+    </button>
+  </div>
+}
+
 @react.component
 let make = (~courseId, ~search) => {
   let params = Webapi.Url.URLSearchParams.make(search)
@@ -221,35 +234,15 @@ let make = (~courseId, ~search) => {
               </div>
             </div>
           </div>
-          <div>
-            {switch state.cohorts {
-            | Unloaded =>
-              <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-            | PartiallyLoaded(cohorts, cursor) =>
-              <div>
-                {cohortsList(cohorts)}
-                {switch state.loading {
-                | LoadingMore =>
-                  <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
-                | Reloading(times) =>
-                  ReactUtils.nullUnless(
-                    <div className="pb-6">
-                      <button
-                        className="btn btn-primary-ghost cursor-pointer w-full"
-                        onClick={_ => {
-                          send(BeginLoadingMore)
-                          getCohorts(send, courseId, Some(cursor), params)
-                        }}>
-                        {"Load More"->str}
-                      </button>
-                    </div>,
-                    ArrayUtils.isEmpty(times),
-                  )
-                }}
-              </div>
-            | FullyLoaded(cohorts) => <div> {cohortsList(cohorts)} </div>
-            }}
-          </div>
+          {PagedCohorts.renderView(
+            ~pagedItems=state.cohorts,
+            ~loading=state.loading,
+            ~entriesView=cohortsList,
+            ~totalEntriesCount=state.totalEntriesCount,
+            ~loadMore=renderLoadMore(send, courseId, params),
+            ~resourceName="Cohorts",
+            ~emptyMessage="No Cohorts Found",
+          )}
         </div>
       </div>
     </div>

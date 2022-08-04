@@ -132,40 +132,44 @@ let reloadTeams = (courseId, send, params) => {
   getTeams(send, courseId, None, params)
 }
 
-let showTeams = (state, teams) => {
+let showTeams = teams => {
   <div className="w-full">
-    {ArrayUtils.isEmpty(teams)
-      ? <div
-          className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
-          <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
-          <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
-            {"Empty Teams message"->str}
-          </h4>
-        </div>
-      : teams
-        ->Js.Array2.map(team =>
-          <div className="p-6 bg-white rounded-lg" key={Team.id(team)}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <p className="text-lg font-semibold"> {Team.name(team)->str} </p>
-                <p className="px-3 py-2 text-xs bg-green-50 text-green-500 rounded-2xl ">
-                  {team->Team.cohort->Cohort.name->str}
-                </p>
-              </div>
-              <Link
-                href={`/school/teams/${Team.id(team)}/details`}
-                className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-                <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
-                <span> {"Edit"->str} </span>
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 gap-4 mt-6 lg md:grid-cols-2">
-              {Team.students(team)->Js.Array2.map(studentCard)->React.array}
-            </div>
+    {teams
+    ->Js.Array2.map(team =>
+      <div className="p-6 bg-white rounded-lg" key={Team.id(team)}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <p className="text-lg font-semibold"> {Team.name(team)->str} </p>
+            <p className="px-3 py-2 text-xs bg-green-50 text-green-500 rounded-2xl ">
+              {team->Team.cohort->Cohort.name->str}
+            </p>
           </div>
-        )
-        ->React.array}
-    {PagedTeams.showStats(state.totalEntriesCount, Array.length(teams), "Team")}
+          <Link
+            href={`/school/teams/${Team.id(team)}/details`}
+            className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
+            <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
+            <span> {"Edit"->str} </span>
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 gap-4 mt-6 lg md:grid-cols-2">
+          {Team.students(team)->Js.Array2.map(studentCard)->React.array}
+        </div>
+      </div>
+    )
+    ->React.array}
+  </div>
+}
+
+let renderLoadMore = (send, courseId, params, cursor) => {
+  <div className="pb-6">
+    <button
+      className="btn btn-primary-ghost cursor-pointer w-full"
+      onClick={_ => {
+        send(BeginLoadingMore)
+        getTeams(send, courseId, Some(cursor), params)
+      }}>
+      {"Load More"->str}
+    </button>
   </div>
 }
 
@@ -213,36 +217,15 @@ let make = (~courseId, ~search) => {
               </div>
             </div>
           </div>
-          <div>
-            {switch state.teams {
-            | Unloaded =>
-              <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-            | PartiallyLoaded(teams, cursor) =>
-              <div>
-                {showTeams(state, teams)}
-                {switch state.loading {
-                | LoadingMore =>
-                  <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
-                | Reloading(times) =>
-                  ReactUtils.nullUnless(
-                    <div className="pb-6">
-                      <button
-                        className="btn btn-primary-ghost cursor-pointer w-full"
-                        onClick={_ => {
-                          send(BeginLoadingMore)
-                          getTeams(send, courseId, Some(cursor), params)
-                        }}>
-                        {"Load More"->str}
-                      </button>
-                    </div>,
-                    ArrayUtils.isEmpty(times),
-                  )
-                }}
-              </div>
-            | FullyLoaded(teams) => <div> {showTeams(state, teams)} </div>
-            }}
-            {PagedTeams.showLoading(state.teams, state.loading)}
-          </div>
+          {PagedTeams.renderView(
+            ~pagedItems=state.teams,
+            ~loading=state.loading,
+            ~entriesView=showTeams,
+            ~totalEntriesCount=state.totalEntriesCount,
+            ~loadMore=renderLoadMore(send, courseId, params),
+            ~resourceName="Teams",
+            ~emptyMessage="No Teams Found",
+          )}
         </div>
       </div>
     </div>

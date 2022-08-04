@@ -137,7 +137,7 @@ let showTag = (~value=?, key, text, color, params) => {
   </button>
 }
 
-let studentsList = (students, params) => {
+let studentsList = (params, students) => {
   <div className="space-y-4">
     {students
     ->Js.Array2.map(student => {
@@ -228,6 +228,19 @@ let makeFilters = () => {
   ]
 }
 
+let renderLoadMore = (send, courseId, params, cursor) => {
+  <div className="pb-6">
+    <button
+      className="btn btn-primary-ghost cursor-pointer w-full"
+      onClick={_ => {
+        send(BeginLoadingMore)
+        getStudents(send, courseId, Some(cursor), params)
+      }}>
+      {"Load More"->str}
+    </button>
+  </div>
+}
+
 @react.component
 let make = (~courseId, ~search) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
@@ -275,36 +288,15 @@ let make = (~courseId, ~search) => {
               </div>
             </div>
           </div>
-          <div>
-            {switch state.students {
-            | Unloaded =>
-              <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-            | PartiallyLoaded(students, cursor) =>
-              <div>
-                {studentsList(students, params)}
-                {switch state.loading {
-                | LoadingMore =>
-                  <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
-                | Reloading(times) =>
-                  ReactUtils.nullUnless(
-                    <div className="pb-6">
-                      <button
-                        className="btn btn-primary-ghost cursor-pointer w-full"
-                        onClick={_ => {
-                          send(BeginLoadingMore)
-                          getStudents(send, courseId, Some(cursor), params)
-                        }}>
-                        {"Load More"->str}
-                      </button>
-                    </div>,
-                    ArrayUtils.isEmpty(times),
-                  )
-                }}
-              </div>
-            | FullyLoaded(students) => <div> {studentsList(students, params)} </div>
-            }}
-          </div>
-          {PagedStudents.showLoading(state.students, state.loading)}
+          {PagedStudents.renderView(
+            ~pagedItems=state.students,
+            ~loading=state.loading,
+            ~entriesView=studentsList(params),
+            ~totalEntriesCount=state.totalEntriesCount,
+            ~loadMore=renderLoadMore(send, courseId, params),
+            ~resourceName="Students",
+            ~emptyMessage="No Students Found",
+          )}
         </div>
       </div>
     </div>

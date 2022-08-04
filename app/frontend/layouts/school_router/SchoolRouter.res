@@ -85,6 +85,14 @@ let make = (~school, ~courses, ~currentUser) => {
       SelectedCourse(Students),
       Some(<StudentActions__Root studentId />),
     )
+  | list{"school", "teams", studentId, "details"} => (
+      SelectedCourse(Teams),
+      Some(<TeamsDetails__Root studentId />),
+    )
+  | list{"school", "teams", studentId, "actions"} => (
+      SelectedCourse(Teams),
+      Some(<TeamsActions__Root studentId />),
+    )
   | list{"school", "courses", courseId, ...tail} => {
       let (coursePage: Page.coursePages, courseComponent) = switch tail {
       | list{"cohorts"} => (Cohorts, Some(<CohortsIndex__Root courseId search={url.search} />))
@@ -110,14 +118,6 @@ let make = (~school, ~courses, ~currentUser) => {
         )
       | list{"teams"} => (Teams, Some(<TeamsIndex__Root courseId search={url.search} />))
       | list{"teams", "new"} => (Teams, Some(<TeamsCreator__Root courseId />))
-      | list{"teams", studentId, "details"} => (
-          Teams,
-          Some(<TeamsDetails__Root courseId studentId />),
-        )
-      | list{"teams", studentId, "actions"} => (
-          Teams,
-          Some(<TeamsActions__Root courseId studentId />),
-        )
       | list{"inactive_students"} => (Students, None)
       | list{"coaches"} => (CourseCoaches, None)
       | list{"curriculum"} => (Curriculum, None)
@@ -153,7 +153,7 @@ let make = (~school, ~courses, ~currentUser) => {
       {
         selectedCourse: selectedCourse,
         setCourseId: findAndSetSelectedCourse(setSelectedCourse, courses),
-      }: SchoolRouter__CourseContext.contextType
+      }: SchoolRouter__CourseContext.t
     )}>
     {switch component {
     | Some(page) =>

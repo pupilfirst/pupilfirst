@@ -80,8 +80,8 @@ Rails.application.routes.draw do
       'students/:student_id/actions',
       'courses/:course_id/teams',
       'courses/:course_id/teams/new',
-      'courses/:course_id/teams/:team_id/details',
-      'courses/:course_id/teams/:team_id/actions',
+      'teams/:team_id/details',
+      'teams/:team_id/actions',
     ].each do |path|
       get path, action: 'school_router'
     end

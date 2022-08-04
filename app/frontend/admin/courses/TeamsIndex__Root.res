@@ -132,7 +132,7 @@ let reloadTeams = (courseId, send, params) => {
   getTeams(send, courseId, None, params)
 }
 
-let showTeams = (state, courseId, teams) => {
+let showTeams = (state, teams) => {
   <div className="w-full">
     {ArrayUtils.isEmpty(teams)
       ? <div
@@ -153,7 +153,7 @@ let showTeams = (state, courseId, teams) => {
                 </p>
               </div>
               <Link
-                href={`/school/courses/${courseId}/teams/${Team.id(team)}/details`}
+                href={`/school/teams/${Team.id(team)}/details`}
                 className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
                 <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
                 <span> {"Edit"->str} </span>
@@ -219,7 +219,7 @@ let make = (~courseId, ~search) => {
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
             | PartiallyLoaded(teams, cursor) =>
               <div>
-                {showTeams(state, courseId, teams)}
+                {showTeams(state, teams)}
                 {switch state.loading {
                 | LoadingMore =>
                   <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -239,7 +239,7 @@ let make = (~courseId, ~search) => {
                   )
                 }}
               </div>
-            | FullyLoaded(teams) => <div> {showTeams(state, courseId, teams)} </div>
+            | FullyLoaded(teams) => <div> {showTeams(state, teams)} </div>
             }}
             {PagedTeams.showLoading(state.teams, state.loading)}
           </div>

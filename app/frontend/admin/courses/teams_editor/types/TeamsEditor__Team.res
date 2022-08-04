@@ -10,7 +10,12 @@ let name = t => t.name
 let students = t => t.students
 let cohort = t => t.cohort
 
-let make = (~id, ~name, ~students, ~cohort) => {id, name, students, cohort}
+let make = (~id, ~name, ~students, ~cohort) => {
+  id: id,
+  name: name,
+  students: students,
+  cohort: cohort,
+}
 
 module Fragment = %graphql(`
    fragment TeamFragment on Team {

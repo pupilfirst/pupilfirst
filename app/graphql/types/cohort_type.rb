@@ -7,6 +7,7 @@ module Types
     field :ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :students_count, Integer, null: false
     field :coaches_count, Integer, null: false
+    field :course_id, String, null: false
 
     def students_count
       BatchLoader::GraphQL

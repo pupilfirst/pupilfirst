@@ -2,28 +2,30 @@ open TeamsEditor__Types
 
 let str = React.string
 
-let teamDetailsSkeleton = () => {
-  <div className="max-w-5xl mx-auto px-2 mt-8"> {SkeletonLoading.button()} </div>
-}
-
-let pageLinks = (courseId, studentId) => [
+let pageLinks = studentId => [
   School__PageHeader.makeLink(
-    ~href={`/school/courses/${courseId}/teams/${studentId}/details`},
+    ~href={`/school/teams/${studentId}/details`},
     ~title="Details",
     ~icon="fas fa-edit",
     ~selected=false,
   ),
   School__PageHeader.makeLink(
-    ~href=`/school/courses/${courseId}/teams/${studentId}/actions`,
+    ~href=`/school/teams/${studentId}/actions`,
     ~title="Actions",
     ~icon="fas fa-cog",
     ~selected=true,
   ),
 ]
 
-type teamData = Unloaded | Loading | Loaded(Team.t)
+type baseData = {
+  courseId: string,
+  team: Team.t,
+}
+
+type pageData = Unloaded | Loading | Loaded(baseData)
+
 type state = {
-  teamData: teamData,
+  pageData: pageData,
   saving: bool,
 }
 
@@ -34,16 +36,28 @@ module TeamDetailsDataQuery = %graphql(`
     team(id: $id) {
       ...TeamFragment
     }
+    teamInfo: team(id: $id) {
+      cohort {
+        courseId
+      }
+    }
   }
 `)
 
-let loadData = (id, setState) => {
-  setState(state => {...state, teamData: Loading})
+let loadData = (id, setState, setCourseId) => {
+  setState(state => {...state, pageData: Loading})
   TeamDetailsDataQuery.fetch({
     id: id,
   })
   |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
-    setState(state => {...state, teamData: Loaded(response.team->Team.makeFromFragment)})
+    setState(state => {
+      ...state,
+      pageData: Loaded({
+        team: response.team->Team.makeFromFragment,
+        courseId: response.teamInfo.cohort.courseId,
+      }),
+    })
+    setCourseId(response.teamInfo.cohort.courseId)
     Js.Promise.resolve()
   })
   |> ignore
@@ -76,35 +90,41 @@ let destroyTeam = (setState, courseId, teamId) => {
 }
 
 @react.component
-let make = (~courseId, ~studentId) => {
-  let (state, setState) = React.useState(() => {teamData: Unloaded, saving: false})
+let make = (~studentId) => {
+  let (state, setState) = React.useState(() => {pageData: Unloaded, saving: false})
+  let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
   React.useEffect1(() => {
-    loadData(studentId, setState)
+    loadData(studentId, setState, courseContext.setCourseId)
     None
   }, [studentId])
 
   <div>
-    <School__PageHeader
-      exitUrl={`/school/courses/${courseId}/teams`}
-      title="Edit Team"
-      description={"Team actions"}
-      links={pageLinks(courseId, studentId)}
-    />
-    {switch state.teamData {
-    | Unloaded => str("Should Load data")
-    | Loading => teamDetailsSkeleton()
-    | Loaded(team) =>
-      <div className="max-w-5xl mx-auto px-2">
-        <h2 className="text-lg font-semibold mt-8"> {`Delete ${Team.name(team)}`->str} </h2>
-        <p className="text-sm text-gray-500">
-          {"Delete will remove all the students from the team and delete the team"->str}
-        </p>
-        <button
-          onClick={_ => destroyTeam(setState, courseId, Team.id(team))}
-          className="btn btn-danger mt-4">
-          {"Delete team"->str}
-        </button>
+    {switch state.pageData {
+    | Unloaded
+    | Loading =>
+      SkeletonLoading.coursePage()
+    | Loaded(baseData) =>
+      <div>
+        <School__PageHeader
+          exitUrl={`/school/courses/${baseData.courseId}/teams`}
+          title={`Edit ${Team.name(baseData.team)}`}
+          description={"Team actions"}
+          links={pageLinks(studentId)}
+        />
+        <div className="max-w-5xl mx-auto px-2">
+          <h2 className="text-lg font-semibold mt-8">
+            {`Delete ${Team.name(baseData.team)}`->str}
+          </h2>
+          <p className="text-sm text-gray-500">
+            {"Delete will remove all the students from the team and delete the team"->str}
+          </p>
+          <button
+            onClick={_ => destroyTeam(setState, baseData.courseId, Team.id(baseData.team))}
+            className="btn btn-danger mt-4">
+            {"Delete team"->str}
+          </button>
+        </div>
       </div>
     }}
   </div>

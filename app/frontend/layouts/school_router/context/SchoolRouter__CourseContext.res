@@ -1,4 +1,4 @@
-type contextType = {
+type t = {
   selectedCourse: option<AppRouter__Course.t>,
   setCourseId: string => unit,
 }

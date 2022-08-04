@@ -38,14 +38,18 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
         <div className="flex font-semibold text-sm">
           {links
           ->Js.Array2.mapi((link, index) => {
-            <Link
-              href={link.href}
-              className={selectedClasses(link.selected)}
-              key={string_of_int(index)}>
-              <div>
-                <i className={link.icon} /> <span className="ml-2"> {str(link.title)} </span>
-              </div>
-            </Link>
+            link.selected
+              ? <div href={link.href} className={selectedClasses(link.selected)}>
+                  <i className={link.icon} /> <span className="ml-2"> {str(link.title)} </span>
+                </div>
+              : <Link
+                  href={link.href}
+                  className={selectedClasses(link.selected)}
+                  key={string_of_int(index)}>
+                  <div>
+                    <i className={link.icon} /> <span className="ml-2"> {str(link.title)} </span>
+                  </div>
+                </Link>
           })
           ->React.array}
         </div>

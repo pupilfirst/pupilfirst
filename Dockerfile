@@ -21,9 +21,6 @@ COPY .yarnrc.docker.yml .yarnrc.yml
 COPY .yarn/releases .yarn/releases
 RUN corepack enable
 
-# Remove checksums on problematic JS packages.
-RUN sed '/83bc7758ab676cbb6cf1d12e23cb8125cb0c5c07c62d4e6fcaf6f9194cfafca675c4309e66a39594c60e176d3114bd45b09c9218721d42650554d17c84579d33/d' yarn.lock > yarn.lock
-
 RUN yarn install
 
 # Copy over remaining files and set up for precompilation.
@@ -46,10 +43,7 @@ RUN bundle exec i18n export
 # Compile ReScript files to JS.
 RUN yarn run re:build
 
-# Remove checksums (again) on problematic JS packages because...
-RUN sed '/83bc7758ab676cbb6cf1d12e23cb8125cb0c5c07c62d4e6fcaf6f9194cfafca675c4309e66a39594c60e176d3114bd45b09c9218721d42650554d17c84579d33/d' yarn.lock > yarn.lock
-
-# ...the assets:precompile step will run `yarn install` again.
+# Run Rails' asset  precompilation step.
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.

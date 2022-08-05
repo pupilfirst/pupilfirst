@@ -2,7 +2,6 @@ class FixSchoolLinksSortIndices < ActiveRecord::Migration[6.1]
   def up
     kinds = SchoolLink::VALID_KINDS
 
-    SchoolLink.reset_column_information
 
     School
       .joins(:school_links)

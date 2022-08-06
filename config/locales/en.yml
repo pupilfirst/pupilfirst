@@ -216,6 +216,12 @@ en:
       pending_submissions: Pending Submissions
       revied_submissions: Reviewed Submissions
       students_assigned: "Students assigned to coach:"
+      select_cohorts: "Cohorts assigned to coach:"
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      update_cohort_assignment: Update Cohort Assignment
+      notification_coach_updated: Coach updated successfully
     CourseCoaches__InfoFormTeam:
       remove_post_confirm: from the list of assigned teams?
       remove_pre_confirm: "Are you sure you want to remove "

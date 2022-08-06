@@ -204,6 +204,10 @@ module Types
       argument :coach_ids, [ID], required: false
     end
 
+    resolved_field :coach, Types::CoachType, null: false do
+      argument :id, ID, required: true
+    end
+
     resolved_field :level, Types::LevelType, null: true do
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false

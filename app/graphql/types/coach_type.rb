@@ -2,7 +2,22 @@ module Types
   class CoachType < Types::BaseObject
     field :id, ID, null: false
     field :user, Types::UserType, null: false
-    field :cohorts, [Types::CohortType], null: false
+    field :cohorts, [Types::CohortType], null: false do
+      argument :course_id, ID, required: true
+
+      def authorized?(_object, _args, context)
+        context[:current_school_admin].present?
+      end
+    end
+
+    field :students, [Types::StudentType], null: false do
+      argument :course_id, ID, required: true
+
+      def authorized?(object, args, context)
+        course = object.courses.find_by(id: args[:course_id])
+        context[:current_school_admin].present? && course.present?
+      end
+    end
 
     def user
       BatchLoader::GraphQL
@@ -12,18 +27,15 @@ module Types
         end
     end
 
-    def cohorts
-      BatchLoader::GraphQL
-        .for(object.id)
-        .batch(default_value: []) do |coach_ids, loader|
-          FacultyCohortEnrollment
-            .where(faculty_id: coach_ids)
-            .each do |enrollment|
-              loader.call(enrollment.faculty_id) do |memo|
-                memo |= [enrollment.cohort].compact # rubocop:disable Lint/UselessAssignment
-              end
-            end
-        end
+    def students(params)
+      object
+        .founders
+        .includes(:cohort)
+        .where(cohort_id: Course.find(params[:course_id]).cohorts)
+    end
+
+    def cohorts(params)
+      object.cohorts.where(course_id: params[:course_id])
     end
   end
 end

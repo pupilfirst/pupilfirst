@@ -32,7 +32,7 @@ let placeholder = (id, checklistItem) => {
     </div>
     <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
       <MarkdownBlock
-        profile=Markdown.AreaOfText
+        profile=Markdown.Permissive
         markdown={title ++ (optional ? " (" ++ ts("optional") ++ ")" : "")}
       />
     </label>

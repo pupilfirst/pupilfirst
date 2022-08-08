@@ -128,9 +128,9 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
       <div className="flex flex-1 items-start justify-between">
         <div className="flex items-start">
           <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
-          <p className="ml-3 pr-2 tracking-wide">
+          <div className="ml-3 pr-2 tracking-wide">
             <MarkdownBlock profile=Markdown.Permissive markdown={ChecklistItem.title(checklistItem)} />
-          </p>
+          </div>
         </div>
         {statusIcon(updateChecklistCB, status)}
       </div>

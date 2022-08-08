@@ -36,25 +36,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # POST /user/update_email
-  def send_update_email_token_email
-    @email = current_user.email
-    @new_email = params[:new_email]
-    params[:email] = current_user.email
-    @form = Users::SendUpdateEmailForm.new(Reform::OpenForm.new)
-    @form&.current_school = current_school
-    @form.current_user = current_user
-
-    @form&.email = current_user.email
-
-    if @form.validate(params)
-      @form.save
-      render json: { success: true }
-    else
-      render json: { error: @form.errors.full_messages.join(', ') }
-    end
-  end
-
   # GET /user/update_email
   def update_email
     user =

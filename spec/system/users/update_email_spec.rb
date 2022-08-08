@@ -75,7 +75,7 @@ feature 'User Update Email', js: true do
   scenario 'user visits the update email link with an expired token', js: true do
     sign_in_user(user_1)
     user_1.regenerate_update_email_token
-
+    user_1.update!(update_email_token_sent_at: 20.minutes.ago)
     travel_to 35.minutes.from_now do
       visit update_email_path(token: user_1.update_email_token)
 

@@ -1,7 +1,6 @@
 # This module is included in:
 #   Users::Sessions::SendResetPasswordEmailForm
 #   Users::Sessions::SignInWithEmailForm
-#   Users::SendUpdateEmailForm
 
 module ValidateTokenGeneration
   extend ActiveSupport::Concern
@@ -43,8 +42,7 @@ module ValidateTokenGeneration
   end
 
   def user
-    @user ||=
-      begin
+    @user ||= begin
         current_school.users.with_email(email).first if email.present?
       end
   end

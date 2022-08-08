@@ -10,28 +10,56 @@
   @apply py-2 leading-relaxed;
 }
 
+.markdown-block__permissive p:first-of-type {
+  @apply pt-0;
+}
+
 .markdown-block__permissive h1 {
   @apply text-4xl pt-6 leading-snug;
+}
+
+.markdown-block__permissive h1:first-of-type {
+  @apply pt-0;
 }
 
 .markdown-block__permissive h2 {
   @apply text-2xl pt-6 leading-snug;
 }
 
+.markdown-block__permissive h2:first-of-type {
+  @apply pt-0;
+}
+
 .markdown-block__permissive h3 {
   @apply text-xl pt-6 leading-snug;
+}
+
+.markdown-block__permissive h3:first-of-type {
+  @apply pt-0;
 }
 
 .markdown-block__permissive h4 {
   @apply text-lg pt-6 leading-snug;
 }
 
+.markdown-block__permissive h4:first-of-type {
+  @apply pt-0;
+}
+
 .markdown-block__permissive h5 {
   @apply text-sm pt-6 leading-snug;
 }
 
+.markdown-block__permissive h5:first-of-type {
+  @apply pt-0;
+}
+
 .markdown-block__permissive h6 {
   @apply text-xs pt-6 leading-snug;
+}
+
+.markdown-block__permissive h6:first-of-type {
+  @apply pt-0;
 }
 
 .markdown-block__permissive em {
@@ -50,6 +78,10 @@
 
 .markdown-block__permissive ul {
   @apply ml-7 pt-3 list-disc;
+}
+
+.markdown-block__permissive ul:first-of-type {
+  @apply pt-0;
 }
 
 @screen md {

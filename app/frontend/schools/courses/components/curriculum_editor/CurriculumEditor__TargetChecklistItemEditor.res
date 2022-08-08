@@ -215,7 +215,7 @@ let make = (
       <div
         className="py-2 mt-2 ">
       <MarkdownEditor
-        textareaId={"checklist-item-" ++ ((index + 1 |> string_of_int) ++ "-title")}
+        textareaId={"checklist-item-" ++ ((string_of_int(index + 1)) ++ "-title")}
         placeholder={t("describe_step")}
         value={checklistItem -> ChecklistItem.title}
         onChange={updateTitle(checklistItem, updateChecklistItemCB)}

@@ -8,16 +8,19 @@ let decodeProps = json => {
   )
 }
 
-Psj.matchPaths(["courses/:id/curriculum", "courses/:id/report"], () => {
-  let (currentCourseId, courses, additionalLinks, coverImage) =
-    DomUtils.parseJSONAttribute(~id="course-header-root", ())->decodeProps
+Psj.matchPaths(
+  ["courses/:id/curriculum", "courses/:id/students", "students/:id/report", "courses/:id/report"],
+  () => {
+    let (currentCourseId, courses, additionalLinks, coverImage) =
+      DomUtils.parseJSONAttribute(~id="course-header-root", ())->decodeProps
 
-  switch ReactDOM.querySelector("#course-header-root") {
-  | Some(root) =>
-    ReactDOM.render(
-      <StudentCourse__Header currentCourseId courses additionalLinks coverImage />,
-      root,
-    )
-  | None => ()
-  }
-})
+    switch ReactDOM.querySelector("#course-header-root") {
+    | Some(root) =>
+      ReactDOM.render(
+        <StudentCourse__Header currentCourseId courses additionalLinks coverImage />,
+        root,
+      )
+    | None => ()
+    }
+  },
+)

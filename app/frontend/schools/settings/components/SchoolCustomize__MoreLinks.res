@@ -13,11 +13,12 @@ let additionalLinks = (linksVisible, links) =>
   if linksVisible {
     <div className="border-2 border-gray-50 rounded-lg absolute w-48 bg-white mt-2">
       {links
-      |> List.map(((id, title, _)) =>
-        <div key=id className="p-2 cursor-default"> <span> {title |> str} </span> </div>
+      ->Js.Array2.map(((id, title, _, _)) =>
+        <div key=id className="p-2 cursor-default">
+          <span> {title |> str} </span>
+        </div>
       )
-      |> Array.of_list
-      |> React.array}
+      ->React.array}
     </div>
   } else {
     React.null
@@ -30,7 +31,7 @@ let reducer = (linksVisible, _action) => !linksVisible
 let make = (~links) => {
   let (state, send) = React.useReducer(reducer, initialState())
   switch links {
-  | list{} => React.null
+  | [] => React.null
   | moreLinks =>
     <button
       title={t("show_more_links")}

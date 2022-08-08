@@ -681,7 +681,7 @@ let make = (
         | Hidden => React.null
         | BlockSelector =>
           <div
-            className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
+            className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4">
             {(
               hasVimeoAccessToken
                 ? [#Markdown, #Image, #Embed, #VideoEmbed, #File, #Audio]

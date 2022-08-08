@@ -9999,6 +9999,31 @@
           "description": null,
           "fields": [
             {
+              "name": "applicant",
+              "description": null,
+              "args": [
+                {
+                  "name": "applicantId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Applicant",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "applicants",
               "description": null,
               "args": [

@@ -207,8 +207,8 @@ module Types
       argument :target_id, ID, required: false
     end
 
-    resolved_field :applicant, Types::ApplicantType, null: true do
-      argument :applicant_id, ID, required: false
+    resolved_field :applicant, Types::ApplicantType, null: false do
+      argument :applicant_id, ID, required: true
     end
   end
 end

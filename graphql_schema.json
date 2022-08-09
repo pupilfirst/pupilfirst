@@ -10006,9 +10006,13 @@
                   "name": "applicantId",
                   "description": null,
                   "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -10016,9 +10020,13 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Applicant",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Applicant",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

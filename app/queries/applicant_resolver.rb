@@ -14,6 +14,6 @@ class ApplicantResolver < ApplicationQuery
   private
 
   def resource_school
-    applicant.course&.school
+    applicant&.course&.school
   end
 end

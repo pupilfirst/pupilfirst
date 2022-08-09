@@ -9,7 +9,7 @@ module Mutations
              required: false,
              validates: {
                length: {
-                 maximum: 1000
+                 maximum: 10_000
                }
              }
     argument :conclusion, Types::SubmissionReportConclusionType, required: true

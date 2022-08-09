@@ -264,6 +264,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </li>
       </ul>
     </div>,
-    secondaryNav(currentUser, selectedCourse, selectedPage),
+    // secondaryNav(currentUser, selectedCourse, selectedPage),
   ]->React.array
 }

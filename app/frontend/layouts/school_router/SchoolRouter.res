@@ -13,6 +13,117 @@ let findAndSetSelectedCourse = (setSelectedCourse, courses, currentCourseId) => 
   setSelectedCourse(_ => currentCourse)
 }
 
+let topNavButtonContents = page => {
+  [
+    <PfIcon key="icon" className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
+    <span key="content" className="ml-2"> {Page.name(page)->str} </span>,
+  ]->React.array
+}
+
+let showLink = (selectedPage, selectedCourse, page, classes, title, contents) => {
+  let courseId = selectedCourse->Belt.Option.map(Course.id)
+  let disabled = courseId->Belt.Option.isNone
+
+  Page.path(~courseId?, page) != "#"
+    ? Page.useSPA(selectedPage, page)
+        ? <Link disabled href={Page.path(~courseId?, page)} className=classes ?title>
+            {contents}
+          </Link>
+        : <a disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </a>
+    : SkeletonLoading.singleLink()
+}
+
+let topLink = (selectedPage, selectedCourse, page) => {
+  let defaultClasses = "school-admin-navbar__primary-nav-link py-3 px-2 mb-1"
+  let classes =
+    defaultClasses ++ (selectedPage == page ? " school-admin-navbar__primary-nav-link--active" : "")
+  let title = Page.shrunk(selectedPage) ? Some(Page.name(page)) : None
+
+  showLink(selectedPage, selectedCourse, page, classes, title, topNavButtonContents(page))
+}
+
+let secondaryNavOption = (selectedPage, selectedCourse, page) => {
+  let defaultClasses = "flex text-sm py-3 px-4 hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500 rounded items-center my-1"
+  let classes =
+    defaultClasses ++ (
+      selectedPage == page
+        ? " bg-primary-50 text-primary-500 font-semibold"
+        : " font-medium text-gray-500"
+    )
+
+  <div key={Page.name(page)}>
+    {showLink(selectedPage, selectedCourse, page, classes, None, Page.name(page)->str)}
+  </div>
+}
+
+let secondaryNavLinks = (selectedPage, selectedCourse, currentUser) => {
+  let navOptionsAdmin = [
+    Page.Curriculum,
+    Cohorts,
+    Students,
+    Applicants,
+    Teams,
+    Authors,
+    Certificates,
+    CourseCoaches,
+    EvaluationCriteria,
+    CourseExports,
+  ]
+
+  let navOptionsAuthor = [Page.Curriculum, EvaluationCriteria]
+
+  (User.isAuthor(currentUser) ? navOptionsAuthor : navOptionsAdmin)->Js.Array2.map(page =>
+    secondaryNavOption(selectedPage, selectedCourse, SelectedCourse(page))
+  )
+}
+
+let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
+  switch selectedPage {
+  | Page.Settings(_settingsSelection) =>
+    <div
+      key="secondary-nav"
+      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      <div className="p-4">
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
+      </div>
+    </div>
+  | SelectedCourse(_courseSelection) =>
+    <div
+      key="secondary-nav"
+      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      <div>
+        <div className="border-t px-4">
+          {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}
+        </div>
+      </div>
+    </div>
+  | _ => React.null
+  }
+
+let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
+  switch selectedPage {
+  | Page.Settings(_settingsSelection) =>
+    <div
+      key="secondary-nav"
+      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      <div className="p-4">
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
+      </div>
+    </div>
+  | SelectedCourse(_courseSelection) =>
+    <div
+      key="secondary-nav"
+      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      <div>
+        <div className="p-4">
+          {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}
+        </div>
+      </div>
+    </div>
+  | _ => React.null
+  }
 let breadcrumbs = (path, courses, currentUser) => {
   <div className="flex justify-between p-4 bg-white border-b">
     <div>
@@ -163,7 +274,10 @@ let make = (~school, ~courses, ~currentUser) => {
         </div>
         <div className="flex flex-col flex-1">
           {breadcrumbs(url.path, courses, currentUser)}
-          <div role="main" className="overflow-y-scroll flex-1 flex flex-col"> {page} </div>
+          <div role="main" className="flex h-full">
+            {secondaryNav(currentUser, selectedCourse, selectedPage)}
+            <div className="overflow-y-scroll flex-1"> {page} </div>
+          </div>
         </div>
       </div>
 

@@ -32,7 +32,7 @@ describe Cohorts::UnassignReviewerService do
       let(:level_2) { create :level, :two, course: course }
       let(:student_l1) { create :student, level: level_1, cohort: cohort }
       let(:student_l2_1) { create :student, level: level_2, cohort: cohort }
-      let(:student_l2_2) { create :student, level: level_2. cohort: cohort }
+      let(:student_l2_2) { create :student, level: level_2, cohort: cohort }
 
       before do
         create :faculty_student_enrollment,

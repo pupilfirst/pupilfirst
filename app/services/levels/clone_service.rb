@@ -17,14 +17,18 @@ module Levels
     end
 
     def create_level(source_level, target_course)
+      new_level_number =
+        if source_level.number.zero? && !target_course.levels.exists?(number: 0)
+          0
+        else
+          (target_course.levels.maximum(:number) || 0) + 1
+        end
+
       Level.create!(
         source_level
           .attributes
           .slice('name', 'description')
-          .merge(
-            course: target_course,
-            number: (target_course.levels.maximum(:number) || 0) + 1
-          )
+          .merge(course: target_course, number: new_level_number)
       )
     end
 
@@ -85,12 +89,12 @@ module Levels
         max_grade: source_evaluation_criteria.max_grade,
         pass_grade: source_evaluation_criteria.pass_grade
       ) ||
-      target_course.evaluation_criteria.create!(
-        name: source_evaluation_criteria.name,
-        max_grade: source_evaluation_criteria.max_grade,
-        pass_grade: source_evaluation_criteria.pass_grade,
-        grade_labels: source_evaluation_criteria.grade_labels
-      )
+        target_course.evaluation_criteria.create!(
+          name: source_evaluation_criteria.name,
+          max_grade: source_evaluation_criteria.max_grade,
+          pass_grade: source_evaluation_criteria.pass_grade,
+          grade_labels: source_evaluation_criteria.grade_labels
+        )
     end
 
     def create_target_evaluation_criteria(old_target, new_target)

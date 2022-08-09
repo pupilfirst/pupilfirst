@@ -1,3 +1,6 @@
+@module("./assets/not-found.svg")
+external notFoundSVG: string = "default"
+
 let t = I18n.t(~scope="components.Pagination")
 
 module type Item = {
@@ -70,7 +73,10 @@ module Make = (Item: Item) => {
       {ArrayUtils.isEmpty(entries)
         ? <div
             className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
-            <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
+            <img
+              className="w-30 h-30"
+              src={notFoundSVG}
+              alt={t("not_found_alt")} />
             <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
               {emptyMessage->React.string}
             </h4>

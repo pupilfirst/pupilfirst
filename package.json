@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/core": "^7.18.6",
     "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#esm",
+    "@emoji-mart/data": "^1.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@glennsl/bs-json": "^5.0.4",
     "@jeff-tian/markdown-it-katex": "^2.1.0",
@@ -32,6 +33,7 @@
     "date-fns-tz": "^1.1.6",
     "dompurify": "^2.3.6",
     "dotenv": "^10.0.0",
+    "emoji-mart": "^5.0.0",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.4.6",
     "i18n-js": "^4.0.0-alpha.11",

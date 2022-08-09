@@ -1,5 +1,9 @@
 module Types
   class MutationType < Types::BaseObject
+    field :update_school_link,
+          mutation: Mutations::UpdateSchoolLink,
+          null: false
+    field :move_school_link, mutation: Mutations::MoveSchoolLink, null: false
     field :create_course, mutation: Mutations::CreateCourse, null: false
     field :clone_course, mutation: Mutations::CloneCourse, null: false
     field :update_course, mutation: Mutations::UpdateCourse, null: false

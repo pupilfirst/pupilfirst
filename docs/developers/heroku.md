@@ -118,6 +118,18 @@ user.update!(
 You **should** discard this user, later, via the school administration interface once you've enrolled yourself as a school
 admin.
 
+### Set a primary domain
+
+Let's inform the application about its domain address. On the Rails console, run:
+
+```ruby
+School.first.domains.create!(fqdn: 'my-app-name.herokuapp.com', primary: true)
+```
+
+Change `my-app-name.herokuapp.com` to match your actual fully qualified domain name.
+
+You can have more than one domain responding to requests, so you can use this same process to add more custom domains. Make sure that only one domain is set to `primary: true`. This primary domain will be used to generate URLs in emails and such.
+
 ## Try visiting the LMS's URL
 
 Now, if you visit the web address for your Heroku app, you should see the homepage for your school. You should also be able to sign in as `admin@example.com` to start working on your school.

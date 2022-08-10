@@ -21,8 +21,6 @@ let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
   updateChecklistItemCB(newChecklistItem)
 }
 
-let buttonColorClasses = color => color
-let iconColorClasses = color => "text-white " ++ color
 let selectedButtonIcon = kind =>
   switch kind {
   | ChecklistItem.LongText => "i-long-text-regular"
@@ -42,22 +40,24 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   | AudioRecord => "border-red-500 bg-red-100 text-red-800"
   | MultiChoice(_choices) => "border-green-500 bg-green-100 text-green-800"
   }
-  let selectedIconColor = switch selectedKind {
-  | LongText => "bg-blue-500"
-  | ShortText => "bg-orange-500"
-  | Files => "bg-yellow-500"
-  | Link => "bg-focusColor-500"
-  | AudioRecord => "bg-red-500"
-  | MultiChoice(_choices) => "bg-green-500"
-  }
+  let selectedIconColor =
+    "text-white " ++
+    switch selectedKind {
+    | LongText => "bg-blue-500"
+    | ShortText => "bg-orange-500"
+    | Files => "bg-yellow-500"
+    | Link => "bg-focusColor-500"
+    | AudioRecord => "bg-red-500"
+    | MultiChoice(_choices) => "bg-green-500"
+    }
   let selected =
     <button
       className={"border focus:outline-none appearance-none flex items-center rounded focus:ring focus:ring-focusColor-500 " ++
-      buttonColorClasses(selectedButtonColor)}>
+      selectedButtonColor}>
       <div className="flex">
         <span
           className={"flex items-center justify-center rounded text-white p-1 m-1 " ++
-          iconColorClasses(selectedIconColor)}>
+          selectedIconColor}>
           <PfIcon className={"if if-fw " ++ selectedButtonIcon(selectedKind)} />
         </span>
         <span className="inline-flex items-center px-1 py-1 font-semibold text-xs">

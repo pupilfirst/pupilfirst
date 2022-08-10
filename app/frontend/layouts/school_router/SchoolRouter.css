@@ -1,0 +1,9 @@
+.top-header--shrunk {
+  width: calc(100% - 6rem);
+  z-index: 999;
+}
+
+.top-header {
+  width: calc(100% - 14rem);
+  z-index: 999;
+}

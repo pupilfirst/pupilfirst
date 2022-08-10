@@ -1,3 +1,4 @@
+%%raw(`import "./SchoolRouter.css"`)
 exception UnknownPathEncountered(list<string>)
 
 open SchoolRouter__Types
@@ -124,8 +125,11 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
     </div>
   | _ => React.null
   }
-let breadcrumbs = (path, courses, currentUser) => {
-  <div className="flex justify-between p-4 bg-white border-b">
+
+
+
+let breadcrumbs = (path, courses, currentUser, selectedPage) => {
+  <div className={"absolute flex justify-between p-4 bg-white border-b " ++ (Page.shrunk(selectedPage) ? "top-header--shrunk" : "top-header")}>
     <div>
       <div className="flex items-center space-x-2 mt-1">
         {
@@ -273,7 +277,7 @@ let make = (~school, ~courses, ~currentUser) => {
           {<SchoolRouter__Nav school courses selectedPage currentUser />}
         </div>
         <div className="flex flex-col flex-1">
-          {breadcrumbs(url.path, courses, currentUser)}
+          {breadcrumbs(url.path, courses, currentUser, selectedPage)}
           <div role="main" className="flex h-full">
             {secondaryNav(currentUser, selectedCourse, selectedPage)}
             <div className="overflow-y-scroll flex-1"> {page} </div>
@@ -284,7 +288,7 @@ let make = (~school, ~courses, ~currentUser) => {
     | None =>
       [
         <SchoolRouter__Nav school courses selectedPage currentUser key="nav-bar" />,
-        <div key="breadcrumbs" className=""> {breadcrumbs(url.path, courses, currentUser)} </div>,
+        <div key="breadcrumbs" className=""> {breadcrumbs(url.path, courses, currentUser, selectedPage)} </div>,
       ]->React.array
     }}
   </SchoolRouter__CourseContext.Provider>

@@ -78,7 +78,7 @@ ru:
       topic_last_updated_text: Последнне обновление
       topic_posted_by_text: Сообщение от
       topic_stats_likes:
-        one: 1 Like
+        one: 1 лайк
         few: "%{count} Likes"
         many: "%{count} Likes"
         other: "%{count} Likes"

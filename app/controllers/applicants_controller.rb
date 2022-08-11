@@ -31,7 +31,7 @@ class ApplicantsController < ApplicationController
         .processing_url
         .gsub('${course_id}', @applicant.course_id.to_s)
         .gsub('${applicant_id}', @applicant.id.to_s)
-        .gsub('${email}', @applicant.email)
+        .gsub('${email}', ERB::Util.url_encode(@applicant.email))
         .gsub('${name}', @applicant.name)
     end
   end

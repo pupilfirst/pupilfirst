@@ -1765,10 +1765,11 @@ en:
     applicant:
       enrollment_verification:
         link_to: this link
-        body_html: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to create an account at %{school_name}.
+        one_time_link: one-time link
+        body_html: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this %{link_to} will verify your email-address and confirm that you wish to create an account at %{school_name}.
         subject: Verify Your Email Address
         subject_with_processing_url: Complete Your Course Application
-        body_processing_url_html: Please complete your enrollment to the %{course_name} course at %{school_name}. Clicking on %{link_to} will redirect you to a URL to process your application to the course.
+        body_processing_url_html: Please complete your enrollment to the %{course_name} course at %{school_name}. Clicking on %{link_to} will redirect you to a URL to complete your application to the course.
     coach:
       course_enrollment:
         subject: You have been added as a coach in %{course_name}

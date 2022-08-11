@@ -12,7 +12,7 @@
 
 <% content_for :body do %>
   <p>
-  <%= t("mailers.applicant.enrollment_verification." + (has_processing_url ? "body_processing_url_html" : "body_html"), school_name: school_name, course_name: course_name, link_to: link_to(t("mailers.applicant.enrollment_verification.link_to"), login_url)) %>
+  <%= t("mailers.applicant.enrollment_verification." + (has_processing_url ? "body_processing_url_html" : "body_html"), school_name: school_name, course_name: course_name, link_to: link_to(t("mailers.applicant.enrollment_verification." + (has_processing_url ? "link_to" : "one_time_link")), login_url)) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

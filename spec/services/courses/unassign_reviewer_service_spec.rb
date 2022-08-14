@@ -35,15 +35,15 @@ describe Cohorts::UnassignReviewerService do
       let(:student_l2_2) { create :student, level: level_2, cohort: cohort }
 
       before do
-        create :faculty_student_enrollment,
+        create :faculty_founder_enrollment,
                :with_course_enrollment,
                faculty: faculty,
                founder: student_l1
-        create :faculty_student_enrollment,
+        create :faculty_founder_enrollment,
                :with_course_enrollment,
                faculty: faculty,
                founder: student_l2_1
-        create :faculty_student_enrollment,
+        create :faculty_founder_enrollment,
                :with_course_enrollment,
                faculty: another_faculty,
                founder: student_l2_2

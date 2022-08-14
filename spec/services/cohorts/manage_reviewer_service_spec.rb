@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Courses::AssignReviewerService do
+describe Cohorts::ManageReviewerService do
   subject { described_class.new(course) }
 
   let(:course) { create :course }

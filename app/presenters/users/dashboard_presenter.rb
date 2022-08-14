@@ -64,7 +64,7 @@ module Users
         begin
           current_user
             .founders
-            .joins(:cohort)
+            .includes(:cohort)
             .map do |student|
               {
                 course_id: student.cohort.course_id,
@@ -135,7 +135,7 @@ module Users
             thumbnail_url: course.thumbnail_url,
             linked_communities: course.communities.pluck(:id).map(&:to_s),
             access_ended: student_access_end(course.id),
-            ended: course.cohorts.active.exists?
+            ended: course.cohorts.active.blank?
           }
         end
     end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :faculty_course_enrollment do
+  factory :faculty_cohort_enrollment do
     faculty
     cohort
   end

@@ -73,8 +73,8 @@ class SubmissionsResolver < ApplicationQuery
     stage_4 =
       if course.faculty.exists?(id: personal_coach_id)
         stage_3
-          .joins(founders: :faculty_student_enrollments)
-          .where(faculty_student_enrollments: { faculty_id: personal_coach_id })
+          .joins(founders: :faculty_founder_enrollments)
+          .where(faculty_founder_enrollments: { faculty_id: personal_coach_id })
       else
         stage_3
       end

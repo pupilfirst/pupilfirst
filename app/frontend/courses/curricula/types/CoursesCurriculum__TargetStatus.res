@@ -70,9 +70,9 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
   /* Eliminate the two course ended and student access ended conditions. */
   if preview {
     makePending(targets)
-  } else if course |> Course.endsAt |> isPast {
+  } else if course |> Course.ended {
     lockTargets(targets, CourseLocked)
-  } else if student |> Student.accessEndsAt |> isPast {
+  } else if student |> Student.endsAt |> isPast {
     lockTargets(targets, AccessLocked)
   } else {
     /* Cache level number of the student. */
@@ -123,11 +123,11 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
       }
 
       {
-        targetId,
+        targetId: targetId,
         targetReviewed: target |> Target.reviewed,
-        levelNumber,
-        milestone,
-        submissionStatus,
+        levelNumber: levelNumber,
+        milestone: milestone,
+        submissionStatus: submissionStatus,
         prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }
     })
@@ -148,7 +148,7 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
         }
       }
 
-      {targetId: ct.targetId, status}
+      {targetId: ct.targetId, status: status}
     })
   }
 

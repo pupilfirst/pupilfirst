@@ -9,8 +9,9 @@ FactoryBot.define do
 
     after(:build) do |team|
       # Add two students.
-      create(:student, team: team, cohort: team.cohort)
-      create(:student, team: team, cohort: team.cohort)
+      level = create(:level, :one, course: team.cohort.course)
+      create(:student, team: team, cohort: team.cohort, level: level)
+      create(:student, team: team, cohort: team.cohort, level: level)
     end
   end
 

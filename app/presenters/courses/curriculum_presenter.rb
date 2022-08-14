@@ -106,6 +106,7 @@ module Courses
               .find_by(courses: { id: @course.id })
               &.serial_number
         )
+        details.merge(ended: @course.ended?)
       else
         details
       end

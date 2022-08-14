@@ -8,7 +8,7 @@ module QueryAuthorizeStudent
     return false unless course&.school == current_school && student.present?
 
     # Founder has access to the course
-    return false unless !course.ends_at&.past? && !student.access_ended?
+    return false unless !student.cohort.ended?
 
     # Level must be accessible.
     return false unless LevelPolicy.new(pundit_user, target.level).accessible?

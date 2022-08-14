@@ -94,16 +94,21 @@ module Targets
     end
 
     def pending_user_ids
-      @founder
-        .team
-        .founders
-        .where.not(id: @founder)
-        .select do |founder|
-          team_member_submissions =
-            founder.timeline_events.live.where(target: @target)
-          team_member_submissions.failed.count == team_member_submissions.count
-        end
-        .map(&:user_id)
+      if @founder.team
+        @founder
+          .team
+          .founders
+          .where.not(id: @founder)
+          .select do |founder|
+            team_member_submissions =
+              founder.timeline_events.live.where(target: @target)
+            team_member_submissions.failed.count ==
+              team_member_submissions.count
+          end
+          .map(&:user_id)
+      else
+        []
+      end
     end
 
     def details_for_submissions

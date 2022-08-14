@@ -8,7 +8,7 @@ module AuthorizeStudent
     return false unless course&.school == current_school && student.present?
 
     # Founder has access to the course
-    return false unless !course.ends_at&.past? && !team.access_ends_at&.past?
+    return false unless !student.cohort.ended?
 
     # Level must be accessible.
     return false unless LevelPolicy.new(pundit_user, target.level).accessible?
@@ -21,7 +21,7 @@ module AuthorizeStudent
     target.live? &&
       (
         target.evaluation_criteria.empty? ||
-          target.level.number <= team.level.number
+          target.level.number <= student.level.number
       )
   end
 
@@ -34,10 +34,6 @@ module AuthorizeStudent
         .first
   end
 
-  def team
-    @team ||= student.startup
-  end
-
   def course
     @course ||= target&.course
   end
@@ -47,11 +43,7 @@ module AuthorizeStudent
   end
 
   def students
-    if target.team_target? && student.team.exists?
-      student.team.founders
-    else
-      [student]
-    end
+    target.team_target? && student.team ? student.team.founders : [student]
   end
 
   def ensure_submittability

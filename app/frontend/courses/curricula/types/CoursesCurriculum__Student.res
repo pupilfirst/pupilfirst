@@ -1,19 +1,18 @@
 type t = {
   @live
   levelId: string,
-  accessEndsAt: option<Js.Date.t>,
+  endsAt: option<Js.Date.t>,
 }
 
 let decode = json => {
   open Json.Decode
   {
     levelId: json |> field("levelId", string),
-    accessEndsAt: (json |> optional(field("accessEndsAt", string)))
-      ->Belt.Option.map(DateFns.parseISO),
+    endsAt: (json |> optional(field("endsAt", string)))->Belt.Option.map(DateFns.parseISO),
   }
 }
 
 let levelId = t => t.levelId
-let accessEndsAt = t => t.accessEndsAt
+let endsAt = t => t.endsAt
 
-let accessEnded = t => t.accessEndsAt->Belt.Option.mapWithDefault(false, DateFns.isPast)
+let accessEnded = t => t.endsAt->Belt.Option.mapWithDefault(false, DateFns.isPast)

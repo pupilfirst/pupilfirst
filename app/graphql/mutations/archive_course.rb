@@ -36,7 +36,7 @@ module Mutations
       Course.transaction do
         course.update!(archived_at: Time.zone.now)
 
-        course.cohorts.active.update_all(ends_at: course.ends_at) # rubocop:disable Rails/SkipsModelValidations
+        course.cohorts.active.update_all(ends_at: course.archived_at) # rubocop:disable Rails/SkipsModelValidations
       end
     end
 

@@ -229,7 +229,7 @@ let computeNotice = (
 ) =>
   if preview {
     Notice.Preview
-  } else if Course.hasEnded(course) {
+  } else if Course.ended(course) {
     CourseEnded
   } else if Student.accessEnded(student) {
     AccessEnded
@@ -376,7 +376,7 @@ let make = (
       | (None, None) => false
       },
       latestSubmissions: submissions,
-      statusOfTargets,
+      statusOfTargets: statusOfTargets,
       notice: computeNotice(
         studentLevel,
         targetGroups,
@@ -387,7 +387,7 @@ let make = (
         preview,
         levelUpEligibility,
       ),
-      levelUpEligibility,
+      levelUpEligibility: levelUpEligibility,
     }
   })
 
@@ -474,9 +474,11 @@ let make = (
             studentLevel
             selectedLevel
             preview
-            setSelectedLevelId={selectedLevelId => setState(state => {...state, selectedLevelId})}
+            setSelectedLevelId={selectedLevelId =>
+              setState(state => {...state, selectedLevelId: selectedLevelId})}
             showLevelZero=state.showLevelZero
-            setShowLevelZero={showLevelZero => setState(state => {...state, showLevelZero})}
+            setShowLevelZero={showLevelZero =>
+              setState(state => {...state, showLevelZero: showLevelZero})}
             levelZero
           />
           {ReactUtils.nullUnless(

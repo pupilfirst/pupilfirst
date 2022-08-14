@@ -133,10 +133,9 @@ module Students
     def target_eligible?(target, eligibility)
       if target.individual_target?
         completed_students =
-          team
-            .founders
-            .all
-            .select { |student| target.status(student).in?(eligibility) }
+          (team ? team.founders : [@student]).select do |student|
+            target.status(student).in?(eligibility)
+          end
 
         if @student.in?(completed_students)
           # Mark that some teammates haven't yet completed target if applicable.

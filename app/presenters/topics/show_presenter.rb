@@ -112,7 +112,7 @@ module Topics
             .slice('id', 'name')
             .merge(
               avatar_url: user.avatar_url(variant: :thumb),
-              title: user.full_title
+              full_title: user.full_title
             )
         end
     end

@@ -22,11 +22,12 @@ feature 'Target Overlay', js: true do
            pass_grade: 2,
            grade_labels: grade_labels_for_1
   end
+  let!(:cohort) { create :cohort, course: course }
   let!(:criterion_2) { create :evaluation_criterion, course: course }
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
-  let!(:team) { create :startup, level: level_1 }
+  let!(:team) { create :team_with_students, cohort: cohort }
   let!(:student) { team.founders.first }
   let!(:target_group_l0) { create :target_group, level: level_0 }
   let!(:target_group_l1) do
@@ -466,9 +467,9 @@ feature 'Target Overlay', js: true do
     end
 
     before do
-      # Enroll one of the coaches to course, and another to the team. One should be left un-enrolled to test how that's handled.
-      create(:faculty_course_enrollment, faculty: coach_1, course: course)
-      create(:faculty_startup_enrollment, faculty: coach_3, startup: team)
+      # Enroll one of the coaches to course, and another to the student. One should be left un-enrolled to test how that's handled.
+      create(:faculty_cohort_enrollment, faculty: coach_1, cohort: cohort)
+      create(:faculty_founder_enrollment, faculty: coach_3, founder: student)
 
       # First submission should have failed on one criterion.
       create(
@@ -657,7 +658,7 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when the course has ended' do
-    before { course.update!(ends_at: 1.day.ago) }
+    before { student.cohort.update!(ends_at: 1.day.ago) }
 
     scenario 'student visits a pending target' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -703,7 +704,10 @@ feature 'Target Overlay', js: true do
   end
 
   context "when student's access to course has ended" do
-    before { team.update!(access_ends_at: 1.day.ago) }
+    before do
+      cohort.update!(ends_at: 1.day.ago)
+      create(:cohort, course: course)
+    end
 
     scenario 'student visits a target in a course where their access has ended' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -1017,8 +1021,8 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when there are two teams with cross-linked submissions' do
-    let!(:team_1) { create :startup, level: level_1 }
-    let!(:team_2) { create :startup, level: level_1 }
+    let!(:team_1) { create :team_with_students, cohort: cohort }
+    let!(:team_2) { create :team_with_students, cohort: cohort }
 
     let(:student_a) { team_1.founders.first }
     let(:student_b) { team_1.founders.last }
@@ -1080,8 +1084,8 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when the team changes for a group of students' do
-    let!(:team_1) { create :startup, level: level_1 }
-    let!(:team_2) { create :startup, level: level_1 }
+    let!(:team_1) { create :team_with_students, cohort: cohort }
+    let!(:team_2) { create :team_with_students, cohort: cohort }
 
     let(:student_1) { team_1.founders.first }
     let(:student_2) { team_2.founders.first }
@@ -1103,7 +1107,7 @@ feature 'Target Overlay', js: true do
              owners: team_2.founders
     end
 
-    before { student_2.update!(startup: team_1) }
+    before { student_2.update!(team: team_1) }
 
     scenario 'latest flag is updated correctly for all students' do
       sign_in_user student_1.user, referrer: target_path(target_l1)

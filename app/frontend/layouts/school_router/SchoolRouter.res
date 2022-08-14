@@ -102,34 +102,11 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   | _ => React.null
   }
 
-let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
-  switch selectedPage {
-  | Page.Settings(_settingsSelection) =>
-    <div
-      key="secondary-nav"
-      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
-      <div className="p-4">
-        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
-        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
-      </div>
-    </div>
-  | SelectedCourse(_courseSelection) =>
-    <div
-      key="secondary-nav"
-      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
-      <div>
-        <div className="p-4">
-          {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}
-        </div>
-      </div>
-    </div>
-  | _ => React.null
-  }
-
-
-
 let breadcrumbs = (path, courses, currentUser, selectedPage) => {
-  <div className={"absolute flex justify-between p-4 bg-white border-b " ++ (Page.shrunk(selectedPage) ? "top-header--shrunk" : "top-header")}>
+  <div
+    className={"absolute flex justify-between p-4 bg-white border-b " ++ (
+      Page.shrunk(selectedPage) ? "top-header--shrunk" : "top-header"
+    )}>
     <div>
       <div className="flex items-center space-x-2 mt-1">
         {
@@ -288,7 +265,10 @@ let make = (~school, ~courses, ~currentUser) => {
     | None =>
       [
         <SchoolRouter__Nav school courses selectedPage currentUser key="nav-bar" />,
-        <div key="breadcrumbs" className=""> {breadcrumbs(url.path, courses, currentUser, selectedPage)} </div>,
+        <div key="breadcrumbs" className="">
+          {breadcrumbs(url.path, courses, currentUser, selectedPage)}
+          {secondaryNav(currentUser, selectedCourse, selectedPage)}
+        </div>,
       ]->React.array
     }}
   </SchoolRouter__CourseContext.Provider>

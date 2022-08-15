@@ -36,26 +36,26 @@ describe Cohorts::UnassignReviewerService do
 
       before do
         create :faculty_founder_enrollment,
-               :with_course_enrollment,
+               :with_cohort_enrollment,
                faculty: faculty,
                founder: student_l1
         create :faculty_founder_enrollment,
-               :with_course_enrollment,
+               :with_cohort_enrollment,
                faculty: faculty,
                founder: student_l2_1
         create :faculty_founder_enrollment,
-               :with_course_enrollment,
+               :with_cohort_enrollment,
                faculty: another_faculty,
                founder: student_l2_2
       end
 
       it 'removes faculty enrollment from all teams in the course' do
         expect { subject.unassign(faculty) }.to(
-          change { FacultyStudentEnrollment.count }.from(3).to(1)
+          change { FacultyFounderEnrollment.count }.from(3).to(1)
         )
 
         # Only the entry for the other faculty member should remain.
-        expect(FacultyStudentEnrollment.first.faculty).to eq(another_faculty)
+        expect(FacultyFounderEnrollment.first.faculty).to eq(another_faculty)
       end
     end
   end

@@ -420,6 +420,12 @@ let showCourse = course => {
             </p>
           </div>
         </div>
+        {ReactUtils.nullIf(
+          <Dropdown
+            className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
+          />,
+          Belt.Option.isSome(Course.archivedAt(course)),
+        )}
         <div className="grid grid-cols-6 gap-4 p-4">
           <button
             title={ts("View Course")}
@@ -439,13 +445,6 @@ let showCourse = course => {
               <span className="font-semibold"> {str(t("edit_course_details"))} </span>
             </div>
           </button>
-
-          // {ReactUtils.nullIf(
-          //   <Dropdown
-          //     className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
-          //   />,
-          //   Belt.Option.isSome(Course.archivedAt(course)),
-          // )}
         </div>
       </div>
     </div>

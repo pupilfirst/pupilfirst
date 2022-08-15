@@ -4,7 +4,7 @@ FactoryBot.define do
     founder
   end
 
-  trait :with_course_enrollment do
+  trait :with_cohort_enrollment do
     after(:create) do |enrollment|
       cohort = enrollment.founder.cohort
       coach = enrollment.faculty

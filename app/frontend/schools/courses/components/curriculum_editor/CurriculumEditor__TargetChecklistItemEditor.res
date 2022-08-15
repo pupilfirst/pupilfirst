@@ -5,8 +5,7 @@ let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__TargetChecklistItemEditor")
 let ts = I18n.ts
 
-let updateTitle = (checklistItem, updateChecklistItemCB, event) => {
-  let title = ReactEvent.Form.target(event)["value"]
+let updateTitle = (checklistItem, updateChecklistItemCB, title) => {
   let newChecklistItem = checklistItem |> ChecklistItem.updateTitle(title)
   updateChecklistItemCB(newChecklistItem)
 }
@@ -214,16 +213,14 @@ let make = (
         </div>
       </div>
       <div
-        className="flex items-center text-sm bg-white border border-gray-300 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
-        <textarea
-          maxLength=500
-          rows=2
-          name={"checklist-item-" ++ ((index + 1 |> string_of_int) ++ "-title")}
-          placeholder={t("describe_step")}
-          className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none resize-y rounded-md"
-          onChange={updateTitle(checklistItem, updateChecklistItemCB)}
-          value={checklistItem |> ChecklistItem.title}
-        />
+        className="py-2 mt-2 ">
+      <MarkdownEditor
+        textareaId={"checklist-item-" ++ ((string_of_int(index + 1)) ++ "-title")}
+        placeholder={t("describe_step")}
+        value={checklistItem -> ChecklistItem.title}
+        onChange={updateTitle(checklistItem, updateChecklistItemCB)}
+        profile=Markdown.Permissive
+      />
       </div>
       <div>
         <School__InputGroupError

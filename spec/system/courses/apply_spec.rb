@@ -53,6 +53,10 @@ feature 'Apply for public courses', js: true do
     open_email(email)
     expect(current_email.body).to include(public_course.name)
     expect(current_email.body).to match(/[a-zA-Z0-9\-_]{22}/)
+    expect(current_email.subject).to eq('Verify Your Email Address')
+    expect(current_email.body).to include(
+      "To activate your #{public_course.school.name} account"
+    )
 
     applicant.regenerate_login_token
     visit enroll_applicants_path(applicant.original_login_token)
@@ -76,10 +80,25 @@ feature 'Apply for public courses', js: true do
     before { public_course.update!(processing_url: processing_url) }
 
     scenario 'applicant tries to sign up multiple times in quick succession' do
+      visit apply_course_path(public_course, name: name, email: email)
+
+      click_button 'Apply'
+
+      expect(page).to have_content("We've sent you a verification mail")
+
+      applicant = Applicant.where(email: email).first
+
+      open_email(email)
+      expect(current_email.subject).to eq('Complete Your Course Application')
+      expect(current_email.body).to include(
+        "We've received your application to the #{public_course.name} at #{public_course.school.name}"
+      )
+
       expected_url =
         "https://www.example.com/q?course_id=#{public_course.id}&applicant_id=#{applicant.id}&name=#{applicant.name}&email=#{applicant.email}"
 
       applicant.regenerate_login_token
+
       visit enroll_applicants_path(applicant.original_login_token)
 
       # User should be redirected to the processing_url.

@@ -226,5 +226,9 @@ module Types
     end
 
     resolved_field :school_stats, Types::SchoolStatsType, null: false
+
+    resolved_field :applicant, Types::ApplicantType, null: false do
+      argument :applicant_id, ID, required: true
+    end
   end
 end

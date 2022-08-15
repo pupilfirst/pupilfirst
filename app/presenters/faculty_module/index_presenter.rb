@@ -21,8 +21,8 @@ module FacultyModule
 
       current_user
         .founders
-        .includes(:course)
-        .map { |student| student.course.id }
+        .includes(cohort: :course)
+        .map { |student| student.cohort.course.id }
     end
 
     def courses

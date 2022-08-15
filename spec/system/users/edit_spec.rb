@@ -4,7 +4,6 @@ feature 'User Edit', js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  let(:startup) { create :startup }
   let(:student) { create :founder }
   let(:user) { student.user }
   let(:student_name) { Faker::Name.name }
@@ -17,8 +16,6 @@ feature 'User Edit', js: true do
   def upload_path(file)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', file))
   end
-
-  before { startup.founders << student }
 
   scenario 'User tries to submit a blank form' do
     sign_in_user(user, referrer: edit_user_path)

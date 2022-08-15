@@ -1,31 +1,32 @@
 require 'rails_helper'
 
 describe Cohorts::ManageReviewerService do
-  subject { described_class.new(course) }
+  subject { described_class.new(course, [cohort_1, cohort_2]) }
 
   let(:course) { create :course }
+  let(:cohort_1) { create :cohort, course: course }
+  let(:cohort_2) { create :cohort, course: course }
   let(:faculty) { create :faculty }
 
   describe '#assign' do
     it 'assigns the faculty to the course' do
       expect { subject.assign(faculty) }.to(
-        change { FacultyCohortEnrollment.count }.from(0).to(1)
+        change { FacultyCohortEnrollment.count }.from(0).to(2)
       )
 
       enrollment = FacultyCohortEnrollment.first
-
       expect(enrollment.faculty).to eq(faculty)
-      expect(enrollment.course).to eq(course)
+      expect(enrollment.cohort).to eq(cohort_1)
     end
 
-    context 'if the course is already assigned' do
+    context 'if the cohort is already assigned' do
       before do
-        create :faculty_course_enrollment, faculty: faculty, course: course
+        create :faculty_cohort_enrollment, faculty: faculty, cohort: cohort_1
       end
 
-      it 'does nothing' do
-        expect { subject.assign(faculty) }.not_to(
-          change { FacultyCohortEnrollment.count }
+      it 'does not duplicate enrollement' do
+        expect { subject.assign(faculty) }.to(
+          change { FacultyCohortEnrollment.count }.from(1).to(2)
         )
       end
     end

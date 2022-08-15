@@ -6,10 +6,10 @@ feature "Student's view of Course Curriculum", js: true do
 
   # The basics.
   let(:course) { create :course }
+  let(:cohort) { create :cohort, course: course }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
-  let!(:team) { create :startup, level: level_4 }
   let(:dashboard_toured) { true }
-  let!(:student) { create :founder, startup: team }
+  let!(:student) { create :founder, level: level_4, cohort: cohort }
   let(:faculty) { create :faculty }
 
   # Levels.
@@ -118,9 +118,9 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event,
       :with_owners,
       latest: true,
-      owners: team.founders,
+      owners: [student],
       target: completed_target_l1,
-      passed_at: 1.day.ago,
+      passed_at: 1.day.ago
     )
   end
   let!(:submission_completed_target_l2) do
@@ -128,9 +128,9 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event,
       :with_owners,
       latest: true,
-      owners: team.founders,
+      owners: [student],
       target: completed_target_l2,
-      passed_at: 1.day.ago,
+      passed_at: 1.day.ago
     )
   end
   let!(:submission_completed_target_l3) do
@@ -138,9 +138,9 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event,
       :with_owners,
       latest: true,
-      owners: team.founders,
+      owners: [student],
       target: completed_target_l3,
-      passed_at: 1.day.ago,
+      passed_at: 1.day.ago
     )
   end
   let!(:submission_completed_target_l4) do
@@ -148,11 +148,11 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event,
       :with_owners,
       latest: true,
-      owners: team.founders,
+      owners: [student],
       target: completed_target_l4,
       passed_at: 1.day.ago,
       evaluator: faculty,
-      evaluated_at: 1.day.ago,
+      evaluated_at: 1.day.ago
     )
   end
   let!(:submission_submitted_target) do
@@ -160,8 +160,8 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event,
       :with_owners,
       latest: true,
-      owners: team.founders,
-      target: submitted_target,
+      owners: [student],
+      target: submitted_target
     )
   end
   let!(:submission_failed_target) do
@@ -169,10 +169,10 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event,
       :with_owners,
       latest: true,
-      owners: team.founders,
+      owners: [student],
       target: failed_target,
       evaluator: faculty,
-      evaluated_at: Time.zone.now,
+      evaluated_at: Time.zone.now
     )
   end
 
@@ -182,20 +182,20 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event_grade,
       timeline_event: submission_completed_target_l4,
       evaluation_criterion: evaluation_criterion,
-      grade: 2,
+      grade: 2
     )
     create(
       :timeline_event_grade,
       timeline_event: submission_failed_target,
       evaluation_criterion: evaluation_criterion,
-      grade: 1,
+      grade: 1
     )
   end
 
   around { |example| Time.use_zone(student.user.time_zone) { example.run } }
 
   scenario "student who has dropped out attempts to view a course's curriculum" do
-    student.startup.update!(dropped_out_at: 1.day.ago)
+    student.update!(dropped_out_at: 1.day.ago)
     sign_in_user student.user, referrer: curriculum_course_path(course)
     expect(page).to have_content("The page you were looking for doesn't exist!")
   end
@@ -207,7 +207,7 @@ feature "Student's view of Course Curriculum", js: true do
   end
 
   context 'when the course the student belongs has ended' do
-    let(:course) { create :course, ends_at: 1.day.ago }
+    let!(:cohort) { create :cohort, course: course, ends_at: 1.day.ago }
 
     scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -218,7 +218,8 @@ feature "Student's view of Course Curriculum", js: true do
   end
 
   context "when a student's access to a course has ended" do
-    let!(:team) { create :startup, level: level_4, access_ends_at: 1.day.ago }
+    let!(:cohort) { create :cohort, course: course, ends_at: 1.day.ago }
+    let!(:another_cohort) { create :cohort, course: course }
 
     scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -271,7 +272,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_selector(
       '.curriculum__target-group',
       text: 'MILESTONE TARGETS',
-      count: 1,
+      count: 1
     )
 
     # Open the level selector dropdown.
@@ -307,7 +308,7 @@ feature "Student's view of Course Curriculum", js: true do
     # There should be two locked targets in L5 right now.
     expect(page).to have_selector(
       '.curriculum__target-status--locked',
-      count: 2,
+      count: 2
     )
 
     # Non-reviewed targets that have prerequisites must be locked.
@@ -332,7 +333,7 @@ feature "Student's view of Course Curriculum", js: true do
     # Completing the prerequisite should unlock the previously locked non-reviewed target.
     expect(page).to have_selector(
       '.curriculum__target-status--locked',
-      count: 1,
+      count: 1
     )
 
     click_link l5_non_reviewed_target_with_prerequisite.title
@@ -435,17 +436,14 @@ feature "Student's view of Course Curriculum", js: true do
   context 'when a user has more than one student profile' do
     context 'when the profile is in the same school' do
       let(:course_2) { create :course }
+      let(:cohort_2) { create :cohort, course: course_2 }
       let(:c2_level_1) { create :level, :one, course: course_2 }
       let(:c2_target_group) { create :target_group, level: c2_level_1 }
       let!(:c2_target) do
         create :target, target_group: c2_target_group, role: Target::ROLE_TEAM
       end
-      let(:c2_team) { create :startup, level: c2_level_1 }
       let!(:c2_student) do
-        create :founder,
-               startup: c2_team,
-               dashboard_toured: dashboard_toured,
-               user: student.user
+        create :founder, level: c2_level_1, user: student.user, cohort: cohort_2
       end
 
       scenario 'student switches to another course' do
@@ -467,12 +465,8 @@ feature "Student's view of Course Curriculum", js: true do
       let(:school_2) { create :school }
       let(:course_2) { create :course, school: school_2 }
       let(:c2_level_1) { create :level, :one, course: course_2 }
-      let(:c2_team) { create :startup, level: c2_level_1 }
       let!(:c2_student) do
-        create :founder,
-               startup: c2_team,
-               dashboard_toured: dashboard_toured,
-               user: student.user
+        create :founder, level: c2_level_1, user: student.user
       end
 
       scenario 'courses in other schools are not displayed' do
@@ -505,7 +499,7 @@ feature "Student's view of Course Curriculum", js: true do
       # An admin should be shown links to edit the level and its targets.
       expect(page).to have_link(
         'Edit Level',
-        href: curriculum_school_course_path(id: course.id, level: 1),
+        href: curriculum_school_course_path(id: course.id, level: 1)
       )
       expect(page).to have_selector(
         "a[href='#{content_school_course_target_path(course_id: course.id, id: completed_target_l1.id)}']"
@@ -552,10 +546,10 @@ feature "Student's view of Course Curriculum", js: true do
 
     before do
       # Enroll the student as a coach who can review her own submissions.
-      create :faculty_startup_enrollment,
+      create :faculty_founder_enrollment,
              :with_course_enrollment,
              faculty: coach,
-             startup: team
+             founder: student
     end
 
     scenario 'coach accesses content in locked levels' do

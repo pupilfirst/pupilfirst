@@ -42,11 +42,16 @@ module Users
       @courses ||=
         begin
           if current_school_admin.present?
-            current_school.courses.active.or(
-              current_school.courses.live.where(
-                id: courses_with_student_profile.pluck(:course_id)
+            current_school
+              .courses
+              .joins(:cohorts)
+              .where('cohorts.ends_at > ? OR cohorts.ends_at IS NULL', Time.now)
+              .or(
+                current_school.courses.live.where(
+                  id: courses_with_student_profile.pluck(:course_id)
+                )
               )
-            )
+              .distinct
           else
             current_school.courses.live.where(
               id:

@@ -43,8 +43,7 @@ class Course < ApplicationRecord
   scope :access_active,
         -> {
           joins(:cohorts)
-            .where('cohorts.ends_at > ?', Time.now)
-            .or(joins(:cohorts).where(cohorts: { ends_at: nil }))
+            .where('cohorts.ends_at > ? OR cohorts.ends_at IS NULL', Time.now)
             .distinct
         }
   scope :ended, -> { live.where.not(id: access_active) }

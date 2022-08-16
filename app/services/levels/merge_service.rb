@@ -9,16 +9,20 @@ module Levels
 
       Level.transaction do
         # Link startups and target groups to supplied level.
-        @level.startups.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
+        @level.founders.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
         @level.target_groups.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
 
         # Remove the level.
         @level.reload.destroy!
 
         # Re-number all remaining levels.
-        course.levels.order(number: :asc).each.with_index(minimum_level_number) do |level, index|
-          level.update!(number: index) if level.number != index
-        end
+        course
+          .levels
+          .order(number: :asc)
+          .each
+          .with_index(minimum_level_number) do |level, index|
+            level.update!(number: index) if level.number != index
+          end
       end
 
       other_level

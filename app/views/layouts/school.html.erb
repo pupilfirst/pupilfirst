@@ -10,9 +10,7 @@
   <script id="school-router-data" type="application/json">
     <%= presenter.props_to_json.html_safe %>
   </script>
-  <div class="antialiased flex h-screen overflow-hidden">
-    <div id="school-router" class="flex school-admin-navbar flex-shrink-0"></div>
-    <%= yield %>
-  </div>
+  <div id="school-router"></div>
+  <%= yield %>
 <% end %>
 <%= render template: 'layouts/tailwind' %>

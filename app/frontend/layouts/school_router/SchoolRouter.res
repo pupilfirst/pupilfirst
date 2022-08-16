@@ -263,13 +263,18 @@ let make = (~school, ~courses, ~currentUser) => {
       </div>
 
     | None =>
-      [
-        <SchoolRouter__Nav school courses selectedPage currentUser key="nav-bar" />,
-        <div key="breadcrumbs" className="">
+      <div className="antialiased flex h-screen overflow-hidden bg-gray-50 ">
+        <div className="flex school-admin-navbar flex-shrink-0">
+          {<SchoolRouter__Nav school courses selectedPage currentUser />}
+        </div>
+        <div className="flex flex-col flex-1">
           {breadcrumbs(url.path, courses, currentUser, selectedPage)}
-          {secondaryNav(currentUser, selectedCourse, selectedPage)}
-        </div>,
-      ]->React.array
+          <div role="main" className="flex h-full">
+            {secondaryNav(currentUser, selectedCourse, selectedPage)}
+            <div id="schoolrouter-innerpage" className="overflow-y-scroll flex-1" />
+          </div>
+        </div>
+      </div>
     }}
   </SchoolRouter__CourseContext.Provider>
 }

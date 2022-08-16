@@ -102,6 +102,59 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   | _ => React.null
   }
 
+let showUserLink = (icon, href) => {
+  <div key=href className="whitespace-nowrap">
+    <a
+      ariaLabel="Sign out"
+      title="Sign out"
+      rel="nofollow"
+      className="flex justify-center items-center text-xs text-gray-500 bg-gray-50 px-2 py-2 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
+      href>
+      <FaIcon classes={"fas fw fa-" ++ icon} />
+    </a>
+  </div>
+}
+
+let showUserLink = () => {
+  [showUserLink("power-off", "/users/sign_out")]
+}
+let bottomLink = (path, iconClasses, text) => {
+  <li>
+    <a
+      title={text}
+      href=path
+      className="py-3 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 items-center">
+      <i className={iconClasses ++ " fa-fw text-lg"} />
+      {<span className="ml-2"> {text->str} </span>}
+    </a>
+  </li>
+}
+
+let showUser = user => {
+  <div>
+    <div className="flex w-full items-center  rounded-md">
+      <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
+        {User.avatarUrl(user)->Belt.Option.mapWithDefault(
+          <Avatar
+            name={User.name(user)}
+            className="w-8 h-8 border border-gray-300 object-contain object-center rounded-full"
+          />,
+          src =>
+            <img
+              className="w-9 h-9 border border-gray-300 object-cover object-center rounded-full"
+              src
+              alt={User.name(user)}
+            />,
+        )}
+      </div>
+      <div className="pl-2 flex justify-between w-full items-center">
+        <p className="text-sm font-medium"> {str(User.name(user))} </p>
+        <div> {showUserLink()->React.array} </div>
+      </div>
+    </div>
+  </div>
+}
+
 let breadcrumbs = (path, courses, currentUser) => {
   <div className={"flex justify-between p-4 bg-white border-b flex-1"}>
     <div>
@@ -130,14 +183,19 @@ let breadcrumbs = (path, courses, currentUser) => {
         }
       </div>
     </div>
-    <div className="relative">
-      <Notifications__Root
-        wrapperClasses=""
-        iconClasses="school-admin-navbar__notifications-unread-bullet"
-        buttonClasses="w-full flex items-center bg-gray-50 rounded relative text-gray-800 text-sm p-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
-        hasNotifications={User.hasNotifications(currentUser)}
-      />
-    </div>
+    <ul className="flex items-center space-x-4">
+      <div className="relative">
+        <Notifications__Root
+          wrapperClasses=""
+          iconClasses="school-admin-navbar__notifications-unread-bullet"
+          buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-3 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
+          title={"Notifications"}
+          hasNotifications={User.hasNotifications(currentUser)}
+        />
+      </div>
+      {bottomLink("/dashboard", "fas fa-home", "Dashboard")}
+      <li> {showUser(currentUser)} </li>
+    </ul>
   </div>
 }
 

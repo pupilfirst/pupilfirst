@@ -19,35 +19,6 @@ let showUserLink = (icon, href) => {
   </div>
 }
 
-let showUserLink = () => {
-  [showUserLink("power-off", "/users/sign_out")]
-}
-
-let showUser = user => {
-  <div className="mt-3">
-    <div className="p-3 flex w-full items-center bg-gray-50 rounded-md">
-      <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
-        {User.avatarUrl(user)->Belt.Option.mapWithDefault(
-          <Avatar
-            name={User.name(user)}
-            className="w-8 h-8 border border-gray-300 object-contain object-center rounded-full"
-          />,
-          src =>
-            <img
-              className="w-9 h-9 border border-gray-300 object-cover object-center rounded-full"
-              src
-              alt={User.name(user)}
-            />,
-        )}
-      </div>
-      <div className="pl-2 flex justify-between w-full items-center">
-        <p className="text-sm font-medium"> {str(User.name(user))} </p>
-        <div> {showUserLink()->React.array} </div>
-      </div>
-    </div>
-  </div>
-}
-
 let containerClasses = shrunk => {
   let defaultClasses = "bg-white school-admin-navbar__primary-nav border-r border-gray-200 flex flex-col justify-between py-3 "
 
@@ -64,22 +35,6 @@ let headerclasses = shrunk => {
 let imageContainerClasses = shrunk => {
   let defaultClasses = "school-admin-navbar__school-logo-container object-contain mx-auto  "
   defaultClasses ++ (shrunk ? "justify-center w-16 h-16" : "bg-white rounded")
-}
-
-let bottomLinkClasses = shrunk => {
-  let defaultClasses = "py-3 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 "
-  defaultClasses ++ (shrunk ? "justify-center" : "items-center")
-}
-
-let bottomLink = (path, shrunk, iconClasses, text) => {
-  let title = shrunk ? Some(text) : None
-
-  <li>
-    <a ?title href=path className={bottomLinkClasses(shrunk)}>
-      <i className={iconClasses ++ " fa-fw text-lg"} />
-      {shrunk ? React.null : <span className="ml-2"> {text->str} </span>}
-    </a>
-  </li>
 }
 
 let topNavButtonContents = page => {
@@ -240,30 +195,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           User.isAuthor(currentUser),
         )}
       </div>
-      <ul>
-        <div className="relative">
-          <Notifications__Root
-            wrapperClasses=""
-            iconClasses="school-admin-navbar__notifications-unread-bullet"
-            buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-3 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
-            title=?{Page.shrunk(selectedPage) ? None : Some("Notifications")}
-            hasNotifications={User.hasNotifications(currentUser)}
-          />
-        </div>
-        {bottomLink("/dashboard", Page.shrunk(selectedPage), "fas fa-home", "Dashboard")}
-        <li>
-          {Page.shrunk(selectedPage)
-            ? <a
-                title=?{Page.shrunk(selectedPage) ? Some("Sign Out") : None}
-                className={bottomLinkClasses(Page.shrunk(selectedPage))}
-                rel="nofollow"
-                href="/users/sign_out">
-                <i className="fas fa-sign-out-alt fa-fw text-lg" />
-              </a>
-            : showUser(currentUser)}
-        </li>
-      </ul>
     </div>,
-    // secondaryNav(currentUser, selectedCourse, selectedPage),
   ]->React.array
 }

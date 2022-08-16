@@ -8,15 +8,18 @@ feature 'Community', js: true do
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
-  let(:course) { create :course, school: school }
+  let(:course) { create :course, :with_cohort, school: school }
   let(:level_1) { create :level, :one, course: course }
   let(:level_1_c2) { create :level, :one, course: course_2 }
   let(:target_group) { create :target_group, level: level_1 }
   let!(:target) { create :target, target_group: target_group }
   let!(:community) { create :community, school: school, target_linkable: true }
-  let(:team) { create :team, level: level_1 }
-  let(:student_1) { create :student, startup: team }
-  let(:student_2) { create :student, startup: team }
+  let(:student_1) do
+    create :student, level: level_1, cohort: course.cohorts.first
+  end
+  let(:student_2) do
+    create :student, level: level_1, cohort: course.cohorts.first
+  end
   let(:coach) { create :faculty, school: school }
   let!(:topic_1) do
     create :topic,
@@ -49,17 +52,18 @@ feature 'Community', js: true do
   let(:reply_for_topic) { Faker::Lorem.sentence }
   let(:reply_for_another_post) { Faker::Lorem.sentence }
 
-  let(:course_2) { create :course, school: school }
-  let(:team_c2) { create :team, level: level_1_c2 }
-  let(:student_c2) { create :student, startup: team_c2 }
+  let(:course_2) { create :course, :with_cohort, school: school }
 
-  let(:archived_course) do
-    create :course, school: school, archived_at: 1.day.ago
+  let(:student_c2) do
+    create :student, level: level_1_c2, cohort: course_2.cohorts.first
   end
+
+  let(:archived_course) { create :course, :archived, school: school }
   let(:archived_course_level) { create :level, :one, course: archived_course }
-  let(:archived_course_team) { create :team, level: archived_course_level }
   let!(:archived_course_student) do
-    create :student, startup: archived_course_team
+    create :student,
+           level: archived_course_level,
+           cohort: archived_course.cohorts.first
   end
 
   shared_examples 'lock and unlock a topic' do
@@ -103,7 +107,9 @@ feature 'Community', js: true do
   end
 
   before do
-    create :faculty_course_enrollment, faculty: coach, course: course
+    create :faculty_cohort_enrollment,
+           faculty: coach,
+           cohort: course.cohorts.first
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
     create :community_course_connection,

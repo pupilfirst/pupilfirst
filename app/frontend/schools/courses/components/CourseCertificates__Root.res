@@ -107,7 +107,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
   let (state, send) = React.useReducerWithMapState(reducer, certificates, computeInitialState)
 
   <DisablingCover containerClasses="w-full" disabled=state.deleting message={t("deleting")}>
-    <div className="flex flex-1 h-screen overflow-y-scroll">
+    <div className="flex flex-1">
       {switch state.drawer {
       | NewCertificate =>
         <CourseCertificates__CreateDrawer

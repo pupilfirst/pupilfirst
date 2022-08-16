@@ -319,7 +319,7 @@ let showApplicant = (baseUrl, applicant) => {
       </div>
     </button>
     <button
-      title={ t("show_actions") ++ ": " ++ Applicant.name(applicant)}
+      title={t("show_actions") ++ ": " ++ Applicant.name(applicant)}
       className="btn btn-small btn-primary-ghost"
       onClick={_ => RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
       {str(t("onboard_as_student"))}
@@ -381,7 +381,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
   }, (state.filter, state.relaodApplicants))
 
   <div className="flex flex-1 flex-col">
-    <div className="px-6 pb-4 flex-1 bg-gray-50 relative overflow-y-scroll">
+    <div className="px-6 pb-4 flex-1 bg-gray-50 relative">
       <p className="mx-auto max-w-3xl pt-4 pb-3 font-semibold border-b">
         {t("applicants_page_title")->str}
       </p>

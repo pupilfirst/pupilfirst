@@ -122,7 +122,7 @@ let make = (~courseId, ~authors) => {
   let (state, send) = React.useReducer(reducer, {authors: authors, deleting: false})
   let rootPath = "/school/courses/" ++ (courseId ++ "/authors")
 
-  <div className="flex flex-1 h-full overflow-y-scroll bg-gray-50">
+  <div className="flex flex-1 h-full bg-gray-50">
     <div className="flex-1 flex flex-col">
       {
         let url = RescriptReactRouter.useUrl()

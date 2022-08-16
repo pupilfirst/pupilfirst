@@ -104,7 +104,7 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
 
 let breadcrumbs = (path, courses, currentUser, selectedPage) => {
   <div
-    className={"absolute flex justify-between p-4 bg-white border-b " ++ (
+    className={"flex justify-between p-4 bg-white border-b " ++ (
       Page.shrunk(selectedPage) ? "top-header--shrunk" : "top-header"
     )}>
     <div>

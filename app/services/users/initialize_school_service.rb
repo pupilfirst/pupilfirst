@@ -9,9 +9,18 @@ module Users
       User.transaction do
         new_course =
           Courses::CloneService.new(@course).clone(@course.name, @user.school)
-        create_and_assign_coach(new_course)
-        create_student(new_course)
-        Founder.create!(user: @user)
+        cohort =
+          Cohort.create!(
+            name: 'Default cohort',
+            description: "Default cohort for #{new_course.name}",
+            course_id: new_course.id
+          )
+        create_and_assign_coach(new_course, cohort)
+        Founder.create!(
+          user: @user,
+          cohort: cohort,
+          level: new_course.levels.find_by(number: 1)
+        )
         create_community(new_course)
       end
     end
@@ -20,14 +29,14 @@ module Users
 
     private
 
-    def create_and_assign_coach(course)
+    def create_and_assign_coach(course, cohort)
       coach =
         Faculty.create!(
           user: @user,
           school: @user.school,
           category: Faculty::CATEGORY_VISITING_COACHES
         )
-      Courses::AssignReviewerService.new(course, notify: false).assign(coach)
+      Cohorts::ManageReviewerService.new(course, [cohort]).assign(coach)
     end
 
     def create_community(course)

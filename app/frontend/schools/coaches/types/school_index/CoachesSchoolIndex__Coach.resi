@@ -4,7 +4,7 @@ let decode: Js.Json.t => t
 
 let name: t => string
 
-let id: t => int
+let id: t => string
 
 let imageUrl: t => string
 
@@ -25,7 +25,7 @@ let affiliation: t => option<string>
 let imageFileName: t => option<string>
 
 let make: (
-  ~id: int,
+  ~id: string,
   ~name: string,
   ~imageUrl: string,
   ~email: string,

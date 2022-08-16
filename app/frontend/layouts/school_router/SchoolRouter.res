@@ -102,11 +102,8 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   | _ => React.null
   }
 
-let breadcrumbs = (path, courses, currentUser, selectedPage) => {
-  <div
-    className={"flex justify-between p-4 bg-white border-b " ++ (
-      Page.shrunk(selectedPage) ? "top-header--shrunk" : "top-header"
-    )}>
+let breadcrumbs = (path, courses, currentUser) => {
+  <div className={"flex justify-between p-4 bg-white border-b flex-1"}>
     <div>
       <div className="flex items-center space-x-2 mt-1">
         {
@@ -247,34 +244,22 @@ let make = (~school, ~courses, ~currentUser) => {
         setCourseId: findAndSetSelectedCourse(setSelectedCourse, courses),
       }: SchoolRouter__CourseContext.t
     )}>
-    {switch component {
-    | Some(page) =>
-      <div className="antialiased flex h-screen overflow-hidden bg-gray-50 ">
-        <div className="flex school-admin-navbar flex-shrink-0">
-          {<SchoolRouter__Nav school courses selectedPage currentUser />}
-        </div>
-        <div className="flex flex-col flex-1">
-          {breadcrumbs(url.path, courses, currentUser, selectedPage)}
-          <div role="main" className="flex h-full">
-            {secondaryNav(currentUser, selectedCourse, selectedPage)}
-            <div className="overflow-y-scroll flex-1"> {page} </div>
+    <div className="antialiased flex h-screen overflow-hidden bg-gray-50 ">
+      <div className="flex school-admin-navbar flex-shrink-0">
+        {<SchoolRouter__Nav school courses selectedPage currentUser />}
+      </div>
+      <div className="flex flex-col flex-1">
+        {breadcrumbs(url.path, courses, currentUser)}
+        <div role="main" className="flex h-full">
+          {secondaryNav(currentUser, selectedCourse, selectedPage)}
+          <div id="schoolrouter-innerpage" className="overflow-y-scroll flex-1">
+            {switch component {
+            | Some(page) => page
+            | None => React.null
+            }}
           </div>
         </div>
       </div>
-
-    | None =>
-      <div className="antialiased flex h-screen overflow-hidden bg-gray-50 ">
-        <div className="flex school-admin-navbar flex-shrink-0">
-          {<SchoolRouter__Nav school courses selectedPage currentUser />}
-        </div>
-        <div className="flex flex-col flex-1">
-          {breadcrumbs(url.path, courses, currentUser, selectedPage)}
-          <div role="main" className="flex h-full">
-            {secondaryNav(currentUser, selectedCourse, selectedPage)}
-            <div id="schoolrouter-innerpage" className="overflow-y-scroll flex-1" />
-          </div>
-        </div>
-      </div>
-    }}
+    </div>
   </SchoolRouter__CourseContext.Provider>
 }

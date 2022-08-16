@@ -53,10 +53,10 @@ let make = (~coaches, ~authenticityToken) => {
       <div className="px-6 pb-4 mt-5 flex flex-1">
         <div className="max-w-2xl w-full mx-auto relative">
           {state.coaches
-          |> List.sort((x, y) => (x |> Coach.id) - (y |> Coach.id))
+          |> List.sort((x, y) => int_of_string(Coach.id(x)) - int_of_string(Coach.id(y)))
           |> List.map(coach =>
             <div
-              key={coach |> Coach.id |> string_of_int}
+              key={coach->Coach.id}
               className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
               <div className="course-faculty__list-item flex w-full">
                 <button

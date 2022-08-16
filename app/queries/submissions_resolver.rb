@@ -124,7 +124,7 @@ class SubmissionsResolver < ApplicationQuery
         scope = include_inactive ? course.founders : course.founders.active
 
         if search.present?
-          students_with_users = scope.joins(founders: :user)
+          students_with_users = scope.joins(:user)
 
           students_with_users
             .where('users.name ILIKE ?', "%#{search}%")

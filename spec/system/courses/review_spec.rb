@@ -5,6 +5,7 @@ feature "Coach's review interface" do
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
   let(:level_3) { create :level, :three, course: course }
@@ -25,31 +26,36 @@ feature "Coach's review interface" do
     create :target, :for_founders, target_group: target_group_l1
   end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
-
-  let(:team_l1) { create :startup, level: level_1 }
-  let(:team_l2) { create :startup, level: level_2 }
-  let(:team_l3) { create :startup, level: level_3 }
+  let(:student_l1) { create :student, cohort: cohort, level: level_1 }
+  let(:student_l2) { create :student, cohort: cohort, level: level_2 }
+  let(:team_l3) { create :team, cohort: cohort }
+  let!(:student_l3) do
+    create :student, cohort: cohort, level: level_3, team: team_l3
+  end
+  let!(:student_l3_2) do
+    create :student, cohort: cohort, level: level_3, team: team_l3
+  end
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
 
   before do
     # Enroll one coach as a "course" coach.
-    create :faculty_course_enrollment, faculty: course_coach, course: course
+    create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
 
     # ...and another as a directly-assigned "team" coach.
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: team_coach,
-           startup: team_l3
+           founder: student_l3
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target_l1.evaluation_criteria << evaluation_criterion
     target_l2.evaluation_criteria << evaluation_criterion
     target_l3.evaluation_criteria << evaluation_criterion
     team_target.evaluation_criteria << evaluation_criterion
-    team_l3.founders.first.user.update!(email: 'pupilfirst@example.com')
-    team_l2.founders.first.user.update!(name: 'Pupilfirst Test User')
+    student_l3.user.update!(email: 'pupilfirst@example.com')
+    student_l2.user.update!(name: 'Pupilfirst Test User')
   end
 
   context 'with multiple submissions' do
@@ -59,7 +65,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team_l3.founders.first],
+        owners: [student_l3],
         target: target_l1,
         evaluator_id: team_coach.id,
         evaluated_at: 4.days.ago,
@@ -71,7 +77,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team_l3.founders.first],
+        owners: [student_l3],
         target: target_l2,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
@@ -109,7 +115,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team_l2.founders.first],
+        owners: [student_l2],
         target: target_l1,
         evaluator_id: team_coach.id,
         evaluated_at: 3.days.ago,
@@ -127,7 +133,7 @@ feature "Coach's review interface" do
         target: target_l1,
         reviewer: course_coach,
         reviewer_assigned_at: 1.day.ago,
-        owners: [team_l1.founders.first]
+        owners: [student_l1]
       )
     end
     let!(:submission_l2_t2) do
@@ -136,7 +142,7 @@ feature "Coach's review interface" do
         :with_owners,
         latest: true,
         target: target_l2,
-        owners: [team_l2.founders.first],
+        owners: [student_l2],
         created_at: 1.day.ago
       )
     end
@@ -146,7 +152,7 @@ feature "Coach's review interface" do
         :with_owners,
         latest: true,
         target: target_l3,
-        owners: [team_l3.founders.first],
+        owners: [student_l3],
         created_at: 2.days.ago
       )
     end
@@ -168,14 +174,12 @@ feature "Coach's review interface" do
       # Pending and Reviewed targets must be visible
       within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text(team_l1.founders.first.user.name)
+        expect(page).to have_text(student_l1.user.name)
       end
 
       within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text(
-          "Submitted by #{team_l3.founders.first.user.name}"
-        )
+        expect(page).to have_text("Submitted by #{student_l3.user.name}")
         expect(page).to have_text('Completed')
       end
 
@@ -188,19 +192,19 @@ feature "Coach's review interface" do
       within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
-        expect(page).to have_text(team_l1.founders.first.user.name)
+        expect(page).to have_text(student_l1.user.name)
       end
 
       within("a[data-submission-id='#{submission_l2_t2.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
-        expect(page).to have_text(team_l2.founders.first.user.name)
+        expect(page).to have_text(student_l2.user.name)
       end
 
       within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text('Level 3')
-        expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text(student_l3.user.name)
       end
 
       # The 'reviewed' tab should show reviewed submissions
@@ -209,18 +213,14 @@ feature "Coach's review interface" do
       within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
-        expect(page).to have_text(
-          "Submitted by #{team_l3.founders.first.user.name}"
-        )
+        expect(page).to have_text("Submitted by #{student_l3.user.name}")
         expect(page).to have_text('Completed')
       end
 
       within("a[data-submission-id='#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
-        expect(page).to have_text(
-          "Submitted by #{team_l3.founders.first.user.name}"
-        )
+        expect(page).to have_text("Submitted by #{student_l3.user.name}")
         expect(page).to have_text('Rejected')
         expect(page).to have_text('Feedback Sent')
       end
@@ -326,7 +326,7 @@ feature "Coach's review interface" do
       click_button 'Pick Name or Email: pupilfirst@example.com'
 
       within("div[id='submissions']") do
-        expect(page).to have_text(team_l3.founders.first.name)
+        expect(page).to have_text(student_l3.name)
       end
 
       expect(page).to have_text(target_l1.title)
@@ -362,7 +362,7 @@ feature "Coach's review interface" do
       within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text('Level 3')
-        expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text(student_l3.user.name)
       end
 
       # submissions from other teams should not be shown
@@ -378,13 +378,13 @@ feature "Coach's review interface" do
       within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
-        expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text(student_l3.user.name)
       end
 
       within("a[data-submission-id='#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
-        expect(page).to have_text(team_l3.founders.first.user.name)
+        expect(page).to have_text(student_l3.user.name)
       end
 
       # team coach should be able to remove the filter showing only his assigned submissions.
@@ -449,8 +449,12 @@ feature "Coach's review interface" do
     end
 
     context 'when the course has inactive students' do
+      let(:inactive_cohort) do
+        create :cohort, course: course, ends_at: 1.day.ago
+      end
+
       let!(:inactive_team) do
-        create :startup, level: level_1, access_ends_at: 1.day.ago
+        create :team_with_students, cohort: inactive_cohort
       end
 
       before do
@@ -629,10 +633,10 @@ feature "Coach's review interface" do
       let(:team_coach_2) { create :faculty, school: school }
 
       before do
-        create :faculty_startup_enrollment,
-               :with_course_enrollment,
+        create :faculty_founder_enrollment,
+               :with_cohort_enrollment,
                faculty: team_coach_2,
-               startup: team_l2
+               founder: student_l2
       end
 
       scenario 'one team coach uses filter to see submissions personal coach another coach',
@@ -658,15 +662,13 @@ feature "Coach's review interface" do
         # Similarly, the reviewed page will list a submission from the team personal coach team coach 2, but not the current coach.
         click_link 'Reviewed'
 
-        expect(page).to have_text team_l2.founders.first.name
-        expect(page).not_to have_text team_l3.founders.first.name
+        expect(page).to have_text student_l2.name
+        expect(page).not_to have_text student_l3.name
       end
     end
   end
 
   context 'when there are over 25 submissions' do
-    let(:student_l1) { team_l1.founders.first }
-    let(:student_l3) { team_l3.founders.first }
     let(:latest_submitted) do
       student_l1.timeline_events.order(created_at: :DESC).first
     end
@@ -761,8 +763,7 @@ feature "Coach's review interface" do
   end
 
   scenario 'student tries to access the review dashboard' do
-    sign_in_user team_l1.founders.first.user,
-                 referrer: review_course_path(course)
+    sign_in_user student_l1.user, referrer: review_course_path(course)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
     expect(page).not_to have_content(course.name)

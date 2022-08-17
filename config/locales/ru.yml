@@ -965,7 +965,7 @@ ru:
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: What steps should the student take to complete this target?
-        limit_warning: Maximum allowed checklist items is 15!
+        limit_warning: Maximum allowed checklist items is 25!
       target_group: Группа задач
       target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
       target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?
@@ -2047,7 +2047,7 @@ ru:
       link_not_found_error: Unable to find link!
       success_notification: Ссылка успешно обновлена!
     update_target:
-      checklist_items_exceeded_error: Список должен содержать менее 15 пунктов.
+      checklist_items_exceeded_error: Checklist should not have more than 25 items
       evaluation_criteria_course_error: Критерии оценки должны быть из того же курса, что и задача
       invalid_checklist_error: Список недействителен
       multiple_method_of_completion: Более одного метода завершения

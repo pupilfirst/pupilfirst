@@ -13,13 +13,24 @@ module Mutations
       end
     end
 
+    class ValidRequest < GraphQL::Schema::Validator
+      def validate(_object, context, _value)
+        current_user = context[:current_user]
+        time_since_last_mail = Time.zone.now - current_user.update_email_token_sent_at
+        if time_since_last_mail < 2.minutes
+          return I18n.t('users.update_email.link_expired')
+        end
+      end
+    end
+
     argument :new_email, String, required: true
 
-    description 'Update a email.'
+    description 'Update email for current user'
 
     field :success, Boolean, null: false
 
     validates NewEmailMustBeUnique => {}
+    validates ValidRequest => {}
 
     def resolve(_params)
       { success: send_update_email_token_email }
@@ -27,24 +38,15 @@ module Mutations
 
     def send_update_email_token_email
       Users::MailUpdateEmailTokenService.new(
-        current_school,
         current_user,
         @params[:new_email]
       ).execute
-    end
-
-    def token_generated_at
-      current_user&.update_email_token_sent_at
     end
 
     private
 
     def query_authorized?
       current_user.present?
-    end
-
-    def resource_school
-      current_user&.school
     end
   end
 end

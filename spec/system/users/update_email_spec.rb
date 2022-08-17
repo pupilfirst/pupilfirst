@@ -8,6 +8,8 @@ feature 'User Update Email', js: true do
   let(:school) { create :school, :current }
   let(:user_1) { create :user, school: school }
   let(:user_2) { create :user, school: school }
+  let(:admin_user) { create :user, school: school }
+  let!(:school_admin) { create :school_admin, user: admin_user, school: admin_user.school }
   let(:domain) { school.domains.where(primary: true).first }
 
   scenario 'Send update email token when user update email' do
@@ -56,6 +58,14 @@ feature 'User Update Email', js: true do
 
     body = current_email.body
     expect(body).to include("Your email in <strong>#{user_1.school.name}</strong> has been successfully updated.")
+
+    # Check admin notification email
+    open_email(school_admin.email)
+    subject = current_email.subject
+    expect(subject).to include("#{user_1.name} has changed email address.")
+
+    body = current_email.body
+    expect(body).to include("<strong>#{user_1.name}</strong> from your school has updated the email address.")
 
     # Check audit records
     audit_record = AuditRecord.last

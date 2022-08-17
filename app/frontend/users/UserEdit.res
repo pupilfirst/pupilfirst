@@ -8,7 +8,7 @@ type state = {
   about: string,
   locale: string,
   email: string,
-  disable_update_email: bool,
+  disable_email_input: bool,
   avatarUrl: option<string>,
   currentPassword: string,
   newPassword: string,
@@ -42,15 +42,16 @@ type action =
   | FinishSaving(bool)
   | StartDeletingAccount
   | FinishAccountDeletion
+  | OnUpdateEmailTokenSent(string)
 
 let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {...state, name: name, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
   | UpdateEmail(email) => {...state, email: email, dirty: true}
-  | SetDisableUpdateEmail(disable_update_email) => {
+  | SetDisableUpdateEmail(disable_email_input) => {
       ...state,
-      disable_update_email: disable_update_email,
+      disable_email_input: disable_email_input,
     }
   | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
@@ -97,6 +98,12 @@ let reducer = (state, action) =>
       showDeleteAccountForm: false,
       deletingAccount: false,
       emailForAccountDeletion: "",
+    }
+  | OnUpdateEmailTokenSent(email) => {
+      ...state,
+      email: email,
+      dirty: true,
+      disable_email_input: true,
     }
   }
 
@@ -149,8 +156,7 @@ let updateEmail = (send, email, newEmail) => {
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
-    send(SetDisableUpdateEmail(true))
-    send(UpdateEmail(email))
+    send(OnUpdateEmailTokenSent(email))
     Js.Promise.resolve()
   })
   |> ignore
@@ -309,7 +315,7 @@ let make = (
     about: about,
     locale: locale,
     email: email,
-    disable_update_email: true,
+    disable_email_input: true,
     avatarUrl: avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
@@ -325,8 +331,8 @@ let make = (
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
-  let handleUpdateEmailFormSubmit = evt => {
-    evt |> ReactEvent.Form.preventDefault
+
+  let handleUpdateEmailFormSubmit = _ => {
     send(SetDisableUpdateEmail(false))
     updateEmail(send, email, state.email)
   }
@@ -414,17 +420,14 @@ let make = (
                 </div>
               </form>
             </div>
-            <form className="mt-6" onSubmit={handleUpdateEmailFormSubmit}>
-              <input
-                name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()}
-              />
+            <div className="mt-6">
               <label name="user_email" className="block text-sm font-semibold">
                 {t("email_label") |> str}
               </label>
               <div className="mt-2 flex items-stretch gap-2">
                 <input
                   value=state.email
-                  disabled={state.disable_update_email}
+                  disabled={state.disable_email_input}
                   onChange={event => send(UpdateEmail(ReactEvent.Form.target(event)["value"]))}
                   className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                   name="user_email"
@@ -433,7 +436,7 @@ let make = (
                   id="user-update__email-input"
                   required=true
                 />
-                {state.disable_update_email
+                {state.disable_email_input
                   ? <button
                       className="btn btn-primary"
                       onClick={evt => send(SetDisableUpdateEmail(false))}>
@@ -442,22 +445,22 @@ let make = (
                   : <div className="flex gap-2">
                       <button
                         className="btn btn-subtle"
-                        onClick={evt => {
+                        onClick={_ => {
                           send(SetDisableUpdateEmail(true))
-
                           send(UpdateEmail(email))
                         }}>
                         {ts("cancel") |> str}
                       </button>
                       <button
                         className="btn btn-primary"
+                        onClick={handleUpdateEmailFormSubmit}
                         disabled={state.email |> EmailUtils.isInvalid(false) ||
                           state.email == email}>
                         {ts("update") |> str}
                       </button>
                     </div>}
               </div>
-            </form>
+            </div>
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">

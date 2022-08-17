@@ -2,9 +2,9 @@ module Users
   class MailUpdateEmailTokenService
     include RoutesResolvable
 
-    def initialize(school, user, new_email)
-      @school = school
-      @domain = school.domains.where(primary: true).first
+    def initialize(user, new_email)
+      @school = user.school
+      @domain = @school.domains.primary
       @user = user
       @new_email = new_email
     end
@@ -14,13 +14,13 @@ module Users
 
       @user.update!(
         update_email_token_sent_at: Time.zone.now,
-        new_email: @new_email
+        new_email: @new_email,
       )
 
       url_options = {
         token: @user.update_email_token,
         host: @domain.fqdn,
-        protocol: 'https'
+        protocol: 'https',
       }
 
       update_email_url = url_helpers.update_email_url(url_options)

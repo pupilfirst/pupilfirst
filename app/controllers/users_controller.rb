@@ -43,18 +43,26 @@ class UsersController < ApplicationController
         .authenticate
 
     if user.present? && user.new_email.present?
-      @old_email = user.email
-      @new_email = user.new_email
-      @token = params[:token]
+      old_email = user.email
+      new_email = user.new_email
 
       # Update user email
       user.update!(
-        email: @new_email,
+        email: new_email,
         update_email_token: nil,
         new_email: nil,
       )
 
-      create_audit_record
+      # Create audit record
+      AuditRecord.create!(
+        audit_type: AuditRecord::TYPE_UPDATE_EMAIL,
+        school_id: current_school.id,
+        metadata: {
+          user_id: current_user.id,
+          email: new_email,
+          old_email: old_email,
+        },
+      )
 
       # Send success email to user
       UserMailer.confirm_email_update(user.name, user.email, current_school)
@@ -74,17 +82,5 @@ class UsersController < ApplicationController
       flash[:error] = t('.link_expired')
       redirect_to edit_user_path
     end
-  end
-
-  def create_audit_record
-    AuditRecord.create!(
-      audit_type: AuditRecord::TYPE_UPDATE_EMAIL,
-      school_id: current_school.id,
-      metadata: {
-        user_id: current_user.id,
-        email: @new_email,
-        old_email: @old_email,
-      },
-    )
   end
 end

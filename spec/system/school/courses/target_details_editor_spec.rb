@@ -627,7 +627,7 @@ feature 'Target Details Editor', js: true do
       ).to eq([])
     end
 
-    context 'whent the checklist is almost at capacity' do
+    context 'when the checklist is almost at capacity' do
       let(:checklist_with_multiple_items) do
         (1..24).map do |number|
           {

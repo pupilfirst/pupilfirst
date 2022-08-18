@@ -4,7 +4,7 @@ let t = I18n.t(~scope="components.UserEdit")
 let ts = I18n.ts
 
 type state = {
-  fullname: string,
+  name: string,
   preferredName: string,
   about: string,
   locale: string,
@@ -23,7 +23,7 @@ type state = {
 }
 
 type action =
-  | UpdateFullname(string)
+  | UpdateName(string)
   | UpdatePreferredName(string)
   | UpdateAbout(string)
   | UpdateLocale(string)
@@ -43,36 +43,36 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateFullname(fullname) => {...state, fullname, dirty: true}
-  | UpdatePreferredName(preferredName) => {...state, preferredName, dirty: true}
-  | UpdateAbout(about) => {...state, about, dirty: true}
-  | UpdateLocale(locale) => {...state, locale, dirty: true}
+  | UpdateName(name) => {...state, name: name, dirty: true}
+  | UpdatePreferredName(preferredName) => {...state, preferredName: preferredName, dirty: true}
+  | UpdateAbout(about) => {...state, about: about, dirty: true}
+  | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
       ...state,
-      currentPassword,
+      currentPassword: currentPassword,
       dirty: true,
     }
-  | UpdateNewPassword(newPassword) => {...state, newPassword, dirty: true}
+  | UpdateNewPassword(newPassword) => {...state, newPassword: newPassword, dirty: true}
   | UpdateNewPassWordConfirm(confirmPassword) => {
       ...state,
-      confirmPassword,
+      confirmPassword: confirmPassword,
       dirty: true,
     }
   | UpdateEmailForDeletion(emailForAccountDeletion) => {
       ...state,
-      emailForAccountDeletion,
+      emailForAccountDeletion: emailForAccountDeletion,
     }
-  | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest, dirty: true}
+  | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest: dailyDigest, dirty: true}
   | StartSaving => {...state, saving: true}
   | ChangeDeleteAccountFormVisibility(showDeleteAccountForm) => {
       ...state,
-      showDeleteAccountForm,
+      showDeleteAccountForm: showDeleteAccountForm,
       emailForAccountDeletion: "",
     }
-  | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError}
+  | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError: avatarUploadError}
   | UpdateAvatarUrl(avatarUrl) => {
       ...state,
-      avatarUrl,
+      avatarUrl: avatarUrl,
       avatarUploadError: None,
     }
   | FinishSaving(hasCurrentPassword) => {
@@ -82,7 +82,7 @@ let reducer = (state, action) =>
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      hasCurrentPassword,
+      hasCurrentPassword: hasCurrentPassword,
     }
   | ResetSaving => {...state, saving: false}
   | StartDeletingAccount => {...state, deletingAccount: true}
@@ -95,8 +95,8 @@ let reducer = (state, action) =>
   }
 
 module UpdateUserQuery = %graphql(`
-  mutation UpdateUserMutation($fullname: String!,$preferredName: String, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
-    updateUser(fullname: $fullname, preferredName: $preferredName,about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
+  mutation UpdateUserMutation($name: String!,$preferredName: String, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
+    updateUser(name: $name, preferredName: $preferredName,about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
       success
     }
   }
@@ -164,7 +164,7 @@ let updateUser = (state, send, event) => {
   send(StartSaving)
 
   let variables = UpdateUserQuery.makeVariables(
-    ~fullname=state.fullname,
+    ~name=state.name,
     ~preferredName=state.preferredName,
     ~about=state.about,
     ~locale=state.locale,
@@ -218,7 +218,7 @@ let hasInvalidPassword = state =>
     : true
 
 let saveDisabled = state =>
-  hasInvalidPassword(state) || (state.fullname |> String.trim |> String.length == 0 || !state.dirty)
+  hasInvalidPassword(state) || (state.name |> String.trim |> String.length == 0 || !state.dirty)
 
 let confirmDeletionWindow = (state, send) =>
   state.showDeleteAccountForm
@@ -260,7 +260,7 @@ let confirmDeletionWindow = (state, send) =>
 
 @react.component
 let make = (
-  ~fullname,
+  ~name,
   ~preferredName,
   ~hasCurrentPassword,
   ~about,
@@ -272,11 +272,11 @@ let make = (
   ~hasValidDeleteAccountToken,
 ) => {
   let initialState = {
-    fullname,
-    preferredName,
-    about,
-    locale,
-    avatarUrl,
+    name: name,
+    preferredName: preferredName,
+    about: about,
+    locale: locale,
+    avatarUrl: avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
     currentPassword: "",
@@ -284,14 +284,13 @@ let make = (
     confirmPassword: "",
     emailForAccountDeletion: "",
     showDeleteAccountForm: false,
-    hasCurrentPassword,
+    hasCurrentPassword: hasCurrentPassword,
     deletingAccount: false,
     avatarUploadError: None,
     dirty: false,
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
-  let name = preferredName |> String.length > 0 ? preferredName : fullname
 
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {confirmDeletionWindow(state, send)}
@@ -305,22 +304,22 @@ let make = (
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <div className="">
               <div className="">
-                <label htmlFor="user_fullname" className="block text-sm font-semibold">
+                <label htmlFor="user_name" className="block text-sm font-semibold">
                   {ts("name") |> str}
                 </label>
               </div>
             </div>
             <input
               autoFocus=true
-              id="user_fullname"
-              name="fullname"
-              value=state.fullname
-              onChange={event => send(UpdateFullname(ReactEvent.Form.target(event)["value"]))}
+              id="user_name"
+              name="name"
+              value=state.name
+              onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
               className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               placeholder={t("name_placeholder")}
             />
             <School__InputGroupError
-              message={t("name_error")} active={state.fullname |> String.trim |> String.length < 2}
+              message={t("name_error")} active={state.name |> String.trim |> String.length < 2}
             />
             <div className="mt-6">
               <label htmlFor="user_preferred_name" className="block text-sm font-semibold">

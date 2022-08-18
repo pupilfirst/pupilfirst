@@ -7,21 +7,20 @@ module Users
     def props
       {
         current_user_id: current_user.id,
-        fullname: current_user.fullname,
-        preferred_name: current_user.preferred_name||'',
+        name: current_user.name,
+        preferred_name: current_user.preferred_name || '',
         about: current_user.about || '',
         locale: current_user.locale,
         available_locales: Rails.application.secrets.locale[:available],
         has_current_password: current_user.encrypted_password.present?,
-        avatar_url:
-          if current_user.avatar.attached?
-            current_user.avatar_url(variant: :mid)
-          else
-            nil
-          end,
+        avatar_url: if current_user.avatar.attached?
+          current_user.avatar_url(variant: :mid)
+        else
+          nil
+        end,
         daily_digest: current_user.preferences['daily_digest'],
         is_school_admin: current_user.school_admin.present?,
-        has_valid_delete_account_token: valid_delete_account_token
+        has_valid_delete_account_token: valid_delete_account_token,
       }
     end
 

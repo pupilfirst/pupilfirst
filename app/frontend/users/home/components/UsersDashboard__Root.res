@@ -11,7 +11,11 @@ type view =
   | ShowCommunities
   | ShowCertificates
 
-let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
+let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit) => {
+  let name = switch preferredName {
+  | Some(preferredName) => preferredName
+  | None => userName
+  }
   <div className="max-w-4xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
     <div className="flex">
       {switch avatarUrl {
@@ -22,12 +26,12 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
         />
       | None =>
         <Avatar
-          name=userName
+          name
           className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden flex-shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
-        <div className="text-black font-bold inline-block"> {userName->str} </div>
+        <div className="text-black font-bold inline-block"> {name->str} </div>
         <div className="text-gray-600 inline-block"> {userTitle->str} </div>
       </div>
     </div>
@@ -39,6 +43,7 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
       showUserEdit,
     )}
   </div>
+}
 
 let navButtonClasses = selected =>
   "font-semibold border-b-2 text-sm py-4 mr-6 hover:text-primary-500 hover:border-gray-300 focus:border-gray-300 focus:text-primary-500 focus:outline-none " ++ (
@@ -321,6 +326,7 @@ let make = (
   ~communities,
   ~showUserEdit,
   ~userName,
+  ~preferredName,
   ~userTitle,
   ~avatarUrl,
   ~issuedCertificates,
@@ -328,7 +334,7 @@ let make = (
   let (view, setView) = React.useState(() => ShowCourses)
   <div className="bg-gray-50">
     <div className="bg-white">
-      {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
+      {headerSectiom(userName, preferredName, userTitle, avatarUrl, showUserEdit)}
       {navSection(view, setView, communities, issuedCertificates)}
     </div>
     <div className="pb-8">

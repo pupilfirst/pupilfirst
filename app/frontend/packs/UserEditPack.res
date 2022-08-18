@@ -1,7 +1,7 @@
 let decodeProps = json => {
   open Json.Decode
   (
-    field("fullname", string, json),
+    field("name", string, json),
     field("preferredName", string, json),
     field("about", string, json),
     field("locale", string, json),
@@ -16,7 +16,7 @@ let decodeProps = json => {
 
 Psj.match("users#edit", () => {
   let (
-    fullname,
+    name,
     preferredName,
     about,
     locale,
@@ -32,7 +32,7 @@ Psj.match("users#edit", () => {
   | Some(root) =>
     ReactDOM.render(
       <UserEdit
-        fullname
+        name
         preferredName
         about
         locale

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_15_123411) do
+ActiveRecord::Schema.define(version: 2022_07_15_114219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -721,7 +721,7 @@ ActiveRecord::Schema.define(version: 2022_07_15_123411) do
     t.boolean "sign_out_at_next_request"
     t.datetime "confirmed_at"
     t.datetime "login_token_generated_at"
-    t.string "fullname"
+    t.string "name"
     t.string "title"
     t.text "about"
     t.bigint "school_id"

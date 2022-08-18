@@ -2,7 +2,7 @@
 class SchoolAdminMailerPreview < ActionMailer::Preview
   def school_admin_added
     school_admin = SchoolAdmin.first
-    user = User.new(name: Faker::Name.name)
+    user = User.new(name: Faker::Name.name, preferred_name: "Preferred #{Faker::Name.name}")
     user.email = Faker::Internet.email(name: user.name)
     new_school_admin = SchoolAdmin.new(user: user, created_at: Time.zone.now)
 
@@ -20,14 +20,14 @@ class SchoolAdminMailerPreview < ActionMailer::Preview
 
     report_attachment = {
       mime_type: 'text/csv',
-      content: "Sl. No,Email\n1, test@hey.com\n"
+      content: "Sl. No,Email\n1, test@hey.com\n",
     }
 
     SchoolAdminMailer.students_bulk_import_complete(
       school_admin,
       course,
       report_params,
-      report_attachment: report_attachment
+      report_attachment: report_attachment,
     )
   end
 end

@@ -59,7 +59,7 @@ class User < ApplicationRecord
             presence: true,
             email: true,
             uniqueness: {
-              scope: :school_id
+              scope: :school_id,
             }
 
   has_one_attached :avatar
@@ -69,15 +69,15 @@ class User < ApplicationRecord
   before_save :capitalize_name_fragments
 
   def capitalize_name_fragments
-    return unless fullname_changed?
+    return unless name_changed?
 
-    self.fullname =
+    self.name =
       name
         .split
         .map do |name_fragment|
-          name_fragment[0] = name_fragment[0].capitalize
-          name_fragment
-        end
+        name_fragment[0] = name_fragment[0].capitalize
+        name_fragment
+      end
         .join(' ')
   end
 
@@ -88,7 +88,7 @@ class User < ApplicationRecord
     @original_login_token = SecureRandom.urlsafe_base64
     update!(
       login_token_digest: Digest::SHA2.base64digest(@original_login_token),
-      login_token_generated_at: Time.zone.now
+      login_token_generated_at: Time.zone.now,
     )
   end
 
@@ -99,8 +99,7 @@ class User < ApplicationRecord
   def regenerate_reset_password_token
     @original_reset_password_token = SecureRandom.urlsafe_base64
     update!(
-      reset_password_token:
-        Digest::SHA2.base64digest(@original_reset_password_token)
+      reset_password_token: Digest::SHA2.base64digest(@original_reset_password_token),
     )
   end
 
@@ -112,14 +111,13 @@ class User < ApplicationRecord
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
     update!(
-      delete_account_token_digest:
-        Digest::SHA2.hexdigest(@delete_account_token_original)
+      delete_account_token_digest: Digest::SHA2.hexdigest(@delete_account_token_original),
     )
   end
 
   def self.find_by_hashed_delete_account_token(delete_account_token)
     find_by(
-      delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token)
+      delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token),
     )
   end
 
@@ -133,10 +131,8 @@ class User < ApplicationRecord
   end
 
   def login_token_expiration_time
-    (
-      login_token_generated_at +
-        Rails.application.secrets.login_token_time_limit
-    ).strftime('%B %-d, %Y at %l:%M %p')
+    (login_token_generated_at +
+     Rails.application.secrets.login_token_time_limit).strftime('%B %-d, %Y at %l:%M %p')
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.
@@ -155,14 +151,14 @@ class User < ApplicationRecord
         auto_orient: true,
         gravity: 'center',
         resize: '320x320^',
-        crop: '320x320+0+0'
+        crop: '320x320+0+0',
       ).processed
     when :thumb
       avatar.variant(
         auto_orient: true,
         gravity: 'center',
         resize: '100x100^',
-        crop: '100x100+0+0'
+        crop: '100x100+0+0',
       ).processed
     else
       avatar
@@ -209,9 +205,5 @@ class User < ApplicationRecord
     else
       title.presence || affiliation.presence
     end
-  end
-
-  def name
-    preferred_name.presence || fullname
   end
 end

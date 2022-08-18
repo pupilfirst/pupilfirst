@@ -1762,11 +1762,11 @@ ml:
     applicant:
       enrollment_verification:
         body_html: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this %{link_to} will verify your email-address and confirm that you wish to create an account at %{school_name}.
-        body_processing_url_html: We've received your application to the %{course_name} at %{school_name}.<br/> Please verify your email address by clicking %{link_to}. Once your email address is verified, you will be shown the next steps required to complete your application.
+        body_processing_url_html: We've received your application to the %{course_name} course at %{school_name}.<br/> Please verify your email address by clicking %{link_to}. Once your email address is verified, you will be shown the next steps required to complete your application.
         link_text: one-time link
         link_text_processing_url: this link
         subject: Verify Your Email Address
-        subject_with_processing_url: Complete Your Course Application
+        subject_with_processing_url: Complete your %{course_name} course application
     coach:
       course_enrollment:
         subject: You have been added as a coach in %{course_name}

@@ -253,6 +253,23 @@ feature 'School Customization', js: true do
              sort_index: 2
     end
 
+    # Add another school with its associated links.
+
+    let!(:school_2) { create :school }
+
+    let!(:school_2_header_link_1) do
+      create :school_link,
+             kind: SchoolLink::KIND_HEADER,
+             school: school_2,
+             sort_index: 1
+    end
+    let!(:school_2_header_link_2) do
+      create :school_link,
+             kind: SchoolLink::KIND_HEADER,
+             school: school_2,
+             sort_index: 2
+    end
+
     scenario 'admin updates and changes order of links' do
       sign_in_user school_admin.user, referrer: customize_school_path
       find('button[title="Edit header links"]').click
@@ -274,6 +291,11 @@ feature 'School Customization', js: true do
         expect(school_header_link_2.reload.sort_index).to eq(1)
         expect(school_header_link_3.reload.sort_index).to eq(2)
       end
+
+      # check that the other school's links are not affected
+
+      expect(school_2_header_link_1.reload.sort_index).to eq(1)
+      expect(school_2_header_link_2.reload.sort_index).to eq(2)
 
       within("div[data-school-link-id='#{school_header_link_1.id}']") do
         # update link

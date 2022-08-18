@@ -35,7 +35,10 @@ module Mutations
     def move_school_link
       direction = @params[:direction]
       ordered_school_links =
-        SchoolLink.where(kind: school_link.kind).order(sort_index: :ASC).to_a
+        SchoolLink
+          .where(kind: school_link.kind, school: resource_school)
+          .order(sort_index: :ASC)
+          .to_a
 
       if direction == 'Up'
         swap_up(ordered_school_links, school_link)

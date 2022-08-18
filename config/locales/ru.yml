@@ -1,19 +1,19 @@
 ru:
   applicants:
     enroll:
-      link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
-      welcome: Welcome to %{school_name}!
+      link_expired: Данная разовая ссылка недействительна. Если вы завершили регистрацию, пожалуйста войдите.
+      welcome: Добро пожаловать в %{school_name}!
     resolve_applicant_path:
-      welcome: Welcome to %{school_name}!
+      welcome: Добро пожаловать в %{school_name}!
   communities:
     show:
-      new_topic: New Topic
-      note: " Coaches in your school have access to all communities."
-      welcome: Welcome to the
+      new_topic: Новая тема
+      note: " Преподаватели в вашей школе имеют доступ ко всем сообществам."
+      welcome: Добро пожаловать в
   components:
     Api:
       error_notification_body: Наша команда была уведомлена об этой ошибке. Пожалуйста, обновите страницу и попробуйте еще раз.
-      error_notification_title: An unexpected error occurred
+      error_notification_title: Произошла непредвиденная ошибка
     AppRouter__Dropdown:
       more: Больше
       show_more_links: Показать больше ссылок
@@ -86,12 +86,12 @@ ru:
         one: 1 Reply
         few: "%{count} Replies"
         many: "%{count} Replies"
-        other: "%{count} Replies"
+        other: "Ответы: %{count}"
       topic_stats_views:
         one: 1 View
         few: "%{count} Views"
         many: "%{count} Views"
-        other: "%{count} Views"
+        other: "Просмотров: %{count}"
       topics_fully_loaded_text: Показать все %{total_topics} темы
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
       unable_find_id: "Не удалось найти категорию темы с ID: "
@@ -159,10 +159,10 @@ ru:
       window_confirm_pre: Вы уверены что хотите удалить
     CourseCertificates__CreateDrawer:
       certificate_base_image:
-        help: This base image must include a full line's space to insert a student's name.
+        help: Базовое изображение должно включать пустые строки для внесения имени ученика.
         help_url: 'https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate'
-        label: Certificate Base Image
-        placeholder: Select a base image for certificate
+        label: Базовое изображение сертификата
+        placeholder: Выберите базовое изображение сертификата
       create_action: Создать Новый Сертификат
       create_button_text: Создать Сертификат
       name_label: Имя
@@ -170,9 +170,9 @@ ru:
       success_notification: Теперь вы можете редактировать этот сертификат.
     CourseCertificates__EditDrawer:
       active:
-        help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
+        help: Хотя вы можете иметь несколько сертификатов, автоматически можно выдавать только один сертификат. Он будет выдан, когда студент <em>завершит</em> курс.
         help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
-        label: Should students be automatically issued this certificate?
+        label: Должны ли студенты автоматически получать этот сертификат?
       cannot_be_auto_issued_warning: Обратите внимание, что последний уровень этого курса не имеет каких-либо контрольных задач. Этот сертификат будет автоматически выдан только в том случае, если на последнем уровне есть хотя бы одна задача.
       edit_action: Редактировать Сертификат
       font_size_label: Размер Шрифта
@@ -189,9 +189,9 @@ ru:
       qr_top_left_label: Верхний Левый
       qr_top_right_label: Верхний Правый
       qr_visibility:
-        help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
+        help: Он будет содержать ссылку на страницу в вашей школе, которую любой может посетить для проверки выданного сертификата.
         help_url: https://docs.pupilfirst.com/users/certificates
-        label: Add QR Code?
+        label: Добавить QR код?
       update_issued_certificates_warning:
         one: This certificate has been issued once.<br/>These changes will also be applied to the issued certificate.
         few: This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates.
@@ -199,7 +199,7 @@ ru:
         other: This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates.
     CourseCertificates__Root:
       auto_issue_tag: Авто-выпуск
-      certificate: Certificate
+      certificate: Сертификат
       create_action: Создать новый сертификат
       delete_button_title: Удалить Сертификат %{name}
       delete_confirm: Вы уверены, что хотите удалить этот сертификат?
@@ -210,7 +210,7 @@ ru:
         one: Issued only once
         few: Issued %{count} times
         many: Issued %{count} times
-        other: Issued %{count} times
+        other: 'Выдано: %{count}'
       no_certificates: Вы еще не создали ни одного сертификата!
     CourseCoaches__EnrollmentForm:
       add_course: Добавить Менторов на Курс

@@ -95,9 +95,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
   }
 
   <DisablingCover containerClasses="w-full" disabled=state.saving>
-    <div
-      key="School admin coaches course index"
-      className="flex flex-1 h-full overflow-y-scroll bg-gray-50">
+    <div key="School admin coaches course index" className="flex flex-1 h-full bg-gray-50">
       {switch state.formVisible {
       | None => React.null
       | CoachEnrollmentForm =>

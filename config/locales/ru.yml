@@ -1170,6 +1170,10 @@ ru:
       manage_images: Управление изображениями
       update_images: Обновить Изображения
       updated_notification: Изображения успешно обновлены.
+    SchoolCustomize__LinkComponent:
+      move_down: Move Down
+      move_up: Move Up
+      cancel_editing: Cancel Editing
     SchoolCustomize__LinkEditor:
       add_new_link: Добавить Новую Ссылку
       adding_new_link: Добавление новой ссылки...
@@ -1215,6 +1219,8 @@ ru:
       edit_terms: Изменить Положения и Условия
       featured_courses: Избранные курсы
       hello_welcome: Здравствуйте, добро пожаловать в
+      homepage: домашняя страница
+      reach_us_at: Свяжитесь с нами по адресу
       social_links_q: Добавить ссылки на социальные сети?
     School__SearchableTagList:
       add_new_tag: Добавить новый тег
@@ -1764,6 +1770,9 @@ ru:
       submission_graded_error: Работа уже оценена
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
+    create_school_link:
+      success_notification: добавлена пользовательская ссылка.
+      blank_title_error: Требуется заголовок
     create_student_from_applicant:
       success_notification: Студент успешно создан.
     create_submission:
@@ -1812,6 +1821,8 @@ ru:
       success_notification: Данные сертификата обновлены.
     update_course:
       success_notification: Курс успешно обновлен!
+    update_school_link:
+      success_notification: Ссылка успешно обновлена!
     update_target:
       checklist_items_exceeded_error: Список должен содержать менее 15 пунктов.
       evaluation_criteria_course_error: Критерии оценки должны быть из того же курса, что и задача

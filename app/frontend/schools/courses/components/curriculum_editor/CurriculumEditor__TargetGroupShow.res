@@ -126,7 +126,7 @@ let make = (
               {t("milestone_targets") |> str}
             </div>
           : React.null}
-        <div className="target-group__title pt-6">
+        <div className="target-group__title pt-6 font-semibold text-lg">
           <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
         {switch TargetGroup.description(targetGroup) {

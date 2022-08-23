@@ -2201,7 +2201,7 @@ en:
     draft: Draft
     edit: Edit
     email: Email
-    email_exists_error: An email address is already being used.
+    email_exists_error: This email is already associated with another user account.
     empty: Empty
     fail: Fail
     file_invalid: Please select a file with a size less than 5 MB.

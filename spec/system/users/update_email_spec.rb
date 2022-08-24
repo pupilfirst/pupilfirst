@@ -25,7 +25,7 @@ feature 'User Update Email', js: true do
     expect(user_1.update_email_token).to be_present
 
     open_email('testing@updateemail.com')
-    expect(current_email.subject).to eq('Update your email')
+    expect(current_email.subject).to eq("Update your email address in #{school.name} school")
     expect(current_email.body).to include("https://#{domain.fqdn}/users/update_email?token=")
   end
 
@@ -36,7 +36,7 @@ feature 'User Update Email', js: true do
     click_button 'Edit'
     fill_in 'user_email', with: user_2.email
     click_button 'Update'
-    expect(page).to have_content('An email address is already being used.')
+    expect(page).to have_content('This email is already associated with another user account.')
 
     expect(user_1.reload.new_email).to be_blank
   end
@@ -54,7 +54,7 @@ feature 'User Update Email', js: true do
     # Check for update email notification
     open_email(new_email)
     subject = current_email.subject
-    expect(subject).to include('Email Updated successfully')
+    expect(subject).to include("Your email in #{school.name} school updated successfully")
 
     body = current_email.body
     expect(body).to include("Your email in <strong>#{user_1.school.name}</strong> has been successfully updated.")

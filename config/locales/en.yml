@@ -1582,8 +1582,8 @@ en:
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
       email_label: Email
-      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
       email_placeholder: Type your email
+      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
       initiate_deletion: Initiate Deletion
       language: Language
       localization: Localization
@@ -1811,6 +1811,11 @@ en:
     link_fallback:
       link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
     school_admin:
+      email_updated_notification:
+        body:
+          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
+          user_html: <strong>%{name}</strong> from your school has updated the email address.
+        subject: "%{name} has changed email address."
       school_admin_added:
         body:
           admin_name_html: The new admin's name is <strong>%{new_school_admin_name}</strong>, and has the registered email address <a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>.
@@ -1818,11 +1823,6 @@ en:
           new_admin_html: A new administrator was added to your school <strong>%{school_name}</strong>, on %{new_school_admin} by %{adding_user_name}.
           not_recognized_html: If you do not recognize this user, you can can remove them from the school administration interface using this %{link_to}.
         subject: New School Admin Added
-      email_updated_notification:
-        body:
-          user_html:  <strong>%{name}</strong> from your school has updated the email address.
-          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
-        subject: "%{name} has changed email address."
       students_bulk_import_complete:
         body:
           link_to: view these newly added students in the school administration interface
@@ -1859,6 +1859,10 @@ en:
         body:
           html: <p> Your account in %{school_name} has been successfully deleted. </p> <p> All your personal information has been removed and you will no longer have access to this school.</p>
         subject: Account deleted successfully from %{school_name}
+      confirm_email_update:
+        body:
+          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+        subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
@@ -1878,21 +1882,17 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
-      update_email_token:
-        body:
-          link_to: link
-          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
-          note_html: <p>This action is irreversible.</p>
-        subject: Update your email
-      confirm_email_update:
-        body:
-          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
-        subject: Email Updated successfully
       new_post:
         body:
           link_to: view the reply on the %{community_name} community
           main_html: <p>%{author_name} has posted a reply to something you said on the %{community_name} community.</p> <p>You can %{link_to}.
         subject: New reply for your post
+      update_email_token:
+        body:
+          link_to: link
+          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible.</p>
+        subject: Update your email address in %{school_name} school
     user_session:
       send_login_token:
         body:
@@ -2270,10 +2270,10 @@ en:
     show:
       submitted_on: Submitted on
   users:
-    edit:
-      title: Edit User
     delete_account:
       link_expired: That link has expired or is invalid. Please try again.
+      title: Edit User
+    edit:
       title: Edit User
     omniauth_callbacks:
       failure:
@@ -2336,6 +2336,7 @@ en:
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
     update_email:
+      frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
   validate_submission_gradable:
     owners_should_be_active:

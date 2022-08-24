@@ -8,7 +8,7 @@ type state = {
   about: string,
   locale: string,
   email: string,
-  disable_email_input: bool,
+  disableEmailInput: bool,
   avatarUrl: option<string>,
   currentPassword: string,
   newPassword: string,
@@ -42,16 +42,16 @@ type action =
   | FinishSaving(bool)
   | StartDeletingAccount
   | FinishAccountDeletion
-  | OnUpdateEmailTokenSent(string)
+  | UpdateEmailAndDisableInput(string)
 
 let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {...state, name: name, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
   | UpdateEmail(email) => {...state, email: email, dirty: true}
-  | SetDisableUpdateEmail(disable_email_input) => {
+  | SetDisableUpdateEmail(disableEmailInput) => {
       ...state,
-      disable_email_input: disable_email_input,
+      disableEmailInput: disableEmailInput,
     }
   | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
@@ -99,11 +99,11 @@ let reducer = (state, action) =>
       deletingAccount: false,
       emailForAccountDeletion: "",
     }
-  | OnUpdateEmailTokenSent(email) => {
+  | UpdateEmailAndDisableInput(email) => {
       ...state,
       email: email,
       dirty: true,
-      disable_email_input: true,
+      disableEmailInput: true,
     }
   }
 
@@ -156,7 +156,7 @@ let updateEmail = (send, email, newEmail) => {
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
-    send(OnUpdateEmailTokenSent(email))
+    send(UpdateEmailAndDisableInput(email))
     Js.Promise.resolve()
   })
   |> ignore
@@ -315,7 +315,7 @@ let make = (
     about: about,
     locale: locale,
     email: email,
-    disable_email_input: true,
+    disableEmailInput: true,
     avatarUrl: avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
@@ -427,7 +427,7 @@ let make = (
               <div className="mt-2 flex items-stretch gap-2">
                 <input
                   value=state.email
-                  disabled={state.disable_email_input}
+                  disabled={state.disableEmailInput}
                   onChange={event => send(UpdateEmail(ReactEvent.Form.target(event)["value"]))}
                   className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                   name="user_email"
@@ -436,7 +436,7 @@ let make = (
                   id="user-update__email-input"
                   required=true
                 />
-                {state.disable_email_input
+                {state.disableEmailInput
                   ? <button
                       className="btn btn-primary"
                       onClick={evt => send(SetDisableUpdateEmail(false))}>
@@ -445,10 +445,7 @@ let make = (
                   : <div className="flex gap-2">
                       <button
                         className="btn btn-subtle"
-                        onClick={_ => {
-                          send(SetDisableUpdateEmail(true))
-                          send(UpdateEmail(email))
-                        }}>
+                        onClick={_ => send(UpdateEmailAndDisableInput(email))}>
                         {ts("cancel") |> str}
                       </button>
                       <button

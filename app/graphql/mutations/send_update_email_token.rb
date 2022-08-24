@@ -16,9 +16,9 @@ module Mutations
     class ValidRequest < GraphQL::Schema::Validator
       def validate(_object, context, _value)
         current_user = context[:current_user]
-        time_since_last_mail = Time.zone.now - current_user.update_email_token_sent_at
+        time_since_last_mail = Time.zone.now - (current_user.update_email_token_sent_at.presence || 0)
         if time_since_last_mail < 2.minutes
-          return I18n.t('users.update_email.link_expired')
+          return I18n.t('users.update_email.frequent_request_error')
         end
       end
     end

@@ -48,17 +48,10 @@ module CourseExports
     def team_rows
       rows =
         teams.map do |team|
-          [
-            team.id,
-            team.name,
-            team.level.number,
-            team.founders.map(&:name).sort.join(', '),
-            team.faculty.map(&:name).sort.join(', '),
-            team.tags.order(:name).pluck(:name).join(', ')
-          ]
+          [team.id, team.name, team.founders.map(&:name).sort.join(', ')]
         end
 
-      [['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags']] + rows
+      [['ID', 'Team Name', 'Students']] + rows
     end
 
     def submission_rows
@@ -80,6 +73,8 @@ module CourseExports
         .distinct
         .each_with_object(Array.new(team_ids.length)) do |submission, grading|
           team = submission.founders.first.startup
+
+          next if team.blank?
 
           next unless submission.founder_ids.sort == team.founder_ids.sort
 
@@ -126,15 +121,17 @@ module CourseExports
       @teams ||=
         begin
           scope =
-            Startup
-              .includes(:level, :founders, faculty: :user)
-              .joins(:course)
-              .where(courses: { id: course.id })
+            Team
+              .includes(founders: [faculty: :user])
+              .joins(:cohort)
+              .where(cohort: { course_id: course.id })
               .active
               .order(:id)
               .distinct
 
-          tags.present? ? scope.tagged_with(tags, any: true) : scope
+          applicable_students =
+            course.founders.tagged_with(tags, any: true).pluck(:id)
+          tags.present? ? scope.where(founders: applicable_students) : scope
         end
     end
 

@@ -219,15 +219,7 @@ module CourseExports
             @course_export.include_inactive_students? ? scope : scope.active
 
           # Filter by tag, if applicable.
-          if tags.present?
-            applicable_startup_ids =
-              Startup.tagged_with(tags, any: true).pluck(:id)
-            scope
-              .joins(:startup)
-              .merge(Startup.where(id: applicable_startup_ids))
-          else
-            scope
-          end
+          tags.present? ? scope.tagged_with(tags, any: true) : scope
         end.order('users.email')
     end
 

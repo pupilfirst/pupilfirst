@@ -24,10 +24,6 @@ class LevelUpMutator < ApplicationQuery
     @course ||= Course.find_by(id: course_id)
   end
 
-  def team
-    @team ||= student.startup
-  end
-
   def student
     @student ||=
       current_user
@@ -41,7 +37,7 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def level_up
-    next_level = course.levels.find_by(number: team.level.number + 1)
-    team.update!(level: next_level)
+    next_level = course.levels.find_by(number: student.level.number + 1)
+    student.update!(level: next_level)
   end
 end

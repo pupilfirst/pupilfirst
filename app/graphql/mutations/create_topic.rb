@@ -78,13 +78,9 @@ module Mutations
         User
           .joins(faculty: :faculty_founder_enrollments)
           .where(
-            {
-              faculty: {
-                faculty_founder_enrollments: {
-                  founder_id: {
-                    id: current_user.founders
-                  }
-                }
+            faculty: {
+              faculty_founder_enrollments: {
+                founder_id: current_user.founders
               }
             }
           )

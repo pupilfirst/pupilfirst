@@ -358,7 +358,7 @@ let dropdownSelected =
   </button>
 
 let showCourse = course => {
-  <Spread key={Course.id(course)} props={"data-submission-id": Course.name(course)}>
+  <Spread key={Course.id(course)} props={"data-t": Course.name(course)}>
     <div className="w-full">
       <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
         <div>
@@ -401,24 +401,30 @@ let showCourse = course => {
           <p className="text-sm px-4 py-2 text-gray-600"> {str(Course.description(course))} </p>
         </div>
         <div className="grid grid-cols-3 divide-x py-4 divide-gray-300 ">
-          <div className="flex-1 px-4">
-            <p className="text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
-            <p className="mt-1 text-lg font-semibold">
-              {Course.cohortsCount(course)->string_of_int->str}
-            </p>
-          </div>
-          <div className="flex-1 px-4">
-            <p className="text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
-            <p className="mt-1 text-lg font-semibold">
-              {Course.coachesCount(course)->string_of_int->str}
-            </p>
-          </div>
-          <div className="flex-1 px-4">
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
-            <p className="mt-1 text-lg font-semibold">
-              {Course.levelsCount(course)->string_of_int->str}
-            </p>
-          </div>
+          <Spread props={"data-t": `${Course.name(course)} cohorts count`}>
+            <div className="flex-1 px-4">
+              <p className="text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
+              <p className="mt-1 text-lg font-semibold">
+                {Course.cohortsCount(course)->string_of_int->str}
+              </p>
+            </div>
+          </Spread>
+          <Spread props={"data-t": `${Course.name(course)} coaches count`}>
+            <div className="flex-1 px-4">
+              <p className="text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
+              <p className="mt-1 text-lg font-semibold">
+                {Course.coachesCount(course)->string_of_int->str}
+              </p>
+            </div>
+          </Spread>
+          <Spread props={"data-t": `${Course.name(course)} levels count`}>
+            <div className="flex-1 px-4">
+              <p className="pr-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
+              <p className="mt-1 text-lg font-semibold">
+                {Course.levelsCount(course)->string_of_int->str}
+              </p>
+            </div>
+          </Spread>
         </div>
         {ReactUtils.nullIf(
           <Dropdown
@@ -641,20 +647,24 @@ let make = (~school) => {
               | Loaded(stats) =>
                 <div className="flex gap-6">
                   <div className="border-r pr-6">
-                    <div>
-                      <p className="text-sm text-gray-500"> {ts("students")->str} </p>
-                      <p className="text-xl font-bold">
-                        {stats.studentsCount->string_of_int->str}
-                      </p>
-                    </div>
+                    <Spread props={"data-t": "school students"}>
+                      <div>
+                        <p className="text-sm text-gray-500"> {ts("students")->str} </p>
+                        <p className="text-xl font-bold">
+                          {stats.studentsCount->string_of_int->str}
+                        </p>
+                      </div>
+                    </Spread>
                   </div>
                   <div className="">
-                    <div>
-                      <p className="text-sm text-gray-500"> {ts("coaches")->str} </p>
-                      <p className="text-xl font-bold">
-                        {stats.coachesCount->string_of_int->str}
-                      </p>
-                    </div>
+                    <Spread props={"data-t": "school coaches"}>
+                      <div>
+                        <p className="text-sm text-gray-500"> {ts("coaches")->str} </p>
+                        <p className="text-xl font-bold">
+                          {stats.coachesCount->string_of_int->str}
+                        </p>
+                      </div>
+                    </Spread>
                   </div>
                 </div>
               }}

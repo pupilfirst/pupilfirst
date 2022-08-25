@@ -33,6 +33,7 @@ class Course < ApplicationRecord
   has_many :webhook_deliveries, dependent: :destroy
   has_one :webhook_endpoint, dependent: :destroy
   has_many :applicants, dependent: :destroy
+  belongs_to :default_cohort, class_name: 'Cohort', optional: true
 
   has_one_attached :thumbnail
   has_one_attached :cover

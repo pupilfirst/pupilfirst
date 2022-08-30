@@ -1,9 +1,6 @@
 require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
-  # Verifies that versions and hashed value of the package contents in the project's package.json
-  config.webpacker.check_yarn_integrity = false
-
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -159,12 +156,12 @@ Rails.application.configure do
   config.middleware.insert_before 0, Rack::Cors do
     allow do
       origins '*'
-      resource '/assets/*', methods: :get, headers: :any
+      resource '/vite/assets/*', methods: :get, headers: :any
     end
 
     allow do
       origins '*'
-      resource '/assets/**/*', methods: :get, headers: :any
+      resource '/vite/assets/**/*', methods: :get, headers: :any
     end
   end
 

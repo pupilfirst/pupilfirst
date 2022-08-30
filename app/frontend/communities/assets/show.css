@@ -1,0 +1,13 @@
+.community-hero__container {
+  height: auto;
+  background-image: url('~/communities/assets/container-background.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 10%;
+}
+
+@screen md {
+  .community-hero__container {
+    height: 18rem;
+  }
+}

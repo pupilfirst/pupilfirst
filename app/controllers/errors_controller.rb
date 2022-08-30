@@ -16,7 +16,13 @@ class ErrorsController < ApplicationController
 
   # GET /errors/:error_type
   def simulate
-    valid_types = %w[internal_server_error not_acceptable not_found unprocessable_entity]
+    valid_types = %w[
+      internal_server_error
+      not_acceptable
+      not_found
+      unprocessable_entity
+      service_unavailable
+    ]
 
     if params[:error_type].in?(valid_types)
       render "errors/#{params[:error_type]}"

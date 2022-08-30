@@ -231,7 +231,7 @@ describe DailyDigestService do
         expect(b).to include(course_2.name)
         expect(b).to include("There are 3")
         expect(b).to include("new submissions to review")
-        expect(b).to include("in 2 courses")
+        expect(b).to include("in some courses")
 
         # The email should include community updates, but only
         # from the courses where the coach is enrolled.

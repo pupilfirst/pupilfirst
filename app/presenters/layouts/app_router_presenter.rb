@@ -171,7 +171,7 @@ module Layouts
           custom_links =
             SchoolLink
               .where(school: current_school, kind: SchoolLink::KIND_HEADER)
-              .order(created_at: :DESC)
+              .order(:sort_index)
               .map do |school_link|
                 { title: school_link.title, url: school_link.url }
               end

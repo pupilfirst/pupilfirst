@@ -1,0 +1,1585 @@
+%%raw(`import "./CoursesReview__Editor.css"`)
+
+let t = I18n.t(~scope="components.CoursesReview__Editor")
+
+open CoursesReview__Types
+let str = React.string
+
+type status =
+  | Graded(bool)
+  | Grading
+  | Ungraded
+
+type editor =
+  | AssignReviewer
+  | GradesEditor
+  | ChecklistEditor
+  | ReviewedSubmissionEditor(array<Grade.t>)
+
+type nextSubmission = DataUnloaded | DataLoading | DataEmpty
+
+type state = {
+  grades: array<Grade.t>,
+  newFeedback: string,
+  saving: bool,
+  showReport: bool,
+  checklist: array<SubmissionChecklistItem.t>,
+  note: option<string>,
+  editor: editor,
+  additonalFeedbackEditorVisible: bool,
+  feedbackGenerated: bool,
+  nextSubmission: nextSubmission,
+  reloadSubmissionReport: bool,
+}
+
+type statusColors =
+  | Red
+  | Orange
+  | Green
+  | Gray
+
+type action =
+  | BeginSaving
+  | FinishSaving
+  | UpdateFeedback(string)
+  | GenerateFeeback(string, editor)
+  | UpdateGrades(array<Grade.t>)
+  | UpdateChecklist(array<SubmissionChecklistItem.t>)
+  | UpdateNote(string)
+  | ShowGradesEditor
+  | ShowChecklistEditor
+  | ShowAdditionalFeedbackEditor
+  | FeedbackAfterSave
+  | UpdateEditor(editor)
+  | FinishGrading(array<Grade.t>)
+  | SetNextSubmissionDataLoading
+  | SetNextSubmissionDataEmpty
+  | UnassignReviewer
+  | ChangeReportVisibility
+
+let reducer = (state, action) =>
+  switch action {
+  | BeginSaving => {...state, saving: true}
+  | FinishSaving => {...state, saving: false}
+  | UpdateFeedback(newFeedback) => {...state, newFeedback: newFeedback}
+  | GenerateFeeback(newFeedback, editor) => {
+      ...state,
+      newFeedback: newFeedback,
+      editor: editor,
+      feedbackGenerated: true,
+    }
+  | UpdateGrades(grades) => {...state, grades: grades}
+  | UpdateChecklist(checklist) => {...state, checklist: checklist}
+  | UpdateNote(note) => {...state, note: Some(note)}
+  | ShowGradesEditor => {...state, editor: GradesEditor}
+  | ShowChecklistEditor => {
+      ...state,
+      editor: ChecklistEditor,
+    }
+  | ChangeReportVisibility => {...state, showReport: !state.showReport}
+  | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
+  | FinishGrading(grades) => {
+      ...state,
+      editor: ReviewedSubmissionEditor(grades),
+      saving: false,
+      newFeedback: "",
+      note: None,
+    }
+  | UpdateEditor(editor) => {...state, editor: editor}
+  | FeedbackAfterSave => {
+      ...state,
+      saving: false,
+      additonalFeedbackEditorVisible: false,
+      newFeedback: "",
+    }
+  | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
+  | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
+  | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
+  }
+
+module CreateGradingMutation = %graphql(`
+    mutation CreateGradingMutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
+      createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note, checklist: $checklist){
+        success
+      }
+    }
+  `)
+
+module UndoGradingMutation = %graphql(`
+    mutation UndoGradingMutation($submissionId: ID!) {
+      undoGrading(submissionId: $submissionId){
+        success
+      }
+    }
+  `)
+
+module CreateFeedbackMutation = %graphql(`
+    mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
+      createFeedback(submissionId: $submissionId, feedback: $feedback){
+        success
+      }
+    }
+  `)
+
+module NextSubmissionQuery = %graphql(`
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
+        nodes {
+          id
+        }
+      }
+    }
+  `)
+
+module UnassignReviewerMutation = %graphql(`
+    mutation UnassignReviewerMutation($submissionId: ID!) {
+      unassignReviewer(submissionId: $submissionId){
+        success
+      }
+    }
+  `)
+
+module SubmissionReportQuery = %graphql(`
+    query SubmissionReportQuery($id: ID!) {
+      submissionReport(id: $id) {
+        id
+        status
+        testReport
+        startedAt
+        completedAt
+        conclusion
+        queuedAt
+      }
+    }
+  `)
+
+let unassignReviewer = (submissionId, send, updateReviewerCB) => {
+  send(BeginSaving)
+
+  UnassignReviewerMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: UnassignReviewerMutation.t) => {
+    if response.unassignReviewer.success {
+      updateReviewerCB(None)
+      send(UnassignReviewer)
+    }
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_ => {
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let getNextSubmission = (send, courseId, filter, submissionId) => {
+  send(SetNextSubmissionDataLoading)
+  let variables = NextSubmissionQuery.makeVariables(
+    ~courseId,
+    ~status=?Filter.tab(filter),
+    ~sortDirection=Filter.defaultDirection(filter),
+    ~sortCriterion=Filter.sortCriterion(filter),
+    ~levelId=?Filter.levelId(filter),
+    ~personalCoachId=?Filter.personalCoachId(filter),
+    ~assignedCoachId=?Filter.assignedCoachId(filter),
+    ~targetId=?Filter.targetId(filter),
+    ~search=?Filter.nameOrEmail(filter),
+    ~excludeSubmissionId=?Some(submissionId),
+    (),
+  )
+  NextSubmissionQuery.make(variables)
+  |> Js.Promise.then_(response => {
+    if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
+      send(SetNextSubmissionDataEmpty)
+      Notification.notice(
+        t("get_next_submission.notice.done"),
+        t("get_next_submission.notice.done_description"),
+      )
+    } else {
+      RescriptReactRouter.push(
+        "/submissions/" ++
+        response["submissions"]["nodes"][0]["id"] ++
+        "/review?" ++
+        Filter.toQueryString(filter),
+      )
+    }
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let isSubmissionReviewAllowed = submissionDetails => {
+  let daysSinceSubmission = DateFns.differenceInDays(
+    Js.Date.make(),
+    SubmissionDetails.createdAt(submissionDetails),
+  )
+
+  let submissionReviewAllowedTime = SubmissionDetails.inactiveSubmissionReviewAllowedDays(
+    submissionDetails,
+  )
+
+  let submissionReviewAllowed = daysSinceSubmission < submissionReviewAllowedTime
+
+  SubmissionDetails.preview(submissionDetails) && !submissionReviewAllowed
+}
+
+let makeFeedback = (user, feedback) => {
+  Feedback.make(
+    ~coachName=Some(User.name(user)),
+    ~coachAvatarUrl=User.avatarUrl(user),
+    ~coachTitle=User.title(user),
+    ~createdAt=Js.Date.make(),
+    ~value=feedback,
+  )
+}
+let createFeedback = (
+  submissionId,
+  feedback,
+  send,
+  overlaySubmission,
+  user,
+  updateSubmissionCB,
+) => {
+  send(BeginSaving)
+
+  CreateFeedbackMutation.make({submissionId: submissionId, feedback: feedback})
+  |> Js.Promise.then_(response => {
+    response["createFeedback"]["success"]
+      ? {
+          updateSubmissionCB(
+            OverlaySubmission.updateFeedback(
+              Js.Array.concat(
+                [makeFeedback(user, feedback)],
+                OverlaySubmission.feedback(overlaySubmission),
+              ),
+              overlaySubmission,
+            ),
+          )
+
+          send(FeedbackAfterSave)
+        }
+      : send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let undoGrading = (submissionId, send) => {
+  send(BeginSaving)
+
+  UndoGradingMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: UndoGradingMutation.t) => {
+    response.undoGrading.success ? DomUtils.reload()->ignore : send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let passed = (grades, evaluationCriteria) => Js.Array.filter(g => {
+    let passGrade = EvaluationCriterion.passGrade(
+      ArrayUtils.unsafeFind(
+        ec => EvaluationCriterion.id(ec) == Grade.evaluationCriterionId(g),
+        "CoursesReview__Editor: Unable to find evaluation criterion with id - " ++
+        Grade.evaluationCriterionId(g),
+        evaluationCriteria,
+      ),
+    )
+
+    Grade.value(g) < passGrade
+  }, grades)->ArrayUtils.isEmpty
+
+let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)
+
+let navigationDisabled = state => {
+  Js.String2.trim(state.newFeedback) != "" || state.note != None || state.saving
+}
+
+let gradeSubmissionQuery = (
+  submissionId,
+  state,
+  send,
+  evaluationCriteria,
+  overlaySubmission,
+  currentUser,
+  updateSubmissionCB,
+) => {
+  send(BeginSaving)
+  let feedback = trimToOption(state.newFeedback)
+  // let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
+
+  let grades = Js.Array.map(
+    g =>
+      CreateGradingMutation.makeInputObjectGradeInput(
+        ~evaluationCriterionId=Grade.evaluationCriterionId(g),
+        ~grade=Grade.value(g),
+        (),
+      ),
+    state.grades,
+  )
+
+  let variables = CreateGradingMutation.makeVariables(
+    ~submissionId,
+    ~feedback?,
+    ~note=?Belt.Option.flatMap(state.note, trimToOption),
+    ~grades,
+    ~checklist=SubmissionChecklistItem.encodeArray(state.checklist),
+    (),
+  )
+
+  CreateGradingMutation.fetch(variables)
+  |> Js.Promise.then_((response: CreateGradingMutation.t) => {
+    response.createGrading.success
+      ? {
+          updateSubmissionCB(
+            OverlaySubmission.update(
+              passed(state.grades, evaluationCriteria) ? Some(Js.Date.make()) : None,
+              Some(User.name(currentUser)),
+              Js.Array.concat(
+                Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
+                OverlaySubmission.feedback(overlaySubmission),
+              ),
+              state.grades,
+              Some(Js.Date.make()),
+              state.checklist,
+              overlaySubmission,
+            ),
+          )
+          send(FinishGrading(state.grades))
+        }
+      : send(FinishSaving)
+
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let inactiveWarning = submissionDetails =>
+  if SubmissionDetails.inactiveStudents(submissionDetails) {
+    let submissionDeadlineDate = DateFns.addDays(
+      SubmissionDetails.createdAt(submissionDetails),
+      SubmissionDetails.inactiveSubmissionReviewAllowedDays(submissionDetails),
+    )
+
+    let warning = if Array.length(SubmissionDetails.students(submissionDetails)) > 1 {
+      isSubmissionReviewAllowed(submissionDetails)
+        ? t("students_dropped_out_message_without_timestamp")
+        : t(
+            ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
+            "students_dropped_out_message_with_timestamp",
+          )
+    } else if isSubmissionReviewAllowed(submissionDetails) {
+      t("student_dropped_out_message_without_timestamp")
+    } else {
+      t(
+        ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
+        "student_dropped_out_message_with_timestamp",
+      )
+    }
+
+    <div
+      className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
+      <i className="fas fa-exclamation-triangle" /> <span className="ml-2"> {warning->str} </span>
+    </div>
+  } else {
+    React.null
+  }
+
+let closeOverlay = (state, courseId, filter) => {
+  let path = "/courses/" ++ courseId ++ "/review?" ++ Filter.toQueryString(filter)
+
+  navigationDisabled(state)
+    ? WindowUtils.confirm(
+        ~onCancel=() => (),
+        t("close_submission_warning"),
+        () => RescriptReactRouter.push(path),
+      )
+    : RescriptReactRouter.push(path)
+}
+
+let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, className) => {
+  ReactUtils.nullIf(
+    <button
+      onClick={_ => getNextSubmission(send, courseId, filter, submissionId)}
+      disabled={nextSubmission == DataLoading}
+      className>
+      {ReactUtils.nullUnless(
+        <i className="fas fa-spinner fa-pulse mr-2" />,
+        nextSubmission == DataLoading,
+      )}
+      <p className="pr-2"> {str(t("review_next"))} </p>
+      <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl" />
+    </button>,
+    nextSubmission == DataEmpty,
+  )
+}
+
+let headerSection = (state, nextSubmission, send, submissionDetails, filter, submissionId) =>
+  <div
+    ariaLabel="submissions-overlay-header"
+    className="bg-gray-50 border-b border-gray-300 flex justify-center">
+    <div className="bg-white flex justify-between w-full">
+      <div className="flex flex-col md:flex-row w-full md:w-auto">
+        <div className="flex flex-1 md:flex-none justify-between border-b md:border-0">
+          <button
+            title={t("close")}
+            ariaLabel="submissions-overlay-close"
+            onClick={_ =>
+              closeOverlay(state, SubmissionDetails.courseId(submissionDetails), filter)}
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
+            <div className="flex items-center justify-center bg-gray-100 rounded-full w-8 h-8">
+              <Icon className="if i-times-regular text-lg lg:text-2xl" />
+            </div>
+            <span className="text-xs mt-0.5"> {str(t("close"))} </span>
+          </button>
+          <div className="flex space-x-4">
+            <CoursesStudents__TeamCoaches
+              tooltipPosition=#Bottom
+              defaultAvatarSize="8"
+              mdAvatarSize="8"
+              title={<span className="hidden"> {t("assigned_coaches")->str} </span>}
+              className="flex md:hidden items-center flex-shrink-0"
+              coaches={SubmissionDetails.coaches(submissionDetails)}
+            />
+            {reviewNextButton(
+              nextSubmission,
+              send,
+              SubmissionDetails.courseId(submissionDetails),
+              filter,
+              submissionId,
+              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
+            )}
+          </div>
+        </div>
+        <div className="px-4 py-3">
+          <div className="block text-sm md:pr-2">
+            <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
+              {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
+            </span>
+            <a
+              href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
+              target="_blank"
+              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+              {SubmissionDetails.targetTitle(submissionDetails)->str}
+            </a>
+          </div>
+          <div className="text-left mt-1 text-xs text-gray-800">
+            {switch SubmissionDetails.teamName(submissionDetails) {
+            | Some(teamName) =>
+              <span>
+                {t("submitted_by_team")->str}
+                <span className="font-semibold"> {teamName->str} </span>
+                {" - "->str}
+              </span>
+            | None => <span> {t("submitted_by")->str} </span>
+            }}
+            {
+              let studentCount = SubmissionDetails.students(submissionDetails)->Array.length
+
+              Js.Array.mapi((student, index) => {
+                let commaRequired = index + 1 != studentCount
+                <span key={Student.id(student)}>
+                  <a
+                    className="font-semibold underline focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500"
+                    href={"/students/" ++ Student.id(student) ++ "/report"}
+                    target="_blank">
+                    {Student.name(student)->str}
+                  </a>
+                  {(commaRequired ? ", " : "")->str}
+                </span>
+              }, SubmissionDetails.students(submissionDetails))->React.array
+            }
+          </div>
+        </div>
+      </div>
+      <div className="hidden md:flex flex-shrink-0 space-x-6">
+        <CoursesStudents__TeamCoaches
+          tooltipPosition=#Bottom
+          defaultAvatarSize="8"
+          mdAvatarSize="8"
+          title={<span className="mr-2"> {t("assigned_coaches")->str} </span>}
+          className="flex w-full md:w-auto items-center flex-shrink-0"
+          coaches={SubmissionDetails.coaches(submissionDetails)}
+        />
+        {reviewNextButton(
+          nextSubmission,
+          send,
+          SubmissionDetails.courseId(submissionDetails),
+          filter,
+          submissionId,
+          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
+        )}
+      </div>
+    </div>
+  </div>
+
+let updateGrading = (grade, state, send) => {
+  let newGrades = Js.Array.concat(
+    [grade],
+    Js.Array.filter(
+      g => Grade.evaluationCriterionId(g) != Grade.evaluationCriterionId(grade),
+      state.grades,
+    ),
+  )
+
+  send(UpdateGrades(newGrades))
+}
+
+let handleGradePillClick = (evaluationCriterionId, value, state, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  switch send {
+  | Some(send) => updateGrading(Grade.make(~evaluationCriterionId, ~value), state, send)
+  | None => ()
+  }
+}
+
+let findEvaluationCriterion = (evaluationCriteria, evaluationCriterionId) =>
+  switch Js.Array.find(
+    ec => EvaluationCriterion.id(ec) == evaluationCriterionId,
+    evaluationCriteria,
+  ) {
+  | Some(ec) => ec
+  | None =>
+    Rollbar.error(
+      "Unable to find evaluation Criterion with id: " ++
+      (evaluationCriterionId ++
+      "in CoursesRevew__Editor"),
+    )
+    evaluationCriteria[0]
+  }
+
+let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
+  <div className="flex justify-between">
+    <p className="text-xs font-semibold"> {evaluationCriteriaName->str} </p>
+    <p className="text-xs font-semibold">
+      {(selectedGrade->string_of_int ++
+        ("/" ++
+        GradeLabel.maxGrade(Array.to_list(gradeLabels))->string_of_int))->str}
+    </p>
+  </div>
+
+let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
+  let defaultClasses =
+    "course-review-editor__grade-pill border-gray-300 py-1 px-2 text-sm flex-1 font-semibold transition " ++
+    switch send {
+    | Some(_) =>
+      "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+        currentGrade >= passgrade
+          ? "hover:bg-green-500 hover:text-white "
+          : "hover:bg-red-500 hover:text-white "
+      )
+
+    | None => ""
+    }
+
+  defaultClasses ++ (
+    currentGrade <= selectedGrade
+      ? switch selectedGrade >= passgrade {
+        | true => "cursor-default bg-green-500 text-white shadow-lg"
+        | false => "cursor-default bg-red-500 text-white shadow-lg"
+        }
+      : "bg-white text-gray-900"
+  )
+}
+
+let showGradePill = (
+  key,
+  submissionDetails,
+  evaluationCriterion,
+  gradeValue,
+  passGrade,
+  state,
+  send,
+) =>
+  <div
+    ariaLabel={"evaluation-criterion-" ++ EvaluationCriterion.id(evaluationCriterion)}
+    key={key->string_of_int}
+    className="mt-2">
+    {gradePillHeader(
+      EvaluationCriterion.name(evaluationCriterion),
+      gradeValue,
+      EvaluationCriterion.gradesAndLabels(evaluationCriterion),
+    )}
+    <div className="course-review-editor__grade-bar inline-flex w-full text-center mt-1">
+      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)
+      ->Js.Array2.map(gradeLabel => {
+        let gradeLabelGrade = GradeLabel.grade(gradeLabel)
+
+        <button
+          key={string_of_int(gradeLabelGrade)}
+          onClick={handleGradePillClick(
+            EvaluationCriterion.id(evaluationCriterion),
+            gradeLabelGrade,
+            state,
+            send,
+          )}
+          disabled={isSubmissionReviewAllowed(submissionDetails)}
+          title={GradeLabel.label(gradeLabel)}
+          className={gradePillClasses(gradeValue, gradeLabelGrade, passGrade, send)}>
+          {switch send {
+          | Some(_) => string_of_int(gradeLabelGrade)->str
+          | None => React.null
+          }}
+        </button>
+      })
+      ->React.array}
+    </div>
+  </div>
+
+let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
+  <div>
+    {Grade.sort(evaluationCriteria, grades)
+    ->Js.Array2.mapi((grade, key) => {
+      let gradeEcId = Grade.evaluationCriterionId(grade)
+      let ec = ArrayUtils.unsafeFind(
+        ec => EvaluationCriterion.id(ec) == gradeEcId,
+        "Unable to find evaluation Criterion with id: " ++ (gradeEcId ++ "in CoursesRevew__Editor"),
+        evaluationCriteria,
+      )
+
+      showGradePill(
+        key,
+        submissionDetails,
+        ec,
+        Grade.value(grade),
+        EvaluationCriterion.passGrade(ec),
+        state,
+        None,
+      )
+    })
+    ->React.array}
+  </div>
+let renderGradePills = (
+  evaluationCriteria,
+  targetEvaluationCriteriaIds,
+  submissionDetails,
+  state,
+  send,
+) =>
+  targetEvaluationCriteriaIds
+  ->Js.Array2.mapi((evaluationCriterionId, key) => {
+    let ec = ArrayUtils.unsafeFind(
+      e => EvaluationCriterion.id(e) == evaluationCriterionId,
+      "CoursesRevew__Editor: Unable to find evaluation criterion with id - " ++
+      evaluationCriterionId,
+      evaluationCriteria,
+    )
+    let grade =
+      state.grades->Js.Array2.find(g =>
+        Grade.evaluationCriterionId(g) == EvaluationCriterion.id(ec)
+      )
+    let gradeValue = switch grade {
+    | Some(g) => Grade.value(g)
+    | None => 0
+    }
+
+    let passGrade = EvaluationCriterion.passGrade(ec)
+
+    showGradePill(key, submissionDetails, ec, gradeValue, passGrade, state, Some(send))
+  })
+  ->React.array
+
+let badgeColorClasses = statusColor => {
+  switch statusColor {
+  | Red => "bg-red-100 border-red-400"
+  | Green => "bg-green-100 border-green-400"
+  | Orange => "bg-orange-100 border-orange-400"
+  | Gray => "bg-gray-50 border-gray-300"
+  }
+}
+
+let gradeBadgeClasses = (statusColor, status, badge) =>
+  (
+    badge
+      ? "px-2 py-2 space-x-2 flex justify-center border rounded items-center "
+      : "w-12 h-10 p-1 mr-2 md:mr-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
+  ) ++
+  badgeColorClasses(statusColor) ++
+  switch status {
+  | Grading => "course-review-editor__status-pulse"
+  | Graded(_)
+  | Ungraded => ""
+  }
+
+let textColor = statusColor => {
+  switch statusColor {
+  | Red => "text-red-800"
+  | Green => "text-green-800"
+  | Orange => "text-orange-800"
+  | Gray => "text-gray-800"
+  }
+}
+
+let submissionReviewStatus = (status, overlaySubmission) => {
+  let (text, color) = switch status {
+  | Graded(passed) => passed ? (t("status.completed"), Green) : (t("status.rejected"), Red)
+  | Grading => (t("status.reviewing"), Orange)
+  | Ungraded => (t("status.pending_review"), Gray)
+  }
+  <div ariaLabel="submission-status" className="hidden md:flex space-x-4 justify-end w-3/4">
+    <div className="flex items-center">
+      {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
+      | (Some(_date), Graded(_)) =>
+        <div>
+          <div>
+            <p className="text-xs text-gray-800"> {t("evaluated_by")->str} </p>
+            <p className="text-xs font-semibold">
+              {switch OverlaySubmission.evaluatorName(overlaySubmission) {
+              | Some(name) => name->str
+              | None => <em> {t("deleted_coach")->str} </em>
+              }}
+            </p>
+          </div>
+        </div>
+      | (None, Graded(_))
+      | (_, Grading)
+      | (_, Ungraded) => React.null
+      }}
+      <div className="flex justify-center ml-2 md:ml-4">
+        <div className={gradeBadgeClasses(color, status, true)}>
+          {switch status {
+          | Graded(passed) =>
+            passed
+              ? <Icon className="if i-badge-check-solid text-xl text-green-500" />
+              : <FaIcon classes="fas fa-exclamation-triangle text-xl text-red-500" />
+          | Grading => <Icon className="if i-writing-pad-solid text-xl text-orange-300" />
+          | Ungraded => <Icon className="if i-eye-solid text-xl text-gray-400" />
+          }}
+          <p className={"text-xs font-semibold " ++ textColor(color)}> {text->str} </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+let submissionStatusIcon = (status, overlaySubmission) => {
+  let (text, color) = switch status {
+  | Graded(passed) => passed ? (t("status.completed"), Green) : (t("status.rejected"), Red)
+  | Grading => (t("status.reviewing"), Orange)
+  | Ungraded => (t("status.pending_review"), Gray)
+  }
+  <div
+    ariaLabel="submission-status"
+    className="flex flex-1 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
+    <div
+      className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
+      {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
+      | (Some(date), Graded(_)) =>
+        <div
+          className="bg-gray-50 block md:flex flex-col w-full justify-between rounded-lg pt-3 mr-2 mt-4 md:mt-0">
+          <div>
+            <p className="text-xs px-3"> {"Evaluated By"->str} </p>
+            <p className="text-sm font-semibold px-3 pb-3">
+              {switch OverlaySubmission.evaluatorName(overlaySubmission) {
+              | Some(name) => name->str
+              | None => <em> {t("deleted_coach")->str} </em>
+              }}
+            </p>
+          </div>
+          <div
+            className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
+            {t(
+              ~variables=[("evaluated_at", DateFns.format(date, "MMMM d, yyyy"))],
+              "evaluated_at",
+            )->str}
+          </div>
+        </div>
+      | (None, Graded(_))
+      | (_, Grading)
+      | (_, Ungraded) => React.null
+      }}
+      <div className="w-full md:w-26 flex flex-row md:flex-col md:items-center justify-center">
+        <div className={gradeBadgeClasses(color, status, false)}>
+          {switch status {
+          | Graded(passed) =>
+            passed
+              ? <Icon className="if i-badge-check-solid text-xl md:text-5xl text-green-500" />
+              : <FaIcon classes="fas fa-exclamation-triangle text-xl md:text-4xl text-red-500" />
+          | Grading =>
+            <Icon className="if i-writing-pad-solid text-xl md:text-5xl text-orange-300" />
+          | Ungraded => <Icon className="if i-eye-solid text-xl md:text-4xl text-gray-400" />
+          }}
+        </div>
+        <p
+          className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 ${badgeColorClasses(
+              color,
+            )} ${textColor(color)}`}>
+          {text->str}
+        </p>
+      </div>
+    </div>
+  </div>
+}
+
+let gradeSubmission = (
+  submissionId,
+  state,
+  send,
+  evaluationCriteria,
+  updateSubmissionCB,
+  status,
+  currentUser,
+  overlaySubmission,
+  event,
+) => {
+  ReactEvent.Mouse.preventDefault(event)
+  switch status {
+  | Graded(_) =>
+    gradeSubmissionQuery(
+      submissionId,
+      state,
+      send,
+      evaluationCriteria,
+      overlaySubmission,
+      currentUser,
+      updateSubmissionCB,
+    )
+  | Grading
+  | Ungraded => ()
+  }
+}
+
+let reviewButtonDisabled = status =>
+  switch status {
+  | Graded(_) => false
+  | Grading
+  | Ungraded => true
+  }
+
+let computeStatus = (
+  overlaySubmission,
+  selectedGrades,
+  evaluationCriteria,
+  targetEvaluationCriteriaIds,
+) => {
+  let currentGradingCriteria =
+    evaluationCriteria->Js.Array2.filter(criterion =>
+      Array.mem(EvaluationCriterion.id(criterion), targetEvaluationCriteriaIds)
+    )
+  switch (
+    OverlaySubmission.passedAt(overlaySubmission),
+    ArrayUtils.isNotEmpty(OverlaySubmission.grades(overlaySubmission)),
+  ) {
+  | (Some(_), _) => Graded(true)
+  | (None, true) => Graded(false)
+  | (_, _) =>
+    if selectedGrades == [] {
+      Ungraded
+    } else if Array.length(selectedGrades) != Array.length(currentGradingCriteria) {
+      Grading
+    } else {
+      Graded(passed(selectedGrades, currentGradingCriteria))
+    }
+  }
+}
+
+let submitButtonText = (feedback, grades) =>
+  switch (feedback != "", ArrayUtils.isNotEmpty(grades)) {
+  | (false, false)
+  | (false, true) =>
+    t("save_grades")
+  | (true, false)
+  | (true, true) =>
+    t("save_grades_and_send_feedback")
+  }
+
+let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send) =>
+  switch OverlaySubmission.grades(overlaySubmission) {
+  | [] =>
+    let (noteAbout, additionalHelp) = teamSubmission
+      ? (t("team"), t("team_notice"))
+      : (t("student"), "")
+
+    let help =
+      <HelpIcon className="ml-1">
+        {t(
+          ~variables=[("note_about", noteAbout), ("additional_help", additionalHelp)],
+          "help_text",
+        )->str}
+      </HelpIcon>
+
+    let textareaId = "note-for-submission-" ++ OverlaySubmission.id(overlaySubmission)
+
+    <div className="text-sm">
+      <div className="font-medium text-sm flex">
+        <Icon className="if i-long-text-light text-gray-800 text-base" />
+        {switch note {
+        | Some(_) =>
+          <span className="ml-2 md:ml-4 tracking-wide">
+            <label htmlFor=textareaId> {t("write_a_note")->str} </label> help
+          </span>
+        | None =>
+          <div className="ml-2 md:ml-4 tracking-wide w-full">
+            <div> <span> {(t("note_help") ++ (noteAbout ++ "?"))->str} </span> help </div>
+            <button
+              className="btn btn-default mt-2"
+              disabled={isSubmissionReviewAllowed(submissionDetails)}
+              onClick={_ => send(UpdateNote(""))}>
+              <i className="far fa-edit" /> <span className="pl-2"> {t("write_a_note")->str} </span>
+            </button>
+          </div>
+        }}
+      </div>
+      {switch note {
+      | Some(note) =>
+        <div className="ml-6 md:ml-7 mt-2">
+          <MarkdownEditor
+            maxLength=10000
+            textareaId
+            value=note
+            onChange={value => send(UpdateNote(value))}
+            profile=Markdown.Permissive
+            placeholder={t("note_placeholder")}
+          />
+        </div>
+      | None => React.null
+      }}
+    </div>
+  | _someGrades => React.null
+  }
+
+let feedbackGenerator = (
+  submissionDetails,
+  reviewChecklist,
+  state,
+  ~showAddFeedbackEditor=true,
+  send,
+) => {
+  <div className="px-4 md:px-6 pt-4 space-y-8">
+    <div>
+      <div className="flex h-7 items-end">
+        <h5 className="font-medium text-sm flex items-center">
+          <PfIcon
+            className="if i-check-square-alt-light text-gray-800 text-base md:text-lg inline-block"
+          />
+          <span className="ml-2 md:ml-3 tracking-wide"> {t("review_checklist")->str} </span>
+        </h5>
+      </div>
+      <div className="mt-2 md:ml-8">
+        <button
+          disabled={isSubmissionReviewAllowed(submissionDetails)}
+          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
+          onClick={_ => send(ShowChecklistEditor)}>
+          <span>
+            {(
+              ArrayUtils.isEmpty(reviewChecklist)
+                ? t("create_review_checklist")
+                : t("show_review_checklist")
+            )->str}
+          </span>
+          <FaIcon classes="fas fa-arrow-right" />
+        </button>
+      </div>
+    </div>
+    {showAddFeedbackEditor
+      ? <div className="course-review__feedback-editor text-sm">
+          <h5 className="font-medium text-sm flex items-center">
+            <PfIcon
+              className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+            />
+            <span className="ml-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
+          </h5>
+          {ReactUtils.nullUnless(
+            <div
+              className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
+              <Icon className="if i-check-circle-solid text-green-700 text-base" />
+              <span className="pl-2 text-sm font-semibold">
+                {t("feedback_generated_text")->str}
+              </span>
+            </div>,
+            state.feedbackGenerated,
+          )}
+          <div className="mt-2 md:ml-8" ariaLabel="feedback">
+            <MarkdownEditor
+              onChange={feedback => send(UpdateFeedback(feedback))}
+              value=state.newFeedback
+              profile=Markdown.Permissive
+              maxLength=10000
+              disabled={SubmissionDetails.preview(submissionDetails)}
+              placeholder={t("feedback_placeholder")}
+            />
+          </div>
+        </div>
+      : React.null}
+  </div>
+}
+
+let showFeedback = feedback =>
+  <div className="divide-y space-y-6 md:ml-8"> {Js.Array.mapi((f, index) =>
+      <Spread props={"data-title": "feedback-section"} key={index->string_of_int}>
+        <div>
+          <div className="pt-6">
+            <div className="flex">
+              <div
+                className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
+                {switch Feedback.coachAvatarUrl(f) {
+                | Some(avatarUrl) => <img src=avatarUrl />
+                | None => <Avatar name={Feedback.coachName(f)} />
+                }}
+              </div>
+              <div>
+                <div className="flex flex-col md:flex-row">
+                  <p className="font-semibold text-sm leading-tight inline-flex">
+                    {Feedback.coachName(f)->str}
+                  </p>
+                  <p className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight">
+                    {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+                  </p>
+                </div>
+                <p className="text-xs leading-tight font-semibold inline-block text-gray-800">
+                  {Feedback.createdAtPretty(f)->str}
+                </p>
+              </div>
+            </div>
+            <div className="md:ml-14">
+              <MarkdownBlock
+                className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
+              />
+            </div>
+          </div>
+        </div>
+      </Spread>
+    , ArrayUtils.copyAndSort(
+      (x, y) => DateFns.differenceInSeconds(Feedback.createdAt(y), Feedback.createdAt(x)),
+      feedback,
+    ))->React.array} </div>
+
+let showSubmissionStatus = status => {
+  let (text, classes) = switch status {
+  | Graded(passed) =>
+    passed
+      ? (t("status.completed"), "bg-green-100 text-green-800")
+      : (t("status.rejected"), "bg-red-100 text-red-700")
+  | Ungraded
+  | Grading => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
+  }
+  <div className={"font-semibold px-2 py-px rounded " ++ classes}> <p> {text->str} </p> </div>
+}
+
+let updateReviewChecklist = (cb, send, checklist) => {
+  if ArrayUtils.isEmpty(checklist) {
+    send(ShowGradesEditor)
+  }
+
+  cb(checklist)
+}
+
+let updateReviewer = (cb, send, reviewer) => {
+  cb(reviewer)
+  send(ShowGradesEditor)
+}
+
+let pageTitle = (number, submissionDetails) => {
+  let studentOrTeamName = switch SubmissionDetails.teamName(submissionDetails) {
+  | Some(teamName) => teamName
+  | None =>
+    Js.Array2.map(SubmissionDetails.students(submissionDetails), Student.name)->Js.Array2.joinWith(
+      ", ",
+    )
+  }
+
+  `${t("submission")} ${number->string_of_int} | ${t(
+      "level_acronym",
+    )}${SubmissionDetails.levelNumber(submissionDetails)} | ${studentOrTeamName}`
+}
+
+let reportStatusString = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(_) => t("report_status_string.queued")
+  | InProgress(_) => t("report_status_string.in_progress")
+  | Completed(_timeStamps, conclusion) =>
+    switch conclusion {
+    | Success => t("report_status_string.completed.success")
+    | Failure => t("report_status_string.completed.failure")
+    | Error => t("report_status_string.completed.error")
+    }
+  }
+}
+
+let reportStatusIconClasses = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(_) => "if i-clock-light text-2xl text-gray-600 rounded-full"
+  | InProgress(_) => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | Completed(_timeStamps, conclusion) =>
+    switch conclusion {
+    | Success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
+    | Failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
+    | Error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
+    }
+  }
+}
+
+let reportConclusionTimeString = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(queuedAt) =>
+    "Queued " ++ DateFns.formatDistanceToNowStrict(queuedAt, ~addSuffix=true, ())
+  | InProgress(startedAt) =>
+    "Started " ++ DateFns.formatDistanceToNowStrict(startedAt, ~addSuffix=true, ())
+
+  | Completed(completedTimestamps, _conclusion) =>
+    "Finished " ++
+    DateFns.formatDistanceToNowStrict(completedTimestamps.completedAt, ~addSuffix=true, ()) ++
+    ", and took " ++
+    DateFns.formatDistance(
+      completedTimestamps.completedAt,
+      completedTimestamps.startedAt,
+      ~includeSeconds=true,
+      (),
+    )
+  }
+}
+
+let loadSubmissionReport = (report, updateSubmissionReportCB) => {
+  let id = SubmissionReport.id(report)
+  SubmissionReportQuery.make({id: id})
+  |> Js.Promise.then_(response => {
+    let reportData = response["submissionReport"]
+    let updatedReport = SubmissionReport.makeFromJS(reportData)
+
+    updateSubmissionReportCB(Some(updatedReport))
+
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let reloadSubmissionReport = (report, updateSubmissionReportCB) => {
+  switch SubmissionReport.status(report) {
+  | Queued(_)
+  | InProgress(_) =>
+    loadSubmissionReport(report, updateSubmissionReportCB)
+  | Completed(_, _) => ()
+  }
+}
+
+@react.component
+let make = (
+  ~overlaySubmission,
+  ~teamSubmission,
+  ~evaluationCriteria,
+  ~reviewChecklist,
+  ~updateSubmissionCB,
+  ~updateReviewChecklistCB,
+  ~targetId,
+  ~targetEvaluationCriteriaIds,
+  ~currentUser,
+  ~number,
+  ~submissionDetails,
+  ~submissionId,
+  ~updateReviewerCB,
+  ~submissionReport,
+  ~updateSubmissionReportCB,
+  ~submissionReportPollTime,
+) => {
+  let (state, send) = React.useReducer(
+    reducer,
+    {
+      grades: [],
+      newFeedback: "",
+      saving: false,
+      showReport: false,
+      note: None,
+      checklist: OverlaySubmission.checklist(overlaySubmission),
+      editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
+        ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
+            UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
+          ) ||
+          isSubmissionReviewAllowed(submissionDetails)
+            ? GradesEditor
+            : AssignReviewer
+        : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
+      additonalFeedbackEditorVisible: false,
+      feedbackGenerated: false,
+      nextSubmission: DataUnloaded,
+      reloadSubmissionReport: false,
+    },
+  )
+
+  let status = computeStatus(
+    overlaySubmission,
+    state.grades,
+    evaluationCriteria,
+    targetEvaluationCriteriaIds,
+  )
+
+  let updateChecklistCB = switch OverlaySubmission.grades(overlaySubmission) {
+  | [] => Some(checklist => send(UpdateChecklist(checklist)))
+  | _ => None
+  }
+
+  let pending = ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
+
+  let findEditor = (pending, overlaySubmission) => {
+    pending
+      ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
+          UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
+        ) ||
+        SubmissionDetails.preview(submissionDetails)
+          ? GradesEditor
+          : AssignReviewer
+      : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
+  }
+
+  React.useEffect0(() => {
+    switch submissionReport {
+    | Some(report) => {
+        let intervalId = Js.Global.setInterval(
+          () => reloadSubmissionReport(report, updateSubmissionReportCB),
+          submissionReportPollTime * 1000,
+        )
+        Some(() => Js.Global.clearInterval(intervalId))
+      }
+    | None => None
+    }
+  })
+
+  let url = RescriptReactRouter.useUrl()
+  let filter = Filter.makeFromQueryParams(url.search)
+
+  {
+    [
+      <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
+      <div key="submission-header">
+        <div> {inactiveWarning(submissionDetails)} </div>
+        {headerSection(state, state.nextSubmission, send, submissionDetails, filter, submissionId)}
+        {ReactUtils.nullIf(
+          <div
+            className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
+            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
+              submission,
+              index,
+            ) =>
+              <CoursesReview__SubmissionInfoCard
+                key={SubmissionMeta.id(submission)}
+                selected={SubmissionMeta.id(submission) == submissionId}
+                submission
+                submissionNumber={Array.length(
+                  SubmissionDetails.allSubmissions(submissionDetails),
+                ) -
+                index}
+                filterString={url.search}
+              />
+            )->React.array}
+          </div>,
+          Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
+        )}
+      </div>,
+      <DisablingCover
+        key="submission-editor"
+        containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 md:overflow-y-auto"
+        disabled=state.saving>
+        <div className="md:w-1/2 w-full bg-white md:border-r relative md:overflow-y-auto">
+          <div
+            className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
+            <div className="flex flex-1 items-center justify-between">
+              <div>
+                <p className="font-semibold"> {str("Submission " ++ string_of_int(number))} </p>
+                <p
+                  className="text-gray-800 text-xs"
+                  title={OverlaySubmission.createdAt(overlaySubmission)->DateFns.formatPreset(
+                    ~year=true,
+                    ~time=true,
+                    (),
+                  )}>
+                  {overlaySubmission
+                  ->OverlaySubmission.createdAt
+                  ->DateFns.formatPreset(~year=true, ())
+                  ->str}
+                </p>
+              </div>
+              <div className="text-sm"> {showSubmissionStatus(status)} </div>
+            </div>
+          </div>
+          <div className="p-4 md:p-6">
+            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
+          </div>
+          {switch submissionReport {
+          | Some(report) =>
+            <div className="p-4 md:p-6 space-y-8">
+              <div className="bg-gray-300 p-4 rounded-md">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-start space-x-3">
+                    <div className="pt-1">
+                      <Icon className={reportStatusIconClasses(report)} />
+                    </div>
+                    <div>
+                      <p className="font-semibold"> {str(reportStatusString(report))} </p>
+                      <p className="text-gray-800 text-xs">
+                        {str(reportConclusionTimeString(report))}
+                      </p>
+                    </div>
+                  </div>
+                  {ReactUtils.nullIf(
+                    <button
+                      onClick={_ => send(ChangeReportVisibility)}
+                      className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition">
+                      <span className="hidden md:block pr-3">
+                        {str(
+                          state.showReport
+                            ? t("hide_test_report_button")
+                            : t("show_test_report_button"),
+                        )}
+                      </span>
+                      {
+                        let toggleTestReportIcon = state.showReport
+                          ? "i-arrows-collapse-light"
+                          : "i-arrows-expand-light"
+                        <span className="inline-block w-5 h-5">
+                          <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                        </span>
+                      }
+                    </button>,
+                    SubmissionReport.testReport(report)->Belt.Option.isNone,
+                  )}
+                </div>
+                {switch (state.showReport, SubmissionReport.testReport(report)) {
+                | (true, Some(testReport)) =>
+                  state.showReport
+                    ? <div>
+                        <p className="text-sm font-semibold mt-4"> {str(t("test_report"))} </p>
+                        <div className="bg-white p-3 rounded-md border mt-2">
+                          <MarkdownBlock profile=Markdown.Permissive markdown={testReport} />
+                        </div>
+                      </div>
+                    : React.null
+                | (true, None) | (false, Some(_) | None) => React.null
+                }}
+              </div>
+            </div>
+          | None => React.null
+          }}
+        </div>
+        <div className="md:w-1/2 w-full md:overflow-y-auto">
+          {switch state.editor {
+          | AssignReviewer =>
+            <div>
+              <div
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                <p className="font-semibold"> {str("Review")} </p>
+              </div>
+              {feedbackGenerator(
+                submissionDetails,
+                reviewChecklist,
+                state,
+                ~showAddFeedbackEditor=false,
+                send,
+              )}
+              <CoursesReview__ReviewerManager
+                submissionDetails
+                updateReviewerCB={updateReviewer(updateReviewerCB, send)}
+                submissionId
+              />
+            </div>
+
+          | GradesEditor =>
+            <div>
+              <div
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                <p className="font-semibold"> {str("Review")} </p>
+              </div>
+              {ReactUtils.nullIf(
+                <div className="px-4 py-4 border-b border-gray-300" ariaLabel="Assigned to">
+                  <div
+                    className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-50">
+                    {switch SubmissionDetails.reviewer(submissionDetails) {
+                    | Some(reviewer) =>
+                      <div>
+                        <div>
+                          <p className="text-xs text-gray-800"> {t("assigned_to")->str} </p>
+                          <p className="text-xs font-semibold">
+                            {UserProxy.name(Reviewer.user(reviewer))->str}
+                          </p>
+                        </div>
+                      </div>
+                    | None => React.null
+                    }}
+                    <div className="flex justify-center ml-2 md:ml-4">
+                      <button
+                        onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
+                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <Icon className="if i-times-regular" />
+                        <span className="ml-2"> {t("remove_assignment")->str} </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>,
+                isSubmissionReviewAllowed(submissionDetails),
+              )}
+              {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
+              <div className="w-full px-4 md:px-6 pt-8 space-y-8">
+                {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
+                <div>
+                  <h5 className="font-medium text-sm flex items-center">
+                    <Icon className="if i-tachometer-light text-gray-800 text-base" />
+                    <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+                  </h5>
+                  <div className="flex md:flex-row flex-col md:ml-8 rounded-lg mt-2">
+                    <div className="w-full md:w-9/12">
+                      <div className="md:pr-8">
+                        {renderGradePills(
+                          evaluationCriteria,
+                          targetEvaluationCriteriaIds,
+                          submissionDetails,
+                          state,
+                          send,
+                        )}
+                      </div>
+                    </div>
+                    {submissionStatusIcon(status, overlaySubmission)}
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex justify-end bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ml-8">
+                <button
+                  disabled={reviewButtonDisabled(status)}
+                  className="btn btn-success btn-large w-full border border-green-600"
+                  onClick={gradeSubmission(
+                    OverlaySubmission.id(overlaySubmission),
+                    state,
+                    send,
+                    evaluationCriteria,
+                    updateSubmissionCB,
+                    status,
+                    currentUser,
+                    overlaySubmission,
+                  )}>
+                  {submitButtonText(state.newFeedback, state.grades)->str}
+                </button>
+              </div>
+              {ReactUtils.nullIf(
+                <div className="p-4 md:p-6">
+                  <h5 className="font-medium text-sm flex items-center">
+                    <PfIcon
+                      className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+                    />
+                    <span className="ml-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
+                  </h5>
+                  {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+                </div>,
+                ArrayUtils.isEmpty(OverlaySubmission.feedback(overlaySubmission)),
+              )}
+            </div>
+
+          | ChecklistEditor =>
+            <div>
+              <CoursesReview__Checklist
+                reviewChecklist
+                updateFeedbackCB={feedback =>
+                  send(GenerateFeeback(feedback, findEditor(pending, overlaySubmission)))}
+                feedback=state.newFeedback
+                updateReviewChecklistCB={updateReviewChecklist(updateReviewChecklistCB, send)}
+                targetId
+                cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
+                overlaySubmission
+                submissionDetails
+              />
+            </div>
+
+          | ReviewedSubmissionEditor(grades) =>
+            <div>
+              <div
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                <div>
+                  <p className="font-semibold"> {str(t("review"))} </p>
+                  {Belt.Option.mapWithDefault(
+                    OverlaySubmission.evaluatedAt(overlaySubmission),
+                    React.null,
+                    date =>
+                      <p className="text-gray-800 text-xs">
+                        {date->DateFns.format("MMMM d, yyyy")->str}
+                      </p>,
+                  )}
+                </div>
+                {submissionReviewStatus(status, overlaySubmission)}
+              </div>
+              <div className="w-full p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                  <h5 className="font-medium text-sm flex items-center">
+                    <Icon className="if i-tachometer-light text-gray-800 text-base" />
+                    <span className="ml-2 md:ml-3 tracking-wide"> {t("grade_card")->str} </span>
+                  </h5>
+                  <div>
+                    {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
+                    | (Some(_), Graded(_)) =>
+                      <div>
+                        <button
+                          onClick={_ =>
+                            WindowUtils.confirm(t("undo_grade_warning"), () =>
+                              OverlaySubmission.id(overlaySubmission)->undoGrading(send)
+                            )}
+                          disabled={isSubmissionReviewAllowed(submissionDetails)}
+                          className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+                          <i className="fas fa-undo" />
+                          <span className="ml-2"> {t("undo_grading")->str} </span>
+                        </button>
+                      </div>
+                    | (None, Graded(_))
+                    | (_, Grading)
+                    | (_, Ungraded) => React.null
+                    }}
+                  </div>
+                </div>
+                <div className="flex md:flex-row flex-col md:ml-8 bg-gray-50 mt-2">
+                  <div className="w-full">
+                    {showGrades(grades, evaluationCriteria, submissionDetails, state)}
+                  </div>
+                  <div className="block md:hidden">
+                    {submissionStatusIcon(status, overlaySubmission)}
+                  </div>
+                </div>
+              </div>
+              {ReactUtils.nullUnless(
+                <div>
+                  {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
+                  <div className="flex justify-end px-4 md:px-6 py-4">
+                    <button
+                      disabled={state.newFeedback == "" || state.saving}
+                      className="btn btn-success border border-green-600 w-full md:w-auto"
+                      onClick={_ =>
+                        createFeedback(
+                          OverlaySubmission.id(overlaySubmission),
+                          state.newFeedback,
+                          send,
+                          overlaySubmission,
+                          currentUser,
+                          updateSubmissionCB,
+                        )}>
+                      {t("share_feedback")->str}
+                    </button>
+                  </div>
+                </div>,
+                state.additonalFeedbackEditorVisible,
+              )}
+              <div className="p-4 md:p-6">
+                <h5 className="font-medium text-sm flex items-center">
+                  <PfIcon
+                    className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+                  />
+                  <span className="ml-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
+                </h5>
+                {ReactUtils.nullIf(
+                  <div className="py-4 md:ml-8 text-center">
+                    <button
+                      onClick={_ => send(ShowAdditionalFeedbackEditor)}
+                      disabled={isSubmissionReviewAllowed(submissionDetails)}
+                      className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+                      <Icon className="if i-plus-regular" />
+                      <p className="pl-2">
+                        {switch OverlaySubmission.feedback(overlaySubmission) {
+                        | [] => t("add_feedback")
+                        | _ => t("add_another_feedback")
+                        }->str}
+                      </p>
+                    </button>
+                  </div>,
+                  state.additonalFeedbackEditorVisible,
+                )}
+                {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+              </div>
+            </div>
+          }}
+        </div>
+      </DisablingCover>,
+    ]->React.array
+  }
+}

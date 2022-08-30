@@ -148,6 +148,7 @@ module CourseExports
           user = student.user
 
           [
+            user.id,
             { formula: student_report_link(student) },
             user.email,
             user.name,
@@ -155,20 +156,21 @@ module CourseExports
             user.title,
             user.affiliation,
             student.startup.tags.order(:name).pluck(:name).join(', '),
-            last_sign_in_at(user)
+            last_seen_at(user)
           ] + average_grades_for_student(student)
         end
 
       [
         [
-          'ID',
+          'User ID',
+          'Student ID',
           'Email Address',
           'Name',
           'Level',
           'Title',
           'Affiliation',
           'Tags',
-          'Last Sign In At'
+          'Last Seen At'
         ] + evaluation_criteria_names
       ] + rows
     end
@@ -229,8 +231,8 @@ module CourseExports
         end.order('users.email')
     end
 
-    def last_sign_in_at(user)
-      user.last_sign_in_at&.iso8601 || ''
+    def last_seen_at(user)
+      user.last_seen_at&.iso8601 || user.last_sign_in_at&.iso8601 || ''
     end
   end
 end

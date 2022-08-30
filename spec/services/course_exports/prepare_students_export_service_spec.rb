@@ -19,7 +19,7 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let(:user_1) do
-    create :user, email: 'a@example.com', last_sign_in_at: 2.days.ago
+    create :user, email: 'a@example.com', last_seen_at: 2.days.ago
   end
 
   let(:user_2) { create :user, email: 'b@example.com' }
@@ -136,8 +136,8 @@ describe CourseExports::PrepareStudentsExportService do
     }
   end
 
-  def last_sign_in_at(student)
-    student.user.last_sign_in_at&.iso8601 || ''
+  def last_seen_at(student)
+    student.user.last_seen_at&.iso8601 || ''
   end
 
   let(:expected_data) do
@@ -196,18 +196,20 @@ describe CourseExports::PrepareStudentsExportService do
         title: 'Students',
         rows: [
           [
-            'ID',
+            'User ID',
+            'Student ID',
             'Email Address',
             'Name',
             'Level',
             'Title',
             'Affiliation',
             'Tags',
-            'Last Sign In At',
+            'Last Seen At',
             'Criterion A (2,3) - Average',
             'Criterion B (2,3) - Average'
           ],
           [
+            student_1.user_id,
             report_link_formula(student_1),
             student_1.email,
             student_1.name,
@@ -215,7 +217,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_1.title,
             student_1.affiliation,
             'tag 1, tag 2',
-            last_sign_in_at(student_1),
+            last_seen_at(student_1),
             student_1_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -230,6 +232,7 @@ describe CourseExports::PrepareStudentsExportService do
               .to_s
           ],
           [
+            student_2.user_id,
             report_link_formula(student_2),
             student_2.email,
             student_2.name,
@@ -237,7 +240,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_2.title,
             student_2.affiliation,
             '',
-            last_sign_in_at(student_2),
+            last_seen_at(student_2),
             student_2_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -362,18 +365,20 @@ describe CourseExports::PrepareStudentsExportService do
             title: 'Students',
             rows: [
               [
-                'ID',
+                'User ID',
+                'Student ID',
                 'Email Address',
                 'Name',
                 'Level',
                 'Title',
                 'Affiliation',
                 'Tags',
-                'Last Sign In At',
+                'Last Seen At',
                 'Criterion A (2,3) - Average',
                 'Criterion B (2,3) - Average'
               ],
               [
+                student_1.user_id,
                 report_link_formula(student_1),
                 student_1.email,
                 student_1.name,
@@ -381,7 +386,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_1.title,
                 student_1.affiliation,
                 'tag 1, tag 2',
-                last_sign_in_at(student_1),
+                last_seen_at(student_1),
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -396,6 +401,7 @@ describe CourseExports::PrepareStudentsExportService do
                   .to_s
               ],
               [
+                student_3_access_ended.user_id,
                 report_link_formula(student_3_access_ended),
                 student_3_access_ended.email,
                 student_3_access_ended.name,
@@ -403,11 +409,12 @@ describe CourseExports::PrepareStudentsExportService do
                 student_3_access_ended.title,
                 student_3_access_ended.affiliation,
                 'tag 2',
-                last_sign_in_at(student_3_access_ended),
+                last_seen_at(student_3_access_ended),
                 nil,
                 nil
               ],
               [
+                student_4_dropped_out.user_id,
                 report_link_formula(student_4_dropped_out),
                 student_4_dropped_out.email,
                 student_4_dropped_out.name,
@@ -415,7 +422,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_4_dropped_out.title,
                 student_4_dropped_out.affiliation,
                 'tag 3',
-                last_sign_in_at(student_4_dropped_out),
+                last_seen_at(student_4_dropped_out),
                 nil,
                 nil
               ]

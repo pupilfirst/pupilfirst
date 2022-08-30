@@ -12,4 +12,6 @@ using [delayed_job](https://github.com/collectiveidea/delayed_job) in the produc
 By default, the development and test environment run jobs in-line with a request. If you've manually configured the
 application to defer them instead, you can execute the jobs with:
 
-    rake jobs:workoff
+```bash
+bundle exec rake jobs:workoff
+```

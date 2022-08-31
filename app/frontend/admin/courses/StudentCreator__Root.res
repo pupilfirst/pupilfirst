@@ -17,14 +17,14 @@ let pageLinks = courseId => [
 
 @react.component
 let make = (~courseId) => {
-  <div>
+  <div className="flex-1">
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}
       title="Add new students"
       description={"You can add multiple students to a list and add them to course"}
       links={pageLinks(courseId)}
     />
-    <div className="bg-white">
+    <div className="bg-white flex-1 pb-10">
       <div className="max-w-5xl mx-auto"> <StudentCreator__CreateForm courseId /> </div>
     </div>
   </div>

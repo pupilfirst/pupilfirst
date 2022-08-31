@@ -308,5 +308,6 @@ let make = (
         </button>
       </div>
     </div>
+    <div className="hidden md:block h-24 " />
   </div>
 }

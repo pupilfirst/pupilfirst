@@ -34,9 +34,7 @@ module Types
         end
     end
 
-    def last_seen_at
-      object.last_seen_at
-    end
+    delegate :last_seen_at, to: :object
 
     def taggings
       BatchLoader::GraphQL

@@ -25,15 +25,15 @@ feature 'School students index', js: true do
   end
 
   context 'with some students' do
-    let!(:student_1) { create :founder, cohort: live_cohort, level: level_1 }
-    let!(:student_2) { create :founder, cohort: live_cohort, level: level_2 }
-
-    # let(:team_in_different_course) { create :team }
-
-    # let(:team_with_lone_student) do
-    #   create :team, level: level_2, tag_list: tags
-    # end
-    # let!(:lone_student) { create :founder, startup: team_with_lone_student }
+    let!(:student_1) do
+      create :founder, cohort: live_cohort, level: level_1, tag_list: [tag_1]
+    end
+    let!(:student_2) do
+      create :founder, cohort: live_cohort, level: level_2, tag_list: [tag_2]
+    end
+    let!(:student_access_ended) do
+      create :founder, cohort: ended_cohort, level: level_2
+    end
 
     let(:name_1) { Faker::Name.name }
     let(:email_1) { Faker::Internet.email(name: name_1) }
@@ -52,9 +52,6 @@ feature 'School students index', js: true do
       create :faculty_cohort_enrollment,
              faculty: course_coach,
              cohort: live_cohort
-      # create :faculty_cohort_enrollment,
-      #        faculty: coach_in_different_course,
-      #        course: team_in_different_course.course
     end
 
     scenario 'School admin adds new students and a team' do
@@ -379,8 +376,6 @@ feature 'School students index', js: true do
         fill_in 'Affiliation', with: ''
         click_button 'Update Student'
 
-        # binding.pry
-
         expect(page).to have_text('Student updated successfully')
         dismiss_notification
 
@@ -388,44 +383,14 @@ feature 'School students index', js: true do
         expect(user_1.title).to eq(new_title)
         expect(user_1.affiliation).to eq(nil)
 
-        # Form a Team
-        check "select-student-#{student_1.id}"
-        check "select-student-#{student_2.id}"
-        click_button 'Group as Team'
-        expect(page).to have_text('Teams updated successfully')
-        dismiss_notification
+        # Assign a coach to a student
 
-        expect(student_1.reload.startup).to eq(student_2.reload.startup)
-        expect(page).to have_text(student_1.startup.name)
-
-        # Try editing the team name for the newly formed team.
-        find('button', text: user_1.name).click
-
-        expect(page).to have_text(student_1.startup.name)
-
-        fill_in 'Team Name', with: new_team_name
-        click_button 'Update Student'
-
-        expect(page).to have_text('Student updated successfully')
-        dismiss_notification
-
-        expect(student_1.reload.startup.name).to eq(new_team_name)
-
-        # Move out from a team
-        check "select-student-#{student_1.id}"
-        click_button 'Move out from Team'
-        expect(page).to have_text('Teams updated successfully')
-        dismiss_notification
-        student_1.reload
-        student_2.reload
-        expect(student_1.startup.id).not_to eq(student_2.startup.id)
-
-        # Assign a coach to a team
-        founder = startup_2.founders.last
-        find('button', text: founder.user.name).click
+        within("div[data-student-name='#{student_2.user.name}']") do
+          click_link 'Edit'
+        end
 
         # Coach in a different course must not be listed.
-        expect(page).to have_text('Team Coaches')
+        expect(page).to have_text('Personal Coaches')
         expect(page).not_to have_text(coach_in_different_course.name)
 
         # But it should be possible to assign a coach in 'this' course.
@@ -437,128 +402,76 @@ feature 'School students index', js: true do
 
         dismiss_notification
 
-        expect(
-          founder.reload.startup.faculty.find_by(id: course_coach)
-        ).to be_present
-      end
-    end
-
-    context 'school admin marks team as inactive' do
-      let!(:inactive_team_1) { create :startup, level: level_1 }
-      let(:access_ends_at) { 1.day.from_now }
-
-      scenario 'School admin updates access end date' do
-        sign_in_user school_admin.user,
-                     referrer: school_course_students_path(course)
-
-        expect(page).to have_link(
-          'Inactive Students',
-          href: school_course_inactive_students_path(course)
-        )
-
-        founder = inactive_team_1.founders.first
-        expect(page).to have_text(founder.name)
-
-        find('button', text: founder.name).click
-
-        expect(page).to have_text(founder.startup.name)
-        fill_in "Team's Access Ends On", with: access_ends_at.to_date.iso8601
-        click_button 'Update Student'
-
-        expect(page).to have_text('Student updated successfully')
-        dismiss_notification
-
-        expect(
-          founder
-            .reload
-            .startup
-            .access_ends_at
-            .in_time_zone(founder.user.time_zone)
-            .to_date
-        ).to eq(access_ends_at.to_date)
-
-        find('button', text: founder.name).click
-        fill_in "Team's Access Ends On", with: 1.day.ago.iso8601
-        click_button 'Update Student'
-
-        expect(page).to have_text(
-          'Team has been updated, and moved to list of inactive students'
-        )
-        dismiss_notification
-
-        expect(founder.reload.startup.access_ends_at.to_date).to eq(
-          1.day.ago.to_date
-        )
-        expect(page).not_to have_text(founder.name)
+        expect(student_2.reload.faculty.find_by(id: course_coach)).to be_present
       end
     end
 
     scenario 'school admin marks students as dropped out' do
-      # Enroll the coach as a team coach in all three teams.
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+      # Enroll the coach as a personal coach for all students.
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: course_coach,
-             startup: startup_1
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+             founder: student_1
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: course_coach,
-             startup: startup_2
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
-             faculty: course_coach,
-             startup: team_with_lone_student
+             founder: student_2
 
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
       # Mark a student in a team of more than one students as dropped out.
-      founder = startup_2.founders.last
-      founder_user = founder.user
 
-      find('button', text: founder_user.name).click
+      within("div[data-student-name='#{student_1.user.name}']") do
+        click_link 'Edit'
+      end
 
-      expect(page).to have_text(founder_user.name)
-      expect(page).to have_text(founder.startup.name)
-      expect(course_coach.startups.count).to eq(3)
+      expect(page).to have_text(student_1.user.name)
+      expect(course_coach.founders.count).to eq(2)
 
-      click_button 'Actions'
+      click_link 'Actions'
       click_button 'Dropout Student'
 
       dismiss_notification
 
-      expect(page).not_to have_text(founder_user.name)
+      expect(page).to have_text('Re-Activate Student')
 
-      # The student's team name should now be the student's own name.
-      expect(founder.reload.startup.name).to eq(founder_user.name)
+      # The student should have been marked as exited.
+      expect(student_1.reload.dropped_out_at).not_to eq(nil)
 
-      # The team should have been marked as exited.
-      expect(founder.startup.dropped_out_at).not_to eq(nil)
+      # The student should have any directly linked coaches.
+      expect(student_1.faculty.count).to eq(0)
 
-      # The student should be in a team without any directly linked coaches.
-      expect(founder.startup.faculty.count).to eq(0)
+      # The student should also be removed from coaches list.
+      expect(course_coach.founders.count).to eq(1)
+    end
 
-      # However the coach should still be linked to the same number of teams.
-      expect(course_coach.startups.count).to eq(3)
+    scenario 'school admin re-activates a dropped out student' do
+      student_access_ended.update!(dropped_out_at: 1.day.ago)
 
-      # Mark a student who is alone in a team as dropped out.
-      expect(team_with_lone_student.faculty.count).to eq(1)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
-      find('button', text: lone_student.name).click
+      # Mark a student in a team of more than one students as dropped out.
 
-      click_button 'Actions'
-      click_button 'Dropout Student'
+      expect(page).not_to have_text(student_access_ended.user.name)
 
-      expect(page).not_to have_text(founder_user.name)
+      fill_in 'Filter Resources', with: 'Inactive Students'
+      click_button 'Pick Include: Inactive Students'
 
-      lone_user_team = lone_student.reload.startup
-      expect(lone_user_team.dropped_out_at).not_to eq(nil)
+      within("div[data-student-name='#{student_access_ended.user.name}']") do
+        click_link 'Edit'
+      end
 
-      # The student's team should not have changed.
-      expect(lone_user_team).to eq(team_with_lone_student)
+      click_link 'Actions'
+      click_button 'Re-Activate Student'
 
-      # All coaches should have been removed from the team.
-      expect(lone_user_team.faculty.count).to eq(0)
-      expect(course_coach.startups.count).to eq(2)
+      dismiss_notification
+
+      expect(page).to have_text('Dropout Student')
+
+      # The student should have been marked as exited.
+      expect(student_access_ended.reload.dropped_out_at).to eq(nil)
     end
 
     scenario 'user who is not logged in gets redirected to sign in page' do
@@ -572,6 +485,9 @@ feature 'School students index', js: true do
 
       # Add a student
       click_link 'Add New Students'
+
+      click_button 'Pick a Cohort'
+      click_button live_cohort.name
 
       fill_in 'Name', with: name_1
       fill_in 'Email', with: email_1
@@ -597,70 +513,68 @@ feature 'School students index', js: true do
                    referrer: school_course_students_path(course)
 
       # filter by level
-      fill_in 'search', with: 'level'
+      fill_in 'Filter Resources', with: 'level'
       click_button level_2.name
-      expect(page).to have_text(startup_2.name)
-      expect(page).not_to have_text(startup_1.name)
-      click_button "Remove selection: #{level_2.name}"
+      expect(page).to have_text(student_2.name)
+      expect(page).not_to have_text(student_1.name)
+      click_button "Remove selection: #{level_2.filter_display_name}"
 
       # filter by tag
-      fill_in 'search', with: tag_1
-      click_button 'Pick Tag: Single Student'
-      expect(page).to have_text(lone_student.name)
-      expect(page).to have_text(tag_2)
-      expect(page).not_to have_text(startup_1.name)
-      expect(page).not_to have_text(startup_2.name)
+      fill_in 'Filter Resources', with: tag_1
+      click_button 'Pick Student Tag: Single Student'
+      expect(page).to have_text(student_1.name)
+      expect(page).not_to have_text(student_2.name)
       click_button 'Remove selection: Single Student'
 
       # filter by name
-      name = startup_1.founders.first.name
-      fill_in 'search', with: name
+      name = student_1.name
+      fill_in 'Filter Resources', with: name
 
-      within('.multiselect-dropdown__search-dropdown') { click_button name }
+      click_button "Pick Search by Name: #{name}"
 
-      expect(page).to have_text(startup_1.name)
+      expect(page).to have_text(student_1.name)
       click_button "Remove selection: #{name}"
 
-      # filter by team name
-      team_name = startup_2.name
-      fill_in 'search', with: team_name
-      click_button team_name
-      expect(page).to have_text(startup_2.founders.first.name)
-      expect(page).not_to have_text(lone_student.name)
-      click_button "Remove selection: #{team_name}"
-
       # filter by email
-      email = startup_1.founders.first.email
-      fill_in 'search', with: email
-      click_button email
-      expect(page).to have_text(startup_1.name)
-      expect(page).not_to have_text(startup_2.name)
-      expect(page).not_to have_text(lone_student.name)
+      email = student_1.email
+      fill_in 'Filter Resources', with: email
+      click_button "Pick Search by Email: #{email}"
+
+      expect(page).to have_text(student_1.name)
+      expect(page).not_to have_text(student_2.name)
       click_button "Remove selection: #{email}"
+
+      # Inlcude Inactive Students
+      expect(page).not_to have_text(student_access_ended.name)
+      fill_in 'Filter Resources', with: 'Inactive Students'
+      click_button 'Pick Include: Inactive Students'
+      expect(page).to have_text(student_access_ended.name)
     end
   end
 
   context 'when there are a large number of teams' do
-    let!(:teams) { create_list :startup, 30, level: level_1 }
-
-    def safe_random_team
-      @selected_team_ids ||= []
-      team =
-        Startup.all.where.not(id: @selected_team_ids).order('random()').first
-      @selected_team_ids << team.id
-      team
+    let!(:students) do
+      create_list :founder, 30, level: level_1, cohort: live_cohort
     end
 
-    let(:oldest_created) { safe_random_team }
-    let(:newest_created) { safe_random_team }
-    let(:oldest_updated) { safe_random_team }
-    let(:newest_updated) { safe_random_team }
-    let(:team_aaa) { safe_random_team }
-    let(:team_zzz) { safe_random_team }
+    def safe_random_students
+      @selected_student_ids ||= []
+      student =
+        Founder.all.where.not(id: @selected_student_ids).order('random()').first
+      @selected_student_ids << student.id
+      student
+    end
+
+    let(:oldest_created) { safe_random_students }
+    let(:newest_created) { safe_random_students }
+    let(:oldest_updated) { safe_random_students }
+    let(:newest_updated) { safe_random_students }
+    let(:student_aaa) { safe_random_students }
+    let(:student_zzz) { safe_random_students }
 
     before do
-      team_aaa.update!(name: 'A aa')
-      team_zzz.update!(name: 'Z zz')
+      student_aaa.user.update!(name: 'A aa')
+      student_zzz.user.update!(name: 'Z zz')
       oldest_created.update!(created_at: Time.at(0))
       newest_created.update!(created_at: 1.day.from_now)
       oldest_updated.update!(updated_at: Time.at(0))
@@ -671,106 +585,82 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      expect(page).to have_content('Showing 20 of 30 students')
-      expect(find('.student-team-container:first-child')).to have_text(
-        team_aaa.name
-      )
+      expect(page).to have_content('Showing 20 of 30 Students')
 
       # Check ordering by last created
-      click_button 'Order by Name'
-      click_button 'Order by Last Created'
-
-      expect(find('.student-team-container:first-child')).to have_text(
-        oldest_created.name
+      expect(find('.student-container:first-child')).to have_text(
+        newest_created.name
       )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(
-        newest_created.name
+      expect(find('.student-container:last-child')).to have_text(
+        oldest_created.name
       )
 
       # Reverse sorting
-      click_button('toggle-sort-order')
+      click_button 'Order by Last Created'
+      click_button 'Order by First Created'
 
-      expect(find('.student-team-container:first-child')).to have_text(
-        newest_created.name
+      expect(find('.student-container:first-child')).to have_text(
+        oldest_created.name
       )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(
-        oldest_created.name
+      expect(find('.student-container:last-child')).to have_text(
+        newest_created.name
       )
 
       # Check ordering by last updated
-      click_button 'Order by Last Created'
+      click_button 'Order by First Created'
       click_button 'Order by Last Updated'
 
-      expect(find('.student-team-container:first-child')).to have_text(
+      expect(find('.student-container:first-child')).to have_text(
         newest_updated.name
       )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(
+      expect(find('.student-container:last-child')).to have_text(
         oldest_updated.name
       )
 
       # Reverse sorting
-      click_button('toggle-sort-order')
+      click_button 'Order by Last Updated'
+      click_button 'Order by First Updated'
 
-      expect(find('.student-team-container:first-child')).to have_text(
+      expect(find('.student-container:first-child')).to have_text(
         oldest_updated.name
       )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(
+      expect(find('.student-container:last-child')).to have_text(
         newest_updated.name
       )
 
       # Check ordering by name
-      click_button 'Order by Last Updated'
+      click_button 'Order by First Updated'
       click_button 'Order by Name'
 
-      expect(find('.student-team-container:first-child')).to have_text(
-        team_aaa.name
+      expect(find('.student-container:first-child')).to have_text(
+        student_aaa.name
       )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(
-        team_zzz.name
-      )
-
-      # Reverse sorting
-      click_button('toggle-sort-order')
-
-      expect(find('.student-team-container:first-child')).to have_text(
-        team_zzz.name
-      )
-
-      click_button('Load More')
-
-      expect(find('.student-team-container:last-child')).to have_text(
-        team_aaa.name
+      expect(find('.student-container:last-child')).to have_text(
+        student_zzz.name
       )
     end
   end
 
   context 'when a course has no certificates' do
-    let!(:team_1) { create :startup, level: level_1 }
-
+    let!(:student) { create :founder, level: level_1, cohort: live_cohort }
     scenario 'admin visits student editor to issue certificates' do
       sign_in_user school_admin.user,
-                   referrer: school_course_students_path(course)
-
-      student = team_1.founders.last
-
-      find('button', text: student.name).click
-
-      click_button 'Actions'
+                   referrer: "/school/students/#{student.id}/actions"
 
       expect(page).to have_text(
         'This course does not have any certificates to issue'
@@ -779,9 +669,13 @@ feature 'School students index', js: true do
   end
 
   context 'when a course has certificates' do
-    let!(:team_1) { create :startup, level: level_1 }
-    let(:student_without_certificate) { team_1.founders.first }
-    let(:student_with_certificate) { team_1.founders.last }
+    let!(:student_without_certificate) do
+      create :founder, level: level_1, cohort: live_cohort
+    end
+    let(:student_with_certificate) do
+      create :founder, level: level_1, cohort: live_cohort
+    end
+
     let!(:certificate_1) { create :certificate, course: course }
     let!(:certificate_2) { create :certificate, course: course }
 
@@ -797,9 +691,11 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      find('button', text: student_without_certificate.name).click
+      within(
+        "div[data-student-name='#{student_without_certificate.user.name}']"
+      ) { click_link 'Edit' }
 
-      click_button 'Actions'
+      click_link 'Actions'
 
       expect(page).to have_text(
         'This student has not been issued any certificates'
@@ -825,10 +721,10 @@ feature 'School students index', js: true do
         expect(page).to have_text(issued_certificate.serial_number)
         expect(page).to have_text(school_admin.user.name)
         expect(page).to have_text(certificate_2.name)
+        expect(page).to have_button('Revoke Certificate')
         expect(page).to have_text(
           issued_certificate.created_at.strftime('%B %-d, %Y')
         )
-        expect(page).to have_button('Revoke Certificate')
       end
     end
 
@@ -836,9 +732,11 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      find('button', text: student_with_certificate.name).click
+      within(
+        "div[data-student-name='#{student_with_certificate.user.name}']"
+      ) { click_link 'Edit' }
 
-      click_button 'Actions'
+      click_link 'Actions'
 
       expect(page).to have_text(certificate_1.name)
 

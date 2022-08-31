@@ -141,7 +141,9 @@ let studentsList = (params, students) => {
   <div className="space-y-4">
     {students
     ->Js.Array2.map(student => {
-      <div key={StudentInfo.id(student)} className="h-full flex items-center bg-white">
+      <div
+        key={StudentInfo.id(student)}
+        className="student-container h-full flex items-center bg-white">
         <div
           className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex">
@@ -220,11 +222,11 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
-      "Student Tags",
+      "Student Tag",
       DataLoad(#StudentTag),
       "focusColor",
     ),
-    CourseResourcesFilter.makeFilter("user_tags", "User Tags", DataLoad(#UserTag), "blue"),
+    CourseResourcesFilter.makeFilter("user_tags", "User Tag", DataLoad(#UserTag), "blue"),
     CourseResourcesFilter.makeFilter("email", "Search by Email", Search, "gray"),
     CourseResourcesFilter.makeFilter("name", "Search by Name", Search, "gray"),
   ]
@@ -282,8 +284,8 @@ let make = (~courseId, ~search) => {
                     search={search}
                     sorter={CourseResourcesFilter.makeSorter(
                       "sort_by",
-                      ["Name", "First Created", "Last Created"],
-                      "Name",
+                      ["Name", "First Created", "Last Created", "First Updated", "Last Updated"],
+                      "Last Created",
                     )}
                   />
                 </div>

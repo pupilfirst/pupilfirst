@@ -428,7 +428,7 @@ let showCourse = course => {
         </div>
         {ReactUtils.nullIf(
           <Dropdown
-            className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
+            className="col-span-2 px-4" selected={dropdownSelected} contents={courseLinks(course)}
           />,
           Belt.Option.isSome(Course.archivedAt(course)),
         )}

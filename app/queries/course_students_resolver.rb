@@ -47,10 +47,11 @@ class CourseStudentsResolver < ApplicationQuery
         }
       ) if filter[:user_tags].present?
 
-    scope = scope.includes(:user).order("#{sort_by_string}") if filter[:sort_by]
-      .present?
-
-    scope
+    if filter[:sort_by].present?
+      scope.includes(:user).order("#{sort_by_string}")
+    else
+      scope.order('founders.created_at DESC')
+    end
   end
 
   def resource_school
@@ -94,6 +95,10 @@ class CourseStudentsResolver < ApplicationQuery
       'founders.created_at ASC'
     when 'Last Created'
       'founders.created_at DESC'
+    when 'First Updated'
+      'founders.updated_at ASC'
+    when 'Last Updated'
+      'founders.updated_at DESC'
     else
       raise "#{filter[:sort_by]} is not a valid sort criterion"
     end

@@ -31,7 +31,11 @@ class Level < ApplicationRecord
     unlock_at.blank? || unlock_at.past?
   end
 
-  def filter_name
+  def filter_display_name
     "#{self.id};#{self.number},#{self.name}"
+  end
+
+  def filter_name
+    "#{self.id};#{filter_display_name}"
   end
 end

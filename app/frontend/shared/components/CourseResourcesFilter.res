@@ -190,6 +190,7 @@ let selected = (sorter: sorter, params) => {
   let value =
     Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
   <button
+    title={"Order by" ++ " " ++ value}
     className="p-3 w-28 text-left truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     {value->str}
   </button>
@@ -199,7 +200,7 @@ let contents = (sorter, params) => {
   sorter.options->Js.Array2.map(sort =>
     <button
       key=sort
-      title={"select" ++ " " ++ sort}
+      title={"Order by" ++ " " ++ sort}
       className="w-full cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       onClick={_e => setParams(sorter.key, sort, params)}>
       {sort->str}

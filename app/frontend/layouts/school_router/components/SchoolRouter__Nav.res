@@ -6,19 +6,6 @@ open SchoolRouter__Types
 
 let str = React.string
 
-let showUserLink = (icon, href) => {
-  <div key=href className="whitespace-nowrap">
-    <a
-      ariaLabel="Sign out"
-      title="Sign out"
-      rel="nofollow"
-      className="flex justify-center items-center text-xs text-gray-500 bg-gray-50 px-2 py-2 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
-      href>
-      <FaIcon classes={"fas fw fa-" ++ icon} />
-    </a>
-  </div>
-}
-
 let containerClasses = shrunk => {
   let defaultClasses = "bg-white school-admin-navbar__primary-nav border-r border-gray-200 flex flex-col justify-between py-3 "
 
@@ -177,13 +164,13 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                   {Js.Array.map(
                     course =>
                       <li key={Course.id(course)}>
-                        <a
+                        <Link
                           ariaLabel={Course.name(course)}
-                          href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
+                          href={"/school/courses/" ++ Course.id(course) ++ "/students"}
                           className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
                           <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
                           {str(Course.name(course))}
-                        </a>
+                        </Link>
                       </li>,
                     Js.Array.filter(course => !Course.ended(course), courses),
                   )->React.array}

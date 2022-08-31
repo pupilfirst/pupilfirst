@@ -105,8 +105,8 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
 let showUserLink = (icon, href) => {
   <div key=href className="whitespace-nowrap">
     <a
-      ariaLabel="Sign out"
-      title="Sign out"
+      ariaLabel="Sign Out"
+      title="Sign Out"
       rel="nofollow"
       className="flex justify-center items-center text-xs text-gray-500 bg-gray-50 px-2 py-2 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>

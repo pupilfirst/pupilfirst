@@ -120,7 +120,7 @@ let reducer = (state, action) =>
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
-  | UpdateFilterString(filterString) => {...state, filterString}
+  | UpdateFilterString(filterString) => {...state, filterString: filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
@@ -132,7 +132,7 @@ let reducer = (state, action) =>
       ...state,
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: NotLoading,
-      totalEntriesCount,
+      totalEntriesCount: totalEntriesCount,
     }
   }
 
@@ -270,7 +270,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 
 let showCourse = (course: course, selected, onChangeCB) => {
   let selectedClass = selected ? " bg-primary-100" : ""
-  <Spread key={course.id} props={"data-submission-id": course.name}>
+  <Spread key={course.id} props={"data-course-id": course.name}>
     <div
       className={"w-full flex cursor-pointer hover:bg-gray-300" ++ selectedClass}
       onClick={_ => onChangeCB(course.id)}

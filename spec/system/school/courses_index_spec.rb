@@ -352,7 +352,7 @@ feature 'Courses Index', js: true do
   scenario 'school admin clicks on quick links' do
     sign_in_user school_admin.user, referrer: school_courses_path
 
-    within("div[data-submission-id='#{course_1.name}']") do
+    within("div[data-t='#{course_1.name}']") do
       expect(page).to have_link('View public page', href: course_path(course_1))
 
       click_button 'Quick Links'

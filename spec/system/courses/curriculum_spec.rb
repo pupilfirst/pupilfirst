@@ -547,7 +547,7 @@ feature "Student's view of Course Curriculum", js: true do
     before do
       # Enroll the student as a coach who can review her own submissions.
       create :faculty_founder_enrollment,
-             :with_course_enrollment,
+             :with_cohort_enrollment,
              faculty: coach,
              founder: student
     end

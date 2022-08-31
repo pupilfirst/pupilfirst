@@ -32,7 +32,7 @@ class Level < ApplicationRecord
   end
 
   def filter_display_name
-    "#{self.id};#{self.number},#{self.name}"
+    "#{self.number},#{self.name}"
   end
 
   def filter_name

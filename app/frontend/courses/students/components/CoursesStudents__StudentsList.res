@@ -53,7 +53,7 @@ let showStudent = student => {
   <Link
     href={"/students/" ++ (student->StudentInfo.id ++ "/report")}
     key={student->StudentInfo.id}
-    ariaLabel={"student: " ++ student->StudentInfo.user->UserDetails.name}
+    ariaLabel={"Student " ++ student->StudentInfo.user->UserDetails.name}
     className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
     <div className="flex flex-col justify-center md:flex-row ">
       <div className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">

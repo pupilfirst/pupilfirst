@@ -7,87 +7,93 @@ feature 'Course students list', js: true do
   # The basics
   let!(:school) { create :school, :current }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
   let(:level_3) { create :level, :three, course: course }
   let(:course_coach) { create :faculty, school: school }
-  let(:team_coach) { create :faculty, school: school }
+  let(:student_coach) { create :faculty, school: school }
 
-  # Create few teams
-  let!(:team_1) do
-    create :startup,
+  # Create few students
+  let!(:student_1) do
+    create :founder,
            level: level_1,
-           name: 'Zucchini',
-           tag_list: ['starts with z', 'vegetable']
+           tag_list: ['starts with z', 'vegetable'],
+           cohort: cohort
   end # This will always be around the bottom of the list.
-  let!(:team_2) do
-    create :startup, level: level_2, name: 'Asparagus', tag_list: ['vegetable']
+  let!(:student_2) do
+    create :founder, level: level_2, tag_list: ['vegetable'], cohort: cohort
   end # This will always be around the top.
-  let!(:team_3) { create :startup, level: level_2, name: 'Banana' }
-  let!(:team_4) { create :startup, level: level_3, name: 'Blueberry' }
-  let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
-  let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
+  let!(:student_3) { create :founder, level: level_2, cohort: cohort }
+  let!(:student_4) { create :founder, level: level_3, cohort: cohort }
+  let!(:student_5) { create :founder, level: level_3, cohort: cohort }
+  let!(:student_6) { create :founder, level: level_3, cohort: cohort }
 
   before do
-    create :faculty_course_enrollment, faculty: course_coach, course: course
-    team_1.founders.first.user.update!(last_seen_at: 3.minutes.ago)
+    create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
+    student_1.user.update!(name: 'Zucchini', last_seen_at: 3.minutes.ago)
+    student_2.user.update!(name: 'Asparagus')
+    student_3.user.update!(name: 'Banana')
+    student_4.user.update!(name: 'Blueberry')
+    student_5.user.update!(name: 'Cherry')
+    student_6.user.update!(name: 'Elderberry')
 
-    10.times do
-      create :startup,
-             level: level_3,
-             name: "C #{Faker::Lorem.word} #{rand(10)}" # These will be in the middle of the list.
+    30.times do
+      user = create :user, name: "C #{Faker::Lorem.word} #{rand(10)}"
+
+      # These will be in the middle of the list.
+      create :student, cohort: cohort, level: level_3, user: user
     end
 
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
-           faculty: team_coach,
-           startup: team_6
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
+           faculty: student_coach,
+           founder: student_6
   end
 
   scenario 'coach checks the complete list of students' do
     sign_in_user course_coach.user, referrer: students_course_path(course)
 
-    teams_sorted_by_name = course.startups.order(:name).to_a
+    click_button 'Order by Last Created'
+    click_button 'Order by Name'
+
+    students_sorted_by_name =
+      course.founders.joins(:user).order('users.name').to_a
 
     # Check if the first ten teams are listed
-    expect(page).to have_text(teams_sorted_by_name[0].name)
-    expect(page).to have_text(teams_sorted_by_name[1].name)
-    expect(page).to have_text(teams_sorted_by_name[9].name)
+    expect(page).to have_text(students_sorted_by_name[0].name)
+    expect(page).to have_text(students_sorted_by_name[10].name)
+    expect(page).to have_text(students_sorted_by_name[19].name)
 
     # Check if teams in next page are not listed
-    expect(page).to_not have_text(teams_sorted_by_name[10].name)
-    expect(page).to_not have_text(teams_sorted_by_name[11].name)
+    expect(page).to_not have_text(students_sorted_by_name[22].name)
+    expect(page).to_not have_text(students_sorted_by_name[30].name)
 
     click_button('Load More...')
 
-    expect(page).to have_text(teams_sorted_by_name[10].name)
-    expect(page).to have_text(teams_sorted_by_name[11].name)
-
-    # Check if founders are listed
-    course.startups.each do |startup|
-      expect(page).to have_text(startup.founders.first.name)
-    end
+    expect(page).to have_text(students_sorted_by_name[22].name)
+    expect(page).to have_text(students_sorted_by_name[30].name)
 
     # Check the last seen for the first student
-    within("div[aria-label='Info of team #{team_1.name}']") do
+    within("a[aria-label='Student #{student_1.name}']") do
       expect(page).to have_text('Last seen 3 minutes ago')
     end
 
     # Check the last seen for the second student
-    within("div[aria-label='Info of team #{team_3.name}']") do
+    within("a[aria-label='Student #{student_3.name}']") do
       expect(page).to have_text('This student has never signed in')
     end
 
-    # Check levels of few teams
-    within("div[aria-label='team level info: #{team_1.id}']") do
+    # Check levels of few students
+    within("div[aria-label='student level info:#{student_1.id}']") do
       expect(page).to have_text('1')
     end
 
-    within("div[aria-label='team level info: #{team_2.id}']") do
+    within("div[aria-label='student level info:#{student_2.id}']") do
       expect(page).to have_text('2')
     end
 
-    within("div[aria-label='team level info: #{team_5.id}']") do
+    within("div[aria-label='student level info:#{student_5.id}']") do
       expect(page).to have_text('3')
     end
 
@@ -109,16 +115,17 @@ feature 'Course students list', js: true do
     end
 
     # Hover over a level to get percentage data
-    students_in_course = Founder.where(startup: course.startups).count
-    students_in_l2 = Founder.where(startup_id: [team_2.id, team_3.id]).count
+    students_in_course = course.founders.count
+    students_in_l2 = 2
     percentage_students_in_l2 = students_in_l2 / students_in_course.to_f * 100
 
     within("div[aria-label='Students in level 2']") do
       find('.tooltip__trigger').hover
     end
 
-    expect(page).to have_text("Percentage: #{percentage_students_in_l2}")
-    expect(page).to have_text('Teams: 2')
+    expect(page).to have_text(
+      "Percentage: #{percentage_students_in_l2.round(1)}"
+    )
     expect(page).to have_text("Students: #{students_in_l2}")
   end
 

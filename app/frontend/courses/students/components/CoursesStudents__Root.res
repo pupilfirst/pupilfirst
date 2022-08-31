@@ -56,7 +56,10 @@ let reducer = (state, action) =>
       loading: LoadingV2.setNotLoading(state.loading),
       totalEntriesCount: totalEntriesCount,
       reloadDistributionAt: None,
-      studentDistribution: Belt.Option.getWithDefault(studentDistribution, []),
+      studentDistribution: Belt.Option.getWithDefault(
+        studentDistribution,
+        state.studentDistribution,
+      ),
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {
@@ -73,7 +76,7 @@ module UserProxyFragment = UserProxy.Fragment
 
 module StudentsQuery = %graphql(`
     query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!) {
-      courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after, ) {
+      courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after) {
         nodes {
           id,
           taggings
@@ -236,15 +239,14 @@ let make = (~courseId) => {
         </div>
         <div
           className="p-5 mt-6 bg-white rounded-md border border-gray-300 relative md:sticky md:top-16 z-10">
-          <p className="uppercase pb-2 text-xs font-semibold"> {"Filter students by"->str} </p>
           <CourseResourcesFilter
             courseId
             filters={makeFilters()}
             search={url.search}
             sorter={CourseResourcesFilter.makeSorter(
               "sort_by",
-              ["Name", "First Created", "Last Created"],
-              "Name",
+              ["Name", "First Created", "Last Created", "First Updated", "Last Updated"],
+              "Last Created",
             )}
           />
         </div>

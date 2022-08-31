@@ -9,7 +9,7 @@ module Types
     field :taggings, [String], null: false
     field :last_seen_at, GraphQL::Types::ISO8601DateTime, null: true
 
-    field :email, String, null: false  do
+    field :email, String, null: false do
       def authorized?(_object, _args, context)
         context[:current_school_admin].present?
       end
@@ -35,7 +35,7 @@ module Types
     end
 
     def last_seen_at
-      object.current_sign_in_at
+      object.last_seen_at
     end
 
     def taggings

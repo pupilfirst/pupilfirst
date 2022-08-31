@@ -3,11 +3,7 @@ class GraphqlController < ApplicationController
   skip_before_action :redirect_to_primary_domain, if: :introspection?
 
   rescue_from ActionController::InvalidAuthenticityToken do
-    render json: {
-             errors: [
-               { message: I18n.t('shared.invalid_authenticity_token_error') }
-             ]
-           }
+    render json: { errors: [{ message: I18n.t('shared.invalid_authenticity_token_error') }] }
   end
 
   def execute
@@ -25,21 +21,14 @@ class GraphqlController < ApplicationController
       token_auth: api_token.present?
     }
 
-    result =
-      PupilfirstSchema.execute(
-        query,
-        variables: variables,
-        context: context,
-        operation_name: operation_name
-      )
+    result = PupilfirstSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
 
     # Inject notifications into the GraphQL response, if any. These should be manually handled by the client.
-    result[:notifications] = context[:notifications] if context[:notifications]
-      .any?
+    result[:notifications] = context[:notifications] if context[:notifications].any?
 
     render json: result
   rescue => e
-    raise e unless Rails.env.development? || Rails.env.test?
+    raise e unless Rails.env.development?
 
     handle_error_in_development e
   end
@@ -58,7 +47,11 @@ class GraphqlController < ApplicationController
   def ensure_hash(ambiguous_param)
     case ambiguous_param
     when String
-      ambiguous_param.present? ? ensure_hash(JSON.parse(ambiguous_param)) : {}
+      if ambiguous_param.present?
+        ensure_hash(JSON.parse(ambiguous_param))
+      else
+        {}
+      end
     when Hash, ActionController::Parameters
       ambiguous_param
     when nil
@@ -72,13 +65,6 @@ class GraphqlController < ApplicationController
     logger.error error.message
     logger.error error.backtrace.join("\n")
 
-    render json: {
-             error: {
-               message: error.message,
-               backtrace: error.backtrace
-             },
-             data: {}
-           },
-           status: :internal_server_error
+    render json: { error: { message: error.message, backtrace: error.backtrace }, data: {} }, status: :internal_server_error
   end
 end

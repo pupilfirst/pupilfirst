@@ -28,7 +28,7 @@ module Schools
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
         render json: {
-                 id: faculty.id,
+                 id: faculty.id.to_s,
                  image_url: faculty.user.image_or_avatar_url,
                  error: nil
                }

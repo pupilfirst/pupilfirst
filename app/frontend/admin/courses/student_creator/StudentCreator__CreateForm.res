@@ -21,7 +21,9 @@ type action =
   | ClearSaving
 
 let str = React.string
-let t = I18n.t(~scope="components.StudentsEditor__CreateForm")
+
+let t = I18n.t(~scope="components.StudentCreator__CreateForm")
+let ts = I18n.ts
 
 let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
@@ -41,7 +43,7 @@ let appliedTags = teams =>
 let allKnownTags = (incomingTags, appliedTags) =>
   incomingTags |> Js.Array.concat(appliedTags) |> ArrayUtils.distinct
 
-let handleResponseCB = (submitCB, state, studentIds) => {
+let handleResponseCB = (state, studentIds) => {
   let studentsAdded = Js.Array.length(studentIds)
 
   if studentsAdded == 0 {
@@ -54,7 +56,7 @@ let handleResponseCB = (submitCB, state, studentIds) => {
     )
 
     if studentsAdded == studentsRequested {
-      Notification.success(t("done_exclamation"), t("added_full_description"))
+      Notification.success(ts("notifications.done_exclamation"), t("added_full_description"))
     } else {
       let description = t(
         ~variables=[
@@ -66,8 +68,6 @@ let handleResponseCB = (submitCB, state, studentIds) => {
       Notification.notice(t("added_partial_title"), description)
     }
   }
-
-  appliedTags(state.teamsToAdd)->submitCB
 }
 
 module CreateStudentsQuery = %graphql(`
@@ -139,7 +139,10 @@ let createStudents = (state, send, courseId, cohort, event) => {
   CreateStudentsQuery.make(variables)
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
-    | Some(_studentIds) => RescriptReactRouter.push({`/school/courses/${courseId}/students`})
+    | Some(studentIds) => {
+        handleResponseCB(state, studentIds)
+        RescriptReactRouter.push({`/school/courses/${courseId}/students`})
+      }
     | None => send(ClearSaving)
     }
 

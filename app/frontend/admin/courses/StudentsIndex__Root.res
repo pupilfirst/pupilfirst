@@ -188,17 +188,19 @@ let studentsList = (params, students) => {
               </div>
             </div>
           </div>
-          <div>
-            <Link
-              ariaLabel={`Edit ${User.name(StudentInfo.user(student))}'s profile`}
-              href={`/school/students/${StudentInfo.id(student)}/details`}
-              className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
-              <span className="inline-flex items-center p-2">
-                <PfIcon className="if i-edit-regular if-fw" />
-                <span className="ml-2"> {"Edit"->str} </span>
-              </span>
-            </Link>
-          </div>
+          <Spread props={"data-student-name": User.name(StudentInfo.user(student))}>
+            <div>
+              <Link
+                ariaLabel={`Edit ${User.name(StudentInfo.user(student))}'s profile`}
+                href={`/school/students/${StudentInfo.id(student)}/details`}
+                className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
+                <span className="inline-flex items-center p-2">
+                  <PfIcon className="if i-edit-regular if-fw" />
+                  <span className="ml-2"> {"Edit"->str} </span>
+                </span>
+              </Link>
+            </div>
+          </Spread>
         </div>
       </div>
     })
@@ -266,7 +268,7 @@ let make = (~courseId, ~search) => {
               <Link
                 className="btn btn-primary btn-large"
                 href={`/school/courses/${courseId}/students/new`}>
-                <span> {str("Create Student")} </span>
+                <span> {str("Add New Students")} </span>
               </Link>
             </div>
           </div>

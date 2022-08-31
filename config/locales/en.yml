@@ -1393,7 +1393,7 @@ en:
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
-    StudentsEditor__CreateForm:
+    StudentCreator__CreateForm:
       added_full_description: All students were created successfully.
       added_none_description: All the students you tried to add were already a part of this course.
       added_none_title: Nothing Changed

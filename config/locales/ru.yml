@@ -1317,7 +1317,7 @@ ru:
       success_notification: Импорт успешно начат! После завершения вы получите уведомление по электронной почте.
       valid_data_message: Данные успешно подтверждены!
       valid_data_summary_text: "Вот сводка данных о студентах на загруженном листе: "
-    StudentsEditor__CreateForm:
+    StudentCreator__CreateForm:
       added_full_description: Все ученики созданы успешно.
       added_none_description: Все студенты, которых вы пытались добавить, уже были частью этого курса.
       added_none_title: Ничего не изменилось

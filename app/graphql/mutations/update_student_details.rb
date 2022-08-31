@@ -110,7 +110,7 @@ module Mutations
     end
 
     def cohort
-      @cohort ||= Cohort.find_by(id: @params[:cohort_id])
+      @cohort ||= course.cohorts.find_by(id: @params[:cohort_id])
     end
 
     def student

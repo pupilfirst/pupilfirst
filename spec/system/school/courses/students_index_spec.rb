@@ -12,6 +12,8 @@ feature 'School students index', js: true do
   let(:school) { create :school, :current, founder_tag_list: tags }
   let!(:domain) { create :domain, :primary, school: school }
   let!(:course) { create :course, school: school }
+  let!(:live_cohort) { create :cohort, course: course }
+  let!(:ended_cohort) { create :cohort, course: course, ends_at: 1.day.ago }
 
   let!(:school_admin) { create :school_admin, school: school }
 
@@ -23,14 +25,15 @@ feature 'School students index', js: true do
   end
 
   context 'with some students' do
-    let!(:startup_1) { create :startup, level: level_1 }
-    let!(:startup_2) { create :startup, level: level_2 }
-    let(:team_in_different_course) { create :team }
+    let!(:student_1) { create :founder, cohort: live_cohort, level: level_1 }
+    let!(:student_2) { create :founder, cohort: live_cohort, level: level_2 }
 
-    let(:team_with_lone_student) do
-      create :team, level: level_2, tag_list: tags
-    end
-    let!(:lone_student) { create :founder, startup: team_with_lone_student }
+    # let(:team_in_different_course) { create :team }
+
+    # let(:team_with_lone_student) do
+    #   create :team, level: level_2, tag_list: tags
+    # end
+    # let!(:lone_student) { create :founder, startup: team_with_lone_student }
 
     let(:name_1) { Faker::Name.name }
     let(:email_1) { Faker::Internet.email(name: name_1) }
@@ -46,21 +49,26 @@ feature 'School students index', js: true do
     let!(:coach_in_different_course) { create :faculty, school: school }
 
     before do
-      create :faculty_course_enrollment, faculty: course_coach, course: course
-      create :faculty_course_enrollment,
-             faculty: coach_in_different_course,
-             course: team_in_different_course.course
+      create :faculty_cohort_enrollment,
+             faculty: course_coach,
+             cohort: live_cohort
+      # create :faculty_cohort_enrollment,
+      #        faculty: coach_in_different_course,
+      #        course: team_in_different_course.course
     end
 
     scenario 'School admin adds new students and a team' do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      expect(page).to have_text(startup_1.founders.first.name)
-      expect(page).to have_text(startup_2.founders.last.name)
+      expect(page).to have_text(student_1.name)
+      expect(page).to have_text(student_2.name)
 
       # Add few students
-      click_button 'Add New Students'
+      click_link 'Add New Students'
+
+      click_button 'Pick a Cohort'
+      click_button live_cohort.name
 
       # Student, alone in a team.
       fill_in 'Name', with: name_1
@@ -161,18 +169,18 @@ feature 'School students index', js: true do
       expect(student_3_user.affiliation).to eq(nil)
       expect(student_4_user.affiliation).to eq(nil)
 
-      expect(student_1.startup.name).to eq(name_1)
-      expect(student_2.startup.name).to eq(name_2)
-      expect(student_3.startup.name).to eq(new_team_name)
-      expect(student_4.startup.name).to eq(new_team_name)
-      expect(student_3.startup.id).to eq(student_4.startup.id)
+      expect(student_1.team).to eq(nil)
+      expect(student_2.team).to eq(nil)
+      expect(student_3.team.name).to eq(new_team_name)
+      expect(student_4.team.name).to eq(new_team_name)
+      expect(student_3.team.id).to eq(student_4.team.id)
 
-      expect(student_1.startup.tag_list).to contain_exactly('Abc', 'Def')
-      expect(student_2.startup.tag_list).to contain_exactly(
-        'Abc',
-        'Def',
-        'GHI JKL'
-      )
+      expect(student_1.cohort).to eq(live_cohort)
+      expect(student_4.cohort).to eq(live_cohort)
+
+      expect(student_1.tag_list).to contain_exactly('Abc', 'Def')
+
+      expect(student_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
 
       open_email(student_1_user.email)
 
@@ -213,7 +221,11 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      click_button 'Add New Students'
+      click_link 'Add New Students'
+
+      click_button 'Pick a Cohort'
+      click_button live_cohort.name
+
       fill_in 'Name', with: name_1
       fill_in 'Email', with: email_1
       click_button 'Add to List'
@@ -239,10 +251,13 @@ feature 'School students index', js: true do
         sign_in_user school_admin.user,
                      referrer: school_course_students_path(course)
 
-        click_button 'Add New Students'
+        click_link 'Add New Students'
 
         expect do
           # First, an existing student.
+          click_button 'Pick a Cohort'
+          click_button live_cohort.name
+
           fill_in 'Name', with: Faker::Name.name
           fill_in 'Email', with: coach_user.email
           fill_in 'Title', with: Faker::Job.title
@@ -279,16 +294,19 @@ feature 'School students index', js: true do
       let!(:original_affiliation) { existing_user.affiliation }
       let(:name_3) { Faker::Name.name }
 
-      before { create :student, user: existing_user, startup: startup_1 }
+      before { create :student, user: existing_user, cohort: live_cohort }
 
       scenario 'School admin tries to add the existing student alongside a new student' do
         sign_in_user school_admin.user,
                      referrer: school_course_students_path(course)
 
-        click_button 'Add New Students'
+        click_link 'Add New Students'
 
         expect do
           # First, an existing student.
+          click_button 'Pick a Cohort'
+          click_button live_cohort.name
+
           fill_in 'Name', with: name_1
           fill_in 'Email', with: email_1
           fill_in 'Title', with: Faker::Job.title
@@ -335,11 +353,12 @@ feature 'School students index', js: true do
                affiliation: Faker::Company.name
       end
 
-      # Put two students by themselves in different teams.
-      let(:team_1) { create :team, level: level_1 }
-      let(:team_2) { create :team, level: level_1 }
-      let!(:student_1) { create :student, user: user_1, startup: team_1 }
-      let!(:student_2) { create :student, user: user_2, startup: team_2 }
+      let!(:student_1) do
+        create :student, user: user_1, cohort: live_cohort, level: level_1
+      end
+      let!(:student_2) do
+        create :student, user: user_2, cohort: live_cohort, level: level_2
+      end
 
       let(:new_title) { Faker::Job.title }
 
@@ -348,7 +367,7 @@ feature 'School students index', js: true do
                      referrer: school_course_students_path(course)
 
         # Update a student
-        find('button', text: name_1).click
+        within("div[data-student-name='#{name_1}']") { click_link 'Edit' }
 
         expect(page).to have_text(user_1.name)
         expect(page.find_field('title').value).to eq(user_1.title)
@@ -360,13 +379,14 @@ feature 'School students index', js: true do
         fill_in 'Affiliation', with: ''
         click_button 'Update Student'
 
+        # binding.pry
+
         expect(page).to have_text('Student updated successfully')
         dismiss_notification
 
         expect(user_1.reload.name).to end_with('Jr.')
         expect(user_1.title).to eq(new_title)
         expect(user_1.affiliation).to eq(nil)
-        expect(student_1.startup.reload.name).to eq(user_1.name)
 
         # Form a Team
         check "select-student-#{student_1.id}"
@@ -551,7 +571,7 @@ feature 'School students index', js: true do
                    referrer: school_course_students_path(course)
 
       # Add a student
-      click_button 'Add New Students'
+      click_link 'Add New Students'
 
       fill_in 'Name', with: name_1
       fill_in 'Email', with: email_1

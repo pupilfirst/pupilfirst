@@ -285,8 +285,6 @@ feature 'Submission review overlay', js: true do
       c2_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c2_result_1_title = Faker::Lorem.sentence
       c2_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
-      c2_result_2_title = Faker::Lorem.sentence
-      c2_result_2_feedback = ""
       c2_result_2_additional_feedback = "Additional feedback"
 
       expect(target.review_checklist).to eq([])
@@ -312,10 +310,6 @@ feature 'Submission review overlay', js: true do
         click_button 'Add Result'
         fill_in 'result_11_title', with: c2_result_1_title
         fill_in 'result_11_feedback', with: c2_result_1_feedback
-        # A result without feedback
-        click_button 'Add Result'
-        fill_in 'result_12_title', with: c2_result_2_title
-        fill_in 'result_12_feedback', with: c2_result_2_feedback
       end
 
       click_button 'Save Checklist'
@@ -354,16 +348,11 @@ feature 'Submission review overlay', js: true do
           expect(page).to have_content(c2_result_1_title)
           find('label', text: c2_result_1_title).click
         end
-
-        within("div[data-result-item='2']") do
-          expect(page).to have_content(c2_result_2_title)
-          find('label', text: c2_result_2_title).click
-
-          expect(page).to have_content('Add Additional Feedback')
-          click_button 'Add Additional Feedback'
-          fill_in 'result_2_feedback', with: c2_result_2_additional_feedback
-        end
       end
+
+      # Add Additional Feedback
+      click_button 'Add Additional Feedback'
+      fill_in 'additional_result_feedback', with: c2_result_2_additional_feedback
 
       click_button 'Generate Feedback'
 

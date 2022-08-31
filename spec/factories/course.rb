@@ -46,5 +46,12 @@ FactoryBot.define do
     trait :with_cohort do
       after(:create) { |course| create :cohort, course: course }
     end
+
+    trait :with_default_cohort do
+      after(:create) do |course|
+        cohort = create :cohort, course: course
+        course.update!(default_cohort: cohort)
+      end
+    end
   end
 end

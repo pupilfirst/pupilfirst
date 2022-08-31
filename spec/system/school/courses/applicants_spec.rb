@@ -7,7 +7,7 @@ feature 'Applicant Index', js: true do
   # Setup a course with a single founder target, ...
   let!(:tags) { ['Pupilfirst'] }
   let!(:school) { create :school, :current, founder_tag_list: tags }
-  let!(:course) { create :course, school: school }
+  let!(:course) { create :course, :with_default_cohort, school: school }
   let!(:level_1) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
   let!(:applicant_1) do
@@ -98,11 +98,9 @@ feature 'Applicant Index', js: true do
     expect(student.name).to eq(applicant_1.name)
     expect(student.email).to eq(applicant_1.email)
     expect(student.title).to eq('Student')
-    expect(student.startup.access_ends_at).to eq(nil)
   end
 
-  scenario 'school admin sets ends at while onboarding an applicant' do
-    access_ends_at = 1.day.from_now
+  scenario 'school admin onboards an applicant with additional data' do
     title_1 = Faker::Lorem.words(number: 2).join(' ')
     affiliation_1 = Faker::Lorem.words(number: 2).join(' ')
 
@@ -111,7 +109,6 @@ feature 'Applicant Index', js: true do
 
     click_button "Show Actions: #{applicant_1.name}"
     fill_in 'Title', with: title_1
-    fill_in "Student's Access Ends On", with: access_ends_at.to_date.iso8601
     find('input[id="title"]').click
     fill_in 'Affiliation', with: affiliation_1
     fill_in 'Tags', with: 'Abc'
@@ -128,13 +125,6 @@ feature 'Applicant Index', js: true do
     expect(student.email).to eq(applicant_1.email)
     expect(student.title).to eq(title_1)
     expect(student.affiliation).to eq(affiliation_1)
-    expect(
-      student
-        .startup
-        .access_ends_at
-        .in_time_zone(student.user.time_zone)
-        .to_date
-    ).to eq(access_ends_at.to_date)
-    expect(student.startup.tag_list).to contain_exactly('Abc', 'Def')
+    expect(student.tag_list).to contain_exactly('Abc', 'Def')
   end
 end

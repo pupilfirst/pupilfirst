@@ -104,11 +104,11 @@ module Courses
               .live
               .joins(:course)
               .find_by(courses: { id: @course.id })
-              &.serial_number
+              &.serial_number,
+          ended: @course.ended?
         )
-        details.merge(ended: @course.ended?)
       else
-        details
+        details.merge(ended: @course.ended?)
       end
     end
 

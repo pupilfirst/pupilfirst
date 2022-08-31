@@ -94,9 +94,8 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <div>
-        <div className="px-4">
+        <div className="px-4 pb-20 bg-white">
           {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}
-          <div className="hidden md:block h-20 bg-white" />
         </div>
       </div>
     </div>
@@ -311,12 +310,11 @@ let make = (~school, ~courses, ~currentUser) => {
         {breadcrumbs(url.path, courses, currentUser)}
         <div role="main" className="flex h-full">
           {secondaryNav(currentUser, selectedCourse, selectedPage)}
-          <div id="schoolrouter-innerpage" className="flex-1 overflow-y-auto bg-gray-50">
+          <div id="schoolrouter-innerpage" className="flex-1 overflow-y-auto bg-gray-50 pb-24">
             {switch component {
             | Some(page) => page
             | None => React.null
             }}
-            <div className="hidden md:block h-24 " />
           </div>
         </div>
       </div>

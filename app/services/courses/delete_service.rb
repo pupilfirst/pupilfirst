@@ -60,7 +60,6 @@ module Courses
     end
 
     def delete_levels
-      delete_submissions
       delete_content
 
       Level.where(course_id: @course.id).delete_all
@@ -125,15 +124,24 @@ module Courses
       cohort_ids = @course.cohorts.select(:id)
       founder_ids = Founder.where(cohort_id: cohort_ids).select(:id)
 
-      Team.where(cohort_id: cohort_ids).delete_all
+      # clean up submissions
+      delete_submissions
+
+      # clean up enrollments and coach notes
       FacultyCohortEnrollment.where(cohort_id: cohort_ids).delete_all
+      FacultyFounderEnrollment.where(founder_id: founder_ids).delete_all
+      CoachNote.joins(:student).where(student: { id: founder_ids }).delete_all
+
       ActsAsTaggableOn::Tagging.where(
         taggable_type: 'Founder',
         taggable_id: founder_ids
       ).delete_all
-      FacultyFounderEnrollment.where(founder_id: founder_ids).delete_all
-      CoachNote.joins(:student).where(student: { id: founder_ids }).delete_all
+
       Founder.where(id: founder_ids).delete_all
+      Team.where(cohort_id: cohort_ids).delete_all
+
+      @course.update!(default_cohort_id: nil)
+      Cohort.where(id: cohort_ids).delete_all
     end
   end
 end

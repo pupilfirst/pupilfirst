@@ -9,7 +9,7 @@ class CourseAuthorMailer < SchoolMailer
       @user.email,
       I18n.t(
         'mailers.course_author.addition.subject',
-        course_name: @course.name,
+        course_name: @course.name
       )
     )
   end

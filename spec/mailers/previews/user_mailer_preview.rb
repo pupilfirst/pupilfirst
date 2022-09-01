@@ -9,7 +9,7 @@ class UserMailerPreview < ActionMailer::Preview
     updates = {
       community_new: new_topics,
       community_reactivated: reactivated_topics,
-      coach: updates_for_coach,
+      coach: updates_for_coach
     }
 
     UserMailer.daily_digest(user, updates)
@@ -23,7 +23,7 @@ class UserMailerPreview < ActionMailer::Preview
       Rails.application.routes.url_helpers.delete_account_url(
         token: 'DELETE_ACCOUNT_TOKEN',
         host: host,
-        protocol: 'https',
+        protocol: 'https'
       )
     UserMailer.delete_account_token(user, delete_account_url)
   end
@@ -64,7 +64,7 @@ class UserMailerPreview < ActionMailer::Preview
         author: Faker::Name.name,
         type: update_type,
         community_id: rand(10),
-        community_name: Faker::Lorem.words(number: 2).join(' ').titleize,
+        community_name: Faker::Lorem.words(number: 2).join(' ').titleize
       }
     end
   end
@@ -75,7 +75,7 @@ class UserMailerPreview < ActionMailer::Preview
         course_id: rand(1..9),
         course_name: Faker::Name.name,
         pending_submissions: rand(1..9),
-        pending_submissions_for_coach: rand(0..3),
+        pending_submissions_for_coach: rand(0..3)
       }
     end
   end

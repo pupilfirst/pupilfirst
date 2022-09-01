@@ -20,7 +20,7 @@ module Users
         end,
         daily_digest: current_user.preferences['daily_digest'],
         is_school_admin: current_user.school_admin.present?,
-        has_valid_delete_account_token: valid_delete_account_token,
+        has_valid_delete_account_token: valid_delete_account_token
       }
     end
 

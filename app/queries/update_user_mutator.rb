@@ -7,7 +7,7 @@ class UpdateUserMutator < ApplicationQuery
            validates: {
              presence: true,
              inclusion: {
-               in: Rails.application.secrets.locale[:available],
+               in: Rails.application.secrets.locale[:available]
              },
            }
 
@@ -16,9 +16,9 @@ class UpdateUserMutator < ApplicationQuery
              presence: true,
              length: {
                minimum: 8,
-               maximum: 128,
+               maximum: 128
              },
-             allow_blank: true,
+             allow_blank: true
            }
 
   property :new_password,
@@ -26,9 +26,9 @@ class UpdateUserMutator < ApplicationQuery
              presence: true,
              length: {
                minimum: 8,
-               maximum: 128,
+               maximum: 128
              },
-             allow_blank: true,
+             allow_blank: true
            }
 
   property :confirm_new_password,
@@ -36,9 +36,9 @@ class UpdateUserMutator < ApplicationQuery
              presence: true,
              length: {
                minimum: 8,
-               maximum: 128,
+               maximum: 128
              },
-             allow_blank: true,
+             allow_blank: true
            }
 
   property :daily_digest
@@ -53,7 +53,7 @@ class UpdateUserMutator < ApplicationQuery
       current_user.update!(
         user_params.merge(
           password: new_password,
-          password_confirmation: confirm_new_password,
+          password_confirmation: confirm_new_password
         )
       )
     end
@@ -63,7 +63,7 @@ class UpdateUserMutator < ApplicationQuery
 
   def current_password_must_be_valid
     if new_password.blank? || current_user.encrypted_password.blank? ||
-       current_user.valid_password?(current_password)
+      current_user.valid_password?(current_password)
       return
     end
 

@@ -20,14 +20,14 @@ class SchoolAdminMailerPreview < ActionMailer::Preview
 
     report_attachment = {
       mime_type: 'text/csv',
-      content: "Sl. No,Email\n1, test@hey.com\n",
+      content: "Sl. No,Email\n1, test@hey.com\n"
     }
 
     SchoolAdminMailer.students_bulk_import_complete(
       school_admin,
       course,
       report_params,
-      report_attachment: report_attachment,
+      report_attachment: report_attachment
     )
   end
 end

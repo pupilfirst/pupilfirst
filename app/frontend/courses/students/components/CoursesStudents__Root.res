@@ -168,6 +168,7 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
     CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
     CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
+    CourseResourcesFilter.makeFilter("personal_coach", "Personal Coach", DataLoad(#Coach), "pink"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
       "Student Tags",

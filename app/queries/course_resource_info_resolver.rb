@@ -15,6 +15,8 @@ class CourseResourceInfoResolver < ApplicationQuery
         resource_shape(resource, course.student_tags)
       when 'UserTag'
         resource_shape(resource, course.user_tags)
+      when 'Coach'
+        resource_shape(resource, course.faculty.map { |l| "#{l.id};#{l.name}" })
       else
         raise "Unknown resource: #{resource}"
       end

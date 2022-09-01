@@ -2456,6 +2456,12 @@
               "description": "User tags in the course",
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "Coach",
+              "description": "Coaches in the course",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null

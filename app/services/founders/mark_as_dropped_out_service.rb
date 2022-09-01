@@ -11,7 +11,11 @@ module Founders
         # Remove all coach enrollments.
         FacultyFounderEnrollment.where(founder: @student).destroy_all
 
+        team = @student.team
+
         @student.update!(team_id: nil, dropped_out_at: Time.zone.now)
+
+        team.destroy! if team && team.founders.blank?
       end
       create_audit_record(@student)
     end

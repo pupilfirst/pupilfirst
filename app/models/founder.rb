@@ -7,7 +7,7 @@ class Founder < ApplicationRecord
   has_one :school, through: :user
   belongs_to :cohort
   belongs_to :level
-  has_one :course, through: :level
+  has_one :course, through: :cohort
   has_many :communities, through: :course
   has_many :coach_notes,
            foreign_key: 'student_id',

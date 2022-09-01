@@ -324,7 +324,7 @@ feature 'Curriculum Editor', js: true do
       find('button[title="Edit selected level"').click
       click_button 'Actions'
 
-      find("div[data-submission-id=\"#{course.name}\"]").click
+      find("div[data-course-id=\"#{course.name}\"]").click
 
       accept_confirm { click_button 'Copy Level' }
 
@@ -343,7 +343,7 @@ feature 'Curriculum Editor', js: true do
       find('button[title="Edit selected level"').click
       click_button 'Actions'
 
-      find("div[data-submission-id=\"#{course_2.name}\"]").click
+      find("div[data-course-id=\"#{course_2.name}\"]").click
 
       accept_confirm { click_button 'Copy Level' }
 

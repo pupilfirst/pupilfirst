@@ -15,7 +15,7 @@ class AuditRecord < ApplicationRecord
       TYPE_REMOVE_SCHOOL_ADMIN,
       TYPE_DROPOUT_STUDENT,
       TYPE_MERGE_USER_ACCOUNTS,
-      TYPE_UPDATE_EMAIL,
+      TYPE_UPDATE_EMAIL
     ].freeze
   end
 

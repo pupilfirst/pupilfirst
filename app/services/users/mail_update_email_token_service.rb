@@ -14,13 +14,13 @@ module Users
 
       @user.update!(
         update_email_token_sent_at: Time.zone.now,
-        new_email: @new_email,
+        new_email: @new_email
       )
 
       url_options = {
         token: @user.update_email_token,
         host: @domain.fqdn,
-        protocol: 'https',
+        protocol: 'https'
       }
 
       update_email_url = url_helpers.update_email_url(url_options)

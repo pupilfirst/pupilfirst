@@ -50,7 +50,7 @@ class UsersController < ApplicationController
       user.update!(
         email: new_email,
         update_email_token: nil,
-        new_email: nil,
+        new_email: nil
       )
 
       # Create audit record
@@ -60,8 +60,8 @@ class UsersController < ApplicationController
         metadata: {
           user_id: current_user.id,
           email: new_email,
-          old_email: old_email,
-        },
+          old_email: old_email
+        }
       )
 
       # Send success email to user

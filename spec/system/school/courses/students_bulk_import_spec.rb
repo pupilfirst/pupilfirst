@@ -8,6 +8,7 @@ feature 'Course students bulk importer', js: true do
   let(:school) { create :school, :current }
   let!(:domain) { create :domain, :primary, school: school }
   let!(:course) { create :course, school: school }
+  let!(:cohort) { create :cohort, course: course }
   let!(:school_admin) { create :school_admin, school: school }
 
   let!(:level_1) { create :level, :one, course: course }
@@ -24,7 +25,8 @@ feature 'Course students bulk importer', js: true do
     sign_in_user school_admin.user,
                  referrer: school_course_students_path(course)
 
-    click_button 'Bulk Import'
+    click_link 'Add New Students'
+    click_link 'CSV File Import'
 
     expect(page).to have_text 'Download an example .csv file'
 
@@ -33,6 +35,9 @@ feature 'Course students bulk importer', js: true do
     expect(page).to have_text 'Super Man'
     expect(page).to have_text 'bat@man.com'
     expect(page).to have_text 'tag1'
+
+    click_button 'Pick a Cohort'
+    click_button cohort.name
 
     click_button 'Import Students'
 
@@ -49,8 +54,8 @@ feature 'Course students bulk importer', js: true do
     expect(student_1.title).to eq('Awesome')
     expect(student_2.title).to eq('Head')
 
-    expect(student_1.startup.tag_list).to match_array(%w[tag1 tag2])
-    expect(student_2.startup.tag_list).to match_array(%w[tag1])
+    expect(student_1.tag_list).to match_array(%w[tag1 tag2])
+    expect(student_2.tag_list).to match_array(%w[tag1])
 
     # Check admin notification
     open_email(school_admin.email)
@@ -79,9 +84,8 @@ feature 'Course students bulk importer', js: true do
 
   scenario 'admin onboards students with notification unchecked' do
     sign_in_user school_admin.user,
-                 referrer: school_course_students_path(course)
+                 referrer: "/school/courses/#{course.id}/students/import"
 
-    click_button 'Bulk Import'
     expect(page).to have_text 'Download an example .csv file'
 
     attach_csv_file('student_import_valid_data.csv')
@@ -92,6 +96,9 @@ feature 'Course students bulk importer', js: true do
       'label',
       text: 'Notify students, and send them a link to sign into this school.'
     ).click
+
+    click_button 'Pick a Cohort'
+    click_button cohort.name
 
     click_button 'Import Students'
 
@@ -106,9 +113,7 @@ feature 'Course students bulk importer', js: true do
 
   scenario 'admin uploads a csv with invalid template for import' do
     sign_in_user school_admin.user,
-                 referrer: school_course_students_path(course)
-
-    click_button 'Bulk Import'
+                 referrer: "/school/courses/#{course.id}/students/import"
 
     attach_csv_file('student_import_wrong_template.csv')
 
@@ -119,9 +124,7 @@ feature 'Course students bulk importer', js: true do
 
   scenario 'admin uploads a csv with invalid data' do
     sign_in_user school_admin.user,
-                 referrer: school_course_students_path(course)
-
-    click_button 'Bulk Import'
+                 referrer: "/school/courses/#{course.id}/students/import"
 
     attach_csv_file('student_import_invalid_data.csv')
 
@@ -145,16 +148,19 @@ feature 'Course students bulk importer', js: true do
     let!(:user) do
       create :user, email: 'bat@man.com', school: school, title: 'New Title'
     end
-    let!(:startup) { create :team, level: level_1 }
-    let!(:founder) { create :founder, startup: startup, user: user }
+
+    let!(:founder) do
+      create :founder, level: level_1, user: user, cohort: cohort
+    end
 
     scenario 'admin uploads csv with email of existing student' do
       sign_in_user school_admin.user,
-                   referrer: school_course_students_path(course)
-
-      click_button 'Bulk Import'
+                   referrer: "/school/courses/#{course.id}/students/import"
 
       attach_csv_file('student_import_valid_data.csv')
+
+      click_button 'Pick a Cohort'
+      click_button cohort.name
 
       click_button 'Import Students'
 

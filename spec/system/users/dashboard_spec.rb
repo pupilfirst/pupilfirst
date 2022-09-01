@@ -87,7 +87,9 @@ feature 'User Dashboard', js: true do
   let(:course_archived) do
     create :course, school: school, archived_at: 1.day.ago
   end
-  let(:course_archived_cohort) { create :cohort, course: course_archived }
+  let(:course_archived_cohort) do
+    create :cohort, course: course_archived, ends_at: 1.day.ago
+  end
   let(:course_archived_level_1) { create :level, :one, course: course_archived }
   let(:course_archived_team_1) do
     create :team, level: course_archived_level_1, dropped_out_at: 1.day.ago
@@ -140,7 +142,7 @@ feature 'User Dashboard', js: true do
            faculty: course_coach,
            cohort: course_1_cohort
     create :faculty_founder_enrollment,
-           :with_course_enrollment,
+           :with_cohort_enrollment,
            faculty: team_coach,
            founder: course_2_founder_1
     create :community_course_connection,

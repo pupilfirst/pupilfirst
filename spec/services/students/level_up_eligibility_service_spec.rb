@@ -151,8 +151,14 @@ describe Students::LevelUpEligibilityService do
         end
       end
 
-      context 'when team is in the second level' do
-        let(:startup) { create :startup, level: level_2 }
+      context 'when student is in the second level' do
+        let(:team_l2) { create :team, cohort: cohort_2 }
+        let!(:student_l) do
+          create :student, level: level_2, cohort: cohort_1, team: team_l2
+        end
+        let!(:student_2) do
+          create :student, level: level_2, cohort: cohort_1, team: team_l2
+        end
         let!(:milestone_target_l2) do
           create :target,
                  :with_group,
@@ -205,7 +211,7 @@ describe Students::LevelUpEligibilityService do
 
           context 'when student has team-mates with a pending review in level 1' do
             before do
-              startup
+              team
                 .founders
                 .where.not(id: student)
                 .each do |other_student|
@@ -220,7 +226,7 @@ describe Students::LevelUpEligibilityService do
 
           context 'when student has a team-mate with a failed submission in level 1' do
             before do
-              startup
+              team
                 .founders
                 .where.not(id: student)
                 .each do |other_student|
@@ -237,7 +243,7 @@ describe Students::LevelUpEligibilityService do
 
           context "when student's team-mates have completed the target in level 1" do
             before do
-              startup
+              team
                 .founders
                 .where.not(id: student)
                 .each do |other_student|

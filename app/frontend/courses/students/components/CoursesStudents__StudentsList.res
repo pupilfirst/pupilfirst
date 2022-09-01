@@ -51,6 +51,7 @@ let studentTags = student => {
 
 let showStudent = student => {
   <Link
+    props={"data-student-id": student->StudentInfo.id}
     href={"/students/" ++ (student->StudentInfo.id ++ "/report")}
     key={student->StudentInfo.id}
     ariaLabel={"Student " ++ student->StudentInfo.user->UserDetails.name}

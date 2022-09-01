@@ -197,40 +197,27 @@ feature 'Course students list', js: true do
     expect(page).to have_text('Zucchini')
   end
 
-  scenario 'team coach only has assigned teams in the students list' do
-    sign_in_user student_coach.user, referrer: students_course_path(course)
-
-    expect(page).to have_text(student_6.name)
-    expect(page).to_not have_text(student_3.name)
-
-    # Team coach can remove the default filter to see all students.
-    find('button[title="Remove selection: Me"').click
-
-    expect(page).to have_text(student_2.name)
-
-    click_button('Load More...')
-
-    expect(page).to have_text(student_3.name)
-  end
-
   context 'when there are more than one team coaches' do
     let(:another_student_coach) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: another_student_coach,
-             startup: student_2
+             founder: student_2
     end
 
     scenario "one team coach can use the filter to see another coach's students" do
       sign_in_user student_coach.user, referrer: students_course_path(course)
 
+      fill_in 'Filter Resources', with: student_coach.name
+      click_button "Pick Personal Coach: #{student_coach.name}"
+
       expect(page).to have_text(student_6.name)
       expect(page).to_not have_text(student_2.name)
 
-      fill_in 'filter', with: another_student_coach.name
-      click_button "Assigned to: #{another_student_coach.name}"
+      fill_in 'Filter Resources', with: another_student_coach.name
+      click_button "Pick Personal Coach: #{another_student_coach.name}"
 
       expect(page).not_to have_text(student_6.name)
       expect(page).to have_text(student_2.name)
@@ -248,7 +235,7 @@ feature 'Course students list', js: true do
         .map(&:capitalize)
         .join
 
-    within("div[data-team-id='#{student_6.id}']") do
+    within("a[data-student-id='#{student_6.id}']") do
       find('.tooltip__trigger', text: expected_initials).hover
     end
 
@@ -262,22 +249,22 @@ feature 'Course students list', js: true do
     let(:student_coach_5) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: student_coach_2,
-             startup: student_6
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+             founder: student_6
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: student_coach_3,
-             startup: student_6
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+             founder: student_6
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: student_coach_4,
-             startup: student_6
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+             founder: student_6
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: student_coach_5,
-             startup: student_6
+             founder: student_6
     end
 
     scenario 'course coach checks names of coaches hidden from main list' do
@@ -293,7 +280,7 @@ feature 'Course students list', js: true do
 
       click_button('Load More...')
 
-      within("div[data-team-id='#{student_6.id}']") do
+      within("a[data-student-id='#{student_6.id}']") do
         find('.tooltip__trigger', text: '+2').hover
       end
 
@@ -310,7 +297,7 @@ feature 'Course students list', js: true do
     let!(:level_4) { create :level, :four, course: course }
     let!(:level_5) { create :level, :five, course: course }
 
-    before { level_1.startups.each { |s| s.update!(level_id: level_2.id) } }
+    before { level_1.founders.each { |s| s.update!(level_id: level_2.id) } }
 
     scenario 'level shows completed icon instead of number of students' do
       sign_in_user course_coach.user, referrer: students_course_path(course)
@@ -363,8 +350,8 @@ feature 'Course students list', js: true do
       expect(page).to have_text('3')
     end
 
-    fill_in 'filter', with: student_coach.name
-    click_button "Assigned to: #{student_coach.name}"
+    fill_in 'Filter Resources', with: student_coach.name
+    click_button "Pick Personal Coach: #{student_coach.name}"
 
     within("div[aria-label='Students in level 1']") do
       expect(page).to have_selector('svg.i-check-solid')
@@ -379,107 +366,19 @@ feature 'Course students list', js: true do
     end
   end
 
-  context 'when some students have coach notes' do
-    let(:author) { course_coach.user }
-
-    before do
-      student_2.founders.each do |student|
-        create :coach_note, author: author, student: student
-      end
-    end
-
-    scenario 'filtering by coach notes updates list of students and distribution bar' do
-      sign_in_user course_coach.user, referrer: students_course_path(course)
-
-      expect(page).to have_text(student_2.name)
-      expect(page).to have_text(student_3.name)
-
-      within("div[aria-label='Students in level 1']") do
-        expect(page).to have_text('1')
-      end
-
-      within("div[aria-label='Students in level 2']") do
-        expect(page).to have_text('2')
-      end
-
-      within("div[aria-label='Students in level 3']") do
-        expect(page).to have_text('3')
-      end
-
-      fill_in 'filter', with: 'has notes'
-      click_button 'Coach Notes: Has notes'
-
-      expect(page).not_to have_text(student_3.name)
-      expect(page).to have_text(student_2.name)
-
-      within("div[aria-label='Students in level 1']") do
-        expect(page).to have_selector('svg.i-check-solid')
-      end
-
-      within("div[aria-label='Students in level 2']") do
-        expect(page).to have_text('1')
-      end
-
-      within("div[aria-label='Students in level 3']") do
-        expect(page).to have_text('0')
-      end
-
-      fill_in 'filter', with: 'does not have notes'
-      click_button 'Coach Notes: Does not have notes'
-
-      expect(page).not_to have_text(student_2.name)
-      expect(page).to have_text(student_3.name)
-
-      within("div[aria-label='Students in level 1']") do
-        expect(page).to have_text('1')
-      end
-
-      within("div[aria-label='Students in level 2']") do
-        expect(page).to have_text('1')
-      end
-
-      within("div[aria-label='Students in level 3']") do
-        expect(page).to have_text('3')
-      end
-    end
-
-    scenario 'adding note to all students in a team should refresh list with "does not have notes" filter' do
-      remaining_student = student_3.founders.first
-      other_students = student_3.founders.where.not(id: remaining_student)
-
-      other_students.each do |student|
-        create :coach_note, author: author, student: student
-      end
-
-      sign_in_user course_coach.user, referrer: students_course_path(course)
-      fill_in 'filter', with: 'does not have notes'
-      click_button 'Coach Notes: Does not have notes'
-
-      within("div[aria-label='Students in level 2']") do
-        expect(page).to have_text('1')
-      end
-
-      click_link remaining_student.name
-      add_markdown('This is a note.')
-      click_button 'Save Note'
-
-      expect(page).to have_text('Note added successfully')
-
-      find('button[title="Close student report"]').click
-
-      within("div[aria-label='Students in level 2']") do
-        expect(page).to have_text('0')
-      end
-
-      expect(page).not_to have_text(remaining_student.name)
-    end
-  end
-
   scenario 'coach filters students by tags applied to their team' do
     sign_in_user course_coach.user, referrer: students_course_path(course)
 
+    click_button 'Order by Last Created'
+    click_button 'Order by Name'
+
     student_in_first_page =
-      course.startups.where.not(id: student_2.id).order(:name).first
+      course
+        .founders
+        .where.not(id: student_2.id)
+        .joins(:user)
+        .order('users.name')
+        .first
 
     expect(page).to have_text(student_in_first_page.name)
 
@@ -495,8 +394,8 @@ feature 'Course students list', js: true do
       expect(page).to have_text('3')
     end
 
-    fill_in 'filter', with: 'vegetable'
-    click_button 'Tagged with: vegetable'
+    fill_in 'Filter Resources', with: 'vegetable'
+    click_button 'Pick Student Tags: vegetable'
 
     # The filter should affect the distribution...
     within("div[aria-label='Students in level 2']") do
@@ -516,8 +415,8 @@ feature 'Course students list', js: true do
     expect(page).to have_text('Asparagus')
     expect(page).to have_text('Zucchini')
 
-    fill_in 'filter', with: 'z'
-    click_button 'Tagged with: starts with z'
+    fill_in 'Filter Resources', with: 'z'
+    click_button 'Pick Student Tags: starts with z'
 
     within("div[aria-label='Students in level 2']") do
       expect(page).to have_text('0')
@@ -535,22 +434,25 @@ feature 'Course students list', js: true do
   scenario 'coach searches student by email' do
     sign_in_user course_coach.user, referrer: students_course_path(course)
 
-    teams_sorted_by_name = course.startups.order('name')
-    team_of_student_to_search = teams_sorted_by_name[5]
-    another_team = teams_sorted_by_name.first
+    click_button 'Order by Last Created'
+    click_button 'Order by Name'
 
-    expect(page).to have_text(another_team.name)
+    students_sorted_by_name = course.founders.joins(:user).order('users.name')
+    student_to_search = students_sorted_by_name[5]
+    another_student = students_sorted_by_name.first
+
+    expect(page).to have_text(another_student.name)
 
     # Apply search by email filter
-    student_email = team_of_student_to_search.founders.first.email
-    fill_in 'filter', with: student_email
-    click_button "Name or Email: #{student_email}"
+    student_email = student_to_search.email
+    fill_in 'Filter Resources', with: student_email
+    click_button "Pick Search by Email: #{student_email}"
 
-    expect(page).not_to have_text(another_team.name)
-    expect(page).to have_text(team_of_student_to_search.name)
+    expect(page).not_to have_text(another_student.name)
+    expect(page).to have_text(student_to_search.name)
 
     # Clear the filter
     find("button[title='Remove selection: #{student_email}']").click
-    expect(page).to have_text(another_team.name)
+    expect(page).to have_text(another_student.name)
   end
 end

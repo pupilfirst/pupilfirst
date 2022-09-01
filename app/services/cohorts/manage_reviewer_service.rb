@@ -11,7 +11,7 @@ module Cohorts
         raise 'Faculty must in same school as course'
       end
 
-      old_cohorts = faculty.cohorts.where(course: @course)
+      old_cohorts_count = faculty.cohorts.where(course: @course).count
 
       FacultyCohortEnrollment.transaction do
         # Remove old assignments
@@ -28,7 +28,7 @@ module Cohorts
         end
       end
 
-      if @notify && old_cohorts.empty?
+      if @notify && old_cohorts_count.zero?
         CoachMailer.course_enrollment(faculty, @course).deliver_later
       end
 

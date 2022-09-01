@@ -21,7 +21,7 @@ class CoachStatsResolver < ApplicationQuery
     TimelineEvent
       .pending_review
       .joins(:founders)
-      .where(id: { id: assigned_student_ids })
+      .where(founders: { id: assigned_student_ids })
       .distinct
       .count
   end

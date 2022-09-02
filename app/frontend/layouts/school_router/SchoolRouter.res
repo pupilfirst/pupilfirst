@@ -118,16 +118,15 @@ let showUserLink = (icon, href) => {
 let showUserLink = () => {
   [showUserLink("power-off", "/users/sign_out")]
 }
-let bottomLink = (path, iconClasses, text) => {
-  <li>
+let bottomLink = (path, text) => {
+  <div>
     <a
       title={text}
       href=path
-      className="py-3 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 items-center">
-      <i className={iconClasses ++ " fa-fw text-lg"} />
-      {<span className="ml-2"> {text->str} </span>}
+      className="py-2 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 items-center">
+      {<span> {text->str} </span>}
     </a>
-  </li>
+  </div>
 }
 
 let showUser = user => {
@@ -148,7 +147,7 @@ let showUser = user => {
         )}
       </div>
       <div className="pl-2 flex justify-between w-full items-center">
-        <p className="text-sm font-medium"> {str(User.name(user))} </p>
+        // <p className="text-sm font-medium"> {str(User.name(user))} </p>
         <div> {showUserLink()->React.array} </div>
       </div>
     </div>
@@ -183,19 +182,23 @@ let breadcrumbs = (path, courses, currentUser) => {
         }
       </div>
     </div>
-    <ul className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4">
+      <div
+        className="py-1 px-2 flex text-sm font-medium border-b-2 border-primary-400 text-primary-500 bg-gray-50 items-center">
+        {"Admin"->str}
+      </div>
+      {bottomLink("/dashboard", "Dashboard")}
       <div className="relative">
         <Notifications__Root
           wrapperClasses=""
           iconClasses="school-admin-navbar__notifications-unread-bullet"
-          buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-3 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
-          title={"Notifications"}
+          buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-2 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
+          // title={"Notifications"}
           hasNotifications={User.hasNotifications(currentUser)}
         />
       </div>
-      {bottomLink("/dashboard", "fas fa-home", "Dashboard")}
-      <li> {showUser(currentUser)} </li>
-    </ul>
+      <div> {showUser(currentUser)} </div>
+    </div>
   </div>
 }
 

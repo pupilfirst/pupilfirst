@@ -8,7 +8,7 @@ class UpdateUserMutator < ApplicationQuery
              presence: true,
              inclusion: {
                in: Rails.application.secrets.locale[:available]
-             },
+             }
            }
 
   property :current_password,

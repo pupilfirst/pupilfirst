@@ -38,7 +38,7 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
     selected
     {showDropdown
       ? <div
-          className={"dropdown__list bg-white shadow-lg rounded mt-1 border border-gray-300 absolute overflow-x-hidden z-30 " ++ (
+          className={"dropdown__list bg-white shadow-lg rounded mt-1 border border-gray-300 absolute overflow-x-hidden z-30 w-max " ++ (
             right ? "right-0" : "left-0"
           )}>
           {contents

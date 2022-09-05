@@ -88,7 +88,14 @@ module Mutations
           affiliation: @params[:affiliation]
         )
 
-        student.update!(tag_list: @params[:taggings], cohort: cohort)
+        student.tag_list = @params[:taggings]
+
+        if student.cohort != cohort
+          student.team_id = nil
+          student.cohort = cohort
+        end
+
+        student.save!
 
         resource_school.founder_tag_list << @params[:taggings]
         resource_school.save!

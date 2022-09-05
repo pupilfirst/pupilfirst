@@ -350,11 +350,22 @@ feature 'School students index', js: true do
                affiliation: Faker::Company.name
       end
 
+      let(:team) { create :team, cohort: live_cohort }
+
       let!(:student_1) do
-        create :student, user: user_1, cohort: live_cohort, level: level_1
+        create :student,
+               user: user_1,
+               cohort: live_cohort,
+               level: level_1,
+               team: team
       end
+
       let!(:student_2) do
         create :student, user: user_2, cohort: live_cohort, level: level_2
+      end
+
+      let!(:student_3) do
+        create :student, cohort: live_cohort, level: level_1, team: team
       end
 
       let(:new_title) { Faker::Job.title }
@@ -403,6 +414,27 @@ feature 'School students index', js: true do
         dismiss_notification
 
         expect(student_2.reload.faculty.find_by(id: course_coach)).to be_present
+      end
+
+      scenario 'School admin moves a student into another cohort' do
+        sign_in_user school_admin.user,
+                     referrer: school_course_students_path(course)
+
+        # Update a student
+        within("div[data-student-name='#{student_1.name}']") do
+          click_link 'Edit'
+        end
+
+        expect(page).to have_text(student_1.name)
+        click_button live_cohort.name
+        click_button ended_cohort.name
+        click_button 'Update Student'
+
+        expect(page).to have_text('Student updated successfully')
+        dismiss_notification
+
+        expect(student_1.reload.cohort).to eq(ended_cohort)
+        expect(student_1.team).to eq(nil)
       end
     end
 

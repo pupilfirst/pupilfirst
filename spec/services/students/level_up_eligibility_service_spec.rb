@@ -22,8 +22,16 @@ describe Students::LevelUpEligibilityService do
     create :level, :two, unlock_at: 2.days.from_now, course: course_2
   end
 
-  let(:team) { create :team_with_students, cohort: cohort_1 }
-  let(:student) { team.founders.first }
+  let(:team) { create :team, cohort: cohort_1 }
+
+  let!(:student) do
+    create :student, level: level_1, cohort: cohort_1, team: team
+  end
+
+  let!(:student_2) do
+    create :student, level: level_1, cohort: cohort_1, team: team
+  end
+
   let(:students) { team.founders }
 
   let!(:milestone_targets) do
@@ -152,13 +160,10 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when student is in the second level' do
-        let(:team_l2) { create :team, cohort: cohort_2 }
-        let!(:student_l) do
-          create :student, level: level_2, cohort: cohort_1, team: team_l2
+        let!(:student) do
+          create :student, level: level_2, cohort: cohort_1, team: team
         end
-        let!(:student_2) do
-          create :student, level: level_2, cohort: cohort_1, team: team_l2
-        end
+
         let!(:milestone_target_l2) do
           create :target,
                  :with_group,
@@ -301,7 +306,9 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when team is in the fourth level and all milestone targets have been submitted' do
-        let(:startup) { create :startup, level: level_4 }
+        let(:student) do
+          create :student, cohort: cohort_1, level: level_4, team: team
+        end
         let(:milestone_target_l4) do
           create :target,
                  :team,

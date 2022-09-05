@@ -119,7 +119,7 @@ let makeFilters = () => {
       Custom("Inactive Cohorts"),
       "orange",
     ),
-    CourseResourcesFilter.makeFilter("name", "Search by Team Name", Search, "gray"),
+    CourseResourcesFilter.makeFilter("name", "Search by Name", Search, "gray"),
   ]
 }
 
@@ -127,47 +127,49 @@ let cohortsList = cohorts => {
   <div className="space-y-4">
     {cohorts
     ->Js.Array2.map(cohort =>
-      <div key={cohort.id} className="p-6 bg-white rounded-lg shadow">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold"> {cohort.name->str} </h2>
-            {switch cohort.description {
-            | Some(description) => <p className="text-sm text-gray-500"> {description->str} </p>
-            | None => React.null
-            }}
-          </div>
-          <div>
-            <Link
-              href={`/school/cohorts/${cohort.id}/details`}
-              className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-              <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
-              <span> {"Edit"->str} </span>
-            </Link>
-          </div>
-        </div>
-        <div className="flex gap-6 flex-wrap mt-6">
-          <div>
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {"Students"->str} </p>
-            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
-              {cohort.studentsCount->string_of_int->str}
-            </p>
-          </div>
-          <div>
-            <p className="pr-6 text-sm text-gray-500 font-medium"> {"Coaches"->str} </p>
-            <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
-              {cohort.coachesCount->string_of_int->str}
-            </p>
-          </div>
-          {cohort.endsAt->Belt.Option.mapWithDefault(React.null, endsAt =>
+      <Spread props={"data-cohort-name": cohort.name}>
+        <div key={cohort.id} className="cohorts-container p-6 bg-white rounded-lg shadow">
+          <div className="flex items-center justify-between">
             <div>
-              <p className="pr-6 text-sm text-gray-500 font-medium"> {"Cohort end date"->str} </p>
+              <h2 className="text-xl font-semibold"> {cohort.name->str} </h2>
+              {switch cohort.description {
+              | Some(description) => <p className="text-sm text-gray-500"> {description->str} </p>
+              | None => React.null
+              }}
+            </div>
+            <div>
+              <Link
+                href={`/school/cohorts/${cohort.id}/details`}
+                className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
+                <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
+                <span> {"Edit"->str} </span>
+              </Link>
+            </div>
+          </div>
+          <div className="flex gap-6 flex-wrap mt-6">
+            <div>
+              <p className="pr-6 text-sm text-gray-500 font-medium"> {"Students"->str} </p>
               <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
-                {endsAt->DateFns.format("MMMM d, yyyy")->str}
+                {cohort.studentsCount->string_of_int->str}
               </p>
             </div>
-          )}
+            <div>
+              <p className="pr-6 text-sm text-gray-500 font-medium"> {"Coaches"->str} </p>
+              <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+                {cohort.coachesCount->string_of_int->str}
+              </p>
+            </div>
+            {cohort.endsAt->Belt.Option.mapWithDefault(React.null, endsAt =>
+              <div>
+                <p className="pr-6 text-sm text-gray-500 font-medium"> {"Cohort end date"->str} </p>
+                <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+                  {endsAt->DateFns.format("MMMM d, yyyy")->str}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </Spread>
     )
     ->React.array}
   </div>
@@ -223,7 +225,7 @@ let make = (~courseId, ~search) => {
                 sorter={CourseResourcesFilter.makeSorter(
                   "sort_by",
                   ["Name", "First Created", "Last Created", "Last Ending"],
-                  "Name",
+                  "Last Created",
                 )}
               />
             </div>

@@ -1,0 +1,174 @@
+require 'rails_helper'
+
+def cohorts_path(course)
+  "/school/courses/#{course.id}/cohorts"
+end
+
+feature 'Cohorts Index', js: true do
+  include UserSpecHelper
+  include NotificationHelper
+
+  let!(:school) { create :school, :current }
+  let!(:course) { create :course, school: school }
+  let!(:live_cohort) { create :cohort, course: course }
+  let!(:ended_cohort) { create :cohort, course: course, ends_at: 1.day.ago }
+
+  let!(:school_admin) { create :school_admin, school: school }
+
+  context 'with some students and coaches assigned to cohorts' do
+    let!(:team_1) { create :team_with_students, cohort: live_cohort }
+    let!(:team_2) { create :team_with_students, cohort: live_cohort }
+    let!(:team_ended) { create :team_with_students, cohort: ended_cohort }
+    let!(:coach_1) { create :faculty, school: school }
+    let!(:coach_2) { create :faculty, school: school }
+
+    before do
+      create :faculty_cohort_enrollment, faculty: coach_1, cohort: live_cohort
+      create :faculty_cohort_enrollment, faculty: coach_2, cohort: live_cohort
+      create :faculty_cohort_enrollment, faculty: coach_1, cohort: ended_cohort
+    end
+
+    scenario 'School admin checkouts active cohorts' do
+      sign_in_user school_admin.user, referrer: cohorts_path(course)
+
+      expect(page).to have_text(live_cohort.name)
+      expect(page).not_to have_text(ended_cohort.name)
+
+      within("div[data-cohort-name='#{live_cohort.name}']") do
+        expect(page).to have_content(live_cohort.description)
+        expect(page).to have_content('Students')
+        expect(page).to have_content(4)
+        expect(page).to have_content('Coaches')
+        expect(page).to have_content(2)
+      end
+
+      expect(page).to have_text('Showing all')
+
+      expect(page).to have_link(
+        'Add new cohort',
+        href: "#{cohorts_path(course)}/new"
+      )
+    end
+
+    scenario 'School admin checkouts inactive cohorts' do
+      sign_in_user school_admin.user, referrer: cohorts_path(course)
+
+      expect(page).to have_text(live_cohort.name)
+      expect(page).not_to have_text(ended_cohort.name)
+
+      fill_in 'Filter Resources', with: 'inactive'
+      click_button 'Pick Include: Inactive Cohorts'
+
+      within("div[data-cohort-name='#{ended_cohort.name}']") do
+        expect(page).to have_content(ended_cohort.description)
+        expect(page).to have_content('Students')
+        expect(page).to have_content(2)
+        expect(page).to have_content('Coaches')
+        expect(page).to have_content(1)
+      end
+    end
+  end
+
+  context 'when there are a large number of teams' do
+    let!(:cohorts) do
+      create_list :cohort, 30, course: course, ends_at: 10.days.from_now
+    end
+
+    def safe_random_cohorts
+      @selected_cohort_ids ||= []
+      cohort =
+        Cohort.all.where.not(id: @selected_cohort_ids).order('random()').first
+      @selected_cohort_ids << cohort.id
+      cohort
+    end
+
+    let(:oldest_created) { safe_random_cohorts }
+    let(:newest_created) { safe_random_cohorts }
+    let(:first_ending) { safe_random_cohorts }
+    let(:cohort_aaa) { safe_random_cohorts }
+    let(:cohort_zzz) { safe_random_cohorts }
+
+    before do
+      cohort_aaa.update!(name: 'aaa aa')
+      cohort_zzz.update!(name: 'zzz zz')
+      oldest_created.update!(created_at: Time.at(0))
+      newest_created.update!(created_at: 1.day.from_now)
+      first_ending.update!(ends_at: 1.day.from_now)
+    end
+
+    scenario 'school admin can order cohorts' do
+      sign_in_user school_admin.user, referrer: cohorts_path(course)
+
+      expect(page).to have_content('Showing 20 of 31 Cohorts')
+
+      # Check ordering by last created
+      expect(find('.cohorts-container:first-child')).to have_text(
+        newest_created.name
+      )
+
+      click_button('Load More')
+
+      expect(find('.cohorts-container:last-child')).to have_text(
+        oldest_created.name
+      )
+
+      # Reverse sorting
+      click_button 'Order by Last Created'
+      click_button 'Order by First Created'
+
+      expect(find('.cohorts-container:first-child')).to have_text(
+        oldest_created.name
+      )
+
+      click_button('Load More')
+
+      expect(find('.cohorts-container:last-child')).to have_text(
+        newest_created.name
+      )
+
+      # Check ordering by last updated
+      click_button 'Order by First Created'
+      click_button 'Order by Last Ending'
+
+      # Cohort without an end date will be listed first
+      expect(find('.cohorts-container:first-child')).to have_text(
+        live_cohort.name
+      )
+
+      click_button('Load More')
+
+      expect(find('.cohorts-container:last-child')).to have_text(
+        first_ending.name
+      )
+
+      # Check ordering by name
+      click_button 'Order by Last Ending'
+      click_button 'Order by Name'
+
+      expect(find('.cohorts-container:first-child')).to have_text(
+        cohort_aaa.name
+      )
+
+      click_button('Load More')
+
+      expect(find('.cohorts-container:last-child')).to have_text(
+        cohort_zzz.name
+      )
+    end
+
+    scenario 'school admin can filter cohorts' do
+      sign_in_user school_admin.user, referrer: cohorts_path(course)
+
+      expect(page).to have_content('Showing 20 of 31 Cohorts')
+      click_button 'Order by Last Created'
+      click_button 'Order by Name'
+
+      expect(page).not_to have_text(cohort_zzz.name)
+
+      fill_in 'Filter Resources', with: 'zz'
+      click_button 'Pick Search by Name: zz'
+
+      expect(page).to have_text(cohort_zzz.name)
+    end
+  end
+end

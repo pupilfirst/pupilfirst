@@ -56,8 +56,7 @@ module ValidateTargetEditable
       non_archived_targets =
         Target
           .where(id: prerequisite_targets)
-          .where
-          .not(visibility: Target::VISIBILITY_ARCHIVED)
+          .where.not(visibility: Target::VISIBILITY_ARCHIVED)
 
       return if prerequisite_targets.count == non_archived_targets.count
 
@@ -108,15 +107,16 @@ module ValidateTargetEditable
         return true
       end
 
-      item['metadata']['choices'].length > 1 && item['metadata']['choices']
-        .all? { |choice| valid_string(choice) }
+      item['metadata']['choices'].length > 1 &&
+        item['metadata']['choices'].all? { |choice| valid_string(choice) }
     end
 
     def validate_checklist(checklist)
-      checklist.respond_to?(:all?) && checklist.all? do |item|
-        valid_string(item['title']) && valid_checklist_kind(item['kind']) &&
-          (item['optional'] == !!item['optional']) && valid_metadata(item)
-      end
+      checklist.respond_to?(:all?) &&
+        checklist.all? do |item|
+          valid_string(item['title']) && valid_checklist_kind(item['kind']) &&
+            (item['optional'] == !!item['optional']) && valid_metadata(item)
+        end
     end
 
     def required_items_have_unique_titles(checklist)
@@ -131,7 +131,7 @@ module ValidateTargetEditable
     def validate(_object, _context, value)
       checklist = value[:checklist]
 
-      return if checklist.respond_to?(:all?) && checklist.length <= 15
+      return if checklist.respond_to?(:all?) && checklist.length <= 25
 
       I18n.t('mutations.update_target.checklist_items_exceeded_error')
     end

@@ -1,0 +1,21 @@
+<%
+  school_name = @school.name
+  login_url = enroll_applicants_url(@applicant.original_login_token)
+  course_name = @course.name
+  applicant_name = @applicant.name
+  has_processing_url = @course.processing_url.present?
+  body_content_key = has_processing_url ? "body_processing_url_html" : "body_html"
+  body_link_key = has_processing_url ? "link_text_processing_url" : "link_text"
+%>
+
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: applicant_name) %>
+<% end %>
+
+<% content_for :body do %>
+  <p>
+  <%= t("mailers.applicant.enrollment_verification.#{body_content_key}", school_name: school_name, course_name: course_name, link_to: link_to(t("mailers.applicant.enrollment_verification.#{body_link_key}"), login_url)) %>
+  </p>
+
+  <%= render 'mailers/link_fallback', url: login_url%>
+<% end %>

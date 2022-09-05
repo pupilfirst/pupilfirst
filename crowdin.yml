@@ -1,0 +1,7 @@
+files:
+  - source: /config/locales/en.yml
+    translation: /config/locales/%two_letters_code%.yml
+  - source: /config/locales/devise.en.yml
+    translation: /config/locales/devise.%two_letters_code%.yml
+  - source: /config/locales/kaminari.en.yml
+    translation: /config/locales/kaminari.%two_letters_code%.yml

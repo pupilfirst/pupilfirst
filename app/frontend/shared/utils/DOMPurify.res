@@ -19,6 +19,11 @@ let getOptions = (~addTags=?, ~allowedTags=?, ()): options => {
   | Some(tags) => opt->Js.Dict.set("ALLOWED_TAGS", tags)
   | _ => ()
   }
+  // Allow full screen in iframe
+  opt->Js.Dict.set(
+    "ADD_ATTR",
+    Some(["allowfullscreen", "webkitallowfullscreen", "mozallowfullscreen"]),
+  )
   opt
 }
 

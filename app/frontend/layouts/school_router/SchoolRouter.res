@@ -155,32 +155,33 @@ let showUser = user => {
 }
 
 let breadcrumbs = (path, courses, currentUser) => {
-  <div className={"flex justify-between p-4 bg-white border-b flex-1"}>
-    <div>
-      <div className="flex items-center space-x-2 mt-1">
-        {
-          // Experimental and this logic needs to be refactored
-          switch path {
-          | list{"school", "courses", _courseId, primaryPage, ...tale} =>
-            <div className="flex items-center space-x-2">
-              <div> <SchoolRouter__CoursesDropdown courses /> </div>
+  <div className={"flex justify-between items-center p-4 bg-white border-b flex-1"}>
+    <div className="flex items-center space-x-2 text-sm font-semibold capitalize">
+      {
+        // Experimental and this logic needs to be refactored
+        switch path {
+        | list{"school", "courses", _courseId, primaryPage, ...tale} =>
+          <div className="flex items-center space-x-2">
+            <div> <SchoolRouter__CoursesDropdown courses /> </div>
+            <Icon className="if i-chevron-right-light text-gray-500" />
+            <p className="text-gray-500">
               {switch tale {
-              | list{_resourceId, secondaryPage, ..._tale} =>
-                <div> {`${primaryPage}/${secondaryPage}`->str} </div>
+              | list{_resourceId, secondaryPage, ..._tale} => `${primaryPage}/${secondaryPage}`->str
               | _ => primaryPage->str
               }}
-            </div>
-          | list{"school", primaryPage, _resourceId, secondaryPage} =>
-            <div className="flex items-center space-x-2">
-              <div> <SchoolRouter__CoursesDropdown courses /> </div>
-              <div> {`${primaryPage}/${secondaryPage}`->str} </div>
-            </div>
-          | list{"school"} => "school"->str
-          | list{"school", page, ..._tale} => page->str
-          | _ => React.null
-          }
+            </p>
+          </div>
+        | list{"school", primaryPage, _resourceId, secondaryPage} =>
+          <div className="flex items-center space-x-2">
+            <div> <SchoolRouter__CoursesDropdown courses /> </div>
+            <Icon className="if i-chevron-right-light text-gray-400" />
+            <div> {`${primaryPage}/${secondaryPage}`->str} </div>
+          </div>
+        | list{"school"} => "school"->str
+        | list{"school", page, ..._tale} => page->str
+        | _ => React.null
         }
-      </div>
+      }
     </div>
     <div className="flex items-center space-x-4">
       <div

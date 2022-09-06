@@ -6,7 +6,7 @@ let selected = currentCourse => {
   let title = currentCourse->Belt.Option.mapWithDefault("Select Course", c => Course.name(c))
   <button
     title={title}
-    className="rounded w-full appearance-none flex items-center justify-between hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-3">
+    className="rounded text-sm w-full appearance-none flex items-center justify-between hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
       <span className="block whitespace-nowrap px-2 text-left"> {title->str} </span>

@@ -359,7 +359,7 @@ let dropdownSelected =
 
 let showCourse = course => {
   <Spread key={Course.id(course)} props={"data-t": Course.name(course)}>
-    <div className="w-full">
+    <div className="w-full relative">
       <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
         <div>
           <div className="relative">

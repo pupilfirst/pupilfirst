@@ -7,12 +7,12 @@ type profile =
 let sanitize = (html, profile) => {
   switch profile {
   | Permissive =>
-    DOMPurify.sanitizedHTMLOpt(html, DOMPurify.getOptions(~addTags=Some(["iframe"]), ()))
+    DOMPurify.sanitizedHTMLOpt(html, DOMPurify.makeOptions(~addTags=["iframe"], ()))
   | AreaOfText =>
     DOMPurify.sanitizedHTMLOpt(
       html,
-      DOMPurify.getOptions(
-        ~allowedTags=Some(["p", "em", "strong", "del", "s", "a", "sup", "sub"]),
+      DOMPurify.makeOptions(
+        ~allowedTags=["p", "em", "strong", "del", "s", "a", "sup", "sub"],
         (),
       ),
     )

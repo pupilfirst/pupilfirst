@@ -5,25 +5,20 @@ type dompurify
 
 let sanitize = s => sanitizeExternal(dompurify, s)
 
-type optionalStringArray = option<array<string>>
+type options = Js.Dict.t<array<string>>
 
-type options = Js.Dict.t<optionalStringArray>
-
-let getOptions = (~addTags=?, ~allowedTags=?, ()): options => {
+let makeOptions = (~addTags=[], ~allowedTags=[], ()) => {
   let opt = Js.Dict.empty()
-  switch addTags {
-  | Some(tags) => opt->Js.Dict.set("ADD_TAGS", tags)
-  | _ => ()
+
+  if ArrayUtils.isNotEmpty(addTags){
+    opt->Js.Dict.set("ADD_TAGS", addTags)
+    opt->Js.Dict.set("ADD_ATTR", ["allowfullscreen", "webkitallowfullscreen", "mozallowfullscreen"])
   }
-  switch allowedTags {
-  | Some(tags) => opt->Js.Dict.set("ALLOWED_TAGS", tags)
-  | _ => ()
+
+  if ArrayUtils.isNotEmpty(allowedTags) {
+    opt->Js.Dict.set("ALLOWD_TAGS", allowedTags)
   }
-  // Allow full screen in iframe
-  opt->Js.Dict.set(
-    "ADD_ATTR",
-    Some(["allowfullscreen", "webkitallowfullscreen", "mozallowfullscreen"]),
-  )
+
   opt
 }
 

@@ -147,12 +147,16 @@ let uploadAvatar = (send, formData) => {
 
 let updateEmail = (send, email, newEmail) => {
   SendEmailUpdateTokenQuery.fetch({newEmail: newEmail})
-  |> Js.Promise.then_(_ => {
-    Notification.success(
-      ts("notifications.done_exclamation"),
-      t("update_email_token_sent_notification"),
-    )
-    send(SetDisableUpdateEmail(true))
+  |> Js.Promise.then_((response: SendEmailUpdateTokenQuery.t) => {
+    response.sendUpdateEmailToken.success
+      ? {
+          Notification.success(
+            ts("notifications.done_exclamation"),
+            t("update_email_token_sent_notification"),
+          )
+          send(SetDisableUpdateEmail(true))
+        }
+      : send(SetDisableUpdateEmail(true))
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {

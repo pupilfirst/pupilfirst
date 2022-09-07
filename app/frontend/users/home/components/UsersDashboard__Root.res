@@ -12,10 +12,7 @@ type view =
   | ShowCertificates
 
 let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit) => {
-  let name = switch preferredName {
-  | Some(preferredName) => preferredName
-  | None => userName
-  }
+  let name = Belt.Option.getWithDefault(preferredName, userName)
   <div className="max-w-4xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
     <div className="flex">
       {switch avatarUrl {

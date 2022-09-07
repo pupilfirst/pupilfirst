@@ -63,7 +63,7 @@ class UpdateUserMutator < ApplicationQuery
 
   def current_password_must_be_valid
     if new_password.blank? || current_user.encrypted_password.blank? ||
-      current_user.valid_password?(current_password)
+         current_user.valid_password?(current_password)
       return
     end
 
@@ -83,6 +83,12 @@ class UpdateUserMutator < ApplicationQuery
   def user_params
     preferences = current_user.preferences
     preferences[:daily_digest] = daily_digest
-    { name: name, preferred_name: preferred_name.presence, about: about, locale: locale, preferences: preferences }
+    {
+      name: name,
+      preferred_name: preferred_name,
+      about: about,
+      locale: locale,
+      preferences: preferences
+    }
   end
 end

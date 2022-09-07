@@ -3,12 +3,12 @@ module Types
     field :id,
           ID,
           null: false,
-          description: 'The ID returned by the type can represent different user role types'
+          description:
+            'The ID returned by the type can represent different user role types'
     field :user_id, ID, null: false
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
-    field :name, String, null: false
     field :preferred_name, String, null: true
 
     def avatar_url

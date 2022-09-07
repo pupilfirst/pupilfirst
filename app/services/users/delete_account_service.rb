@@ -12,11 +12,8 @@ module Users
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
         name = @user.preferred_name.presence || @user.name
-        UserMailer.confirm_account_deletion(
-          name,
-          @user.email,
-          @user.school
-        ).deliver_later
+        UserMailer.confirm_account_deletion(name, @user.email, @user.school)
+          .deliver_later
 
         create_audit_record
 
@@ -65,7 +62,8 @@ module Users
         school_id: @user.school_id,
         metadata: {
           email: @user.email,
-          account_deletion_notification_sent_at: @user.account_deletion_notification_sent_at&.iso8601
+          account_deletion_notification_sent_at:
+            @user.account_deletion_notification_sent_at&.iso8601
         }
       )
     end

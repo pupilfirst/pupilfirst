@@ -16,8 +16,13 @@ module Mutations
     def resolve(params)
       mutator = UpdateUserMutator.new(context, params)
 
-      success = if mutator.valid?
-          mutator.notify(:success, I18n.t('shared.notifications.done'), I18n.t('mutations.update_user.profile_saved_notification'))
+      success =
+        if mutator.valid?
+          mutator.notify(
+            :success,
+            I18n.t('shared.notifications.done'),
+            I18n.t('mutations.update_user.profile_saved_notification')
+          )
           mutator.update_user
           true
         else

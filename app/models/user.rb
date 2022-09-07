@@ -53,7 +53,7 @@ class User < ApplicationRecord
          :recoverable,
          omniauth_providers: %i[google_oauth2 facebook github]
 
-  normalize_attribute :name, :about, :affiliation
+  normalize_attribute :name, :about, :affiliation, :preferred_name
 
   validates :email,
             presence: true,
@@ -75,9 +75,9 @@ class User < ApplicationRecord
       name
         .split
         .map do |name_fragment|
-        name_fragment[0] = name_fragment[0].capitalize
-        name_fragment
-      end
+          name_fragment[0] = name_fragment[0].capitalize
+          name_fragment
+        end
         .join(' ')
   end
 
@@ -99,7 +99,8 @@ class User < ApplicationRecord
   def regenerate_reset_password_token
     @original_reset_password_token = SecureRandom.urlsafe_base64
     update!(
-      reset_password_token: Digest::SHA2.base64digest(@original_reset_password_token)
+      reset_password_token:
+        Digest::SHA2.base64digest(@original_reset_password_token)
     )
   end
 
@@ -111,7 +112,8 @@ class User < ApplicationRecord
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
     update!(
-      delete_account_token_digest: Digest::SHA2.hexdigest(@delete_account_token_original)
+      delete_account_token_digest:
+        Digest::SHA2.hexdigest(@delete_account_token_original)
     )
   end
 
@@ -131,8 +133,10 @@ class User < ApplicationRecord
   end
 
   def login_token_expiration_time
-    (login_token_generated_at +
-     Rails.application.secrets.login_token_time_limit).strftime('%B %-d, %Y at %l:%M %p')
+    (
+      login_token_generated_at +
+        Rails.application.secrets.login_token_time_limit
+    ).strftime('%B %-d, %Y at %l:%M %p')
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

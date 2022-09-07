@@ -206,7 +206,7 @@ module Courses
         .where(id: user_ids)
         .with_attached_avatar
         .map do |user|
-          details = user.attributes.slice('id', 'name','title')
+          details = user.attributes.slice('id', 'name', 'title')
           details['avatar_url'] = user.avatar_url(variant: :thumb)
           details
         end

@@ -465,7 +465,6 @@ ActiveRecord::Schema.define(version: 2022_07_15_114219) do
     t.string "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "sort_index", default: 0, null: false
     t.index ["school_id", "kind"], name: "index_school_links_on_school_id_and_kind"
   end
 

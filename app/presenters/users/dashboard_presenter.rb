@@ -32,15 +32,16 @@ module Users
         .live
         .includes(:course)
         .map do |issued_certificate|
-        issued_certificate
-          .attributes
-          .slice('id', 'serial_number', 'created_at')
-          .merge(course_name: issued_certificate.course.name)
-      end
+          issued_certificate
+            .attributes
+            .slice('id', 'serial_number', 'created_at')
+            .merge(course_name: issued_certificate.course.name)
+        end
     end
 
     def courses
-      @courses ||= begin
+      @courses ||=
+        begin
           if current_school_admin.present?
             current_school.courses.active.or(
               current_school.courses.live.where(
@@ -49,31 +50,36 @@ module Users
             )
           else
             current_school.courses.live.where(
-              id: (courses_with_student_profile.pluck(:course_id) +
-                   courses_with_review_access + courses_with_author_access).uniq
+              id:
+                (
+                  courses_with_student_profile.pluck(:course_id) +
+                    courses_with_review_access + courses_with_author_access
+                ).uniq
             )
           end.with_attached_thumbnail
         end
     end
 
     def courses_with_student_profile
-      @courses_with_student_profile ||= begin
+      @courses_with_student_profile ||=
+        begin
           current_user
             .founders
             .joins(:course)
             .pluck(:course_id, :dropped_out_at, :access_ends_at)
             .map do |course_id, dropped_out_at, access_ends_at|
-            {
-              course_id: course_id,
-              dropped_out_at: dropped_out_at,
-              access_ends_at: access_ends_at
-            }
-          end
+              {
+                course_id: course_id,
+                dropped_out_at: dropped_out_at,
+                access_ends_at: access_ends_at
+              }
+            end
         end
     end
 
     def courses_with_review_access
-      @courses_with_review_access ||= begin
+      @courses_with_review_access ||=
+        begin
           if current_user.faculty.present?
             current_user.faculty.courses.pluck(:id)
           else
@@ -88,7 +94,8 @@ module Users
     end
 
     def communities
-      @communities ||= begin
+      @communities ||=
+        begin
           # All communities in school.
           communities_in_school = Community.where(school: current_school)
 
@@ -119,20 +126,20 @@ module Users
       courses
         .includes(:communities)
         .map do |course|
-        {
-          id: course.id,
-          name: course.name,
-          review: course.id.in?(courses_with_review_access),
-          author: course.id.in?(courses_with_author_access),
-          enable_leaderboard: course.enable_leaderboard?,
-          description: course.description,
-          exited: student_dropped_out(course.id),
-          thumbnail_url: course.thumbnail_url,
-          linked_communities: course.communities.pluck(:id).map(&:to_s),
-          access_ended: student_access_end(course.id),
-          ended: course.ended?
-        }
-      end
+          {
+            id: course.id,
+            name: course.name,
+            review: course.id.in?(courses_with_review_access),
+            author: course.id.in?(courses_with_author_access),
+            enable_leaderboard: course.enable_leaderboard?,
+            description: course.description,
+            exited: student_dropped_out(course.id),
+            thumbnail_url: course.thumbnail_url,
+            linked_communities: course.communities.pluck(:id).map(&:to_s),
+            access_ended: student_access_end(course.id),
+            ended: course.ended?
+          }
+        end
     end
 
     def student_access_end(course_id)

@@ -109,7 +109,7 @@ module Topics
         .map do |user|
           user
             .attributes
-            .slice('id','name')
+            .slice('id', 'name')
             .merge(
               avatar_url: user.avatar_url(variant: :thumb),
               title: user.full_title

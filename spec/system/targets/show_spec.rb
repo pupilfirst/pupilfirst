@@ -713,7 +713,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('Your access to this course has ended.')
+      expect(page).to have_content('You have only limited access to the course now. You are allowed preview the content but cannot complete any target..')
       expect(page).not_to have_selector(
         '.course-overlay__body-tab-item',
         text: 'Complete'

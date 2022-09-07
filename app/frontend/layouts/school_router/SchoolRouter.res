@@ -94,7 +94,7 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <div>
-        <div className="px-4 pb-20 bg-white">
+        <div className="px-4 pt-2 pb-20 bg-white">
           {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}
         </div>
       </div>

@@ -352,7 +352,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 
 let dropdownSelected =
   <button
-    className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 font-semibold text-sm px-3 py-2 rounded w-full">
+    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-100 appearance-none flex items-center justify-between hover:bg-gray-800 md:hover:bg-gray-50 hover:text-gray-50 focus:bg-gray-50 md:hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
     <span> {str(t("quick_links"))} </span>
     <i className="fas fa-chevron-down text-xs ml-3 font-semibold" />
   </button>

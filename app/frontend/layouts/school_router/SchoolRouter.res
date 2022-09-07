@@ -314,7 +314,7 @@ let make = (~school, ~courses, ~currentUser) => {
         {breadcrumbs(url.path, courses, currentUser)}
         <div role="main" className="flex h-full">
           {secondaryNav(currentUser, selectedCourse, selectedPage)}
-          <div id="schoolrouter-innerpage" className="flex-1 overflow-y-auto bg-gray-50 pb-24">
+          <div id="schoolrouter-innerpage" className="flex-1 overflow-y-auto bg-gray-50 pb-40">
             {switch component {
             | Some(page) => page
             | None => React.null

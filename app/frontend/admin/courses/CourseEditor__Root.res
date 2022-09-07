@@ -427,9 +427,13 @@ let showCourse = course => {
           </Spread>
         </div>
         {ReactUtils.nullIf(
-          <Dropdown
-            className="col-span-2 px-4" selected={dropdownSelected} contents={courseLinks(course)}
-          />,
+          <div className="px-4">
+            <Dropdown
+              className="col-span-2 w-full"
+              selected={dropdownSelected}
+              contents={courseLinks(course)}
+            />
+          </div>,
           Belt.Option.isSome(Course.archivedAt(course)),
         )}
         <div className="grid grid-cols-6 gap-4 p-4">

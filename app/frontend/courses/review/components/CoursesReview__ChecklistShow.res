@@ -272,8 +272,7 @@ let make = (
         }}
       </div>
     </div>
-    <div
-      className="flex justify-end border-t bg-gray-50 opacity-90 sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
+    <div className="flex justify-end border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       {feedbackGeneratable(submissionDetails, overlaySubmission)
         ? generateFeedbackButton(
             checklist,

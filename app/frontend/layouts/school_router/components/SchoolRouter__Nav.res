@@ -164,13 +164,13 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                   {Js.Array.map(
                     course =>
                       <li key={Course.id(course)}>
-                        <Link
+                        <a
                           ariaLabel={Course.name(course)}
                           href={"/school/courses/" ++ Course.id(course) ++ "/students"}
                           className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
                           <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
                           {str(Course.name(course))}
-                        </Link>
+                        </a>
                       </li>,
                     Js.Array.filter(course => !Course.ended(course), courses),
                   )->React.array}

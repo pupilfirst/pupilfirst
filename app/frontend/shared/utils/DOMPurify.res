@@ -10,7 +10,7 @@ type options = Js.Dict.t<array<string>>
 let makeOptions = (~addTags=[], ~allowedTags=[], ()) => {
   let opt = Js.Dict.empty()
 
-  if ArrayUtils.isNotEmpty(addTags){
+  if ArrayUtils.isNotEmpty(addTags) {
     opt->Js.Dict.set("ADD_TAGS", addTags)
     opt->Js.Dict.set("ADD_ATTR", ["allowfullscreen", "webkitallowfullscreen", "mozallowfullscreen"])
   }
@@ -29,7 +29,6 @@ let sanitizeOpt = (s, opt) => sanitizeOptExternal(dompurify, s, opt)
 let sanitizedHTML = html => {"__html": sanitize(html)}
 
 let sanitizedHTMLOpt = (html, options) => {
-  Js.log(options)
   {"__html": sanitizeOpt(html, options)}
 }
 
@@ -49,9 +48,6 @@ let sanitizedHTMLHook = (entryPoint, hookFunction) => {
           if (!(src.startsWith('https://www.youtube.com/embed/') ||
             src.startsWith('https://player.vimeo.com/video/'))
           ) {
-            console.log("removing",src)
-            console.log(!src.startsWith('https://www.youtube.com/embed/'),
-            !src.startsWith('https://player.vimeo.com/video/'))
             return node.parentNode?.removeChild(node)
           }
         }

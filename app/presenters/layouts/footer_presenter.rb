@@ -24,6 +24,7 @@ module Layouts
       custom_links =
         SchoolLink
           .where(school: current_school, kind: SchoolLink::KIND_FOOTER)
+          .order(:sort_index)
           .map { |sl| { title: sl.title, url: sl.url, custom: true } }
 
       footer_links + custom_links
@@ -33,8 +34,8 @@ module Layouts
       @social_links ||=
         SchoolLink
           .where(school: current_school, kind: SchoolLink::KIND_SOCIAL)
+          .order(:sort_index)
           .map { |sl| { title: sl.title, url: sl.url } }
-          .reverse
     end
 
     def school_name

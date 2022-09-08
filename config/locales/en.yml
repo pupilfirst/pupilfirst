@@ -952,7 +952,7 @@ en:
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
         label: What steps should the student take to complete this target?
-        limit_warning: Maximum allowed checklist items is 15!
+        limit_warning: Maximum allowed checklist items is 25!
       target_group: Target Group
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
@@ -1046,6 +1046,7 @@ en:
       control_label_bold: Bold
       control_label_italic: Italic
       control_label_strikethrough: Strikethrough
+      emoji_picker: Emoji
       error_maximum_file_size: The maximum file size is 5 MB. Please select another file.
       error_prefix: Failed to attach file!
       error_unexpected: An unexpected error occured! Please reload the page before trying again.
@@ -1240,6 +1241,10 @@ en:
       manage_images: Manage Images
       update_images: Update Images
       updated_notification: Images have been updated successfully.
+    SchoolCustomize__LinkComponent:
+      cancel_editing: Cancel Editing
+      move_down: Move Down
+      move_up: Move Up
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...
@@ -1287,8 +1292,10 @@ en:
       edit_terms: Edit Terms & Conditions
       featured_courses: Featured Courses
       hello_welcome: Hello, welcome to
+      homepage: Home Page
       icon: Icon
       privacy_policy: Privacy Policy
+      reach_us_at: React us at
       sitemap: Sitemap
       social: Social
       social_links_q: Add social media links?
@@ -1520,13 +1527,13 @@ en:
       mark_solution: Mark as solution
       mark_solution_confirm: Are you sure you want to mark this post as solution?
       marked_solution_icon: Marked as solution icon
-      show_replies_button:
-        one: 1 Reply
-        other: "%{count} Replies"
       new_reply_button: Reply
       options_post: Options for post
       replies_post: Replies to post
       show_replies: Show replies of post
+      show_replies_button:
+        one: 1 Reply
+        other: "%{count} Replies"
       solution: Solution
       solution_icon_label: Solution
       unmark_solution: Unmark as solution
@@ -1688,6 +1695,7 @@ en:
   errors:
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      title: Server Error
       went_wrong: We're sorry, but something went wrong.
     messages:
       content_type_invalid: has an invalid content type
@@ -1695,15 +1703,19 @@ en:
     not_acceptable:
       details: It looks like your browser requested a response in a format that our server cannot fulfil. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       invalid_format: Your browser requested an invalid format.
+      title: Invalid Request
     not_found:
       mistyped_moved: You may have mistyped the address, or the page may have moved.
       not_exist: The page you were looking for doesn't exist!
+      title: Not Found
       try_homepage: Try heading back to our homepage?
     service_unavailable:
+      title: Timed out
       too_long: This page took too long to load.
       try_reloading: Could you please try reloading this page?
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
+      title: Invalid Request
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
   faculty:
     index:
@@ -1753,11 +1765,12 @@ en:
   mailers:
     applicant:
       enrollment_verification:
-        body: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to create an account at %{school_name}.
+        body_html: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this %{link_to} will verify your email-address and confirm that you wish to create an account at %{school_name}.
+        body_processing_url_html: We've received your application to the %{course_name} course at %{school_name}.<br/> Please verify your email address by clicking %{link_to}. Once your email address is verified, you will be shown the next steps required to complete your application.
+        link_text: one-time link
+        link_text_processing_url: this link
         subject: Verify Your Email Address
-        subtitle: Use this <strong>one-time link</strong> to verify your email address and sign into %{school_name}!
-        title: Welcome to %{course_name}
-        title_button_text: Activate your account and sign in
+        subject_with_processing_url: Complete your %{course_name} course application
     coach:
       course_enrollment:
         subject: You have been added as a coach in %{course_name}
@@ -1844,10 +1857,10 @@ en:
           asked: asked %{days_ago} days ago.
           assigned: (%{stats} assigned to you)
           assigned_none: (none of which are assigned to you)
-          control_emails: You can control these emails from %{link_to}.
+          control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
-          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in %{courses_number} courses that you are a coach in:"
+          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in some courses that you are a coach in:"
           older: "Older, popular topics that have seen new activity:"
           replies: replies
           views: views
@@ -1928,6 +1941,9 @@ en:
       reply_added_notification: Reply added successfully
     create_quiz_submission:
       responses_saved_notification: Your responses have been saved.
+    create_school_link:
+      blank_title_error: A title is required
+      success_notification: A custom link has been added.
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2009,8 +2025,11 @@ en:
       review_updated_notification: Review checklist updated successfully
     update_school:
       details_updated_notification: Details updated successfully!
+    update_school_link:
+      link_not_found_error: Unable to find link!
+      success_notification: Link updated successfully!
     update_target:
-      checklist_items_exceeded_error: Checklist should have less than 15 items
+      checklist_items_exceeded_error: Checklist should not have more than 25 items
       evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
       invalid_checklist_error: Checklist not valid
       multiple_method_of_completion: More than one method of completion

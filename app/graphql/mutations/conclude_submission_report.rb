@@ -9,7 +9,7 @@ module Mutations
              required: false,
              validates: {
                length: {
-                 maximum: 1000
+                 maximum: 10_000
                }
              }
     argument :conclusion, Types::SubmissionReportConclusionType, required: true
@@ -39,6 +39,7 @@ module Mutations
           )
         else
           SubmissionReport.create!(
+            submission_id: @params[:submission_id],
             status: 'completed',
             test_report: @params[:test_report],
             conclusion: @params[:conclusion],

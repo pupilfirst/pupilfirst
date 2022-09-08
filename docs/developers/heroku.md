@@ -8,12 +8,6 @@ sidebar_label: Heroku
 
 Start by making sure that you've gone through [our notes of some things to consider before deploying](before_deploying).
 
-## Why Heroku?
-
-Heroku is a [PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service) provider that takes care of all network and hardware maintenance requirements for running web applications.
-
-It also makes the deployment and update process extremely simple when compared to the use of traditional [IaaS](https://en.wikipedia.org/wiki/Infrastructure_as_a_service) providers.
-
 ## Steps on Heroku
 
 Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yourself with [how containerized apps run on Heroku](https://devcenter.heroku.com/articles/container-registry-and-runtime).
@@ -34,7 +28,7 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
 
 ## Deployment using Docker
 
-The Heroku Container Registry allows us to deploy our Docker images to Heroku. To access the Heroku Container Registry, we first need to log into it:
+The Heroku Container Registry allows us to deploy [our Docker images](./docker) to Heroku. To access the Heroku Container Registry, we first need to log into it:
 
 ```bash
 heroku container:login
@@ -123,6 +117,18 @@ user.update!(
 
 You **should** discard this user, later, via the school administration interface once you've enrolled yourself as a school
 admin.
+
+### Set a primary domain
+
+Let's inform the application about its domain address. On the Rails console, run:
+
+```ruby
+School.first.domains.create!(fqdn: 'my-app-name.herokuapp.com', primary: true)
+```
+
+Change `my-app-name.herokuapp.com` to match your actual fully qualified domain name.
+
+You can have more than one domain responding to requests, so you can use this same process to add more custom domains. Make sure that only one domain is set to `primary: true`. This primary domain will be used to generate URLs in emails and such.
 
 ## Try visiting the LMS's URL
 

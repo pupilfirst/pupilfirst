@@ -958,26 +958,26 @@ let make = (
                       />
                     })
                     |> React.array}
-                    {state.checklist |> ArrayUtils.isEmpty
+                    {ArrayUtils.isEmpty(state.checklist)
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
-                          {t("empty_checklist_warning") |> str}
+                          {t("empty_checklist_warning")->str}
                         </div>
                       : React.null}
-                    {state.checklist |> Js.Array.length >= 15
+                    {Js.Array.length(state.checklist) >= 25
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
-                          {t("target_checklist.limit_warning") |> str}
+                          {t("target_checklist.limit_warning")->str}
                         </div>
                       : React.null}
                     <button
-                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500"
-                      disabled={state.checklist |> Js.Array.length >= 15}
+                      className="flex justify-center bg-white items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500"
+                      disabled={Js.Array.length(state.checklist) >= 25}
                       onClick={_ => send(AddNewChecklistItem)}>
                       <PfIcon className="fas fa-plus-circle text-lg" />
-                      <span className="font-semibold ml-2"> {t("add_step") |> str} </span>
+                      <span className="font-semibold ml-2"> {t("add_step")->str} </span>
                     </button>
                   </div>
                 </div>

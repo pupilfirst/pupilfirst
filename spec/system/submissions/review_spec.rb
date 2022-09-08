@@ -747,10 +747,7 @@ feature 'Submission review overlay', js: true do
 
       within(
         "div[aria-label='#{submission_pending.checklist.first['title']}']"
-      ) do
-        find('p', text: question_1).click
-        expect(page).to have_content(answer_1)
-      end
+      ) { expect(page).to have_content(answer_1) }
 
       within(
         "div[aria-label='#{submission_pending.checklist.second['title']}']"
@@ -770,10 +767,7 @@ feature 'Submission review overlay', js: true do
 
       within(
         "div[aria-label='#{submission_pending.checklist.last['title']}']"
-      ) do
-        find('p', text: question_6).click
-        expect(page).to have_content('Incorrect')
-      end
+      ) { expect(page).to have_content('Incorrect') }
 
       accept_confirm { click_button('Undo Grading') }
       click_button 'Start Review'

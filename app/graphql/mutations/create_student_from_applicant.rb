@@ -53,5 +53,9 @@ module Mutations
     def applicant
       Applicant.find_by(id: @params[:applicant_id], email_verified: true)
     end
+
+    def allow_token_auth?
+      true
+    end
   end
 end

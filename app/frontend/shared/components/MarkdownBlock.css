@@ -141,6 +141,14 @@
 }
 
 /*
+ * Remove padding-top from the first child.
+ */
+
+.markdown-block__permissive > :first-child {
+  @apply pt-0;
+}
+
+/*
  * Stricter sanitization that limits the kinds of tags available.
  */
 

@@ -119,7 +119,7 @@ type data = {
   cohorts: array<Cohort.t>,
 }
 
-type state = Unloaded | Loading | Loaded(data)
+type state = Unloaded | Loading | Loaded(data) | Errored
 
 module CohortFragment = Cohort.Fragment
 
@@ -142,9 +142,12 @@ module CohortDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
-  CohortDetailsDataQuery.fetch({
-    id: id,
-  })
+  CohortDetailsDataQuery.fetch(
+    ~notifyOnNotFound=false,
+    {
+      id: id,
+    },
+  )
   |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
     setState(_ => Loaded({
       cohort: Cohort.make(
@@ -159,6 +162,10 @@ let loadData = (id, setState, setCourseId) => {
     setCourseId(response.cohort.courseId)
     Js.Promise.resolve()
   })
+  |> Js.Promise.catch(_error => {
+    setState(_ => Errored)
+    Js.Promise.resolve()
+  })
   |> ignore
 }
 
@@ -166,7 +173,7 @@ let loadData = (id, setState, setCourseId) => {
 let make = (~cohortId) => {
   let (state, setState) = React.useState(() => Unloaded)
   let courseContext = React.useContext(SchoolRouter__CourseContext.context)
-  let courseId = "1"
+
   React.useEffect1(() => {
     loadData(cohortId, setState, courseContext.setCourseId)
     None
@@ -180,13 +187,14 @@ let make = (~cohortId) => {
     | Loaded(data) =>
       <div>
         <School__PageHeader
-          exitUrl={`/school/courses/${courseId}/cohorts`}
+          exitUrl={`/school/courses/${Cohort.courseId(data.cohort)}/cohorts`}
           title={`Edit ${Cohort.name(data.cohort)}`}
           description={"Actions for the cohort."}
           links={pageLinks(cohortId)}
         />
         <Editor cohorts=data.cohorts cohort=data.cohort courseId={Cohort.courseId(data.cohort)} />
       </div>
+    | Errored => <ErrorState />
     }
   }
 }

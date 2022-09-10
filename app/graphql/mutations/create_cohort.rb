@@ -8,7 +8,7 @@ module Mutations
              validates: {
                length: {
                  minimum: 1,
-                 maximum: 50
+                 maximum: 100
                }
              }
     argument :description,

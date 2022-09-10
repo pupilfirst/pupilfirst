@@ -344,7 +344,7 @@ type baseData = {
   courseId: string,
 }
 
-type state = Unloaded | Loading | Loaded(baseData)
+type state = Unloaded | Loading | Loaded(baseData) | Errored
 
 module UserProxyFragment = Coach.Fragment
 module CohortFragment = Cohort.Fragment
@@ -383,7 +383,7 @@ module StudentDetailsDataQuery = %graphql(`
 
 let loadData = (studentId, setState, setCourseId) => {
   setState(_ => Loading)
-  StudentDetailsDataQuery.fetch({studentId: studentId})
+  StudentDetailsDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
   |> Js.Promise.then_((response: StudentDetailsDataQuery.t) => {
     setState(_ => Loaded({
       student: {
@@ -401,6 +401,10 @@ let loadData = (studentId, setState, setCourseId) => {
       courseCoaches: response.student.course.coaches->Js.Array2.map(Coach.makeFromFragment),
     }))
     setCourseId(response.student.course.id)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    setState(_ => Errored)
     Js.Promise.resolve()
   })
   |> ignore
@@ -431,30 +435,29 @@ let make = (~studentId) => {
     None
   }, [studentId])
 
-  <div>
-    <div className="max-w-5xl mx-auto px-2">
-      {switch state {
-      | Unloaded
-      | Loading =>
-        SkeletonLoading.coursePage()
-      | Loaded(baseData) =>
-        <div>
-          <School__PageHeader
-            exitUrl={`/school/courses/${baseData.courseId}/students`}
-            title={`Edit ${baseData.student.name}`}
-            description={"Update student details"}
-            links={pageLinks(studentId)}
-          />
-          <Editor
-            courseCoaches=baseData.courseCoaches
-            avilableTags={baseData.tags}
-            student={baseData.student}
-            cohorts={baseData.cohorts}
-            studentId={studentId}
-            courseId={baseData.courseId}
-          />
-        </div>
-      }}
-    </div>
-  </div>
+  {
+    switch state {
+    | Unloaded
+    | Loading =>
+      SkeletonLoading.coursePage()
+    | Loaded(baseData) =>
+      <div className="max-w-5xl mx-auto px-2">
+        <School__PageHeader
+          exitUrl={`/school/courses/${baseData.courseId}/students`}
+          title={`Edit ${baseData.student.name}`}
+          description={"Update student details"}
+          links={pageLinks(studentId)}
+        />
+        <Editor
+          courseCoaches=baseData.courseCoaches
+          avilableTags={baseData.tags}
+          student={baseData.student}
+          cohorts={baseData.cohorts}
+          studentId={studentId}
+          courseId={baseData.courseId}
+        />
+      </div>
+    | Errored => <ErrorState />
+    }
+  }
 }

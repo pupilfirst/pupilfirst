@@ -24,7 +24,7 @@ let pageLinks = cohortId => [
   ),
 ]
 
-type state = Unloaded | Loading | Loaded(Cohort.t)
+type state = Unloaded | Loading | Loaded(Cohort.t) | Errored
 
 module CohortFragment = Cohort.Fragment
 
@@ -38,12 +38,19 @@ module CohortDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
-  CohortDetailsDataQuery.fetch({
-    id: id,
-  })
+  CohortDetailsDataQuery.fetch(
+    ~notifyOnNotFound=false,
+    {
+      id: id,
+    },
+  )
   |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
     setState(_ => Loaded(response.cohort->Cohort.makeFromFragment))
     setCourseId(response.cohort.courseId)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    setState(_ => Errored)
     Js.Promise.resolve()
   })
   |> ignore
@@ -75,6 +82,7 @@ let make = (~cohortId) => {
         />
         <AdminCoursesShared__CohortsEditor courseId cohort />
       </div>
+    | Errored => <ErrorState />
     }
   }
 }

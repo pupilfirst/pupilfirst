@@ -17,7 +17,7 @@ let pageLinks = studentId => [
   ),
 ]
 
-type baseData = Unloaded | Loading | Loaded(Team.t)
+type baseData = Unloaded | Loading | Loaded(Team.t) | Errored
 
 type state = {
   baseData: baseData,
@@ -36,15 +36,22 @@ module TeamDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(state => {...state, baseData: Loading})
-  TeamDetailsDataQuery.fetch({
-    id: id,
-  })
+  TeamDetailsDataQuery.fetch(
+    ~notifyOnNotFound=false,
+    {
+      id: id,
+    },
+  )
   |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
     setState(state => {
       ...state,
       baseData: Loaded(response.team->Team.makeFromFragment),
     })
     setCourseId(response.team.cohort.courseId)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    setState(state => {...state, baseData: Errored})
     Js.Promise.resolve()
   })
   |> ignore
@@ -86,8 +93,8 @@ let make = (~studentId) => {
     None
   }, [studentId])
 
-  <div>
-    {switch state.baseData {
+  {
+    switch state.baseData {
     | Unloaded
     | Loading =>
       SkeletonLoading.coursePage()
@@ -112,6 +119,7 @@ let make = (~studentId) => {
           </button>
         </div>
       </div>
-    }}
-  </div>
+    | Errored => <ErrorState />
+    }
+  }
 }

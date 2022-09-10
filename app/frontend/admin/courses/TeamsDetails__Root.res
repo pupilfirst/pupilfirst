@@ -17,7 +17,7 @@ let pageLinks = studentId => [
   ),
 ]
 
-type state = Unloaded | Loading | Loaded(Team.t)
+type state = Unloaded | Loading | Loaded(Team.t) | Errored
 
 module TeamFragment = Team.Fragment
 
@@ -31,12 +31,19 @@ module TeamDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
-  TeamDetailsDataQuery.fetch({
-    id: id,
-  })
+  TeamDetailsDataQuery.fetch(
+    ~notifyOnNotFound=false,
+    {
+      id: id,
+    },
+  )
   |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
     setState(_ => Loaded(response.team->Team.makeFromFragment))
     setCourseId(response.team.cohort.courseId)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    setState(_ => Errored)
     Js.Promise.resolve()
   })
   |> ignore
@@ -68,6 +75,7 @@ let make = (~studentId) => {
         />
         <AdminCoursesShared__TeamEditor courseId={courseId} team={team} />
       </div>
+    | Errored => <ErrorState />
     }
   }
 }

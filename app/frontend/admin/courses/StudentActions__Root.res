@@ -395,7 +395,7 @@ type baseData = {
   certificates: array<Certificate.t>,
 }
 
-type state = Unloaded | Loading | Loaded(baseData)
+type state = Unloaded | Loading | Loaded(baseData) | Errored
 
 module CertificateFragment = Certificate.Fragment
 
@@ -436,9 +436,12 @@ let pageLinks = studentId => [
 
 let loadData = (studentId, setState, setCourseId) => {
   setState(_ => Loading)
-  StudentActionsDataQuery.fetch({
-    studentId: studentId,
-  })
+  StudentActionsDataQuery.fetch(
+    ~notifyOnNotFound=false,
+    {
+      studentId: studentId,
+    },
+  )
   |> Js.Promise.then_((response: StudentActionsDataQuery.t) => {
     setState(_ => Loaded({
       student: {
@@ -454,6 +457,10 @@ let loadData = (studentId, setState, setCourseId) => {
       courseId: response.student.course.id,
     }))
     setCourseId(response.student.course.id)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    setState(_ => Errored)
     Js.Promise.resolve()
   })
   |> ignore
@@ -490,6 +497,7 @@ let make = (~studentId) => {
           />
         </div>
       </div>
+    | Errored => <ErrorState />
     }
   }
 }

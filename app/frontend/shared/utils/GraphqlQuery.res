@@ -63,7 +63,7 @@ module Extender = (M: X) => {
     | None => ()
     }
 
-  let sendQuery = (~notify=true, query, variables) => {
+  let sendQuery = (~notify=true, ~notifyOnNotFound=true, query, variables) => {
     open Bs_fetch
     fetchWithInit(
       "/graphql",
@@ -88,10 +88,12 @@ module Extender = (M: X) => {
         if notify {
           let statusCode = resp |> Fetch.Response.status |> string_of_int
 
-          Notification.error(
-            "Error " ++ statusCode,
-            "Our team has been notified of this error. Please reload the page and try again.",
-          )
+          if notifyOnNotFound {
+            Notification.error(
+              "Error " ++ statusCode,
+              "Our team has been notified of this error. Please reload the page and try again.",
+            )
+          }
         }
 
         Js.Promise.reject(Graphql_error("Request failed: " ++ Response.statusText(resp)))
@@ -125,19 +127,24 @@ module Extender = (M: X) => {
 
   external tToJsObject: M.t => Js.t<'a> = "%identity"
 
-  let query = (notify, variables) => {
-    sendQuery(~notify, M.query, variables->M.serializeVariables->M.variablesToJson)
+  let query = (notify, notifyOnNotFound, variables) => {
+    sendQuery(
+      ~notify,
+      ~notifyOnNotFound,
+      M.query,
+      variables->M.serializeVariables->M.variablesToJson,
+    )
   }
 
-  let fetch = (~notify=true, variables) => {
-    query(notify, variables) |> Js.Promise.then_(data =>
+  let fetch = (~notify=true, ~notifyOnNotFound=true, variables) => {
+    query(notify, notifyOnNotFound, variables) |> Js.Promise.then_(data =>
       M.unsafe_fromJson(data) |> M.parse |> Js.Promise.resolve
     )
   }
 
   @deprecated("Use fetch instead")
-  let make = (~notify=true, variables) => {
-    query(notify, variables) |> Js.Promise.then_(data => {
+  let make = (~notify=true, ~notifyOnNotFound=true, variables) => {
+    query(notify, notifyOnNotFound, variables) |> Js.Promise.then_(data => {
       tToJsObject(M.unsafe_fromJson(data) |> M.parse) |> Js.Promise.resolve
     })
   }

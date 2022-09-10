@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-def cohorts_path(course)
+def cohorts_new_path(course)
   "/school/courses/#{course.id}/cohorts/new"
 end
 
@@ -14,95 +14,66 @@ feature 'Cohorts New', js: true do
   let!(:level) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
   let!(:student) { create :founder, cohort: live_cohort, level: level }
+  let(:name) { Faker::Lorem.words(number: 2).join(' ') }
+  let(:description) { Faker::Lorem.sentences.join(' ') }
 
-  context 'with some students and coaches assigned to cohorts' do
-    let(:name) { Faker::Lorem.words(number: 2).join ' ' }
-    let(:description) { Faker::Lorem.sentences.join ' ' }
+  scenario 'School admin creates a cohort' do
+    sign_in_user school_admin.user, referrer: cohorts_new_path(course)
 
-    scenario 'School admin creates a cohort' do
-      sign_in_user school_admin.user, referrer: cohorts_path(course)
+    expect(page).to have_text('Add new cohort')
 
-      expect(page).to have_text('Add new cohort')
+    fill_in 'Cohort name', with: name
+    fill_in 'Cohort description', with: description
 
-      fill_in 'Cohort name', with: name
-      fill_in 'Cohort description', with: description
+    click_button 'Add new cohort'
+    dismiss_notification
 
-      click_button 'Add new cohort'
-      dismiss_notification
-
-      within("div[data-cohort-name='#{name}']") do
-        expect(page).to have_content(description)
-      end
-
-      cohort = Cohort.last
-
-      expect(cohort.name).to eq(name)
-      expect(cohort.description).to eq(description)
-      expect(cohort.ends_at).to eq(nil)
-      expect(Cohort.count).to eq(2)
+    within("div[data-cohort-name='#{name}']") do
+      expect(page).to have_content(description)
     end
 
-    scenario 'School admin creates a cohort with an end date' do
-      ends_at = Date.tomorrow
-      sign_in_user school_admin.user, referrer: cohorts_path(course)
+    cohort = Cohort.last
 
-      expect(page).to have_text('Add new cohort')
+    expect(cohort.name).to eq(name)
+    expect(cohort.description).to eq(description)
+    expect(cohort.ends_at).to eq(nil)
+    expect(Cohort.count).to eq(2)
+  end
 
-      fill_in 'Cohort name', with: name
-      fill_in 'Cohort description', with: description
-      fill_in 'Cohort end date', with: ends_at
+  scenario 'School admin creates a cohort with an end date' do
+    ends_at = Date.tomorrow
+    sign_in_user school_admin.user, referrer: cohorts_new_path(course)
 
-      click_button 'Add new cohort'
-      dismiss_notification
+    expect(page).to have_text('Add new cohort')
 
-      within("div[data-cohort-name='#{name}']") do
-        expect(page).to have_content(description)
-      end
+    fill_in 'Cohort name', with: name
+    fill_in 'Cohort description', with: description
+    fill_in 'Cohort end date', with: ends_at
 
-      cohort = Cohort.last
+    click_button 'Add new cohort'
+    dismiss_notification
 
-      expect(cohort.name).to eq(name)
-      expect(cohort.description).to eq(description)
-      expect(cohort.ends_at.strftime('%Y %m %d')).to eq(
-        ends_at.strftime('%Y %m %d')
-      )
+    within("div[data-cohort-name='#{name}']") do
+      expect(page).to have_content(description)
     end
 
-    scenario 'School admin creates a cohort with an end date' do
-      ends_at = Date.tomorrow
-      sign_in_user school_admin.user, referrer: cohorts_path(course)
+    cohort = Cohort.last
 
-      expect(page).to have_text('Add new cohort')
+    expect(cohort.name).to eq(name)
+    expect(cohort.description).to eq(description)
+    expect(cohort.ends_at.strftime('%Y %m %d')).to eq(
+      ends_at.strftime('%Y %m %d')
+    )
+  end
 
-      fill_in 'Cohort name', with: name
-      fill_in 'Cohort description', with: description
-      fill_in 'Cohort end date', with: ends_at
+  scenario 'logged in user who not a school admin tries to access create cohort page' do
+    sign_in_user student.user, referrer: cohorts_new_path(course)
+    expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
 
-      click_button 'Add new cohort'
-      dismiss_notification
-
-      within("div[data-cohort-name='#{name}']") do
-        expect(page).to have_content(description)
-      end
-
-      cohort = Cohort.last
-
-      expect(cohort.name).to eq(name)
-      expect(cohort.description).to eq(description)
-      expect(cohort.ends_at.strftime('%Y %m %d')).to eq(
-        ends_at.strftime('%Y %m %d')
-      )
-    end
-
-    scenario 'logged in user who not a school admin tries to access create cohort page' do
-      sign_in_user student.user, referrer: cohorts_path(course)
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
-
-    scenario 'school admin tries to access an invalid link' do
-      sign_in_user school_admin.user,
-                   referrer: '/school/courses/888888/cohorts/new'
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
+  scenario 'school admin tries to access an invalid link' do
+    sign_in_user school_admin.user,
+                 referrer: '/school/courses/888888/cohorts/new'
+    expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

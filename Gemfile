@@ -59,7 +59,7 @@ gem 'pundit', '~> 2.1' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.1', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'graphql', '~> 1.12.24' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
-gem 'i18n-js', '~> 4.0.0.alpha1' # Provide Rails I18n translations on Javascript.
+gem 'i18n-js', '~> 4.0' # Export Rails I18n translations for the frontend.
 gem 'batch-loader', '~> 2.0' # Generic lazy batching mechanism to avoid N+1 DB queries.
 gem 'recaptcha', '~> 5.8' # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 

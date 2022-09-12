@@ -3,7 +3,7 @@ class HelpController < ApplicationController
 
   # GET /help/:document
   def show
-    @markdown = File.read(Rails.root.join('docs', 'served', document_filename))
+    @markdown = Rails.root.join('docs', 'served', document_filename).read
     render layout: 'student'
   end
 

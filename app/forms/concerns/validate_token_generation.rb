@@ -42,7 +42,8 @@ module ValidateTokenGeneration
   end
 
   def user
-    @user ||= begin
+    @user ||=
+      begin
         current_school.users.with_email(email).first if email.present?
       end
   end

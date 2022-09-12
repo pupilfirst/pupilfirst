@@ -1603,7 +1603,6 @@ en:
       set_password: Set password for your account
       update_credentials: Update your login credentials for the school.
       update_email_notifications: Update settings for email notifications.
-      update_email_token_sent_notification: We've sent you a link to verify your new email!
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
@@ -2011,6 +2010,8 @@ en:
       success_notification: The submission has been assigned to you.
     revoke_issued_certificate:
       success_notification: Certificate revoked!
+    send_update_email_token:
+      success_notification: We've sent you a link to verify your new email!
     unarchive_course:
       success_notification: Course unarchived successfully
     unassign_reviewer:

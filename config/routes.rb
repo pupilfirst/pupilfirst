@@ -7,7 +7,8 @@ Rails.application.routes.draw do
 
   direct :rails_public_blob do |blob|
     if Rails.env.development? || Rails.env.test? || ENV['CLOUDFRONT_HOST'].blank?
-      route = if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
+      route =
+        if blob.is_a?(ActiveStorage::Variant) || blob.is_a(ActiveStorage::VariantWithRecord)
           :rails_representation
         else
           :rails_blob

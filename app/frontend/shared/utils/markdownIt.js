@@ -35,11 +35,10 @@ const md = markdownIt({
   },
 });
 
-md
-  .use(videoPlugin, {
-    youtube: { width: "100%", height: 384 },
-    vimeo: { width: "100%", height: 384 }
-  })
+md.use(videoPlugin, {
+  youtube: { width: "100%", height: 384 },
+  vimeo: { width: "100%", height: 489 },
+})
   .use(subscriptPlugin)
   .use(superscriptPlugin)
   .use(tablePlugin)

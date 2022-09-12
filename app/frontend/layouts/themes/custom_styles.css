@@ -327,8 +327,3 @@
     background-repeat: no-repeat;
   }
 }
-
-.embed-responsive-item {
-  width: "100%";
-  height: clamp(200px, 55vw, 489px);
-}

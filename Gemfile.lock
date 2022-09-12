@@ -134,6 +134,7 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.1.10)
+    connection_pool (2.2.5)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -417,7 +418,10 @@ GEM
       ffi (~> 1.0)
     recaptcha (5.12.3)
       json
-    redis (4.6.0)
+    redis (5.0.4)
+      redis-client (>= 0.7.4)
+    redis-client (0.8.0)
+      connection_pool
     reform (2.6.2)
       disposable (>= 0.5.0, < 1.0.0)
       representable (>= 3.1.1, < 4)
@@ -626,7 +630,7 @@ DEPENDENCIES
   rack-cors (~> 1.1)
   rails (~> 6.1.7)
   recaptcha (~> 5.8)
-  redis (~> 4.6)
+  redis (~> 5.0)
   reform (~> 2.6)
   reform-rails (~> 0.2)
   responders (~> 3.0)

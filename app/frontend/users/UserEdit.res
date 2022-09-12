@@ -146,6 +146,8 @@ let uploadAvatar = (send, formData) => {
 }
 
 let updateEmail = (send, email, newEmail) => {
+  send(SetDisableUpdateEmail(false))
+
   SendEmailUpdateTokenQuery.fetch({newEmail: newEmail})
   |> Js.Promise.then_(_ => {
     send(SetDisableUpdateEmail(true))
@@ -327,11 +329,6 @@ let make = (
 
   let (state, send) = React.useReducer(reducer, initialState)
 
-  let handleUpdateEmailFormSubmit = _ => {
-    send(SetDisableUpdateEmail(false))
-    updateEmail(send, email, state.email)
-  }
-
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {confirmDeletionWindow(state, send)}
     <div className="bg-white shadow sm:rounded-lg">
@@ -445,7 +442,7 @@ let make = (
                       </button>
                       <button
                         className="btn btn-primary"
-                        onClick={handleUpdateEmailFormSubmit}
+                        onClick={_ => updateEmail(send, email, state.email)}
                         disabled={state.email |> EmailUtils.isInvalid(false) ||
                           state.email == email}>
                         {ts("update")->str}

@@ -67,9 +67,9 @@
     "stylelint-config-recommended": "^5.0.0",
     "tailwindcss": "^2.2.19",
     "tus-js-client": "^2.3.1",
-    "vite": "^2.9.1",
+    "vite": "^3.0.0",
     "vite-plugin-babel": "^1.1.0",
-    "vite-plugin-ruby": "^3.0.9"
+    "vite-plugin-ruby": "^3.1.0"
   },
   "resolutions": {
     "fstream": "^1.0.12",

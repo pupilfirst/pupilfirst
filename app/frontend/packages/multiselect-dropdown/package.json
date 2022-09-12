@@ -35,7 +35,7 @@
     "@pupilfirst/pf-icon": "^1.2.0",
     "@rescript/react": "^0.10.3",
     "bs-webapi": "^0.19.1",
-    "fuse.js": "^6.4.6",
+    "fuse.js": "^6.6.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

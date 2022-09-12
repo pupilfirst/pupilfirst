@@ -49,10 +49,10 @@ gem 'rack-attack', '~> 6.6' # A rack middleware for throttling and blocking abus
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
 
-# Omniauth providers
-gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
-gem 'omniauth-facebook', '~> 8.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
-gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
+# OmniAuth providers
+gem 'omniauth-google-oauth2', '~> 1.1' # Oauth2 strategy for Google.
+gem 'omniauth-facebook', '~> 9.0' # Facebook OAuth2 Strategy for OmniAuth.
+gem 'omniauth-github', github: 'pupilfirst/omniauth-github', branch: 'master' # GitHub strategy for OmniAuth. Forked because of incompatibility with omniauth-google-oauth2.
 
 gem 'file_validators', '~> 3.0' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.1' # Minimal authorization through OO design and pure Ruby classes.

@@ -13,8 +13,6 @@ module Mutations
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
-
     validates MustBeGraded => {}
 
     description 'Delete grading for the submission.'

@@ -3,12 +3,6 @@ module Mutations
     include QueryAuthorizeSchoolAdmin
     include ValidateCourseExport
 
-    argument :course_id, ID, required: true
-    argument :export_type, Types::ExportType, required: true
-    argument :tag_ids, [ID], required: true
-    argument :reviewed_only, Boolean, required: true
-    argument :include_inactive_students, Boolean, required: true
-
     description 'Request a course export.'
 
     field :course_export, Types::CourseExportType, null: true

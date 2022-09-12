@@ -101,7 +101,6 @@ group :development, :test do
 end
 
 group :production do
-  gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'newrelic_rpm', '~> 8.6' # Performance monitoring
   gem 'aws-sdk-s3', '~> 1.103', require: false
   gem 'aws-sdk-cloudfront', '~> 1.56', require: false

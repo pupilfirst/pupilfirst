@@ -21,11 +21,6 @@ let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
   updateChecklistItemCB(newChecklistItem)
 }
 
-let buttonColorClasses = color =>
-  "border-" ++
-  (color ++
-  ("-500 " ++ ("bg-" ++ (color ++ ("-100 " ++ ("text-" ++ (color ++ "-800")))))))
-let iconColorClasses = color => "bg-" ++ (color ++ "-500 ")
 let selectedButtonIcon = kind =>
   switch kind {
   | ChecklistItem.LongText => "i-long-text-regular"
@@ -38,21 +33,31 @@ let selectedButtonIcon = kind =>
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind
   let selectedButtonColor = switch selectedKind {
-  | LongText => "blue"
-  | ShortText => "orange"
-  | Files => "yellow"
-  | Link => "focusColor"
-  | AudioRecord => "red"
-  | MultiChoice(_choices) => "green"
+  | LongText => "border-blue-500 bg-blue-100 text-blue-800"
+  | ShortText => "border-orange-500 bg-orange-100 text-orange-800"
+  | Files => "border-yellow-500 bg-yellow-100 text-yellow-800"
+  | Link => "border-focusColor-500 bg-focusColor-100 text-focusColor-800"
+  | AudioRecord => "border-red-500 bg-red-100 text-red-800"
+  | MultiChoice(_choices) => "border-green-500 bg-green-100 text-green-800"
   }
+  let selectedIconColor =
+    "text-white " ++
+    switch selectedKind {
+    | LongText => "bg-blue-500"
+    | ShortText => "bg-orange-500"
+    | Files => "bg-yellow-500"
+    | Link => "bg-focusColor-500"
+    | AudioRecord => "bg-red-500"
+    | MultiChoice(_choices) => "bg-green-500"
+    }
   let selected =
     <button
       className={"border focus:outline-none appearance-none flex items-center rounded focus:ring focus:ring-focusColor-500 " ++
-      buttonColorClasses(selectedButtonColor)}>
+      selectedButtonColor}>
       <div className="flex">
         <span
           className={"flex items-center justify-center rounded text-white p-1 m-1 " ++
-          iconColorClasses(selectedButtonColor)}>
+          selectedIconColor}>
           <PfIcon className={"if if-fw " ++ selectedButtonIcon(selectedKind)} />
         </span>
         <span className="inline-flex items-center px-1 py-1 font-semibold text-xs">

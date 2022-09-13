@@ -89,9 +89,11 @@ feature 'Apply for public courses', js: true do
       applicant = Applicant.where(email: email).first
 
       open_email(email)
-      expect(current_email.subject).to eq('Complete Your Course Application')
+      expect(current_email.subject).to eq(
+        "Complete your #{public_course.name} course application"
+      )
       expect(current_email.body).to include(
-        "We've received your application to the #{public_course.name} at #{public_course.school.name}"
+        "We've received your application to the #{public_course.name} course at #{public_course.school.name}"
       )
 
       expected_url =

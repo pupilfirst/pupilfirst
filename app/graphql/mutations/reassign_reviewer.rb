@@ -3,8 +3,6 @@ module Mutations
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
-
     description 'Reassign reviewer for a submission'
 
     field :reviewer, Types::UserProxyType, null: false

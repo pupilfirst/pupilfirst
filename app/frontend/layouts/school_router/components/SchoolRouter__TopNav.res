@@ -23,7 +23,7 @@ let navLinks = (path, text) => {
     <a
       title={text}
       href=path
-      className="py-2 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 items-center">
+      className="py-2 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 items-center focus:outline-none focus:ring-2 focus:ring-focusColor-500">
       {<span> {text->str} </span>}
     </a>
   </div>
@@ -94,7 +94,7 @@ let make = (~path, ~courses, ~currentUser) => {
         <Notifications__Root
           wrapperClasses=""
           iconClasses="school-admin-navbar__notifications-unread-bullet"
-          buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-2 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
+          buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-2 px-2 rounded hover:text-primary-500 hover:bg-gray-50 font-medium items-center focus:outline-none focus:ring-2 focus:ring-focusColor-500"
           title={"Notifications"}
           hasNotifications={User.hasNotifications(currentUser)}
         />

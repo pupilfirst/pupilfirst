@@ -16,9 +16,11 @@ let make = (~wrapperClasses, ~buttonClasses, ~iconClasses, ~hasNotifications, ~t
       title={tr("show_notifications")}
       className=buttonClasses
       onClick={_ => setShowNotifications(_ => true)}>
-      <PfIcon className={"if i-bell" ++ "-light if-fw text-xl"} />
+      <span className="relative">
+        <PfIcon className={"if i-bell" ++ "-light if-fw text-xl"} />
+        {ReactUtils.nullUnless(<span className=iconClasses />, hasNotifications)}
+      </span>
       {str(title->Belt.Option.getWithDefault(""))}
-      {ReactUtils.nullUnless(<span className=iconClasses />, hasNotifications)}
     </button>
   </div>
 }

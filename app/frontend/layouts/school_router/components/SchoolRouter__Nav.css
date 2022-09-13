@@ -78,9 +78,8 @@
 }
 
 .school-admin-navbar__notifications-unread-bullet {
-  @apply absolute block h-2 w-2 rounded-full border border-white bg-red-500;
-  top: 6px;
-  right: 12px;
+  @apply absolute block h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500 -top-0.5;
+    right: 4px;
 }
 
 .school-admin-navbar__notifications-unread-bullet::before {

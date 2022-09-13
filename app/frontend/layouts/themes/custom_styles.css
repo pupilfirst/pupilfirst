@@ -301,9 +301,9 @@
     top: -7px;
     right: 9px;
     border-right: 7px solid transparent;
-    border-bottom: 7px solid theme("colors.gray.400");
+    border-bottom: 7px solid theme("colors.gray.300");
     border-left: 7px solid transparent;
-    border-bottom-color: theme("colors.gray.400");
+    border-bottom-color: theme("colors.gray.300");
   }
 
   .dropdown__list-right:after {

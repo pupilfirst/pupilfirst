@@ -4,7 +4,6 @@ module Mutations
     include DevelopersNotifications
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
     argument :grades, [Types::GradeInputType], required: true
     argument :feedback,
              String,

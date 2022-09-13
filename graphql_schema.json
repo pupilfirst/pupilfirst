@@ -17167,6 +17167,20 @@
               "deprecationReason": null
             },
             {
+              "name": "isRepeatable",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "locations",
               "description": null,
               "args": [
@@ -17385,6 +17399,12 @@
             {
               "name": "INPUT_FIELD_DEFINITION",
               "description": "Location adjacent to an input object field definition.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "VARIABLE_DEFINITION",
+              "description": "Location adjacent to a variable definition.",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -17715,6 +17735,20 @@
           "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.",
           "fields": [
             {
+              "name": "description",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "directives",
               "description": "A list of all directives supported by this server.",
               "args": [
@@ -17961,6 +17995,24 @@
               "deprecationReason": null
             },
             {
+              "name": "isOneOf",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "kind",
               "description": null,
               "args": [
@@ -18024,6 +18076,20 @@
                     "ofType": null
                   }
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "specifiedByURL",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -18173,6 +18239,16 @@
               "isDeprecated": false,
               "deprecationReason": null
             }
+          ]
+        },
+        {
+          "name": "oneOf",
+          "description": "Requires that exactly one field must be supplied and that field must not be `null`.",
+          "locations": [
+            "INPUT_OBJECT"
+          ],
+          "args": [
+
           ]
         }
       ]

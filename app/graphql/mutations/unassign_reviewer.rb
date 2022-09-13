@@ -3,8 +3,6 @@ module Mutations
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
-
     description 'Unassign reviewer for a submission'
 
     field :success, Boolean, null: false

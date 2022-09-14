@@ -148,8 +148,7 @@ let showLink = (icon, href) => {
       rel="nofollow"
       className="flex justify-center items-center text-xs text-gray-800 bg-gray-200 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} />
-      <p className="ml-2"> {t("sign_out")->str} </p>
+      <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {t("sign_out")->str} </p>
     </a>
   </div>
 }
@@ -223,7 +222,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="md:hidden"> {courseSelector(courses, selectedPage)} </div>
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
-        <div className="flex flex-col flex-1 border-r bg-white">
+        <div className="flex h-full flex-col flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
             {showUser(currentUser)}

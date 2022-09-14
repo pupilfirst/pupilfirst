@@ -16,7 +16,7 @@ let makeOptions = (~addTags=[], ~allowedTags=[], ()) => {
   }
 
   if ArrayUtils.isNotEmpty(allowedTags) {
-    opt->Js.Dict.set("ALLOWD_TAGS", allowedTags)
+    opt->Js.Dict.set("ALLOWED_TAGS", allowedTags)
   }
 
   opt

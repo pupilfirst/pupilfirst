@@ -223,16 +223,16 @@ line from being converted to a list.
 | ------------------------------------------- | --------------------- |
 | First value in row 1                        | Second value in row 1 |
 | First value in row 2                        | Second value in row 2 |
-| You can also _combine_ rows.                                       ||
-| You can also style text `inside` the table.                        ||
+| You can also _combine_ rows.                |                       |
+| You can also style text `inside` the table. |                       |
 ```
 
 | Column 1 Heading                            | Column 2 Heading      |
 | ------------------------------------------- | --------------------- |
 | First value in row 1                        | Second value in row 1 |
 | First value in row 2                        | Second value in row 2 |
-| You can also _combine_ rows                                        ||
-| You can also style text `inside` the table.                        ||
+| You can also _combine_ rows                 |                       |
+| You can also style text `inside` the table. |                       |
 
 ---
 
@@ -264,22 +264,26 @@ KaTeX, please check [their official documentation](https://katex.org/docs/suppor
 ```tex
 An expression as a block:
 
-$$\begin{CD}
+$$
+\begin{CD}
    A @>a>> B \\
 @VbVV @AAcA \\
    C @= D
-\end{CD}$$
+\end{CD}
+$$
 
 An inline expression: $c = \pm\sqrt{a^2 + b^2}$
 ```
 
 An expression as a block:
 
-$$\begin{CD}
+$$
+\begin{CD}
    A @>a>> B \\
 @VbVV @AAcA \\
    C @= D
-\end{CD}$$
+\end{CD}
+$$
 
 An inline expression: $c = \pm\sqrt{a^2 + b^2}$
 

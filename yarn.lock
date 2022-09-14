@@ -9656,7 +9656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:^9.0.0, node-gyp@npm:latest":
+"node-gyp@npm:^9.1.0, node-gyp@npm:latest":
   version: 9.1.0
   resolution: "node-gyp@npm:9.1.0"
   dependencies:
@@ -11930,7 +11930,7 @@ __metadata:
     markdown-it-sup: ^1.0.0
     markdown-it-task-checkbox: ^1.0.6
     markdown-it-video: ^0.6.3
-    node-gyp: ^9.0.0
+    node-gyp: ^9.1.0
     pnotify: ^5.2.0
     postcss: ^8.4.16
     postcss-flexbugs-fixes: ^5.0.2

@@ -236,6 +236,24 @@ line from being converted to a list.
 
 ---
 
+### Embedding videos
+
+You can embed videos from YouTube and Vimeo easily:
+
+```markdown
+@[youtube](il0L60hfVEk)
+
+@[vimeo](452610846)
+```
+
+You can also use the full URL to a video instead of just the video ID. For example:
+
+```markdown
+@[vimeo](https://vimeo.com/452610846)
+```
+
+@[vimeo](https://vimeo.com/452610846)
+
 ### Mathematical expressions
 
 You can use $\KaTeX$ to write mathematical expressions. To learn how to write

@@ -355,19 +355,6 @@ const hanoi = (n, a, b, c) => {
 hanoi(4, 1, 2, 3);
 ```
 
-```py
-n = int(input('Type a number, and its factorial will be printed: '))
-
-if n < 0:
-    raise ValueError('You must enter a non negative integer')
-
-factorial = 1
-for i in range(2, n + 1):
-    factorial *= i
-
-print(factorial)
-```
-
 ---
 
 Supported languages are noted in a separate section below.

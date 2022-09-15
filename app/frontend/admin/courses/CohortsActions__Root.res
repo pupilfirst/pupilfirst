@@ -60,8 +60,8 @@ module Editor = {
   @react.component
   let make = (~courseId, ~cohort, ~cohorts) => {
     let (state, send) = React.useReducer(reducer, {mergeIntoCohort: None, saving: false})
-    <div>
-      <div className="max-w-5xl mx-auto px-2">
+    <div className="bg-white pt-8">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <h2 className="text-lg font-semibold mt-8">
           {`Merge ${Cohort.name(cohort)} cohort into`->str}
         </h2>
@@ -93,7 +93,7 @@ module Editor = {
 }
 
 let cohortActionSkeleton = () => {
-  <div className="max-w-5xl mx-auto px-2 mt-8">
+  <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
     {SkeletonLoading.heading()}
     <div className="w-1/4"> {SkeletonLoading.input()} {SkeletonLoading.button()} </div>
   </div>

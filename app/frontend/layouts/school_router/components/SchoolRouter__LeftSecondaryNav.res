@@ -12,7 +12,7 @@ let showLink = (selectedPage, selectedCourse, page, classes, title, contents) =>
             {contents}
           </Link>
         : <a disabled href={Page.path(~courseId?, page)} className=classes ?title> {contents} </a>
-    : SkeletonLoading.singleLink()
+    : SkeletonLoading.secondaryLink()
 }
 
 let secondaryNavOption = (selectedPage, selectedCourse, page) => {

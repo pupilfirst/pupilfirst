@@ -1,7 +1,7 @@
 let str = React.string
 
 let cohortDetailsSkeleton = () => {
-  <div className="max-w-5xl mx-auto px-2 mt-8">
+  <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
     {SkeletonLoading.input()}
     {SkeletonLoading.input()}
     {SkeletonLoading.input()}

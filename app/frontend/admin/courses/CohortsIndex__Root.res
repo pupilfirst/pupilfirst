@@ -199,41 +199,43 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str("Cohorts Index")} </title> </Helmet>
-    <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
-      <div className="flex gap-2 items-end justify-between">
-        <p className="font-semibold pl-1"> {"Cohorts"->str} </p>
-        <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
-          <PfIcon className="if i-plus-circle-light if-fw" />
-          <span className="inline-block pl-2"> {str("Add new cohort")} </span>
-        </Link>
-      </div>
-      <div className="sticky top-0 my-6">
-        <div className="border rounded-lg mx-auto bg-white ">
-          <div>
-            <div className="flex w-full items-start p-4">
-              <CourseResourcesFilter
-                courseId
-                filters={makeFilters()}
-                search={search}
-                sorter={CourseResourcesFilter.makeSorter(
-                  "sort_by",
-                  ["Name", "First Created", "Last Created", "Last Ending"],
-                  "Last Created",
-                )}
-              />
+    <div className="bg-gray-50 h-full pt-8">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+        <div className="flex gap-2 items-end justify-between">
+          <p className="font-semibold pl-1"> {"Cohorts"->str} </p>
+          <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
+            <PfIcon className="if i-plus-circle-light if-fw" />
+            <span className="inline-block pl-2"> {str("Add new cohort")} </span>
+          </Link>
+        </div>
+        <div className="sticky top-0 my-6">
+          <div className="border rounded-lg mx-auto bg-white ">
+            <div>
+              <div className="flex w-full items-start p-4">
+                <CourseResourcesFilter
+                  courseId
+                  filters={makeFilters()}
+                  search={search}
+                  sorter={CourseResourcesFilter.makeSorter(
+                    "sort_by",
+                    ["Name", "First Created", "Last Created", "Last Ending"],
+                    "Last Created",
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>
+        {PagedCohorts.renderView(
+          ~pagedItems=state.cohorts,
+          ~loading=state.loading,
+          ~entriesView=cohortsList,
+          ~totalEntriesCount=state.totalEntriesCount,
+          ~loadMore=renderLoadMore(send, courseId, params),
+          ~resourceName="Cohorts",
+          ~emptyMessage="No Cohorts Found",
+        )}
       </div>
-      {PagedCohorts.renderView(
-        ~pagedItems=state.cohorts,
-        ~loading=state.loading,
-        ~entriesView=cohortsList,
-        ~totalEntriesCount=state.totalEntriesCount,
-        ~loadMore=renderLoadMore(send, courseId, params),
-        ~resourceName="Cohorts",
-        ~emptyMessage="No Cohorts Found",
-      )}
     </div>
   </>
 }

@@ -148,72 +148,70 @@ let make = (~courseId, ~cohort=?) => {
   let (state, send) = React.useReducerWithMapState(reducer, cohort, computeInitialState)
 
   <DisablingCover disabled={state.saving}>
-    <div className="max-w-5xl mx-auto">
-      <div className="max-w-5xl mx-auto px-2">
-        <div className="mt-8">
-          <label className="block text-sm font-semibold mb-2" htmlFor="cohortName">
-            {"Cohort name"->str}
-          </label>
-          <input
-            value={state.name}
-            onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
-            maxLength={100}
-            className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
-            id="cohortName"
-            type_="text"
-            placeholder="eg, Batch 1"
-          />
-          <School__InputGroupError message="Enter a valid cohort name" active=state.hasNameError />
-        </div>
-        <div className="mt-6">
-          <label className="block text-sm font-semibold mb-2" htmlFor="cohortDescription">
-            {"Cohort description"->str}
-          </label>
-          <input
-            value=state.description
-            onChange={event => send(UpdateDescription(ReactEvent.Form.target(event)["value"]))}
-            className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
-            id="cohortDescription"
-            maxLength={250}
-            type_="text"
-            placeholder="eg, Batch 1 of some year"
-          />
-          <School__InputGroupError
-            message="Enter a valid description for the cohort" active=state.hasDescriptionError
-          />
-        </div>
-        <div className="mt-6">
-          <div className="flex">
-            <label className="block text-sm font-semibold mb-2" htmlFor="cohortEndsAt">
-              {"Cohort end date"->str}
-              <span className="text-xs ml-1 font-light"> {"(optional)"->str} </span>
-            </label>
-            <HelpIcon className="ml-1 text-sm">
-              {"The cohort will be archived on this date"->str}
-            </HelpIcon>
-          </div>
-          <DatePicker
-            onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="cohortEndsAt"
-          />
-        </div>
-        {switch cohort {
-        | Some(cohort) =>
-          <button
-            className="btn btn-primary btn-large w-full mt-6"
-            disabled={disabled(state)}
-            onClick={_e => updateCohort(state, send, Cohort.id(cohort))}>
-            {"Update cohort"->str}
-          </button>
-        | None =>
-          <button
-            className="btn btn-primary btn-large w-full mt-6"
-            type_="submit"
-            disabled={disabled(state)}
-            onClick={_e => createCohort(state, send, courseId)}>
-            {"Add new cohort"->str}
-          </button>
-        }}
+    <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+      <div className="mt-8">
+        <label className="block text-sm font-semibold mb-2" htmlFor="cohortName">
+          {"Cohort name"->str}
+        </label>
+        <input
+          value={state.name}
+          onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
+          maxLength={100}
+          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
+          id="cohortName"
+          type_="text"
+          placeholder="eg, Batch 1"
+        />
+        <School__InputGroupError message="Enter a valid cohort name" active=state.hasNameError />
       </div>
+      <div className="mt-6">
+        <label className="block text-sm font-semibold mb-2" htmlFor="cohortDescription">
+          {"Cohort description"->str}
+        </label>
+        <input
+          value=state.description
+          onChange={event => send(UpdateDescription(ReactEvent.Form.target(event)["value"]))}
+          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
+          id="cohortDescription"
+          maxLength={250}
+          type_="text"
+          placeholder="eg, Batch 1 of some year"
+        />
+        <School__InputGroupError
+          message="Enter a valid description for the cohort" active=state.hasDescriptionError
+        />
+      </div>
+      <div className="mt-6">
+        <div className="flex">
+          <label className="block text-sm font-semibold mb-2" htmlFor="cohortEndsAt">
+            {"Cohort end date"->str}
+            <span className="text-xs ml-1 font-light"> {"(optional)"->str} </span>
+          </label>
+          <HelpIcon className="ml-1 text-sm">
+            {"The cohort will be archived on this date"->str}
+          </HelpIcon>
+        </div>
+        <DatePicker
+          onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="cohortEndsAt"
+        />
+      </div>
+      {switch cohort {
+      | Some(cohort) =>
+        <button
+          className="btn btn-primary btn-large w-full mt-6"
+          disabled={disabled(state)}
+          onClick={_e => updateCohort(state, send, Cohort.id(cohort))}>
+          {"Update cohort"->str}
+        </button>
+      | None =>
+        <button
+          className="btn btn-primary btn-large w-full mt-6"
+          type_="submit"
+          disabled={disabled(state)}
+          onClick={_e => createCohort(state, send, courseId)}>
+          {"Add new cohort"->str}
+        </button>
+      }}
     </div>
   </DisablingCover>
 }

@@ -256,45 +256,43 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str("Students Index")} </title> </Helmet>
-    <div>
-      <div>
-        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
-          <div className="flex justify-between items-end gap-2">
-            <p className="font-semibold pl-1"> {"Students"->str} </p>
-            <div>
-              <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
-                <span> {str("Add New Students")} </span>
-              </Link>
-            </div>
+    <div className="bg-gray-50 h-full pt-8">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+        <div className="flex justify-between items-end gap-2">
+          <p className="font-semibold pl-1"> {"Students"->str} </p>
+          <div>
+            <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
+              <span> {str("Add New Students")} </span>
+            </Link>
           </div>
-          <div className="sticky top-0 my-6">
-            <div className="border rounded-lg mx-auto bg-white ">
-              <div>
-                <div className="flex w-full items-start p-4">
-                  <CourseResourcesFilter
-                    courseId
-                    filters={makeFilters()}
-                    search={search}
-                    sorter={CourseResourcesFilter.makeSorter(
-                      "sort_by",
-                      ["Name", "First Created", "Last Created", "First Updated", "Last Updated"],
-                      "Last Created",
-                    )}
-                  />
-                </div>
+        </div>
+        <div className="sticky top-0 my-6">
+          <div className="border rounded-lg mx-auto bg-white ">
+            <div>
+              <div className="flex w-full items-start p-4">
+                <CourseResourcesFilter
+                  courseId
+                  filters={makeFilters()}
+                  search={search}
+                  sorter={CourseResourcesFilter.makeSorter(
+                    "sort_by",
+                    ["Name", "First Created", "Last Created", "First Updated", "Last Updated"],
+                    "Last Created",
+                  )}
+                />
               </div>
             </div>
           </div>
-          {PagedStudents.renderView(
-            ~pagedItems=state.students,
-            ~loading=state.loading,
-            ~entriesView=studentsList(params),
-            ~totalEntriesCount=state.totalEntriesCount,
-            ~loadMore=renderLoadMore(send, courseId, params),
-            ~resourceName="Students",
-            ~emptyMessage="No Students Found",
-          )}
         </div>
+        {PagedStudents.renderView(
+          ~pagedItems=state.students,
+          ~loading=state.loading,
+          ~entriesView=studentsList(params),
+          ~totalEntriesCount=state.totalEntriesCount,
+          ~loadMore=renderLoadMore(send, courseId, params),
+          ~resourceName="Students",
+          ~emptyMessage="No Students Found",
+        )}
       </div>
     </div>
   </>

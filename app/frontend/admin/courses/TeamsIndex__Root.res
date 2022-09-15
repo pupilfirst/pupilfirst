@@ -184,49 +184,46 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str("Teams Index")} </title> </Helmet>
-    <div>
-      <div>
-        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
-          <div className="mt-2 flex gap-2 items-center justify-between">
-            <ul className="flex font-semibold text-sm">
-              <li
-                className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-                {"Active Teams"->str}
-              </li>
-            </ul>
-            <Link className="btn btn-primary" href={`/school/courses/${courseId}/teams/new`}>
-              <PfIcon className="if i-plus-circle-light if-fw" />
-              <span className="inline-block pl-2"> {str("Create Team")} </span>
-            </Link>
-          </div>
-          <div className="sticky top-0 my-6">
-            <div className="border rounded-lg mx-auto bg-white ">
-              <div>
-                <div className="flex w-full items-start p-4">
-                  <CourseResourcesFilter
-                    courseId
-                    filters={makeFilters()}
-                    search={search}
-                    sorter={CourseResourcesFilter.makeSorter(
-                      "sort_by",
-                      ["Name", "First Created", "Last Created"],
-                      "Name",
-                    )}
-                  />
-                </div>
+    <div className="bg-gray-50 h-full pt-8">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+        <div className="mt-2 flex gap-2 items-center justify-between">
+          <ul className="flex font-semibold text-sm">
+            <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
+              {"Active Teams"->str}
+            </li>
+          </ul>
+          <Link className="btn btn-primary" href={`/school/courses/${courseId}/teams/new`}>
+            <PfIcon className="if i-plus-circle-light if-fw" />
+            <span className="inline-block pl-2"> {str("Create Team")} </span>
+          </Link>
+        </div>
+        <div className="sticky top-0 my-6">
+          <div className="border rounded-lg mx-auto bg-white ">
+            <div>
+              <div className="flex w-full items-start p-4">
+                <CourseResourcesFilter
+                  courseId
+                  filters={makeFilters()}
+                  search={search}
+                  sorter={CourseResourcesFilter.makeSorter(
+                    "sort_by",
+                    ["Name", "First Created", "Last Created"],
+                    "Name",
+                  )}
+                />
               </div>
             </div>
           </div>
-          {PagedTeams.renderView(
-            ~pagedItems=state.teams,
-            ~loading=state.loading,
-            ~entriesView=showTeams,
-            ~totalEntriesCount=state.totalEntriesCount,
-            ~loadMore=renderLoadMore(send, courseId, params),
-            ~resourceName="Teams",
-            ~emptyMessage="No Teams Found",
-          )}
         </div>
+        {PagedTeams.renderView(
+          ~pagedItems=state.teams,
+          ~loading=state.loading,
+          ~entriesView=showTeams,
+          ~totalEntriesCount=state.totalEntriesCount,
+          ~loadMore=renderLoadMore(send, courseId, params),
+          ~resourceName="Teams",
+          ~emptyMessage="No Teams Found",
+        )}
       </div>
     </div>
   </>

@@ -9,6 +9,10 @@
   @apply rounded-full bg-gray-50;
   height: 1rem;
 }
+.skeleton-placeholder__line-lg {
+  @apply rounded-full bg-gray-50;
+  height: 1.5rem;
+}
 
 .skeleton-placeholder__image {
   @apply mt-5 h-48 rounded-lg bg-gray-50;

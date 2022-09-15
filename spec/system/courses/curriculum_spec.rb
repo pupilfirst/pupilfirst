@@ -222,7 +222,7 @@ feature "Student's view of Course Curriculum", js: true do
 
     scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
-      expect(page).to have_text('You have only limited access to the course now. You are allowed preview the content but cannot complete any target..')
+      expect(page).to have_text('You have only limited access to the course now. You are allowed preview the content but cannot complete any target.')
     end
   end
 

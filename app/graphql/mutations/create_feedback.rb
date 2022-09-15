@@ -3,7 +3,6 @@ module Mutations
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
     argument :feedback, String, required: true
 
     description 'Create feedback for submission'

@@ -3,7 +3,6 @@ module Mutations
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
     argument :test_report,
              String,
              required: false,
@@ -39,6 +38,7 @@ module Mutations
           )
         else
           SubmissionReport.create!(
+            submission_id: @params[:submission_id],
             status: 'completed',
             test_report: @params[:test_report],
             conclusion: @params[:conclusion],

@@ -150,14 +150,16 @@ let make = (~courseId, ~cohort=?) => {
   <DisablingCover disabled={state.saving}>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
       <div className="mt-8">
-        <label className="block text-sm font-semibold mb-2" htmlFor="cohortName">
+        <label
+          className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
+          htmlFor="cohortName">
           {"Cohort name"->str}
         </label>
         <input
           value={state.name}
           onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
           maxLength={100}
-          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="cohortName"
           type_="text"
           placeholder="eg, Batch 1"
@@ -165,13 +167,15 @@ let make = (~courseId, ~cohort=?) => {
         <School__InputGroupError message="Enter a valid cohort name" active=state.hasNameError />
       </div>
       <div className="mt-6">
-        <label className="block text-sm font-semibold mb-2" htmlFor="cohortDescription">
+        <label
+          className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
+          htmlFor="cohortDescription">
           {"Cohort description"->str}
         </label>
         <input
           value=state.description
           onChange={event => send(UpdateDescription(ReactEvent.Form.target(event)["value"]))}
-          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="cohortDescription"
           maxLength={250}
           type_="text"
@@ -183,7 +187,9 @@ let make = (~courseId, ~cohort=?) => {
       </div>
       <div className="mt-6">
         <div className="flex">
-          <label className="block text-sm font-semibold mb-2" htmlFor="cohortEndsAt">
+          <label
+            className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
+            htmlFor="cohortEndsAt">
             {"Cohort end date"->str}
             <span className="text-xs ml-1 font-light"> {"(optional)"->str} </span>
           </label>

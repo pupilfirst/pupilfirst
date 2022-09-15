@@ -223,7 +223,7 @@ module Editor = {
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
           <div className="pt-5">
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="name">
               {t("name")->str}
             </label>
@@ -243,7 +243,7 @@ module Editor = {
           </div>
           <div className="mt-5">
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="title">
               {t("title")->str}
             </label>
@@ -261,7 +261,7 @@ module Editor = {
           </div>
           <div className="mt-5">
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="affiliation">
               {t("affiliation")->str}
             </label>

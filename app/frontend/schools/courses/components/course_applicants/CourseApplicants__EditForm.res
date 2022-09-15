@@ -135,7 +135,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
   <div>
     <div className="mt-5">
       <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+        className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
         htmlFor="title">
         {t("title.label")->str}
       </label>
@@ -151,7 +151,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
     </div>
     <div className="mt-5">
       <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+        className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
         htmlFor="affiliation">
         {t("affiliation.label")->str}
       </label>

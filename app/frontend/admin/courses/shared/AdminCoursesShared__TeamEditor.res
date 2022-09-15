@@ -28,11 +28,11 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {
       ...state,
-      name,
+      name: name,
       hasNameError: !StringUtils.lengthBetween(name, 1, 50),
       dirty: true,
     }
-  | SetBaseData(cohorts) => {...state, cohorts, loading: false}
+  | SetBaseData(cohorts) => {...state, cohorts: cohorts, loading: false}
 
   | SetSaving => {...state, saving: true}
   | ClearSaving => {...state, saving: false}
@@ -214,66 +214,64 @@ let make = (~courseId, ~team=?) => {
   }, [courseId])
 
   <DisablingCover disabled={state.saving}>
-    <div className="max-w-5xl mx-auto">
-      <div className="max-w-5xl mx-auto px-2">
-        <div className="mt-8">
-          <label className="block text-sm font-semibold mb-2" htmlFor="teamName">
-            {"Team name" |> str}
-          </label>
-          <input
-            value={state.name}
-            onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
-            className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
-            id="teamName"
-            type_="text"
-            placeholder="eg, Batch 1"
-          />
-          <School__InputGroupError message="Enter a valid team name" active=state.hasNameError />
-        </div>
-        <div className="mt-5 flex flex-col">
-          <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-            {"Select a cohort"->str}
-          </label>
-          <Dropdown
-            placeholder={"Pick a Cohort"}
-            selectables={state.cohorts}
-            selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
-            onSelect={u => send(SetSelectedCohort(u))}
-            disabled={state.selectedStudent->ArrayUtils.isNotEmpty || Belt.Option.isSome(team)}
-            loading={state.loading}
-          />
-        </div>
-        {switch state.selectedCohort {
-        | Some(cohort) =>
-          <div className="mt-5 flex flex-col">
-            <AdminCoursesShared__StudentsPicker
-              courseId
-              selectedStudents=state.selectedStudent
-              cohort
-              onSelect={selectedStudent(send)}
-              onDeselect={deSelectStudent(send)}
-            />
-            {switch team {
-            | Some(team) =>
-              <button
-                className="btn btn-primary btn-large w-full mt-6"
-                disabled={disabled(state)}
-                onClick={_e => updateTeam(state, send, Team.id(team))}>
-                {"Update Team"->str}
-              </button>
-            | None =>
-              <button
-                className="btn btn-primary btn-large w-full mt-6"
-                type_="submit"
-                disabled={disabled(state)}
-                onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
-                {"Add new cohort"->str}
-              </button>
-            }}
-          </div>
-        | None => React.null
-        }}
+    <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+      <div className="mt-8">
+        <label className="block text-sm font-semibold mb-2" htmlFor="teamName">
+          {"Team name" |> str}
+        </label>
+        <input
+          value={state.name}
+          onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          id="teamName"
+          type_="text"
+          placeholder="eg, Batch 1"
+        />
+        <School__InputGroupError message="Enter a valid team name" active=state.hasNameError />
       </div>
+      <div className="mt-5 flex flex-col">
+        <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+          {"Select a cohort"->str}
+        </label>
+        <Dropdown
+          placeholder={"Pick a Cohort"}
+          selectables={state.cohorts}
+          selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
+          onSelect={u => send(SetSelectedCohort(u))}
+          disabled={state.selectedStudent->ArrayUtils.isNotEmpty || Belt.Option.isSome(team)}
+          loading={state.loading}
+        />
+      </div>
+      {switch state.selectedCohort {
+      | Some(cohort) =>
+        <div className="mt-5 flex flex-col">
+          <AdminCoursesShared__StudentsPicker
+            courseId
+            selectedStudents=state.selectedStudent
+            cohort
+            onSelect={selectedStudent(send)}
+            onDeselect={deSelectStudent(send)}
+          />
+          {switch team {
+          | Some(team) =>
+            <button
+              className="btn btn-primary btn-large w-full mt-6"
+              disabled={disabled(state)}
+              onClick={_e => updateTeam(state, send, Team.id(team))}>
+              {"Update Team"->str}
+            </button>
+          | None =>
+            <button
+              className="btn btn-primary btn-large w-full mt-6"
+              type_="submit"
+              disabled={disabled(state)}
+              onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
+              {"Add new cohort"->str}
+            </button>
+          }}
+        </div>
+      | None => React.null
+      }}
     </div>
   </DisablingCover>
 }

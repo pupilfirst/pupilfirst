@@ -19,7 +19,7 @@ module Make = (Selectable: Selectable) => {
   let showSelected = (placeholder, selected, loading, disabled) => {
     <button
       disabled={loading || disabled}
-      className="flex items-center justify-between appearance-none w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-focusColor-500"
+      className="mt-2 flex items-center justify-between appearance-none w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       key="selected">
       <span>
         {switch selected {

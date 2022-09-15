@@ -259,17 +259,10 @@ let make = (~courseId, ~search) => {
     <div>
       <div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
-          <div className="flex justify-between items-center gap-2">
-            <ul className="flex font-semibold text-sm">
-              <li
-                className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-                <span> {"Active Students"->str} </span>
-              </li>
-            </ul>
+          <div className="flex justify-between items-end gap-2">
+            <p className="font-semibold pl-1"> {"Students"->str} </p>
             <div>
-              <Link
-                className="btn btn-primary btn-large"
-                href={`/school/courses/${courseId}/students/new`}>
+              <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
                 <span> {str("Add New Students")} </span>
               </Link>
             </div>

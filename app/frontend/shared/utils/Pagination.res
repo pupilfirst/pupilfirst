@@ -73,10 +73,7 @@ module Make = (Item: Item) => {
       {ArrayUtils.isEmpty(entries)
         ? <div
             className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
-            <img
-              className="w-30 h-30"
-              src={notFoundSVG}
-              alt={t("not_found_alt")} />
+            <img className="w-30 h-30" src={notFoundSVG} alt={t("not_found_alt")} />
             <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
               {emptyMessage->React.string}
             </h4>
@@ -98,7 +95,7 @@ module Make = (Item: Item) => {
     <div>
       {switch pagedItems {
       | Unloaded =>
-        <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
+        <div> {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.card())} </div>
       | PartiallyLoaded(entries, cursor) =>
         <div>
           {renderEntries(entries, emptyMessage, totalEntriesCount, entriesView, resourceName)}

@@ -308,9 +308,9 @@ module Editor = {
   let make = (~studentData, ~studentId, ~certificates) => {
     let (state, send) = React.useReducer(reducer, initialState(studentData))
 
-    <div className="mt-5">
-      <div className="mb-4" ariaLabel={t("manage_certificates")}>
-        <h5 className="mb-2"> {t("certificates_label")->str} </h5>
+    <div className="pt-5">
+      <div className="bg-gray-50 p-4" ariaLabel={t("manage_certificates")}>
+        <h5> {t("certificates_label")->str} </h5>
         {certificates |> ArrayUtils.isEmpty
           ? <p className="text-xs text-gray-800"> {t("empty_course_certificates_text")->str} </p>
           : <div>
@@ -362,28 +362,30 @@ module Editor = {
               )}
             </div>}
       </div>
-      <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-        {t("dropout_student.label")->str}
-      </label>
-      <HelpIcon className="ml-2" link={t("dropout_student.help_url")}>
-        {t("dropout_student.help")->str}
-      </HelpIcon>
-      <div className="mt-2">
-        {Belt.Option.isNone(state.student.droppedOutAt)
-          ? <button
-              disabled=state.saving
-              className="btn btn-danger btn-large"
-              onClick={dropoutStudent(studentId, send)}>
-              <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {t("dropout_student.button")->str} </span>
-            </button>
-          : <button
-              disabled=state.saving
-              className="btn btn-success btn-large"
-              onClick={reActivateStudent(studentId, send)}>
-              <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {"Re-Activate Student"->str} </span>
-            </button>}
+      <div className="p-4 bg-red-50 border-red-300 rounded mt-12">
+        <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
+          {t("dropout_student.label")->str}
+        </label>
+        <HelpIcon className="ml-2" link={t("dropout_student.help_url")}>
+          {t("dropout_student.help")->str}
+        </HelpIcon>
+        <div className="mt-2">
+          {Belt.Option.isNone(state.student.droppedOutAt)
+            ? <button
+                disabled=state.saving
+                className="btn btn-danger"
+                onClick={dropoutStudent(studentId, send)}>
+                <FaIcon classes={submitButtonIcons(state.saving)} />
+                <span className="ml-2"> {t("dropout_student.button")->str} </span>
+              </button>
+            : <button
+                disabled=state.saving
+                className="btn btn-success"
+                onClick={reActivateStudent(studentId, send)}>
+                <FaIcon classes={submitButtonIcons(state.saving)} />
+                <span className="ml-2"> {"Re-Activate Student"->str} </span>
+              </button>}
+        </div>
       </div>
     </div>
   }
@@ -489,12 +491,14 @@ let make = (~studentId) => {
           description={"Actions for the student"}
           links={pageLinks(studentId)}
         />
-        <div className="max-w-5xl mx-auto px-2">
-          <Editor
-            studentData={baseData.student}
-            certificates={baseData.certificates}
-            studentId={studentId}
-          />
+        <div className="bg-white">
+          <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+            <Editor
+              studentData={baseData.student}
+              certificates={baseData.certificates}
+              studentId={studentId}
+            />
+          </div>
         </div>
       </div>
     | Errored => <ErrorState />

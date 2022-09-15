@@ -97,7 +97,7 @@ let make = (
     <input
       value=state
       onChange={event => send(ReactEvent.Form.target(event)["value"])}
-      className="appearance-none block bg-white leading-snug border border-gray-300 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+      className="appearance-none block bg-white leading-snug border border-gray-300 rounded py-2.5 px-3 text-sm w-full mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       id="tags"
       type_="text"
       placeholder={allowNewTags ? t("search_for_add") : t("select_tags")}

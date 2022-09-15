@@ -219,118 +219,120 @@ module Editor = {
     let (state, send) = React.useReducer(reducer, initialState(student))
 
     <DisablingCover disabled=state.saving>
-      <div>
-        <div className="pt-5">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-            htmlFor="name">
-            {t("name")->str}
-          </label>
-          <input
-            autoFocus=true
-            value=state.student.name
-            onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-            id="name"
-            type_="text"
-            placeholder={t("student_name_placeholder")}
-          />
-          <School__InputGroupError
-            message="Name must have at least two characters"
-            active={state.student.name->stringInputInvalid}
-          />
-        </div>
-        <div className="mt-5">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-            htmlFor="title">
-            {t("title")->str}
-          </label>
-          <input
-            value=state.student.title
-            onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-            id="title"
-            type_="text"
-            placeholder={t("title_placeholder")}
-          />
-          <School__InputGroupError
-            message={t("title_error")} active={state.student.title->stringInputInvalid}
-          />
-        </div>
-        <div className="mt-5">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-            htmlFor="affiliation">
-            {t("affiliation")->str}
-          </label>
-          <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
-          <input
-            value=state.student.affiliation
-            onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-            id="affiliation"
-            type_="text"
-            placeholder={t("affiliation_placeholder")}
-          />
-        </div>
-        <div className="mt-5 flex flex-col">
-          <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-            {"Select a cohort"->str}
-          </label>
-          <Dropdown
-            placeholder={"Pick a Cohort"}
-            selectables={cohorts}
-            selected={Some(state.student.cohort)}
-            onSelect={u => send(UpdateCohort(u))}
-          />
-        </div>
-        <div className="mt-5">
-          <div className="border-b pb-4 mb-2 mt-5 ">
-            <span className="inline-block mr-1 text-xs font-semibold">
-              {t("personal_coaches")->str}
-            </span>
-            {teamCoachesEditor(courseCoaches, state, send)}
+      <div className="bg-white">
+        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+          <div className="pt-5">
+            <label
+              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              htmlFor="name">
+              {t("name")->str}
+            </label>
+            <input
+              autoFocus=true
+              value=state.student.name
+              onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              id="name"
+              type_="text"
+              placeholder={t("student_name_placeholder")}
+            />
+            <School__InputGroupError
+              message="Name must have at least two characters"
+              active={state.student.name->stringInputInvalid}
+            />
+          </div>
+          <div className="mt-5">
+            <label
+              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              htmlFor="title">
+              {t("title")->str}
+            </label>
+            <input
+              value=state.student.title
+              onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              id="title"
+              type_="text"
+              placeholder={t("title_placeholder")}
+            />
+            <School__InputGroupError
+              message={t("title_error")} active={state.student.title->stringInputInvalid}
+            />
+          </div>
+          <div className="mt-5">
+            <label
+              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              htmlFor="affiliation">
+              {t("affiliation")->str}
+            </label>
+            <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
+            <input
+              value=state.student.affiliation
+              onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              id="affiliation"
+              type_="text"
+              placeholder={t("affiliation_placeholder")}
+            />
+          </div>
+          <div className="mt-5 flex flex-col">
+            <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+              {"Select a cohort"->str}
+            </label>
+            <Dropdown
+              placeholder={"Pick a Cohort"}
+              selectables={cohorts}
+              selected={Some(state.student.cohort)}
+              onSelect={u => send(UpdateCohort(u))}
+            />
+          </div>
+          <div className="mt-5">
+            <div className="border-b pb-4 mb-2 mt-5 ">
+              <span className="inline-block mr-1 text-xs font-semibold">
+                {t("personal_coaches")->str}
+              </span>
+              {teamCoachesEditor(courseCoaches, state, send)}
+            </div>
+          </div>
+          {state.student.taggings->ArrayUtils.isNotEmpty
+            ? <div className="mt-5">
+                <div className="mb-2 text-xs font-semibold">
+                  {str(t("tags_applied_user") ++ ":")}
+                </div>
+                <div className="flex flex-wrap">
+                  {state.student.usetTaggings
+                  ->Js.Array2.map(tag =>
+                    <div
+                      className="bg-blue-100 text-blue-700 border border-blue-500 rounded-full px-3 py-2 mt-1 mr-1 text-xs text-gray-900"
+                      key={tag}>
+                      {str(tag)}
+                    </div>
+                  )
+                  ->React.array}
+                </div>
+              </div>
+            : React.null}
+          <div className="mt-5">
+            <div className="mb-2 text-xs font-semibold"> {str(t("tags_applied") ++ ":")} </div>
+            <School__SearchableTagList
+              unselectedTags={avilableTags->Js.Array2.filter(tag =>
+                !Array.mem(tag, state.student.taggings)
+              )}
+              selectedTags=state.student.taggings
+              addTagCB={tag => send(AddTag(tag))}
+              removeTagCB={tag => send(RemoveTag(tag))}
+              allowNewTags=true
+            />
+          </div>
+          <div className="pt-5 pb-10 w-auto">
+            <button
+              disabled={formInvalid(state)}
+              onClick={_e => updateStudent(studentId, courseId, state, send)}
+              className="w-full btn btn-large btn-primary">
+              {t("update_student")->str}
+            </button>
           </div>
         </div>
-        {state.student.taggings->ArrayUtils.isNotEmpty
-          ? <div className="mt-5">
-              <div className="mb-2 text-xs font-semibold">
-                {str(t("tags_applied_user") ++ ":")}
-              </div>
-              <div className="flex flex-wrap">
-                {state.student.usetTaggings
-                ->Js.Array2.map(tag =>
-                  <div
-                    className="bg-blue-100 text-blue-700 border border-blue-500 rounded-full px-3 py-2 mt-1 mr-1 text-xs text-gray-900"
-                    key={tag}>
-                    {str(tag)}
-                  </div>
-                )
-                ->React.array}
-              </div>
-            </div>
-          : React.null}
-        <div className="mt-5">
-          <div className="mb-2 text-xs font-semibold"> {str(t("tags_applied") ++ ":")} </div>
-          <School__SearchableTagList
-            unselectedTags={avilableTags->Js.Array2.filter(tag =>
-              !Array.mem(tag, state.student.taggings)
-            )}
-            selectedTags=state.student.taggings
-            addTagCB={tag => send(AddTag(tag))}
-            removeTagCB={tag => send(RemoveTag(tag))}
-            allowNewTags=true
-          />
-        </div>
-      </div>
-      <div className="my-5 w-auto">
-        <button
-          disabled={formInvalid(state)}
-          onClick={_e => updateStudent(studentId, courseId, state, send)}
-          className="w-full btn btn-large btn-primary">
-          {t("update_student")->str}
-        </button>
       </div>
     </DisablingCover>
   }
@@ -441,7 +443,7 @@ let make = (~studentId) => {
     | Loading =>
       SkeletonLoading.coursePage()
     | Loaded(baseData) =>
-      <div className="max-w-5xl mx-auto px-2">
+      <div>
         <School__PageHeader
           exitUrl={`/school/courses/${baseData.courseId}/students`}
           title={`Edit ${baseData.student.name}`}

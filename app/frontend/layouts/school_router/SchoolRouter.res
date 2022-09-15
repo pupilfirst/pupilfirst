@@ -126,9 +126,9 @@ let make = (~school, ~courses, ~currentUser) => {
       </div>
       <div className="flex flex-col flex-1">
         <SchoolRouter__TopNav path=url.path courses currentUser />
-        <div role="main" className="flex h-full">
+        <div role="main" className="flex h-full overflow-y-auto">
           <SchoolRouter__LeftSecondaryNav currentUser selectedCourse selectedPage />
-          <div id="schoolrouter-innerpage" className="flex-1 overflow-y-auto bg-gray-50 pb-40">
+          <div id="schoolrouter-innerpage" className="flex-1 overflow-y-scroll bg-gray-50">
             {switch component {
             | Some(page) => page
             | None => React.null

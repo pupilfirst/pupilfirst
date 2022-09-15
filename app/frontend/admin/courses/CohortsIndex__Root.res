@@ -200,16 +200,9 @@ let make = (~courseId, ~search) => {
   <>
     <Helmet> <title> {str("Cohorts Index")} </title> </Helmet>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
-      <div className="mt-2 flex gap-2 items-center justify-between">
-        <div>
-          <ul className="flex font-semibold text-sm">
-            <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-              {"Active Cohorts"->str}
-            </li>
-          </ul>
-        </div>
-        <Link
-          className="btn btn-primary btn-large" href={`/school/courses/${courseId}/cohorts/new`}>
+      <div className="flex gap-2 items-end justify-between">
+        <p className="font-semibold pl-1"> {"Cohorts"->str} </p>
+        <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
           <PfIcon className="if i-plus-circle-light if-fw" />
           <span className="inline-block pl-2"> {str("Add new cohort")} </span>
         </Link>

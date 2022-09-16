@@ -49,6 +49,8 @@ feature 'School Admin Navbar', js: true do
     # Courses from other schools should not be listed.
     expect(page).not_to have_link(course_3.name)
 
+    click_button 'Show user controls'
+
     # There should also be a link to Sign Out
     expect(page).to have_link('Sign Out')
 

@@ -1340,6 +1340,11 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
+    SchoolRouter__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     StudentsEditor__ActionsForm:
       active_label: Active
       certificates_label: Course Certificates

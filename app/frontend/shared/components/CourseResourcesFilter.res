@@ -216,7 +216,7 @@ let make = (
   ~search,
   ~placeholder="Filter Resources",
   ~sorter=?,
-  ~hint="...or start typing to filter by student using their name or email address",
+  ~hint="...or start typing to filter by cohorts using their name",
 ) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let params = Webapi.Url.URLSearchParams.make(search)

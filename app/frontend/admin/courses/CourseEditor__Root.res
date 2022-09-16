@@ -437,14 +437,15 @@ let showCourse = course => {
           Belt.Option.isSome(Course.archivedAt(course)),
         )}
         <div className="grid grid-cols-6 gap-4 p-4">
-          <button
-            title={ts("View Course")}
-            className="col-span-3 btn btn-primary px-4 py-2 bg-primary-50 rounded text-sm cursor-pointer">
+          <a
+            title={"View Course"}
+            className="col-span-3 btn btn-primary px-4 py-2 bg-primary-50 rounded text-sm cursor-pointer"
+            href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}>
             <div>
               <FaIcon classes="far fa-edit mr-3" />
               <span className="font-semibold"> {str("View Course")} </span>
             </div>
-          </button>
+          </a>
           <button
             title={ts("edit") ++ " " ++ Course.name(course)}
             className="col-span-3 btn btn-default px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"

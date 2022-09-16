@@ -14,9 +14,11 @@ class TeamsResolver < ApplicationQuery
       :name
     ].present?
 
-    scope = scope.order("#{sort_by_string}") if filter[:sort_by].present?
-
-    scope
+    if filter[:sort_by].present?
+      scope.order("#{sort_by_string}")
+    else
+      scope.order('created_at DESC')
+    end
   end
 
   private

@@ -136,25 +136,27 @@ let showTeams = teams => {
   <div className="w-full">
     {teams
     ->Js.Array2.map(team =>
-      <div className="p-6 bg-white rounded-lg" key={Team.id(team)}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <p className="text-lg font-semibold"> {Team.name(team)->str} </p>
-            <p className="px-3 py-2 text-xs bg-green-50 text-green-500 rounded-2xl ">
-              {team->Team.cohort->Cohort.name->str}
-            </p>
+      <Spread props={"data-team-name": Team.name(team)}>
+        <div className="teams-container p-6 bg-white rounded-lg" key={Team.id(team)}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <p className="text-lg font-semibold"> {Team.name(team)->str} </p>
+              <p className="px-3 py-2 text-xs bg-green-50 text-green-500 rounded-2xl ">
+                {team->Team.cohort->Cohort.name->str}
+              </p>
+            </div>
+            <Link
+              href={`/school/teams/${Team.id(team)}/details`}
+              className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
+              <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
+              <span> {"Edit"->str} </span>
+            </Link>
           </div>
-          <Link
-            href={`/school/teams/${Team.id(team)}/details`}
-            className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-            <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
-            <span> {"Edit"->str} </span>
-          </Link>
+          <div className="grid grid-cols-1 gap-4 mt-6 lg md:grid-cols-2">
+            {Team.students(team)->Js.Array2.map(studentCard)->React.array}
+          </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 mt-6 lg md:grid-cols-2">
-          {Team.students(team)->Js.Array2.map(studentCard)->React.array}
-        </div>
-      </div>
+      </Spread>
     )
     ->React.array}
   </div>
@@ -208,7 +210,7 @@ let make = (~courseId, ~search) => {
                   sorter={CourseResourcesFilter.makeSorter(
                     "sort_by",
                     ["Name", "First Created", "Last Created"],
-                    "Name",
+                    "Last Created",
                   )}
                 />
               </div>

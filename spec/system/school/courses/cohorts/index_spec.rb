@@ -69,7 +69,7 @@ feature 'Cohorts Index', js: true do
     end
   end
 
-  context 'when there are a large number of teams' do
+  context 'when there are a large number of cohorts' do
     let!(:cohorts) do
       create_list :cohort, 30, course: course, ends_at: 10.days.from_now
     end

@@ -16,7 +16,7 @@ feature 'School admins Editor', js: true do
     sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # list all school admins
-    expect(page).to have_text("Add New School Admin")
+    expect(page).to have_text('Add New School Admin')
     expect(page).to have_text(school_admin_1.user.name)
     expect(page).to have_text(school_admin_2.user.name)
 
@@ -28,7 +28,7 @@ feature 'School admins Editor', js: true do
     fill_in 'email', with: email
     fill_in 'name', with: name
     click_button 'Create School Admin'
-    expect(page).to have_text("School Admin created successfully")
+    expect(page).to have_text('School Admin created successfully')
     dismiss_notification
 
     expect(page).to have_text(name)
@@ -62,7 +62,7 @@ feature 'School admins Editor', js: true do
     sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # Edit school admin
-    find("button", text: school_admin_2.name).click
+    find('button', text: school_admin_2.name).click
     expect(page).to have_text(school_admin_2.name)
     expect(page).to have_text(school_admin_2.email)
 
@@ -72,7 +72,7 @@ feature 'School admins Editor', js: true do
     fill_in 'name', with: name_for_edit
     click_button 'Update School Admin'
 
-    expect(page).to have_text("School Admin updated successfully")
+    expect(page).to have_text('School Admin updated successfully')
 
     dismiss_notification
 
@@ -91,7 +91,7 @@ feature 'School admins Editor', js: true do
     fill_in 'name', with: altered_name
     click_button 'Create School Admin'
 
-    expect(page).to have_text("School Admin created successfully")
+    expect(page).to have_text('School Admin created successfully')
 
     dismiss_notification
 
@@ -107,9 +107,7 @@ feature 'School admins Editor', js: true do
     expect(page).to have_selector("div[title='Delete #{school_admin_1.name}'")
     expect(page).to have_selector("div[title='Delete #{school_admin_2.name}'")
 
-    accept_confirm do
-      find("div[title='Delete #{school_admin_2.name}'").click
-    end
+    accept_confirm { find("div[title='Delete #{school_admin_2.name}'").click }
 
     expect(page).not_to have_text(school_admin_2.name)
     expect(SchoolAdmin.count).to eq(1)
@@ -117,7 +115,9 @@ feature 'School admins Editor', js: true do
 
     # The current admin should no longer have the delete option.
     expect(page).to have_text(school_admin_1.name)
-    expect(page).not_to have_selector("div[title='Delete #{school_admin_1.name}'")
+    expect(page).not_to have_selector(
+      "div[title='Delete #{school_admin_1.name}'"
+    )
 
     # Check audit records
     audit_record = AuditRecord.last
@@ -130,9 +130,7 @@ feature 'School admins Editor', js: true do
   scenario 'school admins deletes her own admin access' do
     sign_in_user school_admin_1.user, referrer: admins_school_path
 
-    accept_confirm do
-      find("div[title='Delete #{school_admin_1.name}'").click
-    end
+    accept_confirm { find("div[title='Delete #{school_admin_1.name}'").click }
 
     # User should be taken to the dashboard page.
     expect(page).to have_text('Edit Profile')
@@ -142,10 +140,10 @@ feature 'School admins Editor', js: true do
 
   scenario 'user who is not logged in tries to access school admin editor interface' do
     visit admins_school_path
-    expect(page).to have_text("Please sign in to continue.")
+    expect(page).to have_text('Please sign in to continue.')
   end
 
-  scenario 'logged in user who not a school admin tries to access school admin editor interface' do
+  scenario 'logged in user who is not a school admin tries to access school admin editor interface' do
     sign_in_user coach.user, referrer: admins_school_path
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end

@@ -66,7 +66,7 @@ feature 'Cohorts New', js: true do
     )
   end
 
-  scenario 'logged in user who not a school admin tries to access create cohort page' do
+  scenario 'logged in user who is not a school admin tries to access create cohort page' do
     sign_in_user student.user, referrer: cohorts_new_path(course)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end

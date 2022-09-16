@@ -90,7 +90,7 @@ module Make = (Selectable: Selectable) => {
                 <span className="px-2 py-1 flex-1"> {selected |> Selectable.value |> str} </span>
                 <button
                   className={"bg-gray-100 inline-flex flex-shrink-0 px-2 py-1 text-sm rounded-r items-center text-gray-800 transition-all hover:bg-red-50 hover:text-red-700 focus:outline-none focus:bg-red-50 focus:text-red-700 "}
-                  title="Remove"
+                  title={"Remove " ++ Selectable.value(selected)}
                   onClick={event => {
                     ReactEvent.Mouse.preventDefault(event)
 

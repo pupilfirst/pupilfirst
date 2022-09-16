@@ -71,7 +71,7 @@ feature 'Teams New', js: true do
     click_button student_1.name
 
     # You need to select at least two students to create a team.
-    click_button 'Add new team', disabled: true
+    expect(page).to have_button('Add new team', disabled: true)
   end
 
   scenario 'logged in user who is not a school admin tries to access create team page' do

@@ -66,6 +66,35 @@ en:
       filter_result_empty: The filters you've applied does not match any coach. Please change the filter and try again.
       filter_search_string_course: teaches course %{name}
       heading: Coaches
+    CohortsActions__Root:
+      edit: Edit
+      merge_and_delete: Merge and delete
+      merge_help: Merge %{cohort_name} cohort into
+      merge_info: Merging cohorts will move all students from the selected cohorts to the target cohort. This action cannot be undone.
+      page_description: Actions for the cohort.
+      pick_a_cohort: Pick a Cohort
+    CohortsCreator__Root:
+      page_description: Create a new cohort for the course.
+      page_title: Add new cohort
+    CohortsDetails__Root:
+      page_description: Update cohort details
+      page_title: Edit %{cohort_name}
+    CohortsIndex__Root:
+      coaches: Coaches
+      cohorts: Cohorts
+      cohorts_end_date: Cohort end date
+      edit: Edit
+      filter:
+        first_created: First Created
+        inactive_cohorts: Inactive Cohorts
+        include: Include
+        last_created: Last Created
+        last_ending: Last Ending
+        name: Name
+        search_by_name: Search by Name
+      load_more: Load More
+      no_cohorts_found: No Cohorts Found
+      students: Students
     CommunitiesNewTopic__Root:
       asked_on: "Asked on "
       back: Back
@@ -260,34 +289,6 @@ en:
       enrollment_delete_notificaion_success_body: Coach enrollment deleted successfully
       remove_confirm_post: from this course?
       remove_confirm_pre: Are you sure you want to remove
-    CourseEditor__Root:
-      add_new_course: Add New Course
-      button_load_more: Load More Courses...
-      course_links:
-        download_reports: Download Reports
-        edit_curriculum: Edit Curriculum
-        manage_coaches: Manage Coaches
-        manage_students: Manage Students
-        view_as_student: View as Student
-      courses_fully_loaded_text: Showing all %{total_courses} courses
-      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
-      edit_course_details: Edit Course Details
-      empty_courses: You don't have any courses!
-      filter:
-        input_hint: Or start typing to search by name...
-        input_label: Search
-        input_placeholder: Filter and Search courses by name
-        label:
-          name: Search by name
-          status: Status
-        status:
-          active: Active
-          archived: Archived
-          ended: Ended
-      notification_error_body: Our team has been notified about this error. Please try reloading this page.
-      notification_error_head: An unexpected error occurred
-      quick_links: Quick Links
-      view_public_page: View public page
     CourseEditor__Form:
       actions:
         archive_course:
@@ -384,6 +385,34 @@ en:
         help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
         help_url: https://docs.pupilfirst.com/users/courses#course-images
         label: Thumbnail
+    CourseEditor__Root:
+      add_new_course: Add New Course
+      button_load_more: Load More Courses...
+      course_links:
+        download_reports: Download Reports
+        edit_curriculum: Edit Curriculum
+        manage_coaches: Manage Coaches
+        manage_students: Manage Students
+        view_as_student: View as Student
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      edit_course_details: Edit Course Details
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+      notification_error_body: Our team has been notified about this error. Please try reloading this page.
+      notification_error_head: An unexpected error occurred
+      quick_links: Quick Links
+      view_public_page: View public page
     CourseExport__Root:
       active_students_label: Active Students
       all_students_label: All Students
@@ -1353,39 +1382,6 @@ en:
     Sorter:
       order_by: Order by
       toggle_sort: Toggle sort order
-    StudentCourse__Header:
-      calendar: Calendar
-      curriculum: Curriculum
-      leaderboard: Leaderboard
-      report: Report
-      review: Review
-      students: Students
-      unknown: Unknown
-    StudentCreator__CreateForm:
-      added_full_description: All students were created successfully.
-      added_none_description: All the students you tried to add were already a part of this course.
-      added_none_title: Nothing Changed
-      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
-      added_partial_title: Partially Added
-      drawer_heading: Add New Students
-      notify_students_label: Notify students, and send them a link to sign into this school.
-      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
-      save_list_button: Save List
-      team_header_add_more_members: Add more team members!
-      team_header_label: TEAM %{team_name}
-      teams_to_add_empty: This list is empty! Add some students using the form above.
-      teams_to_add_label: "These new students will be added to the course:"
-    StudentTopNav:
-      sign_in: Sign In
-      sign_out: Sign Out
-    StudentTopNav__DropDown:
-      more: More
-      show_links: Show more links
-    StudentTopNav__UserControls:
-      edit_profile: Edit Profile
-      sign_in: Sign In
-      sign_out: Sign Out
-      user_controls: Show user controls
     StudentActions__Root:
       active_label: Active
       certificates_label: Course Certificates
@@ -1439,6 +1435,90 @@ en:
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
+    StudentCourse__Header:
+      calendar: Calendar
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
+      students: Students
+      unknown: Unknown
+    StudentCreator__CreateForm:
+      added_full_description: All students were created successfully.
+      added_none_description: All the students you tried to add were already a part of this course.
+      added_none_title: Nothing Changed
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_partial_title: Partially Added
+      drawer_heading: Add New Students
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      pick_a_cohort: Pick a Cohort
+      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
+      save_list_button: Save List
+      select_a_cohort: Select a cohort
+      select_cohort: Select Cohort
+      student_list: Student list
+      team_header_add_more_members: Add more team members!
+      team_header_label: TEAM %{team_name}
+      teams_to_add_empty: This list is empty! Add some students using the form above.
+      teams_to_add_label: "These new students will be added to the course:"
+    StudentCreator__StudentInfoForm:
+      add_to_list: Add to List
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        error:
+          invalid: invalid email
+          not_unique: email address not unique for student
+        label: Email
+        placeholder: Student email here
+      name:
+        label: Name
+        message: is not valid
+        placeholder: Student name here
+      tags:
+        label: Tags
+      team:
+        help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+        label: Team Name
+        placeholder: Avengers, Fantastic Four, etc.
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    StudentDetails__Root:
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      name: Name
+      personal_coaches: Personal Coaches
+      search_coaches_all: You have selected all available coaches!
+      search_coaches_empty: No coaches selected
+      search_coaches_placeholder: Search coaches
+      student_name_placeholder: Student name here
+      student_updated: Student updated successfully
+      student_updated_moved: Student has been updated, and moved to list of inactive students
+      tags_applied: Tags applied
+      tags_applied_team: Tags applied to team
+      tags_applied_user: Tags applied to user
+      team_coaches: Team Coaches
+      team_name: Team Name
+      team_name_error: Team Name must have at least two characters
+      team_name_placeholder: Team name here
+      team_updated_moved: Team has been updated, and moved to list of inactive students
+      title: Title
+      title_error: Title must have at least two characters
+      title_placeholder: Student, Coach, CEO, etc.
+      update_student: Update Student
+    StudentTopNav:
+      sign_in: Sign In
+      sign_out: Sign Out
+    StudentTopNav__DropDown:
+      more: More
+      show_links: Show more links
+    StudentTopNav__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     StudentsEditor__Root:
       button_add_new_students: Add New Students
       button_all_students: All Students
@@ -1483,29 +1563,6 @@ en:
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
       team: Team
       try_removing_filter: Try removing the search filter options.
-    StudentDetails__Root:
-      affiliation: Affiliation
-      affiliation_placeholder: Acme Inc., Acme University, etc.
-      name: Name
-      personal_coaches: Personal Coaches
-      search_coaches_all: You have selected all available coaches!
-      search_coaches_empty: No coaches selected
-      search_coaches_placeholder: Search coaches
-      student_name_placeholder: Student name here
-      student_updated: Student updated successfully
-      student_updated_moved: Student has been updated, and moved to list of inactive students
-      tags_applied: Tags applied
-      tags_applied_team: Tags applied to team
-      tags_applied_user: Tags applied to user
-      team_coaches: Team Coaches
-      team_name: Team Name
-      team_name_error: Team Name must have at least two characters
-      team_name_placeholder: Team name here
-      team_updated_moved: Team has been updated, and moved to list of inactive students
-      title: Title
-      title_error: Title must have at least two characters
-      title_placeholder: Student, Coach, CEO, etc.
-      update_student: Update Student
     StudentsEditor__UpdateForm:
       actions: Actions
       details: Details

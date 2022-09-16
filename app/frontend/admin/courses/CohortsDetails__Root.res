@@ -78,8 +78,8 @@ let make = (~cohortId) => {
       <div>
         <School__PageHeader
           exitUrl={`/school/courses/${courseId}/cohorts`}
-          title={`Edit ${Cohort.name(cohort)}`}
-          description={"Update cohort details"}
+          title={t("page_title", ~variables=[("cohort_name", Cohort.name(cohort))])}
+          description={t("page_description")}
           links={pageLinks(cohortId)}
         />
         <AdminCoursesShared__CohortsEditor courseId cohort />

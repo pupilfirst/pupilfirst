@@ -65,14 +65,12 @@ module Editor = {
     <div className="bg-white pt-8">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <h2 className="text-lg font-semibold mt-8">
-          {`Merge ${Cohort.name(cohort)} cohort into`->str}
+          {t("merge_info", ~variables=[("cohort_name", Cohort.name(cohort))])->str}
         </h2>
-        <p className="text-sm text-gray-500">
-          {"Merge will add students, coaches, and calendars from this cohort to the targeted cohort and delete this cohort."->str}
-        </p>
+        <p className="text-sm text-gray-500"> {t("merge_help")->str} </p>
         <div className="mt-4">
           <Dropdown
-            placeholder={"Pick a Cohort"}
+            placeholder={t("pick_a_cohort")}
             selectables={cohorts->Js.Array2.filter(c => c != cohort)}
             selected={state.mergeIntoCohort}
             onSelect={u => send(UpdateMergeIntoCohort(u))}
@@ -87,7 +85,7 @@ module Editor = {
             )}
           disabled={state.saving || Belt.Option.isNone(state.mergeIntoCohort)}
           className="btn btn-danger mt-4">
-          {"Merge and delete"->str}
+          {t("merge_and_delete")->str}
         </button>
       </div>
     </div>
@@ -190,8 +188,8 @@ let make = (~cohortId) => {
       <div>
         <School__PageHeader
           exitUrl={`/school/courses/${Cohort.courseId(data.cohort)}/cohorts`}
-          title={`Edit ${Cohort.name(data.cohort)}`}
-          description={"Actions for the cohort."}
+          title={`${t("edit")} ${Cohort.name(data.cohort)}`}
+          description={t("page_description")}
           links={pageLinks(cohortId)}
         />
         <Editor cohorts=data.cohorts cohort=data.cohort courseId={Cohort.courseId(data.cohort)} />

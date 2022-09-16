@@ -117,11 +117,11 @@ let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter(
       "include_inactive_cohorts",
-      "Include",
-      Custom("Inactive Cohorts"),
+      t("filter.include"),
+      Custom(t("filter.inactive_cohorts")),
       "orange",
     ),
-    CourseResourcesFilter.makeFilter("name", "Search by Name", Search, "gray"),
+    CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
   ]
 }
 
@@ -144,26 +144,28 @@ let cohortsList = cohorts => {
                 href={`/school/cohorts/${cohort.id}/details`}
                 className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
                 <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
-                <span> {"Edit"->str} </span>
+                <span> {t("edit")->str} </span>
               </Link>
             </div>
           </div>
           <div className="flex gap-6 flex-wrap mt-6">
             <div>
-              <p className="pr-6 text-sm text-gray-500 font-medium"> {"Students"->str} </p>
+              <p className="pr-6 text-sm text-gray-500 font-medium"> {t("students")->str} </p>
               <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
                 {cohort.studentsCount->string_of_int->str}
               </p>
             </div>
             <div>
-              <p className="pr-6 text-sm text-gray-500 font-medium"> {"Coaches"->str} </p>
+              <p className="pr-6 text-sm text-gray-500 font-medium"> {t("coaches")->str} </p>
               <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
                 {cohort.coachesCount->string_of_int->str}
               </p>
             </div>
             {cohort.endsAt->Belt.Option.mapWithDefault(React.null, endsAt =>
               <div>
-                <p className="pr-6 text-sm text-gray-500 font-medium"> {"Cohort end date"->str} </p>
+                <p className="pr-6 text-sm text-gray-500 font-medium">
+                  {t("cohorts_end_date")->str}
+                </p>
                 <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
                   {endsAt->DateFns.format("MMMM d, yyyy")->str}
                 </p>
@@ -185,7 +187,7 @@ let renderLoadMore = (send, courseId, params, cursor) => {
         send(BeginLoadingMore)
         getCohorts(send, courseId, Some(cursor), params)
       }}>
-      {"Load More"->str}
+      {t("load_more")->str}
     </button>
   </div>
 }
@@ -220,8 +222,13 @@ let make = (~courseId, ~search) => {
                   search={search}
                   sorter={CourseResourcesFilter.makeSorter(
                     "sort_by",
-                    ["Name", "First Created", "Last Created", "Last Ending"],
-                    "Last Created",
+                    [
+                      t("filter.name"),
+                      t("filter.first_created"),
+                      t("filter.last_created"),
+                      t("filter.last_ending"),
+                    ],
+                    t("filter.last_created"),
                   )}
                 />
               </div>
@@ -234,8 +241,8 @@ let make = (~courseId, ~search) => {
           ~entriesView=cohortsList,
           ~totalEntriesCount=state.totalEntriesCount,
           ~loadMore=renderLoadMore(send, courseId, params),
-          ~resourceName="Cohorts",
-          ~emptyMessage="No Cohorts Found",
+          ~resourceName=t("cohorts"),
+          ~emptyMessage=t("no_cohorts_found"),
         )}
       </div>
     </div>

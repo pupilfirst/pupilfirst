@@ -1,7 +1,5 @@
 open StudentsEditor__Types
 
-let t = I18n.t(~scope="components.StudentCreator__CreateForm")
-
 type state = {
   teamsToAdd: array<TeamInfo.t>,
   notifyStudents: bool,
@@ -288,10 +286,10 @@ let make = (~courseId) => {
     <div className="w-1/2 mt-4">
       <div className="mt-5 flex flex-col">
         <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-          {"Select a cohort" |> str}
+          {t("select_a_cohort") -> str}
         </label>
         <Dropdown
-          placeholder={"Pick a Cohort"}
+          placeholder={t("pick_a_cohort")}
           selectables={state.cohorts}
           selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
           onSelect={u => send(SetSelectedCohort(u))}
@@ -309,7 +307,7 @@ let make = (~courseId) => {
     </div>
     <div className="w-1/2 px-4 mt-4">
       <div className="inline-block tracking-wide text-sm font-semibold">
-        {str("Student list")}
+        {str(t("student_list"))}
       </div>
       <div className="p-4 rounded-lg border bordedr-gray-300 bg-gray-200">
         <div>
@@ -322,23 +320,23 @@ let make = (~courseId) => {
               </div>
             | teams =>
               teams
-              |> Js.Array.map(team =>
+              -> Js.Array2.map(team =>
                 switch TeamInfo.nature(team) {
                 | TeamInfo.MultiMember(teamName, studentsInTeam) =>
                   <div className="mt-3" key=teamName>
-                    {teamHeader(teamName, studentsInTeam |> Array.length)}
+                    {teamHeader(teamName, studentsInTeam -> Array.length)}
                     {TeamInfo.tags(team)->tagBoxes}
                     <div className="bg-white border shadow rounded-lg mt-2 px-2">
                       {studentsInTeam
-                      |> Array.map(studentInfo => studentCard(studentInfo, send, true, []))
-                      |> React.array}
+                      -> Js.Array2.map(studentInfo => studentCard(studentInfo, send, true, []))
+                      -> React.array}
                     </div>
                   </div>
                 | SingleMember(studentInfo) =>
                   studentCard(studentInfo, send, false, TeamInfo.tags(team))
                 }
               )
-              |> React.array
+              -> React.array
             }}
           </div>
         </div>
@@ -363,7 +361,7 @@ let make = (~courseId) => {
           {switch state.selectedCohort {
           | Some(c) =>
             <button
-              disabled={state.saving || state.teamsToAdd |> ArrayUtils.isEmpty}
+              disabled={state.saving || state.teamsToAdd -> ArrayUtils.isEmpty}
               onClick={createStudents(state, send, courseId, c)}
               className={"w-full btn btn-primary btn-large mt-3" ++ (
                 formInvalid(state) ? " disabled" : ""
@@ -372,7 +370,7 @@ let make = (~courseId) => {
             </button>
           | None =>
             <button disabled=true className={"w-full btn btn-primary btn-large mt-3 disabled"}>
-              {"Select Cohort"->str}
+              {t("select_cohort")->str}
             </button>
           }}
         </div>

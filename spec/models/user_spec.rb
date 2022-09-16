@@ -28,7 +28,7 @@ describe User, type: :model do
 
     context 'when the user has an uploaded image' do
       before do
-        avatar = File.open(Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg'))
+        avatar = Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg').open
         user.avatar.attach(io: avatar, filename: 'donald_duck.jpg')
         user.save!
       end

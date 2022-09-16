@@ -12,7 +12,10 @@ class ApplicantMailer < SchoolMailer
 
     simple_mail(
       @applicant.email,
-      I18n.t("mailers.applicant.enrollment_verification.#{email_subject_key}"),
+      I18n.t(
+        "mailers.applicant.enrollment_verification.#{email_subject_key}",
+        course_name: @course.name
+      ),
       enable_reply: false
     )
   end

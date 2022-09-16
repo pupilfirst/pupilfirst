@@ -1087,7 +1087,6 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_content(evaluation_criterion_2.name)
       expect(page).to have_button('Save grades', disabled: true)
       click_button 'Remove assignment'
-      dismiss_notification
       expect(page).to have_button('Start Review')
     end
 

@@ -274,6 +274,7 @@ feature 'Target Details Editor', js: true do
              target_group: target_group_2,
              evaluation_criteria: [evaluation_criterion]
     end
+
     let(:checklist_with_multiple_items) do
       [
         {
@@ -293,15 +294,18 @@ feature 'Target Details Editor', js: true do
         }
       ]
     end
+
     let!(:target_3_l2) do
       create :target,
              target_group: target_group_2,
              checklist: checklist_with_multiple_items,
              evaluation_criteria: [evaluation_criterion]
     end
+
     let!(:quiz_target) { create :target, target_group: target_group_2 }
     let(:quiz) { create :quiz, target: quiz_target }
     let(:quiz_question) { create :quiz_question, :with_answers, quiz: quiz }
+
     let!(:submission_for_quiz_target_with_grades) do
       create(
         :timeline_event,
@@ -310,6 +314,7 @@ feature 'Target Details Editor', js: true do
         passed_at: nil
       )
     end
+
     let!(:timeline_event_grade) do
       create(
         :timeline_event_grade,
@@ -318,6 +323,7 @@ feature 'Target Details Editor', js: true do
         grade: 2
       )
     end
+
     let!(:submission_for_quiz_target_without_grades) do
       create(
         :timeline_event,
@@ -620,6 +626,37 @@ feature 'Target Details Editor', js: true do
         )
       ).to eq([])
     end
+
+    context 'when the checklist is almost at capacity' do
+      let(:checklist_with_multiple_items) do
+        (1..24).map do |number|
+          {
+            'kind' => Target::CHECKLIST_KIND_SHORT_TEXT,
+            'title' => "Question #{number}",
+            'optional' => true
+          }
+        end
+      end
+
+      scenario 'checklist is limited to 25 items' do
+        sign_in_user course_author.user,
+                     referrer:
+                       details_school_course_target_path(
+                         course_id: course.id,
+                         id: target_3_l2.id
+                       )
+
+        expect(page).to have_text(
+          'What steps should the student take to complete this target?'
+        )
+
+        click_button 'Add a Step'
+
+        expect(page).to have_text('Step cannot be empty')
+        expect(page).to have_text('Maximum allowed checklist items is 25')
+        expect(page).not_to have_button('Add a Step')
+      end
+    end
   end
 
   context 'school admin modifies the target group for a target' do
@@ -741,7 +778,8 @@ feature 'Target Details Editor', js: true do
 
         within('div#evaluated') { click_button 'Yes' }
 
-        find("button[title='Select #{evaluation_criterion.display_name}']").click
+        find("button[title='Select #{evaluation_criterion.display_name}']")
+          .click
 
         within('div#visibility') { click_button 'Live' }
 

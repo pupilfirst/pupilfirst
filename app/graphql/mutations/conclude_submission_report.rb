@@ -38,6 +38,7 @@ module Mutations
           )
         else
           SubmissionReport.create!(
+            submission_id: @params[:submission_id],
             status: 'completed',
             test_report: @params[:test_report],
             conclusion: @params[:conclusion],

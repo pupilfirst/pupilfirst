@@ -107,7 +107,7 @@ let make = (~studentId) => {
           description={"Team actions"}
           links={pageLinks(studentId)}
         />
-        <div className="max-w-5xl mx-auto px-2">
+        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
           <h2 className="text-lg font-semibold mt-8"> {`Delete ${Team.name(team)}`->str} </h2>
           <p className="text-sm text-gray-500">
             {"Delete will remove all the students from the team and delete the team"->str}

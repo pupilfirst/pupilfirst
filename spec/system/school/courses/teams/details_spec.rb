@@ -65,7 +65,7 @@ feature 'Cohorts Details', js: true do
     expect(ended_cohort.reload.ends_at).to eq(nil)
   end
 
-  scenario 'logged in user who is not a school admin tries to access create cohort page' do
+  scenario 'logged in user who is not a school admin tries to access team details page' do
     sign_in_user student.user, referrer: cohorts_details_path(course)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end

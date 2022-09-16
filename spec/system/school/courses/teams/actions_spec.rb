@@ -1,48 +1,45 @@
 require 'rails_helper'
 
-def cohorts_actions_path(cohort)
-  "/school/cohorts/#{cohort.id}/actions"
+def teams_actions_path(team_1)
+  "/school/teams/#{team_1.id}/actions"
 end
 
-feature 'Cohorts Actions', js: true do
+feature 'Team Actions', js: true do
   include UserSpecHelper
   include NotificationHelper
 
   let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
   let!(:live_cohort) { create :cohort, course: course, ends_at: 1.day.from_now }
-  let!(:ended_cohort) { create :cohort, course: course, ends_at: 1.day.ago }
-  let!(:level) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student) { create :founder, cohort: live_cohort, level: level }
-  let!(:student_ended) { create :founder, cohort: ended_cohort, level: level }
-  let!(:team_ended) { create :team_with_students, cohort: ended_cohort }
+  let!(:team_1) { create :team_with_students, cohort: live_cohort }
+  let!(:team_2) { create :team_with_students, cohort: live_cohort }
 
   scenario 'School admin merges ended cohort into live cohort' do
-    sign_in_user school_admin.user, referrer: cohorts_actions_path(ended_cohort)
+    founders = team_1.founders
 
-    expect(page).to have_text("Merge #{ended_cohort.name} cohort into")
-    click_button 'Pick a Cohort'
-    click_button live_cohort.name
-    click_button 'Merge and delete'
+    sign_in_user school_admin.user, referrer: teams_actions_path(team_1)
+
+    expect(page).to have_text(team_1.name)
+    click_button 'Delete team'
 
     dismiss_notification
 
-    expect(page).to have_text(live_cohort.name)
-    expect(page).not_to have_text(ended_cohort.name)
+    expect(page).to have_text(team_2.name)
+    expect(page).not_to have_text(team_1.name)
 
-    expect(student_ended.reload.cohort).to eq(live_cohort)
-    expect(team_ended.reload.cohort).to eq(live_cohort)
-    expect(course.cohorts.count).to eq(1)
+    founders.each { |founder| expect(founder.reload.team).to eq(nil) }
+    expect(course.teams.count).to eq(1)
   end
 
-  scenario 'logged in user who is not a school admin tries to access create cohort page' do
-    sign_in_user student.user, referrer: cohorts_actions_path(course)
+  scenario 'logged in user who is not a school admin tries to access teams action page' do
+    sign_in_user team_1.founders.first.user,
+                 referrer: teams_actions_path(team_1)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 
   scenario 'school admin tries to access an invalid link' do
-    sign_in_user school_admin.user, referrer: '/school/cohorts/888888/actions'
+    sign_in_user school_admin.user, referrer: '/school/teams/888888/actions'
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

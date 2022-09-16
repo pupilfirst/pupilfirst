@@ -308,7 +308,7 @@ module Editor = {
   let make = (~studentData, ~studentId, ~certificates) => {
     let (state, send) = React.useReducer(reducer, initialState(studentData))
 
-    <div className="pt-5">
+    <div className="pt-5 pb-10">
       <div className="bg-gray-50 p-4" ariaLabel={t("manage_certificates")}>
         <h5> {t("certificates_label")->str} </h5>
         {certificates |> ArrayUtils.isEmpty

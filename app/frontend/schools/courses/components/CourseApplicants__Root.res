@@ -380,7 +380,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
     None
   }, (state.filter, state.relaodApplicants))
 
-  <div className="flex flex-1 flex-col">
+  <div className="flex flex-1 flex-col h-full">
     <div className="px-6 pb-4 flex-1 bg-gray-50 relative">
       <p className="mx-auto max-w-3xl pt-4 pb-3 font-semibold border-b">
         {t("applicants_page_title")->str}

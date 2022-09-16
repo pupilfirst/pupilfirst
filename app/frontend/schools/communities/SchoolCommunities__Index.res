@@ -130,7 +130,7 @@ let make = (~communities, ~courses) => {
     let communities = state.communities |> List.append(list{community})
     send(SaveCommunityChanges(communities))
   }
-  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-50">
+  <div className="bg-gray-50 h-full">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowEditor(community) =>

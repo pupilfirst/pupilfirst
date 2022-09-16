@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CohortsDetails__Root")
+
 let cohortDetailsSkeleton = () => {
   <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
     {SkeletonLoading.input()}

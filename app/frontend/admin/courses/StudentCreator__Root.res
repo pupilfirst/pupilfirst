@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.StudentCreator__Root")
+
 let pageLinks = courseId => [
   School__PageHeader.makeLink(
     ~href={`/school/courses/${courseId}/students/new`},

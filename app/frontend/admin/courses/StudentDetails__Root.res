@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentsEditor__UpdateDetailsForm")
+let t = I18n.t(~scope="components.StudentDetails__Root")
 let ts = I18n.ts
 
 module Coach = UserProxy

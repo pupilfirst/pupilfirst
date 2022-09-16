@@ -1,5 +1,7 @@
 open TeamsEditor__Types
 
+let t = I18n.t(~scope="components.TeamsDetails__Root")
+
 let str = React.string
 
 let pageLinks = studentId => [

@@ -2,6 +2,8 @@ let str = React.string
 
 open TeamsEditor__Types
 
+let t = I18n.t(~scope="components.TeamsIndex__Root")
+
 module Item = {
   type t = Team.t
 }

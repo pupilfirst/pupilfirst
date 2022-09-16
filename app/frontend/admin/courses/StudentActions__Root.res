@@ -1,6 +1,6 @@
 open StudentActions__Type
 
-let t = I18n.t(~scope="components.StudentsEditor__ActionsForm")
+let t = I18n.t(~scope="components.StudentActions__Root")
 let str = React.string
 
 type student = {

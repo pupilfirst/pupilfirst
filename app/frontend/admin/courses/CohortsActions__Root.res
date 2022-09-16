@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CohortsActions__Root")
+
 module Editor = {
   module Selectable = {
     type t = Cohort.t

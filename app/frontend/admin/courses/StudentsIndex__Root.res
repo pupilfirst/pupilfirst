@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.StudentsIndex__Root")
+
 open StudentsIndex__Types
 
 module Item = {

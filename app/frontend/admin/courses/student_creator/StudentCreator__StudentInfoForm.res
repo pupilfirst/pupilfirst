@@ -1,5 +1,7 @@
 open StudentsEditor__Types
 
+let t = I18n.t(~scope="components.StudentCreator__StudentInfoForm")
+
 type state = {
   name: string,
   email: string,

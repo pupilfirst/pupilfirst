@@ -2,7 +2,7 @@ let str = React.string
 
 open StudentsEditor__Types
 
-let t = I18n.t(~scope="components.StudentsEditor__BulkImportForm")
+let t = I18n.t(~scope="components.StudentBulkImport__Root")
 let ts = I18n.ts
 
 module CSVData = {

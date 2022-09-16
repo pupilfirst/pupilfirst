@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CohortsIndex__Root")
+
 type cohortDetails = {
   id: string,
   name: string,

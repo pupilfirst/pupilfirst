@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.TeamsCreator__Root")
+
 @react.component
 let make = (~courseId) => {
   let courseContext = React.useContext(SchoolRouter__CourseContext.context)

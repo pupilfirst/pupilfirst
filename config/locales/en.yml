@@ -260,7 +260,7 @@ en:
       enrollment_delete_notificaion_success_body: Coach enrollment deleted successfully
       remove_confirm_post: from this course?
       remove_confirm_pre: Are you sure you want to remove
-    CourseEditor:
+    CourseEditor__Root:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
@@ -1386,7 +1386,7 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
-    StudentsEditor__ActionsForm:
+    StudentActions__Root:
       active_label: Active
       certificates_label: Course Certificates
       details_certificate: Details of issued certificate
@@ -1409,7 +1409,7 @@ en:
       revoked_date_label: "Revoked on:"
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
-    StudentsEditor__BulkImportForm:
+    StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_email: Email has to be valid and can't be blank
@@ -1483,7 +1483,7 @@ en:
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
       team: Team
       try_removing_filter: Try removing the search filter options.
-    StudentsEditor__UpdateDetailsForm:
+    StudentDetails__Root:
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
       name: Name

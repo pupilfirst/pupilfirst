@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.AdminCoursesShared__TeamEditor")
+
 open TeamsEditor__Types
 
 type state = {
@@ -90,7 +92,6 @@ let createTeam = (state, send, cohortId, courseId) => {
     switch result.createTeam.team {
     | Some(_team) => {
         send(ClearSaving)
-        Js.log("HERE")
         RescriptReactRouter.push(`/school/courses/${courseId}/teams`)
       }
 
@@ -217,7 +218,7 @@ let make = (~courseId, ~team=?) => {
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
       <div className="mt-8">
         <label className="block text-sm font-semibold mb-2" htmlFor="teamName">
-          {"Team name" |> str}
+          {t("team_name.label") -> str}
         </label>
         <input
           value={state.name}
@@ -225,16 +226,16 @@ let make = (~courseId, ~team=?) => {
           className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="teamName"
           type_="text"
-          placeholder="eg, Batch 1"
+          placeholder=t("team_name.placeholder")
         />
-        <School__InputGroupError message="Enter a valid team name" active=state.hasNameError />
+        <School__InputGroupError message=t("team_name.message") active=state.hasNameError />
       </div>
       <div className="mt-5 flex flex-col">
         <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-          {"Select a cohort"->str}
+          {t("select_cohort.label")->str}
         </label>
         <Dropdown
-          placeholder={"Pick a Cohort"}
+          placeholder={t("select_cohort.placeholder")}
           selectables={state.cohorts}
           selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
           onSelect={u => send(SetSelectedCohort(u))}
@@ -258,7 +259,7 @@ let make = (~courseId, ~team=?) => {
               className="btn btn-primary btn-large w-full mt-6"
               disabled={disabled(state)}
               onClick={_e => updateTeam(state, send, Team.id(team))}>
-              {"Update Team"->str}
+              {t("update_team")->str}
             </button>
           | None =>
             <button
@@ -266,7 +267,7 @@ let make = (~courseId, ~team=?) => {
               type_="submit"
               disabled={disabled(state)}
               onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
-              {"Add new team"->str}
+              {t("add_new_team")->str}
             </button>
           }}
         </div>

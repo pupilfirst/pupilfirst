@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.AdminCoursesShared__StudentsPicker")
+
 type state = {
   students: array<UserProxy.t>,
   search: string,
@@ -101,10 +103,10 @@ let make = (~courseId, ~selectedStudents, ~cohort, ~onSelect, ~onDeselect) => {
 
   <StudentsPicker
     placeholder={"Select students"}
-    emptySelectionMessage={"No students selected"}
+    emptySelectionMessage={t("all_students_selected")}
     allItemsSelectedMessage={ArrayUtils.isEmpty(state.students)
-      ? "No Stundets found"
-      : "All students selected"}
+      ? t("no_students_found")
+      : t("all_students_selected")}
     selected=selectedStudents
     unselected={unselected(state.students, selectedStudents)}
     onChange={_ => ()}

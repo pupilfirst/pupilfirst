@@ -1,5 +1,8 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.AdminCoursesShared__CohortsEditor")
+let ts = I18n.ts
+
 type state = {
   name: string,
   description: string,
@@ -153,7 +156,7 @@ let make = (~courseId, ~cohort=?) => {
         <label
           className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
           htmlFor="cohortName">
-          {"Cohort name"->str}
+          {t("cohort.label")->str}
         </label>
         <input
           value={state.name}
@@ -162,15 +165,15 @@ let make = (~courseId, ~cohort=?) => {
           className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="cohortName"
           type_="text"
-          placeholder="eg, Batch 1"
+          placeholder=t("cohort.placeholder")
         />
-        <School__InputGroupError message="Enter a valid cohort name" active=state.hasNameError />
+        <School__InputGroupError message=t("cohort.message") active=state.hasNameError />
       </div>
       <div className="mt-6">
         <label
           className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
           htmlFor="cohortDescription">
-          {"Cohort description"->str}
+          {t("cohort_description.label")->str}
         </label>
         <input
           value=state.description
@@ -179,10 +182,10 @@ let make = (~courseId, ~cohort=?) => {
           id="cohortDescription"
           maxLength={250}
           type_="text"
-          placeholder="eg, Batch 1 of some year"
+          placeholder=t("cohort_description.placeholder")
         />
         <School__InputGroupError
-          message="Enter a valid description for the cohort" active=state.hasDescriptionError
+          message=t("cohort_description.message") active=state.hasDescriptionError
         />
       </div>
       <div className="mt-6">
@@ -190,11 +193,11 @@ let make = (~courseId, ~cohort=?) => {
           <label
             className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
             htmlFor="cohortEndsAt">
-            {"Cohort end date"->str}
-            <span className="text-xs ml-1 font-light"> {"(optional)"->str} </span>
+            {t("cohort_ends_at.label")->str}
+            <span className="text-xs ml-1 font-light"> {ts("optional_braces")->str} </span>
           </label>
           <HelpIcon className="ml-1 text-sm">
-            {"The cohort will be archived on this date"->str}
+            {t("cohort_ends_at.help")->str}
           </HelpIcon>
         </div>
         <DatePicker
@@ -207,7 +210,7 @@ let make = (~courseId, ~cohort=?) => {
           className="btn btn-primary btn-large w-full mt-6"
           disabled={disabled(state)}
           onClick={_e => updateCohort(state, send, Cohort.id(cohort))}>
-          {"Update cohort"->str}
+          {t("update_cohort")->str}
         </button>
       | None =>
         <button
@@ -215,7 +218,7 @@ let make = (~courseId, ~cohort=?) => {
           type_="submit"
           disabled={disabled(state)}
           onClick={_e => createCohort(state, send, courseId)}>
-          {"Add new cohort"->str}
+          {t("add_new_cohort")->str}
         </button>
       }}
     </div>

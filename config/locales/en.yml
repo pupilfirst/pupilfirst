@@ -11,6 +11,33 @@ en:
       note: " Coaches in your school have access to all communities."
       welcome: Welcome to the
   components:
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: Add new cohort
+      cohort:
+        label: Cohort name
+        message: Enter a valid cohort name
+        placeholder: eg, Batch 1
+      cohort_description:
+        label: Cohort description
+        message: Enter a valid description for the cohort
+        placeholder: eg, Batch 1 of some year
+      cohort_ends_at:
+        help: The cohort will be archived on this date
+        label: Cohort end date
+      update_cohort: Update cohort
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: All students selected
+      no_students_found: No Students found
+    AdminCoursesShared__TeamEditor:
+      add_new_team: Add new team
+      select_cohort:
+        label: Select a cohort
+        placeholder: Pick a Cohort
+      team_name:
+        label: Team name
+        message: Enter a valid team name
+        placeholder: eg, Batch 1
+      update_team: Update Team
     Api:
       error_notification_body: Our team has been notified of this error. Please reload the page and try again.
       error_notification_title: An unexpected error occurred
@@ -206,22 +233,22 @@ en:
       search_coaches_all: You have selected all coaches!
       search_coaches_empty: No coaches selected
       search_coaches_placeholder: Search coaches
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
       select_coaches: Select coaches
       select_cohorts: Select Cohorts
-      search_cohorts_all: You have selected all cohorts!
-      search_cohorts_empty: No cohorts selected
-      search_cohorts_placeholder: Search cohorts
     CourseCoaches__InfoForm:
       no_students_assigned: There are no students assigned to this coach. You can assign coaches directly while editing the student details.
+      notification_coach_updated: Coach updated successfully
       pending_submissions: Pending Submissions
       revied_submissions: Reviewed Submissions
-      students_assigned: "Students assigned to coach:"
-      select_cohorts: "Cohorts assigned to coach:"
       search_cohorts_all: You have selected all cohorts!
       search_cohorts_empty: No cohorts selected
       search_cohorts_placeholder: Search cohorts
+      select_cohorts: "Cohorts assigned to coach:"
+      students_assigned: "Students assigned to coach:"
       update_cohort_assignment: Update Cohort Assignment
-      notification_coach_updated: Coach updated successfully
     CourseCoaches__InfoFormTeam:
       remove_post_confirm: from the list of assigned teams?
       remove_pre_confirm: "Are you sure you want to remove "
@@ -276,9 +303,6 @@ en:
         archive_message: Are you sure you want to archive the course?
         clone_course_message: Are you sure you want to make a copy of the course?
         unarchive_message: Are you sure you want to unarchive the course?
-      title:
-        add_new_course: Add New Course
-        edit_course_details: Edit Course Details
       course_about:
         label: About
         placeholder: Add more details about the course.
@@ -322,6 +346,9 @@ en:
         actions: Actions
         details: Details
         images: Images
+      title:
+        add_new_course: Add New Course
+        edit_course_details: Edit Course Details
       update_course: Update Course
     CourseEditor__HighlightsEditor:
       add_highlight: Add Course Highlight
@@ -1305,6 +1332,11 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -1329,6 +1361,20 @@ en:
       review: Review
       students: Students
       unknown: Unknown
+    StudentCreator__CreateForm:
+      added_full_description: All students were created successfully.
+      added_none_description: All the students you tried to add were already a part of this course.
+      added_none_title: Nothing Changed
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_partial_title: Partially Added
+      drawer_heading: Add New Students
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
+      save_list_button: Save List
+      team_header_add_more_members: Add more team members!
+      team_header_label: TEAM %{team_name}
+      teams_to_add_empty: This list is empty! Add some students using the form above.
+      teams_to_add_label: "These new students will be added to the course:"
     StudentTopNav:
       sign_in: Sign In
       sign_out: Sign Out
@@ -1336,11 +1382,6 @@ en:
       more: More
       show_links: Show more links
     StudentTopNav__UserControls:
-      edit_profile: Edit Profile
-      sign_in: Sign In
-      sign_out: Sign Out
-      user_controls: Show user controls
-    SchoolRouter__UserControls:
       edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out
@@ -1398,20 +1439,6 @@ en:
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
-    StudentCreator__CreateForm:
-      added_full_description: All students were created successfully.
-      added_none_description: All the students you tried to add were already a part of this course.
-      added_none_title: Nothing Changed
-      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
-      added_partial_title: Partially Added
-      drawer_heading: Add New Students
-      notify_students_label: Notify students, and send them a link to sign into this school.
-      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
-      save_list_button: Save List
-      team_header_add_more_members: Add more team members!
-      team_header_label: TEAM %{team_name}
-      teams_to_add_empty: This list is empty! Add some students using the form above.
-      teams_to_add_label: "These new students will be added to the course:"
     StudentsEditor__Root:
       button_add_new_students: Add New Students
       button_all_students: All Students
@@ -1899,12 +1926,6 @@ en:
         founder: All Founders
         team: Team
   mutations:
-    create_team:
-      success_notification: Team created successfully
-    update_team:
-      success_notification: Team updated successfully
-    destroy_team:
-      success_notification: Team deleted successfully
     archive_coach_note:
       note_removed_notification: Note removed successfully
     archive_course:
@@ -1968,6 +1989,8 @@ en:
       success_notification: Target created successfully.
     create_target_version:
       new_version_notification: A new version has been created.
+    create_team:
+      success_notification: Team created successfully
     create_topic_subscription:
       success_notification: You will be notified about all the updates.
     delete_certificate:
@@ -1975,6 +1998,8 @@ en:
     delete_course_author:
       author_deleted_details_notification: The author has been removed from this course.
       author_deleted_notification: Author Deleted
+    destroy_team:
+      success_notification: Team deleted successfully
     dropout_student:
       student_updated_notification: Student updated successfully
     export_course_report:
@@ -2040,11 +2065,11 @@ en:
       review_updated_notification: Review checklist updated successfully
     update_school:
       details_updated_notification: Details updated successfully!
-    update_student_details:
-      success_notification: Student updated successfully
     update_school_link:
       link_not_found_error: Unable to find link!
       success_notification: Link updated successfully!
+    update_student_details:
+      success_notification: Student updated successfully
     update_target:
       checklist_items_exceeded_error: Checklist should not have more than 25 items
       evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
@@ -2055,6 +2080,8 @@ en:
       success_notification: Target updated successfully!
       target_group_not_present_error: Target group does not exist
       target_missing_error: Target does not exist
+    update_team:
+      success_notification: Team updated successfully
     update_topic:
       topic_updated_notification: Topic updated successfully!
     update_user:
@@ -2191,11 +2218,10 @@ en:
     are: are
     avatar: Avatar
     cancel: Cancel
-    cohorts: Cohorts
-    levels: Levels
-    coaches: Coaches
     caption_image: A caption for the image
     close: Close
+    coaches: Coaches
+    cohorts: Cohorts
     community: Community
     completed: Completed
     dashboard: Dashboard
@@ -2216,6 +2242,7 @@ en:
       long_without_name: Level %{number}
       short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
+    levels: Levels
     live: Live
     load_more: Load More...
     loading: Loading...

@@ -159,7 +159,7 @@ let computeInitialState = team =>
   }
 
 let disabled = state => {
-  state.hasNameError || state.saving || !state.dirty
+  state.hasNameError || state.saving || !state.dirty || Js.Array2.length(state.selectedStudent) < 2
 }
 
 module Selectable = {
@@ -266,7 +266,7 @@ let make = (~courseId, ~team=?) => {
               type_="submit"
               disabled={disabled(state)}
               onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
-              {"Add new cohort"->str}
+              {"Add new team"->str}
             </button>
           }}
         </div>

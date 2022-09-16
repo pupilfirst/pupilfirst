@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-def cohorts_new_path(course)
-  "/school/courses/#{course.id}/cohorts/new"
+def teams_new_path(course)
+  "/school/courses/#{course.id}/teams/new"
 end
 
-feature 'Cohorts New', js: true do
+feature 'Teams New', js: true do
   include UserSpecHelper
   include NotificationHelper
 
@@ -12,62 +12,70 @@ feature 'Cohorts New', js: true do
   let!(:course) { create :course, school: school }
   let!(:live_cohort) { create :cohort, course: course }
   let!(:level) { create :level, :one, course: course }
+  let!(:level_two) { create :level, :two, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student) { create :founder, cohort: live_cohort, level: level }
+  let!(:student_1) { create :founder, cohort: live_cohort, level: level }
+  let!(:student_2) { create :founder, cohort: live_cohort, level: level }
+  let!(:student_3) { create :founder, cohort: live_cohort, level: level_two }
+  let!(:team_1) { create :team_with_students, cohort: live_cohort }
   let(:name) { Faker::Lorem.words(number: 2).join(' ') }
-  let(:description) { Faker::Lorem.sentences.join(' ') }
 
   scenario 'School admin creates a cohort' do
-    sign_in_user school_admin.user, referrer: cohorts_new_path(course)
+    sign_in_user school_admin.user, referrer: teams_new_path(course)
 
-    expect(page).to have_text('Add new cohort')
+    expect(page).to have_text('Create new team')
 
-    fill_in 'Cohort name', with: name
-    fill_in 'Cohort description', with: description
+    fill_in 'Team name', with: name
 
-    click_button 'Add new cohort'
+    click_button 'Pick a Cohort'
+    click_button live_cohort.name
+
+    expect(page).to have_text('No students selected')
+
+    expect(page).not_to have_text(team_1.founders.first.name)
+    expect(page).not_to have_text(team_1.founders.last.name)
+
+    click_button student_1.name
+    click_button student_2.name
+    click_button student_3.name
+
+    click_button 'Add new team'
+
     dismiss_notification
 
-    within("div[data-cohort-name='#{name}']") do
-      expect(page).to have_content(description)
+    within("div[data-team-name='#{name}']") do
+      expect(page).to have_text(student_1.name)
+      expect(page).to have_text(student_2.name)
+      expect(page).to have_text(student_3.name)
     end
 
-    cohort = Cohort.last
+    team = Team.last
 
-    expect(cohort.name).to eq(name)
-    expect(cohort.description).to eq(description)
-    expect(cohort.ends_at).to eq(nil)
-    expect(Cohort.count).to eq(2)
+    expect(team.name).to eq(name)
+    expect(team.founders.count).to eq(3)
   end
 
-  scenario 'School admin creates a cohort with an end date' do
-    ends_at = Date.tomorrow
-    sign_in_user school_admin.user, referrer: cohorts_new_path(course)
+  scenario 'School admin creates a team with one founder' do
+    sign_in_user school_admin.user, referrer: teams_new_path(course)
+    expect(page).to have_text('Create new team')
 
-    expect(page).to have_text('Add new cohort')
+    fill_in 'Team name', with: name
 
-    fill_in 'Cohort name', with: name
-    fill_in 'Cohort description', with: description
-    fill_in 'Cohort end date', with: ends_at
+    click_button 'Pick a Cohort'
+    click_button live_cohort.name
 
-    click_button 'Add new cohort'
-    dismiss_notification
+    expect(page).to have_text('No students selected')
 
-    within("div[data-cohort-name='#{name}']") do
-      expect(page).to have_content(description)
-    end
+    click_button 'Add new team', disabled: true
 
-    cohort = Cohort.last
+    click_button student_1.name
 
-    expect(cohort.name).to eq(name)
-    expect(cohort.description).to eq(description)
-    expect(cohort.ends_at.strftime('%Y %m %d')).to eq(
-      ends_at.strftime('%Y %m %d')
-    )
+    # You need to select at least two students to create a team.
+    click_button 'Add new team', disabled: true
   end
 
-  scenario 'logged in user who is not a school admin tries to access create cohort page' do
-    sign_in_user student.user, referrer: cohorts_new_path(course)
+  scenario 'logged in user who is not a school admin tries to access create team page' do
+    sign_in_user student_1.user, referrer: teams_new_path(course)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 

@@ -10,15 +10,15 @@ ru:
   helpers:
     page_entries_info:
       entry:
-        one: "entry"
-        few: "entries"
-        many: "entries"
-        other: "entries"
+        one: "запись"
+        few: "записи"
+        many: "записи"
+        other: "записи"
       one_page:
         display_entries:
-          one: "Displaying <b>1</b> %{entry_name}"
-          few: "Displaying <b>all %{count}</b> %{entry_name}"
-          many: "Displaying <b>all %{count}</b> %{entry_name}"
-          other: "Displaying <b>all %{count}</b> %{entry_name}"
+          one: "Показано <b>1</b> %{entry_name}"
+          few: "Показаны <b>все %{count}</b> %{entry_name}"
+          many: "Показаны <b>все %{count}</b> %{entry_name}"
+          other: "Показаны <b>все %{count}</b> %{entry_name}"
       more_pages:
         display_entries: "Показать %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> из <b>%{total}</b> из всего"

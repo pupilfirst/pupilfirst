@@ -81,6 +81,7 @@ en:
       page_description: Update cohort details
       page_title: Edit %{cohort_name}
     CohortsIndex__Root:
+      add_new_cohort: Add new cohort
       coaches: Coaches
       cohorts: Cohorts
       cohorts_end_date: Cohort end date
@@ -1400,6 +1401,8 @@ en:
       issued_date_label: "Issued on:"
       manage_certificates: Manage student certificates
       new_certificate_label: "Issue new certificate:"
+      re_activate_student:
+        button: Re-Activate Student
       revoke_certificate_button: Revoke Certificate
       revoke_certificate_confirmation: Are you sure? This action cannot be undone.
       revoked_by_label: "Revoked by:"

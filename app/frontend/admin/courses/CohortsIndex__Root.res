@@ -202,14 +202,13 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet> <title> {str("Cohorts Index")} </title> </Helmet>
     <div className="bg-gray-50 h-full pt-8">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex gap-2 items-end justify-between">
-          <p className="font-semibold pl-1"> {"Cohorts"->str} </p>
+          <p className="font-semibold pl-1"> {t("cohorts")->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
             <PfIcon className="if i-plus-circle-light if-fw" />
-            <span className="inline-block pl-2"> {str("Add new cohort")} </span>
+            <span className="inline-block pl-2"> {str(t("add_new_cohort"))} </span>
           </Link>
         </div>
         <div className="sticky top-0 my-6">

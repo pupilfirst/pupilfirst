@@ -65,9 +65,9 @@ module Editor = {
     <div className="bg-white pt-8">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <h2 className="text-lg font-semibold mt-8">
-          {t("merge_info", ~variables=[("cohort_name", Cohort.name(cohort))])->str}
+          {t("merge_info")->str}
         </h2>
-        <p className="text-sm text-gray-500"> {t("merge_help")->str} </p>
+        <p className="text-sm text-gray-500"> {t("merge_help", ~variables=[("cohort_name", Cohort.name(cohort))])->str} </p>
         <div className="mt-4">
           <Dropdown
             placeholder={t("pick_a_cohort")}

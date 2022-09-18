@@ -311,7 +311,7 @@ module Editor = {
     <div className="pt-5 pb-10">
       <div className="bg-gray-50 p-4" ariaLabel={t("manage_certificates")}>
         <h5> {t("certificates_label")->str} </h5>
-        {certificates |> ArrayUtils.isEmpty
+        {certificates -> ArrayUtils.isEmpty
           ? <p className="text-xs text-gray-800"> {t("empty_course_certificates_text")->str} </p>
           : <div>
               {showIssuedCertificates(state.student, state, send)}
@@ -383,7 +383,7 @@ module Editor = {
                 className="btn btn-success"
                 onClick={reActivateStudent(studentId, send)}>
                 <FaIcon classes={submitButtonIcons(state.saving)} />
-                <span className="ml-2"> {"Re-Activate Student"->str} </span>
+                <span className="ml-2"> {t("re_activate_student.button")->str} </span>
               </button>}
         </div>
       </div>

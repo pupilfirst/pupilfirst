@@ -13,7 +13,6 @@ type t = {
   exited: bool,
   thumbnailUrl: option<string>,
   linkedCommunities: array<community>,
-  accessEnded: bool,
   ended: bool,
   isStudent: bool,
 }
@@ -26,7 +25,6 @@ let description = t => t.description
 let exited = t => t.exited
 let thumbnailUrl = t => t.thumbnailUrl
 let linkedCommunities = t => t.linkedCommunities
-let accessEnded = t => t.accessEnded
 let ended = t => t.ended
 let enableLeaderboard = t => t.enableLeaderboard
 let isStudent = t => t.isStudent
@@ -51,7 +49,6 @@ let decode = json => {
     enableLeaderboard: field("enableLeaderboard", bool, json),
     thumbnailUrl: field("thumbnailUrl", nullable(string), json)->Js.Null.toOption,
     linkedCommunities: field("linkedCommunities", array(decodeCommunity), json),
-    accessEnded: field("accessEnded", bool, json),
     ended: field("ended", bool, json),
     isStudent: field("isStudent", bool, json),
   }

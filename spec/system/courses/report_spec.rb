@@ -5,8 +5,6 @@ feature 'Students view performance report and submissions overview', js: true do
   include NotificationHelper
 
   # The basics
-  # ToDo: Debug school
-  # let(:school) { create :school, :current }
   let(:course) { create :course }
   let(:cohort) { create :cohort, course: course }
   let(:level_1) { create :level, :one, course: course }

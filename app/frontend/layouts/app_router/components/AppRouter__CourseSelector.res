@@ -25,7 +25,7 @@ let contents = (courses, currentCourse, coursePage, selectedPage) => {
       ? <Link key={Course.id(course)} href className=classes> {Course.name(course)->str} </Link>
       : <a key={Course.id(course)} href className=classes> {Course.name(course)->str} </a>
   }, Js.Array.filter(
-    course => Course.id(course) != Course.id(currentCourse) && !Course.accessEnded(course),
+    course => Course.id(course) != Course.id(currentCourse) && !Course.ended(course),
     courses,
   ))
 }

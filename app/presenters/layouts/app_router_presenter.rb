@@ -135,7 +135,6 @@ module Layouts
           exited: student_dropped_out(course.id),
           thumbnail_url: course.thumbnail_url,
           linked_communities: linked_communities(course),
-          access_ended: student_access_end(course.id),
           ended: course.ended?,
           is_student: student_profile?(course.id)
         }
@@ -144,17 +143,6 @@ module Layouts
 
     def student_profile?(course_id)
       courses_with_student_profile.detect { |c| c.id == course_id }.present?
-    end
-
-    # Todo: Bodhi, This needs to change
-    def student_access_end(course_id)
-      course_with_student =
-        courses_with_student_profile.detect { |c| c.id == course_id }
-
-      return false if course_with_student.blank?
-
-      course_with_student[:access_ends_at].present? &&
-        course_with_student[:access_ends_at].past?
     end
 
     def student_dropped_out(course_id)

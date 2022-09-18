@@ -256,8 +256,6 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
     t.string "current_commitment"
     t.string "commitment"
     t.string "compensation"
-    t.string "slack_username"
-    t.string "slack_user_id"
     t.bigint "user_id"
     t.boolean "public", default: false
     t.string "connect_link"
@@ -311,14 +309,9 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
   create_table "founders", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "startup_id"
     t.string "auth_token"
-    t.string "slack_username"
     t.string "roles"
-    t.string "slack_user_id"
     t.integer "user_id"
-    t.boolean "dashboard_toured"
-    t.integer "resume_file_id"
     t.boolean "excluded_from_leaderboard", default: false
     t.datetime "dropped_out_at"
     t.bigint "cohort_id"
@@ -424,18 +417,6 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
     t.index ["post_number", "topic_id"], name: "index_posts_on_post_number_and_topic_id", unique: true
     t.index ["reply_to_post_id"], name: "index_posts_on_reply_to_post_id"
     t.index ["topic_id"], name: "index_posts_on_topic_id"
-  end
-
-  create_table "public_slack_messages", id: :serial, force: :cascade do |t|
-    t.text "body"
-    t.string "slack_username"
-    t.integer "founder_id"
-    t.string "channel"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "timestamp"
-    t.integer "reaction_to_id"
-    t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
   end
 
   create_table "quiz_questions", force: :cascade do |t|
@@ -612,7 +593,6 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
     t.boolean "archived", default: false
     t.string "youtube_video_id"
     t.datetime "feedback_asked_at"
-    t.datetime "slack_reminders_sent_at"
     t.string "call_to_action"
     t.text "rubric_description"
     t.boolean "resubmittable", default: true

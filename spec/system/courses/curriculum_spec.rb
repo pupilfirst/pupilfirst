@@ -8,7 +8,6 @@ feature "Student's view of Course Curriculum", js: true do
   let(:course) { create :course }
   let(:cohort) { create :cohort, course: course }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
-  let(:dashboard_toured) { true }
   let!(:student) { create :founder, level: level_4, cohort: cohort }
   let(:faculty) { create :faculty }
 

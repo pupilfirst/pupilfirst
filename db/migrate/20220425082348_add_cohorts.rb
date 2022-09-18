@@ -181,6 +181,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
 
     remove_column :founders, :startup_id
     remove_column :founders, :resume_file_id
+    remove_column :founders, :dashboard_toured
 
     drop_table :faculty_course_enrollments
     drop_table :faculty_startup_enrollments

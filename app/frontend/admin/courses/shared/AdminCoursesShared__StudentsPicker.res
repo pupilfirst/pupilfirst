@@ -17,10 +17,10 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | SetBaseData(students) => {...state, students, loading: false}
+  | SetBaseData(students) => {...state, students: students, loading: false}
   | SetLoading => {...state, loading: true}
   | ClearLoading => {...state, loading: false}
-  | SetSearch(search) => {...state, search}
+  | SetSearch(search) => {...state, search: search}
   | ClearSearch => {...state, search: ""}
   }
 
@@ -103,7 +103,7 @@ let make = (~courseId, ~selectedStudents, ~cohort, ~onSelect, ~onDeselect) => {
 
   <StudentsPicker
     placeholder={"Select students"}
-    emptySelectionMessage={t("all_students_selected")}
+    emptySelectionMessage={t("no_students_selected")}
     allItemsSelectedMessage={ArrayUtils.isEmpty(state.students)
       ? t("no_students_found")
       : t("all_students_selected")}

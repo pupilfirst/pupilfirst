@@ -72,7 +72,7 @@ module CourseExports
         .order(:created_at)
         .distinct
         .each_with_object(Array.new(team_ids.length)) do |submission, grading|
-          team = submission.founders.first.startup
+          team = submission.founders.first.team
 
           next if team.blank?
 
@@ -100,9 +100,7 @@ module CourseExports
     end
 
     def teams_with_submissions(target)
-      submissions(target)
-        .distinct('founders.startup_id')
-        .count('founders.startup_id')
+      submissions(target).distinct('founders.team_id').count('founders.team_id')
     end
 
     def teams_pending_review(target)
@@ -112,8 +110,8 @@ module CourseExports
         .pending_review
         .joins(:founders)
         .where(founders: { id: student_ids })
-        .distinct('founders.startup_id')
-        .count('founders.startup_id')
+        .distinct('founders.team_id')
+        .count('founders.team_id')
     end
 
     def teams
@@ -129,14 +127,18 @@ module CourseExports
               .order(:id)
               .distinct
 
-          applicable_students =
+          applicable_student_ids =
             course.founders.tagged_with(tags, any: true).pluck(:id)
-          tags.present? ? scope.where(founders: applicable_students) : scope
+          if tags.present?
+            scope.where(founders: { id: applicable_student_ids })
+          else
+            scope
+          end
         end
     end
 
     def student_ids
-      @student_ids ||= Founder.where(startup_id: teams.pluck(:id))
+      @student_ids ||= Founder.where(team_id: teams.pluck(:id))
     end
   end
 end

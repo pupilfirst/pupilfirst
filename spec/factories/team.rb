@@ -19,7 +19,7 @@ FactoryBot.define do
   factory :team do
     sequence(:name) do |n|
       Faker::Lorem.words(number: rand(1..3)).push(n).join(' ')
-      cohort
     end
+    cohort
   end
 end

@@ -28,6 +28,7 @@ en:
     AdminCoursesShared__StudentsPicker:
       all_students_selected: All students selected
       no_students_found: No Students found
+      no_students_selected: No students selected
     AdminCoursesShared__TeamEditor:
       add_new_team: Add new team
       select_cohort:

@@ -228,7 +228,7 @@ let make = (~courseId, ~coach) => {
         </div>
       </div>
     </div>
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto pb-5">
       {state.loading
         ? <div className="py-3 flex">
             {SkeletonLoading.card(~className="w-full mr-2", ())}
@@ -287,7 +287,7 @@ let make = (~courseId, ~coach) => {
         {state.loading
           ? <div className="max-w-5xl mx-auto px-2 mt-8"> {SkeletonLoading.input()} </div>
           : courseCohortPicker(state.cohorts, state, send)}
-        <div className="flex max-w-2xl w-full mt-5 px-6 pb-5 mx-auto">
+        <div className="flex max-w-2xl w-full mt-5 mx-auto">
           <button
             disabled={state.loading || state.saving || !state.dirty}
             onClick={_e => updateCourseCoaches(state, send, courseId, coach)}

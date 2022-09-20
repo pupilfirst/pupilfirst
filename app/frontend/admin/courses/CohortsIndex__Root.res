@@ -207,7 +207,7 @@ let make = (~courseId, ~search) => {
         <div className="flex gap-2 items-end justify-between">
           <p className="font-semibold pl-1"> {t("cohorts")->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
-            <PfIcon className="if i-plus-circle-light if-fw" />
+            <PfIcon className="if i-plus-regular" />
             <span className="inline-block pl-2"> {str(t("add_new_cohort"))} </span>
           </Link>
         </div>

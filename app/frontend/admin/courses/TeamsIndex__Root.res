@@ -139,7 +139,7 @@ let showTeams = teams => {
     {teams
     ->Js.Array2.map(team =>
       <Spread props={"data-team-name": Team.name(team)}>
-        <div className="teams-container p-6 bg-white rounded-lg" key={Team.id(team)}>
+        <div className="teams-container p-6 bg-white rounded-lg shadow" key={Team.id(team)}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <p className="text-lg font-semibold"> {Team.name(team)->str} </p>
@@ -191,14 +191,10 @@ let make = (~courseId, ~search) => {
     <Helmet> <title> {str("Teams Index")} </title> </Helmet>
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-        <div className="mt-2 flex gap-2 items-center justify-between">
-          <ul className="flex font-semibold text-sm">
-            <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-              {"Active Teams"->str}
-            </li>
-          </ul>
+        <div className="flex justify-between items-end gap-2">
+          <p className="font-semibold pl-1"> {"Teams"->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/teams/new`}>
-            <PfIcon className="if i-plus-circle-light if-fw" />
+            <PfIcon className="if i-plus-regular" />
             <span className="inline-block pl-2"> {str("Create Team")} </span>
           </Link>
         </div>

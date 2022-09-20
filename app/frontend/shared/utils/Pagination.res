@@ -62,7 +62,7 @@ module Make = (Item: Item) => {
               ~variables=[
                 ("total", string_of_int(totalCount)),
                 ("loaded", string_of_int(loadedCount)),
-                ("name", pluralName),
+                ("plural_name", pluralName),
               ],
               "partially_loaded_text",
             )

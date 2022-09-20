@@ -110,7 +110,8 @@ module StudentsQuery = %graphql(`
   `)
 
 let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
-  let filterString = Webapi.Url.URLSearchParams.toString(params)
+  Webapi.Url.URLSearchParams.append("active", "true", params)
+  let filterString = params->Webapi.Url.URLSearchParams.toString
 
   StudentsQuery.makeVariables(
     ~courseId,
@@ -166,7 +167,6 @@ let applicableLevels = levels => levels |> Js.Array.filter(level => Level.number
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
     CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter("personal_coach", "Personal Coach", DataLoad(#Coach), "pink"),
     CourseResourcesFilter.makeFilter(

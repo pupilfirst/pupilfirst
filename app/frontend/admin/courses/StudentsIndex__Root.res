@@ -212,12 +212,6 @@ let studentsList = (params, students) => {
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter(
-      "include_inactive_students",
-      "Include",
-      Custom("Inactive Students"),
-      "orange",
-    ),
     CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",

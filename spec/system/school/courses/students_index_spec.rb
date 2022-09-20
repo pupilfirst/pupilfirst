@@ -484,13 +484,6 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      # Mark a student in a team of more than one students as dropped out.
-
-      expect(page).not_to have_text(student_access_ended.user.name)
-
-      fill_in 'Filter Resources', with: 'Inactive Students'
-      click_button 'Pick Include: Inactive Students'
-
       within("div[data-student-name='#{student_access_ended.user.name}']") do
         click_link 'Edit'
       end
@@ -575,12 +568,6 @@ feature 'School students index', js: true do
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)
       click_button "Remove selection: #{email}"
-
-      # Inlcude Inactive Students
-      expect(page).not_to have_text(student_access_ended.name)
-      fill_in 'Filter Resources', with: 'Inactive Students'
-      click_button 'Pick Include: Inactive Students'
-      expect(page).to have_text(student_access_ended.name)
     end
   end
 
@@ -617,7 +604,7 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      expect(page).to have_content('Showing 20 of 30 Students')
+      expect(page).to have_content('Showing 20 of 30 students')
 
       # Check ordering by last created
       expect(find('.student-container:first-child')).to have_text(

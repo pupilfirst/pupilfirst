@@ -81,13 +81,16 @@ en:
       page_description: Update cohort details
       page_title: Edit %{cohort_name}
     CohortsIndex__Root:
+      active_cohorts: Active Cohorts
       add_new_cohort: Add new cohort
+      all_cohorts: All Cohorts
       coaches: Coaches
       cohort: cohort
       cohorts: cohorts
       cohorts_end_date: Cohort end date
       edit: Edit
       filter:
+        ended: Ended
         first_created: First Created
         inactive_cohorts: Inactive Cohorts
         include: Include
@@ -95,6 +98,7 @@ en:
         last_ending: Last Ending
         name: Name
         search_by_name: Search by Name
+        status: Status
       load_more: Load More
       no_cohorts_found: No Cohorts Found
       students: Students

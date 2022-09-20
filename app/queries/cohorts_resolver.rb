@@ -7,7 +7,7 @@ class CohortsResolver < ApplicationQuery
 
   def cohorts
     scope = course.cohorts
-    scope = scope.active if filter[:include_inactive_cohorts].blank?
+    scope = scope.active if filter[:status].blank?
 
     scope = scope.where('name ILIKE ?', "%#{filter[:name]}%") if filter[:name]
       .present?

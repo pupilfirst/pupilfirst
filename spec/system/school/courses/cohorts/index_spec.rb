@@ -42,7 +42,7 @@ feature 'Cohorts Index', js: true do
         expect(page).to have_content(2)
       end
 
-      expect(page).to have_text('Showing all')
+      expect(page).to have_text('Only one cohort to show')
 
       expect(page).to have_link(
         'Add new cohort',
@@ -50,14 +50,16 @@ feature 'Cohorts Index', js: true do
       )
     end
 
-    scenario 'School admin checkouts inactive cohorts' do
+    scenario 'School admin checkouts all cohorts' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
       expect(page).to have_text(live_cohort.name)
       expect(page).not_to have_text(ended_cohort.name)
 
-      fill_in 'Filter Resources', with: 'inactive'
-      click_button 'Pick Include: Inactive Cohorts'
+      expect(page).to have_text('Active Cohorts')
+
+      fill_in 'Filter Resources', with: 'status'
+      click_button 'Pick Status: Ended'
 
       within("div[data-cohort-name='#{ended_cohort.name}']") do
         expect(page).to have_content(ended_cohort.description)
@@ -66,6 +68,8 @@ feature 'Cohorts Index', js: true do
         expect(page).to have_content('Coaches')
         expect(page).to have_content(1)
       end
+
+      expect(page).to have_text('All Cohorts')
     end
   end
 

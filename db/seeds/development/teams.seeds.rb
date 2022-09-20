@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 after 'development:founders' do
-  puts 'Seeding Teams'
+  puts 'Seeding teams'
 
   Cohort.all.each do |cohort|
     next if cohort.founders.one?

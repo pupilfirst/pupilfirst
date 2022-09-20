@@ -217,7 +217,7 @@ let make = (~courseId, ~team=?) => {
   <DisablingCover disabled={state.saving}>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
       <div className="pt-6">
-        <label className="block text-sm font-semibold" htmlFor="teamName">
+        <label className="block text-sm font-medium" htmlFor="teamName">
           {t("team_name.label")->str}
         </label>
         <input
@@ -231,7 +231,7 @@ let make = (~courseId, ~team=?) => {
         <School__InputGroupError message={t("team_name.message")} active=state.hasNameError />
       </div>
       <div className="pt-5 flex flex-col">
-        <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+        <label className="block text-sm font-medium" htmlFor="email">
           {t("select_cohort.label")->str}
         </label>
         <Dropdown

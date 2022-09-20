@@ -282,11 +282,11 @@ let make = (~courseId) => {
     None
   }, [courseId])
 
-  <div className="flex">
-    <div className="w-1/2 mt-4">
-      <div className="mt-5 flex flex-col">
-        <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-          {t("select_a_cohort") -> str}
+  <div className="grid grid-cols-2 gap-8">
+    <div>
+      <div className="pt-6 flex flex-col">
+        <label className="block text-sm font-medium" htmlFor="email">
+          {t("select_a_cohort")->str}
         </label>
         <Dropdown
           placeholder={t("pick_a_cohort")}
@@ -305,40 +305,38 @@ let make = (~courseId) => {
         disabled={state.loading}
       />
     </div>
-    <div className="w-1/2 px-4 mt-4">
+    <div className="pt-6">
       <div className="inline-block tracking-wide text-sm font-semibold">
         {str(t("student_list"))}
       </div>
-      <div className="p-4 rounded-lg border bordedr-gray-300 bg-gray-200">
+      <div className="p-4 rounded-lg border bordedr-gray-300 bg-gray-100 mt-1">
         <div>
-          <div>
-            {switch state.teamsToAdd {
-            | [] =>
-              <div
-                className="flex items-center justify-between bg-white border rounded p-3 italic mt-2">
-                {t("teams_to_add_empty")->str}
-              </div>
-            | teams =>
-              teams
-              -> Js.Array2.map(team =>
-                switch TeamInfo.nature(team) {
-                | TeamInfo.MultiMember(teamName, studentsInTeam) =>
-                  <div className="mt-3" key=teamName>
-                    {teamHeader(teamName, studentsInTeam -> Array.length)}
-                    {TeamInfo.tags(team)->tagBoxes}
-                    <div className="bg-white border shadow rounded-lg mt-2 px-2">
-                      {studentsInTeam
-                      -> Js.Array2.map(studentInfo => studentCard(studentInfo, send, true, []))
-                      -> React.array}
-                    </div>
+          {switch state.teamsToAdd {
+          | [] =>
+            <div
+              className="flex items-center justify-between bg-white border rounded p-3 text-sm text-gray-600 mt-2">
+              {t("teams_to_add_empty")->str}
+            </div>
+          | teams =>
+            teams
+            ->Js.Array2.map(team =>
+              switch TeamInfo.nature(team) {
+              | TeamInfo.MultiMember(teamName, studentsInTeam) =>
+                <div className="mt-3" key=teamName>
+                  {teamHeader(teamName, studentsInTeam->Array.length)}
+                  {TeamInfo.tags(team)->tagBoxes}
+                  <div className="bg-white border shadow rounded-lg mt-2 px-2">
+                    {studentsInTeam
+                    ->Js.Array2.map(studentInfo => studentCard(studentInfo, send, true, []))
+                    ->React.array}
                   </div>
-                | SingleMember(studentInfo) =>
-                  studentCard(studentInfo, send, false, TeamInfo.tags(team))
-                }
-              )
-              -> React.array
-            }}
-          </div>
+                </div>
+              | SingleMember(studentInfo) =>
+                studentCard(studentInfo, send, false, TeamInfo.tags(team))
+              }
+            )
+            ->React.array
+          }}
         </div>
         <div className="mt-4 flex">
           <input
@@ -348,8 +346,8 @@ let make = (~courseId) => {
             id="notify-new-students"
             type_="checkbox"
           />
-          <label className="checkbox-label" htmlFor="notify-new-students">
-            <span>
+          <label className="checkbox-label flex " htmlFor="notify-new-students">
+            <span className="flex-shrink-0 mt-1">
               <svg width="12px" height="10px" viewBox="0 0 12 10">
                 <polyline points="1.5 6 4.5 9 10.5 1" />
               </svg>
@@ -361,7 +359,7 @@ let make = (~courseId) => {
           {switch state.selectedCohort {
           | Some(c) =>
             <button
-              disabled={state.saving || state.teamsToAdd -> ArrayUtils.isEmpty}
+              disabled={state.saving || state.teamsToAdd->ArrayUtils.isEmpty}
               onClick={createStudents(state, send, courseId, c)}
               className={"w-full btn btn-primary btn-large mt-3" ++ (
                 formInvalid(state) ? " disabled" : ""

@@ -55,9 +55,14 @@ let showUser = user => {
 }
 
 let renderPrimaryPageLink = (courseId, primaryPage, secondaryPage) => {
-  <div>
-    <Link href={`/school/courses/${courseId}/${primaryPage}`}> {primaryPage->str} </Link>
-    {`/${secondaryPage}`->str}
+  <div className="flex items-center space-x-2">
+    <Link
+      className="underline hover:text-primary-500 transition"
+      href={`/school/courses/${courseId}/${primaryPage}`}>
+      {primaryPage->str}
+    </Link>
+    <Icon className="if i-chevron-right-light text-gray-400" />
+    <p className="text-gray-500"> {secondaryPage->str} </p>
   </div>
 }
 
@@ -109,7 +114,6 @@ let make = (~path, ~courses, ~currentUser) => {
           wrapperClasses=""
           iconClasses="school-admin-navbar__notifications-unread-bullet"
           buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-2 px-2 rounded hover:text-primary-500 hover:bg-gray-50 font-medium items-center focus:outline-none focus:ring-2 focus:ring-focusColor-500"
-          title={"Notifications"}
           hasNotifications={User.hasNotifications(currentUser)}
         />
       </div>

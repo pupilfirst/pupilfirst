@@ -414,9 +414,9 @@ let make = (~courseId) => {
       description={"Upload the CSV file containing the students you want to add to the course."}
       links={pageLinks(courseId)}
     />
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
       <div className="mt-5 flex flex-col">
-        <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+        <label className="block text-sm font-medium" htmlFor="email">
           {"Select a cohort" |> str}
         </label>
         <Dropdown

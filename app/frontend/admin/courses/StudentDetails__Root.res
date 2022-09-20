@@ -222,16 +222,12 @@ module Editor = {
       <div className="bg-white">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
           <div className="pt-6">
-            <label
-              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-              htmlFor="name">
-              {t("name")->str}
-            </label>
+            <label className="block text-sm font-medium" htmlFor="name"> {t("name")->str} </label>
             <input
               autoFocus=true
               value=state.student.name
               onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               type_="text"
               placeholder={t("student_name_placeholder")}

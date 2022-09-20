@@ -27,7 +27,9 @@ let make = (~courseId) => {
       links={pageLinks(courseId)}
     />
     <div className="bg-white flex-1 pb-10">
-      <div className="max-w-5xl mx-auto"> <StudentCreator__CreateForm courseId /> </div>
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+        <StudentCreator__CreateForm courseId />
+      </div>
     </div>
   </div>
 }

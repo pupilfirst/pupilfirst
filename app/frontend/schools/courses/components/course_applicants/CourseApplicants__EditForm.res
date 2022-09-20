@@ -133,39 +133,33 @@ let optionalText = () => {
 
 let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicantCB) => {
   <div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-        htmlFor="title">
-        {t("title.label")->str}
-      </label>
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="title"> {t("title.label")->str} </label>
       {optionalText()}
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-1 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="title"
         type_="text"
         placeholder={t("title.placeholder")}
       />
     </div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-        htmlFor="affiliation">
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="affiliation">
         {t("affiliation.label")->str}
       </label>
       {optionalText()}
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-1 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="affiliation"
         type_="text"
         placeholder={t("affiliation.placeholder")}
       />
     </div>
-    <div className="mt-5">
+    <div className="pt-6">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="tags">
         {t("tags.label")->str}
       </label>
@@ -178,7 +172,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       removeTagCB={tag => send(RemoveTag(tag))}
       allowNewTags=true
     />
-    <div className="mt-4">
+    <div className="pt-6">
       <input
         onChange={_event => send(ToggleNotifyStudent)}
         checked=state.notifyStudent

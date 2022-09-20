@@ -106,7 +106,7 @@ module Make = (Selectable: Selectable) => {
               <i className="fas fa-inbox text-3xl" />
               <h5 className="mt-1 font-semibold"> {emptySelectionMessage |> str} </h5>
             </div>}
-        <div className="text-xs font-semibold mt-2">
+        <div className="text-sm font-medium border-t pt-2 mt-2">
           {(
             unselected |> Array.length > 0
               ? "Add more from the list below:"

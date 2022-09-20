@@ -104,32 +104,28 @@ let reducer = (state, action) =>
 @react.component
 let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
   let (state, send) = React.useReducer(reducer, initialState())
-  <div className="max-w-xl">
-    <div>
-      <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
-        {t("name.label")->str}
-      </label>
+  <div>
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="name"> {t("name.label")->str} </label>
       <input
         value=state.name
         onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focuscolor-500"
         id="name"
         type_="text"
-        placeholder=t("name.placeholder")
+        placeholder={t("name.placeholder")}
       />
-      <School__InputGroupError message=t("name.message") active=state.hasNameError />
+      <School__InputGroupError message={t("name.message")} active=state.hasNameError />
     </div>
-    <div className="mt-5">
-      <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-        {t("email.label")->str}
-      </label>
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="email"> {t("email.label")->str} </label>
       <input
         value=state.email
         onChange={event => updateEmail(send, ReactEvent.Form.target(event)["value"])}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focuscolor-500"
         id="email"
         type_="email"
-        placeholder=t("email.placeholder")
+        placeholder={t("email.placeholder")}
       />
       <School__InputGroupError
         message={state.hasEmailError
@@ -141,63 +137,56 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
         active={state.hasEmailError || hasEmailDuplication(state.email, emailsToAdd)}
       />
     </div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-        htmlFor="title">
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="title">
         {t("title.label")->str}
+        <span className="inline-block text-xs ml-1"> {ts("optional_braces")->str} </span>
       </label>
-      <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focuscolor-500"
         id="title"
         type_="text"
-        placeholder=t("title.placeholder")
+        placeholder={t("title.placeholder")}
       />
     </div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-        htmlFor="affiliation">
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="affiliation">
         {t("affiliation.label")->str}
+        <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
       </label>
-      <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focuscolor-500"
         id="affiliation"
         type_="text"
-        placeholder=t("affiliation.placeholder")
+        placeholder={t("affiliation.placeholder")}
       />
     </div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-        htmlFor="team_name">
-        {t("team.label")->str}
-      </label>
-      <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
-      <HelpIcon className="ml-1">
-        {t("team.help")->str}
-      </HelpIcon>
+    <div className="pt-6">
+      <div className="flex items-center space-x-2">
+        <label className="block text-sm font-medium" htmlFor="team_name">
+          {t("team.label")->str}
+          <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
+        </label>
+        <HelpIcon className="ml-1"> {t("team.help")->str} </HelpIcon>
+      </div>
       <input
         value=state.teamName
         onChange={event => send(UpdateTeamName(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="team_name"
         maxLength=50
         type_="text"
-        placeholder=t("team.placeholder")
+        placeholder={t("team.placeholder")}
       />
     </div>
-    <div className="mt-5">
-      <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="tags">
-        {t("tags.label")->str}
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="tags">
+        {t("tags.label")->str} <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
       </label>
-      <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
     </div>
     <School__SearchableTagList
       unselectedTags={Js.Array2.filter(teamTags, tag =>

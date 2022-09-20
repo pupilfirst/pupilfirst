@@ -153,7 +153,7 @@ let make = (~courseId, ~cohort=?) => {
   <DisablingCover disabled={state.saving}>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
       <div className="pt-6">
-        <label className="inline-block tracking-wide text-sm font-medium" htmlFor="cohortName">
+        <label className="block text-sm font-medium" htmlFor="cohortName">
           {t("cohort.label")->str}
         </label>
         <input
@@ -168,8 +168,7 @@ let make = (~courseId, ~cohort=?) => {
         <School__InputGroupError message={t("cohort.message")} active=state.hasNameError />
       </div>
       <div className="pt-6">
-        <label
-          className="inline-block tracking-wide text-sm font-medium" htmlFor="cohortDescription">
+        <label className="block text-sm font-medium" htmlFor="cohortDescription">
           {t("cohort_description.label")->str}
         </label>
         <input
@@ -187,7 +186,7 @@ let make = (~courseId, ~cohort=?) => {
       </div>
       <div className="pt-6">
         <div className="flex">
-          <label className="inline-block tracking-wide text-sm font-medium" htmlFor="cohortEndsAt">
+          <label className="block text-sm font-medium" htmlFor="cohortEndsAt">
             {t("cohort_ends_at.label")->str}
             <span className="text-xs ml-1 font-light"> {ts("optional_braces")->str} </span>
           </label>

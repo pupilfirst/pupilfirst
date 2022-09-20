@@ -113,16 +113,6 @@ let reloadStudents = (courseId, send, params) => {
   getStudents(send, courseId, None, params)
 }
 
-// let pageTitle = (courses, courseId) => {
-//   let currentCourse = ArrayUtils.unsafeFind(
-//     course => AppRouter__Course.id(course) == courseId,
-//     "Could not find currentCourse with ID " ++ courseId ++ " in CoursesReview__Root",
-//     courses,
-//   )
-
-//   `${tc("review")} | ${AppRouter__Course.name(currentCourse)}`
-// }
-
 let onSelect = (key, value, params) => {
   Webapi.Url.URLSearchParams.set(key, value, params)
   RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
@@ -150,11 +140,18 @@ let studentsList = (params, students) => {
           className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex">
             <div className="text-sm flex items-center space-x-4">
-              <img
-                className="inline-block h-12 w-12 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
+              {switch User.avatarUrl(StudentInfo.user(student)) {
+              | Some(avatarUrl) =>
+                <img
+                  className="h-9 w-9 md:h-12 md:w-12 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
+                  src=avatarUrl
+                />
+              | None =>
+                <Avatar
+                  name={User.name(StudentInfo.user(student))}
+                  className="h-9 w-9 md:h-12 md:w-12 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
+                />
+              }}
               <div>
                 <Link
                   href={`/school/students/${StudentInfo.id(student)}/details`}

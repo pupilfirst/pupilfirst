@@ -816,6 +816,7 @@ en:
       no_notes: No notes here!
       save_note: Save Note
     CoursesStudents__Root:
+      level_distribution_label: Level-wise student distribution
       assigned_me: "Assigned to: Me"
       assigned_to: Assigned to
       coach_notes: Coach Notes

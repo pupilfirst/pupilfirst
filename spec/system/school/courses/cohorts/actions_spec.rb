@@ -21,7 +21,7 @@ feature 'Cohorts Actions', js: true do
   scenario 'School admin merges ended cohort into live cohort' do
     sign_in_user school_admin.user, referrer: cohorts_actions_path(ended_cohort)
 
-    expect(page).to have_text("Merge #{ended_cohort.name} cohort into")
+    expect(page).to have_text("Merge #{ended_cohort.name} into another cohort")
     click_button 'Pick a Cohort'
     click_button live_cohort.name
     click_button 'Merge and delete'

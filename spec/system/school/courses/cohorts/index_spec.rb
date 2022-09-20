@@ -103,7 +103,7 @@ feature 'Cohorts Index', js: true do
     scenario 'school admin can order cohorts' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
-      expect(page).to have_content('Showing 20 of 31 Cohorts')
+      expect(page).to have_content('Showing 20 of 31 cohorts')
 
       # Check ordering by last created
       expect(find('.cohorts-container:first-child')).to have_text(
@@ -163,7 +163,7 @@ feature 'Cohorts Index', js: true do
     scenario 'school admin can filter cohorts' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
-      expect(page).to have_content('Showing 20 of 31 Cohorts')
+      expect(page).to have_content('Showing 20 of 31 cohorts')
       click_button 'Order by Last Created'
       click_button 'Order by Name'
 

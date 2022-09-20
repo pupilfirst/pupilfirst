@@ -62,12 +62,15 @@ module Editor = {
   @react.component
   let make = (~courseId, ~cohort, ~cohorts) => {
     let (state, send) = React.useReducer(reducer, {mergeIntoCohort: None, saving: false})
-    <div className="bg-white pt-8">
+    <div className="bg-white">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-        <h2 className="text-lg font-semibold mt-8">
-          {t("merge_info")->str}
-        </h2>
-        <p className="text-sm text-gray-500"> {t("merge_help", ~variables=[("cohort_name", Cohort.name(cohort))])->str} </p>
+        <h2
+          className="text-lg font-semibold mt-8"
+          dangerouslySetInnerHTML={
+            "__html": t("merge_heading_html", ~variables=[("cohort_name", Cohort.name(cohort))]),
+          }
+        />
+        <p className="text-sm text-gray-500"> {t("merge_help")->str} </p>
         <div className="mt-4">
           <Dropdown
             placeholder={t("pick_a_cohort")}
@@ -85,7 +88,7 @@ module Editor = {
             )}
           disabled={state.saving || Belt.Option.isNone(state.mergeIntoCohort)}
           className="btn btn-danger mt-4">
-          {t("merge_and_delete")->str}
+          {t("button_text")->str}
         </button>
       </div>
     </div>

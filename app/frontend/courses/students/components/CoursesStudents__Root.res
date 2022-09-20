@@ -230,14 +230,17 @@ let make = (~courseId) => {
     <div className="w-full md:w-4/5 px-4 mt-8 md:mt-25 mx-auto">
       <div className="bg-gray-50 w-full">
         <h1 className="text-2xl font-semibold"> {"Students"->str} </h1>
-        <div className="p-5 bg-gray-100 rounded-lg mt-6">
-          <p className="text-gray-600 text-sm font-medium">
-            {tr("level_distribution_label")->str}
-          </p>
-          <CoursesStudents__StudentDistribution
-            params={params} studentDistribution={state.studentDistribution}
-          />
-        </div>
+        {ReactUtils.nullIf(
+          <div className="p-5 bg-gray-100 rounded-lg mt-6">
+            <p className="text-gray-600 text-sm font-medium">
+              {tr("level_distribution_label")->str}
+            </p>
+            <CoursesStudents__StudentDistribution
+              params={params} studentDistribution={state.studentDistribution}
+            />
+          </div>,
+          Webapi.Url.URLSearchParams.has("level", params),
+        )}
         <div
           className="p-5 mt-6 bg-white rounded-md border border-gray-300 relative md:sticky md:top-16 z-10">
           <CourseResourcesFilter

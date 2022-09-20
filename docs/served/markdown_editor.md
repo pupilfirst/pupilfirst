@@ -223,18 +223,36 @@ line from being converted to a list.
 | ------------------------------------------- | --------------------- |
 | First value in row 1                        | Second value in row 1 |
 | First value in row 2                        | Second value in row 2 |
-| You can also _combine_ rows.                                       ||
-| You can also style text `inside` the table.                        ||
+| You can also _combine_ rows.                |                       |
+| You can also style text `inside` the table. |                       |
 ```
 
 | Column 1 Heading                            | Column 2 Heading      |
 | ------------------------------------------- | --------------------- |
 | First value in row 1                        | Second value in row 1 |
 | First value in row 2                        | Second value in row 2 |
-| You can also _combine_ rows                                        ||
-| You can also style text `inside` the table.                        ||
+| You can also _combine_ rows                 |                       |
+| You can also style text `inside` the table. |                       |
 
 ---
+
+### Embedding videos
+
+You can embed videos from YouTube and Vimeo easily:
+
+```markdown
+@[youtube](il0L60hfVEk)
+
+@[vimeo](452610846)
+```
+
+You can also use the full URL to a video instead of just the video ID. For example:
+
+```markdown
+@[vimeo](https://vimeo.com/452610846)
+```
+
+@[vimeo](https://vimeo.com/452610846)
 
 ### Mathematical expressions
 
@@ -246,22 +264,26 @@ KaTeX, please check [their official documentation](https://katex.org/docs/suppor
 ```tex
 An expression as a block:
 
-$$\begin{CD}
+$$
+\begin{CD}
    A @>a>> B \\
 @VbVV @AAcA \\
    C @= D
-\end{CD}$$
+\end{CD}
+$$
 
 An inline expression: $c = \pm\sqrt{a^2 + b^2}$
 ```
 
 An expression as a block:
 
-$$\begin{CD}
+$$
+\begin{CD}
    A @>a>> B \\
 @VbVV @AAcA \\
    C @= D
-\end{CD}$$
+\end{CD}
+$$
 
 An inline expression: $c = \pm\sqrt{a^2 + b^2}$
 
@@ -335,19 +357,6 @@ const hanoi = (n, a, b, c) => {
 };
 
 hanoi(4, 1, 2, 3);
-```
-
-```py
-n = int(input('Type a number, and its factorial will be printed: '))
-
-if n < 0:
-    raise ValueError('You must enter a non negative integer')
-
-factorial = 1
-for i in range(2, n + 1):
-    factorial *= i
-
-print(factorial)
 ```
 
 ---

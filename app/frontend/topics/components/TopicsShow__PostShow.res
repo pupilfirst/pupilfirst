@@ -259,7 +259,7 @@ let make = (
                 />
               </div>
             : <div className="flex items-start justify-between min-w-0">
-                <div className="text-sm min-w-0">
+                <div className="text-sm min-w-0 w-full">
                   <MarkdownBlock
                     markdown={post |> Post.body}
                     className="leading-normal text-sm "

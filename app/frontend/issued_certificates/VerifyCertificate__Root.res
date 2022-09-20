@@ -22,9 +22,7 @@ let heading = (currentUser, issuedCertificate) =>
     <span
       dangerouslySetInnerHTML={DOMPurify.sanitizedHTMLOpt(
         t(~variables=[("name", IssuedCertificate.profileName(issuedCertificate))], "heading"),
-        {
-          "ALLOWED_TAGS": ["strong", "br"],
-        },
+        DOMPurify.makeOptions(~allowedTags=["strong", "br"], ()),
       )}
     />
   } else {
@@ -75,9 +73,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
                 ],
                 "description",
               ),
-              {
-                "ALLOWED_TAGS": ["strong"],
-              },
+              DOMPurify.makeOptions(~allowedTags=["strong"], ()),
             )}
           />
           {ReactUtils.nullUnless(
@@ -115,9 +111,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
                 ~variables=[("name", IssuedCertificate.issuedTo(issuedCertificate))],
                 "originally_issued_to",
               ),
-              {
-                "ALLOWED_TAGS": ["strong"],
-              },
+              DOMPurify.makeOptions(~allowedTags=["strong"], ()),
             )}
           />
         </div>,

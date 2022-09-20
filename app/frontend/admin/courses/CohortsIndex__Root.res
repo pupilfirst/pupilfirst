@@ -116,9 +116,9 @@ let reloadStudents = (courseId, send, params) => {
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter(
-      "status",
-      t("filter.status"),
-      Custom(t("filter.ended")),
+      "include_inactive_cohorts",
+      t("filter.include"),
+      Custom(t("filter.inactive_cohorts")),
       "orange",
     ),
     CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
@@ -193,7 +193,9 @@ let renderLoadMore = (send, courseId, params, cursor) => {
 }
 
 let pageTitle = params => {
-  Webapi.Url.URLSearchParams.has("status", params) ? t("all_cohorts") : t("active_cohorts")
+  Webapi.Url.URLSearchParams.has("include_inactive_cohorts", params)
+    ? t("all_cohorts")
+    : t("active_cohorts")
 }
 
 @react.component

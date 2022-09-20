@@ -58,8 +58,8 @@ feature 'Cohorts Index', js: true do
 
       expect(page).to have_text('Active Cohorts')
 
-      fill_in 'Filter Resources', with: 'status'
-      click_button 'Pick Status: Ended'
+      fill_in 'Filter Resources', with: 'inactive'
+      click_button 'Pick Include: Inactive Cohorts'
 
       within("div[data-cohort-name='#{ended_cohort.name}']") do
         expect(page).to have_content(ended_cohort.description)

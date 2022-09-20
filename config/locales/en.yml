@@ -90,7 +90,6 @@ en:
       cohorts_end_date: Cohort end date
       edit: Edit
       filter:
-        ended: Ended
         first_created: First Created
         inactive_cohorts: Inactive Cohorts
         include: Include
@@ -98,7 +97,6 @@ en:
         last_ending: Last Ending
         name: Name
         search_by_name: Search by Name
-        status: Status
       load_more: Load More
       no_cohorts_found: No Cohorts Found
       students: Students

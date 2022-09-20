@@ -232,7 +232,7 @@ let make = (~courseId) => {
   }, [courseId, url.search])
 
   <div role="main" ariaLabel="Students" className="flex-1 flex flex-col overflow-y-auto">
-    <div className="w-full md:w-4/5 px-4 mt-8 md:mt-25 mx-auto">
+    <div className="max-w-4xl 2xl:max-w-5xl mx-auto w-full mt-8 md:mt-25 px-4">
       <div className="bg-gray-50 w-full">
         <h1 className="text-2xl font-semibold"> {"Students"->str} </h1>
         {ReactUtils.nullIf(

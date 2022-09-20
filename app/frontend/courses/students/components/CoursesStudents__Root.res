@@ -232,7 +232,7 @@ let make = (~courseId) => {
         <h1 className="text-2xl font-semibold"> {"Students"->str} </h1>
         <div className="p-5 bg-gray-100 rounded-lg mt-6">
           <p className="text-gray-600 text-sm font-medium">
-            {"Level Wise distribution of students"->str}
+            {tr("level_distribution_label")->str}
           </p>
           <CoursesStudents__StudentDistribution
             params={params} studentDistribution={state.studentDistribution}

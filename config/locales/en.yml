@@ -68,10 +68,10 @@ en:
       filter_search_string_course: teaches course %{name}
       heading: Coaches
     CohortsActions__Root:
+      button_text: Merge and delete
       edit: Edit
-      merge_and_delete: Merge and delete
-      merge_help: Merge %{cohort_name} cohort into
-      merge_info: Merging cohorts will move all students from the selected cohorts to the target cohort. This action cannot be undone.
+      merge_heading_html: Merge <em>%{cohort_name}</em> into another cohort
+      merge_help: Merging cohorts will move all students from the selected cohort to the target cohort. This action can be used to delete unnecessary cohorts. This action cannot be undone.
       page_description: Actions for the cohort.
       pick_a_cohort: Pick a Cohort
     CohortsCreator__Root:
@@ -821,6 +821,7 @@ en:
       coach_notes: Coach Notes
       filter_level: Filter by level, assigned coach, or search by name or email address, and more...
       has_notes: Has notes
+      level_distribution_label: Level-wise student distribution
       me: Me
       name_email: Name or Email
       no_notes: Does not have notes

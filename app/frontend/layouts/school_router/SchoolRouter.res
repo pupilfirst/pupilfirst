@@ -125,7 +125,7 @@ let make = (~school, ~courses, ~currentUser) => {
         {<SchoolRouter__LeftNav school courses selectedPage currentUser />}
       </div>
       <div className="flex flex-col flex-1">
-        <SchoolRouter__TopNav path=url.path courses currentUser />
+        <SchoolRouter__TopNav courses currentUser />
         <div role="main" className="flex h-full overflow-y-auto">
           <SchoolRouter__LeftSecondaryNav currentUser selectedCourse selectedPage />
           <div id="schoolrouter-innerpage" className="flex-1 overflow-y-scroll bg-white">

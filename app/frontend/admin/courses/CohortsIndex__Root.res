@@ -240,7 +240,8 @@ let make = (~courseId, ~search) => {
           ~entriesView=cohortsList,
           ~totalEntriesCount=state.totalEntriesCount,
           ~loadMore=renderLoadMore(send, courseId, params),
-          ~resourceName=t("cohorts"),
+          ~singularResourceName=t("cohort"),
+          ~pluralResourceName=t("cohorts"),
           ~emptyMessage=t("no_cohorts_found"),
         )}
       </div>

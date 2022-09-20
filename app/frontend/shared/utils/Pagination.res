@@ -49,26 +49,34 @@ module Make = (Item: Item) => {
     }
   }
 
-  let showStats = (totalCount, loadedCount, name) =>
+  let showStats = (totalCount, loadedCount, singularName, pluralName) =>
     <div className="pt-8 pb-4 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
       {(
         totalCount == loadedCount
           ? t(
-              ~variables=[("total", string_of_int(totalCount)), ("name", name)],
+              ~variables=[("singular_name", singularName), ("plural_name", pluralName)],
+              ~count=totalCount,
               "fully_loaded_text",
             )
           : t(
               ~variables=[
                 ("total", string_of_int(totalCount)),
                 ("loaded", string_of_int(loadedCount)),
-                ("name", name),
+                ("name", pluralName),
               ],
               "partially_loaded_text",
             )
       )->React.string}
     </div>
 
-  let renderEntries = (entries, emptyMessage, totalEntriesCount, entriesView, resourceName) => {
+  let renderEntries = (
+    entries,
+    emptyMessage,
+    totalEntriesCount,
+    entriesView,
+    singularResourceName,
+    pluralResourceName,
+  ) => {
     <div className="w-full">
       {ArrayUtils.isEmpty(entries)
         ? <div
@@ -79,7 +87,12 @@ module Make = (Item: Item) => {
             </h4>
           </div>
         : entriesView(entries)}
-      {showStats(totalEntriesCount, Array.length(entries), resourceName)}
+      {showStats(
+        totalEntriesCount,
+        Array.length(entries),
+        singularResourceName,
+        pluralResourceName,
+      )}
     </div>
   }
 
@@ -90,7 +103,8 @@ module Make = (Item: Item) => {
     ~entriesView,
     ~totalEntriesCount,
     ~loadMore,
-    ~resourceName,
+    ~singularResourceName,
+    ~pluralResourceName,
   ) => {
     <div>
       {switch pagedItems {
@@ -98,7 +112,14 @@ module Make = (Item: Item) => {
         <div> {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.card())} </div>
       | PartiallyLoaded(entries, cursor) =>
         <div>
-          {renderEntries(entries, emptyMessage, totalEntriesCount, entriesView, resourceName)}
+          {renderEntries(
+            entries,
+            emptyMessage,
+            totalEntriesCount,
+            entriesView,
+            singularResourceName,
+            pluralResourceName,
+          )}
           {switch loading {
           | LoadingV2.LoadingMore =>
             <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -106,7 +127,14 @@ module Make = (Item: Item) => {
           }}
         </div>
       | FullyLoaded(entries) =>
-        renderEntries(entries, emptyMessage, totalEntriesCount, entriesView, resourceName)
+        renderEntries(
+          entries,
+          emptyMessage,
+          totalEntriesCount,
+          entriesView,
+          singularResourceName,
+          pluralResourceName,
+        )
       }}
       {showLoading(pagedItems, loading)}
     </div>

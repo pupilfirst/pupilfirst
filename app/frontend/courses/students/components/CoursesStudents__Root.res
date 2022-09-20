@@ -210,7 +210,12 @@ let selectLevel = (levels, params, levelId) => {
 let showStudents = (state, students) => {
   <div>
     <CoursesStudents__StudentsList students />
-    {PagedStudents.showStats(state.totalEntriesCount, Array.length(students), "Students")}
+    {PagedStudents.showStats(
+      state.totalEntriesCount,
+      Array.length(students),
+      "student",
+      "students",
+    )}
   </div>
 }
 

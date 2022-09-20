@@ -222,7 +222,8 @@ let make = (~courseId, ~search) => {
           ~entriesView=showTeams,
           ~totalEntriesCount=state.totalEntriesCount,
           ~loadMore=renderLoadMore(send, courseId, params),
-          ~resourceName="Teams",
+          ~singularResourceName=t("team"),
+          ~pluralResourceName=t("teams"),
           ~emptyMessage="No Teams Found",
         )}
       </div>

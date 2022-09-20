@@ -95,8 +95,8 @@ let reducer = (state, action) =>
   }
 
 module UpdateUserQuery = %graphql(`
-  mutation UpdateUserMutation($name: String!,$preferredName: String, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
-    updateUser(name: $name, preferredName: $preferredName,about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
+  mutation UpdateUserMutation($name: String!, $preferredName: String, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
+    updateUser(name: $name, preferredName: $preferredName, about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
       success
     }
   }
@@ -323,7 +323,7 @@ let make = (
             />
             <div className="mt-6">
               <label htmlFor="user_preferred_name" className="block text-sm font-semibold">
-                {ts("preferred_name") |> str}
+                {ts("preferred_name")->str}
               </label>
               <input
                 id="user_preferred_name"

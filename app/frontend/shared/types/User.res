@@ -24,10 +24,10 @@ let findById = (id, proxies) =>
   proxies |> ArrayUtils.unsafeFind(proxy => proxy.id == id, "Unable to find a User with ID " ++ id)
 
 let make = (~id, ~name, ~avatarUrl, ~title) => {
-  id,
-  name,
-  avatarUrl,
-  title,
+  id: id,
+  name: name,
+  avatarUrl: avatarUrl,
+  title: title,
 }
 
 let makeFromJs = jsObject =>

@@ -54,20 +54,29 @@ let showUser = user => {
   </div>
 }
 
+let renderPrimaryPageLink = (courseId, primaryPage, secondaryPage) => {
+  <div>
+    <Link href={`/school/courses/${courseId}/${primaryPage}`}> {primaryPage->str} </Link>
+    {`/${secondaryPage}`->str}
+  </div>
+}
+
 @react.component
 let make = (~path, ~courses, ~currentUser) => {
+  let courseContext = React.useContext(SchoolRouter__CourseContext.context)
   <div className={"flex justify-between items-center p-4 bg-white border-b flex-1"}>
     <div className="flex items-center space-x-2 text-sm font-semibold capitalize">
       {
         // Experimental and this logic needs to be refactored
         switch path {
-        | list{"school", "courses", _courseId, primaryPage, ...tale} =>
+        | list{"school", "courses", courseId, primaryPage, ...tale} =>
           <div className="flex items-center space-x-2">
             <div> <SchoolRouter__CoursesDropdown courses /> </div>
             <Icon className="if i-chevron-right-light text-gray-500" />
             <p className="text-gray-500">
               {switch tale {
-              | list{_resourceId, secondaryPage, ..._tale} => `${primaryPage}/${secondaryPage}`->str
+              | list{_resourceId, secondaryPage, ..._tale} =>
+                renderPrimaryPageLink(courseId, primaryPage, secondaryPage)
               | _ => primaryPage->str
               }}
             </p>
@@ -76,7 +85,12 @@ let make = (~path, ~courses, ~currentUser) => {
           <div className="flex items-center space-x-2">
             <div> <SchoolRouter__CoursesDropdown courses /> </div>
             <Icon className="if i-chevron-right-light text-gray-400" />
-            <div> {`${primaryPage}/${secondaryPage}`->str} </div>
+            {switch courseContext.selectedCourse {
+            | Some(course) => renderPrimaryPageLink(Course.id(course), primaryPage, secondaryPage)
+            | None => `${primaryPage}/${secondaryPage}`->str
+            }}
+
+            // <div> {`${primaryPage}/${secondaryPage}`->str} </div>
           </div>
         | list{"school"} => "school"->str
         | list{"school", page, ..._tale} => page->str

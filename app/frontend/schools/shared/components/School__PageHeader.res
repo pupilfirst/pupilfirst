@@ -39,7 +39,10 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
           {links
           ->Js.Array2.mapi((link, index) => {
             link.selected
-              ? <div href={link.href} className={selectedClasses(link.selected)}>
+              ? <div
+                  key={string_of_int(index)}
+                  href={link.href}
+                  className={selectedClasses(link.selected)}>
                   <i className={link.icon} /> <span className="ml-2"> {str(link.title)} </span>
                 </div>
               : <Link

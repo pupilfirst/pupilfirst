@@ -152,74 +152,73 @@ let make = (~courseId, ~cohort=?) => {
 
   <DisablingCover disabled={state.saving}>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-      <div className="mt-8">
-        <label
-          className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-          htmlFor="cohortName">
+      <div className="pt-6">
+        <label className="inline-block tracking-wide text-sm font-medium" htmlFor="cohortName">
           {t("cohort.label")->str}
         </label>
         <input
           value={state.name}
           onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
           maxLength={100}
-          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="cohortName"
           type_="text"
-          placeholder=t("cohort.placeholder")
+          placeholder={t("cohort.placeholder")}
         />
-        <School__InputGroupError message=t("cohort.message") active=state.hasNameError />
+        <School__InputGroupError message={t("cohort.message")} active=state.hasNameError />
       </div>
-      <div className="mt-6">
+      <div className="pt-6">
         <label
-          className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-          htmlFor="cohortDescription">
+          className="inline-block tracking-wide text-sm font-medium" htmlFor="cohortDescription">
           {t("cohort_description.label")->str}
         </label>
         <input
           value=state.description
           onChange={event => send(UpdateDescription(ReactEvent.Form.target(event)["value"]))}
-          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="cohortDescription"
           maxLength={250}
           type_="text"
-          placeholder=t("cohort_description.placeholder")
+          placeholder={t("cohort_description.placeholder")}
         />
         <School__InputGroupError
-          message=t("cohort_description.message") active=state.hasDescriptionError
+          message={t("cohort_description.message")} active=state.hasDescriptionError
         />
       </div>
-      <div className="mt-6">
+      <div className="pt-6">
         <div className="flex">
-          <label
-            className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-            htmlFor="cohortEndsAt">
+          <label className="inline-block tracking-wide text-sm font-medium" htmlFor="cohortEndsAt">
             {t("cohort_ends_at.label")->str}
             <span className="text-xs ml-1 font-light"> {ts("optional_braces")->str} </span>
           </label>
-          <HelpIcon className="ml-1 text-sm">
-            {t("cohort_ends_at.help")->str}
-          </HelpIcon>
+          <HelpIcon className="ml-1 text-sm"> {t("cohort_ends_at.help")->str} </HelpIcon>
         </div>
-        <DatePicker
-          onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="cohortEndsAt"
-        />
+        <div className="mt-1">
+          <DatePicker
+            onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="cohortEndsAt"
+          />
+        </div>
       </div>
       {switch cohort {
       | Some(cohort) =>
-        <button
-          className="btn btn-primary btn-large w-full mt-6"
-          disabled={disabled(state)}
-          onClick={_e => updateCohort(state, send, Cohort.id(cohort))}>
-          {t("update_cohort")->str}
-        </button>
+        <div className="pt-6">
+          <button
+            className="btn btn-primary btn-large w-full"
+            disabled={disabled(state)}
+            onClick={_e => updateCohort(state, send, Cohort.id(cohort))}>
+            {t("update_cohort")->str}
+          </button>
+        </div>
       | None =>
-        <button
-          className="btn btn-primary btn-large w-full mt-6"
-          type_="submit"
-          disabled={disabled(state)}
-          onClick={_e => createCohort(state, send, courseId)}>
-          {t("add_new_cohort")->str}
-        </button>
+        <div className="py-6">
+          <button
+            className="btn btn-primary btn-large w-full"
+            type_="submit"
+            disabled={disabled(state)}
+            onClick={_e => createCohort(state, send, courseId)}>
+            {t("add_new_cohort")->str}
+          </button>
+        </div>
       }}
     </div>
   </DisablingCover>

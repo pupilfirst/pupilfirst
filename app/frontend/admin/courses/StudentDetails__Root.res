@@ -136,7 +136,7 @@ module Editor = {
       courseCoaches
       ->Js.Array2.filter(coach => !Array.mem(Coach.id(coach), state.student.coachIds))
       ->Js.Array2.map(coach => SelectablePrerequisiteTargets.make(coach))
-    <div className="mt-2">
+    <div className="mt-1">
       <MultiselectForTeamCoaches
         placeholder={t("search_coaches_placeholder")}
         emptySelectionMessage={t("search_coaches_empty")}
@@ -221,7 +221,7 @@ module Editor = {
     <DisablingCover disabled=state.saving>
       <div className="bg-white">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <div className="pt-5">
+          <div className="pt-6">
             <label
               className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="name">
@@ -241,10 +241,8 @@ module Editor = {
               active={state.student.name->stringInputInvalid}
             />
           </div>
-          <div className="mt-5">
-            <label
-              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-              htmlFor="title">
+          <div className="pt-6">
+            <label className="inline-block tracking-wide text-sm font-medium" htmlFor="title">
               {t("title")->str}
             </label>
             <input
@@ -259,24 +257,22 @@ module Editor = {
               message={t("title_error")} active={state.student.title->stringInputInvalid}
             />
           </div>
-          <div className="mt-5">
-            <label
-              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
-              htmlFor="affiliation">
+          <div className="pt-6">
+            <label className="inline-block tracking-wide text-sm font-medium" htmlFor="affiliation">
               {t("affiliation")->str}
             </label>
             <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
             <input
               value=state.student.affiliation
               onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="affiliation"
               type_="text"
               placeholder={t("affiliation_placeholder")}
             />
           </div>
-          <div className="mt-5 flex flex-col">
-            <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+          <div className="pt-6 flex flex-col">
+            <label className="inline-block tracking-wide text-sm font-medium" htmlFor="email">
               {"Select a cohort"->str}
             </label>
             <Dropdown
@@ -286,17 +282,17 @@ module Editor = {
               onSelect={u => send(UpdateCohort(u))}
             />
           </div>
-          <div className="mt-5">
-            <div className="border-b pb-4 mb-2 mt-5 ">
-              <span className="inline-block mr-1 text-xs font-semibold">
+          <div className="pt-6">
+            <div className="border-b pb-6 ">
+              <span className="block tracking-wide text-sm font-medium">
                 {t("personal_coaches")->str}
               </span>
               {teamCoachesEditor(courseCoaches, state, send)}
             </div>
           </div>
           {state.student.taggings->ArrayUtils.isNotEmpty
-            ? <div className="mt-5">
-                <div className="mb-2 text-xs font-semibold">
+            ? <div className="pt-6">
+                <div className="block tracking-wide text-sm font-medium">
                   {str(t("tags_applied_user") ++ ":")}
                 </div>
                 <div className="flex flex-wrap">
@@ -312,8 +308,10 @@ module Editor = {
                 </div>
               </div>
             : React.null}
-          <div className="mt-5">
-            <div className="mb-2 text-xs font-semibold"> {str(t("tags_applied") ++ ":")} </div>
+          <div className="pt-6">
+            <div className="block tracking-wide text-sm font-medium">
+              {str(t("tags_applied") ++ ":")}
+            </div>
             <School__SearchableTagList
               unselectedTags={avilableTags->Js.Array2.filter(tag =>
                 !Array.mem(tag, state.student.taggings)
@@ -324,7 +322,7 @@ module Editor = {
               allowNewTags=true
             />
           </div>
-          <div className="pt-5 pb-10 w-auto">
+          <div className="py-6">
             <button
               disabled={formInvalid(state)}
               onClick={_e => updateStudent(studentId, courseId, state, send)}

@@ -202,7 +202,7 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <div className="bg-gray-50 h-full pt-8">
+    <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex gap-2 items-end justify-between">
           <p className="font-semibold pl-1"> {t("cohorts")->str} </p>

@@ -72,7 +72,7 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, "")
   let results = search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
-  <div className="mt-2">
+  <div className="mt-1">
     {ReactUtils.nullUnless(
       <div className="flex flex-wrap">
         {Js.Array.map(

@@ -143,7 +143,8 @@ let showTeams = teams => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <p className="text-lg font-semibold"> {Team.name(team)->str} </p>
-              <p className="px-3 py-2 text-xs bg-green-50 text-green-500 rounded-2xl ">
+              <p
+                className="rounded-lg py-px px-2 text-xs font-semibold bg-green-100 text-green-900 ">
                 {team->Team.cohort->Cohort.name->str}
               </p>
             </div>
@@ -188,7 +189,7 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str("Teams Index")} </title> </Helmet>
-    <div className="bg-gray-50 h-full pt-8">
+    <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="mt-2 flex gap-2 items-center justify-between">
           <ul className="flex font-semibold text-sm">

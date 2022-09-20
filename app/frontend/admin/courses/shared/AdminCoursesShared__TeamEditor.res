@@ -216,21 +216,21 @@ let make = (~courseId, ~team=?) => {
 
   <DisablingCover disabled={state.saving}>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-      <div className="mt-8">
-        <label className="block text-sm font-semibold mb-2" htmlFor="teamName">
-          {t("team_name.label") -> str}
+      <div className="pt-6">
+        <label className="block text-sm font-semibold" htmlFor="teamName">
+          {t("team_name.label")->str}
         </label>
         <input
           value={state.name}
           onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
-          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-2.5 px-3 mt-1 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="teamName"
           type_="text"
-          placeholder=t("team_name.placeholder")
+          placeholder={t("team_name.placeholder")}
         />
-        <School__InputGroupError message=t("team_name.message") active=state.hasNameError />
+        <School__InputGroupError message={t("team_name.message")} active=state.hasNameError />
       </div>
-      <div className="mt-5 flex flex-col">
+      <div className="pt-5 flex flex-col">
         <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
           {t("select_cohort.label")->str}
         </label>
@@ -245,7 +245,7 @@ let make = (~courseId, ~team=?) => {
       </div>
       {switch state.selectedCohort {
       | Some(cohort) =>
-        <div className="mt-5 flex flex-col">
+        <div className="pt-5 flex flex-col">
           <AdminCoursesShared__StudentsPicker
             courseId
             selectedStudents=state.selectedStudent
@@ -255,20 +255,24 @@ let make = (~courseId, ~team=?) => {
           />
           {switch team {
           | Some(team) =>
-            <button
-              className="btn btn-primary btn-large w-full mt-6"
-              disabled={disabled(state)}
-              onClick={_e => updateTeam(state, send, Team.id(team))}>
-              {t("update_team")->str}
-            </button>
+            <div className="py-6">
+              <button
+                className="btn btn-primary btn-large w-full"
+                disabled={disabled(state)}
+                onClick={_e => updateTeam(state, send, Team.id(team))}>
+                {t("update_team")->str}
+              </button>
+            </div>
           | None =>
-            <button
-              className="btn btn-primary btn-large w-full mt-6"
-              type_="submit"
-              disabled={disabled(state)}
-              onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
-              {t("add_new_team")->str}
-            </button>
+            <div className="py-6">
+              <button
+                className="btn btn-primary btn-large w-full"
+                type_="submit"
+                disabled={disabled(state)}
+                onClick={_e => createTeam(state, send, Cohort.id(cohort), courseId)}>
+                {t("add_new_team")->str}
+              </button>
+            </div>
           }}
         </div>
       | None => React.null

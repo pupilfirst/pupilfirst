@@ -255,7 +255,7 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str("Students Index")} </title> </Helmet>
-    <div className="bg-gray-50 h-full pt-8">
+    <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
           <p className="font-semibold pl-1"> {"Students"->str} </p>

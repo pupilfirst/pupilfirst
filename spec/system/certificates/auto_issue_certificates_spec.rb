@@ -5,6 +5,7 @@ feature 'Automatic issuance of certificates', js: true do
   include NotificationHelper
   include MarkdownEditorHelper
   include SubmissionsHelper
+  include HtmlSanitizerSpecHelper
 
   # The basics
   let!(:school) { create :school, :current }
@@ -106,13 +107,13 @@ feature 'Automatic issuance of certificates', js: true do
       # Two emails should also have been sent out.
       open_email(student_1.email)
 
-      expect(current_email.body).to include(
+      expect(sanitize_html(current_email.body)).to include(
         "http://test.host/c/#{issued_certificate.serial_number}"
       )
 
       open_email(student_2.email)
 
-      expect(current_email.body).to include(
+      expect(sanitize_html(current_email.body)).to include(
         "http://test.host/c/#{student_2.user.issued_certificates.first.serial_number}"
       )
     end

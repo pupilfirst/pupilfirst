@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'School admins Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   # Setup a school with 2 school admins
   let!(:school) { create :school, :current }
@@ -40,11 +41,14 @@ feature 'School admins Editor', js: true do
 
     # Existing admins should have been notified by email about the addition.
     open_email(school_admin_1.email)
-    expect(current_email.body).to include(email)
+    expect(sanitize_html(current_email.body)).to include(email)
 
     open_email(school_admin_2.email)
-    expect(current_email.body).to include(email)
-    expect(current_email.body).to include(school_admin_1.user.name)
+
+    body = sanitize_html(current_email.body)
+
+    expect(body).to include(email)
+    expect(body).to include(school_admin_1.user.name)
 
     # New admin shouldn't receive that notification.
     open_email(email)

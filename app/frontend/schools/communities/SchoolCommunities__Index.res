@@ -130,7 +130,7 @@ let make = (~communities, ~courses) => {
     let communities = state.communities |> List.append(list{community})
     send(SaveCommunityChanges(communities))
   }
-  <div className="bg-gray-50 h-full">
+  <div className="bg-gray-50 min-h-full">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowEditor(community) =>

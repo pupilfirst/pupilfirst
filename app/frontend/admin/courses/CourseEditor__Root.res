@@ -576,7 +576,7 @@ let make = (~school) => {
     None
   }, (state.filter, state.reloadCourses))
 
-  <div className="flex flex-1 bg-gray-50">
+  <div className="flex min-h-full bg-gray-50">
     {switch (state.courses, editorAction) {
     | (Unloaded, _)
     | (_, Hidden) => React.null

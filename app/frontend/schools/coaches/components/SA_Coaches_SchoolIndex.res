@@ -32,7 +32,7 @@ let make = (~coaches, ~authenticityToken) => {
 
   let closeFormCB = () => send(UpdateFormVisible(None))
   let updateCoachCB = coach => send(UpdateCoaches(coach))
-  <div role="main" className="flex flex-1 h-full overflow-y-scroll">
+  <div role="main" className="flex min-h-full bg-gray-50">
     {switch state.formVisible {
     | None => React.null
     | CoachEditor(coach) =>

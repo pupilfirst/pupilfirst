@@ -255,7 +255,8 @@ let make = (~courseId, ~search) => {
           <p className="font-semibold pl-1"> {t("students")->str} </p>
           <div>
             <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
-              <span> {str(t("add_new_students"))} </span>
+              <PfIcon className="if i-plus-regular" />
+              <span className="inline-block pl-2"> {str(t("add_new_students"))} </span>
             </Link>
           </div>
         </div>

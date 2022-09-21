@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe Users::InactivityNotificationAndDeletionService do
   include ActiveSupport::Testing::TimeHelpers
+  include HtmlSanitizerSpecHelper
+
   subject { described_class.new }
 
   # Setup the basics
@@ -62,7 +64,7 @@ describe Users::InactivityNotificationAndDeletionService do
         expect(
           inactive_user_school_1.reload.account_deletion_notification_sent_at
         ).to_not eq(nil)
-        expect(current_email.body).to include(
+        expect(sanitize_html(current_email.body)).to include(
           'https://school1.host/users/sign_in'
         )
 
@@ -70,7 +72,7 @@ describe Users::InactivityNotificationAndDeletionService do
         expect(current_email).to eq(nil)
 
         open_email(notified_user_school_1.email)
-        expect(current_email.body).to include(
+        expect(sanitize_html(current_email.body)).to include(
           "Your account in #{school_1.name} has been successfully deleted"
         )
 
@@ -133,7 +135,7 @@ describe Users::InactivityNotificationAndDeletionService do
 
         # Check emails of users in school_2
         open_email(inactive_user_2_school_2.email)
-        expect(current_email.body).to include(
+        expect(sanitize_html(current_email.body)).to include(
           'https://school2.host/users/sign_in'
         )
         expect(
@@ -145,7 +147,7 @@ describe Users::InactivityNotificationAndDeletionService do
         expect(current_email).to eq(nil)
 
         open_email(notified_user_school_2.email)
-        expect(current_email.body).to include(
+        expect(sanitize_html(current_email.body)).to include(
           "Your account in #{school_2.name} has been successfully deleted"
         )
 

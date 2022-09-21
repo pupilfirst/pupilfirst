@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Course Exports', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   let(:level) { create :level }
   let(:cohort) { create :cohort, course: level.course }
@@ -67,7 +68,9 @@ feature 'Course Exports', js: true do
     expect(current_email.subject).to have_text(
       "Export of #{course.name} course is ready for download"
     )
-    expect(current_email.body).to have_text(exports_school_course_path(course))
+    expect(sanitize_html(current_email.body)).to have_text(
+      exports_school_course_path(course)
+    )
 
     # The export file should be attached at this point.
     expect(export.reload.file.attached?).to eq(true)

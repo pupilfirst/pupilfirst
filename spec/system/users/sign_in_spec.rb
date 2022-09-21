@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 feature 'User signing in by supplying email address', js: true do
+  include HtmlSanitizerSpecHelper
+
   let!(:school) { create :school, :current }
 
   context 'when a user exists' do
@@ -53,7 +55,8 @@ feature 'User signing in by supplying email address', js: true do
         )
 
         open_email(user.email)
-        expect(current_email.body).to include(
+
+        expect(sanitize_html(current_email.body)).to include(
           'https://test.host/users/reset_password?token='
         )
 

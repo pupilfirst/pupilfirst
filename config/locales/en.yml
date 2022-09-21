@@ -1618,7 +1618,7 @@ en:
         last_updated: Last Updated
         name: Name
       student: student
-      students: students
+      students: Students
       title: Students Index
     SubmissionChecklistItemShow:
       correct: Correct

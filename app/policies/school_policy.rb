@@ -1,12 +1,11 @@
 class SchoolPolicy < ApplicationPolicy
-  def show?
+  def school_router?
     return false if user.blank?
 
     user.school_admin.present?
   end
 
-  alias customize? show?
-  alias images? show?
-  alias admins? show?
-  alias school_router? show?
+  alias customize? school_router?
+  alias images? school_router?
+  alias admins? school_router?
 end

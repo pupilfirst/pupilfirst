@@ -34,6 +34,7 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
+  # GET /school/
   def school_router
     authorize current_school
     render html: '', layout: 'school_router'

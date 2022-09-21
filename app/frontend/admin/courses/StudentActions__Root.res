@@ -311,7 +311,7 @@ module Editor = {
     <div className="pt-5 pb-10">
       <div className="bg-gray-50 p-4" ariaLabel={t("manage_certificates")}>
         <h5> {t("certificates_label")->str} </h5>
-        {certificates -> ArrayUtils.isEmpty
+        {certificates->ArrayUtils.isEmpty
           ? <p className="text-xs text-gray-800"> {t("empty_course_certificates_text")->str} </p>
           : <div>
               {showIssuedCertificates(state.student, state, send)}
@@ -487,8 +487,8 @@ let make = (~studentId) => {
       <div>
         <School__PageHeader
           exitUrl={`/school/courses/${baseData.courseId}/students`}
-          title={`Edit ${baseData.student.name}`}
-          description={"Actions for the student"}
+          title={`${t("edit")} ${baseData.student.name}`}
+          description={t("page_description")}
           links={pageLinks(studentId)}
         />
         <div className="bg-white">

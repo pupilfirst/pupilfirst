@@ -7,13 +7,13 @@ let str = React.string
 let pageLinks = studentId => [
   School__PageHeader.makeLink(
     ~href={`/school/teams/${studentId}/details`},
-    ~title="Details",
+    ~title=t("pages.links"),
     ~icon="fas fa-edit",
     ~selected=false,
   ),
   School__PageHeader.makeLink(
     ~href=`/school/teams/${studentId}/actions`,
-    ~title="Actions",
+    ~title=t("pages.actions"),
     ~icon="fas fa-cog",
     ~selected=true,
   ),
@@ -105,19 +105,19 @@ let make = (~studentId) => {
       <div>
         <School__PageHeader
           exitUrl={`/school/courses/${courseId}/teams`}
-          title={`Edit ${Team.name(team)}`}
-          description={"Team actions"}
+          title={`${t("edit")} ${Team.name(team)}`}
+          description={t("team_actions")}
           links={pageLinks(studentId)}
         />
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <h2 className="text-lg font-semibold mt-8"> {`Delete ${Team.name(team)}`->str} </h2>
-          <p className="text-sm text-gray-500">
-            {"Delete will remove all the students from the team and delete the team"->str}
-          </p>
+          <h2 className="text-lg font-semibold mt-8">
+            {`${t("delete")} ${Team.name(team)}`->str}
+          </h2>
+          <p className="text-sm text-gray-500"> {t("delete_team_info")->str} </p>
           <button
             onClick={_ => destroyTeam(setState, courseId, Team.id(team))}
             className="btn btn-danger mt-4">
-            {"Delete team"->str}
+            {t("delete_team")->str}
           </button>
         </div>
       </div>

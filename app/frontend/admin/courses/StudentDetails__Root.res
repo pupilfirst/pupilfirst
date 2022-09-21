@@ -269,10 +269,10 @@ module Editor = {
           </div>
           <div className="pt-6 flex flex-col">
             <label className="inline-block tracking-wide text-sm font-medium" htmlFor="email">
-              {"Select a cohort"->str}
+              {t("select_a_cohort")->str}
             </label>
             <Dropdown
-              placeholder={"Pick a Cohort"}
+              placeholder={t("pick_a_cohort")}
               selectables={cohorts}
               selected={Some(state.student.cohort)}
               onSelect={u => send(UpdateCohort(u))}
@@ -409,13 +409,13 @@ let loadData = (studentId, setState, setCourseId) => {
 let pageLinks = studentId => [
   School__PageHeader.makeLink(
     ~href={`/school/students/${studentId}/details`},
-    ~title="Details",
+    ~title=t("pages.details"),
     ~icon="fas fa-edit",
     ~selected=true,
   ),
   School__PageHeader.makeLink(
     ~href=`/school/students/${studentId}/actions`,
-    ~title="Actions",
+    ~title=t("pages.actions"),
     ~icon="fas fa-cog",
     ~selected=false,
   ),
@@ -440,8 +440,8 @@ let make = (~studentId) => {
       <div>
         <School__PageHeader
           exitUrl={`/school/courses/${baseData.courseId}/students`}
-          title={`Edit ${baseData.student.name}`}
-          description={"Update student details"}
+          title={`${t("edit")} ${baseData.student.name}`}
+          description={t("page_description")}
           links={pageLinks(studentId)}
         />
         <Editor

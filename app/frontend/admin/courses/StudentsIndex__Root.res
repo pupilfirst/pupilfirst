@@ -197,7 +197,7 @@ let studentsList = (params, students) => {
                 className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
                 <span className="inline-flex items-center p-2">
                   <PfIcon className="if i-edit-regular if-fw" />
-                  <span className="ml-2"> {"Edit"->str} </span>
+                  <span className="ml-2"> {t("edit")->str} </span>
                 </span>
               </Link>
             </div>
@@ -211,17 +211,17 @@ let studentsList = (params, students) => {
 
 let makeFilters = () => {
   [
-    CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
+    CourseResourcesFilter.makeFilter("cohort", t("cohort"), DataLoad(#Cohort), "green"),
+    CourseResourcesFilter.makeFilter("level", t("level"), DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
       "Student Tag",
       DataLoad(#StudentTag),
       "focusColor",
     ),
-    CourseResourcesFilter.makeFilter("user_tags", "User Tag", DataLoad(#UserTag), "blue"),
-    CourseResourcesFilter.makeFilter("email", "Search by Email", Search, "gray"),
-    CourseResourcesFilter.makeFilter("name", "Search by Name", Search, "gray"),
+    CourseResourcesFilter.makeFilter("user_tags", t("filter.user_tag"), DataLoad(#UserTag), "blue"),
+    CourseResourcesFilter.makeFilter("email", t("filter.search_by_email"), Search, "gray"),
+    CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
   ]
 }
 
@@ -233,7 +233,7 @@ let renderLoadMore = (send, courseId, params, cursor) => {
         send(BeginLoadingMore)
         getStudents(send, courseId, Some(cursor), params)
       }}>
-      {"Load More"->str}
+      {t("load_more")->str}
     </button>
   </div>
 }
@@ -248,14 +248,14 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet> <title> {str("Students Index")} </title> </Helmet>
+    <Helmet> <title> {str(t("title"))} </title> </Helmet>
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold pl-1"> {"Students"->str} </p>
+          <p className="font-semibold pl-1"> {t("students")->str} </p>
           <div>
             <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
-              <span> {str("Add New Students")} </span>
+              <span> {str(t("add_new_students"))} </span>
             </Link>
           </div>
         </div>
@@ -269,8 +269,14 @@ let make = (~courseId, ~search) => {
                   search={search}
                   sorter={CourseResourcesFilter.makeSorter(
                     "sort_by",
-                    ["Name", "First Created", "Last Created", "First Updated", "Last Updated"],
-                    "Last Created",
+                    [
+                      t("sorter.name"),
+                      t("sorter.first_created"),
+                      t("sorter.last_created"),
+                      t("sorter.first_updated"),
+                      t("sorter.last_updated"),
+                    ],
+                    t("sorter.last_created"),
                   )}
                 />
               </div>
@@ -285,7 +291,7 @@ let make = (~courseId, ~search) => {
           ~loadMore=renderLoadMore(send, courseId, params),
           ~singularResourceName=t("student"),
           ~pluralResourceName=t("students"),
-          ~emptyMessage="No Students Found",
+          ~emptyMessage=t("pagination.empty_message"),
         )}
       </div>
     </div>

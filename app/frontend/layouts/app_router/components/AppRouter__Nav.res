@@ -142,50 +142,6 @@ let renderLinksMobile = (courses, selectedPage) => {
   }
 }
 
-let showLink = (icon, href) => {
-  <div key=href className="whitespace-nowrap">
-    <a
-      rel="nofollow"
-      className="flex justify-center items-center text-xs text-gray-800 bg-gray-200 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
-      href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {t("sign_out")->str} </p>
-    </a>
-  </div>
-}
-
-let links = () => {
-  [showLink("power-off", "/users/sign_out")]
-}
-
-let showUser = user => {
-  switch user {
-  | Some(user) =>
-    <div className="mt-3 mx-3">
-      <div className="p-3 flex w-full items-center bg-gray-50 rounded-md">
-        <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
-          {User.avatarUrl(user)->Belt.Option.mapWithDefault(
-            <Avatar
-              name={User.name(user)}
-              className="w-8 h-8 border border-gray-300 object-contain object-center rounded-full"
-            />,
-            src =>
-              <img
-                className="w-9 h-9 border border-gray-300 object-cover object-center rounded-full"
-                src
-                alt={User.name(user)}
-              />,
-          )}
-        </div>
-        <div className="pl-2 flex justify-between w-full items-center">
-          <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
-          <div className="text-xs text-gray-600 flex space-x-2"> {links()->React.array} </div>
-        </div>
-      </div>
-    </div>
-
-  | None => React.null
-  }
-}
 
 @react.component
 let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
@@ -225,7 +181,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="flex h-full flex-col flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
-            {showUser(currentUser)}
           </div>
         </div>
       </div>

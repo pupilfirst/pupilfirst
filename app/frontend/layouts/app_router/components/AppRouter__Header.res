@@ -184,6 +184,7 @@ let make = (~school, ~currentUser) => {
           ? <div
               className="relative flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap flex-shrink-0 transition">
               {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
+              <Layout__UserControls user={(currentUser)} />
             </div>
           : React.null}
       </nav>

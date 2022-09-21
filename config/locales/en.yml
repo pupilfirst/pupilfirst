@@ -1370,7 +1370,7 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
-    SchoolRouter__UserControls:
+    Layout__UserControls:
       edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out

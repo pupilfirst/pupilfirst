@@ -86,7 +86,7 @@ let make = (~courses, ~currentUser) => {
           hasNotifications={User.hasNotifications(currentUser)}
         />
       </div>
-      <div> <SchoolRouter__UserControls user=currentUser /> </div>
+      <Layout__UserControls user={Some(currentUser)} />
     </div>
   </div>
 }

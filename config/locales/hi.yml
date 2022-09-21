@@ -1585,6 +1585,7 @@ hi:
       manage_account: इस स्कूल में अपना खाता प्रबंधित करें
       name_error: नाम खाली नहीं हो सकता
       name_placeholder: अपना नाम डालें
+      preferred_name_placeholder: Type your preferred name
       new_password: नया पासवर्ड
       new_password_placeholder: नया पासवर्ड टाइप करें
       notifications: सूचनाएं
@@ -2197,6 +2198,7 @@ hi:
     loading: लोड हो रहा है...
     login_token_expiration_warning_html: यह लिंक %{timestamp}तक समाप्त हो जाएगा। यदि लिंक की समय सीमा समाप्त हो गई है, तो आप <a href="%{login_url}" %>साइन-इन पृष्ठ</a>से एक बार के टोकन का अनुरोध कर सकते हैं। कृपया ध्यान दें कि यह एक निजी यूआरएल है और इसे साझा नहीं किया जाना चाहिए।
     name: नाम
+    preferred_name: Preferred name
     name_email: नाम या ईमेल
     no_email_found: इस ईमेल के साथ उपयोगकर्ता नहीं मिला। कृपया आपके द्वारा दर्ज ईमेल की जांच करें।
     none: कोई भी नहीं

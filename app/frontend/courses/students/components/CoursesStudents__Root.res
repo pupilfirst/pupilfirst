@@ -110,7 +110,8 @@ module StudentsQuery = %graphql(`
   `)
 
 let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
-  let filterString = Webapi.Url.URLSearchParams.toString(params)
+  Webapi.Url.URLSearchParams.append("active", "true", params)
+  let filterString = params->Webapi.Url.URLSearchParams.toString
 
   StudentsQuery.makeVariables(
     ~courseId,
@@ -166,7 +167,6 @@ let applicableLevels = levels => levels |> Js.Array.filter(level => Level.number
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
     CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter("personal_coach", "Personal Coach", DataLoad(#Coach), "pink"),
     CourseResourcesFilter.makeFilter(
@@ -232,7 +232,7 @@ let make = (~courseId) => {
   }, [courseId, url.search])
 
   <div role="main" ariaLabel="Students" className="flex-1 flex flex-col overflow-y-auto">
-    <div className="w-full md:w-4/5 px-4 mt-8 md:mt-25 mx-auto">
+    <div className="max-w-4xl 2xl:max-w-5xl mx-auto w-full mt-8 md:mt-25 px-4">
       <div className="bg-gray-50 w-full">
         <h1 className="text-2xl font-semibold"> {"Students"->str} </h1>
         {ReactUtils.nullIf(

@@ -42,7 +42,7 @@ feature 'Cohorts Index', js: true do
         expect(page).to have_content(2)
       end
 
-      expect(page).to have_text('Showing all')
+      expect(page).to have_text('Only one cohort to show')
 
       expect(page).to have_link(
         'Add new cohort',
@@ -50,11 +50,13 @@ feature 'Cohorts Index', js: true do
       )
     end
 
-    scenario 'School admin checkouts inactive cohorts' do
+    scenario 'School admin checkouts all cohorts' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
       expect(page).to have_text(live_cohort.name)
       expect(page).not_to have_text(ended_cohort.name)
+
+      expect(page).to have_text('Active Cohorts')
 
       fill_in 'Filter Resources', with: 'inactive'
       click_button 'Pick Include: Inactive Cohorts'
@@ -66,6 +68,8 @@ feature 'Cohorts Index', js: true do
         expect(page).to have_content('Coaches')
         expect(page).to have_content(1)
       end
+
+      expect(page).to have_text('All Cohorts')
     end
   end
 
@@ -99,7 +103,7 @@ feature 'Cohorts Index', js: true do
     scenario 'school admin can order cohorts' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
-      expect(page).to have_content('Showing 20 of 31 Cohorts')
+      expect(page).to have_content('Showing 20 of 31 cohorts')
 
       # Check ordering by last created
       expect(find('.cohorts-container:first-child')).to have_text(
@@ -159,7 +163,7 @@ feature 'Cohorts Index', js: true do
     scenario 'school admin can filter cohorts' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
-      expect(page).to have_content('Showing 20 of 31 Cohorts')
+      expect(page).to have_content('Showing 20 of 31 cohorts')
       click_button 'Order by Last Created'
       click_button 'Order by Name'
 

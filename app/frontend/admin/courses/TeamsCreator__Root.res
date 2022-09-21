@@ -8,7 +8,7 @@ let make = (~courseId) => {
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/teams`}
-      title="Create new team"
+      title={t("title")}
       description={courseContext.selectedCourse->Belt.Option.mapWithDefault(
         "Course",
         AppRouter__Course.name,

@@ -81,7 +81,9 @@ en:
       page_description: Update cohort details
       page_title: Edit %{cohort_name}
     CohortsIndex__Root:
+      active_cohorts: Active Cohorts
       add_new_cohort: Add new cohort
+      all_cohorts: All Cohorts
       coaches: Coaches
       cohort: cohort
       cohorts: cohorts
@@ -1398,6 +1400,7 @@ en:
         help: Marking a student as dropped out will remove all of their access to the course.
         help_url: https://docs.pupilfirst.com/users/students#student-actions
         label: Has this student dropped out?
+      edit: Edit
       empty_course_certificates_text: This course does not have any certificates to issue.
       empty_issued_certificates_text: This student has not been issued any certificates.
       issue_certificate_button: Issue Certificate
@@ -1406,6 +1409,7 @@ en:
       issued_date_label: "Issued on:"
       manage_certificates: Manage student certificates
       new_certificate_label: "Issue new certificate:"
+      page_description: Actions for the student
       re_activate_student:
         button: Re-Activate Student
       revoke_certificate_button: Revoke Certificate
@@ -1441,6 +1445,13 @@ en:
       import_button_text: Import Students
       more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
       notify_students_label: Notify students, and send them a link to sign into this school.
+      page_description: Upload the CSV file containing the students you want to add to the course.
+      page_title: Import students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+      pick_a_cohort: Pick a Cohort
+      select_a_cohort: Select a cohort
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
@@ -1470,6 +1481,12 @@ en:
       team_header_label: TEAM %{team_name}
       teams_to_add_empty: This list is empty! Add some students using the form above.
       teams_to_add_label: "These new students will be added to the course:"
+    StudentCreator__Root:
+      page_description: You can add multiple students to a list and add them to course
+      page_title: Add new students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
     StudentCreator__StudentInfoForm:
       add_to_list: Add to List
       affiliation:
@@ -1497,11 +1514,18 @@ en:
     StudentDetails__Root:
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
+      edit: Edit
       name: Name
+      page_description: Update student details
+      pages:
+        actions: Actions
+        details: Details
       personal_coaches: Personal Coaches
+      pick_a_cohort: Pick a Cohort
       search_coaches_all: You have selected all available coaches!
       search_coaches_empty: No coaches selected
       search_coaches_placeholder: Search coaches
+      select_a_cohort: Select a cohort
       student_name_placeholder: Student name here
       student_updated: Student updated successfully
       student_updated_moved: Student has been updated, and moved to list of inactive students
@@ -1576,8 +1600,26 @@ en:
       actions: Actions
       details: Details
     StudentsIndex__Root:
+      add_new_students: Add New Students
+      cohort: Cohort
+      edit: Edit
+      filter:
+        search_by_email: Search by Email
+        search_by_name: Search by Name
+        user_tag: User Tag
+      level: Level
+      load_more: Load More
+      pagination:
+        empty_message: No Students Found
+      sorter:
+        first_created: First Created
+        first_updated: First Updated
+        last_created: Last Created
+        last_updated: Last Updated
+        name: Name
       student: student
-      students: students
+      students: Students
+      title: Students Index
     SubmissionChecklistItemShow:
       correct: Correct
       incorrect: Incorrect
@@ -1592,7 +1634,37 @@ en:
       action_string_upload_files: Upload Files
       action_string_write_long_text: Write Long Text
       action_string_write_short_text: Write Short Text
+    TeamsActions__Root:
+      delete: Delete
+      delete_team: Delete team
+      delete_team_info: Delete will remove all the students from the team and delete the team
+      edit: Edit
+      pages:
+        actions: Actions
+        links: Details
+      team_actions: Team actions
+    TeamsCreator__Root:
+      title: Create new team
+    TeamsDetails__Root:
+      edit: Edit
+      page_description: Edit team details
+      pages:
+        actions: Actions
+        details: Details
     TeamsIndex__Root:
+      create_team: Create Team
+      edit: Edit
+      filter:
+        include: Include
+        search_by_team_name: Search by Team Name
+      load_more: Load More
+      page_title: Teams
+      pagination:
+        empty_message: No Teams Found
+      sorter:
+        first_created: First Created
+        last_created: Last Created
+        name: Name
       team: team
       teams: teams
     TopicsShow__LikeManager:

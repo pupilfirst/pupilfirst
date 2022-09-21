@@ -82,7 +82,7 @@ feature 'Teams Index', js: true do
     scenario 'school admin can order teams' do
       sign_in_user school_admin.user, referrer: teams_path(course)
 
-      expect(page).to have_content('Showing 20 of 32 Teams')
+      expect(page).to have_content('Showing 20 of 32 teams')
 
       # Check ordering by last created
       expect(find('.teams-container:first-child')).to have_text(
@@ -123,7 +123,7 @@ feature 'Teams Index', js: true do
     scenario 'school admin can filter teams' do
       sign_in_user school_admin.user, referrer: teams_path(course)
 
-      expect(page).to have_content('Showing 20 of 32 Teams')
+      expect(page).to have_content('Showing 20 of 32 teams')
       click_button 'Order by Last Created'
       click_button 'Order by Name'
 

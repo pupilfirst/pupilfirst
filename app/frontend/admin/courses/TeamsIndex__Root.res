@@ -72,11 +72,11 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
     CourseResourcesFilter.makeFilter(
       "include_inactive_teams",
-      "Include",
+      t("filter.include"),
       Custom("Inactive Teams"),
       "orange",
     ),
-    CourseResourcesFilter.makeFilter("name", "Search by Team Name", Search, "gray"),
+    CourseResourcesFilter.makeFilter("name", t("filter.search_by_team_name"), Search, "gray"),
   ]
 }
 
@@ -152,7 +152,7 @@ let showTeams = teams => {
               href={`/school/teams/${Team.id(team)}/details`}
               className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
               <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
-              <span> {"Edit"->str} </span>
+              <span> {t("edit")->str} </span>
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-4 mt-6 lg md:grid-cols-2">
@@ -173,7 +173,7 @@ let renderLoadMore = (send, courseId, params, cursor) => {
         send(BeginLoadingMore)
         getTeams(send, courseId, Some(cursor), params)
       }}>
-      {"Load More"->str}
+      {t("load_more")->str}
     </button>
   </div>
 }
@@ -188,14 +188,14 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet> <title> {str("Teams Index")} </title> </Helmet>
+    <Helmet> <title> {str(t("page_title"))} </title> </Helmet>
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold pl-1"> {"Teams"->str} </p>
+          <p className="font-semibold pl-1"> {t("page_title")->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/teams/new`}>
             <PfIcon className="if i-plus-regular" />
-            <span className="inline-block pl-2"> {str("Create Team")} </span>
+            <span className="inline-block pl-2"> {str(t("create_team"))} </span>
           </Link>
         </div>
         <div className="sticky top-0 my-6">
@@ -208,8 +208,8 @@ let make = (~courseId, ~search) => {
                   search={search}
                   sorter={CourseResourcesFilter.makeSorter(
                     "sort_by",
-                    ["Name", "First Created", "Last Created"],
-                    "Last Created",
+                    [t("sorter.name"), t("sorter.first_created"), t("sorter.last_created")],
+                    t("sorter.last_created"),
                   )}
                 />
               </div>
@@ -224,7 +224,7 @@ let make = (~courseId, ~search) => {
           ~loadMore=renderLoadMore(send, courseId, params),
           ~singularResourceName=t("team"),
           ~pluralResourceName=t("teams"),
-          ~emptyMessage="No Teams Found",
+          ~emptyMessage=t("pagination.empty_message"),
         )}
       </div>
     </div>

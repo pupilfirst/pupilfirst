@@ -372,13 +372,13 @@ let str = React.string
 let pageLinks = courseId => [
   School__PageHeader.makeLink(
     ~href={`/school/courses/${courseId}/students/new`},
-    ~title="Manual",
+    ~title=t("pages.manual"),
     ~icon="fas fa-user",
     ~selected=false,
   ),
   School__PageHeader.makeLink(
     ~href=`/school/courses/${courseId}/students/import`,
-    ~title="CSV File Import",
+    ~title=t("pages.csv_import"),
     ~icon="fas fa-file",
     ~selected=true,
   ),
@@ -410,17 +410,17 @@ let make = (~courseId) => {
   <div>
     <School__PageHeader
       exitUrl
-      title="Import students"
-      description={"Upload the CSV file containing the students you want to add to the course."}
+      title={t("page_title")}
+      description={t("page_description")}
       links={pageLinks(courseId)}
     />
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
       <div className="mt-5 flex flex-col">
         <label className="block text-sm font-medium" htmlFor="email">
-          {"Select a cohort" |> str}
+          {t("select_a_cohort")->str}
         </label>
         <Dropdown
-          placeholder={"Pick a Cohort"}
+          placeholder={t("pick_a_cohort")}
           selectables={state.cohorts}
           selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
           onSelect={u => send(SetSelectedCohort(u))}

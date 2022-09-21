@@ -61,6 +61,7 @@ let loadStudentsData = (courseId, cohort, send) => {
     Webapi.Url.URLSearchParams.makeWithArray([
       ("cohort", `${Cohort.id(cohort)};`),
       ("not_teamed_up", "true"),
+      ("active", "true"),
     ])->Webapi.Url.URLSearchParams.toString
 
   StudentsPickerInfoQuery.fetch(StudentsPickerInfoQuery.makeVariables(~courseId, ~filterString, ()))

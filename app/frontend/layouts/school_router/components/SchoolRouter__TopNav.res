@@ -67,42 +67,10 @@ let renderPrimaryPageLink = (courseId, primaryPage, secondaryPage) => {
 }
 
 @react.component
-let make = (~path, ~courses, ~currentUser) => {
-  let courseContext = React.useContext(SchoolRouter__CourseContext.context)
+let make = (~courses, ~currentUser) => {
   <div className={"flex justify-between items-center p-4 bg-white border-b flex-1"}>
     <div className="flex items-center space-x-2 text-sm font-semibold capitalize">
-      {
-        // Experimental and this logic needs to be refactored
-        switch path {
-        | list{"school", "courses", courseId, primaryPage, ...tale} =>
-          <div className="flex items-center space-x-2">
-            <div> <SchoolRouter__CoursesDropdown courses /> </div>
-            <Icon className="if i-chevron-right-light text-gray-500" />
-            <p className="text-gray-500">
-              {switch tale {
-              | list{_resourceId, secondaryPage, ..._tale} =>
-                renderPrimaryPageLink(courseId, primaryPage, secondaryPage)
-              | _ => primaryPage->str
-              }}
-            </p>
-          </div>
-        | list{"school", primaryPage, _resourceId, secondaryPage} =>
-          <div className="flex items-center space-x-2">
-            <div> <SchoolRouter__CoursesDropdown courses /> </div>
-            <Icon className="if i-chevron-right-light text-gray-400" />
-            {switch courseContext.selectedCourse {
-            | Some(course) => renderPrimaryPageLink(Course.id(course), primaryPage, secondaryPage)
-            // | None => `${primaryPage}/${secondaryPage}`->str
-            | None => <div className="flex items-center space-x-2"><p>{primaryPage->str}</p><Icon className="if i-chevron-right-light text-gray-400" /><p className="text-gray-500"> {secondaryPage->str} </p></div>
-            }}
-
-            // <div> {`${primaryPage}/${secondaryPage}`->str} </div>
-          </div>
-        | list{"school"} => "school"->str
-        | list{"school", page, ..._tale} => page->str
-        | _ => React.null
-        }
-      }
+      <SchoolRouter__CoursesDropdown courses />
     </div>
     <div className="flex items-center space-x-4">
       <div

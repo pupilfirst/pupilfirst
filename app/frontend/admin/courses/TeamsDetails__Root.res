@@ -7,13 +7,13 @@ let str = React.string
 let pageLinks = studentId => [
   School__PageHeader.makeLink(
     ~href={`/school/teams/${studentId}/details`},
-    ~title="Details",
+    ~title=t("pages.details"),
     ~icon="fas fa-edit",
     ~selected=true,
   ),
   School__PageHeader.makeLink(
     ~href=`/school/teams/${studentId}/actions`,
-    ~title="Actions",
+    ~title=t("pages.actions"),
     ~icon="fas fa-cog",
     ~selected=false,
   ),
@@ -71,8 +71,8 @@ let make = (~studentId) => {
       <div>
         <School__PageHeader
           exitUrl={`/school/courses/${courseId}/teams`}
-          title={`Edit ${Team.name(team)}`}
-          description={"Edit team details"}
+          title={`${t("edit")} ${Team.name(team)}`}
+          description={t("page_description")}
           links={pageLinks(studentId)}
         />
         <AdminCoursesShared__TeamEditor courseId={courseId} team={team} />

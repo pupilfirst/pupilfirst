@@ -13,7 +13,7 @@ class CourseStudentsResolver < ApplicationQuery
 
   def students
     scope = course.founders
-    scope = scope.active if filter[:include_inactive_students].blank?
+    scope = scope.active if filter[:active].present?
     scope = scope.joins(:user) if filter[:name].present? ||
       filter[:email].present? || filter[:user_tags].present?
 

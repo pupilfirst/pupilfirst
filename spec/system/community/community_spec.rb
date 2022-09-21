@@ -5,6 +5,7 @@ feature 'Community', js: true do
   include NotificationHelper
   include MarkdownEditorHelper
   include ActiveSupport::Testing::TimeHelpers
+  include HtmlSanitizerSpecHelper
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
@@ -232,9 +233,11 @@ feature 'Community', js: true do
     # A notification should have been mailed to the question author.
     open_email(topic_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
-    expect(current_email.body).to include(
+
+    expect(sanitize_html(current_email.body)).to include(
       "#{student_2.user.name} has posted a reply to something you said on the #{community.name} community"
     )
+
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     expect(page).to have_text('2 Replies')
@@ -292,9 +295,11 @@ feature 'Community', js: true do
     # A mail should have been sent to post author.
     open_email(reply_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
-    expect(current_email.body).to include(
+
+    expect(sanitize_html(current_email.body)).to include(
       "#{student_2.user.name} has posted a reply to something you said on the #{community.name} community"
     )
+
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     # check saved reply

@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Course students bulk importer', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   # Setup a course
   let(:school) { create :school, :current }
@@ -61,7 +62,7 @@ feature 'Course students bulk importer', js: true do
     open_email(school_admin.email)
 
     email_subject = current_email.subject
-    email_body = current_email.body
+    email_body = sanitize_html(current_email.body)
 
     expect(email_subject).to eq('Import of Students Completed')
 
@@ -174,7 +175,7 @@ feature 'Course students bulk importer', js: true do
       # Admin is informed in the email about duplication
       open_email(school_admin.email)
 
-      email_body = current_email.body
+      email_body = sanitize_html(current_email.body)
 
       expect(email_body).to have_content(
         'Some of the students you tried to import were already enrolled in the course'

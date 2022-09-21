@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Apply for public courses', js: true do
   include UserSpecHelper
+  include HtmlSanitizerSpecHelper
 
   # The basics.
   let(:school) { create :school, :current }
@@ -53,10 +54,14 @@ feature 'Apply for public courses', js: true do
     expect(applicant.login_mail_sent_at).not_to eq(nil)
 
     open_email(email)
-    expect(current_email.body).to include(public_course.name)
-    expect(current_email.body).to match(/[a-zA-Z0-9\-_]{22}/)
+
+    body = sanitize_html(current_email.body)
+
+    expect(body).to include(public_course.name)
+    expect(body).to match(/[a-zA-Z0-9\-_]{22}/)
     expect(current_email.subject).to eq('Verify Your Email Address')
-    expect(current_email.body).to include(
+
+    expect(body).to include(
       "To activate your #{public_course.school.name} account"
     )
 
@@ -91,10 +96,12 @@ feature 'Apply for public courses', js: true do
       applicant = Applicant.where(email: email).first
 
       open_email(email)
+
       expect(current_email.subject).to eq(
         "Complete your #{public_course.name} course application"
       )
-      expect(current_email.body).to include(
+
+      expect(sanitize_html(current_email.body)).to include(
         "We've received your application to the #{public_course.name} course at #{public_course.school.name}"
       )
 

@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'School students index', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   let(:tag_1) { 'Single Student' }
   let(:tag_2) { 'Another Tag' }
@@ -200,7 +201,8 @@ feature 'School students index', js: true do
       expect(current_email.subject).to include(
         "You have been added as a student in #{school.name}"
       )
-      expect(current_email.body).to include(
+
+      expect(sanitize_html(current_email.body)).to include(
         "You have also been teamed up with #{student_4_user.name}"
       )
 
@@ -209,7 +211,8 @@ feature 'School students index', js: true do
       expect(current_email.subject).to include(
         "You have been added as a student in #{school.name}"
       )
-      expect(current_email.body).to include(
+
+      expect(sanitize_html(current_email.body)).to include(
         "You have also been teamed up with #{student_3_user.name}"
       )
     end

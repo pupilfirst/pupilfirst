@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 feature 'Referrer Spec', js: true do
+  include HtmlSanitizerSpecHelper
+
   let!(:school) { create :school, :current }
   let(:user) { create :user, :with_password, school: school }
   let!(:school_admin) { create :school_admin, user: user }
@@ -38,6 +40,8 @@ feature 'Referrer Spec', js: true do
 
     open_email(user.email)
     link = current_email.body.match(/href="(?<url>.+?)">/)[:url]
-    expect(CGI::parse(URI::parse(link).query)["referrer"]).to have_content(["/school"])
+    expect(CGI.parse(URI.parse(link).query)['referrer']).to have_content(
+      ['/school']
+    )
   end
 end

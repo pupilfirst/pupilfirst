@@ -1,5 +1,6 @@
 class UpdateUserMutator < ApplicationQuery
   property :name, validates: { presence: true }
+  property :preferred_name, validates: { length: { maximum: 128 } }
   property :about, validates: { length: { maximum: 1000 } }
 
   property :locale,
@@ -82,6 +83,12 @@ class UpdateUserMutator < ApplicationQuery
   def user_params
     preferences = current_user.preferences
     preferences[:daily_digest] = daily_digest
-    { name: name, about: about, locale: locale, preferences: preferences }
+    {
+      name: name,
+      preferred_name: preferred_name,
+      about: about,
+      locale: locale,
+      preferences: preferences
+    }
   end
 end

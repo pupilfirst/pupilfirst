@@ -1483,6 +1483,7 @@ ru:
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
       name_placeholder: Введите ваше имя
+      preferred_name_placeholder: Введите предпочитаемое имя
       new_password: Новый пароль
       new_password_placeholder: Введите новый пароль
       notifications: Уведомления
@@ -2014,6 +2015,7 @@ ru:
     move_down: Двигать Вниз
     move_up: Двигать Вверх
     name: Имя
+    preferred_name: Предпочитаемое имя
     name_email: Имя или Почта
     name_placeholder: Добавьте сюда имя
     next: След

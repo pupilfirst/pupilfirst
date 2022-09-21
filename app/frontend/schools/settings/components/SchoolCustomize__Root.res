@@ -307,7 +307,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
     reducer,
     initialState(customizations, schoolName, schoolAbout),
   )
-  <div>
+  <div className="bg-gray-50 min-h-full">
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <h1 className="font-bold"> {t("homepage")->str} </h1>
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">

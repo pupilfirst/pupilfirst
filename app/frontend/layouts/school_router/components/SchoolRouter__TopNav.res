@@ -92,7 +92,8 @@ let make = (~path, ~courses, ~currentUser) => {
             <Icon className="if i-chevron-right-light text-gray-400" />
             {switch courseContext.selectedCourse {
             | Some(course) => renderPrimaryPageLink(Course.id(course), primaryPage, secondaryPage)
-            | None => `${primaryPage}/${secondaryPage}`->str
+            // | None => `${primaryPage}/${secondaryPage}`->str
+            | None => <div className="flex items-center space-x-2"><p>{primaryPage->str}</p><Icon className="if i-chevron-right-light text-gray-400" /><p className="text-gray-500"> {secondaryPage->str} </p></div>
             }}
 
             // <div> {`${primaryPage}/${secondaryPage}`->str} </div>

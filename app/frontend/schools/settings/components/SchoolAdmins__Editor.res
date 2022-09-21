@@ -121,7 +121,7 @@ let make = (~currentSchoolAdminId, ~admins) => {
     deleting: false,
   })
 
-  <div className="flex flex-1 bg-gray-50">
+  <div className="flex min-h-full bg-gray-50">
     <div className="flex-1 flex flex-col">
       {switch state.editorAction {
       | Hidden => React.null

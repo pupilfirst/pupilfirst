@@ -1607,6 +1607,7 @@ ru:
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
       name_placeholder: Введите ваше имя
+      preferred_name_placeholder: Type your preferred name
       new_password: Новый пароль
       new_password_placeholder: Введите новый пароль
       notifications: Уведомления
@@ -2219,6 +2220,7 @@ ru:
     loading: Загрузка...
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
     name: Имя
+    preferred_name: Preferred name
     name_email: Имя или Почта
     no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
     none: Ничего

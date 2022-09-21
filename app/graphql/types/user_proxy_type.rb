@@ -30,6 +30,16 @@ module Types
         end
     end
 
+    def preferred_name
+      BatchLoader::GraphQL
+        .for(object.user_id)
+        .batch do |user_ids, loader|
+          User
+            .where(id: user_ids)
+            .each { |user| loader.call(user.id, user.preferred_name) }
+        end
+    end
+
     def name
       BatchLoader::GraphQL
         .for(object.user_id)
@@ -48,10 +58,6 @@ module Types
             .where(id: user_ids)
             .each { |user| loader.call(user.id, user.full_title) }
         end
-    end
-
-    def name
-      object.user.name
     end
   end
 end

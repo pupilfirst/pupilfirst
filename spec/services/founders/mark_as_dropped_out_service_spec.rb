@@ -11,7 +11,7 @@ describe Founders::MarkAsDroppedOutService do
     let(:original_team) { create :team_with_students, cohort: cohort }
     let(:student) { original_team.founders.first }
 
-    it 'creates a new startup in the same level and mark the founder as exited' do
+    it 'removes the team link and mark the founder as exited' do
       expect { subject.execute }.to change { student.reload.dropped_out_at }
         .from(nil)
       expect(student.team).to eq(nil)

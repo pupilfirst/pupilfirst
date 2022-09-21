@@ -292,7 +292,9 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when team is in the third level and all milestone targets have been submitted or reviewed with fail grade' do
-        let(:startup) { create :startup, level: level_3 }
+        let(:student) do
+          create :student, cohort: cohort_1, level: level_3, team: team
+        end
 
         before do
           submit_target team_target, student
@@ -336,7 +338,9 @@ describe Students::LevelUpEligibilityService do
       let(:level_3) { create :level, :three, course: course_1 }
       let(:level_4) { create :level, :four, course: course_1 }
       let!(:level_5) { create :level, :five, course: course_1 }
-      let(:startup) { create :startup, level: level_4 }
+      let(:student) do
+        create :student, cohort: cohort_1, level: level_4, team: team
+      end
       let(:team_target) do
         create :target,
                :for_team,

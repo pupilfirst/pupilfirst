@@ -180,7 +180,7 @@ feature 'Course Coaches Index', js: true do
       target_c1_3.evaluation_criteria << evaluation_criteria_c1
       target_c2.evaluation_criteria << evaluation_criteria_c2
 
-      # Enroll the coach directly onto one startup in this course, an another in a different course.
+      # Enroll the coach directly onto one student in this course, an another in a different course.
       create :faculty_founder_enrollment,
              :with_cohort_enrollment,
              faculty: coach_1,

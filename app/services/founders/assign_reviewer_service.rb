@@ -8,7 +8,7 @@ module Founders
       coaches_to_assign = @student.course.faculty.where(id: coach_ids)
 
       if coaches_to_assign.count != [coach_ids].flatten.count
-        raise "All coaches must be assigned to the team's course"
+        raise "All coaches must be assigned to the student's course"
       end
 
       FacultyFounderEnrollment.transaction do

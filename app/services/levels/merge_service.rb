@@ -8,7 +8,7 @@ module Levels
       raise 'Cannot merge into level zero' if other_level.number.zero?
 
       Level.transaction do
-        # Link startups and target groups to supplied level.
+        # Link students and target groups to supplied level.
         @level.founders.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
         @level.target_groups.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
 

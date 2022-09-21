@@ -8,8 +8,6 @@ describe Users::DeleteAccountService do
   let!(:student) { create :student, user: user }
   let!(:team) { create :team_with_students }
 
-  # let!(:student_with_teammates) { create :founder, user: user }
-  # let!(:team_with_user) { student_with_teammates.startup }
   let!(:coach) { create :faculty, user: user }
   let!(:course) { create :course, :with_cohort, school: user.school }
   let!(:course_author) { create :course_author, user: user, course: course }

@@ -48,7 +48,7 @@ describe Targets::StatusService do
         end
       end
 
-      context 'when the target is from a higher level than the startup' do
+      context 'when the target is from a higher level than the team' do
         let!(:student_1) { create :student, level: level_1, team: team }
 
         context 'when the target is reviewed by a coach' do

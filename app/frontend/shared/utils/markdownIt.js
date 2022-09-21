@@ -10,6 +10,7 @@ import linkAttributesPlugin from "markdown-it-link-attributes";
 import katexPlugin from "@jeff-tian/markdown-it-katex";
 import alignPlugin from "markdown-it-align";
 import checkboxPlugin from "markdown-it-task-checkbox";
+import videoPlugin from "markdown-it-video";
 
 const md = markdownIt({
   ...commonmarkPreset.options,
@@ -34,7 +35,11 @@ const md = markdownIt({
   },
 });
 
-md.use(subscriptPlugin)
+md.use(videoPlugin, {
+  youtube: { width: "100%", height: 384 },
+  vimeo: { width: "100%", height: 489 },
+})
+  .use(subscriptPlugin)
   .use(superscriptPlugin)
   .use(tablePlugin)
   .use(imageSizePlugin)

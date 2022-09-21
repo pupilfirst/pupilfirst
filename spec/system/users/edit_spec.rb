@@ -7,6 +7,7 @@ feature 'User Edit', js: true do
   let(:student) { create :founder }
   let(:user) { student.user }
   let(:student_name) { Faker::Name.name }
+  let(:preferred_name) { Faker::Name.name }
   let(:about) { Faker::Lorem.paragraphs.join(' ') }
   let(:current_password) do
     Faker::Internet.password(min_length: 8, max_length: 16)
@@ -49,6 +50,21 @@ feature 'User Edit', js: true do
 
     expect(student.avatar.filename).to eq('donald_duck.jpg')
     expect(user.reload.preferences['daily_digest']).to eq(true)
+  end
+
+  scenario 'User update the preferred name' do
+    sign_in_user(user, referrer: edit_user_path)
+    expect(page).to have_text('Edit').and have_text('profile')
+
+    fill_in 'preferred_name', with: preferred_name
+    click_button 'Save Changes'
+
+    expect(page).to have_text('Profile updated successfully!')
+    expect(user.reload).to have_attributes(preferred_name: preferred_name)
+
+    visit(dashboard_path)
+
+    expect(page).to have_text(preferred_name)
   end
 
   scenario 'User sets a new password' do

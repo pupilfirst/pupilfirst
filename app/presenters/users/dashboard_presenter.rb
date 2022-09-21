@@ -1,7 +1,7 @@
 module Users
   class DashboardPresenter < ApplicationPresenter
     def page_title
-      I18n.t('shared.dashboard') + +" | #{current_school.name}"
+      I18n.t('shared.dashboard') + " | #{current_school.name}"
     end
 
     def props
@@ -11,6 +11,7 @@ module Users
         show_user_edit: show_user_edit?,
         communities: community_details_array,
         user_name: current_user.name,
+        preferred_name: current_user.preferred_name,
         user_title: current_user.full_title,
         issued_certificates: issued_certificate_details
       }

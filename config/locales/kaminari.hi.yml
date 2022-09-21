@@ -1,0 +1,20 @@
+#Sample localization file for Kaminari. You can override these values in your app's locales file if you want.
+hi:
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      entry:
+        one: "प्रवेश"
+        other: "प्रविष्टियों"
+      one_page:
+        display_entries:
+          one: "प्रदर्शित करना <b>1</b> %{entry_name}"
+          other: "<b>सभी %{count}</b> %{entry_name}प्रदर्शित कर रहा है"
+      more_pages:
+        display_entries: "कुल <b>%{total}</b> का %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> प्रदर्शित करना"

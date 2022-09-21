@@ -1,6 +1,4 @@
-# Русский перевод для https://github.com/plataformatec/devise/tree/v4.7.1
-# Другие переводы на https://github.com/plataformatec/devise/wiki/I18n
-
+#Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 ru:
   devise:
     confirmations:
@@ -29,7 +27,7 @@ ru:
       password_change:
         subject: "Пароль был изменён."
     omniauth_callbacks:
-      failure: "Вы не можете войти в систему с учётной записью из %{kind}, так как \"%{reason}\"."
+      failure: 'Вы не можете войти в систему с учётной записью из %{kind}, так как "%{reason}".'
       success: "Вход в систему выполнен с учётной записью из %{kind}."
     passwords:
       no_token: "Эта страница доступна только при переходе с email для сброса пароля. Если Вы перешли по ссылке из письма, пожалуйста, убедитесь, что вы использовали полный URL."
@@ -47,9 +45,9 @@ ru:
       updated: "Ваша учётная запись успешно изменена."
       updated_but_not_signed_in: "Ваш аккаунт успешно изменен, но так как ваш пароль изменился, нужно войти снова."
     sessions:
-      signed_in: "Вход в систему выполнен."
-      signed_out: "Выход из системы выполнен."
-      already_signed_out: "Выход из системы выполнен."
+      signed_in: ""
+      signed_out: ""
+      already_signed_out: ""
     unlocks:
       send_instructions: "В течение нескольких минут вы получите письмо с инструкциями по разблокировке вашей учётной записи."
       send_paranoid_instructions: "Если ваша учётная запись существует, то в течение нескольких минут вы получите письмо с инструкциями по её разблокировке."

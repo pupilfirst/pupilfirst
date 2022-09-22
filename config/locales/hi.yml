@@ -1578,7 +1578,9 @@ hi:
       disable_email_radio: बंद करना
       displayed_publicly: यह जानकारी सार्वजनिक रूप से प्रदर्शित की जाएगी इसलिए सावधान रहें कि आप क्या साझा करते हैं।
       edit_profile: अपने प्रोफ़ाइल संपादित करें
+      email_label: Email
       email_placeholder: अपना ईमेल टाइप करें
+      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
       initiate_deletion: हटाना आरंभ करें
       language: भाषा
       localization: स्थानीयकरण
@@ -1806,6 +1808,11 @@ hi:
     link_fallback:
       link_fallback: "यदि आप ऊपर दिए गए लिंक पर क्लिक करने में असमर्थ हैं, तो कृपया निम्न लिंक को अपने ब्राउज़र के पता बार में कॉपी और पेस्ट करें:"
     school_admin:
+      email_updated_notification:
+        body:
+          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
+          user_html: <strong>%{name}</strong> from your school has updated the email address.
+        subject: "%{name} has changed email address."
       school_admin_added:
         body:
           admin_name_html: नए व्यवस्थापक का नाम <strong>%{new_school_admin_name}</strong>है, और उसका पंजीकृत ईमेल पता <a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>है।
@@ -1849,6 +1856,10 @@ hi:
         body:
           html: <p> आपका खाता %{school_name} में सफलतापूर्वक हटा दिया गया है। </p> <p> आपकी सभी व्यक्तिगत जानकारी हटा दी गई है और अब आपकी इस स्कूल तक पहुंच नहीं होगी।</p>
         subject: खाता %{school_name}. से सफलतापूर्वक हटाया गया
+      confirm_email_update:
+        body:
+          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+        subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
           asked: '%{days_ago} दिन पहले पूछा।'
@@ -1873,6 +1884,12 @@ hi:
           link_to: '%{community_name} समुदाय पर उत्तर देखें'
           main_html: <p>%{author_name} ने %{community_name} समुदाय पर आपके द्वारा कही गई किसी बात का उत्तर पोस्ट किया है।</p> <p>आप %{link_to}कर सकते हैं।
         subject: आपकी पोस्ट के लिए नया जवाब
+      update_email_token:
+        body:
+          link_to: link
+          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible.</p>
+        subject: Update your email address in %{school_name} school
     user_session:
       send_login_token:
         body:
@@ -1991,6 +2008,8 @@ hi:
       success_notification: सबमिशन आपको सौंपा गया है।
     revoke_issued_certificate:
       success_notification: प्रमाणपत्र निरस्त!
+    send_update_email_token:
+      success_notification: We've sent you a link to verify your new email!
     unarchive_course:
       success_notification: पाठ्यक्रम सफलतापूर्वक संग्रह नहीं किया गया
     unassign_reviewer:
@@ -2181,6 +2200,7 @@ hi:
     draft: प्रारूप
     edit: संपादन करना
     email: ईमेल
+    email_exists_error: This email is already associated with another user account.
     empty: खाली
     fail: विफल
     file_invalid: कृपया 5 एमबी से कम आकार वाली फ़ाइल चुनें।
@@ -2253,6 +2273,8 @@ hi:
     delete_account:
       link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
       title: यूजर को संपादित करो
+    edit:
+      title: Edit User
     omniauth_callbacks:
       failure:
         denied: 'प्रमाणीकरण से इनकार किया गया था। कृपया पुन: प्रयास करें।'
@@ -2313,6 +2335,9 @@ hi:
           error: दिया गया ईमेल पता और पासवर्ड मेल नहीं खाते। कृपया अपने क्रेडेंशियल जांचें और पुनः प्रयास करें।
       token:
         link_expired: वह एकमुश्त लिंक समाप्त हो गया है, या अमान्य है। कृपया दुबारा साइन - इन करने की प्रयास करें।
+    update_email:
+      frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      link_expired: That link has expired or is invalid. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: निष्क्रिय छात्र सबमिशन अपडेट नहीं कर सकते।

@@ -47,11 +47,7 @@ class UsersController < ApplicationController
       new_email = user.new_email
 
       # Update user email
-      user.update!(
-        email: new_email,
-        update_email_token: nil,
-        new_email: nil
-      )
+      user.update!(email: new_email, update_email_token: nil, new_email: nil)
 
       # Create audit record
       AuditRecord.create!(
@@ -73,9 +69,9 @@ class UsersController < ApplicationController
         .school_admins
         .where.not(user_id: user.id)
         .each do |admin|
-        SchoolAdminMailer.email_updated_notification(admin, user, old_email)
-          .deliver_later
-      end
+          SchoolAdminMailer.email_updated_notification(admin, user, old_email)
+            .deliver_later
+        end
 
       redirect_to edit_user_path
     else

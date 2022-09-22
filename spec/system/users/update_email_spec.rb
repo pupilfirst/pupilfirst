@@ -9,7 +9,9 @@ feature 'User Update Email', js: true do
   let(:user_1) { create :user, school: school }
   let(:user_2) { create :user, school: school }
   let(:admin_user) { create :user, school: school }
-  let!(:school_admin) { create :school_admin, user: admin_user, school: admin_user.school }
+  let!(:school_admin) do
+    create :school_admin, user: admin_user, school: admin_user.school
+  end
   let(:domain) { school.domains.where(primary: true).first }
 
   scenario 'Send update email token when user update email' do
@@ -25,8 +27,12 @@ feature 'User Update Email', js: true do
     expect(user_1.update_email_token).to be_present
 
     open_email('testing@updateemail.com')
-    expect(current_email.subject).to eq("Update your email address in #{school.name} school")
-    expect(current_email.body).to include("https://#{domain.fqdn}/users/update_email?token=")
+    expect(current_email.subject).to eq(
+      "Update your email address in #{school.name} school"
+    )
+    expect(current_email.body).to include(
+      "https://#{domain.fqdn}/users/update_email?token="
+    )
   end
 
   scenario 'Error if user try to update to existing email' do
@@ -36,7 +42,9 @@ feature 'User Update Email', js: true do
     click_button 'Edit'
     fill_in 'user_email', with: user_2.email
     click_button 'Update'
-    expect(page).to have_content('This email is already associated with another user account.')
+    expect(page).to have_content(
+      'This email is already associated with another user account.'
+    )
 
     expect(user_1.reload.new_email).to be_blank
   end
@@ -46,7 +54,10 @@ feature 'User Update Email', js: true do
     old_email = user_1.email
     new_email = 'testing@updateemail.com'
     user_1.regenerate_update_email_token
-    user_1.update!(new_email: new_email, update_email_token_sent_at: 20.minutes.ago)
+    user_1.update!(
+      new_email: new_email,
+      update_email_token_sent_at: 20.minutes.ago
+    )
     visit update_email_path(token: user_1.update_email_token)
 
     expect(user_1.reload.email).to eq(new_email)
@@ -54,10 +65,14 @@ feature 'User Update Email', js: true do
     # Check for update email notification
     open_email(new_email)
     subject = current_email.subject
-    expect(subject).to include("Your email in #{school.name} school updated successfully")
+    expect(subject).to include(
+      "Your email in #{school.name} school updated successfully"
+    )
 
     body = current_email.body
-    expect(body).to include("Your email in <strong>#{user_1.school.name}</strong> has been successfully updated.")
+    expect(body).to include(
+      "Your email in <strong>#{user_1.school.name}</strong> has been successfully updated."
+    )
 
     # Check admin notification email
     open_email(school_admin.email)
@@ -65,7 +80,9 @@ feature 'User Update Email', js: true do
     expect(subject).to include("#{user_1.name} has changed email address.")
 
     body = current_email.body
-    expect(body).to include("<strong>#{user_1.name}</strong> from your school has updated the email address.")
+    expect(body).to include(
+      "<strong>#{user_1.name}</strong> from your school has updated the email address."
+    )
 
     # Check audit records
     audit_record = AuditRecord.last
@@ -79,10 +96,13 @@ feature 'User Update Email', js: true do
   scenario 'user visits the update email link with invalid token', js: true do
     sign_in_user(user_1, referrer: update_email_path(token: 'test_token'))
 
-    expect(page).to have_text('That link has expired or is invalid. Please try again')
+    expect(page).to have_text(
+      'That link has expired or is invalid. Please try again'
+    )
   end
 
-  scenario 'user visits the update email link with an expired token', js: true do
+  scenario 'user visits the update email link with an expired token',
+           js: true do
     sign_in_user(user_1)
     user_1.regenerate_update_email_token
     user_1.update!(update_email_token_sent_at: 20.minutes.ago)

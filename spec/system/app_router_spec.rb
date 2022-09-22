@@ -112,7 +112,7 @@ feature 'App navigation', js: true do
         href: students_course_path(coached_course)
       )
 
-      expect(page).to have_text(coach.user.name)
+      click_button 'Show user controls'
 
       expect(page).to have_link('Sign Out', href: destroy_user_session_path)
     end

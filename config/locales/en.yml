@@ -1618,8 +1618,8 @@ en:
         last_updated: Last Updated
         name: Name
       student: student
-      students: Students
-      title: Students Index
+      students: students
+      title: Students
     SubmissionChecklistItemShow:
       correct: Correct
       incorrect: Incorrect

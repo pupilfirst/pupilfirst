@@ -123,6 +123,9 @@ module Types
           null: false
     field :delete_account, mutation: Mutations::DeleteAccount, null: false
     field :update_user, mutation: Mutations::UpdateUser, null: false
+    field :send_update_email_token,
+          mutation: Mutations::SendUpdateEmailToken,
+          null: false
     field :update_certificate,
           mutation: Mutations::UpdateCertificate,
           null: false

@@ -43,6 +43,20 @@ class UserMailerPreview < ActionMailer::Preview
     )
   end
 
+  def update_email_token
+    school = School.first
+    user = school.users.first
+    new_email = Faker::Internet.email
+    update_email_url = Faker::Internet.url
+    UserMailer.update_email_token(user, new_email, update_email_url)
+  end
+
+  def confirm_email_update
+    school = School.first
+    user = school.users.first
+    UserMailer.confirm_email_update(user.name, user.email, user.school)
+  end
+
   private
 
   def new_topics

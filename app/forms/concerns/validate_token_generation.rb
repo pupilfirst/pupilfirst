@@ -1,7 +1,6 @@
 # This module is included in:
 #   Users::Sessions::SendResetPasswordEmailForm
 #   Users::Sessions::SignInWithEmailForm
-#
 
 module ValidateTokenGeneration
   extend ActiveSupport::Concern

@@ -8,6 +8,7 @@ module Users
       {
         current_user_id: current_user.id,
         name: current_user.name,
+        email: current_user.email,
         preferred_name: current_user.preferred_name || '',
         about: current_user.about || '',
         locale: current_user.locale,

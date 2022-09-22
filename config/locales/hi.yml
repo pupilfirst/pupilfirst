@@ -449,8 +449,8 @@ hi:
       button_text_level_up: ऊपर का स्तर
       button_text_saving: सहेजा जा रहा है
     CoursesCurriculum__NoticeManager:
-      access_ended_description: इस पाठ्यक्रम तक आपकी पहुंच समाप्त हो गई है।
-      access_ended_title: प्रवेश समाप्त
+      access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
+      access_ended_title: Preview/Limited Access
       course_complete_description: आपने हमारा कोर्सवर्क पूरा कर लिया है। उन लक्ष्यों को पूरा करने के लिए स्वतंत्र महसूस करें जिन्हें आपने छोड़ दिया है, और संलग्न लिंक पर पढ़ें।
       course_complete_title: बधाई हो! आपने अंतिम स्तर में सभी मील के पत्थर के लक्ष्य पूरे कर लिए हैं।
       course_ended_description: पाठ्यक्रम समाप्त हो गया है और सभी लक्ष्यों के लिए सबमिशन अक्षम कर दिए गए हैं!
@@ -524,7 +524,7 @@ hi:
       unknown_coach: अज्ञात कोच
       your_submissions: आपके सबमिशन
     CoursesCurriculum__TargetStatus:
-      access_locked: इस पाठ्यक्रम तक आपकी पहुंच समाप्त हो गई है।
+      access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: यह कोर्स समाप्त हो गया है।
       level_locked: आप लेवल %{current_level}में हैं। पहले स्तर %{current_level} में सभी मील के पत्थर लक्ष्यों को पूरा करें।
       prerequisites_incomplete: इस लक्ष्य में पूर्वापेक्षाएँ हैं जो अपूर्ण हैं।
@@ -1619,7 +1619,7 @@ hi:
       communities: समुदाय
       course_locked_message: इस पाठ्यक्रम के लिए आपकी छात्र प्रोफ़ाइल लॉक है, और इसे अपडेट नहीं किया जा सकता है।
       cta:
-        access_ended: प्रवेश समाप्त
+        access_ended: Preview/Limited Access
         course_ended: कोर्स समाप्त
         dropped_out: छोड़ दिया या हार मान लिया
         edit_curriculum: पाठ्यचर्या संपादित करें

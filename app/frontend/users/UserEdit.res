@@ -443,8 +443,7 @@ let make = (
                       <button
                         className="btn btn-primary"
                         onClick={_ => updateEmail(send, email, state.email)}
-                        disabled={state.email |> EmailUtils.isInvalid(false) ||
-                          state.email == email}>
+                        disabled={EmailUtils.isInvalid(false, state.email) || state.email == email}>
                         {ts("update")->str}
                       </button>
                     </div>}

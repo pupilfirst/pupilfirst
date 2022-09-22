@@ -156,6 +156,11 @@ let targetId = (t: t) => t.targetId
 let status = t => t.status
 
 let isPending = t => t.status == Pending
+let isAccessEnded = t =>
+  switch t.status {
+  | Locked(reason) => reason == AccessLocked
+  | _ => false
+  }
 
 let lockReasonToString = lockReason =>
   switch lockReason {

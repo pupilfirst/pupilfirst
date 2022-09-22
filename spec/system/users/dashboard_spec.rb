@@ -211,7 +211,7 @@ feature 'User Dashboard', js: true do
     within("div[aria-label=\"#{course_5.name}\"]") do
       expect(page).to have_text(course_5.name)
       expect(page).to have_text(course_5.description)
-      expect(page).to have_text('Access Ended')
+      expect(page).to have_text('Preview/Limited Access')
       expect(page).to have_link(
         'View Curriculum',
         href: curriculum_course_path(course_5)
@@ -222,7 +222,7 @@ feature 'User Dashboard', js: true do
     within("div[aria-label=\"#{course_6.name}\"]") do
       expect(page).to have_text(course_6.name)
       expect(page).to have_text(course_6.description)
-      expect(page).to_not have_text('Access Ended')
+      expect(page).to_not have_text('Preview/Limited Access')
       expect(page).to have_link(
         'View Course',
         href: curriculum_course_path(course_6)

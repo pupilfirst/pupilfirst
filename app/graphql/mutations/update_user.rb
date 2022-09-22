@@ -1,6 +1,7 @@
 module Mutations
   class UpdateUser < GraphQL::Schema::Mutation
     argument :name, String, required: true
+    argument :preferred_name, String, required: false
     argument :about, String, required: false
     argument :locale, String, required: true
     argument :current_password, String, required: false
@@ -17,7 +18,11 @@ module Mutations
 
       success =
         if mutator.valid?
-          mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("mutations.update_user.profile_saved_notification"))
+          mutator.notify(
+            :success,
+            I18n.t('shared.notifications.done'),
+            I18n.t('mutations.update_user.profile_saved_notification')
+          )
           mutator.update_user
           true
         else

@@ -450,8 +450,8 @@ en:
       button_text_level_up: Level Up
       button_text_saving: Saving
     CoursesCurriculum__NoticeManager:
-      access_ended_description: Your access to this course has ended.
-      access_ended_title: Access Ended
+      access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
+      access_ended_title: Preview/Limited Access
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
       course_complete_title: Congratulations! You have completed all milestone targets in the final level.
       course_ended_description: The course has ended and submissions are disabled for all targets!
@@ -525,7 +525,7 @@ en:
       unknown_coach: Unknown Coach
       your_submissions: Your Submissions
     CoursesCurriculum__TargetStatus:
-      access_locked: Your access to this course has ended.
+      access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
@@ -1590,6 +1590,7 @@ en:
       manage_account: Manage your account in this school
       name_error: Name can't be blank
       name_placeholder: Type your name
+      preferred_name_placeholder: Type your preferred name
       new_password: New password
       new_password_placeholder: Type new password
       notifications: Notifications
@@ -1623,7 +1624,7 @@ en:
       communities: Communities
       course_locked_message: Your student profile for this course is locked, and cannot be updated.
       cta:
-        access_ended: Access Ended
+        access_ended: Preview/Limited Access
         course_ended: Course Ended
         dropped_out: Dropped out
         edit_curriculum: Edit Curriculum
@@ -2220,6 +2221,7 @@ en:
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     name: Name
+    preferred_name: Preferred name
     name_email: Name or Email
     no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None

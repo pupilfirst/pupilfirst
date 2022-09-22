@@ -725,7 +725,7 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
     t.string "title"
     t.text "about"
     t.bigint "school_id"
-    t.jsonb "preferences", default: { "daily_digest" => true }, null: false
+    t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string "affiliation"
@@ -743,6 +743,7 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
     t.string "update_email_token"
     t.datetime "update_email_token_sent_at"
     t.string "new_email"
+    t.string "preferred_name"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

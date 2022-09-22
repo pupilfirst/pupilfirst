@@ -9,6 +9,7 @@ module Types
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
+    field :preferred_name, String, null: true
 
     def avatar_url
       object.user.avatar_url(variant: :thumb)
@@ -16,6 +17,10 @@ module Types
 
     def title
       object.user.full_title
+    end
+
+    def name
+      object.user.name
     end
   end
 end

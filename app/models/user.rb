@@ -53,7 +53,7 @@ class User < ApplicationRecord
          :recoverable,
          omniauth_providers: %i[google_oauth2 facebook github]
 
-  normalize_attribute :name, :about, :affiliation
+  normalize_attribute :name, :about, :affiliation, :preferred_name
 
   validates :email,
             presence: true,

@@ -1600,7 +1600,9 @@ ru:
       disable_email_radio: Запрещать
       displayed_publicly: Эта информация будет отображаться публично, поэтому будьте осторожны с тем, что вы делитесь.
       edit_profile: Редактировать профиль
+      email_label: Email
       email_placeholder: Введите адрес электронной почты
+      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
       initiate_deletion: Инициировать Удаление
       language: Язык
       localization: Локализация
@@ -1828,6 +1830,11 @@ ru:
     link_fallback:
       link_fallback: "Если вы не можете перейти по ссылке выше, скопируйте и вставьте следующую ссылку в адресную строку вашего браузера:"
     school_admin:
+      email_updated_notification:
+        body:
+          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
+          user_html: <strong>%{name}</strong> from your school has updated the email address.
+        subject: "%{name} has changed email address."
       school_admin_added:
         body:
           admin_name_html: Имя нового администратора <strong>%{new_school_admin_name}</strong>, и имеет зарегистрированный адрес электронной почты <a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>.
@@ -1871,6 +1878,10 @@ ru:
         body:
           html: <p> Ваша учетная запись в %{school_name} была успешно удалена. </p> <p> Вся персональная информация удалена, и вы больше не будете иметь доступ к этой школе.</p>
         subject: Учетная запись успешно удалена из %{school_name}
+      confirm_email_update:
+        body:
+          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+        subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
           asked: спросил %{days_ago} дней назад.
@@ -1895,6 +1906,12 @@ ru:
           link_to: просмотреть ответ сообщества %{community_name}
           main_html: <p>%{author_name} опубликовал ответ на то, что вы сказали в сообществе %{community_name} .</p> <p>Вы можете %{link_to}.
         subject: Новый ответ на ваше сообщение
+      update_email_token:
+        body:
+          link_to: link
+          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible.</p>
+        subject: Update your email address in %{school_name} school
     user_session:
       send_login_token:
         body:
@@ -2013,6 +2030,8 @@ ru:
       success_notification: Работа была назначен вам.
     revoke_issued_certificate:
       success_notification: Сертификат отозван!
+    send_update_email_token:
+      success_notification: We've sent you a link to verify your new email!
     unarchive_course:
       success_notification: Курс успешно разархивирован
     unassign_reviewer:
@@ -2203,6 +2222,7 @@ ru:
     draft: Черновик
     edit: Редактировать
     email: Почта
+    email_exists_error: This email is already associated with another user account.
     empty: Пусто
     fail: Провал
     file_invalid: Пожалуйста, выберите файл размером менее 5 МБ.
@@ -2275,6 +2295,8 @@ ru:
     delete_account:
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       title: Изменить пользователя
+    edit:
+      title: Edit User
     omniauth_callbacks:
       failure:
         denied: Аутентификация была отклонена. Пожалуйста, попробуйте еще раз.
@@ -2335,6 +2357,9 @@ ru:
           error: Указанный адрес электронной почты и пароль не совпадают. Пожалуйста, проверьте ваши данные и повторите попытку.
       token:
         link_expired: Эта одноразовая ссылка истекла или неверна. Пожалуйста, попробуйте войти снова.
+    update_email:
+      frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      link_expired: That link has expired or is invalid. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: Невозможно обновить неактивные работы учащихся.

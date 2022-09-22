@@ -47,7 +47,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
         </span>,
-        TargetStatus.isPending(targetStatus),
+        TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
       )}
     </Link>
     {ReactUtils.nullUnless(

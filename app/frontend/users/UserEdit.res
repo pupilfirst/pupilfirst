@@ -5,6 +5,7 @@ let ts = I18n.ts
 
 type state = {
   name: string,
+  preferredName: string,
   about: string,
   locale: string,
   avatarUrl: option<string>,
@@ -23,6 +24,7 @@ type state = {
 
 type action =
   | UpdateName(string)
+  | UpdatePreferredName(string)
   | UpdateAbout(string)
   | UpdateLocale(string)
   | UpdateCurrentPassword(string)
@@ -42,6 +44,7 @@ type action =
 let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {...state, name: name, dirty: true}
+  | UpdatePreferredName(preferredName) => {...state, preferredName: preferredName, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
   | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
@@ -92,8 +95,8 @@ let reducer = (state, action) =>
   }
 
 module UpdateUserQuery = %graphql(`
-  mutation UpdateUserMutation($name: String!, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
-    updateUser(name: $name, about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
+  mutation UpdateUserMutation($name: String!, $preferredName: String, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
+    updateUser(name: $name, preferredName: $preferredName, about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
       success
     }
   }
@@ -162,6 +165,7 @@ let updateUser = (state, send, event) => {
 
   let variables = UpdateUserQuery.makeVariables(
     ~name=state.name,
+    ~preferredName=state.preferredName,
     ~about=state.about,
     ~locale=state.locale,
     ~currentPassword=state.currentPassword,
@@ -257,6 +261,7 @@ let confirmDeletionWindow = (state, send) =>
 @react.component
 let make = (
   ~name,
+  ~preferredName,
   ~hasCurrentPassword,
   ~about,
   ~locale,
@@ -268,6 +273,7 @@ let make = (
 ) => {
   let initialState = {
     name: name,
+    preferredName: preferredName,
     about: about,
     locale: locale,
     avatarUrl: avatarUrl,
@@ -285,6 +291,7 @@ let make = (
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
+
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {confirmDeletionWindow(state, send)}
     <div className="bg-white shadow sm:rounded-lg">
@@ -314,6 +321,20 @@ let make = (
             <School__InputGroupError
               message={t("name_error")} active={state.name |> String.trim |> String.length < 2}
             />
+            <div className="mt-6">
+              <label htmlFor="user_preferred_name" className="block text-sm font-semibold">
+                {ts("preferred_name")->str}
+              </label>
+              <input
+                id="user_preferred_name"
+                name="preferred_name"
+                value={state.preferredName}
+                onChange={event =>
+                  send(UpdatePreferredName(ReactEvent.Form.target(event)["value"]))}
+                className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                placeholder={t("preferred_name_placeholder")}
+              />
+            </div>
             <div className="mt-6">
               <label htmlFor="about" className="block text-sm font-semibold">
                 {t("about") |> str}
@@ -357,7 +378,7 @@ let make = (
                     <label
                       htmlFor="user-edit__avatar-input"
                       ariaHidden=true
-                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-300 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
+                      className="form-input__file-label shadow-sm py-2 px-3 border border-gray-300 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
                       {t("change_photo") |> str}
                     </label>
                   </span>

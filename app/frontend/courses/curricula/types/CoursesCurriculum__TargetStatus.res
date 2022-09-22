@@ -58,7 +58,8 @@ let makePending = targets =>
 let lockTargets = (targets, reason) =>
   targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Locked(reason)})
 
-let allTargetsComplete = (targetCache, targetIds) => targetIds->Belt.Array.every(targetId => {
+let allTargetsComplete = (targetCache, targetIds) =>
+  targetIds->Belt.Array.every(targetId => {
     Js.Array.find(ct => ct.targetId == targetId, targetCache)->Belt.Option.mapWithDefault(
       true,
       target => target.submissionStatus == SubmissionCompleted,
@@ -153,6 +154,11 @@ let targetId = (t: t) => t.targetId
 let status = t => t.status
 
 let isPending = t => t.status == Pending
+let isAccessEnded = t =>
+  switch t.status {
+  | Locked(reason) => reason == AccessLocked
+  | _ => false
+  }
 
 let lockReasonToString = lockReason =>
   switch lockReason {

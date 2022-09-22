@@ -31,7 +31,8 @@ class UserMailerPreview < ActionMailer::Preview
   def confirm_account_deletion
     school = School.first
     user = school.users.first
-    UserMailer.confirm_account_deletion(user.name, user.school, school)
+    name = user.preferred_name.presence || user.name
+    UserMailer.confirm_account_deletion(name, user.school, school)
   end
 
   def account_deletion_notification

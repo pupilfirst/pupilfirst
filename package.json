@@ -46,6 +46,7 @@
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "markdown-it-task-checkbox": "^1.0.6",
+    "markdown-it-video": "^0.6.3",
     "node-gyp": "^9.1.0",
     "pnotify": "^5.2.0",
     "postcss": "^8.4.16",

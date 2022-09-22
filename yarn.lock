@@ -9231,6 +9231,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"markdown-it-video@npm:^0.6.3":
+  version: 0.6.3
+  resolution: "markdown-it-video@npm:0.6.3"
+  checksum: 11eed4f684b1dff134e9017da58c30bfdfdca6294f28de782cc0e6673d935c38d4e17cb26c364cb8a30c0fecc7c1694d5db500419cf75dac8406ab3a39eaa411
+  languageName: node
+  linkType: hard
+
 "markdown-it@npm:^12.3.2":
   version: 12.3.2
   resolution: "markdown-it@npm:12.3.2"
@@ -12145,6 +12152,7 @@ __metadata:
     markdown-it-sub: ^1.0.0
     markdown-it-sup: ^1.0.0
     markdown-it-task-checkbox: ^1.0.6
+    markdown-it-video: ^0.6.3
     node-gyp: ^9.1.0
     pnotify: ^5.2.0
     postcss: ^8.4.16

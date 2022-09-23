@@ -116,9 +116,9 @@ let reloadStudents = (courseId, send, params) => {
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter(
-      "include_inactive_cohorts",
-      t("filter.include"),
-      Custom(t("filter.inactive_cohorts")),
+      "status",
+      "Status",
+      CustomArray(["Active", "Ended"]),
       "orange",
     ),
     CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
@@ -192,11 +192,7 @@ let renderLoadMore = (send, courseId, params, cursor) => {
   </div>
 }
 
-let pageTitle = params => {
-  Webapi.Url.URLSearchParams.has("include_inactive_cohorts", params)
-    ? t("all_cohorts")
-    : t("active_cohorts")
-}
+
 
 @react.component
 let make = (~courseId, ~search) => {
@@ -211,7 +207,7 @@ let make = (~courseId, ~search) => {
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex gap-2 items-end justify-between">
-          <p className="font-semibold pl-1"> {pageTitle(params)->str} </p>
+          <p className="font-semibold pl-1 capitalize"> {t("cohorts")->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
             <PfIcon className="if i-plus-regular" />
             <span className="inline-block pl-2"> {str(t("add_new_cohort"))} </span>

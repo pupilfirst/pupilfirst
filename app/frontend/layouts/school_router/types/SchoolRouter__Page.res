@@ -74,7 +74,7 @@ let coursePath = (coursePage, courseId) => {
   | Certificates => `/school/courses/${courseId}/certificates`
   | Applicants => `/school/courses/${courseId}/applicants`
   | Teams => `/school/courses/${courseId}/teams`
-  | Cohorts => `/school/courses/${courseId}/cohorts`
+  | Cohorts => `/school/courses/${courseId}/cohorts?status=Active`
   }
 }
 

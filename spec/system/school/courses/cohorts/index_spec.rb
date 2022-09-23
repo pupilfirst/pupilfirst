@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 def cohorts_path(course)
-  "/school/courses/#{course.id}/cohorts"
+  "/school/courses/#{course.id}/cohorts?status=Active"
 end
 
 feature 'Cohorts Index', js: true do
@@ -46,20 +46,20 @@ feature 'Cohorts Index', js: true do
 
       expect(page).to have_link(
         'Add new cohort',
-        href: "#{cohorts_path(course)}/new"
+        href: "/school/courses/#{course.id}/cohorts/new"
       )
     end
 
-    scenario 'School admin checkouts all cohorts' do
+    scenario 'School admin checkouts filters' do
       sign_in_user school_admin.user, referrer: cohorts_path(course)
 
       expect(page).to have_text(live_cohort.name)
       expect(page).not_to have_text(ended_cohort.name)
 
-      expect(page).to have_text('Active Cohorts')
+      expect(page).to have_text('Cohorts')
 
-      fill_in 'Filter Resources', with: 'inactive'
-      click_button 'Pick Include: Inactive Cohorts'
+      fill_in 'Filter Resources', with: 'ended'
+      click_button 'Pick Status: Ended'
 
       within("div[data-cohort-name='#{ended_cohort.name}']") do
         expect(page).to have_content(ended_cohort.description)
@@ -69,7 +69,12 @@ feature 'Cohorts Index', js: true do
         expect(page).to have_content(1)
       end
 
-      expect(page).to have_text('All Cohorts')
+      expect(page).not_to have_text(live_cohort.name)
+
+      click_button 'Remove selection: Ended'
+
+      expect(page).to have_text(live_cohort.name)
+      expect(page).to have_text(ended_cohort.name)
     end
   end
 

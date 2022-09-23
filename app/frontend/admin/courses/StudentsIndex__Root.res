@@ -252,7 +252,7 @@ let make = (~courseId, ~search) => {
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold pl-1"> {t("students")->str} </p>
+          <p className="font-semibold pl-1 capitalize"> {t("students")->str} </p>
           <div>
             <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
               <PfIcon className="if i-plus-regular" />

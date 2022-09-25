@@ -91,8 +91,6 @@ en:
       edit: Edit
       filter:
         first_created: First Created
-        inactive_cohorts: Inactive Cohorts
-        include: Include
         last_created: Last Created
         last_ending: Last Ending
         name: Name

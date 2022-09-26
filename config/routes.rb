@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
         else
-         :rails_blob
+          :rails_blob
         end
       route_for(route, blob, only_path: true)
     else
@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   get 'users/delete_account', controller: 'users', action: 'delete_account', as: 'delete_account'
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
+
+  get 'users/update_email', controller: 'users', action: 'update_email', as: 'update_email'
 
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'

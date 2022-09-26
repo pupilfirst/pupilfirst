@@ -118,10 +118,27 @@ class User < ApplicationRecord
     )
   end
 
+  def original_update_email_token
+    @original_update_email_token ||
+      raise('Original update email token is unavailable')
+  end
+
+  def regenerate_update_email_token
+    @original_update_email_token = SecureRandom.urlsafe_base64
+    update!(
+      update_email_token:
+        Digest::SHA2.base64digest(@original_update_email_token)
+    )
+  end
+
   def self.find_by_hashed_delete_account_token(delete_account_token)
     find_by(
       delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token)
     )
+  end
+
+  def self.find_by_hashed_update_email_token(token)
+    find_by(update_email_token: token)
   end
 
   def regenerate_api_token

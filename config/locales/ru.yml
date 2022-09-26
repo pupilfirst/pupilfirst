@@ -1165,9 +1165,9 @@ ru:
       update_images: Обновить Изображения
       updated_notification: Изображения успешно обновлены.
     SchoolCustomize__LinkComponent:
+      cancel_editing: Cancel Editing
       move_down: Move Down
       move_up: Move Up
-      cancel_editing: Cancel Editing
     SchoolCustomize__LinkEditor:
       add_new_link: Добавить Новую Ссылку
       adding_new_link: Добавление новой ссылки...
@@ -1766,8 +1766,8 @@ ru:
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
     create_school_link:
-      success_notification: добавлена пользовательская ссылка.
       blank_title_error: Требуется заголовок
+      success_notification: добавлена пользовательская ссылка.
     create_student_from_applicant:
       success_notification: Студент успешно создан.
     create_submission:
@@ -1988,6 +1988,7 @@ ru:
     edit: Редактировать
     email: Почта
     email_error: Введите действительную почту
+    email_exists_error: Этот адрес электронной почты уже связан с другой учетной записью пользователя.
     email_placeholder: Добавьте почту здесь
     empty: Пусто
     fail: Провал
@@ -2110,6 +2111,9 @@ ru:
       question: Вопрос
       shared: Вы используете общее устройство?
       with_password: Войти с паролем
+    update_email:
+      frequent_request_error: Письмо было отправлено менее двух минут назад. Пожалуйста, подождите несколько минут, прежде чем повторить попытку.
+      link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
   validate_submission_gradable:
     owners_should_be_active:
       error: Невозможно обновить неактивные работы учащихся.
@@ -2155,6 +2159,10 @@ ru:
         use_link_html: Воспользуйтесь %{link_to}, чтобы войти в %{school_name} и просмотреть курс
       confirm_account_deletion:
         body_html: <p> Ваша учетная запись в %{school_name} успешно удалена. </p> <p> Вся ваша личная информация была удалена, и у вас больше не будет доступа к этой школе.</p>
+      confirm_email_update:
+        body:
+          html: <p> Ваш адрес электронной почты в <strong>%{school_name}</strong> успешно обновлен. </p>
+        subject: Ваш адрес электронной почты в школе %{school_name} успешно обновлен
       course_enrollement:
         added_coach_html: Вы добавлены в качестве ментора курса <strong>%{course_name}</strong> в %{school_name}. Это дает вам возможность просматривать материалы, отправленные учащимися, выставлять оценки и оставлять отзывы об их работе.
         can_sign_html: Теперь вы можете %{link_to}.
@@ -2167,7 +2175,7 @@ ru:
           control_emails_html: Вы можете управлять этими электронными письмами с %{link_to}.
           latest_topics: "Последние темы, опубликованные в ваших сообществах:"
           link_to: страница редактирования вашего профиля
-          main_html: "Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения на некоторых курсах, в которых вы являетесь тренером."
+          main_html: Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения на некоторых курсах, в которых вы являетесь тренером.
           older: "Старые, популярные темы, в которых появились новые действия:"
           replies: ответов
           views: просмотров
@@ -2234,6 +2242,12 @@ ru:
           students_requested_html: <b>Учащихся запрошено:</b> %{report_params}
           summary_import_html: "Ваш запрос на импорт учащихся в курс <strong>%{course_name}</strong> успешно выполнен. Вот краткий обзор импорта:"
           view_html: Вы можете %{link_to}.
+      update_email_token:
+        body:
+          link_to: link
+          main_html: "<p>Мы получили запрос на обновление вашей электронной почты в %{school_name}.</p> <p> Нажмите на эту ссылку %{link_to}, чтобы обновить электронную почту. Ссылка действительна только в течение 30\_минут.</p>"
+          note_html: <p>Это действие необратимо.</p>
+        subject: Обновите свой адрес электронной почты в школе %{school_name}
     sign_in_with_email:
       type_password: Ваш Пароль
     students:

@@ -178,26 +178,6 @@ class AddCohorts < ActiveRecord::Migration[6.1]
           )
         end
     end
-
-    remove_column :founders, :startup_id
-    remove_column :founders, :resume_file_id
-    remove_column :founders, :dashboard_toured
-
-    drop_table :faculty_course_enrollments
-    drop_table :faculty_startup_enrollments
-    drop_table :startups
-    remove_column :courses, :ends_at
-
-    # Clean up slack
-    remove_column :faculty, :slack_username
-    remove_column :faculty, :slack_user_id
-
-    remove_column :founders, :slack_username
-    remove_column :founders, :slack_user_id
-
-    remove_column :targets, :slack_reminders_sent_at
-
-    drop_table :public_slack_messages
   end
 
   def down

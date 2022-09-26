@@ -9,9 +9,9 @@ class CohortsResolver < ApplicationQuery
     scope = course.cohorts
 
     case filter[:status]&.downcase
-    in 'active'
+    when 'active'
       scope = scope.active
-    in 'ended'
+    when 'ended'
       scope = scope.ended
     else
       scope

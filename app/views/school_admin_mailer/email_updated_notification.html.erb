@@ -1,8 +1,6 @@
 <% content_for :salutation do %>
-  <%= t("shared.salutation_name", name: @user.name) %>
+  <%= t("shared.salutation_name", name: @school_admin.name) %>
 <% end %>
-
-
 <% content_for :body do %>
   <p>
     <%= t("mailers.school_admin.email_updated_notification.body.user_html", name: @user.name) %>

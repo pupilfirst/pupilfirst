@@ -222,6 +222,7 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("user_tags", t("filter.user_tag"), DataLoad(#UserTag), "blue"),
     CourseResourcesFilter.makeFilter("email", t("filter.search_by_email"), Search, "gray"),
     CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
+    CourseResourcesFilter.makeFilter("status", "Status", CustomArray(["Active", "Ended", "Dropped"]), "orange"),
   ]
 }
 

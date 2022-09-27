@@ -110,7 +110,7 @@ module StudentsQuery = %graphql(`
   `)
 
 let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
-  Webapi.Url.URLSearchParams.append("active", "true", params)
+  Webapi.Url.URLSearchParams.append("status", "active", params)
   let filterString = params->Webapi.Url.URLSearchParams.toString
 
   StudentsQuery.makeVariables(

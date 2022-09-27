@@ -10,14 +10,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
   end
 
   class Tagging < ApplicationRecord
-    belongs_to :tag, class_name: '::ActsAsTaggableOn::Tag'
     belongs_to :taggable, polymorphic: true
-  end
-
-  class Tags < ApplicationRecord
-    has_many :taggings,
-             dependent: :destroy,
-             class_name: '::ActsAsTaggableOn::Tagging'
   end
 
   class Founder < ApplicationRecord

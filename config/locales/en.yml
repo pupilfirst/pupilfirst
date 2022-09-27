@@ -1653,7 +1653,6 @@ en:
       create_team: Create Team
       edit: Edit
       filter:
-        include: Include
         search_by_team_name: Search by Team Name
       load_more: Load More
       page_title: Teams

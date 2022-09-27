@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 def teams_path(course)
-  "/school/courses/#{course.id}/teams"
+  "/school/courses/#{course.id}/teams?status=Active"
 end
 
 feature 'Teams Index', js: true do
@@ -35,17 +35,20 @@ feature 'Teams Index', js: true do
 
     expect(page).to have_text('Showing all')
 
-    expect(page).to have_link('Create Team', href: "#{teams_path(course)}/new")
+    expect(page).to have_link(
+      'Create Team',
+      href: "/school/courses/#{course.id}/teams/new"
+    )
   end
 
-  scenario 'School admin checkouts inactive teams' do
+  scenario 'School admin checkouts status filter for teams' do
     sign_in_user school_admin.user, referrer: teams_path(course)
 
     expect(page).to have_text(team_1.name)
     expect(page).not_to have_text(team_ended.name)
 
     fill_in 'Filter Resources', with: 'inactive'
-    click_button 'Pick Include: Inactive Teams'
+    click_button 'Pick Status: Inactive'
 
     within("div[data-team-name='#{team_ended.name}']") do
       expect(page).to have_content(team_ended.name)
@@ -55,6 +58,12 @@ feature 'Teams Index', js: true do
         expect(page).to have_content(student.name)
       end
     end
+    expect(page).not_to have_text(team_1.name)
+
+    click_button 'Remove selection: Inactive'
+
+    expect(page).to have_text(team_1.name)
+    expect(page).to have_text(team_ended.name)
   end
 
   context 'when there are a large number of teams' do

@@ -71,9 +71,9 @@ let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
     CourseResourcesFilter.makeFilter(
-      "include_inactive_teams",
-      t("filter.include"),
-      Custom("Inactive Teams"),
+      "status",
+      "Status",
+      CustomArray(["Active", "Inactive"]),
       "orange",
     ),
     CourseResourcesFilter.makeFilter("name", t("filter.search_by_team_name"), Search, "gray"),
@@ -135,7 +135,7 @@ let reloadTeams = (courseId, send, params) => {
 }
 
 let showTeams = teams => {
-  <div className="w-full">
+  <div className="w-full space-y-4">
     {teams
     ->Js.Array2.map(team =>
       <Spread props={"data-team-name": Team.name(team)}>

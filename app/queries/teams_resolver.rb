@@ -8,7 +8,15 @@ class TeamsResolver < ApplicationQuery
   def teams
     scope = course.teams
 
-    scope = scope.active if filter[:include_inactive_teams].blank?
+    case filter[:status]&.downcase
+    when 'active'
+      scope = scope.active
+    when 'inactive'
+      scope = scope.inactive
+    else
+      scope
+    end
+
     scope = scope.where(cohort_id: cohort.id) if cohort.present?
     scope = scope.where('teams.name ILIKE ?', "%#{filter[:name]}%") if filter[
       :name

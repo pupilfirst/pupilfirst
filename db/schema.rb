@@ -785,10 +785,10 @@ ActiveRecord::Schema.define(version: 2022_08_05_063129) do
     t.jsonb "webpush_subscription", default: {}
     t.string "login_token_digest"
     t.datetime "last_seen_at"
+    t.string "preferred_name"
     t.string "update_email_token"
     t.datetime "update_email_token_sent_at"
     t.string "new_email"
-    t.string "preferred_name"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

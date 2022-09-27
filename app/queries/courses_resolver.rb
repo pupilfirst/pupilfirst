@@ -4,7 +4,7 @@ class CoursesResolver < ApplicationQuery
 
   def courses
     if search.present?
-      applicable_courses.where('name ILIKE ?', "%#{search}%")
+      applicable_courses.where('courses.name ILIKE ?', "%#{search}%")
     else
       applicable_courses
     end

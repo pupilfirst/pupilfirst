@@ -1,5 +1,7 @@
 class AddCohorts < ActiveRecord::Migration[6.1]
   class Startup < ApplicationRecord
+    acts_as_taggable
+
     belongs_to :level
     has_many :founders, dependent: :restrict_with_error
     has_many :faculty_startup_enrollments, dependent: :destroy
@@ -8,6 +10,8 @@ class AddCohorts < ActiveRecord::Migration[6.1]
   end
 
   class Founder < ApplicationRecord
+    acts_as_taggable
+
     belongs_to :startup
     has_one :level, through: :startup
     has_one :course, through: :level
@@ -122,7 +126,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
 
       course
         .startups
-        .includes(:founders)
+        .includes(:founders, taggings: :tag)
         .group_by { |x| x.access_ends_at&.to_date }
         .each do |ends_at, startups|
           cohort =
@@ -147,12 +151,14 @@ class AddCohorts < ActiveRecord::Migration[6.1]
               team = Team.create!(name: startup.name, cohort_id: cohort.id)
             end
 
-            startup.founders.update_all(
-              level_id: startup.level_id,
-              cohort_id: cohort.id,
-              dropped_out_at: startup.dropped_out_at,
-              team_id: team&.id
-            )
+            startup.founders.each do |student|
+              student.level_id = startup.level_id
+              student.cohort_id = cohort.id
+              student.dropped_out_at = startup.dropped_out_at
+              student.team_id = team&.id
+              student.tag_list.add(startup.tag_list)
+              student.save!
+            end
           end
         end
 

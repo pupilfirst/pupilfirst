@@ -1,12 +1,27 @@
 module Schools
   module Coaches
     class UpdateForm < Reform::Form
-      property :name, validates: { presence: true, length: { maximum: 250 } }, virtual: true
+      property :name,
+               validates: {
+                 presence: true,
+                 length: {
+                   maximum: 250
+                 }
+               },
+               virtual: true
       property :title, validates: { presence: true, length: { maximum: 250 } }
       property :connect_link
       property :exited
       property :public
-      property :image, virtual: true, validates: { image: true, file_size: { less_than: 5.megabytes }, allow_blank: true }
+      property :image,
+               virtual: true,
+               validates: {
+                 image: true,
+                 file_size: {
+                   less_than: 5.megabytes
+                 },
+                 allow_blank: true
+               }
       property :school_id, virtual: true, validates: { presence: true }
       property :affiliation, virtual: true
 
@@ -31,19 +46,11 @@ module Schools
       end
 
       def user_params
-        {
-          name: name,
-          title: title,
-          affiliation: affiliation
-        }
+        { name: name, title: title, affiliation: affiliation }
       end
 
       def faculty_params
-        {
-          connect_link: connect_link,
-          public: public,
-          exited: exited
-        }
+        { connect_link: connect_link, public: public, exited: exited }
       end
 
       def faculty
@@ -51,8 +58,8 @@ module Schools
       end
 
       def clear_faculty_enrollments
-        FacultyCourseEnrollment.where(faculty: faculty).destroy_all
-        FacultyStartupEnrollment.where(faculty: faculty).destroy_all
+        FacultyCohortEnrollment.where(faculty: faculty).destroy_all
+        FacultyFounderEnrollment.where(faculty: faculty).destroy_all
       end
     end
   end

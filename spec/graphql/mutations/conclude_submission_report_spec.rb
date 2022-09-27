@@ -3,14 +3,14 @@ require 'rails_helper'
 describe Mutations::ConcludeSubmissionReport, type: :request do
   include TokenAuthHelper
 
-  let(:student) { create :student }
-  let(:course) { student.course }
+  let(:course) { create :course, :with_cohort }
+  let(:student) { create :student, cohort: course.cohorts.first }
 
-  let(:faculty_course_enrollment) do
-    create :faculty_course_enrollment, course: course
+  let(:faculty_cohort_enrollment) do
+    create :faculty_cohort_enrollment, cohort: course.cohorts.first
   end
 
-  let(:user) { faculty_course_enrollment.faculty.user }
+  let(:user) { faculty_cohort_enrollment.faculty.user }
   let(:level) { create :level, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, target_group: target_group }

@@ -16,12 +16,13 @@ module Students
       collisions = 0
 
       begin
-        issued_certificate = certificate_to_issue.issued_certificates.create!(
-          user: user,
-          name: user.name,
-          issuer: issuer,
-          serial_number: IssuedCertificates::SerialNumberService.generate
-        )
+        issued_certificate =
+          certificate_to_issue.issued_certificates.create!(
+            user: user,
+            name: user.name,
+            issuer: issuer,
+            serial_number: IssuedCertificates::SerialNumberService.generate
+          )
       rescue ActiveRecord::RecordNotUnique
         collisions += 1
         retry if collisions <= 5
@@ -40,7 +41,10 @@ module Students
     end
 
     def issued_certificate_exists?
-      user.issued_certificates.exists?(certificate: course.certificates, revoked_at: nil)
+      user.issued_certificates.exists?(
+        certificate: course.certificates,
+        revoked_at: nil
+      )
     end
 
     def active_certificate
@@ -48,7 +52,7 @@ module Students
     end
 
     def course
-      @student.startup.course
+      @student.course
     end
   end
 end

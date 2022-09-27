@@ -15,7 +15,7 @@ module Courses
       if current_student.present?
         {
           submissions: submissions,
-          team: team_details,
+          student: student_details,
           coaches: faculty.map(&:attributes),
           users: users,
           evaluation_criteria: evaluation_criteria,
@@ -26,7 +26,7 @@ module Courses
       else
         {
           submissions: [],
-          team: team_details_for_preview_mode,
+          student: student_details_for_preview_mode,
           coaches: [],
           users: [],
           evaluation_criteria: [],
@@ -72,27 +72,26 @@ module Courses
       end
     end
 
-    def team_details_for_preview_mode
+    def student_details_for_preview_mode
       {
         name: current_user&.name || 'John Doe',
         level_id: levels.first.id,
-        access_ends_at: nil
+        ends_at: nil
       }
     end
 
-    def team_details
-      current_student.startup.attributes.slice(
-        'name',
-        'access_ends_at',
-        'level_id'
-      )
+    def student_details
+      {
+        name: current_student.name,
+        level_id: current_student.level_id,
+        ends_at: current_student.cohort.ends_at
+      }
     end
 
     def course_details
       details =
         @course.attributes.slice(
           'id',
-          'ends_at',
           'progression_behavior',
           'progression_limit'
         )
@@ -105,10 +104,11 @@ module Courses
               .live
               .joins(:course)
               .find_by(courses: { id: @course.id })
-              &.serial_number
+              &.serial_number,
+          ended: @course.ended?
         )
       else
-        details
+        details.merge(ended: @course.ended?)
       end
     end
 
@@ -183,10 +183,10 @@ module Courses
     def faculty
       @faculty ||=
         begin
-          scope = Faculty.left_joins(:startups, :courses)
+          scope = Faculty.left_joins(:founders, :courses)
 
           scope
-            .where(startups: { id: current_student.startup })
+            .where(founders: { id: current_student })
             .or(scope.where(courses: { id: @course }))
             .distinct
             .select(:id, :user_id)
@@ -194,13 +194,17 @@ module Courses
         end
     end
 
-    def team_members
-      @team_members ||=
-        current_student.startup.founders.select(:id, :user_id).load
+    def team_members_user_ids
+      @team_members_user_ids ||=
+        if current_student.team.present?
+          current_student.team.founders.pluck(:user_id)
+        else
+          [current_student.user_id]
+        end
     end
 
     def users
-      user_ids = (team_members.pluck(:user_id) + faculty.pluck(:user_id)).uniq
+      user_ids = (team_members_user_ids + faculty.pluck(:user_id)).uniq
 
       User
         .where(id: user_ids)

@@ -35,14 +35,9 @@ Psj.matchPaths(
     "school/courses/:course_id/targets/:target_id/versions",
   ],
   () => {
-    switch ReactDOM.querySelector("#curriculum-editor") {
+    switch ReactDOM.querySelector("#schoolrouter-innerpage") {
     | Some(element) =>
-      let props =
-        DomUtils.parseJSONAttribute(
-          ~id="curriculum-editor",
-          ~attribute="data-props",
-          (),
-        ) |> decodeProps
+      let props = DomUtils.parseJSONTag(~id="curriculum-editor", ()) |> decodeProps
 
       ReactDOM.render(
         <Toggle.Provider value=props.enabledFeatures>

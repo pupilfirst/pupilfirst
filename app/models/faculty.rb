@@ -12,12 +12,13 @@ class Faculty < ApplicationRecord
            inverse_of: :evaluator,
            dependent: :nullify
   has_many :targets, dependent: :restrict_with_error
-  has_many :faculty_course_enrollments, dependent: :destroy
-  has_many :courses, through: :faculty_course_enrollments
+  has_many :faculty_cohort_enrollments, dependent: :destroy
+  has_many :cohorts, through: :faculty_cohort_enrollments
+  has_many :courses, through: :cohorts
 
-  # Startups whose timeline events this faculty can review.
-  has_many :faculty_startup_enrollments, dependent: :destroy
-  has_many :startups, through: :faculty_startup_enrollments
+  # Students whose submissions this faculty can review.
+  has_many :faculty_founder_enrollments, dependent: :destroy
+  has_many :founders, through: :faculty_founder_enrollments
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'
@@ -63,48 +64,9 @@ class Faculty < ApplicationRecord
             },
             allow_blank: true
 
-  scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
-
   delegate :email, :name, :title, :affiliation, :about, :avatar, to: :user
 
   normalize_attribute :connect_link
-
-  validate :slack_username_must_exist
-
-  def slack_username_must_exist
-    return if slack_username.blank?
-    return unless slack_username_changed?
-    return unless Rails.env.production?
-
-    begin
-      @new_slack_user_id =
-        FacultyModule::SlackConnectService.new(self).slack_user_id
-    rescue PublicSlack::OperationFailureException
-      errors.add(
-        :slack_username,
-        "could not be validated using Slack's API. Contact the engineering team."
-      )
-    end
-
-    return if @new_slack_user_id.present?
-
-    errors.add(
-      :slack_username,
-      'does not exist on SV.CO Public Slack. Confirm username and try again.'
-    )
-  end
-
-  before_save :fetch_slack_user_id
-
-  def fetch_slack_user_id
-    return unless slack_username_changed?
-
-    self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
-  end
-
-  def reviewable_startups(course)
-    course.startups.admitted
-  end
 
   def connect_link?
     connect_link.present?

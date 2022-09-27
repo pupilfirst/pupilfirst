@@ -37,15 +37,15 @@ module Users
 
       # Cache teams with only the current user as member
       team_ids =
-        Startup
+        Team
           .joins(:founders)
           .group(:id)
           .having('count(founders.id) = 1')
-          .where(id: @user.founders.distinct(:startup_id).select(:startup_id))
+          .where(id: @user.founders.distinct(:team_id).select(:team_id))
           .pluck(:id)
 
       @user.founders.each(&:destroy!)
-      Startup.where(id: team_ids).each(&:destroy!)
+      Team.where(id: team_ids).each(&:destroy!)
     end
 
     def delete_coach_profile

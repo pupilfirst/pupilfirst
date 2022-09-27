@@ -8,31 +8,39 @@ describe Users::MergeAccountsService do
   let!(:old_user) { create :user, school: school }
 
   # Create courses and student profiles
-  let!(:course_1) { create :course, school: school }
-  let!(:course_2) { create :course, school: school }
+  let!(:course_1) { create :course, :with_cohort, school: school }
+  let!(:course_2) { create :course, :with_cohort, school: school }
   let!(:level_1_c1) { create :level, :one, course: course_1 }
   let!(:level_1_c2) { create :level, :one, course: course_2 }
   let!(:level_2_c2) { create :level, :one, course: course_2 }
 
-  let!(:team_old_user_c1) { create :team, level: level_1_c1 }
-  let!(:team_old_user_c2) { create :team, level: level_2_c2 }
   let!(:student_old_user_c1) do
-    create :student, user: old_user, startup: team_old_user_c1
+    create :student,
+           user: old_user,
+           cohort: course_1.cohorts.first,
+           level: level_1_c1
   end
   let!(:student_old_user_c2) do
-    create :student, user: old_user, startup: team_old_user_c2
+    create :student,
+           user: old_user,
+           cohort: course_2.cohorts.first,
+           level: level_1_c2
   end
 
   # Add coach profiles
   let!(:coach_old_user) { create :faculty, school: school, user: old_user }
   let!(:course_enrollment) do
-    create :faculty_course_enrollment, course: course_1, faculty: coach_old_user
+    create :faculty_cohort_enrollment,
+           cohort: course_1.cohorts.first,
+           faculty: coach_old_user
   end
-  let!(:team_in_c1) { create :team, level: level_1_c1 }
-  let!(:student_in_c1) { create :student, startup: team_in_c1 }
+
+  let!(:student_in_c1) do
+    create :student, cohort: course_1.cohorts.first, level: level_1_c1
+  end
   let!(:student_enrollment) do
-    create :faculty_startup_enrollment,
-           startup: team_in_c1,
+    create :faculty_founder_enrollment,
+           founder: student_in_c1,
            faculty: coach_old_user
   end
 
@@ -121,9 +129,11 @@ describe Users::MergeAccountsService do
     end
 
     context 'both users have student profiles in the same course' do
-      let!(:team_new_user_c1) { create :team, level: level_1_c1 }
       let!(:student_new_user_c1) do
-        create :student, user: new_user, startup: team_new_user_c1
+        create :student,
+               user: new_user,
+               level: level_1_c1,
+               cohort: course_1.cohorts.first
       end
       it 'prompts to select the student profile to be used' do
         expect {

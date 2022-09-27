@@ -33,8 +33,21 @@ module Make = (Selectable: Selectable) => {
 
   let borderColor = colorForSelected => "border border-" ++ (colorForSelected ++ "-500")
 
+  let getBgColor = colorForSelected =>
+    switch colorForSelected {
+    | "primary" => "bg-primary-200"
+    | "orange" => "bg-orange-200"
+    | "green" => "bg-green-200"
+    | "red" => "bg-red-200"
+    | "yellow" => "bg-yellow-200"
+    | "blue" => "bg-blue-200"
+    | "gray" => "bg-gray-200"
+    | "focusColor" => "bg-focusColor-200"
+    | _ => "bg-orange-200"
+    }
+
   let selectedItemClasses = colorForSelected =>
-    "bg-" ++ (colorForSelected ++ ("-200 " ++ borderColor(colorForSelected)))
+    getBgColor(colorForSelected) ++ " " ++ borderColor(colorForSelected)
 
   let searchVisible = (unselected, value) => value != "" || unselected |> Array.length > 3
 
@@ -72,22 +85,18 @@ module Make = (Selectable: Selectable) => {
             |> Array.mapi((index, selected) =>
               <span
                 key={index |> string_of_int}
-                className="inline-flex font-semibold text-xs rounded mb-2 mr-2">
-                <span
-                  className={"px-2 py-1 flex-1 rounded-l " ++
-                  selectedItemClasses(colorForSelected)}>
-                  {selected |> Selectable.value |> str}
-                </span>
+                className={"inline-flex items-center font-semibold text-xs mb-2 mr-2 rounded-full overflow-hidden " ++
+                selectedItemClasses(colorForSelected)}>
+                <span className="px-2 py-1 flex-1"> {selected |> Selectable.value |> str} </span>
                 <button
-                  className={"inline-flex flex-shrink-0 px-2 py-1 text-sm border-l-0 rounded-r items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
-                  borderColor(colorForSelected)}
-                  title="Remove"
+                  className={"bg-gray-100 inline-flex flex-shrink-0 px-2 py-1 text-sm rounded-r items-center text-gray-800 transition-all hover:bg-red-50 hover:text-red-700 focus:outline-none focus:bg-red-50 focus:text-red-700 "}
+                  title={"Remove " ++ Selectable.value(selected)}
                   onClick={event => {
                     ReactEvent.Mouse.preventDefault(event)
 
                     onDeselect(selected)
                   }}>
-                  <PfIcon className="if i-times-light" />
+                  <PfIcon className="if i-times-regular" />
                 </button>
               </span>
             )
@@ -97,7 +106,7 @@ module Make = (Selectable: Selectable) => {
               <i className="fas fa-inbox text-3xl" />
               <h5 className="mt-1 font-semibold"> {emptySelectionMessage |> str} </h5>
             </div>}
-        <div className="text-xs font-semibold mt-2">
+        <div className="text-sm font-medium border-t pt-2 mt-2">
           {(
             unselected |> Array.length > 0
               ? "Add more from the list below:"

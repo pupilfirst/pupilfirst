@@ -3,9 +3,14 @@ module Applicants
     def initialize(applicant)
       @applicant = applicant
       @course = applicant.course
+      @cohort = @course.default_cohort
     end
 
     def create(tags)
+      if @cohort.blank?
+        raise 'Default Cohort Assignment is required to onboard applicants'
+      end
+
       Applicant.transaction do
         student = create_new_student(tags)
 
@@ -37,13 +42,11 @@ module Applicants
       user.regenerate_login_token
       user.update!(name: @applicant.name)
 
-      # Create the team and tag it.
-      team = Startup.create!(name: @applicant.name, level: first_level)
-      team.tag_list.add(tags)
-      team.save!
-
       # Finally, create a student profile for the user.
-      Founder.create!(user: user, startup: team)
+      founder = Founder.create!(user: user, level: first_level, cohort: @cohort)
+      founder.tag_list.add(tags)
+      founder.save!
+      founder
     end
 
     def school

@@ -83,10 +83,10 @@ module Users
         @new_user.faculty.presence ||
           Faculty.create!(user: @new_user, category: old_user_coach.category)
 
-      old_user_coach.faculty_course_enrollments.each do |enrollment|
+      old_user_coach.faculty_cohort_enrollments.each do |enrollment|
         if new_user_coach
-             .faculty_course_enrollments
-             .where(course_id: enrollment.course_id)
+             .faculty_cohort_enrollments
+             .where(cohort_id: enrollment.cohort_id)
              .present?
           next
         else
@@ -95,7 +95,7 @@ module Users
       end
 
       # rubocop:disable Rails/SkipsModelValidations
-      old_user_coach.faculty_startup_enrollments.update_all(
+      old_user_coach.faculty_founder_enrollments.update_all(
         faculty_id: new_user_coach.id
       )
 

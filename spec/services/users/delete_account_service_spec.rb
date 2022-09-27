@@ -6,11 +6,10 @@ describe Users::DeleteAccountService do
   # Setup the basics
   let(:user) { create :user, account_deletion_notification_sent_at: 2.days.ago }
   let!(:student) { create :student, user: user }
-  let!(:student_team) { student.startup }
-  let!(:student_with_teammates) { create :founder, user: user }
-  let!(:team_with_user) { student_with_teammates.startup }
+  let!(:team) { create :team_with_students }
+
   let!(:coach) { create :faculty, user: user }
-  let!(:course) { create :course, school: user.school }
+  let!(:course) { create :course, :with_cohort, school: user.school }
   let!(:course_author) { create :course_author, user: user, course: course }
 
   # Coach notes for the founder profiles
@@ -35,17 +34,21 @@ describe Users::DeleteAccountService do
     create :timeline_event,
            :with_owners,
            latest: true,
-           owners: student_with_teammates.startup.founders,
+           owners: team.founders,
            target: target_1
   end
 
   # Create coach enrollments, startup feedback, evaluated submissions and coach notes by user
-  let!(:coach_course_enrollment) do
-    create :faculty_course_enrollment, course: course, faculty: coach
+  let!(:coach_cohort_enrollment) do
+    create :faculty_cohort_enrollment,
+           cohort: course.cohorts.first,
+           faculty: coach
   end
-  let!(:team_2) { create :startup, level: level_1 }
-  let!(:coach_team_enrollment) do
-    create :faculty_startup_enrollment, startup: team_2, faculty: coach
+  let!(:team_2) { create :team_with_students }
+  let!(:coach_student_enrollment) do
+    create :faculty_founder_enrollment,
+           founder: team_2.founders.first,
+           faculty: coach
   end
   let!(:coach_note_by_user) do
     create :coach_note, author: user, student: team_2.founders.first
@@ -93,24 +96,23 @@ describe Users::DeleteAccountService do
         # Check only applicable records are destroyed
         expect(User.find_by(id: user.id)).to eq(nil)
         expect(Founder.find_by(id: student.id)).to eq(nil)
-        expect(Startup.find_by(id: student_team.id)).to eq(nil)
-        expect(Startup.find_by(id: team_with_user.id)).to_not eq(nil)
+        expect(Team.find_by(id: team.id)).to_not eq(nil)
         expect(
           TimelineEventOwner.where(founder_id: user.founders.select(:id))
         ).to eq([])
         expect(TimelineEvent.find_by(id: submission_by_student.id)).to eq(nil)
         expect(TimelineEvent.find_by(id: submission_by_team.id)).to_not eq(nil)
         expect(submission_by_team.founders.pluck(:id).sort).to eq(
-          team_with_user.founders.reload.pluck(:id).sort
+          team.founders.reload.pluck(:id).sort
         )
         expect(CourseAuthor.find_by(id: course_author.id)).to eq(nil)
         expect(Faculty.find_by(id: coach.id)).to eq(nil)
         expect(CoachNote.find_by(id: coach_note_1.id)).to eq(nil)
         expect(
-          FacultyCourseEnrollment.find_by(id: coach_course_enrollment.id)
+          FacultyCohortEnrollment.find_by(id: coach_cohort_enrollment.id)
         ).to eq(nil)
         expect(
-          FacultyStartupEnrollment.find_by(id: coach_team_enrollment.id)
+          FacultyFounderEnrollment.find_by(id: coach_student_enrollment.id)
         ).to eq(nil)
 
         # Check user_id is nullified in applicable records

@@ -7,6 +7,7 @@ type t = {
   avatarUrl: option<string>,
   hasNotifications: bool,
   coachId: option<string>,
+  isAuthor: bool,
 }
 
 let id = t => t.id
@@ -17,6 +18,7 @@ let canEditProfile = t => t.canEditProfile
 let avatarUrl = t => t.avatarUrl
 let hasNotifications = t => t.hasNotifications
 let coachId = t => t.coachId
+let isAuthor = t => t.isAuthor
 
 let decode = json => {
   open Json.Decode
@@ -29,6 +31,7 @@ let decode = json => {
     avatarUrl: optional(field("avatarUrl", string), json),
     hasNotifications: field("hasNotifications", bool, json),
     coachId: optional(field("coachId", string), json),
+    isAuthor: field("isAuthor", bool, json),
   }
 }
 
@@ -41,6 +44,7 @@ let empty = () => {
   avatarUrl: None,
   hasNotifications: false,
   coachId: None,
+  isAuthor: false,
 }
 
 let defaultUser = currentUser => Belt.Option.getWithDefault(currentUser, empty())

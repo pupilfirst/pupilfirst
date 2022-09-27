@@ -7,10 +7,11 @@ feature 'Topic creator', js: true do
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let(:level_1) { create :level, :one, course: course }
   let!(:community) { create :community, school: school }
-  let(:team) { create :team, level: level_1 }
-  let(:student) { create :student, startup: team }
+  let(:team) { create :team, cohort: cohort }
+  let(:student) { create :student, team: team, cohort: cohort, level: level_1 }
   let!(:topic_1) { create :topic, title: 'Foo bar', community: community }
   let!(:topic_2) { create :topic, title: 'Foobar foobaz', community: community }
   let!(:topic_3) { create :topic, title: 'Baz bar', community: community }
@@ -77,10 +78,8 @@ feature 'Topic creator', js: true do
     let(:coach_2) { create :faculty, school: school }
 
     before do
-      create :faculty_course_enrollment, faculty: coach_1, course: course
-      create :faculty_startup_enrollment,
-             faculty: coach_2,
-             startup: student.startup
+      create :faculty_cohort_enrollment, faculty: coach_1, cohort: cohort
+      create :faculty_founder_enrollment, faculty: coach_2, founder: student
     end
 
     scenario 'user creates a new topic that automatically subscribes personal coaches' do

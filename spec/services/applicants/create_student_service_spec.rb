@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Applicants::CreateStudentService do
   subject { described_class.new(applicant) }
 
-  let(:course) { create :course }
+  let(:course) { create :course, :with_default_cohort }
   let(:school) { course.school }
   let!(:level_one) { create :level, course: course }
   let(:applicant) { create :applicant, course: course }
@@ -24,14 +24,13 @@ describe Applicants::CreateStudentService do
       # The user should be in the same school
       expect(user.school).to eq(school)
 
-      # Applicant should have startup in level 1 of the course
-      startup = Startup.where(name: applicant.name).first
-      expect(startup.name).to eq(applicant.name)
-      expect(startup.founders.count).to eq(1)
-      expect(startup.level).to eq(level_one)
+      student = Founder.joins(:user).where(user: { name: applicant.name }).first
+      expect(student.name).to eq(applicant.name)
+
+      expect(student.level).to eq(level_one)
 
       # Founder should have tag "Public Signup"
-      expect(startup.tag_list.sort).to eq(tags.sort)
+      expect(student.tag_list.sort).to eq(tags.sort)
 
       # Applicant should be destroyed
       expect(Applicant.where(email: applicant.email).count).to eq(0)

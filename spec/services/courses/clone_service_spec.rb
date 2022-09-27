@@ -8,6 +8,7 @@ describe Courses::CloneService do
   let(:school) { create :school }
   let(:new_school) { create :school }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let(:level_zero) { create :level, :zero, course: course }
   let(:level_one) { create :level, :one, course: course }
   let(:level_two) { create :level, :two, course: course }
@@ -47,8 +48,10 @@ describe Courses::CloneService do
     create :target, :with_content, :for_founders, target_group: target_group_l2
   end
 
-  let(:startup_l1) { create :startup, level: level_one }
-  let(:startup_l2) { create :startup, level: level_two }
+  let!(:team) { create :team_with_students, cohort: cohort }
+  let(:student_l1) { create :student, level: level_one, cohort: cohort }
+  let(:student_l2) { create :student, level: level_two, cohort: cohort }
+
   let(:ec_1) { create :evaluation_criterion, course: course }
   let(:ec_2) { create :evaluation_criterion, course: course }
   let(:new_name) { Faker::Lorem.words(number: 2).join(' ') }
@@ -89,11 +92,11 @@ describe Courses::CloneService do
   end
 
   before do
-    complete_target(target_l1_1_1, startup_l1.founders.first)
-    complete_target(target_l1_1_1, startup_l2.founders.first)
-    complete_target(target_l1_1_2, startup_l2.founders.first)
-    complete_target(target_l1_2, startup_l2.founders.first)
-    complete_target(target_l2_1, startup_l2.founders.first)
+    complete_target(target_l1_1_1, student_l1)
+    complete_target(target_l1_1_1, student_l2)
+    complete_target(target_l1_1_2, student_l2)
+    complete_target(target_l1_2, student_l2)
+    complete_target(target_l2_1, student_l2)
 
     # Set correct answers for all quiz questions.
     quiz_question_1.update!(correct_answer: q1_answer_2)
@@ -120,7 +123,7 @@ describe Courses::CloneService do
       original_levels = Level.all.order(:number).pluck(:number, :name)
       original_group_names = TargetGroup.all.pluck(:name)
       original_targets = Target.all.pluck(:title, :description)
-      original_startup_count = Startup.count
+      original_team_count = Team.count
       original_founder_count = Founder.count
       original_submission_count = TimelineEvent.count
       original_quiz_questions = QuizQuestion.all.pluck(:question, :description)
@@ -206,8 +209,8 @@ describe Courses::CloneService do
         }
       ).to match_array(original_content_blocks)
 
-      # There should be no cloning of startups, founders, or timeline events.
-      expect(Startup.count).to eq(original_startup_count)
+      # There should be no cloning of team, founders, or timeline events.
+      expect(Team.count).to eq(original_team_count)
       expect(Founder.count).to eq(original_founder_count)
       expect(TimelineEvent.count).to eq(original_submission_count)
 

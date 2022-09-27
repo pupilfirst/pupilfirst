@@ -1,4 +1,4 @@
-module Level = CoursesReview__Level
+module Level = Shared__Level
 module TargetInfo = CoursesReview__TargetInfo
 module IndexSubmission = CoursesReview__IndexSubmission
 module SubmissionDetails = CoursesReview__SubmissionDetails

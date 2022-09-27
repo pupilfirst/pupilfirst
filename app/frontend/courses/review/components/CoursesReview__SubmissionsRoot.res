@@ -6,6 +6,7 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
+module UserProxyFragment = UserProxy.Fragment
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
@@ -51,15 +52,15 @@ module SubmissionDetailsQuery = %graphql(`
           id, passedAt, createdAt, evaluatedAt, feedbackSent, archivedAt
         }
         coaches{
-          id, userId, name, title, avatarUrl
+          ...UserProxyFragment
         }
         teamName
         courseId
         preview
         reviewerDetails{
           assignedAt
-          user{
-            id, userId, name, title, avatarUrl
+          user {
+            ...UserProxyFragment
           }
         }
       }

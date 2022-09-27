@@ -5,7 +5,9 @@ class CoachesResolver < ApplicationQuery
   property :course_id
 
   def coaches
-    coach_ids.nil? ? course.faculty : course.faculty.where(id: coach_ids)
+    scope =
+      coach_ids.nil? ? course.faculty : course.faculty.where(id: coach_ids)
+    scope.includes(:user)
   end
 
   private

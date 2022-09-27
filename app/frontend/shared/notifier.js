@@ -1,8 +1,8 @@
 import { alert, defaultModules } from "@pnotify/core";
 import "@pnotify/core/dist/PNotify.css";
-import "@pnotify/core/dist/BrightTheme.css";
 import * as PNotifyMobile from "@pnotify/mobile";
 import "@pnotify/mobile/dist/PNotifyMobile.css";
+import "./notifier.css";
 
 const notify = (title, text, type) => {
   let notificationText = text;
@@ -24,7 +24,8 @@ const notify = (title, text, type) => {
     title: title,
     text: notificationText,
     textTrusted: textTrusted,
-    styling: "brighttheme",
+    styling: "custom",
+    icons: "custom",
     mode: "light",
     maxTextHeight: null,
     closer: true,

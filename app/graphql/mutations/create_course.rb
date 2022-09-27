@@ -23,6 +23,16 @@ module Mutations
 
         Courses::DemoContentService.new(course).execute
 
+        default_cohort =
+          Cohort.create!(
+            name: 'Purple (Auto-generated)',
+            description:
+              "Auto generated cohort for active students in #{course.name}",
+            course_id: course.id
+          )
+
+        course.update!(default_cohort_id: default_cohort.id)
+
         course
       end
     end

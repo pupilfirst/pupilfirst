@@ -5,18 +5,42 @@ describe CourseExports::PrepareTeamsExportService do
 
   subject { described_class.new(course_export) }
 
-  let(:level_1) { create :level, :one }
-  let(:level_2) { create :level, :two, course: level_1.course }
+  let!(:course) { create :course }
+  let!(:cohort_live) { create :cohort, course: course }
+  let(:level_1) { create :level, :one, course: course }
+  let(:level_2) { create :level, :two, course: course }
 
-  let(:team_1) { create :startup, level: level_2, tag_list: ['tag 1', 'tag 2'] }
-  let(:team_2) { create :startup, level: level_1 }
-  let(:team_3) { create :team, level: level_1 }
+  let!(:team_1) { create :team, cohort: cohort_live }
+  let!(:student_l2_1) do
+    create :student,
+           cohort: cohort_live,
+           level: level_2,
+           tag_list: ['tag 1', 'tag 2'],
+           team: team_1
+  end
+
+  let!(:student_l2_2) do
+    create :student,
+           cohort: cohort_live,
+           level: level_2,
+           tag_list: ['tag 1', 'tag 2'],
+           team: team_1
+  end
+
+  let!(:team_2) { create :team_with_students, cohort: cohort_live }
+  let!(:team_3) { create :team, cohort: cohort_live }
 
   let(:user_t3) { create :user }
 
   let!(:student_1) { team_1.founders.first }
   let!(:student_2) { team_2.founders.first }
-  let!(:student_3) { create :student, startup: team_3, user: user_t3 } # A student who is alone in a team; should also be included.
+  let!(:student_3) do
+    create :student,
+           cohort: cohort_live,
+           level: level_1,
+           team: team_3,
+           user: user_t3
+  end # A student who is alone in a team; should also be included.
 
   let(:target_group_l1_non_milestone) do
     create :target_group, level: level_1, sort_index: 0
@@ -65,8 +89,7 @@ describe CourseExports::PrepareTeamsExportService do
            evaluation_criteria: [evaluation_criterion_1]
   end
 
-  let(:school) { student_1.school }
-  let(:course) { student_1.course }
+  let(:school) { course.school }
 
   let(:coach_1) { create :faculty, school: school }
   let(:coach_2) { create :faculty, school: school }
@@ -92,15 +115,16 @@ describe CourseExports::PrepareTeamsExportService do
   before do
     # Assign all three coaches to the course, but only two of those coaches directly to the first student. These two
     # should be the only ones listed in the report.
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: coach_1,
-           startup: team_1
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+           founder: student_l2_1
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: coach_2,
-           startup: team_1
-    create :faculty_course_enrollment, faculty: coach_3, course: course
+           founder: student_l2_1
+
+    create :faculty_cohort_enrollment, faculty: coach_3, cohort: cohort_live
 
     # Student has an archived submission - data should not be present in the export
     create :timeline_event,
@@ -183,17 +207,10 @@ describe CourseExports::PrepareTeamsExportService do
       {
         title: 'Teams',
         rows: [
-          ['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags'],
-          [
-            team_1.id,
-            team_1.name,
-            2,
-            sorted_student_names(team_1),
-            sorted_coach_names,
-            'tag 1, tag 2'
-          ],
-          [team_2.id, team_2.name, 1, sorted_student_names(team_2), '', ''],
-          [team_3.id, team_3.name, 1, sorted_student_names(team_3), '', '']
+          ['ID', 'Team Name', 'Students'],
+          [team_1.id, team_1.name, sorted_student_names(team_1)],
+          [team_2.id, team_2.name, sorted_student_names(team_2)],
+          [team_3.id, team_3.name, sorted_student_names(team_3)]
         ]
       },
       {
@@ -287,15 +304,8 @@ describe CourseExports::PrepareTeamsExportService do
           {
             title: 'Teams',
             rows: [
-              ['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags'],
-              [
-                team_1.id,
-                team_1.name,
-                2,
-                sorted_student_names(team_1),
-                sorted_coach_names,
-                'tag 1, tag 2'
-              ]
+              ['ID', 'Team Name', 'Students'],
+              [team_1.id, team_1.name, sorted_student_names(team_1)]
             ]
           },
           {

@@ -10,8 +10,8 @@ let avatar = (avatarUrl, name) =>
 
 @react.component
 let make = (~user, ~createdAt) => {
-  let (name, avatarUrl, title) = switch user {
-  | Some(user) => (User.name(user), User.avatarUrl(user), User.title(user))
+  let (name, avatarUrl, fullTitle) = switch user {
+  | Some(user) => (User.name(user), User.avatarUrl(user), User.fullTitle(user))
   | None => ("Unknown", None, "Unknown")
   }
   <div>
@@ -26,7 +26,7 @@ let make = (~user, ~createdAt) => {
       </div>
       <div className="pl-2">
         <p className="font-semibold text-xs"> {name |> str} </p>
-        <p className="text-xs leadig-normal"> {title |> str} </p>
+        <p className="text-xs leadig-normal"> {fullTitle |> str} </p>
       </div>
     </div>
     <p className="block lg:hidden pb-2 text-xs text-gray-800">

@@ -139,7 +139,7 @@
   }
 
   .btn-primary:focus {
-    @apply bg-primary-800;
+    @apply bg-primary-800 text-white;
     background-image: none;
   }
 
@@ -199,12 +199,11 @@
   }
 
   .btn-danger:hover {
-    @apply bg-gradient-to-br from-red-600 to-red-700;
+    @apply bg-gradient-to-br from-red-600 to-red-700 text-red-50;
   }
 
   .btn-danger:focus {
-    @apply bg-red-800;
-    background-image: none;
+    @apply bg-red-800 text-red-50 bg-none;
   }
 
   button:disabled,
@@ -301,9 +300,9 @@
     top: -7px;
     right: 9px;
     border-right: 7px solid transparent;
-    border-bottom: 7px solid theme("colors.gray.400");
+    border-bottom: 7px solid theme("colors.gray.300");
     border-left: 7px solid transparent;
-    border-bottom-color: theme("colors.gray.400");
+    border-bottom-color: theme("colors.gray.300");
   }
 
   .dropdown__list-right:after {

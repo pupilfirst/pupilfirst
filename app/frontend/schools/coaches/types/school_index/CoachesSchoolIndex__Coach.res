@@ -1,5 +1,5 @@
 type t = {
-  id: int,
+  id: string,
   name: string,
   imageUrl: string,
   email: string,
@@ -35,7 +35,7 @@ let decode = json => {
   open Json.Decode
   {
     name: json |> field("name", string),
-    id: json |> field("id", int),
+    id: json |> field("id", string),
     imageUrl: json |> field("imageUrl", string),
     email: json |> field("email", string),
     title: json |> field("title", string),
@@ -73,5 +73,9 @@ let make = (
 
 let updateList = (coaches, coach) => {
   let oldList = coaches |> List.filter(t => t.id !== coach.id)
-  oldList |> List.rev |> List.append(list{coach}) |> List.rev |> List.sort((x, y) => x.id - y.id)
+  oldList
+  |> List.rev
+  |> List.append(list{coach})
+  |> List.rev
+  |> List.sort((x, y) => int_of_string(x.id) - int_of_string(y.id))
 }

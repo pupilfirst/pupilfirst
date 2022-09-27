@@ -1,38 +1,32 @@
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
-  serialize :roles
+  acts_as_taggable
 
   belongs_to :user
   has_one :school, through: :user
-  has_many :public_slack_messages, dependent: :nullify
-  belongs_to :startup
-  has_one :level, through: :startup
-  has_one :course, through: :level
+  belongs_to :cohort
+  belongs_to :level
+  has_one :course, through: :cohort
   has_many :communities, through: :course
-  belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
-  has_many :timeline_event_owners, dependent: :destroy
-  has_many :timeline_events, through: :timeline_event_owners
-  has_many :leaderboard_entries, dependent: :destroy
-
   has_many :coach_notes,
            foreign_key: 'student_id',
+           class_name: 'CoachNote',
            dependent: :destroy,
            inverse_of: :student
 
-  scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
-  scope :startup_members, -> { where.not(startup_id: nil) }
-  scope :missing_startups, -> { where.not(startup_id: Startup.pluck(:id)) }
-  scope :non_founders, -> { where(startup_id: nil) }
-  scope :not_dropped_out,
-        -> { joins(:startup).where(startups: { dropped_out_at: nil }) }
-  scope :access_active,
-        -> {
-          joins(:startup)
-            .where('startups.access_ends_at > ?', Time.zone.now)
-            .or(joins(:startup).where(startups: { access_ends_at: nil }))
-        }
-  scope :active, -> { not_dropped_out.access_active }
+  has_many :timeline_event_owners, dependent: :destroy
+  has_many :timeline_events, through: :timeline_event_owners
+  has_many :leaderboard_entries, dependent: :destroy
+  has_many :faculty_founder_enrollments, dependent: :destroy
+  has_many :faculty, through: :faculty_founder_enrollments
+  belongs_to :team, optional: true
+
+  scope :not_dropped_out, -> { where(dropped_out_at: nil) }
+  scope :dropped, -> { where.not(dropped_out_at: nil) }
+  scope :access_active, -> { (where(cohort: Cohort.active)) }
+  scope :active, -> { access_active.not_dropped_out }
+  scope :ended, -> { (where(cohort: Cohort.ended)) }
 
   delegate :email,
            :name,
@@ -44,21 +38,12 @@ class Founder < ApplicationRecord
            :initials_avatar,
            to: :user
 
-  def admitted?
-    startup.present? && startup.level.number.positive?
-  end
-
-  before_validation do
-    # Remove blank roles, if any.
-    roles.delete('')
-  end
-
   # TODO: Remove this method when all instance of it being used are gone. https://trello.com/c/yh0Mkfir
   def fullname
     name
   end
 
-  normalize_attribute :startup_id, :slack_username
+  normalize_attribute :cohort_id
 
   has_secure_token :auth_token
 
@@ -70,60 +55,19 @@ class Founder < ApplicationRecord
     name + ' (' + email + ')'
   end
 
-  def name_and_team
-    name + ' (' + startup.name + ')'
-  end
-
   def to_s
     display_name
-  end
-
-  def self.valid_roles
-    %w[product engineering design]
-  end
-
-  def roles
-    super || []
-  end
-
-  def founder?
-    startup.present?
-  end
-
-  # The option to create connect requests is restricted to non exited founders
-  def can_connect?
-    startup.present? && !dropped_out?
-  end
-
-  def dropped_out?
-    startup.dropped_out_at?
   end
 
   def latest_submissions
     timeline_events.live.where(timeline_event_owners: { latest: true })
   end
 
-  def connected_to_slack?
-    return false if slack_access_token.blank?
-
-    Founders::SlackConnectService.new(self).token_valid?(slack_access_token)
-  end
-
-  def faculty
-    return Faculty.none if startup.blank?
-
-    scope = Faculty.left_joins(:startups, :courses)
-    scope
-      .where(startups: { id: startup })
-      .or(scope.where(courses: { id: startup.level.course }))
-      .distinct
-  end
-
   def access_ended?
-    startup.access_ends_at.present? && startup.access_ends_at.past?
+    cohort.ended?
   end
 
   def team_student_ids
-    @team_student_ids ||= startup.founder_ids.sort
+    @team_student_ids ||= team.present? ? team.founders.pluck(:id).sort : [id]
   end
 end

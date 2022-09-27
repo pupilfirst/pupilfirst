@@ -26,6 +26,10 @@ module Types
     field :student_tags, [String], null: false, &authorize_school_admin
     field :coaches, [Types::UserProxyType], null: false, &authorize_school_admin
     field :cohorts, [Types::CohortType], null: false, &authorize_school_admin
+    field :default_cohort,
+          Types::CohortType,
+          null: true,
+          &authorize_school_admin
     field :certificates,
           [Types::CertificateType],
           null: false,
@@ -75,6 +79,17 @@ module Types
             .each do |(course_id, cohorts_count)|
               loader.call(course_id, cohorts_count)
             end
+        end
+    end
+
+    def default_cohort
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch do |course_ids, loader|
+          Course
+            .includes(:default_cohort)
+            .where(id: course_ids)
+            .each { |course| loader.call(course.id, course.default_cohort) }
         end
     end
 

@@ -80,6 +80,7 @@ type t = {
   coachesCount: int,
   levelsCount: int,
   cohortsCount: int,
+  defaultCohort: option<Cohort.t>,
 }
 
 let name = t => t.name
@@ -111,6 +112,8 @@ let levelsCount = t => t.levelsCount
 let cohortsCount = t => t.cohortsCount
 
 let coachesCount = t => t.coachesCount
+
+let defaultCohort = t => t.defaultCohort
 
 let progressionBehavior = t =>
   switch t.progressionBehavior {
@@ -184,6 +187,13 @@ module Fragment = %graphql(`
     coachesCount
     levelsCount
     cohortsCount
+    defaultCohort {
+      id
+      name
+      description
+      endsAt
+      courseId
+    }
   }
   `)
 
@@ -219,5 +229,13 @@ let makeFromFragment = (course: Fragment.t) => {
     coachesCount: course.coachesCount,
     levelsCount: course.levelsCount,
     cohortsCount: course.cohortsCount,
+    defaultCohort: course.defaultCohort->Belt.Option.map(cohort =>
+      Cohort.make(
+        ~id=cohort.id,
+        ~name=cohort.name,
+        ~description=cohort.description,
+        ~endsAt=cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
+        ~courseId=cohort.courseId)
+    ),
   }
 }

@@ -8,9 +8,12 @@ feature 'Courses Index', js: true do
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
-  let!(:course_1) { create :course, :with_cohort, school: school }
+  let!(:course_1) { create :course, :with_default_cohort, school: school }
   let!(:course_2) do
-    create :course, :with_cohort, school: school, name: 'Pupilfirst Demo Course'
+    create :course,
+           :with_default_cohort,
+           school: school,
+           name: 'Pupilfirst Demo Course'
   end
   let!(:course_ended) { create :course, :ended, school: school }
   let!(:course_archived) do
@@ -75,6 +78,7 @@ feature 'Courses Index', js: true do
 
   context 'when a course exists' do
     let(:new_course_name) { Faker::Lorem.words(number: 2).join ' ' }
+    let!(:new_cohort) { create :cohort, course: course_1 }
     let(:new_about) { Faker::Lorem.paragraph }
     let(:new_description) { Faker::Lorem.sentences.join ' ' }
     let(:course_end_date) { Time.zone.today }
@@ -158,6 +162,9 @@ feature 'Courses Index', js: true do
       end
       within('div#public-preview') { click_button 'Yes' }
 
+      click_button course_1.default_cohort.name
+      click_button new_cohort.name
+
       click_button 'Update Course'
 
       expect(page).to have_text('Course updated successfully')
@@ -175,6 +182,7 @@ feature 'Courses Index', js: true do
       expect(course_1.progression_limit).to eq(3)
       expect(course_1.highlights).to eq(highlights.map(&:stringify_keys))
       expect(course_1.processing_url).to eq(processing_url)
+      expect(course_1.default_cohort).to eq(new_cohort)
     end
 
     scenario 'School admin sets other progression behaviors on existing course' do

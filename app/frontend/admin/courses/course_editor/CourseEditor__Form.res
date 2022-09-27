@@ -36,6 +36,9 @@ type state = {
   highlights: array<Course.Highlight.t>,
   hasProcessingUrl: bool,
   processingUrl: string,
+  defaultCohort: option<Cohort.t>,
+  cohorts: array<Cohort.t>,
+  loading: bool,
 }
 
 type action =
@@ -53,6 +56,10 @@ type action =
   | SetHasProcessingUrl
   | ClearHasProcessingUrl
   | UpdateProcessingUrl(string)
+  | SetCohortsData(array<Cohort.t>)
+  | SetDefaultCohort(Cohort.t)
+  | SetLoading
+  | ClearLoading
 
 let reducer = (state, action) =>
   switch action {
@@ -93,6 +100,10 @@ let reducer = (state, action) =>
       processingUrl: processingUrl,
       dirty: true,
     }
+  | SetCohortsData(cohortsData) => {...state, cohorts: cohortsData, loading: false}
+  | SetLoading => {...state, loading: true}
+  | ClearLoading => {...state, loading: false}
+  | SetDefaultCohort(defaultCohort) => {...state, defaultCohort: Some(defaultCohort), dirty: true}
   }
 
 module CourseFragment = CourseEditor__Course.Fragment
@@ -108,8 +119,8 @@ module CreateCourseQuery = %graphql(`
   `)
 
 module UpdateCourseQuery = %graphql(`
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
-      updateCourse(id: $id, name: $name, description: $description, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String, $defaultCohortId: ID!) {
+      updateCourse(id: $id, name: $name, description: $description, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl, defaultCohortId: $defaultCohortId) {
         course {
           ...CourseFragment
         }
@@ -140,6 +151,17 @@ module CloneCourseQuery = %graphql(`
     }
   }
 `)
+
+module CohortFragment = Cohort.Fragment
+module CourseEditorBaseDataQuery = %graphql(`
+  query CourseEditorBaseDataQuery($courseId: ID!) {
+    course(id: $courseId) {
+      cohorts {
+        ...CohortFragment
+      }
+    }
+  }
+  `)
 
 let updateName = (send, name) => {
   let hasError = name->String.trim->String.length < 2
@@ -247,6 +269,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~progressionLimit=?progressionLimitForQuery(state),
     ~highlights,
     ~processingUrl=?processingUrl(state),
+    ~defaultCohortId=state.defaultCohort->Belt.Option.mapWithDefault("", Cohort.id),
     (),
   )
 
@@ -297,6 +320,19 @@ let unarchiveCourse = (send, reloadCoursesCB, course) => {
     Js.Promise.resolve()
   })
   |> ignore
+}
+module Selectable = {
+  type t = Cohort.t
+  let id = t => Cohort.id(t)
+  let name = t => Cohort.name(t)
+}
+
+module CohortsPicker = Select.Make(Selectable)
+
+let findSelectedCohort = (cohorts, selectedCohort) => {
+  Belt.Option.flatMap(selectedCohort, c =>
+    Js.Array2.find(cohorts, u => Cohort.id(c) == Cohort.id(u))
+  )
 }
 
 let cloneCourse = (send, reloadCoursesCB, course) => {
@@ -450,6 +486,9 @@ let computeInitialState = course =>
       highlights: Course.highlights(course),
       processingUrl: Belt.Option.getWithDefault(Course.processingUrl(course), ""),
       hasProcessingUrl: Belt.Option.isSome(Course.processingUrl(course)),
+      defaultCohort: Course.defaultCohort(course),
+      cohorts: [],
+      loading: false,
     }
   | None => {
       name: "",
@@ -468,6 +507,9 @@ let computeInitialState = course =>
       highlights: [],
       processingUrl: "",
       hasProcessingUrl: false,
+      defaultCohort: None,
+      cohorts: [],
+      loading: false,
     }
   }
 
@@ -588,6 +630,19 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {publicSignupField(state.publicSignup, send)}
     {publicPreviewField(state.publicPreview, send)}
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
+    <div className="pt-5 flex flex-col">
+      <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
+        {"Pick the default cohort"->str}
+      </label>
+      <CohortsPicker
+        placeholder={"Pick a Cohort"}
+        selectables={state.cohorts}
+        selected={findSelectedCohort(state.cohorts, state.defaultCohort)}
+        onSelect={u => send(SetDefaultCohort(u))}
+        disabled={state.saving}
+        loading={state.loading}
+      />
+    </div>
     {courseHighlights(state.highlights, send)}
     <div className="max-w-2xl py-6 mx-auto">
       <div className="flex justify-end">
@@ -673,9 +728,38 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
   </div>
 }
 
+let loadData = (courseId, send) => {
+  send(SetLoading)
+  CourseEditorBaseDataQuery.fetch(
+    ~notifyOnNotFound=false,
+    {
+      courseId: courseId,
+    },
+  )
+  |> Js.Promise.then_((response: CourseEditorBaseDataQuery.t) => {
+    send(SetCohortsData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
+
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    send(ClearLoading)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 @react.component
 let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
+  React.useEffect1(() => {
+    switch course {
+    | Some(c) => loadData(Course.id(c), send)
+    | None => ()
+    }
+
+    None
+  }, [course])
+
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
       <div className="border-b border-gray-300 bg-gray-50">

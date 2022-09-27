@@ -112,7 +112,8 @@ module ValidateCourseEditable
       progression_behavior: @params[:progression_behavior],
       progression_limit: sanitized_progression_limit,
       highlights: @params[:highlights].presence || [],
-      processing_url: @params[:processing_url]
+      processing_url: @params[:processing_url],
+      default_cohort_id: @params[:default_cohort_id]
     }
   end
 end

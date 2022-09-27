@@ -114,7 +114,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
       puts "Setting up cohorts #{index + 1}/#{courses_count} :#{course.name}"
       default_cohort =
         Cohort.create!(
-          name: 'Default cohort',
+          name: 'Purple',
           description: "Default cohort for #{course.name}",
           ends_at: course.ends_at,
           course_id: course.id
@@ -142,18 +142,17 @@ class AddCohorts < ActiveRecord::Migration[6.1]
           startups.each_with_index do |startup, i_s|
             n_updated_startups += 1
             puts "Setting up cohorts #{index + 1}/#{courses_count} :#{course.name} | #{i_s + 1}/#{startup_count} | Total: #{n_updated_startups * 100 / total_startups}%"
+
             if startup.founders.count > 1
               team = Team.create!(name: startup.name, cohort_id: cohort.id)
             end
 
-            startup.founders.each do |student|
-              student.update!(
-                level_id: student.startup.level_id,
-                cohort_id: cohort.id,
-                dropped_out_at: student.startup.dropped_out_at,
-                team_id: team&.id
-              )
-            end
+            startup.founders.update_all(
+              level_id: startup.level_id,
+              cohort_id: cohort.id,
+              dropped_out_at: startup.dropped_out_at,
+              team_id: team&.id
+            )
           end
         end
 

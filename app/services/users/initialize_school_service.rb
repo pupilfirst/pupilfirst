@@ -11,10 +11,11 @@ module Users
           Courses::CloneService.new(@course).clone(@course.name, @user.school)
         cohort =
           Cohort.create!(
-            name: 'Default cohort',
+            name: 'Purple',
             description: "Default cohort for #{new_course.name}",
             course_id: new_course.id
           )
+        new_course.update!(default_cohort_id: cohort.id)
         create_and_assign_coach(new_course, cohort)
         Founder.create!(
           user: @user,

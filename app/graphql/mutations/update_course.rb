@@ -7,12 +7,30 @@ module Mutations
         return "Unable to find course with id: #{value[:id]}" if course.blank?
       end
     end
+
+    class DefaultCohortMustExisit < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        course = Course.find_by(id: value[:id])
+
+        return if course.blank?
+
+        cohort = course.cohorts.find_by(id: value[:default_cohort_id])
+
+        if cohort.blank?
+          return(
+            "Please select a valid cohort; Unable to find cohort with id: #{value[:default_cohort_id]}"
+          )
+        end
+      end
+    end
     include QueryAuthorizeSchoolAdmin
     include ValidateCourseEditable
 
     argument :id, ID, required: true
+    argument :default_cohort_id, ID, required: true
 
     validates CourseMustBePresent => {}
+    validates DefaultCohortMustExisit => {}
 
     description 'Update a course.'
 

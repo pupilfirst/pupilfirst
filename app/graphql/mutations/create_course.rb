@@ -23,11 +23,14 @@ module Mutations
 
         Courses::DemoContentService.new(course).execute
 
-        Cohort.create!(
-          name: 'Default cohort',
-          description: "Default cohort for #{course.name}",
-          course_id: course.id
-        )
+        default_cohort =
+          Cohort.create!(
+            name: 'Purple',
+            description: "Default cohort for #{course.name}",
+            course_id: course.id
+          )
+
+        course.update!(default_cohort_id: default_cohort.id)
 
         course
       end

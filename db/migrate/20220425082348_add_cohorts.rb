@@ -9,6 +9,16 @@ class AddCohorts < ActiveRecord::Migration[6.1]
     has_one :course, through: :level
   end
 
+  class Tagging < ApplicationRecord
+    belongs_to :tag, class_name: '::ActsAsTaggableOn::Tag'
+  end
+
+  class Tags < ApplicationRecord
+    has_many :taggings,
+             dependent: :destroy,
+             class_name: '::ActsAsTaggableOn::Tagging'
+  end
+
   class Founder < ApplicationRecord
     acts_as_taggable
 
@@ -129,7 +139,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
 
         course
           .startups
-          .includes(:founders, taggings: :tag)
+          .includes(:founders, :taggings)
           .group_by { |x| x.access_ends_at&.to_date }
           .each do |ends_at, startups|
             cohort =
@@ -154,22 +164,23 @@ class AddCohorts < ActiveRecord::Migration[6.1]
                 team = Team.create!(name: startup.name, cohort_id: cohort.id)
               end
 
-              # startup.founders.each do |student|
-              #   student.level_id = startup.level_id
-              #   student.cohort_id = cohort.id
-              #   student.dropped_out_at = startup.dropped_out_at
-              #   student.team_id = team&.id
-              #   student.tag_list.add(*startup.tag_list)
-              #   student.save!
-              # end
+              startup.founders.each do |student|
+                student.update!(
+                  level_id: startup.level_id,
+                  cohort_id: cohort.id,
+                  dropped_out_at: startup.dropped_out_at,
+                  team_id: team&.id
+                )
 
-              startup.founders.update_all(
-                level_id: startup.level_id,
-                cohort_id: cohort.id,
-                dropped_out_at: startup.dropped_out_at,
-                team_id: team&.id
-                tag_list: startup.tag_list
-              )
+                startup.taggings.each do |tagging|
+                  ActsAsTaggableOn::Tagging.create!(
+                    tag_id: tagging.tag_id,
+                    taggable_id: student.id,
+                    taggable_type: 'Founder',
+                    context: tagging.context
+                  )
+                end
+              end
             end
           end
 

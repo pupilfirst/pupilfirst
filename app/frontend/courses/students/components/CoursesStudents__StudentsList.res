@@ -1,12 +1,10 @@
 %%raw(`import "./CoursesStudents__Root.css"`)
-let t = I18n.t(~scope="components.CoursesStudents__TeamsList")
+let t = I18n.t(~scope="components.CoursesStudents__StudentsList")
+let ts = I18n.t(~scope="shared")
 
 open CoursesStudents__Types
 
 let str = React.string
-
-let tr = I18n.t(~scope="components.CoursesStudents__TeamsList")
-let ts = I18n.t(~scope="shared")
 
 let levelInfo = level =>
   <span
@@ -95,7 +93,7 @@ let showStudent = student => {
       className="flex items-center gap-6 justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__PersonalCoaches
         title={<div className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
-          {tr("personal_coaches") |> str}
+          {t("personal_coaches") -> str}
         </div>}
         className="hidden md:inline-block"
         coaches={StudentInfo.personalCoaches(student)}
@@ -108,10 +106,10 @@ let showStudent = student => {
 @react.component
 let make = (~students) =>
   <div>
-    {students |> ArrayUtils.isEmpty
+    {  ArrayUtils.isEmpty(students)
       ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
           <h4 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-            {tr("no_teams") |> str}
+            {t("no_students") -> str}
           </h4>
         </div>
       : students->Js.Array2.map(showStudent)->React.array}

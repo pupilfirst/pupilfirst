@@ -13,7 +13,7 @@ module Users
           Cohort.create!(
             name: 'Purple (Auto-generated)',
             description:
-              "Auto generated cohort for active students in #{course.name}",
+              "Auto generated cohort for active students in #{new_course.name}",
             course_id: new_course.id
           )
         new_course.update!(default_cohort_id: cohort.id)

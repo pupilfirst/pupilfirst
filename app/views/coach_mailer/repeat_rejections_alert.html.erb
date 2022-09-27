@@ -1,0 +1,13 @@
+<% review_url = review_timeline_event_url(@submission) %>
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @coach.name) %>
+<% end %>
+<% content_for :body do %>
+  <p>
+    <%= t("mailers.coach.repeat_rejections_alert.header", course_name: @course.name, rejection_count: @rejection_count) %>
+  </p>
+  <p>
+    <%= t("mailers.coach.repeat_rejections_alert.body_html", review_url: review_url) %>
+  </p>
+  <%= render 'mailers/link_fallback', url: review_url %>
+<% end %>

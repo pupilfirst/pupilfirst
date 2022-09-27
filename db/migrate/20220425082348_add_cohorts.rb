@@ -168,7 +168,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
               )
 
               taggings.each do |tagging|
-                ActsAsTaggableOn::Tagging.create!(
+                Tagging.create!(
                   tag_id: tagging.tag_id,
                   taggable_id: student.id,
                   taggable_type: 'Founder',

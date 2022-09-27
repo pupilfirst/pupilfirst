@@ -11,8 +11,9 @@ module Users
           Courses::CloneService.new(@course).clone(@course.name, @user.school)
         cohort =
           Cohort.create!(
-            name: 'Purple',
-            description: "Default cohort for #{new_course.name}",
+            name: 'Purple (Auto-generated)',
+            description:
+              "Auto generated cohort for active students in #{course.name}",
             course_id: new_course.id
           )
         new_course.update!(default_cohort_id: cohort.id)

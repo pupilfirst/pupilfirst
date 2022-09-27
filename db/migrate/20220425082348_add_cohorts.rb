@@ -118,8 +118,9 @@ class AddCohorts < ActiveRecord::Migration[6.1]
       puts "Setting up cohorts #{index + 1}/#{courses_count} :#{course.name}"
       default_cohort =
         Cohort.create!(
-          name: 'Purple',
-          description: "Default cohort for #{course.name}",
+          name: 'Purple (Auto-generated)',
+          description:
+            "Auto generated cohort for active students in #{course.name}",
           ends_at: course.ends_at,
           course_id: course.id
         )
@@ -156,7 +157,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
               student.cohort_id = cohort.id
               student.dropped_out_at = startup.dropped_out_at
               student.team_id = team&.id
-              student.tag_list.add(startup.tag_list)
+              student.tag_list.add(*startup.tag_list)
               student.save!
             end
           end

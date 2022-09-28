@@ -65,7 +65,7 @@ let useSPA = (selectedPage, page) => {
 
 let coursePath = (coursePage, courseId) => {
   switch coursePage {
-  | Students => `/school/courses/${courseId}/students`
+  | Students => `/school/courses/${courseId}/students?status=Active`
   | CourseCoaches => `/school/courses/${courseId}/coaches`
   | Curriculum => `/school/courses/${courseId}/curriculum`
   | EvaluationCriteria => `/school/courses/${courseId}/evaluation_criteria`

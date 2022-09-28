@@ -15,13 +15,11 @@ let selected = currentCourse =>
 
 let contents = (courses, currentCourse, coursePage, selectedPage) => {
   Js.Array.map(course => {
-    let href = {
-      Page.canAccessPage(coursePage, course)
-        ? Page.coursePath(Course.id(course), coursePage)
-        : Page.coursePath(Course.id(course), Page.Curriculum)
-    }
+    let nextPage = Page.canAccessPage(coursePage, course) ? coursePage : Page.Curriculum
+    let href = Page.coursePath(Course.id(course), nextPage)
+
     let classes = "block px-4 py-3 text-xs font-semibold text-gray-900 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-normal focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
-    Page.useSPA(selectedPage, Page.SelectedCourse(Course.id(course), coursePage))
+    Page.useSPA(selectedPage, Page.SelectedCourse(Course.id(course), nextPage))
       ? <Link key={Course.id(course)} href className=classes> {Course.name(course)->str} </Link>
       : <a key={Course.id(course)} href className=classes> {Course.name(course)->str} </a>
   }, Js.Array.filter(

@@ -1514,7 +1514,6 @@ en:
       affiliation_placeholder: Acme Inc., Acme University, etc.
       edit: Edit
       name: Name
-      page_description: Update student details
       pages:
         actions: Actions
         details: Details

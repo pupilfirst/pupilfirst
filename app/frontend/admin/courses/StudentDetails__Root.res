@@ -13,6 +13,7 @@ type student = {
   affiliation: string,
   coachIds: array<string>,
   cohort: Cohort.t,
+  email: string,
 }
 
 module Editor = {
@@ -357,6 +358,7 @@ module StudentDetailsDataQuery = %graphql(`
         title
         affiliation
         taggings
+        email
 
       }
       personalCoaches{
@@ -390,6 +392,7 @@ let loadData = (studentId, setState, setCourseId) => {
         coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
         cohort: response.student.cohort->Cohort.makeFromFragment,
         usetTaggings: response.student.user.taggings,
+        email: response.student.user.email,
       },
       courseId: response.student.course.id,
       cohorts: response.student.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
@@ -441,7 +444,7 @@ let make = (~studentId) => {
         <School__PageHeader
           exitUrl={`/school/courses/${baseData.courseId}/students`}
           title={`${t("edit")} ${baseData.student.name}`}
-          description={t("page_description")}
+          description={baseData.student.email}
           links={pageLinks(studentId)}
         />
         <Editor

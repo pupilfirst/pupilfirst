@@ -11,6 +11,34 @@ ru:
       note: " Преподаватели в вашей школе имеют доступ ко всем сообществам."
       welcome: Добро пожаловать в
   components:
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: Add new cohort
+      cohort:
+        label: Cohort name
+        message: Enter a valid cohort name
+        placeholder: eg, Batch 1
+      cohort_description:
+        label: Cohort description
+        message: Enter a valid description for the cohort
+        placeholder: eg, Batch 1 of some year
+      cohort_ends_at:
+        help: The cohort will be archived on this date
+        label: Cohort end date
+      update_cohort: Update cohort
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: All students selected
+      no_students_found: No Students found
+      no_students_selected: No students selected
+    AdminCoursesShared__TeamEditor:
+      add_new_team: Add new team
+      select_cohort:
+        label: Select a cohort
+        placeholder: Pick a Cohort
+      team_name:
+        label: Team name
+        message: Enter a valid team name
+        placeholder: eg, Batch 1
+      update_team: Update Team
     Api:
       error_notification_body: Наша команда была уведомлена об этой ошибке. Пожалуйста, обновите страницу и попробуйте еще раз.
       error_notification_title: Произошла непредвиденная ошибка
@@ -39,6 +67,37 @@ ru:
       filter_result_empty: Примененные вами фильтры не соответствуют ни одному ментору. Пожалуйста, измените фильтр и попробуйте еще раз.
       filter_search_string_course: обучает курс %{name}
       heading: Менторы
+    CohortsActions__Root:
+      button_text: Merge and delete
+      edit: Edit
+      merge_heading_html: Merge <em>%{cohort_name}</em> into another cohort
+      merge_help: Merging cohorts will move all students from the selected cohort to the target cohort. This action can be used to delete unnecessary cohorts. This action cannot be undone.
+      page_description: Actions for the cohort.
+      pick_a_cohort: Pick a Cohort
+    CohortsCreator__Root:
+      page_description: Create a new cohort for the course.
+      page_title: Add new cohort
+    CohortsDetails__Root:
+      page_description: Update cohort details
+      page_title: Edit %{cohort_name}
+    CohortsIndex__Root:
+      active_cohorts: Active Cohorts
+      add_new_cohort: Add new cohort
+      all_cohorts: All Cohorts
+      coaches: Coaches
+      cohort: cohort
+      cohorts: cohorts
+      cohorts_end_date: Cohort end date
+      edit: Edit
+      filter:
+        first_created: First Created
+        last_created: Last Created
+        last_ending: Last Ending
+        name: Name
+        search_by_name: Search by Name
+      load_more: Load More
+      no_cohorts_found: No Cohorts Found
+      students: Students
     CommunitiesNewTopic__Root:
       asked_on: "Спрошен на "
       back: Назад
@@ -96,10 +155,6 @@ ru:
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
       unable_find_id: "Не удалось найти категорию темы с ID: "
     CourseApplicants__EditForm:
-      access_ends_at:
-        help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
-        help_url: 'https://docs.pupilfirst.com/users/students#editing-student-details'
-        label: Доступ студента заканчивается
       add_as_student_button: Добавить как студента
       affiliation:
         label: Принадлежность
@@ -219,12 +274,22 @@ ru:
       search_coaches_all: Вы выбрали всех менторов!
       search_coaches_empty: Менторы не выбраны
       search_coaches_placeholder: Искать менторов
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
       select_coaches: Выберите менторов
+      select_cohorts: Select Cohorts
     CourseCoaches__InfoForm:
       no_students_assigned: У этого ментора нет учеников. Вы можете назначать менторов при редактировании сведений об ученике.
+      notification_coach_updated: Coach updated successfully
       pending_submissions: Ожидающие отправки
       revied_submissions: Рассмотренные работы
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      select_cohorts: "Cohorts assigned to coach:"
       students_assigned: "Студенты назначены к ментору:"
+      update_cohort_assignment: Update Cohort Assignment
     CourseCoaches__InfoFormTeam:
       remove_post_confirm: из списка назначенных команд?
       remove_pre_confirm: "Вы уверены что хочешь удалить "
@@ -236,34 +301,6 @@ ru:
       enrollment_delete_notificaion_success_body: Зачисление тренера успешно удалена
       remove_confirm_post: с этого курса?
       remove_confirm_pre: Вы уверены, что хочите удалить
-    CourseEditor:
-      add_new_course: Добавить новый курс
-      button_load_more: Загрузить Больше Курсов...
-      course_links:
-        download_reports: Загрузить Отчеты
-        edit_curriculum: Редактировать Силлабус
-        manage_coaches: Управлять Менторами
-        manage_students: Управлять Студентами
-        view_as_student: Посмотреть как Студент
-      courses_fully_loaded_text: Показаны все %{total_courses} курсов
-      courses_partially_loaded_text: Показаны %{loaded_courses_count} из %{total_courses} курсов
-      edit_course_details: Изменить детали о курса
-      empty_courses: У вас нет курсов!
-      filter:
-        input_hint: Или начните вводить для поиска по имени...
-        input_label: Искать
-        input_placeholder: Фильтр и поиск курсов по названию
-        label:
-          name: Искать по имени
-          status: Статус
-        status:
-          active: Активен
-          archived: Архивирован
-          ended: Окончен
-      notification_error_body: Наша команда была уведомлена об этой ошибке. Пожалуйста, попробуйте перезагрузить эту страницу.
-      notification_error_head: Произошла непредвиденная ошибка
-      quick_links: Быстрые Ссылки
-      view_public_page: Посмотреть публичной страницы
     CourseEditor__Form:
       actions:
         archive_course:
@@ -279,9 +316,6 @@ ru:
         archive_message: Вы уверены, что хотите заархивировать курс?
         clone_course_message: Вы уверены, что хотите создать копию курса?
         unarchive_message: Вы уверены, что хотите разархивировать курс?
-      button_text:
-        add_new_course: Создать Новый Курс
-        edit_course_details: Редактирвовать Детали Курса
       course_about:
         label: О Курсе
         placeholder: Добавьте подробности о курсе.
@@ -289,10 +323,6 @@ ru:
         error_message: Требуется описание (2–150 знаков)
         label: Описание курса
         placeholder: Краткое описание этого курса
-      course_end_date:
-        help: Если указано, курс будет показан как закрыт для студентов в эту дату. Студенты больше не смогут подавать заявки.
-        help_url: https://docs.pupilfirst.com/users/courses
-        label: Дата окончание курса
       course_highlights:
         label: Основные моменты курса
       course_name:
@@ -329,6 +359,9 @@ ru:
         actions: Действия
         details: Детали
         images: Картинки
+      title:
+        add_new_course: Add New Course
+        edit_course_details: Edit Course Details
       update_course: Обновить Курс
     CourseEditor__HighlightsEditor:
       add_highlight: Добавить Главные Моменты Курса
@@ -364,6 +397,34 @@ ru:
         help: Миниатюра будет отображаться на главной странице и здесь, в списке административных курсов.
         help_url: 'https://docs.pupilfirst.com/users/courses#course-images'
         label: Миниатюра
+    CourseEditor__Root:
+      add_new_course: Add New Course
+      button_load_more: Load More Courses...
+      course_links:
+        download_reports: Download Reports
+        edit_curriculum: Edit Curriculum
+        manage_coaches: Manage Coaches
+        manage_students: Manage Students
+        view_as_student: View as Student
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      edit_course_details: Edit Course Details
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+      notification_error_body: Our team has been notified about this error. Please try reloading this page.
+      notification_error_head: An unexpected error occurred
+      quick_links: Quick Links
+      view_public_page: View public page
     CourseExport__Root:
       active_students_label: Активные Студенты
       all_students_label: Все Студенты
@@ -773,6 +834,7 @@ ru:
       coach_notes: Заметки Ментора
       filter_level: Фильтр по уровню, назначенному ментору или поиск по имени или почте и многое другое...
       has_notes: Имеет заметки
+      level_distribution_label: Level-wise student distribution
       me: меня
       name_email: Имя или Почта
       no_notes: Не имеет заметок
@@ -811,12 +873,12 @@ ru:
     CoursesStudents__SubmissionsList:
       no_revied_submission: Нет Рассмотренного Работ
       submitted_on: "Отправленный в "
-    CoursesStudents__TeamsList:
-      last_seen: Последнее посещение %{time_string}
-      no_last_seen: Этот ученик еще не вошел в систему
-      no_teams: Нет поманд для показа
-      personal_coaches: Личные Менторы
-      team_coaches: Командные Менторы
+    CoursesStudents__StudentsList:
+      last_seen: Last seen %{time_string}
+      no_last_seen: This student has never signed in
+      no_students: No students to show
+      personal_coaches: Personal Coaches
+      team_coaches: Team Coaches
     CurriculumEditor:
       create_level: Создать Уровень
       create_target_group: Создать группу задач
@@ -1103,6 +1165,13 @@ ru:
     Notifications__Root:
       close: "Закрыть "
       show_notifications: Показать уведомления
+    Pagination:
+      fully_loaded_text:
+        one: Only one %{singular_name} to show
+        few: Showing all %{count} %{plural_name}
+        many: Showing all %{count} %{plural_name}
+        other: Showing all %{count} %{plural_name}
+      partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
     SA_Coaches_CoachEditor:
       add_coach: Добавить нового ментора
       affiliation: Партнёр
@@ -1315,6 +1384,11 @@ ru:
       social: Соцсети
       social_links_q: Добавить ссылки на социальные сети?
       terms_and_conditions: Условия использования
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     School__SearchableTagList:
       add_new_tag: Добавить новый тег
       pick_tag: Выберите тег
@@ -1331,6 +1405,70 @@ ru:
     Sorter:
       order_by: Сортировать по
       toggle_sort: Переключить порядок сортировки
+    StudentActions__Root:
+      active_label: Active
+      certificates_label: Course Certificates
+      details_certificate: Details of issued certificate
+      dropout_student:
+        button: Dropout Student
+        help: Marking a student as dropped out will remove all of their access to the course.
+        help_url: 'https://docs.pupilfirst.com/users/students#student-actions'
+        label: Has this student dropped out?
+      edit: Edit
+      empty_course_certificates_text: This course does not have any certificates to issue.
+      empty_issued_certificates_text: This student has not been issued any certificates.
+      issue_certificate_button: Issue Certificate
+      issued_by_label: "Issued by:"
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      manage_certificates: Manage student certificates
+      new_certificate_label: "Issue new certificate:"
+      page_description: Actions for the student
+      re_activate_student:
+        button: Re-Activate Student
+      revoke_certificate_button: Revoke Certificate
+      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
+      revoked_by_label: "Revoked by:"
+      revoked_date_label: "Revoked on:"
+      revoked_status_label: Revoked
+      select_certificate_input_label: Select a certificate to issue
+    StudentBulkImport__Root:
+      csv_data_errors:
+        invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_email: Email has to be valid and can't be blank
+        invalid_name: Name column can't be blank and should be within 250 characters
+        invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+        invalid_team_name: Team name has to be less than 50 characters
+        invalid_title: Title has to be less than 250 characters
+      csv_file_errors:
+        empty: The selected CSV has no valid rows
+        exceeded_entries: The CSV file has more than 1000 entries.
+        invalid: Please select a valid CSV file with size less than 5 MB
+        invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
+        invalid_template: The selected CSV file does not have a valid template
+      csv_file_input:
+        help: This file will be used to import students in bulk. Check the sample file for the required format.
+        help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
+        label: CSV Import file
+        placeholder: Select CSV file to import
+      drawer_heading: Bulk Import Students
+      error_summary_title: "Here is a summary of the errors in the sheet: "
+      example_csv_link:
+        text: Download an example .csv file
+        url: https://docs.pupilfirst.com/files/student_import_sample.csv
+      import_button_text: Import Students
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      page_description: Upload the CSV file containing the students you want to add to the course.
+      page_title: Import students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+      pick_a_cohort: Pick a Cohort
+      select_a_cohort: Select a cohort
+      success_notification: Import initiated successfully! You will be notified in an email once complete.
+      valid_data_message: Data validated successfully!
+      valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentCourse__Header:
       calendar: Календарь
       curriculum: Силлабус
@@ -1339,6 +1477,83 @@ ru:
       review: Проверка
       students: Студенты
       unknown: Неизвестно
+    StudentCreator__CreateForm:
+      added_full_description: All students were created successfully.
+      added_none_description: All the students you tried to add were already a part of this course.
+      added_none_title: Nothing Changed
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_partial_title: Partially Added
+      drawer_heading: Add New Students
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      pick_a_cohort: Pick a Cohort
+      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
+      save_list_button: Save List
+      select_a_cohort: Select a cohort
+      select_cohort: Select Cohort
+      student_list: Student list
+      team_header_add_more_members: Add more team members!
+      team_header_label: TEAM %{team_name}
+      teams_to_add_empty: This list is empty! Add some students using the form above.
+      teams_to_add_label: "These new students will be added to the course:"
+    StudentCreator__Root:
+      page_description: You can add multiple students to a list and add them to course
+      page_title: Add new students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+    StudentCreator__StudentInfoForm:
+      add_to_list: Add to List
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        error:
+          invalid: invalid email
+          not_unique: email address not unique for student
+        label: Email
+        placeholder: Student email here
+      name:
+        label: Name
+        message: is not valid
+        placeholder: Student name here
+      tags:
+        label: Tags
+      team:
+        help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+        label: Team Name
+        placeholder: Avengers, Fantastic Four, etc.
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    StudentDetails__Root:
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      edit: Edit
+      name: Name
+      pages:
+        actions: Actions
+        details: Details
+      personal_coaches: Personal Coaches
+      pick_a_cohort: Pick a Cohort
+      search_coaches_all: You have selected all available coaches!
+      search_coaches_empty: No coaches selected
+      search_coaches_placeholder: Search coaches
+      select_a_cohort: Select a cohort
+      student_name_placeholder: Student name here
+      student_updated: Student updated successfully
+      student_updated_moved: Student has been updated, and moved to list of inactive students
+      tags_applied: Tags applied
+      tags_applied_team: Tags applied to team
+      tags_applied_user: Tags applied to user
+      team_coaches: Team Coaches
+      team_name: Team Name
+      team_name_error: Team Name must have at least two characters
+      team_name_placeholder: Team name here
+      team_updated_moved: Team has been updated, and moved to list of inactive students
+      title: Title
+      title_error: Title must have at least two characters
+      title_placeholder: Student, Coach, CEO, etc.
+      update_student: Update Student
     StudentTopNav:
       sign_in: Войти
       sign_out: Выйти
@@ -1350,73 +1565,6 @@ ru:
       sign_in: Войти
       sign_out: Выйти
       user_controls: Показать пользовательские настройки
-    StudentsEditor__ActionsForm:
-      active_label: Активен
-      certificates_label: Сертификаты Курса
-      details_certificate: Сведения о выданном сертификате
-      dropout_student:
-        button: Выйти из ученика
-        help: Пометка студента как выпавшего удалит все его права на курс.
-        help_url: 'https://docs.pupilfirst.com/users/students#student-actions'
-        label: Этот ученик вышел?
-      empty_course_certificates_text: Этот курс не имеет сертификатов для выдачи.
-      empty_issued_certificates_text: Этому студенту не выдавали никаких сертификатов.
-      issue_certificate_button: Выдать Сертификат
-      issued_by_label: "Выдано от:"
-      issued_certificates_label: "Выданные сертификаты:"
-      issued_date_label: "Выдано в:"
-      manage_certificates: Управление студенческими сертификатами
-      new_certificate_label: "Выдать новый сертификат:"
-      revoke_certificate_button: Отозвать Сертификат
-      revoke_certificate_confirmation: Уверены ли вы? Это действие не может быть отменено.
-      revoked_by_label: "Отозван от:"
-      revoked_date_label: "Отозван в:"
-      revoked_status_label: Отозван
-      select_certificate_input_label: Выберите сертификат для выдачи
-    StudentsEditor__BulkImportForm:
-      csv_data_errors:
-        invalid_affiliation: Принадлежность не должна превышать 250 символов.
-        invalid_email: Почта должна быть действительной и не может быть пустым.
-        invalid_name: Имя не может быть пустым и должен содержать не более 250 символов.
-        invalid_tags: Каждому учащемуся разрешено использовать не более 5 тегов (не более 50 символов каждый).
-        invalid_team_name: Название команды должно быть меньше 50 символов.
-        invalid_title: Название должно быть меньше 250 символов.
-      csv_file_errors:
-        empty: В выбранном CSV-файле нет допустимых строк.
-        exceeded_entries: В CSV-файле более 1000 записей.
-        invalid: Выберите действительный файл CSV размером менее 5 МБ.
-        invalid_data: В CSV-файле есть недопустимые данные в нескольких ячейках. Исправьте ошибки, перечисленные ниже, и повторите попытку.
-        invalid_template: Выбранный файл CSV не имеет допустимого шаблона
-      csv_file_input:
-        help: Этот файл будет использован для массового импорта студентов. Проверьте образец файла для получения требуемого формата.
-        help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
-        label: Файл импорта CSV
-        placeholder: Выберите CSV-файл для импорта
-      drawer_heading: Массовый импорт студентов
-      error_summary_title: "Вот сводка ошибок в таблице: "
-      example_csv_link:
-        text: Скачать пример .csv файла
-        url: https://docs.pupilfirst.com/files/student_import_sample.csv
-      import_button_text: Импортировать студентов
-      more_errors_text: "Ошибок еще больше. Исправьте ошибки в следующих строках и загрузите снова: "
-      notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
-      success_notification: Импорт успешно начат! После завершения вы получите уведомление по электронной почте.
-      valid_data_message: Данные успешно подтверждены!
-      valid_data_summary_text: "Вот сводка данных о студентах на загруженном листе: "
-    StudentsEditor__CreateForm:
-      added_full_description: Все ученики созданы успешно.
-      added_none_description: Все студенты, которых вы пытались добавить, уже были частью этого курса.
-      added_none_title: Ничего не изменилось
-      added_partial_description: "%{students_added} из %{students_requested} студентов были добавлены. Остальные студенты уже прошли курс."
-      added_partial_title: Частично добавлено
-      drawer_heading: Добавить новых студентов
-      notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
-      reload_add_students: Наша команда была уведомлена об этой ошибке. Пожалуйста, перезагрузите эту страницу перед повторной попыткой добавить учащихся.
-      save_list_button: Сохранить Список
-      team_header_add_more_members: Добавьте больше членов команды!
-      team_header_label: КОМАНДА %{team_name}
-      teams_to_add_empty: Этот список пуст! Добавьте несколько студентов, используя форму выше.
-      teams_to_add_label: "Эти новые студенты будут добавлены к курсу.:"
     StudentsEditor__Root:
       button_add_new_students: Добавить новых студентов
       button_all_students: Все Студенты
@@ -1463,37 +1611,30 @@ ru:
       students_partially_loaded_text: Показаны %{loaded_students_count} из %{total_students} студентов
       team: Команда
       try_removing_filter: Попробуйте удалить параметры фильтра поиска.
-    StudentsEditor__UpdateDetailsForm:
-      access_ends_at:
-        help: Если установлено, студенты не смогут выполнить цели после этой даты.
-        help_url: 'https://docs.pupilfirst.com/users/students#editing-student-details'
-        label_student: Доступ студента заканчивается
-        label_team: Доступ к команде заканчивается
-      affiliation: Партнёр
-      affiliation_placeholder: Acme Inc., Acme University, etc.
-      name: Наименование
-      personal_coaches: Личные наставники
-      search_coaches_all: Вы выбрали всех доступных наставников!
-      search_coaches_empty: Наставников не выбрано
-      search_coaches_placeholder: Поиск наставников
-      student_name_placeholder: Имя студента здесь
-      student_updated: Ученик успешно обновлен
-      student_updated_moved: Ученик был обновлен и перемещен в список неактивных учеников
-      tags_applied: Теги применены
-      tags_applied_team: Теги, примененные к команде
-      tags_applied_user: Теги применены к пользователю
-      team_coaches: Тренеры команды
-      team_name: Название команды
-      team_name_error: Имя команды должно содержать не менее двух символов
-      team_name_placeholder: Название команды здесь
-      team_updated_moved: Команда была обновлена и перемещена в список неактивных учеников
-      title: Заголовок
-      title_error: Заголовок должен содержать не менее двух символов
-      title_placeholder: Студент, тренер, CEO и т.д.
-      update_student: Обновить студента
     StudentsEditor__UpdateForm:
       actions: Действия
       details: Детали
+    StudentsIndex__Root:
+      add_new_students: Add New Students
+      cohort: Cohort
+      edit: Edit
+      filter:
+        search_by_email: Search by Email
+        search_by_name: Search by Name
+        user_tag: User Tag
+      level: Level
+      load_more: Load More
+      pagination:
+        empty_message: No Students Found
+      sorter:
+        first_created: First Created
+        first_updated: First Updated
+        last_created: Last Created
+        last_updated: Last Updated
+        name: Name
+      student: student
+      students: students
+      title: Students
     SubmissionChecklistItemShow:
       correct: Верно
       incorrect: Неверно
@@ -1508,6 +1649,38 @@ ru:
       action_string_upload_files: Загрузить файлы
       action_string_write_long_text: Напишите Длинный Текст
       action_string_write_short_text: Напишите Короткий Текст
+    TeamsActions__Root:
+      delete: Delete
+      delete_team: Delete team
+      delete_team_info: Delete will remove all the students from the team and delete the team
+      edit: Edit
+      pages:
+        actions: Actions
+        links: Details
+      team_actions: Team actions
+    TeamsCreator__Root:
+      title: Create new team
+    TeamsDetails__Root:
+      edit: Edit
+      page_description: Edit team details
+      pages:
+        actions: Actions
+        details: Details
+    TeamsIndex__Root:
+      create_team: Create Team
+      edit: Edit
+      filter:
+        search_by_team_name: Search by Team Name
+      load_more: Load More
+      page_title: Teams
+      pagination:
+        empty_message: No Teams Found
+      sorter:
+        first_created: First Created
+        last_created: Last Created
+        name: Name
+      team: team
+      teams: teams
     TopicsShow__LikeManager:
       like: Нравится
       like_button_tooltip: Лайкнуть Этот Пост
@@ -1804,8 +1977,6 @@ ru:
         subject: Вы были добавлены в качестве автора в %{course_name}
     course_enrollement:
       added_coach_html: Вы были добавлены в качестве наставника курса <strong>%{course_name}</strong>, %{school_name}. Это дает вам возможность просматривать работы студентов, назначать оценки и давать им отзывы об их работе.
-      can_sign_html: Теперь вы можете %{link_to}.
-      link_to: войти в %{school_name} и просмотреть работы ваших учеников
     course_export:
       prepared:
         body:
@@ -1951,6 +2122,8 @@ ru:
       success_notification: Запрошена копия уровня. Скоро он появится в намеченном курсе!
     create_coach_note:
       note_added_notification: Заметка успешно добавлена
+    create_cohort:
+      success_notification: Cohort created successfully.
     create_community:
       community_created_notification: Сообщество успешно создано
     create_course:
@@ -1994,6 +2167,8 @@ ru:
       success_notification: Задача успешно создана.
     create_target_version:
       new_version_notification: Новая версия была создана.
+    create_team:
+      success_notification: Team created successfully
     create_topic_subscription:
       success_notification: Вы будете уведомлены обо всех обновлениях.
     delete_certificate:
@@ -2001,8 +2176,9 @@ ru:
     delete_course_author:
       author_deleted_details_notification: Автор был удален из этого курса.
       author_deleted_notification: Автор удалён
+    destroy_team:
+      success_notification: Team deleted successfully
     dropout_student:
-      reloading_list_notification: Перезагрузка списка студентов
       student_updated_notification: Ученик успешно обновлен
     export_course_report:
       course_not_found_error: Не удалось найти курс с указанным идентификатором
@@ -2017,6 +2193,8 @@ ru:
       success_notification: Эта тема была заблокирована. Новые ответы не принимаются.
     mark_post_as_solution:
       reply_marked_notification: Ответ помечен как решение
+    merge_cohort:
+      success_notification: Cohorts merged successfully.
     merge_levels:
       merge_complete_notification: Слияние завершено!
     quiz:
@@ -2024,6 +2202,8 @@ ru:
       question: Вопрос
       your_answer: Ваш ответ
       your_correct_answer: Ваш правильный ответ
+    re_activate_student:
+      success_notification: Student re-activated successfully!
     reassign_reviewer:
       submission_graded_error: Вы можете назначить себя только участникам, ожидающим рассмотрения.
       submission_not_assigned_to_coach: Работа уже назначена вам.
@@ -2050,6 +2230,8 @@ ru:
       reply_unmarked_notification: Ответ не помечен как решение!
     update_certificate:
       success_notification: Данные сертификата обновлены.
+    update_cohort:
+      success_notification: Cohort updated successfully.
     update_course:
       success_notification: Курс успешно обновлен!
     update_course_author:
@@ -2066,6 +2248,8 @@ ru:
     update_school_link:
       link_not_found_error: Не удалось найти ссылку!
       success_notification: Ссылка успешно обновлена!
+    update_student_details:
+      success_notification: Student updated successfully
     update_target:
       checklist_items_exceeded_error: Чеклист не должен иметь более 25 пунктов
       evaluation_criteria_course_error: Критерии оценки должны быть из того же курса, что и задача
@@ -2076,6 +2260,8 @@ ru:
       success_notification: Задача обновлена успешна!
       target_group_not_present_error: Группа задач не существуеш
       target_missing_error: Задачи не существует
+    update_team:
+      success_notification: Team updated successfully
     update_topic:
       topic_updated_notification: Тема успешно обновлена!
     update_user:
@@ -2214,6 +2400,8 @@ ru:
     cancel: Отмена
     caption_image: Подпись к изображению
     close: Закрыть
+    coaches: Coaches
+    cohorts: Cohorts
     community: Сообщество
     completed: Завершено
     dashboard: Обучение
@@ -2235,6 +2423,7 @@ ru:
       long_without_name: Уровень %{number}
       short_with_name: "У%{number}: %{name}"
       short_without_name: У%{number}
+    levels: Levels
     live: Боевой
     load_more: Загрузить Больше...
     loading: Загрузка...

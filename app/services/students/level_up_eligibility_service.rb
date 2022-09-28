@@ -140,7 +140,11 @@ module Students
         if @student.in?(completed_students)
           # Mark that some teammates haven't yet completed target if applicable.
           @team_members_pending ||=
-            completed_students.count != team.founders.count
+            if team.present?
+              completed_students.count != team.founders.count
+            else
+              false
+            end
 
           # Student has completed this target.
           true

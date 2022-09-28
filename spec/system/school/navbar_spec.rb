@@ -63,7 +63,7 @@ feature 'School Admin Navbar', js: true do
     click_link(course_1.name)
     expect(page).to have_link(
       'Students',
-      href: "/school/courses/#{course_1.id}/students"
+      href: "/school/courses/#{course_1.id}/students?status=Active"
     )
     expect(page).to have_link(
       'Coaches',

@@ -11,6 +11,34 @@ hi:
       note: " आपके विद्यालय के प्रशिक्षकों की पहुंच सभी समुदायों तक है।"
       welcome: आपका स्वागत है
   components:
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: Add new cohort
+      cohort:
+        label: Cohort name
+        message: Enter a valid cohort name
+        placeholder: eg, Batch 1
+      cohort_description:
+        label: Cohort description
+        message: Enter a valid description for the cohort
+        placeholder: eg, Batch 1 of some year
+      cohort_ends_at:
+        help: The cohort will be archived on this date
+        label: Cohort end date
+      update_cohort: Update cohort
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: All students selected
+      no_students_found: No Students found
+      no_students_selected: No students selected
+    AdminCoursesShared__TeamEditor:
+      add_new_team: Add new team
+      select_cohort:
+        label: Select a cohort
+        placeholder: Pick a Cohort
+      team_name:
+        label: Team name
+        message: Enter a valid team name
+        placeholder: eg, Batch 1
+      update_team: Update Team
     Api:
       error_notification_body: 'हमारी टीम को इस त्रुटि के बारे में सूचित कर दिया गया है। कृपया पेज लोड करें और पुन: प्रयास करें।'
       error_notification_title: एक अप्रत्याशित गड़बड़ी हुई है!
@@ -39,6 +67,37 @@ hi:
       filter_result_empty: आपके द्वारा लागू किए गए फ़िल्टर किसी भी प्रशिक्षक से मेल नहीं खाते हैं। कृपया फ़िल्टर बदलें और पुनः प्रयास करें।
       filter_search_string_course: पाठ्यक्रम पढ़ाता है %{name}
       heading: डिब्बों
+    CohortsActions__Root:
+      button_text: Merge and delete
+      edit: Edit
+      merge_heading_html: Merge <em>%{cohort_name}</em> into another cohort
+      merge_help: Merging cohorts will move all students from the selected cohort to the target cohort. This action can be used to delete unnecessary cohorts. This action cannot be undone.
+      page_description: Actions for the cohort.
+      pick_a_cohort: Pick a Cohort
+    CohortsCreator__Root:
+      page_description: Create a new cohort for the course.
+      page_title: Add new cohort
+    CohortsDetails__Root:
+      page_description: Update cohort details
+      page_title: Edit %{cohort_name}
+    CohortsIndex__Root:
+      active_cohorts: Active Cohorts
+      add_new_cohort: Add new cohort
+      all_cohorts: All Cohorts
+      coaches: Coaches
+      cohort: cohort
+      cohorts: cohorts
+      cohorts_end_date: Cohort end date
+      edit: Edit
+      filter:
+        first_created: First Created
+        last_created: Last Created
+        last_ending: Last Ending
+        name: Name
+        search_by_name: Search by Name
+      load_more: Load More
+      no_cohorts_found: No Cohorts Found
+      students: Students
     CommunitiesNewTopic__Root:
       asked_on: "पर पूछा "
       back: पीछे
@@ -90,10 +149,6 @@ hi:
       topics_partially_loaded_text: '%{total_topics} में से %{loaded_topics_count} विषय दिखाए जा रहे हैं'
       unable_find_id: "आईडी के साथ विषय श्रेणी खोजने में असमर्थ: "
     CourseApplicants__EditForm:
-      access_ends_at:
-        help: यदि निर्धारित किया जाता है, तो छात्र इस तिथि के बाद लक्ष्य पूरा नहीं कर पाएंगे।
-        help_url: 'https://docs.pupilfirst.com/users/students#editing-student-details'
-        label: छात्र का प्रवेश समाप्त होता है
       add_as_student_button: छात्र के रूप में जोड़ें
       affiliation:
         label: संबंधन
@@ -209,12 +264,22 @@ hi:
       search_coaches_all: आपने सभी कोचों का चयन कर लिया है!
       search_coaches_empty: कोई कोच नहीं चुना गया
       search_coaches_placeholder: कोच खोजें
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
       select_coaches: कोचों का चयन करें
+      select_cohorts: Select Cohorts
     CourseCoaches__InfoForm:
       no_students_assigned: इस कोच को कोई छात्र नहीं सौंपा गया है। छात्र विवरण संपादित करते समय आप सीधे कोच असाइन कर सकते हैं।
+      notification_coach_updated: Coach updated successfully
       pending_submissions: लंबित प्रस्तुतियाँ
       revied_submissions: समीक्षित प्रस्तुतियाँ
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      select_cohorts: "Cohorts assigned to coach:"
       students_assigned: "कोच को सौंपा गया छात्र:"
+      update_cohort_assignment: Update Cohort Assignment
     CourseCoaches__InfoFormTeam:
       remove_post_confirm: सौंपी गई टीमों की सूची से?
       remove_pre_confirm: "क्या आप वाकई निकालना चाहते हैं "
@@ -226,34 +291,6 @@ hi:
       enrollment_delete_notificaion_success_body: कोच नामांकन सफलतापूर्वक हटाया गया
       remove_confirm_post: इस कोर्स से?
       remove_confirm_pre: क्या आप वाकई निकालना चाहते हैं
-    CourseEditor:
-      add_new_course: नया कोर्स जोड़ें
-      button_load_more: अधिक पाठ्यक्रम लोड करें...
-      course_links:
-        download_reports: रिपोर्ट डाउनलोड करें
-        edit_curriculum: पाठ्यचर्या संपादित करें
-        manage_coaches: कोच प्रबंधित करें
-        manage_students: छात्रों को प्रबंधित करें
-        view_as_student: छात्र के रूप में देखें
-      courses_fully_loaded_text: सभी %{total_courses} पाठ्यक्रम दिखा रहा है
-      courses_partially_loaded_text: '%{total_courses} में से %{loaded_courses_count} पाठ्यक्रम दिखा रहे हैं'
-      edit_course_details: पाठ्यक्रम विवरण संपादित करें
-      empty_courses: आपके पास कोई कोर्स नहीं है!
-      filter:
-        input_hint: या नाम से खोजने के लिए टाइप करना प्रारंभ करें...
-        input_label: खोज
-        input_placeholder: नाम से फ़िल्टर और खोज पाठ्यक्रम
-        label:
-          name: नाम से खोजें
-          status: दर्जा
-        status:
-          active: सक्रिय
-          archived: संग्रहीत
-          ended: समाप्त
-      notification_error_body: हमारी टीम को इस त्रुटि के बारे में सूचित कर दिया गया है। कृपया इस पृष्ठ को पुनः लोड करने का प्रयास करें।
-      notification_error_head: एक अप्रत्याशित गड़बड़ी हुई है!
-      quick_links: त्वरित सम्पक
-      view_public_page: सार्वजनिक पृष्ठ देखें
     CourseEditor__Form:
       actions:
         archive_course:
@@ -269,9 +306,6 @@ hi:
         archive_message: क्या आप वाकई पाठ्यक्रम को संग्रहित करना चाहते हैं?
         clone_course_message: क्या आप वाकई पाठ्यक्रम की एक प्रति बनाना चाहते हैं?
         unarchive_message: क्या आप वाकई पाठ्यक्रम को अनारक्षित करना चाहते हैं?
-      button_text:
-        add_new_course: नया कोर्स जोड़ें
-        edit_course_details: पाठ्यक्रम विवरण संपादित करें
       course_about:
         label: बारे में
         placeholder: पाठ्यक्रम के बारे में अधिक जानकारी जोड़ें।
@@ -279,10 +313,6 @@ hi:
         error_message: विवरण की आवश्यकता है (2-150 वर्ण)
         label: पाठ्यक्रम विवरण
         placeholder: इस पाठ्यक्रम के लिए संक्षिप्त विवरण
-      course_end_date:
-        help: यदि निर्दिष्ट किया गया है, तो पाठ्यक्रम इस तिथि को छात्रों के लिए बंद के रूप में दिखाई देगा। छात्र अब और सबमिशन नहीं कर पाएंगे।
-        help_url: https://docs.pupilfirst.com/users/courses
-        label: कोर्स की समाप्ति तिथि
       course_highlights:
         label: कोर्स हाइलाइट्स
       course_name:
@@ -319,6 +349,9 @@ hi:
         actions: कार्रवाई
         details: विवरण
         images: इमेजिस
+      title:
+        add_new_course: Add New Course
+        edit_course_details: Edit Course Details
       update_course: अपडेट कोर्स
     CourseEditor__HighlightsEditor:
       add_highlight: कोर्स हाइलाइट जोड़ें
@@ -354,6 +387,34 @@ hi:
         help: थंबनेल होमपेज पर और यहां व्यवस्थापक पाठ्यक्रम सूची में प्रदर्शित किया जाएगा।
         help_url: 'https://docs.pupilfirst.com/users/courses#course-images'
         label: थंबनेल
+    CourseEditor__Root:
+      add_new_course: Add New Course
+      button_load_more: Load More Courses...
+      course_links:
+        download_reports: Download Reports
+        edit_curriculum: Edit Curriculum
+        manage_coaches: Manage Coaches
+        manage_students: Manage Students
+        view_as_student: View as Student
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      edit_course_details: Edit Course Details
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+      notification_error_body: Our team has been notified about this error. Please try reloading this page.
+      notification_error_head: An unexpected error occurred
+      quick_links: Quick Links
+      view_public_page: View public page
     CourseExport__Root:
       active_students_label: सक्रिय छात्र
       all_students_label: सभी विद्यार्थी
@@ -759,6 +820,7 @@ hi:
       coach_notes: कोच नोट्स
       filter_level: स्तर, असाइन किए गए कोच द्वारा फ़िल्टर करें, या नाम या ईमेल पते से खोजें, और बहुत कुछ...
       has_notes: नोट्स हैं
+      level_distribution_label: Level-wise student distribution
       me: मैं
       name_email: नाम या ईमेल
       no_notes: नोट नहीं है
@@ -795,12 +857,12 @@ hi:
     CoursesStudents__SubmissionsList:
       no_revied_submission: कोई समीक्षित सबमिशन नहीं
       submitted_on: "पर प्रस्तुत की "
-    CoursesStudents__TeamsList:
-      last_seen: अंतिम बार देखा गया %{time_string}
-      no_last_seen: इस छात्र ने कभी साइन इन नहीं किया है
-      no_teams: दिखाने के लिए कोई टीम नहीं
-      personal_coaches: व्यक्तिगत कोच
-      team_coaches: टीम के कोच
+    CoursesStudents__StudentsList:
+      last_seen: Last seen %{time_string}
+      no_last_seen: This student has never signed in
+      no_students: No students to show
+      personal_coaches: Personal Coaches
+      team_coaches: Team Coaches
     CurriculumEditor:
       create_level: स्तर बनाएं
       create_target_group: लक्ष्य समूह बनाएं
@@ -1087,6 +1149,11 @@ hi:
     Notifications__Root:
       close: "बंद करना "
       show_notifications: सूचनाएं दिखाएं
+    Pagination:
+      fully_loaded_text:
+        one: Only one %{singular_name} to show
+        other: Showing all %{count} %{plural_name}
+      partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
     SA_Coaches_CoachEditor:
       add_coach: नया कोच जोड़ें
       affiliation: संबंधन
@@ -1297,6 +1364,11 @@ hi:
       social: सामाजिक
       social_links_q: सोशल मीडिया लिंक जोड़ें?
       terms_and_conditions: नियम एवं शर्तें
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     School__SearchableTagList:
       add_new_tag: नया टैग जोड़ें
       pick_tag: टैग चुनें
@@ -1313,6 +1385,70 @@ hi:
     Sorter:
       order_by: द्वारा आदेश
       toggle_sort: टॉगल सॉर्ट क्रम
+    StudentActions__Root:
+      active_label: Active
+      certificates_label: Course Certificates
+      details_certificate: Details of issued certificate
+      dropout_student:
+        button: Dropout Student
+        help: Marking a student as dropped out will remove all of their access to the course.
+        help_url: 'https://docs.pupilfirst.com/users/students#student-actions'
+        label: Has this student dropped out?
+      edit: Edit
+      empty_course_certificates_text: This course does not have any certificates to issue.
+      empty_issued_certificates_text: This student has not been issued any certificates.
+      issue_certificate_button: Issue Certificate
+      issued_by_label: "Issued by:"
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      manage_certificates: Manage student certificates
+      new_certificate_label: "Issue new certificate:"
+      page_description: Actions for the student
+      re_activate_student:
+        button: Re-Activate Student
+      revoke_certificate_button: Revoke Certificate
+      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
+      revoked_by_label: "Revoked by:"
+      revoked_date_label: "Revoked on:"
+      revoked_status_label: Revoked
+      select_certificate_input_label: Select a certificate to issue
+    StudentBulkImport__Root:
+      csv_data_errors:
+        invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_email: Email has to be valid and can't be blank
+        invalid_name: Name column can't be blank and should be within 250 characters
+        invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+        invalid_team_name: Team name has to be less than 50 characters
+        invalid_title: Title has to be less than 250 characters
+      csv_file_errors:
+        empty: The selected CSV has no valid rows
+        exceeded_entries: The CSV file has more than 1000 entries.
+        invalid: Please select a valid CSV file with size less than 5 MB
+        invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
+        invalid_template: The selected CSV file does not have a valid template
+      csv_file_input:
+        help: This file will be used to import students in bulk. Check the sample file for the required format.
+        help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
+        label: CSV Import file
+        placeholder: Select CSV file to import
+      drawer_heading: Bulk Import Students
+      error_summary_title: "Here is a summary of the errors in the sheet: "
+      example_csv_link:
+        text: Download an example .csv file
+        url: https://docs.pupilfirst.com/files/student_import_sample.csv
+      import_button_text: Import Students
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      page_description: Upload the CSV file containing the students you want to add to the course.
+      page_title: Import students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+      pick_a_cohort: Pick a Cohort
+      select_a_cohort: Select a cohort
+      success_notification: Import initiated successfully! You will be notified in an email once complete.
+      valid_data_message: Data validated successfully!
+      valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentCourse__Header:
       calendar: पंचांग
       curriculum: पाठ्यक्रम
@@ -1321,6 +1457,83 @@ hi:
       review: समीक्षा
       students: छात्र
       unknown: अनजान
+    StudentCreator__CreateForm:
+      added_full_description: All students were created successfully.
+      added_none_description: All the students you tried to add were already a part of this course.
+      added_none_title: Nothing Changed
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_partial_title: Partially Added
+      drawer_heading: Add New Students
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      pick_a_cohort: Pick a Cohort
+      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
+      save_list_button: Save List
+      select_a_cohort: Select a cohort
+      select_cohort: Select Cohort
+      student_list: Student list
+      team_header_add_more_members: Add more team members!
+      team_header_label: TEAM %{team_name}
+      teams_to_add_empty: This list is empty! Add some students using the form above.
+      teams_to_add_label: "These new students will be added to the course:"
+    StudentCreator__Root:
+      page_description: You can add multiple students to a list and add them to course
+      page_title: Add new students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+    StudentCreator__StudentInfoForm:
+      add_to_list: Add to List
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        error:
+          invalid: invalid email
+          not_unique: email address not unique for student
+        label: Email
+        placeholder: Student email here
+      name:
+        label: Name
+        message: is not valid
+        placeholder: Student name here
+      tags:
+        label: Tags
+      team:
+        help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+        label: Team Name
+        placeholder: Avengers, Fantastic Four, etc.
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    StudentDetails__Root:
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      edit: Edit
+      name: Name
+      pages:
+        actions: Actions
+        details: Details
+      personal_coaches: Personal Coaches
+      pick_a_cohort: Pick a Cohort
+      search_coaches_all: You have selected all available coaches!
+      search_coaches_empty: No coaches selected
+      search_coaches_placeholder: Search coaches
+      select_a_cohort: Select a cohort
+      student_name_placeholder: Student name here
+      student_updated: Student updated successfully
+      student_updated_moved: Student has been updated, and moved to list of inactive students
+      tags_applied: Tags applied
+      tags_applied_team: Tags applied to team
+      tags_applied_user: Tags applied to user
+      team_coaches: Team Coaches
+      team_name: Team Name
+      team_name_error: Team Name must have at least two characters
+      team_name_placeholder: Team name here
+      team_updated_moved: Team has been updated, and moved to list of inactive students
+      title: Title
+      title_error: Title must have at least two characters
+      title_placeholder: Student, Coach, CEO, etc.
+      update_student: Update Student
     StudentTopNav:
       sign_in: साइन इन करें
       sign_out: साइन आउट करें
@@ -1332,73 +1545,6 @@ hi:
       sign_in: साइन इन करें
       sign_out: साइन आउट करें
       user_controls: उपयोगकर्ता नियंत्रण दिखाएं
-    StudentsEditor__ActionsForm:
-      active_label: सक्रिय
-      certificates_label: पाठ्यक्रम प्रमाण पत्र
-      details_certificate: जारी प्रमाण पत्र का विवरण
-      dropout_student:
-        button: ड्रॉपआउट छात्र
-        help: किसी छात्र को ड्रॉप आउट के रूप में चिह्नित करने से पाठ्यक्रम तक उसकी सभी पहुंच निकल जाएगी।
-        help_url: 'https://docs.pupilfirst.com/users/students#student-actions'
-        label: क्या यह छात्र बाहर हो गया है?
-      empty_course_certificates_text: इस पाठ्यक्रम में जारी करने के लिए कोई प्रमाण पत्र नहीं है।
-      empty_issued_certificates_text: इस छात्र को कोई प्रमाण पत्र जारी नहीं किया गया है।
-      issue_certificate_button: प्रमाण पत्र जारी करें
-      issued_by_label: "द्वारा जारी:"
-      issued_certificates_label: "जारी किए गए प्रमाण पत्र:"
-      issued_date_label: "पर जारी:"
-      manage_certificates: छात्र प्रमाणपत्र प्रबंधित करें
-      new_certificate_label: "नया प्रमाणपत्र जारी करें:"
-      revoke_certificate_button: प्रमाणपत्र निरस्त करें
-      revoke_certificate_confirmation: क्या आपको यकीन है? इस क्रिया को पूर्ववत नहीं किया जा सकता है।
-      revoked_by_label: "द्वारा निरस्‍त:"
-      revoked_date_label: "इस पर निरस्‍त:"
-      revoked_status_label: निरस्त किया गया
-      select_certificate_input_label: जारी करने के लिए प्रमाणपत्र चुनें
-    StudentsEditor__BulkImportForm:
-      csv_data_errors:
-        invalid_affiliation: संबद्धता 250 वर्णों से कम होनी चाहिए
-        invalid_email: ईमेल मान्य होना चाहिए और खाली नहीं हो सकता
-        invalid_name: नाम कॉलम खाली नहीं हो सकता और 250 वर्णों के भीतर होना चाहिए
-        invalid_tags: प्रति छात्र अधिकतम 5 टैग की अनुमति है, प्रत्येक 50 वर्णों की सीमा के साथ
-        invalid_team_name: टीम का नाम 50 वर्णों से कम होना चाहिए
-        invalid_title: शीर्षक 250 वर्णों से कम का होना चाहिए
-      csv_file_errors:
-        empty: चयनित CSV की कोई मान्य पंक्तियाँ नहीं हैं
-        exceeded_entries: CSV फ़ाइल में 1000 से अधिक प्रविष्टियाँ हैं।
-        invalid: कृपया 5 एमबी से कम आकार वाली एक मान्य सीएसवी फ़ाइल चुनें
-        invalid_data: CSV फ़ाइल में कुछ सेल में अमान्य डेटा है। कृपया नीचे सूचीबद्ध त्रुटियों को ठीक करें और पुनः प्रयास करें।
-        invalid_template: चुनी गई CSV फ़ाइल में मान्य टेम्प्लेट नहीं है
-      csv_file_input:
-        help: इस फ़ाइल का उपयोग छात्रों को थोक में आयात करने के लिए किया जाएगा। आवश्यक प्रारूप के लिए नमूना फ़ाइल की जाँच करें।
-        help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
-        label: सीएसवी आयात फ़ाइल
-        placeholder: आयात करने के लिए CSV फ़ाइल चुनें
-      drawer_heading: थोक आयात छात्र
-      error_summary_title: "यहाँ शीट में त्रुटियों का सारांश दिया गया है: "
-      example_csv_link:
-        text: एक उदाहरण .csv फ़ाइल डाउनलोड करें
-        url: https://docs.pupilfirst.com/files/student_import_sample.csv
-      import_button_text: छात्रों को आयात करें
-      more_errors_text: "और भी त्रुटियां हैं। निम्न पंक्तियों में त्रुटियां ठीक करें और फिर से अपलोड करें: "
-      notify_students_label: छात्रों को सूचित करें, और उन्हें इस स्कूल में साइन इन करने के लिए एक लिंक भेजें।
-      success_notification: आयात सफलतापूर्वक शुरू किया गया! एक बार पूरा होने पर आपको एक ईमेल में सूचित किया जाएगा।
-      valid_data_message: डेटा सफलतापूर्वक सत्यापित किया गया!
-      valid_data_summary_text: "यहां अपलोड की गई शीट में छात्र डेटा का सारांश दिया गया है: "
-    StudentsEditor__CreateForm:
-      added_full_description: सभी छात्र सफलतापूर्वक बनाए गए थे।
-      added_none_description: आपने जिन छात्रों को जोड़ने का प्रयास किया, वे पहले से ही इस पाठ्यक्रम का हिस्सा थे।
-      added_none_title: कुछ नहीं बदला
-      added_partial_description: "%{students_requested} में से %{students_added} छात्र जोड़े गए। शेष छात्र पहले से ही पाठ्यक्रम का हिस्सा हैं।"
-      added_partial_title: आंशिक रूप से जोड़ा गया
-      drawer_heading: नए छात्र जोड़ें
-      notify_students_label: छात्रों को सूचित करें, और उन्हें इस स्कूल में साइन इन करने के लिए एक लिंक भेजें।
-      reload_add_students: हमारी टीम को इस विफलता के बारे में सूचित कर दिया गया है। छात्रों को फिर से जोड़ने का प्रयास करने से पहले कृपया इस पृष्ठ को पुनः लोड करें।
-      save_list_button: सूची सहेजें
-      team_header_add_more_members: अधिक टीम के सदस्यों को जोड़ें!
-      team_header_label: टीम %{team_name}
-      teams_to_add_empty: यह सूची खाली है! ऊपर दिए गए फॉर्म का उपयोग करके कुछ छात्रों को जोड़ें।
-      teams_to_add_label: "इन नए छात्रों को पाठ्यक्रम में जोड़ा जाएगा:"
     StudentsEditor__Root:
       button_add_new_students: नए छात्र जोड़ें
       button_all_students: सभी विद्यार्थी
@@ -1443,37 +1589,30 @@ hi:
       students_partially_loaded_text: '%{total_students} छात्रों में से %{loaded_students_count} दिखाया जा रहा है'
       team: टीम
       try_removing_filter: खोज फ़िल्टर विकल्पों को हटाने का प्रयास करें।
-    StudentsEditor__UpdateDetailsForm:
-      access_ends_at:
-        help: यदि निर्धारित किया जाता है, तो छात्र इस तिथि के बाद लक्ष्य पूरा नहीं कर पाएंगे।
-        help_url: 'https://docs.pupilfirst.com/users/students#editing-student-details'
-        label_student: छात्र का प्रवेश समाप्त होता है
-        label_team: टीम का एक्सेस समाप्त होता है
-      affiliation: संबंधन
-      affiliation_placeholder: एक्मे इंक।, एक्मे विश्वविद्यालय, आदि।
-      name: नाम
-      personal_coaches: व्यक्तिगत कोच
-      search_coaches_all: आपने सभी उपलब्ध कोचों का चयन कर लिया है!
-      search_coaches_empty: कोई कोच नहीं चुना गया
-      search_coaches_placeholder: कोच खोजें
-      student_name_placeholder: यहां छात्र का नाम
-      student_updated: छात्र सफलतापूर्वक अपडेट किया गया
-      student_updated_moved: छात्र को अपडेट कर दिया गया है, और निष्क्रिय छात्रों की सूची में ले जाया गया है
-      tags_applied: टैग लागू
-      tags_applied_team: टीम पर लागू टैग
-      tags_applied_user: उपयोगकर्ता पर लागू टैग
-      team_coaches: टीम के कोच
-      team_name: टीम का नाम
-      team_name_error: टीम के नाम में कम से कम दो अक्षर होने चाहिए
-      team_name_placeholder: टीम का नाम यहाँ
-      team_updated_moved: टीम को अपडेट कर दिया गया है, और निष्क्रिय छात्रों की सूची में स्थानांतरित कर दिया गया है
-      title: शीर्षक
-      title_error: शीर्षक में कम से कम दो अक्षर होने चाहिए
-      title_placeholder: छात्र, कोच, सीईओ, आदि।
-      update_student: छात्र अपडेट करें
     StudentsEditor__UpdateForm:
       actions: कार्रवाई
       details: विवरण
+    StudentsIndex__Root:
+      add_new_students: Add New Students
+      cohort: Cohort
+      edit: Edit
+      filter:
+        search_by_email: Search by Email
+        search_by_name: Search by Name
+        user_tag: User Tag
+      level: Level
+      load_more: Load More
+      pagination:
+        empty_message: No Students Found
+      sorter:
+        first_created: First Created
+        first_updated: First Updated
+        last_created: Last Created
+        last_updated: Last Updated
+        name: Name
+      student: student
+      students: students
+      title: Students
     SubmissionChecklistItemShow:
       correct: सही
       incorrect: ग़लत
@@ -1488,6 +1627,38 @@ hi:
       action_string_upload_files: फाइल अपलोड करो
       action_string_write_long_text: लंबा पाठ लिखें
       action_string_write_short_text: संक्षिप्त पाठ लिखें
+    TeamsActions__Root:
+      delete: Delete
+      delete_team: Delete team
+      delete_team_info: Delete will remove all the students from the team and delete the team
+      edit: Edit
+      pages:
+        actions: Actions
+        links: Details
+      team_actions: Team actions
+    TeamsCreator__Root:
+      title: Create new team
+    TeamsDetails__Root:
+      edit: Edit
+      page_description: Edit team details
+      pages:
+        actions: Actions
+        details: Details
+    TeamsIndex__Root:
+      create_team: Create Team
+      edit: Edit
+      filter:
+        search_by_team_name: Search by Team Name
+      load_more: Load More
+      page_title: Teams
+      pagination:
+        empty_message: No Teams Found
+      sorter:
+        first_created: First Created
+        last_created: Last Created
+        name: Name
+      team: team
+      teams: teams
     TopicsShow__LikeManager:
       like: पसंद करना
       like_button_tooltip: इस डाक की तरह
@@ -1782,8 +1953,6 @@ hi:
         subject: आपको %{course_name}. में एक लेखक के रूप में जोड़ा गया है
     course_enrollement:
       added_coach_html: आपको पाठ्यक्रम <strong>%{course_name}</strong>, %{school_name}पर एक कोच के रूप में जोड़ा गया है। यह आपको छात्रों से सबमिशन की समीक्षा करने, ग्रेड असाइन करने और उन्हें उनके काम पर प्रतिक्रिया देने की क्षमता देता है।
-      can_sign_html: अब आप %{link_to}कर सकते हैं।
-      link_to: '%{school_name} में साइन इन करें और अपने छात्रों के सबमिशन देखें'
     course_export:
       prepared:
         body:
@@ -1929,6 +2098,8 @@ hi:
       success_notification: लेवल कॉपी मांगी गई है। यह जल्द ही लक्ष्य पाठ्यक्रम में दिखाई देगा!
     create_coach_note:
       note_added_notification: नोट सफलतापूर्वक जोड़ा गया
+    create_cohort:
+      success_notification: Cohort created successfully.
     create_community:
       community_created_notification: समुदाय सफलतापूर्वक बनाया गया
     create_course:
@@ -1972,6 +2143,8 @@ hi:
       success_notification: लक्ष्य सफलतापूर्वक बनाया गया।
     create_target_version:
       new_version_notification: एक नया संस्करण बनाया गया है।
+    create_team:
+      success_notification: Team created successfully
     create_topic_subscription:
       success_notification: आपको सभी अपडेट के बारे में सूचित किया जाएगा।
     delete_certificate:
@@ -1979,8 +2152,9 @@ hi:
     delete_course_author:
       author_deleted_details_notification: लेखक को इस पाठ्यक्रम से हटा दिया गया है।
       author_deleted_notification: लेखक हटा दिया गया
+    destroy_team:
+      success_notification: Team deleted successfully
     dropout_student:
-      reloading_list_notification: छात्रों की सूची को फिर से लोड करना
       student_updated_notification: छात्र सफलतापूर्वक अपडेट किया गया
     export_course_report:
       course_not_found_error: दी गई आईडी के साथ कोर्स नहीं मिल सका
@@ -1995,6 +2169,8 @@ hi:
       success_notification: यह टॉपिक लॉक कर दिया गया है। कोई नया उत्तर स्वीकार नहीं किया जाएगा।
     mark_post_as_solution:
       reply_marked_notification: उत्तर सफलतापूर्वक समाधान के रूप में चिह्नित किया गया
+    merge_cohort:
+      success_notification: Cohorts merged successfully.
     merge_levels:
       merge_complete_notification: मर्ज पूरा!
     quiz:
@@ -2002,6 +2178,8 @@ hi:
       question: प्रश्न
       your_answer: आपका उत्तर
       your_correct_answer: आपका सही उत्तर
+    re_activate_student:
+      success_notification: Student re-activated successfully!
     reassign_reviewer:
       submission_graded_error: आप केवल अपने आप को लंबित सबमिशन के लिए असाइन कर सकते हैं।
       submission_not_assigned_to_coach: सबमिशन आपको पहले ही सौंपा जा चुका है।
@@ -2028,6 +2206,8 @@ hi:
       reply_unmarked_notification: समाधान के रूप में अचिह्नित उत्तर दें!
     update_certificate:
       success_notification: प्रमाणपत्र विवरण अपडेट किया गया है।
+    update_cohort:
+      success_notification: Cohort updated successfully.
     update_course:
       success_notification: कोर्स सफलतापूर्वक अपडेट किया गया!
     update_course_author:
@@ -2044,6 +2224,8 @@ hi:
     update_school_link:
       link_not_found_error: लिंक खोजने में असमर्थ!
       success_notification: लिंक सफलतापूर्वक अपडेट किया गया!
+    update_student_details:
+      success_notification: Student updated successfully
     update_target:
       checklist_items_exceeded_error: चेकलिस्ट में 25 से अधिक आइटम नहीं होने चाहिए
       evaluation_criteria_course_error: मूल्यांकन मानदंड लक्ष्य के समान पाठ्यक्रम से होना चाहिए
@@ -2054,6 +2236,8 @@ hi:
       success_notification: लक्ष्य सफलतापूर्वक अपडेट किया गया!
       target_group_not_present_error: लक्ष्य समूह मौजूद नहीं है
       target_missing_error: लक्ष्य मौजूद नहीं है
+    update_team:
+      success_notification: Team updated successfully
     update_topic:
       topic_updated_notification: विषय सफलतापूर्वक अपडेट किया गया!
     update_user:
@@ -2192,6 +2376,8 @@ hi:
     cancel: रद्द करना
     caption_image: छवि के लिए एक कैप्शन
     close: बंद करना
+    coaches: Coaches
+    cohorts: Cohorts
     community: समुदाय
     completed: पूरा हुआ
     dashboard: डैशबोर्ड
@@ -2213,6 +2399,7 @@ hi:
       long_without_name: स्तर %{number}
       short_with_name: "एल%{number}: %{name}"
       short_without_name: एल%{number}
+    levels: Levels
     live: रहना
     load_more: और लोड करें...
     loading: लोड हो रहा है...

@@ -12,7 +12,8 @@ class StudentDetailsResolver < ApplicationQuery
       quiz_scores: quiz_scores,
       average_grades: average_grades,
       completed_level_ids: completed_level_ids,
-      team: team
+      team: team,
+      student: student
     }
   end
 
@@ -104,7 +105,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def team
-    @team ||= student.startup
+    @team ||= student.team
   end
 
   def latest_submissions

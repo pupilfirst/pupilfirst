@@ -32,7 +32,8 @@ let averageGrades = t => t.averageGrades
 
 let completedLevelIds = t => t.completedLevelIds
 
-let makeAverageGrade = gradesData => gradesData |> Js.Array.map(gradeData => {
+let makeAverageGrade = gradesData =>
+  gradesData |> Js.Array.map(gradeData => {
     evaluationCriterionId: gradeData["evaluationCriterionId"],
     grade: gradeData["averageGrade"],
   })
@@ -56,14 +57,17 @@ let gradeAsPercentage = (
 }
 
 let computeAverageQuizScore = quizScores => {
-  let sumOfPercentageScores = quizScores |> Array.map(quizScore => {
-    let fractionArray = quizScore |> String.split_on_char('/') |> Array.of_list
-    let (numerator, denominator) = (
-      fractionArray[0] |> float_of_string,
-      fractionArray[1] |> float_of_string,
-    )
-    numerator /. denominator *. 100.0
-  }) |> Js.Array.reduce((a, b) => a +. b, 0.0)
+  let sumOfPercentageScores =
+    quizScores
+    |> Array.map(quizScore => {
+      let fractionArray = quizScore |> String.split_on_char('/') |> Array.of_list
+      let (numerator, denominator) = (
+        fractionArray[0] |> float_of_string,
+        fractionArray[1] |> float_of_string,
+      )
+      numerator /. denominator *. 100.0
+    })
+    |> Js.Array.reduce((a, b) => a +. b, 0.0)
   sumOfPercentageScores /. (quizScores |> Array.length |> float_of_int)
 }
 
@@ -74,7 +78,7 @@ let makeFromJs = (id, studentData) => {
   id: id,
   evaluationCriteria: studentData["evaluationCriteria"] |> CoursesReport__EvaluationCriterion.makeFromJs,
   totalTargets: studentData["totalTargets"],
-  levelId: studentData["team"]["levelId"],
+  levelId: studentData["student"]["level"]["id"],
   targetsCompleted: studentData["targetsCompleted"],
   quizScores: studentData["quizScores"],
   averageGrades: studentData["averageGrades"] |> makeAverageGrade,

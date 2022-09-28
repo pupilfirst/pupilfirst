@@ -18,7 +18,7 @@ after 'development:schools' do
   # Add three student users in the first school.
   school = School.first
 
-  (1..3).each do |index|
+  (1..25).each do |index|
     school.users.create!(
       email: "student#{index}@example.com",
       name: Faker::Name.name,

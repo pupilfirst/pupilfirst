@@ -39,9 +39,8 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def coaches
-    team_ids = submission.founders.map(&:startup_id).uniq
-    FacultyStartupEnrollment
-      .where(startup_id: team_ids)
+    FacultyFounderEnrollment
+      .where(founder_id: student_ids)
       .includes(faculty: [user: [avatar_attachment: :blob]])
       .map { |c| c.faculty }
   end
@@ -118,13 +117,13 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def students_have_same_team
-    Founder.where(id: student_ids).distinct(:startup_id).pluck(:startup_id).one?
+    Founder.where(id: student_ids).distinct(:team_id).pluck(:team_id).one?
   end
 
   def team_name
     if submission.team_submission? && students_have_same_team &&
          !student_ids.one?
-      Founder.find_by(id: student_ids.first).startup.name
+      Founder.find_by(id: student_ids.first).team.name
     end
   end
 end

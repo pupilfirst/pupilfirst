@@ -12,7 +12,7 @@ Psj.matchPaths(
     "school/courses/:course_id/authors/new",
   ],
   () => {
-    switch ReactDOM.querySelector("#schools-courses-authors__root") {
+    switch ReactDOM.querySelector("#schoolrouter-innerpage") {
     | Some(root) => {
         let (courseId, authors) =
           DomUtils.parseJSONTag(~id="schools-courses-authors__props", ()) |> decodeProps

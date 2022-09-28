@@ -1,0 +1,110 @@
+.school-admin-navbar {
+  @apply w-auto;
+}
+
+.school-admin-navbar__primary-nav {
+  @apply w-56;
+}
+
+.school-admin-navbar__primary-nav--shrunk {
+  @apply w-max items-center;
+}
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link {
+  @apply flex flex-col text-gray-800 font-medium items-center justify-center text-tiny;
+  position: relative;
+  padding: 8px;
+}
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link
+  span {
+  margin: 0px;
+}
+
+.school-admin-navbar__secondary-nav {
+  @apply w-56;
+}
+
+.school-admin-navbar__primary-nav-link {
+  @apply flex text-gray-800 text-sm font-medium items-center;
+  position: relative;
+}
+
+.school-admin-navbar__primary-nav-link:hover {
+  @apply text-primary-500 bg-gray-50;
+}
+
+.school-admin-navbar__primary-nav-link--active {
+  @apply bg-primary-100 text-primary-500 rounded font-semibold;
+}
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link--active::after {
+  content: "";
+  width: 32px;
+  height: 3px;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-primary-500);
+  border-radius: 2px;
+  animation: scale--bottom 0.3s ease-out;
+}
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link--active::before {
+  content: "";
+  width: 0px;
+}
+
+.school-admin-navbar__primary-nav-link--active::before {
+  content: "";
+  width: 3px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  background-color: var(--color-primary-500);
+  border-radius: 2px;
+  animation: scale 0.3s ease-out;
+}
+
+.school-admin-navbar__primary-nav-link--active:hover {
+  @apply bg-gray-200 text-primary-500;
+}
+
+.school-admin-navbar__notifications-unread-bullet {
+  @apply absolute block h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500 -top-0.5;
+    right: 4px;
+}
+
+.school-admin-navbar__notifications-unread-bullet::before {
+  content: "";
+  @apply animate-ping absolute inline-flex h-full w-full inset-0 rounded-full bg-red-300 opacity-75;
+}
+
+@keyframes scale {
+  from {
+    transform: scale(0.5);
+    top: 60%;
+  }
+  to {
+    transform: scale(1);
+    top: 30%;
+  }
+}
+
+@keyframes scale--bottom {
+  from {
+    transform: scale(0.5);
+    left: 70%;
+  }
+  to {
+    transform: scale(1);
+    left: 50%;
+  }
+}

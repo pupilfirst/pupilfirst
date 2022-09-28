@@ -3,9 +3,14 @@ type averageGrade = {
   grade: float,
 }
 
+type team = {
+  id: string,
+  name: string,
+  students: array<CoursesStudents__StudentInfo.t>,
+}
+
 type t = {
   id: string,
-  email: string,
   coachNotes: array<CoursesStudents__CoachNote.t>,
   hasArchivedNotes: bool,
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
@@ -14,33 +19,30 @@ type t = {
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
   completedLevelIds: array<string>,
-  team: CoursesStudents__TeamInfo.t,
+  student: CoursesStudents__StudentInfo.t,
+  team: option<team>,
+  levels: array<Shared__Level.t>,
+  courseId: string,
 }
+
+let student = t => t.student
 
 let team = t => t.team
 
-let student = t => t.team |> CoursesStudents__TeamInfo.studentWithId(t.id)
-
-let name = t => t |> student |> CoursesStudents__TeamInfo.studentName
-
-let title = t => t |> student |> CoursesStudents__TeamInfo.studentTitle
-
-let email = t => t.email
-
-let levelId = t => t.team |> CoursesStudents__TeamInfo.levelId
-
-let avatarUrl = t => t |> student |> CoursesStudents__TeamInfo.studentAvatarUrl
+let students = team => team.students
 
 let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
 
-let teamCoachUserIds = t => t.team |> CoursesStudents__TeamInfo.coachUserIds
+let levels = t => t.levels
 
-let makeAverageGrade = gradesData => gradesData |> Js.Array.map(gradeData => {
-    evaluationCriterionId: gradeData["evaluationCriterionId"],
-    grade: gradeData["averageGrade"],
-  })
+let courseId = t => t.courseId
+
+let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
+  evaluationCriterionId,
+  grade,
+}
 
 let totalTargets = t => t.totalTargets |> float_of_int
 
@@ -83,32 +85,51 @@ let removeNote = (noteId, t) => {
 }
 
 let computeAverageQuizScore = quizScores => {
-  let sumOfPercentageScores = quizScores |> Array.map(quizScore => {
-    let fractionArray = quizScore |> String.split_on_char('/') |> Array.of_list
-    let (numerator, denominator) = (
-      fractionArray[0] |> float_of_string,
-      fractionArray[1] |> float_of_string,
-    )
-    numerator /. denominator *. 100.0
-  }) |> Js.Array.reduce((a, b) => a +. b, 0.0)
+  let sumOfPercentageScores =
+    quizScores
+    |> Array.map(quizScore => {
+      let fractionArray = quizScore |> String.split_on_char('/') |> Array.of_list
+      let (numerator, denominator) = (
+        fractionArray[0] |> float_of_string,
+        fractionArray[1] |> float_of_string,
+      )
+      numerator /. denominator *. 100.0
+    })
+    |> Js.Array.reduce((a, b) => a +. b, 0.0)
   sumOfPercentageScores /. (quizScores |> Array.length |> float_of_int)
 }
 
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
-let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
-  id: id,
-  email: studentDetails["email"],
-  coachNotes: coachNotes |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
-  hasArchivedNotes: hasArchivedNotes,
-  evaluationCriteria: studentDetails["evaluationCriteria"] |> CoursesStudents__EvaluationCriterion.makeFromJs,
-  totalTargets: studentDetails["totalTargets"],
-  targetsCompleted: studentDetails["targetsCompleted"],
-  quizScores: studentDetails["quizScores"],
-  averageGrades: studentDetails["averageGrades"] |> makeAverageGrade,
-  completedLevelIds: studentDetails["completedLevelIds"],
-  team: studentDetails["team"] |> CoursesStudents__TeamInfo.makeFromJS,
-}
+let makeTeam = (~id, ~name, ~students) => {id, name, students}
 
-let teamHasManyStudents = t => t.team |> CoursesStudents__TeamInfo.students |> Array.length > 1
+let make = (
+  ~id,
+  ~coachNotes,
+  ~hasArchivedNotes,
+  ~evaluationCriteria,
+  ~totalTargets,
+  ~targetsCompleted,
+  ~quizScores,
+  ~averageGrades,
+  ~completedLevelIds,
+  ~student,
+  ~team,
+  ~levels,
+  ~courseId,
+) => {
+  id,
+  coachNotes,
+  hasArchivedNotes,
+  evaluationCriteria,
+  totalTargets,
+  targetsCompleted,
+  quizScores,
+  averageGrades,
+  completedLevelIds,
+  student,
+  team,
+  levels,
+  courseId,
+}

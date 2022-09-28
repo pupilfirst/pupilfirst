@@ -69,19 +69,10 @@ module StudentReportOverviewQuery = %graphql(`
         evaluationCriteria {
           id, name, maxGrade, passGrade
         },
-        team {
-          id
-          name
-          levelId
-          droppedOutAt
-          accessEndsAt
-          students {
+        student {
+          level {
             id
-            name
-            title
-            avatarUrl
           }
-          coachUserIds
         }
         totalTargets
         targetsCompleted

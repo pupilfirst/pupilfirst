@@ -3,11 +3,17 @@ open CourseCoaches__Types
 let str = React.string
 
 let tr = I18n.t(~scope="components.CourseCoaches__InfoForm")
+let ts = I18n.t(~scope="shared")
 
 type rec state = {
-  teams: array<Team.t>,
+  students: array<Student.t>,
   loading: bool,
   stats: stats,
+  cohorts: array<Cohort.t>,
+  assignedCohorts: array<Cohort.t>,
+  cohortSearchInput: string,
+  dirty: bool,
+  saving: bool,
 }
 and stats = {
   reviewedSubmissions: int,
@@ -15,30 +21,88 @@ and stats = {
 }
 
 let initialStats = {reviewedSubmissions: 0, pendingSubmissions: 0}
-let initialState = {teams: [], loading: true, stats: initialStats}
+let initialState = {
+  students: [],
+  loading: true,
+  stats: initialStats,
+  cohorts: [],
+  assignedCohorts: [],
+  cohortSearchInput: "",
+  dirty: false,
+  saving: false,
+}
 
 type action =
-  | LoadCoachInfo(array<Team.t>, stats)
-  | RemoveTeam(string)
+  | LoadCoachInfo(array<Student.t>, stats, array<Cohort.t>, array<Cohort.t>)
+  | SelectCohort(Cohort.t)
+  | DeSelectCohort(Cohort.t)
+  | UpdateCohortSearchInput(string)
+  | RemoveStudent(string)
+  | UpdateStatusSuccess
+  | SetSaving
+  | ClearSaving
 
 let reducer = (state, action) =>
   switch action {
-  | LoadCoachInfo(teams, stats) => {teams: teams, stats: stats, loading: false}
-  | RemoveTeam(id) => {
+  | LoadCoachInfo(students, stats, cohorts, assignedCohorts) => {
       ...state,
-      teams: state.teams |> Js.Array.filter(team => Team.id(team) != id),
+      students: students,
+      stats: stats,
+      loading: false,
+      cohorts: cohorts,
+      assignedCohorts: assignedCohorts,
+    }
+  | RemoveStudent(id) => {
+      ...state,
+      students: state.students |> Js.Array.filter(student => Student.id(student) != id),
+    }
+  | UpdateCohortSearchInput(cohortSearchInput) => {...state, cohortSearchInput: cohortSearchInput}
+  | SelectCohort(cohort) => {
+      ...state,
+      assignedCohorts: Js.Array2.concat(state.assignedCohorts, [cohort]),
+      dirty: true,
+    }
+  | DeSelectCohort(cohort) => {
+      ...state,
+      assignedCohorts: state.assignedCohorts->Js.Array2.filter(c =>
+        Cohort.id(c) != Cohort.id(cohort)
+      ),
+      dirty: true,
+    }
+  | SetSaving => {
+      ...state,
+      saving: true,
+    }
+  | ClearSaving => {
+      ...state,
+      saving: false,
+    }
+  | UpdateStatusSuccess => {
+      ...state,
+      saving: false,
+      dirty: false,
     }
   }
 
+module CohortFragment = Cohort.Fragment
+
 module CoachInfoQuery = %graphql(`
-    query CoachInfoQuery($courseId: ID!, $coachId: ID!, $coachNotes: CoachNoteFilter!) {
-      teams(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, first: 100, tags: []) {
-        nodes {
+    query CoachInfoQuery($courseId: ID!, $coachId: ID!) {
+      coach(id: $coachId) {
+        cohorts(courseId: $courseId) {
+          ...CohortFragment
+        }
+        students(courseId: $courseId) {
           id,
-          name,
-          students {
+          user {
             name
           }
+        }
+      }
+
+      course(id: $courseId) {
+        cohorts {
+          ...CohortFragment
         }
       }
 
@@ -49,27 +113,102 @@ module CoachInfoQuery = %graphql(`
     }
   `)
 
-let loadCoachTeams = (courseId, coachId, send) =>
-  CoachInfoQuery.make({courseId: courseId, coachId: coachId, coachNotes: #IgnoreCoachNotes})
-  |> Js.Promise.then_(result => {
+let loadCoachStudents = (courseId, coachId, send) => {
+  CoachInfoQuery.fetch({courseId: courseId, coachId: coachId})
+  |> Js.Promise.then_((result: CoachInfoQuery.t) => {
     let stats = {
-      reviewedSubmissions: result["coachStats"]["reviewedSubmissions"],
-      pendingSubmissions: result["coachStats"]["pendingSubmissions"],
+      reviewedSubmissions: result.coachStats.reviewedSubmissions,
+      pendingSubmissions: result.coachStats.pendingSubmissions,
     }
 
-    send(LoadCoachInfo(Team.makeArrayFromJs(result["teams"]["nodes"]), stats))
+    send(
+      LoadCoachInfo(
+        result.coach.students->Js.Array2.map(s => Student.make(~id=s.id, ~name=s.user.name)),
+        stats,
+        result.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+        result.coach.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+      ),
+    )
     Js.Promise.resolve()
   })
   |> ignore
+}
+let removeStudentEnrollment = (send, studentId) => send(RemoveStudent(studentId))
 
-let removeTeamEnrollment = (send, teamId) => send(RemoveTeam(teamId))
+module SelectableCohort = {
+  type t = Cohort.t
+  let value = t => t->Cohort.name
+  let searchString = value
+}
+
+module MultiselectForCohorts = MultiselectInline.Make(SelectableCohort)
+
+let courseCohortPicker = (cohorts, state, send) => {
+  let selected = state.assignedCohorts
+  let selectedCohortIds = selected->Js.Array2.map(s => Cohort.id(s))
+
+  let unselected = cohorts->Js.Array2.filter(s => !Array.mem(Cohort.id(s), selectedCohortIds))
+
+  <MultiselectForCohorts
+    placeholder={tr("search_cohorts_placeholder")}
+    emptySelectionMessage={tr("search_cohorts_empty")}
+    allItemsSelectedMessage={tr("search_cohorts_all")}
+    selected
+    unselected
+    onChange={value => send(UpdateCohortSearchInput(value))}
+    value=state.cohortSearchInput
+    onSelect={s => send(SelectCohort(s))}
+    onDeselect={s => send(DeSelectCohort(s))}
+  />
+}
+
+let handleResponseCB = (send, _json) => {
+  Notification.success(ts("notifications.success"), tr("notification_coach_updated"))
+  send(UpdateStatusSuccess)
+}
+
+let makePayload = (state, coach) => {
+  let payload = Js.Dict.empty()
+
+  Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
+
+  Js.Dict.set(
+    payload,
+    "coach_ids",
+    [CourseCoach.id(coach)] |> {
+      open Json.Encode
+      array(string)
+    },
+  )
+
+  Js.Dict.set(
+    payload,
+    "cohort_ids",
+    state.assignedCohorts->Js.Array2.map(Cohort.id)
+      |> {
+        open Json.Encode
+        array(string)
+      },
+  )
+
+  payload
+}
+
+let updateCourseCoaches = (state, send, courseId, coach) => {
+  send(SetSaving)
+
+  let payload = makePayload(state, coach)
+  let url = "/school/courses/" ++ (courseId ++ "/update_coach_enrollments")
+
+  Api.create(url, payload, handleResponseCB(send), () => send(ClearSaving))
+}
 
 @react.component
 let make = (~courseId, ~coach) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   React.useEffect1(() => {
-    loadCoachTeams(courseId, coach |> CourseCoach.id, send)
+    loadCoachStudents(courseId, coach |> CourseCoach.id, send)
     None
   }, [courseId])
   <div className="mx-auto">
@@ -89,7 +228,7 @@ let make = (~courseId, ~coach) => {
         </div>
       </div>
     </div>
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto pb-5">
       {state.loading
         ? <div className="py-3 flex">
             {SkeletonLoading.card(~className="w-full mr-2", ())}
@@ -97,7 +236,8 @@ let make = (~courseId, ~coach) => {
           </div>
         : <div className="py-3 flex mt-4">
             <div
-              className="w-full mr-2 rounded-lg shadow px-5 py-6" ariaLabel=tr("revied_submissions")>
+              className="w-full mr-2 rounded-lg shadow px-5 py-6"
+              ariaLabel={tr("revied_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("revied_submissions") |> str} </span>
                 <span className="text-2xl font-semibold">
@@ -106,7 +246,8 @@ let make = (~courseId, ~coach) => {
               </div>
             </div>
             <div
-              className="w-full ml-2 rounded-lg shadow px-5 py-6" ariaLabel=tr("pending_submissions")>
+              className="w-full ml-2 rounded-lg shadow px-5 py-6"
+              ariaLabel={tr("pending_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("pending_submissions") |> str} </span>
                 <span className="text-2xl font-semibold">
@@ -116,29 +257,45 @@ let make = (~courseId, ~coach) => {
             </div>
           </div>}
       <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
-        { tr("students_assigned") |> str}
+        {tr("students_assigned") |> str}
       </span>
       {state.loading
         ? <div className="max-w-2xl mx-auto p-3">
             {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.paragraph())}
           </div>
         : <div>
-            {state.teams |> ArrayUtils.isEmpty
+            {state.students |> ArrayUtils.isEmpty
               ? <div
                   className="border border-gray-300 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
                   {tr("no_students_assigned") |> str}
                 </div>
-              : state.teams
-                |> Array.map(team =>
-                  <CourseCoaches__InfoFormTeam
-                    key={Team.id(team)}
-                    team
+              : state.students
+                |> Array.map(student =>
+                  <CourseCoaches__InfoFormStudent
+                    key={Student.id(student)}
+                    student
                     coach
-                    removeTeamEnrollmentCB={removeTeamEnrollment(send)}
+                    removeStudentEnrollmentCB={removeStudentEnrollment(send)}
                   />
                 )
                 |> React.array}
           </div>}
+      <div>
+        <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
+          {tr("select_cohorts")->str}
+        </span>
+        {state.loading
+          ? <div className="max-w-5xl mx-auto px-2 mt-8"> {SkeletonLoading.input()} </div>
+          : courseCohortPicker(state.cohorts, state, send)}
+        <div className="flex max-w-2xl w-full mt-5 mx-auto">
+          <button
+            disabled={state.loading || state.saving || !state.dirty}
+            onClick={_e => updateCourseCoaches(state, send, courseId, coach)}
+            className="w-full btn btn-primary btn-large">
+            {tr("update_cohort_assignment") |> str}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 }

@@ -60,9 +60,8 @@
   top: -6px;
 }
 .app-router-header__notifications-unread-bullet {
-  @apply absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500;
-  top: 2px;
-  right: 6px;
+  @apply absolute block h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500 -top-0.5;
+  right: 4px;
 }
 
 .app-router-header__notifications-unread-bullet::before {

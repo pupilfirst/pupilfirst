@@ -26,6 +26,12 @@ let initialState = {
 
 let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students"))
 
+module UserDetailsFragment = UserDetails.Fragment
+module LevelFragment = Shared__Level.Fragment
+module CohortFragment = Cohort.Fragment
+module UserProxyFragment = UserProxy.Fragment
+module UserFragment = User.Fragment
+
 module StudentDetailsQuery = %graphql(`
     query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
@@ -33,22 +39,28 @@ module StudentDetailsQuery = %graphql(`
         evaluationCriteria {
           id, name, maxGrade, passGrade
         },
-        team {
-          id
-          name
-          teamTags
-          levelId
-          droppedOutAt
-          accessEndsAt
-          students {
-            id
-            name
-            title
-            avatarUrl
-            userTags
-            lastSeenAt
+        student {
+          id,
+          taggings
+          user {
+            ...UserDetailsFragment
           }
-          coachUserIds
+          level {
+            ...LevelFragment
+          }
+          cohort {
+            ...CohortFragment
+          }
+          personalCoaches {
+            ...UserProxyFragment
+          }
+          droppedOutAt
+          course {
+            id
+            levels {
+              ...LevelFragment
+            }
+          }
         }
         totalTargets
         targetsCompleted
@@ -58,48 +70,117 @@ module StudentDetailsQuery = %graphql(`
           evaluationCriterionId
           averageGrade
         }
+        team {
+          id
+          name
+          students {
+            id,
+            taggings
+            user {
+              ...UserDetailsFragment
+            }
+            level {
+              ...LevelFragment
+            }
+            cohort {
+              ...CohortFragment
+            }
+            personalCoaches {
+              ...UserProxyFragment
+            }
+            droppedOutAt
+          }
+        }
       }
       coachNotes(studentId: $studentId) {
           id
           note
           createdAt
           author {
-            id
-            name
-            title
-            avatarUrl
+          ...UserFragment
         }
       }
       hasArchivedCoachNotes(studentId: $studentId)
     }
   `)
 
-let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchivedCoachNotes) => {
-  let studentDetails = StudentDetails.makeFromJs(
-    studentId,
-    details,
-    coachNotes,
-    hasArchivedCoachNotes,
-  )
-  setState(state => {...state, studentData: Loaded(studentDetails)})
-}
-
-let getStudentDetails = (studentId, setState, ()) => {
+let getStudentDetails = (studentId, setState) => {
   setState(state => {...state, studentData: Loading})
-  StudentDetailsQuery.make({studentId: studentId})
-  |> Js.Promise.then_(response => {
-    updateStudentDetails(
-      setState,
-      studentId,
-      response["studentDetails"],
-      response["coachNotes"],
-      response["hasArchivedCoachNotes"],
+  StudentDetailsQuery.fetch({studentId: studentId})
+  |> Js.Promise.then_((response: StudentDetailsQuery.t) => {
+    let s = response.studentDetails.student
+    let coachNotes =
+      response.coachNotes->Js.Array2.map(coachNote =>
+        CoachNote.make(
+          ~id=coachNote.id,
+          ~note=coachNote.note,
+          ~createdAt=coachNote.createdAt->DateFns.decodeISO,
+          ~author=coachNote.author->Belt.Option.map(User.makeFromFragment),
+        )
+      )
+
+    let evaluationCriteria =
+      response.studentDetails.evaluationCriteria->Js.Array2.map(evaluationCriterion =>
+        CoursesStudents__EvaluationCriterion.make(
+          ~id=evaluationCriterion.id,
+          ~name=evaluationCriterion.name,
+          ~maxGrade=evaluationCriterion.maxGrade,
+          ~passGrade=evaluationCriterion.passGrade,
+        )
+      )
+
+    let averageGrades =
+      response.studentDetails.averageGrades->Js.Array2.map(gradeData =>
+        StudentDetails.makeAverageGrade(
+          ~evaluationCriterionId=gradeData.evaluationCriterionId,
+          ~grade=gradeData.averageGrade,
+        )
+      )
+
+    let studentDetails = StudentDetails.make(
+      ~id=studentId,
+      ~hasArchivedNotes=response.hasArchivedCoachNotes,
+      ~coachNotes,
+      ~evaluationCriteria,
+      ~totalTargets=response.studentDetails.totalTargets,
+      ~targetsCompleted=response.studentDetails.targetsCompleted,
+      ~quizScores=response.studentDetails.quizScores,
+      ~averageGrades,
+      ~completedLevelIds=response.studentDetails.completedLevelIds,
+      ~courseId=response.studentDetails.student.course.id,
+      ~levels=response.studentDetails.student.course.levels->Js.Array2.map(Level.makeFromFragment),
+      ~student=StudentInfo.make(
+        ~id=s.id,
+        ~taggings=s.taggings,
+        ~user=UserDetails.makeFromFragment(s.user),
+        ~level=Shared__Level.makeFromFragment(s.level),
+        ~cohort=Cohort.makeFromFragment(s.cohort),
+        ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+        ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+      ),
+      ~team=response.studentDetails.team->Belt.Option.map(team =>
+        StudentDetails.makeTeam(
+          ~id=team.id,
+          ~name=team.name,
+          ~students=team.students->Js.Array2.map(s =>
+            StudentInfo.make(
+              ~id=s.id,
+              ~taggings=s.taggings,
+              ~user=UserDetails.makeFromFragment(s.user),
+              ~level=Shared__Level.makeFromFragment(s.level),
+              ~cohort=Cohort.makeFromFragment(s.cohort),
+              ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+              ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+            )
+          ),
+        )
+      ),
     )
+
+    setState(state => {...state, studentData: Loaded(studentDetails)})
     Js.Promise.resolve()
   })
   |> ignore
-
-  None
 }
 
 let updateSubmissions = (setState, submissions) =>
@@ -240,16 +321,6 @@ let showSocialLinks = socialLinks =>
     |> React.array}
   </div>
 
-let personalInfo = studentDetails =>
-  <div className="mt-2 text-center">
-    <div className="flex flex-wrap justify-center text-xs font-semibold text-gray-800">
-      <div className="flex items-center px-2">
-        <i className="fas fa-envelope" />
-        <p className="ml-2 tracking-wide"> {studentDetails |> StudentDetails.email |> str} </p>
-      </div>
-    </div>
-  </div>
-
 let setSelectedTab = (selectedTab, setState) =>
   setState(state => {...state, selectedTab: selectedTab})
 
@@ -327,31 +398,27 @@ let removeNote = (setState, studentDetails, noteId) =>
     studentData: Loaded(StudentDetails.removeNote(noteId, studentDetails)),
   })
 
-let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
+let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
-    {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
+    {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
-      <div className="text-xs"> {title |> str} </div>
+      <div className="text-xs"> {fulltitle |> str} </div>
     </div>
   </div>
 
-let coachInfo = (teamCoaches, studentDetails) => {
-  let coaches = studentDetails |> StudentDetails.team |> TeamInfo.coaches(teamCoaches)
-
-  let title =
-    studentDetails |> StudentDetails.teamHasManyStudents ? t("team_coaches") : t("personal_coaches")
-
+let coachInfo = studentDetails => {
+  let coaches = studentDetails->StudentDetails.student->StudentInfo.personalCoaches
   coaches |> ArrayUtils.isNotEmpty
     ? <div className="mb-8">
-        <h6 className="font-semibold"> {title |> str} </h6>
+        <h6 className="font-semibold"> {t("personal_coaches") |> str} </h6>
         {coaches
         |> Array.map(coach =>
           userInfo(
             ~key=coach |> Coach.userId,
             ~avatarUrl=coach |> Coach.avatarUrl,
             ~name=coach |> Coach.name,
-            ~title=coach |> Coach.title,
+            ~fulltitle=coach |> Coach.fullTitle,
           )
         )
         |> React.array}
@@ -362,36 +429,38 @@ let coachInfo = (teamCoaches, studentDetails) => {
 let navigateToStudent = (setState, _event) => setState(_ => initialState)
 
 let otherTeamMembers = (setState, studentId, studentDetails) =>
-  if studentDetails |> StudentDetails.teamHasManyStudents {
+  switch studentDetails->StudentDetails.team {
+  | Some(team) =>
     <div className="block mb-8">
       <h6 className="font-semibold"> {t("other_team_members") |> str} </h6>
-      {studentDetails
-      |> StudentDetails.team
-      |> TeamInfo.otherStudents(studentId)
-      |> Array.map(student => {
-        let path = "/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")
+      {team
+      ->StudentDetails.students
+      ->Js.Array2.filter(student => StudentInfo.id(student) != studentId)
+      ->Js.Array2.map(student => {
+        let path = "/students/" ++ (student->StudentInfo.id ++ "/report")
 
         <Link
           className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
           href=path
           onClick={navigateToStudent(setState)}
-          key={student |> TeamInfo.studentId}>
+          key={student->StudentInfo.id}>
           {userInfo(
-            ~key=student |> TeamInfo.studentId,
-            ~avatarUrl=student |> TeamInfo.studentAvatarUrl,
-            ~name=student |> TeamInfo.studentName,
-            ~title=student |> TeamInfo.studentTitle,
+            ~key=student->StudentInfo.id,
+            ~avatarUrl=student->StudentInfo.user->UserDetails.avatarUrl,
+            ~name=student->StudentInfo.user->UserDetails.name,
+            ~fulltitle=student->StudentInfo.user->UserDetails.fullTitle,
           )}
         </Link>
-      })
-      |> React.array}
+      }) |> React.array}
     </div>
-  } else {
-    React.null
+  | None => React.null
   }
 
-let inactiveWarning = teamInfo => {
-  let warning = switch (teamInfo |> TeamInfo.droppedOutAt, teamInfo |> TeamInfo.accessEndsAt) {
+let inactiveWarning = student => {
+  let warning = switch (
+    student->StudentInfo.droppedOutAt,
+    Cohort.endsAt(StudentInfo.cohort(student)),
+  ) {
   | (Some(droppedOutAt), _) =>
     Some(
       t(
@@ -399,11 +468,11 @@ let inactiveWarning = teamInfo => {
         "dropped_out_at",
       ),
     )
-  | (None, Some(accessEndsAt)) =>
-    accessEndsAt |> DateFns.isPast
+  | (None, Some(endsAt)) =>
+    endsAt->DateFns.isPast
       ? Some(
           t(
-            ~variables=[("date", accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
+            ~variables=[("date", endsAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
             "access_ended_at",
           ),
         )
@@ -421,8 +490,12 @@ let inactiveWarning = teamInfo => {
   )
 }
 
+let onAddCoachNotesCB = (studentId, setState, _) => {
+  getStudentDetails(studentId, setState)
+}
+
 @react.component
-let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNotesCB) => {
+let make = (~studentId, ~userId) => {
   let (state, setState) = React.useState(() => initialState)
 
   React.useEffect0(() => {
@@ -430,127 +503,138 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
     Some(() => ScrollLock.deactivate())
   })
 
-  React.useEffect1(getStudentDetails(studentId, setState), [studentId])
+  React.useEffect1(() => {
+    getStudentDetails(studentId, setState)
+    None
+  }, [studentId])
 
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
     {switch state.studentData {
-    | Loaded(studentDetails) =>
-      <div className="flex flex-col md:flex-row md:h-screen">
-        <div
-          className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
-          <div className="student-overlay__student-details relative pb-8">
-            <button
-              ariaLabel={t("close_student_report")}
-              title={t("close_student_report")}
-              onClick={_ => closeOverlay(courseId)}
-              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
-              <Icon className="if i-times-regular text-xl lg:text-2xl" />
-            </button>
+    | Loaded(studentDetails) => {
+        let student = studentDetails->StudentDetails.student
+        <div className="flex flex-col md:flex-row md:h-screen">
+          <div
+            className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
+            <div className="student-overlay__student-details relative pb-8">
+              <button
+                ariaLabel={t("close_student_report")}
+                title={t("close_student_report")}
+                onClick={_ => closeOverlay(StudentDetails.courseId(studentDetails))}
+                className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                <Icon className="if i-times-regular text-xl lg:text-2xl" />
+              </button>
+              <div
+                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+                {switch student->StudentInfo.user->UserDetails.avatarUrl {
+                | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
+                | None =>
+                  <Avatar
+                    name={student->StudentInfo.user->UserDetails.name} className="object-cover"
+                  />
+                }}
+              </div>
+              <h2 className="text-lg text-center mt-3">
+                {student->StudentInfo.user->UserDetails.name |> str}
+              </h2>
+              <p className="text-sm font-semibold text-center mt-1">
+                {student->StudentInfo.user->UserDetails.fullTitle |> str}
+              </p>
+              {inactiveWarning(student)}
+            </div>
+            {levelProgressBar(
+              student->StudentInfo.level->Shared__Level.id,
+              StudentDetails.levels(studentDetails),
+              studentDetails->StudentDetails.completedLevelIds,
+            )}
+            <div className="mb-8">
+              <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
+              <div className="flex -mx-2 flex-wrap mt-2">
+                {targetsCompletionStatus(
+                  studentDetails |> StudentDetails.targetsCompleted,
+                  studentDetails |> StudentDetails.totalTargets,
+                )}
+                {quizPerformanceChart(
+                  studentDetails |> StudentDetails.averageQuizScore,
+                  studentDetails |> StudentDetails.quizzesAttempted,
+                )}
+              </div>
+            </div>
+            {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
+              ? <div className="mb-8">
+                  <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
+                  <div className="flex -mx-2 flex-wrap">
+                    {averageGradeCharts(
+                      studentDetails |> StudentDetails.evaluationCriteria,
+                      studentDetails |> StudentDetails.averageGrades,
+                    )}
+                  </div>
+                </div>
+              : React.null}
+            {coachInfo(studentDetails)}
+            {otherTeamMembers(setState, studentId, studentDetails)}
+          </div>
+          <div
+            className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
             <div
-              className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
-              {switch studentDetails |> StudentDetails.avatarUrl {
-              | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
-              | None =>
-                <Avatar name={studentDetails |> StudentDetails.name} className="object-cover" />
+              className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
+              <ul
+                role="tablist"
+                className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
+                <li
+                  tabIndex=0
+                  role="tab"
+                  ariaSelected={state.selectedTab === Notes}
+                  onClick={_event => setSelectedTab(Notes, setState)}
+                  className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
+                  switch state.selectedTab {
+                  | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
+                  | Submissions => " "
+                  }}>
+                  {t("notes") |> str}
+                </li>
+                <li
+                  tabIndex=0
+                  role="tab"
+                  ariaSelected={state.selectedTab === Submissions}
+                  onClick={_event => setSelectedTab(Submissions, setState)}
+                  className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
+                  switch state.selectedTab {
+                  | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
+                  | Notes => " "
+                  }}>
+                  {t("submissions") |> str}
+                </li>
+              </ul>
+            </div>
+            <div className="pt-2 px-4 md:px-8 2xl:px-16">
+              {switch state.selectedTab {
+              | Notes =>
+                <CoursesStudents__CoachNotes
+                  studentId
+                  hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
+                  coachNotes={studentDetails |> StudentDetails.coachNotes}
+                  addNoteCB={addNote(
+                    setState,
+                    studentDetails,
+                    onAddCoachNotesCB(studentId, setState),
+                  )}
+                  userId
+                  removeNoteCB={removeNote(setState, studentDetails)}
+                />
+              | Submissions =>
+                <CoursesStudents__SubmissionsList
+                  studentId
+                  levels={studentDetails->StudentDetails.levels}
+                  submissions=state.submissions
+                  updateSubmissionsCB={updateSubmissions(setState)}
+                />
               }}
             </div>
-            <h2 className="text-lg text-center mt-3">
-              {studentDetails |> StudentDetails.name |> str}
-            </h2>
-            <p className="text-sm font-semibold text-center mt-1">
-              {studentDetails |> StudentDetails.title |> str}
-            </p>
-            {personalInfo(studentDetails)}
-            {inactiveWarning(studentDetails |> StudentDetails.team)}
-          </div>
-          {levelProgressBar(
-            studentDetails |> StudentDetails.levelId,
-            levels,
-            studentDetails |> StudentDetails.completedLevelIds,
-          )}
-          <div className="mb-8">
-            <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
-            <div className="flex -mx-2 flex-wrap mt-2">
-              {targetsCompletionStatus(
-                studentDetails |> StudentDetails.targetsCompleted,
-                studentDetails |> StudentDetails.totalTargets,
-              )}
-              {quizPerformanceChart(
-                studentDetails |> StudentDetails.averageQuizScore,
-                studentDetails |> StudentDetails.quizzesAttempted,
-              )}
-            </div>
-          </div>
-          {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
-            ? <div className="mb-8">
-                <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
-                <div className="flex -mx-2 flex-wrap">
-                  {averageGradeCharts(
-                    studentDetails |> StudentDetails.evaluationCriteria,
-                    studentDetails |> StudentDetails.averageGrades,
-                  )}
-                </div>
-              </div>
-            : React.null}
-          {coachInfo(teamCoaches, studentDetails)}
-          {otherTeamMembers(setState, studentId, studentDetails)}
-        </div>
-        <div
-          className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
-          <div
-            className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
-            <ul
-              role="tablist"
-              className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
-              <li
-                tabIndex=0
-                role="tab"
-                ariaSelected={state.selectedTab === Notes}
-                onClick={_event => setSelectedTab(Notes, setState)}
-                className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
-                switch state.selectedTab {
-                | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
-                | Submissions => " "
-                }}>
-                {t("notes") |> str}
-              </li>
-              <li
-                tabIndex=0
-                role="tab"
-                ariaSelected={state.selectedTab === Submissions}
-                onClick={_event => setSelectedTab(Submissions, setState)}
-                className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
-                switch state.selectedTab {
-                | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
-                | Notes => " "
-                }}>
-                {t("submissions") |> str}
-              </li>
-            </ul>
-          </div>
-          <div className="pt-2 px-4 md:px-8 2xl:px-16">
-            {switch state.selectedTab {
-            | Notes =>
-              <CoursesStudents__CoachNotes
-                studentId
-                hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
-                coachNotes={studentDetails |> StudentDetails.coachNotes}
-                addNoteCB={addNote(setState, studentDetails, onAddCoachNotesCB)}
-                userId
-                removeNoteCB={removeNote(setState, studentDetails)}
-              />
-            | Submissions =>
-              <CoursesStudents__SubmissionsList
-                studentId
-                levels
-                submissions=state.submissions
-                updateSubmissionsCB={updateSubmissions(setState)}
-              />
-            }}
           </div>
         </div>
-      </div>
+      }
+
     | Loading =>
       <div className="flex flex-col md:flex-row md:h-screen">
         <div className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">

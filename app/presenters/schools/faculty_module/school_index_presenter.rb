@@ -11,8 +11,12 @@ module Schools
         current_school.faculty.includes(user: { avatar_attachment: :blob })
       end
 
-      def react_props
-        { coaches: faculty_details, schoolId: @school.id, authenticityToken: view.form_authenticity_token }
+      def props
+        {
+          coaches: faculty_details,
+          schoolId: @school.id,
+          authenticityToken: view.form_authenticity_token
+        }
       end
 
       private
@@ -29,7 +33,7 @@ module Schools
             connectLink: faculty.connect_link,
             exited: faculty.exited,
             imageFileName: faculty.image_filename,
-            affiliation: faculty.user.affiliation,
+            affiliation: faculty.user.affiliation
           }
         end
       end

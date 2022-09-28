@@ -8,13 +8,16 @@ feature 'Courses Index', js: true do
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
-  let!(:course_1) { create :course, school: school }
+  let!(:course_1) { create :course, :with_default_cohort, school: school }
   let!(:course_2) do
-    create :course, school: school, name: 'Pupilfirst Demo Course'
+    create :course,
+           :with_default_cohort,
+           school: school,
+           name: 'Pupilfirst Demo Course'
   end
-  let!(:course_ended) { create :course, school: school, ends_at: 1.day.ago }
+  let!(:course_ended) { create :course, :ended, school: school }
   let!(:course_archived) do
-    create :course, school: school, ends_at: 1.day.ago, archived_at: 1.day.ago
+    create :course, school: school, archived_at: 1.day.ago
   end
 
   let!(:school_admin) { create :school_admin, school: school }
@@ -75,6 +78,7 @@ feature 'Courses Index', js: true do
 
   context 'when a course exists' do
     let(:new_course_name) { Faker::Lorem.words(number: 2).join ' ' }
+    let!(:new_cohort) { create :cohort, course: course_1 }
     let(:new_about) { Faker::Lorem.paragraph }
     let(:new_description) { Faker::Lorem.sentences.join ' ' }
     let(:course_end_date) { Time.zone.today }
@@ -96,7 +100,7 @@ feature 'Courses Index', js: true do
 
     scenario 'School admin edits an existing course' do
       sign_in_user school_admin.user,
-                   referrer: details_school_course_path(course_1)
+                   referrer: "/school/courses/#{course_1.id}/details"
 
       fill_in 'Course name',
               with: new_course_name,
@@ -108,7 +112,6 @@ feature 'Courses Index', js: true do
               fill_options: {
                 clear: :backspace
               }
-      fill_in 'Course end date', with: course_end_date.iso8601
       replace_markdown new_about
       select 'thrice', from: 'progression-limit'
 
@@ -159,6 +162,9 @@ feature 'Courses Index', js: true do
       end
       within('div#public-preview') { click_button 'Yes' }
 
+      click_button course_1.default_cohort.name
+      click_button new_cohort.name
+
       click_button 'Update Course'
 
       expect(page).to have_text('Course updated successfully')
@@ -168,7 +174,6 @@ feature 'Courses Index', js: true do
       expect(course_1.about).to eq(new_about)
       expect(course_1.public_signup).to eq(true)
       expect(course_1.public_preview).to eq(true)
-      expect(course_1.ends_at.to_date).to eq(course_end_date)
 
       expect(course_1.progression_behavior).to eq(
         Course::PROGRESSION_BEHAVIOR_LIMITED
@@ -177,6 +182,7 @@ feature 'Courses Index', js: true do
       expect(course_1.progression_limit).to eq(3)
       expect(course_1.highlights).to eq(highlights.map(&:stringify_keys))
       expect(course_1.processing_url).to eq(processing_url)
+      expect(course_1.default_cohort).to eq(new_cohort)
     end
 
     scenario 'School admin sets other progression behaviors on existing course' do
@@ -208,7 +214,7 @@ feature 'Courses Index', js: true do
 
     scenario 'School admin edits images associated with the course' do
       sign_in_user school_admin.user,
-                   referrer: images_school_course_path(course_1)
+                   referrer: "/school/courses/#{course_1.id}/images"
 
       expect(page).to have_text('Please choose an image file.', count: 2)
 
@@ -239,7 +245,7 @@ feature 'Courses Index', js: true do
 
     scenario 'School admin edits images associated with the archived course' do
       sign_in_user school_admin.user,
-                   referrer: images_school_course_path(course_archived)
+                   referrer: "/school/courses/#{course_archived.id}/images"
 
       expect(page).to have_text('Please choose an image file.', count: 2)
 
@@ -273,7 +279,7 @@ feature 'Courses Index', js: true do
   end
 
   context 'with many courses' do
-    before { 23.times { create :course, school: school } }
+    before { 23.times { create :course, :with_cohort, school: school } }
 
     scenario 'school admin loads all courses' do
       sign_in_user school_admin.user, referrer: school_courses_path
@@ -290,7 +296,8 @@ feature 'Courses Index', js: true do
 
     scenario 'school admin loads details route for last course' do
       sign_in_user school_admin.user,
-                   referrer: details_school_course_path(school.courses.last)
+                   referrer: "/school/courses/#{school.courses.last.id}/details"
+
       expect(page).to have_text('EDIT COURSE DETAILS')
     end
   end
@@ -307,6 +314,7 @@ feature 'Courses Index', js: true do
 
     within("div[id='courses']") do
       expect(page).to have_text(course_1.name)
+
       expect(page).not_to have_text(course_ended.name)
       expect(page).not_to have_text(course_archived.name)
     end
@@ -352,7 +360,7 @@ feature 'Courses Index', js: true do
   scenario 'school admin clicks on quick links' do
     sign_in_user school_admin.user, referrer: school_courses_path
 
-    within("div[data-submission-id='#{course_1.name}']") do
+    within("div[data-t='#{course_1.name}']") do
       expect(page).to have_link('View public page', href: course_path(course_1))
 
       click_button 'Quick Links'
@@ -381,18 +389,18 @@ feature 'Courses Index', js: true do
 
   scenario 'school admin visits details route for archived course' do
     sign_in_user school_admin.user,
-                 referrer: details_school_course_path(course_archived)
+                 referrer: "/school/courses/#{course_archived.id}/details"
     expect(page).to have_text('EDIT COURSE DETAILS')
   end
 
   context 'when students exist in a course' do
     let!(:level) { create :level, course: course_1 }
-    let!(:startup) { create :startup, level: level }
+    let!(:student) { create :student, level: level }
 
     scenario 'school admin archives a course' do
       notification_service = prepare_developers_notification
       sign_in_user school_admin.user,
-                   referrer: actions_school_course_path(course_1)
+                   referrer: "/school/courses/#{course_1.id}/actions"
 
       expect(page).to have_text('Do you want to archive the course?')
 
@@ -400,8 +408,7 @@ feature 'Courses Index', js: true do
 
       expect(page).to have_text('Course archived successfully')
       expect(course_1.reload.archived_at).not_to eq(nil)
-      expect(course_1.ends_at).not_to eq(nil)
-      expect(startup.reload.access_ends_at).not_to eq(nil)
+      expect(course_1.cohorts.first.ends_at).not_to eq(nil)
       within("div[id='courses']") do
         expect(page).not_to have_text(course_1.name)
       end
@@ -456,6 +463,8 @@ feature 'Courses Index', js: true do
     )
 
     visit school_courses_path
+    fill_in('Search', with: 'ended')
+    click_button 'Pick Status: Ended'
     within("div[id='courses']") do
       expect(page).to have_text(course_1.name + ' - copy')
     end

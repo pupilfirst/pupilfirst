@@ -19,11 +19,19 @@ let make = (~school, ~courses, ~currentUser) => {
         currentCoachId={Belt.Option.getWithDefault(User.coachId(User.defaultUser(currentUser)), "")}
         courses
       />,
-      Student__Review(courseId),
+      SelectedCourse(courseId, Review),
     )
   | list{"submissions", submissionId, "review"} => (
       <CoursesReview__SubmissionsRoot submissionId currentUser={User.defaultUser(currentUser)} />,
       Student__SubmissionShow(submissionId),
+    )
+  | list{"courses", courseId, "students"} => (
+      <CoursesStudents__Root courseId />,
+      SelectedCourse(courseId, Students),
+    )
+  | list{"students", studentId, "report"} => (
+      <CoursesStudents__StudentOverlay studentId userId={User.id(User.defaultUser(currentUser))} />,
+      Student__StudentsReport(studentId),
     )
   | _ =>
     Rollbar.critical(
@@ -31,7 +39,7 @@ let make = (~school, ~courses, ~currentUser) => {
     )
     raise(UnknownPathEncountered(url.path))
   }
-  <div className="md:h-screen md:flex bg-gray-50">
+  <div className="md:h-screen md:flex bg-gray-50 overflow-hidden">
     {ReactUtils.nullUnless(
       <AppRouter__Nav school courses selectedPage currentUser />,
       Page.showSideNav(selectedPage),

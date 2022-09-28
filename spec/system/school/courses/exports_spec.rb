@@ -3,12 +3,27 @@ require 'rails_helper'
 feature 'Course Exports', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   let(:level) { create :level }
-  let(:team_1) { create :team, level: level, tag_list: ['tag 1', 'tag 2'] }
-  let(:team_2) { create :team, level: level, tag_list: ['tag 3'] }
-  let(:student_1) { create :student, startup: team_1 }
-  let(:student_2) { create :student, startup: team_2 }
+  let(:cohort) { create :cohort, course: level.course }
+
+  let(:team_1) { create :team, cohort: cohort }
+  let(:team_2) { create :team, cohort: cohort }
+  let(:student_1) do
+    create :student,
+           cohort: cohort,
+           level: level,
+           team: team_1,
+           tag_list: ['tag 1', 'tag 2']
+  end
+  let(:student_2) do
+    create :student,
+           cohort: cohort,
+           level: level,
+           team: team_2,
+           tag_list: ['tag 3']
+  end
   let(:school) { student_1.school }
   let(:course) { student_1.course }
   let!(:school_admin) { create :school_admin, school: school }
@@ -50,8 +65,12 @@ feature 'Course Exports', js: true do
 
     # A mail should be sent to requesting user when the report is prepared.
     open_email(school_admin.user.email)
-    expect(current_email.subject).to have_text("Export of #{course.name} course is ready for download")
-    expect(current_email.body).to have_text(exports_school_course_path(course))
+    expect(current_email.subject).to have_text(
+      "Export of #{course.name} course is ready for download"
+    )
+    expect(sanitize_html(current_email.body)).to have_text(
+      exports_school_course_path(course)
+    )
 
     # The export file should be attached at this point.
     expect(export.reload.file.attached?).to eq(true)
@@ -59,7 +78,14 @@ feature 'Course Exports', js: true do
     # Reload the page - it should say the report has been prepared.
     visit current_path
     expect(page).to have_text('Prepared less than a minute ago')
-    expect(page).to have_link(nil, href: Rails.application.routes.url_helpers.rails_blob_path(export.file, only_path: true))
+    expect(page).to have_link(
+      nil,
+      href:
+        Rails.application.routes.url_helpers.rails_blob_path(
+          export.file,
+          only_path: true
+        )
+    )
   end
 
   scenario 'school admin creates a teams export' do

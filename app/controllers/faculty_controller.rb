@@ -3,7 +3,7 @@ class FacultyController < ApplicationController
   def index
     @coaches =
       policy_scope(Faculty).includes(
-        :faculty_course_enrollments,
+        :faculty_cohort_enrollments,
         user: {
           avatar_attachment: :blob
         }

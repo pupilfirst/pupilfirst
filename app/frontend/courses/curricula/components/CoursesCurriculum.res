@@ -164,18 +164,18 @@ let issuedCertificate = course =>
 let computeLevelUp = (
   levelUpEligibility,
   course,
-  teamLevel,
+  studentLevel,
   targetGroups,
   targets,
   statusOfTargets,
 ) => {
   let progressionBehavior = course |> Course.progressionBehavior
-  let currentLevelNumber = teamLevel |> Level.number
+  let currentLevelNumber = studentLevel |> Level.number
 
   let statusOfCurrentMilestoneTargets = statusOfMilestoneTargets(
     targetGroups,
     targets,
-    teamLevel,
+    studentLevel,
     statusOfTargets,
   )
 
@@ -218,23 +218,23 @@ let computeLevelUp = (
 }
 
 let computeNotice = (
-  teamLevel,
+  studentLevel,
   targetGroups,
   targets,
   statusOfTargets,
   course,
-  team,
+  student,
   preview,
   levelUpEligibility,
 ) =>
   if preview {
     Notice.Preview
-  } else if Course.hasEnded(course) {
+  } else if Course.ended(course) {
     CourseEnded
-  } else if Team.accessEnded(team) {
+  } else if Student.accessEnded(student) {
     AccessEnded
   } else {
-    computeLevelUp(levelUpEligibility, course, teamLevel, targetGroups, targets, statusOfTargets)
+    computeLevelUp(levelUpEligibility, course, studentLevel, targetGroups, targets, statusOfTargets)
   }
 
 let navigationLink = (direction, level, setState) => {
@@ -293,7 +293,7 @@ let make = (
   ~targetGroups,
   ~targets,
   ~submissions,
-  ~team,
+  ~student,
   ~coaches,
   ~users,
   ~evaluationCriteria,
@@ -325,12 +325,12 @@ let make = (
    * are shown on the page. */
 
   let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
-  let teamLevelId = team |> Team.levelId
+  let studentLevelId = student |> Student.levelId
 
-  let teamLevel =
+  let studentLevel =
     levels |> ArrayUtils.unsafeFind(
-      l => l |> Level.id == teamLevelId,
-      "Could not find teamLevel with ID " ++ teamLevelId,
+      l => l |> Level.id == studentLevelId,
+      "Could not find studentLevel with ID " ++ studentLevelId,
     )
 
   let targetLevelId = switch selectedTarget {
@@ -350,7 +350,7 @@ let make = (
   /* Curried function so that this can be re-used when a new submission is created. */
   let computeTargetStatus = TargetStatus.compute(
     preview,
-    team,
+    student,
     course,
     levels,
     targetGroups,
@@ -365,9 +365,9 @@ let make = (
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
       | (true, None, _levelZero) => Level.first(levels)->Level.id
       | (_, Some(targetLevelId), Some(levelZero)) =>
-        levelZero |> Level.id == targetLevelId ? teamLevelId : targetLevelId
+        levelZero |> Level.id == targetLevelId ? studentLevelId : targetLevelId
       | (_, Some(targetLevelId), None) => targetLevelId
-      | (_, None, _) => teamLevelId
+      | (_, None, _) => studentLevelId
       },
       showLevelZero: switch (levelZero, targetLevelId) {
       | (Some(levelZero), Some(targetLevelId)) => levelZero |> Level.id == targetLevelId
@@ -378,12 +378,12 @@ let make = (
       latestSubmissions: submissions,
       statusOfTargets: statusOfTargets,
       notice: computeNotice(
-        teamLevel,
+        studentLevel,
         targetGroups,
         targets,
         statusOfTargets,
         course,
-        team,
+        student,
         preview,
         levelUpEligibility,
       ),
@@ -420,12 +420,12 @@ let make = (
         ...state,
         statusOfTargets: newStatusOfTargets,
         notice: computeNotice(
-          teamLevel,
+          studentLevel,
           targetGroups,
           targets,
           newStatusOfTargets,
           course,
-          team,
+          student,
           preview,
           state.levelUpEligibility,
         ),
@@ -471,7 +471,7 @@ let make = (
         <div className="relative" key="curriculum-body">
           <CoursesCurriculum__LevelSelector
             levels
-            teamLevel
+            studentLevel
             selectedLevel
             preview
             setSelectedLevelId={selectedLevelId =>

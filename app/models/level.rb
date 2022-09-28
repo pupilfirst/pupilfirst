@@ -3,11 +3,12 @@ class Level < ApplicationRecord
   validates :name, presence: true
 
   has_many :target_groups, dependent: :restrict_with_error
-  has_many :startups, dependent: :restrict_with_error
+  has_many :founders, dependent: :restrict_with_error
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :targets
 
-  scope :unlocked, -> { where(unlock_at: nil).or(where('unlock_at <= ?', Time.zone.now)) }
+  scope :unlocked,
+        -> { where(unlock_at: nil).or(where('unlock_at <= ?', Time.zone.now)) }
 
   belongs_to :course
 
@@ -28,5 +29,13 @@ class Level < ApplicationRecord
 
   def unlocked?
     unlock_at.blank? || unlock_at.past?
+  end
+
+  def filter_display_name
+    "#{self.number},#{self.name}"
+  end
+
+  def filter_name
+    "#{self.id};#{filter_display_name}"
   end
 end

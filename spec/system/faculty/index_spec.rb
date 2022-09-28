@@ -3,22 +3,27 @@ require 'rails_helper'
 feature 'Connect to featured coaches', js: true do
   include UserSpecHelper
 
-  let(:startup) { create :startup }
-  let(:school) { startup.school }
+  let(:course) { create :course }
+  let(:cohort) { create :cohort, course: course }
+  let(:school) { course.school }
   let(:school_admin) { create :school_admin, school: school }
-  let(:student) { startup.founders.first }
-  let(:course) { startup.course }
+
+  let(:student) { create :student, cohort: cohort }
   let(:enrolled_hidden_coach) { create :faculty, school: school, public: false }
 
   before do
-    create :faculty_course_enrollment, faculty: enrolled_hidden_coach, course: course
+    create :faculty_cohort_enrollment,
+           faculty: enrolled_hidden_coach,
+           cohort: cohort
   end
 
   context 'when there are no featured coaches' do
     scenario 'A member of the public attempts to view the coaches page' do
       visit coaches_index_path
 
-      expect(page).to have_content("The page you were looking for doesn't exist")
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
     end
   end
 
@@ -27,7 +32,7 @@ feature 'Connect to featured coaches', js: true do
     let!(:unenrolled_coach) { create :faculty, school: school, public: true }
 
     before do
-      create :faculty_course_enrollment, faculty: coach, course: course
+      create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
       unenrolled_coach.user.update!(about: Faker::Lorem.paragraph)
     end
 
@@ -63,16 +68,24 @@ feature 'Connect to featured coaches', js: true do
     end
 
     context 'when featured coaches are in a mix of public and private courses' do
-      let(:course_2) { create :course, school: school, featured: false }
-      let(:course_3) { create :course, school: school, featured: false }
-      let(:startup_2) { create :startup, course: course_2 }
-      let!(:student_2) { create :founder, startup: startup_2 }
+      let(:course_2) do
+        create :course, :with_cohort, school: school, featured: false
+      end
+      let(:course_3) do
+        create :course, :with_cohort, school: school, featured: false
+      end
+
+      let(:student_2) { create :student, cohort: course_2.cohorts.first }
       let(:coach_2) { create :faculty, school: school, public: true }
       let(:coach_3) { create :faculty, school: school, public: true }
 
       before do
-        create :faculty_course_enrollment, faculty: coach_2, course: course_2
-        create :faculty_course_enrollment, faculty: coach_3, course: course_3
+        create :faculty_cohort_enrollment,
+               faculty: coach_2,
+               cohort: course_2.cohorts.first
+        create :faculty_cohort_enrollment,
+               faculty: coach_3,
+               cohort: course_3.cohorts.first
       end
 
       scenario 'A member of the public uses the filter on the featured coaches page' do

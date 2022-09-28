@@ -1,20 +1,22 @@
 exception UnsafeFindFailed(string)
 
-open CourseEditor__Types
-
 let t = I18n.t(~scope="components.CourseSelect")
 
 let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module CourseFragment = CourseEditor__Course.Fragments
+type course = {
+  id: string,
+  name: string,
+}
 
-module CoursesQuery = %graphql(`
+module CoursesInfoQuery = %graphql(`
   query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
-        ...CourseFragment
+        id
+        name
       }
       pageInfo{
         endCursor,hasNextPage
@@ -25,7 +27,7 @@ module CoursesQuery = %graphql(`
   `)
 
 module Item = {
-  type t = Course.t
+  type t = course
 }
 
 module Pagination = Pagination.Make(Item)
@@ -59,7 +61,7 @@ type action =
   | SetFilterActive
   | SetFilterEnded
   | ClearArchivedFilter
-  | LoadCourses(option<string>, bool, array<Course.t>, int)
+  | LoadCourses(option<string>, bool, array<course>, int)
 
 let reducer = (state, action) =>
   switch action {
@@ -135,24 +137,21 @@ let reducer = (state, action) =>
   }
 
 let loadCourses = (state, cursor, send) => {
-  let variables = CoursesQuery.makeVariables(
+  let variables = CoursesInfoQuery.makeVariables(
     ~status=?state.filter.status,
     ~after=?cursor,
     ~search=?state.filter.name,
     (),
   )
-  CoursesQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    let courses = Js.Array.map(
-      rawCourse => Course.makeFromJs(rawCourse),
-      response["courses"]["nodes"],
-    )
+  CoursesInfoQuery.fetch(variables)
+  |> Js.Promise.then_((response: CoursesInfoQuery.t) => {
+    let courses = response.courses.nodes->Js.Array2.map(c => {id: c.id, name: c.name})
     send(
       LoadCourses(
-        response["courses"]["pageInfo"]["endCursor"],
-        response["courses"]["pageInfo"]["hasNextPage"],
+        response.courses.pageInfo.endCursor,
+        response.courses.pageInfo.hasNextPage,
         courses,
-        response["courses"]["totalCount"],
+        response.courses.totalCount,
       ),
     )
     Js.Promise.resolve()
@@ -269,14 +268,14 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )->str}
   </div>
 
-let showCourse = (course, selected, onChangeCB) => {
+let showCourse = (course: course, selected, onChangeCB) => {
   let selectedClass = selected ? " bg-primary-100" : ""
-  <Spread key={Course.id(course)} props={"data-submission-id": Course.name(course)}>
+  <Spread key={course.id} props={"data-course-id": course.name}>
     <div
       className={"w-full flex cursor-pointer hover:bg-gray-300" ++ selectedClass}
-      onClick={_ => onChangeCB(Course.id(course))}
-      key={Course.id(course)}>
-      <span className="p-1 pr-4 text-gray-900"> {str(Course.name(course))} </span>
+      onClick={_ => onChangeCB(course.id)}
+      key={course.id}>
+      <span className="p-1 pr-4 text-gray-900"> {str(course.name)} </span>
     </div>
   </Spread>
 }
@@ -292,7 +291,7 @@ let showCourses = (courses, state, value, onChangeCB) => {
         </div>
       : <div className="flex flex-wrap">
           {Js.Array.map(
-            course => showCourse(course, Course.id(course) == value, onChangeCB),
+            course => showCourse(course, course.id == value, onChangeCB),
             courses,
           )->React.array}
         </div>}

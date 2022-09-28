@@ -54,7 +54,7 @@ let make = (~courseId, ~evaluationCriteria) => {
     evaluationCriteria: evaluationCriteria,
   })
 
-  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-50">
+  <div className="bg-gray-50 h-full">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowEditor(evaluationCriterion) =>

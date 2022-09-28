@@ -12,17 +12,17 @@ let levelZeroSelectorClasses = isSelected => {
 let levelName = level =>
   LevelLabel.format(~short=true, ~name=level |> Level.name, level |> Level.number |> string_of_int)
 
-let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId, preview) => {
-  let teamLevelNumber = teamLevel |> Level.number
+let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview) => {
+  let studentLevelNumber = studentLevel |> Level.number
 
   orderedLevels |> Js.Array.map(level => {
     let levelNumber = level |> Level.number
 
     let icon = if preview {
       "fas fa-eye"
-    } else if levelNumber < teamLevelNumber {
+    } else if levelNumber < studentLevelNumber {
       "fas fa-check text-green-500"
-    } else if levelNumber == teamLevelNumber {
+    } else if levelNumber == studentLevelNumber {
       "fas fa-map-marker-alt text-blue-400"
     } else if level |> Level.isUnlocked {
       "inline-block"
@@ -34,7 +34,9 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId, preview) =
       className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
-      <span className="mr-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
+      <span className="mr-2 mt-px">
+        <FaIcon classes={"fa-fw " ++ icon} />
+      </span>
       {levelName(level) |> str}
     </button>
   })
@@ -43,7 +45,7 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId, preview) =
 let untabbedLevelSelector = (
   selectedLevel,
   orderedLevels,
-  teamLevel,
+  studentLevel,
   setSelectedLevelId,
   preview,
 ) => {
@@ -57,14 +59,14 @@ let untabbedLevelSelector = (
 
   <Dropdown
     selected
-    contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
+    contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
     className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50"
   />
 }
 
 let tabbedLevelSelector = (
   orderedLevels,
-  teamLevel,
+  studentLevel,
   selectedLevel,
   setSelectedLevelId,
   showLevelZero,
@@ -90,7 +92,7 @@ let tabbedLevelSelector = (
     : <Dropdown
         key="numbered-level-selector"
         selected={selected(false)}
-        contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
+        contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
         className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
       />
 
@@ -109,7 +111,7 @@ let tabbedLevelSelector = (
 @react.component
 let make = (
   ~levels,
-  ~teamLevel,
+  ~studentLevel,
   ~selectedLevel,
   ~preview,
   ~setSelectedLevelId,
@@ -126,7 +128,7 @@ let make = (
       | Some(levelZero) =>
         tabbedLevelSelector(
           orderedLevels,
-          teamLevel,
+          studentLevel,
           selectedLevel,
           setSelectedLevelId,
           showLevelZero,
@@ -135,7 +137,13 @@ let make = (
           preview,
         )
       | None =>
-        untabbedLevelSelector(selectedLevel, orderedLevels, teamLevel, setSelectedLevelId, preview)
+        untabbedLevelSelector(
+          selectedLevel,
+          orderedLevels,
+          studentLevel,
+          setSelectedLevelId,
+          preview,
+        )
       }}
     </div>
   </div>

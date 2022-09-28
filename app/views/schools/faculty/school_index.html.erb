@@ -2,4 +2,6 @@
   <title><%= current_school.name %> | <%= t(".title") %></title>
 <% end %>
 <% @presenter = Schools::FacultyModule::SchoolIndexPresenter.new(self, @school) %>
-<div id="sa-coaches-panel" class=" flex flex-1 h-full bg-gray-50" data-props="<%= @presenter.react_props.to_json %>"></div>
+<script type="application/json" id="sa-coaches-panel">
+  <%= @presenter.props_to_json.html_safe %>
+</script>

@@ -74,7 +74,7 @@ module Layouts
     def report
       if current_user.present? &&
            current_user
-             .startups
+             .founders
              .not_dropped_out
              .joins(:level)
              .exists?(levels: { course_id: @course.id })

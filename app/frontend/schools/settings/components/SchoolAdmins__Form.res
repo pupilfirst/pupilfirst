@@ -134,7 +134,7 @@ let make = (~admin, ~updateCB) => {
           </h5>
           <div>
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="email">
               {ts("email") |> str}
             </label>
@@ -154,7 +154,7 @@ let make = (~admin, ~updateCB) => {
           </div>
           <div className="mt-5">
             <label
-              className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
+              className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="name">
               {ts("name") |> str}
             </label>

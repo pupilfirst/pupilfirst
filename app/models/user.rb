@@ -8,7 +8,8 @@ class User < ApplicationRecord
 
   belongs_to :school
   has_many :founders, dependent: :restrict_with_error
-  has_many :startups, through: :founders
+  has_many :teams, through: :founders
+  has_many :cohorts, through: :founders
   has_many :course_authors, dependent: :restrict_with_error
   has_many :communities, through: :founders
   has_many :courses, through: :founders
@@ -153,7 +154,7 @@ class User < ApplicationRecord
     (
       login_token_generated_at +
         Rails.application.secrets.login_token_time_limit
-    ).strftime('%B %-d, %Y at %l:%M %p')
+    ).strftime('%B %-d, %Y at %-l:%M %p')
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

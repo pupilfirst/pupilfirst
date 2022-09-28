@@ -2,13 +2,13 @@ type t = {
   id: string,
   name: string,
   avatarUrl: option<string>,
-  title: string,
+  fullTitle: string,
 }
 
 let id = t => t.id
 let name = t => t.name
 let avatarUrl = t => t.avatarUrl
-let title = t => t.title
+let fullTitle = t => t.fullTitle
 
 let decode = json => {
   open Json.Decode
@@ -16,18 +16,18 @@ let decode = json => {
     id: json |> field("id", string),
     name: json |> field("name", string),
     avatarUrl: json |> optional(field("avatarUrl", string)),
-    title: json |> field("title", string),
+    fullTitle: json |> field("fullTitle", string),
   }
 }
 
 let findById = (id, proxies) =>
   proxies |> ArrayUtils.unsafeFind(proxy => proxy.id == id, "Unable to find a User with ID " ++ id)
 
-let make = (~id, ~name, ~avatarUrl, ~title) => {
+let make = (~id, ~name, ~avatarUrl, ~fullTitle) => {
   id: id,
   name: name,
   avatarUrl: avatarUrl,
-  title: title,
+  fullTitle: fullTitle,
 }
 
 let makeFromJs = jsObject =>
@@ -35,5 +35,17 @@ let makeFromJs = jsObject =>
     ~id=jsObject["id"],
     ~name=jsObject["name"],
     ~avatarUrl=jsObject["avatarUrl"],
-    ~title=jsObject["title"],
+    ~fullTitle=jsObject["fullTitle"],
   )
+
+module Fragment = %graphql(`
+  fragment UserFragment on User {
+    id
+    name
+    fullTitle
+    avatarUrl
+  }
+`)
+
+let makeFromFragment = (user: Fragment.t) =>
+  make(~id=user.id, ~name=user.name, ~avatarUrl=user.avatarUrl, ~fullTitle=user.fullTitle)

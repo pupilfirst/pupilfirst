@@ -161,7 +161,7 @@ class DailyDigestService
         else
           students =
             Founder
-              .joins(startup: %i[faculty course])
+              .joins([:faculty, level: :course])
               .where(faculty: { id: coach }, courses: { id: course })
           {
             course_id: course.id,

@@ -3,8 +3,6 @@ class CoachMailer < SchoolMailer
     @school = course.school
     @course = course
     @coach = coach
-    @user = coach.user
-    @user.regenerate_login_token
 
     simple_mail(
       coach.email,

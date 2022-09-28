@@ -7,12 +7,13 @@ feature 'Markdown editor', js: true do
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
-  let(:course) { create :course, school: school }
+  let(:course) { create :course, :with_cohort, school: school }
   let(:level_1) { create :level, :one, course: course }
 
   let!(:community) { create :community, school: school, target_linkable: true }
-  let(:team) { create :team, level: level_1 }
-  let(:student) { create :student, startup: team }
+  let(:student) do
+    create :student, level: level_1, cohort: course.cohorts.first
+  end
 
   before do
     create :community_course_connection, course: course, community: community
@@ -27,14 +28,22 @@ feature 'Markdown editor', js: true do
 
     fill_in 'Title', with: 'This is a title.'
     add_markdown(intro_sentence)
-    attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
+    attach_file(
+      'Click here to attach a file.',
+      sample_file_path('logo_lipsum_on_light_bg.png'),
+      visible: false
+    )
 
     expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
     # Add a bit of sleep here to allow the JS to fully insert the markdown embed code.
     sleep(0.1)
 
-    attach_file("Click here to attach a file.", sample_file_path('pdf-sample.pdf'), visible: false)
+    attach_file(
+      'Click here to attach a file.',
+      sample_file_path('pdf-sample.pdf'),
+      visible: false
+    )
 
     expect(page).to have_text('pdf-sample.pdf')
 
@@ -50,9 +59,12 @@ feature 'Markdown editor', js: true do
     image_attachment = MarkdownAttachment.first
     pdf_attachment = MarkdownAttachment.last
 
-    expect(last_topic.first_post.body).to include("#{intro_sentence}\n![logo_lipsum_on_light_bg.png]")
+    expect(last_topic.first_post.body).to include(
+      "#{intro_sentence}\n![logo_lipsum_on_light_bg.png]"
+    )
 
-    expected_url_head = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}/markdown_attachments"
+    expected_url_head =
+      "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}/markdown_attachments"
 
     expect(last_topic.first_post.body).to match(
       %r{!\[logo_lipsum_on_light_bg\.png\]\(#{expected_url_head}/#{image_attachment.id}/#{image_attachment.token}\)}
@@ -90,7 +102,11 @@ feature 'Markdown editor', js: true do
       sign_in_user(student.user, referrer: new_topic_community_path(community))
       fill_in 'Title', with: 'This is a title.'
 
-      attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)
+      attach_file(
+        'Click here to attach a file.',
+        sample_file_path('logo_lipsum_on_light_bg.png'),
+        visible: false
+      )
 
       expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
@@ -98,9 +114,15 @@ feature 'Markdown editor', js: true do
       expect(page).to have_text('0 Replies')
 
       # Let's try filling in an reply with an attachment.
-      attach_file("Click here to attach a file.", sample_file_path('pdf-sample.pdf'), visible: false)
+      attach_file(
+        'Click here to attach a file.',
+        sample_file_path('pdf-sample.pdf'),
+        visible: false
+      )
 
-      expect(page).to have_text('You have exceeded the number of attachments allowed per day.')
+      expect(page).to have_text(
+        'You have exceeded the number of attachments allowed per day.'
+      )
       expect(page).not_to have_text('logo_lipsum_on_light_bg.png')
 
       expect(MarkdownAttachment.count).to eq(1)

@@ -5,13 +5,10 @@ import "~/schools/shared/shared.css";
 import "~/schools/show.css";
 
 // Layout-specific JavaScript
-import "~/packs/SchoolLayoutPack.bs.js";
+import "~/packs/SchoolRouterPack.bs.js";
 
 // Page-specific JavaScript
-import "~/psj/schools/courses/index.js";
 import "~/psj/schools/courses/curriculum.js";
-import "~/psj/schools/courses/students.js";
-import "~/psj/schools/courses/inactive_students.js";
 import "~/psj/schools/courses/applicants.js";
 import "~/psj/schools/courses/authors.js";
 import "~/psj/schools/courses/certificates.js";

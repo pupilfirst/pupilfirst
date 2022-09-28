@@ -62,7 +62,8 @@ describe TimelineEvents::CreateService do
     end
 
     context 'when target is a team target and student is in a team' do
-      let(:student) { create :founder }
+      let(:team) { create :team_with_students }
+      let(:student) { team.founders.first }
       let(:target) do
         create :target, role: Target::ROLE_TEAM, target_group: target_group
       end
@@ -72,15 +73,15 @@ describe TimelineEvents::CreateService do
 
         last_submission = TimelineEvent.last
 
-        expect(last_submission.founders.count).to eq(3)
+        expect(last_submission.founders.count).to eq(2)
         expect(last_submission.founders.pluck(:id)).to match_array(
-          student.startup.founders.pluck(:id)
+          student.team.founders.pluck(:id)
         )
       end
     end
 
     context 'when previous submissions exist' do
-      let(:another_team) { create :startup, level: level }
+      let(:another_team) { create :team_with_students }
       let(:another_student) { another_team.founders.first }
       let!(:first_submission) do
         create :timeline_event,
@@ -136,7 +137,7 @@ describe TimelineEvents::CreateService do
     end
 
     context 'when target is an individual target with submissions from team members' do
-      let(:another_student) { create :student, startup: student.startup }
+      let(:another_student) { create :student }
       let!(:student_first_submission) do
         create :timeline_event,
                :with_owners,

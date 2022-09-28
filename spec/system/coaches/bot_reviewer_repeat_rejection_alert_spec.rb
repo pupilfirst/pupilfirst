@@ -9,8 +9,19 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
+  let(:student) { create :student, cohort: cohort }
+  let(:coach) { create :faculty, school: school }
+  let(:bot_reviewer) { create :faculty, school: school }
+
+  let(:grade_labels) do
+    [
+      { 'grade' => 1, 'label' => 'Reject' },
+      { 'grade' => 2, 'label' => 'Accept' }
+    ]
+  end
 
   let(:evaluation_criterion) do
     create :evaluation_criterion,
@@ -27,17 +38,6 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
            evaluation_criteria: [evaluation_criterion]
   end
 
-  let(:grade_labels) do
-    [
-      { 'grade' => 1, 'label' => 'Reject' },
-      { 'grade' => 2, 'label' => 'Accept' }
-    ]
-  end
-
-  let(:team) { create :startup, level: level }
-  let(:coach) { create :faculty, school: school }
-  let(:bot_reviewer) { create :faculty, school: school }
-
   around do |example|
     with_secret(
       bot: {
@@ -46,8 +46,6 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
       }
     ) { example.run }
   end
-
-  let(:student) { team.founders.first }
 
   let!(:submission_rejected_1) do
     fail_target(target, student, evaluator: bot_reviewer, latest: false)
@@ -64,8 +62,8 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
   end
 
   before do
-    create :faculty_course_enrollment, faculty: coach, course: course
-    create :faculty_course_enrollment, faculty: bot_reviewer, course: course
+    create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
+    create :faculty_cohort_enrollment, faculty: bot_reviewer, cohort: cohort
   end
 
   context 'with one submission rejected by the bot, and another pending review' do

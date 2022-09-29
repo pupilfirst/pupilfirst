@@ -18,7 +18,9 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2022.3
 
-This version adds support for running multiple cohorts in a course. This is a not a breaking change, but involves a lot of changes in the organisation of student data. If you are using the GraphQL API, you will need to update your queries to reflect the new structure.
+This version adds support for running multiple cohorts in a course. This version also introduces new pages in admin for managing cohorts and teams along with redesign of a few other pages.
+
+If you are using the GraphQL API, you will need to ensure that `createStudents` mutation is called with the `cohort_id` argument instead of `course_id`.
 
 ### 2022.2
 

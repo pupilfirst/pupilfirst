@@ -630,19 +630,22 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {publicSignupField(state.publicSignup, send)}
     {publicPreviewField(state.publicPreview, send)}
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
-    <div className="pt-5 flex flex-col">
-      <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
-        {"Pick the default cohort"->str}
-      </label>
-      <CohortsPicker
-        placeholder={"Pick a Cohort"}
-        selectables={state.cohorts}
-        selected={findSelectedCohort(state.cohorts, state.defaultCohort)}
-        onSelect={u => send(SetDefaultCohort(u))}
-        disabled={state.saving}
-        loading={state.loading}
-      />
-    </div>
+    {ReactUtils.nullUnless(
+      <div className="pt-5 flex flex-col">
+        <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
+          {t("pick_default_cohort")->str}
+        </label>
+        <CohortsPicker
+          placeholder={t("pick_a_cohort")}
+          selectables={state.cohorts}
+          selected={findSelectedCohort(state.cohorts, state.defaultCohort)}
+          onSelect={u => send(SetDefaultCohort(u))}
+          disabled={state.saving}
+          loading={state.loading}
+        />
+      </div>,
+      Belt.Option.isSome(course),
+    )}
     {courseHighlights(state.highlights, send)}
     <div className="max-w-2xl py-6 mx-auto">
       <div className="flex justify-end">

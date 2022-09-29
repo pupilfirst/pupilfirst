@@ -324,6 +324,8 @@ en:
       enable_public_preview_label: Allow public to view course curriculum?
       enable_public_signup_label: Enable public signup for this course?
       feature_course_in_homepage_label: Feature course in school homepage?
+      pick_a_cohort: Pick a Cohort
+      pick_default_cohort: Pick the default cohort
       processing_url:
         error: Invalid processing url
         help: You can send the applicants to a processing url once they apply for the course
@@ -857,15 +859,15 @@ en:
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
-    CoursesStudents__SubmissionsList:
-      no_revied_submission: No Reviewed Submission
-      submitted_on: "Submitted on "
     CoursesStudents__StudentsList:
       last_seen: Last seen %{time_string}
       no_last_seen: This student has never signed in
       no_students: No students to show
       personal_coaches: Personal Coaches
       team_coaches: Team Coaches
+    CoursesStudents__SubmissionsList:
+      no_revied_submission: No Reviewed Submission
+      submitted_on: "Submitted on "
     CurriculumEditor:
       create_level: Create Level
       create_target_group: Create target group
@@ -1102,6 +1104,11 @@ en:
       update_criterion: Update Criterion
     HelpIcon:
       read_more: Read more
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -1368,11 +1375,6 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
-    Layout__UserControls:
-      edit_profile: Edit Profile
-      sign_in: Sign In
-      sign_out: Sign Out
-      user_controls: Show user controls
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -1762,12 +1764,12 @@ en:
       manage_account: Manage your account in this school
       name_error: Name can't be blank
       name_placeholder: Type your name
-      preferred_name_placeholder: Type your preferred name
       new_password: New password
       new_password_placeholder: Type new password
       notifications: Notifications
       password_placeholder: Type current password
       photo: Photo
+      preferred_name_placeholder: Type your preferred name
       save_changes: Save Changes
       security: Security
       select_image_limit: Please select an image with a size less than 5 MB
@@ -2409,7 +2411,6 @@ en:
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     name: Name
-    preferred_name: Preferred name
     name_email: Name or Email
     no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None
@@ -2432,6 +2433,7 @@ en:
     pass: Pass
     percentage: Percentage
     post: Post
+    preferred_name: Preferred name
     processing: Processing
     rejected: Rejected
     replies: Replies

@@ -1950,6 +1950,10 @@ en:
     coach:
       course_enrollment:
         subject: You have been added as a coach in %{course_name}
+      repeat_rejections_alert:
+        subject: Repeated rejection of a student's submission (%{rejection_count} times)
+        header: A bot has rejected a student's submission %{rejection_count} times in the %{course_name} course.
+        body_html: Please consider going through <a href="%{review_url}">the student's submission</a> to see if there's some feedback you can give to help the student progress.
     course_author:
       addition:
         body:

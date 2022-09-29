@@ -333,6 +333,8 @@ ru:
       enable_public_preview_label: Разрешить всем просматривать учебную программу?
       enable_public_signup_label: Разрешить всем записываться на этот курс?
       feature_course_in_homepage_label: Рекомендовать курс на домашней странице школы?
+      pick_a_cohort: Pick a Cohort
+      pick_default_cohort: Pick the default cohort
       processing_url:
         error: Недействительный URL обработки
         help: Вы можете отправить URL курса абитурентам после того, как они подадут заявку на курс.
@@ -870,15 +872,15 @@ ru:
       targets_overview: Обзор Задач
       team_coaches: Менторы Команд
       total_targets_completed: Всего задач выполнено
-    CoursesStudents__SubmissionsList:
-      no_revied_submission: Нет Рассмотренного Работ
-      submitted_on: "Отправленный в "
     CoursesStudents__StudentsList:
       last_seen: Last seen %{time_string}
       no_last_seen: This student has never signed in
       no_students: No students to show
       personal_coaches: Personal Coaches
       team_coaches: Team Coaches
+    CoursesStudents__SubmissionsList:
+      no_revied_submission: Нет Рассмотренного Работ
+      submitted_on: "Отправленный в "
     CurriculumEditor:
       create_level: Создать Уровень
       create_target_group: Создать группу задач
@@ -1115,6 +1117,11 @@ ru:
       update_criterion: Критерий Обновления
     HelpIcon:
       read_more: Подробнее
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -1384,11 +1391,6 @@ ru:
       social: Соцсети
       social_links_q: Добавить ссылки на социальные сети?
       terms_and_conditions: Условия использования
-    Layout__UserControls:
-      edit_profile: Edit Profile
-      sign_in: Sign In
-      sign_out: Sign Out
-      user_controls: Show user controls
     School__SearchableTagList:
       add_new_tag: Добавить новый тег
       pick_tag: Выберите тег
@@ -1782,12 +1784,12 @@ ru:
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
       name_placeholder: Введите ваше имя
-      preferred_name_placeholder: Type your preferred name
       new_password: Новый пароль
       new_password_placeholder: Введите новый пароль
       notifications: Уведомления
       password_placeholder: Введите текущий пароль
       photo: Фото
+      preferred_name_placeholder: Type your preferred name
       save_changes: Сохранить изменения
       security: Безопасность
       select_image_limit: Выберите изображение размером менее 5\_МБ.
@@ -2429,7 +2431,6 @@ ru:
     loading: Загрузка...
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
     name: Имя
-    preferred_name: Preferred name
     name_email: Имя или Почта
     no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
     none: Ничего
@@ -2452,6 +2453,7 @@ ru:
     pass: Пройдено
     percentage: Процент
     post: Пост
+    preferred_name: Preferred name
     processing: Обрабатывается
     rejected: Отклонено
     replies: Ответов

@@ -323,6 +323,8 @@ hi:
       enable_public_preview_label: जनता को पाठ्यक्रम पाठ्यक्रम देखने की अनुमति दें?
       enable_public_signup_label: इस पाठ्यक्रम के लिए सार्वजनिक साइनअप सक्षम करें?
       feature_course_in_homepage_label: स्कूल के होमपेज में फीचर कोर्स?
+      pick_a_cohort: Pick a Cohort
+      pick_default_cohort: Pick the default cohort
       processing_url:
         error: अमान्य संसाधन url
         help: कोर्स के लिए आवेदन करने के बाद आप आवेदकों को प्रोसेसिंग यूआरएल पर भेज सकते हैं
@@ -854,15 +856,15 @@ hi:
       targets_overview: लक्ष्य अवलोकन
       team_coaches: टीम के कोच
       total_targets_completed: कुल लक्ष्य पूरे किए गए
-    CoursesStudents__SubmissionsList:
-      no_revied_submission: कोई समीक्षित सबमिशन नहीं
-      submitted_on: "पर प्रस्तुत की "
     CoursesStudents__StudentsList:
       last_seen: Last seen %{time_string}
       no_last_seen: This student has never signed in
       no_students: No students to show
       personal_coaches: Personal Coaches
       team_coaches: Team Coaches
+    CoursesStudents__SubmissionsList:
+      no_revied_submission: कोई समीक्षित सबमिशन नहीं
+      submitted_on: "पर प्रस्तुत की "
     CurriculumEditor:
       create_level: स्तर बनाएं
       create_target_group: लक्ष्य समूह बनाएं
@@ -1099,6 +1101,11 @@ hi:
       update_criterion: अद्यतन मानदंड
     HelpIcon:
       read_more: अधिक पढ़ें
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
     MarkdownEditor:
       attach_file_label: फ़ाइल संलग्न करने के लिए यहां क्लिक करें।
       bold_insert: साहसिक
@@ -1364,11 +1371,6 @@ hi:
       social: सामाजिक
       social_links_q: सोशल मीडिया लिंक जोड़ें?
       terms_and_conditions: नियम एवं शर्तें
-    Layout__UserControls:
-      edit_profile: Edit Profile
-      sign_in: Sign In
-      sign_out: Sign Out
-      user_controls: Show user controls
     School__SearchableTagList:
       add_new_tag: नया टैग जोड़ें
       pick_tag: टैग चुनें
@@ -1758,12 +1760,12 @@ hi:
       manage_account: इस स्कूल में अपना खाता प्रबंधित करें
       name_error: नाम खाली नहीं हो सकता
       name_placeholder: अपना नाम डालें
-      preferred_name_placeholder: Type your preferred name
       new_password: नया पासवर्ड
       new_password_placeholder: नया पासवर्ड टाइप करें
       notifications: सूचनाएं
       password_placeholder: वर्तमान पासवर्ड टाइप करें
       photo: फ़ोटो
+      preferred_name_placeholder: Type your preferred name
       save_changes: परिवर्तनों को सुरक्षित करें
       security: सुरक्षा
       select_image_limit: कृपया 5 एमबी से कम आकार वाली छवि चुनें
@@ -2405,7 +2407,6 @@ hi:
     loading: लोड हो रहा है...
     login_token_expiration_warning_html: यह लिंक %{timestamp}तक समाप्त हो जाएगा। यदि लिंक की समय सीमा समाप्त हो गई है, तो आप <a href="%{login_url}" %>साइन-इन पृष्ठ</a>से एक बार के टोकन का अनुरोध कर सकते हैं। कृपया ध्यान दें कि यह एक निजी यूआरएल है और इसे साझा नहीं किया जाना चाहिए।
     name: नाम
-    preferred_name: Preferred name
     name_email: नाम या ईमेल
     no_email_found: इस ईमेल के साथ उपयोगकर्ता नहीं मिला। कृपया आपके द्वारा दर्ज ईमेल की जांच करें।
     none: कोई भी नहीं
@@ -2428,6 +2429,7 @@ hi:
     pass: रास्ता
     percentage: प्रतिशत
     post: पद
+    preferred_name: Preferred name
     processing: प्रसंस्करण
     rejected: अस्वीकृत
     replies: जवाब

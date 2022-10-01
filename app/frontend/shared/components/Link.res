@@ -27,6 +27,12 @@ let handleOnClick = (href, confirm, onClick, event) => {
   }
 }
 
+let link = (href, includeReferrer) => {
+  let ref = Webapi.Dom.window->Webapi.Dom.Window.location->Webapi.Dom.Location.search
+
+  includeReferrer ? `${href}${ref}` : href
+}
+
 @react.component
 let make = (
   ~href,
@@ -37,18 +43,19 @@ let make = (
   ~onClick=?,
   ~title=?,
   ~children,
+  ~includeSearch=false,
   ~disabled=false,
   ~props=?,
 ) => {
   let switchProps = Belt.Option.getWithDefault(props, Js.Obj.empty())
   <Spread props={switchProps}>
     <a
-      href
+      href={link(href, includeSearch)}
       ?ariaLabel
       ?className
       ?id
       ?title
-      onClick={handleOnClick(href, confirm, onClick)}
+      onClick={handleOnClick(link(href, includeSearch), confirm, onClick)}
       disabled>
       children
     </a>

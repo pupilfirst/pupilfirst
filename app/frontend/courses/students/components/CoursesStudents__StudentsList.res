@@ -53,6 +53,7 @@ let showStudent = student => {
     href={"/students/" ++ (student->StudentInfo.id ++ "/report")}
     key={student->StudentInfo.id}
     ariaLabel={"Student " ++ student->StudentInfo.user->UserDetails.name}
+    includeSearch={true}
     className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
     <div className="flex flex-col justify-center md:flex-row ">
       <div className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
@@ -93,7 +94,7 @@ let showStudent = student => {
       className="flex items-center gap-6 justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__PersonalCoaches
         title={<div className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
-          {t("personal_coaches") -> str}
+          {t("personal_coaches")->str}
         </div>}
         className="hidden md:inline-block"
         coaches={StudentInfo.personalCoaches(student)}
@@ -106,10 +107,10 @@ let showStudent = student => {
 @react.component
 let make = (~students) =>
   <div>
-    {  ArrayUtils.isEmpty(students)
+    {ArrayUtils.isEmpty(students)
       ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
           <h4 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-            {t("no_students") -> str}
+            {t("no_students")->str}
           </h4>
         </div>
       : students->Js.Array2.map(showStudent)->React.array}

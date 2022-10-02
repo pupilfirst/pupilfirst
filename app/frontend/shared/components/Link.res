@@ -27,10 +27,9 @@ let handleOnClick = (href, confirm, onClick, event) => {
   }
 }
 
-let link = (href, includeReferrer) => {
-  let ref = Webapi.Dom.window->Webapi.Dom.Window.location->Webapi.Dom.Location.search
-
-  includeReferrer ? `${href}${ref}` : href
+let link = (href, includeSearch) => {
+  let search = Webapi.Dom.window->Webapi.Dom.Window.location->Webapi.Dom.Location.search
+  includeSearch ? `${href}${search}` : href
 }
 
 @react.component

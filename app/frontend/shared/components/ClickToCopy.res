@@ -3,7 +3,6 @@ let str = React.string
 type state = ReadyToCopy | Copied
 
 let performCopy = (_copy, setState, _event) => {
-  // Do more things.
   %raw(`navigator.clipboard.writeText(_copy)`)->ignore
   setState(_ => Copied)
 }

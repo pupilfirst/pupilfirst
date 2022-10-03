@@ -1,4 +1,5 @@
 let str = React.string
+let t = I18n.t(~scope="components.ClickToCopy")
 
 type state = ReadyToCopy | Copied
 
@@ -14,8 +15,8 @@ let make = (~copy, ~tooltipPosition=#Top, ~className="", ~tooltipClassName=?, ~c
   let (state, setState) = React.useState(() => ReadyToCopy)
 
   let tip = switch state {
-  | ReadyToCopy => "Copy to clipboard"
-  | Copied => "Copied!"
+  | ReadyToCopy => t("copy")
+  | Copied => t("copied")
   }->str
 
   <div

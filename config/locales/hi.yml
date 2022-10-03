@@ -57,6 +57,9 @@ hi:
       review: समीक्षा
       sign_out: साइन आउट करें
       students: छात्र
+    ClickToCopy:
+      copied: Copied!
+      copy: Copy to clipboard
     CoachesIndex__Root:
       button_about: बारे में
       button_connect: जुड़ें
@@ -1947,9 +1950,9 @@ hi:
       course_enrollment:
         subject: आपको %{course_name}. में एक कोच के रूप में जोड़ा गया है
       repeat_rejections_alert:
-        subject: Repeated rejection of a student's submission (%{rejection_count} times)
-        header: A bot has rejected a student's submission %{rejection_count} times in the %{course_name} course.
         body_html: Please consider going through <a href="%{review_url}">the student's submission</a> to see if there's some feedback you can give to help the student progress.
+        header: A bot has rejected a student's submission %{rejection_count} times in the %{course_name} course.
+        subject: Repeated rejection of a student's submission (%{rejection_count} times)
     course_author:
       addition:
         body:

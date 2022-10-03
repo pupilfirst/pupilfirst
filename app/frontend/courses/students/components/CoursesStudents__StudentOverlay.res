@@ -494,6 +494,26 @@ let onAddCoachNotesCB = (studentId, setState, _) => {
   getStudentDetails(studentId, setState)
 }
 
+let ids = student => {
+  <div className="text-center mt-1">
+    <ClickToCopy
+      copy={StudentInfo.user(student)->UserDetails.id}
+      className="inline-block hover:text-primary-500">
+      <span className="text-xs"> {"User ID "->str} </span>
+      <span className="font-semibold text-sm underline text-primary-500">
+        {`#${StudentInfo.user(student)->UserDetails.id}`->str}
+      </span>
+    </ClickToCopy>
+    <ClickToCopy
+      copy={StudentInfo.id(student)} className="ml-2 inline-block hover:text-primary-500">
+      <span className="text-xs"> {"Student ID "->str} </span>
+      <span className="font-semibold text-sm underline text-primary-500">
+        {`#${StudentInfo.id(student)}`->str}
+      </span>
+    </ClickToCopy>
+  </div>
+}
+
 @react.component
 let make = (~studentId, ~userId) => {
   let (state, setState) = React.useState(() => initialState)
@@ -540,6 +560,7 @@ let make = (~studentId, ~userId) => {
               <p className="text-sm font-semibold text-center mt-1">
                 {student->StudentInfo.user->UserDetails.fullTitle |> str}
               </p>
+              {ids(student)}
               {inactiveWarning(student)}
             </div>
             {levelProgressBar(

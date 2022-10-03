@@ -11,6 +11,7 @@ module Students
 
     def execute
       students.each do |student|
+        student.update!(completed_at: Time.zone.now)
         Students::IssueCertificateService.new(student).issue
       end
 

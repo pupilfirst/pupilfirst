@@ -13,11 +13,10 @@ describe Students::AfterCourseCompletionService do
         student.course
       )
       subject =
-        described_class.new(
-          student,
-          notification_service: notification_service
-        )
+        described_class.new(student, notification_service: notification_service)
       subject.execute
+
+      expect(student.completed_at).not_to be_nil
     end
   end
 end

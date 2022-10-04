@@ -1965,8 +1965,8 @@ hi:
     course_export:
       prepared:
         body:
-          body: आपने जिस निर्यात का अनुरोध पाठ्यक्रम %{course_name} से %{course_export_created_at} के लिए किया था वह अब डाउनलोड के लिए तैयार है। निर्यात डाउनलोड करने के लिए कृपया %{link_to} का उपयोग करके पाठ्यक्रम निर्यात पृष्ठ पर जाएं।
-          export_ods: निर्यात ओडीएस (ओपन डॉक्यूमेंट स्प्रेडशीट) प्रारूप में तैयार किया गया है, जिसे आप सभी लोकप्रिय स्प्रेडशीट अनुप्रयोगों में खोलने में सक्षम होना चाहिए।
+          footer: The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all popular spreadsheet applications.
+          header_html: The export that you requested for the course %{course_name} on %{course_export_created_at} is now ready for download. Please visit <a href="%{link}">the course exports page</a> to download the export.
           link_to: संपर्क
         subject: '%{course_export} पाठ्यक्रम का निर्यात डाउनलोड के लिए तैयार है'
         subtitle: पाठ्यक्रम %{course_name} से डेटा का निर्यात डाउनलोड के लिए तैयार है।

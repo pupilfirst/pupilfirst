@@ -1969,8 +1969,8 @@ en:
     course_export:
       prepared:
         body:
-          body: The export that you requested for the course %{course_name} on %{course_export_created_at} is now ready for download. Please visit the course exports page using the %{link_to} to download the export.
-          export_ods: The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all popular spreadsheet applications.
+          footer: The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all popular spreadsheet applications.
+          header_html: The export that you requested for the course %{course_name} on %{course_export_created_at} is now ready for download. Please visit <a href="%{link}">the course exports page</a> to download the export.
           link_to: link
         subject: Export of %{course_export} course is ready for download
         subtitle: The export of data from course %{course_name} is ready for download.

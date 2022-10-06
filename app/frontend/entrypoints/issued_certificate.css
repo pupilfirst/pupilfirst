@@ -1,0 +1,9 @@
+header,
+footer,
+button.verify-certificate__cancel-button {
+  display: none;
+}
+
+@page {
+  size: landscape;
+}

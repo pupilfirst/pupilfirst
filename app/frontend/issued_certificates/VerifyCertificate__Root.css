@@ -1,4 +1,8 @@
 @media print {
+  body {
+    margin: 0 !important;
+  }
+
   header,
   footer,
   button.verify-certificate__cancel-button {

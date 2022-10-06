@@ -4,6 +4,10 @@ button.verify-certificate__cancel-button {
   display: none;
 }
 
+body {
+  margin: 0 !important;
+}
+
 @page {
   size: landscape;
 }

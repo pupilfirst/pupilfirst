@@ -151,3 +151,9 @@
     box-shadow: 0 0 0 #7886d7;
   }
 }
+
+@media print {
+  .curriculum-overlay__learn-submit-btn, .curriculum-overlay__learn-auto-verify-btn {
+    display: none;
+  }
+}

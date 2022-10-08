@@ -114,9 +114,6 @@ let statusButton = (index, status, callback, checklist) =>
     </button>
   </div>
 
-let cardHeaderClasses = pending =>
-  "text-sm font-medium flex items-center justify-between " ++ (pending ? "" : "bg-white rounded")
-
 let cardBodyClasses = pending => "pl-7 md:pl-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
@@ -124,8 +121,8 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>
-    <div className={cardHeaderClasses(pending)}>
-      <div className="flex flex-1 items-start justify-between">
+    <div className="text-sm font-medium flex items-center justify-between ">
+      <div className="flex flex-1 items-start space-x-2">
         <div className="flex items-start">
           <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
           <MarkdownBlock

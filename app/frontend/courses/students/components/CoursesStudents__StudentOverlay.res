@@ -24,7 +24,10 @@ let initialState = {
   submissions: Unloaded,
 }
 
-let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students"))
+let closeOverlay = courseId => {
+  let search = Webapi.Dom.window->Webapi.Dom.Window.location->Webapi.Dom.Location.search
+  RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students") ++ search)
+}
 
 module UserDetailsFragment = UserDetails.Fragment
 module LevelFragment = Shared__Level.Fragment

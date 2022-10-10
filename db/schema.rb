@@ -417,11 +417,11 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
 
   create_table "organisation_admin", force: :cascade do |t|
     t.bigint "organisation_id", null: false
-    t.citext "email", null: false
-    t.string "name", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["organisation_id"], name: "index_organisation_admin_on_organisation_id"
+    t.index ["user_id"], name: "index_organisation_admin_on_user_id"
   end
 
   create_table "organisations", force: :cascade do |t|
@@ -875,6 +875,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"
   add_foreign_key "organisation_admin", "organisations"
+  add_foreign_key "organisation_admin", "users"
   add_foreign_key "posts", "posts", column: "reply_to_post_id"
   add_foreign_key "posts", "topics"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"

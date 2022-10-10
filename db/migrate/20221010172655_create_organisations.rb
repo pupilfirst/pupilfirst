@@ -8,8 +8,7 @@ class CreateOrganisations < ActiveRecord::Migration[6.1]
 
     create_table :organisation_admin do |t|
       t.references :organisation, null: false, foreign_key: true
-      t.citext :email, null: false
-      t.string :name, null: false
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

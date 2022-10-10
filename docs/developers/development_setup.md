@@ -27,6 +27,10 @@ be printed to the command-line after it's successfully installed.
 
 #### On Ubuntu
 
+The following command should be run to update package lists 
+
+    sudo apt-get update 
+
 The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
 adapt the command to work with the package manager available with your distribution.
 

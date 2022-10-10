@@ -1,0 +1,24 @@
+body {
+  overflow: auto !important;
+}
+
+body.overflow-hidden div[aria-label="Curriculum"] {
+  visibility: hidden;
+}
+
+#target-overlay {
+  visibility: visible;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  overflow: visible !important;
+  height: auto !important;
+  z-index: 100;
+}
+
+footer,
+header,
+#course-header-root,
+div[aria-label="Curriculum"] #target-navigation {
+  display: none;
+}

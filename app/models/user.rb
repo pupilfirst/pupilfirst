@@ -9,6 +9,7 @@ class User < ApplicationRecord
   belongs_to :school
   belongs_to :organisation, optional: true
   has_many :organisation_admins, dependent: :restrict_with_error
+  has_many :organisations, through: :organisation_admins
   has_many :founders, dependent: :restrict_with_error
   has_many :teams, through: :founders
   has_many :cohorts, through: :founders

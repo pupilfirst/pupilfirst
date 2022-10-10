@@ -6,7 +6,7 @@ class CreateOrganisations < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    create_table :organisation_admin do |t|
+    create_table :organisation_admins do |t|
       t.references :organisation, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
 

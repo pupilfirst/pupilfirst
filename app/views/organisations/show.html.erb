@@ -1,0 +1,17 @@
+<section class="max-w-7xl mx-auto">
+  <h1 class="text-3xl font-bold mt-4"><%= @organisation.name %></h1>
+  <h2> Users Count: <%= @total_users_count %> </h2>
+  <div class="space-y-4 mt-4">
+    <h2 class="text-3xl font-bold mt-4">Cohorts</h2>
+    <% @cohorts.each do |cohort| %>
+      <%= link_to organisation_path(@organisation), class: "p-6 flex flex-col bg-white items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400" do %>
+        <div>
+          cohort #<%= cohort.id %> | <%= cohort.name %>
+        </div>
+        <div>
+          <%= cohort.course.name %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<section class="max-w-7xl mx-auto">
+  <h1 class="text-3xl font-bold mt-4">Organisations</h1>
+  <div class="space-y-4 mt-4">
+    <% @organisations.each do |organisation| %>
+      <%= link_to organisation_path(organisation), class: "p-6 flex bg-white items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400" do %>
+        #<%= organisation.id %> | <%= organisation.name %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 class CourseResourceInfoResolver < ApplicationQuery
-  include AuthorizeReviewer
+  include AuthorizeCoach
 
   property :course_id
   property :resources

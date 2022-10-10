@@ -1,6 +1,4 @@
 class SubmissionReportResolver < ApplicationQuery
-  include AuthorizeCoach
-
   property :id
 
   def submission_report
@@ -12,8 +10,8 @@ class SubmissionReportResolver < ApplicationQuery
 
     return false if current_user.faculty.blank?
 
-    current_user.faculty.courses.exists?(
-      id: submission_report.submission.target.course
+    current_user.faculty.cohorts.exists?(
+      id: submission_report.submission.founders.first.cohort
     )
   end
 end

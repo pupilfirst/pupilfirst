@@ -7,6 +7,6 @@ module QueryAuthorizeCoach
 
     return false if course&.school != current_school
 
-    current_user.faculty.courses.exists?(id: course)
+    current_user.faculty.cohorts.exists?(id: submission.founders.first.cohort)
   end
 end

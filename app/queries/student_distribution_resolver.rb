@@ -1,5 +1,5 @@
 class StudentDistributionResolver < ApplicationQuery
-  include AuthorizeReviewer
+  include AuthorizeCoach
 
   property :course_id
   property :filter_string

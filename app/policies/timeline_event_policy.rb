@@ -4,7 +4,11 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if record.evaluation_criteria.blank?
 
-    CoursePolicy.new(@pundit_user, record.target.course).review?
+    return true if current_school_admin.present?
+
+    return false if current_user.faculty.blank?
+
+    current_user.faculty.cohorts.exists?(id: record.founders.first.cohort_id)
   end
 
   def show?

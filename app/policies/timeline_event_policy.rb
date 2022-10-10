@@ -6,7 +6,7 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if user.faculty.blank?
 
-    current_coach.cohorts.exists?(id: record.founders.first.cohort_id)
+    user.faculty.cohorts.exists?(id: record.founders.first.cohort_id)
   end
 
   def show?

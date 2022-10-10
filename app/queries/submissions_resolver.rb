@@ -125,12 +125,7 @@ class SubmissionsResolver < ApplicationQuery
   def students
     @students ||=
       begin
-        scope =
-          if current_school_admin.present?
-            course.founders
-          else
-            course.founders.where(cohort_id: coach.cohorts)
-          end
+        scope = course.founders.where(cohort_id: coach.cohorts)
 
         scope = include_inactive ? scope : scope.active
 

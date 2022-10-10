@@ -15,7 +15,7 @@ class CourseStudentsResolver < ApplicationQuery
       if current_school_admin.present?
         course.founders
       else
-        course.founders.where(cohort_id: faculty.cohorts)
+        course.founders.where(cohort_id: current_user.faculty.cohorts)
       end
 
     case filter[:status]&.downcase

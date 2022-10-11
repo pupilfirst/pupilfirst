@@ -3,7 +3,6 @@ class CourseStudentsResolver < ApplicationQuery
 
   property :course_id
   property :filter_string
-  property :request_source
 
   def course_students
     students
@@ -12,12 +11,11 @@ class CourseStudentsResolver < ApplicationQuery
   private
 
   def students
-    scope =
-      if request_source == 'course_index'
-        course.founders.where(cohort_id: current_user.faculty.cohorts)
-      elsif current_school_admin.present?
-        course.founders
-      end
+    scope = course.founders
+
+    scope = scope.where(cohort_id: current_user.faculty&.cohorts) if filter[
+      :reviewable
+    ]
 
     case filter[:status]&.downcase
     when 'active'

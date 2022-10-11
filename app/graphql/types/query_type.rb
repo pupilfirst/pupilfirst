@@ -118,7 +118,6 @@ module Types
                    null: false do
       argument :course_id, ID, required: true
       argument :filter_string, String, required: false
-      argument :request_source, String, required: false
     end
 
     resolved_field :student, Types::StudentType, null: false do

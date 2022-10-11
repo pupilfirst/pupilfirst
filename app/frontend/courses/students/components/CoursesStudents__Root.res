@@ -75,8 +75,8 @@ module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 
 module StudentsQuery = %graphql(`
-    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String,$requestSource: String, $skipIfLoadingMore: Boolean!) {
-      courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after, requestSource: $requestSource) {
+    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!) {
+      courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after) {
         nodes {
           id,
           taggings
@@ -111,6 +111,7 @@ module StudentsQuery = %graphql(`
 
 let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
   Webapi.Url.URLSearchParams.append("status", "active", params)
+  Webapi.Url.URLSearchParams.append("reviewable", "true", params)
   let filterString = params->Webapi.Url.URLSearchParams.toString
 
   StudentsQuery.makeVariables(
@@ -118,7 +119,6 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
     ~after=?cursor,
     ~filterString=?Some(filterString),
     ~skipIfLoadingMore={loadingMore},
-    ~requestSource="course_index",
     (),
   )
   |> StudentsQuery.fetch

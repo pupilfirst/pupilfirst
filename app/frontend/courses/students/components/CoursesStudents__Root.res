@@ -75,8 +75,8 @@ module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 
 module StudentsQuery = %graphql(`
-    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!) {
-      courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after) {
+    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String,$requestSource: String, $skipIfLoadingMore: Boolean!) {
+      courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after, requestSource: $requestSource) {
         nodes {
           id,
           taggings
@@ -118,6 +118,7 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
     ~after=?cursor,
     ~filterString=?Some(filterString),
     ~skipIfLoadingMore={loadingMore},
+    ~requestSource="course_index",
     (),
   )
   |> StudentsQuery.fetch

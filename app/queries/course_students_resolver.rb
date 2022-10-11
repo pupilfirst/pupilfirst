@@ -3,6 +3,7 @@ class CourseStudentsResolver < ApplicationQuery
 
   property :course_id
   property :filter_string
+  property :request_source
 
   def course_students
     students
@@ -12,10 +13,10 @@ class CourseStudentsResolver < ApplicationQuery
 
   def students
     scope =
-      if current_school_admin.present?
-        course.founders
-      else
+      if request_source == 'course_index'
         course.founders.where(cohort_id: current_user.faculty.cohorts)
+      elsif current_school_admin.present?
+        course.founders
       end
 
     case filter[:status]&.downcase

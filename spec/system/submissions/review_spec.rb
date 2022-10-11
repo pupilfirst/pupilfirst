@@ -1053,6 +1053,8 @@ feature 'Submission review overlay', js: true do
         evaluation_criterion: evaluation_criterion_1,
         grade: 4
       )
+
+      create(:faculty_cohort_enrollment, faculty: coach, cohort: ended_cohort)
     end
 
     around do |example|

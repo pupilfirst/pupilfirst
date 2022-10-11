@@ -8,7 +8,11 @@ class StudentDistributionResolver < ApplicationQuery
     students =
       CourseStudentsResolver.new(
         @context,
-        { course_id: course_id, filter_string: filter_string }
+        {
+          course_id: course_id,
+          filter_string: filter_string,
+          request_source: 'course_index'
+        }
       ).course_students
 
     course.levels.map do |level|

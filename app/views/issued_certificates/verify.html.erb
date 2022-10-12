@@ -1,6 +1,7 @@
 <% presenter = IssuedCertificates::VerifyPresenter.new(self, @issued_certificate) %>
 <% content_for(:head) do %>
   <title> <%= t('.title')%> <%= presenter.serial_number %></title>
+  <%= vite_stylesheet_tag 'issued_certificate', media: 'print' %>
 <% end %>
 <script type="application/json" id="react-root-data">
   <%= presenter.props_to_json.html_safe %>

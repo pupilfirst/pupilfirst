@@ -465,6 +465,12 @@ feature "Coach's review interface" do
           owners: inactive_team.founders,
           target: team_target
         )
+
+        create(
+          :faculty_cohort_enrollment,
+          faculty: course_coach,
+          cohort: inactive_cohort
+        )
       end
 
       scenario 'coach can access inactive submission', js: true do

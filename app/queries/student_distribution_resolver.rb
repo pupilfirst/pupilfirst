@@ -1,5 +1,5 @@
 class StudentDistributionResolver < ApplicationQuery
-  include AuthorizeReviewer
+  include AuthorizeCoach
 
   property :course_id
   property :filter_string
@@ -20,5 +20,9 @@ class StudentDistributionResolver < ApplicationQuery
         filter_name: level.filter_name
       }
     end
+  end
+
+  def course
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 end

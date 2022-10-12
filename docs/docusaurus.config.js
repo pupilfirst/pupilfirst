@@ -120,7 +120,7 @@ module.exports = {
         routeBasePath: "developers",
         sidebarPath: require.resolve("./sidebarsDevelopers.js"),
         editUrl:
-          "https://github.com/pupilfirst/pupilfirst/edit/master/docs/developers/",
+          "https://github.com/pupilfirst/pupilfirst/edit/master/docs/",
         // ... other options
       },
     ],

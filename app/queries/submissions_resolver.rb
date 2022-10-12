@@ -19,9 +19,13 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if current_user.faculty.blank?
+    return false if coach.blank?
 
-    current_user.faculty.courses.exists?(id: course)
+    coach.courses.exists?(id: course)
+  end
+
+  def coach
+    @coach ||= current_user.faculty
   end
 
   def sort_direction_string
@@ -121,7 +125,9 @@ class SubmissionsResolver < ApplicationQuery
   def students
     @students ||=
       begin
-        scope = include_inactive ? course.founders : course.founders.active
+        scope = course.founders.where(cohort_id: coach.cohorts)
+
+        scope = include_inactive ? scope : scope.active
 
         if search.present?
           students_with_users = scope.joins(:user)

@@ -1,6 +1,4 @@
 class CourseResourceInfoResolver < ApplicationQuery
-  include AuthorizeReviewer
-
   property :course_id
   property :resources
 
@@ -33,7 +31,13 @@ class CourseResourceInfoResolver < ApplicationQuery
     @course ||= current_school.courses.find_by(id: course_id)
   end
 
-  def resource_school
-    course&.school
+  def authorized?
+    return false if course&.school != current_school
+
+    return true if current_school_admin.present?
+
+    return false if current_user&.faculty.blank?
+
+    current_user.faculty.courses.exists?(id: course)
   end
 end

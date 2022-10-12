@@ -161,7 +161,11 @@ Rails.application.routes.draw do
     resources :communities, only: %i[index]
   end
 
-  resources :organisations, only: %i[show index]
+  resources :organisations, only: %i[show index] do
+    member do
+      get 'cohorts/:cohort_id/stats', action: 'cohort_stats', as: 'cohort_stats'
+    end
+  end
 
   resources :communities, only: %i[show] do
     member do

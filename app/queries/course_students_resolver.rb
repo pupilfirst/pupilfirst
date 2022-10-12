@@ -13,9 +13,13 @@ class CourseStudentsResolver < ApplicationQuery
   def students
     scope = course.founders
 
-    scope = scope.where(cohort_id: current_user.faculty&.cohorts) if filter[
-      :reviewable
-    ]
+    scope =
+      if current_school_admin.present? &&
+           filter[:request_origin] == 'review_interface'
+        scope.where(cohort_id: current_user.faculty&.cohorts)
+      else
+        scope
+      end
 
     case filter[:status]&.downcase
     when 'active'

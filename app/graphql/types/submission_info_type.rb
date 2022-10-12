@@ -76,9 +76,8 @@ module Types
     end
 
     def resolve_team_name(submission)
-      if submission.team_submission? &&
-           submission.timeline_event_owners.count > 1 &&
-           students_have_same_team?(submission)
+      if submission.timeline_event_owners.count > 1 &&
+           submission.team_submission? && students_have_same_team?(submission)
         submission.founders.first.team.name
       end
     end

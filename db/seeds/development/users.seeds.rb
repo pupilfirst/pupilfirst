@@ -14,7 +14,6 @@ after 'development:organisations' do
         .first_or_create!(name: Faker::Name.name, title: 'School Admin')
 
     user.tag_list = %w[admin]
-    user.organisation = organisations.sample
     user.save!
   end
 

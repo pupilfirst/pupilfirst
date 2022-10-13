@@ -1,5 +1,9 @@
 after 'development:schools' do
   puts 'Seeding organisations'
 
-  (1..3).each { |n| Organisation.create!(name: "#{Faker::Company.name} #{n}") }
+  School.all.each do |school|
+    (1..3).each do |n|
+      school.organisations.create!(name: "#{Faker::Company.name} #{n}")
+    end
+  end
 end

@@ -162,9 +162,7 @@ Rails.application.routes.draw do
   end
 
   resources :organisations, only: %i[show index] do
-    member do
-      get 'cohorts/:cohort_id/stats', action: 'cohort_stats', as: 'cohort_stats'
-    end
+    resources :cohorts, only: %i[show]
   end
 
   resources :communities, only: %i[show] do

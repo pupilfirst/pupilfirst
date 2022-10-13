@@ -426,8 +426,10 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
 
   create_table "organisations", force: :cascade do |t|
     t.string "name"
+    t.bigint "school_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["school_id"], name: "index_organisations_on_school_id"
   end
 
   create_table "post_likes", force: :cascade do |t|
@@ -876,6 +878,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
   add_foreign_key "markdown_attachments", "users"
   add_foreign_key "organisation_admins", "organisations"
   add_foreign_key "organisation_admins", "users"
+  add_foreign_key "organisations", "schools"
   add_foreign_key "posts", "posts", column: "reply_to_post_id"
   add_foreign_key "posts", "topics"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"

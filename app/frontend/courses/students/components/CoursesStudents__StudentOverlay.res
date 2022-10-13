@@ -548,7 +548,7 @@ let make = (~studentId, ~userId) => {
                 <Icon className="if i-times-regular text-xl lg:text-2xl" />
               </button>
               <div
-                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
                 {switch student->StudentInfo.user->UserDetails.avatarUrl {
                 | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
                 | None =>

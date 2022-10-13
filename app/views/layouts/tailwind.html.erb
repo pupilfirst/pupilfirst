@@ -21,7 +21,6 @@
     <meta name="theme-color" content="#4D1E9A" />
     <%= tag :meta, name: :psj, action: action_name, controller: controller_path %>
     <!-- Load styles -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha256-M6KFoDq9eUpmogkDgw6+3R3ZgUPSuFXnQyr8tskSfQs=" crossorigin="anonymous">
     <!-- Prep for JS -->
     <%= javascript_tag(nonce: true) do %>
@@ -63,7 +62,7 @@
   <body data-host="<%= current_host %>">
         <section class="min-h-full flex flex-col items-stretch">
           <%= yield :nav %>
-          <main class="flex-grow bg-gray-50">
+          <main class="grow bg-gray-50">
             <% if content_for?(:wrapper) %>
               <%= yield :wrapper %>
             <% else %>

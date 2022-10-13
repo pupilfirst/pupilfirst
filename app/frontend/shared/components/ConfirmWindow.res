@@ -27,7 +27,7 @@ let make = (
       ariaLabelledby="modal-headline">
       <div className="sm:flex sm:items-start">
         <div
-          className={"mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10 " ++
+          className={"mx-auto shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10 " ++
           alertBgClass}>
           <svg
             className={"h-6 w-6 " ++ alertTextClass}

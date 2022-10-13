@@ -6,10 +6,10 @@ open CoursesReview__Types
 let str = React.string
 
 let cardClasses = (submission, selected) =>
-  "inline-block bg-white relative rounded-lg submission-info__tab flex-shrink-0 rounded-lg transition " ++
+  "inline-block bg-white relative rounded-lg submission-info__tab shrink-0 rounded-lg transition " ++
   (selected
     ? "border border-primary-400 "
-    : "bg-opacity-50 border border-gray-300 hover:bg-opacity-100 ") ++
+    : "bg-white/50 border border-gray-300 hover:bg-white ") ++
   switch (
     SubmissionMeta.archivedAt(submission),
     SubmissionMeta.passedAt(submission),

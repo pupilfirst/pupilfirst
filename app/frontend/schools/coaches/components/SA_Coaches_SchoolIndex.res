@@ -78,7 +78,7 @@ let make = (~coaches, ~authenticityToken) => {
                     </div>
                   </div>
                   <span
-                    className="flex items-center flex-shrink-0 ml-2 py-4 px-4 text-gray-600 hover:text-primary-500 text-sm">
+                    className="flex items-center shrink-0 ml-2 py-4 px-4 text-gray-600 hover:text-primary-500 text-sm">
                     <i className="fas fa-edit text-normal" />
                     <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>

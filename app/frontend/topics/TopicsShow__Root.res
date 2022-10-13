@@ -379,7 +379,7 @@ let make = (
                     type_="text"
                   />
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
-                    <div className="flex flex-col items-left flex-shrink-0">
+                    <div className="flex flex-col items-left shrink-0">
                       <span className="inline-block text-gray-600 text-tiny font-semibold mr-2">
                         {t("topic_category_label") |> str}
                       </span>
@@ -416,7 +416,7 @@ let make = (
                     {moderator || isTopicCreator(firstPost, currentUserId)
                       ? <button
                           onClick={_ => send(ShowTopicEditor(true))}
-                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
+                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ml-3">
                           <i className="far fa-edit" />
                           <span className="hidden md:inline-block ml-1">
                             {t("edit_topic_button") |> str}
@@ -434,7 +434,7 @@ let make = (
                                 isLocked
                                   ? unlockTopic(topicId, send)
                                   : lockTopic(topicId, currentUserId, send)}
-                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
+                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ml-2">
                               <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
                               <span className="hidden md:inline-block ml-1">
                                 {(
@@ -518,7 +518,7 @@ let make = (
         | Some(_lockedAt) =>
           <div
             className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
-            <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
+            <div className="w-6 h-6 text-yellow-500 shrink-0">
               <i className="fa fa-lock" />
             </div>
             <span className="ml-2"> {t("locked_topic_notice")->React.string} </span>

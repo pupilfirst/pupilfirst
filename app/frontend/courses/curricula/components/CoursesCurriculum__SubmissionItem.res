@@ -90,7 +90,7 @@ let longTextWarning = value => {
           <span> {tr("warning_length_limit") |> str} </span>
         </div>
         <div
-          className={"flex-shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded " ++
+          className={"shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded " ++
           colors}>
           {currentLength |> string_of_int |> str} {" / 5000" |> str}
         </div>

@@ -1828,8 +1828,8 @@ en:
       signed_out_notified: You will now be signed out, and you will be notified over email once deletion is complete.
     VerifyCertificate__Root:
       cancel: Cancel and return
-      description: This certificate was issued to <strong class="whitespace-no-wrap">%{name}</strong> on <strong class="whitespace-no-wrap">%{issue_date}</strong> for the course <strong>%{course_name}</strong>.
-      heading: Congratulations <strong class="whitespace-no-wrap">%{name}</strong>!<br/>You've earned it.
+      description: This certificate was issued to <strong class="whitespace-nowrap">%{name}</strong> on <strong class="whitespace-nowrap">%{issue_date}</strong> for the course <strong>%{course_name}</strong>.
+      heading: Congratulations <strong class="whitespace-nowrap">%{name}</strong>!<br/>You've earned it.
       originally_issued_to: This student's name was updated after the certificate was issued. This certificate was originally issued to <strong>%{name}</strong>.
       print_or_save: Print, or save as PDF
       serial_number: Serial No. %{serial}

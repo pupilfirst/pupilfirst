@@ -1,8 +1,12 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  mode: "jit",
-  purge: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx"],
+  content: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx"],
+  safelist: [
+    {
+      pattern: /bg-(red|yellow|orange|green|blue|primary|focusColor|gray)-(50|100|200|300|400|500|600|700|800|900)/,
+    }
+  ],
   theme: {
     colors: {
       transparent: "transparent",
@@ -56,11 +60,7 @@ module.exports = {
         sans: "var(--font-family-sans)",
       },
       spacing: {
-        7: "1.75rem",
-        9: "2.25rem",
-        11: "2.75rem",
         13: "3.25rem",
-        14: "3.5rem",
         15: "3.75rem",
         17: "4.25rem",
         18: "4.5rem",
@@ -71,21 +71,18 @@ module.exports = {
         25: "6.25rem",
         26: "6.5rem",
         27: "6.75rem",
-        28: "7rem",
         29: "7.25rem",
         30: "7.5rem",
         31: "7.75rem",
         33: "8.25rem",
         34: "8.5rem",
         35: "8.75rem",
-        36: "9rem",
         37: "9.25rem",
         38: "9.5rem",
         39: "9.75rem",
         41: "10.25rem",
         42: "10.5rem",
         43: "10.75rem",
-        44: "11rem",
         45: "11.25rem",
         46: "11.5rem",
         47: "11.75rem",
@@ -117,7 +114,6 @@ module.exports = {
       },
       screens: {
         "2xl": "1824px",
-        // => @media (min-width: 1824px) { ... }
       },
     },
   },

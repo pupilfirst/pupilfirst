@@ -58,7 +58,7 @@ let make = (~attachUrlCB, ~typingCB) => {
         value=state.url
         type_="text"
         placeholder=tr("button_placeholder")
-        className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
+        className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm grow mr-2"
         onChange={updateUrl(send, typingCB)}
       />
       <button

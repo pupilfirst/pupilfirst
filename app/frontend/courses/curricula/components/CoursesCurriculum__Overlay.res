@@ -453,7 +453,7 @@ let renderPendingStudents = (pendingUserIds, users) =>
         <div
           key={user |> User.id}
           title={(user |> User.name) ++ " has not completed this target."}
-          className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
+          className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md shrink-0 mt-2">
           {user |> User.avatar}
         </div>
       })

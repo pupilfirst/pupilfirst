@@ -379,13 +379,13 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   />
                 </div>
                 <div className="mt-5" ariaLabel="public-profile-selector">
-                  <div className="flex items-center flex-shrink-0">
+                  <div className="flex items-center shrink-0">
                     <label
                       className="block tracking-wide text-xs font-semibold mr-3"
                       htmlFor="evaluated">
                       {t("coach_public_q") |> str}
                     </label>
-                    <div id="notification" className="flex flex-shrink-0 overflow-hidden ">
+                    <div id="notification" className="flex shrink-0 overflow-hidden ">
                       <div>
                         <button
                           type_="submit"
@@ -445,13 +445,13 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <div className="flex max-w-2xl w-full justify-between items-center mx-auto">
                     {switch coach {
                     | Some(_coach) =>
-                      <div className="flex items-center flex-shrink-0">
+                      <div className="flex items-center shrink-0">
                         <label
                           className="block tracking-wide  text-xs font-semibold mr-3"
                           htmlFor="evaluated">
                           {t("coach_left_q") |> str}
                         </label>
-                        <div id="exited" className="flex flex-shrink-0 overflow-hidden">
+                        <div id="exited" className="flex shrink-0 overflow-hidden">
                           <div>
                             <button
                               onClick={_event => {

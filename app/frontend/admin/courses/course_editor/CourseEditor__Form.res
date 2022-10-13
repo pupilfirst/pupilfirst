@@ -361,7 +361,7 @@ let publicSignupField = (publicSignup, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
       {t("enable_public_signup_label")->str}
     </label>
-    <div id="public-signup" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+    <div id="public-signup" className="flex toggle-button__group shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
@@ -380,7 +380,7 @@ let publicPreviewField = (publicPreview, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-preview">
       {t("enable_public_preview_label")->str}
     </label>
-    <div id="public-preview" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+    <div id="public-preview" className="flex toggle-button__group shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicPreview)}
         onClick={_ => send(UpdatePublicPreview(true))}>
@@ -399,7 +399,7 @@ let featuredButton = (featured, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
       {t("feature_course_in_homepage_label")->str}
     </label>
-    <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+    <div id="featured" className="flex toggle-button__group shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
         {ts("_yes")->str}
       </button>
@@ -419,7 +419,7 @@ let processingUrlInput = (state, send) => {
       <HelpIcon className="ml-2 mr-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
-      <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+      <div id="processing-url" className="flex toggle-button__group shrink-0 rounded-lg">
         <button
           className={booleanButtonClasses(state.hasProcessingUrl)}
           onClick={_ => send(SetHasProcessingUrl)}>

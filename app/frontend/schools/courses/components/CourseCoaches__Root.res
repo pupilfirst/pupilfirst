@@ -137,7 +137,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                 String.compare(a |> CourseCoach.name, b |> CourseCoach.name)
               )
               |> Array.map(coach =>
-                <div key={coach |> CourseCoach.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
+                <div key={coach |> CourseCoach.id} className="flex w-1/2 shrink-0 mb-5 px-3">
                   <div
                     id={coach |> CourseCoach.name}
                     className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
@@ -146,7 +146,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                         ariaLabel={"View " ++ CourseCoach.name(coach)}
                         onClick={_ => send(UpdateFormVisible(CoachInfoForm(coach)))}
                         className="flex flex-1 py-4 px-4 items-center text-left focus:outline-none focus:bg-gray-50 focus:text-primary-500">
-                        <span className="mr-4 flex-shrink-0">
+                        <span className="mr-4 shrink-0">
                           {switch coach |> CourseCoach.avatarUrl {
                           | Some(avatarUrl) =>
                             <img className="w-10 h-10 rounded-full object-cover" src=avatarUrl />

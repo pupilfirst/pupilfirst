@@ -1824,8 +1824,8 @@ hi:
       signed_out_notified: अब आपको साइन आउट कर दिया जाएगा, और विलोपन पूर्ण होने के बाद आपको ईमेल पर सूचित किया जाएगा।
     VerifyCertificate__Root:
       cancel: रद्द करें और वापस लौटें
-      description: यह प्रमाणपत्र <strong class="whitespace-no-wrap">%{name}</strong> को <strong class="whitespace-no-wrap">%{issue_date}</strong> को पाठ्यक्रम <strong>%{course_name}</strong>के लिए जारी किया गया था।
-      heading: बधाई <strong class="whitespace-no-wrap">%{name}</strong>!<br/>आपने इसे अर्जित किया है।
+      description: This certificate was issued to <strong class="whitespace-nowrap">%{name}</strong> on <strong class="whitespace-nowrap">%{issue_date}</strong> for the course <strong>%{course_name}</strong>.
+      heading: Congratulations <strong class="whitespace-nowrap">%{name}</strong>!<br/>You've earned it.
       originally_issued_to: प्रमाण पत्र जारी होने के बाद इस छात्र का नाम अपडेट किया गया था। यह प्रमाणपत्र मूल रूप से <strong>%{name}</strong>को जारी किया गया था।
       print_or_save: प्रिंट करें, या PDF के रूप में सहेजें
       serial_number: क्रमांक %{serial}

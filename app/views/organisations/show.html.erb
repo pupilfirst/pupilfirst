@@ -3,18 +3,27 @@
     <%= link_to "< Back", organisations_path, class: 'underline' %>
   <% end %>
   <h1 class="text-3xl font-bold mt-4"><%= @organisation.name %></h1>
-  <h2> Total Students <%= @total_users_count %> </h2>
+  <h2> Total Students <%= @counts[:total_students] %> </h2>
+  <h2> Active Students <%= @counts[:active_students] %> </h2>
   <div class="space-y-4 mt-4">
-    <h2 class="text-3xl font-bold mt-4">Cohorts</h2>
-    <% @cohorts.each do |cohort| %>
-      <%= link_to organisation_cohort_path(@organisation, cohort), class: "p-6 flex flex-col bg-white items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400" do %>
+    <h2 class="text-3xl font-bold mt-4">Students enrolled in</h2>
+    <% @courses_with_cohorts.each do |course_with_cohorts| %>
+      <div class="border-2 border-red-500">
+        <h3><%= course_with_cohorts[:course].name %></h3>
         <div>
-          cohort #<%= cohort.id %> | <%= cohort.name %>
+          <%= course_with_cohorts[:total_students] %> students enrolled in <%= course_with_cohorts[:cohorts].count %> active cohorts
         </div>
-        <div>
-          <%= cohort.course.name %>
-        </div>
-      <% end %>
+        <% course_with_cohorts[:cohorts].each do |cohort| %>
+          <%= link_to organisation_cohort_path(@organisation, cohort), class: "p-6 flex flex-col bg-white items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400" do %>
+            <div>
+              cohort #<%= cohort.id %> | <%= cohort.name %>
+            </div>
+            <div>
+              <%= cohort.course.name %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

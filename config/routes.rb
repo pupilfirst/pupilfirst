@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
         else
-         :rails_blob
+          :rails_blob
         end
       route_for(route, blob, only_path: true)
     else
@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
+  get 'users/update_email', controller: 'users', action: 'update_email', as: 'update_email'
+
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'
     mount OverrideCsp.new(Flipper::UI.app(Flipper)), at: '/toggle'
@@ -54,13 +56,38 @@ Rails.application.routes.draw do
 
   resources :notifications, only: %i[show]
 
-  resource :school, only: %i[show update] do
+  resource :school, only: [] do
     get 'customize'
     get 'admins'
     post 'images'
   end
 
   namespace :school, module: 'schools' do
+    [
+      '/',
+      'courses',
+      'courses/new',
+      'courses/:course_id',
+      'courses/:course_id/details',
+      'courses/:course_id/images',
+      'courses/:course_id/actions',
+      'courses/:course_id/cohorts',
+      'courses/:course_id/cohorts/new',
+      'cohorts/:cohort_id/details',
+      'cohorts/:cohort_id/actions',
+      'courses/:course_id/students',
+      'courses/:course_id/students/new',
+      'courses/:course_id/students/import',
+      'students/:student_id/details',
+      'students/:student_id/actions',
+      'courses/:course_id/teams',
+      'courses/:course_id/teams/new',
+      'teams/:team_id/details',
+      'teams/:team_id/actions',
+    ].each do |path|
+      get path, action: 'school_router'
+    end
+
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do
         get '/', action: 'school_index'
@@ -71,18 +98,20 @@ Rails.application.routes.draw do
       resource :content_block, only: %i[create]
     end
 
-    resources :courses, only: %i[index show new] do
+    resources :cohorts, only: [] do
+      member do
+        post 'bulk_import_students'
+      end
+    end
+
+    resources :courses, only: [] do
       member do
         get 'applicants'
-        get 'details'
-        get 'images', action: :details
-        get 'actions', action: :details
         get 'curriculum'
         get 'exports'
         get 'authors'
         get 'certificates'
         post 'certificates', action: 'create_certificate'
-        post 'bulk_import_students'
         get 'evaluation_criteria'
         post 'attach_images'
       end
@@ -112,9 +141,7 @@ Rails.application.routes.draw do
         end
       end
 
-      post 'mark_teams_active'
       get 'students'
-      get 'inactive_students'
       post 'delete_coach_enrollment'
       post 'update_coach_enrollments'
     end

@@ -157,7 +157,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
   let addCoach = json => {
     let id = json |> {
       open Json.Decode
-      field("id", int)
+      field("id", string)
     }
     let imageUrl = json |> {
       open Json.Decode
@@ -204,7 +204,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
   }
   let sendCoach = formData => {
     let endPoint = switch coach {
-    | Some(coach) => "/school/coaches/" ++ (coach |> Coach.id |> string_of_int)
+    | Some(coach) => "/school/coaches/" ++ (coach |> Coach.id)
     | None => "/school/coaches/"
     }
     let httpMethod = switch coach {

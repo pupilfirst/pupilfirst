@@ -44,7 +44,7 @@ let makeFromJS = data =>
 
 let certificate = (t, certificates) =>
   ArrayUtils.unsafeFind(
-    c => StudentsEditor__Certificate.id(c) == t.certificateId,
+    c => StudentActions__Certificate.id(c) == t.certificateId,
     " Unable to find certificate with ID: " ++ t.certificateId,
     certificates,
   )

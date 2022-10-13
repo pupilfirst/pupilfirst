@@ -1,5 +1,5 @@
 module Course = CoursesCurriculum__Course
-module Team = CoursesCurriculum__Team
+module Student = CoursesCurriculum__Student
 module Target = CoursesCurriculum__Target
 module Level = CoursesCurriculum__Level
 module TargetGroup = CoursesCurriculum__TargetGroup
@@ -66,21 +66,21 @@ let allTargetsComplete = (targetCache, targetIds) =>
     )
   })
 
-let compute = (preview, team, course, levels, targetGroups, targets, submissions) =>
+let compute = (preview, student, course, levels, targetGroups, targets, submissions) =>
   /* Eliminate the two course ended and student access ended conditions. */
   if preview {
     makePending(targets)
-  } else if course |> Course.endsAt |> isPast {
+  } else if course |> Course.ended {
     lockTargets(targets, CourseLocked)
-  } else if team |> Team.accessEndsAt |> isPast {
+  } else if student |> Student.endsAt |> isPast {
     lockTargets(targets, AccessLocked)
   } else {
     /* Cache level number of the student. */
     let studentLevelNumber =
       levels
       |> ArrayUtils.unsafeFind(
-        l => l |> Level.id == Team.levelId(team),
-        "Could not student's level with ID " ++ Team.levelId(team),
+        l => l |> Level.id == Student.levelId(student),
+        "Could not student's level with ID " ++ Student.levelId(student),
       )
       |> Level.number
 
@@ -102,7 +102,9 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
         levels
         |> ArrayUtils.unsafeFind(
           l => l |> Level.id == (targetGroup |> TargetGroup.levelId),
-          "Could not find level with ID " ++ (Team.levelId(team) ++ " to create target cache"),
+          "Could not find level with ID " ++
+          (Student.levelId(student) ++
+          " to create target cache"),
         )
         |> Level.number
 

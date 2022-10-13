@@ -154,8 +154,11 @@ feature 'Public preview of course curriculum', js: true do
   end
 
   context 'when the user is a student in another course' do
-    let(:student) { create :founder }
-    let(:enrolled_course) { student.course }
+    let(:enrolled_course) { create :course, :with_cohort }
+    let(:l_1) { create :level, :one, course: enrolled_course }
+    let(:student) do
+      create :founder, level: l_1, cohort: enrolled_course.cohorts.first
+    end
 
     scenario 'student in one course accesses preview of another course' do
       sign_in_user student.user,

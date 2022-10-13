@@ -1,8 +1,9 @@
 class School < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :courses, dependent: :restrict_with_error
-  has_many :startups, through: :courses
+  has_many :cohorts, through: :courses
   has_many :founders, through: :users
+  has_many :teams, through: :courses
   has_many :faculty, through: :users
   has_many :school_admins, dependent: :destroy
   has_many :domains, dependent: :destroy
@@ -31,9 +32,11 @@ class School < ApplicationRecord
 
     case variant
     when :mid
-      logo.variant(auto_orient: true, gravity: 'center', resize: '200x200>').processed
+      logo.variant(auto_orient: true, gravity: 'center', resize: '200x200>')
+        .processed
     when :thumb
-      logo.variant(auto_orient: true, gravity: 'center', resize: '100x100>').processed
+      logo.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
+        .processed
     else
       logo
     end
@@ -42,7 +45,8 @@ class School < ApplicationRecord
   def icon_variant(variant)
     case variant
     when :thumb
-      icon.variant(auto_orient: true, gravity: 'center', resize: '100x100>').processed
+      icon.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
+        .processed
     else
       icon
     end

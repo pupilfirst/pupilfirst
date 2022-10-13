@@ -98,7 +98,7 @@ module Layouts
       {
         id: current_user.id,
         name: current_user.name,
-        title: current_user.title,
+        full_title: current_user.full_title,
         avatar_url: current_user.avatar_url(variant: :thumb)
       }
     end

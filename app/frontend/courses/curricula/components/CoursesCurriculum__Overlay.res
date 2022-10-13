@@ -342,7 +342,7 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
     </button>
   })

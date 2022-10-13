@@ -35,7 +35,7 @@ module Courses
     end
 
     def coaches
-      team_coaches = current_student.startup&.faculty
+      team_coaches = current_student.faculty
 
       return [] if team_coaches.empty?
 

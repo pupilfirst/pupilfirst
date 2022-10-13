@@ -5,31 +5,6 @@ module Schools
 
     layout 'school'
 
-    # GET /school/courses
-    def index
-      authorize(current_school, policy_class: Schools::CoursePolicy)
-    end
-
-    # GET /school/course/new
-    def new
-      index
-      render 'index'
-    end
-
-    # GET /school/course/id/
-    def show
-      @course =
-        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      redirect_to details_school_course_path
-    end
-
-    # GET /school/course/id/details
-    def details
-      @course =
-        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      render 'index'
-    end
-
     # POST /courses/id/attach_images
     def attach_images
       course =
@@ -71,7 +46,7 @@ module Schools
           policy_class: Schools::CoursePolicy
         )
 
-      ::Courses::UnassignReviewerService.new(course).unassign(coach)
+      ::Cohorts::UnassignReviewerService.new(course).unassign(coach)
 
       render json: { coach_id: coach.id.to_s, error: nil }
     end
@@ -85,8 +60,12 @@ module Schools
       coaches =
         current_school.faculty.where(id: params[:coach_ids]).includes(:school)
 
+      cohorts = course.cohorts.where(id: params[:cohort_ids])
+
       coaches.each do |coach|
-        ::Courses::AssignReviewerService.new(course, notify: true).assign(coach)
+        ::Cohorts::ManageReviewerService
+          .new(course, cohorts, notify: true)
+          .assign(coach)
       end
 
       course_coaches =
@@ -116,46 +95,6 @@ module Schools
     def applicants
       @course =
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-    end
-
-    def inactive_students
-      @course =
-        authorize(
-          scope.find(params[:course_id]),
-          policy_class: Schools::CoursePolicy
-        )
-
-      inactive_teams =
-        if params[:search].present?
-          ::Courses::InactiveTeamsSearchService
-            .new(@course)
-            .find_teams(params[:search].to_s)
-        else
-          Startup.joins(:course).inactive.where(courses: { id: @course }).to_a
-        end
-
-      @teams =
-        Kaminari.paginate_array(inactive_teams).page(params[:page]).per(20)
-    end
-
-    # POST /school/courses/:course_id/mark_teams_active?team_ids[]=
-    def mark_teams_active
-      course =
-        authorize(
-          scope.find(params[:course_id]),
-          policy_class: Schools::CoursePolicy
-        )
-
-      Startup.transaction do
-        course
-          .startups
-          .where(id: params[:team_ids])
-          .each do |startup|
-            startup.update!(access_ends_at: nil, dropped_out_at: nil)
-          end
-
-        render json: { message: t('.teams_active'), error: nil }
-      end
     end
 
     # GET /school/courses/:id/exports
@@ -195,25 +134,6 @@ module Schools
                 scope.first
               )
           }
-        else
-          { error: form.errors.full_messages.join(', ') }
-        end
-
-      render json: camelize_keys(stringify_ids(props))
-    end
-
-    # POST /school/courses/:id/bulk_import_students
-    def bulk_import_students
-      @course =
-        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-
-      form = ::Courses::BulkImportStudentsForm.new(@course)
-      form.current_user = current_user
-
-      props =
-        if form.validate(params)
-          form.save
-          { success: true }
         else
           { error: form.errors.full_messages.join(', ') }
         end

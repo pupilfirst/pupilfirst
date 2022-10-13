@@ -5,11 +5,6 @@ class SchoolsController < ApplicationController
   # Enforce authorization with Pundit in all school administration routes.
   after_action :verify_authorized
 
-  # GET /school
-  def show
-    authorize current_school
-  end
-
   # GET /school/customize
   def customize
     authorize current_school
@@ -24,17 +19,24 @@ class SchoolsController < ApplicationController
     if form.validate(params)
       form.save
 
-      image_details = Schools::CustomizePresenter.new(view_context).school_images
+      image_details =
+        Schools::CustomizePresenter.new(view_context).school_images
       image_details[:error] = nil
 
       render json: image_details
     else
-      render json: { error: form.errors.full_messages.join(", ") }
+      render json: { error: form.errors.full_messages.join(', ') }
     end
   end
 
   # GET /school/admins
   def admins
     authorize current_school
+  end
+
+  # GET /school/
+  def school_router
+    authorize current_school
+    render html: '', layout: 'school_router'
   end
 end

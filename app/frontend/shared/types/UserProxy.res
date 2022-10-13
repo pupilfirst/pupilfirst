@@ -3,14 +3,14 @@ type t = {
   userId: string,
   name: string,
   avatarUrl: option<string>,
-  title: string,
+  fullTitle: string,
 }
 
 let id = t => t.id
 let userId = t => t.userId
 let name = t => t.name
 let avatarUrl = t => t.avatarUrl
-let title = t => t.title
+let fullTitle = t => t.fullTitle
 
 let decode = json => {
   open Json.Decode
@@ -19,7 +19,7 @@ let decode = json => {
     userId: json |> field("userId", string),
     name: json |> field("name", string),
     avatarUrl: json |> optional(field("avatarUrl", string)),
-    title: json |> field("title", string),
+    fullTitle: json |> field("fullTitle", string),
   }
 }
 
@@ -29,12 +29,12 @@ let findById = (id, proxies) =>
     "Unable to find a UserProxy with ID " ++ id,
   )
 
-let make = (~id, ~userId, ~name, ~avatarUrl, ~title) => {
+let make = (~id, ~userId, ~name, ~avatarUrl, ~fullTitle) => {
   id: id,
   userId: userId,
   name: name,
   avatarUrl: avatarUrl,
-  title: title,
+  fullTitle: fullTitle,
 }
 
 let makeFromJs = jsObject =>
@@ -43,15 +43,24 @@ let makeFromJs = jsObject =>
     ~userId=jsObject["userId"],
     ~name=jsObject["name"],
     ~avatarUrl=jsObject["avatarUrl"],
-    ~title=jsObject["title"],
+    ~fullTitle=jsObject["fullTitle"],
   )
 
-module Fragments = %graphql(`
+module Fragment = %graphql(`
   fragment UserProxyFragment on UserProxy {
     id
     name
     userId
-    title
+    fullTitle
     avatarUrl
   }
 `)
+
+let makeFromFragment = (user: Fragment.t) =>
+  make(
+    ~id=user.id,
+    ~userId=user.userId,
+    ~name=user.name,
+    ~avatarUrl=user.avatarUrl,
+    ~fullTitle=user.fullTitle,
+  )

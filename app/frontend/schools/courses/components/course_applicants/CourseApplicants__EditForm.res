@@ -12,7 +12,6 @@ type state = {
   hasNameError: bool,
   hasEmailError: bool,
   tagsToApply: array<string>,
-  accessEndsAt: option<Js.Date.t>,
   saving: bool,
   notifyStudent: bool,
 }
@@ -22,14 +21,13 @@ type action =
   | UpdateAffiliation(string)
   | AddTag(string)
   | RemoveTag(string)
-  | UpdateAccessEndsAt(option<Js.Date.t>)
   | StartSaving
   | FailSaving
   | ToggleNotifyStudent
 
 module CreateStudentFromApplicant = %graphql(`
-  mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $accessEndsAt: ISO8601DateTime, $title: String, $affiliation: String, $tags: [String!]!) {
-    createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, accessEndsAt: $accessEndsAt, title: $title, affiliation: $affiliation, tags: $tags) {
+  mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $title: String, $affiliation: String, $tags: [String!]!) {
+    createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, title: $title, affiliation: $affiliation, tags: $tags) {
       success
     }
   }
@@ -40,7 +38,6 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
 
   let variables = CreateStudentFromApplicant.makeVariables(
     ~applicantId=Applicant.id(applicant),
-    ~accessEndsAt=?state.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
     ~title=state.title,
     ~affiliation=state.affiliation,
     ~notifyStudent=state.notifyStudent,
@@ -69,7 +66,6 @@ let initialState = applicant => {
   hasNameError: false,
   hasEmailError: false,
   tagsToApply: Applicant.tags(applicant),
-  accessEndsAt: None,
   notifyStudent: true,
   saving: false,
 }
@@ -86,7 +82,6 @@ let reducer = (state, action) =>
       ...state,
       tagsToApply: Js.Array.filter(t => t != tag, state.tagsToApply),
     }
-  | UpdateAccessEndsAt(accessEndsAt) => {...state, accessEndsAt: accessEndsAt}
   | StartSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | ToggleNotifyStudent => {...state, notifyStudent: !state.notifyStudent}
@@ -138,53 +133,33 @@ let optionalText = () => {
 
 let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicantCB) => {
   <div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-        htmlFor="title">
-        {t("title.label")->str}
-      </label>
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="title"> {t("title.label")->str} </label>
       {optionalText()}
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-1 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="title"
         type_="text"
         placeholder={t("title.placeholder")}
       />
     </div>
-    <div className="mt-5">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-        htmlFor="affiliation">
+    <div className="pt-6">
+      <label className="block text-sm font-medium" htmlFor="affiliation">
         {t("affiliation.label")->str}
       </label>
       {optionalText()}
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-1 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="affiliation"
         type_="text"
         placeholder={t("affiliation.placeholder")}
       />
     </div>
-    <div className="mt-5">
-      <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-        {t("access_ends_at.label")->str}
-      </label>
-      {optionalText()}
-      <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
-        {t("access_ends_at.help")->str}
-      </HelpIcon>
-      <DatePicker
-        onChange={date => send(UpdateAccessEndsAt(date))}
-        selected=?state.accessEndsAt
-        id="access-ends-at-input"
-      />
-    </div>
-    <div className="mt-5">
+    <div className="pt-6">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="tags">
         {t("tags.label")->str}
       </label>
@@ -197,7 +172,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       removeTagCB={tag => send(RemoveTag(tag))}
       allowNewTags=true
     />
-    <div className="mt-4">
+    <div className="pt-6">
       <input
         onChange={_event => send(ToggleNotifyStudent)}
         checked=state.notifyStudent

@@ -8,6 +8,7 @@ module Types
     field :quiz_scores, [String], null: false
     field :average_grades, [Types::EvaluationCriterionAverageType], null: false
     field :completed_level_ids, [ID], null: false
-    field :team, Types::TeamType, null: false
+    field :team, Types::TeamType, null: true
+    field :student, Types::StudentType, null: false
   end
 end

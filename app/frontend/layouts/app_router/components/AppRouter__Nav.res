@@ -6,12 +6,18 @@ open AppRouter__Types
 
 let str = React.string
 
+let showLink = (id, selectedPage, page, classes, title, contents) => {
+  Page.useSPA(selectedPage, Page.SelectedCourse(id, page))
+    ? <Link key=title href={Page.coursePath(id, page)} className=classes title> {contents} </Link>
+    : <a key=title href={Page.coursePath(id, page)} className=classes title> {contents} </a>
+}
+
 let renderLinks = (courses, selectedPage) => {
-  switch Page.courseId(selectedPage) {
-  | Some(currentCourseId) =>
+  switch selectedPage {
+  | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
-      course => Course.id(course) == currentCourseId,
-      "Could not find currentCourse with ID " ++ currentCourseId,
+      course => Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
       courses,
     )
 
@@ -26,40 +32,49 @@ let renderLinks = (courses, selectedPage) => {
         }}
       </div>
       <div className="mt-4">
-        <AppRouter__CourseSelector courses selectedPage currentCourseId />
+        <AppRouter__CourseSelector courses coursePage currentCourse selectedPage />
       </div>
-      <div className="mt-4 space-y-3"> {Js.Array.map(link => {
+      <div className="mt-4 space-y-3">
+        {Page.activeLinks(currentCourse)
+        ->Js.Array2.map(link => {
           let (title, icon) = switch link {
-          | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-light")
-          | Student__Report(_) => (t("report"), "i-graph-up-light")
-          | Student__Students(_) => (t("students"), "i-users-light")
-          | Student__Review(_) => (t("review"), "i-clipboard-check-light")
-          | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-light")
-          | Student__SubmissionShow(_) => ("", "")
+          | Page.Curriculum => (t("curriculum"), "i-journal-text-light")
+          | Report => (t("report"), "i-graph-up-light")
+          | Students => (t("students"), "i-users-light")
+          | Review => (t("review"), "i-clipboard-check-light")
+          | Leaderboard => (t("leaderboard"), "i-tachometer-alt-light")
           }
-          <a
-            key=title
-            href={Page.path(link)}
-            className={"flex relative items-center p-3 rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 " ++ (
-              link == selectedPage
-                ? "text-primary-500 bg-gray-50 before:block before:bg-primary-500 before:w-1 before:absolute before:left-0 before:top-1/2 before:h-3/4 before:rounded-r-md before:transform before:-translate-y-1/2"
-                : "hover:text-primary-500 hover:bg-gray-50"
-            )}>
-            <Icon className={`if ${icon} text-xl if-fw`} />
-            <div className="pl-3"> {str(title)} </div>
-          </a>
-        }, Page.activeLinks(currentCourse))->React.array} </div>
+
+          let classes =
+            "app-router-navbar__primary-nav-link py-3 px-2 mb-1 " ++ (
+              link == coursePage ? "app-router-navbar__primary-nav-link--active" : ""
+            )
+
+          showLink(
+            courseId,
+            selectedPage,
+            link,
+            classes,
+            title,
+            [
+              <Icon key="icon" className={`if ${icon} text-xl if-fw`} />,
+              <div key="title" className="pl-3"> {str(title)} </div>,
+            ]->React.array,
+          )
+        })
+        ->React.array}
+      </div>
     </div>
-  | None => React.null
+  | _ => React.null
   }
 }
 
 let courseSelector = (courses, selectedPage) => {
-  switch Page.courseId(selectedPage) {
-  | Some(currentCourseId) =>
+  switch selectedPage {
+  | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
-      course => Course.id(course) == currentCourseId,
-      "Could not find currentCourse with ID " ++ currentCourseId,
+      course => Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
       courses,
     )
 
@@ -74,88 +89,56 @@ let courseSelector = (courses, selectedPage) => {
         }}
       </div>
       <div className="-mt-11 pb-2 md:pb-0 md:mt-4 px-2">
-        <AppRouter__CourseSelector courses selectedPage currentCourseId />
+        <AppRouter__CourseSelector courses coursePage currentCourse selectedPage />
       </div>
     </div>
-  | None => React.null
+  | _ => React.null
   }
 }
 
 let renderLinksMobile = (courses, selectedPage) => {
-  switch Page.courseId(selectedPage) {
-  | Some(currentCourseId) =>
+  switch selectedPage {
+  | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
-      course => Course.id(course) == currentCourseId,
-      "Could not find currentCourse with ID " ++ currentCourseId,
+      course => Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
       courses,
     )
 
-    <div className="flex"> {Js.Array.map(link => {
+    <div className="flex">
+      {Page.activeLinks(currentCourse)
+      ->Js.Array2.map(link => {
         let (title, icon) = switch link {
-        | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-regular")
-        | Student__Report(_) => (t("report"), "i-graph-up-regular")
-        | Student__Students(_) => (t("students"), "i-users-regular")
-        | Student__Review(_) => (t("review"), "i-clipboard-check-regular")
-        | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-regular")
-        | Student__SubmissionShow(_) => ("", "")
+        | Page.Curriculum => (t("curriculum"), "i-journal-text-regular")
+        | Report => (t("report"), "i-graph-up-regular")
+        | Students => (t("students"), "i-users-regular")
+        | Review => (t("review"), "i-clipboard-check-regular")
+        | Leaderboard => (t("leaderboard"), "i-tachometer-alt-regular")
         }
-        <a
-          key=title
-          href={Page.path(link)}
-          className={"flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold " ++ (
-            link == selectedPage
+
+        let classes = {
+          "flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold " ++ (
+            coursePage == link
               ? "text-primary-500 bg-gray-50"
               : "hover:text-primary-500 hover:bg-gray-50"
-          )}>
-          <Icon className={`if ${icon} text-lg if-fw`} /> <div className="pt-1"> {str(title)} </div>
-        </a>
-      }, Page.activeLinks(currentCourse))->React.array} </div>
-  | None => React.null
-  }
-}
+          )
+        }
 
-let showLink = (icon, href) => {
-  <div key=href className="whitespace-nowrap">
-    <a
-      rel="nofollow"
-      className="flex justify-center items-center text-xs text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
-      href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {t("sign_out")->str} </p>
-    </a>
-  </div>
-}
-
-let links = () => {
-  [showLink("power-off", "/users/sign_out")]
-}
-
-let showUser = user => {
-  switch user {
-  | Some(user) =>
-    <div className="px-4 pt-6">
-      <div className="flex w-full items-center p-2 bg-gray-50 rounded-md">
-        <div className="flex items-center justify-center rounded-full text-center shrink-0">
-          {User.avatarUrl(user)->Belt.Option.mapWithDefault(
-            <Avatar
-              name={User.name(user)}
-              className="flex w-10 h-10 border border-gray-300 object-contain object-center rounded-full text-tiny shrink-0"
-            />,
-            src =>
-              <img
-                className="flex w-10 h-10 border border-gray-300 object-cover object-center rounded-full text-tiny"
-                src
-                alt={User.name(user)}
-              />,
-          )}
-        </div>
-        <div className="pl-2 flex justify-between w-full items-center">
-          <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
-          <div className="text-xs text-gray-600 flex space-x-2"> {links()->React.array} </div>
-        </div>
-      </div>
+        showLink(
+          courseId,
+          selectedPage,
+          link,
+          classes,
+          title,
+          [
+            <Icon key="icon" className={`if ${icon} text-lg if-fw`} />,
+            <div key="title" className="pt-1"> {str(title)} </div>,
+          ]->React.array,
+        )
+      })
+      ->React.array}
     </div>
-
-  | None => React.null
+  | _ => React.null
   }
 }
 
@@ -194,15 +177,16 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="md:hidden"> {courseSelector(courses, selectedPage)} </div>
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
-        <div className="flex flex-col h-0 flex-1 border-r bg-white">
+        <div className="flex h-full flex-col flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
-            {showUser(currentUser)}
           </div>
         </div>
       </div>
     </div>,
-    <div className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t" key="mobile-links">
+    <div
+      className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t z-50"
+      key="mobile-links">
       {renderLinksMobile(courses, selectedPage)}
     </div>,
   ]->React.array

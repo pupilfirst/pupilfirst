@@ -42,7 +42,7 @@ module DeleteContentBlockMutation = %graphql(`
     }
   `)
 
-module ContentBlockFragment = ContentBlock.Fragments
+module ContentBlockFragment = ContentBlock.Fragment
 
 module MoveContentBlockMutation = %graphql(`
     mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {

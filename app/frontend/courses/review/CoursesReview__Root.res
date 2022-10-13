@@ -124,7 +124,7 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
-module UserProxyFragment = UserProxy.Fragments
+module UserProxyFragment = UserProxy.Fragment
 
 module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $personalCoachId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $coachIds: [ID!] $after: String) {

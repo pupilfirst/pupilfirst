@@ -14,7 +14,7 @@ let avatar = (avatarUrl, name) => {
 
 let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
   <div key className="w-full md:w-1/2 shadow rounded-lg p-4 flex items-center mt-2 bg-white">
-    {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
+    {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {title |> str} </div>

@@ -1,9 +1,3 @@
-<%
-  sign_in_link = user_token_url(token: @user.original_login_token)
-%>
-
-<% content_for(:title_button_link, sign_in_link) %>
-
 <% content_for :salutation do %>
   <%= t("shared.salutation_name", name: @coach.name) %>
 <% end %>
@@ -12,12 +6,4 @@
   <p>
     <%= t("mailers.course_enrollement.added_coach_html", course_name: @course.name, school_name: @school.name) %>
   </p>
-
-  <p>
-    <%= t("mailers.course_enrollement.can_sign_html", link_to: link_to(t("mailers.course_enrollement.link_to", school_name: @school.name), sign_in_link)) %>
-  </p>
-
-  <%= render 'mailers/link_fallback', url: sign_in_link %>
-
-  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: sign_in_with_email_url) %></p>
 <% end %>

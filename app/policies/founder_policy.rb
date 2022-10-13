@@ -4,6 +4,6 @@ class FounderPolicy < ApplicationPolicy
 
     # Coaches who review submissions from this student can view their profile.
     faculty = user.faculty
-    faculty.present? && faculty.courses.exists?(id: record.course)
+    faculty.present? && faculty.cohorts.exists?(id: record.cohort)
   end
 end

@@ -3,11 +3,12 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
 
+module UserProxyFragment = UserProxy.Fragment
 module AssignReviewerMutation = %graphql(`
     mutation AssignReviewerMutation($submissionId: ID!) {
       assignReviewer(submissionId: $submissionId){
         reviewer{
-          id, userId, name, title, avatarUrl
+          ...UserProxyFragment
         }
       }
     }
@@ -17,7 +18,7 @@ module ReassignReviewerMutation = %graphql(`
     mutation ReassignReviewerMutation($submissionId: ID!) {
       reassignReviewer(submissionId: $submissionId){
         reviewer{
-          id, userId, name, title, avatarUrl
+          ...UserProxyFragment
         }
       }
     }

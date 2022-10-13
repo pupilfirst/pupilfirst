@@ -16,6 +16,12 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2022.3
+
+This version adds support for running multiple cohorts in a course. This version also introduces new pages in admin for managing cohorts and teams along with redesign of a few other pages.
+
+If you are using the GraphQL API, you will need to ensure that `createStudents` mutation is called with the `cohort_id` argument instead of `course_id`.
+
 ### 2022.2
 
 This version adds a new start script (`bin/start`) for the LMS that responds to new environment variables `PROCESS_TYPE`, `WORKER_MIGRATE` and `WORKER_SETUP_CRON`. These variables must be set when deploying to DigitalOcean App Platform. When deploying to Heroku, the recommended approach has changed to pushing official Docker images to Heroku's Container Registry, and then releasing these images to dynos. This replaces the older time-consuming, failure-prone build process on Heroku. On Heroku, you'll also need to set a new environment variable - `TINI_SUBREAPER`. Please go through updated deployment documentation for both these platforms for more information.

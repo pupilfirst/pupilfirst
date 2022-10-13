@@ -432,7 +432,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             <span className="text-xs mt-0.5"> {str(t("close"))} </span>
           </button>
           <div className="flex space-x-4">
-            <CoursesStudents__TeamCoaches
+            <CoursesStudents__PersonalCoaches
               tooltipPosition=#Bottom
               defaultAvatarSize="8"
               mdAvatarSize="8"
@@ -492,7 +492,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
         </div>
       </div>
       <div className="hidden md:flex shrink-0 space-x-6">
-        <CoursesStudents__TeamCoaches
+        <CoursesStudents__PersonalCoaches
           tooltipPosition=#Bottom
           defaultAvatarSize="8"
           mdAvatarSize="8"
@@ -1395,7 +1395,7 @@ let make = (
                     <div className="flex justify-center ml-2 md:ml-4">
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
-                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                         <Icon className="if i-times-regular" />
                         <span className="ml-2"> {t("remove_assignment")->str} </span>
                       </button>

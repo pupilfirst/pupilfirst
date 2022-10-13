@@ -5,7 +5,9 @@ class RevokeIssuedCertificateMutator < ApplicationQuery
 
   def execute
     Certificate.transaction do
-      Students::RevokeIssuedCertificateService.new(issued_certificate).revoke(revoker: current_user)
+      Students::RevokeIssuedCertificateService
+        .new(issued_certificate)
+        .revoke(revoker: current_user)
     end
   end
 

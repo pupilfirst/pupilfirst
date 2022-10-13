@@ -4,6 +4,7 @@ let decodeProps = json => {
     field("name", string, json),
     field("preferredName", string, json),
     field("about", string, json),
+    field("email", string, json),
     field("locale", string, json),
     field("availableLocales", array(string), json),
     field("avatarUrl", optional(string), json),
@@ -19,6 +20,7 @@ Psj.match("users#edit", () => {
     name,
     preferredName,
     about,
+    email,
     locale,
     availableLocales,
     avatarUrl,
@@ -28,6 +30,7 @@ Psj.match("users#edit", () => {
     hasValidDeleteAccountToken,
   ) =
     DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
+
   switch ReactDOM.querySelector("#react-root") {
   | Some(root) =>
     ReactDOM.render(
@@ -35,6 +38,7 @@ Psj.match("users#edit", () => {
         name
         preferredName
         about
+        email
         locale
         availableLocales
         avatarUrl

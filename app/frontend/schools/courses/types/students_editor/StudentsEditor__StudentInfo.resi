@@ -21,4 +21,9 @@ let toJsObject: (
   "affiliation": option<string>,
 }
 
-let make: (~name: string, ~email: string, ~title: string, ~affiliation: string) => t
+let make: (
+  ~name: string,
+  ~email: string,
+  ~title: string,
+  ~affiliation: string
+) => t

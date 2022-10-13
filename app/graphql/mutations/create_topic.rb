@@ -76,8 +76,14 @@ module Mutations
     def create_subscribers(topic)
       users =
         User
-          .joins([faculty: :startups])
-          .where(startups: { id: current_user.startups })
+          .joins(faculty: :faculty_founder_enrollments)
+          .where(
+            faculty: {
+              faculty_founder_enrollments: {
+                founder_id: current_user.founders
+              }
+            }
+          )
           .distinct + [current_user]
 
       users.each { |user| TopicSubscription.create!(user: user, topic: topic) }

@@ -5,7 +5,7 @@ module TimelineEvents
     end
 
     def was_last_target?
-      return false unless startup.level == last_level
+      return false unless student.level == last_level
 
       return false if final_milestone_targets.empty?
 
@@ -29,15 +29,11 @@ module TimelineEvents
     end
 
     def students
-      @students ||= startup.founders
-    end
-
-    def startup
-      @startup ||= student.startup
+      @students ||= student.team.present? ? student.team.founders : [student]
     end
 
     def course
-      startup.course
+      student.course
     end
 
     def last_level
@@ -45,7 +41,17 @@ module TimelineEvents
     end
 
     def final_milestone_targets
-      Target.live.joins(target_group: :level).where(target_groups: { milestone: true }, levels: { id: last_level.id })
+      Target
+        .live
+        .joins(target_group: :level)
+        .where(
+          target_groups: {
+            milestone: true
+          },
+          levels: {
+            id: last_level.id
+          }
+        )
     end
   end
 end

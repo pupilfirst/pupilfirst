@@ -45,9 +45,9 @@ module Targets
     def reason_to_lock
       @reason_to_lock ||=
         begin
-          if @target.course.ends_at&.past?
+          if @target.course.ended?
             STATUS_COURSE_LOCKED
-          elsif @founder.startup.access_ends_at&.past?
+          elsif @founder.cohort.ended?
             STATUS_ACCESS_LOCKED
           elsif target_level_number > founder_level_number && target_reviewed?
             STATUS_LEVEL_LOCKED

@@ -162,11 +162,11 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
               className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="email"
               type_="email"
-              placeholder=t("email_placeholder")
+              placeholder={t("email_placeholder")}
               disabled={emailInputDisabled(author)}
             />
             <School__InputGroupError
-              message=t("email_message") active={showInvalidEmailError(email, author)}
+              message={t("email_message")} active={showInvalidEmailError(email, author)}
             />
           </div>
           <div className="mt-5">
@@ -181,10 +181,10 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
               className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               type_="text"
-              placeholder=t("name_placeholder")
+              placeholder={t("name_placeholder")}
             />
             <School__InputGroupError
-              message=t("name_message") active={showInvalidNameError(name, author)}
+              message={t("name_message")} active={showInvalidNameError(name, author)}
             />
           </div>
           <div className="w-auto mt-8">

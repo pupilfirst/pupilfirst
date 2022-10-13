@@ -214,10 +214,13 @@ let deleteSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("merge_levels_confirm"), () => {
     send(BeginSaving)
 
-    MergeLevelsQuery.make({
-      deleteLevelId: Level.id(level),
-      mergeIntoLevelId: state.mergeIntoLevelId,
-    })
+    MergeLevelsQuery.make(
+      MergeLevelsQuery.makeVariables(
+        ~deleteLevelId=Level.id(level),
+        ~mergeIntoLevelId=state.mergeIntoLevelId,
+        (),
+      ),
+    )
     |> Js.Promise.then_(result => {
       if result["mergeLevels"]["success"] {
         DomUtils.reload()

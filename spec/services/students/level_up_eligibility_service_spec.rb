@@ -7,23 +7,51 @@ describe Students::LevelUpEligibilityService do
 
   let(:course_1) { create :course }
   let!(:course_2) { create :course }
+
+  let(:cohort_1) { create :cohort, course: course_1 }
+  let(:cohort_2) { create :cohort, course: course_2 }
+
   let(:evaluation_criterion) { create :evaluation_criterion, course: course_1 }
+
   let(:level_1) { create :level, :one, course: course_1 }
-  let!(:level_2) { create :level, :two, unlock_at: 5.days.ago, course: course_1 }
-  let!(:level_2_c2) { create :level, :two, unlock_at: 2.days.from_now, course: course_2 }
-  let(:startup) { create :startup, level: level_1 }
-  let(:student) { startup.founders.first }
-  let(:students) { startup.founders }
-  let!(:milestone_targets) { create :target_group, level: level_1, milestone: true }
-  let!(:team_target) { create :target, :for_team, target_group: milestone_targets }
-  let!(:non_milestone_team_target) { create :target, :for_team, :with_group, level: level_1 }
+  let!(:level_2) do
+    create :level, :two, unlock_at: 5.days.ago, course: course_1
+  end
+
+  let!(:level_2_c2) do
+    create :level, :two, unlock_at: 2.days.from_now, course: course_2
+  end
+
+  let(:team) { create :team, cohort: cohort_1 }
+
+  let!(:student) do
+    create :student, level: level_1, cohort: cohort_1, team: team
+  end
+
+  let!(:student_2) do
+    create :student, level: level_1, cohort: cohort_1, team: team
+  end
+
+  let(:students) { team.founders }
+
+  let!(:milestone_targets) do
+    create :target_group, level: level_1, milestone: true
+  end
+  let!(:team_target) do
+    create :target, :for_team, target_group: milestone_targets
+  end
+  let!(:non_milestone_team_target) do
+    create :target, :for_team, :with_group, level: level_1
+  end
 
   # Presence of an archived milestone target should not alter results.
-  let!(:archived_team_target) { create :target, :for_team, :archived, target_group: milestone_targets }
+  let!(:archived_team_target) do
+    create :target, :for_team, :archived, target_group: milestone_targets
+  end
 
   describe '#eligibility' do
     context 'when the course has progression limited to one level' do
-      context 'when startup has submitted all milestone targets' do
+      context 'when team has submitted all milestone targets' do
         before do
           complete_target team_target, student
 
@@ -38,22 +66,20 @@ describe Students::LevelUpEligibilityService do
         end
 
         context 'when the next level is locked' do
-          before do
-            level_2.update!(unlock_at: 5.days.from_now)
-          end
+          before { level_2.update!(unlock_at: 5.days.from_now) }
 
           it "returns 'DateLocked'" do
             expect(subject.eligibility).to eq('DateLocked')
           end
 
-          after do
-            level_2.update!(unlock_at: 5.days.ago)
-          end
+          after { level_2.update!(unlock_at: 5.days.ago) }
         end
       end
 
       context 'when there is a target that must be submitted individually by all students' do
-        let!(:individual_target) { create :target, :for_founders, target_group: milestone_targets }
+        let!(:individual_target) do
+          create :target, :for_founders, target_group: milestone_targets
+        end
 
         before do
           submit_target non_milestone_team_target, student
@@ -92,7 +118,9 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'where there are no milestone target groups' do
-        let!(:milestone_targets) { create :target_group, level: level_1, milestone: false }
+        let!(:milestone_targets) do
+          create :target_group, level: level_1, milestone: false
+        end
 
         it "returns 'NoMilestonesInLevel'" do
           expect(subject.eligibility).to eq('NoMilestonesInLevel')
@@ -100,7 +128,13 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when there are more than one milestone target groups' do
-        let!(:milestone_team_target_g2) { create :target, :for_team, :with_group, level: level_1, milestone: true }
+        let!(:milestone_team_target_g2) do
+          create :target,
+                 :for_team,
+                 :with_group,
+                 level: level_1,
+                 milestone: true
+        end
 
         before do
           # Submit all targets in the first milestone target group.
@@ -125,20 +159,30 @@ describe Students::LevelUpEligibilityService do
         end
       end
 
-      context 'when team is in the second level' do
-        let(:startup) { create :startup, level: level_2 }
-        let!(:milestone_target_l2) { create :target, :with_group, level: level_2, milestone: true, role: Target::ROLE_TEAM }
-        let!(:level_3) { create :level, :three, course: course_1 }
-        let!(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
-
-        before do
-          complete_target milestone_target_l2, student
+      context 'when student is in the second level' do
+        let!(:student) do
+          create :student, level: level_2, cohort: cohort_1, team: team
         end
 
-        context "when student has a submission pending review in level 1" do
-          before do
-            submit_target team_target, student
-          end
+        let!(:milestone_target_l2) do
+          create :target,
+                 :with_group,
+                 level: level_2,
+                 milestone: true,
+                 role: Target::ROLE_TEAM
+        end
+        let!(:level_3) { create :level, :three, course: course_1 }
+        let!(:team_target) do
+          create :target,
+                 :for_team,
+                 target_group: milestone_targets,
+                 evaluation_criteria: [evaluation_criterion]
+        end
+
+        before { complete_target milestone_target_l2, student }
+
+        context 'when student has a submission pending review in level 1' do
+          before { submit_target team_target, student }
 
           it "returns 'PreviousLevelIncomplete'" do
             expect(subject.eligibility).to eq('PreviousLevelIncomplete')
@@ -147,7 +191,9 @@ describe Students::LevelUpEligibilityService do
 
         context 'when student has a failed submission in level 1' do
           before do
-            submit_target team_target, student, grade: SubmissionsHelper::GRADE_FAIL
+            submit_target team_target,
+                          student,
+                          grade: SubmissionsHelper::GRADE_FAIL
           end
 
           it "returns 'PreviousLevelIncomplete'" do
@@ -156,7 +202,12 @@ describe Students::LevelUpEligibilityService do
         end
 
         context 'when there is a target in L1 that must be submitted individually by all students' do
-          let!(:individual_target) { create :target, :for_founders, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
+          let!(:individual_target) do
+            create :target,
+                   :for_founders,
+                   target_group: milestone_targets,
+                   evaluation_criteria: [evaluation_criterion]
+          end
 
           before do
             complete_target team_target, student
@@ -165,9 +216,12 @@ describe Students::LevelUpEligibilityService do
 
           context 'when student has team-mates with a pending review in level 1' do
             before do
-              startup.founders.where.not(id: student).each do |other_student|
-                submit_target individual_target, other_student
-              end
+              team
+                .founders
+                .where.not(id: student)
+                .each do |other_student|
+                  submit_target individual_target, other_student
+                end
             end
 
             it "returns 'TeamMembersPending'" do
@@ -177,9 +231,14 @@ describe Students::LevelUpEligibilityService do
 
           context 'when student has a team-mate with a failed submission in level 1' do
             before do
-              startup.founders.where.not(id: student).each do |other_student|
-                submit_target individual_target, other_student, grade: SubmissionsHelper::GRADE_FAIL
-              end
+              team
+                .founders
+                .where.not(id: student)
+                .each do |other_student|
+                  submit_target individual_target,
+                                other_student,
+                                grade: SubmissionsHelper::GRADE_FAIL
+                end
             end
 
             it "returns 'TeamMembersPending'" do
@@ -189,9 +248,12 @@ describe Students::LevelUpEligibilityService do
 
           context "when student's team-mates have completed the target in level 1" do
             before do
-              startup.founders.where.not(id: student).each do |other_student|
-                complete_target individual_target, other_student
-              end
+              team
+                .founders
+                .where.not(id: student)
+                .each do |other_student|
+                  complete_target individual_target, other_student
+                end
             end
 
             it "returns 'Eligible'" do
@@ -206,12 +268,33 @@ describe Students::LevelUpEligibilityService do
       let(:course_1) { create :course, progression_limit: 3 }
       let(:level_3) { create :level, :three, course: course_1 }
       let!(:level_4) { create :level, :four, course: course_1 }
-      let(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
-      let(:milestone_target_l2) { create :target, :team, :with_group, milestone: true, level: level_2, evaluation_criteria: [evaluation_criterion] }
-      let(:milestone_target_l3) { create :target, :team, :with_group, milestone: true, level: level_3, evaluation_criteria: [evaluation_criterion] }
+      let(:team_target) do
+        create :target,
+               :for_team,
+               target_group: milestone_targets,
+               evaluation_criteria: [evaluation_criterion]
+      end
+      let(:milestone_target_l2) do
+        create :target,
+               :team,
+               :with_group,
+               milestone: true,
+               level: level_2,
+               evaluation_criteria: [evaluation_criterion]
+      end
+      let(:milestone_target_l3) do
+        create :target,
+               :team,
+               :with_group,
+               milestone: true,
+               level: level_3,
+               evaluation_criteria: [evaluation_criterion]
+      end
 
       context 'when team is in the third level and all milestone targets have been submitted or reviewed with fail grade' do
-        let(:startup) { create :startup, level: level_3 }
+        let(:student) do
+          create :student, cohort: cohort_1, level: level_3, team: team
+        end
 
         before do
           submit_target team_target, student
@@ -225,8 +308,17 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when team is in the fourth level and all milestone targets have been submitted' do
-        let(:startup) { create :startup, level: level_4 }
-        let(:milestone_target_l4) { create :target, :team, :with_group, milestone: true, level: level_4, evaluation_criteria: [evaluation_criterion] }
+        let(:student) do
+          create :student, cohort: cohort_1, level: level_4, team: team
+        end
+        let(:milestone_target_l4) do
+          create :target,
+                 :team,
+                 :with_group,
+                 milestone: true,
+                 level: level_4,
+                 evaluation_criteria: [evaluation_criterion]
+        end
 
         before do
           submit_target team_target, student
@@ -246,11 +338,39 @@ describe Students::LevelUpEligibilityService do
       let(:level_3) { create :level, :three, course: course_1 }
       let(:level_4) { create :level, :four, course: course_1 }
       let!(:level_5) { create :level, :five, course: course_1 }
-      let(:startup) { create :startup, level: level_4 }
-      let(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
-      let(:milestone_target_l2) { create :target, :team, :with_group, milestone: true, level: level_2, evaluation_criteria: [evaluation_criterion] }
-      let(:milestone_target_l3) { create :target, :team, :with_group, milestone: true, level: level_3, evaluation_criteria: [evaluation_criterion] }
-      let(:milestone_target_l4) { create :target, :team, :with_group, milestone: true, level: level_4, evaluation_criteria: [evaluation_criterion] }
+      let(:student) do
+        create :student, cohort: cohort_1, level: level_4, team: team
+      end
+      let(:team_target) do
+        create :target,
+               :for_team,
+               target_group: milestone_targets,
+               evaluation_criteria: [evaluation_criterion]
+      end
+      let(:milestone_target_l2) do
+        create :target,
+               :team,
+               :with_group,
+               milestone: true,
+               level: level_2,
+               evaluation_criteria: [evaluation_criterion]
+      end
+      let(:milestone_target_l3) do
+        create :target,
+               :team,
+               :with_group,
+               milestone: true,
+               level: level_3,
+               evaluation_criteria: [evaluation_criterion]
+      end
+      let(:milestone_target_l4) do
+        create :target,
+               :team,
+               :with_group,
+               milestone: true,
+               level: level_4,
+               evaluation_criteria: [evaluation_criterion]
+      end
 
       before do
         submit_target team_target, student
@@ -266,7 +386,12 @@ describe Students::LevelUpEligibilityService do
 
     context 'when the course has strict progression' do
       let(:course_1) { create :course, :strict }
-      let(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
+      let(:team_target) do
+        create :target,
+               :for_team,
+               target_group: milestone_targets,
+               evaluation_criteria: [evaluation_criterion]
+      end
 
       context 'when the student has submitted all milestone targets' do
         before do
@@ -280,9 +405,7 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when the student has failed a milestone target' do
-        before do
-          fail_target team_target, student
-        end
+        before { fail_target team_target, student }
 
         it "returns 'CurrentLevelIncomplete'" do
           expect(subject.eligibility).to eq('CurrentLevelIncomplete')
@@ -290,9 +413,7 @@ describe Students::LevelUpEligibilityService do
       end
 
       context 'when the student has passed all milestone targets' do
-        before do
-          complete_target team_target, student
-        end
+        before { complete_target team_target, student }
 
         it "returns 'Eligible'" do
           expect(subject.eligibility).to eq('Eligible')
@@ -311,7 +432,14 @@ describe Students::LevelUpEligibilityService do
 
     context 'when eligibility is not "Eligible"' do
       it 'returns false' do
-        %w[AtMaxLevel NoMilestonesInLevel CurrentLevelIncomplete PreviousLevelIncomplete TeamMembersPending DateLocked].each do |ineligible_marker|
+        %w[
+          AtMaxLevel
+          NoMilestonesInLevel
+          CurrentLevelIncomplete
+          PreviousLevelIncomplete
+          TeamMembersPending
+          DateLocked
+        ].each do |ineligible_marker|
           allow(subject).to receive(:eligibility).and_return(ineligible_marker)
           expect(subject.eligible?).to eq(false)
         end

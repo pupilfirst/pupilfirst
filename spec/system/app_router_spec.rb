@@ -2,16 +2,25 @@ require 'rails_helper'
 feature 'App navigation', js: true do
   include UserSpecHelper
 
-  let(:student) { create :founder }
+  let(:course) { create :course, :with_cohort }
+  let(:student) { create :founder, cohort: course.cohorts.first }
   let(:coach) { create :faculty, school: student.school, user: student.user }
 
-  let!(:custom_link_1) { create :school_link, :header, school: student.school }
-  let!(:custom_link_2) { create :school_link, :header, school: student.school }
-  let!(:custom_link_3) { create :school_link, :header, school: student.school }
-  let!(:custom_link_4) { create :school_link, :header, school: student.school }
+  let!(:custom_link_1) do
+    create :school_link, :header, school: student.school, sort_index: 4
+  end
+  let!(:custom_link_2) do
+    create :school_link, :header, school: student.school, sort_index: 3
+  end
+  let!(:custom_link_3) do
+    create :school_link, :header, school: student.school, sort_index: 2
+  end
+  let!(:custom_link_4) do
+    create :school_link, :header, school: student.school, sort_index: 1
+  end
 
-  let(:coached_course) { create :course }
-  let(:another_coached_course) { create :course }
+  let(:coached_course) { create :course, :with_cohort }
+  let(:another_coached_course) { create :course, :with_cohort }
 
   context 'when the user is a school admin and coach' do
     before do
@@ -19,7 +28,9 @@ feature 'App navigation', js: true do
       create :school_admin, user: student.user, school: student.school
 
       # Enroll one coach as a "course" coach.
-      create :faculty_course_enrollment, faculty: coach, course: coached_course
+      create :faculty_cohort_enrollment,
+             faculty: coach,
+             cohort: coached_course.cohorts.first
     end
 
     it 'displays all main links on the navbar and puts custom links in the dropdown' do
@@ -27,6 +38,7 @@ feature 'App navigation', js: true do
 
       expect(page).to have_link('Admin', href: '/school')
       expect(page).to have_link('Dashboard', href: '/dashboard')
+
       expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
 
       # None of the custom links should be visible by default.
@@ -57,10 +69,12 @@ feature 'App navigation', js: true do
   context 'when the user is a coach in multiple course and a student in another' do
     before do
       # Enroll one coach as a "course" coach.
-      create :faculty_course_enrollment, faculty: coach, course: coached_course
-      create :faculty_course_enrollment,
+      create :faculty_cohort_enrollment,
              faculty: coach,
-             course: another_coached_course
+             cohort: coached_course.cohorts.first
+      create :faculty_cohort_enrollment,
+             faculty: coach,
+             cohort: another_coached_course.cohorts.first
     end
 
     scenario 'user can switch between courses' do
@@ -98,7 +112,7 @@ feature 'App navigation', js: true do
         href: students_course_path(coached_course)
       )
 
-      expect(page).to have_text(coach.user.name)
+      click_button 'Show user controls'
 
       expect(page).to have_link('Sign Out', href: destroy_user_session_path)
     end

@@ -7,12 +7,12 @@ type progressionBehavior =
 
 type t = {
   id: string,
-  endsAt: option<Js.Date.t>,
+  ended: bool,
   certificateSerialNumber: option<string>,
   progressionBehavior: progressionBehavior,
 }
 
-let endsAt = t => t.endsAt
+let ended = t => t.ended
 
 let id = t => t.id
 
@@ -48,10 +48,8 @@ let decode = json => {
   open Json.Decode
   {
     id: json |> field("id", string),
-    endsAt: (json |> optional(field("endsAt", string)))->Belt.Option.map(DateFns.parseISO),
+    ended: json |> field("ended", bool),
     certificateSerialNumber: json |> optional(field("certificateSerialNumber", string)),
     progressionBehavior: progressionBehavior,
   }
 }
-
-let hasEnded = t => t.endsAt->Belt.Option.mapWithDefault(false, DateFns.isPast)

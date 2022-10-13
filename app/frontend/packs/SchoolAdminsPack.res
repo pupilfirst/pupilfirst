@@ -12,7 +12,7 @@ let decodeProps = json => {
 }
 
 Psj.match("schools#admins", () => {
-  switch ReactDOM.querySelector("#school-admins") {
+  switch ReactDOM.querySelector("#schoolrouter-innerpage") {
   | Some(element) =>
     let props = DomUtils.parseJSONTag(~id="school-admins-data", ()) |> decodeProps
 

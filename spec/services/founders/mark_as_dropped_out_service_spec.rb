@@ -7,13 +7,14 @@ describe Founders::MarkAsDroppedOutService do
 
   describe '#execute' do
     context 'when the student is in a team of more than one'
-    let(:original_team) { create :startup, tag_list: %w[tag_a tag_b] }
+    let(:cohort) { create :cohort }
+    let(:original_team) { create :team_with_students, cohort: cohort }
     let(:student) { original_team.founders.first }
 
-    it 'creates a new startup in the same level and mark the founder as exited' do
-      expect { subject.execute }.to change { student.reload.startup.dropped_out_at }.from(nil)
-      expect(student.startup.id).not_to eq(original_team.id)
-      expect(student.startup.tag_list).to match_array(%w[tag_a tag_b])
+    it 'removes the team link and mark the founder as exited' do
+      expect { subject.execute }.to change { student.reload.dropped_out_at }
+        .from(nil)
+      expect(student.team).to eq(nil)
 
       # Check audit records
       audit_record = AuditRecord.last
@@ -25,20 +26,30 @@ describe Founders::MarkAsDroppedOutService do
   end
 
   context 'when the student is alone in a team' do
-    let(:team) { create :team }
-    let(:student) { create :founder, startup: team }
-    let(:coach) { create :faculty, school: team.school }
+    let(:cohort) { create :cohort }
+    let(:team) { create :team, cohort: cohort }
+    let(:student) { create :founder, team: team, cohort: cohort }
+    let(:coach) { create :faculty, school: cohort.school }
 
     before do
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
+             faculty: coach,
+             founder: student
     end
 
     it 'marks the student as exited and removes all direct coach enrollments to the team' do
-      expect { subject.execute }.to change { team.faculty.count }.from(1).to(0)
+      team_id = team.id
+      expect(student.team).to eq(team)
 
-      # The student should be in the same team.
-      expect(student.reload.startup).to eq(team)
-      expect(student.startup.dropped_out_at).not_to eq(nil)
+      expect { subject.execute }.to change { student.faculty.count }
+        .from(1)
+        .to(0)
+
+      # The student should be destroyed.
+      expect(student.reload.team).to eq(nil)
+      expect(Team.find_by(id: team_id)).to eq(nil)
+      expect(student.dropped_out_at).not_to eq(nil)
     end
   end
 end

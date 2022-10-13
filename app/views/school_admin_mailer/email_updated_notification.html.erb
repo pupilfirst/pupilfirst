@@ -1,0 +1,11 @@
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @school_admin.name) %>
+<% end %>
+<% content_for :body do %>
+  <p>
+    <%= t("mailers.school_admin.email_updated_notification.body.user_html", name: @user.name) %>
+  </p>
+  <p>
+    <%= t("mailers.school_admin.email_updated_notification.body.previous_email_html", old_email: @old_email,new_email:@user.email) %>
+  </p>
+<% end %>

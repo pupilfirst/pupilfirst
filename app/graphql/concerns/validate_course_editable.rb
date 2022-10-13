@@ -50,7 +50,6 @@ module ValidateCourseEditable
                  maximum: 150
                }
              }
-    argument :ends_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :about,
              GraphQL::Types::String,
              required: false,
@@ -106,7 +105,6 @@ module ValidateCourseEditable
     {
       name: @params[:name],
       description: @params[:description],
-      ends_at: @params[:ends_at],
       public_signup: @params[:public_signup],
       public_preview: @params[:public_preview],
       about: @params[:about],
@@ -114,7 +112,8 @@ module ValidateCourseEditable
       progression_behavior: @params[:progression_behavior],
       progression_limit: sanitized_progression_limit,
       highlights: @params[:highlights].presence || [],
-      processing_url: @params[:processing_url]
+      processing_url: @params[:processing_url],
+      default_cohort_id: @params[:default_cohort_id]
     }
   end
 end

@@ -9,7 +9,8 @@ feature 'Submission review overlay', js: true do
   include ConfigHelper
 
   let(:school) { create :school, :current }
-  let(:course) { create :course, school: school }
+  let(:course) { create :course, :with_cohort, school: school }
+  let(:cohort) { course.cohorts.first }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_founders, target_group: target_group }
@@ -34,19 +35,22 @@ feature 'Submission review overlay', js: true do
   end
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
-  let(:team) { create :startup, level: level }
+  let(:team) { create :team, cohort: cohort }
+  let(:student) { create :student, level: level, cohort: cohort, team: team }
+  let!(:another_student) do
+    create :student, level: level, cohort: cohort, team: team
+  end
   let(:coach) { create :faculty, school: school }
   let(:team_coach_user) { create :user, name: 'John Doe' }
   let(:team_coach) { create :faculty, school: school, user: team_coach_user }
   let(:school_admin) { create :school_admin }
 
   before do
-    create :faculty_course_enrollment, faculty: coach, course: course
-    create :faculty_course_enrollment, faculty: team_coach, course: course
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+    create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: team_coach,
-           startup: team
+           founder: student
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [
@@ -60,7 +64,6 @@ feature 'Submission review overlay', js: true do
   end
 
   context 'with a pending submission' do
-    let(:student) { team.founders.first }
     let!(:submission_pending) do
       create(
         :timeline_event,
@@ -818,7 +821,7 @@ feature 'Submission review overlay', js: true do
     end
 
     scenario 'student tries to access the submission review page' do
-      sign_in_user team.founders.first.user,
+      sign_in_user student.user,
                    referrer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
@@ -832,7 +835,7 @@ feature 'Submission review overlay', js: true do
     end
 
     scenario 'coach is warned when a student has dropped out' do
-      team.update!(dropped_out_at: 1.day.ago)
+      student.update!(dropped_out_at: 1.day.ago)
 
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)
@@ -843,7 +846,7 @@ feature 'Submission review overlay', js: true do
     end
 
     scenario "coach is warned when a student's access to course has ended" do
-      team.update!(access_ends_at: 1.day.ago)
+      cohort.update!(ends_at: 1.day.ago)
 
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)
@@ -854,11 +857,16 @@ feature 'Submission review overlay', js: true do
     end
 
     context 'when submission is from students who are now in different teams' do
-      let(:another_team) do
-        create :startup, level: level, dropped_out_at: 1.day.ago
+      let(:another_team) { create :team, cohort: cohort }
+      let(:another_student) do
+        create :student,
+               team: another_team,
+               cohort: cohort,
+               level: level,
+               dropped_out_at: 1.day.ago
       end
 
-      before { submission_pending.founders << another_team.founders.first }
+      before { submission_pending.founders << another_student }
 
       scenario 'coach is warned when one student in the submission is inactive' do
         sign_in_user coach.user,
@@ -995,38 +1003,42 @@ feature 'Submission review overlay', js: true do
   end
 
   context 'when the course has inactive students' do
-    let(:inactive_team) do
-      create :startup, level: level, access_ends_at: 1.day.ago
+    let(:ended_cohort) { create :cohort, ends_at: 1.day.ago }
+    let(:inactive_student_1) do
+      create :student, cohort: ended_cohort, level: level
+    end
+    let(:inactive_student_2) do
+      create :student, cohort: ended_cohort, level: level
     end
 
-    let!(:pending_submission_one_from_inactive_team) do
+    let!(:pending_submission_one_from_inactive_students) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
         created_at: 5.days.ago,
-        owners: inactive_team.founders,
+        owners: [inactive_student_1, inactive_student_2],
         target: target
       )
     end
 
-    let!(:pending_submission_two_from_inactive_team) do
+    let!(:pending_submission_two_from_inactive_students) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
         created_at: 1.hour.ago,
-        owners: inactive_team.founders,
+        owners: [inactive_student_1, inactive_student_2],
         target: target
       )
     end
 
-    let!(:reviewed_submission_from_inactive_team) do
+    let!(:reviewed_submission_from_inactive_students) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: inactive_team.founders,
+        owners: [inactive_student_1, inactive_student_2],
         target: target,
         evaluator_id: coach.id,
         created_at: 5.days.ago,
@@ -1037,10 +1049,12 @@ feature 'Submission review overlay', js: true do
     before do
       create(
         :timeline_event_grade,
-        timeline_event: reviewed_submission_from_inactive_team,
+        timeline_event: reviewed_submission_from_inactive_students,
         evaluation_criterion: evaluation_criterion_1,
         grade: 4
       )
+
+      create(:faculty_cohort_enrollment, faculty: coach, cohort: ended_cohort)
     end
 
     around do |example|
@@ -1051,7 +1065,7 @@ feature 'Submission review overlay', js: true do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       pending_submission_one_from_inactive_team
+                       pending_submission_one_from_inactive_students
                      )
       expect(page).not_to have_text('You can review the submission until')
       expect(page).to have_button('Create Review Checklist', disabled: true)
@@ -1063,7 +1077,7 @@ feature 'Submission review overlay', js: true do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       pending_submission_two_from_inactive_team
+                       pending_submission_two_from_inactive_students
                      )
 
       click_button 'Start Review'
@@ -1082,7 +1096,7 @@ feature 'Submission review overlay', js: true do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       reviewed_submission_from_inactive_team
+                       reviewed_submission_from_inactive_students
                      )
 
       expect(page).to have_button('Undo Grading', disabled: true)
@@ -1285,7 +1299,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team.founders.first],
+        owners: [student],
         target: target_1,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1311,7 +1325,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team.founders.first],
+        owners: [student],
         target: target_1
       )
     end
@@ -1369,7 +1383,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team.founders.first],
+        owners: [student],
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1473,7 +1487,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team.founders.first],
+        owners: [student],
         target: auto_verify_target,
         passed_at: 1.day.ago
       )
@@ -1491,8 +1505,8 @@ feature 'Submission review overlay', js: true do
   context 'when there are some submissions that have a mixed list of owners' do
     let(:target) { create :target, :for_team, target_group: target_group }
 
-    let(:team_1) { create :startup, level: level }
-    let(:team_2) { create :startup, level: level }
+    let(:team_1) { create :team_with_students, cohort: cohort }
+    let(:team_2) { create :team_with_students, cohort: cohort }
 
     let!(:submission_reviewed_1) do
       create(
@@ -1611,8 +1625,8 @@ feature 'Submission review overlay', js: true do
       create :target, :for_founders, target_group: target_group
     end
     let(:team_target) { create :target, :for_team, target_group: target_group }
-    let(:team_1) { create :startup, level: level }
-    let(:team_2) { create :startup, level: level }
+    let(:team_1) { create :team_with_students, cohort: cohort }
+    let(:team_2) { create :team_with_students, cohort: cohort }
     let(:student) { team_1.founders.first }
 
     let!(:submission_individual_target) do
@@ -1700,7 +1714,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: false,
-        owners: [team.founders.first],
+        owners: [student],
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 2.days.ago,
@@ -1726,7 +1740,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: false,
-        owners: [team.founders.first],
+        owners: [student],
         target: target,
         archived_at: 1.day.ago
       )
@@ -1736,7 +1750,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team.founders.first],
+        owners: [student],
         target: target
       )
     end
@@ -1776,7 +1790,6 @@ feature 'Submission review overlay', js: true do
   end
 
   context 'when a submission report exists for a submission' do
-    let(:student) { team.founders.first }
     let!(:submission_with_report) do
       create(
         :timeline_event,

@@ -12,7 +12,8 @@ class StudentDetailsResolver < ApplicationQuery
       quiz_scores: quiz_scores,
       average_grades: average_grades,
       completed_level_ids: completed_level_ids,
-      team: team
+      team: team,
+      student: student
     }
   end
 
@@ -88,7 +89,7 @@ class StudentDetailsResolver < ApplicationQuery
     return true if current_user.id == student.user_id
 
     current_user.faculty.present? &&
-      current_user.faculty.courses.exists?(id: student.course)
+      current_user.faculty.cohorts.exists?(id: student.cohort_id)
   end
 
   def levels
@@ -104,7 +105,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def team
-    @team ||= student.startup
+    @team ||= student.team
   end
 
   def latest_submissions

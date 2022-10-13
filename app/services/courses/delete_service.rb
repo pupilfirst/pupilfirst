@@ -13,7 +13,7 @@ module Courses
         delete_course_authors
         delete_course_exports
         delete_evaluation_criteria
-        delete_faculty_course_enrollments
+        delete_cohorts
         delete_levels
 
         @course.reload.destroy!
@@ -59,13 +59,7 @@ module Courses
       evaluation_criteria.delete_all
     end
 
-    def delete_faculty_course_enrollments
-      @course.faculty_course_enrollments.delete_all
-    end
-
     def delete_levels
-      delete_submissions
-      delete_teams
       delete_content
 
       Level.where(course_id: @course.id).delete_all
@@ -126,20 +120,28 @@ module Courses
       TargetGroup.joins(:course).where(courses: { id: @course.id }).delete_all
     end
 
-    def delete_teams
-      startup_ids = @course.startups.select(:id)
+    def delete_cohorts
+      cohort_ids = @course.cohorts.select(:id)
+      founder_ids = Founder.where(cohort_id: cohort_ids).select(:id)
+
+      # clean up submissions
+      delete_submissions
+
+      # clean up enrollments and coach notes
+      FacultyCohortEnrollment.where(cohort_id: cohort_ids).delete_all
+      FacultyFounderEnrollment.where(founder_id: founder_ids).delete_all
+      CoachNote.joins(:student).where(student: { id: founder_ids }).delete_all
 
       ActsAsTaggableOn::Tagging.where(
-        taggable_type: 'Startup',
-        taggable_id: startup_ids
+        taggable_type: 'Founder',
+        taggable_id: founder_ids
       ).delete_all
-      FacultyStartupEnrollment.where(startup_id: startup_ids).delete_all
-      CoachNote
-        .joins(student: :startup)
-        .where(startups: { id: startup_ids })
-        .delete_all
-      Founder.where(startup_id: startup_ids).delete_all
-      Startup.where(id: startup_ids).delete_all
+
+      Founder.where(id: founder_ids).delete_all
+      Team.where(cohort_id: cohort_ids).delete_all
+
+      @course.update!(default_cohort_id: nil)
+      Cohort.where(id: cohort_ids).delete_all
     end
   end
 end

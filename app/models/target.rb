@@ -4,9 +4,6 @@ class Target < ApplicationRecord
   # Use to allow changing visibility of a target. See Targets::UpdateVisibilityService.
   attr_accessor :safe_to_change_visibility
 
-  # Need to allow these two to be read for AA form.
-  attr_reader :startup_id, :founder_id
-
   STATUS_COMPLETE = :complete
   STATUS_NEEDS_IMPROVEMENT = :needs_improvement
   STATUS_SUBMITTED = :submitted

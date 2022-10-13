@@ -5,6 +5,7 @@ feature 'Submissions show' do
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_team, target_group: target_group }
@@ -12,7 +13,7 @@ feature 'Submissions show' do
   let(:submission) { create(:timeline_event, target: target) }
   let(:submission_2) { create(:timeline_event, target: target) }
 
-  let(:team) { create :startup, level: level }
+  let(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.founders.first }
 
   context 'submission is of an evaluated target' do
@@ -23,7 +24,8 @@ feature 'Submissions show' do
       submission_2.founders << team.founders.last
     end
 
-    scenario 'student visits show page of submission he is linked to', js: true do
+    scenario 'student visits show page of submission he is linked to',
+             js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
@@ -31,7 +33,8 @@ feature 'Submissions show' do
       expect(page).to have_content(submission.checklist.first['result'])
     end
 
-    scenario 'student visits show page of submission he is not linked to', js: true do
+    scenario 'student visits show page of submission he is not linked to',
+             js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_2)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
@@ -39,9 +42,7 @@ feature 'Submissions show' do
   end
 
   context 'submission is of an auto-verified target' do
-    before do
-      submission.founders << student
-    end
+    before { submission.founders << student }
 
     scenario 'student visits show page of submission', js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)

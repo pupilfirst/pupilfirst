@@ -1,33 +1,28 @@
 class StudentDistributionResolver < ApplicationQuery
-  include AuthorizeReviewer
+  include AuthorizeCoach
 
   property :course_id
-  property :coach_id
-  property :coach_notes
-  property :tags
+  property :filter_string
 
   def student_distribution
+    students =
+      CourseStudentsResolver.new(
+        @context,
+        { course_id: course_id, filter_string: filter_string }
+      ).course_students
+
     course.levels.map do |level|
-      teams = TeamsResolver.filter_by_coach(teams_in_level(level), coach_id)
-      teams = TeamsResolver.filter_by_coach_notes(teams, coach_notes)
-      teams = TeamsResolver.filter_by_tags(course, teams, tags)
-
-      team_ids = teams.select(:id).distinct(:id)
-      students_in_level = Founder.where(startup: team_ids).count
-
       {
         id: level.id,
         number: level.number,
-        students_in_level: students_in_level,
-        teams_in_level: team_ids.count,
-        unlocked: level.unlocked?
+        students_in_level: students.where(level_id: level.id).count,
+        unlocked: level.unlocked?,
+        filter_name: level.filter_name
       }
     end
   end
 
-  private
-
-  def teams_in_level(level)
-    level.startups.active
+  def course
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 end

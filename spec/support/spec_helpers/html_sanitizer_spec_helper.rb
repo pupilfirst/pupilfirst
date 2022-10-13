@@ -1,5 +1,13 @@
 module HtmlSanitizerSpecHelper
   def sanitize_html(html)
-    Rails::Html::FullSanitizer.new.sanitize(html).squeeze(' ').gsub(/(\r\n\s?)+/, "\n").squeeze("\n")
+    sanitized =
+      Rails::Html::FullSanitizer
+        .new
+        .sanitize(html)
+        .squeeze(' ')
+        .gsub(/(\r\n\s?)+/, "\n")
+        .squeeze("\n")
+
+    CGI.unescape_html(sanitized)
   end
 end

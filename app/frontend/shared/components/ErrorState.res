@@ -4,11 +4,9 @@ external pageNotFoundSVG: string = "default"
 let str = React.string
 
 let defaultCTA = {
-  <button
-    onClick={_ => RescriptReactRouter.push("/")}
-    className="btn btn-primary mt-2 mb-3 text-sm leading-normal">
+  <Link href="/school" className="btn btn-primary mt-2 mb-3 text-sm leading-normal">
     {str("Back to home")}
-  </button>
+  </Link>
 }
 
 @react.component

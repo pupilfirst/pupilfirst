@@ -1,8 +1,24 @@
-<%= link_to "< Back", organisation_path(@organisation), class: 'underline' %>
 <section class="max-w-7xl mx-auto">
-  <h1 class="text-3xl font-bold mt-4"><%= @organisation.name %></h1>
-  <h2 class="text-3xl font-bold mt-4">Cohort:<%= @cohort.name %></h2>
-  <div class="space-y-4 mt-4">
-    <h2 class="text-3xl font-bold mt-4">Students</h2>
+  <div class="mt-4">
+    <%= link_to "< Back", organisation_path(@organisation), class: 'underline' %>
   </div>
-</div>
+  <h1 class="text-3xl font-bold mt-4"><%= @cohort.name %></h2>
+  <h2 class="text-xl font-bold mt-4"><%= @cohort.course.name %></h1>
+  <div class="mt-4">
+    <%= link_to "Students", students_organisation_cohort_path(@organisation, @cohort), class: 'underline' %>
+  </div>
+  <div class="mt-4">
+    <div>
+      Active:
+    </div>
+    <div>
+      Completed:
+    </div>
+    <div>
+      Total:
+    </div>
+    <div>
+      Level distribution:
+    </div>
+  </div>
+</section>

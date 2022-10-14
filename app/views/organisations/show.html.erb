@@ -1,6 +1,8 @@
 <section class="max-w-7xl mx-auto">
   <% if policy_scope(Organisation).count > 1 %>
-    <%= link_to "< Back", organisations_path, class: 'underline' %>
+    <div class="mt-4">
+      <%= link_to "< Back", organisations_path, class: 'underline' %>
+    </div>
   <% end %>
   <h1 class="text-3xl font-bold mt-4"><%= @organisation.name %></h1>
   <h2> Total Students <%= @counts[:total_students] %> </h2>
@@ -14,13 +16,8 @@
           <%= course_with_cohorts[:total_students] %> students enrolled in <%= course_with_cohorts[:cohorts].count %> active cohorts
         </div>
         <% course_with_cohorts[:cohorts].each do |cohort| %>
-          <%= link_to organisation_cohort_path(@organisation, cohort), class: "p-6 flex flex-col bg-white items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400" do %>
-            <div>
-              cohort #<%= cohort.id %> | <%= cohort.name %>
-            </div>
-            <div>
-              <%= cohort.course.name %>
-            </div>
+          <%= link_to organisation_cohort_path(@organisation, cohort), class: "block p-6 hover:bg-gray-200 hover:text-primary-500 hover:border-primary-400" do %>
+            <span class="text-xl">#<%= cohort.id %></span> <%= cohort.name %>
           <% end %>
         <% end %>
       </div>

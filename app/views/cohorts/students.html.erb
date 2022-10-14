@@ -1,0 +1,12 @@
+<section class="max-w-7xl mx-auto">
+  <div class="mt-4">
+    <%= link_to "< Back", organisation_cohort_path(@organisation, @cohort), class: 'underline' %>
+  </div>
+  <h1 class="text-3xl font-bold mt-4">Students in <%= @cohort.name %></h2>
+  <h2 class="text-xl font-bold mt-4"><%= @cohort.course.name %></h1>
+  <div class="mt-4">
+    <div>
+      Level distribution:
+    </div>
+  </div>
+</section>

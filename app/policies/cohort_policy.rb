@@ -11,4 +11,6 @@ class CohortPolicy < ApplicationPolicy
       .joins(:user)
       .exists?(users: { organisation_id: organisation_ids })
   end
+
+  alias students? show?
 end

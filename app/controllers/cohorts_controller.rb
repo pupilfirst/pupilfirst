@@ -24,14 +24,20 @@ class CohortsController < ApplicationController
   end
 
   def distribution
-    scope
-      .joins(:level)
-      .group('levels.number')
-      .count
-      .tap do |dist|
-        max_level_number = @cohort.course.levels.where.not(number: 0).count
+    counts = scope.joins(:level).group('levels.number').count
 
-        (1..max_level_number).each { |level_number| dist[level_number] ||= 0 }
+    @cohort
+      .course
+      .levels
+      .where.not(number: 0)
+      .map do |level|
+        {
+          id: level.id,
+          number: level.number,
+          filterName: 'level',
+          studentsInLevel: counts[level.number] || 0,
+          unlocked: level.unlocked?
+        }
       end
   end
 

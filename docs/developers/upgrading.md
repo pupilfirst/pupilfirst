@@ -18,7 +18,22 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2022.4
 
-This version adds a `completed_at` attribute to the students. When students complete the course, the course completion date is updated. This version also adds Course Completion Date in student export.
+This version adds a `completed_at` attribute to the students. This attribute is used to determine if a student has completed a course. If you are upgrading from a version prior to 2022.4, you will need to run the following command to set the `completed_at` attribute for all students:
+
+```rb
+  Founder.all.each do |founder|
+      # Get the latest submission for the founder.
+      latest_submission = founder.latest_submissions.order('created_at DESC').first
+      # If the founder has no submissions, skip.
+      if latest_submission.present? && TimelineEvents::WasLastTargetService.new(latest_submission).was_last_target?
+        # If the founder has a submission, and it was the last target, set the
+        founder.update!(completed_at: latest_submission.created_at)
+      end
+    end
+  end
+```
+
+This is not a breaking change, but it is recommended to ensure that the `completed_at` attribute is set for all students.
 
 ### 2022.3
 

@@ -16,6 +16,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2022.4
+
+This version adds a `completed_at` attribute to the students. When students complete the course, the course completion date is updated. This version also adds Course Completion Date in student export.
+
 ### 2022.3
 
 This version adds support for running multiple cohorts in a course. This version also introduces new pages in admin for managing cohorts and teams along with redesign of a few other pages.

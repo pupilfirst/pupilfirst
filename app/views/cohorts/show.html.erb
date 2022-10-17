@@ -7,18 +7,17 @@
   <div class="mt-4">
     <%= link_to "Students", students_organisation_cohort_path(@organisation, @cohort), class: 'underline' %>
   </div>
+  <pre>
+  </pre>
   <div class="mt-4">
     <div>
-      Active:
+      Total students: <%= @counts[:total] %>
     </div>
     <div>
-      Completed:
+      Completed: Waiting for branch to be merged.
     </div>
     <div>
-      Total:
-    </div>
-    <div>
-      Level distribution:
+      Level distribution: <%= @counts[:distribution] %>
     </div>
   </div>
 </section>

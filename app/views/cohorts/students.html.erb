@@ -8,5 +8,34 @@
     <div>
       Level distribution: <%= @distribution %>
     </div>
-  </div>
-</section>
+    <div data-re-component="LevelDistribution" data-re-json="<%= { distribution: @distribution }.to_json %>">
+      <div class="skeleton-body-container pt-4 w-full mx-auto">
+        <div class="skeleton-body-wrapper px-3 lg:px-0">
+          <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
+            <div class="flex">
+              <div class="w-1/6">
+                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+              </div>
+              <div class="w-5/12">
+                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+              </div>
+              <div class="w-1/4">
+                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+              </div>
+              <div class="w-1/12">
+                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+              </div>
+              <div class="w-1/12">
+                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

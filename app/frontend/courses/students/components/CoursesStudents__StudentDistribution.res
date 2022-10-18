@@ -147,3 +147,13 @@ let make = (~studentDistribution, ~params) => {
     }
   </div>
 }
+
+let decodeProps = json => {
+  open Json.Decode
+
+  {
+    "studentDistribution": json
+    |> Json.parseOrRaise
+    |> field("studentDistribution", array(DistributionInLevel.decode)),
+  }
+}

@@ -32,7 +32,7 @@ class CohortsController < ApplicationController
       .where.not(number: 0)
       .map do |level|
         {
-          id: level.id,
+          id: level.id.to_s,
           number: level.number,
           filterName: 'level',
           studentsInLevel: counts[level.number] || 0,

@@ -13,10 +13,55 @@ class CohortsController < ApplicationController
   def students
     @organisation = policy_scope(Organisation).find(params[:organisation_id])
     @cohort = authorize current_school.cohorts.find(params[:id])
-    @distribution = distribution
+    @distribution = { studentDistribution: distribution }
+    @filter = prepare_students_filter
   end
 
   private
+
+  def prepare_students_filter
+    {
+      id: 'organisation-cohort-students-filter',
+      filters: [
+        {
+          key: 'level',
+          label: 'Level',
+          filterType: 'MultiSelect',
+          values:
+            @cohort
+              .course
+              .levels
+              .map { |l| "#{l.number};L#{l.number}: #{l.name}" },
+          color: 'green'
+        },
+        {
+          key: 'studentName',
+          label: 'Name',
+          filterType: 'Search',
+          color: 'red'
+        },
+        {
+          key: 'studentEmail',
+          label: 'Email',
+          filterType: 'Search',
+          color: 'yellow'
+        }
+      ],
+      placeholder: 'Filter by level, or search by name or email',
+      hint: "...or start typing to search by student's name of email",
+      sorter: {
+        key: 'sort_by',
+        default: 'Last Created',
+        options: [
+          'Name',
+          'First Created',
+          'Last Created',
+          'First Updated',
+          'Last Updated'
+        ]
+      }
+    }
+  end
 
   def scope
     @scope ||=

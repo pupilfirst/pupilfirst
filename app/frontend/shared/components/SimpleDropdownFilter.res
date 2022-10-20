@@ -37,13 +37,12 @@ type action =
   | ClearFilterString
   | UpdateFilterInput(string)
 
-let reducer = (state, action) =>
+let reducer = (_state, action) =>
   switch action {
   | ClearFilterString => {
-      ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {filterInput: filterInput}
   }
 
 let removeIdFromString = string => {
@@ -135,8 +134,11 @@ let onDeselect = (params, selectable) => {
 }
 
 let selectedSorter = (sorter: sorter, params) => {
-  let value =
-    Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
+  let value = switch Webapi.Url.URLSearchParams.get(sorter.key, params) {
+  | Some(userSuppliedValue) =>
+    sorter.options->Js.Array2.includes(userSuppliedValue) ? userSuppliedValue : sorter.default
+  | None => sorter.default
+  }
 
   <button
     title={"Order by" ++ " " ++ value}

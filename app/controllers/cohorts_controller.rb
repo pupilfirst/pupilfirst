@@ -34,18 +34,8 @@ class CohortsController < ApplicationController
               .map { |l| "#{l.number};L#{l.number}: #{l.name}" },
           color: 'green'
         },
-        {
-          key: 'studentName',
-          label: 'Name',
-          filterType: 'Search',
-          color: 'red'
-        },
-        {
-          key: 'studentEmail',
-          label: 'Email',
-          filterType: 'Search',
-          color: 'yellow'
-        }
+        { key: 'name', label: 'Name', filterType: 'Search', color: 'red' },
+        { key: 'email', label: 'Email', filterType: 'Search', color: 'yellow' }
       ],
       placeholder: 'Filter by level, or search by name or email',
       hint: "...or start typing to search by student's name of email",

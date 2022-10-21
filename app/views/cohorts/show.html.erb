@@ -1,51 +1,66 @@
-<section class="max-w-7xl mx-auto">
-  <div class="mt-4">
-    <%= link_to "< Back", organisation_path(@organisation), class: 'underline' %>
-  </div>
-  <h1 class="text-3xl font-bold mt-4"><%= @cohort.name %></h2>
-  <h2 class="text-xl font-bold mt-4"><%= @cohort.course.name %></h1>
-  <div class="mt-4">
-    <%= link_to "Students", students_organisation_cohort_path(@organisation, @cohort), class: 'underline' %>
-  </div>
-  <pre>
-  </pre>
-  <div class="mt-4">
-    <div>
-      Total students: <%= @counts[:total] %>
+<div>
+  <section class="bg-gray-50">
+    <div class="max-w-7xl mx-auto p-6 pb-0">
+      <div class="mt-4">
+        <%= link_to "< Back", organisation_path(@organisation), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
+      </div>
+      <h1 class="text-xl font-bold mt-4">
+        <%= @cohort.name %>
+      </h1>
+      <p class="text-sm font-medium"><%= @cohort.course.name %></p>
+      <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold">Overview</p>
+        <%= link_to "Students", students_organisation_cohort_path(@organisation, @cohort), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
+      </div>
     </div>
-    <div>
-      Completed: Waiting for branch to be merged.
-    </div>
-    <hr class="my-4">
-    <div data-re-component="StudentDistribution" data-re-json="<%= { studentDistribution: @counts[:distribution] }.to_json %>">
-      <div class="skeleton-body-container pt-4 w-full mx-auto">
-        <div class="skeleton-body-wrapper px-3 lg:px-0">
-          <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
-            <div class="flex">
-              <div class="w-1/6">
-                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-              </div>
-              <div class="w-5/12">
-                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-              </div>
-              <div class="w-1/4">
-                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-              </div>
-              <div class="w-1/12">
-                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-              </div>
-              <div class="w-1/12">
-                <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+  </section>
+  <section class="bg-white">
+    <div class="max-w-7xl mx-auto p-6">
+      <div class="mt-4 grid grid-cols-3 gap-5">
+        <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
+          <p class="text-sm text-gray-600">Total Students</p>
+          <p class="text-3xl font-bold"><%= @counts[:total] %></p>
+          <%= link_to "View all", students_organisation_cohort_path(@organisation, @cohort), class: "text-primary-500 hover:text-primary-800 hover:underline" %>
+        </div>
+        <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
+          <p class="text-sm text-gray-600">Students Completed</p>
+          <p class="text-3xl font-bold">Waiting...</p>
+          <%= link_to "View all", students_organisation_cohort_path(@organisation, @cohort), class: "text-primary-500 hover:text-primary-800 hover:underline" %>
+        </div>
+      </div>
+      <div class="p-4 bg-gray-100 rounded-lg mt-8">
+        <h3 class="text-xs font-semibold">Level-wise student distribution</h3>
+        <div data-re-component="StudentDistribution" data-re-json="<%= { studentDistribution: @counts[:distribution] }.to_json %>">
+          <div class="skeleton-body-container pt-4 w-full mx-auto">
+            <div class="skeleton-body-wrapper px-3 lg:px-0">
+              <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
+                <div class="flex">
+                  <div class="w-1/6">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-5/12">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-1/4">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-1/12">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-1/12">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>

@@ -11,13 +11,13 @@
   </pre>
   <div class="mt-4">
     <div>
-      Total students: <%= @counts[:total] %>
+      Total students: <%= @presenter.counts[:total] %>
     </div>
     <div>
       Completed: Waiting for branch to be merged.
     </div>
     <hr class="my-4">
-    <div data-re-component="StudentDistribution" data-re-json="<%= { studentDistribution: @counts[:distribution] }.to_json %>">
+    <div data-re-component="StudentDistribution" data-re-json="<%= @presenter.distribution.to_json %>">
       <div class="skeleton-body-container pt-4 w-full mx-auto">
         <div class="skeleton-body-wrapper px-3 lg:px-0">
           <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">

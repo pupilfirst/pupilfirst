@@ -5,7 +5,7 @@
   <h1 class="text-3xl font-bold mt-4">Students in <%= @cohort.name %></h2>
   <h2 class="text-xl font-bold mt-4"><%= @cohort.course.name %></h1>
   <hr class="my-4">
-  <div data-re-component="StudentDistribution" data-re-json="<%= @distribution.to_json %>">
+  <div data-re-component="StudentDistribution" data-re-json="<%= @presenter.distribution.to_json %>">
     <div class="skeleton-body-container pt-4 w-full mx-auto">
       <div class="skeleton-body-wrapper px-3 lg:px-0">
         <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
@@ -35,6 +35,6 @@
       </div>
     </div>
   </div>
-  <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @filter.to_json %>">
+  <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>">
   </div>
 </section>

@@ -50,7 +50,7 @@
         </div>
       </div>
       <div class="mt-6">
-        <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @filter.to_json %>"></div>
+        <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
       </div>
     </div>
     <% @presenter.students.each do |student| %>

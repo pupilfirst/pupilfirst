@@ -37,4 +37,8 @@
   </div>
   <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>">
   </div>
+  <% @presenter.students.each do |student| %>
+    <%= render "student", student: student %>
+  <% end %>
+  <%= paginate @presenter.students %>
 </section>

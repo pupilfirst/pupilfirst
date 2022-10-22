@@ -1,0 +1,21 @@
+<% user = student.user %>
+<div class="border-2 border-red-500 mt-2">
+  <div class="flex justify-between">
+    <div>
+      <div>
+        <%= user.name %>
+      </div>
+      <div>
+        <span> <%= user.title %> </span>
+        <% if user.last_seen_at.present? %>
+          <span title="<%= user.last_seen_at.iso8601 %>">| <%= "Last seen #{time_ago_in_words(user.last_seen_at)} ago" %></span>
+        <% else %>
+          <span>| Has never signed in</span>
+        <% end %>
+      </div>
+    </div>
+    <div>
+      Level <%= student.level.number %>
+    </div>
+  </div>
+</div>

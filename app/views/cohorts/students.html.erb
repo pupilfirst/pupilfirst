@@ -56,6 +56,9 @@
         <%= render "student", student: student %>
       <% end %>
       <%= paginate @presenter.students %>
+      <% if @presenter.students.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4">There are a total of <%= @presenter.students.total_count %> such students.</div>
+      <% end %>
     </div>
   </section>
 </div>

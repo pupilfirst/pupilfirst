@@ -79,11 +79,15 @@ module Cohorts
     end
 
     def students
-      filter_1 = filter_students_by_level(scope)
-      filter_2 = filter_students_by_name(filter_1)
-      filter_3 = filter_students_by_email(filter_2)
-      sorted = sort_students(filter_3)
-      paginate_students(sorted)
+      @students ||=
+        begin
+          filter_1 = filter_students_by_level(scope)
+          filter_2 = filter_students_by_name(filter_1)
+          filter_3 = filter_students_by_email(filter_2)
+          sorted = sort_students(filter_3)
+          included = sorted.includes(:user, :level)
+          included.page(params[:page])
+        end
     end
 
     def filter_students_by_level(scope)
@@ -110,10 +114,6 @@ module Cohorts
       else
         scope
       end
-    end
-
-    def paginate_students(scope)
-      scope.page(params[:page])
     end
 
     def sort_students(scope)

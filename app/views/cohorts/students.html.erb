@@ -1,44 +1,61 @@
-<section class="max-w-7xl mx-auto">
-  <div class="mt-4">
-    <%= link_to "< Back", organisation_cohort_path(@organisation, @cohort), class: 'underline' %>
-  </div>
-  <h1 class="text-3xl font-bold mt-4">Students in <%= @cohort.name %></h2>
-  <h2 class="text-xl font-bold mt-4"><%= @cohort.course.name %></h1>
-  <hr class="my-4">
-  <div data-re-component="StudentDistribution" data-re-json="<%= @presenter.distribution.to_json %>">
-    <div class="skeleton-body-container pt-4 w-full mx-auto">
-      <div class="skeleton-body-wrapper px-3 lg:px-0">
-        <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
-          <div class="flex">
-            <div class="w-1/6">
-              <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-              <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-            </div>
-            <div class="w-5/12">
-              <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-              <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-            </div>
-            <div class="w-1/4">
-              <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-              <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-            </div>
-            <div class="w-1/12">
-              <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-              <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-            </div>
-            <div class="w-1/12">
-              <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-              <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+<div>
+  <section class="bg-gray-50">
+    <div class="max-w-7xl mx-auto p-6 pb-0">
+      <div class="mt-4">
+        <%= link_to "< Back", organisation_path(@organisation), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
+      </div>
+      <h1 class="text-xl font-bold mt-4">
+        <%= @cohort.name %>
+      </h1>
+      <p class="text-sm font-medium"><%= @cohort.course.name %></p>
+      <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
+        <%= link_to "Overview", organisation_cohort_path(@organisation, @cohort), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold">Students</p>
+      </div>
+    </div>
+  </section>
+  <section class="bg-white">
+    <div class="max-w-7xl mx-auto p-6">
+      <div class="p-4 bg-gray-100 rounded-lg">
+        <h3 class="text-xs font-semibold">Level-wise student distribution</h3>
+        <div data-re-component="StudentDistribution" data-re-json="<%= @presenter.distribution.to_json %>">
+          <div class="skeleton-body-container pt-4 w-full mx-auto">
+            <div class="skeleton-body-wrapper px-3 lg:px-0">
+              <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
+                <div class="flex">
+                  <div class="w-1/6">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-5/12">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-1/4">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-1/12">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                  <div class="w-1/12">
+                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
+                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="mt-6">
+        <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @filter.to_json %>"></div>
+      </div>
     </div>
-  </div>
-  <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>">
-  </div>
-  <% @presenter.students.each do |student| %>
-    <%= render "student", student: student %>
-  <% end %>
-  <%= paginate @presenter.students %>
-</section>
+    <% @presenter.students.each do |student| %>
+      <%= render "student", student: student %>
+    <% end %>
+    <%= paginate @presenter.students %>
+  </section>
+</div>

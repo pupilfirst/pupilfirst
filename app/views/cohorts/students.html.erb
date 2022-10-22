@@ -52,10 +52,10 @@
       <div class="mt-6">
         <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
       </div>
+      <% @presenter.students.each do |student| %>
+        <%= render "student", student: student %>
+      <% end %>
+      <%= paginate @presenter.students %>
     </div>
-    <% @presenter.students.each do |student| %>
-      <%= render "student", student: student %>
-    <% end %>
-    <%= paginate @presenter.students %>
   </section>
 </div>

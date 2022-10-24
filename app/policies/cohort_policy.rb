@@ -4,7 +4,7 @@ class CohortPolicy < ApplicationPolicy
 
     organisation_ids = user.organisations.pluck(:id)
 
-    return if organisation_ids.blank?
+    return false if organisation_ids.blank?
 
     record
       .founders

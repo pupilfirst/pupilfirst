@@ -27,7 +27,7 @@ feature 'Organisation index' do
   let(:regular_user) { create :user, school: school }
 
   context 'when the user is a school admin' do
-    scenario 'school admin can see all organisations in the school' do
+    scenario 'user can see all organisations in the school' do
       sign_in_user(school_admin_user, referrer: organisations_path)
 
       expect(page).to have_link(
@@ -45,7 +45,7 @@ feature 'Organisation index' do
   end
 
   context 'when the user is an organisation admin in one school' do
-    scenario 'organisation admin gets redirected to org page' do
+    scenario 'user gets redirected to org page' do
       sign_in_user(org_admin_user, referrer: organisations_path)
 
       expect(page).to have_current_path(organisation_path(organisation_1))
@@ -59,7 +59,7 @@ feature 'Organisation index' do
              user: org_admin_user
     end
 
-    scenario 'organisation admin is shown the organisations index page' do
+    scenario 'user is shown the organisations index page' do
       sign_in_user(org_admin_user, referrer: organisations_path)
 
       expect(page).to have_link(organisation_1.name)
@@ -74,7 +74,7 @@ feature 'Organisation index' do
              user: org_admin_user
     end
 
-    scenario 'non-admin cannot see the organisations index page' do
+    scenario 'user cannot see the organisations index page' do
       sign_in_user(regular_user, referrer: organisations_path)
 
       expect(page).to have_http_status(:not_found)

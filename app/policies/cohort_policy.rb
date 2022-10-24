@@ -1,6 +1,6 @@
 class CohortPolicy < ApplicationPolicy
   def show?
-    return false if record.ended?
+    return true if user.school_admin.present?
 
     organisation_ids = user.organisations.pluck(:id)
 

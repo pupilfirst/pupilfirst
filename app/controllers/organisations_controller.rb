@@ -1,17 +1,25 @@
 class OrganisationsController < ApplicationController
   before_action :authenticate_user!
+
   layout 'student'
+
+  # GET /organisations
+  def index
+    @organisations = policy_scope(Organisation)
+
+    case @organisations.count
+    when 0
+      raise_not_found
+    when 1
+      redirect_to organisation_path(@organisations.first)
+    end
+  end
 
   # GET /organisations/:id
   def show
     @organisation = policy_scope(Organisation).find(params[:id])
     @courses_with_cohorts = prepare_courses
     @counts = prepare_counts
-  end
-
-  # GET /organisations
-  def index
-    @organisations = policy_scope(Organisation)
   end
 
   private

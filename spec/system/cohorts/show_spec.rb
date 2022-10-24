@@ -38,7 +38,7 @@ feature 'Organisation show' do
   end
 
   context 'when the user is an organisation admin' do
-    scenario 'user can access cohort overview of active course', js: true do
+    scenario 'user can access org overview of active cohort', js: true do
       sign_in_user org_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
@@ -51,7 +51,7 @@ feature 'Organisation show' do
       )
     end
 
-    scenario 'user can access overview of inactive cohort' do
+    scenario 'user can access org overview of inactive cohort' do
       sign_in_user org_admin_user,
                    referrer:
                      organisation_cohort_path(organisation, cohort_inactive)
@@ -61,13 +61,14 @@ feature 'Organisation show' do
   end
 
   context 'when the user is a school admin' do
-    scenario 'user can access cohort overview of active course' do
+    scenario 'user can access org overview of active cohort' do
       sign_in_user school_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text("Total Students\n4")
     end
-    scenario 'user can access cohort overview of inactive course' do
+
+    scenario 'user can access org overview of inactive cohort' do
       sign_in_user school_admin_user,
                    referrer:
                      organisation_cohort_path(organisation, cohort_inactive)
@@ -77,16 +78,9 @@ feature 'Organisation show' do
   end
 
   context 'when the user is a regular user' do
-    scenario 'user cannot access cohort overview of active course' do
+    scenario 'user cannot access org overview of a cohort' do
       sign_in_user regular_user,
                    referrer: organisation_cohort_path(organisation, cohort)
-
-      expect(page).to have_http_status(:not_found)
-    end
-    scenario 'user cannot access cohort overview of inactive course' do
-      sign_in_user regular_user,
-                   referrer:
-                     organisation_cohort_path(organisation, cohort_inactive)
 
       expect(page).to have_http_status(:not_found)
     end

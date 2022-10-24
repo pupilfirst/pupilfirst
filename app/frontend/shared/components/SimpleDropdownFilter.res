@@ -176,7 +176,7 @@ let make = (
 
   <div className="w-full flex gap-3">
     <div className="flex-1">
-      <p className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </p>
+      <label htmlFor=id className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </label>
       <Multiselect
         id
         unselected={unselected(state, filters)}

@@ -63,8 +63,8 @@ module Cohorts
               'Name',
               'First Created',
               'Last Created',
-              'First Updated',
-              'Last Updated'
+              'Earliest Seen',
+              'Recently Seen'
             ]
           }
         }
@@ -122,10 +122,10 @@ module Cohorts
         scope.joins(:user).order('users.name')
       when 'First Created'
         scope.order(created_at: :asc)
-      when 'First Updated'
-        scope.order(updated_at: :asc)
-      when 'Last Updated'
-        scope.order(updated_at: :desc)
+      when 'Earliest Seen'
+        scope.joins(:user).order('users.last_seen_at ASC NULLS FIRST')
+      when 'Recently Seen'
+        scope.joins(:user).order('users.last_seen_at DESC NULLS LAST')
       else
         scope.order(created_at: :desc)
       end

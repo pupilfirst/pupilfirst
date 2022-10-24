@@ -1,8 +1,3 @@
-# [ ] org admin can view cohort
-# [ ] org admin can view inactive cohort's overview
-# [ ] school admin can access cohort overview
-# [ ] regular user cannot access cohort overview
-
 require 'rails_helper'
 
 feature 'Organisation show' do

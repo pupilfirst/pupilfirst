@@ -595,8 +595,13 @@ feature 'School students index', js: true do
     let(:student_zzz) { safe_random_students }
 
     before do
-      student_aaa.user.update!(name: 'A aa')
-      student_zzz.user.update!(name: 'Z zz')
+      # Fix student names so that sort order isn't random.
+      students.each_with_index do |s, i|
+        s.user.update!(name: "Test Student #{i}")
+      end
+
+      student_aaa.user.update!(name: 'Aa Aa')
+      student_zzz.user.update!(name: 'Zz Zz')
       oldest_created.update!(created_at: Time.at(0))
       newest_created.update!(created_at: 1.day.from_now)
       oldest_updated.update!(updated_at: Time.at(0))

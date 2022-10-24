@@ -160,8 +160,8 @@ feature 'Organisation show' do
       middle_student_1.update!(created_at: 1.day.ago)
       middle_student_2.update!(created_at: 1.day.from_now)
 
-      middle_student_1.user.update!(name: 'Zebra')
-      middle_student_2.user.update!(name: 'Anaconda')
+      middle_student_1.user.update!(name: 'Zatanna Zatara')
+      middle_student_2.user.update!(name: 'Amanda Waller')
 
       sign_in_user org_admin_user,
                    referrer:

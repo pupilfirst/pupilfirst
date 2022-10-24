@@ -98,8 +98,8 @@ feature 'Cohorts Index', js: true do
     let(:cohort_zzz) { safe_random_cohorts }
 
     before do
-      cohort_aaa.update!(name: 'aaa aa')
-      cohort_zzz.update!(name: 'zzz zz')
+      cohort_aaa.update!(name: 'AA aa')
+      cohort_zzz.update!(name: 'ZZ zz')
       oldest_created.update!(created_at: Time.at(0))
       newest_created.update!(created_at: 1.day.from_now)
       first_ending.update!(ends_at: 1.day.from_now)
@@ -174,8 +174,8 @@ feature 'Cohorts Index', js: true do
 
       expect(page).not_to have_text(cohort_zzz.name)
 
-      fill_in 'Filter Resources', with: 'zz'
-      click_button 'Pick Search by Name: zz'
+      fill_in 'Filter Resources', with: 'ZZ'
+      click_button 'Pick Search by Name: ZZ'
 
       expect(page).to have_text(cohort_zzz.name)
     end

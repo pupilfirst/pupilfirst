@@ -3,7 +3,6 @@ require 'rails_helper'
 feature 'Organisation index' do
   include UserSpecHelper
 
-  # Setup a course with founders and target for community.
   let(:school) { create :school, :current }
 
   let!(:organisation_1) { create :organisation, school: school }
@@ -68,12 +67,6 @@ feature 'Organisation index' do
   end
 
   context 'when the user is a non-admin' do
-    let!(:org_admin_2) do
-      create :organisation_admin,
-             organisation: organisation_2,
-             user: org_admin_user
-    end
-
     scenario 'user cannot see the organisations index page' do
       sign_in_user(regular_user, referrer: organisations_path)
 

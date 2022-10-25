@@ -52,7 +52,7 @@ class User < ApplicationRecord
          :rememberable,
          :omniauthable,
          :recoverable,
-         omniauth_providers: %i[google_oauth2 facebook github]
+         omniauth_providers: %i[google_oauth2 facebook github discord]
 
   normalize_attribute :name, :about, :affiliation, :preferred_name
 

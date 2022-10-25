@@ -245,9 +245,17 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH2_CLIENT_ID'], ENV['GOOGLE_OAUTH2_CLIENT_SECRET'], verify_iss: false, prompt: 'select_account'
+  config.omniauth :google_oauth2,
+                  ENV['GOOGLE_OAUTH2_CLIENT_ID'],
+                  ENV['GOOGLE_OAUTH2_CLIENT_SECRET'],
+                  verify_iss: false,
+                  prompt: 'select_account'
   config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
+  config.omniauth :discord,
+                  ENV['DISCORD_KEY'],
+                  ENV['DISCORD_SECRET'],
+                  scope: 'identify'
   config.omniauth :developer, fields: %i[email] if Rails.env.development?
 
   # ==> Warden configuration
@@ -274,10 +282,13 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 end
 
-Rails.application.config.to_prepare do
-  Devise::Mailer.layout 'mailer'
-  # Devise::RegistrationsController.layout 'demo_generic_inner'
-  # Devise::ConfirmationsController.layout 'demo_generic_inner'
-  # Devise::SessionsController.layout 'demo_generic_inner'
-  # Devise::PasswordsController.layout 'demo_generic_inner'
-end
+Rails
+  .application
+  .config
+  .to_prepare do
+    Devise::Mailer.layout 'mailer'
+    # Devise::RegistrationsController.layout 'demo_generic_inner'
+    # Devise::ConfirmationsController.layout 'demo_generic_inner'
+    # Devise::SessionsController.layout 'demo_generic_inner'
+    # Devise::PasswordsController.layout 'demo_generic_inner'
+  end

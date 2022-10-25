@@ -11,7 +11,9 @@ module Students
 
     def execute
       students.each do |student|
-        student.update!(completed_at: Time.zone.now) unless student.completed_at
+        if student.completed_at.blank?
+          student.update!(completed_at: Time.zone.now)
+        end
 
         Students::IssueCertificateService.new(student).issue
       end

@@ -142,6 +142,27 @@ module Users
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
+    # GET /users/auth_callback?token=xxx
+    def auth_callback
+      begin
+        crypt = EncryptorService.new
+        data = crypt.decrypt(params[:token].presence || '')
+        email = data[:auth_hash]&.dig(:info)&.dig(:email)
+        user = User.find_by(email: email, school: current_school)
+
+        if user.present? && data[:session_id] == session.id
+          sign_in user
+          redirect_to after_sign_in_path_for(user)
+        else
+          flash[:error] = 'Invalid login credtentails'
+          redirect_to new_user_session_path
+        end
+      rescue ActiveSupport::MessageEncryptor::InvalidMessage
+        flash[:error] = 'Invalid login credtentails'
+        redirect_to new_user_session_path
+      end
+    end
+
     private
 
     def process_password_login

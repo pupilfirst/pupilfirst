@@ -65,7 +65,7 @@ module Users
             raise_unexpected_provider(provider)
           end
 
-        "//#{oauth_host}/oauth/#{provider_key}?fqdn=#{view.current_host}"
+        "//#{oauth_host}/oauth/#{provider_key}?fqdn=#{view.current_host}&session_id=#{view.session.id}"
       end
 
       def icon_classes(provider)

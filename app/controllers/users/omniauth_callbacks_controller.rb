@@ -8,7 +8,7 @@ module Users
     def oauth_callback
       @email = email_from_auth_hash
 
-      if oauth_origin.present?
+      if oauth_origin.present? && oauth_origin[:session_id]
         if @email.blank?
           redirect_to oauth_error_url(
                         host: oauth_origin[:fqdn],
@@ -57,15 +57,18 @@ module Users
 
     def sign_in_at_oauth_origin
       if user.present?
-        # Regenerate the login token.
-        user.regenerate_login_token
+        token =
+          EncryptorService.new.encrypt(
+            { auth_hash: auth_hash, session_id: oauth_origin[:session_id] }
+          )
+
         token_url_options = {
-          token: user.original_login_token,
-          host: oauth_origin[:fqdn]
+          token: token,
+          host: oauth_origin[:fqdn],
+          port: nil # Hack to get the local setup working, should be removed.
         }
 
-        # Redirect user to sign in at the origin domain with newly generated token.
-        redirect_to user_token_url(token_url_options)
+        redirect_to user_auth_callback_url(token_url_options)
       else
         redirect_to oauth_error_url(
                       host: oauth_origin[:fqdn],

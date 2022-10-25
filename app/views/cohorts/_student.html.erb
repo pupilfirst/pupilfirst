@@ -1,21 +1,22 @@
 <% user = student.user %>
-<div data-test-class="student" class="border-2 border-red-500 mt-2">
-  <div class="flex justify-between">
+<div data-test-class="student" class="p-5 mt-4 border border-gray-200 bg-white rounded-lg">
+  <div class="flex justify-between items-center">
     <div>
-      <div>
+      <p class="font-semibold">
         <%= user.name %>
-      </div>
-      <div>
-        <span> <%= user.title %> </span>
+      </p>
+      <p class="text-sm text-gray-600">
+        <%= user.title %> <span class="px-1" aria-hidden="true">|</span>
         <% if user.last_seen_at.present? %>
-          <span title="<%= user.last_seen_at.iso8601 %>">| <%= "Last seen #{time_ago_in_words(user.last_seen_at)} ago" %></span>
+          <span title="<%= user.last_seen_at.iso8601 %>"<%= "Last seen #{time_ago_in_words(user.last_seen_at)} ago" %></span>
         <% else %>
-          <span>| Has never signed in</span>
+          Has never signed in
         <% end %>
-      </div>
+      </p>
     </div>
-    <div>
-      Level <%= student.level.number %>
+    <div class="flex flex-col items-center py-2 px-2 text-xs bg-yellow-50 text-yellow-900 border border-yellow-900 rounded-lg">
+      <p>Level</p>
+      <p class="font-bold"><%= student.level.number %></p>
     </div>
   </div>
 </div>

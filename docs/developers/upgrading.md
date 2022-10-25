@@ -18,22 +18,25 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2022.4
 
-This version adds a `completed_at` attribute to the students. This attribute is used to determine if a student has completed a course. If you are upgrading from a version prior to 2022.4, you will need to run the following command to set the `completed_at` attribute for all students:
+This version adds a `completed_at` attribute to students. This attribute will be used to determine if a student has completed a course. After upgrading, you should run the following script via the Rails console to set the `completed_at` attribute for all eligible students:
 
 ```rb
-  Founder.all.each do |students|
-      # Get the latest submission for the students.
-      students = students.latest_submissions.order('created_at DESC').first
-      # If the students has no submissions, skip.
-      if latest_submission.present? && TimelineEvents::WasLastTargetService.new(latest_submission).was_last_target?
-        # If the students has a submission, and it was the last target, set the
-        students.update!(completed_at: latest_submission.created_at)
-      end
+Founder
+  .all
+  .each_with_object(nil) do |student, _x|
+    # Get the latest submission for each student.
+    latest_submission =
+      student.latest_submissions.order('created_at DESC').first
+
+    # If a student has no submission, skip.
+    if latest_submission.present? &&
+         TimelineEvents::WasLastTargetService.new(latest_submission)
+           .was_last_target?
+      # If the students has a submission, and it was the last target, set `completed_at`
+      student.update!(completed_at: latest_submission.created_at)
     end
   end
 ```
-
-This is not a breaking change, but it is recommended to ensure that the `completed_at` attribute is set for all students.
 
 ### 2022.3
 

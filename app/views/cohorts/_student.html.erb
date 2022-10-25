@@ -8,14 +8,14 @@
       <p class="text-sm text-gray-600">
         <%= user.title %> <span class="px-1" aria-hidden="true">|</span>
         <% if user.last_seen_at.present? %>
-          <span title="<%= user.last_seen_at.iso8601 %>"><%= "Last seen #{time_ago_in_words(user.last_seen_at)} ago" %></span>
+          <span title="<%= user.last_seen_at.iso8601 %>"><%= t('.time_ago', time_ago: time_ago_in_words(user.last_seen_at)) %></span>
         <% else %>
-          Has never signed in
+          <%= t('.never_signed_in') %>
         <% end %>
       </p>
     </div>
     <div class="flex flex-col items-center py-2 px-2 text-xs bg-yellow-50 text-yellow-900 border border-yellow-900 rounded-lg">
-      <p>Level</p>
+      <p><%= t('.level_label') %></p>
       <p class="font-bold"><%= student.level.number %></p>
     </div>
   </div>

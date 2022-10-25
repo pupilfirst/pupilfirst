@@ -8,7 +8,7 @@
       <p class="text-sm text-gray-600">
         <%= user.title %> <span class="px-1" aria-hidden="true">|</span>
         <% if user.last_seen_at.present? %>
-          <span title="<%= user.last_seen_at.iso8601 %>"<%= "Last seen #{time_ago_in_words(user.last_seen_at)} ago" %></span>
+          <span title="<%= user.last_seen_at.iso8601 %>"><%= "Last seen #{time_ago_in_words(user.last_seen_at)} ago" %></span>
         <% else %>
           Has never signed in
         <% end %>

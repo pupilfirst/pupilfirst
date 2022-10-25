@@ -15,6 +15,7 @@ module Schools
         delete_markdown_attachments
         delete_domains
         delete_audit_records
+        delete_organisations
         delete_users
 
         @school.reload.destroy!
@@ -50,7 +51,10 @@ module Schools
     end
 
     def delete_taggings
-      ActsAsTaggableOn::Tagging.where(taggable_type: 'School').where(taggable_id: @school.id).delete_all
+      ActsAsTaggableOn::Tagging
+        .where(taggable_type: 'School')
+        .where(taggable_id: @school.id)
+        .delete_all
     end
 
     def delete_markdown_attachments
@@ -68,6 +72,16 @@ module Schools
     def delete_users
       Faculty.joins(user: :school).where(schools: { id: @school.id }).delete_all
       @school.users.each(&:destroy!)
+    end
+
+    def delete_organisations
+      @school.users.update_all(organisation_id: nil) # rubocop:disable Rails/SkipsModelValidations
+
+      @school.organisations.each do |organisation|
+        organisation.organisation_admins.destroy_all
+      end
+
+      @school.organisations.delete_all
     end
   end
 end

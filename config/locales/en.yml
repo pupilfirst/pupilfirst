@@ -2471,6 +2471,12 @@ en:
     optional_braces: (optional)
     or: or
     pass: Pass
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo; Previous"
+      next: "Next &rsaquo;"
+      truncate: "&hellip;"
     percentage: Percentage
     post: Post
     preferred_name: Preferred name

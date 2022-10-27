@@ -2345,6 +2345,8 @@ en:
           title: Coaches
         dashboard_link:
           title: Dashboard
+        organisations_link:
+          title: My Org
     posts:
       versions:
         page_title:

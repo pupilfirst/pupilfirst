@@ -40,6 +40,6 @@ feature 'Team Actions', js: true do
 
   scenario 'school admin tries to access an invalid link' do
     sign_in_user school_admin.user, referrer: '/school/teams/888888/actions'
-    expect(page).to have_text("The page you were looking for doesn't exist!")
+    expect(page).to have_text("Sorry, The page you are looking for doesn't exist or has been moved.")
   end
 end

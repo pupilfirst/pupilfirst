@@ -68,7 +68,7 @@ let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
 let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
   <div
     key={(admin |> SchoolAdmin.id) ++ (admin |> SchoolAdmin.name)}
-    className="flex w-1/2 flex-shrink-0 mb-5 px-3">
+    className="flex w-1/2 shrink-0 mb-5 px-3">
     <div
       className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
       <button
@@ -78,7 +78,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
           setState(state => {...state, editorAction: ShowEditor(Some(admin))})
         }}>
         <div className="flex">
-          <span className="mr-4 flex-shrink-0">
+          <span className="mr-4 shrink-0">
             {switch admin |> SchoolAdmin.avatarUrl {
             | Some(avatarUrl) =>
               <img className="w-10 h-10 rounded-full object-cover" src=avatarUrl />

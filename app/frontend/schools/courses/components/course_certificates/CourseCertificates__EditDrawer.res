@@ -181,7 +181,7 @@ let make = (
     closeDrawerCB closeButtonTitle={t("close")} size=SchoolAdmin__EditorDrawer.Large>
     <div className="flex flex-col min-h-screen">
       <DisablingCover
-        disabled=state.saving message="Saving changes..." containerClasses="bg-white flex-grow-0">
+        disabled=state.saving message="Saving changes..." containerClasses="bg-white grow-0">
         <div className="bg-gray-50 pt-6 pb-4 border-b">
           <div className="max-w-4xl px-4 mx-auto">
             <h5 className="uppercase"> {t("edit_action")->str} </h5>
@@ -214,7 +214,7 @@ let make = (
             <HelpIcon className="ml-1" link={t("active.help_url")}>
               <span dangerouslySetInnerHTML={"__html": t("active.help")} />
             </HelpIcon>
-            <div className="ml-4 inline-flex toggle-button__group flex-shrink-0">
+            <div className="ml-4 inline-flex toggle-button__group shrink-0">
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>
@@ -229,7 +229,7 @@ let make = (
             {!canBeAutoIssued
               ? <div
                   className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2">
-                  <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
+                  <div className="w-6 h-6 text-yellow-500 shrink-0">
                     <i className="fas fa-exclamation-triangle" />
                   </div>
                   <span className="ml-2"> {t("cannot_be_auto_issued_warning")->React.string} </span>
@@ -317,7 +317,7 @@ let make = (
                     }
                   />
                 </HelpIcon>
-                <div className="ml-4 inline-flex toggle-button__group flex-shrink-0">
+                <div className="ml-4 inline-flex toggle-button__group shrink-0">
                   <button
                     className={qrVisiblityClasses(state.qrCorner, true)}
                     onClick={activateQrCode(state, send)}>
@@ -407,7 +407,7 @@ let make = (
           </div>
         </div>
       </DisablingCover>
-      <div className="bg-gray-50 flex-grow">
+      <div className="bg-gray-50 grow">
         <div className="max-w-4xl px-4 py-6 mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -426,7 +426,7 @@ let make = (
                   </div>
                 : React.null}
             </div>
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <button
                 onClick={saveChanges(certificate, updateCertificateCB, state, send)}
                 disabled=saveButtonDisabled

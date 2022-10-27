@@ -156,7 +156,8 @@ module CourseExports
             user.title,
             user.affiliation,
             student.tags.order(:name).pluck(:name).join(', '),
-            last_seen_at(user)
+            last_seen_at(user),
+            student.completed_at&.iso8601 || ''
           ] + average_grades_for_student(student)
         end
 
@@ -170,7 +171,8 @@ module CourseExports
           'Title',
           'Affiliation',
           'Tags',
-          'Last Seen At'
+          'Last Seen At',
+          'Course Completed At'
         ] + evaluation_criteria_names
       ] + rows
     end

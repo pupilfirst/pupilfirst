@@ -343,6 +343,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
     t.bigint "cohort_id"
     t.bigint "level_id"
     t.bigint "team_id"
+    t.datetime "completed_at"
     t.index ["cohort_id"], name: "index_founders_on_cohort_id"
     t.index ["level_id"], name: "index_founders_on_level_id"
     t.index ["team_id"], name: "index_founders_on_team_id"

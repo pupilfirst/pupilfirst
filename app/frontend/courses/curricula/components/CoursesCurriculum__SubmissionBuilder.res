@@ -137,9 +137,7 @@ let tooltipText = preview =>
   if preview {
     <span> {tr("accessing_preview") |> str} <br /> {tr("for_course") |> str} </span>
   } else {
-    <span>
-      {tr("compete_all") |> str} <br /> {tr("steps_submit") |> str}
-    </span>
+    <span> {tr("compete_all") |> str} <br /> {tr("steps_submit") |> str} </span>
   }
 
 @react.component
@@ -148,9 +146,7 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   <div className="bg-gray-50 p-4 my-4 border rounded-lg" id="submission-builder">
     <DisablingCover disabled={isBusy(state.formState)} message={statusText(state.formState)}>
       {state.checklist |> ArrayUtils.isEmpty
-        ? <div className="text-center">
-            {tr("no_actions") |> str}
-          </div>
+        ? <div className="text-center"> {tr("no_actions") |> str} </div>
         : state.checklist
           |> Array.mapi((index, checklistItem) =>
             <CoursesCurriculum__SubmissionItem
@@ -168,7 +164,7 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
           <button
             onClick={submit(state, send, target, addSubmissionCB)}
             disabled={isButtonDisabled(state) || preview}
-            className="btn btn-primary flex justify-center flex-grow md:flex-grow-0">
+            className="btn btn-primary flex justify-center grow md:grow-0">
             {buttonContents(state.formState, checklist)}
           </button>
         </Tooltip>

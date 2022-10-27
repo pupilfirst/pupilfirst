@@ -34,9 +34,7 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
       className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
-      <span className="mr-2 mt-px">
-        <FaIcon classes={"fa-fw " ++ icon} />
-      </span>
+      <span className="mr-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
       {levelName(level) |> str}
     </button>
   })
@@ -51,16 +49,14 @@ let untabbedLevelSelector = (
 ) => {
   let selected =
     <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
-      <span className="flex-grow text-center truncate w-0">
-        {selectedLevel |> levelName |> str}
-      </span>
+      <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
       <FaIcon classes="fas fa-caret-down ml-1" />
     </button>
 
   <Dropdown
     selected
     contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
-    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50"
+    className="grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50"
   />
 }
 
@@ -77,15 +73,13 @@ let tabbedLevelSelector = (
   let selected = hideCaret =>
     <button
       className="rounded-l-lg font-semibold w-full px-2 h-10 flex items-center justify-between">
-      <span className="flex-grow text-center truncate w-0">
-        {selectedLevel |> levelName |> str}
-      </span>
+      <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
       <FaIcon classes={"fas fa-caret-down ml-1" ++ (hideCaret ? " invisible" : "")} />
     </button>
 
   let numberedLevelSelector = showLevelZero
     ? <div
-        className="cursor-pointer text-sm flex-grow rounded-l-lg hover:bg-gray-50 hover:text-primary-500"
+        className="cursor-pointer text-sm grow rounded-l-lg hover:bg-gray-50 hover:text-primary-500"
         onClick={_ => setShowLevelZero(false)}>
         {selected(true)}
       </div>
@@ -93,7 +87,7 @@ let tabbedLevelSelector = (
         key="numbered-level-selector"
         selected={selected(false)}
         contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
-        className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
+        className="cursor-pointer grow rounded-l-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
       />
 
   [

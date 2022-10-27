@@ -18,13 +18,13 @@ let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden flex-shrink-0 mr-4"
+          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 mr-4"
           src
         />
       | None =>
         <Avatar
           name
-          className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden flex-shrink-0"
+          className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">

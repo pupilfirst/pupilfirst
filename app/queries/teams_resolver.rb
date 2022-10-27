@@ -1,5 +1,5 @@
 class TeamsResolver < ApplicationQuery
-  include AuthorizeReviewer
+  include AuthorizeSchoolAdmin
   include FilterUtils
 
   property :course_id
@@ -54,5 +54,13 @@ class TeamsResolver < ApplicationQuery
     else
       raise "#{filter[:sort_by]} is not a valid sort criterion"
     end
+  end
+
+  def resource_school
+    course&.school
+  end
+
+  def course
+    @course ||= Course.find_by(id: course_id)
   end
 end

@@ -105,7 +105,9 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     return false if current_user.faculty.blank?
 
-    current_user.faculty.courses.exists?(id: target.course)
+    current_user.faculty.cohorts.exists?(
+      id: submission.founders.first.cohort_id
+    )
   end
 
   def inactive_students

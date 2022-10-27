@@ -121,7 +121,7 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
         onChange={attachFile(state, send, attachingCB, attachFileCB, preview)}
       />
       <label
-        className="text-center cursor-pointer truncate bg-gray-50 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
+        className="text-center cursor-pointer truncate bg-gray-50 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 grow"
         htmlFor={"attachment_file_" ++ string_of_int(index)}>
         <span className="w-full">
           <i className="fas fa-upload mr-2 text-lg" />

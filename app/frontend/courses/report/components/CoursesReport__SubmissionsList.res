@@ -167,7 +167,7 @@ module SubmissionsSorter = Sorter.Make(Sortable)
 
 let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   let criteria = [sortBy]
-  <div ariaLabel="Change submissions sorting" className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+  <div ariaLabel="Change submissions sorting" className="shrink-0 mt-3 md:mt-0 md:ml-2">
     <label className="block text-tiny font-semibold uppercase"> {tr("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
@@ -263,19 +263,19 @@ let showSubmissionStatus = submission =>
   switch submission |> Submission.status {
   | #Rejected =>
     <div
-      className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
+      className="bg-red-100 border border-red-500 shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
       {tr("rejected") |> str}
     </div>
 
   | #Completed =>
     <div
-      className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
+      className="bg-green-100 border border-green-500 shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
       {tr("completed") |> str}
     </div>
 
   | #PendingReview =>
     <div
-      className="bg-blue-100 border border-blue-500 flex-shrink-0 leading-normal text-blue-800 font-semibold px-3 py-px rounded">
+      className="bg-blue-100 border border-blue-500 shrink-0 leading-normal text-blue-800 font-semibold px-3 py-px rounded">
       {tr("pending_review") |> str}
     </div>
   }
@@ -347,7 +347,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               </div>
               <a
                 href={"/targets/" ++ Submission.targetId(submission)}
-                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200 hover:text-blue-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                className="shrink-0 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200 hover:text-blue-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <span className="hidden md:inline"> {tr("view") |> str} </span>
                 {ts("target") |> str}
                 <FaIcon classes="fas fa-arrow-right ml-2" />

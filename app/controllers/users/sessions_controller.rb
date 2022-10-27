@@ -147,10 +147,11 @@ module Users
       begin
         crypt = EncryptorService.new
         data = crypt.decrypt(params[:token].presence || '')
-        email = data[:auth_hash]&.dig(:info)&.dig(:email)
-        user = User.find_by(email: email, school: current_school)
+        user =
+          Users::AuthenticationService.new(current_school, data[:login_token])
+            .authenticate
 
-        if user.present? && data[:session_id] == session.id
+        if user.present? && data[:session_id].to_s == session.id.to_s
           sign_in user
           redirect_to after_sign_in_path_for(user)
         else

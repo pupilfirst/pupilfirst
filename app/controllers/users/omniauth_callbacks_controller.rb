@@ -57,9 +57,15 @@ module Users
 
     def sign_in_at_oauth_origin
       if user.present?
+        user.regenerate_login_token
+
         token =
           EncryptorService.new.encrypt(
-            { auth_hash: auth_hash, session_id: oauth_origin[:session_id] }
+            {
+              login_token: user.original_login_token,
+              auth_hash: auth_hash_data,
+              session_id: oauth_origin[:session_id]
+            }
           )
 
         token_url_options = {
@@ -91,6 +97,17 @@ module Users
               .first
           school.users.with_email(@email).first
         end
+    end
+
+    def auth_hash_data
+      case auth_hash[:provider]
+      when 'google_oauth2', 'facebook', 'github', 'developer'
+        {}
+      when 'discord'
+        { discord: { uid: auth_hash[:uid] } }
+      else
+        raise_unexpected_provider(provider)
+      end
     end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.

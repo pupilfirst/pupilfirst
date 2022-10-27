@@ -477,7 +477,7 @@ let showCourses = (courses, state) => {
         </div>
       : <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
           <div
-            className="bg-gray-50 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
+            className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
             <EmptyState
               title={t("add_new_course")}
               description={"Let's create another course."}

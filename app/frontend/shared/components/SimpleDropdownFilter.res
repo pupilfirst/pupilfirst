@@ -174,7 +174,7 @@ let make = (
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let params = Webapi.Url.URLSearchParams.make(search)
 
-  <div className="w-full flex gap-3">
+  <div className="bg-gray-50 p-4 w-full flex flex-wrap gap-3 rounded-lg">
     <div className="flex-1">
       <label htmlFor=id className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </label>
       <Multiselect

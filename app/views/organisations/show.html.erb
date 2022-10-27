@@ -32,7 +32,7 @@
           </p>
           <div class="mt-4">
             <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
-            <div class="grid grid-cols-2 gap-5 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
               <% course_with_cohorts[:cohorts].each do |cohort| %>
                 <%= link_to organisation_cohort_path(@organisation, cohort), class: "block bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
                   <%= cohort.name %>

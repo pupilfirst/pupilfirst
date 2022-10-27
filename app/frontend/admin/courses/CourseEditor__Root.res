@@ -1,5 +1,8 @@
 %%raw(`import "./CourseEditor__Root.css"`)
 
+@module("../../shared/images/add-new-course.svg")
+external addNewCourseSVG: string = "default"
+
 exception UnsafeFindFailed(string)
 
 open CourseEditor__Types
@@ -486,26 +489,7 @@ let showCourses = (courses, state) => {
                 <PfIcon className="if i-plus-circle-regular if-fw" />
                 <span className="font-semibold ml-1"> {str(t("add_new_course"))} </span>
               </button>}
-              image={<svg
-                width="150"
-                height="150"
-                viewBox="0 0 150 150"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <circle cx="75" cy="75" r="75" fill="url(#paint0_linear_1452_24450)" />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_1452_24450"
-                    x1="17.246"
-                    y1="2.47079e-06"
-                    x2="179.679"
-                    y2="180.08"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#D0D0D0" />
-                    <stop offset="1" stopColor="#D0D0D0" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>}
+              image={<img src={addNewCourseSVG} />}
             />
           </div>
           {Js.Array.map(course => showCourse(course), courses)->React.array}

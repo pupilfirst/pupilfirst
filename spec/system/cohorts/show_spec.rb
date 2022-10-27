@@ -35,6 +35,9 @@ feature 'Organisation show' do
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation) }
     end
+
+    # Mark one team of students as having completed the course.
+    team_2.founders.each { |f| f.update!(completed_at: 1.day.ago) }
   end
 
   context 'when the user is an organisation admin' do
@@ -43,6 +46,7 @@ feature 'Organisation show' do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text("Total Students\n4")
+      expect(page).to have_text("Students Completed\n2")
       expect(page).to have_text('Level-wise student distribution')
 
       expect(page).to have_link(

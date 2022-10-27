@@ -24,7 +24,7 @@
         </div>
         <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
-          <p class="text-3xl font-bold">Waiting...</p>
+          <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
           <%= link_to t('.view_all'), students_organisation_cohort_path(@organisation, @cohort), class: "text-primary-500 hover:text-primary-800 hover:underline" %>
         </div>
       </div>

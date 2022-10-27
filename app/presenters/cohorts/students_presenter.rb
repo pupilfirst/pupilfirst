@@ -72,9 +72,8 @@ module Cohorts
 
     def counts
       @counts = {
-        total: scope.count
-        # TODO: Uncomment and use the following figure when related branch has been merged.
-        # completed: scope.where.not(completed_at: nil).count
+        total: scope.count,
+        completed: scope.where.not(completed_at: nil).count
       }
     end
 

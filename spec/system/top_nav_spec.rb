@@ -139,4 +139,14 @@ feature 'Top navigation bar', js: true do
       expect(page).to have_link('Coaches', href: '/coaches')
     end
   end
+
+  context 'when the user is an admin of at least one organisation' do
+    let(:organisation_admin) { create :organisation_admin }
+
+    scenario 'user sees a link to organisations index' do
+      sign_in_user organisation_admin.user
+
+      expect(page).to have_link('My Org', href: '/organisations')
+    end
+  end
 end

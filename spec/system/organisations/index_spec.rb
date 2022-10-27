@@ -4,10 +4,14 @@ feature 'Organisation index' do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
+  let(:another_school) { create :school }
 
   let!(:organisation_1) { create :organisation, school: school }
   let!(:organisation_2) { create :organisation, school: school }
-  let!(:organisation_in_another_school) { create :organisation }
+
+  let!(:organisation_in_another_school) do
+    create :organisation, school: another_school
+  end
 
   let(:school_admin_user) { create :user, school: school }
 

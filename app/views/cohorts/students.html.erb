@@ -58,9 +58,9 @@
       <div class="mt-6 flex items-center justify-center">
         <%= paginate @presenter.students %>
       </div>
-        <% if @presenter.students.total_pages > 1 %>
-          <div class="text-center text-sm italic mt-4"><%= t('.pagination_notice', count: @presenter.students.total_count) %></div>
-        <% end %>
+      <% if @presenter.students.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4"><%= t('.pagination_notice', page_start: @presenter.page_start, page_end: @presenter.page_end, count: @presenter.students.total_count) %></div>
+      <% end %>
     </div>
   </section>
 </div>

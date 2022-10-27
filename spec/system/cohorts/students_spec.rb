@@ -224,7 +224,9 @@ feature 'Organisation show' do
                    referrer:
                      students_organisation_cohort_path(organisation, cohort)
 
-      expect(page).to have_text('There are a total of 30 such students')
+      expect(page).to have_text(
+        'Now showing 1-25 of a total of 30 such students'
+      )
     end
 
     scenario 'user can access list of students of inactive course' do

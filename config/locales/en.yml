@@ -21,7 +21,7 @@ en:
       time_ago: Last seen %{time_ago} ago
     students:
       distribution_heading: Level-wise student distribution
-      pagination_notice: There are a total of %{count} such students.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
       new_topic: New Topic

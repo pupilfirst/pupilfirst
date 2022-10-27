@@ -214,6 +214,7 @@ describe CourseExports::PrepareStudentsExportService do
             'Affiliation',
             'Tags',
             'Last Seen At',
+            'Course Completed At',
             'Criterion A (2,3) - Average',
             'Criterion B (2,3) - Average'
           ],
@@ -227,6 +228,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_1.affiliation,
             'tag 1, tag 2',
             last_seen_at(student_1),
+            student_1.completed_at&.iso8601 || '',
             student_1_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -250,6 +252,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_2.affiliation,
             '',
             last_seen_at(student_2),
+            student_2.completed_at&.iso8601 || '',
             student_2_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -383,6 +386,7 @@ describe CourseExports::PrepareStudentsExportService do
                 'Affiliation',
                 'Tags',
                 'Last Seen At',
+                'Course Completed At',
                 'Criterion A (2,3) - Average',
                 'Criterion B (2,3) - Average'
               ],
@@ -396,6 +400,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_1.affiliation,
                 'tag 1, tag 2',
                 last_seen_at(student_1),
+                student_1.completed_at&.iso8601 || '',
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -419,6 +424,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_3_access_ended.affiliation,
                 'tag 2',
                 last_seen_at(student_3_access_ended),
+                student_3_access_ended.completed_at&.iso8601 || '',
                 nil,
                 nil
               ],
@@ -432,6 +438,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_4_dropped_out.affiliation,
                 'tag 3',
                 last_seen_at(student_4_dropped_out),
+                student_4_dropped_out.completed_at&.iso8601 || '',
                 nil,
                 nil
               ]

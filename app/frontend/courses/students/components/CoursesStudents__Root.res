@@ -242,7 +242,7 @@ let make = (~courseId) => {
               {tr("level_distribution_label")->str}
             </p>
             <CoursesStudents__StudentDistribution
-              params={Some(params)} studentDistribution={state.studentDistribution}
+              params studentDistribution={state.studentDistribution}
             />
           </div>,
           Webapi.Url.URLSearchParams.has("level", params),

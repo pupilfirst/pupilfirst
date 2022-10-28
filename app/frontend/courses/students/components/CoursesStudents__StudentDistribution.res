@@ -26,12 +26,19 @@ let stylingForLevelPills = percentageStudents => {
   }
 }
 
-let onLevelSelect = (value, params) => {
+let onLevelSelect = (value, params, href) => {
   switch params {
   | Some(p) =>
     Webapi.Url.URLSearchParams.set("level", value, p)
     RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(p))
-  | None => Js.log("Navigate normally")
+  | None =>
+    let search = Webapi.Dom.location->Webapi.Dom.Location.search
+    let params = Webapi.Url.URLSearchParams.make(search)
+    Webapi.Url.URLSearchParams.set("level", value, params)
+    let currentPath = Webapi.Dom.location->Webapi.Dom.Location.pathname
+    let searchString = Webapi.Url.URLSearchParams.toString(params)
+    let path = Belt.Option.getWithDefault(href, currentPath)
+    Webapi.Dom.window->Webapi.Dom.Window.setLocation(`${path}?${searchString}`)
   }
 }
 
@@ -64,7 +71,7 @@ let studentDistributionSkeleton =
   </div>
 
 @react.component
-let make = (~studentDistribution, ~params) => {
+let make = (~studentDistribution, ~params=?, ~href=?) => {
   <div ariaLabel="Students level-wise distribution" className="w-full py-4">
     {
       let totalStudentsInCourse =
@@ -113,7 +120,7 @@ let make = (~studentDistribution, ~params) => {
             <Tooltip className="w-full" tip position=#Bottom>
               <button
                 id={tr("students_level") ++ DistributionInLevel.number(level)->string_of_int}
-                onClick={_ => onLevelSelect(DistributionInLevel.filterName(level), params)}
+                onClick={_ => onLevelSelect(DistributionInLevel.filterName(level), params, href)}
                 className={"student-distribution__pill w-full hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (
                   completedLevels->Js.Array2.includes(level)
                     ? "bg-yellow-300 text-yellow-900"
@@ -151,10 +158,12 @@ let make = (~studentDistribution, ~params) => {
 let makeFromJson = props => {
   open Json.Decode
 
-  let studentDistribution = props |> field("studentDistribution", array(DistributionInLevel.decode))
+  let studentDistribution = field("studentDistribution", array(DistributionInLevel.decode), props)
+  let href = optional(field("href", string), props)
 
   make({
     "studentDistribution": studentDistribution,
     "params": None,
+    "href": href,
   })
 }

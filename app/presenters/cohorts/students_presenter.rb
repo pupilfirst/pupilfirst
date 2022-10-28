@@ -20,13 +20,16 @@ module Cohorts
                 {
                   id: level.id.to_s,
                   number: level.number,
-                  filterName: 'level',
+                  filterName: level.filter_name,
                   studentsInLevel: counts[level.number] || 0,
                   unlocked: level.unlocked?
                 }
               end
 
-          { studentDistribution: dist }
+          {
+            studentDistribution: dist,
+            href: view.students_organisation_cohort_path(@organisation, @cohort)
+          }
         end
     end
 

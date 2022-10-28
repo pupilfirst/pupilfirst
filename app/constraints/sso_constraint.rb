@@ -8,7 +8,5 @@ class SsoConstraint
 
     # Match constraint if visiting the SSO domain.
     request.host == sso_domain
-
-    true
   end
 end

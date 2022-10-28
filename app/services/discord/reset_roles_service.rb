@@ -8,7 +8,11 @@ module Discord
     def execute
       return unless @user.discord_user_id.present? && @configuration.present?
 
-      role_ids = @user.cohorts.pluck(:discord_role_ids).flatten
+      role_ids =
+        [
+          @user.cohorts.pluck(:discord_role_ids),
+          @configuration['default_role_ids']
+        ].flatten - [nil]
 
       return if role_ids.empty?
 

@@ -10,16 +10,17 @@
     <div class="px-4 py-5 sm:p-6">
       <div class="flex flex-col md:flex-row">
         <div class="w-full md:w-1/3 pr-4">
-          <h3 class="text-lg font-semibold">Connect you discord Account</h3>
+          <h3 class="text-lg font-semibold">Connect you Discord Account</h3>
           <p class="mt-1 text-sm text-gray-600">This will help you gain access to locked channels in discord</p>
         </div>
-        <div class="mt-5 md:mt-0 w-full md:w-2/3">
-          <div class="">
-            <%= link_to "Connect Discord", presenter.discord_federated_login_url, method: :post %>
-          </div>
-          <div class="mt-2">
-            <%= current_user.discord_user_id%>
-          </div>
+        <div class="mt-5 md:mt-0 w-full md:w-2/3 flex items-center">
+          <% if current_user.discord_user_id.blank? %>
+            <div class="">
+              <%= link_to "Connect Discord", presenter.discord_federated_login_url, class: 'btn btn-primary btn-large', method: :post %>
+            </div>
+          <% else %>
+            <%= button_to "Disconnect Discord", clear_discord_id_path, class: 'btn btn-primary-ghost btn-large', method: :post %>
+          <% end %>
         </div>
       </div>
     </div>

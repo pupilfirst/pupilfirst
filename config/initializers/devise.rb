@@ -255,7 +255,7 @@ Devise.setup do |config|
   config.omniauth :discord,
                   ENV['DISCORD_KEY'],
                   ENV['DISCORD_SECRET'],
-                  scope: 'identify'
+                  scope: 'email identify'
   config.omniauth :developer, fields: %i[email] if Rails.env.development?
 
   # ==> Warden configuration

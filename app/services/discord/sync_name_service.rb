@@ -6,7 +6,7 @@ module Discord
     end
 
     def execute
-      return unless @user.discord_user_id.present?
+      return if @user.discord_user_id.blank?
 
       Discordrb::API::Server.update_member(
         "Bot #{@configuration['bot_token']}",

@@ -22,7 +22,7 @@ module Users
       end
 
       def providers
-        default_providers = %i[google facebook github]
+        default_providers = %i[google facebook github discord]
 
         if Rails.env.development?
           [:developer] + default_providers
@@ -43,6 +43,8 @@ module Users
             'federated-sigin-in__github-btn hover:bg-black text-white'
           when :google
             'federated-sigin-in__google-btn hover:bg-red-600 text-white'
+          when :discord
+            'federated-sigin-in__discord-btn hover:bg-indigo-600 text-white'
           when :developer
             'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
           else
@@ -59,6 +61,8 @@ module Users
             'facebook'
           when :github
             'github'
+          when :discord
+            'discord'
           when :developer
             'developer'
           else
@@ -76,6 +80,8 @@ module Users
           'fab fa-facebook-f mr-1'
         when :github
           'fab fa-github'
+        when :discord
+          'fab fa-discord'
         when :developer
           'fas fa-laptop-code'
         else
@@ -92,6 +98,8 @@ module Users
             'continue_with_facebook'
           when :github
             'continue_with_github'
+          when :discord
+            'continue_with_discord'
           when :developer
             'continue_as_developer'
           else

@@ -1,17 +1,9 @@
-after 'development:organisations', 'development:school_admins' do
+after 'development:organisations' do
   puts 'Seeding organisation_admins'
 
-  School.all.each do |school|
-    admin =
-      school
-        .school_admins
-        .joins(:user)
-        .where(users: { email: 'admin@example.com' })
-        .first
-
-    school.organisations.each do |organisation|
-      OrganisationAdmin.where(user: admin, organisation: organisation)
-        .first_or_create
-    end
+  # Make the first user of each org its org admin.
+  Organisation.all.each do |organisation|
+    user = organisation.users.first
+    organisation.organisation_admins.create!(user: user)
   end
 end

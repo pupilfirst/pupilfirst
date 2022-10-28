@@ -1,3 +1,14 @@
+# JSON fields schema:
+#
+# configuration: {
+#   discord: {
+#     server_id: string,
+#     bot_token: string,
+#     default_role_ids: [string]
+#   }
+# }
+#
+
 class School < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :courses, dependent: :restrict_with_error

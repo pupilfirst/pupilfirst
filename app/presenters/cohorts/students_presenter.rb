@@ -20,7 +20,7 @@ module Cohorts
                 {
                   id: level.id.to_s,
                   number: level.number,
-                  filterName: level.filter_name,
+                  filterName: "#{level.number};L#{level.number}: #{level.name}",
                   studentsInLevel: counts[level.number] || 0,
                   unlocked: level.unlocked?
                 }

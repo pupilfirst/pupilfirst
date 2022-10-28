@@ -89,6 +89,11 @@ feature 'Organisation show' do
         'Overview',
         href: organisation_cohort_path(organisation, cohort)
       )
+
+      # Check whether the student distribution bar can be used to filter by level.
+      click_button '10'
+
+      expect(page).to have_selector('[data-test-class="student"]', count: 10)
     end
 
     scenario 'user can paginate through all students' do

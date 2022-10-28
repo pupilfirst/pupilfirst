@@ -11,6 +11,7 @@
 
 class School < ApplicationRecord
   has_many :users, dependent: :destroy
+  has_many :organisations, dependent: :destroy
   has_many :courses, dependent: :restrict_with_error
   has_many :cohorts, through: :courses
   has_many :founders, through: :users

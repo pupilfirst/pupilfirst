@@ -71,13 +71,13 @@ module Types
       # object.startup_feedback.present?
     end
 
-    def students_have_same_team(submission)
-      submission.founders.distinct(:team_id).pluck(:team_id).one?
+    def students_have_same_team?(submission)
+      submission.founders.distinct(:team_id).pluck(:team_id).count == 1
     end
 
     def resolve_team_name(submission)
-      if submission.team_submission? && students_have_same_team(submission) &&
-           submission.timeline_event_owners.count > 1
+      if submission.timeline_event_owners.count > 1 &&
+           submission.team_submission? && students_have_same_team?(submission)
         submission.founders.first.team.name
       end
     end

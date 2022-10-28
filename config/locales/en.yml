@@ -5,6 +5,24 @@ en:
       welcome: Welcome to %{school_name}!
     resolve_applicant_path:
       welcome: Welcome to %{school_name}!
+  cohorts:
+    shared:
+      back_link: < Back
+      overview_link: Overview
+      students_link: Students
+    show:
+      distribution_heading: Level-wise student distribution
+      students_completed: Students Completed
+      total_students: Total Students
+      view_all: View All
+    student:
+      level_label: Level
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
+    students:
+      distribution_heading: Level-wise student distribution
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
       new_topic: New Topic
@@ -2255,6 +2273,22 @@ en:
       topic_updated_notification: Topic updated successfully!
     update_user:
       profile_saved_notification: Profile updated successfully!
+  organisations:
+    index:
+      heading: Organisations
+    show:
+      active_students_label: Active Students
+      back_link: < Back
+      cohorts_subheading: Cohorts
+      organisation_label: Organisation
+      students_enrolled_heading: Students enrolled in
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> active cohort
+        other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+      total_students_label: Total Students
   posts:
     versions:
       back_to_post: Back to Post
@@ -2312,6 +2346,8 @@ en:
           title: Coaches
         dashboard_link:
           title: Dashboard
+        organisations_link:
+          title: My Org
     posts:
       versions:
         page_title:
@@ -2437,6 +2473,12 @@ en:
     optional: optional
     optional_braces: (optional)
     or: or
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      next: Next &rsaquo;
+      previous: "&lsaquo; Previous"
+      truncate: "&hellip;"
     pass: Pass
     percentage: Percentage
     post: Post

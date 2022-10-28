@@ -1,0 +1,8 @@
+<%# Non-link tag that stands for skipped pages...
+  - available local variables
+    current_page:  a page object for the currently displayed page
+    total_pages:   total number of pages
+    per_page:      number of items to fetch per page
+    remote:        data-remote
+-%>
+<div class="w-8 h-8 flex items-center justify-center rounded-md shadow border border-transparent"><%= t('shared.pagination.truncate').html_safe %></div>

@@ -13,13 +13,13 @@ after 'development:courses' do
 
   school.courses.each do |course|
     course.cohorts.create!(
-      name: Faker::Color.color_name,
+      name: "Summer #{Time.zone.now.year}",
       description: Faker::Lorem.paragraph,
       course: course
     )
 
     course.cohorts.create!(
-      name: Faker::Color.color_name,
+      name: "Winter #{Time.zone.now.year}",
       description: Faker::Lorem.paragraph,
       course: course,
       ends_at: 1.day.ago

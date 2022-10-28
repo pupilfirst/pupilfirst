@@ -416,23 +416,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.index ["recipient_id"], name: "index_notifications_on_recipient_id"
   end
 
-  create_table "organisation_admins", force: :cascade do |t|
-    t.bigint "organisation_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["organisation_id"], name: "index_organisation_admins_on_organisation_id"
-    t.index ["user_id"], name: "index_organisation_admins_on_user_id"
-  end
-
-  create_table "organisations", force: :cascade do |t|
-    t.string "name"
-    t.bigint "school_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["school_id"], name: "index_organisations_on_school_id"
-  end
-
   create_table "post_likes", force: :cascade do |t|
     t.bigint "post_id"
     t.bigint "user_id"
@@ -807,13 +790,11 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.string "update_email_token"
     t.datetime "update_email_token_sent_at"
     t.string "new_email"
-    t.bigint "organisation_id"
     t.string "discord_user_id"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["login_token_digest"], name: "index_users_on_login_token_digest", unique: true
-    t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
@@ -878,9 +859,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"
-  add_foreign_key "organisation_admins", "organisations"
-  add_foreign_key "organisation_admins", "users"
-  add_foreign_key "organisations", "schools"
   add_foreign_key "posts", "posts", column: "reply_to_post_id"
   add_foreign_key "posts", "topics"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
@@ -906,7 +884,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"
   add_foreign_key "topics", "users", column: "locked_by_id"
-  add_foreign_key "users", "organisations"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"
 end

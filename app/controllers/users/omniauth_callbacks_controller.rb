@@ -60,15 +60,14 @@ module Users
 
     # This method is called when the user is already signed in, and is trying to link their social account with user.
     def passthru_oauth_data
-      token =
+      encrypted_token =
         EncryptorService.new.encrypt(
           { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] }
         )
 
       token_url_options = {
-        token: token,
-        host: oauth_origin[:fqdn],
-        port: nil # Hack to get the local setup working, should be removed.
+        encrypted_token: encrypted_token,
+        host: oauth_origin[:fqdn]
       }
 
       redirect_to user_auth_callback_url(token_url_options)
@@ -79,7 +78,7 @@ module Users
       if user.present?
         user.regenerate_login_token
 
-        token =
+        encrypted_token =
           EncryptorService.new.encrypt(
             {
               login_token: user.original_login_token,
@@ -89,9 +88,8 @@ module Users
           )
 
         token_url_options = {
-          token: token,
-          host: oauth_origin[:fqdn],
-          port: nil # Hack to get the local setup working, should be removed.
+          encrypted_token: encrypted_token,
+          host: oauth_origin[:fqdn]
         }
 
         redirect_to user_auth_callback_url(token_url_options)

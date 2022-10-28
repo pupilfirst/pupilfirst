@@ -142,11 +142,11 @@ module Users
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
-    # GET /users/auth_callback?token=xxx
+    # GET /users/auth_callback?encrypted_token=xxx
     def auth_callback
       begin
         crypt = EncryptorService.new
-        data = crypt.decrypt(params[:token].presence || '')
+        data = crypt.decrypt(params[:encrypted_token].presence || '')
 
         # Abort if the session is invalid
         if data[:session_id].to_s != session.id.to_s

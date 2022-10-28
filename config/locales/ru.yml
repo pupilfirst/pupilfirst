@@ -5,6 +5,24 @@ ru:
       welcome: Добро пожаловать в %{school_name}!
     resolve_applicant_path:
       welcome: Добро пожаловать в %{school_name}!
+  cohorts:
+    shared:
+      back_link: < Back
+      overview_link: Overview
+      students_link: Students
+    show:
+      distribution_heading: Level-wise student distribution
+      students_completed: Students Completed
+      total_students: Total Students
+      view_all: View All
+    student:
+      level_label: Level
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
+    students:
+      distribution_heading: Level-wise student distribution
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
       new_topic: Новая тема
@@ -2275,6 +2293,26 @@ ru:
       topic_updated_notification: Тема успешно обновлена!
     update_user:
       profile_saved_notification: Профиль успешно обновлен!
+  organisations:
+    index:
+      heading: Organisations
+    show:
+      active_students_label: Active Students
+      back_link: < Back
+      cohorts_subheading: Cohorts
+      organisation_label: Organisation
+      students_enrolled_heading: Students enrolled in
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        few: <span class="font-semibold text-black">%{count}</span> students enrolled
+        many: <span class="font-semibold text-black">%{count}</span> students enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> active cohort
+        few: in <span class="font-semibold text-black">%{count}</span> active cohorts
+        many: in <span class="font-semibold text-black">%{count}</span> active cohorts
+        other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+      total_students_label: Total Students
   posts:
     versions:
       back_to_post: Вернуться к сообщению
@@ -2332,6 +2370,8 @@ ru:
           title: Наставники
         dashboard_link:
           title: Панель
+        organisations_link:
+          title: My Org
     posts:
       versions:
         page_title:
@@ -2457,6 +2497,12 @@ ru:
     optional: необязательно
     optional_braces: (необязательно)
     or: или
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      next: Next &rsaquo;
+      previous: "&lsaquo; Previous"
+      truncate: "&hellip;"
     pass: Пройдено
     percentage: Процент
     post: Пост

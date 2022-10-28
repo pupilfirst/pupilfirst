@@ -93,7 +93,7 @@ module Layouts
     end
 
     def orgs_link
-      if current_user.present? && current_user.organisations.exists?
+      if current_user.present? && view.policy_scope(Organisation).exists?
         [
           {
             title:

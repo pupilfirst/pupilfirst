@@ -140,13 +140,29 @@ feature 'Top navigation bar', js: true do
     end
   end
 
-  context 'when the user is an admin of at least one organisation' do
-    let(:organisation_admin) { create :organisation_admin }
+  context 'when organisations exist' do
+    context 'when user is a school admin' do
+      before do
+        # Make the user a school admin.
+        create :organisation, school: student.school
+        create :school_admin, user: student.user, school: student.school
+      end
 
-    scenario 'user sees a link to organisations index' do
-      sign_in_user organisation_admin.user
+      scenario 'user sees a link to organisations index' do
+        sign_in_user student.user
 
-      expect(page).to have_link('My Org', href: '/organisations')
+        expect(page).to have_link('My Org', href: '/organisations')
+      end
+    end
+
+    context 'when user is an org admin' do
+      let(:organisation_admin) { create :organisation_admin }
+
+      scenario 'user sees a link to organisations index' do
+        sign_in_user organisation_admin.user
+
+        expect(page).to have_link('My Org', href: '/organisations')
+      end
     end
   end
 end

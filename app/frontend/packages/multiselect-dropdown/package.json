@@ -1,6 +1,6 @@
 {
   "name": "@pupilfirst/multiselect-dropdown",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Tailwind styled Reason React multiselect dropdown component",
   "keywords": [
     "Reason",
@@ -32,7 +32,7 @@
     "tailwindcss": "^1.9.6"
   },
   "dependencies": {
-    "@pupilfirst/pf-icon": "^1.2.0",
+    "@pupilfirst/pf-icon": "^1.3.0",
     "@rescript/react": "^0.10.3",
     "bs-webapi": "^0.19.1",
     "fuse.js": "^6.6.2",

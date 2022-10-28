@@ -1,6 +1,6 @@
 {
   "name": "@pupilfirst/multiselect-inline",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "A multi-select inline dropdown component for ReasonReact projects",
   "keywords": [
     "Reason",
@@ -31,7 +31,7 @@
     "tailwindcss": "^1.1.4"
   },
   "dependencies": {
-    "@pupilfirst/pf-icon": "^1.2.0",
+    "@pupilfirst/pf-icon": "^1.3.0",
     "@rescript/react": "^0.10.3",
     "bs-webapi": "^0.19.1",
     "react": "^16.8.6",

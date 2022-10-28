@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.bigint "course_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "discord_role_ids", default: [], array: true
     t.index ["course_id"], name: "index_cohorts_on_course_id"
   end
 

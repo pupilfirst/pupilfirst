@@ -51,7 +51,8 @@ class HomeController < ApplicationController
       {
         provider: params[:provider],
         fqdn: params[:fqdn],
-        session_id: params[:session_id]
+        session_id: params[:session_id],
+        link_data: params[:link_data]
       }.to_json
     )
 

@@ -147,11 +147,30 @@ module Users
       begin
         crypt = EncryptorService.new
         data = crypt.decrypt(params[:token].presence || '')
+
+        # Abort if the session is invalid
+        if data[:session_id].to_s != session.id.to_s
+          flash[:error] = 'Invalid login credtentails'
+          redirect_to new_user_session_path
+          return
+        end
+
+        # Link discord account to user if the request has discord data
+        if data[:login_token].blank? && current_user.present? &&
+             data[:auth_hash]&.dig(:discord)&.dig(:uid).present?
+          current_user.update!(
+            discord_user_id: data[:auth_hash][:discord][:uid]
+          )
+
+          redirect_to edit_user_path
+          return
+        end
+
         user =
           Users::AuthenticationService.new(current_school, data[:login_token])
             .authenticate
 
-        if user.present? && data[:session_id].to_s == session.id.to_s
+        if user.present?
           sign_in user
           redirect_to after_sign_in_path_for(user)
         else

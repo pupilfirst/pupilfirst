@@ -9,7 +9,9 @@ module Users
       @email = email_from_auth_hash
 
       if oauth_origin.present? && oauth_origin[:session_id]
-        if @email.blank?
+        if oauth_origin[:link_data].present?
+          passthru_oauth_data
+        elsif @email.blank?
           redirect_to oauth_error_url(
                         host: oauth_origin[:fqdn],
                         error: email_blank_flash
@@ -26,6 +28,7 @@ module Users
     alias google_oauth2 oauth_callback
     alias facebook oauth_callback
     alias github oauth_callback
+    alias discord oauth_callback
     alias developer oauth_callback
 
     def failure
@@ -55,6 +58,23 @@ module Users
         end
     end
 
+    # This method is called when the user is already signed in, and is trying to link their social account with user.
+    def passthru_oauth_data
+      token =
+        EncryptorService.new.encrypt(
+          { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] }
+        )
+
+      token_url_options = {
+        token: token,
+        host: oauth_origin[:fqdn],
+        port: nil # Hack to get the local setup working, should be removed.
+      }
+
+      redirect_to user_auth_callback_url(token_url_options)
+    end
+
+    # This method is called when the user is not signed in, and is trying to sign in using OAuth.
     def sign_in_at_oauth_origin
       if user.present?
         user.regenerate_login_token
@@ -99,6 +119,7 @@ module Users
         end
     end
 
+    # This method is used to pass the auth_hash data to the oauth_origin.
     def auth_hash_data
       case auth_hash[:provider]
       when 'google_oauth2', 'facebook', 'github', 'developer'

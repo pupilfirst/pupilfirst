@@ -15,7 +15,10 @@
         </div>
         <div class="mt-5 md:mt-0 w-full md:w-2/3">
           <div class="">
-            <%= link_to "Connect Discord", user_discord_omniauth_authorize_path, method: :post %>
+            <%= link_to "Connect Discord", presenter.discord_federated_login_url, method: :post %>
+          </div>
+          <div class="mt-2">
+            <%= current_user.discord_user_id%>
           </div>
         </div>
       </div>

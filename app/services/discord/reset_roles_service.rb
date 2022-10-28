@@ -1,17 +1,21 @@
 module Discord
-  class SetRolesService
+  class ResetRolesService
     def initialize(user)
       @user = user
     end
 
-    def execute(roles_ids)
+    def execute
       return unless @user.discord_user_id.present?
+
+      role_ids = @user.cohorts.pluck(:discord_role_ids).flatten
+
+      return if role_ids.empty?
 
       Discordrb::API::Server.update_member(
         "Bot #{ENV['DISCORD_BOT_TOKEN']}",
         ENV['DISCORD_SERVER_ID'],
         @user.discord_user_id,
-        roles: roles_ids
+        roles: role_ids
       )
     end
   end

@@ -21,6 +21,7 @@ en:
       time_ago: Last seen %{time_ago} ago
     students:
       distribution_heading: Level-wise student distribution
+      nothing_to_show: There are no students matching the selected filters.
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
@@ -2472,13 +2473,13 @@ en:
     optional: optional
     optional_braces: (optional)
     or: or
-    pass: Pass
     pagination:
       first: "&laquo;"
       last: "&raquo;"
+      next: Next &rsaquo;
       previous: "&lsaquo; Previous"
-      next: "Next &rsaquo;"
       truncate: "&hellip;"
+    pass: Pass
     percentage: Percentage
     post: Post
     preferred_name: Preferred name

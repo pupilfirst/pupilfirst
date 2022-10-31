@@ -1,4 +1,7 @@
-let defaultMaxSize = 5 * 1024 * 1024
+@val @scope(("window", "pupilfirst"))
+external maxUploadFileSize: int = "maxUploadFileSize"
+
+let defaultMaxSize = maxUploadFileSize
 let defaultVideoMaxSize = 500 * 1024 * 1024
 
 let hasValidSize = (~maxSize, file) => file["size"] <= maxSize

@@ -2,6 +2,9 @@ exception InvalidModeForPreview
 
 %%raw(`import "./MarkdownEditor.css"`)
 
+@val @scope(("window", "pupilfirst"))
+external maxUploadFileSize: int = "maxUploadFileSize"
+
 let str = React.string
 let t = I18n.t(~scope="components.MarkdownEditor")
 
@@ -485,7 +488,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   | [] => ()
   | files =>
     let file = files[0]
-    let maxFileSize = 5 * 1024 * 1024
+    let maxFileSize = maxUploadFileSize
     send(SelectFile(ReactEvent.Form.target(event)["value"]))
 
     let error = file["size"] > maxFileSize ? Some(t("error_maximum_file_size")) : None

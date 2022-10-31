@@ -25,14 +25,15 @@
     <!-- Prep for JS -->
     <%= javascript_tag(nonce: true) do %>
       window.pupilfirst = {
-      environment: "<%= Rails.env %>",
-      defaultLocale: "<%= I18n.default_locale %>",
-      locale: "<%= I18n.locale %>",
-      rollbar: {
-      accessToken: "<%= ENV['ROLLBAR_CLIENT_TOKEN'] %>",
-      captureUncaught: "<%= ENV['ROLLBAR_CAPTURE_UNCAUGHT'] %>",
-      captureUnhandledRejections: "<%= ENV['ROLLBAR_CAPTURE_UNHANDLED_REJECTIONS'] %>",
-      }
+        environment: "<%= Rails.env %>",
+        defaultLocale: "<%= I18n.default_locale %>",
+        locale: "<%= I18n.locale %>",
+        maxUploadFileSize: <%= ENV['MAX_UPLOAD_FILE_SIZE'] %>,
+        rollbar: {
+          accessToken: "<%= ENV['ROLLBAR_CLIENT_TOKEN'] %>",
+          captureUncaught: "<%= ENV['ROLLBAR_CAPTURE_UNCAUGHT'] %>",
+          captureUnhandledRejections: "<%= ENV['ROLLBAR_CAPTURE_UNHANDLED_REJECTIONS'] %>",
+        }
       }
       // Prevent Prism from automatically highlighting all code elements on the page.
       window.Prism = window.Prism || {};

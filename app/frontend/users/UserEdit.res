@@ -1,5 +1,8 @@
 let str = React.string
 
+@val @scope(("window", "pupilfirst"))
+external maxUploadFileSize: int = "maxUploadFileSize"
+
 let t = I18n.t(~scope="components.UserEdit")
 let ts = I18n.ts
 
@@ -180,7 +183,7 @@ let handleAvatarInputChange = (send, formId, event) => {
   | files =>
     let file = files[0]
 
-    let maxAllowedFileSize = 5 * 1024 * 1024
+    let maxAllowedFileSize = maxUploadFileSize
     let isInvalidImageFile =
       file["size"] > maxAllowedFileSize ||
         switch file["_type"] {

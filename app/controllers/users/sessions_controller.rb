@@ -162,8 +162,7 @@ module Users
             discord_user_id: data[:auth_hash][:discord][:uid]
           )
 
-          Discord::SyncNameJob.perform_later(current_user.id)
-          Discord::ResetRolesJob.perform_later(current_user.id)
+          Discord::SyncProfileJob.perform_later(current_user.id)
 
           flash[:success] = 'Discord account linked successfully'
 

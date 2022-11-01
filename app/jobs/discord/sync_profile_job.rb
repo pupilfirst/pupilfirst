@@ -1,8 +1,8 @@
 module Discord
-  class ResetRolesJob < ApplicationJob
+  class SyncProfileJob < ApplicationJob
     def perform(user_id)
       user = User.find(user_id)
-      Discord::ResetRolesService.new(user).execute
+      Discord::SyncProfileJob.new(user).execute
     end
   end
 end

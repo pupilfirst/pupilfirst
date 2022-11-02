@@ -40,7 +40,8 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   end
 
   def sender_signature
-    custom_signature = Schools.Configuration.new(@school).email_sender_signature
+    custom_signature =
+      Schools::Configuration.new(@school).email_sender_signature
 
     if custom_signature.present? && custom_signature['confirmed_at'].present?
       "#{custom_signature['name']} <#{custom_signature['email']}>"

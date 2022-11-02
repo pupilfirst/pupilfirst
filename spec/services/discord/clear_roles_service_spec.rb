@@ -25,25 +25,16 @@ describe Discord::ClearRolesService do
           roles: []
         )
 
-        subject.new(user, user.discord_user_id).execute
-      end
-    end
-
-    context 'when a user does not have a discord user id' do
-      it 'does not clear the roles' do
-        expect(Discordrb::API::Server).not_to receive(:update_member)
-
-        subject.new(user, nil).execute
+        subject.new(user.discord_user_id, school.configuration['discord'])
+          .execute
       end
     end
 
     context 'when configuration is not present' do
-      before { school.update!(configuration: {}) }
-
       it 'does not clear the roles' do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 
-        subject.new(user, user.discord_user_id).execute
+        subject.new(user.discord_user_id, nil).execute
       end
     end
   end

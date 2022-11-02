@@ -4,7 +4,11 @@ describe Users::DeleteAccountService do
   subject { described_class.new(user) }
 
   # Setup the basics
-  let(:user) { create :user, account_deletion_notification_sent_at: 2.days.ago }
+  let(:user) do
+    create :user,
+           account_deletion_notification_sent_at: 2.days.ago,
+           discord_user_id: Faker::Number.number(digits: 18)
+  end
   let!(:student) { create :student, user: user }
   let!(:team) { create :team_with_students }
 

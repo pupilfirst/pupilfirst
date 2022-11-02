@@ -6,12 +6,12 @@ module Discord
     end
 
     def execute
-      return if @configuration.blank?
+      return unless @configuration.configured?
 
       begin
         Discordrb::API::Server.update_member(
-          "Bot #{@configuration['bot_token']}",
-          @configuration['server_id'],
+          "Bot #{@configuration.bot_token}",
+          @configuration.server_id,
           @discord_user_id,
           roles: []
         )

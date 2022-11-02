@@ -5,11 +5,11 @@ module Discord
     end
 
     def execute
-      return if @user.discord_user_id.blank? || configuration.blank?
+      return if @user.discord_user_id.blank? || !configuration.configured?
 
       Discordrb::API::Server.update_member(
-        "Bot #{configuration['bot_token']}",
-        configuration['server_id'],
+        "Bot #{configuration.bot_token}",
+        configuration.server_id,
         @user.discord_user_id,
         nick: @user.name
       )
@@ -22,7 +22,7 @@ module Discord
     end
 
     def configuration
-      @configuration ||= Schools::Configuration.new(@user.school).discord
+      @configuration ||= Schools::Configuration::Discord.new(@user.school)
     end
   end
 end

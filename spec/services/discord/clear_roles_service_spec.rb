@@ -4,7 +4,13 @@ describe Discord::ClearRolesService do
   subject { described_class }
 
   let(:discord_configuration) do
-    { discord: { bot_token: 'bot_token', server_id: 'server_id' } }
+    {
+      discord: {
+        bot_token: 'bot_token',
+        server_id: 'server_id',
+        default_role_ids: ['default']
+      }
+    }
   end
 
   let(:school) { create :school, configuration: discord_configuration }
@@ -25,8 +31,10 @@ describe Discord::ClearRolesService do
           roles: []
         )
 
-        subject.new(user.discord_user_id, school.configuration['discord'])
-          .execute
+        subject.new(
+          user.discord_user_id,
+          Schools::Configuration::Discord.new(school)
+        ).execute
       end
     end
 

@@ -5,19 +5,19 @@ module Discord
     end
 
     def execute
-      return unless @user.discord_user_id.present? && configuration.present?
+      return unless @user.discord_user_id.present? && configuration.configured?
 
       role_ids =
         [
           @user.cohorts.pluck(:discord_role_ids),
-          configuration['default_role_ids']
+          configuration.default_role_ids
         ].flatten - [nil]
 
       return if role_ids.empty?
 
       Discordrb::API::Server.update_member(
-        "Bot #{configuration['bot_token']}",
-        configuration['server_id'],
+        "Bot #{configuration.bot_token}",
+        configuration.server_id,
         @user.discord_user_id,
         roles: role_ids,
         nick: @user.name
@@ -31,7 +31,7 @@ module Discord
     end
 
     def configuration
-      @configuration ||= Schools::Configuration.new(@user.school).discord
+      @configuration ||= Schools::Configuration::Discord.new(@user.school)
     end
   end
 end

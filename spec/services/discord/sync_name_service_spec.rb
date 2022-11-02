@@ -4,7 +4,13 @@ describe Discord::SyncNameService do
   subject { described_class }
 
   let(:discord_configuration) do
-    { discord: { bot_token: 'bot_token', server_id: 'server_id' } }
+    {
+      discord: {
+        bot_token: 'bot_token',
+        server_id: 'server_id',
+        default_role_ids: ['default']
+      }
+    }
   end
 
   let(:school) { create :school, configuration: discord_configuration }

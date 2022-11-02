@@ -3,42 +3,58 @@ module Schools
     include ActiveModel::Model
     include ActiveModel::Validations
 
+    class Discord
+      attr_accessor :bot_token, :server_id, :default_role_ids
+
+      def initialize(school)
+        @discord = school.configuration['discord'].presence || {}
+        @bot_token = @discord['bot_token']
+        @server_id = @discord['server_id']
+        @default_role_ids = @discord['default_role_ids']
+      end
+
+      def configured?
+        @bot_token.present? && @server_id.present? && @default_role_ids.present?
+      end
+    end
+
+    class EmailSenderSignature
+      attr_accessor :name, :email, :confirmed_at
+
+      def initialize(school)
+        @ess = school.configuration['email_sender_signature'].presence || {}
+        @name = @ess['name']
+        @email = @ess['email']
+        @confirmed_at = @ess['confirmed_at']
+      end
+
+      def configured?
+        @name.present? && @email.present? && @confirmed_at.present?
+      end
+    end
+
+    class Vimeo
+      attr_accessor :account_type, :access_token
+
+      def initialize(school)
+        @vimeo = school.configuration['vimeo'].presence || {}
+        @account_type = @vimeo['account_type']
+        @access_token = @vimeo['access_token']
+      end
+
+      def configured?
+        @account_type.present? && @access_token.present?
+      end
+    end
+
     def initialize(school)
       @school = school
     end
 
-    # discord: {
-    #   server_id: string,
-    #   bot_token: string,
-    #   default_role_ids: [string]
-    # }
-    def discord
-      @school.configuration['discord']
-    end
-
-    # disable_primary_domain_redirection: boolean
-    def disable_primary_domain_redirection
+    def disable_primary_domain_redirection?
       @school.configuration['disable_primary_domain_redirection']
     end
 
-    # email_sender_signature: {
-    #   name: string,
-    #   email: string,
-    #   confirmed_at: string
-    # }
-    def email_sender_signature
-      @school.configuration['email_sender_signature']
-    end
-
-    # vimeo: {
-    #   account_type: string,
-    #   access_token: string,
-    # }
-    def vimeo
-      @school.configuration['vimeo']
-    end
-
-    # delete_inactive_users_after: integer
     def delete_inactive_users_after
       @school.configuration['delete_inactive_users_after']
     end

@@ -10,7 +10,7 @@ module Users
       if @user.discord_user_id.present?
         Discord::ClearRolesService.new(
           @user.discord_user_id,
-          Schools::Configuration.new(@user.school).discord
+          Schools::Configuration::Discord.new(@user.school)
         ).execute
       end
 

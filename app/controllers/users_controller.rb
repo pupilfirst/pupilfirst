@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   def clear_discord_id
     Discord::ClearRolesJob.perform_later(
       current_user.discord_user_id,
-      Schools::Configuration.new(current_school).discord
+      Schools::Configuration::Discord.new(current_school)
     )
     current_user.update!(discord_user_id: nil)
     flash[:success] = t('.success')

@@ -7,7 +7,7 @@ module MarkdownAttachments
              validates: {
                presence: true,
                file_size: {
-                 less_than: 5.megabytes
+                 less_than: ENV['MAX_UPLOAD_FILE_SIZE'].to_i
                }
              }
 

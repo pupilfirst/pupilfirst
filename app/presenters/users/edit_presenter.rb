@@ -27,7 +27,12 @@ module Users
     end
 
     def discord_federated_login_url
-      "//#{Rails.application.secrets.sso_domain}/oauth/discord?fqdn=#{view.current_host}&session_id=#{view.session.id}&link_data=true"
+      "//#{Rails.application.secrets.sso_domain}/oauth/discord?fqdn=#{view.current_host}&session_id=#{encrypted_session_id}&link_data=true"
+    end
+
+    def encrypted_session_id
+      @encrypted_session_id ||=
+        Base64.urlsafe_encode64(EncryptorService.new.encrypt(view.session.id))
     end
 
     private

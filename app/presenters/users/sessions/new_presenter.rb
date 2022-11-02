@@ -69,7 +69,12 @@ module Users
             raise_unexpected_provider(provider)
           end
 
-        "//#{oauth_host}/oauth/#{provider_key}?fqdn=#{view.current_host}&session_id=#{view.session.id}"
+        "//#{oauth_host}/oauth/#{provider_key}?fqdn=#{view.current_host}&session_id=#{encrypted_session_id}"
+      end
+
+      def encrypted_session_id
+        @encrypted_session_id ||=
+          Base64.urlsafe_encode64(EncryptorService.new.encrypt(view.session.id))
       end
 
       def icon_classes(provider)

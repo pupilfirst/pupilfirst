@@ -66,7 +66,7 @@ module Users
         )
 
       token_url_options = {
-        encrypted_token: encrypted_token,
+        encrypted_token: Base64.urlsafe_encode64(encrypted_token),
         host: oauth_origin[:fqdn]
       }
 
@@ -88,7 +88,7 @@ module Users
           )
 
         token_url_options = {
-          encrypted_token: encrypted_token,
+          encrypted_token: Base64.urlsafe_encode64(encrypted_token),
           host: oauth_origin[:fqdn]
         }
 

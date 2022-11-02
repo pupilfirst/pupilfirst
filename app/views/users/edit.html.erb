@@ -19,7 +19,7 @@
               <%= link_to "Connect Discord", presenter.discord_federated_login_url, class: 'btn btn-primary btn-large', method: :post %>
             </div>
           <% else %>
-            <%= button_to "Disconnect Discord", clear_discord_id_path, class: 'btn btn-primary-ghost btn-large', method: :post %>
+            <%= button_to "Disconnect Discord", clear_discord_id_user_path, class: 'btn btn-primary-ghost btn-large', method: :post %>
           <% end %>
         </div>
       </div>

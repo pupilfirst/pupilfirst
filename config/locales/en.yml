@@ -2514,15 +2514,14 @@ en:
       submitted_on: Submitted on
   users:
     clear_discord_id:
-      success_notification: Discord ID cleared successfully.
+      success: Discord unlinked successfully.
     delete_account:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
     edit:
       title: Edit User
-      discord:
-        title: Discord
-        description: "This will help you gain access to locked channels in discord"
+      discord_title: Discord
+      discord_description: "This will help you gain access to locked channels in discord"
     omniauth_callbacks:
       failure:
         denied: Authentication was denied. Please try again.

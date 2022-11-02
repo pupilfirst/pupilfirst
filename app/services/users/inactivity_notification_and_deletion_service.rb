@@ -83,10 +83,8 @@ module Users
     end
 
     def deletion_period(school)
-      Schools::ConfigurationService
-        .new(school)
-        .delete_inactive_users_after
-        .presence || Rails.application.secrets.delete_inactive_users_after
+      Schools::Configuration.new(school).delete_inactive_users_after.presence ||
+        Rails.application.secrets.delete_inactive_users_after
     end
   end
 end

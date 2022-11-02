@@ -44,8 +44,6 @@ Rails.application.routes.draw do
 
   get 'users/update_email', controller: 'users', action: 'update_email', as: 'update_email'
 
-  post 'users/clear_discord_id', controller: 'users', action: 'clear_discord_id', as: 'clear_discord_id'
-
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'
     mount OverrideCsp.new(Flipper::UI.app(Flipper)), at: '/toggle'

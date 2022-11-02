@@ -150,7 +150,7 @@ module Users
 
         # Abort if the session is invalid
         if data[:session_id].to_s != session.id.to_s
-          flash[:error] = 'Invalid login credentials'
+          flash[:error] = t('.invalid_session')
           redirect_to new_user_session_path
           return
         end
@@ -162,9 +162,9 @@ module Users
             discord_user_id: data[:auth_hash][:discord][:uid]
           )
 
-          Discord::SyncProfileJob.perform_later(current_user.id)
+          Discord::SyncProfileJob.perform_later(current_user)
 
-          flash[:success] = 'Discord account linked successfully'
+          flash[:success] = t('.success')
 
           redirect_to edit_user_path
           return
@@ -178,11 +178,11 @@ module Users
           sign_in user
           redirect_to after_sign_in_path_for(user)
         else
-          flash[:error] = 'Invalid login credentials'
+          flash[:error] = t('.error')
           redirect_to new_user_session_path
         end
       rescue ActiveSupport::MessageEncryptor::InvalidMessage
-        flash[:error] = 'Invalid login credentials'
+        flash[:error] = t('.error')
         redirect_to new_user_session_path
       end
     end

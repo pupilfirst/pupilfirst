@@ -61,7 +61,7 @@ class UpdateUserMutator < ApplicationQuery
     end
 
     if user_name != current_user.name
-      Discord::SyncNameJob.perform_later(current_user.id)
+      Discord::SyncNameJob.perform_later(current_user)
     end
   end
 

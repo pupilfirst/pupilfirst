@@ -17,7 +17,7 @@ module Schools
     end
 
     # disable_primary_domain_redirection: boolean
-    def disable_primary_domain_redirection?
+    def disable_primary_domain_redirection
       @school.configuration['disable_primary_domain_redirection']
     end
 

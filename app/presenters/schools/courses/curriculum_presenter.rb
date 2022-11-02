@@ -76,14 +76,17 @@ module Schools
         end
 
         @vimeo_access_token =
-          @course.school.configuration.dig('vimeo', 'access_token').present? ||
-            Rails.application.secrets.vimeo_access_token.present?
+          Schools::Configuration
+            .new(@course.school)
+            .vimeo
+            &.dig('access_token')
+            .present? || Rails.application.secrets.vimeo_access_token.present?
       end
 
       def vimeo_plan
         return unless vimeo_access_token?
 
-        @course.school.configuration.dig('vimeo', 'account_type') ||
+        Schools::Configuration.new(@course.school).vimeo&.dig('account_type') ||
           Rails.application.secrets.vimeo_account_type
       end
 

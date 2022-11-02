@@ -37,9 +37,9 @@ describe Discord::ClearRolesService do
       end
     end
 
-    # when configuration is not present, the service should not clear roles
     context 'when configuration is not present' do
-      before { school.configuration = {} }
+      before { school.update!(configuration: {}) }
+
       it 'does not clear the roles' do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 

@@ -88,13 +88,17 @@ module Vimeo
     end
 
     def access_token
-      (@current_school.configuration['vimeo'] && @current_school.configuration['vimeo']['access_token']) ||
+      (vimeo_configuration && vimeo_configuration['access_token']) ||
         Rails.application.secrets.vimeo_access_token
     end
 
     def account_type
-      (@current_school.configuration['vimeo'] && @current_school.configuration['vimeo']['account_type']) ||
+      (vimeo_configuration && vimeo_configuration['account_type']) ||
         Rails.application.secrets.vimeo_account_type
+    end
+
+    def vimeo_configuration
+      Schools::Configuration.new(@current_school).vimeo
     end
 
     def base_url

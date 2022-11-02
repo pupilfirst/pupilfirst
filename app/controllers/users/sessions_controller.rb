@@ -150,7 +150,7 @@ module Users
 
         # Abort if the session is invalid
         if data[:session_id].to_s != session.id.to_s
-          flash[:error] = 'Invalid login credtentails'
+          flash[:error] = 'Invalid login credentials'
           redirect_to new_user_session_path
           return
         end
@@ -178,11 +178,11 @@ module Users
           sign_in user
           redirect_to after_sign_in_path_for(user)
         else
-          flash[:error] = 'Invalid login credtentails'
+          flash[:error] = 'Invalid login credentials'
           redirect_to new_user_session_path
         end
       rescue ActiveSupport::MessageEncryptor::InvalidMessage
-        flash[:error] = 'Invalid login credtentails'
+        flash[:error] = 'Invalid login credentials'
         redirect_to new_user_session_path
       end
     end

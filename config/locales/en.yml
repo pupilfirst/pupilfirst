@@ -2513,6 +2513,8 @@ en:
     show:
       submitted_on: Submitted on
   users:
+    clear_discord_id:
+      success_notification: Discord ID cleared successfully.
     delete_account:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User

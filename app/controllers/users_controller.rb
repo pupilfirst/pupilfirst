@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       current_user.discord_user_id
     )
     current_user.update!(discord_user_id: nil)
-    flash[:success] = 'Discord link cleared successfully'
+    flash[:success] = t('.success')
     redirect_to edit_user_path
   end
 

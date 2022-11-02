@@ -39,7 +39,7 @@ describe Discord::SyncNameService do
     end
 
     context 'when configuration is not present' do
-      before { school.configuration = {} }
+      before { school.update!(configuration: {}) }
       it 'does not sync the name' do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 

@@ -8,15 +8,23 @@
 <div class="container mx-auto px-3 py-8 max-w-5xl">
   <div class="bg-white shadow sm:rounded-lg">
     <div class="flex flex-col md:flex-row">
-      <div class="w-full md:w-1/3 pr-4 sm:rounded-l-lg bg-primary-500 px-4 py-4 text-white flex flex-col justify-between">
-        <h3 class="text-lg font-semibold"><%= t(".discord_title") %></h3>
-        <%= image_tag 'users/edit/discord-logo.svg', class: 'w-1/2' %>
+      <div class="flex flex-col justify-between w-full md:w-1/3 bg-primary-50 px-4 py-5 sm:p-6">
+        <div>
+          <h3 class="text-lg font-semibold"><%= t(".discord_title") %></h3>
+          <p class="mt-1 text-sm text-gray-600"><%= t(".discord_description") %></p>
+        </div>
+        <%= image_tag 'users/edit/discord-logo-blue.svg', class: 'w-1/2' %>
       </div>
       <div class="px-4 py-5 sm:p-6 md:mt-0 w-full md:w-2/3">
-        <p class="mt-1 text-sm text-gray-600"><%= simple_format(t(".discord_description")) %></p>
+      <h4 class="font-semibold"><%= t(".discord_how_it_works_title") %></h4>
+      <ul class="mt-1 text-sm md:text-base text-gray-700 ml-5 list-disc">
+        <%= simple_format(t(".discord_how_it_works")) %>
+      </ul>
         <div class="mt-4">
           <% if current_user.discord_user_id.blank? %>
-            <%= link_to "Connect Discord", presenter.discord_federated_login_url, class: 'btn btn-primary btn-large', method: :post %>
+            <%= link_to presenter.discord_federated_login_url, class: 'btn btn-primary btn-large', method: :post do %>
+            <span class="ml-2"><%= t(".discord_connect") %></span>
+            <% end %>
           <% else %>
             <%= button_to "Disconnect Discord", clear_discord_id_user_path, class: 'btn btn-primary-ghost btn-large', method: :post %>
           <% end %>

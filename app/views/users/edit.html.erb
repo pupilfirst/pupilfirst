@@ -23,6 +23,7 @@
         <div class="mt-4">
           <% if current_user.discord_user_id.blank? %>
             <%= link_to presenter.discord_federated_login_url, class: 'btn btn-primary btn-large', method: :post do %>
+            <i class="if i-discord text-lg"></i>
             <span class="ml-2"><%= t(".discord_connect") %></span>
             <% end %>
           <% else %>

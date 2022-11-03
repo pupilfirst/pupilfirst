@@ -1,0 +1,13 @@
+<div class="w-24">
+  <div data-re-component="Avatar" data-re-json="<%= { name: 'Foo Bar' }.to_json %>"></div>
+</div>
+<%= @presenter.student.name %><br/>
+<%= @presenter.student.title %><br/>
+<div class="flex flex-col items-center py-2 px-2 text-xs bg-yellow-50 text-yellow-900 border border-yellow-900 rounded-lg">
+  <p><%= t('.level_label') %></p>
+  <p class="font-bold"><%= @presenter.student.level.number %></p>
+</div>
+targets overview (completion percentage and number of targets completed/total)<br/>
+other team members, if any<br/>
+notes for non-admins<br/>
+link to submissions

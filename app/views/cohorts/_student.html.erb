@@ -1,5 +1,5 @@
 <% user = student.user %>
-<div data-test-class="student" class="p-5 mt-4 border border-gray-200 bg-white rounded-lg">
+<a href="<%= org_student_path(student) %>" data-test-class="student" class="block p-5 mt-4 border border-gray-200 bg-white rounded-lg">
   <div class="flex justify-between items-center gap-4">
     <div>
       <p class="font-semibold">
@@ -19,4 +19,4 @@
       <p class="font-bold"><%= student.level.number %></p>
     </div>
   </div>
-</div>
+</a>

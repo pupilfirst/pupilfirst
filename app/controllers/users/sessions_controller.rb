@@ -151,10 +151,10 @@ module Users
           crypt.decrypt(
             Base64.urlsafe_decode64(params[:encrypted_token].presence || '')
           )
-        session_id = crypt.decrypt(Base64.urlsafe_decode64(data[:session_id]))
+        session_id = Base64.urlsafe_decode64(data[:session_id])
 
         # Abort if the session is invalid
-        if session_id.to_s != session.id.to_s
+        if session_id.to_s != session.id.private_id.to_s
           flash[:error] = t('.invalid_session')
           redirect_to new_user_session_path
           return

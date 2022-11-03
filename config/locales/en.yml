@@ -2520,8 +2520,8 @@ en:
       title: Edit User
     edit:
       title: Edit User
-      discord_title: Discord
-      discord_description: "This will help you gain access to locked channels in discord"
+      discord_title: Connect your Discord Account
+      discord_description: <b>How it works</b> <li>Sign up for Discord (it's free!) </li><li>Link your Discord account with this school's account. </li><li>Gain access to our community on Discord!</li>
     omniauth_callbacks:
       failure:
         denied: Authentication was denied. Please try again.

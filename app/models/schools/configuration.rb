@@ -1,8 +1,5 @@
 module Schools
   class Configuration
-    include ActiveModel::Model
-    include ActiveModel::Validations
-
     class Discord
       attr_accessor :bot_token, :server_id, :default_role_ids
 
@@ -14,7 +11,7 @@ module Schools
       end
 
       def configured?
-        @bot_token.present? && @server_id.present? && @default_role_ids.present?
+        @bot_token.present? && @server_id.present?
       end
     end
 

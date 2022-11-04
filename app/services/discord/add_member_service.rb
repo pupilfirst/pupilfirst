@@ -7,12 +7,6 @@ module Discord
     def execute(discord_user_id, access_token)
       return unless configuration.configured? && @user.present?
 
-      role_ids =
-        [
-          @user.cohorts.pluck(:discord_role_ids),
-          configuration.default_role_ids
-        ].flatten - [nil]
-
       Discordrb::API::Server.add_member(
         "Bot #{configuration.bot_token}",
         configuration.server_id,

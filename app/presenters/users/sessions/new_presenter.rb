@@ -74,7 +74,14 @@ module Users
 
       def encoded_private_session_id
         @encoded_private_session_id ||=
-          Base64.urlsafe_encode64(view.session.id.private_id)
+          Base64.urlsafe_encode64(session.id.private_id)
+      end
+
+      def session
+        return view.session if view.session.loaded?
+
+        view.session[:init] = true
+        view.session
       end
 
       def icon_classes(provider)

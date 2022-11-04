@@ -6,7 +6,7 @@
 <script id="user-edit__props" type="application/json">
   <%= presenter.props_to_json.html_safe %>
 </script>
-<% if ENV['DISCORD_KEY'].present? && discord_config.configured?%>
+<% if Rails.application.secrets.sso[:discord][:key].present? && discord_config.configured?%>
   <div class="container mx-auto px-3 py-8 max-w-5xl">
     <div class="bg-white shadow rounded-lg">
       <div class="flex flex-col md:flex-row">
@@ -21,7 +21,7 @@
           <div class="px-4 py-5 sm:p-6 md:mt-0 w-full md:w-2/3">
             <h4 class="font-semibold"><%= t(".discord_how_it_works_title") %></h4>
             <ul class="mt-1 text-sm md:text-base text-gray-700 ml-5 list-disc">
-              <%= simple_format(t(".discord_how_it_works")) %>
+              <%= t(".discord_how_it_works_html") %>
             </ul>
             <div class="mt-4">
               <%= link_to presenter.discord_federated_login_url, class: 'btn btn-primary', method: :post do %>

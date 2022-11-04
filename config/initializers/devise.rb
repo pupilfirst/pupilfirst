@@ -253,8 +253,8 @@ Devise.setup do |config|
   config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
   config.omniauth :discord,
-                  ENV['DISCORD_KEY'],
-                  ENV['DISCORD_SECRET'],
+                  Rails.application.secrets.sso[:discord][:key],
+                  Rails.application.secrets.sso[:discord][:secret],
                   scope: 'email identify guilds.join'
   config.omniauth :developer, fields: %i[email] if Rails.env.development?
 

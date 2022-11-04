@@ -163,13 +163,19 @@ module Users
         # Link discord account to user if the request has discord data
         if data[:login_token].blank? && current_user.present? &&
              data[:auth_hash]&.dig(:discord)&.dig(:uid).present?
-          current_user.update!(
-            discord_user_id: data[:auth_hash][:discord][:uid]
-          )
+          onboard_user =
+            Discord::AddMemberService
+              .new(current_user)
+              .execute(
+                data[:auth_hash][:discord][:uid],
+                data[:auth_hash][:discord][:access_token]
+              )
 
-          Discord::SyncProfileJob.perform_later(current_user)
-
-          flash[:success] = t('.success')
+          if onboard_user
+            flash[:success] = t('.success')
+          else
+            flash[:error] = t('.discord_link_error')
+          end
 
           redirect_to edit_user_path
           return

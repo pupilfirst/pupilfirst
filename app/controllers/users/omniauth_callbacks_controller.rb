@@ -123,7 +123,12 @@ module Users
       when 'google_oauth2', 'facebook', 'github', 'developer'
         {}
       when 'discord'
-        { discord: { uid: auth_hash[:uid] } }
+        {
+          discord: {
+            uid: auth_hash[:uid],
+            access_token: auth_hash[:credentials][:token]
+          }
+        }
       else
         raise_unexpected_provider(provider)
       end

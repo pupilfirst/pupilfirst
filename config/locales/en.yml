@@ -2520,11 +2520,12 @@ en:
       title: Edit User
     edit:
       title: Edit User
-      discord_connect: Connect Discord
-      discord_title: Connect your Discord Account
+      discord_connect: Join Our Discord Community
+      discord_title: Join Our Discord Server
       discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
       discord_how_it_works_title: How it works
-      discord_how_it_works: <li>Sign up for Discord (it's free!)</li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_how_it_works: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_how_it_works
     omniauth_callbacks:
       failure:
         denied: Authentication was denied. Please try again.
@@ -2571,6 +2572,7 @@ en:
         error: "Invalid login credentials"
         invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
         success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly"
+        discord_link_error: "We were unable to link your Discord account. Please try again."
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

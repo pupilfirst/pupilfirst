@@ -22,7 +22,11 @@ module Users
       end
 
       def providers
-        default_providers = %i[google facebook github discord]
+        default_providers = %i[google facebook github]
+
+        default_providers = default_providers + [:discord] if ENV[
+          'DISCORD_CLIENT_ID'
+        ].present?
 
         if Rails.env.development?
           [:developer] + default_providers

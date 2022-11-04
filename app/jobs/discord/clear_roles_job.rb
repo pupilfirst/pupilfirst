@@ -1,7 +1,10 @@
 module Discord
   class ClearRolesJob < ApplicationJob
-    def perform(discord_user_id, configuration)
-      Discord::ClearRolesService.new(discord_user_id, configuration).execute
+    def perform(discord_user_id, school)
+      Discord::ClearRolesService.new(
+        discord_user_id,
+        Schools::Configuration::Discord.new(school.configuration)
+      ).execute
     end
   end
 end

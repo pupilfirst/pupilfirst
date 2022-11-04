@@ -2525,7 +2525,10 @@ en:
       discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
       discord_how_it_works_title: How it works
       discord_how_it_works: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
-      discord_how_it_works
+      discord_connected_account: Go to Discord Community
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
+
     omniauth_callbacks:
       failure:
         denied: Authentication was denied. Please try again.

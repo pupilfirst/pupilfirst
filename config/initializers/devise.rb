@@ -252,10 +252,12 @@ Devise.setup do |config|
                   prompt: 'select_account'
   config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
-  config.omniauth :discord,
-                  Rails.application.secrets.sso[:discord][:key],
-                  Rails.application.secrets.sso[:discord][:secret],
-                  scope: 'email identify guilds.join'
+  if Rails.application.secrets.sso[:discord][:key].present?
+    config.omniauth :discord,
+                    Rails.application.secrets.sso[:discord][:key],
+                    Rails.application.secrets.sso[:discord][:secret],
+                    scope: 'email identify guilds.join'
+  end
   config.omniauth :developer, fields: %i[email] if Rails.env.development?
 
   # ==> Warden configuration

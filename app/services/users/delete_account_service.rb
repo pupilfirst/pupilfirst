@@ -7,6 +7,13 @@ module Users
     def execute
       raise 'user is a school admin' if @user.school_admin.present?
 
+      if @user.discord_user_id.present?
+        Discord::ClearRolesService.new(
+          @user.discord_user_id,
+          Schools::Configuration::Discord.new(@user.school)
+        ).execute
+      end
+
       User.transaction do
         delete_founder_data if @user.founders.present?
         delete_coach_profile if @user.faculty.present?

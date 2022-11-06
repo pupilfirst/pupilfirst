@@ -76,15 +76,17 @@ module Schools
         end
 
         @vimeo_access_token =
-          @course.school.configuration.dig('vimeo', 'access_token').present? ||
+          Schools::Configuration::Vimeo.new(@course.school).configured? ||
             Rails.application.secrets.vimeo_access_token.present?
       end
 
       def vimeo_plan
         return unless vimeo_access_token?
 
-        @course.school.configuration.dig('vimeo', 'account_type') ||
-          Rails.application.secrets.vimeo_account_type
+        Schools::Configuration::Vimeo
+          .new(@course.school)
+          .account_type
+          .presence || Rails.application.secrets.vimeo_account_type
       end
 
       def markdown_curriculum_editor_max_length

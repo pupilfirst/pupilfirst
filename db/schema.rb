@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_10_172655) do
+ActiveRecord::Schema.define(version: 2022_10_27_192041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
     t.bigint "course_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "discord_role_ids", default: [], array: true
     t.index ["course_id"], name: "index_cohorts_on_course_id"
   end
 
@@ -808,6 +809,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_172655) do
     t.datetime "update_email_token_sent_at"
     t.string "new_email"
     t.bigint "organisation_id"
+    t.string "discord_user_id"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

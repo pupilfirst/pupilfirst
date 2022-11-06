@@ -24,6 +24,10 @@ module Users
       def providers
         default_providers = %i[google facebook github]
 
+        if Rails.application.secrets.sso[:discord][:key].present?
+          default_providers = default_providers + [:discord]
+        end
+
         if Rails.env.development?
           [:developer] + default_providers
         else
@@ -43,6 +47,8 @@ module Users
             'federated-sigin-in__github-btn hover:bg-black text-white'
           when :google
             'federated-sigin-in__google-btn hover:bg-red-600 text-white'
+          when :discord
+            'federated-sigin-in__discord-btn hover:bg-indigo-600 text-white'
           when :developer
             'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
           else
@@ -59,13 +65,27 @@ module Users
             'facebook'
           when :github
             'github'
+          when :discord
+            'discord'
           when :developer
             'developer'
           else
             raise_unexpected_provider(provider)
           end
 
-        "//#{oauth_host}/oauth/#{provider_key}?fqdn=#{view.current_host}"
+        "//#{oauth_host}/oauth/#{provider_key}?fqdn=#{view.current_host}&session_id=#{encoded_private_session_id}"
+      end
+
+      def encoded_private_session_id
+        @encoded_private_session_id ||=
+          Base64.urlsafe_encode64(session.id.private_id)
+      end
+
+      def session
+        return view.session if view.session.loaded?
+
+        view.session[:init] = true
+        view.session
       end
 
       def icon_classes(provider)
@@ -76,6 +96,8 @@ module Users
           'fab fa-facebook-f mr-1'
         when :github
           'fab fa-github'
+        when :discord
+          'fab fa-discord'
         when :developer
           'fas fa-laptop-code'
         else
@@ -92,6 +114,8 @@ module Users
             'continue_with_facebook'
           when :github
             'continue_with_github'
+          when :discord
+            'continue_with_discord'
           when :developer
             'continue_as_developer'
           else

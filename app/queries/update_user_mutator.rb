@@ -47,6 +47,8 @@ class UpdateUserMutator < ApplicationQuery
   validate :new_passwords_should_match
 
   def update_user
+    user_name = current_user.name
+
     if new_password.blank?
       current_user.update!(user_params)
     else
@@ -56,6 +58,10 @@ class UpdateUserMutator < ApplicationQuery
           password_confirmation: confirm_new_password
         )
       )
+    end
+
+    if user_name != current_user.name
+      Discord::SyncNameJob.perform_later(current_user)
     end
   end
 

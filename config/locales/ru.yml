@@ -2384,6 +2384,7 @@ ru:
           continue_with_facebook: Продолжить с Facebook
           continue_with_github: Продолжить на Github
           continue_with_google: Продолжить через Google
+          continue_with_discord: Continue with Discord
         page_title:
           title: Войти
   queries:
@@ -2536,11 +2537,21 @@ ru:
     show:
       submitted_on: Отправлено
   users:
+    clear_discord_id:
+      success: Discord unlinked successfully.
     delete_account:
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       title: Изменить пользователя
     edit:
       title: Edit User
+      discord_connect: Join Our Discord Community
+      discord_title: Join Our Discord Server
+      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
+      discord_how_it_works_title: How it works
+      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_connected_account: Go to Discord Community
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
     omniauth_callbacks:
       failure:
         denied: Аутентификация была отклонена. Пожалуйста, попробуйте еще раз.
@@ -2583,6 +2594,11 @@ ru:
         subtitle: Введите ваш email для восстановления пароля.
       reset_password:
         link_used: Эта одноразовая ссылка уже была использована или неверна. Пожалуйста, попробуйте сбросить пароль еще раз.
+      auth_callback:
+        error: "Invalid login credentials"
+        invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly"
+        discord_link_error: "We were unable to link your Discord account. Please try again."
       sign_in_with_email:
         already_signed: Вы уже вошли в систему.
         email: Продолжить по электронной почте

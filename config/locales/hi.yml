@@ -2356,6 +2356,7 @@ hi:
           continue_with_facebook: फेसबुक के साथ जारी रखें
           continue_with_github: गीथूब के साथ जारी रखें
           continue_with_google: Google के साथ जारी रखें
+          continue_with_discord: Continue with Discord
         page_title:
           title: साइन इन करें
   queries:
@@ -2508,11 +2509,21 @@ hi:
     show:
       submitted_on: पर प्रस्तुत की
   users:
+    clear_discord_id:
+      success: Discord unlinked successfully.
     delete_account:
       link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
       title: यूजर को संपादित करो
     edit:
       title: Edit User
+      discord_connect: Join Our Discord Community
+      discord_title: Join Our Discord Server
+      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
+      discord_how_it_works_title: How it works
+      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_connected_account: Go to Discord Community
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
     omniauth_callbacks:
       failure:
         denied: 'प्रमाणीकरण से इनकार किया गया था। कृपया पुन: प्रयास करें।'
@@ -2555,6 +2566,11 @@ hi:
         subtitle: पासवर्ड पुनर्प्राप्ति के लिए अपना ईमेल दर्ज करें।
       reset_password:
         link_used: वह वन-टाइम लिंक पहले ही उपयोग किया जा चुका है, या अमान्य है। कृपया अपना पासवर्ड फिर से रीसेट करने का प्रयास करें।
+      auth_callback:
+        error: "Invalid login credentials"
+        invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly"
+        discord_link_error: "We were unable to link your Discord account. Please try again."
       sign_in_with_email:
         already_signed: आप पहले ही साइन इन कर चुके हैं।
         email: ईमेल के साथ जारी रखें

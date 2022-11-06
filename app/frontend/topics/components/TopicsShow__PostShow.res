@@ -139,9 +139,9 @@ let optionsDropdown = (
 
   let contents = switch (moderator, isTopicCreator, isPostCreator) {
   | (true, _, _) => [editPostButton, historyButton, deletePostButton]
-  | (false, true, false) => [historyButton]
-  | (false, true, true) => [editPostButton, historyButton, deletePostButton]
-  | (false, false, true) => [editPostButton, historyButton, deletePostButton]
+  | (false, true, false) => [editPostButton, deletePostButton]
+  | (false, true, true) => [editPostButton, deletePostButton]
+  | (false, false, true) => [editPostButton, deletePostButton]
   | _ => []
   }
   <Dropdown selected contents right=true />

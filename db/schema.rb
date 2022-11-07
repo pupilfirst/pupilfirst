@@ -190,7 +190,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "school_id"
-    t.datetime "ends_at"
     t.string "description"
     t.boolean "enable_leaderboard", default: false
     t.boolean "public_signup", default: false
@@ -258,8 +257,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.string "current_commitment"
     t.string "commitment"
     t.string "compensation"
-    t.string "slack_username"
-    t.string "slack_user_id"
     t.bigint "user_id"
     t.boolean "public", default: false
     t.string "connect_link"
@@ -278,15 +275,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.index ["faculty_id"], name: "index_faculty_cohort_enrollments_on_faculty_id"
   end
 
-  create_table "faculty_course_enrollments", force: :cascade do |t|
-    t.bigint "faculty_id"
-    t.bigint "course_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_id", "faculty_id"], name: "index_faculty_course_enrollments_on_course_id_and_faculty_id", unique: true
-    t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
-  end
-
   create_table "faculty_founder_enrollments", force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "founder_id"
@@ -294,15 +282,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["faculty_id"], name: "index_faculty_founder_enrollments_on_faculty_id"
     t.index ["founder_id", "faculty_id"], name: "index_faculty_founder_enrollments_on_founder_id_and_faculty_id", unique: true
-  end
-
-  create_table "faculty_startup_enrollments", force: :cascade do |t|
-    t.bigint "faculty_id"
-    t.bigint "startup_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_faculty_startup_enrollments_on_faculty_id"
-    t.index ["startup_id", "faculty_id"], name: "index_faculty_startup_enrollments_on_startup_id_and_faculty_id", unique: true
   end
 
   create_table "features", id: :serial, force: :cascade do |t|
@@ -331,14 +310,9 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
   create_table "founders", id: :serial, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "startup_id"
     t.string "auth_token"
-    t.string "slack_username"
     t.string "roles"
-    t.string "slack_user_id"
     t.integer "user_id"
-    t.boolean "dashboard_toured"
-    t.integer "resume_file_id"
     t.boolean "excluded_from_leaderboard", default: false
     t.datetime "dropped_out_at"
     t.bigint "cohort_id"
@@ -464,18 +438,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.index ["topic_id"], name: "index_posts_on_topic_id"
   end
 
-  create_table "public_slack_messages", id: :serial, force: :cascade do |t|
-    t.text "body"
-    t.string "slack_username"
-    t.integer "founder_id"
-    t.string "channel"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "timestamp"
-    t.integer "reaction_to_id"
-    t.index ["founder_id"], name: "index_public_slack_messages_on_founder_id"
-  end
-
   create_table "quiz_questions", force: :cascade do |t|
     t.text "question"
     t.text "description"
@@ -554,16 +516,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.integer "timeline_event_id"
     t.index ["faculty_id"], name: "index_startup_feedback_on_faculty_id"
     t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id"
-  end
-
-  create_table "startups", id: :serial, force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "name"
-    t.integer "level_id"
-    t.datetime "access_ends_at"
-    t.datetime "dropped_out_at"
-    t.index ["level_id"], name: "index_startups_on_level_id"
   end
 
   create_table "submission_reports", force: :cascade do |t|
@@ -660,7 +612,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
     t.boolean "archived", default: false
     t.string "youtube_video_id"
     t.datetime "feedback_asked_at"
-    t.datetime "slack_reminders_sent_at"
     t.string "call_to_action"
     t.text "rubric_description"
     t.boolean "resubmittable", default: true
@@ -862,12 +813,8 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"
-  add_foreign_key "faculty_course_enrollments", "courses"
-  add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_founder_enrollments", "faculty"
   add_foreign_key "faculty_founder_enrollments", "founders"
-  add_foreign_key "faculty_startup_enrollments", "faculty"
-  add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "cohorts"
   add_foreign_key "founders", "levels"
   add_foreign_key "founders", "teams"
@@ -893,7 +840,6 @@ ActiveRecord::Schema.define(version: 2022_10_27_192041) do
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
-  add_foreign_key "startups", "levels"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"

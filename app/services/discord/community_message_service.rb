@@ -19,6 +19,8 @@ module Discord
       send_message(message)
     end
 
+    private
+
     def send_message(message)
       if @community.discord_channel_id.blank? || !configuration.configured? ||
            message.blank? || message.length > 2000

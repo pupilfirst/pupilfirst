@@ -257,8 +257,8 @@ class ApplicationController < ActionController::Base
     return false if current_domain.blank?
 
     return false if current_domain.primary? || current_school.domains.one?
-
-    !current_school.configuration['disable_primary_domain_redirection']
+    !Schools::Configuration.new(current_school)
+      .disable_primary_domain_redirection?
   end
 
   def redirect_to_primary_domain
@@ -271,7 +271,8 @@ class ApplicationController < ActionController::Base
                     user_signed_in? &&
                       (
                         session[:last_seen_at] == nil ||
-                          Time.zone.parse(session[:last_seen_at]) < 15.minutes.ago
+                          Time.zone.parse(session[:last_seen_at]) <
+                            15.minutes.ago
                       )
                   }
 

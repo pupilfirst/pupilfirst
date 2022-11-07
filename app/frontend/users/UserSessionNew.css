@@ -1,7 +1,7 @@
 .federated-signin-in__seperator:before {
   @apply bg-gray-300 absolute;
   z-index: -1;
-  content: '';
+  content: "";
   top: 50%;
   left: 50%;
   transform: translateX(-50%);
@@ -10,13 +10,17 @@
 }
 
 .federated-sigin-in__google-btn {
-  background-color: #4285F4;
+  background-color: #4285f4;
 }
 
 .federated-sigin-in__facebook-btn {
-  background-color: #4267B2;
+  background-color: #4267b2;
 }
 
 .federated-sigin-in__github-btn {
   background-color: #333333;
+}
+
+.federated-sigin-in__discord-btn {
+  background-color: #5765f2;
 }

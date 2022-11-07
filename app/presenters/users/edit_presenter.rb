@@ -26,6 +26,15 @@ module Users
       }
     end
 
+    def discord_federated_login_url
+      "//#{Rails.application.secrets.sso_domain}/oauth/discord?fqdn=#{view.current_host}&session_id=#{encoded_private_session_id}&link_data=true"
+    end
+
+    def encoded_private_session_id
+      @encoded_private_session_id ||=
+        Base64.urlsafe_encode64(view.session.id.private_id)
+    end
+
     private
 
     def valid_delete_account_token

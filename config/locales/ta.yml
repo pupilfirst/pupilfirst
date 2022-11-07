@@ -1,0 +1,2599 @@
+ta:
+  applicants:
+    enroll:
+      link_expired: அந்த ஒரு முறை இணைப்பு காலாவதியானது அல்லது தவறானது. நீங்கள் ஏற்கனவே பதிவுசெய்தலை முடித்திருந்தால், உள்நுழையவும்.
+      welcome: '%{school_name}க்கு வரவேற்கிறோம்!'
+    resolve_applicant_path:
+      welcome: '%{school_name}க்கு வரவேற்கிறோம்!'
+  cohorts:
+    shared:
+      back_link: < பின்
+      overview_link: கண்ணோட்டம்
+      students_link: மாணவர்கள்
+    show:
+      distribution_heading: நிலை வாரியான மாணவர் விநியோகம்
+      students_completed: மாணவர்கள் முடித்தனர்
+      total_students: மொத்த மாணவர்கள்
+      view_all: அனைத்தையும் காட்டு
+    student:
+      level_label: நிலை
+      never_signed_in: இதுவரை உள்நுழையவில்லை
+      time_ago: கடைசியாகப் பார்த்தது %{time_ago} முன்பு
+    students:
+      distribution_heading: நிலை வாரியான மாணவர் விநியோகம்
+      nothing_to_show: தேர்ந்தெடுக்கப்பட்ட வடிப்பான்களுடன் பொருந்தக்கூடிய மாணவர்கள் யாரும் இல்லை.
+      pagination_notice: இப்போது %{page_start}-%{page_end} என மொத்தம் %{count} மாணவர்களைக் காட்டுகிறது.
+  communities:
+    show:
+      new_topic: புது தலைப்பு
+      note: " உங்கள் பள்ளியில் உள்ள பயிற்சியாளர்களுக்கு அனைத்து சமூகங்களுக்கும் அணுகல் உள்ளது."
+      welcome: க்கு வரவேற்கிறோம்
+  components:
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: புதிய குழுவைச் சேர்க்கவும்
+      cohort:
+        label: கூட்டுப் பெயர்
+        message: சரியான கூட்டுப் பெயரை உள்ளிடவும்
+        placeholder: எ.கா, தொகுதி 1
+      cohort_description:
+        label: கூட்டு விளக்கம்
+        message: கூட்டுக்கு சரியான விளக்கத்தை உள்ளிடவும்
+        placeholder: எ.கா. சில வருடங்களின் தொகுதி 1
+      cohort_ends_at:
+        help: இந்த தேதியில் கூட்டுக்குழு காப்பகப்படுத்தப்படும்
+        label: கூட்டு முடிவு தேதி
+      update_cohort: குழுவைப் புதுப்பிக்கவும்
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: அனைத்து மாணவர்களும் தேர்ந்தெடுக்கப்பட்டனர்
+      no_students_found: மாணவர்கள் இல்லை
+      no_students_selected: மாணவர்கள் யாரும் தேர்ந்தெடுக்கப்படவில்லை
+    AdminCoursesShared__TeamEditor:
+      add_new_team: புதிய அணியைச் சேர்க்கவும்
+      select_cohort:
+        label: ஒரு குழுவைத் தேர்ந்தெடுக்கவும்
+        placeholder: ஒரு குழுவைத் தேர்ந்தெடுங்கள்
+      team_name:
+        label: குழு பெயர்
+        message: சரியான குழு பெயரை உள்ளிடவும்
+        placeholder: எ.கா, தொகுதி 1
+      update_team: குழுவைப் புதுப்பிக்கவும்
+    Api:
+      error_notification_body: இந்த பிழை குறித்து எங்கள் குழுவிற்கு தெரிவிக்கப்பட்டுள்ளது. பக்கத்தை மீண்டும் ஏற்றி மீண்டும் முயற்சிக்கவும்.
+      error_notification_title: எதிர் பாராத பிழை ஏற்பட்டு விட்டது
+    AppRouter__Dropdown:
+      more: மேலும்
+      show_more_links: மேலும் இணைப்புகளைக் காட்டு
+    AppRouter__Header:
+      edit_profile: சுயவிவரத்தைத் திருத்து
+      sign_in: உள்நுழையவும்
+      sign_out: வெளியேறு
+    AppRouter__Nav:
+      close_sidebar: பக்கப்பட்டியை மூடு
+      curriculum: பாடத்திட்டம்
+      leaderboard: லீடர்போர்டு
+      report: அறிக்கை
+      review: விமர்சனம்
+      sign_out: வெளியேறு
+      students: மாணவர்கள்
+    ClickToCopy:
+      copied: நகலெடுக்கப்பட்டது!
+      copy: கிளிப்போர்டுக்கு நகலெடுக்கவும்
+    CoachesIndex__Root:
+      button_about: பற்றி
+      button_connect: இணைக்கவும்
+      filter_input_label: வடிகட்டவும்
+      filter_input_placeholder: பெயரால் தேடவும் அல்லது பாடத்திட்டத்தைத் தேர்ந்தெடுக்கவும்
+      filter_label_name_like: பெயர் லைக்
+      filter_label_teaches_course: பாடத்தை கற்பிக்கிறார்
+      filter_result_empty: நீங்கள் பயன்படுத்திய வடிப்பான்கள் எந்த பயிற்சியாளருக்கும் பொருந்தவில்லை. வடிகட்டியை மாற்றி மீண்டும் முயற்சிக்கவும்.
+      filter_search_string_course: '%{name}பாடத்தை கற்பிக்கிறது'
+      heading: பயிற்சியாளர்கள்
+    CohortsActions__Root:
+      button_text: ஒன்றிணைத்து நீக்கவும்
+      edit: தொகு
+      merge_heading_html: <em>%{cohort_name}</em> ஐ மற்றொரு குழுவில் இணைக்கவும்
+      merge_help: கூட்டிணைவுகளை இணைப்பது அனைத்து மாணவர்களையும் தேர்ந்தெடுத்த குழுவிலிருந்து இலக்கு குழுவிற்கு நகர்த்தும். தேவையற்ற கூட்டுகளை நீக்க இந்தச் செயலைப் பயன்படுத்தலாம். இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.
+      page_description: கூட்டுக்கான நடவடிக்கைகள்.
+      pick_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுங்கள்
+    CohortsCreator__Root:
+      page_description: பாடநெறிக்கு ஒரு புதிய குழுவை உருவாக்கவும்.
+      page_title: புதிய குழுவைச் சேர்க்கவும்
+    CohortsDetails__Root:
+      page_description: கூட்டு விவரங்களைப் புதுப்பிக்கவும்
+      page_title: திருத்து %{cohort_name}
+    CohortsIndex__Root:
+      active_cohorts: செயலில் உள்ள கூட்டாளிகள்
+      add_new_cohort: புதிய குழுவைச் சேர்க்கவும்
+      all_cohorts: அனைத்து கூட்டாளிகள்
+      coaches: பயிற்சியாளர்கள்
+      cohort: கூட்டு
+      cohorts: கூட்டாளிகள்
+      cohorts_end_date: கூட்டு முடிவு தேதி
+      edit: தொகு
+      filter:
+        first_created: முதலில் உருவாக்கப்பட்டது
+        last_created: கடைசியாக உருவாக்கப்பட்டது
+        last_ending: கடைசி முடிவு
+        name: பெயர்
+        search_by_name: பெயர் மூலம் தேடவும்
+      load_more: அதிகமாய் ஏற்று
+      no_cohorts_found: கூட்டாளிகள் எதுவும் இல்லை
+      students: மாணவர்கள்
+    CommunitiesNewTopic__Root:
+      asked_on: "அன்று கேட்டார் "
+      back: மீண்டும்
+      be_descriptive: நீங்கள் ஒரு கேள்வியைக் கேட்கிறீர்கள் என்றால், மற்றவர்கள் பதில்களை இடுகையிடுவதை எளிதாக்குவதற்கு முடிந்தவரை விளக்கமாக இருக்க முயற்சிக்கவும். இந்த உரையை வடிவமைக்க மார்க் டவுனைப் பயன்படுத்தலாம்.
+      body: உடல்
+      clear: தெளிவு
+      count_replies_label: " பதில்கள்"
+      create_topic: தலைப்பை உருவாக்கவும்
+      create_topic_discussion: விவாதத்தின் புதிய தலைப்பை உருவாக்கவும்
+      done: முடிந்தது!
+      failed_fetch_similar: சர்வரிலிருந்து இதே போன்ற தலைப்புகளைப் பெறத் தவறிவிட்டோம்! இந்த பிழை குறித்து எங்கள் குழுவிற்கு அறிவிக்கப்பட்டுள்ளது.
+      linked_target: "இணைக்கப்பட்ட இலக்கு: "
+      missing_info: தகவல் இல்லை!
+      no_category_found: "ஐடியுடன் வகையைக் கண்டறிய முடியவில்லை:"
+      no_replies: பதில்கள் இல்லை
+      not_selected: தேர்ந்தெடுக்கப்படவில்லை
+      one_reply: 1 பதில்
+      oops: அச்சச்சோ!
+      please_reload: மீண்டும் இடுகையிட முயற்சிக்கும் முன் பக்கத்தை மீண்டும் ஏற்றவும்.
+      redirecting: இப்போது புதிய தலைப்புக்கு திருப்பி விடப்படுகிறது...
+      select_category: பிரிவை தேர்வு செய்க
+      similar_topics: இதே போன்ற தலைப்புகள்
+      title: தலைப்பு
+      title_placeholder: புதிய தலைப்புக்கான தலைப்பு
+      topic_body_present: தலைப்பு மற்றும் உள்ளடக்கம் இருக்க வேண்டும்.
+    CommunitiesShow__Root:
+      all_categories_button: அனைத்து வகைகள்
+      button_load_more: அதிகமாய் ஏற்று...
+      empty_topics: இங்கு இதுவரை எந்த விவாதமும் இல்லை.
+      filter_input_label: "இதன்படி வடிகட்டவும்:"
+      filter_input_placeholder_categories: வகை, தீர்வு அல்லது தலைப்புகளில் தேடுதல் மூலம் வடிகட்டவும்
+      filter_input_placeholder_default: தலைப்புகளில் தேடவும் அல்லது தீர்வு மூலம் வடிகட்டவும்
+      sort_criterion_input_label: "இதன்படி வரிசைப்படுத்தவும்:"
+      sort_criterion_last_activity: கடைசி செயல்பாடு
+      sort_criterion_posted_at: Posted at
+      sort_criterion_views: காட்சிகள்
+      topic_last_updated_text: கடைசியாக புதுப்பிக்கப்பட்டது
+      topic_posted_by_text: பதிவிட்டவர்
+      topic_stats_likes:
+        one: 1 விருப்பம்
+        other: "%{count} விருப்பங்கள்"
+      topic_stats_replies:
+        one: 1 பதில்
+        other: "%{count} பதில்கள்"
+      topic_stats_views:
+        one: 1 பார்வை
+        other: "%{count} பார்வைகள்"
+      topics_fully_loaded_text: அனைத்து %{total_topics} தலைப்புகளையும் காட்டுகிறது
+      topics_partially_loaded_text: '%{total_topics} தலைப்புகளில் %{loaded_topics_count} காட்டுகிறது'
+      unable_find_id: "ஐடியுடன் தலைப்பு வகையைக் கண்டறிய முடியவில்லை: "
+    CourseApplicants__EditForm:
+      add_as_student_button: மாணவராகச் சேர்க்கவும்
+      affiliation:
+        label: இணைப்பு
+        placeholder: Acme Inc., Acme பல்கலைக்கழகம் போன்றவை.
+      email:
+        label: மின்னஞ்சல்
+        placeholder: மாணவர் மின்னஞ்சல் இங்கே
+      name:
+        error: செல்லாது
+        label: பெயர்
+        placeholder: மாணவர் பெயர் இங்கே
+      notify_students:
+        label: மாணவர்களுக்கு அறிவித்து, இந்தப் பள்ளியில் உள்நுழைவதற்கான இணைப்பை அவர்களுக்கு அனுப்பவும்.
+      page_title: மாணவராகச் சேர்க்கவும்
+      tabs:
+        actions: செயல்கள்
+        details: விவரங்கள்
+      tags:
+        label: குறிச்சொற்கள்
+      title:
+        label: தலைப்பு
+        placeholder: மாணவர், பயிற்சியாளர், CEO, முதலியன.
+    CourseApplicants__Root:
+      applicants_fully_loaded_text: அனைத்து %{total_applicants} விண்ணப்பதாரர்களையும் காட்டுகிறது
+      applicants_page_title: விண்ணப்பதாரர்கள்
+      applicants_partially_loaded_text: '%{total_applicants} விண்ணப்பதாரர்களில் %{loaded_applicants_count} காட்டுகிறது'
+      button_load_more: மேலும் விண்ணப்பதாரர்களை ஏற்றவும்...
+      empty_applicants: உங்களிடம் விண்ணப்பதாரர்கள் யாரும் இல்லை!
+      filter:
+        input_label: தேடு
+        input_placeholder: விண்ணப்பதாரர்களின் பெயரை வடிகட்டவும் மற்றும் தேடவும்
+        label:
+          search: பெயர் அல்லது மின்னஞ்சல் மூலம் தேடவும்
+          tag: குறிச்சொல்
+      onboard_as_student: மாணவராக ஆன்போர்டு
+      show_actions: செயல்களைக் காட்டு
+      show_details: "விவரங்களை காட்டு: "
+      sort_criterion:
+        created_at: இல் உருவாக்கப்பட்டது
+        name: பெயர்
+        updated_at: இல் புதுப்பிக்கப்பட்டது
+      sorter:
+        label: வரிசைப்படுத்து
+    CourseAuthors__Form:
+      add_new_author: புதிய ஆசிரியரைச் சேர்க்கவும்
+      create_author: ஆசிரியரை உருவாக்கவும்
+      email: மின்னஞ்சல்
+      email_message: சரியான மின்னஞ்சலை உள்ளிடவும்
+      email_placeholder: மின்னஞ்சலை இங்கே சேர்க்கவும்
+      name: பெயர்
+      name_message: சரியான பெயரை உள்ளிடவும்
+      name_placeholder: இங்கே பெயரைச் சேர்க்கவும்
+      saving: சேமிப்பு
+      update_author: புதுப்பிப்பு ஆசிரியர்
+    CourseAuthors__Root:
+      window_confirm_post: ஆசிரியர்கள் பட்டியலில் இருந்து?
+      window_confirm_pre: நீங்கள் நிச்சயமாக அகற்ற விரும்புகிறீர்களா
+    CourseCertificates__CreateDrawer:
+      certificate_base_image:
+        help: இந்த அடிப்படைப் படத்தில் மாணவரின் பெயரைச் செருக முழு வரியின் இடைவெளி இருக்க வேண்டும்.
+        help_url: 'https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate'
+        label: சான்றிதழ் அடிப்படை படம்
+        placeholder: சான்றிதழுக்கான அடிப்படை படத்தைத் தேர்ந்தெடுக்கவும்
+      create_action: புதிய சான்றிதழை உருவாக்கவும்
+      create_button_text: சான்றிதழை உருவாக்கவும்
+      name_label: பெயர்
+      name_placeholder: இந்த சான்றிதழை அடையாளம் காண ஒரு பெயர்
+      success_notification: நீங்கள் இப்போது இந்த சான்றிதழை திருத்தலாம்.
+    CourseCertificates__EditDrawer:
+      active:
+        help: உங்களிடம் பல சான்றிதழ்கள் இருக்கும் போது, ஒன்றை மட்டும் தானாக வழங்க முடியும்; ஒரு மாணவர் <em></em> படிப்பை முடிக்கும்போது அது வழங்கப்படும்.
+        help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
+        label: மாணவர்களுக்கு தானாகவே இந்தச் சான்றிதழ் வழங்கப்பட வேண்டுமா?
+      cannot_be_auto_issued_warning: இந்த பாடத்திட்டத்தின் கடைசி நிலை எந்த மைல்கல் இலக்குகளையும் கொண்டிருக்கவில்லை என்பதை நினைவில் கொள்ளவும். கடைசி நிலை குறைந்தபட்சம் ஒரு மைல்கல் இலக்கு இருந்தால் மட்டுமே இந்தச் சான்றிதழ் தானாகவே வழங்கப்படும்.
+      edit_action: சான்றிதழைத் திருத்தவும்
+      font_size_label: எழுத்துரு அளவு
+      margin_label: விளிம்பு
+      name_error: பெயர் காலியாக இருக்கக்கூடாது
+      name_label: பெயர்
+      name_offset_top_label: பெயர் ஆஃப்செட் (மேலே இருந்து)
+      name_placeholder: இந்த சான்றிதழுக்கான குறுகிய பெயர்
+      qr_bottom_left_label: கீழே இடது
+      qr_bottom_right_label: கீழ் வலது
+      qr_hidden_label: மறைக்கப்பட்டது
+      qr_position_label: QR குறியீடு நிலை
+      qr_scale_label: QR குறியீடு அளவுகோல்
+      qr_top_left_label: மேல் இடது
+      qr_top_right_label: மேல் வலது
+      qr_visibility:
+        help: வழங்கப்பட்ட சான்றிதழை சரிபார்க்க எவரும் பார்வையிடக்கூடிய உங்கள் பள்ளியில் உள்ள பக்கத்திற்கான இணைப்பு அதில் இருக்கும்.
+        help_url: https://docs.pupilfirst.com/users/certificates
+        label: QR குறியீட்டைச் சேர்க்கவா?
+      update_issued_certificates_warning:
+        one: இந்த சான்றிதழ் ஒருமுறை வழங்கப்பட்டது.<br/>இந்த மாற்றங்கள் வழங்கப்பட்ட சான்றிதழிலும் பயன்படுத்தப்படும்.
+        other: இந்த சான்றிதழ் %{count} முறை வழங்கப்பட்டுள்ளது.<br/>வழங்கப்பட்ட இந்த %{count} சான்றிதழ்களுக்கும் இந்த மாற்றங்கள் பொருந்தும்.
+    CourseCertificates__Root:
+      auto_issue_tag: தானியங்கு வெளியீடு
+      certificate: சான்றிதழ்
+      create_action: புதிய சான்றிதழை உருவாக்கவும்
+      delete_button_title: சான்றிதழை நீக்கு %{name}
+      delete_confirm: இந்தச் சான்றிதழை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
+      deleting: நீக்குகிறது...
+      edit_button_title: சான்றிதழைத் திருத்து %{name}
+      heading: சான்றிதழ்கள்
+      issued_count:
+        one: ஒருமுறை மட்டுமே வழங்கப்பட்டது
+        other: '%{count} முறை வழங்கப்பட்டது'
+      no_certificates: நீங்கள் இதுவரை எந்தச் சான்றிதழ்களையும் உருவாக்கவில்லை!
+    CourseCoaches__EnrollmentForm:
+      add_course: பாடப் பயிற்சியாளர்களைச் சேர்க்கவும்
+      assign_coaches: பாடநெறிக்கு பயிற்சியாளர்களை நியமிக்கவும்
+      notification_coach_enrollment: பயிற்சியாளர் பதிவுகள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன
+      search_coaches_all: நீங்கள் அனைத்து பயிற்சியாளர்களையும் தேர்ந்தெடுத்துள்ளீர்கள்!
+      search_coaches_empty: பயிற்சியாளர்கள் தேர்வு செய்யப்படவில்லை
+      search_coaches_placeholder: பயிற்சியாளர்களைத் தேடுங்கள்
+      search_cohorts_all: நீங்கள் அனைத்து கூட்டாளிகளையும் தேர்ந்தெடுத்துள்ளீர்கள்!
+      search_cohorts_empty: குழுக்கள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை
+      search_cohorts_placeholder: கூட்டாளிகளைத் தேடுங்கள்
+      select_coaches: பயிற்சியாளர்களைத் தேர்ந்தெடுக்கவும்
+      select_cohorts: கூட்டாளர்களைத் தேர்ந்தெடுக்கவும்
+    CourseCoaches__InfoForm:
+      no_students_assigned: இந்தப் பயிற்சியாளருக்கு மாணவர்கள் யாரும் நியமிக்கப்படவில்லை. மாணவர் விவரங்களைத் திருத்தும்போது நேரடியாக பயிற்சியாளர்களை நியமிக்கலாம்.
+      notification_coach_updated: பயிற்சியாளர் புதுப்பிக்கப்பட்டது
+      pending_submissions: நிலுவையில் உள்ள சமர்ப்பிப்புகள்
+      revied_submissions: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகள்
+      search_cohorts_all: நீங்கள் அனைத்து கூட்டாளிகளையும் தேர்ந்தெடுத்துள்ளீர்கள்!
+      search_cohorts_empty: குழுக்கள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை
+      search_cohorts_placeholder: கூட்டாளிகளைத் தேடுங்கள்
+      select_cohorts: "பயிற்சியாளருக்கு ஒதுக்கப்பட்ட குழுக்கள்:"
+      students_assigned: "பயிற்சியாளராக நியமிக்கப்பட்ட மாணவர்கள்:"
+      update_cohort_assignment: Cohort Assignment ஐப் புதுப்பிக்கவும்
+    CourseCoaches__InfoFormTeam:
+      remove_post_confirm: ஒதுக்கப்பட்ட அணிகளின் பட்டியலில் இருந்து?
+      remove_pre_confirm: "நீங்கள் நிச்சயமாக அகற்ற விரும்புகிறீர்களா "
+    CourseCoaches__Root:
+      coaches_list: பயிற்சியாளர்களின் பட்டியல்
+      course_empty: பாடநெறிக்கு பயிற்சியாளர்கள் நியமிக்கப்படவில்லை!
+      enrollment_delete_error_head_notification: பயிற்சியாளர் சேர்க்கையை நீக்க முடியவில்லை
+      enrollment_delete_error_notification_body: தயவுசெய்து மீண்டும் முயற்சி செய்க
+      enrollment_delete_notificaion_success_body: பயிற்சியாளர் பதிவு வெற்றிகரமாக நீக்கப்பட்டது
+      remove_confirm_post: இந்த படிப்பிலிருந்து?
+      remove_confirm_pre: நீங்கள் நிச்சயமாக அகற்ற விரும்புகிறீர்களா
+    CourseEditor__Form:
+      actions:
+        archive_course:
+          button_text: காப்பக படிப்பு
+          label: பாடத்திட்டத்தை காப்பகப்படுத்த விரும்புகிறீர்களா?
+        clone_course:
+          button_text: குளோன் பாடநெறி
+          label: பாடத்தின் நகலை உருவாக்க விரும்புகிறீர்களா?
+        unarchive_course:
+          button_text: காப்பகப்படுத்தப்படாத பாடநெறி
+          label: பாடத்திட்டத்தை மீட்டெடுக்க விரும்புகிறீர்களா?
+      alert:
+        archive_message: நிச்சயமாகக் காப்பகப்படுத்த விரும்புகிறீர்களா?
+        clone_course_message: நிச்சயமாகப் பாடத்தின் நகலை உருவாக்க விரும்புகிறீர்களா?
+        unarchive_message: நிச்சயமாக காப்பகத்தை மீட்டெடுக்க விரும்புகிறீர்களா?
+      course_about:
+        label: பற்றி
+        placeholder: படிப்பைப் பற்றிய கூடுதல் விவரங்களைச் சேர்க்கவும்.
+      course_description:
+        error_message: விளக்கம் தேவை (2-150 எழுத்துகள்)
+        label: பாட விளக்கம்
+        placeholder: இந்த பாடத்திற்கான சுருக்கமான விளக்கம்
+      course_highlights:
+        label: பாடத்தின் சிறப்பம்சங்கள்
+      course_name:
+        error_message: பெயர் தேவை (2-50 எழுத்துகள்)
+        label: படிப்பின் பெயர்
+        placeholder: பாடத்தின் பெயரை இங்கே தட்டச்சு செய்யவும்
+      create_course: பாடத்தை உருவாக்கவும்
+      enable_public_preview_label: பாடத்திட்டத்தைப் பார்க்க பொதுமக்களை அனுமதிக்கவா?
+      enable_public_signup_label: இந்தப் பாடநெறிக்கான பொதுப் பதிவுகளை இயக்கவா?
+      feature_course_in_homepage_label: பள்ளி முகப்புப் பக்கத்தில் சிறப்புப் பாடமா?
+      pick_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுங்கள்
+      pick_default_cohort: இயல்புநிலை குழுவைத் தேர்ந்தெடுக்கவும்
+      processing_url:
+        error: தவறான செயலாக்க url
+        help: விண்ணப்பதாரர்கள் பாடநெறிக்கு விண்ணப்பித்தவுடன், அவர்களை செயலாக்க urlக்கு அனுப்பலாம்
+        help_url: 'https://docs.pupilfirst.com/users/courses#processing-url'
+        label: விண்ணப்பதாரர்களைப் பதிவுசெய்வதற்கு முன் அவர்களின் தகவலைச் செயல்படுத்த விரும்புகிறீர்களா?
+      progression_behavior:
+        help: உங்கள் பாடத்திட்டத்தில் மைல்கல் இலக்குகள் இருந்தால் மட்டுமே, பயிற்சியாளர்களின் மதிப்பாய்விற்கு மாணவர்கள் தங்கள் வேலையைச் சமர்ப்பிக்க வேண்டும்.
+        help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
+        label: முன்னேற்ற நடத்தை
+        limited:
+          description_end: " சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யாமல்."
+          description_start: மாணவர்கள் சமன் செய்யலாம்
+          once: ஒருமுறை
+          thrice: மூன்று முறை
+          title: வரையறுக்கப்பட்டவை
+          twice: இரண்டு முறை
+        strict:
+          description: சமர்ப்பிப்புகளை மதிப்பாய்வு செய்து தேர்ச்சி பெற்ற பின்னரே மாணவர்கள் சமன் செய்ய முடியும்.
+          title: கண்டிப்பான
+        unlimited:
+          description: மாணவர்கள் சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யாமலேயே, பாடநெறி முடியும் வரை சமன் செய்யலாம்.
+          title: வரம்பற்ற
+      tabs:
+        actions: செயல்கள்
+        details: விவரங்கள்
+        images: படங்கள்
+      title:
+        add_new_course: புதிய பாடத்தைச் சேர்க்கவும்
+        edit_course_details: படிப்பு விவரங்களைத் திருத்தவும்
+      update_course: பாடநெறியைப் புதுப்பிக்கவும்
+    CourseEditor__HighlightsEditor:
+      add_highlight: பாடத்தின் சிறப்பம்சத்தைச் சேர்க்கவும்
+      delete_highlight: ஹைலைட்டை நீக்கு
+      description:
+        placeholder: சிறப்பம்சத்தின் விளக்கம்
+      move_down: கீழே இறங்கு
+      move_up: மேலே நகர்த்து
+      select: தேர்ந்தெடு
+      selected_button:
+        title: ஐகானைத் தேர்ந்தெடுக்கவும்
+      title:
+        placeholder: சிறப்பம்சத்தின் தலைப்பு
+    CourseEditor__ImagesForm:
+      button_text:
+        update_images: படங்களை புதுப்பிக்கவும்
+        updating: புதுப்பிக்கிறது...
+      cover_image:
+        error_message: JPEG / PNG அளவு 2 MBக்குக் கீழ் இருக்க வேண்டும்
+        help: பாடத்திட்டத்தில் உள்ள அனைத்து மாணவர் பக்கங்களின் மேற்புறத்திலும் சில பாட மின்னஞ்சல்களின் தலைப்பாகவும் அட்டை காட்டப்படும்.
+        help_url: 'https://docs.pupilfirst.com/users/courses#course-images'
+        label: அட்டைப் படம்
+      empty_image_label: தயவுசெய்து படக் கோப்பைத் தேர்ந்தெடுக்கவும்.
+      image_label:
+        end: . தற்போதைய படத்தை மாற்ற கிளிக் செய்யவும்.
+        start: "நீங்கள் தேர்ந்தெடுத்துள்ளீர்கள் "
+      notification_success:
+        description: படங்கள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன.
+        title: முடிந்தது!
+      replace_image_label: "மாற்றுவதற்கு ஒரு கோப்பைத் தேர்ந்தெடுக்கவும் "
+      thumbnail:
+        error_message: JPEG / PNG அளவு 2 MBக்குக் கீழ் இருக்க வேண்டும்
+        help: சிறுபடம் முகப்புப் பக்கத்திலும், நிர்வாக படிப்புகள் பட்டியலிலும் காட்டப்படும்.
+        help_url: 'https://docs.pupilfirst.com/users/courses#course-images'
+        label: சிறுபடம்
+    CourseEditor__Root:
+      add_new_course: புதிய பாடத்தைச் சேர்க்கவும்
+      button_load_more: மேலும் படிப்புகளை ஏற்றவும்...
+      course_links:
+        download_reports: அறிக்கைகளைப் பதிவிறக்கவும்
+        edit_curriculum: பாடத்திட்டத்தை திருத்தவும்
+        manage_coaches: பயிற்சியாளர்களை நிர்வகிக்கவும்
+        manage_students: மாணவர்களை நிர்வகிக்கவும்
+        view_as_student: மாணவராகப் பார்க்கவும்
+      courses_fully_loaded_text: அனைத்து %{total_courses} படிப்புகளையும் காட்டுகிறது
+      courses_partially_loaded_text: '%{loaded_courses_count} இல் %{total_courses} பாடங்களைக் காட்டுகிறது'
+      edit_course_details: படிப்பு விவரங்களைத் திருத்தவும்
+      empty_courses: உங்களிடம் படிப்புகள் எதுவும் இல்லை!
+      filter:
+        input_hint: அல்லது பெயரால் தேட தட்டச்சு செய்யத் தொடங்குங்கள்...
+        input_label: தேடு
+        input_placeholder: வடிகட்டுதல் மற்றும் பெயரின்படி படிப்புகளைத் தேடுங்கள்
+        label:
+          name: பெயரால் தேடுங்கள்
+          status: நிலை
+        status:
+          active: செயலில்
+          archived: காப்பகப்படுத்தப்பட்டது
+          ended: முடிந்தது
+      notification_error_body: இந்த பிழை குறித்து எங்கள் குழுவிற்கு அறிவிக்கப்பட்டுள்ளது. இந்தப் பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
+      notification_error_head: எதிர் பாராத பிழை ஏற்பட்டு விட்டது
+      quick_links: விரைவு இணைப்புகள்
+      view_public_page: பொதுப் பக்கத்தைப் பார்க்கவும்
+    CourseExport__Root:
+      active_students_label: செயலில் மாணவர்கள்
+      all_students_label: அனைத்து மாணவர்கள்
+      all_targets_label: அனைத்து இலக்குகள்
+      close_export_form: ஏற்றுமதி படிவத்தை மூடு
+      create_action: புதிய ஏற்றுமதியை உருவாக்கவும்
+      create_action_button: பாடத் தரவை ஏற்றுமதி செய்யவும்
+      create_button_active_label: ஏற்றுமதியை அமைக்கிறது...
+      create_button_text: ஏற்றுமதியை உருவாக்கவும்
+      download_course_export: பதிவிறக்க பாடநெறி ஏற்றுமதி
+      export: ஏற்றுமதி
+      export_tags_label: பின்வரும் குறிச்சொற்களுடன் மாணவர்களை மட்டும் ஏற்றுமதி செய்யவும்
+      export_targets_label: ஏற்றுமதியில் என்ன இலக்குகள் இருக்க வேண்டும்?
+      export_type_label: உங்களுக்கு தேவையான ஏற்றுமதி வகையைத் தேர்ந்தெடுக்கவும்
+      heading: ஏற்றுமதி
+      include_inactive_students_tag: செயலற்ற மாணவர்களை உள்ளடக்கியது
+      no_exports_notice: நீங்கள் இன்னும் எதையும் ஏற்றுமதி செய்யவில்லை!
+      prepared: தயார் செய்யப்பட்டது
+      requested: கோரப்பட்டது
+      reviewed_only_tag: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகள் மட்டுமே
+      reviewed_only_targets_label: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகளைக் கொண்ட இலக்குகள் மட்டுமே
+      search_tag_placeholder: குறிச்சொல்லைத் தேடவும்
+      search_tags_empty: குறிச்சொற்கள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை
+      students_label: மாணவர்கள்
+      students_to_include_label: பாடநெறி ஏற்றுமதியில் சேர்க்க மாணவர்களைத் தேர்ந்தெடுக்கவும்
+      teams_label: அணிகள்
+    CourseSelect:
+      button_load_more: மேலும் படிப்புகளை ஏற்றவும்...
+      courses_fully_loaded_text: அனைத்து %{total_courses} படிப்புகளையும் காட்டுகிறது
+      courses_partially_loaded_text: '%{loaded_courses_count} இல் %{total_courses} பாடங்களைக் காட்டுகிறது'
+      empty_courses: உங்களிடம் படிப்புகள் எதுவும் இல்லை!
+      filter:
+        input_hint: அல்லது பெயரால் தேட தட்டச்சு செய்யத் தொடங்குங்கள்...
+        input_label: தேடு
+        input_placeholder: வடிகட்டுதல் மற்றும் பெயரின்படி படிப்புகளைத் தேடுங்கள்
+        label:
+          name: பெயரால் தேடுங்கள்
+          status: நிலை
+        status:
+          active: செயலில்
+          archived: காப்பகப்படுத்தப்பட்டது
+          ended: முடிந்தது
+    CoursesApply__Root:
+      email_sent_message:
+        description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். பதிவு செய்ய மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்து, தொடங்கவும்.
+        title: நாங்கள் உங்களுக்கு சரிபார்ப்பு மின்னஞ்சலை அனுப்பியுள்ளோம்.
+    CoursesCurriculum:
+      edit_level_button: நிலை திருத்தவும்
+      edit_target_button_title: இலக்கைத் திருத்து %{title}
+      empty_level_content_notice: இந்த நிலையில் வெளியிடப்பட்ட உள்ளடக்கம் எதுவும் இல்லை.
+      issued_certificate_button: சான்றிதழைப் பார்க்கவும்
+      issued_certificate_heading: வாழ்த்துகள்! உங்களுக்கு சான்றிதழ் வழங்கப்பட்டுள்ளது.
+      level_locked: நிலை பூட்டப்பட்டது
+      level_locked_explanation: நீங்கள் %{date}இல் உள்ளடக்கத்தை அணுகலாம்.
+      level_locked_for_students_notice: இந்த நிலை இன்னும் மாணவர்களுக்கு பூட்டப்பட்டுள்ளது மற்றும் <strong>%{date}</strong>இல் திறக்கப்படும்.
+      level_locked_notice: நிலை தற்போது பூட்டப்பட்டுள்ளது!
+      milestone_targets: மைல்கல் இலக்குகள்
+      nav_next_level: அடுத்த நிலை
+      nav_previous_level: முந்தைய நிலை
+    CoursesCurriculum__AudioRecorder:
+      button_text_record_again: மீண்டும் பதிவு செய்யுங்கள்
+      button_text_start_recording: பதிவைத் தொடங்கவும்
+      cannot_record: நீங்கள் ஆடியோவை பதிவு செய்ய முடியாது.
+      preview_mode: முன்னோட்ட முறை
+      recording_size_limit_warning: பதிவு அளவு 5mb ஐ விட அதிகமாக இருக்கக்கூடாது. மீண்டும் பதிவு செய்யவும்
+      recording_string: பதிவு...
+    CoursesCurriculum__AutoVerify:
+      before_marking: முழுமையானதாகக் குறிக்கும் முன்...
+      before_visiting: இணைப்பைப் பார்வையிடும் முன்...
+      mark_complete: முடிந்ததாகக் குறி
+      saving: சேமிப்பு
+      visit_complete: முடிக்க இணைப்பைப் பார்வையிடவும்
+      visit_link: "இணைப்பைப் பார்வையிடவும் "
+    CoursesCurriculum__Discuss:
+      create: ஒரு தலைப்பை உருவாக்கவும்
+      go_to: சமூகத்திற்குச் செல்லுங்கள்
+      no_discussion: இந்த இலக்கு பற்றி சமீபத்தில் எந்த விவாதமும் இல்லை.
+      topics_post: " சமூக"
+      topics_pre: "தலைப்புகள் "
+      use_community: உங்கள் சந்தேகங்களைத் தீர்க்கவும், உங்கள் சகாக்களுக்கு உதவவும் சமூகத்தைப் பயன்படுத்துங்கள்!
+    CoursesCurriculum__FileForm:
+      another_file: பதிவேற்ற மற்றொரு கோப்பைத் தேர்ந்தெடுக்கவும்.
+      cannot_attach: நீங்கள் கோப்புகளை இணைக்க முடியாது.
+      choose_upload: பதிவேற்ற கோப்பைத் தேர்ந்தெடுக்கவும்
+      error: "பிழை "
+      max_file_size: அதிகபட்ச கோப்பு அளவு 5 எம்பி.
+      please_reload: பக்கத்தை மீண்டும் ஏற்றி மீண்டும் முயற்சிக்கவும்.
+      preview_mode: முன்னோட்ட முறை
+      smth_went_wrong: ஏதோ தவறு நடைபெற்றிருக்கிறது!
+    CoursesCurriculum__Learn:
+      edit_target_button: உள்ளடக்கத்தைத் திருத்தவும்
+    CoursesCurriculum__LevelUpButton:
+      button_text_level_up: லெவல் அப்
+      button_text_saving: சேமிப்பு
+    CoursesCurriculum__NoticeManager:
+      access_ended_description: நீங்கள் இப்போது பாடநெறிக்கு வரம்புக்குட்பட்ட அணுகல் மட்டுமே உள்ளது. நீங்கள் உள்ளடக்கத்தை முன்னோட்டமிட அனுமதிக்கப்படுகிறீர்கள், ஆனால் எந்த இலக்கையும் முடிக்க முடியாது.
+      access_ended_title: முன்னோட்டம்/வரையறுக்கப்பட்ட அணுகல்
+      course_complete_description: நீங்கள் எங்கள் பாடத்தை முடித்துவிட்டீர்கள். நீங்கள் விட்டுவிட்ட இலக்குகளை முடிக்க தயங்காதீர்கள் மற்றும் இணைக்கப்பட்ட இணைப்புகளில் படிக்கவும்.
+      course_complete_title: வாழ்த்துகள்! இறுதி நிலையில் அனைத்து மைல்கல் இலக்குகளையும் முடித்துவிட்டீர்கள்.
+      course_ended_description: பாடநெறி முடிந்தது மற்றும் அனைத்து இலக்குகளுக்கும் சமர்ப்பிப்புகள் முடக்கப்பட்டுள்ளன!
+      course_ended_title: படிப்பு முடிந்தது
+      level_up_blocked:
+        body_middle_pending_review: "பயிற்சியாளரின் மதிப்பாய்வு இன்னும் நிலுவையில் உள்ளது. "
+        body_middle_rejected: "நிராகரிக்கப்பட்டுள்ளன. "
+        body_prefix: "நிலை %{number}இல் அனைத்து மைல்கல் இலக்குகளையும் சமர்ப்பித்துள்ளீர்கள், ஆனால் ஒன்று அல்லது அதற்கு மேற்பட்ட சமர்ப்பிப்புகள் "
+        body_suffix: சமன் செய்ய அனைத்து மைல்கல் இலக்குகளிலும் தேர்ச்சி தர வேண்டும்.
+        title_pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
+        title_rejected: லெவல் அப் தடுக்கப்பட்டது
+      level_up_description: வாழ்த்துகள்! பாடத்திட்டத்தில் அடுத்த நிலைக்குச் செல்ல தேவையான அனைத்து மைல்கல் இலக்குகளையும் வெற்றிகரமாக முடித்துவிட்டீர்கள். பாடத்திட்டத்தில் தொடர்ந்து முன்னேற கீழே உள்ள "லெவல் அப்" பட்டனை கிளிக் செய்யவும்.
+      level_up_limited_description: நீங்கள் நிலை %{currentLevel}இல் உள்ளீர்கள், ஆனால் நிலை %{minimumRequiredLevel} இல் இலக்குகள் நிராகரிக்கப்பட்டுள்ளன அல்லது பயிற்சியாளரால் இன்னும் மதிப்பாய்வு நிலுவையில் உள்ளன. தொடர்ந்து சமன் செய்ய, நிலை %{minimumRequiredLevel} இல் உள்ள அனைத்து மைல்கல் இலக்குகளையும் நீங்கள் கடக்க வேண்டும்.
+      level_up_limited_title: லெவல் அப் தடுக்கப்பட்டது
+      level_up_title: நிலைக்குத் தயார்!
+      preview_mode_description: இந்தப் பாடத்திட்டத்திற்கான முன்னோட்டப் பயன்முறையை அணுகுகிறீர்கள்
+      preview_mode_title: முன்னோட்ட முறை
+      team_members_pending_description: தேவையான அனைத்து மைல்ஸ்டோன் இலக்குகளையும் நீங்கள் பூர்த்தி செய்துள்ளீர்கள், ஆனால் உங்கள் குழுத் தோழர்களில் ஒன்று அல்லது அதற்கு மேற்பட்டவர்கள் செய்யவில்லை. உள்நுழைந்து முழுமையடையாத மைல்கல் இலக்குகளை சரிபார்க்கும்படி அவர்களிடம் கேளுங்கள்.
+      team_members_pending_title: உங்கள் குழுவுடன் சரிபார்க்கவும்
+    CoursesCurriculum__Overlay:
+      close_button: நெருக்கமான
+      completion_tab_complete: முழுமை
+      completion_tab_completed: நிறைவு
+      completion_tab_locked: பூட்டப்பட்டது
+      completion_tab_mark_complete: முழுமையானதாகக் குறிக்கவும்
+      completion_tab_quiz_result: வினாடி வினா முடிவு
+      completion_tab_submissions: சமர்ப்பிப்புகள் & கருத்து
+      completion_tab_take_quiz: வினாடி வினா எடுக்கவும்
+      completion_tab_visit_link: முடிக்க இணைப்பைப் பார்வையிடவும்
+      discuss_tab: விவாதிக்கவும்
+      learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
+      learn_cta_take_quiz: வினாடி வினா எடுங்கள்
+      learn_tab: அறிய
+      next_target_button: அடுத்த இலக்கு
+      pending_team_members_notice: "இந்த இலக்கை இன்னும் முடிக்காத குழு உறுப்பினர்கள் உங்களிடம் உள்ளனர்:"
+      preview_mode_text: நீங்கள் தற்போது இந்தப் பாடத்திட்டத்தின் முன்னோட்டத்தைப் பார்க்கிறீர்கள்.
+      previous_target_button: முந்தைய இலக்கு
+      scroll_to_top: மேலே உருட்டவும்
+    CoursesCurriculum__Quiz:
+      next_question: அடுத்த கேள்வி
+      question: கேள்வி
+      submit_quiz: வினாடி வினாவைச் சமர்ப்பிக்கவும்
+    CoursesCurriculum__SubmissionBuilder:
+      accessing_preview: நீங்கள் முன்னோட்ட பயன்முறையை அணுகுகிறீர்கள்
+      attaching: இணைக்கிறது
+      compete_all: தேவையான அனைத்தையும் பூர்த்தி செய்யவும்
+      complete: முழுமை
+      for_course: இந்த படிப்புக்கு
+      no_actions: இந்த இலக்குக்கு செயல்கள் இல்லை. இலக்கை முடிக்க சமர்ப்பி என்பதைக் கிளிக் செய்யவும்
+      steps_submit: இந்த இலக்கை சமர்பிப்பதற்கான படிகள்
+      submit: சமர்ப்பிக்கவும்
+      submitting: சமர்ப்பிக்கிறது
+    CoursesCurriculum__SubmissionItem:
+      link_error: இது சரியான URL போல் இல்லை.
+      link_placeholder: https://... இல் தொடங்கி முழு URL ஐ உள்ளிடவும்
+      remove: "அகற்று "
+      short_text_error: பதில் 250 எழுத்துகளுக்கு குறைவாக இருக்க வேண்டும்
+      short_text_placeholder: ஒரு சிறிய உரையைச் சேர்க்கவும்
+      warning_length_limit: தயவு செய்து உங்கள் பதிலை 5000 எழுத்துகளுக்கும் குறைவான நீளத்தில் வைக்கவும்.
+    CoursesCurriculum__SubmissionsAndFeedback:
+      add_another: இன்னொன்றை சேர்
+      add_another_submission: மற்றொரு சமர்ப்பிப்பைச் சேர்க்கவும்
+      cancel: ரத்து செய்
+      completed: நிறைவு
+      grading: தரப்படுத்துதல்
+      pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
+      rejected: நிராகரிக்கப்பட்டது
+      submission_details: "உங்கள் சமர்ப்பிப்பு பற்றிய விவரங்கள் "
+      submission_number: "சமர்ப்பிப்பு #"
+      submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
+      unknown_coach: தெரியாத பயிற்சியாளர்
+      your_submissions: உங்கள் சமர்ப்பிப்புகள்
+    CoursesCurriculum__TargetStatus:
+      access_locked: நீங்கள் இப்போது பாடநெறிக்கு வரம்புக்குட்பட்ட அணுகல் மட்டுமே உள்ளது. நீங்கள் உள்ளடக்கத்தை முன்னோட்டமிட அனுமதிக்கப்படுகிறீர்கள், ஆனால் எந்த இலக்கையும் முடிக்க முடியாது.
+      course_locked: இந்த பாடநெறி முடிந்தது.
+      level_locked: நீங்கள் நிலை %{current_level}இல் உள்ளீர்கள். முதலில் நிலை %{current_level} ல் உள்ள அனைத்து மைல்கல் இலக்குகளையும் முடிக்கவும்.
+      prerequisites_incomplete: இந்த இலக்கு முழுமையடையாத முன்நிபந்தனைகளைக் கொண்டுள்ளது.
+      status:
+        completed: நிறைவு
+        locked: பூட்டப்பட்டது
+        pending: நிலுவையில் உள்ளது
+        pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
+        rejected: நிராகரிக்கப்பட்டது
+    CoursesCurriculum__UndoButton:
+      notification_error_body: எதிர்பாராத பிழை ஏற்பட்டது, இது குறித்து எங்கள் குழுவிற்கு அறிவிக்கப்பட்டுள்ளது. மீண்டும் முயற்சிக்கும் முன் பக்கத்தை மீண்டும் ஏற்றவும்.
+      notification_error_head: எதிர்பாராத பிழை
+      notification_notice_body: மீண்டும் முயற்சிக்கும் முன், பக்கத்தை மீண்டும் ஏற்றி, சமர்ப்பிப்பின் நிலையைச் சரிபார்க்கவும்.
+      notification_notice_head: சமர்ப்பித்தலை செயல்தவிர்க்க முடியவில்லை
+      undo_submission_title: இந்த சமர்ப்பிப்பை நீக்கவும்
+      window_confirm: இந்தச் சமர்ப்பிப்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
+    CoursesCurriculum__UrlForm:
+      button_placeholder: https://... என தொடங்கி முழு URL ஐ உள்ளிடவும்
+      button_text: இணைப்பை இணைக்கவும்
+      url_validate_error: சரியான URL போல் இல்லை
+    CoursesReport:
+      button_overview_text: கண்ணோட்டம்
+      button_submissions_text: சமர்ப்பிப்புகள்
+    CoursesReport__Overview:
+      average_grades: சராசரி தரங்கள்
+      average_quiz_score: சராசரி வினாடி வினா மதிப்பெண்
+      course_completed: படிப்பு முடிந்தது!
+      incomplete_targets: "முழுமையற்றது: %{targetsCount}"
+      level_progress: நிலை முன்னேற்றம்
+      personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
+      quizzes_attempted:
+        one: 1 வினாடி வினா முயற்சி
+        other: "%{count} வினாடி வினாக்கள் முயற்சி"
+      schedule_coaching_session: ஒரு பயிற்சி அமர்வை திட்டமிடுங்கள்
+      targets_completed: "நிறைவு: %{targetsCount}"
+      targets_overview: இலக்குகள் மேலோட்டம்
+      targets_pending_review: "நிலுவையில் உள்ள மதிப்பாய்வு: %{targetsCount}"
+    CoursesReport__SubmissionsList:
+      completed: நிறைவு
+      filter_by_another_level: மற்றொரு நிலை மூலம் வடிகட்டவும்
+      filter_by_another_level_or_status: மற்றொரு நிலை அல்லது நிலை மூலம் வடிகட்டவும்
+      filter_by_level: நிலை மூலம் வடிகட்டவும்
+      filter_by_level_or_status: நிலை அல்லது நிலை மூலம் வடிகட்டவும்
+      load_more: அதிகமாய் ஏற்று...
+      no_submissions_to_show: "காட்ட சமர்ப்பிப்புகள் இல்லை "
+      pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
+      rejected: நிராகரிக்கப்பட்டது
+      sort_by: "இதன்படி வரிசைப்படுத்தவும்:"
+      status: நிலை
+      submission_not_considered: இந்தச் சமர்ப்பிப்பு இலக்கின் நிறைவை நோக்கிக் கணக்கிடப்படவில்லை.
+      submission_not_considered_help: இது <em>அணி</em> இலக்காகும், மேலும் இந்தச் சமர்ப்பிப்பு உங்கள் குழுவின் சில உறுப்பினர்களுடன் இணைக்கப்படவில்லை. உங்கள் தனிப்பட்ட சமர்ப்பிப்புக்குப் பிறகு இலக்கு மாற்றப்பட்டாலோ, <em>குழு</em> சமர்ப்பிப்பு தேவைப்பட்டாலோ அல்லது <em>குழு</em> சமர்ப்பிப்பு உருவாக்கப்பட்ட பிறகு உங்கள் குழுவின் அமைப்பு மாறியிருந்தாலோ இது நிகழலாம்.
+      submitted_at: சமர்ப்பிக்கப்பட்டது
+      submitted_on: '%{date}அன்று சமர்ப்பிக்கப்பட்டது'
+      view: "காண்க "
+    CoursesReview__Checklist:
+      create_review_checklist: மதிப்பாய்வு சரிபார்ப்பு பட்டியலை உருவாக்கவும்
+      create_review_checklist_description: சரிபார்ப்புப் பட்டியலை உருவாக்குவதன் மூலம் உங்கள் மதிப்பாய்வுக்குத் தயாராகுங்கள்
+    CoursesReview__ChecklistEditor:
+      add_checklist_item: சரிபார்ப்புப் பட்டியல் உருப்படியைச் சேர்க்கவும்
+      add_result: முடிவைச் சேர்க்கவும்
+      cancel: ரத்து செய்
+      checklist_item_description:
+        error_message: ஒரு காசோலையின் முடிவு காலியாக இருக்கக்கூடாது
+        placeholder: கருத்தைச் சேர் (விரும்பினால்)
+      checklist_item_title:
+        move_down_button_title: சரிபார்ப்புப் பட்டியல் முடிவை கீழே நகர்த்தவும்
+        move_up_button_title: சரிபார்ப்புப் பட்டியல் முடிவை மேலே நகர்த்தவும்
+        placeholder: இந்தச் சரிபார்ப்பிற்கான முடிவைச் சேர்க்கவும்
+        remove_button_title: சரிபார்ப்புப் பட்டியல் முடிவை அகற்று
+      checklist_title:
+        error_message: சரிபார்ப்பு பட்டியல் உருப்படியை காலியாக இருக்கக்கூடாது
+        move_down_button_title: சரிபார்ப்புப் பட்டியல் உருப்படியை கீழே நகர்த்தவும்
+        move_up_button_title: சரிபார்ப்புப் பட்டியல் உருப்படியை மேலே நகர்த்தவும்
+        placeholder: சரிபார்ப்புப் பட்டியலில் ஒரு பொருளைச் சேர்க்கவும்
+        remove_button_title: சரிபார்ப்புப் பட்டியல் உருப்படியை அகற்று
+      create_review_checklist: மதிப்பாய்வு சரிபார்ப்பு பட்டியலை உருவாக்கவும்
+      disabled: முடக்கப்பட்டது
+      edit_review_checklist: மதிப்பாய்வு சரிபார்ப்புப் பட்டியலைத் திருத்து
+      save_checklist: சரிபார்ப்புப் பட்டியலைச் சேமிக்கவும்
+    CoursesReview__ChecklistShow:
+      edit_checklist_button: சரிபார்ப்புப் பட்டியலைத் திருத்தவும்
+      feedback_placeholder: கருத்தைச் சேர் (விரும்பினால்)
+      generate_feedback_button: கருத்தை உருவாக்கவும்
+      review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
+    CoursesReview__Editor:
+      add_another_feedback: மற்றொரு கருத்தைச் சேர்க்கவும்
+      add_feedback: கருத்தைச் சேர்க்கவும்
+      add_your_feedback: உங்கள் கருத்தைச் சேர்க்கவும்
+      assigned_coaches: நியமிக்கப்பட்ட பயிற்சியாளர்கள்
+      assigned_to: ஒதுக்கப்படும்
+      close: நெருக்கமான
+      close_submission_warning: சமர்ப்பிப்பைச் சேமிக்காமல் நிச்சயமாக மூட விரும்புகிறீர்களா?
+      create_review_checklist: மதிப்பாய்வு சரிபார்ப்பு பட்டியலை உருவாக்கவும்
+      deleted_coach: நீக்கப்பட்ட பயிற்சியாளர்
+      evaluated_at: '%{evaluated_at}இல்'
+      evaluated_by: மூலம் மதிப்பிடப்பட்டது
+      feedback: பின்னூட்டம்
+      feedback_generated_text: மதிப்பாய்வு சரிபார்ப்புப் பட்டியலில் இருந்து கருத்து உருவாக்கப்பட்டது.
+      feedback_placeholder: நீங்கள் கிரேடிங் முடிந்ததும் இந்தக் கருத்து மாணவர்களுக்கு மின்னஞ்சலில் அனுப்பப்படும்.
+      get_next_submission:
+        notice:
+          done: முடிந்தது!
+          done_description: இதே போன்ற சமர்ப்பிப்புகள் எதுவும் இல்லை.
+      grade_card: தர அட்டை
+      help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
+      hide_test_report_button: சோதனை அறிக்கையை மறை
+      level_acronym: எல்
+      note_help: "இதைப் பற்றி ஒரு குறிப்பு எழுத விரும்புகிறீர்களா "
+      note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
+      remove_assignment: வேலையை அகற்று
+      report_description: சோதனை அறிக்கை
+      report_status_string:
+        completed:
+          error: பிழைகள் காரணமாக தானியங்கு சோதனைகளை முடிக்க முடியவில்லை
+          failure: சில தானியங்கு சோதனைகள் தோல்வியடைந்தன
+          success: அனைத்து தானியங்கி சோதனைகளும் வெற்றி பெற்றன
+        in_progress: தானியங்கி சோதனைகள் நடந்து வருகின்றன
+        queued: தானியங்கு சோதனைகள் வரிசையில் உள்ளன
+      review: விமர்சனம்
+      review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
+      review_next: அடுத்தது
+      save_grades: தரங்களைச் சேமிக்கவும்
+      save_grades_and_send_feedback: கிரேடுகளைச் சேமித்து கருத்து அனுப்பவும்
+      share_feedback: கருத்துக்களைப் பகிரவும்
+      show_review_checklist: மதிப்பாய்வு சரிபார்ப்புப் பட்டியலைக் காட்டு
+      show_test_report_button: சோதனை அறிக்கையைக் காட்டு
+      status:
+        completed: நிறைவு
+        pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
+        rejected: நிராகரிக்கப்பட்டது
+        reviewing: மதிப்பாய்வு செய்கிறது
+      student: மாணவர்
+      student_dropped_out_message_with_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய மாணவரிடமிருந்து. நீங்கள் சமர்ப்பிப்பை %{timestamp}வரை மதிப்பாய்வு செய்யலாம்.
+      student_dropped_out_message_without_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய மாணவரிடமிருந்து.
+      students_dropped_out_message_with_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுடன் இணைக்கப்பட்டுள்ளது. நீங்கள் சமர்ப்பிப்பை %{timestamp}வரை மதிப்பாய்வு செய்யலாம்
+      students_dropped_out_message_without_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுடன் இணைக்கப்பட்டுள்ளது.
+      submission: சமர்ப்பணம்
+      submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
+      submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது: "
+      team: அணி
+      team_notice: " இந்தச் சமர்ப்பிப்பு ஒரு குழுவிடமிருந்து வந்தது, எனவே இங்கு சேர்க்கப்பட்ட குறிப்பு, குழுவில் உள்ள அனைத்து மாணவர்களின் அறிக்கையிலும் இடுகையிடப்படும்."
+      test_report: சோதனை அறிக்கை
+      undo_grade_warning: இந்த கிரேடுகளை நிச்சயமாக அகற்ற விரும்புகிறீர்களா? இது சமர்ப்பிப்பை 'நிலுவையில் உள்ள மதிப்பாய்வு' நிலைக்குத் திருப்பும்.
+      undo_grading: கிரேடிங்கை செயல்தவிர்
+      write_a_note: ஒரு குறிப்பு எழுதவும்
+    CoursesReview__ReviewerManager:
+      assigned_at: ஒதுக்கப்பட்டது %{date}
+      change_reviewer_and_start_review: ஆம், என்னை ஒதுக்கு
+      remove_reviewer_assign_to_me: '%{current_coach_name} ஐ அகற்றி, மதிப்பாய்வு செய்ய உங்களை ஒதுக்க விரும்புகிறீர்களா?'
+      start_review: மதிப்பாய்வைத் தொடங்கவும்
+    CoursesReview__Root:
+      assigned_to: ஒதுக்கப்படும்
+      assigned_to_coach: "ஒதுக்கப்படும்:"
+      assigned_to_me: " எனக்கு ஒதுக்கப்பட்டது"
+      button_load_more: மேலும் சமர்ப்பிப்புகளை ஏற்றவும்...
+      coach_filter_by:
+        assigned_to: சமர்ப்பிப்புக்கு யார் ஒதுக்கப்பட்டுள்ளனர் என்பதன் அடிப்படையில் வடிகட்டவும்
+        personal_coach: ஒரு மாணவருக்கு யார் ஒதுக்கப்பட்டுள்ளது என்பதை வடிகட்டவும்
+        reviewed_by: சமர்ப்பிப்பை மதிப்பாய்வு செய்தவர்களால் வடிகட்டவும்
+      filter_by: "இதன்படி வடிகட்டவும்:"
+      filter_by_another_level: மற்றொரு நிலை மூலம் வடிகட்டவும்
+      filter_by_another_level_or_submissions_assigned: மற்றொரு நிலை மூலம் வடிகட்டவும் அல்லது பயிற்சியாளருக்கு ஒதுக்கப்பட்ட சமர்ப்பிப்புகளை மட்டும் காட்டவும்
+      filter_by_level: நிலை மூலம் வடிகட்டவும்
+      filter_by_level_or_submissions_assigned: நிலை வாரியாக வடிகட்டவும் அல்லது பயிற்சியாளருக்கு ஒதுக்கப்பட்ட சமர்ப்பிப்புகளை மட்டும் காட்டவும்
+      filter_by_target: இலக்கின்படி வடிகட்டவும்
+      filter_hint: ... அல்லது மாணவர் அவர்களின் பெயர் அல்லது மின்னஞ்சல் முகவரியைப் பயன்படுத்தி வடிகட்ட தட்டச்சு செய்யத் தொடங்குங்கள்
+      filter_input:
+        assigned_to: "ஒதுக்கப்படும்: "
+        level: "நிலை: "
+        personal_coach: "தனிப்பட்ட பயிற்சியாளர்: "
+        reviewed_by: "மதிப்பாய்வு செய்தவர்: "
+        target: "இலக்கு: "
+      inactive_students: செயலற்ற மாணவர்கள்
+      include: சேர்க்கிறது
+      level: நிலை
+      me: நான்
+      name_or_email: பெயர் அல்லது மின்னஞ்சல்
+      now_showing_submissions_assigned_to: இப்போது 0 க்கு ஒதுக்கப்பட்ட சமர்ப்பிப்புகளைக் %{name}.
+      now_showing_submissions_from_all_students: இப்போது இந்தப் படிப்பில் உள்ள அனைத்து மாணவர்களிடமிருந்தும் சமர்ப்பிப்புகளைக் காட்டுகிறது.
+      pending: நிலுவையில் உள்ளது
+      personal_coach: தனிப்பட்ட பயிற்சியாளர்
+      review: விமர்சனம்
+      reviewed: மதிப்பாய்வு செய்யப்பட்டது
+      reviewed_at: மதிப்பாய்வு செய்யப்பட்டது
+      reviewed_by: மதிப்பாய்வு செய்தது
+      search:
+        assigned_to: "ஒதுக்கப்படும்:"
+        level: "நிலை:"
+        personal_coach: "தனிப்பட்ட பயிற்சியாளர்:"
+        reviewed_by: "மதிப்பாய்வு செய்தது:"
+        status: "நிலை: "
+        target: "இலக்கு:"
+      sort_by: "இதன்படி வரிசைப்படுத்தவும்:"
+      status: நிலை
+      submissions_fully_loaded_text:
+        one: ஒரே ஒரு சமர்ப்பிப்பு உள்ளது.
+        other: அனைத்து %{count} சமர்ப்பிப்புகளையும் காட்டுகிறது
+      submissions_partially_loaded_text: '%{total_submissions} சமர்ப்பிப்புகளில் %{loaded_submissions_count} காட்டுகிறது'
+      submitted_at: சமர்ப்பிக்கப்பட்டது
+      target: இலக்கு
+    CoursesReview__SubmissionCard:
+      assigned_to: ஒதுக்கப்படும்
+      completed: நிறைவு
+      created_at: '%{created_at}இல்.'
+      feedback_sent: கருத்து அனுப்பப்பட்டது
+      level: "நிலை "
+      no_submissions_found: சமர்ப்பிப்புகள் எதுவும் இல்லை
+      rejected: நிராகரிக்கப்பட்டது
+      submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
+      submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது "
+    CoursesReview__SubmissionInfoCard:
+      completed: நிறைவு
+      deleted: நீக்கப்பட்டது
+      pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
+      rejected: நிராகரிக்கப்பட்டது
+      submission_hash: சமர்ப்பணம்
+    CoursesStudents__CoachNoteShow:
+      coach_on: "அன்று"
+      delete_note: "குறிப்பை நீக்கு "
+      deleted_coach: நீக்கப்பட்ட பயிற்சியாளர்
+      sure_delete: இந்தக் குறிப்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
+      unknown: தெரியவில்லை
+    CoursesStudents__CoachNotes:
+      all_notes: அனைத்து குறிப்புகள்
+      has_archived_notes: இந்த மாணவரிடம் சில காப்பக குறிப்புகள் உள்ளன.
+      new_note: புதிய குறிப்பைச் சேர்க்கவும்
+      no_notes: இங்கே குறிப்புகள் இல்லை!
+      save_note: குறிப்பைச் சேமிக்கவும்
+    CoursesStudents__Root:
+      assigned_me: "ஒதுக்கப்பட்டது: எனக்கு"
+      assigned_to: ஒதுக்கப்படும்
+      coach_notes: பயிற்சியாளர் குறிப்புகள்
+      filter_level: நிலை, ஒதுக்கப்பட்ட பயிற்சியாளர் அல்லது பெயர் அல்லது மின்னஞ்சல் முகவரி மூலம் தேடுதல் மற்றும் பல...
+      has_notes: குறிப்புகள் உள்ளன
+      level_distribution_label: நிலை வாரியான மாணவர் விநியோகம்
+      me: நான்
+      name_email: பெயர் அல்லது மின்னஞ்சல்
+      no_notes: குறிப்புகள் இல்லை
+      not_found: "ஐடியுடன், விநியோகப் பட்டியில் இருந்து தேர்ந்தெடுக்கப்பட்ட நிலையைக் கண்டறிய முடியவில்லை "
+      restore_filer_none: இப்போது இந்த பாடத்திட்டத்தில் உள்ள அனைத்து மாணவர்களையும் காட்டுகிறது.
+      search_assigned_me: " எனக்கு ஒதுக்கப்பட்டது"
+      search_assigned_to: "ஒதுக்கப்படும் "
+      search_no_notes: குறிப்புகள் இல்லை குறிப்புகள் பயிற்சி குறிப்புகள் உள்ளன
+      search_tag: "குறிச்சொல் "
+      showing_assigned: "இப்போது ஒதுக்கப்பட்ட மாணவர்களைக் காட்டுகிறது "
+      tagged_with: குறியிடப்பட்டது
+    CoursesStudents__StudentDistribution:
+      level_wise: மாணவர்கள் நிலை வாரியாக விநியோகம்
+      students_level: நிலை மாணவர்கள்
+    CoursesStudents__StudentOverlay:
+      access_ended_at: படிப்பிற்கான இந்த மாணவரின் அணுகல் %{date}அன்று முடிந்தது.
+      average_grades: சராசரி தரங்கள்
+      average_quiz_score: சராசரி வினாடி வினா மதிப்பெண்
+      close_student_report: மாணவர் அறிக்கையை மூடவும்
+      course_completed: படிப்பு முடிந்தது!
+      dropped_out_at: இந்த மாணவர் %{date}இல் படிப்பை விட்டு வெளியேறினார்.
+      level_progress: நிலை முன்னேற்றம்
+      notes: குறிப்புகள்
+      other_team_members: மற்ற குழு உறுப்பினர்கள்
+      personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
+      quizzes_attempted:
+        one: 1 வினாடி வினா முயற்சி
+        other: "%{count} வினாடி வினாக்கள் முயற்சி"
+      submissions: சமர்ப்பிப்புகள்
+      targets: " இலக்குகள்"
+      targets_overview: இலக்குகள் மேலோட்டம்
+      team_coaches: குழு பயிற்சியாளர்கள்
+      total_targets_completed: மொத்த இலக்குகள் நிறைவடைந்தன
+    CoursesStudents__StudentsList:
+      last_seen: கடைசியாகப் பார்த்தது %{time_string}
+      no_last_seen: இந்த மாணவர் இதுவரை உள்நுழைந்ததில்லை
+      no_students: காட்ட மாணவர்கள் இல்லை
+      personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
+      team_coaches: குழு பயிற்சியாளர்கள்
+    CoursesStudents__SubmissionsList:
+      no_revied_submission: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்பு இல்லை
+      submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
+    CurriculumEditor:
+      create_level: நிலை உருவாக்கவும்
+      create_target_group: இலக்கு குழுவை உருவாக்கவும்
+      edit_selected_level: தேர்ந்தெடுக்கப்பட்ட நிலையைத் திருத்தவும்
+    CurriculumEditor__ContentBlockCreator:
+      audio_upload_size_limit_warning: 10 MB க்கும் குறைவான அளவு கொண்ட கோப்பைத் தேர்ந்தெடுக்கவும்.
+      button_labels:
+        embed: உட்பொதிக்கவும்
+        file: கோப்பு
+        image: படம்
+        markdown: மார்க் டவுன்
+        video: காணொளி
+      close_embed: உட்பொதிக்கப்பட்ட படிவத்தை மூடு
+      creating: உருவாக்குகிறது...
+      description_video_placeholder: உங்கள் வீடியோவிற்கான விளக்கம்
+      embed_url:
+        help: நாங்கள் பல மூன்றாம் தரப்பு சேவைகளை ஆதரிக்கிறோம் (கீழே உள்ள இணைப்பைச் சரிபார்க்கவும்). நீங்கள் உட்பொதிக்க விரும்பும் ஆதாரம் உள்ள பக்கத்தில் முழு URL ஐ நகலெடுத்து ஒட்டவும்.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#content-block-types'
+        label: உட்பொதிப்பதற்கான URL
+        save_button: சேமிக்கவும்
+      failed_create_error: எதிர்பாராத பிழை ஏற்பட்டது. பக்கத்தை மீண்டும் ஏற்றி மீண்டும் முயற்சிக்கவும்.
+      failed_upload_error: கோப்பை பதிவேற்ற முடியவில்லை. அறிவிப்பில் உள்ள செய்தியைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்.
+      failed_url_error: URL சரியானதாக இல்லை. இது 'https://' எனத் தொடங்குவதையும், ஏற்றுக்கொள்ளப்பட்ட இணையதளங்களில் இதுவும் ஒன்று என்பதையும் உறுதிசெய்யவும்.
+      file:
+        upload_size_warning: 5 MB க்கும் குறைவான அளவு கொண்ட கோப்பைத் தேர்ந்தெடுக்கவும்.
+      image:
+        invalid_image_warning: 5 MB க்கும் குறைவான அளவு மற்றும் 4096px க்கும் குறைவான அகலம் அல்லது அதிக அளவு கொண்ட படத்தை (PNG, JPEG, GIF) தேர்ந்தெடுக்கவும்.
+      invalid_audio_file_error: சரியான ஆடியோ கோப்பைத் தேர்ந்தெடுக்கவும்
+      preparing_upload: பதிவேற்ற தயாராகிறது...
+      title_video_placeholder: உங்கள் வீடியோவின் தலைப்பு
+      toggle_content_block: உள்ளடக்கத் தடுப்புப் படிவத்தை நிலைமாற்று
+      upload_success_notification: கோப்பு பதிவேற்றப்பட்டது.
+      video:
+        description_label: விளக்கம்
+        invalid_format_warning: தவறான கோப்பு வடிவம், MP4, MOV, WMV அல்லது AVI கோப்பைத் தேர்ந்தெடுக்கவும்.
+        select_file_button: கோப்பைத் தேர்ந்தெடுத்து பதிவேற்றவும்
+        title_label: தலைப்பு
+        upload_limit_warning: '%{maximumVideoSize} க்கும் குறைவான அளவிலான கோப்பைத் தேர்ந்தெடுக்கவும்.'
+        uploading: பதிவேற்றுகிறது
+    CurriculumEditor__ContentBlockEditor:
+      delete: அழி
+      delete_block_confirm: இந்தத் தடுப்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
+      deleting: நீக்குகிறது...
+      editor_content_block: "உள்ளடக்கத் தொகுதிக்கான எடிட்டர் "
+      move_down: கீழே இறங்கு
+      move_up: மேலே நகர்த்து
+      save_changes: மாற்றங்களை சேமியுங்கள்
+      undo_block_confirm: இந்தத் தொகுதியில் நீங்கள் செய்த மாற்றங்களை நிச்சயமாகச் செயல்தவிர்க்க விரும்புகிறீர்களா?
+      undo_changes: மாற்றங்களை செயல்தவிர்
+      uploading: புதுப்பிக்கிறது...
+    CurriculumEditor__ContentEditor:
+      last_updated: கடைசியாக புதுப்பிக்கப்பட்டது
+      not_versioned: பதிப்பு செய்யப்படவில்லை
+      view_as_student: மாணவராகப் பார்க்கவும்
+    CurriculumEditor__EmbedBlockResolver:
+      error_notification: எதிர்பாராத பிழை ஏற்பட்டது, இது குறித்து எங்கள் குழுவிற்கு அறிவிக்கப்பட்டுள்ளது. மீண்டும் முயற்சிக்கும் முன் பக்கத்தை மீண்டும் ஏற்றவும்.
+      trying_embed: URL ஐ உட்பொதிக்க முயற்சிக்கிறது...
+      unable_embed: உட்பொதிக்க முடியவில்லை, 1 நிமிடத்தில் மீண்டும் முயற்சிக்கிறது...
+      video_processed: வீடியோ செயலாக்கப்படுகிறது, 1 நிமிடத்தில் மீண்டும் முயற்சிக்கிறது...
+    CurriculumEditor__FileBlockEditor:
+      placeholder: இந்தக் கோப்பிற்கான தலைப்பு
+      title: தலைப்பு
+    CurriculumEditor__ImageBlockEditor:
+      resize_panel_button_title:
+        auto: தானியங்கி அகலம்
+        four_fifths: நான்கில் ஐந்தில் அகலம்
+        full: முழு அகலம்
+        three_fifths: மூன்று ஐந்தில் அகலம்
+        two_fifths: இரண்டு ஐந்தில் அகலம்
+    CurriculumEditor__LevelEditor:
+      actions_error_title: அச்சச்சோ!
+      clone_level_button: நகல் நிலை
+      clone_level_confirm: இந்த நிலையின் நகலை நிச்சயமாக உருவாக்க விரும்புகிறீர்களா?
+      clone_level_error_message: இந்த நிலையை நாங்கள் நகலெடுக்க முயன்றபோது ஏதோ தவறு ஏற்பட்டது. மீண்டும் முயற்சிக்கும் முன் இந்தப் பக்கத்தை மீண்டும் ஏற்றவும்.
+      clone_level_hint: இந்த நிலையை நகலெடுக்க பாடத்தைத் தேர்ந்தெடுக்கவும். இந்த செயல் அனைத்து இலக்குகளையும் தேர்ந்தெடுத்த பாடத்தில் நகலெடுக்கும்.
+      clone_level_label: நகலெடுக்கவும்
+      create_level: புதிய நிலை உருவாக்கவும்
+      create_success: நிலை வெற்றிகரமாக உருவாக்கப்பட்டது
+      edit_level: நிலை %{number}ஐ திருத்து
+      level_name_invalid: சரியான பெயர் அல்ல
+      level_name_label: நிலை பெயர்
+      level_name_placeholder: நிலைப் பெயரை இங்கே தட்டச்சு செய்யவும்
+      merge_levels_button: ஒன்றிணைத்து நீக்கு
+      merge_levels_confirm: நீ சொல்வது உறுதியா? இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.
+      merge_levels_error_message: இந்த நிலையை ஒன்றிணைத்து நீக்க முயற்சித்தபோது ஏதோ தவறு ஏற்பட்டது. மீண்டும் முயற்சிக்கும் முன் இந்தப் பக்கத்தை மீண்டும் ஏற்றவும்.
+      merge_levels_hint: இந்த நிலையை இணைக்க மற்றொரு நிலையைத் தேர்ந்தெடுக்கவும். இந்த நடவடிக்கை அனைத்து இலக்குகளையும் மாணவர்களையும் மட்டத்தில் மாற்றும்.
+      merge_levels_label: நீக்கு & ஒன்றிணைக்கவும்
+      merge_levels_select: வேறு நிலையைத் தேர்ந்தெடுக்கவும்
+      optional: " (விரும்பினால்)"
+      success: வெற்றி
+      tabs:
+        actions: செயல்கள்
+        details: விவரங்கள்
+      unlock_on_label: நிலை திறக்கவும்
+      update_level: புதுப்பிப்பு நிலை
+      update_success: நிலை வெற்றிகரமாக புதுப்பிக்கப்பட்டது
+    CurriculumEditor__TargetChecklistItemEditor:
+      add_choice: ஒரு தேர்வைச் சேர்க்கவும்
+      choices: தேர்வுகள்
+      controls_checklist: சரிபார்ப்பு பட்டியல் உருப்படிக்கான கட்டுப்பாடுகள்
+      copy: நகலெடுக்கவும்
+      delete: அழி
+      describe_step: இந்த படியை விவரிக்கவும்
+      editor_checklist: சரிபார்ப்பு பட்டியல் உருப்படிக்கான எடிட்டர்
+      limits_notice: மாணவர்கள் 3 கோப்புகள் வரை சமர்ப்பிக்கலாம், ஒவ்வொன்றும் 5 எம்பி வரை மட்டுமே.
+      move_down: கீழே இறங்கு
+      move_up: மேலே நகர்த்து
+      not_unique_step: ஒரு தனித்துவமான படி அல்ல; தேவையான படிகள் தனிப்பட்டதாக இருக்க வேண்டும்
+      not_valid_choice: சரியான தேர்வு அல்ல
+      optional: விருப்பமானது
+      remove_choice: தேர்வை அகற்று
+      step_cannot_empty: படி காலியாக இருக்க முடியாது
+    CurriculumEditor__TargetDetailsEditor:
+      add_another_question: மற்றொரு கேள்வியைச் சேர்க்கவும்
+      add_step: ஒரு படி சேர்க்கவும்
+      choose_target_group: இலக்கு குழுவைத் தேர்ந்தெடுக்கவும்
+      completion_instructions:
+        help: முக்கியமான ஒன்றைப் பற்றி மாணவருக்கு நினைவூட்ட இதைப் பயன்படுத்தவும். மாணவர்கள் இலக்கை நிறைவு செய்யும் இடத்திற்கு அருகில் இந்த வழிமுறைகள் காட்டப்படும்.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
+        label: மாணவர்களுக்கான நிறைவு வழிமுறைகள் உங்களிடம் உள்ளதா?
+      could_not_find: ஐடியுடன் தேர்ந்தெடுக்கப்பட்ட மதிப்பீட்டு அளவுகோலைக் கண்டறிய முடியவில்லை
+      describe_submission: உங்கள் சமர்ப்பிப்பை விவரிக்கவும்
+      empty_checklist_warning: இந்த இலக்குக்கு படிகள் இல்லை. மாணவர்கள் எந்த நடவடிக்கையும் இல்லாமல் இலக்கை சமர்ப்பிக்க முடியும்!
+      enter_valid_link: சரியான இணைப்பை உள்ளிடவும்
+      enter_valid_title: சரியான தலைப்பை உள்ளிடவும்
+      link_complete: முடிக்க இணைப்பு
+      mark_as_complete: இலக்கை முடிந்ததாகக் குறிக்கவும்.
+      need_submit: " சமர்ப்பிக்க வேண்டும்."
+      no_targets_selected: இலக்குகள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை
+      one_student_team: ஒரு அணியில் ஒரு மாணவர் மட்டுமே
+      optional_braces: (விரும்பினால்)
+      paste_link_complete: முடிக்க இணைப்பை ஒட்டவும்
+      prepare_quiz: வினாடி வினாவை இப்போதே தயார் செய்யுங்கள்.
+      prepare_quiz_error: அனைத்து கேள்விகளும் நிரப்பப்பட வேண்டும், மேலும் அனைத்து கேள்விகளுக்கும் குறைந்தது இரண்டு பதில்கள் இருக்க வேண்டும்.
+      prerequisite_targets_label: ஏதேனும் முன்நிபந்தனை இலக்குகள் உள்ளதா?
+      search_criteria_all: நீங்கள் அனைத்து மதிப்பீட்டு அளவுகோல்களையும் தேர்ந்தெடுத்துள்ளீர்கள்!
+      search_criteria_empty: எந்த அளவுகோலும் தேர்ந்தெடுக்கப்படவில்லை
+      search_criteria_placeholder: தேடல் மதிப்பீட்டு அளவுகோல்கள்
+      search_targets: தேடல் இலக்குகள்
+      select_criterion_label: உங்கள் பட்டியலில் இருந்து மதிப்பீட்டு அளவுகோலைத் தேர்வு செய்யவும்
+      select_criterion_warning: குறைந்தபட்சம் ஒருவரையாவது தேர்ந்தெடுக்க வேண்டும்
+      selected_all_targets: நீங்கள் அனைத்து இலக்குகளையும் தேர்ந்தெடுத்துள்ளீர்கள்
+      submit_individually: அனைத்து மாணவர்களும் தனித்தனியாக சமர்ப்பிக்க வேண்டும்.
+      take_quiz: இலக்கை முடிக்க வினாடி வினா எடுங்கள்.
+      target_checklist:
+        help: இலக்கில் பணியைச் சமர்ப்பிக்க ஒரு மாணவர் முடிக்க வேண்டிய படிகள் இவை. இந்தத் தகவல் பயிற்சியாளருக்கு மதிப்பாய்வுக்காகக் காண்பிக்கப்படும்.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
+        label: இந்த இலக்கை முடிக்க மாணவர் என்ன நடவடிக்கைகளை எடுக்க வேண்டும்?
+        limit_warning: அதிகபட்சமாக அனுமதிக்கப்பட்ட சரிபார்ப்புப் பட்டியல் உருப்படிகள் 25!
+      target_group: இலக்கு குழு
+      target_method_of_completion_label: மாணவர் இலக்கை எப்படி முடிக்க வேண்டும் என்று விரும்புகிறீர்கள்?
+      target_reviewed_by_coach: இந்த இலக்கின் சமர்ப்பிப்புகளை பயிற்சியாளர் மதிப்பாய்வு செய்வாரா?
+      target_role:
+        help: ஒரு குழுவில் உள்ள மாணவர்கள் தனித்தனியாகவோ அல்லது ஒன்றாகவோ இலக்கில் பணியைச் சமர்ப்பிக்க வேண்டுமா?
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
+        label: இந்த இலக்கை அணிகள் எவ்வாறு எதிர்கொள்ள வேண்டும்?
+      target_title_placeholder: இலக்கு தலைப்பை இங்கே தட்டச்சு செய்யவும்
+      target_visibility: இலக்கு தெரிவுநிலை
+      title: தலைப்பு
+      update_target: இலக்கைப் புதுப்பிக்கவும்
+      visit_link: இலக்கை முடிக்க இணைப்பைப் பார்வையிடவும்.
+    CurriculumEditor__TargetDrawer:
+      content: உள்ளடக்கம்
+      details: விவரங்கள்
+      unexpected_error: எதிர்பாராத பிழை. பக்கத்தை மீண்டும் ஏற்றவும்.
+      unsaved_confirm: சேமிக்கப்படாத மாற்றங்கள் உள்ளன. நீங்கள் நிச்சயமாக அவற்றை நிராகரிக்க விரும்புகிறீர்களா?
+      versions: பதிப்புகள்
+    CurriculumEditor__TargetGroupEditor:
+      choose_level: ஒரு நிலை தேர்வு செய்யவும்
+      create_group: இலக்கு குழுவை உருவாக்கவும்
+      description: விளக்கம்
+      description_placeholder: இலக்கு குழு விளக்கத்தை உள்ளிடவும்
+      group_archived_q: இந்த இலக்கு குழு காப்பகப்படுத்தப்பட்டதா?
+      group_details: இலக்கு குழு விவரங்கள்
+      milestone_q: இது ஒரு மைல்கல் இலக்கு குழுவா?
+      target_group_created_notification: இலக்கு குழு வெற்றிகரமாக உருவாக்கப்பட்டது
+      target_group_updated_notificaion: இலக்கு குழு வெற்றிகரமாக புதுப்பிக்கப்பட்டது
+      title: தலைப்பு
+      title_name_error: சரியான தலைப்பு அல்ல
+      title_placeholder: இலக்கு குழுவின் பெயரை இங்கே தட்டச்சு செய்யவும்
+      update_group: இலக்கு குழுவைப் புதுப்பிக்கவும்
+    CurriculumEditor__TargetGroupShow:
+      create: உருவாக்கு
+      create_a_target: ஒரு இலக்கை உருவாக்குங்கள்
+      create_target: இலக்கை உருவாக்குங்கள்
+      milestone_targets: மைல்கல் இலக்குகள்
+      move_down: கீழே இறங்கு
+      move_up: மேலே நகர்த்து
+    CurriculumEditor__TargetQuizAnswer:
+      answer_placeholder: பதில் விருப்பம் (மார்க் டவுனை ஆதரிக்கிறது)
+      correct_answer: சரியான பதில்
+      mark_correct: சரியானது எனக் குறிக்கவும்
+      remove_answer_option: இந்த பதில் விருப்பத்தை நீக்கவும்
+    CurriculumEditor__TargetQuizQuestion:
+      add_another_answer: மற்றொரு பதில் விருப்பத்தைச் சேர்க்கவும்
+      answer_placeholder: கேள்வியை இங்கே தட்டச்சு செய்யவும் (மார்க் டவுனை ஆதரிக்கிறது)
+      question: கேள்வி
+      remove_question: வினாடி வினா கேள்வியை அகற்று
+    CurriculumEditor__TargetShow:
+      draft: வரைவு
+      edit: தொகு
+      edit_content: இலக்கின் உள்ளடக்கத்தைத் திருத்தவும்
+      move_down: கீழே இறங்கு
+      move_up: மேலே நகர்த்து
+      of_target: இலக்கு
+    CurriculumEditor__TargetVersionSelector:
+      edit: தொகு
+      preview: முன்னோட்ட
+      restore_version: இந்தப் பதிப்பை மீட்டெடுக்கவும்
+    CurriculumEditor__VersionsEditor:
+      help: இலக்கின் உள்ளடக்கத்தின் தற்போதைய நிலையைப் பாதுகாக்க, முந்தைய சேமிக்கப்பட்ட பதிப்புகளை உலாவவும், தேவைப்பட்டால் அவற்றை மீட்டெடுக்கவும் பதிப்புகள் அம்சத்தைப் பயன்படுத்தவும்.
+      help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions'
+      restore_version: இந்தப் பதிப்பை மீட்டெடுக்கவும்
+      save_version: இந்த பதிப்பைச் சேமிக்கவும்
+      select_version: பதிப்பைத் தேர்ந்தெடுக்கவும்
+    EditorDrawer:
+      close_editor: எடிட்டரை மூடு
+    EvaluationCriteria__Index:
+      add_new_criterion: புதிய மதிப்பீட்டு அளவுகோலைச் சேர்க்கவும்
+    EvaluationCriterionEditor__Form:
+      add_criterion: மதிப்பீட்டு அளவுகோலைச் சேர்க்கவும்
+      create_criterion: அளவுகோலை உருவாக்கவும்
+      grade_labels:
+        help: மாணவர்கள் மற்றும் பயிற்சியாளர்களுக்கான கிரேடு கார்டுகளில் பிரதிபலிக்க, ஒவ்வொரு தரத்திற்கும் லேபிள்களை ஒதுக்கவும்
+        help_url: https://docs.pupilfirst.com/users/evaluation_criteria
+        label: கிரேடு மற்றும் லேபிள்கள்
+      important: முக்கியமான
+      important_details: ஒரு அளவுகோல் உருவாக்கப்பட்டவுடன் அதிகபட்ச மற்றும் தேர்ச்சி தரங்களுக்கான மதிப்புகளை மாற்ற முடியாது. ஒவ்வொரு தரத்திற்கும் கொடுக்கப்பட்ட லேபிள்கள் பின்னர் திருத்தப்படலாம்.
+      label_grade_placeholder: தரத்திற்கான லேபிள்
+      max_grade: அதிகபட்ச தரம்
+      name_error: சரியான பெயரை உள்ளிடவும்
+      name_placeholder: மதிப்பீட்டு அளவுகோல் பெயர்
+      passing_grade: மற்றும் தேர்ச்சி தரம் ஆகும்
+      update_criterion: புதுப்பிப்பு அளவுகோல்
+    HelpIcon:
+      read_more: மேலும் படிக்கவும்
+    Layout__UserControls:
+      edit_profile: சுயவிவரத்தைத் திருத்து
+      sign_in: உள்நுழையவும்
+      sign_out: வெளியேறு
+      user_controls: பயனர் கட்டுப்பாடுகளைக் காட்டு
+    MarkdownEditor:
+      attach_file_label: கோப்பை இணைக்க இங்கே கிளிக் செய்யவும்.
+      bold_insert: தைரியமான
+      control_label_bold: தடித்த
+      control_label_italic: சாய்வு
+      control_label_strikethrough: வேலைநிறுத்தம்
+      emoji_picker: ஈமோஜி
+      error_maximum_file_size: அதிகபட்ச கோப்பு அளவு 5 எம்பி. மற்றொரு கோப்பைத் தேர்ந்தெடுக்கவும்.
+      error_prefix: கோப்பை இணைக்க முடியவில்லை!
+      error_unexpected: எதிர்பாராத பிழை ஏற்பட்டது! மீண்டும் முயற்சிக்கும் முன் பக்கத்தை மீண்டும் ஏற்றவும்.
+      exit_full_screen_label: முழுத்திரையிலிருந்து வெளியேறவும்
+      file_upload_wait: கோப்பு பதிவேற்றப்படும் வரை காத்திருக்கவும்...
+      help_aria_label: மார்க் டவுனில் உதவி வேண்டுமா?
+      help_label: உதவி தேவை?
+      italic_insert: சாய்வு
+      mode_label_fullscreen: முழு திரை
+      mode_label_fullscreen_exit: முழுத்திரையிலிருந்து வெளியேறவும்
+      mode_label_preview: முன்னோட்ட
+      mode_label_preview_exit: தொகு
+      mode_label_split: ஸ்பிலிட் வியூவில் எடிட்டரையும் முன்னோட்டத்தையும் பார்க்கவும்
+      mode_label_split_exit: பிளவு காட்சியை மூடு
+      strikethrough_insert: வேலைநிறுத்தம்
+    Notifications__EntryCard:
+      mark_read: படித்ததாக
+    Notifications__List:
+      button_load_more: மேலும் அறிவிப்புகளை ஏற்றவும்...
+      empty_notifications: உங்களிடம் எந்த அறிவிப்பும் இல்லை!
+      filter:
+        events:
+          post_created_text: இடுகை உருவாக்கப்பட்டது
+          topic_created_text: தலைப்பு உருவாக்கப்பட்டது
+        input_hint: தலைப்பு பெயர் அல்லது நிகழ்வு வகை மூலம் தேடவும்
+        input_label: தேடு
+        input_placeholder: தலைப்பு, நிகழ்வு, படித்தது மற்றும் படிக்காதது ஆகியவற்றின் அடிப்படையில் தேடுங்கள்
+        label:
+          event: நிகழ்வு
+          status: நிலை
+          title: தலைப்பு மூலம் தேடுங்கள்
+        status:
+          all: அனைத்து
+          new: புதிய
+          read: படி
+          unread: படிக்காதது
+      mark_all_as_read_button: அனைத்தையும் வாசிக்கப்பட்டதாக அடையாளமிடு
+      notifications: அறிவிப்புகள்
+      notifications_fully_loaded_text: அனைத்து %{total_notifications} அறிவிப்புகளையும் காட்டுகிறது
+      notifications_partially_loaded_text: '%{total_notifications} அறிவிப்புகளில் %{loaded_notifications_count} காட்டுகிறது'
+    Notifications__Root:
+      close: "நெருக்கமான "
+      show_notifications: அறிவிப்புகளைக் காட்டு
+    Pagination:
+      fully_loaded_text:
+        one: ஒரு %{singular_name} மட்டுமே காட்ட வேண்டும்
+        other: அனைத்து %{count} %{plural_name}ஐக் காட்டுகிறது
+      partially_loaded_text: '%{total} %{plural_name}இல் %{loaded} காட்டுகிறது'
+    SA_Coaches_CoachEditor:
+      add_coach: புதிய பயிற்சியாளரைச் சேர்க்கவும்
+      affiliation: இணைப்பு
+      affiliation_placeholder: Acme Inc., Acme பல்கலைக்கழகம் போன்றவை.
+      coach_add: பயிற்சியாளரைச் சேர்க்கவும்
+      coach_created: பயிற்சியாளர் வெற்றிகரமாக உருவாக்கப்பட்டது
+      coach_email: பயிற்சியாளர் மின்னஞ்சல் முகவரி
+      coach_left_q: பயிற்சியாளர் பள்ளியை விட்டு வெளியேறிவிட்டாரா?
+      coach_name: பயிற்சியாளர் பெயர்
+      coach_profile_warn: பயிற்சியாளர் சுயவிவரம் பொதுவில் இல்லாததால், இது எங்கும் காட்டப்படாது
+      coach_public_q: பயிற்சியாளர் சுயவிவரம் பொதுவில் இருக்க வேண்டுமா?
+      coach_title: பயிற்சியாளர் தலைப்பு/நிபுணத்துவம்
+      coach_title_error: குறைந்தது இரண்டு எழுத்துகள் இருக்க வேண்டும்
+      coach_update: பயிற்சியாளரைப் புதுப்பிக்கவும்
+      coach_updated: பயிற்சியாளர் புதுப்பிக்கப்பட்டது
+      connect_link: இணைப்பை இணைக்கவும்
+      connect_link_error: இது சரியான URL போல் இல்லை
+      connect_link_placeholder: பயிற்சியாளருக்கான மாணவர் இணைப்பு கோரிக்கை இணைப்பு
+      email: மின்னஞ்சல்
+      email_input_error: சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்
+      input_group_error: குறைந்தது இரண்டு எழுத்துக்கள் இருக்க வேண்டும்
+      name: பெயர்
+      replace_avatar: அவதாரத்தை மாற்றவும்
+      title: தலைப்பு
+      upload_avatar: அவதாரத்தைப் பதிவேற்றவும்
+    SA_Coaches_SchoolIndex:
+      add_new_coach: புதிய பயிற்சியாளரைச் சேர்க்கவும்
+      avatar_of: "அவதாரம் "
+    SA_InactiveStudentsPanel:
+      all_students: அனைத்து மாணவர்கள்
+      inactive_students: செயலற்ற மாணவர்கள்
+      next: அடுத்தது
+      prev: முந்தைய
+      reactivate_students: மாணவர்களை மீண்டும் இயக்கவும்
+      search_empty: உங்கள் தேடல் அளவுகோல்களுடன் எந்த செயலற்ற மாணவரும் பொருந்தவில்லை.
+      search_placeholder: மாணவர் அல்லது குழு பெயர் அல்லது மாணவர் மின்னஞ்சல் மூலம் தேடவும்...
+      team: குழு
+    SchoolAdminNavbar__Root:
+      course_nav:
+        applicants: விண்ணப்பதாரர்கள்
+        authors: ஆசிரியர்கள்
+        certificates: சான்றிதழ்கள்
+        coaches: பயிற்சியாளர்கள்
+        curriculum: பாடத்திட்டம்
+        evaluation_criteria: மதிப்பீட்டு அளவுகோல்கள்
+        exports: ஏற்றுமதி
+        students: மாணவர்கள்
+      dashboard: டாஷ்போர்டு
+      navbar:
+        admins: நிர்வாகிகள்
+        coaches: பயிற்சியாளர்கள்
+        communities: சமூகங்கள்
+        courses: படிப்புகள்
+        customization: தனிப்பயனாக்கம்
+        overview: கண்ணோட்டம்
+        settings: அமைப்புகள்
+      notifications: அறிவிப்புகள்
+      sign_out: வெளியேறு
+    SchoolAdmin__EditorDrawer:
+      close_editor: எடிட்டரை மூடு
+    SchoolAdmins__Editor:
+      add_new_admin: புதிய பள்ளி நிர்வாகியைச் சேர்க்கவும்
+      remove_confirm_post: நிர்வாகிகள் பட்டியலில் இருந்து?
+      remove_confirm_pre: நீங்கள் நிச்சயமாக அகற்ற விரும்புகிறீர்களா
+    SchoolAdmins__Form:
+      add_new_admin: புதிய பள்ளி நிர்வாகியைச் சேர்க்கவும்
+      admin_created_notification: பள்ளி நிர்வாகி வெற்றிகரமாக உருவாக்கப்பட்டது.
+      admin_updated_notification: பள்ளி நிர்வாகம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது.
+      create_admin: பள்ளி நிர்வாகத்தை உருவாக்கவும்
+      email_error: சரியான மின்னஞ்சலை உள்ளிடவும்
+      email_placeholder: மின்னஞ்சலை இங்கே சேர்க்கவும்
+      name_placeholder: இங்கே பெயரைச் சேர்க்கவும்
+      update_admin: பள்ளி நிர்வாகியைப் புதுப்பிக்கவும்
+    SchoolCommunities__CategoryEditor:
+      add_new_category: புதிய வகையைச் சேர்க்கவும்
+      delete_category: வகையை நீக்கு
+      editor_category_alt: "வகைக்கான ஆசிரியர் "
+      save_category: வகையைச் சேமிக்கவும்
+      topics:
+        one: 1 தலைப்பு
+        other: "%{count} தலைப்புகள்"
+      topics_delete_confirm: இந்த வகைக்கு ஒதுக்கப்பட்ட தலைப்புகள் உள்ளன! இந்த வகையை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
+      update_category: வகையைப் புதுப்பிக்கவும்
+    SchoolCommunities__CategoryManager:
+      categories_in: உள்ள வகைகள்
+    SchoolCommunities__Editor:
+      add_categories: வகைகளைச் சேர்க்கவும்
+      allowed_targets_q: இந்த சமூகத்தில் இலக்குகளை விவாதிக்க மாணவர்களை அனுமதிக்க வேண்டுமா?
+      can_add_topic: இந்த சமூகத்தை உருவாக்கிய பிறகு தலைப்பு வகைகளைச் சேர்க்கலாம்!
+      community_editor: சமூக ஆசிரியர்
+      community_editor_error: சரியான பெயர் அல்ல
+      community_editor_label: இந்த சமூகத்தை நீங்கள் என்ன அழைக்க விரும்புகிறீர்கள்?
+      community_editor_placeholder: இந்த சமூகத்திற்கு ஒரு பெயர் தேவை!
+      community_updated_notification: சமூகம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது.
+      create_community: சமூகத்தை உருவாக்குங்கள்
+      edit_categories: வகைகளைத் திருத்தவும்
+      give_access: "இதிலிருந்து மாணவர்களுக்கு அணுகலை வழங்கவும்:"
+      no_topic: இந்த சமூகத்தில் தற்போது தலைப்பு வகைகள் எதுவும் இல்லை!
+      note: " உங்கள் பள்ளியில் உள்ள பயிற்சியாளர்களுக்கு அனைத்து சமூகங்களுக்கும் அணுகல் உள்ளது."
+      notification_answer_cant_blank: பதில் காலியாக இருக்க முடியாது
+      notification_reload_post: மீண்டும் இடுகையிட முயற்சிக்கும் முன் பக்கத்தை மீண்டும் ஏற்றவும்.
+      search_course: ஒரு பாடத்திட்டத்தைத் தேடுங்கள்
+      search_course_all: கிடைக்கக்கூடிய அனைத்து படிப்புகளையும் தேர்ந்தெடுத்துள்ளீர்கள்
+      search_course_empty: படிப்புகள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை
+      topic_categories: தலைப்பு வகைகள்
+      update_community: சமூகத்தைப் புதுப்பிக்கவும்
+    SchoolCommunities__Index:
+      add_new_community: புதிய சமூகத்தைச் சேர்க்கவும்
+      close_category_editor: வகை எடிட்டரை மூடு
+      close_community_editor: சமூக எடிட்டரை மூடு
+      unsaved_window_confirm: சேமிக்கப்படாத மாற்றங்கள் உள்ளன! நீங்கள் நிச்சயமாக மூட விரும்புகிறீர்களா?
+    SchoolCustomize__AgreementsEditor:
+      agreement_body: உடன்படிக்கையின் உடல்
+      agreement_placeholder: அடிக்குறிப்பு இணைப்பை மறைக்க, ஒப்பந்தப் பகுதியை காலியாக விடவும்.
+      manage: நிர்வகிக்கவும்
+      privacy_policy: தனியுரிமைக் கொள்கை
+      terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+      updated_notification: மாற்றப்பட்டுள்ளது.
+    SchoolCustomize__ContactsEditor:
+      address_placeholder: அடிக்குறிப்பு பகுதியை மறைக்க முகவரியை காலியாக விடவும்.
+      contact_address: தொடர்பு முகவரி
+      contact_updated_notification: தொடர்பு விவரங்கள் புதுப்பிக்கப்பட்டன.
+      email_address: மின்னஞ்சல் முகவரி
+      email_address_error: சரியான மின்னஞ்சல் முகவரி அல்ல
+      email_address_placeholder: அடிக்குறிப்பு இணைப்பை மறைக்க மின்னஞ்சல் முகவரியை காலியாக விடவும்.
+      manage_contact: தொடர்பு விவரங்களை நிர்வகிக்கவும்
+      partial_success_notification: ஓரளவு வெற்றி!
+      update_address_notification: முகவரியை மட்டுமே புதுப்பிக்க முடிந்தது.
+      update_contact: தொடர்பு விவரங்களைப் புதுப்பிக்கவும்
+      update_email_notification: மின்னஞ்சல் முகவரியை மட்டுமே எங்களால் புதுப்பிக்க முடிந்தது.
+    SchoolCustomize__DetailsEditor:
+      about_label: பற்றி
+      details_placeholder: பள்ளியைப் பற்றிய கூடுதல் விவரங்களைச் சேர்க்கவும்.
+      max_characters: (அதிகபட்சம் 500 எழுத்துகள்)
+      school_name: பள்ளி பெயர்
+      school_name_error: பெயரின் நீளம் 2 எழுத்துகளுக்கு மேல் இருக்க வேண்டும்
+      school_name_placeholder: பள்ளியின் பெயரை இங்கே தட்டச்சு செய்யவும்
+      update_details: புதுப்பிப்பு விவரங்கள்
+    SchoolCustomize__ImageFileInput:
+      choose_customize: தனிப்பயனாக்க படக் கோப்பைத் தேர்ந்தெடுக்கவும்
+      image_error_message: JPEG / PNG அளவு 2 MBக்குக் கீழ் இருக்க வேண்டும்
+      pick_replace_pre: மாற்றுவதற்கு ஒரு கோப்பைத் தேர்ந்தெடுக்கவும்
+      you_selected_post: தற்போதைய படத்தை மாற்றுவதற்கு.
+      you_selected_pre: நீங்கள் தேர்ந்தெடுத்துள்ளீர்கள்
+    SchoolCustomize__ImagesEditor:
+      cover_image: அட்டைப் படம்
+      icon: ஐகான்
+      logo_light_label: ஒளி பின்னணியில் லோகோ
+      manage_images: படங்களை நிர்வகிக்கவும்
+      update_images: படங்களை புதுப்பிக்கவும்
+      updated_notification: படங்கள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன.
+    SchoolCustomize__LinkComponent:
+      cancel_editing: திருத்துவதை ரத்துசெய்
+      move_down: கீழே இறங்கு
+      move_up: மேலே நகர்த்து
+    SchoolCustomize__LinkEditor:
+      add_new_link: புதிய இணைப்பைச் சேர்க்கவும்
+      adding_new_link: புதிய இணைப்பைச் சேர்க்கிறது...
+      cant_empty_message: காலியாக இருக்க முடியாது
+      done_notification_body: தனிப்பயன் இணைப்பு சேர்க்கப்பட்டது.
+      error_body: நீங்கள் உள்ளிட்ட URL தவறானது போல் தெரிகிறது. சரிபார்க்கவும், மீண்டும் முயற்சிக்கவும்.
+      error_head: தவறான வலைதள முகவரி
+      footer_link_title: அடிக்குறிப்பு இணைப்புகளைப் பார்த்து திருத்தவும்
+      footer_sitemap: அடிக்குறிப்பு தளவரைபடம்
+      full_url: முழு URL
+      full_url_error: சரியான URL அல்ல
+      full_url_placeholder: முழு URL, https:// உடன் உற்று நோக்குகிறது
+      header: தலைப்பு
+      header_links: தற்போதைய தலைப்பு இணைப்புகள்
+      location_link: இணைப்பின் இடம்
+      manage_links: தனிப்பயன் இணைப்புகளை நிர்வகிக்கவும்
+      no_custom_links: இங்கே தனிப்பயன் இணைப்புகள் எதுவும் இல்லை. சிலவற்றைச் சேர்க்கவா?
+      show_header_title: தலைப்பு இணைப்புகளைப் பார்த்து திருத்தவும்
+      sitemap_links: தற்போதைய தளவரைபட இணைப்புகள்
+      social: சமூக
+      social_links: தற்போதைய சமூக ஊடக இணைப்புகள்
+      social_links_title: சமூக ஊடக இணைப்புகளைப் பார்க்கலாம் மற்றும் திருத்தலாம்
+      title: தலைப்பு
+      title_placeholder: புதிய இணைப்பிற்கான சிறு தலைப்பு
+    SchoolCustomize__MoreLinks:
+      more: மேலும்
+      show_more_links: மேலும் இணைப்புகளைக் காட்டு
+    SchoolCustomize__Root:
+      add_address_q: முகவரியைச் சேர்க்கவா?
+      add_contact_email_q: தொடர்பு மின்னஞ்சலைச் சேர்க்கவா?
+      add_more_details: பள்ளியைப் பற்றிய கூடுதல் விவரங்களைச் சேர்க்கவும்.
+      change_cover: உறையை மாற்று
+      contact: தொடர்பு கொள்ளவும்
+      customize_link_footer: அடிக்குறிப்பில் உள்ள இணைப்புகளை நீங்கள் தனிப்பயனாக்கலாம்.
+      customize_link_header: நீங்கள் தலைப்பில் இணைப்புகளைத் தனிப்பயனாக்கலாம்.
+      edit_contact_details: தொடர்பு விவரங்களைத் திருத்தவும்
+      edit_footer_links: அடிக்குறிப்பு இணைப்புகளைத் திருத்தவும்
+      edit_header_links: தலைப்பு இணைப்புகளைத் திருத்தவும்
+      edit_icon: திருத்து ஐகான்
+      edit_logo_dark: லோகோவைத் திருத்து (இருண்ட பின்னணியில்)
+      edit_logo_light: லோகோவைத் திருத்து (ஒளி பின்னணியில்)
+      edit_privacy: தனியுரிமைக் கொள்கையைத் திருத்தவும்
+      edit_school_details: பள்ளி விவரங்களைத் திருத்தவும்
+      edit_social_links: சமூக ஊடக இணைப்புகளைத் திருத்தவும்
+      edit_terms: விதிமுறைகள் & நிபந்தனைகளைத் திருத்தவும்
+      featured_courses: சிறப்புப் படிப்புகள்
+      hello_welcome: வணக்கம், வரவேற்கிறோம்
+      homepage: முகப்பு பக்கம்
+      icon: ஐகான்
+      privacy_policy: தனியுரிமைக் கொள்கை
+      reach_us_at: எங்களிடம் பதிலளிக்கவும்
+      sitemap: தளவரைபடம்
+      social: சமூக
+      social_links_q: சமூக ஊடக இணைப்புகளைச் சேர்க்கவா?
+      terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+    School__SearchableTagList:
+      add_new_tag: புதிய குறிச்சொல்லைச் சேர்க்கவும்
+      pick_tag: குறிச்சொல்லைத் தேர்ந்தெடு
+      remove_tag: குறிச்சொல்லை அகற்று
+      search_for_add: புதிய குறிச்சொற்களைத் தேடவும் அல்லது சேர்க்கவும்
+      select_tags: குறிச்சொற்களைத் தேர்ந்தெடுக்கவும்
+    School__SelectBox:
+      no_items_select: தேர்ந்தெடுக்க உருப்படிகள் எதுவும் இல்லை.
+      none_selected: எதுவும் தேர்ந்தெடுக்கப்படவில்லை
+      remove: அகற்று
+      select: தேர்ந்தெடு
+      select_from_list: பின்வரும் பட்டியலில் இருந்து தேர்ந்தெடுக்கவும்.
+      type_search: தேட தட்டச்சு செய்யவும்
+    Sorter:
+      order_by: உத்தரவின் படி
+      toggle_sort: வரிசைப்படுத்தும் வரிசையை நிலைமாற்று
+    StudentActions__Root:
+      active_label: செயலில்
+      certificates_label: பாடநெறி சான்றிதழ்கள்
+      details_certificate: வழங்கப்பட்ட சான்றிதழின் விவரங்கள்
+      dropout_student:
+        button: இடைநிற்றல் மாணவர்
+        help: ஒரு மாணவர் வெளியேறியதாகக் குறிப்பது, படிப்பிற்கான அனைத்து அணுகலையும் நீக்கிவிடும்.
+        help_url: 'https://docs.pupilfirst.com/users/students#student-actions'
+        label: இந்த மாணவர் வெளியேறிவிட்டாரா?
+      edit: தொகு
+      empty_course_certificates_text: இந்தப் பாடநெறிக்கு வழங்குவதற்கான சான்றிதழ்கள் எதுவும் இல்லை.
+      empty_issued_certificates_text: இந்த மாணவருக்கு சான்றிதழ்கள் எதுவும் வழங்கப்படவில்லை.
+      issue_certificate_button: சான்றிதழ் வழங்கவும்
+      issued_by_label: "வழங்கியவர்:"
+      issued_certificates_label: "வழங்கப்பட்ட சான்றிதழ்கள்:"
+      issued_date_label: "அன்று வெளியிடப்பட்ட:"
+      manage_certificates: மாணவர் சான்றிதழ்களை நிர்வகிக்கவும்
+      new_certificate_label: "புதிய சான்றிதழை வழங்கவும்:"
+      page_description: மாணவருக்கான நடவடிக்கைகள்
+      re_activate_student:
+        button: மாணவனை மீண்டும் இயக்கு
+      revoke_certificate_button: ரத்துச் சான்றிதழ்
+      revoke_certificate_confirmation: நீ சொல்வது உறுதியா? இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.
+      revoked_by_label: "ரத்து செய்தது:"
+      revoked_date_label: "ரத்து செய்யப்பட்டது:"
+      revoked_status_label: ரத்து செய்யப்பட்டது
+      select_certificate_input_label: வழங்குவதற்கான சான்றிதழைத் தேர்ந்தெடுக்கவும்
+    StudentBulkImport__Root:
+      csv_data_errors:
+        invalid_affiliation: இணைப்பு 250 எழுத்துகளுக்கு குறைவாக இருக்க வேண்டும்
+        invalid_email: மின்னஞ்சல் சரியானதாக இருக்க வேண்டும் மற்றும் காலியாக இருக்க முடியாது
+        invalid_name: பெயர் நெடுவரிசை காலியாக இருக்கக்கூடாது மற்றும் 250 எழுத்துகளுக்குள் இருக்க வேண்டும்
+        invalid_tags: ஒரு மாணவருக்கு அதிகபட்சம் 5 குறிச்சொற்கள் அனுமதிக்கப்படும், ஒவ்வொன்றும் 50 எழுத்துகள் மட்டுமே
+        invalid_team_name: அணியின் பெயர் 50 எழுத்துகளுக்கு குறைவாக இருக்க வேண்டும்
+        invalid_title: தலைப்பு 250 எழுத்துகளுக்கு குறைவாக இருக்க வேண்டும்
+      csv_file_errors:
+        empty: தேர்ந்தெடுக்கப்பட்ட CSV இல் சரியான வரிசைகள் இல்லை
+        exceeded_entries: CSV கோப்பில் 1000க்கும் மேற்பட்ட உள்ளீடுகள் உள்ளன.
+        invalid: 5 MB க்கும் குறைவான அளவுள்ள சரியான CSV கோப்பைத் தேர்ந்தெடுக்கவும்
+        invalid_data: CSV கோப்பில் சில கலங்களில் தவறான தரவு உள்ளது. கீழே பட்டியலிடப்பட்டுள்ள பிழைகளை சரிசெய்து மீண்டும் முயற்சிக்கவும்.
+        invalid_template: தேர்ந்தெடுக்கப்பட்ட CSV கோப்பில் சரியான டெம்ப்ளேட் இல்லை
+      csv_file_input:
+        help: மாணவர்களை மொத்தமாக இறக்குமதி செய்ய இந்தக் கோப்பு பயன்படுத்தப்படும். தேவையான வடிவமைப்பிற்கான மாதிரி கோப்பை சரிபார்க்கவும்.
+        help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
+        label: CSV இறக்குமதி கோப்பு
+        placeholder: இறக்குமதி செய்ய CSV கோப்பைத் தேர்ந்தெடுக்கவும்
+      drawer_heading: மொத்த இறக்குமதி மாணவர்கள்
+      error_summary_title: "தாளில் உள்ள பிழைகளின் சுருக்கம் இங்கே: "
+      example_csv_link:
+        text: உதாரணம் .csv கோப்பைப் பதிவிறக்கவும்
+        url: https://docs.pupilfirst.com/files/student_import_sample.csv
+      import_button_text: மாணவர்களை இறக்குமதி செய்
+      more_errors_text: "மேலும் பிழைகள் உள்ளன. பின்வரும் வரிசைகளில் உள்ள பிழைகளை சரிசெய்து மீண்டும் பதிவேற்றவும்: "
+      notify_students_label: மாணவர்களுக்கு அறிவித்து, இந்தப் பள்ளியில் உள்நுழைவதற்கான இணைப்பை அவர்களுக்கு அனுப்பவும்.
+      page_description: நீங்கள் பாடத்திட்டத்தில் சேர்க்க விரும்பும் மாணவர்களைக் கொண்ட CSV கோப்பைப் பதிவேற்றவும்.
+      page_title: மாணவர்களை இறக்குமதி செய்
+      pages:
+        csv_import: CSV கோப்பு இறக்குமதி
+        manual: கையேடு
+      pick_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுங்கள்
+      select_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுக்கவும்
+      success_notification: இறக்குமதி வெற்றிகரமாக தொடங்கப்பட்டது! முடிந்ததும் உங்களுக்கு மின்னஞ்சலில் தெரிவிக்கப்படும்.
+      valid_data_message: தரவு வெற்றிகரமாக சரிபார்க்கப்பட்டது!
+      valid_data_summary_text: "பதிவேற்றிய தாளில் உள்ள மாணவர் தரவின் சுருக்கம் இங்கே: "
+    StudentCourse__Header:
+      calendar: நாட்காட்டி
+      curriculum: பாடத்திட்டம்
+      leaderboard: லீடர்போர்டு
+      report: அறிக்கை
+      review: விமர்சனம்
+      students: மாணவர்கள்
+      unknown: தெரியவில்லை
+    StudentCreator__CreateForm:
+      added_full_description: அனைத்து மாணவர்களும் வெற்றிகரமாக உருவாக்கப்பட்டனர்.
+      added_none_description: நீங்கள் சேர்க்க முயற்சித்த அனைத்து மாணவர்களும் ஏற்கனவே இந்தப் பாடத்திட்டத்தின் ஒரு பகுதியாக இருந்தனர்.
+      added_none_title: எதுவும் மாறவில்லை
+      added_partial_description: "%{students_requested} மாணவர்களில் %{students_added} பேர் சேர்க்கப்பட்டனர். மீதமுள்ள மாணவர்கள் ஏற்கனவே படிப்பின் ஒரு பகுதியாக உள்ளனர்."
+      added_partial_title: பகுதி சேர்க்கப்பட்டது
+      drawer_heading: புதிய மாணவர்களைச் சேர்க்கவும்
+      notify_students_label: மாணவர்களுக்கு அறிவித்து, இந்தப் பள்ளியில் உள்நுழைவதற்கான இணைப்பை அவர்களுக்கு அனுப்பவும்.
+      pick_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுங்கள்
+      reload_add_students: இந்த தோல்வி குறித்து எங்கள் குழுவுக்கு அறிவிக்கப்பட்டுள்ளது. மீண்டும் மாணவர்களைச் சேர்க்க முயற்சிக்கும் முன் இந்தப் பக்கத்தை மீண்டும் ஏற்றவும்.
+      save_list_button: பட்டியலைச் சேமிக்கவும்
+      select_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுக்கவும்
+      select_cohort: கோஹார்ட்டைத் தேர்ந்தெடுக்கவும்
+      student_list: மாணவர் பட்டியல்
+      team_header_add_more_members: மேலும் குழு உறுப்பினர்களைச் சேர்க்கவும்!
+      team_header_label: அணி %{team_name}
+      teams_to_add_empty: இந்தப் பட்டியல் காலியாக உள்ளது! மேலே உள்ள படிவத்தைப் பயன்படுத்தி சில மாணவர்களைச் சேர்க்கவும்.
+      teams_to_add_label: "இந்தப் புதிய மாணவர்கள் படிப்பில் சேர்க்கப்படுவார்கள்:"
+    StudentCreator__Root:
+      page_description: நீங்கள் ஒரு பட்டியலில் பல மாணவர்களைச் சேர்த்து, படிப்பில் சேர்க்கலாம்
+      page_title: புதிய மாணவர்களைச் சேர்க்கவும்
+      pages:
+        csv_import: CSV கோப்பு இறக்குமதி
+        manual: கையேடு
+    StudentCreator__StudentInfoForm:
+      add_to_list: பட்டியலில் சேர்
+      affiliation:
+        label: இணைப்பு
+        placeholder: Acme Inc., Acme பல்கலைக்கழகம் போன்றவை.
+      email:
+        error:
+          invalid: தவறான மின்னஞ்சல்
+          not_unique: மின்னஞ்சல் முகவரி மாணவர்களுக்கானது அல்ல
+        label: மின்னஞ்சல்
+        placeholder: மாணவர் மின்னஞ்சல் இங்கே
+      name:
+        label: பெயர்
+        message: செல்லாது
+        placeholder: மாணவர் பெயர் இங்கே
+      tags:
+        label: குறிச்சொற்கள்
+      team:
+        help: ஒரே குழு பெயரைக் கொண்ட மாணவர்கள் ஒன்றாகக் குழுவாக்கப்படுவார்கள்; இது நிச்சயமாக இருக்கும் அணிகளை பாதிக்காது.
+        label: குழு பெயர்
+        placeholder: அவெஞ்சர்ஸ், ஃபென்டாஸ்டிக் ஃபோர் போன்றவை.
+      title:
+        label: தலைப்பு
+        placeholder: மாணவர், பயிற்சியாளர், CEO, முதலியன
+    StudentDetails__Root:
+      affiliation: இணைப்பு
+      affiliation_placeholder: Acme Inc., Acme பல்கலைக்கழகம் போன்றவை.
+      edit: தொகு
+      name: பெயர்
+      pages:
+        actions: செயல்கள்
+        details: விவரங்கள்
+      personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
+      pick_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுங்கள்
+      search_coaches_all: கிடைக்கக்கூடிய அனைத்து பயிற்சியாளர்களையும் தேர்ந்தெடுத்துவிட்டீர்கள்!
+      search_coaches_empty: பயிற்சியாளர்கள் தேர்வு செய்யப்படவில்லை
+      search_coaches_placeholder: பயிற்சியாளர்களைத் தேடுங்கள்
+      select_a_cohort: ஒரு குழுவைத் தேர்ந்தெடுக்கவும்
+      student_name_placeholder: மாணவர் பெயர் இங்கே
+      student_updated: மாணவர் வெற்றிகரமாக புதுப்பிக்கப்பட்டார்
+      student_updated_moved: மாணவர் புதுப்பிக்கப்பட்டு, செயலற்ற மாணவர்களின் பட்டியலுக்கு நகர்த்தப்பட்டார்
+      tags_applied: குறிச்சொற்கள் பயன்படுத்தப்பட்டன
+      tags_applied_team: குறிச்சொற்கள் அணிக்கு பயன்படுத்தப்பட்டன
+      tags_applied_user: குறிச்சொற்கள் பயனருக்குப் பயன்படுத்தப்பட்டன
+      team_coaches: குழு பயிற்சியாளர்கள்
+      team_name: குழு பெயர்
+      team_name_error: அணியின் பெயரில் குறைந்தது இரண்டு எழுத்துகள் இருக்க வேண்டும்
+      team_name_placeholder: அணியின் பெயர் இங்கே
+      team_updated_moved: குழு புதுப்பிக்கப்பட்டு, செயலற்ற மாணவர்களின் பட்டியலுக்கு நகர்த்தப்பட்டது
+      title: தலைப்பு
+      title_error: தலைப்பில் குறைந்தது இரண்டு எழுத்துகள் இருக்க வேண்டும்
+      title_placeholder: மாணவர், பயிற்சியாளர், CEO, முதலியன
+      update_student: மாணவர் புதுப்பிக்கவும்
+    StudentTopNav:
+      sign_in: உள்நுழையவும்
+      sign_out: வெளியேறு
+    StudentTopNav__DropDown:
+      more: மேலும்
+      show_links: மேலும் இணைப்புகளைக் காட்டு
+    StudentTopNav__UserControls:
+      edit_profile: சுயவிவரத்தைத் திருத்து
+      sign_in: உள்நுழையவும்
+      sign_out: வெளியேறு
+      user_controls: பயனர் கட்டுப்பாடுகளைக் காட்டு
+    StudentsEditor__Root:
+      button_add_new_students: புதிய மாணவர்களைச் சேர்க்கவும்
+      button_all_students: அனைத்து மாணவர்கள்
+      button_bulk_import: மொத்த இறக்குமதி
+      button_inactive_students: செயலற்ற மாணவர்கள்
+      group_as_team: குழுவாக குழு
+      move_out_team: அணியிலிருந்து வெளியேறவும்
+      sort_criterion_label: "இதன்படி வரிசைப்படுத்தவும்:"
+      sort_criterion_last_created: கடைசியாக உருவாக்கப்பட்டது
+      sort_criterion_last_updated: கடைசியாக புதுப்பிக்கப்பட்டது
+      sort_criterion_name: பெயர்
+      teams_updated_success: அணிகள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன
+    StudentsEditor__Search:
+      filter_input_label: "இதன்படி வடிகட்டவும்:"
+      filter_input_placeholder: வகை பெயர், குறிச்சொல் அல்லது நிலை
+    StudentsEditor__StudentInfoForm:
+      add_list: பட்டியலில் சேர்
+      affiliation: இணைப்பு
+      affiliation_placeholder: Acme Inc., Acme பல்கலைக்கழகம் போன்றவை.
+      email: மின்னஞ்சல்
+      email_not_unique: மாணவர்களுக்கான மின்னஞ்சல் முகவரி தனிப்பட்டது அல்ல
+      email_placeholder: மாணவர் மின்னஞ்சல் இங்கே
+      invalid_email: தவறான மின்னஞ்சல்
+      name: பெயர்
+      name_placeholder: மாணவர் பெயர் இங்கே
+      tags: குறிச்சொற்கள்
+      team_name: குழு பெயர்
+      team_name_help: ஒரே குழு பெயரைக் கொண்ட மாணவர்கள் ஒன்றாகக் குழுவாக்கப்படுவார்கள்; இது நிச்சயமாக இருக்கும் அணிகளை பாதிக்காது.
+      team_name_placeholder: அவெஞ்சர்ஸ், ஃபென்டாஸ்டிக் ஃபோர் போன்றவை.
+      title: தலைப்பு
+      title_placeholder: மாணவர், பயிற்சியாளர், CEO, முதலியன.
+    StudentsEditor__TeamsList:
+      check_spelling: எழுத்துப்பிழை சரியாக உள்ளதா என்பதை உறுதிப்படுத்தவும்.
+      clear_filter: வடிகட்டியை அழி
+      empty_message: இங்கு மாணவர்கள் இல்லை.
+      level: நிலை
+      load_more: "அதிகமாய் ஏற்று "
+      no_results_found: மன்னிக்கவும், முடிவுகள் எதுவும் கிடைக்கவில்லை.
+      students_fully_loaded_text:
+        one: ஒரே ஒரு மாணவர்தான் இருக்கிறார்.
+        other: அனைத்து %{count} மாணவர்களையும் காட்டுகிறது
+      students_partially_loaded_text: '%{loaded_students_count} இல் %{total_students} மாணவர்களைக் காட்டுகிறது'
+      team: குழு
+      try_removing_filter: தேடல் வடிகட்டி விருப்பங்களை அகற்ற முயற்சிக்கவும்.
+    StudentsEditor__UpdateForm:
+      actions: செயல்கள்
+      details: விவரங்கள்
+    StudentsIndex__Root:
+      add_new_students: புதிய மாணவர்களைச் சேர்க்கவும்
+      cohort: கோஹார்ட்
+      edit: தொகு
+      filter:
+        search_by_email: மின்னஞ்சல் மூலம் தேடவும்
+        search_by_name: பெயர் மூலம் தேடவும்
+        user_tag: பயனர் குறிச்சொல்
+      level: நிலை
+      load_more: அதிகமாய் ஏற்று
+      pagination:
+        empty_message: மாணவர்கள் யாரும் இல்லை
+      sorter:
+        first_created: முதலில் உருவாக்கப்பட்டது
+        first_updated: முதலில் புதுப்பிக்கப்பட்டது
+        last_created: கடைசியாக உருவாக்கப்பட்டது
+        last_updated: கடைசியாக புதுப்பிக்கப்பட்டது
+        name: பெயர்
+      student: மாணவர்
+      students: மாணவர்கள்
+      title: மாணவர்கள்
+    SubmissionChecklistItemShow:
+      correct: சரி
+      incorrect: தவறானது
+      mark_correct: சரியானது எனக் குறிக்கவும்
+      mark_incorrect: தவறு எனக் குறிக்கவும்
+    SubmissionChecklistShow:
+      target_marked_as_complete: இலக்கு முடிந்ததாகக் குறிக்கப்பட்டது.
+    TargetChecklistItem:
+      action_string_attach_link: இணைப்பை இணைக்கவும்
+      action_string_choose_from_list: பட்டியலில் இருந்து தேர்வு செய்யவும்
+      action_string_record_audio: ஆடியோ பதிவு
+      action_string_upload_files: கோப்புகளைப் பதிவேற்றவும்
+      action_string_write_long_text: நீண்ட உரையை எழுதுங்கள்
+      action_string_write_short_text: குறுகிய உரையை எழுதுங்கள்
+    TeamsActions__Root:
+      delete: அழி
+      delete_team: குழுவை நீக்கு
+      delete_team_info: நீக்கினால் குழுவில் இருந்து அனைத்து மாணவர்களும் நீக்கப்பட்டு, குழுவை நீக்கும்
+      edit: தொகு
+      pages:
+        actions: செயல்கள்
+        links: விவரங்கள்
+      team_actions: குழு நடவடிக்கைகள்
+    TeamsCreator__Root:
+      title: புதிய குழுவை உருவாக்கவும்
+    TeamsDetails__Root:
+      edit: தொகு
+      page_description: குழு விவரங்களைத் திருத்தவும்
+      pages:
+        actions: செயல்கள்
+        details: விவரங்கள்
+    TeamsIndex__Root:
+      create_team: குழுவை உருவாக்கவும்
+      edit: தொகு
+      filter:
+        search_by_team_name: குழு பெயர் மூலம் தேடவும்
+      load_more: அதிகமாய் ஏற்று
+      page_title: அணிகள்
+      pagination:
+        empty_message: அணிகள் எதுவும் இல்லை
+      sorter:
+        first_created: முதலில் உருவாக்கப்பட்டது
+        last_created: கடைசியாக உருவாக்கப்பட்டது
+        name: பெயர்
+      team: அணி
+      teams: அணிகள்
+    TopicsShow__LikeManager:
+      like: பிடிக்கும்
+      like_button_tooltip: இந்த இடுகையை விரும்பவும்
+      post: அஞ்சல்
+      unlike: போலல்லாமல்
+    TopicsShow__PostEditor:
+      cancel: ரத்து செய்
+      cant_blank: பதில் காலியாக இருக்க முடியாது
+      empty: காலியாக
+      post_reply: உங்கள் பதிலை இடுகையிடவும்
+      reason_edit: இந்த திருத்தத்திற்கான காரணம் (விரும்பினால்)
+      reply_to: பதிலளிக்க
+      type_reply: உங்கள் பதிலை உள்ளிடவும். உங்கள் பதிலை வடிவமைக்க மார்க் டவுனைப் பயன்படுத்தலாம்.
+      update_post: இடுகையைப் புதுப்பிக்கவும்
+      update_reply: பதிலைப் புதுப்பிக்கவும்
+      your_reply: தங்களின் பதில்
+    TopicsShow__PostReply:
+      jump_reply: பதிலளிக்க குதிக்கவும்
+      navigate_post: இடுகைக்கு செல்லவும்
+    TopicsShow__PostShow:
+      add_reply_post: "இடுகையில் பதிலைச் சேர்க்கவும் "
+      add_reply_topic: தலைப்பில் பதிலைச் சேர்க்கவும்
+      delete_post_confirm_dialog: இடுகையை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இதை முடிக்காமல் விட கூடாது.
+      delete_reply_string: பதிலை நீக்கு
+      delete_topic_confirm_dialog: தலைப்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இதை முடிக்காமல் விட கூடாது.
+      delete_topic_string: தலைப்பை நீக்கு
+      deleted_user_name: நீக்கப்பட்ட பயனர்
+      edit_post_string: இடுகையைத் திருத்து
+      edit_reply_string: பதிலைத் திருத்து
+      go_to_solution_button: தீர்வுக்குச் செல்லவும்
+      history_button_text: வரலாறு
+      last_edited_by_label: "கடைசியாக திருத்தியது "
+      mark_as_solution_label: தீர்வாகக் குறிக்கவும்
+      mark_solution: தீர்வாகக் குறிக்கவும்
+      mark_solution_confirm: இந்த இடுகையை நிச்சயமாக தீர்வாகக் குறிக்க விரும்புகிறீர்களா?
+      marked_solution_icon: தீர்வு ஐகானாகக் குறிக்கப்பட்டது
+      new_reply_button: பதில்
+      options_post: பதவிக்கான விருப்பங்கள்
+      replies_post: இடுகைக்கான பதில்கள்
+      show_replies: இடுகையின் பதில்களைக் காட்டு
+      show_replies_button:
+        one: 1 பதில்
+        other: "%{count} பதில்கள்"
+      solution: தீர்வு
+      solution_icon_label: தீர்வு
+      unmark_solution: தீர்வாகக் குறிக்கவும்
+      unmark_solution_confirm: இந்த இடுகையை தீர்வாகக் குறிக்க நிச்சயமாக நீக்க விரும்புகிறீர்களா?
+    TopicsShow__Root:
+      edit_topic_button: தலைப்பைத் திருத்து
+      linked_target_label: "இணைக்கப்பட்ட இலக்கு: "
+      lock_topic_button: பூட்டு தலைப்பு
+      lock_topic_confirm: இந்தத் தலைப்பை நிச்சயமாகப் பூட்ட விரும்புகிறீர்களா?
+      locked_topic_notice: இந்த தலைப்பு நூல் பூட்டப்பட்டுள்ளது; புதிய பதில்களை இடுகையிட முடியாது.
+      select_category: பிரிவை தேர்வு செய்க
+      select_no_category: வகை இல்லை என்பதைத் தேர்ந்தெடுக்கவும்
+      selected_category: தேர்ந்தெடுக்கப்பட்ட வகை
+      topic_category_label: "தலைப்பு வகை: "
+      topic_details: தலைப்பு விவரங்கள்
+      topic_editor_cancel_button: ரத்து செய்
+      topic_title: தலைப்பு தலைப்பு
+      unlock_topic_button: தலைப்பைத் திறக்கவும்
+      unlock_topic_confirm: இந்தத் தலைப்பை நிச்சயமாகத் திறக்க விரும்புகிறீர்களா?
+      update_topic_button: தலைப்பைப் புதுப்பிக்கவும்
+      view_target_button: இலக்கைக் காண்க
+    TopicsShow__SubscriptionManager:
+      subscribe: பதிவு
+      unsubscribe: குழுவிலகவும்
+    UserEdit:
+      about: பற்றி
+      about_placeholder: உங்களைப் பற்றிய சிறு அறிமுகம்
+      account: கணக்கு
+      account_delete_q: உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இது எங்கள் சேவையகங்களிலிருந்து உங்கள் தரவை நிரந்தரமாக அகற்றுவதற்கான செயல்முறையைத் தொடங்கும்.
+      already_iniated_deletion_warning: நீங்கள் ஏற்கனவே கணக்கை நீக்கிவிட்டீர்கள். உங்கள் கணக்கை நீக்குவதற்கான கூடுதல் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்.
+      avatar_uploaded_notification: அவதார் வெற்றிகரமாக பதிவேற்றப்பட்டது.
+      cancel: ரத்து செய்
+      change_password: உங்கள் தற்போதைய கடவுச்சொல்லை மாற்றவும்
+      change_photo: புகைப்படத்தை மாற்று
+      community_digest_emails: Community digest மின்னஞ்சல்களில் உங்கள் சமூகங்களில் இருந்து புதிய கேள்விகள் மற்றும் கடந்த வாரத்தில் இருந்து பதிலளிக்கப்படாத கேள்விகள் உள்ளன.
+      confirm_dialog_aria: கணக்கை நீக்குவதற்கான உரையாடலை உறுதிப்படுத்தவும்
+      confirm_email: உங்கள் மின்னஞ்சலை உறுதிப்படுத்தவும்
+      confirm_password: கடவுச்சொல்லை உறுதிப்படுத்தவும்
+      confirm_password_error: புதிய கடவுச்சொல் மற்றும் உறுதிப்படுத்தல் பொருந்த வேண்டும் மற்றும் குறைந்தது 8 எழுத்துக்கள் இருக்க வேண்டும்
+      confirm_password_placeholder: புதிய கடவு சொல்லை உறுதி செய்
+      current_password: தற்போதைய கடவுச்சொல்
+      delete_account: கணக்கை நீக்குக
+      delete_your_account: உங்கள் கணக்கை நீக்கவும்
+      deleting_account_warning: உங்கள் பயனர் கணக்கை நீக்குவது இந்தப் பள்ளியிலிருந்து உங்கள் எல்லாத் தரவையும் நீக்கிவிடும். சமூகங்களில் உள்ள இடுகைகளுக்கான பதில்களும் மாணவர்களுக்கான கருத்துகளும் (பயனர் பயிற்சியாளர் சுயவிவரத்தை வைத்திருந்தால்) நீக்கப்படாது. இந்தப் பள்ளியில் நீங்கள் நிர்வாகியாக இருந்தால் நிர்வாக உரிமைகள் ரத்து செய்யப்பட வேண்டும்.
+      disable_email_radio: முடக்கு
+      displayed_publicly: இந்தத் தகவல் பொதுவில் காட்டப்படும், எனவே நீங்கள் எதைப் பகிர்கிறீர்கள் என்பதில் கவனமாக இருக்கவும்.
+      edit_profile: உங்கள் சுயவிவரத்தை திருத்தவும்
+      email_label: மின்னஞ்சல்
+      email_placeholder: உங்கள் மின்னஞ்சலை தட்டச்சு செய்யவும்
+      email_sent_notification: உங்கள் புதிய மின்னஞ்சலைச் சரிபார்க்கவும். உங்கள் மின்னஞ்சல் முகவரியைப் புதுப்பிப்பதற்கான வழிமுறைகளை அனுப்பியுள்ளோம்.
+      initiate_deletion: நீக்குதலைத் தொடங்கவும்
+      language: மொழி
+      localization: உள்ளூர்மயமாக்கல்
+      manage_account: இந்தப் பள்ளியில் உங்கள் கணக்கை நிர்வகிக்கவும்
+      name_error: பெயர் காலியாக இருக்க முடியாது
+      name_placeholder: உங்கள் பெயரை உள்ளிடவும்
+      new_password: புதிய கடவுச்சொல்
+      new_password_placeholder: புதிய கடவுச்சொல்லை உள்ளிடவும்
+      notifications: அறிவிப்புகள்
+      password_placeholder: தற்போதைய கடவுச்சொல்லை உள்ளிடவும்
+      photo: புகைப்படம்
+      preferred_name_placeholder: உங்களுக்கு விருப்பமான பெயரை உள்ளிடவும்
+      save_changes: மாற்றங்களை சேமியுங்கள்
+      security: பாதுகாப்பு
+      select_image_limit: 5 MB க்கும் குறைவான அளவு கொண்ட படத்தைத் தேர்ந்தெடுக்கவும்
+      select_language: பயனர் இடைமுகத்தை செலுத்த விரும்பும் மொழியைத் தேர்ந்தெடுக்கவும்.
+      send_email_radio: எனக்கு தினசரி மின்னஞ்சல் அனுப்பு
+      set_password: உங்கள் கணக்கிற்கான கடவுச்சொல்லை அமைக்கவும்
+      update_credentials: பள்ளிக்கான உங்கள் உள்நுழைவுச் சான்றுகளைப் புதுப்பிக்கவும்.
+      update_email_notifications: மின்னஞ்சல் அறிவிப்புகளுக்கான அமைப்புகளைப் புதுப்பிக்கவும்.
+      update_locale: உங்கள் மொழி தொடர்பான அமைப்புகளைப் புதுப்பிக்கவும்.
+      upload_failed: பதிவேற்ற முடியவில்லை
+      you_admin_warning: நீங்கள் தற்போது இந்தப் பள்ளியின் நிர்வாகியாக உள்ளீர்கள். கணக்கு நீக்குதலை இயக்க, உங்கள் நிர்வாகி அணுகலை நீக்கவும்.
+    UserSessionResetPassword:
+      confirm_password: கடவுச்சொல்லை உறுதிப்படுத்தவும்
+      confirm_password_placeholder: தயவு செய்து தங்கள் கடவுச்சொல்லை மீண்டும் உள்ளீடுக
+      confirm_your_password: உங்கள் கடவுச்சொல்லை உறுதிப்படுத்தவும்
+      enter_new_password: புதிய கடவுச்சொல்லை உள்ளிடவும்
+      new_password: புதிய கடவுச்சொல்
+      new_password_placeholder: வலுவான கடவுச்சொல்லை உள்ளிடவும்
+      password_short: கடவுச்சொல் மிகவும் சிறியது
+      passwords_not_match: கடவுச்சொற்கள் பொருந்தவில்லை
+      set_new_password: புதிய கடவுச்சொல்லை அமை
+      update_password: கடவுச்சொல்லை புதுப்பிக்கவும்
+      updating_password: கடவுச்சொல்லைப் புதுப்பிக்கிறது...
+    UsersDashboard__Root:
+      certificates: சான்றிதழ்கள்
+      communities: சமூகங்கள்
+      course_locked_message: இந்த பாடத்திட்டத்திற்கான உங்கள் மாணவர் சுயவிவரம் பூட்டப்பட்டுள்ளது, மேலும் புதுப்பிக்க முடியாது.
+      cta:
+        access_ended: முன்னோட்டம்/வரையறுக்கப்பட்ட அணுகல்
+        course_ended: படிப்பு முடிந்தது
+        dropped_out: கைவிடப்பட்டது
+        edit_curriculum: பாடத்திட்டத்தை திருத்தவும்
+        leaderboard: லீடர்போர்டு
+        my_students: என் மாணவர்கள்
+        review_submissions: சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யவும்
+        view_certificate: சான்றிதழைப் பார்க்கவும்
+        view_course: பாடத்தைப் பார்க்கவும்
+        view_curriculum: பாடத்திட்டத்தைப் பார்க்கவும்
+        visit_community: சமூகத்தைப் பார்வையிடவும்
+      edit_curricullum: பாடத்திட்டத்தை திருத்தவும்
+      edit_profile: சுயவிவரத்தைத் திருத்து
+      empty_courses: உங்களிடம் தற்போது செயலில் உள்ள படிப்புகள் எதுவும் இல்லை.
+      issued_on: "அன்று வெளியிடப்பட்ட:"
+      my_courses: எனது படிப்புகள்
+    UsersDeleteAccount:
+      cancel: ரத்து செய்
+      click_button_below: இந்தப் பள்ளியில் உங்கள் கணக்கை நிரந்தரமாக நீக்க, கீழே உள்ள பொத்தானைக் கிளிக் செய்யவும்
+      delete_account: கணக்கை நீக்குக
+      deletion_progresss: கணக்கு நீக்குதல் செயலில் உள்ளது.
+      head: நீங்கள் செல்வதைக் கண்டு வருந்துகிறோம்.
+      please_wait: தயவுசெய்து காத்திருங்கள்...
+      queuing_deletion: உங்கள் கணக்கை நீக்குவதற்கு வரிசையில் நிற்கிறோம்.
+      signed_out_notified: நீங்கள் இப்போது வெளியேறிவிடுவீர்கள், நீக்குதல் முடிந்ததும் மின்னஞ்சல் மூலம் உங்களுக்குத் தெரிவிக்கப்படும்.
+    VerifyCertificate__Root:
+      cancel: ரத்து செய்து திரும்பவும்
+      description: இந்த சான்றிதழ் <strong class="whitespace-nowrap">%{name}</strong> இல் <strong class="whitespace-nowrap">%{issue_date}</strong> க்கு <strong>%{course_name}</strong>வழங்கப்பட்டது.
+      heading: வாழ்த்துக்கள் <strong class="whitespace-nowrap">%{name}</strong>!<br/>நீங்கள் சம்பாதித்துவிட்டீர்கள்.
+      originally_issued_to: சான்றிதழ் வழங்கப்பட்ட பிறகு இந்த மாணவரின் பெயர் புதுப்பிக்கப்பட்டது. இந்த சான்றிதழ் முதலில் <strong>%{name}</strong>க்கு வழங்கப்பட்டது.
+      print_or_save: அச்சிடவும் அல்லது PDF ஆக சேமிக்கவும்
+      serial_number: வரிசை எண். %{serial}
+    WebPushSubscriptionManager:
+      notification_rejected: அனுமதி நிராகரிக்கப்பட்டது
+      notification_rejected_message: உங்கள் எண்ணத்தை மாற்றினால், டெஸ்க்டாப் அறிவிப்புகளை அனுப்ப உங்கள் உலாவிக்கு அனுமதி வழங்க பூட்டு ஐகானைக் கிளிக் செய்யவும்.
+      subscribe: பதிவு
+      subscribed_on_another_device: இந்தச் சாதனத்தில் குழுசேரவும்
+      unsubscribe: குழுவிலகவும்
+  courses:
+    apply:
+      apply_button: விண்ணப்பிக்கவும்
+      email_label: மின்னஞ்சல்
+      email_placeholder: john@example.com
+      enroll: பதிவு செய்யவும்
+      heading: '%{course_name} படிப்பில் சேரவும்'
+      name_label: பெயர்
+      name_placeholder: ஜான் டோ
+      privacy_policy: தனியுரிமைக் கொள்கை
+      terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+    leaderboard:
+      active_students: செயலில் மாணவர்கள்
+      change: மாற்றவும்
+      inactive_students: செயலற்ற மாணவர்கள்
+      level: நிலை
+      new_new: புதியது
+      no_entries: இந்தக் காலத்திற்கு லீடர்போர்டில் உள்ளீடுகள் எதுவும் இல்லை.
+      note_html: இந்த லீடர்போர்டு முந்தைய லீடர்போர்டுடன் ஒப்பிடும்போது</strong> ஐ மேம்படுத்திய மாணவர்களைக் <strong>.
+      page_title: '%{course_name}இல் பதிவு செய்யவும்'
+      rank: தரவரிசை
+      score: மதிப்பெண்
+      student: மாணவர்
+    process_application:
+      errors: "உங்கள் சமர்ப்பிப்பில் பிழைகள் உள்ளன: %{form_errors}"
+      sent_mail: நாங்கள் உங்களுக்கு சரிபார்ப்பு மின்னஞ்சலை அனுப்பியுள்ளோம். ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். பதிவு செய்ய மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்து, தொடங்கவும்.
+    show:
+      apply_button: விண்ணப்பிக்கவும்
+      apply_now: இப்பொழுது விண்ணப்பியுங்கள்
+      continue_course: பாடத்தைத் தொடரவும்
+      enroll: பதிவு செய்யவும்
+      preview_course: முன்னோட்ட பாடநெறி
+  errors:
+    internal_server_error:
+      details: உங்கள் கோரிக்கையைச் செயல்படுத்த முயற்சிக்கும்போது எங்கள் சேவையகம் சிக்கலைத் தாக்கியது போல் தெரிகிறது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
+      title: சர்வர் பிழை
+      went_wrong: மன்னிக்கவும், ஏதோ தவறாகிவிட்டது.
+    messages:
+      content_type_invalid: தவறான உள்ளடக்க வகை உள்ளது
+      limit_out_of_range: மொத்த எண்ணிக்கை வரம்பிற்கு வெளியே உள்ளது
+    not_acceptable:
+      details: எங்கள் சர்வரால் நிறைவேற்ற முடியாத வடிவமைப்பில் உங்கள் உலாவி ஒரு பதிலைக் கோரியது போல் தெரிகிறது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
+      invalid_format: உங்கள் உலாவி தவறான வடிவமைப்பைக் கோரியுள்ளது.
+      title: தவறான கோரிக்கை
+    not_found:
+      mistyped_moved: நீங்கள் முகவரியை தவறாக தட்டச்சு செய்திருக்கலாம் அல்லது பக்கம் நகர்ந்திருக்கலாம்.
+      not_exist: நீங்கள் தேடும் பக்கம் இல்லை!
+      title: கிடைக்கவில்லை
+      try_homepage: எங்கள் முகப்புப் பக்கத்திற்குச் செல்ல முயற்சிக்கவா?
+    service_unavailable:
+      title: நேரம் கடந்துவிட்டது
+      too_long: இந்தப் பக்கம் ஏற்றப்படுவதற்கு அதிக நேரம் எடுத்தது.
+      try_reloading: இந்தப் பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்க முடியுமா?
+    unprocessable_entity:
+      invalid_request: உங்கள் உலாவி தவறான கோரிக்கையை வைத்துள்ளது.
+      title: தவறான கோரிக்கை
+      wasnt_valid: <em>உங்கள் உலாவி அனுப்பிய கோரிக்கையைப் பற்றிய ஏதோ</em> தவறானது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
+  faculty:
+    index:
+      coaches_at: பயிற்சியாளர்கள்
+      title: பயிற்சியாளர்கள்
+  help:
+    show:
+      title: உதவி
+  home:
+    agreement:
+      privacy_policy: தனியுரிமைக் கொள்கை
+      terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+    index:
+      access_ended: பாடத்தின் உள்ளடக்கத்தை மதிப்பாய்வு செய்யவும்
+      active: பாடத்தைத் தொடரவும்
+      dropped_out: கைவிடப்பட்டது
+      featured_courses_heading: சிறப்புப் படிப்புகள்
+      get_started: தொடங்குங்கள்
+      learn_more: மேலும் அறிக
+      welcome_prefix: வணக்கம், வரவேற்கிறோம்
+    offline:
+      heading: நீங்கள் ஆஃப்லைனில் இருக்கிறீர்கள்!
+      message_html: உங்கள் இணைப்பில் சிக்கல் இருப்பதாகத் தெரிகிறது.<br/>உங்கள் நெட்வொர்க் நிலையை சரிபார்க்கவும்.
+      title: ஆஃப்லைனில் உள்ளீர்கள்
+  issued_certificates:
+    verify:
+      title: சான்றிதழ்
+  jobs:
+    courses:
+      clone_course:
+        new_name: "%{name} - நகல்"
+    notifications:
+      create:
+        message:
+          post_created: "%{community_name} சமூகத்தில் நீங்கள் அங்கம் வகிக்கும் தொடரிழைக்கு %{user_name} பதிலளித்துள்ளார்"
+          topic_created: "%{user_name} %{community_name} சமூகத்தில் புதிய தலைப்பை உருவாக்கியுள்ளது"
+  layouts:
+    student_footer:
+      contact: தொடர்பு கொள்ளவும்
+      logo: சின்னம்
+      privacy_policy: தனியுரிமைக் கொள்கை
+      reach_us: எங்களை அணுகவும்
+      sitemap: தளவரைபடம்
+      social: சமூக
+      support: ஆதரவைத் தொடர்பு கொள்ளவும்
+      terms_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+  mailers:
+    applicant:
+      enrollment_verification:
+        body_html: உங்கள் %{school_name} கணக்கைச் செயல்படுத்தவும், %{course_name} பாடத்திட்டத்தில் சேரவும், உங்கள் மின்னஞ்சல் முகவரியைச் சரிபார்க்கவும். இந்த %{link_to} ஐக் கிளிக் செய்வதன் மூலம், உங்கள் மின்னஞ்சல் முகவரியைச் சரிபார்த்து, %{school_name}ல் ஒரு கணக்கை உருவாக்க விரும்புகிறீர்கள் என்பதை உறுதிப்படுத்தும்.
+        body_processing_url_html: '%{course_name} பாடத்திற்கான உங்கள் விண்ணப்பத்தை %{school_name}மணிக்கு பெற்றுள்ளோம்.<br/> %{link_to}ஐக் கிளிக் செய்வதன் மூலம் உங்கள் மின்னஞ்சல் முகவரியைச் சரிபார்க்கவும். உங்கள் மின்னஞ்சல் முகவரி சரிபார்க்கப்பட்டதும், உங்கள் விண்ணப்பத்தை பூர்த்தி செய்வதற்கு தேவையான அடுத்த படிகள் காண்பிக்கப்படும்.'
+        link_text: ஒரு முறை இணைப்பு
+        link_text_processing_url: இந்த இணைப்பு
+        subject: உங்கள் மின்னஞ்சல் முகவரியை சரிபார்க்கவும்
+        subject_with_processing_url: உங்கள் %{course_name} பாடத்திட்ட விண்ணப்பத்தை பூர்த்தி செய்யவும்
+    coach:
+      course_enrollment:
+        subject: நீங்கள் %{course_name}இல் பயிற்சியாளராக சேர்க்கப்பட்டீர்கள்
+      repeat_rejections_alert:
+        body_html: மாணவர் முன்னேற்றத்திற்கு உதவ சில கருத்துகள்</a> <a href="%{review_url}">பார்க்கவும்.
+        header: '%{course_name} பாடத்திட்டத்தில் ஒரு மாணவரின் சமர்ப்பிப்பை ஒரு போட் %{rejection_count} முறை நிராகரித்துள்ளது.'
+        subject: மாணவர் சமர்ப்பிப்பை மீண்டும் மீண்டும் நிராகரித்தல் (%{rejection_count} முறை)
+    course_author:
+      addition:
+        body:
+          added_author_html: <strong>%{course_name}</strong>, %{school_name}இல் நீங்கள் ஆசிரியராக சேர்க்கப்பட்டீர்கள். இது பாடத்தின் உள்ளடக்கங்களைத் திருத்துவதற்கு பள்ளி நிர்வாக இடைமுகத்தைப் பயன்படுத்தும் திறனையும், <em>ஒரு மாணவராக</em> பாடத்திட்டத்தை முன்னோட்டமிடவும் உதவுகிறது.
+          link_to: இந்த இணைப்பு
+          use_link_html: '%{school_name} இல் உள்நுழைந்து பாடத்திட்டத்தைப் பார்க்க %{link_to} ஐப் பயன்படுத்தவும்'
+        subject: நீங்கள் %{course_name}இல் ஆசிரியராக சேர்க்கப்பட்டீர்கள்
+    course_enrollement:
+      added_coach_html: <strong>%{course_name}</strong>, %{school_name}இல் பயிற்சியாளராக நீங்கள் சேர்க்கப்பட்டீர்கள். இது மாணவர்களின் சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யவும், கிரேடுகளை ஒதுக்கவும், அவர்களின் பணி குறித்த கருத்துக்களை வழங்கவும் உங்களுக்கு உதவுகிறது.
+    course_export:
+      prepared:
+        body:
+          footer: ஏற்றுமதியானது ODS (OpenDocument Spreadsheet) வடிவத்தில் தயாரிக்கப்பட்டது, இதை நீங்கள் அனைத்து பிரபலமான விரிதாள் பயன்பாடுகளிலும் திறக்க முடியும்.
+          header_html: '%{course_name} ஆன் %{course_export_created_at} பாடத்திற்கு நீங்கள் கோரிய ஏற்றுமதி இப்போது பதிவிறக்கத்திற்குத் தயாராக உள்ளது. ஏற்றுமதியைப் பதிவிறக்க, <a href="%{link}">பாடநெறி ஏற்றுமதிகள் பக்கம்</a> ஐப் பார்வையிடவும்.'
+          link_to: இணைப்பு
+        subject: '%{course_export} பாடத்தின் ஏற்றுமதி பதிவிறக்கத்திற்கு தயாராக உள்ளது'
+        subtitle: பாடநெறி %{course_name} இலிருந்து தரவு ஏற்றுமதி பதிவிறக்கத்திற்கு தயாராக உள்ளது.
+        title: நிச்சயமாக ஏற்றுமதி தயாராக உள்ளது
+        title_button_text: ஏற்றுமதி பக்கத்தைப் பார்வையிடவும்
+    issued_certificate:
+      issued:
+        body:
+          awarded_certificate_html: <strong>%{course_name}</strong> பாடத்திட்டத்தை முடித்ததற்காக உங்களுக்கு சான்றிதழ் வழங்கப்பட்டுள்ளது.
+          congratulations: வாழ்த்துகள்!
+          issued_on_html: சான்றிதழ் %{issued_certificate} அன்று வழங்கப்பட்டது மற்றும் %{link_to}மூலம் பார்க்கலாம் அல்லது அச்சிடலாம்.
+          link_to: சான்றிதழின் பொது இணைப்பைப் பார்வையிடுதல்
+        subject: உங்களுக்கு சான்றிதழ் வழங்கப்பட்டுள்ளது!
+    layouts:
+      mail:
+        thanks: நன்றி,
+    link_fallback:
+      link_fallback: "மேலே உள்ள இணைப்பைக் கிளிக் செய்ய முடியாவிட்டால், உங்கள் உலாவியின் முகவரிப் பட்டியில் பின்வரும் இணைப்பை நகலெடுத்து ஒட்டவும்:"
+    school_admin:
+      email_updated_notification:
+        body:
+          previous_email_html: முந்தைய மின்னஞ்சல் முகவரி <strong>%{old_email}</strong> மற்றும் புதிய மின்னஞ்சல் முகவரி <strong>%{new_email}</strong>.
+          user_html: உங்கள் பள்ளியிலிருந்து <strong>%{name}</strong> மின்னஞ்சல் முகவரியைப் புதுப்பித்துள்ளார்.
+        subject: "%{name} மின்னஞ்சல் முகவரியை மாற்றியுள்ளது."
+      school_admin_added:
+        body:
+          admin_name_html: புதிய நிர்வாகியின் பெயர் <strong>%{new_school_admin_name}</strong>, மற்றும் பதிவு செய்யப்பட்ட மின்னஞ்சல் முகவரி <a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>.
+          link_to: இணைப்பு
+          new_admin_html: உங்கள் பள்ளியில் <strong>%{school_name}</strong>, அன்று %{new_school_admin} க்கு %{adding_user_name}க்கு புதிய நிர்வாகி சேர்க்கப்பட்டார்.
+          not_recognized_html: இந்தப் பயனரை நீங்கள் அடையாளம் காணவில்லை என்றால், இந்த %{link_to}ஐப் பயன்படுத்தி பள்ளி நிர்வாக இடைமுகத்திலிருந்து அவர்களை நீக்கலாம்.
+        subject: புதிய பள்ளி நிர்வாகி சேர்க்கப்பட்டார்
+      students_bulk_import_complete:
+        body:
+          link_to: பள்ளி நிர்வாக முகப்பில் புதிதாக சேர்க்கப்பட்ட இந்த மாணவர்களைப் பார்க்கவும்
+          report_attachments: நீங்கள் இறக்குமதி செய்ய முயற்சித்த மாணவர்களில் சிலர் ஏற்கனவே படிப்பில் சேர்ந்துள்ளனர். இந்த மாணவர்கள் இறக்குமதியின் போது புறக்கணிக்கப்பட்டனர். அத்தகைய மாணவர்களின் மின்னஞ்சல் முகவரிகளின் பட்டியல் இந்த மின்னஞ்சலுடன் இணைப்பாக சேர்க்கப்பட்டுள்ளது.
+          students_added_html: <b>மாணவர்கள் சேர்க்கப்பட்டனர்:</b> %{report_params}
+          students_requested_html: <b>மாணவர்கள் கோரியுள்ளனர்:</b> %{report_params}
+          summary_import_html: "<strong>%{course_name}</strong> பாடத்திட்டத்தில் மாணவர்களை இறக்குமதி செய்வதற்கான உங்கள் கோரிக்கை வெற்றிகரமாக முடிந்தது. இறக்குமதி பற்றிய சிறிய சுருக்கம் இங்கே:"
+          view_html: நீங்கள் %{link_to}முடியும்.
+        subject: மாணவர்களின் இறக்குமதி முடிந்தது
+    startup:
+      feedback_as_email:
+        body:
+          link_to: முழு கருத்து
+          main_html: உங்கள் %{update_for}இல் %{coach_name} இலிருந்து சில கருத்துகள்
+          recent_submission: சமீபத்திய சமர்ப்பிப்பு
+          recent_updates: சமீபத்திய புதுப்பிப்புகள்
+          view_html: பின்னூட்டத்தில் இணைக்கப்பட்டுள்ள கோப்புகள் உட்பட %{link_to}ஐ நீங்கள் பார்க்கலாம்.
+        subject: உங்கள் சமர்ப்பிப்புக்கு %{startup_feedback} இலிருந்து புதிய கருத்து
+    student:
+      enrollment:
+        body:
+          link_to: '%{school_name} இல் உள்நுழைந்து இந்த பாடத்திட்டத்தில் வேலை செய்யத் தொடங்குங்கள்'
+          main_html: '%{school_name}ஆம் தேதி <strong>%{course_name}</strong>பாடத்தில் மாணவராகப் பதிவு செய்துள்ளீர்கள்.'
+          sign_html: நீங்கள் இப்போது %{link_to}முடியும்.
+          team: நீங்களும் %{team_members}உடன் இணைந்திருக்கிறீர்கள்; இந்த பாடத்திட்டத்தில் முன்னேற நீங்கள் ஒன்றாக வேலை செய்வீர்கள் என்று எதிர்பார்க்கப்படுகிறது.
+        subject: நீங்கள் %{school_name}இல் மாணவராக சேர்க்கப்பட்டீர்கள்
+    user:
+      account_deletion_notification:
+        body:
+          link_to: தயவுசெய்து பள்ளியில் உள்நுழையவும்
+          main_html: <p> %{inactivity_months} மாதங்களுக்கும் மேலாக %{school_name} ல் உங்கள் கணக்கைப் பயன்படுத்தவில்லை என்பதை நாங்கள் கவனித்தோம்.  </p> <p> ஒரு மாதத்திற்குப் பிறகு உங்கள் கணக்கை நாங்கள் தானாகவே நீக்குவோம். உங்கள் கணக்கு நீக்கப்பட்டதும், உங்களின் தனிப்பட்ட தகவல்கள் அனைத்தும் அகற்றப்படும், மேலும் நீங்கள் பள்ளியை அணுக முடியாது.</p> <p> உங்கள் கணக்கை வைத்திருக்க விரும்பினால், %{link_to} க்கு முன் %{one_month_from_now}.  </p>
+        subject: '%{school_name} இல் உள்ள உங்கள் கணக்கு 30 நாட்களில் நீக்கப்படும்'
+      confirm_account_deletion:
+        body:
+          html: <p> %{school_name} ல் உள்ள உங்கள் கணக்கு வெற்றிகரமாக நீக்கப்பட்டது. </p> <p> உங்களின் தனிப்பட்ட தகவல்கள் அனைத்தும் அகற்றப்பட்டுவிட்டதால், இனி இந்தப் பள்ளியை நீங்கள் அணுக முடியாது.</p>
+        subject: '%{school_name}இலிருந்து கணக்கு வெற்றிகரமாக நீக்கப்பட்டது'
+      confirm_email_update:
+        body:
+          html: <p> <strong>%{school_name}</strong> இல் உள்ள உங்கள் மின்னஞ்சல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது. </p>
+        subject: '%{school_name} பள்ளியில் உங்கள் மின்னஞ்சல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது'
+      daily_digest:
+        body:
+          asked: '%{days_ago} நாட்களுக்கு முன்பு கேட்டார்.'
+          assigned: (%{stats} உங்களுக்கு ஒதுக்கப்பட்டுள்ளது)
+          assigned_none: (இதில் எதுவுமே உங்களுக்கு ஒதுக்கப்படவில்லை)
+          control_emails_html: இந்த மின்னஞ்சல்களை %{link_to}இலிருந்து நீங்கள் கட்டுப்படுத்தலாம்.
+          latest_topics: "உங்கள் சமூகங்களில் இடுகையிடப்பட்ட சமீபத்திய தலைப்புகள்:"
+          link_to: உங்கள் சுயவிவர திருத்தப் பக்கம்
+          main_html: "நீங்கள் பயிற்சியாளராக உள்ள சில படிப்புகளில் மதிப்பாய்வு செய்ய %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> புதிய சமர்ப்பிப்புகள் உள்ளன:"
+          older: "புதிய செயல்பாட்டைக் கண்ட பழைய, பிரபலமான தலைப்புகள்:"
+          replies: பதில்கள்
+          views: காட்சிகள்
+        subject: தினசரி டைஜஸ்ட்
+      delete_account_token:
+        body:
+          link_to: இணைப்பு
+          main_html: <p> %{school_name}இல் உங்கள் கணக்கை நீக்குவதற்கான கோரிக்கையைப் பெற்றோம்.</p> <p> கணக்கு நீக்குதலை உறுதிப்படுத்த, இந்த %{link_to} ஐக் கிளிக் செய்யவும். இணைப்பு 30 நிமிடங்களுக்கு மட்டுமே செல்லுபடியாகும்.</p>
+          note_html: <p>இந்தச் செயல் மீள முடியாதது, மேலும் பள்ளிக்கான உங்கள் அணுகலை நிரந்தரமாக அகற்றும்.</p>
+        subject: '%{school_name}இலிருந்து கணக்கை நீக்கு'
+      new_post:
+        body:
+          link_to: '%{community_name} சமூகத்தில் பதிலைப் பார்க்கவும்'
+          main_html: <p>%{author_name} %{community_name} சமூகத்தில் நீங்கள் கூறியதற்குப் பதிலைப் பதிவிட்டுள்ளார்.</p> <p>உங்களால் முடியும் %{link_to}.
+        subject: உங்கள் இடுகைக்கு புதிய பதில்
+      update_email_token:
+        body:
+          link_to: இணைப்பு
+          main_html: <p> %{school_name}ல் உங்கள் மின்னஞ்சலைப் புதுப்பிக்க கோரிக்கையைப் பெற்றோம்.</p> <p> மின்னஞ்சலைப் புதுப்பிக்க இந்த %{link_to} ஐக் கிளிக் செய்யவும். இணைப்பு 30 நிமிடங்களுக்கு மட்டுமே செல்லுபடியாகும்.</p>
+          note_html: <p>இந்த நடவடிக்கை மீள முடியாதது.</p>
+        subject: '%{school_name} பள்ளியில் உங்கள் மின்னஞ்சல் முகவரியைப் புதுப்பிக்கவும்'
+    user_session:
+      send_login_token:
+        body:
+          link_to: இங்கே கிளிக் செய்யவும்
+          main_html: <p> தயவுசெய்து %{link_to} உங்கள் %{school_name} கணக்கில் உள்நுழையவும்.  </p>
+        subject: உள்நுழைய
+      send_reset_password_token:
+        body:
+          link_to: இங்கே கிளிக் செய்யவும்
+          main_html: <p> உங்கள் %{school_name} கடவுச்சொல்லை மீட்டமைப்பதற்கான கோரிக்கையைப் பெற்றுள்ளோம்.  </p> <p> தயவுசெய்து %{link_to} உங்கள் கடவுச்சொல்லை மாற்றவும்.  </p>
+        subject: கணக்கு மீட்பு
+  models:
+    faculty:
+      commitment:
+        full_time: முழு நேரம்
+        part_time: பகுதி நேரம்
+    target:
+      role:
+        founder: அனைத்து நிறுவனர்கள்
+        team: குழு
+  mutations:
+    archive_coach_note:
+      note_removed_notification: குறிப்பு வெற்றிகரமாக அகற்றப்பட்டது
+    archive_course:
+      success_notification: பாடநெறி காப்பகப்படுத்தப்பட்டது.
+    archive_post:
+      post_archived_notification: இடுகை வெற்றிகரமாக காப்பகப்படுத்தப்பட்டது
+    assign_reviewer:
+      submission_already_assigned: இந்த சமர்ப்பிப்பு ஏற்கனவே ஒரு பயிற்சியாளருக்கு ஒதுக்கப்பட்டுள்ளது.
+      submission_graded_error: நிலுவையில் உள்ள சமர்ப்பிப்புகளுக்கு மட்டுமே நீங்கள் உங்களை ஒதுக்க முடியும்.
+      success_notification: இந்த சமர்ப்பிப்பு உங்களுக்கு ஒதுக்கப்பட்டுள்ளது.
+    auto_verify_submission:
+      success_notification: இலக்கு முடிந்ததாகக் குறிக்கப்பட்டது.
+    clone_course:
+      success_notification: பாட நகல் கோரப்பட்டது. அது விரைவில் இங்கே தோன்றும்!
+    clone_level:
+      success_notification: நிலை நகல் கோரப்பட்டது. இது விரைவில் இலக்கு போக்கில் தோன்றும்!
+    create_coach_note:
+      note_added_notification: குறிப்பு வெற்றிகரமாக சேர்க்கப்பட்டது
+    create_cohort:
+      success_notification: கோஹார்ட் வெற்றிகரமாக உருவாக்கப்பட்டது.
+    create_community:
+      community_created_notification: சமூகம் வெற்றிகரமாக உருவாக்கப்பட்டது
+    create_course:
+      success_notification: பாடநெறி வெற்றிகரமாக உருவாக்கப்பட்டது!
+    create_course_author:
+      author_created_notification: ஆசிரியர் உருவாக்கப்பட்டது
+      new_author_added_notification: இந்தப் பாடத்திட்டத்தில் ஒரு புதிய ஆசிரியர் சேர்க்கப்பட்டுள்ளார்.
+    create_evaluation_criterion:
+      eval_crit_notification: மதிப்பீட்டு அளவுகோல் வெற்றிகரமாக உருவாக்கப்பட்டது!
+    create_feedback:
+      success_notification:
+        description: உங்கள் கருத்து மாணவருக்கு மின்னஞ்சலில் அனுப்பப்படும்.
+        title: கருத்து அனுப்பப்பட்டது
+    create_grading:
+      evaluation_criteria_error: மதிப்பீட்டு அளவுகோல் இல்லாமல் சமர்ப்பிப்பு %{submission_id} ஐ தர முடியாது
+      grade_recorded: தரங்கள் பதிவு செய்யப்பட்டன
+      invalid_checklist_shape_error: சமர்ப்பிப்பு சரிபார்ப்புப் பட்டியலில் உள்ள தரவின் வடிவம் மதிப்பாய்வுடன் அனுப்பப்பட்ட வடிவத்துடன் பொருந்தவில்லை
+      invalid_checklist_values_error: சமர்ப்பிப்பில் உள்ள சரிபார்ப்புப் பட்டியல் உருப்படிகளுக்கான மதிப்புகள் மதிப்பாய்வுத் தரவுடன் பொருந்தவில்லை
+      invalid_grading_error: "வழங்கப்பட்ட கிரேடிங் மதிப்புகள் தவறானவை: %{grades_data}"
+      submission_graded_error: சமர்ப்பிப்பு ஏற்கனவே தரப்படுத்தப்பட்டுள்ளது
+      submission_missing_error: "ஐடி: %{submission_id}உடன் சமர்ப்பிப்பைக் கண்டறிய முடியவில்லை"
+      success_notification: சமர்ப்பிப்பு மதிப்பாய்வு செய்யப்பட்டதாகக் குறிக்கப்பட்டது.
+    create_post:
+      reply_added_notification: பதில் வெற்றிகரமாக சேர்க்கப்பட்டது
+    create_quiz_submission:
+      responses_saved_notification: உங்கள் பதில்கள் சேமிக்கப்பட்டன.
+    create_school_link:
+      blank_title_error: ஒரு தலைப்பு தேவை
+      success_notification: தனிப்பயன் இணைப்பு சேர்க்கப்பட்டது.
+    create_student_from_applicant:
+      success_notification: மாணவர் வெற்றிகரமாக உருவாக்கப்பட்டது.
+    create_submission:
+      blocked_submission_status_error: இந்த இலக்கின் நிலை %{target_status}ஆகும், எனவே நீங்கள் ஒரு புதிய சமர்ப்பிப்பைச் சேர்க்க முடியாது; பக்கத்தை மீண்டும் ஏற்றவும்
+      invalid_files_attached: இணைக்கப்பட்ட சில கோப்புகள் தவறானவை
+      invalid_submission_checklist: சமர்ப்பிப்பு சரிபார்ப்பு பட்டியல் தவறானது.
+      item_file_limit_error: சமர்ப்பிக்கும் உருப்படியில் மூன்று கோப்புகளுக்கு மேல் இணைக்க முடியாது
+      linked_file_exists_error: சில கோப்பு இணைப்புகள் ஏற்கனவே சமர்ப்பிப்புடன் இணைக்கப்பட்டுள்ளன
+      missing_answer_error: "கேள்விக்கான பதில் இல்லை: %{title}"
+      success_notification: உங்கள் சமர்ப்பிப்பு மதிப்பாய்வுக்காக வரிசையில் வைக்கப்பட்டுள்ளது.
+    create_target:
+      success_notification: இலக்கு வெற்றிகரமாக உருவாக்கப்பட்டது.
+    create_target_version:
+      new_version_notification: புதிய பதிப்பு உருவாக்கப்பட்டது.
+    create_team:
+      success_notification: குழு வெற்றிகரமாக உருவாக்கப்பட்டது
+    create_topic_subscription:
+      success_notification: அனைத்து புதுப்பிப்புகள் குறித்தும் உங்களுக்கு அறிவிக்கப்படும்.
+    delete_certificate:
+      success_notification: சான்றிதழ் நீக்கப்பட்டது.
+    delete_course_author:
+      author_deleted_details_notification: இந்தப் பாடத்திலிருந்து ஆசிரியர் நீக்கப்பட்டுள்ளார்.
+      author_deleted_notification: ஆசிரியர் நீக்கப்பட்டார்
+    destroy_team:
+      success_notification: குழு வெற்றிகரமாக நீக்கப்பட்டது
+    dropout_student:
+      student_updated_notification: மாணவர் வெற்றிகரமாக புதுப்பிக்கப்பட்டார்
+    export_course_report:
+      course_not_found_error: கொடுக்கப்பட்ட ஐடியுடன் படிப்பைக் கண்டுபிடிக்க முடியவில்லை
+      success_notification: உங்கள் ஏற்றுமதி செயலாக்கப்படுகிறது. அது தயாரானவுடன் உங்களுக்கு அறிவிப்போம்.
+      tag_not_found_error: கொடுக்கப்பட்ட ஐடிகளுடன் குறிச்சொற்களைக் கண்டறிய முடியவில்லை
+    initiate_account_deletion:
+      check_inbox_notification: மேலும் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்!
+      deletion_init_notification: கணக்கு நீக்குதல் தொடங்கப்பட்டது
+    issue_certificate:
+      success_notification: சான்றிதழ் வெற்றிகரமாக வழங்கப்பட்டது!
+    lock_topic:
+      success_notification: இந்த தலைப்பு பூட்டப்பட்டுள்ளது. புதிய பதில்கள் ஏற்கப்படாது.
+    mark_post_as_solution:
+      reply_marked_notification: பதில் வெற்றிகரமாக தீர்வாகக் குறிக்கப்பட்டது
+    merge_cohort:
+      success_notification: கோஹார்ட்ஸ் வெற்றிகரமாக இணைக்கப்பட்டது.
+    merge_levels:
+      merge_complete_notification: ஒன்றிணைத்தல் முடிந்தது!
+    quiz:
+      correct_answer: சரியான பதில்
+      question: கேள்வி
+      your_answer: உங்கள் பதில்
+      your_correct_answer: உங்கள் சரியான பதில்
+    re_activate_student:
+      success_notification: மாணவர் வெற்றிகரமாக மீண்டும் செயல்படுத்தப்பட்டார்!
+    reassign_reviewer:
+      submission_graded_error: நிலுவையில் உள்ள சமர்ப்பிப்புகளுக்கு மட்டுமே நீங்கள் உங்களை ஒதுக்க முடியும்.
+      submission_not_assigned_to_coach: சமர்ப்பிப்பு ஏற்கனவே உங்களுக்கு ஒதுக்கப்பட்டுள்ளது.
+      success_notification: சமர்ப்பிப்பு உங்களுக்கு ஒதுக்கப்பட்டுள்ளது.
+    revoke_issued_certificate:
+      success_notification: சான்றிதழ் ரத்து!
+    send_update_email_token:
+      success_notification: உங்கள் புதிய மின்னஞ்சலைச் சரிபார்க்க ஒரு இணைப்பை அனுப்பியுள்ளோம்!
+    unarchive_course:
+      success_notification: பாடநெறி வெற்றிகரமாக மீட்டெடுக்கப்பட்டது
+    unassign_reviewer:
+      submission_assigned_to_another_coach: சமர்ப்பிப்பு மற்றொரு பயிற்சியாளருக்கு ஒதுக்கப்பட்டுள்ளது.
+      submission_graded_error: இந்த சமர்ப்பிப்பு ஏற்கனவே தரப்படுத்தப்பட்டுள்ளது.
+      submission_not_assigned: சமர்ப்பிப்பு இன்னும் ஒதுக்கப்படவில்லை.
+      success_notification: இந்தச் சமர்ப்பிப்புக்கு நீங்கள் இனி ஒதுக்கப்படவில்லை.
+    undo_grading:
+      must_be_graded: கொடுக்கப்பட்ட ஐடியுடன் தரப்படுத்தப்பட்ட சமர்ப்பிப்பைக் கண்டறிய முடியவில்லை
+      success_notification:
+        description: சமர்ப்பிப்பு இப்போது மதிப்பாய்வு நிலுவையில் உள்ளது.
+        title: கிரேடுகள் அகற்றப்பட்டன
+    unlock_topic:
+      success_notification: இந்த தலைப்பு திறக்கப்பட்டது. சமூக உறுப்பினர்கள் இப்போது மீண்டும் பதில்களை இடுகையிடலாம்.
+    unmark_post_as_solution:
+      reply_unmarked_notification: தீர்வாகக் குறிக்கப்படாத பதில்!
+    update_certificate:
+      success_notification: சான்றிதழ் விவரங்கள் புதுப்பிக்கப்பட்டுள்ளன.
+    update_cohort:
+      success_notification: Cohort வெற்றிகரமாக புதுப்பிக்கப்பட்டது.
+    update_course:
+      success_notification: பாடநெறி வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+    update_course_author:
+      author_name_updated_notification: ஆசிரியரின் பெயர் புதுப்பிக்கப்பட்டது.
+      author_updated_notification: ஆசிரியர் புதுப்பிக்கப்பட்டார்
+    update_evaluation_criterion:
+      eval_crit_updated_notification: மதிப்பீட்டு அளவுகோல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+    update_post:
+      updated_success_notification: வெற்றிகரமாக புதுப்பிக்கப்பட்டது
+    update_review_checklist:
+      review_updated_notification: சரிபார்ப்பு பட்டியல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது
+    update_school:
+      details_updated_notification: விவரங்கள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன!
+    update_school_link:
+      link_not_found_error: இணைப்பைக் கண்டுபிடிக்க முடியவில்லை!
+      success_notification: இணைப்பு வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+    update_student_details:
+      success_notification: மாணவர் வெற்றிகரமாக புதுப்பிக்கப்பட்டார்
+    update_target:
+      checklist_items_exceeded_error: சரிபார்ப்புப் பட்டியலில் 25 உருப்படிகளுக்கு மேல் இருக்கக்கூடாது
+      evaluation_criteria_course_error: மதிப்பீட்டு அளவுகோல் இலக்கின் அதே போக்கில் இருந்து இருக்க வேண்டும்
+      invalid_checklist_error: சரிபார்ப்பு பட்டியல் செல்லாது
+      multiple_method_of_completion: ஒன்றுக்கு மேற்பட்ட நிறைவு முறைகள்
+      prerequisities_archived_error: காப்பகப்படுத்தப்பட்ட முன்நிபந்தனைகள் இருக்க முடியாது
+      prerequisities_in_same_level: முன்தேவையான இலக்குகள் இலக்கின் அதே மட்டத்தில் இருக்க வேண்டும்
+      success_notification: இலக்கு வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+      target_group_not_present_error: இலக்கு குழு இல்லை
+      target_missing_error: இலக்கு இல்லை
+    update_team:
+      success_notification: குழு வெற்றிகரமாக புதுப்பிக்கப்பட்டது
+    update_topic:
+      topic_updated_notification: தலைப்பு வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+    update_user:
+      profile_saved_notification: சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+  organisations:
+    index:
+      heading: நிறுவனங்கள்
+    show:
+      active_students_label: செயலில் மாணவர்கள்
+      back_link: < பின்
+      cohorts_subheading: கூட்டாளிகள்
+      organisation_label: அமைப்பு
+      students_enrolled_heading: மாணவர்கள் சேர்ந்தனர்
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> மாணவர் சேர்ந்தார்
+        other: <span class="font-semibold text-black">%{count}</span> மாணவர்கள் சேர்ந்தனர்
+      students_enrolled_suffix_html:
+        one: <span class="font-semibold text-black">1</span> செயலில் உள்ள குழுவில்
+        other: <span class="font-semibold text-black">%{count}</span> செயலில் உள்ள கூட்டாளிகளில்
+      total_students_label: மொத்த மாணவர்கள்
+  posts:
+    versions:
+      back_to_post: இடுகைக்குத் திரும்பு
+      created_by: உருவாக்கியது
+      current_version: நடப்பு வடிவம்
+      edit_history: திருத்த வரலாற்றை இடுகையிடவும்
+      edited_by: திருத்தியவர்
+      reason: காரணம்
+  presenters:
+    apply:
+      page_title: '%{course_name}இல் பதிவு செய்யவும்'
+    communities:
+      new_topic:
+        page_title:
+          community: சமூக
+          new_topic: புது தலைப்பு
+      show:
+        page_title:
+          community: சமூக
+    courses:
+      leaderboard:
+        heading:
+          multiple_mid_text: "இந்த வாரம் லீடர்போர்டில் முதலிடத்தில் உள்ளன, ஸ்கோரைப் பகிர்ந்து கொள்கின்றன "
+          others: மற்றவைகள்
+          top_leaderboard_html: <span class="font-bold">நீங்கள்</span> லீடர்போர்டில் முதலிடத்தில் உள்ளீர்கள். <span class="font-bold">வாழ்த்துக்கள்!</span>
+          top_week: இந்த வாரம் லீடர்போர்டில் முதலிடத்தில் உள்ளது
+        rank_change_icon:
+          rank_down_alt: தரவரிசை மாற்றம் குறைந்தது
+          rank_down_double_alt: ரேங்க் மாற்றம் இரட்டிப்பாகும்
+          rank_no_change_alt: தரவரிசையில் மாற்றம் இல்லை
+          rank_up_alt: தரவரிசை மாற்றம்
+          rank_up_double_alt: ரேங்க் மாற்றம் இரட்டிப்பாகும்
+      report:
+        student_report: மாணவர் அறிக்கை
+      review:
+        review_dashboard: மதிப்பாய்வு டாஷ்போர்டு
+      students:
+        students_in_course: படிப்பில் மாணவர்கள்
+    layouts:
+      app_router:
+        admin_link:
+          title: நிர்வாகம்
+        coaches_link:
+          title: பயிற்சியாளர்கள்
+        dashboard_link:
+          title: டாஷ்போர்டு
+      footer:
+        nav_links:
+          dashboard: டாஷ்போர்டு
+          home: வீடு
+      students_top_nav:
+        admin_link:
+          title: நிர்வாகம்
+        coaches_link:
+          title: பயிற்சியாளர்கள்
+        dashboard_link:
+          title: டாஷ்போர்டு
+        organisations_link:
+          title: எனது அமைப்பு
+    posts:
+      versions:
+        page_title:
+          title: பதிப்புகள் | அஞ்சல்
+    users:
+      sessions_new:
+        button_text:
+          continue_as_developer: டெவலப்பராக தொடரவும்
+          continue_with_email_link: மின்னஞ்சலுடன் தொடரவும்
+          continue_with_facebook: Facebook உடன் தொடரவும்
+          continue_with_github: Github உடன் தொடரவும்
+          continue_with_google: Google உடன் தொடரவும்
+          continue_with_discord: டிஸ்கார்டுடன் தொடரவும்
+        page_title:
+          title: உள்நுழையவும்
+  queries:
+    delete_certificate_mutator:
+      issued_error: இந்தச் சான்றிதழ் ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுக்கு வழங்கப்பட்டுள்ளது - இதை நீக்க முடியாது.
+    issue_certificate_mutator:
+      certificate_error: குறிப்பிட்ட சான்றிதழைக் கண்டுபிடிக்க முடியவில்லை.
+      issued_error: இந்த மாணவருக்கு இந்தப் படிப்புக்கான சான்றிதழ் ஏற்கனவே வழங்கப்பட்டுள்ளது.
+  schools:
+    admins:
+      title: நிர்வாகிகள்
+    communities:
+      index:
+        title: சமூகங்கள்
+    courses:
+      applicants:
+        title: விண்ணப்பதாரர்கள்
+      authors:
+        title: ஆசிரியர்கள்
+      certificates:
+        title: சான்றிதழ்கள்
+      curriculum:
+        title: பாடத்திட்டம்
+      evaluation_criteria:
+        title: மதிப்பீட்டு அளவுகோல்கள்
+      exports:
+        title: ஏற்றுமதி
+      inactive_students:
+        title: மாணவர்கள்
+      index:
+        title: படிப்புகள்
+      mark_teams_active:
+        teams_active: அணிகள் வெற்றிகரமாகக் குறிக்கப்பட்டன!
+      students:
+        title: மாணவர்கள்
+    customize:
+      title: தனிப்பயனாக்கம்
+    faculty:
+      course_index:
+        title: பயிற்சியாளர்கள்
+      school_index:
+        title: பயிற்சியாளர்கள்
+    show:
+      coaches: பயிற்சியாளர்கள்
+      courses: படிப்புகள்
+      levels: நிலைகள்
+      no_submissions: இதுவரை மாணவர் சமர்ப்பிப்புகள் எதுவும் இல்லை!
+      overview: null
+      students: மாணவர்கள்
+      submissions_reviewed: சமர்ப்பிப்புகள் மதிப்பாய்வு செய்யப்பட்டன
+      title: கண்ணோட்டம்
+  services:
+    team_up:
+      must_be_on_the_same_level: அணிசேர்வதற்கு மாணவர்கள் ஒரே மட்டத்தில் இருக்க வேண்டும்
+  shared:
+    _no: "இல்லை"
+    _yes: "ஆம்"
+    all: அனைத்து
+    and: மற்றும்
+    archived: காப்பகப்படுத்தப்பட்டது
+    are: உள்ளன
+    avatar: அவதாரம்
+    cancel: ரத்து செய்
+    caption_image: படத்திற்கான தலைப்பு
+    close: நெருக்கமான
+    coaches: பயிற்சியாளர்கள்
+    cohorts: கூட்டாளிகள்
+    community: சமூக
+    completed: நிறைவு
+    dashboard: டாஷ்போர்டு
+    delete: அழி
+    deleting: நீக்குகிறது
+    draft: வரைவு
+    edit: தொகு
+    email: மின்னஞ்சல்
+    email_exists_error: இந்த மின்னஞ்சல் ஏற்கனவே மற்றொரு பயனர் கணக்குடன் இணைக்கப்பட்டுள்ளது.
+    empty: காலியாக
+    fail: தோல்வி
+    file_invalid: 5 MB க்கும் குறைவான அளவு கொண்ட கோப்பைத் தேர்ந்தெடுக்கவும்.
+    image_file_invalid: 5 MB க்கும் குறைவான அளவு மற்றும் 4096px க்கும் குறைவான அகலம் அல்லது அதிக அளவு கொண்ட படத்தை (PNG, JPEG, GIF) தேர்ந்தெடுக்கவும்.
+    invalid_authenticity_token_error: தவறான அல்லது CSRF டோக்கன் விடுபட்டுள்ளது. அந்த செயலைச் செய்வதற்கு முன் இந்தப் பக்கத்தைப் புதுப்பிக்கவும்.
+    is: இருக்கிறது
+    level: நிலை
+    level_label:
+      long_with_name: "நிலை %{number}: %{name}"
+      long_without_name: நிலை %{number}
+      short_with_name: "எல்%{number}: %{name}"
+      short_without_name: எல்%{number}
+    levels: நிலைகள்
+    live: வாழ்க
+    load_more: அதிகமாய் ஏற்று...
+    loading: ஏற்றுகிறது...
+    login_token_expiration_warning_html: இந்த இணைப்பு %{timestamp}ஆல் காலாவதியாகும். இணைப்பு காலாவதியாகிவிட்டால், உள்நுழைவு பக்கம்</a>இல் <a href="%{login_url}" %>ல் இருந்து மற்றொரு ஒருமுறை டோக்கனைக் கோரலாம். இது ஒரு தனிப்பட்ட URL மற்றும் பகிரப்படக்கூடாது என்பதை நினைவில் கொள்ளவும்.
+    name: பெயர்
+    name_email: பெயர் அல்லது மின்னஞ்சல்
+    no_email_found: இந்த மின்னஞ்சலில் பயனரைக் கண்டறிய முடியவில்லை. நீங்கள் உள்ளிட்ட மின்னஞ்சலைச் சரிபார்க்கவும்.
+    none: இல்லை
+    note: "குறிப்பு:"
+    notifications:
+      done: முடிந்தது!
+      done_dot: முடிந்தது
+      done_exclamation: முடிந்தது!
+      empty: காலியாக
+      error: பிழை
+      notice: கவனிக்கவும்
+      please_reload: பக்கத்தை மீண்டும் ஏற்றி மீண்டும் முயற்சிக்கவும்.
+      something_wrong: ஏதோ தவறு நடைபெற்றிருக்கிறது!
+      success: வெற்றி
+      try_again: தயவுசெய்து மீண்டும் முயற்சி செய்க
+      unexpected_error: எதிர்பாராத பிழை!
+    optional: விருப்பமானது
+    optional_braces: (விரும்பினால்)
+    or: அல்லது
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      next: அடுத்து &rsaquo;
+      previous: "&lsaquo; முந்தையது"
+      truncate: "&hellip;"
+    pass: பாஸ்
+    percentage: சதவிதம்
+    post: அஞ்சல்
+    preferred_name: விருப்பமான பெயர்
+    processing: செயலாக்கம்
+    rejected: நிராகரிக்கப்பட்டது
+    replies: பதில்கள்
+    reply: பதில்
+    salutation: வணக்கம்,
+    salutation_name: வணக்கம் %{name},
+    save_changes: மாற்றங்களை சேமியுங்கள்
+    saving: சேமிக்கிறது...
+    school: பள்ளி
+    search: தேடு
+    settings: அமைப்புகள்
+    sign_out: வெளியேறு
+    students: மாணவர்கள்
+    tag: குறிச்சொல்
+    tags: குறிச்சொற்கள்
+    target: இலக்கு
+    team: குழு
+    team_name: குழு பெயர்
+    teams: அணிகள்
+    update: புதுப்பிக்கவும்
+    updating: புதுப்பிக்கிறது
+    uploading: பதிவேற்றுகிறது
+    version: பதிப்பு
+    versions: பதிப்புகள்
+    view: காண்க
+  timeline_events:
+    show:
+      submitted_on: அன்று சமர்ப்பிக்கப்பட்டது
+  users:
+    clear_discord_id:
+      success: டிஸ்கார்ட் வெற்றிகரமாக இணைக்கப்பட்டது.
+    delete_account:
+      link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
+      title: பயனரைத் திருத்து
+    edit:
+      title: பயனரைத் திருத்து
+      discord_connect: எங்கள் டிஸ்கார்ட் சமூகத்தில் சேரவும்
+      discord_title: எங்கள் டிஸ்கார்ட் சேவையகத்தில் சேரவும்
+      discord_description: எங்கள் டிஸ்கார்ட் சர்வரில் இணைவதன் மூலம், எங்கள் குழு, பயிற்சியாளர்கள் மற்றும் உங்கள் சகாக்களுடன் உடனடியாகத் தொடர்புகொள்ளலாம்.
+      discord_how_it_works_title: எப்படி இது செயல்படுகிறது
+      discord_how_it_works_html: <li> எங்கள் டிஸ்கார்ட் சர்வரில் சேரவும் (இது இலவசம்!) </li><li>இந்தப் பள்ளியின் கணக்குடன் உங்கள் டிஸ்கார்ட் கணக்கை இணைக்கவும்.</li><li>டிஸ்கார்டில் எங்கள் சமூகத்திற்கான அணுகலைப் பெறுங்கள்!</li>
+      discord_connected_account: டிஸ்கார்ட் சமூகத்திற்குச் செல்லவும்
+      discord_connected_message_title: உங்கள் %{school_name} கணக்கு இப்போது உங்கள் டிஸ்கார்ட் கணக்குடன் இணைக்கப்பட்டுள்ளது.
+      discord_connected_message: <li>டிஸ்கார்ட் சர்வரில் உள்ள உங்கள் புனைப்பெயர் இங்கே உங்கள் பெயருடன் ஒத்திசைக்கப்படும்.</li><li>டிஸ்கார்டில் உங்களுக்கு கூடுதல் பொறுப்புகள் ஒதுக்கப்பட்டுள்ளன.</li>
+    omniauth_callbacks:
+      failure:
+        denied: அங்கீகாரம் மறுக்கப்பட்டது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
+        denied_by: அங்கீகாரம் %{provider}ஆல் மறுக்கப்பட்டது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
+      oauth_callback:
+        add_facebook: <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">உங்கள் அங்கீகரிக்கப்பட்ட பயன்பாடுகள் பட்டியல்</a> இலிருந்து \'Pupilfirst\' ஐ அகற்றிவிட்டு மீண்டும் உள்நுழைய முயற்சிக்கவும்.
+        add_github: தயவுசெய்து <a href="https://github.com/settings/profile" target="_blank" rel="noopener">உங்கள் Github சுயவிவரம்</a> இல் பொது மின்னஞ்சல் முகவரியைச் சேர்த்து மீண்டும் முயற்சிக்கவும்.
+        add_other: மற்றொரு முறையைப் பயன்படுத்தி உள்நுழையவும்.
+        email_unregistered: "உங்கள் மின்னஞ்சல் முகவரி: %{email} பதிவு செய்யப்படவில்லை."
+        not_receive_email: "மன்னிக்கவும், உங்கள் மின்னஞ்சல் முகவரியை %{provider_name}இலிருந்து பெறவில்லை. "
+        oauth_origin_missing:
+          details: <em>உங்கள் உலாவி அனுப்பிய கோரிக்கையைப் பற்றிய ஏதோ</em> தவறானது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
+          invalid_request: உங்கள் உலாவி தவறான கோரிக்கையை வைத்துள்ளது.
+    sessions:
+      email_sent:
+        image_alt: உங்கள் இன்பாக்ஸில் ஒரு மின்னஞ்சல் பறக்கிறது
+        magic_link:
+          description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்யவும், நீங்கள் உள்நுழைவீர்கள்.
+          heading: நாங்கள் உங்களுக்கு ஒரு மேஜிக் இணைப்பை அனுப்பியுள்ளோம்!
+          notice: இந்த இணைப்பு ஒருமுறை மட்டுமே வேலை செய்யும்.
+          page_title: மேஜிக் இணைப்பு வந்து கொண்டிருக்கிறது!
+        reset_password_link:
+          description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்யவும், புதிய கடவுச்சொல்லை அமைக்கும்படி கேட்கப்படுவீர்கள்.
+          heading: உங்கள் கடவுச்சொல்லை மீட்டமைக்க ஒரு இணைப்பை அனுப்பியுள்ளோம்!
+          notice: இந்த இணைப்பு ஒருமுறை மட்டுமே வேலை செய்யும்.
+          page_title: உங்கள் கோரிக்கையை உறுதிப்படுத்தவும்
+      new:
+        already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
+        continue_with_email_link: மின்னஞ்சலுடன் தொடரவும்
+        heading: '%{school_name}இல் உள்நுழையவும்'
+        sign_in_options_separator: அல்லது
+      request_password_reset:
+        cancel_link: Google, Facebook அல்லது Github மூலம் உள்நுழையவும்
+        email_label: மின்னஞ்சல்
+        email_placeholder: john@example.com
+        heading: உங்கள் கடவுச்சொல்லை மீட்டமைக்க
+        image_alt: ரீசெட் சின்னத்துடன் ராட்சத சாவியை வைத்திருக்கும் மாணவர்
+        page_title: கடவுச்சொல்லை மீட்டமைக்க
+        submit_button: கடவுச்சொல் மீட்டமைப்பைக் கோரவும்
+        subtitle: கடவுச்சொல் மீட்புக்கு உங்கள் மின்னஞ்சலை உள்ளிடவும்.
+      reset_password:
+        link_used: அந்த ஒரு முறை இணைப்பு ஏற்கனவே பயன்படுத்தப்பட்டது அல்லது தவறானது. உங்கள் கடவுச்சொல்லை மீண்டும் அமைக்க முயற்சிக்கவும்.
+      auth_callback:
+        error: "தவறான உள்நுழைவு சான்றுகள்"
+        invalid_session: "உள்நுழையச் சொன்னது நீங்கள்தானா என்பதை எங்களால் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழைய முயற்சிக்கவும்."
+        success: "உங்கள் டிஸ்கார்ட் கணக்கு வெற்றிகரமாக இணைக்கப்பட்டது. எங்கள் டிஸ்கார்ட் சேவையகத்திற்கான உங்கள் அணுகல் விரைவில் புதுப்பிக்கப்படும்"
+        discord_link_error: "உங்கள் டிஸ்கார்ட் கணக்கை இணைக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சி செய்க."
+      sign_in_with_email:
+        already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
+        email: மின்னஞ்சலுடன் தொடரவும்
+        email_address: மின்னஞ்சல் முகவரி
+        email_me: உள்நுழைவதற்கான இணைப்பை எனக்கு மின்னஞ்சல் செய்யவும்
+        magic_link: நாங்கள் உங்களுக்கு ஒரு மேஜிக் இணைப்பை மின்னஞ்சல் செய்யலாம், எனவே உங்கள் கடவுச்சொல்லை உள்ளிடாமல் உள்நுழையலாம்.
+        oauth: Google, Facebook அல்லது Github மூலம் உள்நுழையவும்
+        password: கடவுச்சொல்
+        password_free: கடவுச்சொல் இல்லாத உள்நுழைவு
+        password_new: உங்கள் கடவுச்சொல்லை மீட்டமைக்க
+        shared: நீங்கள் பகிரப்பட்ட சாதனத்தைப் பயன்படுத்துகிறீர்களா?
+        type_password: உங்கள் கடவுச்சொல்லை உள்ளிடவும்
+        with_password: கடவுச்சொல் மூலம் உள்நுழையவும்.
+      sign_in_with_password_form:
+        check_credentials:
+          error: வழங்கப்பட்ட மின்னஞ்சல் முகவரி மற்றும் கடவுச்சொல் பொருந்தவில்லை. உங்கள் நற்சான்றிதழ்களைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்.
+      token:
+        link_expired: அந்த ஒரு முறை இணைப்பு காலாவதியானது அல்லது தவறானது. மீண்டும் உள்நுழைய முயற்சிக்கவும்.
+    update_email:
+      frequent_request_error: இரண்டு நிமிடங்களுக்கு முன் ஒரு மின்னஞ்சல் அனுப்பப்பட்டது. மீண்டும் முயற்சிக்கும் முன் சில நிமிடங்கள் காத்திருக்கவும்.
+      link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
+  validate_submission_gradable:
+    owners_should_be_active:
+      error: செயலற்ற மாணவர் சமர்ப்பிப்புகளை புதுப்பிக்க முடியாது.
+    submission_should_be_live:
+      error: அத்தகைய சமர்ப்பிப்பு இல்லை, அல்லது அது காப்பகப்படுத்தப்பட்டுள்ளது.

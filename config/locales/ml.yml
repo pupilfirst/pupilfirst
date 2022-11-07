@@ -2,9 +2,9 @@ ml:
   applicants:
     enroll:
       link_expired: ആ ഒറ്റത്തവണ ലിങ്ക് കാലഹരണപ്പെട്ടു, അല്ലെങ്കിൽ അസാധുവാണ്. നിങ്ങൾ ഇതിനകം എൻറോൾമെന്റ് പൂർത്തിയാക്കിയിട്ടുണ്ടെങ്കിൽ, ദയവായി സൈൻ ഇൻ ചെയ്യുക.
-      welcome: '%{school_name}ലേക്ക് സ്വാഗതം!'
+      welcome: '%{school_name} - സ്വാഗതം!'
     resolve_applicant_path:
-      welcome: '%{school_name}ലേക്ക് സ്വാഗതം!'
+      welcome: '%{school_name} - സ്വാഗതം!'
   cohorts:
     shared:
       back_link: < തിരികെ

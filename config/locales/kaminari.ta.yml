@@ -1,0 +1,20 @@
+#Sample localization file for Kaminari. You can override these values in your app's locales file if you want.
+ta:
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      entry:
+        one: "நுழைவு"
+        other: "உள்ளீடுகள்"
+      one_page:
+        display_entries:
+          one: "<b>1</b> %{entry_name}ஐக் காட்டுகிறது"
+          other: "<b>அனைத்து %{count}</b> %{entry_name}ஐக் காட்டுகிறது"
+      more_pages:
+        display_entries: "மொத்தம் <b>%{total}</b> இல் %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> ஐக் காட்டுகிறது"

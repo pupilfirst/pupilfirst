@@ -32,8 +32,6 @@ module Discord
         @community.discord_channel_id,
         message
       )
-    rescue Discordrb::Errors::MessageTooLong
-      Rails.logger.error 'Message too long, Must be 2000 or fewer in length.'
     rescue Discordrb::Errors::NoPermission
       Rails
         .logger.error "No permission to send message to channel #{@community.discord_channel_id}"

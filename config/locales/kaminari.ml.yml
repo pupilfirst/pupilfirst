@@ -10,11 +10,11 @@ ml:
   helpers:
     page_entries_info:
       entry:
-        one: "entry"
-        other: "entries"
+        one: "പ്രവേശനം"
+        other: "എൻട്രികൾ"
       one_page:
         display_entries:
-          one: "Displaying <b>1</b> %{entry_name}"
-          other: "Displaying <b>all %{count}</b> %{entry_name}"
+          one: "<b>1</b> %{entry_name}പ്രദർശിപ്പിക്കുന്നു"
+          other: "<b>എല്ലാം %{count}</b> %{entry_name}പ്രദർശിപ്പിക്കുന്നു"
       more_pages:
-        display_entries: "Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
+        display_entries: "മൊത്തം <b>%{total}</b> ന്റെ %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> പ്രദർശിപ്പിക്കുന്നു"

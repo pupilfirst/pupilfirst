@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     post 'users/send_reset_password_email', controller: 'users/sessions', action: 'send_reset_password_email', as: 'user_send_reset_password_email'
     get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
+    get 'users/auth_callback', controller: 'users/sessions', action: 'auth_callback', as: 'user_auth_callback'
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
     get 'users/sign_in_with_email', controller: 'users/sessions', action: 'sign_in_with_email', as: 'sign_in_with_email'
@@ -192,6 +193,7 @@ Rails.application.routes.draw do
 
   resource :user, only: %i[edit] do
     post 'upload_avatar'
+    post 'clear_discord_id'
   end
 
   resources :timeline_event_files, only: %i[create] do

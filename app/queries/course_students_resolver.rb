@@ -1,5 +1,4 @@
 class CourseStudentsResolver < ApplicationQuery
-  include AuthorizeReviewer
   include FilterUtils
 
   property :course_id
@@ -13,6 +12,14 @@ class CourseStudentsResolver < ApplicationQuery
 
   def students
     scope = course.founders
+
+    scope =
+      if current_school_admin.present? &&
+           filter[:request_origin] == 'review_interface'
+        scope.where(cohort_id: current_user.faculty&.cohorts)
+      else
+        scope
+      end
 
     case filter[:status]&.downcase
     when 'active'
@@ -113,5 +120,11 @@ class CourseStudentsResolver < ApplicationQuery
     else
       raise "#{filter[:sort_by]} is not a valid sort criterion"
     end
+  end
+
+  def authorized?
+    return true if current_school_admin.present?
+
+    current_user.faculty&.courses&.exists?(id: course)
   end
 end

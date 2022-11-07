@@ -342,7 +342,7 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
     </button>
   })
@@ -453,7 +453,7 @@ let renderPendingStudents = (pendingUserIds, users) =>
         <div
           key={user |> User.id}
           title={(user |> User.name) ++ " has not completed this target."}
-          className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
+          className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md shrink-0 mt-2">
           {user |> User.avatar}
         </div>
       })

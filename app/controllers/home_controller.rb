@@ -42,11 +42,18 @@ class HomeController < ApplicationController
   # GET /oauth/:provider?fqdn=FQDN&referrer=
   def oauth
     # Disallow routing OAuth results to unknown domains.
-    raise_not_found if Domain.find_by(fqdn: params[:fqdn]).blank?
+    if Domain.find_by(fqdn: params[:fqdn]).blank? || params[:session_id].blank?
+      raise_not_found
+    end
 
     set_cookie(
       :oauth_origin,
-      { provider: params[:provider], fqdn: params[:fqdn] }.to_json
+      {
+        provider: params[:provider],
+        fqdn: params[:fqdn],
+        session_id: params[:session_id],
+        link_data: params[:link_data]
+      }.to_json
     )
 
     redirect_to OmniauthProviderUrlService.new(params[:provider], current_host)

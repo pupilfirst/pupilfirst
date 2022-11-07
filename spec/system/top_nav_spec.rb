@@ -1,10 +1,9 @@
 require 'rails_helper'
 
-feature 'Top navigation bar' do
+feature 'Top navigation bar', js: true do
   include UserSpecHelper
 
   let(:student) { create :founder }
-  let(:coach) { create :faculty, school: student.school, user: student.user }
 
   let!(:custom_link_1) do
     create :school_link, :header, school: student.school, sort_index: 1
@@ -19,7 +18,7 @@ feature 'Top navigation bar' do
     create :school_link, :header, school: student.school, sort_index: 3
   end
 
-  it 'displays custom links on the navbar', js: true do
+  it 'displays custom links on the navbar' do
     visit new_user_session_path
 
     # All four links should be visible.
@@ -55,8 +54,7 @@ feature 'Top navigation bar' do
       create :school_admin, user: student.user, school: student.school
     end
 
-    it 'displays all main links on the navbar and puts custom links in the dropdown',
-       js: true do
+    it 'displays all main links on the navbar and puts custom links in the dropdown' do
       sign_in_user student.user,
                    referrer: leaderboard_course_path(student.course)
 
@@ -90,7 +88,7 @@ feature 'Top navigation bar' do
   end
 
   context 'when the user is a student' do
-    it 'displays dashboard link on the navbar', js: true do
+    it 'displays dashboard link on the navbar' do
       sign_in_user student.user,
                    referrer: leaderboard_course_path(student.course)
 
@@ -104,7 +102,7 @@ feature 'Top navigation bar' do
       create :school_link, :header, school: student.school, sort_index: 4
     end
 
-    it 'displays additional links in a "More" dropdown', js: true do
+    it 'displays additional links in a "More" dropdown' do
       visit new_user_session_path
 
       # Three links should be visible.
@@ -129,6 +127,42 @@ feature 'Top navigation bar' do
 
       expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
       expect(page).to have_link(custom_link_1.title, href: custom_link_1.url)
+    end
+  end
+
+  context 'when there is at least one featured coach' do
+    let!(:coach) { create :faculty, public: true }
+
+    scenario 'a visitor comes to the homepage' do
+      visit root_path
+
+      expect(page).to have_link('Coaches', href: '/coaches')
+    end
+  end
+
+  context 'when organisations exist' do
+    context 'when user is a school admin' do
+      before do
+        # Make the user a school admin.
+        create :organisation, school: student.school
+        create :school_admin, user: student.user, school: student.school
+      end
+
+      scenario 'user sees a link to organisations index' do
+        sign_in_user student.user
+
+        expect(page).to have_link('My Org', href: '/organisations')
+      end
+    end
+
+    context 'when user is an org admin' do
+      let(:organisation_admin) { create :organisation_admin }
+
+      scenario 'user sees a link to organisations index' do
+        sign_in_user organisation_admin.user
+
+        expect(page).to have_link('My Org', href: '/organisations')
+      end
     end
   end
 end

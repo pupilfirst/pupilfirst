@@ -29,7 +29,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
             className="flex items-center bg-gray-50 border rounded-full hover:bg-gray-300"
             onClick={_e => audioRecorder.stopRecording()}>
             <div
-              className="flex flex-shrink-0 items-center justify-center bg-red-600 shadow-md rounded-full h-10 w-10">
+              className="flex shrink-0 items-center justify-center bg-red-600 shadow-md rounded-full h-10 w-10">
               <Icon className="if i-stop-solid text-base text-white relative z-10" />
               <span
                 className="w-8 h-8 z-0 animate-ping absolute inline-flex rounded-full bg-red-600 opacity-75"
@@ -48,7 +48,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
                 ? Notification.notice(t("preview_mode"), t("cannot_record"))
                 : audioRecorder.startRecording()}>
             <div
-              className="flex flex-shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">
+              className="flex shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">
               <Icon className="if i-microphone-fill-light text-lg text-red-600" />
             </div>
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">

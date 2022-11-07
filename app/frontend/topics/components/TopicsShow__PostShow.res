@@ -229,7 +229,7 @@ let make = (
         <div className="pt-2" id="body">
           <div className="flex justify-between lg:hidden">
             <TopicsShow__UserShow user=creator createdAt={post |> Post.createdAt} />
-            <div className="flex-shrink-0 mt-1">
+            <div className="shrink-0 mt-1">
               {isPostCreator || (moderator || isTopicCreator)
                 ? optionsDropdown(
                     post,
@@ -285,7 +285,7 @@ let make = (
                   | None => React.null
                   }}
                 </div>
-                <div className="hidden lg:block flex-shrink-0 ml-3">
+                <div className="hidden lg:block shrink-0 ml-3">
                   {isPostCreator || (moderator || isTopicCreator)
                     ? optionsDropdown(
                         post,

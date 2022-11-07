@@ -1,7 +1,9 @@
 require_relative 'helper'
 
-after 'development:schools' do
+after 'development:organisations' do
   puts 'Seeding users'
+
+  organisations = Organisation.all
 
   # Add admin user to all schools.
   School.all.each do |school|
@@ -18,12 +20,13 @@ after 'development:schools' do
   # Add three student users in the first school.
   school = School.first
 
-  (1..25).each do |index|
+  (1..200).each do |index|
     school.users.create!(
       email: "student#{index}@example.com",
       name: Faker::Name.name,
       title: 'Student',
-      tag_list: %w[student]
+      tag_list: %w[student],
+      organisation: organisations.sample
     )
   end
 

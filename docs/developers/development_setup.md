@@ -223,10 +223,7 @@ When editing YAML files (especially translations) please use the [YAML Sort exte
 
 ## Versioning
 
-The version number for the LMS is stored in _two_ locations. Both must be updated when bumping the version:
-
-- `Pupilfirst::Application::VERSION` in `config/application.rb`
-- `env.PF_VERSION` in `.github/workflows/ci.yml`
+The version number for the LMS is stored in `env.PF_VERSION` in the `.github/workflows/ci.yml` file.
 
 The version number **must** be bumped when a breaking change is introduced. A breaking change is classified as any change that a LMS instance maintainer should be aware of when upgrading. Such changes should also be documented in the [Upgrading Guide](./upgrading).
 
@@ -297,3 +294,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 
 If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
 `http://school.localhost`.
+
+### Set up schools and domains
+
+Make sure that the `Domain` table is populated with FQDNs that you're going to use locally, and that they are all linked to the correct `School` entry. These will be verified on each request; verification failure will cause a redirect to `https://www.pupilfirst.com/?redirect_from=<UNVERIFIABLE_FQDN>`. So if this happens to you, check your `School` and `Domain` entries.

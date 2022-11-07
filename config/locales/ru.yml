@@ -1538,8 +1538,8 @@ ru:
       signed_out_notified: Теперь вы выйдете из аккаунта и получите уведомление по почте, как только удаление будет завершено.
     VerifyCertificate__Root:
       cancel: Отменить и Вернуться
-      description: Данный сертификат был выдан <strong class="whitespace-no-wrap">%{name}</strong> в <strong class="whitespace-no-wrap">%{issue_date}</strong> по курсу <strong>%{course_name}</strong>.
-      heading: Поздравляем, <strong class="whitespace-no-wrap">%{name}</strong>!<br/>Вы заслужили это.
+      description: Данный сертификат был выдан <strong class="whitespace-nowrap">%{name}</strong> в <strong class="whitespace-nowrap">%{issue_date}</strong> по курсу <strong>%{course_name}</strong>.
+      heading: Поздравляем, <strong class="whitespace-nowrap">%{name}</strong>!<br/>Вы заслужили это.
       originally_issued_to: Имя этого студента было обновлено после выдачи сертификата. Этот сертификат изначально был выдан <strong>%{name}</strong>.
       print_or_save: Распечатайте или сохраните как PDF
       serial_number: Серийный Номер %{serial}
@@ -2059,6 +2059,12 @@ ru:
     optional_braces: (необязательно)
     or: или
     pass: Пройдено
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
     percentage: Процент
     post: Пост
     prev: Пред

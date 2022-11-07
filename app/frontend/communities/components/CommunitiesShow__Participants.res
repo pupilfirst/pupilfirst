@@ -12,7 +12,7 @@ let avatarClasses = size => {
   (mdSize ++
   (" md:h-" ++
   (mdSize ++
-  " text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover")))))))
+  " text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover")))))))
 }
 
 let avatar = (~size=("8", "10"), avatarUrl, name) =>

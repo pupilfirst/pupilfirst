@@ -12,4 +12,21 @@ class CoachMailer < SchoolMailer
       )
     )
   end
+
+  def repeat_rejections_alert(coach, submission, rejection_count)
+    @course = submission.target.course
+    @school = @course.school
+    @coach = coach
+    @submission = submission
+    @rejection_count = rejection_count
+
+    simple_mail(
+      coach.email,
+      I18n.t(
+        'mailers.coach.repeat_rejections_alert.subject',
+        course_name: @course.name,
+        rejection_count: rejection_count
+      )
+    )
+  end
 end

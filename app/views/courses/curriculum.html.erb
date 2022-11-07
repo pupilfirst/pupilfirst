@@ -1,5 +1,6 @@
 <% content_for(:head) do %>
   <title><%= @presenter.page_title %></title>
+  <%= vite_stylesheet_tag 'curriculum_overlay', media: 'print' %>
 <% end %>
 <% content_for(:inner_wrapper) do %>
   <script id="react-root-data" type="application/json">

@@ -147,6 +147,7 @@ class DailyDigestService
 
     coach
       .courses
+      .distinct
       .map do |course|
         pending_submissions =
           course
@@ -154,6 +155,7 @@ class DailyDigestService
             .live
             .where('timeline_events.created_at > ?', 1.week.ago)
             .pending_review
+
         pending_submissions_in_course = pending_submissions.count
 
         if pending_submissions_in_course.zero?

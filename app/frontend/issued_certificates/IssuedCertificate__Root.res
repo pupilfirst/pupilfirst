@@ -131,8 +131,8 @@ let make = (~issuedCertificate, ~verifyImageUrl) => {
     None
   }, [IssuedCertificate.fontSize(issuedCertificate)])
 
-  <div className="relative">
-    <img className="w-full" src={IssuedCertificate.imageUrl(issuedCertificate)} />
+  <div className="relative w-full h-full">
+    <img className="w-full object-contain" src={IssuedCertificate.imageUrl(issuedCertificate)} />
     <div
       className="absolute top-0 left-0 w-full h-full"
       style={certificateContainerStyle(issuedCertificate)}>

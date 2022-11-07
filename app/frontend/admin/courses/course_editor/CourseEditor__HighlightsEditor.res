@@ -118,7 +118,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             </div>
           </div>
           <div
-            className="flex-shrink-0 bg-gray-50 border rounded flex flex-col text-xs sticky top-0">
+            className="shrink-0 bg-gray-50 border rounded flex flex-col text-xs sticky top-0">
             {ReactUtils.nullIf(
               <button
                 title={t("move_up")}

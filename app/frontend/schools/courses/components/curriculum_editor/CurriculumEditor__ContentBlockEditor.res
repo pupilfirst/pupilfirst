@@ -266,7 +266,7 @@ let make = (
     <div
       className="flex items-start"
       ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
-      <div className="flex-grow self-stretch min-w-0">
+      <div className="grow self-stretch min-w-0">
         {innerEditor(
           contentBlock,
           state.contentBlock,
@@ -277,7 +277,7 @@ let make = (
         )}
       </div>
       <div
-        className="pl-2 flex-shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
+        className="pl-2 shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
         {controlIcon(
           ~icon="fa-arrow-up",
           ~title=t("move_up"),

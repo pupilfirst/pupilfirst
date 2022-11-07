@@ -361,7 +361,7 @@ let publicSignupField = (publicSignup, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
       {t("enable_public_signup_label")->str}
     </label>
-    <div id="public-signup" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+    <div id="public-signup" className="flex toggle-button__group shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
@@ -380,7 +380,7 @@ let publicPreviewField = (publicPreview, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-preview">
       {t("enable_public_preview_label")->str}
     </label>
-    <div id="public-preview" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+    <div id="public-preview" className="flex toggle-button__group shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicPreview)}
         onClick={_ => send(UpdatePublicPreview(true))}>
@@ -399,7 +399,7 @@ let featuredButton = (featured, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
       {t("feature_course_in_homepage_label")->str}
     </label>
-    <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+    <div id="featured" className="flex toggle-button__group shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
         {ts("_yes")->str}
       </button>
@@ -419,7 +419,7 @@ let processingUrlInput = (state, send) => {
       <HelpIcon className="ml-2 mr-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
-      <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+      <div id="processing-url" className="flex toggle-button__group shrink-0 rounded-lg">
         <button
           className={booleanButtonClasses(state.hasProcessingUrl)}
           onClick={_ => send(SetHasProcessingUrl)}>
@@ -630,19 +630,22 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {publicSignupField(state.publicSignup, send)}
     {publicPreviewField(state.publicPreview, send)}
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
-    <div className="pt-5 flex flex-col">
-      <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
-        {"Pick the default cohort"->str}
-      </label>
-      <CohortsPicker
-        placeholder={"Pick a Cohort"}
-        selectables={state.cohorts}
-        selected={findSelectedCohort(state.cohorts, state.defaultCohort)}
-        onSelect={u => send(SetDefaultCohort(u))}
-        disabled={state.saving}
-        loading={state.loading}
-      />
-    </div>
+    {ReactUtils.nullUnless(
+      <div className="pt-5 flex flex-col">
+        <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
+          {t("pick_default_cohort")->str}
+        </label>
+        <CohortsPicker
+          placeholder={t("pick_a_cohort")}
+          selectables={state.cohorts}
+          selected={findSelectedCohort(state.cohorts, state.defaultCohort)}
+          onSelect={u => send(SetDefaultCohort(u))}
+          disabled={state.saving}
+          loading={state.loading}
+        />
+      </div>,
+      Belt.Option.isSome(course),
+    )}
     {courseHighlights(state.highlights, send)}
     <div className="max-w-2xl py-6 mx-auto">
       <div className="flex justify-end">

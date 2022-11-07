@@ -311,7 +311,7 @@ let topicsList = (topicCategories, topics) =>
             <div className="md:w-1/5">
               <CommunitiesShow__Participants
                 title=React.null
-                className="flex flex-shrink-0 items-center justify-end pr-4 md:pr-6"
+                className="flex shrink-0 items-center justify-end pr-4 md:pr-6"
                 participants={Topic.participants(topic)}
                 participantsCount={Topic.participantsCount(topic)}
               />
@@ -521,7 +521,7 @@ module Sortable = {
 module TopicsSorter = Sorter.Make(Sortable)
 
 let topicsSorter = filter =>
-  <div ariaLabel="Change topics sorting" className="flex-shrink-0">
+  <div ariaLabel="Change topics sorting" className="shrink-0">
     <label className="block text-tiny font-semibold uppercase">
       {t("sort_criterion_input_label")->str}
     </label>

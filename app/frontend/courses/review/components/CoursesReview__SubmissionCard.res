@@ -10,7 +10,7 @@ open CoursesReview__Types
 let str = React.string
 
 let submissionStatus = submission => {
-  let classes = "flex-shrink-0 leading-normal font-semibold px-2 py-px rounded "
+  let classes = "shrink-0 leading-normal font-semibold px-2 py-px rounded "
 
   let (className, text) = if IndexSubmission.pendingReview(submission) {
     (classes ++ "bg-orange-100 text-orange-800", IndexSubmission.timeDistance(submission))
@@ -25,7 +25,7 @@ let submissionStatus = submission => {
 let feedbackSentNotice = feedbackSent =>
   ReactUtils.nullUnless(
     <div
-      className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-2 py-px rounded mr-3">
+      className="bg-primary-100 text-primary-600 border border-transparent shrink-0 leading-normal font-semibold px-2 py-px rounded mr-3">
       {str(t("feedback_sent"))}
     </div>,
     feedbackSent,

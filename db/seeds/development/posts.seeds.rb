@@ -1,7 +1,7 @@
 after 'development:communities',
       'development:topic_categories',
       'development:users' do
-  puts 'Seeding topics and posts...'
+  puts 'Seeding topics and posts'
 
   community = Community.first
   community_users = community.users.first(5)

@@ -105,21 +105,19 @@
   /* Button Styles */
 
   .btn-default {
-    @apply bg-primary-50 text-primary-500 border border-primary-500 rounded;
+    @apply bg-primary-50 text-primary-500 border border-primary-500 rounded !important;
   }
 
-  .btn:hover,
   .btn-default:hover {
-    @apply bg-primary-100 text-primary-600;
+    @apply bg-primary-100 text-primary-600 !important;
   }
 
-  .btn:focus,
   .btn-default:focus {
     @apply bg-primary-100 text-primary-700;
   }
 
   .btn-subtle {
-    @apply bg-gray-50 text-gray-800;
+    @apply bg-gray-50 text-gray-800  !important;
   }
 
   .btn-subtle:hover {
@@ -131,7 +129,7 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow;
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow  !important;
   }
 
   .btn-primary:hover {
@@ -144,7 +142,7 @@
   }
 
   .btn-primary-ghost {
-    @apply bg-white text-primary-500 border border-primary-500;
+    @apply bg-white text-primary-500 border border-primary-500  !important;
   }
 
   .btn-primary-ghost:hover {
@@ -156,7 +154,7 @@
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-br from-red-500 to-red-700 text-white;
+    @apply bg-gradient-to-br from-red-500 to-red-700 text-white  !important;
   }
 
   .btn-secondary:hover {
@@ -169,7 +167,7 @@
   }
 
   .btn-success {
-    @apply bg-gradient-to-br from-green-500 to-green-600 text-white;
+    @apply bg-gradient-to-br from-green-500 to-green-600 text-white !important;
   }
 
   .btn-success:hover {
@@ -182,7 +180,7 @@
   }
 
   .btn-warning {
-    @apply bg-gradient-to-br from-yellow-500 to-yellow-600 text-white;
+    @apply bg-gradient-to-br from-yellow-500 to-yellow-600 text-white  !important;
   }
 
   .btn-warning:hover {
@@ -195,7 +193,7 @@
   }
 
   .btn-danger {
-    @apply bg-gradient-to-br from-red-500 to-red-600 text-white;
+    @apply bg-gradient-to-br from-red-500 to-red-600 text-white  !important;
   }
 
   .btn-danger:hover {

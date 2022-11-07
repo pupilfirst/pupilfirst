@@ -21,11 +21,11 @@ let percentageStudents = (t, totalStudents) => {
 }
 
 let make = (~id, ~number, ~studentsInLevel, ~unlocked, ~filterName) => {
-  id,
-  number,
-  studentsInLevel,
-  unlocked,
-  filterName,
+  id: id,
+  number: number,
+  studentsInLevel: studentsInLevel,
+  unlocked: unlocked,
+  filterName: filterName,
 }
 
 let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
@@ -47,3 +47,15 @@ let levelsCompletedByAllStudents = levels => {
 }
 
 let shortName = t => LevelLabel.format(~short=true, t.number |> string_of_int)
+
+let decode = json => {
+  open Json.Decode
+
+  make(
+    ~id=field("id", string, json),
+    ~number=field("number", int, json),
+    ~studentsInLevel=field("studentsInLevel", int, json),
+    ~unlocked=field("unlocked", bool, json),
+    ~filterName=field("filterName", string, json),
+  )
+}

@@ -24,7 +24,10 @@ let initialState = {
   submissions: Unloaded,
 }
 
-let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students"))
+let closeOverlay = courseId => {
+  let search = Webapi.Dom.window->Webapi.Dom.Window.location->Webapi.Dom.Location.search
+  RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students") ++ search)
+}
 
 module UserDetailsFragment = UserDetails.Fragment
 module LevelFragment = Shared__Level.Fragment
@@ -494,6 +497,26 @@ let onAddCoachNotesCB = (studentId, setState, _) => {
   getStudentDetails(studentId, setState)
 }
 
+let ids = student => {
+  <div className="text-center mt-1">
+    <ClickToCopy
+      copy={StudentInfo.user(student)->UserDetails.id}
+      className="inline-block hover:text-primary-500">
+      <span className="text-xs"> {"User ID "->str} </span>
+      <span className="font-semibold text-sm underline text-primary-500">
+        {`#${StudentInfo.user(student)->UserDetails.id}`->str}
+      </span>
+    </ClickToCopy>
+    <ClickToCopy
+      copy={StudentInfo.id(student)} className="ml-2 inline-block hover:text-primary-500">
+      <span className="text-xs"> {"Student ID "->str} </span>
+      <span className="font-semibold text-sm underline text-primary-500">
+        {`#${StudentInfo.id(student)}`->str}
+      </span>
+    </ClickToCopy>
+  </div>
+}
+
 @react.component
 let make = (~studentId, ~userId) => {
   let (state, setState) = React.useState(() => initialState)
@@ -525,7 +548,7 @@ let make = (~studentId, ~userId) => {
                 <Icon className="if i-times-regular text-xl lg:text-2xl" />
               </button>
               <div
-                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
                 {switch student->StudentInfo.user->UserDetails.avatarUrl {
                 | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
                 | None =>
@@ -540,6 +563,7 @@ let make = (~studentId, ~userId) => {
               <p className="text-sm font-semibold text-center mt-1">
                 {student->StudentInfo.user->UserDetails.fullTitle |> str}
               </p>
+              {ids(student)}
               {inactiveWarning(student)}
             </div>
             {levelProgressBar(

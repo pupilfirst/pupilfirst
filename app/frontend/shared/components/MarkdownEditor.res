@@ -56,7 +56,7 @@ let reducer = (state, action) =>
       Fullscreen(#Preview)
     | Fullscreen(#Preview) => Fullscreen(#Editor)
     }
-    {...state, mode}
+    {...state, mode: mode}
   | ClickSplit =>
     let mode = switch state.mode {
     | Windowed(_) => Fullscreen(#Split)
@@ -65,7 +65,7 @@ let reducer = (state, action) =>
       Fullscreen(#Split)
     | Fullscreen(#Split) => Fullscreen(#Editor)
     }
-    {...state, mode}
+    {...state, mode: mode}
   | ClickFullscreen =>
     let mode = switch state.mode {
     | Windowed(#Editor) => Fullscreen(#Editor)
@@ -74,8 +74,8 @@ let reducer = (state, action) =>
     | Fullscreen(#Preview) => Windowed(#Preview)
     | Fullscreen(#Split) => Windowed(#Editor)
     }
-    {...state, mode}
-  | SetSelection(selection) => {...state, selection}
+    {...state, mode: mode}
+  | SetSelection(selection) => {...state, selection: selection}
   | BumpSelection(offset) =>
     let (selectionStart, selectionEnd) = state.selection
     {...state, selection: (selectionStart + offset, selectionEnd + offset)}
@@ -89,11 +89,11 @@ let reducer = (state, action) =>
     | Fullscreen(#Split) =>
       Windowed(#Editor)
     }
-    {...state, mode}
+    {...state, mode: mode}
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
-  | SelectFile(currentFileName) => {...state, currentFileName}
+  | SelectFile(currentFileName) => {...state, currentFileName: currentFileName}
   | ClearFile => {...state, currentFileName: None}
   }
 
@@ -106,8 +106,8 @@ let computeInitialState = ((value, textareaId, mode)) => {
   let length = value |> String.length
 
   {
-    id,
-    mode,
+    id: id,
+    mode: mode,
     selection: (length, length),
     uploadState: ReadyToUpload(None),
     currentFileName: None,
@@ -387,7 +387,7 @@ let controls = (disabled, value, state, send, onChange) => {
 let modeClasses = mode =>
   switch mode {
   | Windowed(_) => ""
-  | Fullscreen(_) => "flex flex-grow"
+  | Fullscreen(_) => "flex grow"
   }
 
 let editorContainerClasses = mode =>
@@ -539,27 +539,22 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         {switch state.uploadState {
         | ReadyToUpload(error) =>
           <label
-            className={`text-xs px-3 py-2 flex flex-grow ${disabled
+            className={`text-xs px-3 py-2 flex grow ${disabled
                 ? "cursor-not-allowed"
                 : "cursor-pointer"}`}
             htmlFor=fileInputId>
             {switch error {
             | Some(error) =>
               <span className="text-red-500">
-                <i className="fas fa-exclamation-triangle mr-2" />
-                {error |> str}
+                <i className="fas fa-exclamation-triangle mr-2" /> {error |> str}
               </span>
             | None =>
-              <span>
-                <i className="far fa-file-image mr-2" />
-                {t("attach_file_label")->str}
-              </span>
+              <span> <i className="far fa-file-image mr-2" /> {t("attach_file_label")->str} </span>
             }}
           </label>
         | Uploading =>
-          <span className="text-xs px-3 py-2 flex-grow cursor-wait">
-            <i className="fas fa-spinner fa-pulse mr-2" />
-            {t("file_upload_wait")->str}
+          <span className="text-xs px-3 py-2 grow cursor-wait">
+            <i className="fas fa-spinner fa-pulse mr-2" /> {t("file_upload_wait")->str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}

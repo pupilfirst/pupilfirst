@@ -2580,6 +2580,7 @@ en:
         invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
         success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly"
         discord_link_error: "We were unable to link your Discord account. Please try again."
+        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

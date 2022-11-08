@@ -1130,6 +1130,8 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
+    LevelProgressBar:
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -2356,11 +2358,11 @@ en:
       sessions_new:
         button_text:
           continue_as_developer: Continue as Developer
+          continue_with_discord: Continue with Discord
           continue_with_email_link: Continue with email
           continue_with_facebook: Continue with Facebook
           continue_with_github: Continue with Github
           continue_with_google: Continue with Google
-          continue_with_discord: Continue with Discord
         page_title:
           title: Sign In
   queries:
@@ -2519,16 +2521,15 @@ en:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
     edit:
-      title: Edit User
       discord_connect: Join Our Discord Community
-      discord_title: Join Our Discord Server
-      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
-      discord_how_it_works_title: How it works
-      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
       discord_connected_account: Go to Discord Community
-      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
       discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
-
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
+      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_how_it_works_title: How it works
+      discord_title: Join Our Discord Server
+      title: Edit User
     omniauth_callbacks:
       failure:
         denied: Authentication was denied. Please try again.
@@ -2543,6 +2544,11 @@ en:
           details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
           invalid_request: Your browser made an invalid request.
     sessions:
+      auth_callback:
+        discord_link_error: We were unable to link your Discord account. Please try again.
+        error: Invalid login credentials
+        invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:
@@ -2571,11 +2577,6 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
-      auth_callback:
-        error: "Invalid login credentials"
-        invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
-        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly"
-        discord_link_error: "We were unable to link your Discord account. Please try again."
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

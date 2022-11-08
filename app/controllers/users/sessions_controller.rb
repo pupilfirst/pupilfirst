@@ -142,6 +142,71 @@ module Users
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
+    # GET /users/auth_callback?encrypted_token=xxx
+    def auth_callback
+      begin
+        crypt = EncryptorService.new
+
+        data =
+          crypt.decrypt(
+            Base64.urlsafe_decode64(params[:encrypted_token].presence || '')
+          )
+        session_id = Base64.urlsafe_decode64(data[:session_id])
+
+        # Abort if the session is invalid
+        if session_id.to_s != session.id.private_id.to_s
+          flash[:error] = t('.invalid_session')
+          redirect_to new_user_session_path
+          return
+        end
+
+        # Link discord account to user if the request has discord data
+        if data[:login_token].blank? && current_user.present? &&
+             data[:auth_hash]&.dig(:discord)&.dig(:uid).present?
+          if current_school.users.exists?(
+               discord_user_id: data[:auth_hash][:discord][:uid]
+             )
+            flash[:error] = t('.discord_already_linked')
+            redirect_to edit_user_path
+            return
+          end
+
+          onboard_user =
+            Discord::AddMemberService
+              .new(current_user)
+              .execute(
+                data[:auth_hash][:discord][:uid],
+                data[:auth_hash][:discord][:tag],
+                data[:auth_hash][:discord][:access_token]
+              )
+
+          if onboard_user
+            flash[:success] = t('.success')
+          else
+            flash[:error] = t('.discord_link_error')
+          end
+
+          redirect_to edit_user_path
+          return
+        end
+
+        user =
+          Users::AuthenticationService.new(current_school, data[:login_token])
+            .authenticate
+
+        if user.present?
+          sign_in user
+          redirect_to after_sign_in_path_for(user)
+        else
+          flash[:error] = t('.error')
+          redirect_to new_user_session_path
+        end
+      rescue ActiveSupport::MessageEncryptor::InvalidMessage
+        flash[:error] = t('.error')
+        redirect_to new_user_session_path
+      end
+    end
+
     private
 
     def process_password_login

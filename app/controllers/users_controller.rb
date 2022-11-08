@@ -36,6 +36,17 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /user/clear_discord_id
+  def clear_discord_id
+    Discord::ClearRolesJob.perform_later(
+      current_user.discord_user_id,
+      current_school
+    )
+    current_user.update!(discord_user_id: nil)
+    flash[:success] = t('.success')
+    redirect_to edit_user_path
+  end
+
   # GET /user/update_email
   def update_email
     user =

@@ -2,12 +2,16 @@
 class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
   layout 'mail/school'
 
+  after_action :prevent_delivery_to_bounced_addresses
+
   protected
 
   def default_url_options
     primary_fqdn = @school.domains.primary.fqdn
 
-    raise "School##{@school.id} does not have any primary FQDN. Cannot send email." if primary_fqdn.blank?
+    if primary_fqdn.blank?
+      raise "School##{@school.id} does not have any primary FQDN. Cannot send email."
+    end
 
     { host: primary_fqdn }
   end
@@ -22,11 +26,26 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   # @param email_address [String] email address to send email to
   # @param subject [String] subject of the email
   def simple_mail(email_address, subject, enable_reply: true)
-    options = { to: email_address, subject: subject, **from_options(enable_reply) }
+    options = {
+      to: email_address,
+      subject: subject,
+      **from_options(enable_reply)
+    }
+
     mail(options)
   end
 
   private
+
+  def prevent_delivery_to_bounced_addresses
+    if BounceReport.exists?(email: mail.to)
+      mail.perform_deliveries = false
+
+      Rails.logger.info(
+        "Prevented delivery of email to #{mail.to} because it is a known bounced address."
+      )
+    end
+  end
 
   def school_name
     # sanitize school name to remove special characters
@@ -34,10 +53,10 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   end
 
   def sender_signature
-    custom_signature = @school.configuration['email_sender_signature']
+    custom_signature = Schools::Configuration::EmailSenderSignature.new(@school)
 
-    if custom_signature.present? && custom_signature['confirmed_at'].present?
-      "#{custom_signature['name']} <#{custom_signature['email']}>"
+    if custom_signature.configured?
+      "#{custom_signature.name} <#{custom_signature.email}>"
     else
       "#{school_name} <#{Rails.application.secrets.default_sender_email_address}>"
     end

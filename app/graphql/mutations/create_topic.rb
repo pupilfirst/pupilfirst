@@ -56,6 +56,8 @@ module Mutations
         new_topic
       )
 
+      Discord::NotificationJob.perform_later(:topic_created, new_topic)
+
       { topic_id: new_topic.id }
     end
 

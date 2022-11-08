@@ -8,8 +8,10 @@ module Users
     def oauth_callback
       @email = email_from_auth_hash
 
-      if oauth_origin.present?
-        if @email.blank?
+      if oauth_origin.present? && oauth_origin[:session_id]
+        if oauth_origin[:link_data].present?
+          passthru_oauth_data
+        elsif @email.blank?
           redirect_to oauth_error_url(
                         host: oauth_origin[:fqdn],
                         error: email_blank_flash
@@ -26,6 +28,7 @@ module Users
     alias google_oauth2 oauth_callback
     alias facebook oauth_callback
     alias github oauth_callback
+    alias discord oauth_callback
     alias developer oauth_callback
 
     def failure
@@ -55,17 +58,41 @@ module Users
         end
     end
 
+    # This method is called when the user is already signed in, and is trying to link their social account with user.
+    def passthru_oauth_data
+      encrypted_token =
+        EncryptorService.new.encrypt(
+          { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] }
+        )
+
+      token_url_options = {
+        encrypted_token: Base64.urlsafe_encode64(encrypted_token),
+        host: oauth_origin[:fqdn]
+      }
+
+      redirect_to user_auth_callback_url(token_url_options)
+    end
+
+    # This method is called when the user is not signed in, and is trying to sign in using OAuth.
     def sign_in_at_oauth_origin
       if user.present?
-        # Regenerate the login token.
         user.regenerate_login_token
+
+        encrypted_token =
+          EncryptorService.new.encrypt(
+            {
+              login_token: user.original_login_token,
+              auth_hash: auth_hash_data,
+              session_id: oauth_origin[:session_id]
+            }
+          )
+
         token_url_options = {
-          token: user.original_login_token,
+          encrypted_token: Base64.urlsafe_encode64(encrypted_token),
           host: oauth_origin[:fqdn]
         }
 
-        # Redirect user to sign in at the origin domain with newly generated token.
-        redirect_to user_token_url(token_url_options)
+        redirect_to user_auth_callback_url(token_url_options)
       else
         redirect_to oauth_error_url(
                       host: oauth_origin[:fqdn],
@@ -88,6 +115,25 @@ module Users
               .first
           school.users.with_email(@email).first
         end
+    end
+
+    # This method is used to pass the auth_hash data to the oauth_origin.
+    def auth_hash_data
+      case auth_hash[:provider]
+      when 'google_oauth2', 'facebook', 'github', 'developer'
+        {}
+      when 'discord'
+        {
+          discord: {
+            uid: auth_hash[:uid],
+            tag:
+              "#{auth_hash[:extra][:raw_info][:username]}##{auth_hash[:extra][:raw_info][:discriminator]}",
+            access_token: auth_hash[:credentials][:token]
+          }
+        }
+      else
+        raise_unexpected_provider(provider)
+      end
     end
 
     # This is a hack to resolve the issue of flashing message 'You are already signed in' when signing in using OAuth.

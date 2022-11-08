@@ -81,9 +81,13 @@ class UserMailer < SchoolMailer
     @school = user.school
     @inactivity_months = inactivity_months
     @sign_in_url = sign_in_url
+
     simple_mail(
       user.email,
-      I18n.t('mailers.user.account_deletion_notification.subject')
+      I18n.t(
+        'mailers.user.account_deletion_notification.subject',
+        school_name: @school.name
+      )
     )
   end
 end

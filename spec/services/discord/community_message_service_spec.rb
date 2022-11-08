@@ -25,7 +25,7 @@ describe Discord::CommunityMessageService do
   describe '#post_topic_created' do
     it 'posts a message' do
       message =
-        I18n.translate(
+        I18n.t(
           'services.discord.community_message_service.post_topic_created.message',
           user_name: user.name,
           topic_url:

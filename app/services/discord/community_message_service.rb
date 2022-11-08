@@ -9,7 +9,7 @@ module Discord
       return if topic.blank?
 
       message =
-        I18n.translate(
+        I18n.t(
           'services.discord.community_message_service.post_topic_created.message',
           user_name: topic.creator.name,
           topic_url: url_helpers.topic_url(topic, url_options),

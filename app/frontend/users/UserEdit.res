@@ -183,9 +183,8 @@ let handleAvatarInputChange = (send, formId, event) => {
   | files =>
     let file = files[0]
 
-    let maxAllowedFileSize = maxUploadFileSize
     let isInvalidImageFile =
-      file["size"] > maxAllowedFileSize ||
+      file["size"] > maxUploadFileSize ||
         switch file["_type"] {
         | "image/jpeg"
         | "image/gif"

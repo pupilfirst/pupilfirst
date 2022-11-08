@@ -1,7 +1,6 @@
 @val @scope(("window", "pupilfirst"))
 external maxUploadFileSize: int = "maxUploadFileSize"
 
-let defaultMaxSize = maxUploadFileSize
 let defaultVideoMaxSize = 500 * 1024 * 1024
 
 let hasValidSize = (~maxSize, file) => file["size"] <= maxSize
@@ -37,7 +36,7 @@ let isAudio = file =>
   | _ => false
   }
 
-let isValid = (~maxSize=defaultMaxSize, ~image=false, ~video=false, file) => {
+let isValid = (~maxSize=maxUploadFileSize, ~image=false, ~video=false, file) => {
   let maxSize = video ? defaultVideoMaxSize : maxSize
   let sizeValid = hasValidSize(~maxSize, file)
 
@@ -47,5 +46,5 @@ let isValid = (~maxSize=defaultMaxSize, ~image=false, ~video=false, file) => {
   sizeValid && (imageValid && videoValid)
 }
 
-let isInvalid = (~maxSize=defaultMaxSize, ~image=false, ~video=false, file) =>
+let isInvalid = (~maxSize=maxUploadFileSize, ~image=false, ~video=false, file) =>
   !isValid(~maxSize, ~image, ~video, file)

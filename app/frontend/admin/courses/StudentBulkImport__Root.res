@@ -46,7 +46,7 @@ let validTemplate = csvData => {
 }
 
 let validateFile = (csvData, fileInfo) => {
-  CSVReader.fileSize(fileInfo) > FileUtils.defaultMaxSize
+  CSVReader.fileSize(fileInfo) > FileUtils.maxUploadFileSize
     ? Some(InvalidCSVFile)
     : ArrayUtils.isEmpty(csvData)
     ? Some(EmptyFile)

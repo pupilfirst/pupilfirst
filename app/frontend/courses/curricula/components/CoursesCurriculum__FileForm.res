@@ -86,9 +86,8 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
       | [] => ()
       | files =>
         let file = files[0]
-        let maxFileSize = maxUploadFileSize
 
-        let errors = file["size"] > maxFileSize ? list{tr("max_file_size")} : list{}
+        let errors = file["size"] > maxUploadFileSize ? list{tr("max_file_size")} : list{}
 
         if errors |> ListUtils.isEmpty {
           let filename = file["name"]

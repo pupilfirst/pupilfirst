@@ -2417,8 +2417,7 @@ en:
       must_be_on_the_same_level: Students must belong to the same level for teaming up
     discord:
       community_message_service:
-        post_topic_created:
-          message: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
+        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
   shared:
     _no: "No"
     _yes: "Yes"

@@ -26,7 +26,7 @@ describe Discord::CommunityMessageService do
     it 'posts a message' do
       message =
         I18n.t(
-          'services.discord.community_message_service.post_topic_created.message',
+          'services.discord.community_message_service.post_topic_created',
           user_name: user.name,
           topic_url:
             "https://#{school.domains.primary.fqdn}/topics/#{topic.id}",

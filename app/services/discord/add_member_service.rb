@@ -4,7 +4,7 @@ module Discord
       @user = user
     end
 
-    def execute(discord_user_id, discriminator, access_token)
+    def execute(discord_user_id, tag, access_token)
       return false unless configuration.configured? && @user.present?
 
       Discordrb::API::Server.add_member(
@@ -14,10 +14,7 @@ module Discord
         access_token
       )
 
-      @user.update!(
-        discord_user_id: discord_user_id,
-        discord_discriminator: discriminator
-      )
+      @user.update!(discord_user_id: discord_user_id, discord_tag: tag)
 
       Discord::SyncProfileJob.perform_later(@user)
 

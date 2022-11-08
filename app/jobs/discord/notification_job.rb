@@ -1,7 +1,7 @@
 module Discord
   class NotificationJob < ApplicationJob
     rescue_from ActiveJob::DeserializationError do |_exception|
-      true # Skip processing if either the actor or the resource have been deleted.
+      true # Skip processing if the resource have been deleted.
     end
 
     def perform(event, resource)

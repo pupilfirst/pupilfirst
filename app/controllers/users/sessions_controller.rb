@@ -176,7 +176,7 @@ module Users
               .new(current_user)
               .execute(
                 data[:auth_hash][:discord][:uid],
-                data[:auth_hash][:discord][:discriminator],
+                data[:auth_hash][:discord][:tag],
                 data[:auth_hash][:discord][:access_token]
               )
 

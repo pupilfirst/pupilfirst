@@ -10,7 +10,7 @@ module Discord
 
       message =
         I18n.t(
-          'services.discord.community_message_service.post_topic_created.message',
+          'services.discord.community_message_service.post_topic_created',
           user_name: topic.creator.name,
           topic_url: url_helpers.topic_url(topic, url_options),
           topic_title: topic.title

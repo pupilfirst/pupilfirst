@@ -2,6 +2,8 @@
 class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
   layout 'mail/school'
 
+  after_action :prevent_delivery_to_bounced_addresses
+
   protected
 
   def default_url_options
@@ -29,10 +31,21 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
       subject: subject,
       **from_options(enable_reply)
     }
+
     mail(options)
   end
 
   private
+
+  def prevent_delivery_to_bounced_addresses
+    if BounceReport.exists?(email: mail.to)
+      mail.perform_deliveries = false
+
+      Rails.logger.info(
+        "Prevented delivery of email to #{mail.to} because it is a known bounced address."
+      )
+    end
+  end
 
   def school_name
     # sanitize school name to remove special characters

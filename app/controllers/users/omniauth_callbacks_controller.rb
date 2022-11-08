@@ -126,6 +126,8 @@ module Users
         {
           discord: {
             uid: auth_hash[:uid],
+            tag:
+              "#{auth_hash[:extra][:raw_info][:username]}##{auth_hash[:extra][:raw_info][:discriminator]}",
             access_token: auth_hash[:credentials][:token]
           }
         }

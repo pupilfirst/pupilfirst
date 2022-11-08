@@ -163,11 +163,20 @@ module Users
         # Link discord account to user if the request has discord data
         if data[:login_token].blank? && current_user.present? &&
              data[:auth_hash]&.dig(:discord)&.dig(:uid).present?
+          if current_school.users.exists?(
+               discord_user_id: data[:auth_hash][:discord][:uid]
+             )
+            flash[:error] = t('.discord_already_linked')
+            redirect_to edit_user_path
+            return
+          end
+
           onboard_user =
             Discord::AddMemberService
               .new(current_user)
               .execute(
                 data[:auth_hash][:discord][:uid],
+                data[:auth_hash][:discord][:tag],
                 data[:auth_hash][:discord][:access_token]
               )
 

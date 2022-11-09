@@ -47,4 +47,9 @@
     <%= render 'submission', submission: submission %>
   <% end %>
 <% end %>
-link to list of reviewed submissions<br/>
+<% if @presenter.reviewed_submissions.exists? %>
+  <a class="mt-4 p-6 flex bg-white items-center border border-transparent rounded-lg shadow font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500 cursor-pointer" href="<%= submissions_org_student_path(@presenter.student) %>">
+    <i class="if i-clipboard-check-regular if-fw"></i>
+    <span class="pl-2">View previously reviewed submissions</span>
+  </a>
+<% end %>

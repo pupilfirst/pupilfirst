@@ -78,6 +78,14 @@ module Organisations
       latest_submissions.pending_review
     end
 
+    def reviewed_submissions
+      student
+        .timeline_events
+        .evaluated_by_faculty
+        .joins(:target)
+        .where(targets: { id: current_course_targets })
+    end
+
     private
 
     def current_course_targets

@@ -2291,6 +2291,18 @@ en:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
+    students:
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        back_link: < Back
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
   posts:
     versions:
       back_to_post: Back to Post

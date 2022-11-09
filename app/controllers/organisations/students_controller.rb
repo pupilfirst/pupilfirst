@@ -13,6 +13,7 @@ module Organisations
     def submissions
       student = authorize Founder.find(params[:id])
       @presenter = StudentPresenter.new(view_context, student)
+      raise_not_found if @presenter.reviewed_submissions.empty?
     end
 
     private

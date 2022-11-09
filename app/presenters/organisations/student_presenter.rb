@@ -66,16 +66,16 @@ module Organisations
       ((targets_completed.to_f / total_targets) * 100).floor
     end
 
-    def submissions_pending_review
-      latest_submissions.pending_review
-    end
-
     def coach_notes
       if @student.user.organisations.exists?(id: @student.user.organisation)
         CoachNote.none
       else
         @student.coach_notes.not_archived
       end
+    end
+
+    def submissions_pending_review
+      latest_submissions.pending_review
     end
 
     private

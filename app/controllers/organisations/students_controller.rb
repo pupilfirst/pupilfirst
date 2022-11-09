@@ -10,7 +10,10 @@ module Organisations
     end
 
     # GET /org/students/:id/submissions
-    def submissions; end
+    def submissions
+      student = authorize Founder.find(params[:id])
+      @presenter = StudentPresenter.new(view_context, student)
+    end
 
     private
 

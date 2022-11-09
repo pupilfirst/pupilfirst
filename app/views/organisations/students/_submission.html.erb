@@ -1,0 +1,16 @@
+<a href="<%= timeline_event_path(submission) %>" class="block p-5 mt-4 border border-gray-200 bg-white rounded-lg">
+  <div class="flex justify-between items-center gap-4">
+    <div>
+      <p class="font-semibold">
+        <%= submission.target.title %>
+      </p>
+      <p class="text-sm text-gray-600">
+        <span title="<%= submission.created_at.iso8601 %>">Submitted <%= time_ago_in_words(submission.created_at) %> ago</span>
+      </p>
+    </div>
+    <div class="flex flex-col items-center py-2 px-2 text-xs bg-yellow-50 text-yellow-900 border border-yellow-900 rounded-lg">
+      <p>Level</p>
+      <p class="font-bold"><%= submission.target.level.number %></p>
+    </div>
+  </div>
+</a>

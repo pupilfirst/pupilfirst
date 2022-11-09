@@ -1,12 +1,31 @@
-<div class="w-24">
-  <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
-</div>
-<%= @presenter.student.name %><br/>
-<%= @presenter.student.title %><br/>
 <div class="max-w-xl">
+  <div class="w-24">
+    <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
+  </div>
+  <%= @presenter.student.name %><br/>
+  <%= @presenter.student.title %><br/>
   <div data-re-component="LevelProgressBar" data-re-json="<%= @presenter.level_progress_bar_props.to_json %>"></div>
+  <div class="mb-8">
+    <h6 class="font-semibold">Targets Overview</h6>
+    <div class="flex -mx-2 flex-wrap mt-2">
+      <div aria-label="target-completion-status" class="w-full lg:w-1/2 px-2">
+        <div class="student-overlay__doughnut-chart-container">
+          <%= render 'donut_chart', color: 'purple', percentage: @presenter.target_completion_percentage %>
+          <p class="text-sm font-semibold text-center mt-3">Total Targets Completed</p>
+          <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= @presenter.targets_completed %>/<%= @presenter.total_targets %> Targets</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h6 class="font-semibold">Average Grades</h6>
+  <div class="flex -mx-2 flex-wrap">
+    <div aria-label="average-grade-for-criterion-1" class="flex w-full lg:w-1/2 px-2 mt-2">
+      <div class="student-overlay__pie-chart-container">
+        <%= render 'pie_chart' %>
+        <p class="text-sm font-semibold px-5 pt-3 pb-4">Quality</p>
+      </div>
+    </div>
+  </div>
 </div>
-targets overview (completion percentage and number of targets completed/total)<br/>
-other team members, if any<br/>
 notes for non-admins<br/>
 link to submissions

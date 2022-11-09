@@ -56,17 +56,16 @@ module Organisations
       @total_targets ||= current_course_targets.count
     end
 
-    def targets_pending_review
+    def target_completion_percentage
+      ((targets_completed.to_f / total_targets) * 100).floor
+    end
+
+    def submissions_pending_review
       latest_submissions.pending_review
     end
 
     def current_course_targets
       course.targets.live.joins(:level).where.not(levels: { number: 0 })
-    end
-
-    def quiz_scores
-      @quiz_scores ||=
-        latest_submissions.where.not(quiz_score: nil).pluck(:quiz_score)
     end
 
     def course

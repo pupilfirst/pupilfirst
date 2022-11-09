@@ -16,8 +16,8 @@ let levelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
 }
 
 @react.component
-let make = (~levels, ~currentLevelNumber, ~courseCompleted) => {
-  <div className="mb-8">
+let make = (~levels, ~currentLevelNumber, ~courseCompleted, ~className="") => {
+  <div className>
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {t("heading") |> str} </h6>
     </div>
@@ -50,5 +50,6 @@ let makeFromJson = json => {
     "levels": field("levels", array(bool), json),
     "currentLevelNumber": field("currentLevelNumber", int, json),
     "courseCompleted": field("courseCompleted", bool, json),
+    "className": optional(field("className", string), json),
   })
 }

@@ -7,7 +7,6 @@ en:
       welcome: Welcome to %{school_name}!
   cohorts:
     shared:
-      back_link: < Back
       overview_link: Overview
       students_link: Students
     show:
@@ -2280,7 +2279,6 @@ en:
       heading: Organisations
     show:
       active_students_label: Active Students
-      back_link: < Back
       cohorts_subheading: Cohorts
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
@@ -2299,7 +2297,6 @@ en:
         submitted_time_ago: Submitted %{time_ago_in_words} ago
       submissions:
         accepted_submissions_label: Accepted
-        back_link: < Back
         rejected_submissions_label: Rejected
         student_name_label: Reviewed submissions from
         total_reviewed_submissions: Total
@@ -2437,6 +2434,7 @@ en:
     archived: Archived
     are: are
     avatar: Avatar
+    back_link: < Back
     cancel: Cancel
     caption_image: A caption for the image
     close: Close

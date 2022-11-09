@@ -9,6 +9,14 @@ module Organisations
       @student
     end
 
+    def organisation
+      @student.user.organisation
+    end
+
+    def cohort
+      @student.cohort
+    end
+
     def level_progress_bar_props
       {
         levels: levels.map { |level| completed_level_ids.include?(level.id) },

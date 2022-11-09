@@ -34,15 +34,21 @@ module Organisations
 
           criteria =
             EvaluationCriterion
-              .where(id: average_grades.pluck(:evaluation_criterion_id))
+              .where(id: averaged.pluck(:evaluation_criterion_id))
               .each_with_object({}) do |ec, criteria|
                 criteria[ec.id] = { name: ec.name, max_grade: ec.max_grade }
               end
 
           averaged.map do |average_grade|
-            average_grade.merge(
-              criteria[average_grade[:evaluation_criterion_id]]
-            )
+            merged =
+              average_grade.merge(
+                criteria[average_grade[:evaluation_criterion_id]]
+              )
+
+            merged[:percentage] =
+              ((merged[:average_grade] / merged[:max_grade]) * 100).floor
+
+            merged
           end
         end
     end

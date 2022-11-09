@@ -17,15 +17,20 @@
       </div>
     </div>
   </div>
-  <h6 class="font-semibold">Average Grades</h6>
-  <div class="flex -mx-2 flex-wrap">
-    <div aria-label="average-grade-for-criterion-1" class="flex w-full lg:w-1/2 px-2 mt-2">
-      <div class="student-overlay__pie-chart-container">
-        <%= render 'pie_chart' %>
-        <p class="text-sm font-semibold px-5 pt-3 pb-4">Quality</p>
+  <% if @presenter.average_grades.any? %>
+    <h6 class="font-semibold">Average Grades</h6>
+    <div class="flex -mx-2 flex-wrap">
+      <% @presenter.average_grades.each do |average_grade| %>
+        <div class="flex w-full lg:w-1/2 px-2 mt-2 border-2 rounded">
+          <div class="student-overlay__pie-chart-container">
+            <%= render 'pie_chart', percentage: average_grade[:percentage]  %>
+            <span class="ml-3 text-lg font-semibold"><%= average_grade[:average_grade].to_s.sub(/\.?0+$/, '') %>/<%= average_grade[:max_grade] %></span></div>
+          <p class="text-sm font-semibold px-5 pt-3 pb-4"><%= average_grade[:name] %></p>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
+<% end %>
 </div>
 notes for non-admins<br/>
 link to submissions

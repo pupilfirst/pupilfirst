@@ -32,5 +32,14 @@
   </div>
 <% end %>
 </div>
-notes for non-admins<br/>
-link to submissions
+<% if @presenter.coach_notes.exists? %>
+  <h2>Notes</h2>
+  <%= @presenter.coach_notes.each do |coach_note| %>
+    <div>
+      <p class="convert-markdown" data-json-props="<%= {profile: 'permissive', markdown: coach_note.note}.to_json %>"><%= coach_note.note %></p>
+      <p><%= coach_note.created_at %></p>
+    </div>
+  <% end%>
+<% end %>
+all submissions pending review<br/>
+link to list of reviewed submissions<br/>

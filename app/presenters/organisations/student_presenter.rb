@@ -70,23 +70,22 @@ module Organisations
       latest_submissions.pending_review
     end
 
+    def coach_notes
+      if @student.user.organisations.exists?(id: @student.user.organisation)
+        CoachNote.none
+      else
+        @student.coach_notes.not_archived
+      end
+    end
+
+    private
+
     def current_course_targets
       course.targets.live.joins(:level).where.not(levels: { number: 0 })
     end
 
     def course
       @course ||= student.course
-    end
-
-    def authorized?
-      return false if current_user.blank?
-
-      return false if student.blank?
-
-      return true if current_user.id == student.user_id
-
-      current_user.faculty.present? &&
-        current_user.faculty.cohorts.exists?(id: student.cohort_id)
     end
 
     def levels
@@ -108,8 +107,6 @@ module Organisations
           .joins(:target)
           .where(targets: { id: current_course_targets })
     end
-
-    private
 
     def completed_level_ids
       @completed_level_ids ||=

@@ -59,7 +59,9 @@
         <%= paginate @presenter.students %>
       </div>
       <% if @presenter.students.total_pages > 1 %>
-        <div class="text-center text-sm italic mt-4"><%= t('.pagination_notice', page_start: @presenter.page_start, page_end: @presenter.page_end, count: @presenter.students.total_count) %></div>
+        <div class="text-center text-sm italic mt-4">
+          <%= t('.pagination_notice', page_start: kaminari_page_start(@presenter.students), page_end: kaminari_page_end(@presenter.students), count: @presenter.students.total_count) %>
+        </div>
       <% end %>
       <% if @presenter.students.empty? %>
         <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show') %></div>

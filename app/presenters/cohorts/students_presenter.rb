@@ -93,15 +93,6 @@ module Cohorts
         end
     end
 
-    def page_start
-      ((students.current_page - 1) * students.limit_value) + 1
-    end
-
-    def page_end
-      max = students.current_page * students.limit_value
-      max > students.total_count ? students.total_count : max
-    end
-
     private
 
     def filter_students_by_level(scope)

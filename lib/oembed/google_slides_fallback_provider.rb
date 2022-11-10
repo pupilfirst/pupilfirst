@@ -6,13 +6,12 @@ module Oembed
 
     def self.paths
       [
-        /^\/presentation\/.*\/pub/
+        /^\/presentation\/.*\/edit/
       ]
     end
 
     def resource_url
-      # Replace '/pub' with '/embed'.
-      @resource_url.gsub('/pub', '/embed')
+      @resource_url
     end
   end
 end

@@ -6,7 +6,7 @@ module Oembed
 
     def self.paths
       [
-        /^\/document\/.*\/pub$/
+        /^\/document\/.*\/edit$/
       ]
     end
 
@@ -19,4 +19,3 @@ module Oembed
     end
   end
 end
-

@@ -6,7 +6,7 @@ module Oembed
 
     def self.paths
       [
-        /^\/spreadsheets\/.*\/pubhtml$/,
+        /^\/spreadsheets\/.*\/edit$/,
       ]
     end
 

@@ -35,15 +35,6 @@
               <p class="text-sm font-semibold pl-5 pt-3 pb-4"><%= average_grade[:name] %></p>
             </div>
           <% end %>
-          <div class="flex p-4 mt-3 border rounded-lg items-center">
-            <div class="flex flex-col items-center">
-              <svg class="student-overlay__pie-chart student-overlay__pie-chart--pass" viewBox="0 0 32 32">
-                <circle class="student-overlay__pie-chart-circle student-overlay__pie-chart-circle--pass" cx="16" cy="16" r="16" stroke-dasharray="50, 100"></circle>
-              </svg>
-              <span class="pt-2 text-lg font-semibold">2/4</span>
-            </div>
-            <p class="text-sm font-semibold pl-5 pt-3 pb-4">Quality</p>
-          </div>
         </div>
       <% end %>
       <% if @presenter.coach_notes.exists? %>

@@ -95,8 +95,17 @@ module Organisations
           .where(targets: { id: current_course_targets })
           .includes(target: :level)
           .page(params[:page])
+          .per(10)
 
       paged.count.zero? ? paged.page(paged.total_pages) : paged
+    end
+
+    def reviewed_submissions_passed_count
+      reviewed_submissions.except(:limit, :offset).passed.count
+    end
+
+    def reviewed_submissions_failed_count
+      reviewed_submissions.except(:limit, :offset).failed.count
     end
 
     private

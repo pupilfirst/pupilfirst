@@ -50,7 +50,7 @@
         <h2 class="text-xl font-semibold mt-5">Notes</h2>
         <% @presenter.coach_notes.each do |coach_note| %>
           <div class="mt-4 p-6 bg-white items-center border border-transparent rounded-lg shadow">
-            <p class="text-xs"><%= coach_note.created_at %></p>
+            <p class="inline-block text-xs font-semibold leading-tight bg-gray-300 text-gray-800 mt-px px-1 py-px rounded" title="<%= coach_note.created_at.iso8601 %>"><%= coach_note.created_at.strftime("%B %-d, %Y") %></p>
             <p class="mt-2 convert-markdown" data-json-props="<%= {profile: 'permissive', markdown: coach_note.note}.to_json %>"><%= coach_note.note %></p>
           </div>
         <% end %>

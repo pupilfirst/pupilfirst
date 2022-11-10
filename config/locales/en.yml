@@ -2300,6 +2300,7 @@ en:
         rejected_submissions_label: Rejected
         student_name_label: Reviewed submissions from
         total_reviewed_submissions: Total
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
   posts:
     versions:
       back_to_post: Back to Post

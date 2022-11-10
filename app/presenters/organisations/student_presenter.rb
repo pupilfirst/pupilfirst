@@ -87,11 +87,16 @@ module Organisations
     end
 
     def reviewed_submissions
-      student
-        .timeline_events
-        .evaluated_by_faculty
-        .joins(:target)
-        .where(targets: { id: current_course_targets })
+      paged =
+        student
+          .timeline_events
+          .evaluated_by_faculty
+          .joins(:target)
+          .where(targets: { id: current_course_targets })
+          .includes(target: :level)
+          .page(params[:page])
+
+      paged.count.zero? ? paged.page(paged.total_pages) : paged
     end
 
     private

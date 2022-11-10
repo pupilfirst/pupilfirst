@@ -27,6 +27,11 @@
       <% @presenter.reviewed_submissions.each do |submission| %>
         <%= render 'submission', submission: submission %>
       <% end %>
-    </div>
-  </section>
-</div>
+      <div class="mt-6 flex items-center justify-center">
+        <%= paginate @presenter.reviewed_submissions %>
+      </div>
+      <% if @presenter.reviewed_submissions.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4"><%= t('.pagination_notice', page_start: @presenter.page_start, page_end: @presenter.page_end, count: @presenter.students.total_count) %></div>
+      <% end %>
+    </section>
+  </div>

@@ -54,9 +54,11 @@
       <% end %>
       <% if @presenter.submissions_pending_review.exists? %>
         <h2 class="text-base md:text-xl font-semibold mt-8"><%= t(".waiting_for_review") %></h2>
-        <% @presenter.submissions_pending_review.each do |submission| %>
-          <%= render 'submission', submission: submission %>
-        <% end %>
+        <div class="grid grid-flow-row gap-4 grid-cols-1 xl:grid-cols-2 auto-rows-max mt-4">
+          <% @presenter.submissions_pending_review.each do |submission| %>
+            <%= render 'submission', submission: submission %>
+          <% end %>
+        </div>
       <% end %>
       <% if @presenter.reviewed_submissions.exists? %>
         <h2 class="text-base md:text-xl font-semibold mt-8"><%= t(".reviewed_submissions.heading") %></h2>

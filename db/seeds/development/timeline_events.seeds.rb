@@ -18,7 +18,13 @@ after 'development:founders', 'development:targets' do
       kind: 'longText',
       title: "# This is the heading for a question\n\n_And this is its body._",
       result: "This is the answer to the question.\n\n_Also_ Markdown.",
-      status: 'Passed'
+      status: 'noAnswer'
+    },
+    {
+      kind: 'link',
+      title: 'A second question, to test multiple questions',
+      result: 'https://www.pupilfirst.com',
+      status: 'noAnswer'
     }
   ]
 

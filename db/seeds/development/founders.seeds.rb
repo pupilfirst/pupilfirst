@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:levels', 'development:users' do
+after 'development:levels', 'development:cohorts', 'development:users' do
   puts 'Seeding founders'
 
   admin_user = User.find_by(email: 'admin@example.com')

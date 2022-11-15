@@ -2,21 +2,22 @@ after 'development:founders', 'development:targets' do
   puts 'Seeding timeline events'
 
   school = School.find_by(name: 'Test School')
-  course = school.courses.first
+  user = school.users.find_by(email: 'student1@example.com')
+  student = user.founders.first
+  course = student.course
   cohort = course.cohorts.active.first
-  student = cohort.founders.joins(user: :organisation).first
-  user = student.user
 
   # Move this student to the final level of the course in an active cohort.
   final_level = course.levels.order(number: :desc).first
   student.level = final_level
+  student.cohort = cohort
   student.save!
 
   checklist = [
     {
       kind: 'longText',
-      title: 'The title of this question has been seeded.',
-      result: 'This is the answer to the question.',
+      title: "# This is the heading for a question\n\n_And this is its body._",
+      result: "This is the answer to the question.\n\n_Also_ Markdown.",
       status: 'Passed'
     }
   ]
@@ -93,7 +94,8 @@ after 'development:founders', 'development:targets' do
 
   puts "\nStudent with submissions"
   puts '------------------------'
-  puts "Name: #{student.name}"
+  puts "Email: #{user.email}"
+  puts "Name: #{user.name}"
   puts "Organisation: #{user.organisation.name}"
   puts "Cohort: #{cohort.name}"
   puts "Course: #{course.name}"

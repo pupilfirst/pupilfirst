@@ -2290,6 +2290,15 @@ en:
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
     students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
       submission:
         accepted: Accepted
         rejected: Rejected
@@ -2472,6 +2481,7 @@ en:
     no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None
     note: "Note:"
+    notes: Notes
     notifications:
       done: Done!
       done_dot: Done
@@ -2524,10 +2534,10 @@ en:
     view: View
   timeline_events:
     show:
-      question_with_number: "Question #%{number}"
-      submitted_on: Submitted on %{date}.
       accepted_on: Reviewed and accepted on %{date}.
+      question_with_number: "Question #%{number}"
       rejected_on: Reviewed and rejected on %{date}.
+      submitted_on: Submitted on %{date}.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

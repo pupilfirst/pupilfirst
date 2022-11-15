@@ -88,7 +88,7 @@ module Cohorts
           filter_3 = filter_students_by_email(filter_2)
           sorted = sort_students(filter_3)
           included = sorted.includes(:user, :level)
-          paged = included.page(params[:page])
+          paged = included.page(params[:page]).per(24)
           paged.count.zero? ? paged.page(paged.total_pages) : paged
         end
     end

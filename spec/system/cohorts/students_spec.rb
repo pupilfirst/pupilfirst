@@ -101,13 +101,13 @@ feature 'Organisation show' do
                    referrer:
                      students_organisation_cohort_path(organisation, cohort)
 
-      expect(page).to have_selector('[data-test-class="student"]', count: 25)
+      expect(page).to have_selector('[data-test-class="student"]', count: 24)
       expect(page).not_to have_text(student_from_another_cohort.name)
       expect(page).not_to have_text(student_from_another_org.name)
 
       click_link '2'
 
-      expect(page).to have_selector('[data-test-class="student"]', count: 5)
+      expect(page).to have_selector('[data-test-class="student"]', count: 6)
       expect(page).not_to have_text(student_from_another_cohort.name)
       expect(page).not_to have_text(student_from_another_org.name)
     end
@@ -230,7 +230,7 @@ feature 'Organisation show' do
                      students_organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text(
-        'Now showing 1-25 of a total of 30 such students'
+        'Now showing 1-24 of a total of 30 such students'
       )
     end
 

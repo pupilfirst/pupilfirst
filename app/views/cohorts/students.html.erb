@@ -52,9 +52,11 @@
       <div class="mt-6">
         <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
       </div>
-      <% @presenter.students.each do |student| %>
-        <%= render "student", student: student %>
-      <% end %>
+      <div class="grid grid-flow-row gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-rows-max mt-4">
+        <% @presenter.students.each do |student| %>
+          <%= render "student", student: student %>
+        <% end %>
+      </div>
       <div class="mt-6 flex items-center justify-center">
         <%= paginate @presenter.students %>
       </div>

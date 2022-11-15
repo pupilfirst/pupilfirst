@@ -20,7 +20,15 @@
             <%= item['title'] %>
           </div>
           <hr class="mt-3"/>
-          <div class="convert-markdown p-3 text-sm" data-json-props="<%= presenter.markdown_prop(item['result']) %>"><%= item['result'] %></div>
+          <% if presenter.render_markdown?(item) %>
+            <div class="convert-markdown p-3 text-sm" data-json-props="<%= presenter.markdown_prop(item['result']) %>"><%= item['result'] %></div>
+          <% elsif presenter.audio?(item) %>
+            <%= render 'audio', file: presenter.audio_file(item) %>
+          <% elsif presenter.files?(item) %>
+            <%= render 'files', files: presenter.files(item) %>
+          <% else %>
+            <div class="p-3 text-sm"><%= item['result'] %></div>
+          <% end %>
         </div>
       <% end %>
     </div>

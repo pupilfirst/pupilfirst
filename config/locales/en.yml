@@ -2297,10 +2297,10 @@ en:
         submitted_time_ago: Submitted %{time_ago_in_words} ago
       submissions:
         accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
         rejected_submissions_label: Rejected
         student_name_label: Reviewed submissions from
         total_reviewed_submissions: Total
-        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
   posts:
     versions:
       back_to_post: Back to Post
@@ -2524,7 +2524,10 @@ en:
     view: View
   timeline_events:
     show:
-      submitted_on: Submitted on
+      question_with_number: "Question #%{number}"
+      submitted_on: Submitted on %{date}.
+      accepted_on: Reviewed and accepted on %{date}.
+      rejected_on: Reviewed and rejected on %{date}.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

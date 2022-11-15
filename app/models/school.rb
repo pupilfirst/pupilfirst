@@ -35,6 +35,9 @@ class School < ApplicationRecord
     when :mid
       logo.variant(auto_orient: true, gravity: 'center', resize: '200x200>')
         .processed
+    when :high
+      logo.variant(auto_orient: true, gravity: 'center', resize: '500x500>')
+        .processed
     when :thumb
       logo.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
         .processed

@@ -1,6 +1,9 @@
 exception FormNotFound(string)
 exception UnexpectedResponse(int)
 
+@val @scope(("window", "pupilfirst"))
+external maxUploadFileSize: int = "maxUploadFileSize"
+
 let str = React.string
 
 let tr = I18n.t(~scope="components.CoursesCurriculum__FileForm")
@@ -83,9 +86,8 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
       | [] => ()
       | files =>
         let file = files[0]
-        let maxFileSize = 5 * 1024 * 1024
 
-        let errors = file["size"] > maxFileSize ? list{tr("max_file_size")} : list{}
+        let errors = file["size"] > maxUploadFileSize ? list{tr("max_file_size")} : list{}
 
         if errors |> ListUtils.isEmpty {
           let filename = file["name"]

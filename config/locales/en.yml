@@ -2436,6 +2436,9 @@ en:
   services:
     team_up:
       must_be_on_the_same_level: Students must belong to the same level for teaming up
+    discord:
+      community_message_service:
+        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
   shared:
     _no: "No"
     _yes: "Yes"
@@ -2569,10 +2572,11 @@ en:
           invalid_request: Your browser made an invalid request.
     sessions:
       auth_callback:
-        discord_link_error: We were unable to link your Discord account. Please try again.
-        error: Invalid login credentials
-        invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
-        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly
+        error: "Invalid login credentials"
+        invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
+        discord_link_error: "We were unable to link your Discord account. Please try again."
+        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:

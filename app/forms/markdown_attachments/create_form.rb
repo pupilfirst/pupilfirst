@@ -7,7 +7,7 @@ module MarkdownAttachments
              validates: {
                presence: true,
                file_size: {
-                 less_than: 5.megabytes
+                 less_than: Rails.application.secrets.max_upload_file_size
                }
              }
 

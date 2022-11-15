@@ -83,7 +83,7 @@ module Organisations
     end
 
     def submissions_pending_review
-      latest_submissions.pending_review
+      latest_submissions.pending_review.order(created_at: :desc)
     end
 
     def reviewed_submissions
@@ -94,6 +94,7 @@ module Organisations
           .joins(:target)
           .where(targets: { id: current_course_targets })
           .includes(target: :level)
+          .order(created_at: :desc)
           .page(params[:page])
           .per(10)
 

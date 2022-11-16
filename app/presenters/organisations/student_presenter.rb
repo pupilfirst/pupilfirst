@@ -72,7 +72,11 @@ module Organisations
     end
 
     def target_completion_percentage
-      ((targets_completed.to_f / total_targets) * 100).floor
+      if total_targets.zero?
+        0
+      else
+        ((targets_completed.to_f / total_targets) * 100).floor
+      end
     end
 
     def coach_notes

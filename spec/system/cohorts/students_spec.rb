@@ -31,7 +31,8 @@ feature 'Organisation show' do
                name: "Student #{i}",
                email: "student#{i}@example.com",
                school: school,
-               last_seen_at: 1.week.ago
+               last_seen_at: 1.week.ago,
+               organisation: organisation
 
       create :student, user: user, cohort: cohort, level: level
     end
@@ -42,7 +43,8 @@ feature 'Organisation show' do
       create :user,
              name: 'Student From Another Org',
              email: 'another_org_student@example.com',
-             school: school
+             school: school,
+             organisation: organisation_2
 
     create :student, user: user, cohort: cohort, level: level_2
   end
@@ -52,7 +54,8 @@ feature 'Organisation show' do
       create :user,
              name: 'Student From Another Cohort',
              email: 'another_cohort_student@example.com',
-             school: school
+             school: school,
+             organisation: organisation
 
     create :student, user: user, cohort: cohort_2, level: level_3
   end
@@ -62,17 +65,10 @@ feature 'Organisation show' do
       create :user,
              name: 'Student In Inactive Cohort',
              email: 'inactive_cohort_student@example.com',
-             school: school
+             school: school,
+             organisation: organisation
 
     create :student, user: user, cohort: cohort_inactive, level: level_3
-  end
-
-  before do
-    # Set up org relationships
-    students.each { |student| student.user.update!(organisation: organisation) }
-    student_from_another_org.user.update!(organisation: organisation_2)
-    student_from_another_cohort.user.update!(organisation: organisation)
-    student_in_inactive_cohort.user.update!(organisation: organisation)
   end
 
   context 'when the user is an organisation admin' do

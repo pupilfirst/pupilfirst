@@ -135,7 +135,7 @@ feature 'Organisation show' do
 
       expect(page).to have_text("Email: #{student.email}")
       expect(page).to have_selector('[data-test-class="student"]', count: 1)
-      expect(page).to have_text(student.name)
+      expect(page).to have_link(student.name, href: org_student_path(student))
     end
 
     scenario 'user can filter by name', js: true do
@@ -213,7 +213,10 @@ feature 'Organisation show' do
                        cohort_inactive
                      )
 
-      expect(page).to have_text(student_in_inactive_cohort.name)
+      expect(page).to have_link(
+        student_in_inactive_cohort.name,
+        href: org_student_path(student_in_inactive_cohort)
+      )
     end
   end
 
@@ -242,7 +245,10 @@ feature 'Organisation show' do
                        cohort_inactive
                      )
 
-      expect(page).to have_text(student_in_inactive_cohort.name)
+      expect(page).to have_link(
+        student_in_inactive_cohort.name,
+        href: org_student_path(student_in_inactive_cohort)
+      )
     end
   end
 

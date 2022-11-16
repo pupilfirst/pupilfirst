@@ -19,7 +19,8 @@ module Organisations
 
     def level_progress_bar_props
       {
-        levels: levels.map { |level| completed_level_ids.include?(level.id) },
+        levels:
+          course.levels.map { |level| completed_level_ids.include?(level.id) },
         currentLevelNumber: level.number,
         courseCompleted: student.completed_at.present?
       }

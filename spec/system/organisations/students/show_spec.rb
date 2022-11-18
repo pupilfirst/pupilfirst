@@ -26,7 +26,13 @@ feature 'Organisation show' do
   let(:target_group_l2) { create :target_group, level: level_2 }
   let(:target_group_l3) { create :target_group, level: level_3 }
 
-  let(:target_l1) do
+  let(:target_l1_1) do
+    create :target,
+           target_group: target_group_l1,
+           evaluation_criteria: [evaluation_criterion_1, evaluation_criterion_2]
+  end
+
+  let(:target_l1_2) do
     create :target,
            target_group: target_group_l1,
            evaluation_criteria: [evaluation_criterion_1, evaluation_criterion_2]
@@ -82,6 +88,10 @@ feature 'Organisation show' do
     create :student, user: user, cohort: cohort_inactive, level: level_3
   end
 
+  let!(:coach_note) do
+    create :coach_note, student: student, author: faculty.user
+  end
+
   before do
     # Enroll faculty in cohort.
     create :faculty_cohort_enrollment, faculty: faculty, cohort: cohort
@@ -89,15 +99,16 @@ feature 'Organisation show' do
     # Create evaluated L1 submissions for student.
     (1..11).each do |i|
       latest = i == 11
+
       te =
         create :timeline_event,
                :evaluated,
                :with_owners,
                owners: [student],
                latest: latest,
-               target: target_l1,
+               target: target_l1_1,
                evaluator: faculty,
-               passed_at: i % 2 != 0 ? nil : 1.day.ago
+               passed_at: i % 2 == 0 ? nil : 1.day.ago
 
       create :timeline_event_grade,
              timeline_event: te,
@@ -110,7 +121,30 @@ feature 'Organisation show' do
              grade: i % 2 == 0 ? 2 : 3
     end
 
-    # Create one submission pending review in L2 for student.
+    # Create one reviewed submission on the second L2 target.
+    te_l1_2 =
+      create :timeline_event,
+             :evaluated,
+             :with_owners,
+             owners: [student],
+             latest: true,
+             target: target_l1_2,
+             evaluator: faculty,
+             passed_at: 1.day.ago
+
+    create :timeline_event_grade,
+           timeline_event: te_l1_2,
+           evaluation_criterion: evaluation_criterion_1,
+           grade: 1
+
+    create :timeline_event_grade,
+           timeline_event: te_l1_2,
+           evaluation_criterion: evaluation_criterion_2,
+           grade: 2
+  end
+
+  # Create one submission pending review in L2 for student.
+  let!(:timeline_event_pending) do
     create :timeline_event,
            :with_owners,
            owners: [student],
@@ -156,7 +190,7 @@ feature 'Organisation show' do
 
       # Check target completion stats.
       expect(page).to have_text(
-        "Targets Overview\n33%\nTotal Targets Completed\n1/3 Targets"
+        "Targets Overview\n50%\nTotal Targets Completed\n2/4 Targets"
       )
 
       # Check average grades.
@@ -164,10 +198,19 @@ feature 'Organisation show' do
       expect(page).to have_text("2.5/3\n#{evaluation_criterion_2.name}")
 
       # Check notes.
+      expect(page).to have_text(coach_note.note)
 
       # Check pending submissions...
+      expect(page).to have_link(
+        target_l2.title,
+        href: timeline_event_path(timeline_event_pending)
+      )
 
       # ..and link to previously reviewed submissions page.
+      expect(page).to have_link(
+        'View previously reviewed submissions',
+        href: submissions_org_student_path(student)
+      )
     end
 
     scenario 'org admin can access details of a student of inactive cohort' do

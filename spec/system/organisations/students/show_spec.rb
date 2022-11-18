@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Organisation show' do
+feature 'Organisation student details page and submissions list' do
   include UserSpecHelper
 
   let(:school) { create :school, :current }

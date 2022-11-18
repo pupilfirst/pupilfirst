@@ -108,7 +108,8 @@ feature 'Organisation show' do
                latest: latest,
                target: target_l1_1,
                evaluator: faculty,
-               passed_at: i % 2 == 0 ? nil : 1.day.ago
+               created_at: i.days.ago,
+               passed_at: i % 2 == 0 ? nil : (i.days.ago + 1.hour)
 
       create :timeline_event_grade,
              timeline_event: te,
@@ -205,12 +206,22 @@ feature 'Organisation show' do
         target_l2.title,
         href: timeline_event_path(timeline_event_pending)
       )
+    end
 
-      # ..and link to previously reviewed submissions page.
-      expect(page).to have_link(
-        'View previously reviewed submissions',
-        href: submissions_org_student_path(student)
-      )
+    scenario 'org admin can access a list of all previously reviewed submissions' do
+      sign_in_user org_admin_user, referrer: org_student_path(student)
+
+      click_link 'View previously reviewed submissions'
+
+      expect(page).to have_text("Total\n12\nAccepted\n7\nRejected\n5")
+
+      expect(page).to have_link(target_l1_2.title, count: 1)
+      expect(page).to have_link(target_l1_1.title, count: 9)
+
+      # Try the second page.
+      click_link('2')
+
+      expect(page).to have_link(target_l1_1.title, count: 2)
     end
 
     scenario 'org admin can access details of a student of inactive cohort' do

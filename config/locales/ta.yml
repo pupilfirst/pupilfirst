@@ -7,7 +7,6 @@ ta:
       welcome: '%{school_name}க்கு வரவேற்கிறோம்!'
   cohorts:
     shared:
-      back_link: < பின்
       overview_link: கண்ணோட்டம்
       students_link: மாணவர்கள்
     show:
@@ -1127,6 +1126,8 @@ ta:
       sign_in: உள்நுழையவும்
       sign_out: வெளியேறு
       user_controls: பயனர் கட்டுப்பாடுகளைக் காட்டு
+    LevelProgressBar:
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: கோப்பை இணைக்க இங்கே கிளிக் செய்யவும்.
       bold_insert: தைரியமான
@@ -2274,7 +2275,6 @@ ta:
       heading: நிறுவனங்கள்
     show:
       active_students_label: செயலில் மாணவர்கள்
-      back_link: < பின்
       cohorts_subheading: கூட்டாளிகள்
       organisation_label: அமைப்பு
       students_enrolled_heading: மாணவர்கள் சேர்ந்தனர்
@@ -2285,6 +2285,27 @@ ta:
         one: <span class="font-semibold text-black">1</span> செயலில் உள்ள குழுவில்
         other: <span class="font-semibold text-black">%{count}</span> செயலில் உள்ள கூட்டாளிகளில்
       total_students_label: மொத்த மாணவர்கள்
+    students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
   posts:
     versions:
       back_to_post: இடுகைக்குத் திரும்பு
@@ -2352,11 +2373,11 @@ ta:
       sessions_new:
         button_text:
           continue_as_developer: டெவலப்பராக தொடரவும்
+          continue_with_discord: டிஸ்கார்டுடன் தொடரவும்
           continue_with_email_link: மின்னஞ்சலுடன் தொடரவும்
           continue_with_facebook: Facebook உடன் தொடரவும்
           continue_with_github: Github உடன் தொடரவும்
           continue_with_google: Google உடன் தொடரவும்
-          continue_with_discord: டிஸ்கார்டுடன் தொடரவும்
         page_title:
           title: உள்நுழையவும்
   queries:
@@ -2411,6 +2432,9 @@ ta:
   services:
     team_up:
       must_be_on_the_same_level: அணிசேர்வதற்கு மாணவர்கள் ஒரே மட்டத்தில் இருக்க வேண்டும்
+    discord:
+      community_message_service:
+        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
   shared:
     _no: "இல்லை"
     _yes: "ஆம்"
@@ -2419,6 +2443,7 @@ ta:
     archived: காப்பகப்படுத்தப்பட்டது
     are: உள்ளன
     avatar: அவதாரம்
+    back_link: < Back
     cancel: ரத்து செய்
     caption_image: படத்திற்கான தலைப்பு
     close: நெருக்கமான
@@ -2455,6 +2480,7 @@ ta:
     no_email_found: இந்த மின்னஞ்சலில் பயனரைக் கண்டறிய முடியவில்லை. நீங்கள் உள்ளிட்ட மின்னஞ்சலைச் சரிபார்க்கவும்.
     none: இல்லை
     note: "குறிப்பு:"
+    notes: Notes
     notifications:
       done: முடிந்தது!
       done_dot: முடிந்தது
@@ -2507,7 +2533,10 @@ ta:
     view: காண்க
   timeline_events:
     show:
-      submitted_on: அன்று சமர்ப்பிக்கப்பட்டது
+      accepted_on: Reviewed and accepted on %{date}.
+      question_with_number: "Question #%{number}"
+      rejected_on: Reviewed and rejected on %{date}.
+      submitted_on: Submitted on %{date}.
   users:
     clear_discord_id:
       success: டிஸ்கார்ட் வெற்றிகரமாக இணைக்கப்பட்டது.
@@ -2515,15 +2544,15 @@ ta:
       link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
       title: பயனரைத் திருத்து
     edit:
-      title: பயனரைத் திருத்து
       discord_connect: எங்கள் டிஸ்கார்ட் சமூகத்தில் சேரவும்
-      discord_title: எங்கள் டிஸ்கார்ட் சேவையகத்தில் சேரவும்
-      discord_description: எங்கள் டிஸ்கார்ட் சர்வரில் இணைவதன் மூலம், எங்கள் குழு, பயிற்சியாளர்கள் மற்றும் உங்கள் சகாக்களுடன் உடனடியாகத் தொடர்புகொள்ளலாம்.
-      discord_how_it_works_title: எப்படி இது செயல்படுகிறது
-      discord_how_it_works_html: <li> எங்கள் டிஸ்கார்ட் சர்வரில் சேரவும் (இது இலவசம்!) </li><li>இந்தப் பள்ளியின் கணக்குடன் உங்கள் டிஸ்கார்ட் கணக்கை இணைக்கவும்.</li><li>டிஸ்கார்டில் எங்கள் சமூகத்திற்கான அணுகலைப் பெறுங்கள்!</li>
       discord_connected_account: டிஸ்கார்ட் சமூகத்திற்குச் செல்லவும்
-      discord_connected_message_title: உங்கள் %{school_name} கணக்கு இப்போது உங்கள் டிஸ்கார்ட் கணக்குடன் இணைக்கப்பட்டுள்ளது.
       discord_connected_message: <li>டிஸ்கார்ட் சர்வரில் உள்ள உங்கள் புனைப்பெயர் இங்கே உங்கள் பெயருடன் ஒத்திசைக்கப்படும்.</li><li>டிஸ்கார்டில் உங்களுக்கு கூடுதல் பொறுப்புகள் ஒதுக்கப்பட்டுள்ளன.</li>
+      discord_connected_message_title: உங்கள் %{school_name} கணக்கு இப்போது உங்கள் டிஸ்கார்ட் கணக்குடன் இணைக்கப்பட்டுள்ளது.
+      discord_description: எங்கள் டிஸ்கார்ட் சர்வரில் இணைவதன் மூலம், எங்கள் குழு, பயிற்சியாளர்கள் மற்றும் உங்கள் சகாக்களுடன் உடனடியாகத் தொடர்புகொள்ளலாம்.
+      discord_how_it_works_html: <li> எங்கள் டிஸ்கார்ட் சர்வரில் சேரவும் (இது இலவசம்!) </li><li>இந்தப் பள்ளியின் கணக்குடன் உங்கள் டிஸ்கார்ட் கணக்கை இணைக்கவும்.</li><li>டிஸ்கார்டில் எங்கள் சமூகத்திற்கான அணுகலைப் பெறுங்கள்!</li>
+      discord_how_it_works_title: எப்படி இது செயல்படுகிறது
+      discord_title: எங்கள் டிஸ்கார்ட் சேவையகத்தில் சேரவும்
+      title: பயனரைத் திருத்து
     omniauth_callbacks:
       failure:
         denied: அங்கீகாரம் மறுக்கப்பட்டது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
@@ -2538,6 +2567,12 @@ ta:
           details: <em>உங்கள் உலாவி அனுப்பிய கோரிக்கையைப் பற்றிய ஏதோ</em> தவறானது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
           invalid_request: உங்கள் உலாவி தவறான கோரிக்கையை வைத்துள்ளது.
     sessions:
+      auth_callback:
+        error: "தவறான உள்நுழைவு சான்றுகள்"
+        invalid_session: "உள்நுழையச் சொன்னது நீங்கள்தானா என்பதை எங்களால் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழைய முயற்சிக்கவும்."
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
+        discord_link_error: "உங்கள் டிஸ்கார்ட் கணக்கை இணைக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சி செய்க."
+        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       email_sent:
         image_alt: உங்கள் இன்பாக்ஸில் ஒரு மின்னஞ்சல் பறக்கிறது
         magic_link:
@@ -2566,11 +2601,6 @@ ta:
         subtitle: கடவுச்சொல் மீட்புக்கு உங்கள் மின்னஞ்சலை உள்ளிடவும்.
       reset_password:
         link_used: அந்த ஒரு முறை இணைப்பு ஏற்கனவே பயன்படுத்தப்பட்டது அல்லது தவறானது. உங்கள் கடவுச்சொல்லை மீண்டும் அமைக்க முயற்சிக்கவும்.
-      auth_callback:
-        error: "தவறான உள்நுழைவு சான்றுகள்"
-        invalid_session: "உள்நுழையச் சொன்னது நீங்கள்தானா என்பதை எங்களால் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழைய முயற்சிக்கவும்."
-        success: "உங்கள் டிஸ்கார்ட் கணக்கு வெற்றிகரமாக இணைக்கப்பட்டது. எங்கள் டிஸ்கார்ட் சேவையகத்திற்கான உங்கள் அணுகல் விரைவில் புதுப்பிக்கப்படும்"
-        discord_link_error: "உங்கள் டிஸ்கார்ட் கணக்கை இணைக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சி செய்க."
       sign_in_with_email:
         already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
         email: மின்னஞ்சலுடன் தொடரவும்

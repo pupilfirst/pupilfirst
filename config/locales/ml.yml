@@ -7,7 +7,6 @@ ml:
       welcome: '%{school_name} - സ്വാഗതം!'
   cohorts:
     shared:
-      back_link: < തിരികെ
       overview_link: അവലോകനം
       students_link: വിദ്യാർത്ഥികൾ
     show:
@@ -1127,6 +1126,8 @@ ml:
       sign_in: സൈൻ ഇൻ
       sign_out: സൈൻ ഔട്ട്
       user_controls: ഉപയോക്തൃ നിയന്ത്രണങ്ങൾ കാണിക്കുക
+    LevelProgressBar:
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: ഒരു ഫയൽ അറ്റാച്ചുചെയ്യാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക.
       bold_insert: ധീരമായ
@@ -2274,7 +2275,6 @@ ml:
       heading: സംഘടനകൾ
     show:
       active_students_label: സജീവ വിദ്യാർത്ഥികൾ
-      back_link: < തിരികെ
       cohorts_subheading: കൂട്ടുകാർ
       organisation_label: സംഘടന
       students_enrolled_heading: വിദ്യാർത്ഥികൾ എൻറോൾ ചെയ്തു
@@ -2285,6 +2285,27 @@ ml:
         one: <span class="font-semibold text-black">1</span> സജീവ കൂട്ടായ്മയിൽ
         other: <span class="font-semibold text-black">%{count}</span> സജീവ കൂട്ടങ്ങളിൽ
       total_students_label: മൊത്തം വിദ്യാർത്ഥികൾ
+    students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
   posts:
     versions:
       back_to_post: പോസ്റ്റിലേക്ക് മടങ്ങുക
@@ -2352,11 +2373,11 @@ ml:
       sessions_new:
         button_text:
           continue_as_developer: ഡെവലപ്പറായി തുടരുക
+          continue_with_discord: ഡിസ്കോർഡുമായി തുടരുക
           continue_with_email_link: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക
           continue_with_facebook: ഫേസ്ബുക്കിൽ തുടരുക
           continue_with_github: Github-ൽ തുടരുക
           continue_with_google: Google-ൽ തുടരുക
-          continue_with_discord: ഡിസ്കോർഡുമായി തുടരുക
         page_title:
           title: സൈൻ ഇൻ
   queries:
@@ -2411,6 +2432,9 @@ ml:
   services:
     team_up:
       must_be_on_the_same_level: ടീം അപ്പ് ചെയ്യുന്നതിന് വിദ്യാർത്ഥികൾ ഒരേ തലത്തിലുള്ളവരായിരിക്കണം
+    discord:
+      community_message_service:
+        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
   shared:
     _no: "ഇല്ല"
     _yes: "അതെ"
@@ -2419,6 +2443,7 @@ ml:
     archived: ആർക്കൈവ് ചെയ്തു
     are: ആകുന്നു
     avatar: അവതാർ
+    back_link: < Back
     cancel: റദ്ദാക്കുക
     caption_image: ചിത്രത്തിന് ഒരു അടിക്കുറിപ്പ്
     close: അടയ്ക്കുക
@@ -2455,6 +2480,7 @@ ml:
     no_email_found: ഈ ഇമെയിൽ ഉപയോഗിച്ച് ഉപയോക്താവിനെ കണ്ടെത്താനായില്ല. നിങ്ങൾ നൽകിയ ഇമെയിൽ പരിശോധിക്കുക.
     none: ഒന്നുമില്ല
     note: "കുറിപ്പ്:"
+    notes: Notes
     notifications:
       done: ചെയ്തു!
       done_dot: ചെയ്തു
@@ -2507,7 +2533,10 @@ ml:
     view: കാണുക
   timeline_events:
     show:
-      submitted_on: ന് സമർപ്പിച്ചു
+      accepted_on: Reviewed and accepted on %{date}.
+      question_with_number: "Question #%{number}"
+      rejected_on: Reviewed and rejected on %{date}.
+      submitted_on: Submitted on %{date}.
   users:
     clear_discord_id:
       success: വിയോജിപ്പ് അൺലിങ്ക് ചെയ്തു.
@@ -2515,15 +2544,15 @@ ml:
       link_expired: ആ ലിങ്ക് കാലഹരണപ്പെട്ടു അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.
       title: ഉപയോക്താവിനെ എഡിറ്റ് ചെയ്യുക
     edit:
-      title: ഉപയോക്താവിനെ എഡിറ്റ് ചെയ്യുക
       discord_connect: ഞങ്ങളുടെ ഡിസ്കോർഡ് കമ്മ്യൂണിറ്റിയിൽ ചേരുക
-      discord_title: ഞങ്ങളുടെ ഡിസ്കോർഡ് സെർവറിൽ ചേരുക
-      discord_description: ഞങ്ങളുടെ ഡിസ്‌കോർഡ് സെർവറിൽ ചേരുന്നത് ഞങ്ങളുടെ ടീമുമായും പരിശീലകരുമായും നിങ്ങളുടെ സമപ്രായക്കാരുമായും തൽക്ഷണം ബന്ധപ്പെടാൻ നിങ്ങളെ അനുവദിക്കും.
-      discord_how_it_works_title: ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു
-      discord_how_it_works_html: <li> ഞങ്ങളുടെ ഡിസ്‌കോർഡ് സെർവറിൽ ചേരുക (ഇത് സൗജന്യമാണ്!) </li><li>നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ട് ഈ സ്കൂളിന്റെ അക്കൗണ്ടുമായി ലിങ്ക് ചെയ്യുക.</li><li>ഡിസ്കോർഡിൽ ഞങ്ങളുടെ കമ്മ്യൂണിറ്റിയിലേക്ക് പ്രവേശനം നേടുക!</li>
       discord_connected_account: ഡിസ്കോർഡ് കമ്മ്യൂണിറ്റിയിലേക്ക് പോകുക
-      discord_connected_message_title: നിങ്ങളുടെ %{school_name} അക്കൗണ്ട് ഇപ്പോൾ നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ടുമായി ലിങ്ക് ചെയ്‌തിരിക്കുന്നു.
       discord_connected_message: <li>ഡിസ്കോർഡ് സെർവറിലെ നിങ്ങളുടെ വിളിപ്പേര് ഇവിടെ നിങ്ങളുടെ പേരുമായി സമന്വയിപ്പിച്ച് സൂക്ഷിക്കും.</li><li>ഡിസ്കോർഡിൽ നിങ്ങൾക്ക് അധിക റോളുകൾ നൽകിയിട്ടുണ്ട്.</li>
+      discord_connected_message_title: നിങ്ങളുടെ %{school_name} അക്കൗണ്ട് ഇപ്പോൾ നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ടുമായി ലിങ്ക് ചെയ്‌തിരിക്കുന്നു.
+      discord_description: ഞങ്ങളുടെ ഡിസ്‌കോർഡ് സെർവറിൽ ചേരുന്നത് ഞങ്ങളുടെ ടീമുമായും പരിശീലകരുമായും നിങ്ങളുടെ സമപ്രായക്കാരുമായും തൽക്ഷണം ബന്ധപ്പെടാൻ നിങ്ങളെ അനുവദിക്കും.
+      discord_how_it_works_html: <li> ഞങ്ങളുടെ ഡിസ്‌കോർഡ് സെർവറിൽ ചേരുക (ഇത് സൗജന്യമാണ്!) </li><li>നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ട് ഈ സ്കൂളിന്റെ അക്കൗണ്ടുമായി ലിങ്ക് ചെയ്യുക.</li><li>ഡിസ്കോർഡിൽ ഞങ്ങളുടെ കമ്മ്യൂണിറ്റിയിലേക്ക് പ്രവേശനം നേടുക!</li>
+      discord_how_it_works_title: ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു
+      discord_title: ഞങ്ങളുടെ ഡിസ്കോർഡ് സെർവറിൽ ചേരുക
+      title: ഉപയോക്താവിനെ എഡിറ്റ് ചെയ്യുക
     omniauth_callbacks:
       failure:
         denied: ആധികാരികത നിഷേധിക്കപ്പെട്ടു. ദയവായി വീണ്ടും ശ്രമിക്കുക.
@@ -2538,6 +2567,12 @@ ml:
           details: <em>നിങ്ങളുടെ ബ്രൗസർ അയച്ച അഭ്യർത്ഥനയെക്കുറിച്ചുള്ള ചിലത്</em> സാധുവായതല്ല. ഞങ്ങൾ ഈ പിശകുകൾ സ്വയമേവ ട്രാക്ക് ചെയ്യുന്നു, പക്ഷേ പ്രശ്നം നിലനിൽക്കുകയാണെങ്കിൽ ഞങ്ങളെ ബന്ധപ്പെടാൻ മടിക്കേണ്ടതില്ല. അതിനിടയിൽ, പേജ് വീണ്ടും ലോഡ് ചെയ്യാൻ ശ്രമിക്കുക.
           invalid_request: നിങ്ങളുടെ ബ്രൗസർ ഒരു അസാധുവായ അഭ്യർത്ഥന നടത്തി.
     sessions:
+      auth_callback:
+        error: "അസാധുവായ ലോഗിൻ ക്രെഡൻഷ്യലുകൾ"
+        invalid_session: "സൈൻ ഇൻ ചെയ്യാൻ ആവശ്യപ്പെട്ടത് നിങ്ങളാണോ എന്ന് പരിശോധിക്കാൻ ഞങ്ങൾക്ക് കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും സൈൻ ഇൻ ചെയ്യാൻ ശ്രമിക്കുക."
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
+        discord_link_error: "നിങ്ങളുടെ Discord അക്കൗണ്ട് ലിങ്ക് ചെയ്യാൻ ഞങ്ങൾക്ക് കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക."
+        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       email_sent:
         image_alt: നിങ്ങളുടെ ഇൻബോക്സിലേക്ക് ഒരു ഇമെയിൽ പറക്കുന്നു
         magic_link:
@@ -2566,11 +2601,6 @@ ml:
         subtitle: പാസ്‌വേഡ് വീണ്ടെടുക്കലിനായി നിങ്ങളുടെ ഇമെയിൽ നൽകുക.
       reset_password:
         link_used: ആ ഒറ്റത്തവണ ലിങ്ക് ഇതിനകം ഉപയോഗിച്ചു, അല്ലെങ്കിൽ അസാധുവാണ്. നിങ്ങളുടെ പാസ്‌വേഡ് വീണ്ടും പുനഃസജ്ജമാക്കാൻ ശ്രമിക്കുക.
-      auth_callback:
-        error: "അസാധുവായ ലോഗിൻ ക്രെഡൻഷ്യലുകൾ"
-        invalid_session: "സൈൻ ഇൻ ചെയ്യാൻ ആവശ്യപ്പെട്ടത് നിങ്ങളാണോ എന്ന് പരിശോധിക്കാൻ ഞങ്ങൾക്ക് കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും സൈൻ ഇൻ ചെയ്യാൻ ശ്രമിക്കുക."
-        success: "നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ട് വിജയകരമായി ലിങ്ക് ചെയ്‌തു. ഞങ്ങളുടെ ഡിസ്കോർഡ് സെർവറിലേക്കുള്ള നിങ്ങളുടെ ആക്സസ് ഉടൻ അപ്ഡേറ്റ് ചെയ്യപ്പെടും"
-        discord_link_error: "നിങ്ങളുടെ Discord അക്കൗണ്ട് ലിങ്ക് ചെയ്യാൻ ഞങ്ങൾക്ക് കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക."
       sign_in_with_email:
         already_signed: നിങ്ങൾ ഇതിനകം സൈൻ ഇൻ ചെയ്തിട്ടുണ്ട്.
         email: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക

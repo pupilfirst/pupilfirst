@@ -11,6 +11,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <%= ::NewRelic::Agent.browser_timing_header(content_security_policy_nonce) if Rails.env.production? && Rails.application.secrets.new_relic_license_key.present? %>
     <link rel="manifest" href="/manifest.json" />
     <% if content_for?(:viewport) %>
       <%= yield :viewport %>

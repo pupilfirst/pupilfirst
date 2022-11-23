@@ -31,7 +31,8 @@ feature 'Organisation show' do
                name: "Student #{i}",
                email: "student#{i}@example.com",
                school: school,
-               last_seen_at: 1.week.ago
+               last_seen_at: 1.week.ago,
+               organisation: organisation
 
       create :student, user: user, cohort: cohort, level: level
     end
@@ -42,7 +43,8 @@ feature 'Organisation show' do
       create :user,
              name: 'Student From Another Org',
              email: 'another_org_student@example.com',
-             school: school
+             school: school,
+             organisation: organisation_2
 
     create :student, user: user, cohort: cohort, level: level_2
   end
@@ -52,7 +54,8 @@ feature 'Organisation show' do
       create :user,
              name: 'Student From Another Cohort',
              email: 'another_cohort_student@example.com',
-             school: school
+             school: school,
+             organisation: organisation
 
     create :student, user: user, cohort: cohort_2, level: level_3
   end
@@ -62,17 +65,10 @@ feature 'Organisation show' do
       create :user,
              name: 'Student In Inactive Cohort',
              email: 'inactive_cohort_student@example.com',
-             school: school
+             school: school,
+             organisation: organisation
 
     create :student, user: user, cohort: cohort_inactive, level: level_3
-  end
-
-  before do
-    # Set up org relationships
-    students.each { |student| student.user.update!(organisation: organisation) }
-    student_from_another_org.user.update!(organisation: organisation_2)
-    student_from_another_cohort.user.update!(organisation: organisation)
-    student_in_inactive_cohort.user.update!(organisation: organisation)
   end
 
   context 'when the user is an organisation admin' do
@@ -101,13 +97,13 @@ feature 'Organisation show' do
                    referrer:
                      students_organisation_cohort_path(organisation, cohort)
 
-      expect(page).to have_selector('[data-test-class="student"]', count: 25)
+      expect(page).to have_selector('[data-test-class="student"]', count: 24)
       expect(page).not_to have_text(student_from_another_cohort.name)
       expect(page).not_to have_text(student_from_another_org.name)
 
       click_link '2'
 
-      expect(page).to have_selector('[data-test-class="student"]', count: 5)
+      expect(page).to have_selector('[data-test-class="student"]', count: 6)
       expect(page).not_to have_text(student_from_another_cohort.name)
       expect(page).not_to have_text(student_from_another_org.name)
     end
@@ -135,7 +131,7 @@ feature 'Organisation show' do
 
       expect(page).to have_text("Email: #{student.email}")
       expect(page).to have_selector('[data-test-class="student"]', count: 1)
-      expect(page).to have_text(student.name)
+      expect(page).to have_link(student.name, href: org_student_path(student))
     end
 
     scenario 'user can filter by name', js: true do
@@ -213,7 +209,10 @@ feature 'Organisation show' do
                        cohort_inactive
                      )
 
-      expect(page).to have_text(student_in_inactive_cohort.name)
+      expect(page).to have_link(
+        student_in_inactive_cohort.name,
+        href: org_student_path(student_in_inactive_cohort)
+      )
     end
   end
 
@@ -230,7 +229,7 @@ feature 'Organisation show' do
                      students_organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text(
-        'Now showing 1-25 of a total of 30 such students'
+        'Now showing 1-24 of a total of 30 such students'
       )
     end
 
@@ -242,7 +241,10 @@ feature 'Organisation show' do
                        cohort_inactive
                      )
 
-      expect(page).to have_text(student_in_inactive_cohort.name)
+      expect(page).to have_link(
+        student_in_inactive_cohort.name,
+        href: org_student_path(student_in_inactive_cohort)
+      )
     end
   end
 

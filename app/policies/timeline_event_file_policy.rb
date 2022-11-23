@@ -1,6 +1,6 @@
 class TimelineEventFilePolicy < ApplicationPolicy
   def download?
-    return false if user.founders.blank? && current_coach.blank?
+    return false if user.blank?
 
     timeline_event = record.timeline_event
 
@@ -14,7 +14,17 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return true if current_user_coaches?(timeline_event.target.course, students)
 
     # Team members linked directly to the submission can access attached files.
-    students.exists?(user_id: user&.id)
+    return true if students.exists?(user_id: user.id)
+
+    # School admins can access files
+    return true if current_school_admin.present?
+
+    # Organisation admins can access files
+    organisation = students.first.user.organisation
+
+    return false if organisation.blank?
+
+    user.organisations.exists?(id: record.user.organisation_id)
   end
 
   def create?

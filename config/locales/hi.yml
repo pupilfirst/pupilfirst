@@ -7,7 +7,6 @@ hi:
       welcome: '%{school_name} में आपका स्वागत है!'
   cohorts:
     shared:
-      back_link: <पीछे
       overview_link: अवलोकन
       students_link: छात्र
     show:
@@ -1127,6 +1126,8 @@ hi:
       sign_in: साइन इन करें
       sign_out: साइन आउट
       user_controls: उपयोगकर्ता नियंत्रण दिखाएं
+    LevelProgressBar:
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: फ़ाइल संलग्न करने के लिए यहां क्लिक करें।
       bold_insert: साहसिक
@@ -2274,7 +2275,6 @@ hi:
       heading: संगठनों
     show:
       active_students_label: सक्रिय छात्र
-      back_link: <पीछे
       cohorts_subheading: समानता रखने वाले लोग
       organisation_label: संगठन
       students_enrolled_heading: में नामांकित छात्र
@@ -2285,6 +2285,27 @@ hi:
         one: <span class="font-semibold text-black">1</span> सक्रिय समूह में
         other: <span class="font-semibold text-black">%{count}</span> सक्रिय समूह में
       total_students_label: कुल छात्र
+    students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
   posts:
     versions:
       back_to_post: पोस्ट पर वापस जाएं
@@ -2352,11 +2373,11 @@ hi:
       sessions_new:
         button_text:
           continue_as_developer: डेवलपर के रूप में जारी रखें
+          continue_with_discord: कलह के साथ जारी रखें
           continue_with_email_link: ईमेल के साथ जारी रखें
           continue_with_facebook: फेसबुक के साथ जारी रखें
           continue_with_github: गीथूब के साथ जारी रखें
           continue_with_google: Google के साथ जारी रखें
-          continue_with_discord: कलह के साथ जारी रखें
         page_title:
           title: साइन इन करें
   queries:
@@ -2411,6 +2432,9 @@ hi:
   services:
     team_up:
       must_be_on_the_same_level: टीम बनाने के लिए छात्रों को समान स्तर का होना चाहिए
+    discord:
+      community_message_service:
+        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
   shared:
     _no: "नहीं"
     _yes: "हाँ"
@@ -2419,6 +2443,7 @@ hi:
     archived: संग्रहीत
     are: हैं
     avatar: अवतार
+    back_link: < Back
     cancel: रद्द करना
     caption_image: छवि के लिए एक कैप्शन
     close: बंद करना
@@ -2455,6 +2480,7 @@ hi:
     no_email_found: इस ईमेल के साथ उपयोगकर्ता नहीं मिला। कृपया आपके द्वारा दर्ज ईमेल की जांच करें।
     none: कोई भी नहीं
     note: "टिप्पणी:"
+    notes: Notes
     notifications:
       done: पूर्ण!
       done_dot: पूर्ण
@@ -2507,7 +2533,10 @@ hi:
     view: राय
   timeline_events:
     show:
-      submitted_on: पर प्रस्तुत की
+      accepted_on: Reviewed and accepted on %{date}.
+      question_with_number: "Question #%{number}"
+      rejected_on: Reviewed and rejected on %{date}.
+      submitted_on: Submitted on %{date}.
   users:
     clear_discord_id:
       success: डिस्कॉर्ड सफलतापूर्वक अनलिंक किया गया.
@@ -2515,15 +2544,15 @@ hi:
       link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
       title: यूजर को संपादित करो
     edit:
-      title: यूजर को संपादित करो
       discord_connect: हमारे कलह समुदाय में शामिल हों
-      discord_title: हमारे डिस्कॉर्ड सर्वर से जुड़ें
-      discord_description: हमारे डिस्कॉर्ड सर्वर से जुड़ने से आप हमारी टीम, कोचों और अपने साथियों से तुरंत संपर्क कर सकेंगे।
-      discord_how_it_works_title: यह काम किस प्रकार करता है
-      discord_how_it_works_html: <li> हमारे डिस्कॉर्ड सर्वर से जुड़ें (यह मुफ़्त है!) </li><li>अपने डिसॉर्डर खाते को इस स्कूल के खाते से लिंक करें।</li><li>कलह पर हमारे समुदाय तक पहुँच प्राप्त करें!</li>
       discord_connected_account: डिस्कॉर्ड समुदाय पर जाएं
-      discord_connected_message_title: आपका %{school_name} खाता अब आपके डिस्कॉर्ड खाते से जुड़ा हुआ है।
       discord_connected_message: <li>डिस्कॉर्ड सर्वर पर आपका उपनाम यहां आपके नाम के साथ समन्वयित रहेगा।</li><li>आपको Discord पर अतिरिक्त भूमिकाएँ सौंपी गई हैं।</li>
+      discord_connected_message_title: आपका %{school_name} खाता अब आपके डिस्कॉर्ड खाते से जुड़ा हुआ है।
+      discord_description: हमारे डिस्कॉर्ड सर्वर से जुड़ने से आप हमारी टीम, कोचों और अपने साथियों से तुरंत संपर्क कर सकेंगे।
+      discord_how_it_works_html: <li> हमारे डिस्कॉर्ड सर्वर से जुड़ें (यह मुफ़्त है!) </li><li>अपने डिसॉर्डर खाते को इस स्कूल के खाते से लिंक करें।</li><li>कलह पर हमारे समुदाय तक पहुँच प्राप्त करें!</li>
+      discord_how_it_works_title: यह काम किस प्रकार करता है
+      discord_title: हमारे डिस्कॉर्ड सर्वर से जुड़ें
+      title: यूजर को संपादित करो
     omniauth_callbacks:
       failure:
         denied: 'प्रमाणीकरण से इनकार किया गया था। कृपया पुन: प्रयास करें।'
@@ -2538,6 +2567,12 @@ hi:
           details: <em>आपके ब्राउज़र द्वारा भेजे गए अनुरोध के बारे में कुछ</em> मान्य नहीं था। हम इन त्रुटियों को स्वचालित रूप से ट्रैक करते हैं, लेकिन यदि समस्या बनी रहती है तो बेझिझक हमसे संपर्क करें। इस बीच, पृष्ठ को पुनः लोड करने का प्रयास करें।
           invalid_request: आपके ब्राउज़र ने एक अमान्य अनुरोध किया है।
     sessions:
+      auth_callback:
+        error: "अमान्य प्रवेश करना प्रत्यायक"
+        invalid_session: "हम यह सत्यापित करने में असमर्थ थे कि आपने ही साइन इन करने के लिए कहा था। कृपया फिर से साइन इन करने का प्रयास करें।"
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
+        discord_link_error: "हम आपके डिसॉर्डर खाते को लिंक करने में असमर्थ रहे। कृपया पुन: प्रयास करें।"
+        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       email_sent:
         image_alt: एक ईमेल आपके इनबॉक्स में आ रहा है
         magic_link:
@@ -2566,11 +2601,6 @@ hi:
         subtitle: पासवर्ड पुनर्प्राप्ति के लिए अपना ईमेल दर्ज करें।
       reset_password:
         link_used: वह वन-टाइम लिंक पहले ही उपयोग किया जा चुका है, या अमान्य है। कृपया अपना पासवर्ड फिर से रीसेट करने का प्रयास करें।
-      auth_callback:
-        error: "अमान्य प्रवेश करना प्रत्यायक"
-        invalid_session: "हम यह सत्यापित करने में असमर्थ थे कि आपने ही साइन इन करने के लिए कहा था। कृपया फिर से साइन इन करने का प्रयास करें।"
-        success: "आपका डिस्कॉर्ड खाता सफलतापूर्वक लिंक कर दिया गया है। हमारे डिस्कॉर्ड सर्वर तक आपकी पहुंच शीघ्र ही अपडेट कर दी जाएगी"
-        discord_link_error: "हम आपके डिसॉर्डर खाते को लिंक करने में असमर्थ रहे। कृपया पुन: प्रयास करें।"
       sign_in_with_email:
         already_signed: आप पहले ही साइन इन कर चुके हैं।
         email: ईमेल के साथ जारी रखें

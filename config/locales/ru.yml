@@ -7,7 +7,6 @@ ru:
       welcome: Добро пожаловать в %{school_name}!
   cohorts:
     shared:
-      back_link: < Назад
       overview_link: Обзор
       students_link: Ученики
     show:
@@ -1143,6 +1142,8 @@ ru:
       sign_in: Войти
       sign_out: Выход
       user_controls: Показать пользовательские элементы управления
+    LevelProgressBar:
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -2298,7 +2299,6 @@ ru:
       heading: Организации
     show:
       active_students_label: Активные студенты
-      back_link: < Назад
       cohorts_subheading: Когорты
       organisation_label: Организация
       students_enrolled_heading: Студенты, зачисленные в
@@ -2313,6 +2313,27 @@ ru:
         many: в <span class="font-semibold text-black">%{count}</span> активных когортах
         other: в <span class="font-semibold text-black">%{count}</span> активных когортах
       total_students_label: Всего студентов
+    students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
   posts:
     versions:
       back_to_post: Вернуться к сообщению
@@ -2380,11 +2401,11 @@ ru:
       sessions_new:
         button_text:
           continue_as_developer: Продолжить как разработчик
+          continue_with_discord: Продолжить в Дискорде
           continue_with_email_link: Продолжить по электронной почте
           continue_with_facebook: Продолжить с Facebook
           continue_with_github: Продолжить на Github
           continue_with_google: Продолжить через Google
-          continue_with_discord: Продолжить в Дискорде
         page_title:
           title: Войти
   queries:
@@ -2439,6 +2460,9 @@ ru:
   services:
     team_up:
       must_be_on_the_same_level: Ученики должны принадлежать к одному уровню для объединения
+    discord:
+      community_message_service:
+        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
   shared:
     _no: "Нет"
     _yes: "Да"
@@ -2447,6 +2471,7 @@ ru:
     archived: Архивирован
     are: являются
     avatar: Аватар
+    back_link: < Back
     cancel: Отмена
     caption_image: Подпись к изображению
     close: Закрыть
@@ -2483,6 +2508,7 @@ ru:
     no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
     none: Ничего
     note: "Примечание:"
+    notes: Notes
     notifications:
       done: Сделано!
       done_dot: Сделано
@@ -2535,7 +2561,10 @@ ru:
     view: Посмотреть
   timeline_events:
     show:
-      submitted_on: Отправлено
+      accepted_on: Reviewed and accepted on %{date}.
+      question_with_number: "Question #%{number}"
+      rejected_on: Reviewed and rejected on %{date}.
+      submitted_on: Submitted on %{date}.
   users:
     clear_discord_id:
       success: Связь Discord успешно отключена.
@@ -2543,15 +2572,15 @@ ru:
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       title: Изменить пользователя
     edit:
-      title: Изменить пользователя
       discord_connect: Присоединяйтесь к нашему сообществу Discord
-      discord_title: Присоединяйтесь к нашему Discord-серверу
-      discord_description: Присоединение к нашему серверу Discord позволит вам мгновенно связаться с нашей командой, тренерами и коллегами.
-      discord_how_it_works_title: Как это работает
-      discord_how_it_works_html: <li> Присоединяйтесь к нашему серверу Discord (это бесплатно!) </li><li>Свяжите свою учетную запись Discord с учетной записью этой школы.</li><li>Получите доступ к нашему сообществу в Discord!</li>
       discord_connected_account: Перейти в сообщество раздора
-      discord_connected_message_title: Ваша учетная запись %{school_name} теперь связана с вашей учетной записью Discord.
       discord_connected_message: <li>Ваш никнейм на сервере Discord будет синхронизирован с вашим именем здесь.</li><li>Вам были назначены дополнительные роли в Discord.</li>
+      discord_connected_message_title: Ваша учетная запись %{school_name} теперь связана с вашей учетной записью Discord.
+      discord_description: Присоединение к нашему серверу Discord позволит вам мгновенно связаться с нашей командой, тренерами и коллегами.
+      discord_how_it_works_html: <li> Присоединяйтесь к нашему серверу Discord (это бесплатно!) </li><li>Свяжите свою учетную запись Discord с учетной записью этой школы.</li><li>Получите доступ к нашему сообществу в Discord!</li>
+      discord_how_it_works_title: Как это работает
+      discord_title: Присоединяйтесь к нашему Discord-серверу
+      title: Изменить пользователя
     omniauth_callbacks:
       failure:
         denied: Аутентификация была отклонена. Пожалуйста, попробуйте еще раз.
@@ -2566,6 +2595,12 @@ ru:
           details: <em>Что-то</em> о запросе, отправленном вашим браузером, неверно. Мы отслеживаем эти ошибки автоматически, но если проблема не стесняйтесь связаться с нами. А пока попробуйте перезагрузить страницу.
           invalid_request: Ваш браузер сделал неверный запрос.
     sessions:
+      auth_callback:
+        error: "Неверные логин или пароль"
+        invalid_session: "Нам не удалось проверить, запрашивали ли вы вход в систему. Попробуйте войти еще раз."
+        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
+        discord_link_error: "Нам не удалось связать ваш аккаунт Discord. Пожалуйста, попробуйте еще раз."
+        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       email_sent:
         image_alt: Письмо в ваш почтовый ящик
         magic_link:
@@ -2594,11 +2629,6 @@ ru:
         subtitle: Введите ваш email для восстановления пароля.
       reset_password:
         link_used: Эта одноразовая ссылка уже была использована или неверна. Пожалуйста, попробуйте сбросить пароль еще раз.
-      auth_callback:
-        error: "Неверные логин или пароль"
-        invalid_session: "Нам не удалось проверить, запрашивали ли вы вход в систему. Попробуйте войти еще раз."
-        success: "Ваша учетная запись Discord была успешно связана. Ваш доступ к нашему серверу Discord будет обновлен в ближайшее время."
-        discord_link_error: "Нам не удалось связать ваш аккаунт Discord. Пожалуйста, попробуйте еще раз."
       sign_in_with_email:
         already_signed: Вы уже вошли в систему.
         email: Продолжить по электронной почте

@@ -46,15 +46,15 @@ module Make = (Selectable: Selectable) => {
 
   let tagPillClasses = (color, showHover) => {
     let bgColor = switch color {
-    | "primary" => "bg-primary-200"
-    | "orange" => "bg-orange-200"
-    | "green" => "bg-green-200"
-    | "red" => "bg-red-200"
-    | "yellow" => "bg-yellow-200"
-    | "blue" => "bg-blue-200"
-    | "gray" => "bg-gray-200"
-    | "focusColor" => "bg-focusColor-200"
-    | _ => "bg-orange-200"
+    | "primary" => "bg-primary-100"
+    | "orange" => "bg-orange-100"
+    | "green" => "bg-green-100"
+    | "red" => "bg-red-100"
+    | "yellow" => "bg-yellow-100"
+    | "blue" => "bg-blue-100"
+    | "gray" => "bg-gray-100"
+    | "focusColor" => "bg-focusColor-100"
+    | _ => "bg-orange-100"
     }
 
     let textColor = switch color {
@@ -143,22 +143,20 @@ module Make = (Selectable: Selectable) => {
   let showSelected = (onDeselect, labelSuffix, selected) =>
     selected |> Array.mapi((index, selection) => {
       let value = selection |> Selectable.value
-      <div key={index |> string_of_int} className="inline-flex py-1 mr-2">
-        <div className={tagPillClasses(selection |> Selectable.color, false)}>
-          <span className="pl-2 py-px">
-            {switch selection |> Selectable.label {
-            | Some(label) => label ++ (labelSuffix ++ value)
-            | None => value
-            } |> str}
-          </span>
-          <button
-            ariaLabel={"Remove selection: " ++ value}
-            title={"Remove selection: " ++ value}
-            className="ml-1 text-red-700 px-2 py-px focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
-            onClick={removeSelection(onDeselect, selection)}>
-            <PfIcon className="if i-times-light" />
-          </button>
-        </div>
+      <div key={index |> string_of_int} className={tagPillClasses(selection |> Selectable.color, false) ++ " flex gap-px"}>
+        <span className="pl-2 py-px text-xs leading-[unset]">
+          {switch selection |> Selectable.label {
+          | Some(label) => label ++ (labelSuffix ++ value)
+          | None => value
+          } |> str}
+        </span>
+        <button
+          ariaLabel={"Remove selection: " ++ value}
+          title={"Remove selection: " ++ value}
+          className="text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
+          onClick={removeSelection(onDeselect, selection)}>
+          <PfIcon className="if i-times-regular" />
+        </button>
       </div>
     })
 
@@ -237,14 +235,14 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-300 rounded-md w-full p-3 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
+          className="bg-gray-50 flex flex-wrap gap-2 items-center text-sm bg-white border border-gray-300 rounded-md w-full p-3 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="w-full grow appearance-none bg-transparent border-none text-gray-600 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
+            className="flex-1 grow appearance-none bg-transparent border-none text-gray-600 leading-snug focus:outline-none placeholder-gray-500"
             id=inputId
             type_="search"
             role="combobox"

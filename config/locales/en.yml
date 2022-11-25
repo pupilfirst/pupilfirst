@@ -2434,11 +2434,14 @@ en:
       submissions_reviewed: submissions reviewed
       title: Overview
   services:
-    team_up:
-      must_be_on_the_same_level: Students must belong to the same level for teaming up
     discord:
       community_message_service:
-        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:
     _no: "No"
     _yes: "Yes"
@@ -2548,6 +2551,12 @@ en:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
     edit:
+      course_discord_requirement_met:
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
+        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+      course_requires_discord_account:
+        heading: Wait a second! You need to link your Discord account first.
+        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
       discord_connect: Join Our Discord Community
       discord_connected_account: Go to Discord Community
       discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
@@ -2572,11 +2581,11 @@ en:
           invalid_request: Your browser made an invalid request.
     sessions:
       auth_callback:
-        error: "Invalid login credentials"
-        invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
-        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
-        discord_link_error: "We were unable to link your Discord account. Please try again."
-        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: We were unable to link your Discord account. Please try again.
+        error: Invalid login credentials
+        invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:

@@ -231,4 +231,8 @@ class User < ApplicationRecord
       title.presence || affiliation.presence
     end
   end
+
+  def discord_account_connected?
+    discord_user_id.present?
+  end
 end

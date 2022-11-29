@@ -185,7 +185,7 @@ feature 'Community', js: true do
 
     fill_in 'edit-reason', with: first_reason
     click_button 'Update Reply'
-    expect(page).to have_text('Reply updated successfully')
+    dismiss_notification
     expect(reply_1.reload.edit_reason).to eq(first_reason)
 
     # Edit a reply and set reason second time.
@@ -199,6 +199,7 @@ feature 'Community', js: true do
     fill_in 'edit-reason', with: second_reason
     click_button 'Update Reply'
     expect(page).to have_text('Reply updated successfully')
+    dismiss_notification
 
     expect(reply_1.reload.edit_reason).to eq(second_reason)
     expect(reply_1.text_versions.reload.last.reason).to eq(first_reason)
@@ -261,6 +262,8 @@ feature 'Community', js: true do
     end
 
     click_button 'Update Reply'
+
+    dismiss_notification
 
     expect(page).not_to have_text(reply_body)
     expect(new_reply.reload.body).to eq(reply_body_for_edit)

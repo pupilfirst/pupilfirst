@@ -201,12 +201,12 @@ feature 'Community', js: true do
     expect(page).to have_text('Reply updated successfully')
     dismiss_notification
 
-    expect(reply_1.reload.edit_reason).to eq(second_reason)
-    expect(reply_1.text_versions.reload.last.reason).to eq(first_reason)
-
     # Student is denied access to the history page.
     find("div[aria-label='Options for post #{reply_1.id}']").click
     expect(page).to_not have_link('History')
+
+    expect(reply_1.reload.edit_reason).to eq(second_reason)
+    expect(reply_1.text_versions.last.reason).to eq(first_reason)
 
     visit(post_version_path(reply_1))
     expect(page).to have_text("The page you were looking for doesn't exist")

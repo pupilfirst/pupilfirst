@@ -2430,11 +2430,14 @@ hi:
       submissions_reviewed: प्रस्तुतियाँ की समीक्षा की गई
       title: अवलोकन
   services:
-    team_up:
-      must_be_on_the_same_level: टीम बनाने के लिए छात्रों को समान स्तर का होना चाहिए
     discord:
       community_message_service:
-        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: टीम बनाने के लिए छात्रों को समान स्तर का होना चाहिए
   shared:
     _no: "नहीं"
     _yes: "हाँ"
@@ -2544,6 +2547,12 @@ hi:
       link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
       title: यूजर को संपादित करो
     edit:
+      course_discord_requirement_met:
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
+        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+      course_requires_discord_account:
+        heading: Wait a second! You need to link your Discord account first.
+        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
       discord_connect: हमारे कलह समुदाय में शामिल हों
       discord_connected_account: डिस्कॉर्ड समुदाय पर जाएं
       discord_connected_message: <li>डिस्कॉर्ड सर्वर पर आपका उपनाम यहां आपके नाम के साथ समन्वयित रहेगा।</li><li>आपको Discord पर अतिरिक्त भूमिकाएँ सौंपी गई हैं।</li>
@@ -2568,11 +2577,11 @@ hi:
           invalid_request: आपके ब्राउज़र ने एक अमान्य अनुरोध किया है।
     sessions:
       auth_callback:
-        error: "अमान्य प्रवेश करना प्रत्यायक"
-        invalid_session: "हम यह सत्यापित करने में असमर्थ थे कि आपने ही साइन इन करने के लिए कहा था। कृपया फिर से साइन इन करने का प्रयास करें।"
-        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
-        discord_link_error: "हम आपके डिसॉर्डर खाते को लिंक करने में असमर्थ रहे। कृपया पुन: प्रयास करें।"
-        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: 'हम आपके डिसॉर्डर खाते को लिंक करने में असमर्थ रहे। कृपया पुन: प्रयास करें।'
+        error: अमान्य प्रवेश करना प्रत्यायक
+        invalid_session: हम यह सत्यापित करने में असमर्थ थे कि आपने ही साइन इन करने के लिए कहा था। कृपया फिर से साइन इन करने का प्रयास करें।
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         image_alt: एक ईमेल आपके इनबॉक्स में आ रहा है
         magic_link:

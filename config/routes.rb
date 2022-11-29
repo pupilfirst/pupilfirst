@@ -170,6 +170,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :org, module: 'organisations' do
+    resources :students, only: %[show] do
+      member do
+        get 'submissions'
+      end
+    end
+  end
+
   resources :communities, only: %i[show] do
     member do
       get 'new_topic'

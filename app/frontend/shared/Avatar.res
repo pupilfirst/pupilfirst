@@ -27,3 +27,13 @@ let make = (~colors=?, ~name, ~className=?) => {
     </text>
   </svg>
 }
+
+let makeFromJson = json => {
+  open Json.Decode
+
+  make({
+    "colors": optional(field("id", pair(string, string)), json),
+    "name": field("name", string, json),
+    "className": optional(field("placeholder", string), json),
+  })
+}

@@ -25,6 +25,7 @@ module Schools
     alias exports? authors?
     alias certificates? authors?
     alias create_certificate? authors?
+    alias calendars? authors?
 
     def curriculum?
       return false if user.blank?

@@ -1,0 +1,15 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | <%= t(".title") %> </title>
+<% end %>
+
+
+<div id="schoolrouter-innerpage-data" class="grid grid-cols-12 bg-white shadow rounded-md">
+  <div class="col-span-4 bg-gray-200"></div>
+  <div class="col-span-8"></div>
+</div>
+
+<% content_for(:tail) do %>
+  <%= javascript_tag(nonce: true) do %>
+     console.log("Mahesh")
+  <% end %>
+<% end %>

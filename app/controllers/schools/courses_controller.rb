@@ -37,6 +37,12 @@ module Schools
       @course = authorize(course, policy_class: Schools::CoursePolicy)
     end
 
+    # GET /courses/:id/calendars
+    def calendars
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+    end
+
     # POST /school/courses/:course_id/delete_coach_enrollment
     def delete_coach_enrollment
       coach = current_school.faculty.find(params[:coach_id])

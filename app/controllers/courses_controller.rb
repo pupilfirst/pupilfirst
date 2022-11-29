@@ -1,10 +1,12 @@
 class CoursesController < ApplicationController
   include RecaptchaVerifiable
+  include DiscordAccountRequirable
 
   before_action :authenticate_user!,
                 except: %i[show apply process_application curriculum]
 
   before_action :preview_or_authenticate, only: %i[curriculum]
+  before_action :require_discord_account, only: %i[curriculum report]
 
   # GET /courses/:id/curriculum
   def curriculum
@@ -82,6 +84,10 @@ class CoursesController < ApplicationController
   end
 
   private
+
+  def course
+    @course ||= Course.find(params[:id])
+  end
 
   def preview_or_authenticate
     course = find_course

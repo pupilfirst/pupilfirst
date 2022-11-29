@@ -9,6 +9,22 @@ class UsersController < ApplicationController
 
   def edit
     @user = authorize(current_user)
+
+    @course_requiring_discord_account =
+      if params[:course_requiring_discord].present? &&
+           !current_user.discord_account_connected?
+        course =
+          current_user.courses.find_by(id: params[:course_requiring_discord])
+
+        session[:course_requiring_discord] = course.id if course.present?
+        course
+      elsif session.key?(:course_requiring_discord)
+        course =
+          current_user.courses.find_by(id: session[:course_requiring_discord])
+
+        session.delete(:course_requiring_discord)
+        course
+      end
   end
 
   # GET /users/delete_account

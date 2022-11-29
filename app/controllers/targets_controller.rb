@@ -1,8 +1,10 @@
 class TargetsController < ApplicationController
   include CamelizeKeys
   include StringifyIds
+  include DiscordAccountRequirable
 
   before_action :preview_or_authenticate
+  before_action :require_discord_account, only: %i[show]
 
   # GET /targets/:id/(:slug)
   def show
@@ -32,6 +34,10 @@ class TargetsController < ApplicationController
   end
 
   private
+
+  def course
+    @course ||= Target.find(params[:id]).course
+  end
 
   def preview_or_authenticate
     target = Target.find(params[:id])

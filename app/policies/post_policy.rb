@@ -1,5 +1,6 @@
 class PostPolicy < ApplicationPolicy
   def versions?
-    CommunityPolicy.new(@pundit_user, record.topic.community).show?
+    current_school_admin.present? ||
+      (current_coach.present? && !current_coach.exited?)
   end
 end

@@ -4,6 +4,5 @@ class PostsController < ApplicationController
 
   def versions
     @post = authorize(Post.live.find(params[:id]))
-    raise_not_found unless current_coach
   end
 end

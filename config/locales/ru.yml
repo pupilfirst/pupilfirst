@@ -2458,11 +2458,14 @@ ru:
       submissions_reviewed: сабмиты проверены
       title: Общий обзор
   services:
-    team_up:
-      must_be_on_the_same_level: Ученики должны принадлежать к одному уровню для объединения
     discord:
       community_message_service:
-        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: Ученики должны принадлежать к одному уровню для объединения
   shared:
     _no: "Нет"
     _yes: "Да"
@@ -2572,6 +2575,12 @@ ru:
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       title: Изменить пользователя
     edit:
+      course_discord_requirement_met:
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
+        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+      course_requires_discord_account:
+        heading: Wait a second! You need to link your Discord account first.
+        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
       discord_connect: Присоединяйтесь к нашему сообществу Discord
       discord_connected_account: Перейти в сообщество раздора
       discord_connected_message: <li>Ваш никнейм на сервере Discord будет синхронизирован с вашим именем здесь.</li><li>Вам были назначены дополнительные роли в Discord.</li>
@@ -2596,11 +2605,11 @@ ru:
           invalid_request: Ваш браузер сделал неверный запрос.
     sessions:
       auth_callback:
-        error: "Неверные логин или пароль"
-        invalid_session: "Нам не удалось проверить, запрашивали ли вы вход в систему. Попробуйте войти еще раз."
-        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
-        discord_link_error: "Нам не удалось связать ваш аккаунт Discord. Пожалуйста, попробуйте еще раз."
-        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: Нам не удалось связать ваш аккаунт Discord. Пожалуйста, попробуйте еще раз.
+        error: Неверные логин или пароль
+        invalid_session: Нам не удалось проверить, запрашивали ли вы вход в систему. Попробуйте войти еще раз.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         image_alt: Письмо в ваш почтовый ящик
         magic_link:

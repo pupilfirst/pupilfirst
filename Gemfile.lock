@@ -325,6 +325,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
+    mini_portile2 (2.8.0)
     minitest (5.16.3)
     motion-markdown-it (8.4.1.2)
       linkify-it-rb (~> 2.0)
@@ -336,6 +337,9 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.10.1)
     nio4r (2.5.8)
+    nokogiri (1.13.8)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
     nokogiri (1.13.8-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.8-x86_64-linux)
@@ -601,6 +605,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  ruby
   x86_64-linux
 
 DEPENDENCIES
@@ -691,7 +696,7 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 RUBY VERSION
-   ruby 2.7.6p219
+   ruby 2.7.7p221
 
 BUNDLED WITH
    2.3.11

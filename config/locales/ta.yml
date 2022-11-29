@@ -2430,11 +2430,14 @@ ta:
       submissions_reviewed: சமர்ப்பிப்புகள் மதிப்பாய்வு செய்யப்பட்டன
       title: கண்ணோட்டம்
   services:
-    team_up:
-      must_be_on_the_same_level: அணிசேர்வதற்கு மாணவர்கள் ஒரே மட்டத்தில் இருக்க வேண்டும்
     discord:
       community_message_service:
-        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: அணிசேர்வதற்கு மாணவர்கள் ஒரே மட்டத்தில் இருக்க வேண்டும்
   shared:
     _no: "இல்லை"
     _yes: "ஆம்"
@@ -2544,6 +2547,12 @@ ta:
       link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
       title: பயனரைத் திருத்து
     edit:
+      course_discord_requirement_met:
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
+        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+      course_requires_discord_account:
+        heading: Wait a second! You need to link your Discord account first.
+        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
       discord_connect: எங்கள் டிஸ்கார்ட் சமூகத்தில் சேரவும்
       discord_connected_account: டிஸ்கார்ட் சமூகத்திற்குச் செல்லவும்
       discord_connected_message: <li>டிஸ்கார்ட் சர்வரில் உள்ள உங்கள் புனைப்பெயர் இங்கே உங்கள் பெயருடன் ஒத்திசைக்கப்படும்.</li><li>டிஸ்கார்டில் உங்களுக்கு கூடுதல் பொறுப்புகள் ஒதுக்கப்பட்டுள்ளன.</li>
@@ -2568,11 +2577,11 @@ ta:
           invalid_request: உங்கள் உலாவி தவறான கோரிக்கையை வைத்துள்ளது.
     sessions:
       auth_callback:
-        error: "தவறான உள்நுழைவு சான்றுகள்"
-        invalid_session: "உள்நுழையச் சொன்னது நீங்கள்தானா என்பதை எங்களால் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழைய முயற்சிக்கவும்."
-        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly."
-        discord_link_error: "உங்கள் டிஸ்கார்ட் கணக்கை இணைக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சி செய்க."
-        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: உங்கள் டிஸ்கார்ட் கணக்கை இணைக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சி செய்க.
+        error: தவறான உள்நுழைவு சான்றுகள்
+        invalid_session: உள்நுழையச் சொன்னது நீங்கள்தானா என்பதை எங்களால் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழைய முயற்சிக்கவும்.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         image_alt: உங்கள் இன்பாக்ஸில் ஒரு மின்னஞ்சல் பறக்கிறது
         magic_link:

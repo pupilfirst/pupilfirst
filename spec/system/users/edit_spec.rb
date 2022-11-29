@@ -171,7 +171,7 @@ feature 'User Edit', js: true do
     scenario 'user is prompted to connect a Discord account; afterwards is shown link to course' do
       sign_in_user(
         user,
-        referrer: edit_user_path(discord_account_required: course.id)
+        referrer: edit_user_path(course_requiring_discord: course.id)
       )
 
       expect(page).to have_text('You need to link your Discord account first')

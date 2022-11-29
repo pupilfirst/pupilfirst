@@ -11,18 +11,18 @@ class UsersController < ApplicationController
     @user = authorize(current_user)
 
     @course_requiring_discord_account =
-      if params[:discord_account_required].present? &&
+      if params[:course_requiring_discord].present? &&
            !current_user.discord_account_connected?
         course =
-          current_user.courses.find_by(id: params[:discord_account_required])
+          current_user.courses.find_by(id: params[:course_requiring_discord])
 
-        session[:discord_account_required] = course.id if course.present?
+        session[:course_requiring_discord] = course.id if course.present?
         course
-      elsif session.key?(:discord_account_required)
+      elsif session.key?(:course_requiring_discord)
         course =
-          current_user.courses.find_by(id: session[:discord_account_required])
+          current_user.courses.find_by(id: session[:course_requiring_discord])
 
-        session.delete(:discord_account_required)
+        session.delete(:course_requiring_discord)
         course
       end
   end

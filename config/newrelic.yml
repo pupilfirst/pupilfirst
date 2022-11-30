@@ -27,6 +27,11 @@ common:
   # Logging level for log/newrelic_agent.log
   log_level: info
 
+  # Automatic-injection of browser monitoring to be disabled because it must be enabled manually,
+  # injecting nonce via template file. For more details, see https://github.com/newrelic/newrelic-ruby-agent/pull/673
+  browser_monitoring:
+    auto_instrument: false
+
   application_logging:
     # If `true`, all logging-related features for the agent can be enabled or disabled
     # independently. If `false`, all logging-related features are disabled.

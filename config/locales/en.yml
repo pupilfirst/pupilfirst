@@ -7,7 +7,6 @@ en:
       welcome: Welcome to %{school_name}!
   cohorts:
     shared:
-      back_link: < Back
       overview_link: Overview
       students_link: Students
     show:
@@ -1130,6 +1129,8 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
+    LevelProgressBar:
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -2278,7 +2279,6 @@ en:
       heading: Organisations
     show:
       active_students_label: Active Students
-      back_link: < Back
       cohorts_subheading: Cohorts
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
@@ -2289,6 +2289,27 @@ en:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
+    students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
   posts:
     versions:
       back_to_post: Back to Post
@@ -2356,11 +2377,11 @@ en:
       sessions_new:
         button_text:
           continue_as_developer: Continue as Developer
+          continue_with_discord: Continue with Discord
           continue_with_email_link: Continue with email
           continue_with_facebook: Continue with Facebook
           continue_with_github: Continue with Github
           continue_with_google: Continue with Google
-          continue_with_discord: Continue with Discord
         page_title:
           title: Sign In
   queries:
@@ -2413,11 +2434,14 @@ en:
       submissions_reviewed: submissions reviewed
       title: Overview
   services:
-    team_up:
-      must_be_on_the_same_level: Students must belong to the same level for teaming up
     discord:
       community_message_service:
-        post_topic_created: "**%{user_name}** created a new discussion:\n%{topic_url}\n> %{topic_title}"
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:
     _no: "No"
     _yes: "Yes"
@@ -2426,6 +2450,7 @@ en:
     archived: Archived
     are: are
     avatar: Avatar
+    back_link: < Back
     cancel: Cancel
     caption_image: A caption for the image
     close: Close
@@ -2462,6 +2487,7 @@ en:
     no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None
     note: "Note:"
+    notes: Notes
     notifications:
       done: Done!
       done_dot: Done
@@ -2514,7 +2540,10 @@ en:
     view: View
   timeline_events:
     show:
-      submitted_on: Submitted on
+      accepted_on: Reviewed and accepted on %{date}.
+      question_with_number: "Question #%{number}"
+      rejected_on: Reviewed and rejected on %{date}.
+      submitted_on: Submitted on %{date}.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.
@@ -2522,16 +2551,21 @@ en:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
     edit:
-      title: Edit User
+      course_discord_requirement_met:
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
+        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+      course_requires_discord_account:
+        heading: Wait a second! You need to link your Discord account first.
+        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
       discord_connect: Join Our Discord Community
-      discord_title: Join Our Discord Server
-      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
-      discord_how_it_works_title: How it works
-      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
       discord_connected_account: Go to Discord Community
-      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
       discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
-
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
+      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_how_it_works_title: How it works
+      discord_title: Join Our Discord Server
+      title: Edit User
     omniauth_callbacks:
       failure:
         denied: Authentication was denied. Please try again.
@@ -2546,6 +2580,12 @@ en:
           details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
           invalid_request: Your browser made an invalid request.
     sessions:
+      auth_callback:
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: We were unable to link your Discord account. Please try again.
+        error: Invalid login credentials
+        invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:
@@ -2574,12 +2614,6 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
-      auth_callback:
-        error: "Invalid login credentials"
-        invalid_session: "We were unable to verify whether it was you who asked to be signed in. Please try to sign in again."
-        success: "Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly"
-        discord_link_error: "We were unable to link your Discord account. Please try again."
-        discord_already_linked: "Your Discord account is already linked to another account. Please unlink it from that account first."
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

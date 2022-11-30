@@ -14,6 +14,14 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if record.evaluation_criteria.blank?
 
-    record.founders.where(user: user).present?
+    return true if record.founders.exists?(user: user)
+
+    return true if current_school_admin.present?
+
+    organisation = record.founders.first.user.organisation
+
+    return false if organisation.blank?
+
+    user.organisations.exists?(id: record.user.organisation_id)
   end
 end

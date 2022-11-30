@@ -167,9 +167,9 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                         <a
                           ariaLabel={Course.name(course)}
                           href={"/school/courses/" ++ Course.id(course) ++ "/students"}
-                          className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
-                          <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
-                          {str(Course.name(course))}
+                          className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex gap-2 items-center hover:bg-gray-50 hover:text-primary-500">
+                          <Avatar name={Course.name(course)} className="w-5 h-5 shrink-0" />
+                          <span className="inline-block"> {str(Course.name(course))} </span>
                         </a>
                       </li>,
                     Js.Array.filter(course => !Course.ended(course), courses),

@@ -1,0 +1,41 @@
+<div>
+  <section class="bg-gray-50">
+    <div class="max-w-5xl mx-auto p-6">
+      <div class="mt-4">
+        <%= link_to t('shared.back_link'), org_student_path(@presenter.student), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
+      </div>
+      <p class="mt-5 text-gray-600 text-sm"><%= t('.student_name_label') %></p>
+      <h1 class="text-xl md:text-2xl font-bold"><%= @presenter.student.name %></h1>
+      <div class="mt-6 flex items-center gap-12">
+        <div>
+          <h3 class="text-sm text-gray-600"><%= t('.total_reviewed_submissions') %></h3>
+          <p class="text-xl font-bold"><%= @presenter.reviewed_submissions.total_count %></p>
+        </div>
+        <div class="pl-5 border-l border-gray-300">
+          <h3 class="text-sm text-gray-600"><%= t('.accepted_submissions_label') %></h3>
+          <p class="text-xl font-bold"><%= @presenter.reviewed_submissions_passed_count %></p>
+        </div>
+        <div class="pl-5 border-l border-gray-300">
+          <h3 class="text-sm text-gray-600"><%= t('.rejected_submissions_label') %></h3>
+          <p class="text-xl font-bold"><%= @presenter.reviewed_submissions_failed_count %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="bg-white">
+    <div class="max-w-5xl mx-auto p-6">
+      <div class="grid grid-flow-row gap-4 grid-cols-1 xl:grid-cols-2 auto-rows-max">
+        <% @presenter.reviewed_submissions.each do |submission| %>
+          <%= render 'submission', submission: submission %>
+        <% end %>
+      </div>
+      <div class="mt-6 flex items-center justify-center">
+        <%= paginate @presenter.reviewed_submissions %>
+      </div>
+      <% if @presenter.reviewed_submissions.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4">
+          <%= t('.pagination_notice', page_start: kaminari_page_start(@presenter.reviewed_submissions), page_end: kaminari_page_end(@presenter.reviewed_submissions), count: @presenter.reviewed_submissions.total_count) %>
+        </div>
+      <% end %>
+    </section>
+  </div>

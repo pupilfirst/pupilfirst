@@ -601,5 +601,13 @@ feature "Student's view of Course Curriculum", js: true do
 
       expect(page).to have_content(course.name)
     end
+
+    scenario 'inactive student without a connection Discord account should not be redirected' do
+      cohort.update(ends_at: 1.day.ago)
+
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      expect(page).to have_content('The course has ended')
+    end
   end
 end

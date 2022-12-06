@@ -31,8 +31,7 @@ module Cohorts
     def csv_rows
       @csv_rows ||=
         begin
-          text = File.read(csv, { encoding: 'UTF-8' })
-          CSV.parse(text, headers: true).map { |r| r.to_hash }
+          CSV.read(csv, headers: true).map { |r| r.to_hash }
         end
     end
 

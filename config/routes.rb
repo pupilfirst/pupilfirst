@@ -118,7 +118,7 @@ Rails.application.routes.draw do
         post 'attach_images'
       end
 
-      resources :calendar_events, only: %i[new create update destroy], controller: 'calendar_events'
+      resources :calendar_events, only: %i[new create update destroy show], controller: 'calendar_events'
 
       resources :calendars, only: %i[new create update destroy], controller: 'calendars'
 

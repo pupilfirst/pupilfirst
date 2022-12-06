@@ -49,7 +49,7 @@ gem 'rack-attack', '~> 6.6' # A rack middleware for throttling and blocking abus
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
 gem 'discordrb', '~> 3.4' # A Ruby wrapper for the Discord API.
-
+gem 'discorb', '~> 0.20.0' # A Ruby wrapper for the Discord Bot.
 
 # OmniAuth providers
 gem 'omniauth-google-oauth2', '~> 1.1' # Oauth2 strategy for Google.

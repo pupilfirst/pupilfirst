@@ -64,16 +64,10 @@
 
 .bookings-calendar__date-grid-button {
   @apply relative bg-white text-xs;
-  box-shadow: 0 0 0 1px theme(colors.gray.300);
-  height: 5.5ch;
+  /* box-shadow: 0 0 0 1px theme(colors.gray.300); */
+  height: 6ch;
 }
 
-@screen 2xl {
-  .bookings-calendar__date-grid-button {
-    @apply text-sm;
-    height: 7ch;
-  }
-}
 
 .bookings-calendar__date-grid-button:hover,
 .bookings-calendar__date-grid-button:focus {

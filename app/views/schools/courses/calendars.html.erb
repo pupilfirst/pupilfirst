@@ -3,16 +3,16 @@
 <% end %>
 
 <div id="schoolrouter-innerpage-data">
-  <div class="max-w-5xl mx-auto px-4 mt-8">
+  <div class="max-w-7xl mx-auto px-4 mt-8">
     <div class="flex items-center justify-between gap-2">
       <h1 class="text-xl font-semibold"> Calendar </h1>
       <a href="#" class="text-primary-500 font-medium text-sm hover:underline">
         See all upcoming events
       </a>
     </div>
-    <div  class="grid grid-cols-12 bg-white shadow rounded-md max-w-5xl mx-auto">
-      <div class="col-span-4 bg-gray-50 p-6 border-r border-gray-200 max-w-xs">
-        <div id="course-calendar-picker" class="h-64 w-64 bg-green-50" >
+    <div  class="grid grid-cols-12 bg-white shadow rounded-md mx-auto">
+      <div class="col-span-4 bg-gray-50 p-6 border-r border-gray-200">
+        <div id="course-calendar-picker" class="bg-green-50" >
           <div data-re-component="CalendarsIndex__DatePicker" data-re-json=<%={id: "10"}.to_json%>></div>
         </div>
         <div class="mt-4 flex items-center justify-between gap-2 p-1">
@@ -25,7 +25,7 @@
           </a>
         </div>
       </div>
-      <div class="p-6 bg-white flex-1 col-span-8">
+      <div class="col-span-8 p-6 bg-white flex-1">
         <div class="flex items-center justify-between gap-2">
           <p class="text-base font-medium"> Events </p>
           <p class="text-gray-600"> 11-November-2022 </p>

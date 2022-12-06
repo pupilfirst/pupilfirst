@@ -131,7 +131,7 @@ let make = (~test) => {
   let selectedMonth = computeSelectedMonth(state)
   let selectedDate = Js.Date.make()
 
-  <div className="lg:w-4/12 sticky top-0 bg-white border-r z-50 p-2 lg:p-0">
+  <div className="sticky top-0 bg-white border-r z-50 p-2 lg:p-0">
     <section className="px-2 py-2 lg:py-4">
       <div className="bookings-calendar__container 2xl:px-3">
         <div className="flex justify-between lg:pt-4">

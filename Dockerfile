@@ -1,5 +1,5 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:2.7.7
+FROM ruby:3.0.5
 WORKDIR /build
 
 # Begin by installing gems.

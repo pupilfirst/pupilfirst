@@ -696,7 +696,7 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 RUBY VERSION
-   ruby 2.7.7p221
+   ruby 3.0.5p211
 
 BUNDLED WITH
    2.3.11

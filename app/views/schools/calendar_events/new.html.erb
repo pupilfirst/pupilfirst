@@ -1,0 +1,23 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | <%= t(".title") %> </title>
+<% end %>
+
+<div id="schoolrouter-innerpage-data">
+  <div class="max-w-5xl mx-auto px-4 mt-8">
+    <div class="flex items-center justify-between gap-2">
+      <h1 class="text-xl font-semibold"> Calendar </h1>
+      <a href="#" class="text-primary-500 font-medium text-sm hover:underline">
+        New Event Form
+      </a>
+    </div>
+  </div>
+</div>
+
+<% content_for(:tail) do %>
+  <%= javascript_tag(nonce: true) do %>
+     window.onload = function() {
+       document.getElementById("schoolrouter-innerpage").innerHTML = document.getElementById("schoolrouter-innerpage-data").innerHTML;
+       document.getElementById("schoolrouter-innerpage-data").remove();
+    }
+  <% end %>
+<% end %>

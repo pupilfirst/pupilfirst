@@ -11,7 +11,7 @@ task discord_bot: [:environment] do
   school_id = ENV['SCHOOL_ID_FOR_DISCORD_BOT']
   school = School.find_by(id: school_id)
 
-  return unless school.present?
+  return if school.blank?
 
   discord_configuration = Schools::Configuration::Discord.new(school)
 
@@ -30,15 +30,14 @@ task discord_bot: [:environment] do
     client.on :message do |message|
       # We only want to listen to default messages type in the current implementation
       # This ensures that we don't log thread creation messages
-      next unless message.type == :default
+      next if message.type != :default
 
-      # The messages should belong to the configured server
+      # The messages should belong to the school's server
       next unless message.guild.id == discord_configuration.server_id
 
-      # The urser should be a member of the school
+      # The author of the message should be a user in the school
       user = User.find_by(discord_user_id: message.author.id)
-
-      next unless user.present?
+      next if user.blank?
 
       # A catch in channles is that threads are also channels inside a channel, the channel uuid
       # for a message in a thread is the channel id of the thread, not the channel id of the parent channel

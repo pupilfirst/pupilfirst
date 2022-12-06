@@ -18,6 +18,8 @@ let isPast: Js.Date.t => bool
 
 let isFuture: Js.Date.t => bool
 
+let getDaysInMonth: Js.Date.t => float
+
 @ocaml.doc("
  * `format(date, fmt)` returns the date as a string in the desired format, and in the user's timezone.
  *

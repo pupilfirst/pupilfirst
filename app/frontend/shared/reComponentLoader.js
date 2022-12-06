@@ -5,6 +5,7 @@ import { makeFromJson as Avatar } from "~/shared/Avatar.bs.js";
 import { makeFromJson as LevelProgressBar } from "~/shared/components/LevelProgressBar.bs.js";
 import { makeFromJson as SimpleDropdownFilter } from "~/shared/components/SimpleDropdownFilter.bs.js";
 import { makeFromJson as StudentDistribution } from "~/courses/students/components/CoursesStudents__StudentDistribution.bs.js";
+import { makeFromJson as CalendarsIndex__DatePicker } from "~/admin/courses/calendars_index/CalendarsIndex__DatePicker.bs.js";
 
 const selectComponent = (name) => {
   switch (name) {
@@ -16,6 +17,8 @@ const selectComponent = (name) => {
       return SimpleDropdownFilter;
     case "StudentDistribution":
       return StudentDistribution;
+    case "CalendarsIndex__DatePicker":
+      return CalendarsIndex__DatePicker;
     default:
       throw new Error(`Unknown component name: ${name}`);
   }

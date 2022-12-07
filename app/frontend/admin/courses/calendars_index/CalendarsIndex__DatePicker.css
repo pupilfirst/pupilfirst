@@ -1,18 +1,18 @@
-.bookings-calendar__month-indicator {
+.courses-calendar__month-indicator {
   @apply text-center font-semibold;
 }
 
-.bookings-calendar__day-of-week,
-.bookings-calendar__date-grid {
+.courses-calendar__day-of-week,
+.courses-calendar__date-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 }
 
-.bookings-calendar__day-of-week {
+.courses-calendar__day-of-week {
   margin-top: 1.25em;
 }
 
-.bookings-calendar__day-of-week > * {
+.courses-calendar__day-of-week > * {
   @apply text-xs font-semibold;
   letter-spacing: 0.1em;
   text-align: center;
@@ -20,65 +20,65 @@
 
 /* Dates */
 
-.bookings-calendar__date-grid {
+.courses-calendar__date-grid {
   margin-top: 0.5em;
   grid-gap: 1px;
 }
 
 /* Positioning the first day */
 
-.bookings-calendar__date-grid--start-on-sun
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-sun
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 1;
 }
 
-.bookings-calendar__date-grid--start-on-mon
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-mon
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 2;
 }
 
-.bookings-calendar__date-grid--start-on-tue
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-tue
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 3;
 }
 
-.bookings-calendar__date-grid--start-on-wed
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-wed
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 4;
 }
 
-.bookings-calendar__date-grid--start-on-thu
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-thu
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 5;
 }
 
-.bookings-calendar__date-grid--start-on-fri
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-fri
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 6;
 }
 
-.bookings-calendar__date-grid--start-on-sat
-  .bookings-calendar__date-grid-button:first-child {
+.courses-calendar__date-grid--start-on-sat
+  .courses-calendar__date-grid-button:first-child {
   grid-column: 7;
 }
 
-.bookings-calendar__date-grid-button {
+.courses-calendar__date-grid-button {
   @apply relative bg-white text-xs;
   /* box-shadow: 0 0 0 1px theme(colors.gray.300); */
   height: 6ch;
 }
 
 
-.bookings-calendar__date-grid-button:hover,
-.bookings-calendar__date-grid-button:focus {
+.courses-calendar__date-grid-button:hover,
+.courses-calendar__date-grid-button:focus {
   @apply bg-gray-200 outline-none;
 }
 
-.bookings-calendar__date-grid-button:active {
+.courses-calendar__date-grid-button:active {
   @apply bg-gray-300 text-primary-600;
 }
 
-.bookings-calendar__date-grid-button--is-selected {
+.courses-calendar__date-grid-button--is-selected {
   @apply text-white border-0 border-primary-400;
   background-image: linear-gradient(
     135deg,
@@ -87,24 +87,24 @@
   );
 }
 
-.bookings-calendar__booking-status-container {
+.courses-calendar__booking-status-container {
   @apply flex justify-center mt-1;
 }
 
-.bookings-calendar__booking-status {
+.courses-calendar__booking-status {
   @apply bg-gray-200 rounded-full;
   width: 6px;
   height: 6px;
 }
 
-.bookings-calendar__booking-status--booked {
+.courses-calendar__booking-status--booked {
   @apply bg-red-500;
 }
 
-.bookings-calendar__booking-status--available {
+.courses-calendar__booking-status--available {
   @apply bg-green-500;
 }
 
-.bookings-calendar__booking-status--unconfirmed {
+.courses-calendar__booking-status--unconfirmed {
   @apply bg-yellow-500;
 }

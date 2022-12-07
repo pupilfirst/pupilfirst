@@ -81,10 +81,8 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
     <button
       key=dayAsString
       onClick={_ => Js.log("mahesh")}
-      className={"bookings-calendar__date-grid-button " ++ (
-        selectedDateAsString == dayAsString
-          ? "bookings-calendar__date-grid-button--is-selected"
-          : ""
+      className={"courses-calendar__date-grid-button " ++ (
+        selectedDateAsString == dayAsString ? "courses-calendar__date-grid-button--is-selected" : ""
       )}>
       <time dateTime=dayAsString> {day |> string_of_int |> str} </time>
       {
@@ -94,20 +92,20 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
 
         selectedDateAsString == dayAsString
           ? React.null
-          : <div className="bookings-calendar__booking-status-container space-x-1">
+          : <div className="courses-calendar__booking-status-container space-x-1">
               {available
                 ? <span
-                    className="bookings-calendar__booking-status bookings-calendar__booking-status--available"
+                    className="courses-calendar__booking-status courses-calendar__booking-status--available"
                   />
                 : React.null}
               {confirmed
                 ? <span
-                    className="bookings-calendar__booking-status bookings-calendar__booking-status--booked"
+                    className="courses-calendar__booking-status courses-calendar__booking-status--booked"
                   />
                 : React.null}
               {unconfirmed
                 ? <span
-                    className="bookings-calendar__booking-status bookings-calendar__booking-status--unconfirmed"
+                    className="courses-calendar__booking-status courses-calendar__booking-status--unconfirmed"
                   />
                 : React.null}
             </div>
@@ -133,9 +131,9 @@ let make = (~test) => {
 
   <div className="sticky top-0 bg-white border-r z-50 p-2 lg:p-0">
     <section className="px-2 py-2 lg:py-4">
-      <div className="bookings-calendar__container 2xl:px-3">
+      <div className="courses-calendar__container 2xl:px-3">
         <div className="flex justify-between lg:pt-4">
-          <div className="bookings-calendar__month-indicator flex items-center">
+          <div className="courses-calendar__month-indicator flex items-center">
             <span
               className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-300 text-gray-600 rounded-full hover:bg-gray-400 hover:text-gray-900">
               <i className="fas fa-chevron-left" />
@@ -152,7 +150,7 @@ let make = (~test) => {
             <span> {"Today" |> str} </span>
           </button>
         </div>
-        <div className="bookings-calendar__day-of-week">
+        <div className="courses-calendar__day-of-week">
           <div> {"Su" |> str} </div>
           <div> {"Mo" |> str} </div>
           <div> {"Tu" |> str} </div>
@@ -166,7 +164,7 @@ let make = (~test) => {
           | Loading => SkeletonLoading.paragraph()
           | Loaded(statuses) =>
             <div
-              className={"bookings-calendar__date-grid bookings-calendar__date-grid--start-on-" ++
+              className={"courses-calendar__date-grid courses-calendar__date-grid--start-on-" ++
               startOnDayClass(selectedMonth)}>
               {daysOfMonth(selectedMonth, selectedDate, statuses)}
             </div>

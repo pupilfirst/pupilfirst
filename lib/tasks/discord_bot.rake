@@ -28,6 +28,9 @@ task discord_bot: [:environment] do
     end
 
     client.on :message do |message|
+      # Log the event type
+      puts "Event #{message.type} received"
+
       # We only want to listen to default messages type in the current implementation
       # This ensures that we don't log thread creation messages
       next if message.type != :default
@@ -51,6 +54,8 @@ task discord_bot: [:environment] do
           timestamp: message.timestamp,
           user: user
         )
+
+      puts "Message #{message.id} received from #{message.author.id} in channel #{message.channel.id}"
     end
 
     client.run("Bot #{discord_configuration.bot_token}")

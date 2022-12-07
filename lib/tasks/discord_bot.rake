@@ -29,14 +29,15 @@ task discord_bot: [:environment] do
 
     client.on :message do |message|
       # Log the event type
-      puts "Event #{message.type} received"
+
+      puts "Event #{message.type} received with ID #{message.id}"
 
       # We only want to listen to default messages type in the current implementation
       # This ensures that we don't log thread creation messages
       next if message.type != :default
 
-      # The messages should belong to the school's server
-      next unless message.guild.id == discord_configuration.server_id
+      # The messages should belong to the school's server & we should ignore messages sent as dm to the bot
+      next unless message.guild&.id == discord_configuration.server_id
 
       # The author of the message should be a user in the school
       user = User.find_by(discord_user_id: message.author.id)
@@ -55,7 +56,7 @@ task discord_bot: [:environment] do
           user: user
         )
 
-      puts "Message #{message.id} received from #{message.author.id} in channel #{message.channel.id}"
+      puts "Event #{message.type} received with ID #{message.id} from author #{message.author.id} in channel #{message.channel.id}"
     end
 
     client.run("Bot #{discord_configuration.bot_token}")

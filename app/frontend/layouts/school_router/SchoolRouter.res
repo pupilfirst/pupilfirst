@@ -86,7 +86,7 @@ let make = (~school, ~courses, ~currentUser) => {
         | list{"inactive_students"} => (Students, None)
         | list{"coaches"} => (CourseCoaches, None)
         | list{"curriculum"} => (Curriculum, None)
-        | list{"calendars"} => (Calendars, None)
+        | list{"calendars", ..._tail} => (Calendars, None)
         | list{"calendar_events", ..._tail} => (Calendars, None)
         | list{"targets", _targetId, "content" | "versions" | "details"} => (Curriculum, None)
         | list{"exports"} => (CourseExports, None)

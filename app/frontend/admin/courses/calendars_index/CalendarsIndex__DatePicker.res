@@ -47,12 +47,12 @@ let reducer = (state, action) => {
   switch action {
   | ChangeToNextMonth => {
       ...state,
-      dayEventsLoadStatus: Loading,
+      dayEventsLoadStatus: Loaded([]),
       selectedMonthDeviation: state.selectedMonthDeviation + 1,
     }
   | ChangeToPreviousMonth => {
       ...state,
-      dayEventsLoadStatus: Loading,
+      dayEventsLoadStatus: Loaded([]),
       selectedMonthDeviation: state.selectedMonthDeviation - 1,
     }
   | ChangeDate(selectedDate) => {...state, selectedDate: selectedDate}
@@ -69,18 +69,18 @@ let reducer = (state, action) => {
   }
 }
 
-let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
+let daysOfMonth = (selectedMonth, selectedDate, dayStatuses, send) => {
   let daysInMonth = selectedMonth |> DateFns.getDaysInMonth |> int_of_float
   let daysAsArray = Array.make(daysInMonth, 1) |> Js.Array.mapi((day, index) => day + index)
-  let currentMonthAsString = selectedMonth->DateFns.format("yyyy-mm-")
-  let selectedDateAsString = selectedDate->DateFns.format("yyyy-mm-dd")
+  let currentMonthAsString = selectedMonth->DateFns.format("yyyy-MM-")
+  let selectedDateAsString = selectedDate->DateFns.format("yyyy-MM-dd")
   daysAsArray
   |> Js.Array.map(day => {
     let dayAsString =
       currentMonthAsString ++ (day < 10 ? "0" ++ string_of_int(day) : string_of_int(day))
     <button
       key=dayAsString
-      onClick={_ => Js.log("mahesh")}
+      onClick={_ => send(ChangeDate(DateFns.parseISO(dayAsString)))}
       className={"courses-calendar__date-grid-button " ++ (
         selectedDateAsString == dayAsString ? "courses-calendar__date-grid-button--is-selected" : ""
       )}>
@@ -127,7 +127,6 @@ let make = (~test) => {
   )
 
   let selectedMonth = computeSelectedMonth(state)
-  let selectedDate = Js.Date.make()
 
   <div className="sticky top-0 z-50 p-2 lg:p-0">
     <section>
@@ -135,30 +134,32 @@ let make = (~test) => {
         <div className="flex justify-between">
           <div className="courses-calendar__month-indicator flex items-center">
             <button
+              onClick={_ => send(ChangeToPreviousMonth)}
               className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-full hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
               <i className="fas fa-chevron-left" />
             </button>
             <time className="px-2 md:px-4 text-sm xl:text-base" dateTime="2020-06">
-              {selectedMonth->DateFns.format("mmm yyyy") |> str}
+              {selectedMonth->DateFns.format("MMM yyyy")->str}
             </time>
             <button
+              onClick={_ => send(ChangeToNextMonth)}
               className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-full hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
               <i className="fas fa-chevron-right" />
             </button>
           </div>
           <button
             className="px-2 py-1 text-sm bg-gray-100 rounded hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
-            <span> {"Today" |> str} </span>
+            <span> {"Today"->str} </span>
           </button>
         </div>
         <div className="courses-calendar__day-of-week">
-          <div> {"Su" |> str} </div>
-          <div> {"Mo" |> str} </div>
-          <div> {"Tu" |> str} </div>
-          <div> {"We" |> str} </div>
-          <div> {"Th" |> str} </div>
-          <div> {"Fr" |> str} </div>
-          <div> {"Sa" |> str} </div>
+          <div> {"Su"->str} </div>
+          <div> {"Mo"->str} </div>
+          <div> {"Tu"->str} </div>
+          <div> {"We"->str} </div>
+          <div> {"Th"->str} </div>
+          <div> {"Fr"->str} </div>
+          <div> {"Sa"->str} </div>
         </div>
         <div>
           {switch state.dayEventsLoadStatus {
@@ -167,7 +168,7 @@ let make = (~test) => {
             <div
               className={"courses-calendar__date-grid courses-calendar__date-grid--start-on-" ++
               startOnDayClass(selectedMonth)}>
-              {daysOfMonth(selectedMonth, selectedDate, statuses)}
+              {daysOfMonth(selectedMonth, state.selectedDate, statuses, send)}
             </div>
           }}
         </div>

@@ -24,9 +24,20 @@ const selectComponent = (name) => {
   }
 };
 
-document.querySelectorAll("[data-re-component]").forEach(function (el) {
-  const component = selectComponent(el.dataset.reComponent);
-  const props = JSON.parse(el.dataset.reJson);
+window.onload = function () {
+  const schoolRouterInnerPageData = document.getElementById(
+    "schoolrouter-innerpage-data"
+  );
+  if (schoolRouterInnerPageData) {
+    document.getElementById("schoolrouter-innerpage").innerHTML =
+      schoolRouterInnerPageData.innerHTML;
+    schoolRouterInnerPageData.remove();
+  }
 
-  ReactDom.render(React.createElement(component, props), el);
-});
+  document.querySelectorAll("[data-re-component]").forEach(function (el) {
+    const component = selectComponent(el.dataset.reComponent);
+    const props = JSON.parse(el.dataset.reJson);
+
+    ReactDom.render(React.createElement(component, props), el);
+  });
+};

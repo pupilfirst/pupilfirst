@@ -63,11 +63,10 @@
 }
 
 .courses-calendar__date-grid-button {
-  @apply relative bg-white text-xs;
+  @apply relative text-xs rounded-md;
   /* box-shadow: 0 0 0 1px theme(colors.gray.300); */
   height: 6ch;
 }
-
 
 .courses-calendar__date-grid-button:hover,
 .courses-calendar__date-grid-button:focus {
@@ -79,12 +78,7 @@
 }
 
 .courses-calendar__date-grid-button--is-selected {
-  @apply text-white border-0 border-primary-400;
-  background-image: linear-gradient(
-    135deg,
-    rgba(240, 89, 37, 1) 0%,
-    rgba(199, 34, 77, 1) 100%
-  );
+  @apply text-white bg-primary-500;
 }
 
 .courses-calendar__booking-status-container {

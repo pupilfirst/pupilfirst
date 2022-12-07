@@ -38,7 +38,7 @@ let noEventToday = () => {
 
 @react.component
 let make = (~courseId) => {
-  <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
+  <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-5 mt-8">
     <div className="flex items-center justify-between gap-2">
       <h1 className="text-xl font-semibold"> {"Calendar"->str} </h1>
       <Link href="#" className="text-primary-500 font-medium text-sm hover:underline">

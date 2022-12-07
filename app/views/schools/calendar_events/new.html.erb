@@ -1,16 +1,84 @@
 <% content_for(:head) do %>
   <title><%= @course.name %> | <%= t(".title") %> </title>
 <% end %>
-
 <div id="schoolrouter-innerpage-data">
-  <div class="max-w-5xl mx-auto px-4 mt-8">
-    <div class="flex items-center justify-between gap-2">
-      <h1 class="text-xl font-semibold"> Calendar </h1>
-      <a href="#" class="text-primary-500 font-medium text-sm hover:underline">
-        New Event Form
-      </a>
+  <section class="bg-gray-50">
+    <div class="max-w-5xl mx-auto p-6">
+      <div class="mt-4">
+        <%= link_to t('shared.back_link'), "#", class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
+      </div>
+      <h1 class="text-xl md:text-3xl font-bold mt-4">
+        Add an event
+      </h1>
+      <p class="text-sm font-medium text-gray-500">[[course name]]</p>
     </div>
-  </div>
+  </section>
+  <section class="bg-white" >
+    <form class="max-w-5xl mx-auto p-6">
+      <label>
+        <span class="text-sm font-medium">Event Title</span>
+        <input type="text" required autofocus placeholder="Name of an event" class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+      </label>
+      <div class="flex gap-5 items-center">
+        <label class="mt-5 block flex-1">
+          <span class="text-sm font-medium">Add event to</span>
+          <div class="border border-gray-400 mt-2 rounded-md">
+            <select name="Calnedars" required class="text-sm block w-full border-r-8 border-transparent outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+              <option value="main">[[Main]]</option>
+              <option value="calendar-1">[[Calendar 2]]</option>
+            </select>
+          </div>
+        </label>
+
+        <%# Replace this with a dropdown rescript component %>
+        <label class="mt-5 block">
+          <span class="text-sm font-medium">Color</span>  <i class="fa fa-question-circle cursor-help" aria-hidden="true" title="Colors help you to differntiate different types of events at glance"></i>
+          <div class="border border-gray-400 mt-2 rounded-md">
+            <select name="colors" required class="text-sm block w-full border-r-8 border-transparent outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+              <option value="red">Red</option>
+              <option value="blue">Blue</option>
+            </select>
+          </div>
+        </label>
+      </div>
+      <div class="flex gap-5 items-center">
+        <label class="mt-5 block">
+          <span class="text-sm font-medium">Date</span>
+          <input type="date" required class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" >
+        </label>
+        <label class="mt-5 block">
+          <span class="text-sm font-medium">Time</span>
+          <input type="time" required class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" >
+        </label>
+      </div>
+      <div class="pt-8 mt-8 border-t border-gray-200">
+        <label class="flex gap-3">
+          <input type="checkbox" checked required class="mt-2 w-4 h-4 text-sm block border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" >
+          <div>
+            <p class="text-sm font-semibold">Add an event link</p>
+            <p class="text-sm text-gray-500">Add a link to your event. The link can be GMeet, zoom or any other link </p>
+          </div>
+        </label>
+        <div class="flex gap-5 items-center mt-5">
+          <label class="block flex-1">
+            <span class="text-sm font-medium">Event link title</span>
+            <input type="text" required placeholder="eg. Zooom meeting link" class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+          </label>
+          <label class="block flex-1">
+            <span class="text-sm font-medium">Event link URL</span>
+            <input type="url" required pattern="https://.*"  placeholder="https://www.example.com" class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+          </label>
+        </div>
+      </div>
+      <div class="pt-8 mt-8 border-t border-gray-200">
+        <label class="block flex-1">
+          <span class="text-sm font-medium">Description <span class="font-light">(optional)</span></span>
+          <p class="p-8 bg-gray-200 w-full text-center">Replace me with markdown editor</p>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary w-full mt-5">Add event</button>
+    </form>
+  </section>
 </div>
 
 <% content_for(:tail) do %>

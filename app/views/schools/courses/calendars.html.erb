@@ -3,26 +3,33 @@
 <% end %>
 
 <div id="schoolrouter-innerpage-data">
-  <div class="max-w-7xl mx-auto px-4 mt-8">
+  <div class="max-w-6xl mx-auto px-5 mt-8">
     <div class="flex items-center justify-between gap-2">
       <h1 class="text-xl font-semibold"> Calendar </h1>
       <a href="#" class="text-primary-500 font-medium text-sm hover:underline">
         See all upcoming events
       </a>
     </div>
-    <div  class="grid grid-cols-12 bg-white shadow rounded-md mx-auto">
-      <div class="col-span-4 bg-gray-50 p-6 border-r border-gray-200">
-        <div id="course-calendar-picker" class="bg-green-50" >
+    <div  class="mt-6 grid grid-cols-12 bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
+      <div class="col-span-4 p-6 border-r border-gray-200">
+        <div id="course-calendar-picker" class="pb-4" >
           <div data-re-component="CalendarsIndex__DatePicker" data-re-json=<%={id: "10"}.to_json%>></div>
         </div>
-        <div class="mt-4 flex items-center justify-between gap-2 p-1">
-          <p class="text-base font-medium "> Calendars </p>
+        <div class="pt-2 border-t border-gray-200 flex items-center justify-between gap-2 p-1">
+          <p class="text-base font-medium ">Calendars</p>
           <a
             class="p-2 rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500"
             ariaLabel="Add new calendar"
+            title="Add new calendar"
             href="/school/courses/${courseId}/calendars/new">
             <i class="if i-plus-regular if-fw" ></i>
           </a>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" checked/>
+            Calendar 1
+          </label>
         </div>
       </div>
       <div class="col-span-8 p-6 bg-white flex-1">

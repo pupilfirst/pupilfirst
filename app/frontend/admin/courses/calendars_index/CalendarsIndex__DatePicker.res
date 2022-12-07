@@ -129,24 +129,25 @@ let make = (~test) => {
   let selectedMonth = computeSelectedMonth(state)
   let selectedDate = Js.Date.make()
 
-  <div className="sticky top-0 bg-white border-r z-50 p-2 lg:p-0">
-    <section className="px-2 py-2 lg:py-4">
+  <div className="sticky top-0 z-50 p-2 lg:p-0">
+    <section>
       <div className="courses-calendar__container 2xl:px-3">
-        <div className="flex justify-between lg:pt-4">
+        <div className="flex justify-between">
           <div className="courses-calendar__month-indicator flex items-center">
-            <span
-              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-300 text-gray-600 rounded-full hover:bg-gray-400 hover:text-gray-900">
+            <button
+              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-full hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
               <i className="fas fa-chevron-left" />
-            </span>
+            </button>
             <time className="px-2 md:px-4 text-sm xl:text-base" dateTime="2020-06">
               {selectedMonth->DateFns.format("mmm yyyy") |> str}
             </time>
-            <span
-              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-300 text-gray-600 rounded-full hover:bg-gray-400 hover:text-gray-900">
+            <button
+              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-full hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
               <i className="fas fa-chevron-right" />
-            </span>
+            </button>
           </div>
-          <button className="px-2 py-1 text-sm bg-gray-200 rounded">
+          <button
+            className="px-2 py-1 text-sm bg-gray-100 rounded hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
             <span> {"Today" |> str} </span>
           </button>
         </div>

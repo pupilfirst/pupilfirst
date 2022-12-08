@@ -8,6 +8,7 @@ after 'development:calendars' do
       calendar.calendar_events.create!(
         title: Faker::Lorem.words(number: 3).join(' '),
         description: Faker::Lorem.words(number: 5).join(' '),
+        color: %w[blue green yellow].sample,
         start_time:
           Faker::Time.between(
             from: DateTime.now + 1.day,

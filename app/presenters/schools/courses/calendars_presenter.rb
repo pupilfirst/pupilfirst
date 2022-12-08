@@ -8,14 +8,12 @@ module Schools
         super(view_context)
       end
 
-      def props
-        { events: tag_details, upcoming_events: course_details }
+      def events_for_day
+        @course.calendar_events.where(start_time: (@date).all_day)
       end
 
-      private
-
-      def events
-        @course.calendar_events.where(start_time: @date.all_day)
+      def selected_date
+        @date.strftime('%d-%B-%Y')
       end
 
       def upcoming_events

@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       member do
         get 'applicants'
         get 'calendars'
+        get 'calendar_events'
         get 'curriculum'
         get 'exports'
         get 'authors'

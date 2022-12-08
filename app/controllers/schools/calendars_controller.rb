@@ -8,5 +8,11 @@ module Schools
       @calendar = Calendar.new
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
     end
+
+    def create
+      @course = current_school.courses.find(params[:course_id])
+
+      authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
+    end
   end
 end

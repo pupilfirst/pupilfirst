@@ -40,7 +40,9 @@ task discord_bot: [:environment] do
       next unless message.guild&.id == discord_configuration.server_id
 
       # The author of the message should be a user in the school
-      user = User.find_by(discord_user_id: message.author.id)
+      user =
+        User.find_by(discord_user_id: message.author.id, school_id: school_id)
+
       next if user.blank?
 
       # A catch in channles is that threads are also channels inside a channel, the channel uuid

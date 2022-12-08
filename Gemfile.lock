@@ -260,6 +260,8 @@ GEM
       railties
       sprockets-rails
     graphql (2.0.14)
+    groupdate (6.1.0)
+      activesupport (>= 5.2)
     hashdiff (1.0.1)
     hashie (5.0.0)
     hkdf (0.3.0)
@@ -642,6 +644,7 @@ DEPENDENCIES
   gaffe (~> 1.2)
   graphiql-rails (~> 1.8)
   graphql (~> 2.0)
+  groupdate (~> 6.1.0)
   humanize (~> 2.5)
   i18n-js (~> 4.0)
   image_processing (~> 1.12)
@@ -699,4 +702,4 @@ RUBY VERSION
    ruby 2.7.7p221
 
 BUNDLED WITH
-   2.3.11
+   2.3.26

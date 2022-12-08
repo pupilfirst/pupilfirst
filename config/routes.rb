@@ -117,6 +117,7 @@ Rails.application.routes.draw do
         post 'certificates', action: 'create_certificate'
         get 'evaluation_criteria'
         post 'attach_images'
+        get 'monthly_calendar_events', controller: 'calendar_events', action: 'month_data'
       end
 
       resources :calendar_events, only: %i[new create update destroy show], controller: 'calendar_events'

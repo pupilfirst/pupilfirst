@@ -45,25 +45,36 @@
         </div>
         <div class="flex flex-col gap-4 mt-6">
           <div>
-            <p class="font-semibold text-sm">21-November-2022 <span aria-hidden="true"> - </span> <em class="font-normal">Today</em></p>
-            <div class="mt-3 flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg">
-              <p><i class="if i-calendar-solid if-fw text-3xl"></i></p>
-              <p class="text-sm font-semibold mt-4">No event scheduled for today</p>
-              <p class="text-gray-600 text-sm w-3/4">Events help you to mark the calendar. blah blah blah. <a href="#" class="text-primary-500 font-medium hover:underline">Learn more about events</a></p>
-            </div>
-          </div>
-          <div class="p-4 pb-6 bg-gradient-to-b from-primary-100 to-white flex items-center justify-between bg-gray-100 rounded-t-lg">
-            <p class="font-semibold text-sm">Other events in November</p>
-            <p><i class="if i-arrow-down-regular if-fw"></i></p>
+            <p class="font-semibold text-sm"><%=@presenter.selected_date%>
+              <% if @presenter.today? %>
+                <span aria-hidden="true"></span>- </span> <em class="font-normal">Today</em>
+              <% end %>
+            </p>
+            <% if @presenter.events_for_day.blank? %>
+              <div class="mt-3 flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg">
+                <p><i class="if i-calendar-solid if-fw text-3xl"></i></p>
+                <p class="text-sm font-semibold mt-4">No event scheduled for the selected date</p>
+                <%# <p class="text-gray-600 text-sm w-3/4">Events help you to mark the calendar. blah blah blah. <a href="#" class="text-primary-500 font-medium hover:underline">Learn more about events</a></p> %>
+              </div>
+            <% end %>
           </div>
           <div>
-            <p class="font-semibold text-sm">22-November-2022</p>
             <div class="mt-3 flex flex-col gap-4">
               <% @presenter.events_for_day.each do |event|%>
                 <%= render partial: "event_card", locals: {event: event} %>
               <% end %>
             </div>
           </div>
+          <% if @presenter.upcoming_events_for_month.present? %>
+            <div class="p-4 pb-6 bg-gradient-to-b from-primary-100 to-white flex items-center justify-between bg-gray-100 rounded-t-lg">
+              <p class="font-semibold text-sm">Other events in <%= @presenter.selected_month %></p>
+              <p><i class="if i-arrow-down-regular if-fw"></i></p>
+            </div>
+            <div class="mt-3 flex flex-col gap-4">
+              <% @presenter.upcoming_events_for_month.each do |event|%>
+                <%= render partial: "event_card", locals: {event: event} %>
+              <% end %>
+          <% end %>
         </div>
       </div>
     </div>

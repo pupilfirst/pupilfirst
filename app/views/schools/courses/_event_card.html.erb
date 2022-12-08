@@ -1,30 +1,27 @@
   <div>
-    <a href="" class="block px-4 py-4 bg-blue-50 rounded-md hover:bg-blue-100">
+    <a href=<%=school_course_calendar_event_path(@course,event)%> class="<%= "block px-4 py-4 rounded-md " + "bg-#{event.color}-50 hover:bg-#{event.color}-100"%>">
       <div class="flex justify-between border-b border-gray-200">
         <div class="flex gap-3 items-center">
-          <div class="w-3 h-3 bg-blue-500 rounded" ></div>
+          <div class=<%="w-3 h-3 rounded " + "bg-#{event.color}-500"%>></div>
           <div>
-            <p class="font-semibold text-base"> Awesome Event </p>
+            <p class="font-semibold text-base"> <%= event.title %> </p>
             <p class="font-medium">
-              24-11-2022 • 11:20PM
+              <%= event.display_time %>
             </p>
           </div>
         </div>
-        <p class="text-gray-600"> Main Calendar </p>
+        <p class="text-gray-600"> <%= event.calendar.name %> </p>
       </div>
     </a>
-      <a
-        href="#"
+    <a
+        href=<%= event.link_url %>
         target="_blank"
         class="text-primary-500 font-medium hover:underline focus:underline">
-        <div class="py-4 flex gap-2 items-center">
+        <div class="<%="py-4 flex gap-2 items-center " + "bg-#{event.color}-50" %>">
           <i class="if i-external-link-regular if-fw"></i>
           <p>
-            "Event Title"
+            <%= event.link_title %>
           </p>
         </div>
       </a>
-      <div class="py-4 border-t border-gray-200">
-        <p> This is an event you must participate </p>
-      </div>
   </div>

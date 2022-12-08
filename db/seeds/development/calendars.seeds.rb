@@ -5,7 +5,7 @@ after 'development:courses', 'development:cohorts' do
 
   Course.all.each do |course|
     course.calendars.create!(
-      name: Faker::Lorem.name,
+      name: 'Master Calendar',
       description: Faker::Lorem.words(number: 3).join(' ')
     )
   end

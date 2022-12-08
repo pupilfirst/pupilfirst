@@ -10,4 +10,17 @@ class CalendarEvent < ApplicationRecord
 
     errors.add(:ends_at, 'must be after starts_at') if ends_at <= starts_at
   end
+
+  enum color: {
+         yellow: 'yellow',
+         blue: 'blue',
+         green: 'green',
+         red: 'red',
+         orange: 'orange'
+       },
+       _prefix: :color
+
+  def display_time
+    start_time.strftime('%-d %b %Y, %H:%M')
+  end
 end

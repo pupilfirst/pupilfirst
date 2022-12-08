@@ -116,11 +116,14 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses, send) => {
 }
 
 @react.component
-let make = (~test) => {
+let make = (~selectedDate) => {
   let (state, send) = React.useReducer(
     reducer,
     {
-      selectedDate: Js.Date.make(),
+      selectedDate: switch selectedDate {
+      | Some(date) => DateFns.parseISO(date)
+      | None => Js.Date.make()
+      },
       dayEventsLoadStatus: Loaded([]),
       selectedMonthDeviation: 0,
     },
@@ -178,5 +181,5 @@ let make = (~test) => {
 }
 
 let makeFromJson = _props => {
-  make({"test": "test"})
+  make({"selectedDate": Some("2022-12-07")})
 }

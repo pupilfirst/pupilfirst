@@ -6,7 +6,7 @@
   <div class="max-w-6xl mx-auto px-5 mt-8">
     <div class="flex items-center justify-between gap-2">
       <h1 class="text-xl font-semibold"> Calendar </h1>
-      <a href="#" class="text-primary-500 font-medium text-sm hover:underline">
+      <a href=<%= calendar_events_school_course_path(@course)%> class="text-primary-500 font-medium text-sm hover:underline">
         See all upcoming events
       </a>
     </div>
@@ -21,7 +21,7 @@
             class="p-2 rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500"
             ariaLabel="Add new calendar"
             title="Add new calendar"
-            href="/school/courses/${courseId}/calendars/new">
+            href=<%= new_school_course_calendar_path(@course)%>>
             <i class="if i-plus-regular if-fw" ></i>
           </a>
         </div>
@@ -35,16 +35,16 @@
       <div class="col-span-8 p-6 bg-white flex-1">
         <div class="flex items-center justify-between gap-2">
           <p class="text-base font-medium"> Events </p>
-          <p class="text-gray-600"> 11-November-2022 </p>
+          <p class="text-gray-600"> <%= @presenter.selected_date %> </p>
         </div>
-        <button
-          class="bg-primary-50 text-primary-500 font-semibold flex items-center justify-center gap-1 rounded-md p-4 w-full mt-6 hover:bg-primary-100">
+        <%= link_to new_school_course_calendar_event_path(@course), class: "bg-primary-50 text-primary-500 font-semibold flex items-center justify-center gap-1 rounded-md p-4 w-full mt-6 hover:bg-primary-100" do %>
           <i class="if i-plus-circle-regular if-fw" ></i>
           Add an event
-        </button>
+        <% end %>
         <div class="flex flex-col gap-4 mt-6">
-          <%= render "event_card" %>
-          <%= render "event_card" %>
+          <% @presenter.events_for_day.each do |event|%>
+            <%= render partial: "event_card", locals: {event: event} %>
+            <% end %>
         </div>
       </div>
     </div>

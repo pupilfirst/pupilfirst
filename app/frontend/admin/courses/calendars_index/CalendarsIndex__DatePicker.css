@@ -80,25 +80,3 @@
 .courses-calendar__date-grid-button--is-selected {
   @apply text-white bg-primary-500;
 }
-
-.courses-calendar__booking-status-container {
-  @apply flex justify-center mt-1;
-}
-
-.courses-calendar__booking-status {
-  @apply bg-gray-200 rounded-full;
-  width: 6px;
-  height: 6px;
-}
-
-.courses-calendar__booking-status--booked {
-  @apply bg-red-500;
-}
-
-.courses-calendar__booking-status--available {
-  @apply bg-green-500;
-}
-
-.courses-calendar__booking-status--unconfirmed {
-  @apply bg-yellow-500;
-}

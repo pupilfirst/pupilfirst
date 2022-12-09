@@ -31,6 +31,21 @@ module Schools
       def today?
         @date == Time.current.to_date
       end
+
+      def date_picker_props
+        { selectedDate: @date.iso8601, courseId: @course.id.to_s }.to_json
+      end
+
+      def month_data
+        applicable_events = @course.calendar_events
+        applicable_events
+          .group_by_day(range: @date.all_month, series: true) do |event|
+            event.start_time
+          end
+          .each_with_object({}) do |(day, events), hash|
+            hash[day.iso8601] = events.map(&:color).uniq
+          end
+      end
     end
   end
 end

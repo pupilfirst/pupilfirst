@@ -1,4 +1,5 @@
 %%raw(`import "./CalendarsIndex__DatePicker.css"`)
+open Json.Decode
 
 exception WeekDayInvalid(string)
 let str = React.string
@@ -20,7 +21,7 @@ let startOnDayClass = currentMonth => {
   }
 }
 
-type dayEventsLoadStatus = Loading | Loaded(array<array<string>>)
+type dayEventsLoadStatus = Loading | Loaded(Js.Json.t)
 
 type state = {
   selectedDate: Js.Date.t,
@@ -34,12 +35,12 @@ type action =
   | ChangeDate(Js.Date.t)
   | ChangeDateToToday
   | StartLoadingStatus
-  | FinishLoadingStatus(array<array<string>>)
+  | FinishLoadingStatus(Js.Json.t)
 
 let computeSelectedMonth = state => {
   let currentDate = Js.Date.make()
-  let month = (currentDate |> Js.Date.getMonth) +. float_of_int(state.selectedMonthDeviation)
-  let year = currentDate |> Js.Date.getFullYear
+  let month = currentDate->Js.Date.getMonth +. float_of_int(state.selectedMonthDeviation)
+  let year = currentDate->Js.Date.getFullYear
   Js.Date.makeWithYM(~year, ~month, ())
 }
 
@@ -47,12 +48,12 @@ let reducer = (state, action) => {
   switch action {
   | ChangeToNextMonth => {
       ...state,
-      dayEventsLoadStatus: Loaded([]),
+      dayEventsLoadStatus: Loading,
       selectedMonthDeviation: state.selectedMonthDeviation + 1,
     }
   | ChangeToPreviousMonth => {
       ...state,
-      dayEventsLoadStatus: Loaded([]),
+      dayEventsLoadStatus: Loading,
       selectedMonthDeviation: state.selectedMonthDeviation - 1,
     }
   | ChangeDate(selectedDate) => {...state, selectedDate: selectedDate}
@@ -69,67 +70,87 @@ let reducer = (state, action) => {
   }
 }
 
-let daysOfMonth = (selectedMonth, selectedDate, dayStatuses, send) => {
-  let daysInMonth = selectedMonth |> DateFns.getDaysInMonth |> int_of_float
-  let daysAsArray = Array.make(daysInMonth, 1) |> Js.Array.mapi((day, index) => day + index)
+let decodeJsonAsStringArray = (. x) => {
+  Json.Decode.array(string)(x)
+}
+
+let reloadPage = selectedDate => {
+  let search = Webapi.Dom.location->Webapi.Dom.Location.search
+  let params = Webapi.Url.URLSearchParams.make(search)
+  Webapi.Url.URLSearchParams.set("date", selectedDate, params)
+  let currentPath = Webapi.Dom.location->Webapi.Dom.Location.pathname
+  let searchString = Webapi.Url.URLSearchParams.toString(params)
+  Webapi.Dom.window->Webapi.Dom.Window.setLocation(`${currentPath}?${searchString}`)
+}
+
+let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
+  let daysInMonth = selectedMonth->DateFns.getDaysInMonth->int_of_float
+  let daysAsArray = Array.make(daysInMonth, 1)->Js.Array2.mapi((day, index) => day + index)
   let currentMonthAsString = selectedMonth->DateFns.format("yyyy-MM-")
   let selectedDateAsString = selectedDate->DateFns.format("yyyy-MM-dd")
+  let parsedStatuses =
+    Js.Json.decodeObject(dayStatuses)->Belt.Option.getWithDefault(Js.Dict.empty())
+      |> Js.Dict.map(decodeJsonAsStringArray)
+
   daysAsArray
-  |> Js.Array.map(day => {
+  ->Js.Array2.map(day => {
     let dayAsString =
       currentMonthAsString ++ (day < 10 ? "0" ++ string_of_int(day) : string_of_int(day))
     <button
       key=dayAsString
-      onClick={_ => send(ChangeDate(DateFns.parseISO(dayAsString)))}
+      onClick={_ => reloadPage(dayAsString)}
       className={"courses-calendar__date-grid-button " ++ (
         selectedDateAsString == dayAsString ? "courses-calendar__date-grid-button--is-selected" : ""
       )}>
-      <time dateTime=dayAsString> {day |> string_of_int |> str} </time>
+      <time dateTime=dayAsString> {day->string_of_int->str} </time>
       {
-        let available = true
-        let confirmed = false
-        let unconfirmed = true
+        let dayStatus = parsedStatuses->Js.Dict.get(dayAsString)->Belt.Option.getWithDefault([])
 
-        selectedDateAsString == dayAsString
+        selectedDateAsString == dayAsString || dayStatus->ArrayUtils.isEmpty
           ? React.null
-          : <div className="courses-calendar__booking-status-container space-x-1">
-              {available
-                ? <span
-                    className="courses-calendar__booking-status courses-calendar__booking-status--available"
-                  />
-                : React.null}
-              {confirmed
-                ? <span
-                    className="courses-calendar__booking-status courses-calendar__booking-status--booked"
-                  />
-                : React.null}
-              {unconfirmed
-                ? <span
-                    className="courses-calendar__booking-status courses-calendar__booking-status--unconfirmed"
-                  />
-                : React.null}
+          : <div className="flex justify-center mt-1 space-x-1">
+              {dayStatus
+              ->Js.Array2.map(color => {
+                <span className={`h-1.5 w-1.5 bg-${color}-500 rounded-full`} />
+              })
+              ->React.array}
             </div>
       }
     </button>
   })
-  |> React.array
+  ->React.array
+}
+
+let getMonthEventStatus = (selectedMonth, courseId, send) => {
+  send(StartLoadingStatus)
+  let monthStartAsString = selectedMonth->DateFns.format("yyyy-MM") ++ "-01"
+  let url =
+    "/school/courses/" ++ courseId ++ "/calendar_month_data" ++ "?date=" ++ monthStartAsString
+  Api.get(
+    ~url,
+    ~responseCB=res => send(FinishLoadingStatus(res)),
+    ~errorCB=() => send(FinishLoadingStatus(Js.Json.null)),
+    ~notify=false,
+  )
 }
 
 @react.component
-let make = (~selectedDate) => {
+let make = (~selectedDate, ~courseId) => {
   let (state, send) = React.useReducer(
     reducer,
     {
-      selectedDate: switch selectedDate {
-      | Some(date) => DateFns.parseISO(date)
-      | None => Js.Date.make()
-      },
-      dayEventsLoadStatus: Loaded([]),
+      selectedDate: DateFns.parseISO(selectedDate),
+      dayEventsLoadStatus: Loading,
       selectedMonthDeviation: 0,
     },
   )
 
   let selectedMonth = computeSelectedMonth(state)
+
+  React.useEffect1(() => {
+    getMonthEventStatus(selectedMonth, courseId, send)
+    None
+  }, [state.selectedMonthDeviation])
 
   <div className="sticky top-0 z-50 p-2 lg:p-0">
     <section>
@@ -171,7 +192,7 @@ let make = (~selectedDate) => {
             <div
               className={"courses-calendar__date-grid courses-calendar__date-grid--start-on-" ++
               startOnDayClass(selectedMonth)}>
-              {daysOfMonth(selectedMonth, state.selectedDate, statuses, send)}
+              {daysOfMonth(selectedMonth, state.selectedDate, statuses)}
             </div>
           }}
         </div>
@@ -180,6 +201,9 @@ let make = (~selectedDate) => {
   </div>
 }
 
-let makeFromJson = _props => {
-  make({"selectedDate": Some("2022-12-07")})
+let makeFromJson = json => {
+  make({
+    "selectedDate": field("selectedDate", string, json),
+    "courseId": field("courseId", string, json),
+  })
 }

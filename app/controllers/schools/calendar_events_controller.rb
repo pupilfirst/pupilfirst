@@ -22,7 +22,5 @@ module Schools
       @event = @course.calendar_events.find(params[:id])
       authorize(@event, policy_class: Schools::CalendarEventPolicy)
     end
-
-    def month_data; end
   end
 end

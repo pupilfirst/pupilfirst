@@ -1,7 +1,7 @@
   <div class="<%= "bg-#{event.color}-50 " + "overflow-hidden rounded-lg"%>">
     <a
       href=<%=school_course_calendar_event_path(@course,event)%>
-      class="<%= "block p-4 transition-all focus:outline-none" + "hover:bg-#{event.color}-100 focus:bg-#{event.color}-100"%>"
+      class="<%= "block p-4 transition-all focus:outline-none " + "hover:bg-#{event.color}-100 focus:bg-#{event.color}-100"%>"
       ariaLabel="eventName on eventDate at eventTime">
       <div class="flex justify-between">
         <div class="flex gap-3 items-center">
@@ -22,7 +22,7 @@
         ariaLabel="Link to event"
         target="_blank"
         rel="noopener noreferrer"
-        class="<%="p-4 block text-primary-500 font-medium text-sm transition-all border-t border-black/5 hover:underline focus:underline focus:outline-none" + "hover:bg-#{event.color}-100 focus:bg-#{event.color}-100"%>">
+        class="<%="p-4 block text-primary-500 font-medium text-sm transition-all border-t border-black/5 hover:underline focus:underline focus:outline-none " + "hover:bg-#{event.color}-100 focus:bg-#{event.color}-100"%>">
         <div class="flex gap-2 items-center">
           <i class="if i-external-link-regular if-fw"></i>
           <p>

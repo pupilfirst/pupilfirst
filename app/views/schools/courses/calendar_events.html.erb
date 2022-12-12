@@ -23,10 +23,10 @@
           </a>
         </div>
         <div class="group px-1 py-2 hover:bg-gray-100 rounded-md text-sm flex items-center justify-between">
-          <label class="flex items-center gap-3 font-medium">
-            <input type="checkbox" checked/>
+          <button class="flex items-center gap-2 font-medium" aria-label="Hide calendar name" title="Hide Calendar name">
+            <i class="text-primary-500 text-lg if i-eye-solid if-fw"></i>
             Calendar 1
-          </label>
+          </button>
           <button class="hidden px-1 transition-all rounded-md group-focus:block group-hover:block hover:bg-gray-200 hover:text-primary-500 focus:text-primary-500">
             <i class="if i-kebab-regular if-fw" ></i>
           </button>
@@ -53,15 +53,15 @@
           <div>
             <p class="font-semibold text-sm">21-November-2022</p>
             <div class="mt-3 flex flex-col gap-4">
-              <%= render "event_card" %>
-              <%= render "event_card" %>
+              <%# <%= render "event_card" %>
+              <%# <%= render "event_card" %>
             </div>
           </div>
           <div>
             <p class="font-semibold text-sm">25-November-2022</p>
             <div class="mt-3 flex flex-col gap-4">
-              <%= render "event_card" %>
-              <%= render "event_card" %>
+              <%# <%= render "event_card" %>
+              <%# <%= render "event_card" %>
             </div>
           </div>
           <a href="#" class="block p-4 text-center font-semibold text-primary-500 focus:underline focus:outline-none hover:underline">

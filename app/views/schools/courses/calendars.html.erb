@@ -26,10 +26,10 @@
           </a>
         </div>
         <div class="group px-1 py-2 hover:bg-gray-100 rounded-md text-sm flex items-center justify-between">
-          <label class="flex items-center gap-3 font-medium">
-            <input type="checkbox" checked/>
+          <button class="flex items-center gap-2 font-medium" aria-label="Hide calendar name" title="Hide Calendar name">
+            <i class="text-primary-500 text-lg if i-eye-solid if-fw"></i>
             Calendar 1
-          </label>
+          </button>
           <button class="hidden px-1 transition-all rounded-md group-focus:block group-hover:block hover:bg-gray-200 hover:text-primary-500 focus:text-primary-500">
             <i class="if i-kebab-regular if-fw" ></i>
           </button>
@@ -66,14 +66,14 @@
             </div>
           </div>
           <% if @presenter.upcoming_events_for_month.present? %>
-            <div class="p-4 pb-6 bg-gradient-to-b from-primary-100 to-white flex items-center justify-between bg-gray-100 rounded-t-lg">
-              <p class="font-semibold text-sm">Upcoming events in <%= @presenter.selected_month %></p>
-              <p><i class="if i-arrow-down-regular if-fw"></i></p>
+            <div class="border border-gray-200 rounded-lg">
+              <p class="font-semibold text-sm p-4 pb-6 bg-gradient-to-b from-primary-100 to-white rounded-t-lg">Upcoming events in <%= @presenter.selected_month %></p>
+              <div class="mt-3 flex flex-col gap-4 p-3 pt-0">
+                <% @presenter.upcoming_events_for_month.each do |event|%>
+                  <%= render partial: "event_card", locals: {event: event} %>
+                <% end %>
+              </div>
             </div>
-            <div class="mt-3 flex flex-col gap-4">
-              <% @presenter.upcoming_events_for_month.each do |event|%>
-                <%= render partial: "event_card", locals: {event: event} %>
-              <% end %>
           <% end %>
         </div>
       </div>

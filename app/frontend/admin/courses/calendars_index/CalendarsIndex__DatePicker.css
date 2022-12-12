@@ -80,3 +80,8 @@
 .courses-calendar__date-grid-button--is-selected {
   @apply text-white bg-primary-500;
 }
+
+.courses-calendar__date-grid-button--is-selected:hover,
+.courses-calendar__date-grid-button--is-selected:focus {
+  @apply text-white bg-primary-400;
+}

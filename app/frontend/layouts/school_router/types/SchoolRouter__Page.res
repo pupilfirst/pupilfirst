@@ -98,28 +98,28 @@ let path = (~courseId=?, t) => {
 
 let name = t => {
   switch t {
-  | SchoolCoaches => "Coaches"
+  | SchoolCoaches => {I18n.t("shared.coaches")}
   | Settings(settingsPages) =>
     switch settingsPages {
-    | Customization => "Customization"
-    | Admins => "Admins"
+    | Customization => {I18n.t("components.SchoolAdminNavbar__Root.navbar.settings")}
+    | Admins => {I18n.t("components.SchoolAdminNavbar__Root.navbar.admins")}
     }
-  | Courses => "Courses"
+  | Courses => {I18n.t("components.SchoolAdminNavbar__Root.navbar.courses")}
   | SelectedCourse(coursePages) =>
     switch coursePages {
-    | Students => "Students"
-    | CourseCoaches => "Coaches"
-    | Curriculum => "Curriculum"
-    | EvaluationCriteria => "Evaluation Criteria"
-    | CourseExports => "Exports"
-    | Authors => "Authors"
-    | Certificates => "Certificates"
-    | Applicants => "Applicants"
-    | Teams => "Teams"
-    | Cohorts => "Cohorts"
+    | Students => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.students")}
+    | CourseCoaches => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.coaches")}
+    | Curriculum => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.curriculum")}
+    | EvaluationCriteria => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.evaluation_criteria")}
+    | CourseExports => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.exports")}
+    | Authors => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.authors")}
+    | Certificates => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.certificates")}
+    | Applicants => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.applicants")}
+    | Teams => {I18n.t("components.TeamsIndex__Root.teams")}
+    | Cohorts => {I18n.t("components.CohortsIndex__Root.cohorts")}
     | Calendars => "Calendars"
     }
-  | Communities => "Communities"
+  | Communities => {I18n.t("components.SchoolAdminNavbar__Root.navbar.communities")}
   }
 }
 

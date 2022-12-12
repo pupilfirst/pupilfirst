@@ -446,7 +446,7 @@ let showCourse = course => {
             href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}>
             <div>
               <FaIcon classes="far fa-edit mr-3" />
-              <span className="font-semibold"> {str("View Course")} </span>
+              <span className="font-semibold"> {str(t("course_links.edit_curriculum"))} </span>
             </div>
           </a>
           <button

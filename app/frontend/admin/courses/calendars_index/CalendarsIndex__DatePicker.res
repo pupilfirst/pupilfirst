@@ -187,7 +187,7 @@ let make = (~selectedDate, ~courseId) => {
         </div>
         <div>
           {switch state.dayEventsLoadStatus {
-          | Loading => SkeletonLoading.paragraph()
+          | Loading => SkeletonLoading.calendar()
           | Loaded(statuses) =>
             <div
               className={"courses-calendar__date-grid courses-calendar__date-grid--start-on-" ++

@@ -15,32 +15,33 @@
   </section>
   <section class="bg-white" >
     <form class="max-w-5xl mx-auto p-6">
-      <label>
-        <span class="text-sm font-medium">Event Title</span>
-        <input type="text" required autofocus placeholder="Name of an event" class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+      <label for="email" class="text-sm font-medium">
+        Event Title
       </label>
-      <div class="flex gap-5 items-center">
-        <label class="mt-5 block flex-1">
-          <span class="text-sm font-medium">Add event to</span>
-          <div class="border border-gray-400 mt-2 rounded-md">
-            <select name="Calnedars" required class="text-sm block w-full border-r-8 border-transparent outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
-              <option value="main">[[Main]]</option>
-              <option value="calendar-1">[[Calendar 2]]</option>
-            </select>
-          </div>
-        </label>
+      <input type="text" name="email" id="email" required autofocus placeholder="Name of an event" class="mt-1 text-sm block w-full border border-gray-300 py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
 
-        <%# Replace this with a dropdown rescript component %>
-        <label class="mt-5 block">
-          <span class="text-sm font-medium">Color </span><i class="if i-question-circle-regular if-fw" aria-hidden="true" title="Colors help you to differntiate different types of events at glance"></i>
-          <div class="flex items-center bg-white border border-gray-400 mt-2 pl-2 rounded-md">
-            <svg class="w-8 h-8" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0)"><path d="M8 8h8c0-1.5-.4-2.8-1.1-4L8 8z" fill="#F5AC43"/><path d="M8 8l-6.9 4c.7 1.2 1.7 2.2 2.9 2.9L8 8z" fill="#515EBB"/><path d="M8 8v8c1.5 0 2.8-.4 4-1.1L8 8z" fill="#D0449A"/><path d="M4 14.9c1.2.7 2.5 1.1 4 1.1V8l-4 6.9z" fill="#7C39B1"/><path d="M14.9 4c-.7-1.2-1.7-2.2-2.9-2.9L8 8l6.9-4z" fill="#F8CE33"/><path d="M8 8H0c0 1.5.4 2.8 1.1 4L8 8z" fill="#177AC3"/><path d="M8 8l4 6.9c1.2-.7 2.2-1.7 2.9-2.9L8 8z" fill="#FE4A29"/><path d="M8 8l6.9 4c.7-1.2 1.1-2.5 1.1-4H8z" fill="#F97932"/><path d="M8 8L1.1 4C.4 5.2 0 6.5 0 8h8z" fill="#1AB3D0"/><path d="M8 8l4-6.9C10.8.4 9.5 0 8 0v8z" fill="#FCF222"/><path d="M8 0C6.5 0 5.2.4 4 1.1L8 8V0z" fill="#89D31C"/><path d="M8 8L4 1.1C2.8 1.8 1.8 2.8 1.1 4L8 8z" fill="#33B634"/></g><defs><clipPath id="clip0"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
-            <select name="colors" required class="text-sm block bg-white w-full border-r-8 border-transparent outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+      <div class="flex mt-5 space-x-3">
+        <div class="flex-1">
+          <label class="text-sm font-medium">
+            Add event to
+          </label>
+          <select name="Calendars" required class="select mt-1 block w-full rounded-md bg-white border border-gray-300 py-3 px-4 pr-10 text-base focus:outline-none focus:ring-1 focus:ring-focusColor-500 sm:text-sm">
+            <option value="main">[[Main]]</option>
+            <option value="calendar-1">[[Calendar 2]]</option>
+          </select>
+        </div>
+        <div>
+          <%# Replace this with a dropdown rescript component %>
+          <label for="event-color" class="block">
+            <span class="text-sm font-medium space-x-1"><span>Color</span><i class="if i-question-circle-regular" aria-hidden="true" title="Colors help you to differntiate different types of events at glance"></i></span>
+          </label>
+          <div class="mt-1">
+            <select id="event-color" name="colors" required class="select flex items-center bg-white border border-gray-300 text-sm w-full outline-none py-3 px-4 pr-10 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
               <option value="red">Red</option>
               <option value="blue">Blue</option>
             </select>
           </div>
-        </label>
+        </div>
       </div>
       <div class="flex gap-5 items-center">
         <label class="mt-5 block">

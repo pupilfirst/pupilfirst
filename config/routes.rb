@@ -122,7 +122,7 @@ Rails.application.routes.draw do
 
       resources :calendar_events, only: %i[new create update destroy show edit], controller: 'calendar_events'
 
-      resources :calendars, only: %i[new create update destroy], controller: 'calendars'
+      resources :calendars, only: %i[new create update destroy edit], controller: 'calendars'
 
       resources :authors, only: %w[show new]
 

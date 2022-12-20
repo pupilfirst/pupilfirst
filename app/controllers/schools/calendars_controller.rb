@@ -14,5 +14,11 @@ module Schools
 
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
     end
+
+    def edit
+      @course = current_school.courses.find(params[:course_id])
+      @calendar = @course.calendars.find(params[:id])
+      authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
+    end
   end
 end

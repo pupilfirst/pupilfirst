@@ -120,7 +120,7 @@ Rails.application.routes.draw do
         get 'calendar_month_data'
       end
 
-      resources :calendar_events, only: %i[new create update destroy show], controller: 'calendar_events'
+      resources :calendar_events, only: %i[new create update destroy show edit], controller: 'calendar_events'
 
       resources :calendars, only: %i[new create update destroy], controller: 'calendars'
 

@@ -14,7 +14,7 @@
     </div>
   </section>
   <section class="bg-white" >
-    <%= form_with  model: @event, url: school_course_calendar_events_path(@course), class: "max-w-5xl mx-auto p-6" do |f|  %>
+    <%= form_with  model: @event, url: school_course_calendar_event_path(@course, @event), method: "patch", class: "max-w-5xl mx-auto p-6" do |f|  %>
       <label for="email" class="text-sm font-medium">
         Event Title
       </label>
@@ -67,7 +67,7 @@
           <%= f.text_area(:description, class: "p-2 w-full text-left border border-gray-300", placeholder: "An optional description of the event") %>
         </label>
       </div>
-      <button type="submit" class="btn btn-primary w-full mt-5">Add event</button>
+      <button type="submit" class="btn btn-primary w-full mt-5"><%= @event.persisted? ? "Update Event" : "Create Event"%></button>
     <% end %>
   </section>
 </div>

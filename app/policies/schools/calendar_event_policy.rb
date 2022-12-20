@@ -7,5 +7,9 @@ module Schools
 
     alias new? index?
     alias show? index?
+    alias create? index?
+    alias edit? index?
+    alias update? index?
+    alias destroy? index?
   end
 end

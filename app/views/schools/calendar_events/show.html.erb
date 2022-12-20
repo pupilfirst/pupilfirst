@@ -6,18 +6,20 @@
   <section class="bg-yellow-50"> <%# Replace with event color %>
     <div class="max-w-5xl mx-auto p-6">
       <div class="mt-4">
-        <%= link_to t('shared.back_link'), "#", class: 'bg-black/10 px-3 py-1 text-black rounded-xl text-sm hover:bg-black/20 focus:outline-none  focus:bg-black/20 focus:ring-1 focus:ring-focusColor-500' %>
+        <%= link_to t('shared.back_link'), school_course_calendar_events_path(@course), class: 'bg-black/10 px-3 py-1 text-black rounded-xl text-sm hover:bg-black/20 focus:outline-none  focus:bg-black/20 focus:ring-1 focus:ring-focusColor-500' %>
       </div>
       <div class="flex items-center justify-between gap-5">
         <div class="flex-1">
           <h1 class="text-xl md:text-2xl font-bold mt-4">
-            Name of an Event
+            <%= @event.title %>
           </h1>
-          <p class="text-sm font-medium text-gray-500">Calendar name</p>
+          <p class="text-sm font-medium text-gray-500"><%= @event.calendar.name %></p>
         </div>
         <div class="flex gap-3">
-          <button class="text-sm font-medium px-4 py-2 bg-white border border-gray-300 rounded-lg text-black hover:text-primary-500 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-edit-regular if-fw" aria-hidden="true"></i> Edit</button>
-          <button class="text-sm font-medium px-4 py-2 bg-red-500 border border-red-300 rounded-lg text-white hover:bg-red-600 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-trash-regular if-fw" aria-hidden="true"></i> Delete</button>
+          <a href="<%= edit_school_course_calendar_event_path(@course, @event) %>" class="text-sm font-medium px-4 py-2 bg-white border border-gray-300 rounded-lg text-black hover:text-primary-500 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-edit-regular if-fw" aria-hidden="true"></i> Edit</a>
+          <%= form_with(url: school_course_calendar_event_path(@course, @event), method: "delete") do |form| %>
+            <button name="delete" type="submit" data-confirm="Your confirm message" class="text-sm font-medium px-4 py-2 bg-red-500 border border-red-300 rounded-lg text-white hover:bg-red-600 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-trash-regular if-fw" aria-hidden="true"></i> Delete</button>
+          <% end %>
         </div>
       </div>
     </div>
@@ -27,29 +29,25 @@
       <div class="mt-5">
         <p class="text-sm font-semibold text-gray-500">Date and time</p>
         <div class="mt-3 text-lg font-semibold flex items-center gap-8 flex-wrap">
-          <p><i class="if i-calendar-regular if-fw" aria-hidden="true"></i>  Tuesday, 11-November-2022</p>
-          <p><i class="if i-clock-regular if-fw" aria-hidden="true"></i>  11:00 AM</p>
+          <p><i class="if i-calendar-regular if-fw" aria-hidden="true"></i>  <%= @event.start_time.strftime("%A, %d-%B-%Y")%></p>
+          <p><i class="if i-clock-regular if-fw" aria-hidden="true"></i>  <%= @event.start_time.strftime("%I:%M %p")%></p>
         </div>
       </div>
-      <div class="mt-8">
-        <p class="text-sm font-semibold text-gray-500">Event link</p>
-        <a href="#" target="_blank" class="block mt-3 text-lg text-primary-500 hover:underline">
-          <i class="if i-external-link-regular if-fw"></i> Zoom meeting link
-        </a>
-      </div>
+      <% if @event.link_url.present? %>
+        <div class="mt-8">
+          <p class="text-sm font-semibold text-gray-500">Event link</p>
+          <a href=<%= @event.link_url %> target="_blank" class="block mt-3 text-lg text-primary-500 hover:underline">
+            <i class="if i-external-link-regular if-fw"></i> <%=@event.link_title %>
+          </a>
+        </div>
+      <% end %>
       <div class="pt-8 mt-8 border-t border-gray-200">
         <p class="text-sm font-semibold text-gray-500">Description</p>
-        <p class="p-8 bg-gray-200 w-full text-center">Replace me with markdown renderer</p>
+        <% if @event.description.present? %>
+          <div data-re-component="MarkdownBlock" data-re-json="<%= { markdown: @event.description }.to_json %>"></div>
+        <% end %>
+        </div>
       </div>
     </div>
   </section>
 </div>
-
-<% content_for(:tail) do %>
-  <%= javascript_tag(nonce: true) do %>
-     window.onload = function() {
-       document.getElementById("schoolrouter-innerpage").innerHTML = document.getElementById("schoolrouter-innerpage-data").innerHTML;
-       document.getElementById("schoolrouter-innerpage-data").remove();
-    }
-  <% end %>
-<% end %>

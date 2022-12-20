@@ -43,7 +43,7 @@ module Schools
             event.start_time
           end
           .each_with_object({}) do |(day, events), hash|
-            hash[day.iso8601] = events.map(&:color).uniq
+            hash[day.iso8601] = events.map(&:color).uniq.first(3)
           end
       end
     end

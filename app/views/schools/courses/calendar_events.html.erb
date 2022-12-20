@@ -2,7 +2,7 @@
   <title><%= @course.name %> | <%= t(".title") %> </title>
 <% end %>
 
-<div id="schoolrouter-innerpage-data">
+<div class="relative" id="schoolrouter-innerpage-data">
   <div class="max-w-6xl mx-auto px-5 mt-8">
     <div class="flex items-end justify-between gap-2">
       <h1 class="text-xl font-semibold"> Calendar </h1>
@@ -14,27 +14,27 @@
       </div>
     </div>
     <div  class="mt-4 grid grid-cols-12 bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-      <div class="col-span-4 p-6 border-r border-gray-200">
+      <div class="col-span-4 p-6 border-r border-gray-200 sticky top-0">
         <div id="course-calendar-picker" class="pb-4" >
           <div data-re-component="CalendarsIndex__DatePicker" data-re-json=<%=@presenter.date_picker_props%>></div>
         </div>
-        <div class="pt-2 border-t border-gray-200 flex items-center justify-between gap-2 p-1">
-          <p class="text-base font-medium ">Calendars</p>
+        <div class="pt-6 border-t border-gray-200 flex items-center justify-between gap-2 p-1">
+          <p class="text-lg font-semibold ">Calendars</p>
           <a
-            class="p-2 rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500"
+            class="block btn btn-default btn-small"
             ariaLabel="Add new calendar"
             title="Add new calendar"
             href=<%= new_school_course_calendar_path(@course)%>>
             <i class="if i-plus-regular if-fw" ></i>
+            <span>Add Calendar</span>
           </a>
         </div>
-        <div class="group px-1 py-2 hover:bg-gray-100 rounded-md text-sm flex items-center justify-between">
-          <button class="flex items-center gap-2 font-medium" aria-label="Hide calendar name" title="Hide Calendar name">
-            <i class="text-primary-500 text-lg if i-eye-solid if-fw"></i>
+        <div class="bg-white mt-3 shadow-sm px-2 py-1 rounded-md text-sm flex items-center justify-between">
+          <span class="flex items-center gap-2 font-semibold">
             Calendar 1
-          </button>
-          <button class="hidden px-1 transition-all rounded-md group-focus:block group-hover:block hover:bg-gray-200 hover:text-primary-500 focus:text-primary-500">
-            <i class="if i-kebab-regular if-fw" ></i>
+          </span>
+          <button class="bg-gray-50 p-2 rounded-md hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
+            <i class="if i-edit-regular if-fw text-base" ></i>
           </button>
         </div>
       </div>
@@ -43,7 +43,7 @@
           <p class="text-lg font-semibold">Events</p>
           <div class="flex items-center space-x-2">
             <label class="text-sm font-medium flex-shrink-0 text-gray-600">Showing events from</label>
-            <select name="Calendars" required class="select block w-full rounded-md bg-white border border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+            <select name="Calendars" required class="select block w-full rounded-md bg-white border border-gray-300 py-2 pl-3 pr-10 text-base sm:text-sm focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
               <option value="main">[[Main]]</option>
               <option value="calendar-1">[[Calendar 2]]</option>
             </select>

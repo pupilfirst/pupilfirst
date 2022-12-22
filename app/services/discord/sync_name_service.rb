@@ -11,7 +11,7 @@ module Discord
         "Bot #{configuration.bot_token}",
         configuration.server_id,
         @user.discord_user_id,
-        nick: @user.name
+        nick: nick_name
       )
     rescue Discordrb::Errors::UnknownMember
       Rails.logger.error "Unknown member #{@user.discord_user_id}"
@@ -19,9 +19,14 @@ module Discord
     rescue Discordrb::Errors::NoPermission
       Rails
         .logger.error "No permission to update member #{@user.discord_user_id}"
-    rescue RestClient::BadRequest
+    rescue RestClient::BadRequest => e
       Rails
-        .logger.error "Bad request with discord_user_id: #{@user.discord_user_id}"
+        .logger.error "Bad request with discord_user_id: #{@user.discord_user_id}; #{e.response.body}"
+    end
+
+    def nick_name
+      return @user.name if @user.name.length <= 32
+      @user.name[0..28] + '...'
     end
 
     def configuration

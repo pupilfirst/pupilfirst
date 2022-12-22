@@ -20,7 +20,7 @@ module Discord
         configuration.server_id,
         @user.discord_user_id,
         roles: role_ids,
-        nick: @user.name
+        nick: nick_name
       )
     rescue Discordrb::Errors::UnknownMember
       Rails.logger.error "Unknown member #{@user.discord_user_id}"
@@ -35,6 +35,11 @@ module Discord
 
     def configuration
       @configuration ||= Schools::Configuration::Discord.new(@user.school)
+    end
+
+    def nick_name
+      return @user.name if @user.name.length <= 32
+      @user.name[0..28] + '...'
     end
   end
 end

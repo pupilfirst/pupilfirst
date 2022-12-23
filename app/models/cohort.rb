@@ -5,6 +5,7 @@ class Cohort < ApplicationRecord
   has_many :faculty_cohort_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_cohort_enrollments
   has_one :school, through: :course
+  has_many :calendar_cohorts, dependent: :destroy
   has_many :calendars, through: :calendar_cohorts
 
   scope :active,

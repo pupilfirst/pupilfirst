@@ -7,6 +7,9 @@ import { makeFromJson as SimpleDropdownFilter } from "~/shared/components/Simple
 import { makeFromJson as StudentDistribution } from "~/courses/students/components/CoursesStudents__StudentDistribution.bs.js";
 import { makeFromJson as CalendarsIndex__DatePicker } from "~/admin/courses/calendars_index/CalendarsIndex__DatePicker.bs.js";
 import { makeFromJson as MarkdownBlock } from "~/shared/components/MarkdownBlock.bs.js";
+import { makeFromJson as SimpleMarkdownEditor } from "~/shared/components/SimpleMarkdownEditor.bs.js";
+import { makeFromJson as SelectLink } from "~/shared/components/SelectLink.bs.js";
+import { makeFromJson as SimpleMultiSelectInline } from "~/shared/components/SimpleMultiSelectInline.bs.js";
 
 const selectComponent = (name) => {
   switch (name) {
@@ -22,6 +25,12 @@ const selectComponent = (name) => {
       return CalendarsIndex__DatePicker;
     case "MarkdownBlock":
       return MarkdownBlock;
+    case "SimpleMarkdownEditor":
+      return SimpleMarkdownEditor;
+    case "SimpleMultiSelectInline":
+      return SimpleMultiSelectInline;
+    case "SelectLink":
+      return SelectLink;
     default:
       throw new Error(`Unknown component name: ${name}`);
   }

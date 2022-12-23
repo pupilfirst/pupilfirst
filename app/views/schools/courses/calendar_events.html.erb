@@ -47,10 +47,11 @@
           <p class="text-lg font-semibold">Events</p>
           <div class="flex items-center space-x-2">
             <label class="text-sm font-medium flex-shrink-0 text-gray-600">Showing events from</label>
-            <select name="Calendars" required class="select block w-full rounded-md bg-white border border-gray-300 py-2 pl-3 pr-10 text-base sm:text-sm focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
+            <%# <select name="Calendars" required class="select block w-full rounded-md bg-white border border-gray-300 py-2 pl-3 pr-10 text-base sm:text-sm focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
               <option value="main">[[Main]]</option>
               <option value="calendar-1">[[Calendar 2]]</option>
-            </select>
+            </select> %>
+            <div data-re-component="SelectLink" data-re-json="<%= @presenter.calendar_link_props.to_json %>"></div>
           </div>
         </div>
         <div class="flex flex-col gap-8 divide-y p-6">

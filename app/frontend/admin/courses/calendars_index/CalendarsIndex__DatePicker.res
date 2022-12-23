@@ -180,6 +180,7 @@ let make = (~selectedDate,~selectedCalendarId=?, ~courseId) => {
             </button>
           </div>
           <button
+            onClick={_ => reloadPage(Js.Date.make()->DateFns.format("yyyy-MM-dd"))}
             className="px-2 py-1 text-sm bg-gray-100 rounded hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
             <span> {"Today"->str} </span>
           </button>

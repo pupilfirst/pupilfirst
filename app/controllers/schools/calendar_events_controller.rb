@@ -60,7 +60,7 @@ module Schools
       if @form.valid?
         @form.save
         flash[:success] = 'Event updated successfully'
-        redirect_to school_course_calendar_events_path(@course)
+        redirect_to school_course_calendar_event_path(@course, @event)
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
         render :edit

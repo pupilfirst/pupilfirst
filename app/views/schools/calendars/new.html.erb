@@ -1,3 +1,14 @@
+<%
+  def cohorts
+    @course.cohorts.map do |cohort|
+      {
+        id: cohort.id.to_s,
+        name: cohort.name
+      }
+    end
+  end
+%>
+
 <% content_for(:head) do %>
   <title><%= @course.name %> | <%= t(".title") %> </title>
 <% end %>
@@ -5,32 +16,29 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-6">
       <div class="mt-4">
-        <%= link_to t('shared.back_link'), "#", class: 'bg-black/10 px-3 py-1 text-black rounded-xl text-sm hover:bg-black/20 focus:outline-none  focus:bg-black/20 focus:ring-1 focus:ring-focusColor-500' %>
+        <%= link_to t('shared.back_link'), calendar_events_school_course_path(@course), class: 'bg-black/10 px-3 py-1 text-black rounded-xl text-sm hover:bg-black/20 focus:outline-none  focus:bg-black/20 focus:ring-1 focus:ring-focusColor-500' %>
       </div>
       <div class="">
           <h1 class="text-xl md:text-2xl font-bold mt-4">
             Create new calendar
           </h1>
-          <p class="text-sm font-medium text-gray-500">Course name</p>
+          <p class="text-sm font-medium text-gray-500"><%= @course.name %></p>
       </div>
     </div>
   </section>
   <section class="bg-white" >
-    <form class="max-w-5xl mx-auto p-6">
+    <%= form_with  model: @calendar, url: school_course_calendars_path(@course), class: "max-w-5xl mx-auto p-6" do |f|  %>
       <label>
         <span class="text-sm font-medium">Calendar name</span>
-        <input type="text" required autofocus placeholder="eg, Batch 1 calendar" class="mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
+         <%= f.text_field :name, placeholder: "eg, Batch 1 calendar", required: true, class: "mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500"  %>
       </label>
       <label class="mt-5 block flex-1">
         <span class="text-sm font-medium">Link calendar to </span><span title="This will link calendar to specified cohorts"><i class="if i-question-circle-regular if-fw cursor-help" aria-hidden="true"></i></span>
         <div class="border border-gray-400 mt-2 rounded-md">
-          <select name="cohorts" required class="text-sm block w-full border-r-8 border-transparent outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500">
-            <option value="cohort 1">Replace with multiSelect component</option>
-            <option value="Cohort 2">Cohort 2</option>
-          </select>
+           <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= { selected: [], allItems: cohorts, inputName: "calendar[cohort_ids][]" }.to_json %>"></div>
         </div>
       </label>
-      <button type="submit" disabled class="btn btn-primary w-full mt-5">Add calendar</button>
-    </form>
+      <button type="submit" class="btn btn-primary w-full mt-5">Add calendar</button>
+    <% end %>
   </section>
 </div>

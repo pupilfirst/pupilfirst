@@ -4,21 +4,29 @@ module Schools
       def initialize(view_context, course, params)
         @course = course
         @date = params[:date] ? Date.parse(params[:date]) : Time.current.to_date
+        @selected_calendar = @course.calendars.find_by(id: params[:calendar_id])
 
         super(view_context)
       end
 
       def events_for_day
-        @course.calendar_events.where(start_time: (@date).all_day)
+        events_scope.where(start_time: (@date).all_day)
       end
 
       def selected_date
         @date.strftime('%d-%B-%Y')
       end
 
+      def events_scope
+        if @selected_calendar
+          @selected_calendar.calendar_events
+        else
+          @course.calendar_events
+        end
+      end
+
       def upcoming_events_for_month
-        @course
-          .calendar_events
+        events_scope
           .where(start_time: @date.end_of_day..@date.end_of_month.end_of_day)
           .order(:start_time)
           .limit(10)
@@ -32,13 +40,37 @@ module Schools
         @date == Time.current.to_date
       end
 
+      def calendar_link(calendar)
+        return if calendar.nil?
+        {
+          name: calendar.name,
+          url:
+            view.calendar_events_school_course_path(
+              @course,
+              calendar_id: calendar.id,
+              date: selected_date
+            )
+        }
+      end
+
+      def calendar_link_props
+        {
+          links: @course.calendars.map { |calendar| calendar_link(calendar) },
+          selectedLink: calendar_link(@selected_calendar),
+          placeholder: 'Select a calendar'
+        }
+      end
+
       def date_picker_props
-        { selectedDate: @date.iso8601, courseId: @course.id.to_s }.to_json
+        {
+          selectedDate: @date.iso8601,
+          courseId: @course.id.to_s,
+          selectedCalendarId: @selected_calendar&.id&.to_s
+        }.to_json
       end
 
       def month_data
-        applicable_events = @course.calendar_events
-        applicable_events
+        events_scope
           .group_by_day(range: @date.all_month, series: true) do |event|
             event.start_time
           end

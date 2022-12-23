@@ -121,11 +121,16 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
   ->React.array
 }
 
-let getMonthEventStatus = (selectedMonth, courseId, send) => {
+let getMonthEventStatus = (selectedMonth,selectedCalendarId, courseId, send) => {
   send(StartLoadingStatus)
   let monthStartAsString = selectedMonth->DateFns.format("yyyy-MM") ++ "-01"
   let url =
-    "/school/courses/" ++ courseId ++ "/calendar_month_data" ++ "?date=" ++ monthStartAsString
+    "/school/courses/" ++ courseId ++ "/calendar_month_data" ++ "?date=" ++ monthStartAsString ++ (
+      switch selectedCalendarId {
+      | Some(id) => "&calendar_id=" ++ id
+      | None => ""
+      }
+    )
   Api.get(
     ~url,
     ~responseCB=res => send(FinishLoadingStatus(res)),
@@ -135,20 +140,23 @@ let getMonthEventStatus = (selectedMonth, courseId, send) => {
 }
 
 @react.component
-let make = (~selectedDate, ~courseId) => {
+let make = (~selectedDate,~selectedCalendarId=?, ~courseId) => {
   let (state, send) = React.useReducer(
     reducer,
     {
       selectedDate: DateFns.parseISO(selectedDate),
       dayEventsLoadStatus: Loading,
-      selectedMonthDeviation: 0,
+      selectedMonthDeviation: DateFns.differenceInCalendarMonths(
+        DateFns.parseISO(selectedDate),
+        Js.Date.make(),
+      )
     },
   )
 
   let selectedMonth = computeSelectedMonth(state)
 
   React.useEffect1(() => {
-    getMonthEventStatus(selectedMonth, courseId, send)
+    getMonthEventStatus(selectedMonth,selectedCalendarId, courseId, send)
     None
   }, [state.selectedMonthDeviation])
 
@@ -204,6 +212,7 @@ let make = (~selectedDate, ~courseId) => {
 let makeFromJson = json => {
   make({
     "selectedDate": field("selectedDate", string, json),
+    "selectedCalendarId": optional(field("selectedCalendarId", string), json),
     "courseId": field("courseId", string, json),
   })
 }

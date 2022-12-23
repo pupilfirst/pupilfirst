@@ -64,7 +64,7 @@
       <div class="pt-8 mt-8 border-t border-gray-200">
         <label class="block flex-1">
           <span class="text-sm font-medium">Description <span class="font-light">(optional)</span></span>
-          <%= f.text_area(:description, class: "p-2 w-full text-left border border-gray-300", placeholder: "An optional description of the event") %>
+          <div data-re-component="SimpleMarkdownEditor" data-re-json="<%= { value: "", textAreaName: "calendar_event[description]", profile: "TextArea" }.to_json %>"></div>
         </label>
       </div>
       <button type="submit" class="btn btn-primary w-full mt-5">Add event</button>

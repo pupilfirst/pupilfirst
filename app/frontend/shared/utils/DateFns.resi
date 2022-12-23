@@ -8,6 +8,8 @@ let encodeISO: Js.Date.t => Js.Json.t
 
 let differenceInSeconds: (Js.Date.t, Js.Date.t) => int
 
+let differenceInCalendarMonths: (Js.Date.t, Js.Date.t) => int
+
 let differenceInMinutes: (Js.Date.t, Js.Date.t) => int
 
 let differenceInDays: (Js.Date.t, Js.Date.t) => int

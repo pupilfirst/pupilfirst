@@ -324,6 +324,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_bold")}
           title={t("control_label_bold")}
+          type_="button"
           className=buttonClasses
           onClick={_ => curriedModifyPhrase(Bold)}>
           <i className="fas fa-bold fa-fw" />
@@ -332,6 +333,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_italic")}
           title={t("control_label_italic")}
+          type_="button"
           className={buttonClasses ++ "border-l border-gray-300"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
@@ -340,6 +342,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_strikethrough")}
           title={t("control_label_strikethrough")}
+          type_="button"
           className={buttonClasses ++ "border-l border-gray-300"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
@@ -356,6 +359,7 @@ let controls = (disabled, value, state, send, onChange) => {
         ariaLabel={modeLabel(#Preview, mode)}
         title={modeLabel(#Preview, mode)}
         disabled
+        type_="button"
         className={"rounded " ++ buttonClasses}
         onClick={onClickPreview(state, send)}>
         {modeIcon(#Preview, mode)}
@@ -364,6 +368,7 @@ let controls = (disabled, value, state, send, onChange) => {
         ariaLabel={modeLabel(#Split, mode)}
         title={modeLabel(#Split, mode)}
         disabled
+        type_="button"
         className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(#Split, mode)}
@@ -372,6 +377,7 @@ let controls = (disabled, value, state, send, onChange) => {
         ariaLabel={modeLabel(#Fullscreen, mode)}
         title={modeLabel(#Fullscreen, mode)}
         disabled
+        type_="button"
         className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(#Fullscreen, mode)}
@@ -662,6 +668,7 @@ let make = (
   ~defaultMode=Windowed(#Editor),
   ~placeholder=?,
   ~tabIndex=?,
+  ~textAreaName=?,
   ~fileUpload=true,
   ~disabled=false,
   ~dynamicHeight=false,
@@ -758,6 +765,7 @@ let make = (
           <textarea
             ?tabIndex
             ?placeholder
+            name=?textAreaName
             ariaLabel="Markdown editor"
             rows=4
             maxLength

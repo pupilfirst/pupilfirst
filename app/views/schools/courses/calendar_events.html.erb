@@ -30,16 +30,18 @@
               <span>Add Calendar</span>
             </a>
           </div>
-          <div class="bg-white mt-3 shadow-sm px-2 py-1 rounded-md text-sm flex items-center justify-between">
-            <% @course.calendars.each do |calendar|  %>
-              <span class="flex items-center gap-2 font-semibold">
+
+          <% @course.calendars.each do |calendar|  %>
+            <div class="bg-white mt-2 px-2 py-1 rounded-md text-sm flex items-center justify-between">
+              <span class="flex items-center gap-2 font-medium">
                 <%= calendar.name %>
               </span>
               <a href=<%= edit_school_course_calendar_path(@course, calendar) %> class="bg-gray-50 p-2 rounded-md hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
                 <i class="if i-edit-regular if-fw text-base" ></i>
               </a>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
+
         </div>
       </div>
       <div class="col-span-8 bg-white flex-1 rounded-r-lg">

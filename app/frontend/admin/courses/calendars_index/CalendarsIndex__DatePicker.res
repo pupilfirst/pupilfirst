@@ -100,7 +100,9 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
       key=dayAsString
       onClick={_ => reloadPage(dayAsString)}
       className={"courses-calendar__date-grid-button " ++ (
-        selectedDateAsString == dayAsString ? "courses-calendar__date-grid-button--is-selected" : ""
+        selectedDateAsString == dayAsString
+          ? "courses-calendar__date-grid-button--is-selected"
+          : "hover:text-primary-500 hover:bg-primary-100 focus:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition"
       )}>
       <time dateTime=dayAsString> {day->string_of_int->str} </time>
       {
@@ -121,16 +123,19 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
   ->React.array
 }
 
-let getMonthEventStatus = (selectedMonth,selectedCalendarId, courseId, send) => {
+let getMonthEventStatus = (selectedMonth, selectedCalendarId, courseId, send) => {
   send(StartLoadingStatus)
   let monthStartAsString = selectedMonth->DateFns.format("yyyy-MM") ++ "-01"
   let url =
-    "/school/courses/" ++ courseId ++ "/calendar_month_data" ++ "?date=" ++ monthStartAsString ++ (
-      switch selectedCalendarId {
-      | Some(id) => "&calendar_id=" ++ id
-      | None => ""
-      }
-    )
+    "/school/courses/" ++
+    courseId ++
+    "/calendar_month_data" ++
+    "?date=" ++
+    monthStartAsString ++
+    switch selectedCalendarId {
+    | Some(id) => "&calendar_id=" ++ id
+    | None => ""
+    }
   Api.get(
     ~url,
     ~responseCB=res => send(FinishLoadingStatus(res)),
@@ -140,7 +145,7 @@ let getMonthEventStatus = (selectedMonth,selectedCalendarId, courseId, send) => 
 }
 
 @react.component
-let make = (~selectedDate,~selectedCalendarId=?, ~courseId) => {
+let make = (~selectedDate, ~selectedCalendarId=?, ~courseId) => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -149,14 +154,14 @@ let make = (~selectedDate,~selectedCalendarId=?, ~courseId) => {
       selectedMonthDeviation: DateFns.differenceInCalendarMonths(
         DateFns.parseISO(selectedDate),
         Js.Date.make(),
-      )
+      ),
     },
   )
 
   let selectedMonth = computeSelectedMonth(state)
 
   React.useEffect1(() => {
-    getMonthEventStatus(selectedMonth,selectedCalendarId, courseId, send)
+    getMonthEventStatus(selectedMonth, selectedCalendarId, courseId, send)
     None
   }, [state.selectedMonthDeviation])
 
@@ -167,21 +172,21 @@ let make = (~selectedDate,~selectedCalendarId=?, ~courseId) => {
           <div className="courses-calendar__month-indicator flex items-center">
             <button
               onClick={_ => send(ChangeToPreviousMonth)}
-              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-full hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
-              <i className="fas fa-chevron-left" />
+              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-md hover:text-primary-500 hover:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition">
+              <i className="fas fa-chevron-left mr-px" />
             </button>
             <time className="px-2 md:px-4 text-sm xl:text-base" dateTime="2020-06">
               {selectedMonth->DateFns.format("MMM yyyy")->str}
             </time>
             <button
               onClick={_ => send(ChangeToNextMonth)}
-              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-full hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
-              <i className="fas fa-chevron-right" />
+              className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-md hover:text-primary-500 hover:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition">
+              <i className="fas fa-chevron-right ml-px" />
             </button>
           </div>
           <button
             onClick={_ => reloadPage(Js.Date.make()->DateFns.format("yyyy-MM-dd"))}
-            className="px-2 py-1 text-sm bg-gray-100 rounded hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500">
+            className="px-2 py-1 text-sm bg-gray-100 font-medium border rounded-md hover:text-primary-500 hover:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition">
             <span> {"Today"->str} </span>
           </button>
         </div>

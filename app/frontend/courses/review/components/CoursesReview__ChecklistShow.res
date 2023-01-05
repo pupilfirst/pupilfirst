@@ -136,7 +136,7 @@ let make = (
         </h5>
         <button className="btn btn-small btn-default" onClick={_ => showEditorCB()}>
           <i className="far fa-edit" />
-          <div className="ml-2"> {t("edit_checklist_button")->str} </div>
+          <div className="ltr:ml-2 rtl:mr-2"> {t("edit_checklist_button")->str} </div>
         </button>
       </div>
       <div className="border bg-white rounded-lg py-2 md:py-4 mt-2 space-y-8">

@@ -175,7 +175,7 @@ let make = (~communities, ~courses) => {
         onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer focus:outline-none focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {tr("add_new_community") |> str} </h5>
+        <h5 className="font-semibold ltr:ml-2 rtl:mr-2"> {tr("add_new_community") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
@@ -198,7 +198,7 @@ let make = (~communities, ~courses) => {
                     {community |> Community.name |> str}
                   </span>
                   <span
-                    className="ml-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
+                    className="ltr:ml-2 rtl:mr-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
                     <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>

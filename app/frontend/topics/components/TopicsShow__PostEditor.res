@@ -159,7 +159,7 @@ let replyToUserInfo = user => {
         className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
       />
     }}
-    <span className="text-xs font-semibold ml-2"> {name |> str} </span>
+    <span className="text-xs font-semibold ltr:ml-2 rtl:mr-2"> {name |> str} </span>
   </div>
 }
 

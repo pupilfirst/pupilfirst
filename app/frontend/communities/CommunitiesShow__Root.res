@@ -472,7 +472,7 @@ let categoryDropdownSelected = topicCategory =>
 
       <div className="inline-flex items-center">
         <div className="h-3 w-3 border" style />
-        <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>
+        <span className="ltr:ml-2 rtl:mr-2"> {TopicCategory.name(topicCategory)->str} </span>
       </div>
     | None => t("all_categories_button")->str
     }}

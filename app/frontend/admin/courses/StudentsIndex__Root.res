@@ -197,7 +197,7 @@ let studentsList = (params, students) => {
                 className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
                 <span className="inline-flex items-center p-2">
                   <PfIcon className="if i-edit-regular if-fw" />
-                  <span className="ml-2"> {t("edit")->str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2"> {t("edit")->str} </span>
                 </span>
               </Link>
             </div>

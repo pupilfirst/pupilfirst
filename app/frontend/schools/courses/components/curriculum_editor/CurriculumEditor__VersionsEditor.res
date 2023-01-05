@@ -96,7 +96,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
       title={tr("select_version") ++ " " ++ (selectedVersion |> Version.id)}
       className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-focusColor-500 hover:bg-gray-50 hover:shadow-lg px-3 h-full">
       <span> {versionText(selectedVersion)} </span>
-      <span className="border-l border-gray-300 ml-2 pl-2">
+      <span className="border-l border-gray-300 ltr:ml-2 rtl:mr-2 pl-2">
         <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>
@@ -128,7 +128,7 @@ let showContentBlocks = (
       <div className="border rounded border-gray-300 flex items-center">
         {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
       </div>
-      <div className="ml-2">
+      <div className="ltr:ml-2 rtl:mr-2">
         <button
           className="btn btn-primary-ghost"
           onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>

@@ -151,7 +151,7 @@ module Make = (Selectable: Selectable) => {
                     <i
                       className="far fa-plus-square multiselect-inline__list-item-select-icon-selected text-xl"
                     />
-                    <span className="ml-2"> {item |> Selectable.value |> str} </span>
+                    <span className="ltr:ml-2 rtl:mr-2"> {item |> Selectable.value |> str} </span>
                   </button>
                 )
                 |> React.array}

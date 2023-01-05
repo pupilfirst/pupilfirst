@@ -149,7 +149,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
       className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-300 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">
       <PfIcon className="fas fa-plus-circle if-fw" />
-      <span className="font-semibold ml-2"> {t("add_choice") |> str} </span>
+      <span className="font-semibold ltr:ml-2 rtl:mr-2"> {t("add_choice") |> str} </span>
     </button>
   </div>
 
@@ -212,7 +212,7 @@ let make = (
             id={index |> string_of_int}
             checked={checklistItem |> ChecklistItem.optional}
           />
-          <label className="text-xs text-gray-600 ml-2" htmlFor={index |> string_of_int}>
+          <label className="text-xs text-gray-600 ltr:ml-2 rtl:mr-2" htmlFor={index |> string_of_int}>
             {t("optional") |> str}
           </label>
         </div>

@@ -416,7 +416,7 @@ let processingUrlInput = (state, send) => {
       <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
         {t("processing_url.label")->str}
       </label>
-      <HelpIcon className="ml-2 mr-6" link={t("processing_url.help_url")}>
+      <HelpIcon className="ltr:ml-2 rtl:mr-2 mr-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
       <div id="processing-url" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -587,7 +587,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       <label className="tracking-wide text-xs font-semibold">
         {t("progression_behavior.label")->str}
       </label>
-      <HelpIcon className="ml-2" link={t("progression_behavior.help_url")}>
+      <HelpIcon className="ltr:ml-2 rtl:mr-2" link={t("progression_behavior.help_url")}>
         {t("progression_behavior.help")->str}
       </HelpIcon>
       <div className="flex mt-2">
@@ -689,7 +689,7 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
               cloneCourse(send, reloadCoursesCB, course)
             )}>
           <FaIcon classes={cloneButtonIcons(state.saving)} />
-          <span className="ml-2"> {t("actions.clone_course.button_text")->str} </span>
+          <span className="ltr:ml-2 rtl:mr-2"> {t("actions.clone_course.button_text")->str} </span>
         </button>
       </div>
     </div>
@@ -707,7 +707,7 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
                   unarchiveCourse(send, reloadCoursesCB, course)
                 )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {t("actions.unarchive_course.button_text")->str} </span>
+              <span className="ltr:ml-2 rtl:mr-2"> {t("actions.unarchive_course.button_text")->str} </span>
             </button>
           </div>
         </div>
@@ -724,7 +724,7 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
                   archiveCourse(send, reloadCoursesCB, course)
                 )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
+              <span className="ltr:ml-2 rtl:mr-2"> {t("actions.archive_course.button_text")->str} </span>
             </button>
           </div>
         </div>}
@@ -781,7 +781,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
                   className={selectedTabClasses(selectedTab == DetailsTab)}
                   onClick={_ => RescriptReactRouter.push("./details")}>
                   <i className="fa fa-edit" />
-                  <span className="ml-2"> {t("tabs.details")->str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2"> {t("tabs.details")->str} </span>
                 </button>
                 <button
                   role="tab"
@@ -789,7 +789,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
                   className={selectedTabClasses(selectedTab == ImagesTab)}
                   onClick={_ => RescriptReactRouter.push("./images")}>
                   <i className="fa fa-camera" />
-                  <span className="ml-2"> {t("tabs.images")->str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2"> {t("tabs.images")->str} </span>
                 </button>
                 <button
                   role="tab"
@@ -797,7 +797,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
                   className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
                   onClick={_ => RescriptReactRouter.push("./actions")}>
                   <i className="fa fa-cog" />
-                  <span className="ml-2"> {t("tabs.actions")->str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2"> {t("tabs.actions")->str} </span>
                 </button>
               </div>
             </div>,

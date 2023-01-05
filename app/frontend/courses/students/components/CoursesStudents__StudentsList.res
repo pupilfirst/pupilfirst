@@ -61,7 +61,7 @@ let showStudent = student => {
           student->StudentInfo.user->UserDetails.avatarUrl,
           student->StudentInfo.user->UserDetails.name,
         )}
-        <div className="ml-2 md:ml-3 block text-sm md:pr-2">
+        <div className="ltr:ml-2 rtl:mr-2 md:ml-3 block text-sm md:pr-2">
           <p className="font-semibold inline-block leading-snug">
             {student->StudentInfo.user->UserDetails.name->str}
           </p>

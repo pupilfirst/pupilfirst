@@ -37,7 +37,7 @@ let make = (~post, ~users) => {
     <div className="flex justify-between">
       <div className="flex items-center">
         {avatar(user)}
-        <span className="text-xs font-semibold ml-2">
+        <span className="text-xs font-semibold ltr:ml-2 rtl:mr-2">
           {user->Belt.Option.mapWithDefault("Unknown", user => User.name(user)) |> str}
         </span>
       </div>

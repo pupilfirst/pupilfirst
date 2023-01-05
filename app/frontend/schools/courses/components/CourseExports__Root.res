@@ -271,7 +271,7 @@ let make = (~course, ~exports, ~tags) => {
                   {if state.saving {
                     <span>
                       <FaIcon classes="fas fa-spinner fa-pulse" />
-                      <span className="ml-2"> {t("create_button_active_label")->str} </span>
+                      <span className="ltr:ml-2 rtl:mr-2"> {t("create_button_active_label")->str} </span>
                     </span>
                   } else {
                     {t("create_button_text")->str}
@@ -288,7 +288,7 @@ let make = (~course, ~exports, ~tags) => {
           onClick={_ => send(OpenDrawer)}
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-file-export text-lg" />
-          <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
+          <h5 className="font-semibold ltr:ml-2 rtl:mr-2"> {t("create_action")->str} </h5>
         </button>
       </div>
       {state.courseExports |> ArrayUtils.isEmpty

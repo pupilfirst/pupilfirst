@@ -1,6 +1,7 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
 <!DOCTYPE html>
 <html
+  dir="rtl"
   lang="<%= I18n.locale %>"
   data-user-id="<%= current_user&.id %>"
   data-flash="<%= presenter.flash_messages %>"

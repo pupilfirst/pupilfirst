@@ -30,7 +30,7 @@ module Make = (Sortable: Sortable) => {
           onClick={_ => onCriterionChange(criterion)}
           className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
           <Icon className="if i-clock-regular text-sm if-fw text-gray-600" />
-          <span className="ml-2"> {Sortable.criterion(criterion) |> str} </span>
+          <span className="ltr:ml-2 rtl:mr-2"> {Sortable.criterion(criterion) |> str} </span>
         </button>
       )
     <Dropdown selected=selectedForDropdown contents=dropDownContents />

@@ -312,7 +312,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                 <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                   {submission |> Submission.levelId |> Level.levelLabel(levels) |> str}
                 </span>
-                <span className="ml-2 font-semibold text-base">
+                <span className="ltr:ml-2 rtl:mr-2 font-semibold text-base">
                   {submission |> Submission.title |> str}
                 </span>
               </div>
@@ -350,7 +350,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                 className="shrink-0 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200 hover:text-blue-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <span className="hidden md:inline"> {tr("view") |> str} </span>
                 {ts("target") |> str}
-                <FaIcon classes="fas fa-arrow-right ml-2" />
+                <FaIcon classes="fas fa-arrow-right ltr:ml-2 rtl:mr-2" />
               </a>
             </div>
           : React.null}

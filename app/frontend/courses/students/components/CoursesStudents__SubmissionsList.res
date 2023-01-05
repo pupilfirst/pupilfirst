@@ -122,7 +122,7 @@ let showSubmission = (submissions, levels) =>
                 |> Level.unsafeLevelNumber(levels, "StudentSubmissionsList")
                 |> str}
               </span>
-              <span className="ml-2 font-semibold text-base">
+              <span className="ltr:ml-2 rtl:mr-2 font-semibold text-base">
                 {submission |> Submission.title |> str}
               </span>
             </div>

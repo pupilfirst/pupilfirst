@@ -229,7 +229,7 @@ let unlockTopic = (topicId, send) =>
 let communityLink = community =>
   <a href={Community.path(community)} className="btn btn-subtle">
     <i className="fas fa-users" />
-    <span className="ml-2"> {Community.name(community) |> str} </span>
+    <span className="ltr:ml-2 rtl:mr-2"> {Community.name(community) |> str} </span>
   </a>
 
 let topicCategory = (topicCategories, topicCategoryId) =>
@@ -256,7 +256,7 @@ let categoryDropdownSelected = topicCategory =>
 
       <div className="inline-flex items-center">
         <div className="h-3 w-3 rounded mt-px" style />
-        <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>
+        <span className="ltr:ml-2 rtl:mr-2"> {TopicCategory.name(topicCategory)->str} </span>
       </div>
     | None => str(ts("none"))
     }}
@@ -285,7 +285,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
       className="px-3 py-2 font-normal flex items-center"
       onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
       <div className="w-3 h-3 rounded mt-px" style />
-      <span className="ml-2"> {categoryName->str} </span>
+      <span className="ltr:ml-2 rtl:mr-2"> {categoryName->str} </span>
     </div>
   }, selectableTopicCategories)
 
@@ -300,7 +300,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
           className="px-3 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(None))}>
           <div className="w-3 h-3 rounded bg-gray-300 mt-px" />
-          <span className="ml-2"> {ts("none")->str} </span>
+          <span className="ltr:ml-2 rtl:mr-2"> {ts("none")->str} </span>
         </div>,
       ],
     )
@@ -434,7 +434,7 @@ let make = (
                                 isLocked
                                   ? unlockTopic(topicId, send)
                                   : lockTopic(topicId, currentUserId, send)}
-                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ml-2">
+                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ltr:ml-2 rtl:mr-2">
                               <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
                               <span className="hidden md:inline-block ml-1">
                                 {(
@@ -453,7 +453,7 @@ let make = (
                   let style = ReactDOM.Style.make(~backgroundColor=color, ())
                   <div className="py-2 flex items-center lg:pl-14 text-xs font-semibold">
                     <div className="w-3 h-3 rounded" style />
-                    <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>
+                    <span className="ltr:ml-2 rtl:mr-2"> {TopicCategory.name(topicCategory)->str} </span>
                   </div>
                 | None => React.null
                 }}
@@ -521,7 +521,7 @@ let make = (
             <div className="w-6 h-6 text-yellow-500 shrink-0">
               <i className="fa fa-lock" />
             </div>
-            <span className="ml-2"> {t("locked_topic_notice")->React.string} </span>
+            <span className="ltr:ml-2 rtl:mr-2"> {t("locked_topic_notice")->React.string} </span>
           </div>
 
         | None =>

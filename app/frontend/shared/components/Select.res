@@ -29,7 +29,7 @@ module Make = (Selectable: Selectable) => {
       </span>
       {loading
         ? <FaIcon classes="fas fa-spinner fa-spin" />
-        : <FaIcon classes="fas fa-caret-down ml-2" />}
+        : <FaIcon classes="fas fa-caret-down ltr:ml-2 rtl:mr-2" />}
     </button>
   }
   @react.component

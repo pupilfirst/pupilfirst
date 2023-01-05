@@ -109,7 +109,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
-        <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
+        <h2 className="ltr:ml-2 rtl:mr-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
           {str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)}
         </h2>
         <div

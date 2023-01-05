@@ -333,18 +333,18 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="grades">
                   {t("grade_labels.label") |> str}
                 </label>
-                <HelpIcon className="ml-2" link={t("grade_labels.help_url")}>
+                <HelpIcon className="ltr:ml-2 rtl:mr-2" link={t("grade_labels.help_url")}>
                   {t("grade_labels.help") |> str}
                 </HelpIcon>
               </div>
               <div className="flex">
                 <div className="flex justify-center items-center ml-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed" />
-                  <span className="ml-2 text-xs"> {ts("fail") |> str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2 text-xs"> {ts("fail") |> str} </span>
                 </div>
                 <div className="flex justify-center items-center ml-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed" />
-                  <span className="ml-2 text-xs"> {ts("pass") |> str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2 text-xs"> {ts("pass") |> str} </span>
                 </div>
               </div>
             </div>

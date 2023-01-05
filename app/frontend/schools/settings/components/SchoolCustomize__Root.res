@@ -143,7 +143,7 @@ let editIcon = (additionalClasses, clickHandler, title) =>
     ariaLabel=title
     onClick=clickHandler>
     <i className="fas fa-pencil-alt text-xs" />
-    <span className="text-xs font-semibold ml-2"> {ts("edit")->str} </span>
+    <span className="text-xs font-semibold ltr:ml-2 rtl:mr-2"> {ts("edit")->str} </span>
   </button>
 
 let showEditor = (editor, send, event) => {
@@ -334,7 +334,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 focus:bg-primary-200 focus:border-primary-500 focus:text-primary-600px px-2 py-1 cursor-pointer rounded"
             onClick={showEditor(ImagesEditor, send)}>
             <i className="fas fa-pencil-alt" />
-            <span className="font-semibold ml-2"> {t("change_cover")->str} </span>
+            <span className="font-semibold ltr:ml-2 rtl:mr-2"> {t("change_cover")->str} </span>
           </button>
         </div>
         <div className="relative pb-1/2 md:pb-1/4 rounded-b-lg overflow-hidden">
@@ -490,8 +490,8 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div className="bg-gray-300 rounded-t-lg h-12 flex items-end">
           <div className="w-full flex items-center pr-3">
             <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
-            <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
-            <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
+            <div className="h-3 w-3 rounded-full bg-gray-500 ltr:ml-2 rtl:mr-2" />
+            <div className="h-3 w-3 rounded-full bg-gray-500 ltr:ml-2 rtl:mr-2" />
             <div className="p-3 ml-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
                 src={state.customizations |> Customizations.icon |> Customizations.url}
@@ -501,7 +501,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 {schoolName->str}
               </span>
             </div>
-            {editIcon("ml-2", showEditor(ImagesEditor, send), t("edit_icon"))}
+            {editIcon("ltr:ml-2 rtl:mr-2", showEditor(ImagesEditor, send), t("edit_icon"))}
           </div>
         </div>
         <div className="bg-gray-50 border border-t-0 h-16 rounded-b-lg" />

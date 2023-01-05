@@ -88,7 +88,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           <div className="mt-4">
             <button onClick={printCertificate(setViewMode)} className="btn btn-primary">
               <i className="fas fa-print" />
-              <span className="ml-2"> {t("print_or_save")->str} </span>
+              <span className="ltr:ml-2 rtl:mr-2"> {t("print_or_save")->str} </span>
             </button>
           </div>
         </div>

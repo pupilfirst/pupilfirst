@@ -214,13 +214,13 @@ let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
               className={selectedTabClasses(selectedTab == DetailsTab)}
               onClick={_ =>
                 RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
-              <i className="fa fa-edit" /> <span className="ml-2"> {t("tabs.details")->str} </span>
+              <i className="fa fa-edit" /> <span className="ltr:ml-2 rtl:mr-2"> {t("tabs.details")->str} </span>
             </button>
             <button
               className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
               onClick={_ =>
                 RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
-              <i className="fa fa-cog" /> <span className="ml-2"> {t("tabs.actions")->str} </span>
+              <i className="fa fa-cog" /> <span className="ltr:ml-2 rtl:mr-2"> {t("tabs.actions")->str} </span>
             </button>
           </div>
           <Spread props={"applicant-id": Applicant.id(applicant)}>

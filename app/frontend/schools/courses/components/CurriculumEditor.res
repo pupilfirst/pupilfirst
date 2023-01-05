@@ -304,7 +304,7 @@ let make = (
           <span className="flex bg-gray-50 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>
+          <h4 className="font-semibold ltr:ml-2 rtl:mr-2"> {t("create_target_group") |> str} </h4>
         </button>
       </div>
     </div>

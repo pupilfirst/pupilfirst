@@ -679,7 +679,7 @@ let quizEditor = (state, send) =>
         onClick={addQuizQuestion(send)}
         className="flex w-full items-center bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
         <i className="fas fa-plus-circle text-lg" />
-        <h5 className="font-semibold ml-2"> {t("add_another_question") |> str} </h5>
+        <h5 className="font-semibold ltr:ml-2 rtl:mr-2"> {t("add_another_question") |> str} </h5>
       </button>
     </div>
   </div>
@@ -977,7 +977,7 @@ let make = (
                       disabled={Js.Array.length(state.checklist) >= 25}
                       onClick={_ => send(AddNewChecklistItem)}>
                       <PfIcon className="fas fa-plus-circle text-lg" />
-                      <span className="font-semibold ml-2"> {t("add_step")->str} </span>
+                      <span className="font-semibold ltr:ml-2 rtl:mr-2"> {t("add_step")->str} </span>
                     </button>
                   </div>
                 </div>

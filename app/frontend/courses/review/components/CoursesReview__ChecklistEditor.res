@@ -342,7 +342,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     ->React.array}
                     <button
                       onClick={_ => addEmptyResultItem(send, reviewChecklistItem, itemIndex)}
-                      className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
+                      className="checklist-editor__add-result-btn ltr:ml-2 rtl:mr-2 md:ml-4 mt-3 flex items-center focus:outline-none">
                       <span
                         title={t("add_result")}
                         className="checklist-editor__add-result-btn-check shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2"

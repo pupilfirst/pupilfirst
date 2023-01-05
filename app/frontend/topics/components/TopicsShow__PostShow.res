@@ -109,7 +109,7 @@ let optionsDropdown = (
       onClick={_ => toggleShowPostEdit(_ => true)}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-edit fa-fw text-base" />
-      <span className="ml-2">
+      <span className="ltr:ml-2 rtl:mr-2">
         {(isFirstPost ? t("edit_post_string") : t("edit_reply_string")) |> str}
       </span>
     </button>
@@ -121,7 +121,7 @@ let optionsDropdown = (
         onClick={_ => archivePost(isFirstPost, post |> Post.id, archivePostCB)}
         className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
-        <span className="ml-2">
+        <span className="ltr:ml-2 rtl:mr-2">
           {(isFirstPost ? t("delete_topic_string") : t("delete_reply_string")) |> str}
         </span>
       </button>
@@ -132,7 +132,7 @@ let optionsDropdown = (
       href={"/posts/" ++ (Post.id(post) ++ "/versions")}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-history fa-fw text-base" />
-      <span className="ml-2"> {t("history_button_text") |> str} </span>
+      <span className="ltr:ml-2 rtl:mr-2"> {t("history_button_text") |> str} </span>
     </a>
   | None => React.null
   }
@@ -334,7 +334,7 @@ let make = (
                     className="bg-gray-50 flex md:hidden items-center text-center rounded-lg p-2 hover:bg-gray-50 text-gray-600">
                     <PfIcon className="if i-check-solid text-sm lg:text-base" />
                     <span
-                      className="ml-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
+                      className="ltr:ml-2 rtl:mr-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
                       {t("solution") |> str}
                     </span>
                   </button>,
@@ -373,7 +373,7 @@ let make = (
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                     className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-50">
                     {t(~count=Post.replies(post)->Js.Array2.length, "show_replies_button")->str}
-                    <FaIcon classes={"ml-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")} />
+                    <FaIcon classes={"ltr:ml-2 rtl:mr-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")} />
                   </button>
                 : React.null}
             </div>

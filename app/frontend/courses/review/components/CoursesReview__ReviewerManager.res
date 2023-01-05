@@ -75,7 +75,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
                 className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
               />
             }}
-            <div className="ml-2">
+            <div className="ltr:ml-2 rtl:mr-2">
               <p className="text-sm font-semibold">
                 {UserProxy.name(Reviewer.user(reviewer))->str}
               </p>

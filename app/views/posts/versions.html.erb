@@ -7,7 +7,7 @@
     <div class="border-b pb-3">
       <%= link_to topic_path(@post.topic, anchor: "post-show-#{@post.id}"), class: "btn btn-default" do %>
         <i class="fas fa-arrow-left"></i>
-        <span class="ml-2"><%= t(".back_to_post") %></span>
+        <span class="ltr:ml-2 rtl:mr-2"><%= t(".back_to_post") %></span>
       <% end %>
     </div>
     <div class="mt-5 inline-block bg-gray-50 border rounded px-2 pb-1 ml-8 md:ml-19">

@@ -232,7 +232,7 @@ let make = (~courseId, ~coach) => {
       {state.loading
         ? <div className="py-3 flex">
             {SkeletonLoading.card(~className="w-full mr-2", ())}
-            {SkeletonLoading.card(~className="w-full ml-2", ())}
+            {SkeletonLoading.card(~className="w-full ltr:ml-2 rtl:mr-2", ())}
           </div>
         : <div className="py-3 flex mt-4">
             <div
@@ -246,7 +246,7 @@ let make = (~courseId, ~coach) => {
               </div>
             </div>
             <div
-              className="w-full ml-2 rounded-lg shadow px-5 py-6"
+              className="w-full ltr:ml-2 rtl:mr-2 rounded-lg shadow px-5 py-6"
               ariaLabel={tr("pending_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("pending_submissions") |> str} </span>

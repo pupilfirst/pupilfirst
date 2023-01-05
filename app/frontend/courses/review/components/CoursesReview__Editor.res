@@ -378,7 +378,7 @@ let inactiveWarning = submissionDetails =>
 
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
-      <i className="fas fa-exclamation-triangle" /> <span className="ml-2"> {warning->str} </span>
+      <i className="fas fa-exclamation-triangle" /> <span className="ltr:ml-2 rtl:mr-2"> {warning->str} </span>
     </div>
   } else {
     React.null
@@ -458,7 +458,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+              className="ltr:ml-2 rtl:mr-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
@@ -734,7 +734,7 @@ let submissionReviewStatus = (status, overlaySubmission) => {
       | (_, Grading)
       | (_, Ungraded) => React.null
       }}
-      <div className="flex justify-center ml-2 md:ml-4">
+      <div className="flex justify-center ltr:ml-2 rtl:mr-2 md:ml-4">
         <div className={gradeBadgeClasses(color, status, true)}>
           {switch status {
           | Graded(passed) =>
@@ -904,11 +904,11 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
         <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
-          <span className="ml-2 md:ml-4 tracking-wide">
+          <span className="ltr:ml-2 rtl:mr-2 md:ml-4 tracking-wide">
             <label htmlFor=textareaId> {t("write_a_note")->str} </label> help
           </span>
         | None =>
-          <div className="ml-2 md:ml-4 tracking-wide w-full">
+          <div className="ltr:ml-2 rtl:mr-2 md:ml-4 tracking-wide w-full">
             <div> <span> {(t("note_help") ++ (noteAbout ++ "?"))->str} </span> help </div>
             <button
               className="btn btn-default mt-2"
@@ -951,7 +951,7 @@ let feedbackGenerator = (
           <PfIcon
             className="if i-check-square-alt-light text-gray-800 text-base md:text-lg inline-block"
           />
-          <span className="ml-2 md:ml-3 tracking-wide"> {t("review_checklist")->str} </span>
+          <span className="ltr:ml-2 rtl:mr-2 md:ml-3 tracking-wide"> {t("review_checklist")->str} </span>
         </h5>
       </div>
       <div className="mt-2 md:ml-8">
@@ -976,7 +976,7 @@ let feedbackGenerator = (
             <PfIcon
               className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
             />
-            <span className="ml-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
+            <span className="ltr:ml-2 rtl:mr-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
           </h5>
           {ReactUtils.nullUnless(
             <div
@@ -1392,12 +1392,12 @@ let make = (
                       </div>
                     | None => React.null
                     }}
-                    <div className="flex justify-center ml-2 md:ml-4">
+                    <div className="flex justify-center ltr:ml-2 rtl:mr-2 md:ml-4">
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
                         className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                         <Icon className="if i-times-regular" />
-                        <span className="ml-2"> {t("remove_assignment")->str} </span>
+                        <span className="ltr:ml-2 rtl:mr-2"> {t("remove_assignment")->str} </span>
                       </button>
                     </div>
                   </div>
@@ -1410,7 +1410,7 @@ let make = (
                 <div>
                   <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+                    <span className="ltr:ml-2 rtl:mr-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
                   </h5>
                   <div className="flex md:flex-row flex-col md:ml-8 rounded-lg mt-2">
                     <div className="w-full md:w-9/12">
@@ -1452,7 +1452,7 @@ let make = (
                     <PfIcon
                       className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                     />
-                    <span className="ml-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
+                    <span className="ltr:ml-2 rtl:mr-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
                   </h5>
                   {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
                 </div>,
@@ -1496,7 +1496,7 @@ let make = (
                 <div className="flex items-center justify-between">
                   <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ml-2 md:ml-3 tracking-wide"> {t("grade_card")->str} </span>
+                    <span className="ltr:ml-2 rtl:mr-2 md:ml-3 tracking-wide"> {t("grade_card")->str} </span>
                   </h5>
                   <div>
                     {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
@@ -1510,7 +1510,7 @@ let make = (
                           disabled={isSubmissionReviewAllowed(submissionDetails)}
                           className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                           <i className="fas fa-undo" />
-                          <span className="ml-2"> {t("undo_grading")->str} </span>
+                          <span className="ltr:ml-2 rtl:mr-2"> {t("undo_grading")->str} </span>
                         </button>
                       </div>
                     | (None, Graded(_))
@@ -1555,7 +1555,7 @@ let make = (
                   <PfIcon
                     className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                   />
-                  <span className="ml-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
+                  <span className="ltr:ml-2 rtl:mr-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
                 </h5>
                 {ReactUtils.nullIf(
                   <div className="py-4 md:ml-8 text-center">

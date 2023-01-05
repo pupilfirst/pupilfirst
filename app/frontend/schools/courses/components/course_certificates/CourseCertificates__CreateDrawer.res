@@ -120,7 +120,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       htmlFor="certificate-file-input">
                       {t("certificate_base_image.label")->str}
                     </label>
-                    <HelpIcon className="ml-2" link={t("certificate_base_image.help_url")}>
+                    <HelpIcon className="ltr:ml-2 rtl:mr-2" link={t("certificate_base_image.help_url")}>
                       {t("certificate_base_image.help")->str}
                     </HelpIcon>
                   </div>

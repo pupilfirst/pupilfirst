@@ -377,7 +377,7 @@ let controls = (disabled, value, state, send, onChange) => {
         {modeIcon(#Fullscreen, mode)}
         {switch mode {
         | Fullscreen(_) =>
-          <span ariaHidden=true className="ml-2 text-xs font-semibold">
+          <span ariaHidden=true className="ltr:ml-2 rtl:mr-2 text-xs font-semibold">
             {t("exit_full_screen_label")->str}
           </span>
         | Windowed(_) => React.null

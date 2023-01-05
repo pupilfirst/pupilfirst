@@ -232,7 +232,7 @@ let make = (
                   <div className="w-6 h-6 text-yellow-500 shrink-0">
                     <i className="fas fa-exclamation-triangle" />
                   </div>
-                  <span className="ml-2"> {t("cannot_be_auto_issued_warning")->React.string} </span>
+                  <span className="ltr:ml-2 rtl:mr-2"> {t("cannot_be_auto_issued_warning")->React.string} </span>
                 </div>
               : React.null}
           </div>
@@ -418,7 +418,7 @@ let make = (
                       <i className="fas fa-exclamation-triangle" />
                     </div>
                     <div
-                      className="ml-2 text-xs font-semibold"
+                      className="ltr:ml-2 rtl:mr-2 text-xs font-semibold"
                       dangerouslySetInnerHTML={
                         "__html": t(~count=issuedCount, "update_issued_certificates_warning"),
                       }
@@ -432,7 +432,7 @@ let make = (
                 disabled=saveButtonDisabled
                 className="w-auto btn btn-success">
                 <FaIcon classes={"fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")} />
-                <span className="ml-2"> {t(state.saving ? "saving" : "save_changes")->str} </span>
+                <span className="ltr:ml-2 rtl:mr-2"> {t(state.saving ? "saving" : "save_changes")->str} </span>
               </button>
             </div>
           </div>

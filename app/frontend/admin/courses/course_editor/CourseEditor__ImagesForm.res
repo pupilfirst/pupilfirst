@@ -178,7 +178,7 @@ let make = (~course, ~updateCourseCB) => {
           />
           <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
             <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
+            <span className="ltr:ml-2 rtl:mr-2 truncate">
               {optionalImageLabelText(thumbnail, state.filenameThumb)}
             </span>
           </label>
@@ -211,7 +211,7 @@ let make = (~course, ~updateCourseCB) => {
           />
           <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
             <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
+            <span className="ltr:ml-2 rtl:mr-2 truncate">
               {optionalImageLabelText(cover, state.filenameCover)}
             </span>
           </label>

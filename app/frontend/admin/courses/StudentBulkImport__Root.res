@@ -439,7 +439,7 @@ let make = (~courseId) => {
                     <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
                       {t("csv_file_input.label")->str}
                     </label>
-                    <HelpIcon className="ml-2" link={t("csv_file_input.help_url")}>
+                    <HelpIcon className="ltr:ml-2 rtl:mr-2" link={t("csv_file_input.help_url")}>
                       {str(t("csv_file_input.help"))}
                     </HelpIcon>
                   </div>

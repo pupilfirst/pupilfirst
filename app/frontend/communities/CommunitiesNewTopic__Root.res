@@ -187,7 +187,7 @@ let suggestions = state => {
           {tr("similar_topics") |> str}
         </span>
         {state.searching
-          ? <span className="ml-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
+          ? <span className="ltr:ml-2 rtl:mr-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
           : React.null}
         {suggestions->Js.Array2.map(suggestion => {
           let askedOn =
@@ -216,7 +216,7 @@ let suggestions = state => {
               </p>
             </div>
             <div
-              className={"text-xs px-1 py-px ml-2 rounded font-semibold shrink-0 " ++
+              className={"text-xs px-1 py-px ltr:ml-2 rtl:mr-2 rounded font-semibold shrink-0 " ++
               answersClasses}>
               {answersText |> str}
             </div>
@@ -261,7 +261,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
             <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
               <i className="fas fa-arrow-left" />
-              <span className="ml-2"> {tr("back") |> str} </span>
+              <span className="ltr:ml-2 rtl:mr-2"> {tr("back") |> str} </span>
             </a>
           </div>
         </div>

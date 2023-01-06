@@ -83,6 +83,13 @@ class CoursesController < ApplicationController
     render layout: 'student_course'
   end
 
+  # GET /courses/:id/calendar
+  def calendar
+    @course = authorize(find_course)
+    @presenter = Courses::CalendarsPresenter.new(view_context, @course, params)
+    render layout: 'student_course'
+  end
+
   private
 
   def course

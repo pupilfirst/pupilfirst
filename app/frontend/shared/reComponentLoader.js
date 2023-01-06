@@ -41,6 +41,7 @@ window.onload = function () {
     "schoolrouter-innerpage-data"
   );
   if (schoolRouterInnerPageData) {
+    debugger;
     document.getElementById("schoolrouter-innerpage").innerHTML =
       schoolRouterInnerPageData.innerHTML;
     schoolRouterInnerPageData.remove();

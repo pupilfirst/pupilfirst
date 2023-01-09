@@ -108,7 +108,6 @@ Rails.application.routes.draw do
     resources :courses, only: [] do
       member do
         get 'applicants'
-        get 'calendars'
         get 'calendar_events'
         get 'curriculum'
         get 'exports'

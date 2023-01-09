@@ -40,7 +40,7 @@ gem 'virtus', '~> 2.0' # Required for reform coercion. Attributes on Steroids fo
 gem 'dry-validation', '~> 1.7' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
 gem 'postmark-rails', '~> 0.21' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'responders', '~> 3.0' # A set of Rails responders to dry up your application (respond_to / with)
-gem 'rollbar', '~> 3.2' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
+gem 'rollbar', '~> 3.4.0' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 2.5' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.

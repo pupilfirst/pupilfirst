@@ -20,9 +20,9 @@ module Discord
         @user.update!(discord_user_id: nil)
       rescue Discordrb::Errors::NoPermission
         Rails.logger.error "No permission to update member #{@discord_user_id}"
-      rescue RestClient::BadRequest
+      rescue RestClient::BadRequest => e
         Rails
-          .logger.error "Bad request with discord_user_id: #{@discord_user_id}"
+          .logger.error "Bad request with discord_user_id: #{@discord_user_id}; #{e.response.body}"
       end
     end
   end

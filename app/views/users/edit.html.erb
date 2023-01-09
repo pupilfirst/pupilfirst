@@ -13,7 +13,7 @@
         <div class="bg-green-100 border-l-4 border-green-400 p-4">
           <div class="flex items-center">
             <i class="fas fa-check-circle text-green-400 text-4xl"></i>
-            <div class="ml-3">
+            <div class="ltr:ml-3 rtl:mr-3">
               <h3 class="text-lg font-semibold"><%= t('.course_discord_requirement_met.heading_html', course_path: curriculum_course_path(@course_requiring_discord_account)) %></h3>
               <p class="text-sm text-green-900"><%= t('.course_discord_requirement_met.description_html', school_name: current_school.name, course_path: curriculum_course_path(@course_requiring_discord_account)) %></p>
             </div>
@@ -23,7 +23,7 @@
         <div class="bg-orange-100 border-l-4 border-orange-400 p-4">
           <div class="flex items-center">
             <i class="fas fa-exclamation-triangle text-orange-400 text-4xl"></i>
-            <div class="ml-3">
+            <div class="ltr:ml-3 rtl:mr-3">
               <h3 class="text-lg font-semibold"><%= t('.course_requires_discord_account.heading') %></h3>
               <p class="text-sm text-orange-900"><%= t('.course_requires_discord_account.description_html', course_name: @course_requiring_discord_account.name) %></p>
             </div>
@@ -43,7 +43,7 @@
           </div>
           <div class="px-4 py-5 sm:p-6 md:mt-0 w-full md:w-2/3">
             <h4 class="font-semibold"><%= t(".discord_how_it_works_title") %></h4>
-            <ul class="mt-1 text-sm md:text-base text-gray-700 ml-5 list-disc">
+            <ul class="mt-1 text-sm md:text-base text-gray-700 ltr:ml-5 rtl:mr-5 list-disc">
               <%= t(".discord_how_it_works_html") %>
             </ul>
             <div class="mt-4">
@@ -59,7 +59,7 @@
           </div>
           <div class="px-4 py-5 sm:p-6 md:mt-0 w-full md:w-2/3">
             <h4 class="font-semibold"><%= t(".discord_connected_message_title", school_name: current_school.name) %></h4>
-            <ul class="mt-1 text-sm md:text-base text-gray-700 ml-5 list-disc">
+            <ul class="mt-1 text-sm md:text-base text-gray-700 ltr:ml-5 rtl:mr-5 list-disc">
               <%= simple_format(t(".discord_connected_message")) %>
             </ul>
             <div class="mt-3">

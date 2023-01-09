@@ -267,7 +267,7 @@ let confirmDeletionWindow = (state, send) =>
     ? {
         let body =
           <div ariaLabel={t("confirm_dialog_aria")}>
-            <p className="text-sm text-center sm:text-left text-gray-600">
+            <p className="text-sm text-center ltr:sm:text-left rtl:sm:text-right text-gray-600">
               {t("account_delete_q")->str}
             </p>
             <div className="mt-3">

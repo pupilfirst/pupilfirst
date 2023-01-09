@@ -28,7 +28,7 @@
           <div class="flex gap-2 items-center">
             <i class="if i-external-link-regular if-fw"></i>
             <p>
-            <%= event.link_title %>
+               <%= event.link_title.present? ? event.link_title : event.link_url %>
             </p>
           </div>
         </a>

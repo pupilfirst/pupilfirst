@@ -574,8 +574,6 @@ select.select {
   background-repeat: no-repeat;
   background-size: 1.5em 1.5em;
   padding-right: 2.5rem;
-  -webkit-print-color-adjust: exact;
-  color-adjust: exact;
   appearance: none;
 }
 

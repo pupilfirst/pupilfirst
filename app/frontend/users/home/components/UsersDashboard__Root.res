@@ -13,7 +13,7 @@ type view =
 
 let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit) => {
   let name = Belt.Option.getWithDefault(preferredName, userName)
-  <div className="max-w-4xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
+  <div className="max-w-5xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
     <div className="flex">
       {switch avatarUrl {
       | Some(src) =>
@@ -49,7 +49,7 @@ let navButtonClasses = selected =>
 
 let navSection = (view, setView, communities, issuedCertificates) =>
   <div className="border-b mt-6">
-    <div role="tablist" className="flex max-w-4xl mx-auto px-3 lg:px-0">
+    <div role="tablist" className="flex max-w-5xl mx-auto px-3 lg:px-0">
       <button
         role="tab"
         ariaSelected={view == ShowCourses}
@@ -190,7 +190,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
 }
 
 let coursesSection = (courses, communities, currentSchoolAdmin) =>
-  <div className="w-full max-w-4xl mx-auto">
+  <div className="w-full max-w-5xl mx-auto">
     {ReactUtils.nullUnless(
       <div
         className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center mt-4">
@@ -248,7 +248,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
   </div>
 
 let communitiesSection = communities =>
-  <div className="w-full max-w-4xl mx-auto">
+  <div className="w-full max-w-5xl mx-auto">
     <div className="flex flex-wrap flex-1 lg:-mx-5">
       {Js.Array.map(
         community =>
@@ -277,7 +277,7 @@ let communitiesSection = communities =>
   </div>
 
 let certificatesSection = issuedCertificates =>
-  <div className="w-full max-w-4xl mx-auto">
+  <div className="w-full max-w-5xl mx-auto">
     <div className="flex flex-wrap flex-1 lg:-mx-5">
       {Js.Array.map(
         issuedCertificate =>

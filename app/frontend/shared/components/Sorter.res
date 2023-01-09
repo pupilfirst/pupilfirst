@@ -15,7 +15,7 @@ module Make = (Sortable: Sortable) => {
         title={t("order_by") ++ " " ++ (selectedCriterion |> Sortable.criterion)}
         className="flex w-full items-center justify-between leading-relaxed font-semibold bg-white border border-gray-300 rounded focus:outline-none px-2 md:px-3 py-1 md:py-2 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
         <span> {selectedCriterion |> Sortable.criterion |> str} </span>
-        <i className="fas fa-caret-down ml-3" />
+        <i className="fas fa-caret-down ltr:ml-3 rtl:mr-3" />
       </button>
     let dropDownContents =
       criteria

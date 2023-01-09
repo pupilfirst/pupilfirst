@@ -3,7 +3,7 @@
 <% end %>
 
 <div id="schoolrouter-innerpage-data">
-  <section class="bg-yellow-50"> <%# Replace with event color %>
+  <section class="<%="bg-#{@event.color}-50"%>">
     <div class="max-w-5xl mx-auto p-6">
       <div class="mt-4">
         <%= link_to t('shared.back_link'), school_course_calendar_events_path(@course), class: 'bg-black/10 px-3 py-1 text-black rounded-xl text-sm hover:bg-black/20 focus:outline-none  focus:bg-black/20 focus:ring-1 focus:ring-focusColor-500' %>

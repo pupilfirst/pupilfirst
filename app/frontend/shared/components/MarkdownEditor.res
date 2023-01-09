@@ -364,7 +364,7 @@ let controls = (disabled, value, state, send, onChange) => {
         ariaLabel={modeLabel(#Split, mode)}
         title={modeLabel(#Split, mode)}
         disabled
-        className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
+        className={buttonClasses ++ "rounded ltr:ml-1 rtl:mr-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(#Split, mode)}
       </button>
@@ -372,7 +372,7 @@ let controls = (disabled, value, state, send, onChange) => {
         ariaLabel={modeLabel(#Fullscreen, mode)}
         title={modeLabel(#Fullscreen, mode)}
         disabled
-        className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
+        className={buttonClasses ++ "rounded  ltr:ml-1 rtl:mr-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(#Fullscreen, mode)}
         {switch mode {
@@ -549,15 +549,15 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
             {switch error {
             | Some(error) =>
               <span className="text-red-500">
-                <i className="fas fa-exclamation-triangle mr-2" /> {error |> str}
+                <i className="fas fa-exclamation-triangle ltr:mr-2 rtl:ml-2" /> {error |> str}
               </span>
             | None =>
-              <span> <i className="far fa-file-image mr-2" /> {t("attach_file_label")->str} </span>
+              <span> <i className="far fa-file-image ltr:mr-2 rtl:ml-2" /> {t("attach_file_label")->str} </span>
             }}
           </label>
         | Uploading =>
           <span className="text-xs px-3 py-2 grow cursor-wait">
-            <i className="fas fa-spinner fa-pulse mr-2" /> {t("file_upload_wait")->str}
+            <i className="fas fa-spinner fa-pulse ltr:mr-2 rtl:ml-2" /> {t("file_upload_wait")->str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}
@@ -567,7 +567,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         target="_blank"
         className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-red-500 focus:outline-none focus:bg-gray-300 focus:text-red-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
-        <span className="text-xs ml-1 font-semibold hidden sm:inline">
+        <span className="text-xs ltr:ml-1 rtl:mr-1 font-semibold hidden sm:inline">
           {t("help_label")->str}
         </span>
       </a>

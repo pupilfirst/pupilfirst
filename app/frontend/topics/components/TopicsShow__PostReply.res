@@ -50,7 +50,7 @@ let make = (~post, ~users) => {
         </div>
       </Tooltip>
     </div>
-    <div className="text-sm ml-9">
+    <div className="text-sm ltr:ml-9 rtl:mr-9">
       <MarkdownBlock
         markdown={post |> Post.body} className="leading-normal text-sm " profile=Markdown.Permissive
       />

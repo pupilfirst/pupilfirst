@@ -262,7 +262,7 @@ let make = (
               <button
                 disabled=state.saving
                 onClick={_ => handleCloseCB()}
-                className="btn btn-subtle mr-2">
+                className="btn btn-subtle ltr:mr-2 rtl:ml-2">
                 {tr("cancel") |> str}
               </button>
             | None => React.null

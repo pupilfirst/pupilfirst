@@ -20,7 +20,7 @@ let userTags = student => {
         {tags
         |> Js.Array.map(tag =>
           <div
-            className="bg-blue-100 mt-1 mr-1 py-px px-2 text-tiny rounded-lg font-semibold text-gray-900
+            className="bg-blue-100 mt-1 ltr:mr-1 rtl:ml-1 py-px px-2 text-tiny rounded-lg font-semibold text-gray-900
             "
             key={tag}>
             {str(tag)}
@@ -37,7 +37,7 @@ let studentTags = student => {
         {StudentInfo.taggings(student)
         |> Js.Array.map(tag =>
           <div
-            className="bg-gray-100 rounded-lg font-semibold mt-1 mr-1 py-px px-2 text-tiny text-gray-900"
+            className="bg-gray-100 rounded-lg font-semibold mt-1 ltr:mr-1 rtl:ml-1 py-px px-2 text-tiny text-gray-900"
             key={tag}>
             {str(tag)}
           </div>
@@ -61,16 +61,16 @@ let showStudent = student => {
           student->StudentInfo.user->UserDetails.avatarUrl,
           student->StudentInfo.user->UserDetails.name,
         )}
-        <div className="ltr:ml-2 rtl:mr-2 md:ml-3 block text-sm md:pr-2">
+        <div className="ltr:ml-2 rtl:mr-2 ltr:md:ml-3 rtl:md:mr-3 block text-sm ltr:md:pr-2 rtl:md:pl-2">
           <p className="font-semibold inline-block leading-snug">
             {student->StudentInfo.user->UserDetails.name->str}
           </p>
           <div
             className="py-px text-gray-600 text-xs leading-snug flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold pr-2">
+            <span className="font-semibold ltr:pr-2 rtl:pl-2">
               {student->StudentInfo.user->UserDetails.fullTitle->str}
             </span>
-            <span className="sm:pl-2 sm:border-l border-gray-400 italic">
+            <span className="ltr:sm:pl-2 rtl:sm:pr-2 sm:border-l border-gray-400 italic">
               {switch student->StudentInfo.user->UserDetails.lastSeenAt {
               | Some(date) =>
                 t(

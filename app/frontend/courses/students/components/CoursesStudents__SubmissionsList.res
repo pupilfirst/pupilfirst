@@ -115,7 +115,7 @@ let showSubmission = (submissions, levels) =>
           ariaLabel={"student-submission-card-" ++ (submission |> Submission.id)}
           className={submissionCardClasses(submission)}>
           <div className="w-full md:w-3/4">
-            <div className="block text-sm md:pr-2">
+            <div className="block text-sm ltr:md:pr-2 rtl:md:pl-2">
               <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                 {submission
                 |> Submission.levelId
@@ -127,7 +127,7 @@ let showSubmission = (submissions, levels) =>
               </span>
             </div>
             <div className="mt-1 ml-px text-xs text-gray-900">
-              <span className="ml-1">
+              <span className="ltr:ml-1 rtl:mr-1">
                 {tr("submitted_on") ++ (submission |> Submission.createdAtPretty) |> str}
               </span>
             </div>

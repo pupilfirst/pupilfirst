@@ -97,7 +97,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
             </div>
           </div>,
           <div className="flex flex-col md:flex-row items-center mt-4" key="change-reviewer-button">
-            <p className="text-sm pr-4">
+            <p className="text-sm ltr:pr-4 rtl:pl-4">
               {t(
                 ~variables=[("current_coach_name", UserProxy.name(Reviewer.user(reviewer)))],
                 "remove_reviewer_assign_to_me",

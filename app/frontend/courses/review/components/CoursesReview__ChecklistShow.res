@@ -125,7 +125,7 @@ let make = (
           className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left text-gray-500" />
-          <p className="pl-2"> {str("Back to Review")} </p>
+          <p className="ltr:pl-2 rtl:pr-2"> {str("Back to Review")} </p>
         </button>
       </div>
     </div>
@@ -170,7 +170,7 @@ let make = (
                             )->Belt.Option.isSome
 
                           ReactUtils.nullUnless(
-                            <div className="pl-7 pt-2">
+                            <div className="ltr:pl-7 rtl:pr-7 pt-2">
                               <textarea
                                 rows=4
                                 cols=33

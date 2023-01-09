@@ -35,7 +35,7 @@ let courseDropdown = (currentCourse, otherCourses) =>
             {CourseInfo.name(currentCourse)->str}
           </span>
           <div
-            className="student-course__dropdown-btn ml-3 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-between px-3 py-2 rounded">
+            className="student-course__dropdown-btn ltr:ml-3 rtl:mr-3 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-between px-3 py-2 rounded">
             <i className="fas fa-chevron-down text-xs font-semibold" />
           </div>
         </button>

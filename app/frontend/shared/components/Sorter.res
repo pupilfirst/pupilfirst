@@ -54,7 +54,7 @@ module Make = (Sortable: Sortable) => {
             className="inline-flex flex-1 md:flex-auto items-center bg-gray-50 leading-relaxed font-semibold text-gray-600 border border-gray-300 rounded px-3 py-1 md:py-2 text-sm ">
             <div> {selectedCriterion |> Sortable.criterion |> str} </div>
           </div>}
-      <span className="flex ml-1">
+      <span className="flex ltr:ml-1 rtl:mr-1">
         <button
           ariaLabel={t("toggle_sort")}
           title="toggle-sort-order"

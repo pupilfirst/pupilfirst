@@ -277,7 +277,7 @@ let averageGradeCharts = (
               cy="16"
             />
           </svg>
-          <span className="ml-3 text-lg font-semibold">
+          <span className="ltr:ml-3 rtl:mr-3 text-lg font-semibold">
             {(grade.grade |> Js.Float.toString) ++ ("/" ++ (criterion.maxGrade |> string_of_int))
               |> str}
           </span>
@@ -404,7 +404,7 @@ let removeNote = (setState, studentDetails, noteId) =>
 let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
     {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
-    <div className="ltr:ml-2 rtl:mr-2 md:ml-3">
+    <div className="ltr:ml-2 rtl:mr-2 ltr:md:ml-3 rtl:md:mr-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {fulltitle |> str} </div>
     </div>

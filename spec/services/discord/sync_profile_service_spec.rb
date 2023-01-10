@@ -45,7 +45,15 @@ describe Discord::SyncProfileService do
           "Bot #{discord_configuration[:discord][:bot_token]}",
           discord_configuration[:discord][:server_id],
           user.discord_user_id,
-          roles: %w[role_1 role_2 role_shared role_3 role_4 default_role],
+          roles:
+            a_collection_containing_exactly(
+              'role_1',
+              'role_2',
+              'role_shared',
+              'role_3',
+              'role_4',
+              'default_role'
+            ),
           nick: user.name
         )
 

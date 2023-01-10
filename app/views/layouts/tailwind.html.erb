@@ -76,5 +76,7 @@
         </section>
         <!-- Initialize Rollbar only at the very end. -->
         <%= vite_javascript_tag 'rollbar', nonce: true %>
+        <!-- Rails specific scripts. -->
+        <%= vite_javascript_tag 'application', nonce: true %>
       </body>
     </html>

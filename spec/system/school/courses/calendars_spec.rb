@@ -212,7 +212,7 @@ feature 'Calendars', js: true do
         expect(page).to have_text(calendar_event_1.title)
 
         # Delete event
-        click_link('Delete')
+        accept_confirm { click_button('Delete') }
 
         dismiss_notification
 

@@ -17,7 +17,10 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-6">
       <div class="mt-4">
-        <%= link_to t('shared.back_link'), calendar_events_school_course_path(@course), class: 'bg-black/10 px-3 py-1 text-black rounded-xl text-sm hover:bg-black/20 focus:outline-none  focus:bg-black/20 focus:ring-1 focus:ring-focusColor-500' %>
+        <%= link_to calendar_events_school_course_path(@course), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
+          <i class="if i-arrow-left-regular if-fw" ></i>
+          <%= t('shared.back_link') %>
+        <% end %>
       </div>
       <div class="">
           <h1 class="text-xl md:text-2xl font-bold mt-4">

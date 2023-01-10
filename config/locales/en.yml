@@ -2395,14 +2395,33 @@ en:
       title: Admins
     calendars:
       new:
-        title: 'Create calendar'
+        title: 'Create new calendar'
+        name_label: Calendar name
+        cohorts_label: Link calendar to cohorts
+        no_cohorts_selected: No cohorts selected
+        all_cohorts_selected: All cohorts selected
+        add_calendar_button: Add calendar
     calendar_events:
       new:
         title: 'Add new event'
         new_event: 'Add new event'
         edit_event: 'Edit event'
+        title_label: Event Title
+        select_calendar_label: Add event to
+        select_color_label: Color
+        start_time_label: Date and Time
+        add_link_section_title: Add an event link (optional)
+        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
+        event_link_title_label: Event link title
+        event_link_url_label: Event link URL
+        description_label: Description
+        add_event_button: Add event
       show:
         title: 'Calendar event details'
+        link_label: Event Link
+        description_label: Description
+        date_and_time: Date and time
+        confirm_delete: Are you sure to delete the event?
     communities:
       index:
         title: Communities
@@ -2413,6 +2432,16 @@ en:
         title: Authors
       calendar_events:
         title: Calendars and Events
+        add_calendar_button: Add Calendar
+        calendar: Calendar
+        calendars: Calendars
+        calendar_filter_label: Showing events from
+        select_calendar_filter: Select a calendar
+        upcoming_events_in: Upcoming events in
+        add_event_button: Add an event
+        events: Events
+        empty_events: No event scheduled for the selected date
+        today: Today
       certificates:
         title: Certificates
       curriculum:

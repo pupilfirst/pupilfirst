@@ -57,7 +57,8 @@ module Schools
         {
           links: @course.calendars.map { |calendar| calendar_link(calendar) },
           selectedLink: calendar_link(@selected_calendar),
-          placeholder: 'Select a calendar'
+          placeholder:
+            I18n.t('schools.courses.calendar_events.select_calendar_filter')
         }
       end
 

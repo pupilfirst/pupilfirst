@@ -2393,6 +2393,16 @@ en:
   schools:
     admins:
       title: Admins
+    calendars:
+      new:
+        title: 'Create calendar'
+    calendar_events:
+      new:
+        title: 'Add new event'
+        new_event: 'Add new event'
+        edit_event: 'Edit event'
+      show:
+        title: 'Calendar event details'
     communities:
       index:
         title: Communities
@@ -2401,6 +2411,8 @@ en:
         title: Applicants
       authors:
         title: Authors
+      calendar_events:
+        title: Calendars and Events
       certificates:
         title: Certificates
       curriculum:

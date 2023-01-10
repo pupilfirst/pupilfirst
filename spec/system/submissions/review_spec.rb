@@ -1061,7 +1061,7 @@ feature 'Submission review overlay', js: true do
       with_secret(inactive_submission_review_allowed_days: 1) { example.run }
     end
 
-    scenario 'coach visits pending submission page of inactive student with allowed submission review time has elapsed' do
+    scenario 'coach visits pending submission page of inactive student after submission review allowed time has elapsed' do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
@@ -1084,6 +1084,7 @@ feature 'Submission review overlay', js: true do
       dismiss_notification
       expect(page).to have_content('You can review the submission until')
       expect(page).to have_content('Add Your Feedback')
+      add_markdown('Some feedback about the submission.')
       expect(page).to have_content('Grade Card')
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content(evaluation_criterion_2.name)

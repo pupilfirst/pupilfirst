@@ -2447,6 +2447,8 @@ en:
         events: Events
         empty_events: No event scheduled for the selected date
         today: Today
+        no_calendars_message: No calendars yet
+        no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
       certificates:
         title: Certificates
       curriculum:

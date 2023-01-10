@@ -14,7 +14,7 @@ feature 'Calendars', js: true do
     sign_in_user school_admin.user,
                  referrer: calendar_events_school_course_path(course)
 
-    expect(page).to have_text('No event scheduled for the selected date')
+    expect(page).to have_text('No calendars yet')
 
     # Create a new calendar.
     click_link 'Add Calendar'

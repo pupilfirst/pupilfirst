@@ -97,8 +97,8 @@
         <div class="w-64">
           <%= image_tag 'shared/no-calendar-icon.svg', class: 'w-full', alt: 'Internal server error' %>
         </div>
-        <h2 class="font-semibold mt-3">No Calendars yet</h2>
-        <p class="text-sm">Calendar helps you to schedule events and reminders for upcoming activities.</p>
+        <h2 class="font-semibold mt-3"><%= t(".no_calendars_message") %></h2>
+        <p class="text-sm"><%= t(".no_calendars_sub_text") %></p>
         <a
           class="block btn btn-primary mt-4"
           ariaLabel="Add new calendar"

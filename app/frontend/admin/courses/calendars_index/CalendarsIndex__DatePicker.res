@@ -165,7 +165,7 @@ let make = (~selectedDate, ~selectedCalendarId=?, ~courseId) => {
     None
   }, [state.selectedMonthDeviation])
 
-  <div className="sticky top-0 z-50 p-2 lg:p-0">
+  <div className="sticky top-0 z-50">
     <section>
       <div className="courses-calendar__container 2xl:px-3">
         <div className="flex justify-between">

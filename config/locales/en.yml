@@ -1869,6 +1869,11 @@ en:
       name_placeholder: John Doe
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
+    calendar:
+      no_events_text: No event scheduled for the selected date
+      today: Today
+      upcoming_events: Upcoming events in %{month}
+      events: Events
     leaderboard:
       active_students: Active Students
       change: Change
@@ -2442,6 +2447,8 @@ en:
         events: Events
         empty_events: No event scheduled for the selected date
         today: Today
+        no_calendars_message: No calendars yet
+        no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
       certificates:
         title: Certificates
       curriculum:

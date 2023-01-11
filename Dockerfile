@@ -50,7 +50,7 @@ RUN yarn run re:build
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
-FROM ruby:2.7.7-slim-bullseye
+FROM ruby:3.0.5-slim-bullseye
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \

@@ -1,4 +1,3 @@
-
 type link = {
   name: string,
   url: string,
@@ -20,17 +19,18 @@ let contents = links => {
 }
 
 let showSelected = (placeholder, selected) => {
-    <button
-      className="mt-1 flex items-center justify-between appearance-none w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-      key="selected">
-      <span>
-        {switch selected {
-        | Some(s) => s.name
-        | None => placeholder
-        }->React.string}
-      </span>
-    </button>
-  }
+  <button
+    className="mt-1 flex space-x-2 items-center justify-between appearance-none w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+    key="selected">
+    <span>
+      {switch selected {
+      | Some(s) => s.name
+      | None => placeholder
+      }->React.string}
+    </span>
+    <Icon className="if i-chevron-down-regular if-fw" />
+  </button>
+}
 
 @react.component
 let make = (~links, ~selectedLink=?, ~placeholder="Select") => {
@@ -38,7 +38,10 @@ let make = (~links, ~selectedLink=?, ~placeholder="Select") => {
   | [] => React.null
   | moreLinks =>
     <Dropdown2
-      selected={showSelected(placeholder,selectedLink)} contents={contents(moreLinks)} right=true key="links-dropdown"
+      selected={showSelected(placeholder, selectedLink)}
+      contents={contents(moreLinks)}
+      right=true
+      key="links-dropdown"
     />
   }
 }

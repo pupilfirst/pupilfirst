@@ -13,7 +13,7 @@
           <h3 class="text-sm text-gray-600"><%= t('.total_students_label') %></h3>
           <p class="text-xl font-bold"><%= @counts[:total_students] %></p>
         </div>
-        <div class="pl-5 border-l border-gray-300">
+        <div class="ltr:pl-5 rtl:pr-5 ltr:border-l rtl:border-r border-gray-300">
           <h3 class="text-sm text-gray-600"><%= t('.active_students_label') %></h3>
           <p class="text-xl font-bold"><%= @counts[:active_students] %></p>
         </div>
@@ -36,7 +36,7 @@
               <% course_with_cohorts[:cohorts].each do |cohort| %>
                 <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
                   <span class="inline-block font-medium"><%= cohort.name %></span>
-                  <i class="fa fa-arrow-right inline-block text-primary-500" aria-hidden="true"></i>
+                  <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
                 <% end %>
               <% end %>
             </div>

@@ -620,7 +620,7 @@ let make = (
             </p>
             <div className="mt-4">
               {isSchoolAdmin || hasValidDeleteAccountToken
-                ? <div className="bg-orange-100 border-l-4 border-orange-400 p-4">
+                ? <div className="bg-orange-100 ltr:border-l-4 rtl:border-r-4 border-orange-400 p-4">
                     <div className="flex">
                       <FaIcon classes="fas fa-exclamation-triangle text-orange-400" />
                       <div className="ltr:ml-3 rtl:mr-3">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_24_124958) do
+ActiveRecord::Schema.define(version: 2022_12_05_094729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -227,6 +227,22 @@ ActiveRecord::Schema.define(version: 2022_11_24_124958) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "discord_messages", force: :cascade do |t|
+    t.string "author_uuid", null: false
+    t.string "channel_uuid"
+    t.string "message_uuid", null: false
+    t.string "server_uuid", null: false
+    t.string "content"
+    t.datetime "timestamp"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_uuid"], name: "index_discord_messages_on_author_uuid"
+    t.index ["channel_uuid"], name: "index_discord_messages_on_channel_uuid"
+    t.index ["server_uuid"], name: "index_discord_messages_on_server_uuid"
+    t.index ["user_id"], name: "index_discord_messages_on_user_id"
   end
 
   create_table "domains", force: :cascade do |t|
@@ -814,6 +830,7 @@ ActiveRecord::Schema.define(version: 2022_11_24_124958) do
   add_foreign_key "course_exports", "users"
   add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
+  add_foreign_key "discord_messages", "users"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"

@@ -144,7 +144,7 @@ module Make = (Selectable: Selectable) => {
     selected |> Array.mapi((index, selection) => {
       let value = selection |> Selectable.value
       <div key={index |> string_of_int} className={tagPillClasses(selection |> Selectable.color, false) ++ " flex gap-px"}>
-        <span className="pl-2 py-px text-xs leading-[unset]">
+        <span className="ltr:pl-2 rtl:pr-2 py-px text-xs leading-[unset]">
           {switch selection |> Selectable.label {
           | Some(label) => label ++ (labelSuffix ++ value)
           | None => value

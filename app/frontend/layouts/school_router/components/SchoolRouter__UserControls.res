@@ -25,7 +25,7 @@ let links = () => {
 let selected = user => {
   <button
     title={t("user_controls")}
-    className="md:ml-2 h-10 w-10 rounded-full border-2 border-gray-300 hover:border-primary-500 focus:outline-none focus:border-primary-500 ">
+    className="ltr:md:ml-2 rtl:md:mr-2 h-10 w-10 rounded-full border-2 border-gray-300 hover:border-primary-500 focus:outline-none focus:border-primary-500 ">
     {User.avatarUrl(user)->Belt.Option.mapWithDefault(
       <Avatar
         name={User.name(user)} className="inline-block object-contain rounded-full text-tiny"

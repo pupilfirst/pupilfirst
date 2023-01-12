@@ -13,7 +13,7 @@ let toggleDropdown = (setShowDropdown, event) => {
 }
 
 let containerClasses = className => {
-  "dropdown inline-block relative text-sm " ++ className
+  "dropdown inline-block relative text-sm rtl:mr-4" ++ className
 }
 
 @react.component

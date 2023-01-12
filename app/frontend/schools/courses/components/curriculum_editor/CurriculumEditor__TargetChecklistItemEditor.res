@@ -86,7 +86,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
         key={index |> string_of_int}
         className="w-full px-2 py-1 focus:outline-none appearance-none text-left"
         onClick={_ => updateKind(checklistItem, updateChecklistItemCB, kind)}>
-        <PfIcon className={"mr-2 if if-fw " ++ selectedButtonIcon(kind)} />
+        <PfIcon className={"ltr:mr-2 rtl:ml-2 if if-fw " ++ selectedButtonIcon(kind)} />
         {kind |> ChecklistItem.actionStringForKind |> str}
       </button>
     )
@@ -109,7 +109,7 @@ let updateChoiceText = (choiceIndex, checklistItem, updateChecklistItemCB, event
 }
 
 let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB) =>
-  <div className="ml-3 mt-3">
+  <div className="ltr:ml-3 rtl:mr-3 mt-3">
     <div className="text-xs font-semibold mb-2"> {t("choices") ++ ":" |> str} </div>
     {
       let showRemoveIcon = Js.Array.length(choices) > 2
@@ -119,7 +119,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
           <div className="flex items-center text-sm rounded mt-2">
             <span className="text-gray-400"> <i className="far fa-circle text-base" /> </span>
             <div
-              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-300 rounded">
+              className="flex flex-1 py-2 px-3 ltr:ml-3 rtl:mr-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-300 rounded">
               <input
                 name={"multichoice-input-" ++ (index + 1 |> string_of_int)}
                 className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
@@ -136,7 +136,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
               </button>
             </div>
           </div>
-          <div className="ml-6">
+          <div className="ltr:ml-6 rtl:mr-6">
             <School__InputGroupError
               message={t("not_valid_choice")} active={choice |> String.trim == ""}
             />
@@ -147,7 +147,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
     }
     <button
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
-      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-300 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">
+      className="flex mt-2 ltr:ml-7 rtl:mr-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-300 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">
       <PfIcon className="fas fa-plus-circle if-fw" />
       <span className="font-semibold ltr:ml-2 rtl:mr-2"> {t("add_choice") |> str} </span>
     </button>
@@ -168,7 +168,7 @@ let controlIcon = (~icon, ~title, ~handler) =>
 let filesNotice =
   <div className="mt-2 text-sm">
     <strong> {I18n.t("shared.note") |> str} </strong>
-    <span className="ml-1"> {t("limits_notice") |> str} </span>
+    <span className="ltr:ml-1 rtl:mr-1"> {t("limits_notice") |> str} </span>
   </div>
 
 let isRequiredStepTitleDuplicated = (checklist, item) => {
@@ -201,7 +201,7 @@ let make = (
     key={index |> string_of_int}
     ariaLabel={t("editor_checklist") ++ " " ++ (index + 1 |> string_of_int)}
     className="flex items-start py-2 relative">
-    <div className="w-full bg-gray-50 border rounded-lg p-5 mr-1">
+    <div className="w-full bg-gray-50 border rounded-lg p-5 ltr:mr-1 rtl:ml-1">
       <div className="flex justify-between items-center">
         <div> {checklistDropdown(checklistItem, updateChecklistItemCB)} </div>
         <div className="items-center">
@@ -248,7 +248,7 @@ let make = (
     </div>
     <div
       ariaLabel={t("controls_checklist") ++ " " ++ (index + 1 |> string_of_int)}
-      className="-mr-10 shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
+      className="-ltr:-mr-10 rtl:-ml-10 shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
         ~icon="fa-arrow-up",
         ~title=t("move_up"),

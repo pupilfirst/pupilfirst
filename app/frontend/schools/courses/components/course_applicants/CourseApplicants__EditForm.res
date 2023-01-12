@@ -128,7 +128,7 @@ let detailsTab = (state, applicant) => {
 }
 
 let optionalText = () => {
-  <span className="text-xs ml-1"> {("(" ++ I18n.ts("optional") ++ ")")->str} </span>
+  <span className="text-xs ltr:ml-1 rtl:mr-1"> {("(" ++ I18n.ts("optional") ++ ")")->str} </span>
 }
 
 let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicantCB) => {
@@ -186,7 +186,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
             <polyline points="1.5 6 4.5 9 10.5 1" />
           </svg>
         </span>
-        <span className="text-sm"> {t("notify_students.label")->str} </span>
+        <span className="text-sm rtl:pr-2"> {t("notify_students.label")->str} </span>
       </label>
     </div>
     <button

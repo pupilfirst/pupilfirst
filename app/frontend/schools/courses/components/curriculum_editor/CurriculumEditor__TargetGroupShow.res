@@ -141,7 +141,7 @@ let make = (
       </div>
       {targetGroups |> Js.Array.length > 1
         ? <div
-            className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-600 justify-between items-center bg-white">
+            className="target-group__group-reorder flex flex-col shadow ltr:rounded-l-lg rtl:rounded-r-lg absolute h-full border ltr:border-r-0 rtl:border-l-0 overflow-hidden text-gray-600 justify-between items-center bg-white">
             <button
               title={t("move_up")}
               ariaLabel={t("move_up")}
@@ -178,7 +178,7 @@ let make = (
           className="target-group__target-create relative bg-gray-50 flex items-center border border-dashed border-gray-300 text-gray-600 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
           <label
             htmlFor={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
-            className="absolute flex items-center h-full cursor-pointer pl-4">
+            className="absolute flex items-center h-full cursor-pointer ltr:pl-4 rtl:pr-4">
             <i className="fas fa-plus-circle text-2xl" />
           </label>
           <input
@@ -187,13 +187,13 @@ let make = (
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
             placeholder={t("create_target")}
-            className="target-create__input text-left bg-gray-50 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-medium leading-tight hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-gray-500"
+            className="target-create__input ltr:text-left rtl:text-right bg-gray-50 ltr:pr-5 rtl:pl-5 ltr:pl-12 rtl:pr-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-medium leading-tight hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-gray-500"
           />
           {state.validTargetTitle
             ? <button
                 onClick={_e => handleCreateTarget(state.targetTitle, targetGroup |> TargetGroup.id)}
                 disabled=state.savingNewTarget
-                className="flex items-center whitespace-nowrap text-sm font-medium py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
+                className="flex items-center whitespace-nowrap text-sm font-medium py-2 px-4 ltr:mr-4 rtl:ml-4 rounded btn-primary appearance-none focus:outline-none text-center">
                 {t("create") |> str}
               </button>
             : React.null}

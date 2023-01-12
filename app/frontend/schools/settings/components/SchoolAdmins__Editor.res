@@ -78,7 +78,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
           setState(state => {...state, editorAction: ShowEditor(Some(admin))})
         }}>
         <div className="flex">
-          <span className="mr-4 shrink-0">
+          <span className="ltr:mr-4 rtl:ml-4 shrink-0">
             {switch admin |> SchoolAdmin.avatarUrl {
             | Some(avatarUrl) =>
               <img className="w-10 h-10 rounded-full object-cover" src=avatarUrl />

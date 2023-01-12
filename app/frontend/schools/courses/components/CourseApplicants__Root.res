@@ -299,7 +299,7 @@ let entriesLoadedData = (totalNotificationsCount, loadedNotificaionsCount) =>
   </div>
 
 let showApplicant = (baseUrl, applicant) => {
-  <div className="flex flex-1 items-center pr-4 bg-white hover:shadow border rounded">
+  <div className="flex flex-1 items-center ltr:pr-4 rtl:pl-4 bg-white hover:shadow border rounded">
     <button
       title={t("show_details") ++ Applicant.name(applicant)}
       className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-50 cursor-pointer"
@@ -411,7 +411,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
               <div className="w-full">
                 <label
                   htmlFor="search_applicants"
-                  className="block text-tiny font-semibold uppercase pl-px text-left">
+                  className="block text-tiny font-semibold uppercase pl-px ltr:text-left rtl:text-right">
                   {t("filter.input_label")->str}
                 </label>
                 <Multiselect

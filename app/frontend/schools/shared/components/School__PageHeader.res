@@ -30,7 +30,7 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
           <Link
             href={exitUrl}
             className="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500 ">
-            <i className="fas fa-arrow-left" /> <span className="ltr:ml-2 rtl:mr-2"> {str("Back")} </span>
+            <i className="fas fa-arrow-left rtl:rotate-180" /> <span className="ltr:ml-2 rtl:mr-2"> {str("Back")} </span>
           </Link>
         </div>
         <h1 className="text-2xl font-bold mt-4"> {str(title)} </h1>

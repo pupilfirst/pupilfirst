@@ -312,7 +312,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                 <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                   {submission |> Submission.levelId |> Level.levelLabel(levels) |> str}
                 </span>
-                <span className="ml-2 font-semibold text-base">
+                <span className="ltr:ml-2 rtl:mr-2 font-semibold text-base">
                   {submission |> Submission.title |> str}
                 </span>
               </div>

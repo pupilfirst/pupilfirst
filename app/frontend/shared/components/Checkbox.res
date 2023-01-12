@@ -9,8 +9,8 @@ let make = (~id, ~onChange, ~checked=false, ~label=?, ~disabled=false) =>
   <div className="relative">
     {switch label {
     | Some(element) =>
-      <label className="checkbox__label flex items-center space-x-2" htmlFor=id>
-        {input(id, onChange, checked, disabled)} <div className="text-sm flex-1"> {element} </div>
+      <label className="checkbox__label flex items-center ltr:space-x-2" htmlFor=id>
+        {input(id, onChange, checked, disabled)} <div className="text-sm flex-1 rtl:mr-2"> {element} </div>
       </label>
 
     | None =>

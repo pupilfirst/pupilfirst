@@ -358,7 +358,7 @@ let booleanButtonClasses = bool => {
 
 let publicSignupField = (publicSignup, send) =>
   <div className="flex items-center mt-5">
-    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
+    <label className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6" htmlFor="public-signup">
       {t("enable_public_signup_label")->str}
     </label>
     <div id="public-signup" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -377,7 +377,7 @@ let publicSignupField = (publicSignup, send) =>
 
 let publicPreviewField = (publicPreview, send) =>
   <div className="flex items-center mt-5">
-    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-preview">
+    <label className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6" htmlFor="public-preview">
       {t("enable_public_preview_label")->str}
     </label>
     <div id="public-preview" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -396,7 +396,7 @@ let publicPreviewField = (publicPreview, send) =>
 
 let featuredButton = (featured, send) =>
   <div className="flex items-center mt-5">
-    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
+    <label className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6" htmlFor="featured">
       {t("feature_course_in_homepage_label")->str}
     </label>
     <div id="featured" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -416,7 +416,7 @@ let processingUrlInput = (state, send) => {
       <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
         {t("processing_url.label")->str}
       </label>
-      <HelpIcon className="ltr:ml-2 rtl:mr-2 mr-6" link={t("processing_url.help_url")}>
+      <HelpIcon className="ltr:ml-2 rtl:mr-2 ltr:mr-6 rtl:ml-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
       <div id="processing-url" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -593,7 +593,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       <div className="flex mt-2">
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Limited))}
-          className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
+          className={progressionBehaviorButtonClasses(state, #Limited, "ltr:mr-1 rtl:ml-1")}>
           <div className="font-bold text-xl"> {t("progression_behavior.limited.title")->str} </div>
           <div className="text-xs mt-2">
             <div> {t("progression_behavior.limited.description_start")->str} </div>
@@ -620,7 +620,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         </button>
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Strict))}
-          className={progressionBehaviorButtonClasses(state, #Strict, "ml-1")}>
+          className={progressionBehaviorButtonClasses(state, #Strict, "ltr:ml-1 rtl:mr-1")}>
           <div className="font-bold text-xl"> {t("progression_behavior.strict.title")->str} </div>
           <span className="text-xs"> {t("progression_behavior.strict.description")->str} </span>
         </button>
@@ -632,7 +632,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
     {ReactUtils.nullUnless(
       <div className="pt-5 flex flex-col">
-        <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
+        <label className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6" htmlFor="email">
           {t("pick_default_cohort")->str}
         </label>
         <CohortsPicker

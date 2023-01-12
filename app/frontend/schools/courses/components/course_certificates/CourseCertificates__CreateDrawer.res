@@ -136,7 +136,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       onChange={selectFile(send)}
                     />
                     <label className="file-input-label mt-2" htmlFor="certificate-file-input">
-                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <i className="fas fa-upload ltr:mr-2 rtl:ml-2 text-gray-600 text-lg" />
                       <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
                     </label>
                   </div>

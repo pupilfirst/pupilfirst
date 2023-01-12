@@ -122,7 +122,7 @@ let showTag = (~value=?, key, text, color, params) => {
   let paramsValue = Belt.Option.getWithDefault(value, text)
   <button
     key={text}
-    className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
+    className={"rounded-lg mt-1 ltr:mr-1 rtl:ml-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
     color}
     onClick={_e => onSelect(key, paramsValue, params)}>
     {text->str}
@@ -139,7 +139,7 @@ let studentsList = (params, students) => {
         <div
           className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex">
-            <div className="text-sm flex items-center space-x-4">
+            <div className="text-sm flex items-center ltr:space-x-4">
               {switch User.avatarUrl(StudentInfo.user(student)) {
               | Some(avatarUrl) =>
                 <img
@@ -152,7 +152,7 @@ let studentsList = (params, students) => {
                   className="h-9 w-9 md:h-12 md:w-12 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
                 />
               }}
-              <div>
+              <div className="rtl:mr-4">
                 <Link
                   href={`/school/students/${StudentInfo.id(student)}/details`}
                   className="font-semibold inline-block hover:underline hover:text-primary-500 transition ">
@@ -253,11 +253,11 @@ let make = (~courseId, ~search) => {
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold pl-1 capitalize"> {t("students")->str} </p>
+          <p className="font-semibold ltr:pl-1 rtl:pr-1 capitalize"> {t("students")->str} </p>
           <div>
             <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
               <PfIcon className="if i-plus-regular" />
-              <span className="inline-block pl-2"> {str(t("add_new_students"))} </span>
+              <span className="inline-block ltr:pl-2 rtl:pr-2"> {str(t("add_new_students"))} </span>
             </Link>
           </div>
         </div>

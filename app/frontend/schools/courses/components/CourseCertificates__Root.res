@@ -179,7 +179,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               ? <div
                                   className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                   <span
-                                    className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
+                                    className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 ltr:mr-1 rtl:ml-1">
                                     {t("auto_issue_tag")->str}
                                   </span>
                                 </div>

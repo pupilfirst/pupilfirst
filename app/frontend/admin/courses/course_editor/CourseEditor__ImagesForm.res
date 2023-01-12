@@ -81,7 +81,7 @@ let optionalImageLabelText = (image, selectedFilename) =>
   | Some(name) =>
     <span>
       {t("image_label.start")->str}
-      <code className="mr-1"> {name->str} </code>
+      <code className="ltr:mr-1 rtl:ml-1"> {name->str} </code>
       {t("image_label.end")->str}
     </span>
   | None =>
@@ -159,7 +159,7 @@ let make = (~course, ~updateCourseCB) => {
           {t("thumbnail.label")->str}
         </label>
         <HelpIcon
-          className="text-xs ml-1"
+          className="text-xs ltr:ml-1 rtl:mr-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link={t("thumbnail.help_url")}>
           {t("thumbnail.help")->str}
@@ -192,7 +192,7 @@ let make = (~course, ~updateCourseCB) => {
           {t("cover_image.label") |> str}
         </label>
         <HelpIcon
-          className="text-xs ml-1"
+          className="text-xs ltr:ml-1 rtl:mr-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link={t("cover_image.help_url")}>
           {t("cover_image.help") |> str}

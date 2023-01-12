@@ -176,7 +176,7 @@ let make = (~course, ~exports, ~tags) => {
                 {t("create_action_button")->str}
               </h5>
               <div className="mt-4">
-                <label className="block tracking-wide text-xs font-semibold mr-6 mb-2">
+                <label className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6 mb-2">
                   {t("export_type_label")->str}
                 </label>
                 <div className="flex -mx-2">
@@ -215,7 +215,7 @@ let make = (~course, ~exports, ~tags) => {
               </div>
               <div className="mt-5">
                 <label
-                  className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                  className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6 mb-2"
                   htmlFor="targets_filter">
                   {t("export_targets_label")->str}
                 </label>
@@ -240,7 +240,7 @@ let make = (~course, ~exports, ~tags) => {
               </div>
               <div className="mt-5">
                 <label
-                  className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                  className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6 mb-2"
                   htmlFor="inactive_students_filter">
                   {t("students_to_include_label")->str}
                 </label>
@@ -326,13 +326,13 @@ let make = (~course, ~exports, ~tags) => {
                           <div className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                             {courseExport->CourseExport.reviewedOnly
                               ? <span
-                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 ltr:mr-1 rtl:ml-1">
                                   {t("reviewed_only_tag")->str}
                                 </span>
                               : React.null}
                             {courseExport->CourseExport.includeInactiveStudents
                               ? <span
-                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 ltr:mr-1 rtl:ml-1">
                                   {t("include_inactive_students_tag")->str}
                                 </span>
                               : React.null}
@@ -341,7 +341,7 @@ let make = (~course, ~exports, ~tags) => {
                             |> Array.map(tag =>
                               <span
                                 key=tag
-                                className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
+                                className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 ltr:mr-1 rtl:ml-1">
                                 {tag |> str}
                               </span>
                             )

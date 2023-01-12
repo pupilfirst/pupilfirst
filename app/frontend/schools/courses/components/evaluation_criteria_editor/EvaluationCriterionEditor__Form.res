@@ -163,7 +163,7 @@ let saveDisabled = state => {
 let labelClasses = (grade, passGrade) => {
   let failGradeClasses = "bg-red-300 text-red-700 border-red-500"
   let passGradeClasses = "bg-green-300 text-green-700 border-green-500"
-  "w-12 p-3 text-center  mr-3 rounded-lg border  leading-tight " ++ (
+  "w-12 p-3 text-center  ltr:mr-3 rtl:ml-3 rounded-lg border  leading-tight " ++ (
     grade < passGrade ? failGradeClasses : passGradeClasses
   )
 }
@@ -259,7 +259,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
           <div className="max-w-2xl pt-6 mx-auto">
             <div className="mb-4">
               <span
-                className="inline-block tracking-wide text-sm font-semibold mr-2"
+                className="inline-block tracking-wide text-sm font-semibold ltr:mr-2 rtl:ml-2"
                 htmlFor="max_grades">
                 {t("max_grade") |> str}
               </span>
@@ -338,11 +338,11 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                 </HelpIcon>
               </div>
               <div className="flex">
-                <div className="flex justify-center items-center ml-4">
+                <div className="flex justify-center items-center ltr:ml-4 rtl:mr-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed" />
                   <span className="ltr:ml-2 rtl:mr-2 text-xs"> {ts("fail") |> str} </span>
                 </div>
-                <div className="flex justify-center items-center ml-4">
+                <div className="flex justify-center items-center ltr:ml-4 rtl:mr-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed" />
                   <span className="ltr:ml-2 rtl:mr-2 text-xs"> {ts("pass") |> str} </span>
                 </div>

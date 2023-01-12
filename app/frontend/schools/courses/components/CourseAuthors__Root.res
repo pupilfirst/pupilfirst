@@ -89,7 +89,7 @@ let renderAuthor = (rootPath, author, send) => {
           RescriptReactRouter.push(authorPath)
         }}>
         <div className="flex">
-          <span className="mr-4 shrink-0">
+          <span className="ltr:mr-4 rtl:ml-4 shrink-0">
             {switch author |> Author.avatarUrl {
             | Some(avatarUrl) =>
               <img className="w-10 h-10 rounded-full object-cover" src=avatarUrl />

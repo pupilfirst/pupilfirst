@@ -139,7 +139,7 @@ let editor = (
       | Draft
       | Archived => React.null
       }}
-      <div className="w-1/3 text-left">
+      <div className="w-1/3 ltr:text-left rtl:text-right">
         <label className="text-xs block text-gray-600"> {t("last_updated") |> str} </label>
         <span className="text-sm font-semibold"> currentVersion </span>
       </div>

@@ -36,7 +36,7 @@ let showPreviewMessage = () =>
   <div
     className="flex max-w-lg md:mx-auto mx-3 mt-4 rounded-lg px-3 py-2 shadow-lg items-center border border-primary-300 bg-gray-50 ">
     <img className="w-20 md:w-22 flex-no-shrink" src=Notice.previewModeImage />
-    <div className="flex-1 text-left ltr:ml-4 rtl:mr-4">
+    <div className="flex-1 ltr:text-left rtl:text-right ltr:ml-4 rtl:mr-4">
       <h4 className="font-bold text-lg leading-tight"> {t("preview_mode_title")->str} </h4>
       <p className="text-sm mt-1"> {t("preview_mode_description")->str} </p>
     </div>

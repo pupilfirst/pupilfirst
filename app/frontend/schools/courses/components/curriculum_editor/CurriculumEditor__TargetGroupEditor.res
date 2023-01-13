@@ -255,7 +255,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 />
                 {state.hasNameError
                   ? <div className="drawer-right-form__error-msg">
-                      <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
+                      <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-exclamation-triangle" /> </span>
                       <span> {tr("title_name_error") |> str} </span>
                     </div>
                   : React.null}
@@ -307,8 +307,8 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
               <div className="max-w-2xl p-6 mx-auto flex w-full justify-between items-center">
                 {switch targetGroup {
                 | Some(_) =>
-                  <div className="flex items-center mr-2">
-                    <label className="block tracking-wide text-xs font-semibold mr-6">
+                  <div className="flex items-center ltr:mr-2 rtl:ml-2">
+                    <label className="block tracking-wide text-xs font-semibold ltr:mr-6 rtl:ml-6">
                       {tr("group_archived_q") |> str}
                     </label>
                     <div

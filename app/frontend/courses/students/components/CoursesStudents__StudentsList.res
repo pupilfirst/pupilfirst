@@ -70,7 +70,7 @@ let showStudent = student => {
             <span className="font-semibold ltr:pr-2 rtl:pl-2">
               {student->StudentInfo.user->UserDetails.fullTitle->str}
             </span>
-            <span className="ltr:sm:pl-2 rtl:sm:pr-2 sm:border-l border-gray-400 italic">
+            <span className="ltr:sm:pl-2 rtl:sm:pr-2 ltr:sm:border-l rtl:sm:border-r border-gray-400 italic">
               {switch student->StudentInfo.user->UserDetails.lastSeenAt {
               | Some(date) =>
                 t(

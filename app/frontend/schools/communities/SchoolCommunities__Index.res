@@ -200,7 +200,7 @@ let make = (~communities, ~courses) => {
                   <span
                     className="ltr:ml-2 rtl:mr-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {ts("edit") |> str} </span>
+                    <span className="ltr:ml-1 rtl:mr-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
               </button>
@@ -209,7 +209,7 @@ let make = (~communities, ~courses) => {
                 href={"/communities/" ++ (community |> Community.id)}
                 className="text-sm flex items-center border-l text-gray-600 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
-                <span className="ml-1"> {ts("view") |> str} </span>
+                <span className="ltr:ml-1 rtl:mr-1"> {ts("view") |> str} </span>
               </a>
             </div>
           </div>

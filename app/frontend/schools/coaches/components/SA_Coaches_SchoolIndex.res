@@ -68,11 +68,11 @@ let make = (~coaches, ~authenticityToken) => {
                   }}>
                   <div className="flex flex-1 py-4 px-4">
                     <img
-                      className="w-10 h-10 rounded-full mr-4 object-cover"
+                      className="w-10 h-10 rounded-full ltr:mr-4 rtl:ml-4 object-cover"
                       src={coach |> Coach.imageUrl}
                       alt={tr("avatar_of") ++ (coach |> Coach.name)}
                     />
-                    <div className="text-sm text-left">
+                    <div className="text-sm ltr:text-left rtl:text-right">
                       <p className="font-semibold"> {coach |> Coach.name |> str} </p>
                       <p className="text-gray-600 text-xs mt-px"> {coach |> Coach.title |> str} </p>
                     </div>
@@ -80,7 +80,7 @@ let make = (~coaches, ~authenticityToken) => {
                   <span
                     className="flex items-center shrink-0 ltr:ml-2 rtl:mr-2 py-4 px-4 text-gray-600 hover:text-primary-500 text-sm">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {ts("edit") |> str} </span>
+                    <span className="ltr:ml-1 rtl:mr-1"> {ts("edit") |> str} </span>
                   </span>
                 </button>
               </div>

@@ -46,7 +46,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   }
 
 let headerLink = ((id, title, _, _)) =>
-  <div className="ml-6 text-sm font-semibold cursor-default" key=id>
+  <div className="ltr:ml-6 rtl:mr-6 text-sm font-semibold cursor-default" key=id>
     <span> {title->str} </span>
   </div>
 
@@ -81,7 +81,7 @@ let sitemap = links =>
     <div className="flex flex-wrap">
       {links
       ->Js.Array2.map(((id, title, _, _)) =>
-        <div className="w-1/3 pr-4 mt-3 text-xs font-semibold" key=id> {title->str} </div>
+        <div className="w-1/3 ltr:pr-4 rtl:pl-4 mt-3 text-xs font-semibold" key=id> {title->str} </div>
       )
       ->React.array}
     </div>
@@ -313,7 +313,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-50 rounded p-2">
           {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
-          {editIcon("ml-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
+          {editIcon("ltr:ml-6 rtl:mr-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
         </div>
         <div className="flex items-center">
           <div
@@ -323,7 +323,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               |> Customizations.filterLinks(~header=true)
               |> Customizations.unpackLinks,
             )}
-            {editIcon("ml-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
+            {editIcon("ltr:ml-3 rtl:mr-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
           </div>
         </div>
       </div>
@@ -361,7 +361,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               <span> {state.schoolName->str} </span>
               <button
                 ariaLabel="Edit School name"
-                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ml-1 cursor-pointer rounded"
+                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ltr:ml-1 rtl:mr-1 cursor-pointer rounded"
                 onClick={showEditor(DetailsEditor, send)}>
                 <i className="fas fa-pencil-alt" />
               </button>
@@ -370,7 +370,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             onClick={showEditor(DetailsEditor, send)}
             className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 focus-within:border-primary-300 focus-within:text-primary-200 cursor-text">
-            <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
+            <div className="absolute right-0 top-0 z-10 pt-2 ltr:pr-2 rtl:pl-2">
               <button
                 ariaLabel={t("edit_school_details")}
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">
@@ -396,11 +396,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div className="school-customize__footer-top-container rounded-t-lg p-6 flex">
           <div className="w-2/5">
             <div
-              className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full mr-2">
+              className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full ltr:mr-2 rtl:ml-2">
               <div className="flex items-center">
                 <span className="uppercase font-bold text-sm"> {t("sitemap")->str} </span>
                 {editIcon(
-                  "ml-3",
+                  "ltr:ml-3 rtl:mr-3",
                   showEditor(LinksEditor(FooterLink), send),
                   t("edit_footer_links"),
                 )}
@@ -416,11 +416,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="flex">
               <div className="w-3/5">
                 <div
-                  className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full mr-2">
+                  className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full ltr:mr-2 rtl:ml-2">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {t("social")->str} </span>
                     {editIcon(
-                      "ml-3",
+                      "ltr:ml-3 rtl:mr-3",
                       showEditor(LinksEditor(SocialLink), send),
                       t("edit_social_links"),
                     )}
@@ -437,7 +437,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                   className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {t("contact")->str} </span>
-                    {editIcon("ml-3", showEditor(ContactsEditor, send), t("edit_contact_details"))}
+                    {editIcon("ltr:ml-3 rtl:mr-3", showEditor(ContactsEditor, send), t("edit_contact_details"))}
                   </div>
                   {address(state.customizations |> Customizations.address)}
                   {emailAddress(state.customizations |> Customizations.emailAddress)}
@@ -450,23 +450,23 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div className="flex items-center border border-dashed border-gray-500 rounded p-2">
             {footerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
-            {editIcon("ml-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
+            {editIcon("ltr:ml-3 rtl:mr-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
           </div>
           <div className="flex items-center text-sm">
             <div
               className="flex items-center border border-dashed border-gray-500 rounded p-2 text-xs">
               <div> {t("privacy_policy")->str} </div>
               {editIcon(
-                "ml-3",
+                "ltr:ml-3 rtl:mr-3",
                 showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.PrivacyPolicy), send),
                 t("edit_privacy"),
               )}
             </div>
             <div
-              className="flex items-center border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 ltr:ml-6 rtl:mr-6 text-xs">
               <div> {t("terms_and_conditions")->str} </div>
               {editIcon(
-                "ml-3",
+                "ltr:ml-3 rtl:mr-3",
                 showEditor(
                   AgreementsEditor(SchoolCustomize__AgreementsEditor.TermsAndConditions),
                   send,
@@ -474,9 +474,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 t("edit_terms"),
               )}
             </div>
-            <div className="ml-6 flex items-center text-xs text-gray-600">
+            <div className="ltr:ml-6 rtl:mr-6 flex items-center text-xs text-gray-600">
               <i className="far fa-copyright" />
-              <span className="ml-1">
+              <span className="ltr:ml-1 rtl:mr-1">
                 {(Js.Date.make()->Js.Date.getFullYear->int_of_float->string_of_int ++
                   (" " ++
                   schoolName))->str}
@@ -488,16 +488,16 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <div className="mt-6 font-bold"> {t("icon")->str} </div>
       <div className="mt-3 w-1/2 max-w-sm">
         <div className="bg-gray-300 rounded-t-lg h-12 flex items-end">
-          <div className="w-full flex items-center pr-3">
-            <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
+          <div className="w-full flex items-center ltr:pr-3 rtl:pl-3">
+            <div className="h-3 w-3 rounded-full bg-gray-500 ltr:ml-4 rtl:mr-4" />
             <div className="h-3 w-3 rounded-full bg-gray-500 ltr:ml-2 rtl:mr-2" />
             <div className="h-3 w-3 rounded-full bg-gray-500 ltr:ml-2 rtl:mr-2" />
-            <div className="p-3 ml-4 bg-gray-50 rounded-t-lg flex items-center">
+            <div className="p-3 ltr:ml-4 rtl:mr-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
                 src={state.customizations |> Customizations.icon |> Customizations.url}
                 className="h-5 w-5"
               />
-              <span className="ml-1 text-xs font-semibold max-w-xs truncate">
+              <span className="ltr:ml-1 rtl:mr-1 text-xs font-semibold max-w-xs truncate">
                 {schoolName->str}
               </span>
             </div>

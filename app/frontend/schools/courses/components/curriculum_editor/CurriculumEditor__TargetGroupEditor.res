@@ -278,7 +278,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
               {levelEditor(state, levels, send)}
               <div className="mt-5">
                 <div className="flex items-center shrink-0">
-                  <label className="block tracking-wide text-xs font-semibold mr-3">
+                  <label className="block tracking-wide text-xs font-semibold ltr:mr-3 rtl:ml-3">
                     {tr("milestone_q") |> str}
                   </label>
                   <div

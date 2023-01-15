@@ -298,15 +298,15 @@
 }
 
 .toggle-button__button:first-child {
-  @apply rounded-l;
+  @apply ltr:rounded-l rtl:rounded-r;
 }
 
 .toggle-button__button:last-child {
-  @apply rounded-r;
+  @apply ltr:rounded-r rtl:rounded-l;
 }
 
 .toggle-button__button:not(:last-of-type) {
-  border-right-color: transparent;
+  @apply ltr:border-r-transparent	 rtl:border-l-transparent;
 }
 
 .toggle-button__button:hover {

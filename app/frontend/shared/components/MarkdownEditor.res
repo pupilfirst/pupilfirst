@@ -332,7 +332,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_italic")}
           title={t("control_label_italic")}
-          className={buttonClasses ++ "border-l border-gray-300"}
+          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-300"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
@@ -340,13 +340,13 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_strikethrough")}
           title={t("control_label_strikethrough")}
-          className={buttonClasses ++ "border-l border-gray-300"}
+          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-300"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
         <EmojiPicker
           onChange={handleEmojiChange}
-          className={buttonClasses ++ "border-l border-gray-400 hidden md:block"}
+          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-400 hidden md:block"}
           title={t("emoji_picker")}
         />
       </div>

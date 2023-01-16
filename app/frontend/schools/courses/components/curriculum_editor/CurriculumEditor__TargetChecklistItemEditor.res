@@ -84,7 +84,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     |> Js.Array.mapi((kind, index) =>
       <button
         key={index |> string_of_int}
-        className="w-full px-2 py-1 focus:outline-none appearance-none text-left"
+        className="w-full px-2 py-1 focus:outline-none appearance-none ltr:text-left rtl:text-right"
         onClick={_ => updateKind(checklistItem, updateChecklistItemCB, kind)}>
         <PfIcon className={"ltr:mr-2 rtl:ml-2 if if-fw " ++ selectedButtonIcon(kind)} />
         {kind |> ChecklistItem.actionStringForKind |> str}

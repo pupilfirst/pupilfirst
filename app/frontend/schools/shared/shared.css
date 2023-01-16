@@ -376,7 +376,7 @@
 .target-group__group-reorder {
   max-height: 4.5rem;
   top: 50%;
-  left: -37px;
+  @apply ltr:-left-9	rtl:-right-9;
   z-index: -1;
   transform: translateY(-50%);
 }

@@ -42,10 +42,10 @@ module Courses
 
     def date_picker_props
       {
-        selected_date: @date.iso8601,
-        course_id: @course.id,
-        selected_calendar_id: @selected_calendar&.id
-      }.props_to_json
+        selectedDate: @date.iso8601,
+        courseId: @course.id.to_s,
+        selectedCalendarId: @selected_calendar&.id&.to_s
+      }.to_json
     end
 
     def month_data

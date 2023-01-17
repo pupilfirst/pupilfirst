@@ -22,7 +22,7 @@ module Schools
 
       if @form.valid?
         @form.save
-        flash[:success] = 'Event created successfully'
+        flash[:success] = I18n.t('calendar_events.create.success')
         redirect_to school_course_calendar_events_path(@course)
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
@@ -59,7 +59,7 @@ module Schools
 
       if @form.valid?
         @form.save
-        flash[:success] = 'Event updated successfully'
+        flash[:success] = I18n.t('calendar_events.update.success')
         redirect_to school_course_calendar_event_path(@course, @event)
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
@@ -72,14 +72,9 @@ module Schools
       @event = @course.calendar_events.find(params[:id])
       authorize(@event, policy_class: Schools::CalendarEventPolicy)
 
-      if @event.present?
-        @event.destroy
-        flash[:success] = 'Event deleted successfully'
-        redirect_to school_course_calendar_events_path(@course)
-      else
-        flash[:error] = 'Event not found'
-        redirect_to school_course_calendar_events_path(@course)
-      end
+      @event.destroy
+      flash[:success] = I18n.t('calendar_events.delete.success')
+      redirect_to school_course_calendar_events_path(@course)
     end
 
     private

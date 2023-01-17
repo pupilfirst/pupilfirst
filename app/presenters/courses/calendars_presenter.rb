@@ -8,7 +8,7 @@ module Courses
     end
 
     def events_for_day
-      events_scope.where(start_time: (@date).all_day)
+      events_scope.where(start_time: @date.all_day)
     end
 
     def selected_date
@@ -19,20 +19,17 @@ module Courses
       cohort_calendars = @course.calendars.joins(:cohorts)
       course_calendars = @course.calendars.where.not(id: cohort_calendars)
 
-      CalendarEvent
-        .where(calendar: course_calendars)
-        .or(
-          CalendarEvent.where(
-            calendar: applicable_cohort_calendars(cohort_calendars)
-          )
-        )
+      CalendarEvent.where(
+        calendar:
+          course_calendars + applicable_cohort_calendars(cohort_calendars)
+      )
     end
 
     def upcoming_events_for_month
       events_scope
         .where(start_time: @date.end_of_day..@date.end_of_month.end_of_day)
         .order(:start_time)
-        .limit(10)
+        .limit(30)
     end
 
     def selected_month
@@ -45,10 +42,10 @@ module Courses
 
     def date_picker_props
       {
-        selectedDate: @date.iso8601,
-        courseId: @course.id.to_s,
-        selectedCalendarId: @selected_calendar&.id&.to_s
-      }.to_json
+        selected_date: @date.iso8601,
+        course_id: @course.id,
+        selected_calendar_id: @selected_calendar&.id
+      }.props_to_json
     end
 
     def month_data

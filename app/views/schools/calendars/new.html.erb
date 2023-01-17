@@ -1,14 +1,3 @@
-<%
-  def cohorts
-    @course.cohorts.map do |cohort|
-      {
-        id: cohort.id.to_s,
-        name: cohort.name
-      }
-    end
-  end
-%>
-
 <% content_for(:head) do %>
   <title><%= @course.name %> | <%= t(".title") %> </title>
 <% end %>
@@ -40,7 +29,7 @@
           <span class="text-sm font-medium"><%= t(".cohorts_label") %>  </span><span title="This will link calendar to specified cohorts"><i class="if i-question-circle-regular if-fw cursor-help" aria-hidden="true"></i></span>
         </label>
         <div class="mt-1">
-          <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= { selected: [], allItems: cohorts, inputName: "calendar[cohort_ids][]", allItemsSelectedMessage: t(".all_cohorts_selected"), emptySelectionMessage: t(".no_cohorts_selected") }.to_json %>"></div>
+          <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= { selected: [], allItems: @course.cohorts.map { |cohort| { id: cohort.id.to_s, name: cohort.name }}, inputName: "calendar[cohort_ids][]", allItemsSelectedMessage: t(".all_cohorts_selected"), emptySelectionMessage: t(".no_cohorts_selected") }.to_json %>"></div>
         </div>
       </div>
       <button type="submit" class="btn btn-primary btn-large w-full mt-5"><%= t(".add_calendar_button") %> </button>

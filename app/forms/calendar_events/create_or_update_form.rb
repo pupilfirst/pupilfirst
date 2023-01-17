@@ -14,19 +14,25 @@ module CalendarEvents
 
     validates :title,
               presence: {
-                message: 'Please enter a valid title for the event'
+                message:
+                  I18n.t('calendar_events.create_or_update_form.title_error')
               }
     validates :calendar_id,
               presence: {
-                message: 'Please select a calendar from the list'
+                message:
+                  I18n.t('calendar_events.create_or_update_form.calendar_error')
               }
     validates :color,
               presence: {
-                message: 'Please select a color for the event'
+                message:
+                  I18n.t('calendar_events.create_or_update_form.color_error')
               }
     validates :start_time,
               presence: {
-                message: 'Please select a valid time for the event'
+                message:
+                  I18n.t(
+                    'calendar_events.create_or_update_form.start_time_error'
+                  )
               }
 
     validate :start_time_is_valid
@@ -36,10 +42,16 @@ module CalendarEvents
       begin
         time = Time.zone.parse(start_time)
         if time.blank?
-          errors.add(:base, 'Please enter a valid time for the event')
+          errors.add(
+            :base,
+            I18n.t('calendar_events.create_or_update_form.start_time_error')
+          )
         end
       rescue StandardError
-        errors.add(:base, 'Please enter a valid time for the event')
+        errors.add(
+          :base,
+          I18n.t('calendar_events.create_or_update_form.start_time_error')
+        )
       end
     end
 
@@ -49,7 +61,10 @@ module CalendarEvents
       begin
         URI.parse(link_url)
       rescue StandardError
-        errors.add(:base, 'Please enter a valid URL for the event')
+        errors.add(
+          :base,
+          I18n.t('calendar_events.create_or_update_form.invalid_url')
+        )
       end
     end
 

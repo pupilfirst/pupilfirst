@@ -16,7 +16,7 @@ module Schools
 
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
 
-      flash[:success] = 'Calendar created successfully'
+      flash[:success] = I18n.t('calendars.create.success')
       redirect_to school_course_calendar_events_path(@course)
     end
 
@@ -34,7 +34,7 @@ module Schools
 
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
 
-      flash[:success] = 'Calendar updated successfully'
+      flash[:success] = I18n.t('calendars.update.success')
       redirect_to school_course_calendar_events_path(@course)
     end
   end

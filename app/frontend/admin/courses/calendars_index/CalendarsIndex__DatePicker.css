@@ -67,15 +67,6 @@
   height: 6ch;
 }
 
-/* .courses-calendar__date-grid-button:hover,
-.courses-calendar__date-grid-button:focus {
-  @apply bg-gray-200 outline-none;
-}
-
-.courses-calendar__date-grid-button:active {
-  @apply bg-gray-300 text-primary-600;
-} */
-
 .courses-calendar__date-grid-button--is-selected {
   @apply text-white bg-primary-500;
 }

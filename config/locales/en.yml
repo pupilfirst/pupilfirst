@@ -5,6 +5,24 @@ en:
       welcome: Welcome to %{school_name}!
     resolve_applicant_path:
       welcome: Welcome to %{school_name}!
+  calendars:
+    create:
+      success: Calendar created successfully!
+    update:
+      success: Calendar updated successfully!
+  calendar_events:
+    create:
+      success: Event created successfully!
+    update:
+      success: Event updated successfully!
+    delete:
+      success: Event deleted successfully!
+    create_or_update_form:
+      title_error: Please enter a valid title for the event
+      calendar_error: Please select a calendar from the list
+      start_time_error: Please select a valid time for the event
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
   cohorts:
     shared:
       overview_link: Overview
@@ -2406,6 +2424,10 @@ en:
         no_cohorts_selected: No cohorts selected
         all_cohorts_selected: All cohorts selected
         add_calendar_button: Add calendar
+      edit:
+        update_calendar: Update calendar
+        link_to_cohorts: Link calendar to cohorts
+        calendar_name: Calendar name
     calendar_events:
       new:
         title: 'Add new event'
@@ -2421,6 +2443,7 @@ en:
         event_link_url_label: Event link URL
         description_label: Description
         add_event_button: Add event
+        link_title_placeholder: eg. Zoom meeting link
       show:
         title: 'Calendar event details'
         link_label: Event Link

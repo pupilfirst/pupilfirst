@@ -84,8 +84,8 @@ module Layouts
         current_user
           .founders
           .not_dropped_out
-          .joins(:level)
-          .exists?(levels: { course_id: @course.id })
+          .joins(:cohort)
+          .exists?(cohorts: { course_id: @course.id })
     end
 
     def user_is_coach?

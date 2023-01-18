@@ -16,12 +16,15 @@ module Courses
     end
 
     def events_scope
+      return CalendarEvent.none unless @course.calendars.exists?
+
       cohort_calendars = @course.calendars.joins(:cohorts)
       course_calendars = @course.calendars.where.not(id: cohort_calendars)
 
       CalendarEvent.where(
         calendar:
-          course_calendars + applicable_cohort_calendars(cohort_calendars)
+          course_calendars +
+            (applicable_cohort_calendars(cohort_calendars) || [])
       )
     end
 

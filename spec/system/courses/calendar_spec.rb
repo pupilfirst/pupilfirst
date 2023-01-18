@@ -15,6 +15,14 @@ feature 'Course calendar feature for students and coaches', js: true do
 
   before { coach.cohorts << [cohort, cohort_2] }
 
+  context 'when the course has no calendars' do
+    scenario 'student sees no calendar' do
+      sign_in_user student.user, referrer: calendar_course_path(course)
+
+      expect(page).to have_text('No event scheduled')
+    end
+  end
+
   context 'when the course has calendars and events' do
     let!(:course_calendar) { create :calendar, course: course }
     let!(:cohort_calendar) { create :calendar, course: course }

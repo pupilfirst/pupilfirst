@@ -5,7 +5,7 @@ WORKDIR /build
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.3.11'
+RUN gem install bundler -v '2.3.26'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4

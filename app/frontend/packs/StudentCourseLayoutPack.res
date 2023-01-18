@@ -8,7 +8,7 @@ let decodeProps = json => {
   )
 }
 
-Psj.matchPaths(["courses/:id/curriculum", "courses/:id/report"], () => {
+Psj.matchPaths(["courses/:id/curriculum", "courses/:id/report", "courses/:id/calendar"], () => {
   let (currentCourseId, courses, additionalLinks, coverImage) =
     DomUtils.parseJSONAttribute(~id="course-header-root", ())->decodeProps
 

@@ -98,6 +98,36 @@ ActiveRecord::Schema.define(version: 2022_12_05_094729) do
     t.index ["email"], name: "index_bounce_reports_on_email", unique: true
   end
 
+  create_table "calendar_cohorts", force: :cascade do |t|
+    t.bigint "calendar_id"
+    t.bigint "cohort_id"
+    t.index ["calendar_id"], name: "index_calendar_cohorts_on_calendar_id"
+    t.index ["cohort_id"], name: "index_calendar_cohorts_on_cohort_id"
+  end
+
+  create_table "calendar_events", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "calendar_id"
+    t.string "color"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "link_url"
+    t.string "link_title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.bigint "course_id"
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_calendars_on_course_id"
+  end
+
   create_table "certificates", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.string "qr_corner", null: false

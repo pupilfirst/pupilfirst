@@ -108,6 +108,7 @@ Rails.application.routes.draw do
     resources :courses, only: [] do
       member do
         get 'applicants'
+        get 'calendar_events'
         get 'curriculum'
         get 'exports'
         get 'authors'
@@ -115,7 +116,12 @@ Rails.application.routes.draw do
         post 'certificates', action: 'create_certificate'
         get 'evaluation_criteria'
         post 'attach_images'
+        get 'calendar_month_data'
       end
+
+      resources :calendar_events, only: %i[new create update destroy show edit], controller: 'calendar_events'
+
+      resources :calendars, only: %i[new create update destroy edit], controller: 'calendars'
 
       resources :authors, only: %w[show new]
 
@@ -236,6 +242,8 @@ Rails.application.routes.draw do
     member do
       get 'review', action: 'review'
       get 'students', action: 'students'
+      get 'calendar', action: 'calendar'
+      get 'calendar_month_data', action: 'calendar_month_data'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
       get 'report', action: 'report'

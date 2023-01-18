@@ -1,6 +1,6 @@
 %%raw(`import "./CalendarsIndex__DatePicker.css"`)
 open Json.Decode
-
+exception InvalidSource(string)
 exception WeekDayInvalid(string)
 let str = React.string
 
@@ -123,11 +123,18 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
   ->React.array
 }
 
-let getMonthEventStatus = (selectedMonth, selectedCalendarId, courseId, send) => {
+let getMonthEventStatus = (selectedMonth, source, selectedCalendarId, courseId, send) => {
   send(StartLoadingStatus)
   let monthStartAsString = selectedMonth->DateFns.format("yyyy-MM") ++ "-01"
+
+  let path = switch source {
+  | "student" => "/courses/"
+  | "admin" => "/school/courses/"
+  | _ => raise(InvalidSource("Invalid source"))
+  }
+
   let url =
-    "/school/courses/" ++
+    path ++
     courseId ++
     "/calendar_month_data" ++
     "?date=" ++
@@ -145,7 +152,7 @@ let getMonthEventStatus = (selectedMonth, selectedCalendarId, courseId, send) =>
 }
 
 @react.component
-let make = (~selectedDate, ~selectedCalendarId=?, ~courseId) => {
+let make = (~selectedDate, ~source, ~selectedCalendarId=?, ~courseId) => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -161,7 +168,7 @@ let make = (~selectedDate, ~selectedCalendarId=?, ~courseId) => {
   let selectedMonth = computeSelectedMonth(state)
 
   React.useEffect1(() => {
-    getMonthEventStatus(selectedMonth, selectedCalendarId, courseId, send)
+    getMonthEventStatus(selectedMonth, source, selectedCalendarId, courseId, send)
     None
   }, [state.selectedMonthDeviation])
 
@@ -220,5 +227,6 @@ let makeFromJson = json => {
     "selectedDate": field("selectedDate", string, json),
     "selectedCalendarId": optional(field("selectedCalendarId", string), json),
     "courseId": field("courseId", string, json),
+    "source": field("source", string, json),
   })
 }

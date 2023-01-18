@@ -44,7 +44,7 @@ module Courses
       {
         selectedDate: @date.iso8601,
         courseId: @course.id.to_s,
-        selectedCalendarId: @selected_calendar&.id&.to_s
+        source: 'student'
       }.to_json
     end
 

@@ -243,6 +243,7 @@ Rails.application.routes.draw do
       get 'review', action: 'review'
       get 'students', action: 'students'
       get 'calendar', action: 'calendar'
+      get 'calendar_month_data', action: 'calendar_month_data'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
       get 'report', action: 'report'

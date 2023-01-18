@@ -9,6 +9,7 @@ type coursePages =
   | Review
   | Students
   | Leaderboard
+  | Calendar
 
 type t =
   | SelectedCourse(courseId, coursePages)
@@ -31,6 +32,7 @@ let coursePath = (id, page) => {
   | Review => `review`
   | Students => `students`
   | Leaderboard => `leaderboard`
+  | Calendar => `calendar`
   }
 }
 let path = t => {
@@ -42,7 +44,7 @@ let path = t => {
 }
 
 let activeLinks = currentCourse => {
-  let defaultLinks = [Curriculum]
+  let defaultLinks = [Curriculum, Calendar]
   let linksForStudents = AppRouter__Course.isStudent(currentCourse)
     ? Js.Array.concat([Report], defaultLinks)
     : defaultLinks
@@ -58,6 +60,7 @@ let isSPA = t => {
     switch l {
     | Curriculum
     | Report
+    | Calendar
     | Leaderboard => false
     | Review
     | Students => true

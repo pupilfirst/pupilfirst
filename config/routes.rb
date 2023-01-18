@@ -95,6 +95,9 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :calendars, only: %i[update], controller: 'calendars'
+    resources :calendar_events, only: %i[update destroy], controller: 'calendar_events'
+
     resources :targets, only: [] do
       resource :content_block, only: %i[create]
     end
@@ -119,9 +122,9 @@ Rails.application.routes.draw do
         get 'calendar_month_data'
       end
 
-      resources :calendar_events, only: %i[new create update destroy show edit], controller: 'calendar_events'
+      resources :calendar_events, only: %i[new create show edit], controller: 'calendar_events'
 
-      resources :calendars, only: %i[new create update destroy edit], controller: 'calendars'
+      resources :calendars, only: %i[new create edit], controller: 'calendars'
 
       resources :authors, only: %w[show new]
 

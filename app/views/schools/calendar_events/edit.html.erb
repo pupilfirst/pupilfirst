@@ -17,7 +17,7 @@
     </div>
   </section>
   <section class="bg-white" >
-    <%= form_with  model: @event, url: school_course_calendar_event_path(@course, @event), method: "patch", class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6" do |f|  %>
+    <%= form_with  model: @event, url: school_calendar_event_path(@event), method: "patch", class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6" do |f|  %>
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-10">
           <label>

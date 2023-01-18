@@ -1,6 +1,6 @@
 ---
 id: calendars
-title: calendars
+title: Calendars
 sidebar_label: Calendars
 ---
 

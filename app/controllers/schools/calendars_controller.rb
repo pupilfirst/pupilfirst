@@ -12,6 +12,10 @@ module Schools
     def create
       @course = current_school.courses.find(params[:course_id])
       calendar_params = params.require(:calendar).permit(:name, cohort_ids: [])
+
+      calendar_params[:cohort_ids] =
+        @course.cohorts.where(id: calendar_params[:cohort_ids]).pluck(:id)
+
       @course.calendars.create!(calendar_params)
 
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
@@ -26,10 +30,13 @@ module Schools
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
     end
 
+    # POST /school/calendars/:id
     def update
-      @course = current_school.courses.find(params[:course_id])
-      @calendar = @course.calendars.find(params[:id])
+      @calendar = current_school.calendars.find(params[:id])
+      @course = @calendar.course
       calendar_params = params.require(:calendar).permit(:name, cohort_ids: [])
+      calendar_params[:cohort_ids] =
+        @course.cohorts.where(id: calendar_params[:cohort_ids]).pluck(:id)
       @calendar.update!(calendar_params)
 
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)

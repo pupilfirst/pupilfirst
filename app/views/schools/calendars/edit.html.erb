@@ -19,7 +19,7 @@
     </div>
   </section>
   <section class="bg-white" >
-    <%= form_with  model: @calendar, url: school_course_calendar_path(@course, method: 'patch'), class: "max-w-5xl mx-auto p-6" do |f|  %>
+    <%= form_with  model: @calendar, url: school_calendar_path(@calendar, method: 'patch'), class: "max-w-5xl mx-auto p-6" do |f|  %>
       <label for="name">
         <span class="text-sm font-medium"><%= t('.calendar_name') %></span>
       </label>

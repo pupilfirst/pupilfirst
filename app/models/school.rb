@@ -17,6 +17,8 @@ class School < ApplicationRecord
   has_many :timeline_events, through: :founders
   has_many :markdown_attachments, dependent: :destroy
   has_many :audit_records, dependent: :destroy
+  has_many :calendars, through: :courses
+  has_many :calendar_events, through: :calendars
 
   acts_as_taggable_on :founder_tags
   acts_as_taggable_on :user_tags

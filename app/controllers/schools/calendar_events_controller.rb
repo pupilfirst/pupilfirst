@@ -46,8 +46,7 @@ module Schools
     end
 
     def update
-      @course = current_school.courses.find(params[:course_id])
-      @event = @course.calendar_events.find(params[:id])
+      @event = current_school.calendar_events.find(params[:id])
       authorize(@event, policy_class: Schools::CalendarEventPolicy)
 
       @form =
@@ -60,7 +59,10 @@ module Schools
       if @form.valid?
         @form.save
         flash[:success] = I18n.t('calendar_events.update.success')
-        redirect_to school_course_calendar_event_path(@course, @event)
+        redirect_to school_course_calendar_event_path(
+                      @event.calendar.course,
+                      @event
+                    )
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
         render :edit
@@ -68,13 +70,12 @@ module Schools
     end
 
     def destroy
-      @course = current_school.courses.find(params[:course_id])
-      @event = @course.calendar_events.find(params[:id])
+      @event = current_school.calendar_events.find(params[:id])
       authorize(@event, policy_class: Schools::CalendarEventPolicy)
-
       @event.destroy
+
       flash[:success] = I18n.t('calendar_events.delete.success')
-      redirect_to school_course_calendar_events_path(@course)
+      redirect_to school_course_calendar_events_path(@event.calendar.course)
     end
 
     private

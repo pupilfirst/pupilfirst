@@ -5,6 +5,24 @@ hi:
       welcome: '%{school_name} में आपका स्वागत है!'
     resolve_applicant_path:
       welcome: '%{school_name} में आपका स्वागत है!'
+  calendars:
+    create:
+      success: Calendar created successfully!
+    update:
+      success: Calendar updated successfully!
+  calendar_events:
+    create:
+      success: Event created successfully!
+    update:
+      success: Event updated successfully!
+    delete:
+      success: Event deleted successfully!
+    create_or_update_form:
+      title_error: Please enter a valid title for the event
+      calendar_error: Please select a calendar from the list
+      start_time_error: Please select a valid time for the event
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
   cohorts:
     shared:
       overview_link: अवलोकन
@@ -1865,6 +1883,11 @@ hi:
       name_placeholder: जॉन डो
       privacy_policy: गोपनीयता नीति
       terms_and_conditions: नियम एवं शर्तें
+    calendar:
+      no_events_text: No event scheduled for the selected date
+      today: Today
+      upcoming_events: Upcoming events in %{month}
+      events: Events
     leaderboard:
       active_students: सक्रिय छात्र
       change: परिवर्तन
@@ -2389,6 +2412,40 @@ hi:
   schools:
     admins:
       title: व्यवस्थापक
+    calendars:
+      new:
+        title: 'Create new calendar'
+        name_label: Calendar name
+        cohorts_label: Link calendar to cohorts
+        no_cohorts_selected: No cohorts selected
+        all_cohorts_selected: All cohorts selected
+        add_calendar_button: Add calendar
+      edit:
+        update_calendar: Update calendar
+        link_to_cohorts: Link calendar to cohorts
+        calendar_name: Calendar name
+    calendar_events:
+      new:
+        title: 'Add new event'
+        new_event: 'Add new event'
+        edit_event: 'Edit event'
+        title_label: Event Title
+        select_calendar_label: Add event to
+        select_color_label: Color
+        start_time_label: Date and Time
+        add_link_section_title: Add an event link (optional)
+        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
+        event_link_title_label: Event link title
+        event_link_url_label: Event link URL
+        description_label: Description
+        add_event_button: Add event
+        link_title_placeholder: eg. Zoom meeting link
+      show:
+        title: 'Calendar event details'
+        link_label: Event Link
+        description_label: Description
+        date_and_time: Date and time
+        confirm_delete: Are you sure to delete the event?
     communities:
       index:
         title: समुदाय
@@ -2397,6 +2454,20 @@ hi:
         title: आवेदक
       authors:
         title: लेखकों
+      calendar_events:
+        title: Calendars and Events
+        add_calendar_button: Add Calendar
+        calendar: Calendar
+        calendars: Calendars
+        calendar_filter_label: Showing events from
+        select_calendar_filter: Select a calendar
+        upcoming_events_in: Upcoming events in
+        add_event_button: Add an event
+        events: Events
+        empty_events: No event scheduled for the selected date
+        today: Today
+        no_calendars_message: No calendars yet
+        no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
       certificates:
         title: प्रमाण पत्र
       curriculum:
@@ -2446,7 +2517,7 @@ hi:
     archived: संग्रहीत
     are: हैं
     avatar: अवतार
-    back_link: < Back
+    back_link: Back
     cancel: रद्द करना
     caption_image: छवि के लिए एक कैप्शन
     close: बंद करना

@@ -1,5 +1,8 @@
 exception UnsafeFindFailed(string)
 
+let ct = I18n.t(~scope="components.SchoolAdminNavbar__Root.course_nav")
+let tt = I18n.t(~scope="components.SchoolAdminNavbar__Root.navbar")
+
 type courseId = string
 type id = string
 
@@ -98,28 +101,28 @@ let path = (~courseId=?, t) => {
 
 let name = t => {
   switch t {
-  | SchoolCoaches => {I18n.t("shared.coaches")}
+  | SchoolCoaches => tt("coaches")
   | Settings(settingsPages) =>
     switch settingsPages {
-    | Customization => {I18n.t("components.SchoolAdminNavbar__Root.navbar.settings")}
-    | Admins => {I18n.t("components.SchoolAdminNavbar__Root.navbar.admins")}
+    | Customization => tt("settings")
+    | Admins => tt("admins")
     }
-  | Courses => {I18n.t("components.SchoolAdminNavbar__Root.navbar.courses")}
+  | Courses => tt("courses")
   | SelectedCourse(coursePages) =>
     switch coursePages {
-    | Students => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.students")}
-    | CourseCoaches => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.coaches")}
-    | Curriculum => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.curriculum")}
-    | EvaluationCriteria => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.evaluation_criteria")}
-    | CourseExports => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.exports")}
-    | Authors => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.authors")}
-    | Certificates => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.certificates")}
-    | Applicants => {I18n.t("components.SchoolAdminNavbar__Root.course_nav.applicants")}
-    | Teams => {I18n.t("components.TeamsIndex__Root.teams")}
-    | Cohorts => {I18n.t("components.CohortsIndex__Root.cohorts")}
-    | Calendars => "Calendars"
+    | Students => ct("students")
+    | CourseCoaches => ct("coaches")
+    | Curriculum => ct("curriculum")
+    | EvaluationCriteria => ct("evaluation_criteria")
+    | CourseExports => ct("exports")
+    | Authors => ct("authors")
+    | Certificates => ct("certificates")
+    | Applicants => ct("applicants")
+    | Teams => I18n.t("components.TeamsIndex__Root.teams")
+    | Cohorts => I18n.t("components.CohortsIndex__Root.cohorts")
+    | Calendars => ct("calendar")
     }
-  | Communities => {I18n.t("components.SchoolAdminNavbar__Root.navbar.communities")}
+  | Communities => tt("communities")
   }
 }
 

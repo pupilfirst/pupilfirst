@@ -1253,6 +1253,7 @@ en:
         evaluation_criteria: Evaluation Criteria
         exports: Exports
         students: Students
+        calendar: Calendars
       dashboard: Dashboard
       navbar:
         admins: Admins
@@ -2265,6 +2266,8 @@ en:
     update_cohort:
       success_notification: Cohort updated successfully.
     update_course:
+      unable_to_find_course: "Unable to find course with id: %{value}"
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with id: %{value}"
       success_notification: Course updated successfully!
     update_course_author:
       author_name_updated_notification: The author's name has been updated.

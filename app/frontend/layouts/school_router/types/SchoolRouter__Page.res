@@ -104,7 +104,7 @@ let name = t => {
   | SchoolCoaches => tt("coaches")
   | Settings(settingsPages) =>
     switch settingsPages {
-    | Customization => tt("settings")
+    | Customization => tt("customization")
     | Admins => tt("admins")
     }
   | Courses => tt("courses")

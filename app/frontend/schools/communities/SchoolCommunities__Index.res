@@ -175,7 +175,7 @@ let make = (~communities, ~courses) => {
         onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer focus:outline-none focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {tr("add_new_community") |> str} </h5>
+        <h5 className="font-semibold ltr:ml-2 rtl:mr-2"> {tr("add_new_community") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
@@ -192,24 +192,24 @@ let make = (~communities, ~courses) => {
                   ReactEvent.Mouse.preventDefault(_event)
                   send(UpdateEditorAction(ShowEditor(Some(community))))
                 }}
-                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg text-left hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-50 focus:text-primary-500">
+                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer ltr:rounded-l-lg rtl:rounded-r-lg ltr:text-left rtl:text-right hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-50 focus:text-primary-500">
                 <div className="flex w-full text-sm justify-between">
                   <span className="flex-1 font-semibold py-5 px-5">
                     {community |> Community.name |> str}
                   </span>
                   <span
-                    className="ml-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
+                    className="ltr:ml-2 rtl:mr-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {ts("edit") |> str} </span>
+                    <span className="ltr:ml-1 rtl:mr-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
               </button>
               <a
                 target="_blank"
                 href={"/communities/" ++ (community |> Community.id)}
-                className="text-sm flex items-center border-l text-gray-600 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
+                className="text-sm flex items-center ltr:border-l rtl:border-r text-gray-600 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
-                <span className="ml-1"> {ts("view") |> str} </span>
+                <span className="ltr:ml-1 rtl:mr-1"> {ts("view") |> str} </span>
               </a>
             </div>
           </div>

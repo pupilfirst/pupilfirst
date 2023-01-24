@@ -20,7 +20,7 @@ type state = {
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--" ++ (targetStatus |> TargetStatus.statusClassesSufix)
-  "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses
+  "curriculum__target-status px-3 py-px ltr:ml-4 rtl:mr-4 h-6 " ++ statusClasses
 }
 
 let rendertarget = (target, statusOfTargets, author, courseId) => {
@@ -155,7 +155,7 @@ let issuedCertificate = course =>
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
         <FaIcon classes="fas fa-certificate" />
-        <span className="ml-2"> {t("issued_certificate_button")->str} </span>
+        <span className="ltr:ml-2 rtl:mr-2"> {t("issued_certificate_button")->str} </span>
       </a>
     </div>
   | None => React.null
@@ -270,7 +270,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
           <div key="previous" className="w-1/2 mr-2">
             {navigationLink(#Previous, previousLevel, setState)}
           </div>,
-          <div key="next" className="w-1/2 ml-2">
+          <div key="next" className="w-1/2 ltr:ml-2 rtl:mr-2">
             {navigationLink(#Next, nextLevel, setState)}
           </div>,
         ] |> React.array
@@ -490,7 +490,7 @@ let make = (
                 "/curriculum?level=" ++
                 Level.number(currentLevel)->string_of_int}>
                 <i className="fas fa-pencil-alt" />
-                <span className="ml-2"> {t("edit_level_button")->str} </span>
+                <span className="ltr:ml-2 rtl:mr-2"> {t("edit_level_button")->str} </span>
               </a>
             </div>,
             author,

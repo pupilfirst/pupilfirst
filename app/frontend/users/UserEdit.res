@@ -267,7 +267,7 @@ let confirmDeletionWindow = (state, send) =>
     ? {
         let body =
           <div ariaLabel={t("confirm_dialog_aria")}>
-            <p className="text-sm text-center sm:text-left text-gray-600">
+            <p className="text-sm text-center ltr:sm:text-left rtl:sm:text-right text-gray-600">
               {t("account_delete_q")->str}
             </p>
             <div className="mt-3">
@@ -342,7 +342,7 @@ let make = (
     <div className="bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/3 pr-4">
+          <div className="w-full md:w-1/3 ltr:pr-4 rtl:pl-4">
             <h3 className="text-lg font-semibold"> {t("edit_profile")->str} </h3>
             <p className="mt-1 text-sm text-gray-600"> {t("displayed_publicly")->str} </p>
           </div>
@@ -409,7 +409,7 @@ let make = (
                     | None => <Avatar name />
                     }}
                   </span>
-                  <span className="ml-5 inline-flex">
+                  <span className="ltr:ml-5 rtl:mr-5 inline-flex">
                     <input
                       className="form-input__file-sr-only"
                       name="user[avatar]"
@@ -474,7 +474,7 @@ let make = (
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
-          <div className="w-full md:w-1/3 pr-4">
+          <div className="w-full md:w-1/3 ltr:pr-4 rtl:pl-4">
             <h3 className="text-lg font-semibold"> {t("security")->str} </h3>
             <p className="mt-1 text-sm text-gray-600"> {t("update_credentials")->str} </p>
           </div>
@@ -537,7 +537,7 @@ let make = (
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
-          <div className="w-full md:w-1/3 pr-4">
+          <div className="w-full md:w-1/3 ltr:pr-4 rtl:pl-4">
             <h3 className="text-lg font-semibold"> {t("notifications")->str} </h3>
             <p className="mt-1 text-sm text-gray-600"> {t("update_email_notifications")->str} </p>
           </div>
@@ -567,7 +567,7 @@ let make = (
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
-          <div className="w-full md:w-1/3 pr-4">
+          <div className="w-full md:w-1/3 ltr:pr-4 rtl:pl-4">
             <h3 className="text-lg font-semibold"> {t("localization")->str} </h3>
             <p className="mt-1 text-sm text-gray-600"> {t("update_locale")->str} </p>
           </div>
@@ -609,7 +609,7 @@ let make = (
     <div className="bg-white shadow sm:rounded-lg mt-10">
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/3 pr-4">
+          <div className="w-full md:w-1/3 ltr:pr-4 rtl:pl-4">
             <h3 className="text-lg font-semibold"> {t("account")->str} </h3>
             <p className="mt-1 text-sm text-gray-600"> {t("manage_account")->str} </p>
           </div>
@@ -620,10 +620,10 @@ let make = (
             </p>
             <div className="mt-4">
               {isSchoolAdmin || hasValidDeleteAccountToken
-                ? <div className="bg-orange-100 border-l-4 border-orange-400 p-4">
+                ? <div className="bg-orange-100 ltr:border-l-4 rtl:border-r-4 border-orange-400 p-4">
                     <div className="flex">
                       <FaIcon classes="fas fa-exclamation-triangle text-orange-400" />
-                      <div className="ml-3">
+                      <div className="ltr:ml-3 rtl:mr-3">
                         <p className="text-sm text-orange-900">
                           {(
                             isSchoolAdmin

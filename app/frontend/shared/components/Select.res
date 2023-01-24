@@ -10,7 +10,7 @@ module Make = (Selectable: Selectable) => {
       <button
         key={string_of_int(index)}
         onClick={_ => onSelect(selectable)}
-        className="w-full text-left cursor-pointer block p-3 bg-white hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50">
+        className="w-full ltr:text-left rtl:text-right cursor-pointer block p-3 bg-white hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50">
         {Selectable.name(selectable)->React.string}
       </button>
     )
@@ -29,7 +29,7 @@ module Make = (Selectable: Selectable) => {
       </span>
       {loading
         ? <FaIcon classes="fas fa-spinner fa-spin" />
-        : <FaIcon classes="fas fa-caret-down ml-2" />}
+        : <FaIcon classes="fas fa-caret-down ltr:ml-2 rtl:mr-2" />}
     </button>
   }
   @react.component

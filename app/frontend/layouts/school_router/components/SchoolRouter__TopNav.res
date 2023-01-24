@@ -19,7 +19,7 @@ let showUserLink = () => {
   [renderUserLink("power-off", "/users/sign_out")]
 }
 let navLinks = (path, text) => {
-  <div>
+  <div  className="rtl:mr-4">
     <a
       title={text}
       href=path
@@ -72,13 +72,13 @@ let make = (~courses, ~currentUser) => {
     <div className="flex items-center space-x-2 text-sm font-semibold capitalize">
       <SchoolRouter__CoursesDropdown courses />
     </div>
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center ltr:space-x-4">
       <div
         className="py-1 px-2 flex text-sm font-medium border-b-2 border-primary-400 text-primary-500 bg-gray-50 items-center">
         {"Admin"->str}
       </div>
       {navLinks("/dashboard", "Dashboard")}
-      <div className="relative">
+      <div className="relative rtl:mr-4">
         <Notifications__Root
           wrapperClasses=""
           iconClasses="school-admin-navbar__notifications-unread-bullet"

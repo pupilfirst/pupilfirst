@@ -277,7 +277,7 @@ let make = (
         )}
       </div>
       <div
-        className="pl-2 shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
+        className="ltr:pl-2 rtl:pr-2 shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs ltr:-mr-10 rtl:-ml-10 sticky top-0">
         {controlIcon(
           ~icon="fa-arrow-up",
           ~title=t("move_up"),

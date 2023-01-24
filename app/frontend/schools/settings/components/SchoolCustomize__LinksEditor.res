@@ -285,7 +285,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           ariaSelected={state.kind == FooterLink}
           ariaLabel={t("footer_link_title")}
           title={t("footer_link_title")}
-          className={kindClasses(state.kind == FooterLink) ++ " border-l"}
+          className={kindClasses(state.kind == FooterLink) ++ " ltr:border-l rtl:border-r"}
           onClick={handleKindChange(send, FooterLink)}>
           {"Footer Sitemap"->str}
         </button>
@@ -294,7 +294,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           ariaSelected={state.kind == SocialLink}
           ariaLabel={t("social_links_title")}
           title={t("social_links_title")}
-          className={kindClasses(state.kind == SocialLink) ++ " border-l"}
+          className={kindClasses(state.kind == SocialLink) ++ " ltr:border-l rtl:border-r"}
           onClick={handleKindChange(send, SocialLink)}>
           {"Social"->str}
         </button>
@@ -316,7 +316,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
       <DisablingCover disabled=state.adding>
         <div className="flex mt-3" key="sc-links-editor__form-body">
           {if state->titleInputVisible {
-            <div className="grow mr-4">
+            <div className="grow ltr:mr-4 rtl:ml-4">
               <label
                 className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-title">
                 {t("title")->str}

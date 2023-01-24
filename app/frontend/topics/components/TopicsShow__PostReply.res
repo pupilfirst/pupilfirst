@@ -37,7 +37,7 @@ let make = (~post, ~users) => {
     <div className="flex justify-between">
       <div className="flex items-center">
         {avatar(user)}
-        <span className="text-xs font-semibold ml-2">
+        <span className="text-xs font-semibold ltr:ml-2 rtl:mr-2">
           {user->Belt.Option.mapWithDefault("Unknown", user => User.name(user)) |> str}
         </span>
       </div>
@@ -50,7 +50,7 @@ let make = (~post, ~users) => {
         </div>
       </Tooltip>
     </div>
-    <div className="text-sm ml-9">
+    <div className="text-sm ltr:ml-9 rtl:mr-9">
       <MarkdownBlock
         markdown={post |> Post.body} className="leading-normal text-sm " profile=Markdown.Permissive
       />

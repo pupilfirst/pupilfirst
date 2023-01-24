@@ -67,7 +67,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
           {switch audioRecorder.url {
           | None => React.null
           | Some(_) =>
-            <div className="btn btn-success ml-4" onClick={_e => audioRecorder.downloadBlob()}>
+            <div className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={_e => audioRecorder.downloadBlob()}>
               <FaIcon classes="fas fa-download" />
             </div>
           }}

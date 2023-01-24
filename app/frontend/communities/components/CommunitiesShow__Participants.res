@@ -39,7 +39,7 @@ let make = (
         <Tooltip
           position=tooltipPosition
           tip={participant |> TopicParticipant.name |> str}
-          className="-mr-1"
+          className="ltr:-mr-1 rtl:-ml-1"
           key={participant |> TopicParticipant.id}>
           {avatar(
             ~size=(defaultAvatarSize, mdAvatarSize),

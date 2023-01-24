@@ -298,15 +298,15 @@
 }
 
 .toggle-button__button:first-child {
-  @apply rounded-l;
+  @apply ltr:rounded-l rtl:rounded-r;
 }
 
 .toggle-button__button:last-child {
-  @apply rounded-r;
+  @apply ltr:rounded-r rtl:rounded-l;
 }
 
 .toggle-button__button:not(:last-of-type) {
-  border-right-color: transparent;
+  @apply ltr:border-r-transparent	 rtl:border-l-transparent;
 }
 
 .toggle-button__button:hover {
@@ -376,7 +376,7 @@
 .target-group__group-reorder {
   max-height: 4.5rem;
   top: 50%;
-  left: -37px;
+  @apply ltr:-left-9	rtl:-right-9;
   z-index: -1;
   transform: translateY(-50%);
 }

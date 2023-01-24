@@ -85,11 +85,11 @@ module Make = (Selectable: Selectable) => {
             |> Array.mapi((index, selected) =>
               <span
                 key={index |> string_of_int}
-                className={"inline-flex items-center font-semibold text-xs mb-2 mr-2 rounded-full overflow-hidden " ++
+                className={"inline-flex items-center font-semibold text-xs mb-2 ltr:mr-2 rtl:ml-2 rounded-full overflow-hidden " ++
                 selectedItemClasses(colorForSelected)}>
                 <span className="px-2 py-1 flex-1"> {selected |> Selectable.value |> str} </span>
                 <button
-                  className={"inline-flex shrink-0 px-2 py-1 text-sm border-l-0 rounded-r items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
+                  className={"inline-flex shrink-0 px-2 py-1 text-sm ltr:border-l-0 rtl:border-r-0 ltr:rounded-r rtl:rounded-l items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
                   borderColor(colorForSelected)}
                   title={"Remove " ++ Selectable.value(selected)}
                   onClick={event => {
@@ -151,7 +151,7 @@ module Make = (Selectable: Selectable) => {
                     <i
                       className="far fa-plus-square multiselect-inline__list-item-select-icon-selected text-xl"
                     />
-                    <span className="ml-2"> {item |> Selectable.value |> str} </span>
+                    <span className="ltr:ml-2 rtl:mr-2"> {item |> Selectable.value |> str} </span>
                   </button>
                 )
                 |> React.array}

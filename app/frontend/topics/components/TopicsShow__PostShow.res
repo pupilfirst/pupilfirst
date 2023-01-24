@@ -67,7 +67,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
   let tip = <div className="text-center"> {t("unmark_solution") |> str} </div>
   let solutionIcon =
     <div
-      className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
+      className={"flex items-center justify-center ltr:pr-2 rtl:pl-2 ltr:pl-0 rtl:lg:pr-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
         userCanUnmarkSolution ? "hover:bg-gray-50 hover:text-gray-600" : ""
       )}>
       <PfIcon className="if i-check-solid text-sm lg:text-base" />
@@ -78,7 +78,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
   <div
     ariaLabel={t("marked_solution_icon")}
     onClick={_ => userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
-    className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
+    className={"flex lg:flex-col items-center px-2 ltr:lg:pl-0 rtl:lg:pr-0 ltr:lg:pr-4 rtl:lg:pl-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
       userCanUnmarkSolution ? "cursor-pointer" : ""
     )}>
     {iconWithTip}
@@ -109,7 +109,7 @@ let optionsDropdown = (
       onClick={_ => toggleShowPostEdit(_ => true)}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-edit fa-fw text-base" />
-      <span className="ml-2">
+      <span className="ltr:ml-2 rtl:mr-2">
         {(isFirstPost ? t("edit_post_string") : t("edit_reply_string")) |> str}
       </span>
     </button>
@@ -121,7 +121,7 @@ let optionsDropdown = (
         onClick={_ => archivePost(isFirstPost, post |> Post.id, archivePostCB)}
         className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
-        <span className="ml-2">
+        <span className="ltr:ml-2 rtl:mr-2">
           {(isFirstPost ? t("delete_topic_string") : t("delete_reply_string")) |> str}
         </span>
       </button>
@@ -132,7 +132,7 @@ let optionsDropdown = (
       href={"/posts/" ++ (Post.id(post) ++ "/versions")}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-history fa-fw text-base" />
-      <span className="ml-2"> {t("history_button_text") |> str} </span>
+      <span className="ltr:ml-2 rtl:mr-2"> {t("history_button_text") |> str} </span>
     </a>
   | None => React.null
   }
@@ -206,7 +206,7 @@ let make = (
           {
             let tip = <div className="text-center"> {t("mark_solution") |> str} </div>
             <div
-              className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
+              className="hidden md:flex md:flex-col items-center text-center md:w-14 ltr:pr-3 rtl:pl-3 ltr:md:pr-4 rtl:md:pl-4 md:mt-4">
               <Tooltip tip position=#Top>
                 <button
                   ariaLabel={t("mark_solution")}
@@ -284,7 +284,7 @@ let make = (
                   | None => React.null
                   }}
                 </div>
-                <div className="hidden lg:block shrink-0 ml-3">
+                <div className="hidden lg:block shrink-0 ltr:ml-3 rtl:mr-3">
                   {isPostCreator || (moderator || isTopicCreator)
                     ? optionsDropdown(
                         post,
@@ -301,7 +301,7 @@ let make = (
               </div>}
         </div>
         <div className="flex justify-between lg:items-end pt-4">
-          <div className="flex-1 lg:flex-initial mr-3">
+          <div className="flex-1 lg:flex-initial ltr:mr-3 rtl:ml-3">
             <div className="hidden lg:block">
               <TopicsShow__UserShow user=creator createdAt={post |> Post.createdAt} />
             </div>
@@ -310,7 +310,7 @@ let make = (
               <div className="flex">
                 <div className="flex">
                   <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
-                  <div className="pr-3">
+                  <div className="ltr:pr-3 rtl:pl-3">
                     {repliesToPost |> ArrayUtils.isNotEmpty
                       ? <button
                           onClick={_ => toggleShowReplies(showReplies => !showReplies)}
@@ -334,7 +334,7 @@ let make = (
                     className="bg-gray-50 flex md:hidden items-center text-center rounded-lg p-2 hover:bg-gray-50 text-gray-600">
                     <PfIcon className="if i-check-solid text-sm lg:text-base" />
                     <span
-                      className="ml-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
+                      className="ltr:ml-2 rtl:mr-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
                       {t("solution") |> str}
                     </span>
                   </button>,
@@ -356,9 +356,9 @@ let make = (
               isFirstPost
                 ? <a
                     href={"#post-show-" ++ id}
-                    className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded mr-3 text-left focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
+                    className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded ltr:mr-3 rtl:ml-3 text-left focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
                     <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
-                    <div className="text-xs font-semibold pl-2">
+                    <div className="text-xs font-semibold ltr:pl-2 rtl:pr-2">
                       {t("go_to_solution_button") |> str}
                     </div>
                   </a>
@@ -371,9 +371,9 @@ let make = (
                     id={"show-replies-" ++ Post.id(post)}
                     ariaLabel={t("show_replies") ++ " " ++ Post.id(post)}
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
-                    className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-50">
+                    className="border bg-white ltr:mr-3 rtl:ml-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-50">
                     {t(~count=Post.replies(post)->Js.Array2.length, "show_replies_button")->str}
-                    <FaIcon classes={"ml-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")} />
+                    <FaIcon classes={"ltr:ml-2 rtl:mr-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")} />
                   </button>
                 : React.null}
             </div>
@@ -388,7 +388,7 @@ let make = (
                   ? t("add_reply_topic")
                   : t("add_reply_post") ++ Post.id(post)}
                 className="bg-gray-50 lg:border lg:bg-gray-50 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
-                <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button")->str}
+                <FaIcon classes="fas fa-reply ltr:mr-2 rtl:ml-2" /> {t("new_reply_button")->str}
               </button>,
               Topic.lockedAt(topic)->Belt.Option.isSome,
             )}
@@ -397,7 +397,7 @@ let make = (
         {showReplies
           ? <div
               ariaLabel={t("replies_post") ++ " " ++ Post.id(post)}
-              className="lg:pl-10 pt-2 topics-post-show__replies-container">
+              className="ltr:lg:pl-10 rtl:lg:pr-10 pt-2 topics-post-show__replies-container">
               {repliesToPost
               |> Array.map(post => <TopicsShow__PostReply key={post |> Post.id} post users />)
               |> React.array}

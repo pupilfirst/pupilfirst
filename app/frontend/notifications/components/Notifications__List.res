@@ -433,7 +433,7 @@ let make = () => {
     <div className="w-full bg-gray-50 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
       <label
         htmlFor="search_notifcations"
-        className="block text-tiny font-semibold uppercase pl-px text-left">
+        className="block text-tiny font-semibold uppercase pl-px ltr:text-left rtl:text-right">
         {t("filter.input_label")->str}
       </label>
       <Multiselect

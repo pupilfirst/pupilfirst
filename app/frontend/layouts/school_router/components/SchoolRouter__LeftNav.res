@@ -27,7 +27,7 @@ let imageContainerClasses = shrunk => {
 let topNavButtonContents = page => {
   [
     <PfIcon key="icon" className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
-    <span key="content" className="ml-2"> {Page.name(page)->str} </span>,
+    <span key="content" className="ltr:ml-2 rtl:mr-2"> {Page.name(page)->str} </span>,
   ]->React.array
 }
 

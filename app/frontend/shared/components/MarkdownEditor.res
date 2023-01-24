@@ -334,7 +334,7 @@ let controls = (disabled, value, state, send, onChange) => {
           ariaLabel={t("control_label_italic")}
           title={t("control_label_italic")}
           type_="button"
-          className={buttonClasses ++ "border-l border-gray-300"}
+          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-300"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
@@ -343,13 +343,13 @@ let controls = (disabled, value, state, send, onChange) => {
           ariaLabel={t("control_label_strikethrough")}
           title={t("control_label_strikethrough")}
           type_="button"
-          className={buttonClasses ++ "border-l border-gray-300"}
+          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-300"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
         <EmojiPicker
           onChange={handleEmojiChange}
-          className={buttonClasses ++ "border-l border-gray-400 hidden md:block"}
+          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-400 hidden md:block"}
           title={t("emoji_picker")}
         />
       </div>
@@ -369,7 +369,7 @@ let controls = (disabled, value, state, send, onChange) => {
         title={modeLabel(#Split, mode)}
         disabled
         type_="button"
-        className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
+        className={buttonClasses ++ "rounded ltr:ml-1 rtl:mr-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(#Split, mode)}
       </button>
@@ -378,12 +378,12 @@ let controls = (disabled, value, state, send, onChange) => {
         title={modeLabel(#Fullscreen, mode)}
         disabled
         type_="button"
-        className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
+        className={buttonClasses ++ "rounded  ltr:ml-1 rtl:mr-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(#Fullscreen, mode)}
         {switch mode {
         | Fullscreen(_) =>
-          <span ariaHidden=true className="ml-2 text-xs font-semibold">
+          <span ariaHidden=true className="ltr:ml-2 rtl:mr-2 text-xs font-semibold">
             {t("exit_full_screen_label")->str}
           </span>
         | Windowed(_) => React.null
@@ -555,15 +555,15 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
             {switch error {
             | Some(error) =>
               <span className="text-red-500">
-                <i className="fas fa-exclamation-triangle mr-2" /> {error |> str}
+                <i className="fas fa-exclamation-triangle ltr:mr-2 rtl:ml-2" /> {error |> str}
               </span>
             | None =>
-              <span> <i className="far fa-file-image mr-2" /> {t("attach_file_label")->str} </span>
+              <span> <i className="far fa-file-image ltr:mr-2 rtl:ml-2" /> {t("attach_file_label")->str} </span>
             }}
           </label>
         | Uploading =>
           <span className="text-xs px-3 py-2 grow cursor-wait">
-            <i className="fas fa-spinner fa-pulse mr-2" /> {t("file_upload_wait")->str}
+            <i className="fas fa-spinner fa-pulse ltr:mr-2 rtl:ml-2" /> {t("file_upload_wait")->str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}
@@ -573,7 +573,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         target="_blank"
         className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-red-500 focus:outline-none focus:bg-gray-300 focus:text-red-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
-        <span className="text-xs ml-1 font-semibold hidden sm:inline">
+        <span className="text-xs ltr:ml-1 rtl:mr-1 font-semibold hidden sm:inline">
           {t("help_label")->str}
         </span>
       </a>

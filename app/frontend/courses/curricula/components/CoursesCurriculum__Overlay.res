@@ -235,7 +235,7 @@ let overlayHeaderTitleCardClasses = targetStatus =>
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fas fa-lock text-lg" /> <span className="ml-2"> {text |> str} </span>
+    <i className="fas fa-lock text-lg" /> <span className="ltr:ml-2 rtl:mr-2"> {text |> str} </span>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
@@ -249,7 +249,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:mr-6 md:text-xl">
+        <h1 className="text-base leading-snug ltr:md:mr-6 rtl:md:ml-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -343,7 +343,7 @@ let learnSection = (
     <button
       onClick={_ => send(Select(tab))}
       className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-      <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
+      <span> <FaIcon classes={iconClasses ++ " ltr:mr-2 rtl:ml-2"} /> {str(linkText)} </span>
     </button>
   })
 
@@ -516,7 +516,7 @@ let quickNavigationLinks = (targetDetails, send) => {
   <div className="pb-6">
     <hr className="my-6" />
     <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
-      <div className="w-1/3 mr-2">
+      <div className="w-1/3 ltr:mr-2 rtl:ml-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
         )}
@@ -529,7 +529,7 @@ let quickNavigationLinks = (targetDetails, send) => {
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
-      <div className="w-1/3 ml-2">
+      <div className="w-1/3 ltr:ml-2 rtl:mr-2">
         {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
           navigationLink(#Next, nextUrl, send)
         )}

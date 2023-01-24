@@ -62,14 +62,14 @@ let createAutoVerifySubmission = (target, linkToComplete, setSaving, addSubmissi
 }
 
 let completeButtonText = (title, iconClasses) =>
-  <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>
+  <span> <FaIcon classes={iconClasses ++ " ltr:mr-2 rtl:ml-2"} /> {title |> str} </span>
 
 let previewLinkToComplete = link =>
   <a
     href=link
     target="_blank"
     className="block text-primary-500 w-full text-center bg-gray-50 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
-    <span> <FaIcon classes="fas fa-external-link-alt mr-2" /> {tr("visit_link") |> str} </span>
+    <span> <FaIcon classes="fas fa-external-link-alt ltr:mr-2 rtl:ml-2" /> {tr("visit_link") |> str} </span>
   </a>
 
 let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, preview) =>
@@ -93,7 +93,7 @@ let statusBar = (string, linkToComplete) => {
   let defaultClasses = "font-bold p-4 flex w-full items-center text-green-500 bg-green-100 justify-center"
   let message =
     <div className="flex items-center">
-      <span className="fa-stack text-lg mr-1 text-green-500">
+      <span className="fa-stack text-lg ltr:mr-1 rtl:ml-1 text-green-500">
         <i className="fas fa-certificate fa-stack-2x" />
         <i className="fas fa-check fa-stack-1x fa-inverse" />
       </span>
@@ -101,7 +101,7 @@ let statusBar = (string, linkToComplete) => {
     </div>
   let visitLink = link =>
     <a className="text-right w-full" href=link target="_blank">
-      <i className="fas fa-external-link-alt mr-2" /> {tr("visit_link") |> str}
+      <i className="fas fa-external-link-alt ltr:mr-2 rtl:ml-2" /> {tr("visit_link") |> str}
     </a>
 
   <div className=defaultClasses>

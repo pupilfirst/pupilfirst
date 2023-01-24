@@ -24,7 +24,7 @@ let make = (~user, ~createdAt) => {
         className="w-9 h-9 rounded-full bg-gray-500 text-white border border-gray-300 flex items-center justify-center shrink-0 overflow-hidden">
         {avatar(avatarUrl, name)}
       </div>
-      <div className="pl-2">
+      <div className="ltr:pl-2 rtl:pr-2">
         <p className="font-semibold text-xs"> {name |> str} </p>
         <p className="text-xs leadig-normal"> {fullTitle |> str} </p>
       </div>

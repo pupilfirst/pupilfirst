@@ -11,7 +11,7 @@ let selected = currentCourse => {
       <Icon className="if i-journal-text-light" />
       <span className="block whitespace-nowrap px-2 text-left"> {title->str} </span>
     </span>
-    <span className="w-1/6 text-right pt-0.5">
+    <span className="w-1/6 ltr:text-right rtl:text-left pt-0.5">
       <Icon className="if i-chevron-down-light text-sm" />
     </span>
   </button>

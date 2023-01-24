@@ -21,14 +21,14 @@
           <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
           <p class="text-3xl font-bold"><%= @presenter.counts[:total] %></p>
           <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-primary-500 hover:text-primary-800 hover:underline" do %>
-            <span><%= t('.view_all')%></span><i class="fa fa-arrow-right inline-block text-primary-500 ml-2" aria-hidden="true"></i>
+            <span><%= t('.view_all')%></span><i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500 ltr:ml-2 rtl:mr-2" aria-hidden="true"></i>
           <% end %>
         </div>
         <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
           <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
           <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-primary-500 hover:text-primary-800 hover:underline" do %>
-            <span><%= t('.view_all')%></span><i class="fa fa-arrow-right inline-block text-primary-500 ml-2" aria-hidden="true"></i>
+            <span><%= t('.view_all')%></span><i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500 ltr:ml-2 rtl:mr-2" aria-hidden="true"></i>
           <% end %>
         </div>
       </div>

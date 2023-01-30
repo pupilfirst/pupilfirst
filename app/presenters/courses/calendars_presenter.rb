@@ -66,24 +66,22 @@ module Courses
     def applicable_cohort_calendars(cohort_calendars)
       return if cohort_calendars.blank?
 
-      if current_user.faculty.present?
-        cohort_calendars.where(cohorts: { id: current_user.faculty.cohorts })
-      elsif current_user
+      applicable_cohorts = []
+
+      if current_user.founders.present?
+        applicable_cohorts <<
+          current_user
             .founders
-            .joins(:course)
-            .where(courses: { id: @course })
-            .present?
-        cohort_calendars.where(
-          cohorts: {
-            id:
-              current_user
-                .founders
-                .joins(:course)
-                .where(courses: { id: @course })
-                .pluck(:cohort_id)
-          }
-        )
+            .joins(:cohort)
+            .where(cohorts: { course_id: @course })
+            .pluck(:cohort_id)
       end
+
+      if current_user.faculty.present?
+        applicable_cohorts << current_user.faculty.cohorts.pluck(:id)
+      end
+
+      cohort_calendars.where(cohorts: { id: applicable_cohorts.flatten })
     end
   end
 end

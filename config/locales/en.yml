@@ -854,8 +854,8 @@ en:
     CoursesStudents__CoachNotes:
       all_notes: All Notes
       has_archived_notes: This student has some archived notes.
-      new_note: Add a New Note
       help_text: Notes can be used to keep track of a student's progress. These notes are shown only to coaches in a student's report.
+      new_note: Add a New Note
       no_notes: No notes here!
       save_note: Save Note
     CoursesStudents__Root:

@@ -16,8 +16,8 @@ let drawerClasses = size => {
 
 @react.component
 let make = (~closeDrawerCB, ~closeButtonTitle=tr("close_editor"), ~size=Normal, ~children) =>
-  <div>
-    <div className="blanket" />
+  [
+    <div className="blanket" />,
     <div className={drawerClasses(size)}>
       <div className="drawer-right__close absolute">
         <button
@@ -32,5 +32,5 @@ let make = (~closeDrawerCB, ~closeButtonTitle=tr("close_editor"), ~size=Normal, 
         </button>
       </div>
       <div className="w-full overflow-y-scroll"> children </div>
-    </div>
-  </div>
+    </div>,
+  ]->React.array

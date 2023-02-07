@@ -62,7 +62,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
       <label
         htmlFor="course-students__coach-notes-new-note"
         className="font-semibold text-sm block mb-1">
-        {tr("new_note") |> str}
+        {tr("new_note")->str}
       </label>
       <HelpIcon className="ml-1"> {tr("help_text")->str} </HelpIcon>
     </span>

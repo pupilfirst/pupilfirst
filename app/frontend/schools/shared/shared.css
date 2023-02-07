@@ -130,22 +130,7 @@
   right: 0px;
   top: 0px;
   z-index: 500;
-  animation-name: blanket-animation 0.4s cubic-bezier(0.63, 0.34, 0, 1) normal;
-}
-
-@keyframes blanket-animation {
-  from {
-    background: rgba(9, 30, 66, 0);
-  }
-  to {
-    background: rgba(9, 30, 66, 0.54);
-  }
-}
-
-@keyframes slideIn {
-  0% {
-    right: -9999px;
-  }
+  background: rgba(9, 30, 66, 0.54);
 }
 
 .drawer-right {
@@ -157,7 +142,6 @@
   top: 0px;
   width: 100%;
   z-index: 501;
-  animation: slideIn 0.3s cubic-bezier(0.63, 0.34, 0, 1) normal;
 }
 
 /* Community */
@@ -570,7 +554,7 @@
 
 select.select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right .5rem center;
+  background-position: right 0.5rem center;
   background-repeat: no-repeat;
   background-size: 1.5em 1.5em;
   padding-right: 2.5rem;

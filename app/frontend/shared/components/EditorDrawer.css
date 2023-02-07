@@ -11,7 +11,7 @@
 
 .editor-drawer--l0-to-l1 {
   right: 0;
-  right: 16rem;
+  animation: slide-l1 0.25s ease 0s 1 normal forwards;
 }
 
 .editor-drawer--l1-to-l0 {
@@ -19,11 +19,23 @@
 }
 
 .editor-drawer--l0 {
-  right: 0;
+  animation: slide-l0 0.25s ease 0s 1 normal forwards;
 }
 
 .editor-drawer--l1 {
   right: 16rem;
+}
+
+@keyframes slide-l0 {
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes slide-l1 {
+  100% {
+    right: 16rem;
+  }
 }
 
 @screen md {
@@ -52,5 +64,16 @@
   right: 0px;
   top: 0px;
   z-index: 500;
-  background: rgba(9, 30, 66, 0.54);
+  animation-name: blanket-animation;
+  animation-duration: 0.15s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes blanket-animation {
+  from {
+    background: rgba(9, 30, 66, 0);
+  }
+  to {
+    background: rgba(9, 30, 66, 0.54);
+  }
 }

@@ -852,6 +852,7 @@ hi:
     CoursesStudents__CoachNotes:
       all_notes: सभी नोट्स
       has_archived_notes: इस छात्र के पास कुछ संग्रहीत नोट हैं।
+      help_text: Notes can be used to keep track of a student's progress. These notes are shown only to coaches.
       new_note: एक नया नोट जोड़ें
       no_notes: यहाँ कोई नोट नहीं है!
       save_note: नोट सहेजें

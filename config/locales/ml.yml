@@ -852,6 +852,7 @@ ml:
     CoursesStudents__CoachNotes:
       all_notes: എല്ലാ കുറിപ്പുകളും
       has_archived_notes: ഈ വിദ്യാർത്ഥിയുടെ കൈവശം ആർക്കൈവുചെയ്‌ത ചില കുറിപ്പുകൾ ഉണ്ട്.
+      help_text: Notes can be used to keep track of a student's progress. These notes are shown only to coaches.
       new_note: ഒരു പുതിയ കുറിപ്പ് ചേർക്കുക
       no_notes: ഇവിടെ കുറിപ്പുകളൊന്നുമില്ല!
       save_note: കുറിപ്പ് സംരക്ഷിക്കുക

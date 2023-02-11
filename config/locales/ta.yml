@@ -852,6 +852,7 @@ ta:
     CoursesStudents__CoachNotes:
       all_notes: அனைத்து குறிப்புகள்
       has_archived_notes: இந்த மாணவரிடம் சில காப்பக குறிப்புகள் உள்ளன.
+      help_text: Notes can be used to keep track of a student's progress. These notes are shown only to coaches.
       new_note: புதிய குறிப்பைச் சேர்க்கவும்
       no_notes: இங்கே குறிப்புகள் இல்லை!
       save_note: குறிப்பைச் சேமிக்கவும்

@@ -866,6 +866,7 @@ ru:
     CoursesStudents__CoachNotes:
       all_notes: Все Заметки
       has_archived_notes: У этого студента есть несколько архивных заметок.
+      help_text: Notes can be used to keep track of a student's progress. These notes are shown only to coaches.
       new_note: Добавить Новую Заметку
       no_notes: Здесь нет заметок!
       save_note: Сохранить Заметку

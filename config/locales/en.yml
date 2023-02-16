@@ -3,6 +3,10 @@ en:
     enroll:
       link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
       welcome: Welcome to %{school_name}!
+      errors:
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
     resolve_applicant_path:
       welcome: Welcome to %{school_name}!
   calendars:

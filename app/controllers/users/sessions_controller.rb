@@ -196,6 +196,7 @@ module Users
 
         if user.present?
           sign_in user
+          remember_me(user)
           redirect_to after_sign_in_path_for(user)
         else
           flash[:error] = t('.error')

@@ -28,7 +28,7 @@ let placeholder = (id, checklistItem) => {
   let optional = checklistItem |> ChecklistItem.optional
   <div className="flex items-start">
     <PfIcon className={kindIconClasses(checklistItem->ChecklistItem.result)} />
-    <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
+    <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide overflow-auto">
       <MarkdownBlock
         profile=Markdown.Permissive
         markdown={title ++ (optional ? " (" ++ ts("optional") ++ ")" : "")}

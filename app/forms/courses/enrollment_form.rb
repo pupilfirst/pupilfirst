@@ -73,7 +73,7 @@ module Courses
 
       errors.add(
         :base,
-        I18n.t('applicants.enroll.email_should_not_have_bounced')
+        I18n.t('applicants.enroll.errors.email_should_not_have_bounced')
       )
     end
   end

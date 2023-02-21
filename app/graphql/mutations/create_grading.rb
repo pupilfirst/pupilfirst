@@ -257,7 +257,10 @@ module Mutations
           timeline_event: submission
         )
 
-      StartupFeedbackModule::EmailService.new(startup_feedback).send
+      evaluation_criteria = submission.evaluation_criteria
+      grades = submission.timeline_event_grades
+
+      StartupFeedbackModule::EmailService.new(startup_feedback, evaluation_criteria, grades).send
     end
   end
 end

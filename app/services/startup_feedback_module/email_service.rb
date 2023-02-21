@@ -2,8 +2,10 @@ module StartupFeedbackModule
   class EmailService
     include Loggable
 
-    def initialize(startup_feedback)
+    def initialize(startup_feedback, evaluation_criteria=nil, grades=nil)
       @startup_feedback = startup_feedback
+      @evaluation_criteria = evaluation_criteria
+      @grades = grades
     end
 
     def send

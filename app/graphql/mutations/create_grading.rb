@@ -257,15 +257,19 @@ module Mutations
           timeline_event: submission
         )
 
-      evaluation_criteria_details = submission.evaluation_criteria.map { |criteria|
-        { name: criteria.name, max_grade: criteria.max_grade }
+      grading_details = submission.evaluation_criteria.map.with_index { |criteria, index|
+        grade_labels = criteria[:grade_labels].map {|label| label["label"]}
+        submission_grade = submission.timeline_event_grades[index].grade
+        {
+          name: criteria.name,
+          max_grade: criteria.max_grade,
+          grade_labels: grade_labels[submission_grade-1],
+          grade: submission_grade
+
+        }
       }
 
-      grades = submission.timeline_event_grades.map { |grade|
-        { grade: grade.grade }
-      }
-
-      StartupFeedbackModule::EmailService.new(startup_feedback, evaluation_criteria_details, grades).send
+      StartupFeedbackModule::EmailService.new(startup_feedback, grading_details).send
     end
   end
 end

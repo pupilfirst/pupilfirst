@@ -1,9 +1,11 @@
 # Mails sent out to teams, as a whole.
 class StartupMailer < SchoolMailer
-  def feedback_as_email(startup_feedback)
+  def feedback_as_email(startup_feedback, grading_details)
     @startup_feedback = startup_feedback
     @students =
       @startup_feedback.timeline_event.founders.map(&:fullname).join(', ')
+
+    @grading_details = grading_details
 
     send_to =
       startup_feedback

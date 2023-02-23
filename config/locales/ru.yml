@@ -2204,6 +2204,7 @@ ru:
         welcome: Добро пожаловать в %{course_name}
       feedback_as_email:
         body:
+          Grading: оценка
           link_to: полный отзыв
           main_html: Вот ответ от %{coach_name} о вашем %{update_for}
           recent_submission: недавней работе

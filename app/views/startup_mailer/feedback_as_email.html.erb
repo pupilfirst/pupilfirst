@@ -15,7 +15,7 @@
   </p>
 
   <% if @grading_details.present? %>
-    <p>Grading</p>
+    <p><%= t("mailers.startup.feedback_as_email.body.grading") %></p>
     <ul style="list-style: none; margin: 2; padding: 2;">
     <% @grading_details.each_with_index do |criteria, index| %>
     <li>

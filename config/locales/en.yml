@@ -2058,6 +2058,7 @@ en:
     startup:
       feedback_as_email:
         body:
+          grading: Grading
           link_to: the full feedback
           main_html: Here is some feedback from %{coach_name} on your %{update_for}
           recent_submission: recent submission

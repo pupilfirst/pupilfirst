@@ -20,8 +20,13 @@
     <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
     <ul style="list-style: none; margin: 0; padding: 0;">
     <% @grading_details.each_with_index do |criteria, index| %>
-      <li>
-        <p><%= "#{criteria[:name]}: #{criteria[:grade_labels]}  #{criteria[:grade]}/#{criteria[:max_grade]}"%> <%= criteria[:status].html_safe %></p>
+    <li>
+      <p>
+        <%= criteria[:status].html_safe %>
+        <%= "#{criteria[:name]}: ".html_safe %>
+        <strong><%= criteria[:grade_label] %></strong>
+        <%= " #{criteria[:grade]}/#{criteria[:max_grade]}" %>
+        </p>
       </li>
     <% end %>
     </ul>

@@ -260,7 +260,7 @@ module Mutations
       grading_details = submission.evaluation_criteria.map.with_index { |criteria, index|
         grade_label = criteria[:grade_labels].map {|label| label["label"]}
         grade = submission.timeline_event_grades[index].grade
-        status = grade > criteria.pass_grade ? "\u{2714}" : "\u{2715}"
+        status = grade >= criteria.pass_grade ? "\u{2705}" : "\u{274c}"
         {
           name: criteria.name,
           max_grade: criteria.max_grade,

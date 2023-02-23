@@ -17,8 +17,7 @@
   </blockquote>
   <% if @grading_details.present? %>
     <p>Grading</p>
-    <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
-    <ul style="list-style: none; margin: 0; padding: 0;">
+    <ul style="list-style: none; margin: 2; padding: 2;">
     <% @grading_details.each_with_index do |criteria, index| %>
     <li>
       <p>
@@ -31,7 +30,6 @@
     <% end %>
     </ul>
   <% end %>
-    </blockquote>
 
   <% if target.present? %>
     <p>

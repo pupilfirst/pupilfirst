@@ -205,7 +205,12 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_text('The submission has been marked as reviewed')
 
+      student = submission_pending.founders.first
+      open_email(student.user.email)
+      expect(current_email).to have_content("Grading")
+
       dismiss_notification
+
 
       expect(page).to have_button('Undo Grading')
 

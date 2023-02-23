@@ -258,14 +258,14 @@ module Mutations
         )
 
       grading_details = submission.evaluation_criteria.map.with_index { |criteria, index|
-        grade_labels = criteria[:grade_labels].map {|label| label["label"]}
+        grade_label = criteria[:grade_labels].map {|label| label["label"]}
         submission_grade = submission.timeline_event_grades[index].grade
         {
           name: criteria.name,
           max_grade: criteria.max_grade,
-          grade_labels: grade_labels[submission_grade-1],
+          pass_grade: criteria.pass_grade,
+          grade_label: grade_label[submission_grade-1],
           grade: submission_grade
-
         }
       }
 

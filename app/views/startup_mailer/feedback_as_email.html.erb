@@ -21,7 +21,7 @@
     <ul style="list-style: none; margin: 0; padding: 0;">
     <% @grading_details.each_with_index do |criteria, index| %>
       <li>
-        <p><%= "#{criteria[:name]}: #{criteria[:grade_labels]}  #{criteria[:grade]}/#{criteria[:max_grade]}" %></p>
+        <p><%= "#{criteria[:name]}: #{criteria[:grade_labels]}  #{criteria[:grade]}/#{criteria[:max_grade]}"%> <%= criteria[:status].html_safe %></p>
       </li>
     <% end %>
     </ul>

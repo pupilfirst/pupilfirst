@@ -9,12 +9,11 @@
 <% end %>
 <% content_for :body do %>
   <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission")  : t("mailers.startup.feedback_as_email.body.recent_updates") %>
+
   <p>
     <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
   </p>
-  <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
-    <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
-  </blockquote>
+
   <% if @grading_details.present? %>
     <p>Grading</p>
     <ul style="list-style: none; margin: 2; padding: 2;">
@@ -31,6 +30,9 @@
     </ul>
   <% end %>
 
+  <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
+    <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
+  </blockquote>
   <% if target.present? %>
     <p>
       <%= t("mailers.startup.feedback_as_email.body.view_html", link_to: link_to(t("mailers.startup.feedback_as_email.body.link_to"), target_url)) %>

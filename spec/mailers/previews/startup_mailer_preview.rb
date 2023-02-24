@@ -15,7 +15,7 @@ class StartupMailerPreview < ActionMailer::Preview
 
       grading_details = [
         {
-          name: "Idea",
+          name: "Design",
           max_grade: 4,
           pass_grade: 2,
           grade_label: "Rejected",

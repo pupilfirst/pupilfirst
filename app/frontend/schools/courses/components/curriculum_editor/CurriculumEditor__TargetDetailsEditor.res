@@ -613,8 +613,18 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #SubmitForm => quizIcon
   }
 
+  let disabled =
+    switch methodOfCompletion {
+    | #TakeQuiz => true
+    | #VisitLink => true
+    | #MarkAsComplete => true
+    | #SubmitForm => false
+    } &&
+    targetEvaluated(state.methodOfCompletion)
+
   <div key={index |> string_of_int} className="w-1/3 px-2">
     <button
+      disabled
       onClick={updateMethodOfCompletion(methodOfCompletion |> methodOfCompletionSelection, send)}
       className={methodOfCompletionButtonClasses(selected)}>
       <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div> {buttonString |> str}
@@ -711,7 +721,7 @@ let isValidMethodOfCompletion = state =>
   | Evaluated =>
     state.evaluationCriteria |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
-  | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty
+  | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   }
 
 let saveDisabled = (
@@ -996,9 +1006,7 @@ let make = (
               | SubmitForm
               | MarkAsComplete => React.null
               }}
-              {targetEvaluated(state.methodOfCompletion)
-                ? React.null
-                : methodOfCompletionSelector(state, send)}
+              {methodOfCompletionSelector(state, send)}
               {switch state.methodOfCompletion {
               | Evaluated => evaluationCriteriaEditor(state, evaluationCriteria, send)
               | MarkAsComplete => React.null

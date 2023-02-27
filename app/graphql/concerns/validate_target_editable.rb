@@ -85,7 +85,7 @@ module ValidateTargetEditable
 
       return if evaluation_criteria.blank? && checklist.blank?
 
-      if evaluation_criteria.present? && validate_checklist(checklist) &&
+      if validate_checklist(checklist) &&
            required_items_have_unique_titles(checklist)
         return
       end

@@ -417,11 +417,11 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
       {t("select_criterion_label") |> str}
     </label>
     <div className="ml-6">
-      {validNumberOfEvaluationCriteria(state)
-        ? React.null
-        : <div className="drawer-right-form__error-msg mb-2">
-            {t("select_criterion_warning") |> str}
-          </div>}
+      // {validNumberOfEvaluationCriteria(state)
+      //   ? React.null
+      //   : <div className="drawer-right-form__error-msg mb-2">
+      //       {t("select_criterion_warning") |> str}
+      //     </div>}
       <MultiSelectForEvaluationCriteria
         placeholder={t("search_criteria_placeholder")}
         emptySelectionMessage={t("search_criteria_empty")}
@@ -719,7 +719,7 @@ let isValidMethodOfCompletion = state =>
   | TakeQuiz => isValidQuiz(state.quiz)
   | MarkAsComplete => true
   | Evaluated =>
-    state.evaluationCriteria |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
+    state.evaluationCriteria |> ArrayUtils.isNotEmpty || isValidChecklist(state.checklist)
   | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
   | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   }

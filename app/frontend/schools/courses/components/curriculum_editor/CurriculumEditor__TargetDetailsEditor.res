@@ -17,6 +17,7 @@ type methodOfCompletion =
   | VisitLink
   | TakeQuiz
   | MarkAsComplete
+  | SubmitForm
 
 type evaluationCriterion = (int, string, bool)
 
@@ -115,11 +116,13 @@ let computeMethodOfCompletion = targetDetails => {
   | Some(_) => true
   | None => false
   }
-  switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete) {
-  | (true, _y, _z) => Evaluated
-  | (_x, true, _z) => TakeQuiz
-  | (_x, _y, true) => VisitLink
-  | (false, false, false) => MarkAsComplete
+  let hasChecklist = targetDetails.checklist |> ArrayUtils.isNotEmpty
+  switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete, hasChecklist) {
+  | (true, _x, _y, _z) => Evaluated
+  | (_w, true, _y, _z) => TakeQuiz
+  | (_w, _x, true, _z) => VisitLink
+  | (_w, _x, _y, true) => SubmitForm
+  | (false, false, false, false) => MarkAsComplete
   }
 }
 
@@ -355,6 +358,7 @@ let targetEvaluated = methodOfCompletion =>
   | VisitLink => false
   | TakeQuiz => false
   | MarkAsComplete => false
+  | SubmitForm => false
   }
 
 let validNumberOfEvaluationCriteria = state => state.evaluationCriteria |> ArrayUtils.isNotEmpty
@@ -583,6 +587,7 @@ let methodOfCompletionSelection = polyMethodOfCompletion =>
   | #TakeQuiz => TakeQuiz
   | #VisitLink => VisitLink
   | #MarkAsComplete => MarkAsComplete
+  | #SubmitForm => SubmitForm
   }
 
 let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
@@ -590,12 +595,14 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #TakeQuiz => t("take_quiz")
   | #VisitLink => t("visit_link")
   | #MarkAsComplete => t("mark_as_complete")
+  | #SubmitForm => t("submit_form")
   }
 
   let selected = switch (state.methodOfCompletion, methodOfCompletion) {
   | (TakeQuiz, #TakeQuiz) => true
   | (VisitLink, #VisitLink) => true
   | (MarkAsComplete, #MarkAsComplete) => true
+  | (SubmitForm, #SubmitForm) => true
   | _anyOtherCombo => false
   }
 
@@ -603,6 +610,7 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #TakeQuiz => quizIcon
   | #VisitLink => linkIcon
   | #MarkAsComplete => markIcon
+  | #SubmitForm => quizIcon
   }
 
   <div key={index |> string_of_int} className="w-1/3 px-2">
@@ -624,7 +632,7 @@ let methodOfCompletionSelector = (state, send) =>
         {t("target_method_of_completion_label") |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2 pl-6">
-        {[#MarkAsComplete, #VisitLink, #TakeQuiz]
+        {[#MarkAsComplete, #VisitLink, #TakeQuiz, #SubmitForm]
         |> Js.Array.mapi((methodOfCompletion, index) =>
           methodOfCompletionButton(methodOfCompletion, state, send, index)
         )
@@ -703,6 +711,7 @@ let isValidMethodOfCompletion = state =>
   | Evaluated =>
     state.evaluationCriteria |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
+  | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty
   }
 
 let saveDisabled = (
@@ -780,6 +789,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   | VisitLink => ([], [], state.linkToComplete, [])
   | TakeQuiz => (quizAsJs, [], "", [])
   | MarkAsComplete => ([], [], "", [])
+  | SubmitForm => ([], [], "", state.checklist)
   }
 
   let visibility = switch state.visibility {
@@ -983,6 +993,7 @@ let make = (
                 </div>
               | VisitLink
               | TakeQuiz
+              | SubmitForm
               | MarkAsComplete => React.null
               }}
               {targetEvaluated(state.methodOfCompletion)
@@ -993,6 +1004,7 @@ let make = (
               | MarkAsComplete => React.null
               | TakeQuiz => quizEditor(state, send)
               | VisitLink => linkEditor(state, send)
+              | SubmitForm => React.null
               }}
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
@@ -1064,8 +1076,7 @@ let make = (
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
                     {t("target_visibility") |> str}
                   </label>
-                  <div
-                    id="visibility" className="flex toggle-button__group shrink-0 rounded-lg">
+                  <div id="visibility" className="flex toggle-button__group shrink-0 rounded-lg">
                     {[TargetDetails.Live, Archived, Draft]
                     |> Js.Array.mapi((visibility, index) =>
                       <button

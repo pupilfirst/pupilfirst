@@ -1051,6 +1051,7 @@ en:
       select_criterion_warning: At least one has to be selected
       selected_all_targets: You have selected all targets
       submit_individually: All students must submit individually.
+      submit_form: Submit a form to complete the target.
       take_quiz: Take a quiz to complete the target.
       target_checklist:
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.

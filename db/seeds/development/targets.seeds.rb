@@ -70,5 +70,46 @@ after 'development:evaluation_criteria', 'development:target_groups' do
       safe_to_change_visibility: true,
       sort_index: 5
     )
+
+    form_submission = target_group.targets.create!(
+      title: Faker::Lorem.sentence,
+      role: Target.valid_roles.sample,
+      resubmittable: true,
+      visibility: 'live',
+      sort_index: 6,
+      checklist: [
+        {
+          "kind": Target::CHECKLIST_KIND_MULTI_CHOICE,
+          "title": "Have you participated (asked or answered questions) in Pupilfirst School Discord server during WD 101 duration?",
+          "optional": false,
+          "metadata": {
+            "choices": [
+              "Yes",
+              "No"
+            ]
+          }
+        },
+        {
+          kind: Target::CHECKLIST_KIND_LONG_TEXT,
+          title: "If you have chosen Yes for the previous question on participation in the Discord server, type \"None\" and proceed to the next question.\n\nElse, if you have chosen No, please let us know why?",
+          optional: false
+        },
+        {
+          "kind": Target::CHECKLIST_KIND_SHORT_TEXT,
+          "title": "Approximately how much time did it take you to complete the WD101 course?",
+          "optional": false,
+          "metadata": {}
+        },
+        {
+          "kind": Target::CHECKLIST_KIND_LINK,
+          "title": "Please, fill your github link",
+          "optional": true,
+          "metadata": {}
+        }
+      ]
+    )
+    form_submission.target_evaluation_criteria.create!(
+      evaluation_criterion: form_submission.course.evaluation_criteria.sample
+    )
   end
 end

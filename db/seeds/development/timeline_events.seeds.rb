@@ -98,6 +98,43 @@ after 'development:founders', 'development:targets' do
       archived.timeline_event_owners.create!(latest: false, founder: student)
     end
 
+  form_submission_checklist = [
+    {
+      "title": "Have you participated (asked or answered questions) in Pupilfirst School Discord server during WD 101 duration?",
+      "kind": "multiChoice",
+      "result": "Yes"
+    },
+    {
+      "title": "If you have chosen Yes for the previous question on participation in the Discord server, type \"None\" and proceed to the next question.\n\nElse, if you have chosen No, please let us know why?",
+      "kind": "longText",
+      "result": "None"
+    },
+    {
+      "title": "Approximately how much time did it take you to complete the WD101 course?",
+      "kind": "shortText",
+      "result": "15"
+    },
+    {
+      "title": "Please, fill your github link",
+      "kind": "link",
+      "status": "noAnswer",
+      "result": "https://github.com"
+    }
+  ]
+
+
+  form_submission =
+  TimelineEvent.create!(
+    checklist: checklist_form_submission,
+    created_at: 2.hours.ago,
+    target_id: 7
+  )
+
+  form_submission.timeline_event_owners.create!(
+    latest: true,
+    founder: student
+  )
+
   puts "\nStudent with submissions"
   puts '------------------------'
   puts "Email: #{user.email}"

@@ -18,7 +18,7 @@
     <% @grading_details.each_with_index do |criteria, index| %>
     <li>
       <p>
-        <%= criteria[:status].html_safe %>
+        <%= criteria[:grade] >= criteria[:pass_grade] ? "\u{2705}" : "\u{274c}" %>
         <%= "#{criteria[:name]}: ".html_safe %>
         <strong><%= criteria[:grade_label] %></strong>
         <%= " #{criteria[:grade]}/#{criteria[:max_grade]}" %>

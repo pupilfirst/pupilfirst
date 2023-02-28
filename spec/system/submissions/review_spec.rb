@@ -207,7 +207,7 @@ feature 'Submission review overlay', js: true do
 
       student = submission_pending.founders.first
       open_email(student.user.email)
-      expect(current_email).to have_content("Grading")
+      expect(current_email).to have_content("grades")
 
       dismiss_notification
 

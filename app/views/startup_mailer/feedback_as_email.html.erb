@@ -10,12 +10,10 @@
 <% content_for :body do %>
   <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission")  : t("mailers.startup.feedback_as_email.body.recent_updates") %>
 
-  <p>
-    <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
-  </p>
-
   <% if @grading_details.present? %>
-    <p><%= t("mailers.startup.feedback_as_email.body.grading") %></p>
+    <p>
+    <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
+    </p>
     <ul style="list-style: none; margin: 2; padding: 2;">
     <% @grading_details.each_with_index do |criteria, index| %>
     <li>
@@ -28,8 +26,14 @@
       </li>
     <% end %>
     </ul>
+    <p>
+      <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header", coach_name: coach_name, update_for: update_for) %>
+    </p>
+    <% else %>
+    <p>
+      <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
+    </p>
   <% end %>
-
   <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
     <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
   </blockquote>

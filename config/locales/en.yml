@@ -2058,7 +2058,8 @@ en:
     startup:
       feedback_as_email:
         body:
-          grading: Grading
+          grading_feedback_header: Here is some feedback on your submission
+          grading_header: Your submission was awarded the following grades by %{coach_name}
           link_to: the full feedback
           main_html: Here is some feedback from %{coach_name} on your %{update_for}
           recent_submission: recent submission

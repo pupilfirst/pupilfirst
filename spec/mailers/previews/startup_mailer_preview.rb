@@ -12,6 +12,7 @@ class StartupMailerPreview < ActionMailer::Preview
           ),
         faculty: Faculty.last
       )
+
     StartupMailer.feedback_as_email(startup_feedback, true)
   end
 

@@ -3,6 +3,10 @@ ar:
     enroll:
       link_expired: انتهت صلاحية هذا الرابط أو أنه غير صالح، في حال أنك أكملت التسجيل بالفعل فيرجى تسجيل الدخول
       welcome: مرحبا بكم في %{school_name}!
+      errors:
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
     resolve_applicant_path:
       welcome: مرحبا بكم في %{school_name}!
   calendars:
@@ -24,6 +28,9 @@ ar:
       color_error: Please select a valid color for the event
       invalid_url: Please enter a valid URL for the event
   cohorts:
+    auto_generated_cohort:
+      name: Purple (Auto-generated)
+      description: Auto generated cohort for active students in %{course_name}
     shared:
       overview_link: Overview
       students_link: Students
@@ -331,6 +338,7 @@ ar:
       enrollment_delete_notificaion_success_body: Coach enrollment deleted successfully
       remove_confirm_post: from this course?
       remove_confirm_pre: Are you sure you want to remove
+      assign_coaches: Assign Coaches to Course
     CourseEditor__Form:
       actions:
         archive_course:
@@ -513,6 +521,7 @@ ar:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
+      level1: Level 1
       milestone_targets: Milestone targets
       nav_next_level: Next Level
       nav_previous_level: Previous Level
@@ -715,6 +724,7 @@ ar:
       edit_review_checklist: Edit Review Checklist
       save_checklist: Save Checklist
     CoursesReview__ChecklistShow:
+      back_to_review: Back to Review
       edit_checklist_button: Edit Checklist
       feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback
@@ -1267,6 +1277,7 @@ ar:
         evaluation_criteria: Evaluation Criteria
         exports: Exports
         students: Students
+        calendar: Calendars
       dashboard: Dashboard
       navbar:
         admins: Admins
@@ -1836,6 +1847,7 @@ ar:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      community_digest: community digest
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -2283,6 +2295,8 @@ ar:
     update_cohort:
       success_notification: Cohort updated successfully.
     update_course:
+      unable_to_find_course: "Unable to find course with id: %{value}"
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with id: %{value}"
       success_notification: Course updated successfully!
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
@@ -2443,10 +2457,16 @@ ar:
         no_cohorts_selected: No cohorts selected
         all_cohorts_selected: All cohorts selected
         add_calendar_button: Add calendar
+        calendar_name_place_holder: مثال، تقويم الدفعة 11
+        cohorts_label_hint: من هنا يتم ربط التقويم مع مجموعات محددة
       edit:
+        title: 'تعديل التقويم'
         update_calendar: Update calendar
         link_to_cohorts: Link calendar to cohorts
         calendar_name: Calendar name
+        no_cohorts_selected: لم يتم تحديد أي مجموعة
+        all_cohorts_selected: تم تحديد كل المجموعات
+        calendar_name_place_holder: مثال، تقويم الدفعة 11
     calendar_events:
       new:
         title: 'Add new event'
@@ -2463,6 +2483,24 @@ ar:
         description_label: Description
         add_event_button: Add event
         link_title_placeholder: eg. Zoom meeting link
+      edit:
+        title: 'تعديل الفعالية'
+        new_event: 'إضافة فعالية جديدة'
+        edit_event: 'تعديل الفعالية'
+        title_label: عنوان الفعالية
+        select_calendar_label: إضافة الفعالية الى
+        select_color_label: اللون
+        start_time_label: التاريخ والوقت
+        add_link_section_title: إضافة رابط للفعالية (إختياري)
+        add_link_section_subtitle: إضف رابط للفعالية الرابط يمكن أن يكون زوم - جوجل ميت أو اي رابط أخر
+        event_link_title_label: عنوان الرابط
+        event_link_url_label: رابط الفعالية
+        description_label: الوصف
+        add_event_button: إضافة الفعالية
+        update_event_button: تعديل الفعالية
+        link_title_placeholder: مثال، رابط خدمة زوم
+        event_name_placeholder: اسم الفعالية
+        event_title_placeholder: أدخل اسم الفعالية
       show:
         title: 'Calendar event details'
         link_label: Event Link

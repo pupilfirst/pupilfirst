@@ -2457,10 +2457,16 @@ en:
         no_cohorts_selected: No cohorts selected
         all_cohorts_selected: All cohorts selected
         add_calendar_button: Add calendar
+        calendar_name_place_holder: eg, Batch 1 calendar
+        cohorts_label_hint: This will link calendar to specified cohorts
       edit:
+        title: 'Create new calendar'
         update_calendar: Update calendar
         link_to_cohorts: Link calendar to cohorts
         calendar_name: Calendar name
+        no_cohorts_selected: No cohorts selected
+        all_cohorts_selected: All cohorts selected
+        calendar_name_place_holder: eg, Batch 1 calendar
     calendar_events:
       new:
         title: 'Add new event'
@@ -2477,6 +2483,23 @@ en:
         description_label: Description
         add_event_button: Add event
         link_title_placeholder: eg. Zoom meeting link
+      edit:
+        title: 'Edit event'
+        new_event: 'Add new event'
+        edit_event: 'Edit event'
+        title_label: Event Title
+        select_calendar_label: Add event to
+        select_color_label: Color
+        start_time_label: Date and Time
+        add_link_section_title: Add an event link (optional)
+        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
+        event_link_title_label: Event link title
+        event_link_url_label: Event link URL
+        description_label: Description
+        add_event_button: Add event
+        update_event_button: Update event
+        link_title_placeholder: eg. Zoom meeting link
+        event_title_placeholder: Enter Event Title 
       show:
         title: 'Calendar event details'
         link_label: Event Link
@@ -2494,6 +2517,7 @@ en:
       calendar_events:
         title: Calendars and Events
         add_calendar_button: Add Calendar
+        add_new_calendar: Add New Calendar
         calendar: Calendar
         calendars: Calendars
         calendar_filter_label: Showing events from

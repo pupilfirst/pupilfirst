@@ -12,27 +12,7 @@ class StartupMailerPreview < ActionMailer::Preview
           ),
         faculty: Faculty.last
       )
-
-      grading_details = [
-        {
-          name: "Design",
-          max_grade: 4,
-          pass_grade: 2,
-          grade_label: "Rejected",
-          grade: 1,
-          status: "\u274c"
-        },
-        {
-          name: "Code Quality",
-          max_grade: 2,
-          pass_grade: 2,
-          grade_label: "Meets Expectations",
-          grade: 2,
-          status: "\u2705"
-        },
-      ]
-
-    StartupMailer.feedback_as_email(startup_feedback, grading_details)
+    StartupMailer.feedback_as_email(startup_feedback, true)
   end
 
   def feedback_as_email
@@ -49,6 +29,6 @@ class StartupMailerPreview < ActionMailer::Preview
         faculty: Faculty.last
       )
 
-    StartupMailer.feedback_as_email(startup_feedback, nil)
+    StartupMailer.feedback_as_email(startup_feedback, false)
   end
 end

@@ -15,7 +15,7 @@ env:
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     services:

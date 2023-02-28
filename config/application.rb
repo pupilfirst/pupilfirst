@@ -1,5 +1,7 @@
 require_relative 'boot'
 require 'rails/all'
+require 'ffi'
+
 
 if Rails.env.development?
   require 'dotenv'

@@ -1,34 +1,13 @@
 class StartupMailerPreview < ActionMailer::Preview
   def feedback_as_email_with_grade
-    startup_feedback =
-      StartupFeedback.new(
-        id: 1,
-        feedback: "This is the feedback text.\n\nIt is multi-line.",
-        timeline_event:
-          TimelineEvent.new(
-            id: 2,
-            founders: [Founder.first],
-            target: Target.new(id: 1, title: 'Super Cool Target')
-          ),
-        faculty: Faculty.last
-      )
+    last_timeline_event_grade = TimelineEventGrade.last
+    startup_feedback = StartupFeedback.where(timeline_event_id: last_timeline_event_grade.timeline_event_id).last
 
     StartupMailer.feedback_as_email(startup_feedback, true)
   end
 
   def feedback_as_email
-    startup_feedback =
-      StartupFeedback.new(
-        id: 1,
-        feedback: "This is the feedback text.\n\nIt is multi-line.",
-        timeline_event:
-          TimelineEvent.new(
-            id: 2,
-            founders: [Founder.first],
-            target: Target.new(id: 1, title: 'Super Cool Target')
-          ),
-        faculty: Faculty.last
-      )
+    startup_feedback = StartupFeedback.last
 
     StartupMailer.feedback_as_email(startup_feedback, false)
   end

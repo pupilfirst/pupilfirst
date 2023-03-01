@@ -9,21 +9,17 @@
 <% end %>
 <% content_for :body do %>
   <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission")  : t("mailers.startup.feedback_as_email.body.recent_updates") %>
-
   <% if @grading_details.present? %>
     <p>
     <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
     </p>
     <ul style="list-style: none; margin: 2; padding: 2;">
-    <% @grading_details.each_with_index do |criteria, index| %>
+    <% @grading_details.each_with_index do |garde_details, index| %>
     <li>
       <p>
-        <%= criteria[:grade] >= criteria[:pass_grade] ? "\u{2705}" : "\u{274c}" %>
-        <%= "#{criteria[:name]}: ".html_safe %>
-        <strong><%= criteria[:grade_label] %></strong>
-        <%= " #{criteria[:grade]}/#{criteria[:max_grade]}" %>
-        </p>
-      </li>
+        <%= garde_details %>
+      </p>
+    </li>
     <% end %>
     </ul>
     <p>

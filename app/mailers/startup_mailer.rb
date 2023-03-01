@@ -4,21 +4,7 @@ class StartupMailer < SchoolMailer
     @startup_feedback = startup_feedback
     @students =
       @startup_feedback.timeline_event.founders.map(&:fullname).join(', ')
-
-    if include_grades
-      submission = TimelineEvent.find_by(id: @startup_feedback.timeline_event_id)
-      @grading_details = submission.evaluation_criteria.map.with_index { |criteria, index|
-        grade_label = criteria[:grade_labels].map {|label| label["label"]}
-        grade = submission.timeline_event_grades[index].grade
-        {
-          name: criteria.name,
-          max_grade: criteria.max_grade,
-          pass_grade: criteria.pass_grade,
-          grade_label: grade_label[grade-1],
-          grade: grade,
-        }
-      }
-    end
+    @grading_details = grading_details(startup_feedback, include_grades)
 
     send_to =
       startup_feedback
@@ -33,5 +19,34 @@ class StartupMailer < SchoolMailer
         startup_feedback: startup_feedback.faculty.name
       )
     simple_mail(send_to, subject)
+  end
+
+  def grading_details(startup_feedback, include_grades)
+    return unless include_grades
+
+    timeline_event_grades =
+      startup_feedback.timeline_event.timeline_event_grades.includes(
+        :evaluation_criterion
+      )
+
+    timeline_event_grades.map { |te_grade|
+      criteria_name = te_grade.evaluation_criterion.name
+      grade = te_grade.grade
+      grade_icon = grade >= te_grade.evaluation_criterion.pass_grade ? '✅' : '❌'
+      grade_label =
+        te_grade
+          .evaluation_criterion
+          .grade_labels
+          .find { |g| g['grade'] == grade }['label']
+
+      I18n.t(
+        'mailers.startup.feedback_as_email.body.grading_details_html',
+        grade_icon: grade_icon,
+        criteria_name: criteria_name,
+        grade_label: grade_label,
+        grade: grade,
+        max_grade: te_grade.evaluation_criterion.max_grade
+      ).html_safe
+    }
   end
 end

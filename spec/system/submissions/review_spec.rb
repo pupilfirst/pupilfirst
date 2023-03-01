@@ -211,7 +211,6 @@ feature 'Submission review overlay', js: true do
 
       dismiss_notification
 
-
       expect(page).to have_button('Undo Grading')
 
       submission = submission_pending.reload

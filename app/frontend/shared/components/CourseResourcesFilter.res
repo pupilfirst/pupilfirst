@@ -196,7 +196,7 @@ let selected = (sorter: sorter, params) => {
     Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
   <button
     title={"Order by" ++ " " ++ value}
-    className="p-3 flex items-center justify-center text-sm font-medium space-x-2 text-left truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    className="p-3 w-full sm:w-36 flex items-center justify-center text-sm font-medium space-x-2 text-left truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <Icon className="if i-sort-alpha-ascending-regular" /> <span> {value->str} </span>
   </button>
 }

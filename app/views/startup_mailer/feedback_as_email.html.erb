@@ -14,10 +14,10 @@
     <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
     </p>
     <ul style="list-style: none; margin: 2; padding: 2;">
-    <% @grading_details.each_with_index do |garde_details, index| %>
+    <% @grading_details.each do |grade_details| %>
     <li>
       <p>
-        <%= garde_details %>
+        <%= grade_details %>
       </p>
     </li>
     <% end %>

@@ -1,4 +1,4 @@
-after 'development:founders', 'development:targets' do
+after 'development:founders', 'development:targets', 'development:faculty' do
   puts 'Seeding timeline events'
 
   school = School.find_by(name: 'Test School')
@@ -58,6 +58,13 @@ after 'development:founders', 'development:targets' do
             grade: (1..criterion.max_grade).to_a.sample
           )
         end
+
+        # Add feedback to the graded submissions
+        reviewed_submission.startup_feedback.create!(
+          feedback: "Here is some feedback for the submission.",
+          faculty_id: 1,
+          sent_at: Time.current + Rational(500, 1000)
+        )
 
         # Set passed_at if all grades are over the pass grade.
         if reviewed_submission

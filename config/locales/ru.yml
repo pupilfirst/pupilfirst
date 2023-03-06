@@ -985,6 +985,9 @@ ru:
       update_criterion: Критерий Обновления
     HelpIcon:
       read_more: Подробнее
+    LevelProgressBar:
+      heading: Прогресс Уровня
+      course_completed: Курс Пройден!
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный

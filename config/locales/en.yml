@@ -577,14 +577,17 @@ en:
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
+      completion_tab_form_response: Form Response
       completion_tab_locked: Locked
       completion_tab_mark_complete: Mark as Complete
       completion_tab_quiz_result: Quiz Result
       completion_tab_submissions: Submissions & Feedback
+      completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
       learn_cta_submit_work: Submit work for review
+      learn_cta_submit_form: Submit Form
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       next_target_button: Next Target

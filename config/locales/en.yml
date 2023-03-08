@@ -2198,6 +2198,7 @@ en:
       success_notification: Student created successfully.
     create_submission:
       blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
+      form_success_notification: You response has been saved.
       invalid_files_attached: Some files attached are invalid
       invalid_submission_checklist: Submission checklist is not valid.
       item_file_limit_error: No more than three files can be attached to a submission item

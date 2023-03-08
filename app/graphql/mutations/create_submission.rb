@@ -11,11 +11,20 @@ module Mutations
 
     def resolve(_params)
       submission = create_submission
-      notify(
-        :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.create_submission.success_notification')
-      )
+
+      if submission.passed_at.blank?
+        notify(
+          :success,
+          I18n.t('shared.notifications.done_exclamation'),
+          I18n.t('mutations.create_submission.success_notification')
+        )
+      else
+        notify(
+          :success,
+          I18n.t('shared.notifications.done_exclamation'),
+          I18n.t('mutations.create_submission.form_success_notification')
+        )
+      end
       { submission: submission, level_up_eligibility: level_up_eligibility }
     end
 

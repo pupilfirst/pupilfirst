@@ -1776,6 +1776,7 @@ ru:
       success_notification: Студент успешно создан.
     create_submission:
       blocked_submission_status_error: Статус этой задачи - %{target_status}, поэтому вы не можете добавить новую работу; пожалуйста, перезагрузите страницу
+      form_success_notification: Ваш ответ сохранен.
       invalid_files_attached: Некоторые прикрепленные файлы недействительны
       invalid_submission_checklist: Список работ недействителен.
       item_file_limit_error: К отправке можно прикрепить не более трех файлов

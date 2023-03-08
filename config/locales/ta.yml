@@ -1148,6 +1148,7 @@ ta:
       user_controls: பயனர் கட்டுப்பாடுகளைக் காட்டு
     LevelProgressBar:
       heading: Level Progress
+      course_completed: Course Completed!
     MarkdownEditor:
       attach_file_label: கோப்பை இணைக்க இங்கே கிளிக் செய்யவும்.
       bold_insert: தைரியமான

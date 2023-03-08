@@ -14,8 +14,11 @@ module TimelineEvents
     def execute
       submission =
         TimelineEvent.transaction do
+          timeline_event_params =
+            @target.evaluation_criteria.blank? ? @params.merge(passed_at: Time.zone.now) :
+              @params
           TimelineEvent
-            .create!(@params)
+            .create!(timeline_event_params)
             .tap do |s|
               @founder.timeline_event_owners.create!(
                 timeline_event: s,

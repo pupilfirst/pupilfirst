@@ -433,9 +433,6 @@ let completeSection = (
           addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
           preview
         />,
-        <CoursesCurriculum__AutoVerify
-          target targetDetails targetStatus addSubmissionCB=addVerifiedSubmissionCB preview
-        />,
       ] |> React.array
 
     | (

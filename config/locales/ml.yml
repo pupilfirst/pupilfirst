@@ -1148,6 +1148,7 @@ ml:
       user_controls: ഉപയോക്തൃ നിയന്ത്രണങ്ങൾ കാണിക്കുക
     LevelProgressBar:
       heading: Level Progress
+      course_completed: Course Completed!
     MarkdownEditor:
       attach_file_label: ഒരു ഫയൽ അറ്റാച്ചുചെയ്യാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക.
       bold_insert: ധീരമായ

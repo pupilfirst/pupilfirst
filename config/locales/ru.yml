@@ -985,6 +985,9 @@ ru:
       update_criterion: Критерий Обновления
     HelpIcon:
       read_more: Подробнее
+    LevelProgressBar:
+      heading: Прогресс Уровня
+      course_completed: Курс Пройден!
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -2204,7 +2207,9 @@ ru:
         welcome: Добро пожаловать в %{course_name}
       feedback_as_email:
         body:
-          Grading: оценка
+          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_feedback_header: Вот отзыв о вашей работе
+          grading_header: Ваша заявка получила следующие оценки от %{coach_name}
           link_to: полный отзыв
           main_html: Вот ответ от %{coach_name} о вашем %{update_for}
           recent_submission: недавней работе

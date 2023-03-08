@@ -8,31 +8,31 @@
   <%= t("shared.salutation_name", name: @students) %>
 <% end %>
 <% content_for :body do %>
-  <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission")  : t("mailers.startup.feedback_as_email.body.recent_updates") %>
-
-  <p>
-    <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
-  </p>
-
+  <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission") : t("mailers.startup.feedback_as_email.body.recent_updates") %>
   <% if @grading_details.present? %>
-    <p><%= t("mailers.startup.feedback_as_email.body.grading") %></p>
-    <ul style="list-style: none; margin: 2; padding: 2;">
-    <% @grading_details.each_with_index do |criteria, index| %>
-    <li>
-      <p>
-        <%= criteria[:status].html_safe %>
-        <%= "#{criteria[:name]}: ".html_safe %>
-        <strong><%= criteria[:grade_label] %></strong>
-        <%= " #{criteria[:grade]}/#{criteria[:max_grade]}" %>
-        </p>
+    <p>
+    <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
+    </p>
+    <ul style="list-style: none; margin: 0px; padding-left: 8px;">
+      <% @grading_details.each do |grade_details| %>
+      <li style="padding-bottom: 8px;">
+        <%= grade_details %>
       </li>
-    <% end %>
+      <% end %>
     </ul>
+    <p style="margin: 0px; padding-top: 16px">
+      <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header", coach_name: coach_name, update_for: update_for) %>
+    </p>
+  <% else %>
+    <p style="margin: 0px;">
+      <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
+    </p>
   <% end %>
-
-  <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
-    <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
-  </blockquote>
+  <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
+    <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">
+      <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
+    </blockquote>
+  </div>
   <% if target.present? %>
     <p>
       <%= t("mailers.startup.feedback_as_email.body.view_html", link_to: link_to(t("mailers.startup.feedback_as_email.body.link_to"), target_url)) %>

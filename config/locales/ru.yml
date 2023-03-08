@@ -1164,6 +1164,7 @@ ru:
       user_controls: Показать пользовательские элементы управления
     LevelProgressBar:
       heading: Level Progress
+      course_completed: Course Completed!
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный

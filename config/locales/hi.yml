@@ -1148,6 +1148,7 @@ hi:
       user_controls: उपयोगकर्ता नियंत्रण दिखाएं
     LevelProgressBar:
       heading: Level Progress
+      course_completed: Course Completed!
     MarkdownEditor:
       attach_file_label: फ़ाइल संलग्न करने के लिए यहां क्लिक करें।
       bold_insert: साहसिक

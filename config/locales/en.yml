@@ -1151,6 +1151,7 @@ en:
       user_controls: Show user controls
     LevelProgressBar:
       heading: Level Progress
+      course_completed: Course Completed!
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold

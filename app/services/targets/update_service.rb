@@ -12,7 +12,7 @@ module Targets
         @target.link_to_complete = target_params[:link_to_complete]
 
         @target.resubmittable =
-          target_params[:evaluation_criterion_ids].present?
+          target_params[:checklist].present?
 
         @target.link_to_complete = target_params[:link_to_complete]
 

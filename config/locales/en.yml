@@ -1024,7 +1024,7 @@ en:
       remove_choice: Remove Choice
       step_cannot_empty: Step cannot be empty
     CurriculumEditor__TargetDetailsEditor:
-      add_another_question: Add another Question
+      add_another_question: Add another question
       add_step: Add a Step
       choose_target_group: Choose a target group
       completion_instructions:
@@ -1057,6 +1057,8 @@ en:
       submit_form: Submit a form to complete the target.
       take_quiz: Take a quiz to complete the target.
       target_checklist:
+        form_label: What are the questions you would like the student to answer?
+        form_help: These are the questions a student must answer to complete the target.
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
         label: What steps should the student take to complete this target?
@@ -2198,7 +2200,7 @@ en:
       success_notification: Student created successfully.
     create_submission:
       blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
-      form_success_notification: You response has been saved.
+      form_success_notification: Your response has been saved.
       invalid_files_attached: Some files attached are invalid
       invalid_submission_checklist: Submission checklist is not valid.
       item_file_limit_error: No more than three files can be attached to a submission item

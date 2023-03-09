@@ -718,11 +718,9 @@ let formEditor = (state, send) =>
   <div className="mb-6">
     <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-      {t("target_checklist.label") |> str}
+      {t("target_checklist.form_label") |> str}
     </label>
-    <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
-      {t("target_checklist.help") |> str}
-    </HelpIcon>
+    <HelpIcon className="ml-1"> {t("target_checklist.form_help") |> str} </HelpIcon>
     <div className="ml-6 mb-6">
       {state.checklist
       |> Js.Array.mapi((checklistItem, index) => {
@@ -764,7 +762,7 @@ let formEditor = (state, send) =>
         disabled={Js.Array.length(state.checklist) >= 25}
         onClick={_ => send(AddNewChecklistItem)}>
         <PfIcon className="fas fa-plus-circle text-lg" />
-        <span className="font-semibold ml-2"> {t("add_step")->str} </span>
+        <span className="font-semibold ml-2"> {t("add_another_question")->str} </span>
       </button>
     </div>
   </div>

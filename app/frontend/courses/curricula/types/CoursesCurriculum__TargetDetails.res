@@ -70,8 +70,6 @@ let computeCompletionType = targetDetails => {
   }
 
   let hasChecklist = Js.Array.length(targetDetails.checklist) > 0
-  Js.log("Yaswanth Completion Type")
-  Js.log(hasChecklist)
   switch (evaluated, hasQuiz, hasLinkToComplete, hasChecklist) {
   | (true, _, _, _) => Evaluated
   | (false, true, _, _) => TakeQuiz

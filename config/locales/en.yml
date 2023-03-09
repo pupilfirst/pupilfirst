@@ -618,6 +618,7 @@ en:
       warning_length_limit: Please keep your answer to less than 5000 characters in length.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: Add another
+      add_another_response: Add another response
       add_another_submission: Add another submission
       cancel: Cancel
       completed: Completed

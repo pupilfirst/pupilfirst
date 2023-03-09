@@ -480,6 +480,7 @@ ru:
       warning_length_limit: Пожалуйста, старайтесь, чтобы ваш ответ не превышал 5000 символов.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: Добавить другую
+      add_another_response: Добавить еще один ответ
       add_another_submission: Добавить другую работу
       cancel: Отмена
       completed: Завершено

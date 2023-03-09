@@ -6,6 +6,8 @@ external markIcon: string = "default"
 external linkIcon: string = "default"
 @module("./images/target-complete-quiz-icon.svg")
 external quizIcon: string = "default"
+@module("./images/target-complete-form-icon.svg")
+external formIcon: string = "default"
 
 let str = React.string
 
@@ -610,7 +612,7 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #TakeQuiz => quizIcon
   | #VisitLink => linkIcon
   | #MarkAsComplete => markIcon
-  | #SubmitForm => quizIcon
+  | #SubmitForm => formIcon
   }
 
   let disabled =

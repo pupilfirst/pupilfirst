@@ -495,6 +495,8 @@ ru:
       submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
       your_submissions: Ваши Работы
+      your_responses: Ваши ответы
+
     CoursesCurriculum__TargetStatus:
       access_locked: Ваш доступ к этому курсу закончился.
       course_locked: Курс был окончен.
@@ -865,6 +867,7 @@ ru:
       copy: Копировать
       delete: Удалить
       describe_step: Опишите этот этап
+      describe_question: Введите ваш вопрос здесь
       editor_checklist: Редактор элемента контрольного списка
       limits_notice: Учащиеся могут отправить до 3 файлов размером не более 5 МБ каждый.
       move_down: Двигать Вниз
@@ -872,6 +875,7 @@ ru:
       not_unique_step: Не уникальный этап; требуемые этапы должны быть уникальными
       not_valid_choice: Неверный выбор
       optional: Необязательный
+      question_cannot_empty: Вопрос не может быть пустым
       remove_choice: Убрать Выбор
       step_cannot_empty: Этап не может быть пустым
     CurriculumEditor__TargetDetailsEditor:

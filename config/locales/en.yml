@@ -631,6 +631,7 @@ en:
       submitted_on: "Submitted on "
       unknown_coach: Unknown Coach
       your_submissions: Your Submissions
+      your_responses: Your Responses
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
@@ -1016,6 +1017,7 @@ en:
       copy: Copy
       delete: Delete
       describe_step: Describe this step
+      describe_question: Type your question here
       editor_checklist: Editor for checklist item
       limits_notice: Students can submit up to 3 files, limited to 5 MB each.
       move_down: Move Down
@@ -1023,6 +1025,7 @@ en:
       not_unique_step: Not a unique step; required steps must be unique
       not_valid_choice: Not a valid choice
       optional: Optional
+      question_cannot_empty: Question cannot be empty
       remove_choice: Remove Choice
       step_cannot_empty: Step cannot be empty
     CurriculumEditor__TargetDetailsEditor:

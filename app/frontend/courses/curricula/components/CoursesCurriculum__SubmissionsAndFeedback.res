@@ -241,10 +241,15 @@ let make = (
   ~checklist,
 ) => {
   let (showSubmissionForm, setShowSubmissionForm) = React.useState(() => false)
+  let completionType = targetDetails |> TargetDetails.computeCompletionType
 
   <div>
     <div className="flex justify-between items-end border-b pb-2">
-      <h4 className="text-base md:text-xl"> {tr("your_submissions") |> str} </h4>
+      <h4 className="text-base md:text-xl">
+        {completionType === SubmitForm
+          ? tr("your_responses") |> str
+          : tr("your_submissions") |> str}
+      </h4>
       {targetStatus |> TargetStatus.canSubmit(~resubmittable=target |> Target.resubmittable)
         ? switch showSubmissionForm {
           | true =>
@@ -261,7 +266,7 @@ let make = (
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
               <PfIcon className="if i-plus-regular text-lg mr-2" />
               <span className="hidden md:inline">
-                {targetDetails |> TargetDetails.computeCompletionType === SubmitForm
+                {completionType === SubmitForm
                   ? tr("add_another_response") |> str
                   : tr("add_another_submission") |> str}
               </span>

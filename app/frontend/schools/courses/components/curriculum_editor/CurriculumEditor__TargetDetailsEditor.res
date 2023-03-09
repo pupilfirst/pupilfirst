@@ -734,6 +734,7 @@ let formEditor = (state, send) =>
         <CurriculumEditor__TargetChecklistItemEditor
           checklist=state.checklist
           key={index |> string_of_int}
+          form=true
           checklistItem
           index
           updateChecklistItemCB={newChecklistItem =>
@@ -1018,6 +1019,7 @@ let make = (
 
                       <CurriculumEditor__TargetChecklistItemEditor
                         checklist=state.checklist
+                        form=false
                         key={index |> string_of_int}
                         checklistItem
                         index

@@ -189,6 +189,7 @@ let isRequiredStepTitleDuplicated = (checklist, item) => {
 @react.component
 let make = (
   ~checklist,
+  ~form,
   ~checklistItem,
   ~index,
   ~updateChecklistItemCB,
@@ -220,7 +221,7 @@ let make = (
       <div className="py-2 mt-2 ">
         <MarkdownEditor
           textareaId={"checklist-item-" ++ (string_of_int(index + 1) ++ "-title")}
-          placeholder={t("describe_step")}
+          placeholder={form ? t("describe_question") : t("describe_step")}
           value={checklistItem->ChecklistItem.title}
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
           profile=Markdown.Permissive
@@ -228,7 +229,7 @@ let make = (
       </div>
       <div>
         <School__InputGroupError
-          message={t("step_cannot_empty")}
+          message={form ? t("question_cannot_empty") : t("step_cannot_empty")}
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
         />
         <School__InputGroupError

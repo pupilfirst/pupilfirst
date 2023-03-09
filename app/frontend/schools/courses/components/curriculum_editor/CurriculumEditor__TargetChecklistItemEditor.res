@@ -233,7 +233,7 @@ let make = (
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
         />
         <School__InputGroupError
-          message={t("not_unique_step")}
+          message={form ? t("not_unique_question") : t("not_unique_step")}
           active={isRequiredStepTitleDuplicated(checklist, checklistItem)}
         />
       </div>

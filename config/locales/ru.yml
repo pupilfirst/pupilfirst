@@ -442,10 +442,12 @@ ru:
       close_button: Закрыть
       completion_tab_complete: Завершить
       completion_tab_completed: Завершено
+      completion_tab_form_response: Форма ответов
       completion_tab_locked: Заблокировано
       completion_tab_mark_complete: Отметить как завершено
       completion_tab_quiz_result: Результаты Теста
       completion_tab_submissions: Работы и Отзывы
+      completion_tab_submit_form: Представить форму
       completion_tab_take_quiz: Пройти Тест
       completion_tab_visit_link: Пройдите по Ссылке для Заввершения
       discuss_tab: Обсуждения
@@ -484,6 +486,7 @@ ru:
       add_another_submission: Добавить другую работу
       cancel: Отмена
       completed: Завершено
+      form_response_number: "Ответ #"
       grading: Оценивается
       pending_review: Ожидает Оценки
       rejected: Отказано

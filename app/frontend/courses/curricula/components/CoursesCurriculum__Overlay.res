@@ -402,6 +402,7 @@ let completeSection = (
         <CoursesCurriculum__SubmissionBuilder
           key="courses-curriculum-submission-form"
           target
+          targetDetails
           checklist={targetDetails |> TargetDetails.checklist}
           addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
           preview
@@ -429,6 +430,7 @@ let completeSection = (
         <CoursesCurriculum__SubmissionBuilder
           key="courses-curriculum-submission-form"
           target
+          targetDetails
           checklist={targetDetails |> TargetDetails.checklist}
           addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
           preview

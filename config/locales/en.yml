@@ -577,7 +577,7 @@ en:
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
-      completion_tab_form_response: Form Response
+      completion_tab_form_response: Form Responses
       completion_tab_locked: Locked
       completion_tab_mark_complete: Mark as Complete
       completion_tab_quiz_result: Quiz Result
@@ -622,6 +622,7 @@ en:
       add_another_submission: Add another submission
       cancel: Cancel
       completed: Completed
+      form_response_number: "Response #"
       grading: Grading
       pending_review: Pending Review
       rejected: Rejected

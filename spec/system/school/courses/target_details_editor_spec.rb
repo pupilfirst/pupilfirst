@@ -26,6 +26,7 @@ feature 'Target Details Editor', js: true do
   end
   let!(:target_3_l2) { create :target, target_group: target_group_2 }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
+  let!(:target_4_l2) { create :target, target_group: target_group_2 }
 
   let(:link_to_complete) { Faker::Internet.url }
   let(:completion_instructions) { Faker::Lorem.sentence }
@@ -109,6 +110,30 @@ feature 'Target Details Editor', js: true do
     )
   end
 
+  scenario 'school admin updates a target to one with submit a form' do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text('Title')
+
+    fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
+
+    within('div#evaluated') { click_button 'No' }
+
+    expect(page).to have_button('Submit a form to complete the target.')
+    expect(page).to_not have_text('At least one has to be selected')
+
+    click_button 'Update Target'
+    expect(page).to have_text('Target updated successfully')
+    dismiss_notification
+
+    expect(target_1_l2.reload.title).to eq(new_target_title)
+    expect(target_1_l2.visibility).to eq(Target::VISIBILITY_LIVE)
+    expect(target_1_l2.evaluation_criteria.count).to eq(0)
+  end
+
   scenario 'school admin updates a target to one with link to complete' do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course)
@@ -164,7 +189,7 @@ feature 'Target Details Editor', js: true do
     end
 
     # Quiz Question 2
-    find('button', text: 'Add another Question').click
+    find('button', text: 'Add another question').click
     replace_markdown(quiz_question_2, id: 'quiz-question-2')
     fill_in 'quiz-question-2-answer-option-1',
             with: quiz_question_2_answer_option_1
@@ -190,6 +215,33 @@ feature 'Target Details Editor', js: true do
     expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(
       quiz_question_2_answer_option_1
     )
+  end
+
+  scenario 'school admin updates a target to one with submit a form' do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_2_l2.title}']").click
+    expect(page).to have_text('Title')
+
+    within('div#evaluated') { click_button 'No' }
+
+    expect(page).to have_button('Submit a form to complete the target.')
+    within('div#method_of_completion') do
+      click_button 'Submit a form to complete the target.'
+    end
+
+    expect(page).to_not have_text('evaluation criteria')
+
+    click_button 'Update Target'
+    expect(page).to have_text('Target updated successfully')
+    dismiss_notification
+
+    expect(target_2_l2.reload.evaluation_criteria.count).to eq(0)
+    expect(target_2_l2.link_to_complete).to eq(nil)
+    expect(target_2_l2.quiz).to eq(nil)
+    expect(target_2_l2.visibility).to eq(Target::VISIBILITY_LIVE)
   end
 
   scenario 'course author modifies target role and prerequisite targets' do

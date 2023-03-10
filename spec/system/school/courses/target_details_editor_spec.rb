@@ -26,7 +26,6 @@ feature 'Target Details Editor', js: true do
   end
   let!(:target_3_l2) { create :target, target_group: target_group_2 }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
-  let!(:target_4_l2) { create :target, target_group: target_group_2 }
 
   let(:link_to_complete) { Faker::Internet.url }
   let(:completion_instructions) { Faker::Lorem.sentence }
@@ -123,6 +122,8 @@ feature 'Target Details Editor', js: true do
     within('div#evaluated') { click_button 'No' }
 
     expect(page).to have_button('Submit a form to complete the target.')
+    within('div#method_of_completion') { click_button 'Submit a form to complete the target.' }
+    expect(page).to have_text('What are the questions you would like the student to answer?')
     expect(page).to_not have_text('At least one has to be selected')
 
     click_button 'Update Target'
@@ -552,6 +553,191 @@ feature 'Target Details Editor', js: true do
         }
       ]
 
+      expect(target_2_l2.reload.checklist).to eq(expected_checklist)
+    end
+
+    scenario 'admin changes the target with an existing checklist to an form submission' do
+      sign_in_user course_author.user,
+                   referrer:
+                     details_school_course_target_path(
+                       course_id: course.id,
+                       id: target_2_l2.id
+                     )
+      expect(page).to have_text(
+        'What steps should the student take to complete this target?'
+      )
+
+      # Change the existing item
+      within("div[aria-label='Editor for checklist item 1'") do
+        click_on 'Write Long Text'
+        expect(page).to have_text('Write Short Text')
+        expect(page).to have_text('Attach a Link')
+        expect(page).to have_text('Choose from a list')
+
+        click_on 'Write Short Text'
+        fill_in 'checklist-item-1-title',
+                with: 'New title for short text item',
+                fill_options: {
+                  clear: :backspace
+                }
+      end
+
+      # Add few more checklist items of different kind
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 2'") do
+        click_on 'Write Long Text'
+        click_on 'Upload Files'
+        fill_in 'checklist-item-2-title',
+                with: 'Add a file for the submission',
+                fill_options: {
+                  clear: :backspace
+                }
+        check 'Optional'
+      end
+
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 3'") do
+        click_on 'Write Long Text'
+
+        click_on 'Choose from a list'
+
+        expect(page).to have_text('Choices:')
+
+        fill_in 'checklist-item-3-title',
+                with: 'Choose one item',
+                fill_options: {
+                  clear: :backspace
+                }
+
+        expect(page).to_not have_selector('.i-times-regular')
+
+        fill_in 'multichoice-input-1',
+                with: 'First Choice',
+                fill_options: {
+                  clear: :backspace
+                }
+        fill_in 'multichoice-input-2',
+                with: 'Second Choice',
+                fill_options: {
+                  clear: :backspace
+                }
+        click_button 'Add a choice'
+
+        expect(page).to have_text('Not a valid choice')
+        expect(page).to have_selector('.i-times-regular')
+
+        fill_in 'multichoice-input-3',
+                with: 'Another Choice',
+                fill_options: {
+                  clear: :backspace
+                }
+        click_button 'Remove Choice 2'
+      end
+
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 4'") do
+        expect(page).to have_text('Step cannot be empty')
+
+        click_on 'Write Long Text'
+        click_on 'Attach a Link'
+        fill_in 'checklist-item-4-title',
+                with: 'New title for short text item',
+                fill_options: {
+                  clear: :backspace
+                }
+
+        # The user should be blocked from saving the checklist with duplicate required steps.
+        expect(page).to have_text('required steps must be unique')
+      end
+
+      expect(page).to have_button('Update Target', disabled: true)
+
+      # The warning should disappear when we make the step optional.
+      within("div[aria-label='Editor for checklist item 4'") do
+        check 'Optional'
+
+        expect(page).not_to have_text('required steps must be unique')
+
+        fill_in 'checklist-item-4-title',
+                with: 'Attach a link for the submission',
+                fill_options: {
+                  clear: :backspace
+                }
+      end
+
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 5'") do
+        expect(page).to have_text('Step cannot be empty')
+
+        click_on 'Write Long Text'
+        click_on 'Record Audio'
+        fill_in 'checklist-item-5-title',
+                with: 'Title for audio item',
+                fill_options: {
+                  clear: :backspace
+                }
+      end
+
+      click_button 'Update Target'
+
+      expect(page).to have_text('Target updated successfully')
+
+      dismiss_notification
+
+      expected_checklist = [
+        {
+          'kind' => Target::CHECKLIST_KIND_SHORT_TEXT,
+          'title' => 'New title for short text item',
+          'metadata' => {},
+          'optional' => false
+        },
+        {
+          'kind' => Target::CHECKLIST_KIND_FILES,
+          'title' => 'Add a file for the submission',
+          'metadata' => {},
+          'optional' => true
+        },
+        {
+          'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
+          'title' => 'Choose one item',
+          'metadata' => {
+            'choices' => ['First Choice', 'Another Choice']
+          },
+          'optional' => false
+        },
+        {
+          'kind' => Target::CHECKLIST_KIND_LINK,
+          'title' => 'Attach a link for the submission',
+          'metadata' => {},
+          'optional' => true
+        },
+        {
+          'kind' => Target::CHECKLIST_KIND_AUDIO,
+          'title' => 'Title for audio item',
+          'metadata' => {},
+          'optional' => false
+        }
+      ]
+
+      expect(target_2_l2.reload.checklist).to eq(expected_checklist)
+
+      within("div#evaluated") { click_button 'No' }
+      within('div#method_of_completion') { click_button 'Submit a form to complete the target.' }
+      expect(page).to have_text('What are the questions you would like the student to answer?')
+      expect(page).to have_button('Add another question')
+      expect(page).to_not have_text("evaluation criteria")
+
+      click_button 'Update Target'
+
+      expect(page).to have_text('Target updated successfully')
+
+      dismiss_notification
+
+      expect(target_2_l2.reload.evaluation_criteria.count).to eq(0)
       expect(target_2_l2.reload.checklist).to eq(expected_checklist)
     end
 

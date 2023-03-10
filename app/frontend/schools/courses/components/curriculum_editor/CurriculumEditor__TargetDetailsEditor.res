@@ -751,13 +751,14 @@ let formEditor = (state, send) =>
       {ArrayUtils.isEmpty(state.checklist)
         ? <div
             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-            <i className="fas fa-info-circle mr-2" /> {t("empty_checklist_warning")->str}
+            <i className="fas fa-info-circle mr-2" /> {t("empty_form_warning")->str}
           </div>
         : React.null}
       {Js.Array.length(state.checklist) >= 25
         ? <div
             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-            <i className="fas fa-info-circle mr-2" /> {t("target_checklist.limit_warning")->str}
+            <i className="fas fa-info-circle mr-2" />
+            {t("target_checklist.form_limit_warning")->str}
           </div>
         : React.null}
       <button

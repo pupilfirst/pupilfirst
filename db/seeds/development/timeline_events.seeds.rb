@@ -129,7 +129,7 @@ after 'development:founders', 'development:targets', 'development:faculty' do
     }
   ]
 
-
+  # Add a form submission which will be auto verified
   form_submission =
   TimelineEvent.create!(
     checklist: form_submission_checklist,

@@ -132,7 +132,7 @@ after 'development:founders', 'development:targets', 'development:faculty' do
 
   form_submission =
   TimelineEvent.create!(
-    checklist: checklist_form_submission,
+    checklist: form_submission_checklist,
     created_at: 2.hours.ago,
     target_id: 7
   )
@@ -141,6 +141,8 @@ after 'development:founders', 'development:targets', 'development:faculty' do
     latest: true,
     founder: student
   )
+
+  form_submission.update!(passed_at: 2.hours.ago);
 
   puts "\nStudent with submissions"
   puts '------------------------'

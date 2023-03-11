@@ -108,8 +108,5 @@ after 'development:evaluation_criteria', 'development:target_groups' do
         }
       ]
     )
-    form_submission.target_evaluation_criteria.create!(
-      evaluation_criterion: form_submission.course.evaluation_criteria.sample
-    )
   end
 end

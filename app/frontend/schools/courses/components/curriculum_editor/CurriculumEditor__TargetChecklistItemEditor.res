@@ -108,8 +108,27 @@ let updateChoiceText = (choiceIndex, checklistItem, updateChecklistItemCB, event
   updateChecklistItemCB(newChecklistItem)
 }
 
-let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB) =>
+let multiChoiceEditor = (
+  choices,
+  checklistItem,
+  removeMultichoiceOption,
+  updateChecklistItemCB,
+  isMultiSelectChecked,
+  setIsMultiSelectChecked,
+) => {
   <div className="ml-3 mt-3">
+    <div className="items-center">
+      <input
+        className="leading-tight"
+        type_="checkbox"
+        id="multi-select"
+        checked={isMultiSelectChecked}
+        onChange={event => setIsMultiSelectChecked(ReactEvent.Form.target(event)["checked"])}
+      />
+      <label className="text-xs text-gray-600 ml-2" htmlFor="multi-select">
+        {t("multi_choice") |> str}
+      </label>
+    </div>
     <div className="text-xs font-semibold mb-2"> {t("choices") ++ ":" |> str} </div>
     {
       let showRemoveIcon = Js.Array.length(choices) > 2
@@ -117,7 +136,12 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
       |> Js.Array.mapi((choice, index) =>
         <div key={index |> string_of_int}>
           <div className="flex items-center text-sm rounded mt-2">
-            <span className="text-gray-400"> <i className="far fa-circle text-base" /> </span>
+            {
+              let shape = isMultiSelectChecked ? "square" : "circle"
+              <span className="text-gray-400">
+                <PfIcon className={j`if i-$shape-light if-fw`} />
+              </span>
+            }
             <div
               className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-300 rounded">
               <input
@@ -152,6 +176,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
       <span className="font-semibold ml-2"> {t("add_choice") |> str} </span>
     </button>
   </div>
+}
 
 let controlIcon = (~icon, ~title, ~handler) =>
   handler == None
@@ -197,7 +222,8 @@ let make = (
   ~moveChecklistItemUpCB=?,
   ~moveChecklistItemDownCB=?,
   ~copyChecklistItemCB,
-) =>
+) => {
+  let (isMultiSelectChecked, setIsMultiSelectChecked) = React.useState(() => false)
   <div
     key={index |> string_of_int}
     ariaLabel={t("editor_checklist") ++ " " ++ (index + 1 |> string_of_int)}
@@ -239,7 +265,14 @@ let make = (
       </div>
       {switch checklistItem |> ChecklistItem.kind {
       | MultiChoice(choices) =>
-        multiChoiceEditor(choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB)
+        multiChoiceEditor(
+          choices,
+          checklistItem,
+          removeMultichoiceOption,
+          updateChecklistItemCB,
+          isMultiSelectChecked,
+          setIsMultiSelectChecked,
+        )
       | Files => filesNotice
       | ShortText
       | LongText
@@ -268,3 +301,4 @@ let make = (
       )}
     </div>
   </div>
+}

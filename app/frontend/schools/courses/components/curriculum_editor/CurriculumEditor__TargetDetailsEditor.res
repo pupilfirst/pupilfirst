@@ -615,18 +615,8 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #SubmitForm => formIcon
   }
 
-  let disabled =
-    switch methodOfCompletion {
-    | #TakeQuiz => true
-    | #VisitLink => true
-    | #MarkAsComplete => true
-    | #SubmitForm => false
-    } &&
-    targetEvaluated(state.methodOfCompletion)
-
   <div key={index |> string_of_int} className="w-1/3 px-2">
     <button
-      disabled
       onClick={updateMethodOfCompletion(methodOfCompletion |> methodOfCompletionSelection, send)}
       className={methodOfCompletionButtonClasses(selected)}>
       <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div> {buttonString |> str}

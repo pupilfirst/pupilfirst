@@ -94,10 +94,18 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
       let submissionChecklist =
         checklist |> Json.Decode.array(SubmissionChecklistItem.decode(files))
       let completionType = targetDetails |> TargetDetails.computeCompletionType
+      let status = switch completionType {
+      | TakeQuiz
+      | LinkToComplete
+      | MarkAsComplete
+      | SubmitForm =>
+        Submission.MarkedAsComplete
+      | Evaluated => Pending
+      }
       let newSubmission = Submission.make(
         ~id=submission["id"],
         ~createdAt=DateFns.decodeISO(submission["createdAt"]),
-        ~status=completionType === SubmitForm ? Submission.MarkedAsComplete : Submission.Pending,
+        ~status,
         ~checklist=submissionChecklist,
       )
       let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(

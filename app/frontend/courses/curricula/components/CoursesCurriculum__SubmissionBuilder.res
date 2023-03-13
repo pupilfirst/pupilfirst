@@ -100,7 +100,7 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
       | MarkAsComplete
       | SubmitForm =>
         Submission.MarkedAsComplete
-      | Evaluated => Pending
+      | Evaluated => Submission.Pending
       }
       let newSubmission = Submission.make(
         ~id=submission["id"],

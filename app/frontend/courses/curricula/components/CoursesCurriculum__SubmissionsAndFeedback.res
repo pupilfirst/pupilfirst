@@ -185,8 +185,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           | None => (
               tr("unknown_coach"),
               None,
-              <div
-                className="w-10 h-10 rounded-full bg-gray-400 inline-block flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center">
                 <i className="fas fa-user-times" />
               </div>,
             )

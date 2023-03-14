@@ -277,9 +277,14 @@ let make = (
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
               <PfIcon className="if i-plus-regular text-lg mr-2" />
               <span className="hidden md:inline">
-                {completionType === SubmitForm
-                  ? tr("add_another_response") |> str
-                  : tr("add_another_submission") |> str}
+                {switch completionType {
+                | SubmitForm => tr("add_another_response")->str
+                | MarkAsComplete
+                | TakeQuiz
+                | LinkToComplete
+                | Evaluated =>
+                  tr("add_another_submission")->str
+                }}
               </span>
               <span className="md:hidden"> {tr("add_another") |> str} </span>
             </button>

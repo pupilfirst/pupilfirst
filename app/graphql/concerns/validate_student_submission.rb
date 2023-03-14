@@ -12,6 +12,7 @@ module ValidateStudentSubmission
           .where(levels: { course_id: course })
           .first
       target_status = Targets::StatusService.new(target, student).status
+      submittable = target.checklist.present?
       submission_required =
         target_status.in?(
           [
@@ -23,7 +24,7 @@ module ValidateStudentSubmission
         target.resubmittable? &&
           target_status == Targets::StatusService::STATUS_PASSED
 
-      if (submission_required || submitted_but_resubmittable)
+      if submittable && (submission_required || submitted_but_resubmittable)
         return
       end
 

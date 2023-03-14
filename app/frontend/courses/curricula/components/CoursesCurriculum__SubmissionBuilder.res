@@ -95,12 +95,12 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
         checklist |> Json.Decode.array(SubmissionChecklistItem.decode(files))
       let completionType = targetDetails |> TargetDetails.computeCompletionType
       let status = switch completionType {
+      | Evaluated => Submission.Pending
       | TakeQuiz
       | LinkToComplete
       | MarkAsComplete
       | SubmitForm =>
         Submission.MarkedAsComplete
-      | Evaluated => Submission.Pending
       }
       let newSubmission = Submission.make(
         ~id=submission["id"],

@@ -101,7 +101,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
   let submissions = TargetDetails.submissions(targetDetails)
   let totalSubmissions = Js.Array2.length(submissions)
 
-  let completionType = targetDetails |> TargetDetails.computeCompletionType
+  let completionType = targetDetails->TargetDetails.computeCompletionType
 
   Js.Array2.mapi(Submission.sort(submissions), (submission, index) => {
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
@@ -112,9 +112,15 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
         <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
-          {completionType === SubmitForm
-            ? str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
-            : str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)}
+          {switch completionType {
+          | SubmitForm =>
+            str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
+          | MarkAsComplete
+          | TakeQuiz
+          | LinkToComplete
+          | Evaluated =>
+            str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)
+          }}
         </h2>
         <div
           className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
@@ -241,14 +247,19 @@ let make = (
   ~checklist,
 ) => {
   let (showSubmissionForm, setShowSubmissionForm) = React.useState(() => false)
-  let completionType = targetDetails |> TargetDetails.computeCompletionType
+  let completionType = targetDetails->TargetDetails.computeCompletionType
 
   <div>
     <div className="flex justify-between items-end border-b pb-2">
       <h4 className="text-base md:text-xl">
-        {completionType === SubmitForm
-          ? tr("your_responses") |> str
-          : tr("your_submissions") |> str}
+        {switch completionType {
+        | SubmitForm => tr("your_responses")->str
+        | MarkAsComplete
+        | TakeQuiz
+        | LinkToComplete
+        | Evaluated =>
+          tr("your_submissions")->str
+        }}
       </h4>
       {targetStatus |> TargetStatus.canSubmit(~resubmittable=target |> Target.resubmittable)
         ? switch showSubmissionForm {

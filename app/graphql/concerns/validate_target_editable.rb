@@ -108,8 +108,8 @@ module ValidateTargetEditable
       end
 
       item['metadata']['choices'].length > 1 &&
-        item['metadata']['choices'].all? { |choice| valid_string(choice) } &&
-          item['metadata']['allowMultiSelect'] === true | false
+        item['metadata']['choices'].all? { |choice| valid_string(choice) }
+        # && item['metadata']['isMultiSelect'] === true | false
     end
 
     def validate_checklist(checklist)

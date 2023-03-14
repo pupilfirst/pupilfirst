@@ -706,13 +706,19 @@ let doRequiredStepsHaveUniqueTitles = checklist => {
 
 let isValidTitle = title => title |> String.trim |> String.length > 0
 
-let formEditor = (state, send) =>
+let formEditor = (state, send) => {
+  let status = targetEvaluated(state.methodOfCompletion)
+
   <div className="mb-6">
     <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-      {t("target_checklist.form_label") |> str}
+      {status ? t("target_checklist.label")->str : t("target_checklist.form_label")->str}
     </label>
-    <HelpIcon className="ml-1"> {t("target_checklist.form_help") |> str} </HelpIcon>
+    {status
+      ? <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
+          {t("target_checklist.help")->str}
+        </HelpIcon>
+      : <HelpIcon className="ml-1"> {t("target_checklist.form_help")->str} </HelpIcon>}
     <div className="ml-6 mb-6">
       {state.checklist
       |> Js.Array.mapi((checklistItem, index) => {
@@ -726,7 +732,6 @@ let formEditor = (state, send) =>
         <CurriculumEditor__TargetChecklistItemEditor
           checklist=state.checklist
           key={index |> string_of_int}
-          form=true
           checklistItem
           index
           updateChecklistItemCB={newChecklistItem =>
@@ -760,6 +765,7 @@ let formEditor = (state, send) =>
       </button>
     </div>
   </div>
+}
 let isValidMethodOfCompletion = state =>
   switch state.methodOfCompletion {
   | TakeQuiz => isValidQuiz(state.quiz)
@@ -990,64 +996,7 @@ let make = (
                 </div>
               </div>
               {switch state.methodOfCompletion {
-              | Evaluated =>
-                <div className="mb-6">
-                  <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
-                    <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                    {t("target_checklist.label") |> str}
-                  </label>
-                  <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
-                    {t("target_checklist.help") |> str}
-                  </HelpIcon>
-                  <div className="ml-6 mb-6">
-                    {state.checklist
-                    |> Js.Array.mapi((checklistItem, index) => {
-                      let moveChecklistItemUpCB =
-                        index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
-
-                      let moveChecklistItemDownCB =
-                        index != Js.Array.length(state.checklist) - 1
-                          ? Some(() => send(MoveChecklistItemDown(index)))
-                          : None
-
-                      <CurriculumEditor__TargetChecklistItemEditor
-                        checklist=state.checklist
-                        form=false
-                        key={index |> string_of_int}
-                        checklistItem
-                        index
-                        updateChecklistItemCB={newChecklistItem =>
-                          send(UpdateChecklistItem(index, newChecklistItem))}
-                        removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
-                        ?moveChecklistItemUpCB
-                        ?moveChecklistItemDownCB
-                        copyChecklistItemCB={() => send(CopyChecklistItem(index))}
-                      />
-                    })
-                    |> React.array}
-                    {ArrayUtils.isEmpty(state.checklist)
-                      ? <div
-                          className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-                          <i className="fas fa-info-circle mr-2" />
-                          {t("empty_checklist_warning")->str}
-                        </div>
-                      : React.null}
-                    {Js.Array.length(state.checklist) >= 25
-                      ? <div
-                          className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-                          <i className="fas fa-info-circle mr-2" />
-                          {t("target_checklist.limit_warning")->str}
-                        </div>
-                      : React.null}
-                    <button
-                      className="flex justify-center bg-white items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500"
-                      disabled={Js.Array.length(state.checklist) >= 25}
-                      onClick={_ => send(AddNewChecklistItem)}>
-                      <PfIcon className="fas fa-plus-circle text-lg" />
-                      <span className="font-semibold ml-2"> {t("add_step")->str} </span>
-                    </button>
-                  </div>
-                </div>
+              | Evaluated => formEditor(state, send)
               | VisitLink
               | TakeQuiz
               | SubmitForm

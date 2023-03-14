@@ -214,7 +214,6 @@ let isRequiredStepTitleDuplicated = (checklist, item) => {
 @react.component
 let make = (
   ~checklist,
-  ~form,
   ~checklistItem,
   ~index,
   ~updateChecklistItemCB,
@@ -255,11 +254,11 @@ let make = (
       </div>
       <div>
         <School__InputGroupError
-          message={form ? t("question_cannot_empty") : t("step_cannot_empty")}
+          message={t("question_cannot_empty")}
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
         />
         <School__InputGroupError
-          message={form ? t("not_unique_question") : t("not_unique_step")}
+          message={t("not_unique_question")}
           active={isRequiredStepTitleDuplicated(checklist, checklistItem)}
         />
       </div>

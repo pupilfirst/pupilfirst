@@ -872,15 +872,12 @@ ru:
       move_down: Двигать Вниз
       move_up: Двигать Вверх
       not_unique_question: Не уникальный вопрос; требуемые вопросы должны быть уникальными
-      not_unique_step: Не уникальный этап; требуемые этапы должны быть уникальными
       not_valid_choice: Неверный выбор
       optional: Необязательный
       question_cannot_empty: Вопрос не может быть пустым
       remove_choice: Убрать Выбор
-      step_cannot_empty: Этап не может быть пустым
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Добавить еще один вопрос
-      add_step: Добавить этап
       choose_target_group: Выберите группу задач
       completion_instructions_help: Используйте это, чтобы напомнить ученику о чем-то важном. Эти инструкции будут отображаться рядом с тем местом, где учащиеся выполнят задание.
       completion_instructions_label: Есть ли у вас какие-либо инструкции для ученика?
@@ -914,7 +911,6 @@ ru:
       target_checklist_form_help: На эти вопросы студент должен ответить, чтобы выполнить задание.
       target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу позадаче. Эта информация будет показана ментору для ознакомления.
       target_checklist_label: Какие шаги должен предпринять ученик для достижения этой задачи?
-      target_checklist_limit_warning: Максимально допустимое количество элементов списка - 25!
       target_group: Группа задач
       target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
       target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?

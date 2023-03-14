@@ -1,11 +1,12 @@
 class UpdateTargetChecklistDataForMultiChoice < ActiveRecord::Migration[6.1]
   def up
-    # Get all targets with multi-choice checklist item
-    applicable_targets =
-      Target.where('checklist @> ?', [{ kind: 'multiChoice' }].to_json)
+    # Get all reviewed targets
+    reviewed_targets = Target.where.not("checklist = '[]'")
 
-    applicable_targets.each do |target|
+    reviewed_targets.each do |target|
       checklist = target.checklist
+
+      next if checklist.find { |item| item['kind'] == 'multiChoice' }.nil?
 
       # Update checklist column of target
       updated_checklist =
@@ -24,12 +25,13 @@ class UpdateTargetChecklistDataForMultiChoice < ActiveRecord::Migration[6.1]
       target.update!(checklist: updated_checklist)
     end
 
-    #  Get all evaluated submissions with multiChoice checklist items
-    applicable_submissions =
-      TimelineEvent.where('checklist @> ?', [{ kind: 'multiChoice' }].to_json)
+    #  Get all evaluated submissions
+    evaluated_submissions = TimelineEvent.where.not("checklist = '[]'")
 
-    applicable_submissions.each do |timeline_event|
+    evaluated_submissions.each do |timeline_event|
       checklist = timeline_event.checklist
+
+      next if checklist.find { |item| item['kind'] == 'multiChoice' }.nil?
 
       updated_checklist =
         checklist.map do |item|

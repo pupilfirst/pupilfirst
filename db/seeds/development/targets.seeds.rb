@@ -47,7 +47,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
     target_group.targets.create!(
       title: "Quiz: #{Faker::Lorem.sentence}",
       role: Target.valid_roles.sample,
-      resubmittable: true,
+      resubmittable: false,
       visibility: 'live',
       sort_index: 3
     )

@@ -80,7 +80,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
       checklist: [
         {
           "kind": Target::CHECKLIST_KIND_MULTI_CHOICE,
-          "title": "Have you participated (asked or answered questions) in Pupilfirst School Discord server during WD 101 duration?",
+          "title": "Do you play cricket?",
           "optional": false,
           "metadata": {
             "choices": [
@@ -91,18 +91,18 @@ after 'development:evaluation_criteria', 'development:target_groups' do
         },
         {
           kind: Target::CHECKLIST_KIND_LONG_TEXT,
-          title: "If you have chosen Yes for the previous question on participation in the Discord server, type \"None\" and proceed to the next question.\n\nElse, if you have chosen No, please let us know why?",
+          title: "Describe your cricketing experience",
           optional: false
         },
         {
           "kind": Target::CHECKLIST_KIND_SHORT_TEXT,
-          "title": "Approximately how much time did it take you to complete the WD101 course?",
+          "title": "Are you morning person or night owl?",
           "optional": false,
           "metadata": {}
         },
         {
           "kind": Target::CHECKLIST_KIND_LINK,
-          "title": "Please, fill your github link",
+          "title": "Please, fill your portifolio link",
           "optional": true,
           "metadata": {}
         }

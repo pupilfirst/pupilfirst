@@ -112,6 +112,16 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) =>
   | LongText => t
   }
 
+let updateAllowMultiple = (allowMultiple, t) =>
+  switch t.kind {
+  | MultiChoice(choices, _) => updateKind(MultiChoice(choices, allowMultiple), t)
+  | Files
+  | Link
+  | ShortText
+  | AudioRecord
+  | LongText => t
+  }
+
 let longText = {title: "", kind: LongText, optional: false}
 
 let isFilesKind = t =>

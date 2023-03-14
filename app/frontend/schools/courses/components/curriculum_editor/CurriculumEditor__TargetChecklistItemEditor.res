@@ -28,9 +28,9 @@ let selectedButtonIcon = kind =>
   | Files => "i-file-regular"
   | Link => "i-link-regular"
   | AudioRecord => "i-microphone-outline-regular"
-  | MultiChoice(_choices) => "i-check-circle-alt-regular"
+  | MultiChoice(_choices, _allowMultiple) => "i-check-circle-alt-regular"
   }
-let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
+let checklistDropdown = (checklistItem, updateChecklistItemCB, allowMultiple) => {
   let selectedKind = checklistItem |> ChecklistItem.kind
   let selectedButtonColor = switch selectedKind {
   | LongText => "border-blue-500 bg-blue-100 text-blue-800"
@@ -38,7 +38,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   | Files => "border-yellow-500 bg-yellow-100 text-yellow-800"
   | Link => "border-focusColor-500 bg-focusColor-100 text-focusColor-800"
   | AudioRecord => "border-red-500 bg-red-100 text-red-800"
-  | MultiChoice(_choices) => "border-green-500 bg-green-100 text-green-800"
+  | MultiChoice(_choices, _allowMultiple) => "border-green-500 bg-green-100 text-green-800"
   }
   let selectedIconColor =
     "text-white " ++
@@ -48,7 +48,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     | Files => "bg-yellow-500"
     | Link => "bg-focusColor-500"
     | AudioRecord => "bg-red-500"
-    | MultiChoice(_choices) => "bg-green-500"
+    | MultiChoice(_choices, _allowMultiple) => "bg-green-500"
     }
   let selected =
     <button
@@ -73,7 +73,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     ChecklistItem.LongText,
     ShortText,
     Link,
-    MultiChoice([ts("_yes"), ts("_no")]),
+    MultiChoice([ts("_yes"), ts("_no")], allowMultiple),
     AudioRecord,
     Files,
   ]
@@ -108,22 +108,33 @@ let updateChoiceText = (choiceIndex, checklistItem, updateChecklistItemCB, event
   updateChecklistItemCB(newChecklistItem)
 }
 
+let updateAllowMultiple = (checklistItem, updateChecklistItemCB, event) => {
+  let allowMultiple = ReactEvent.Form.target(event)["checked"]
+  let newChecklistItem = checklistItem |> ChecklistItem.updateAllowMultiple(allowMultiple)
+  updateChecklistItemCB(newChecklistItem)
+}
+
 let multiChoiceEditor = (
   choices,
+  allowMultiple,
   checklistItem,
   removeMultichoiceOption,
   updateChecklistItemCB,
-  isMultiSelectChecked,
-  setIsMultiSelectChecked,
 ) => {
+  // isMultiSelectChecked,
+  // setIsMultiSelectChecked,
+
   <div className="ml-3 mt-3">
     <div className="items-center">
       <input
         className="leading-tight"
         type_="checkbox"
         id="multi-select"
-        checked={isMultiSelectChecked}
-        onChange={event => setIsMultiSelectChecked(ReactEvent.Form.target(event)["checked"])}
+        checked={allowMultiple}
+        onChange={
+          // setIsMultiSelectChecked(ReactEvent.Form.target(event)["checked"])
+          updateAllowMultiple(checklistItem, updateChecklistItemCB)
+        }
       />
       <label className="text-xs text-gray-600 ml-2" htmlFor="multi-select">
         {t("multi_choice") |> str}
@@ -137,7 +148,7 @@ let multiChoiceEditor = (
         <div key={index |> string_of_int}>
           <div className="flex items-center text-sm rounded mt-2">
             {
-              let shape = isMultiSelectChecked ? "square" : "circle"
+              let shape = allowMultiple ? "square" : "circle"
               <span className="text-gray-400">
                 <PfIcon className={j`if i-$shape-light if-fw`} />
               </span>
@@ -215,6 +226,7 @@ let isRequiredStepTitleDuplicated = (checklist, item) => {
 let make = (
   ~checklist,
   ~checklistItem,
+  ~allowMultiple,
   ~index,
   ~updateChecklistItemCB,
   ~removeChecklistItemCB,
@@ -222,14 +234,14 @@ let make = (
   ~moveChecklistItemDownCB=?,
   ~copyChecklistItemCB,
 ) => {
-  let (isMultiSelectChecked, setIsMultiSelectChecked) = React.useState(() => false)
+  // let (isMultiSelectChecked, setIsMultiSelectChecked) = React.useState(() => allowMultiple)
   <div
     key={index |> string_of_int}
     ariaLabel={t("editor_checklist") ++ " " ++ (index + 1 |> string_of_int)}
     className="flex items-start py-2 relative">
     <div className="w-full bg-gray-50 border rounded-lg p-5 mr-1">
       <div className="flex justify-between items-center">
-        <div> {checklistDropdown(checklistItem, updateChecklistItemCB)} </div>
+        <div> {checklistDropdown(checklistItem, updateChecklistItemCB, allowMultiple)} </div>
         <div className="items-center">
           <input
             className="leading-tight"
@@ -263,14 +275,15 @@ let make = (
         />
       </div>
       {switch checklistItem |> ChecklistItem.kind {
-      | MultiChoice(choices) =>
+      | MultiChoice(choices, allowMultiple) =>
         multiChoiceEditor(
           choices,
+          allowMultiple,
           checklistItem,
           removeMultichoiceOption,
           updateChecklistItemCB,
-          isMultiSelectChecked,
-          setIsMultiSelectChecked,
+          // isMultiSelectChecked,
+          // setIsMultiSelectChecked,
         )
       | Files => filesNotice
       | ShortText

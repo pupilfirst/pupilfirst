@@ -556,7 +556,7 @@ feature 'Target Details Editor', js: true do
       expect(target_2_l2.reload.checklist).to eq(expected_checklist)
     end
 
-    scenario 'admin changes the target with an existing checklist to an form submission' do
+    scenario 'admin changes the target with an existing checklist to a form submission' do
       sign_in_user course_author.user,
                    referrer:
                      details_school_course_target_path(

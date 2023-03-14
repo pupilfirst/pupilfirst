@@ -247,7 +247,7 @@ let make = (
       <div className="py-2 mt-2 ">
         <MarkdownEditor
           textareaId={"checklist-item-" ++ (string_of_int(index + 1) ++ "-title")}
-          placeholder={form ? t("describe_question") : t("describe_step")}
+          placeholder={t("describe_question")}
           value={checklistItem->ChecklistItem.title}
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
           profile=Markdown.Permissive

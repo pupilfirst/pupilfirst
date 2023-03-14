@@ -1016,7 +1016,6 @@ en:
       controls_checklist: Controls for checklist item
       copy: Copy
       delete: Delete
-      describe_step: Describe this step
       describe_question: Type your question here
       editor_checklist: Editor for checklist item
       limits_notice: Students can submit up to 3 files, limited to 5 MB each.

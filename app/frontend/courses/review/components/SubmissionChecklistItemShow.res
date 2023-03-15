@@ -117,7 +117,7 @@ let statusButton = (index, status, callback, checklist) =>
 let cardBodyClasses = pending => "pl-7 md:pl-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
-let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
+let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>

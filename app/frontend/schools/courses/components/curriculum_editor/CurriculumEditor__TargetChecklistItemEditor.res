@@ -115,6 +115,7 @@ let updateAllowMultiple = (checklistItem, updateChecklistItemCB, event) => {
 }
 
 let multiChoiceEditor = (
+  index,
   choices,
   allowMultiple,
   checklistItem,
@@ -126,11 +127,12 @@ let multiChoiceEditor = (
       <input
         className="leading-tight"
         type_="checkbox"
-        id="allow-multiple"
+        id={index->string_of_int ++ "-allow-multiple"}
         checked={allowMultiple}
         onChange={updateAllowMultiple(checklistItem, updateChecklistItemCB)}
       />
-      <label className="text-xs text-gray-600 ml-2" htmlFor="allow-multiple">
+      <label
+        className="text-xs text-gray-600 ml-2" htmlFor={index->string_of_int ++ "-allow-multiple"}>
         {t("multi_choice") |> str}
       </label>
     </div>
@@ -269,6 +271,7 @@ let make = (
       {switch checklistItem |> ChecklistItem.kind {
       | MultiChoice(choices, allowMultiple) =>
         multiChoiceEditor(
+          index,
           choices,
           allowMultiple,
           checklistItem,

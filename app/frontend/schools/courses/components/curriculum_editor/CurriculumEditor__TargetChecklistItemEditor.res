@@ -30,7 +30,7 @@ let selectedButtonIcon = kind =>
   | AudioRecord => "i-microphone-outline-regular"
   | MultiChoice(_choices, _allowMultiple) => "i-check-circle-alt-regular"
   }
-let checklistDropdown = (checklistItem, updateChecklistItemCB, allowMultiple) => {
+let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind
   let selectedButtonColor = switch selectedKind {
   | LongText => "border-blue-500 bg-blue-100 text-blue-800"
@@ -73,7 +73,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB, allowMultiple) =>
     ChecklistItem.LongText,
     ShortText,
     Link,
-    MultiChoice([ts("_yes"), ts("_no")], allowMultiple),
+    MultiChoice([ts("_yes"), ts("_no")], false),
     AudioRecord,
     Files,
   ]
@@ -226,7 +226,6 @@ let isRequiredStepTitleDuplicated = (checklist, item) => {
 let make = (
   ~checklist,
   ~checklistItem,
-  ~allowMultiple,
   ~index,
   ~updateChecklistItemCB,
   ~removeChecklistItemCB,
@@ -241,7 +240,7 @@ let make = (
     className="flex items-start py-2 relative">
     <div className="w-full bg-gray-50 border rounded-lg p-5 mr-1">
       <div className="flex justify-between items-center">
-        <div> {checklistDropdown(checklistItem, updateChecklistItemCB, allowMultiple)} </div>
+        <div> {checklistDropdown(checklistItem, updateChecklistItemCB)} </div>
         <div className="items-center">
           <input
             className="leading-tight"

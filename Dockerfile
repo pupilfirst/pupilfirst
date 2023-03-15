@@ -70,7 +70,7 @@ RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
 # Let's also upgrade bundler to the same version used in the build.
-RUN gem install bundler -v '2.3.11'
+RUN gem install bundler -v '2.4.8'
 
 WORKDIR /app
 COPY . /app

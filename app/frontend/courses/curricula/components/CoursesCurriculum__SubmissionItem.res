@@ -113,34 +113,50 @@ let showLongText = (value, id, updateResultCB) =>
     {longTextWarning(value)}
   </div>
 
-let checkboxOnChange = (choices, allowMultiple, itemIndex, updateResultCB, event) =>
-  ReactEvent.Form.target(event)["checked"]
-    ? updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, Some(itemIndex)))
-    : updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, None))
+let checkboxOnChange = (choices, allowMultiple, label, selected, updateResultCB, event) => {
+  let checked = ReactEvent.Form.target(event)["checked"]
+  checked
+    ? updateResultCB(
+        ChecklistItem.MultiChoice(choices, allowMultiple, Js.Array2.concat(selected, [label])),
+      )
+    : updateResultCB(
+        ChecklistItem.MultiChoice(
+          choices,
+          allowMultiple,
+          selected->Js.Array2.filter(i => i != label),
+        ),
+      )
+}
 
-let showMultiChoice = (choices, allowMultiple, choice, id, updateResultCB) =>
-  Js.Array2.mapi(choices, (label, index) => {
-    let checked = Belt.Option.mapWithDefault(choice, false, i => i == index)
+let radioOnChange = (choices, allowMultiple, label, updateResultCB, event) => {
+  let checked = ReactEvent.Form.target(event)["checked"]
+  checked
+    ? updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, [label]))
+    : updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, []))
+}
 
-    if allowMultiple {
+let showMultiChoice = (choices, allowMultiple, selected, id, updateResultCB) =>
+  if allowMultiple {
+    Js.Array2.mapi(choices, (label, index) => {
       <Checkbox
-        key={index |> string_of_int}
-        label={label |> str}
-        id={id ++ (index |> string_of_int)}
-        onChange={checkboxOnChange(choices, allowMultiple, index, updateResultCB)}
-        checked={true}
+        key={index->string_of_int}
+        label={label->str}
+        id={id ++ index->string_of_int}
+        checked={selected->Js.Array2.includes(label)}
+        onChange={checkboxOnChange(choices, allowMultiple, label, selected, updateResultCB)}
       />
-    } else {
+    })->React.array
+  } else {
+    Js.Array2.mapi(choices, (label, index) => {
       <Radio
         key={index |> string_of_int}
         id={id ++ (index |> string_of_int)}
         label
-        onChange={checkboxOnChange(choices, allowMultiple, index, updateResultCB)}
-        checked
+        checked={selected->Js.Array2.includes(label)}
+        onChange={radioOnChange(choices, allowMultiple, label, updateResultCB)}
       />
-    }
-  })->React.array
-
+    })->React.array
+  }
 let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false)
   updateResultCB(ChecklistItem.Files(files |> Array.append([ChecklistItem.makeFile(id, filename)])))

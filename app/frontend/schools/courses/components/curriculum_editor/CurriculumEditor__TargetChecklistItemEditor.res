@@ -121,9 +121,6 @@ let multiChoiceEditor = (
   removeMultichoiceOption,
   updateChecklistItemCB,
 ) => {
-  // isMultiSelectChecked,
-  // setIsMultiSelectChecked,
-
   <div className="ml-3 mt-3">
     <div className="items-center">
       <input
@@ -131,10 +128,7 @@ let multiChoiceEditor = (
         type_="checkbox"
         id="allow-multiple"
         checked={allowMultiple}
-        onChange={
-          // setIsMultiSelectChecked(ReactEvent.Form.target(event)["checked"])
-          updateAllowMultiple(checklistItem, updateChecklistItemCB)
-        }
+        onChange={updateAllowMultiple(checklistItem, updateChecklistItemCB)}
       />
       <label className="text-xs text-gray-600 ml-2" htmlFor="allow-multiple">
         {t("multi_choice") |> str}
@@ -233,7 +227,6 @@ let make = (
   ~moveChecklistItemDownCB=?,
   ~copyChecklistItemCB,
 ) => {
-  // let (isMultiSelectChecked, setIsMultiSelectChecked) = React.useState(() => allowMultiple)
   <div
     key={index |> string_of_int}
     ariaLabel={t("editor_checklist") ++ " " ++ (index + 1 |> string_of_int)}
@@ -281,8 +274,6 @@ let make = (
           checklistItem,
           removeMultichoiceOption,
           updateChecklistItemCB,
-          // isMultiSelectChecked,
-          // setIsMultiSelectChecked,
         )
       | Files => filesNotice
       | ShortText

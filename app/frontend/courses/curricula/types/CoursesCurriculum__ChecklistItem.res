@@ -8,11 +8,12 @@ type rec result =
   | Link(string)
   | ShortText(string)
   | LongText(string)
-  | MultiChoice(choices, allowMultiple, option<int>)
+  | MultiChoice(choices, allowMultiple, selected)
   | AudioRecord(file)
 
 and choices = array<string>
 and allowMultiple = bool
+and selected = array<string>
 
 type t = {
   title: string,
@@ -37,7 +38,7 @@ let fromTargetChecklistItem = targetChecklist =>
     | Link => Link("")
     | ShortText => ShortText("")
     | LongText => LongText("")
-    | MultiChoice(choices, allowMultiple) => MultiChoice(choices, allowMultiple, None)
+    | MultiChoice(choices, allowMultiple) => MultiChoice(choices, allowMultiple, [])
     | AudioRecord => AudioRecord({id: "", name: ""})
     }
     make(~title, ~optional, ~result)
@@ -83,10 +84,7 @@ let resultAsJson = t => {
   | LongText(t) =>
     t->string
   | AudioRecord(file) => file.id->string
-  | MultiChoice(choices, allowMUltiple, index) =>
-    string(
-      index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default(""),
-    )
+  | MultiChoice(_, _, selected) => selected->stringArray
   }
 }
 
@@ -102,8 +100,7 @@ let validLongText = s => validString(s, 5000)
 
 let validFiles = files => files != [] && files |> Array.length < 4
 
-let validMultiChoice = (choices, index) =>
-  index |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)
+let validMultiChoice = selected => selected |> Array.length > 0
 
 let validResponse = (response, allowBlank) => {
   let optional = allowBlank ? response.optional : false
@@ -117,9 +114,9 @@ let validResponse = (response, allowBlank) => {
   | (ShortText(t), true) => validShortText(t) || t == ""
   | (LongText(t), false) => validLongText(t)
   | (LongText(t), true) => validLongText(t) || t == ""
-  | (MultiChoice(choices, allowMultiple, index), false) => validMultiChoice(choices, index)
-  | (MultiChoice(choices, allowMultiple, index), true) =>
-    validMultiChoice(choices, index) || index == None
+  | (MultiChoice(_choices, _allowMultiple, selected), false) => validMultiChoice(selected)
+  | (MultiChoice(_choices, _allowMultiple, selected), true) =>
+    validMultiChoice(selected) || selected |> ArrayUtils.isEmpty
   | (AudioRecord(_), true) => true
   | (AudioRecord(file), false) => file.id != ""
   }

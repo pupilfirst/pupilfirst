@@ -129,14 +129,14 @@ let multiChoiceEditor = (
       <input
         className="leading-tight"
         type_="checkbox"
-        id="multi-select"
+        id="allow-multiple"
         checked={allowMultiple}
         onChange={
           // setIsMultiSelectChecked(ReactEvent.Form.target(event)["checked"])
           updateAllowMultiple(checklistItem, updateChecklistItemCB)
         }
       />
-      <label className="text-xs text-gray-600 ml-2" htmlFor="multi-select">
+      <label className="text-xs text-gray-600 ml-2" htmlFor="allow-multiple">
         {t("multi_choice") |> str}
       </label>
     </div>

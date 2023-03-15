@@ -122,8 +122,12 @@ feature 'Target Details Editor', js: true do
     within('div#evaluated') { click_button 'No' }
 
     expect(page).to have_button('Submit a form to complete the target.')
-    within('div#method_of_completion') { click_button 'Submit a form to complete the target.' }
-    expect(page).to have_text('What are the questions you would like the student to answer?')
+    within('div#method_of_completion') do
+      click_button 'Submit a form to complete the target.'
+    end
+    expect(page).to have_text(
+      'What are the questions you would like the student to answer?'
+    )
     expect(page).to_not have_text('At least one has to be selected')
 
     click_button 'Update Target'
@@ -443,6 +447,8 @@ feature 'Target Details Editor', js: true do
 
         expect(page).to_not have_selector('.i-times-regular')
 
+        check 'Allow multiple selections'
+
         fill_in 'multichoice-input-1',
                 with: 'First Choice',
                 fill_options: {
@@ -535,7 +541,8 @@ feature 'Target Details Editor', js: true do
           'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
           'title' => 'Choose one item',
           'metadata' => {
-            'choices' => ['First Choice', 'Another Choice']
+            'choices' => ['First Choice', 'Another Choice'],
+            'allowMultiple' => true
           },
           'optional' => false
         },
@@ -688,14 +695,17 @@ feature 'Target Details Editor', js: true do
 
       # dismiss_notification
 
-
       # expect(target_2_l2.reload.checklist).to eq(expected_checklist)
 
-      within("div#evaluated") { click_button 'No' }
-      within('div#method_of_completion') { click_button 'Submit a form to complete the target.' }
-      expect(page).to have_text('What are the questions you would like the student to answer?')
+      within('div#evaluated') { click_button 'No' }
+      within('div#method_of_completion') do
+        click_button 'Submit a form to complete the target.'
+      end
+      expect(page).to have_text(
+        'What are the questions you would like the student to answer?'
+      )
       expect(page).to have_button('Add another question')
-      expect(page).to_not have_text("evaluation criteria")
+      expect(page).to_not have_text('evaluation criteria')
 
       click_button 'Add another question'
 
@@ -705,7 +715,7 @@ feature 'Target Details Editor', js: true do
         click_on 'Write Long Text'
         click_on 'Record Audio'
         fill_in 'checklist-item-6-title',
-                with: 'Title for audio item 1',
+                with: 'Title for audio item 2',
                 fill_options: {
                   clear: :backspace
                 }
@@ -728,6 +738,7 @@ feature 'Target Details Editor', js: true do
           'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
           'title' => 'Choose one item',
           'metadata' => {
+            'allowMultiple' => false,
             'choices' => ['First Choice', 'Another Choice']
           },
           'optional' => false
@@ -746,7 +757,7 @@ feature 'Target Details Editor', js: true do
         },
         {
           'kind' => Target::CHECKLIST_KIND_AUDIO,
-          'title' => 'Title for audio item',
+          'title' => 'Title for audio item 2',
           'metadata' => {},
           'optional' => false
         }
@@ -859,7 +870,7 @@ feature 'Target Details Editor', js: true do
       end
 
       expect(page).to have_text(
-        'This target has no steps. Students will be able to submit target without any action!'
+        'There are currently no questions for the student to submit. The target needs to have atleast one question.'
       )
 
       find("button[title='Select #{evaluation_criterion.display_name}']").click
@@ -912,7 +923,7 @@ feature 'Target Details Editor', js: true do
         click_button 'Add another question'
 
         expect(page).to have_text('Question cannot be empty')
-        expect(page).to have_text('Maximum allowed checklist items is 25')
+        expect(page).to have_text('Maximum allowed questions is 25!')
         expect(page).not_to have_button('Add another question')
       end
     end

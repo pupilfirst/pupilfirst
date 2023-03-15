@@ -12,6 +12,7 @@ let kindIconClasses = result =>
   | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
   | MultiChoice(
       _choices,
+      _allowMultiple,
       _selected,
     ) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
@@ -112,22 +113,31 @@ let showLongText = (value, id, updateResultCB) =>
     {longTextWarning(value)}
   </div>
 
-let checkboxOnChange = (choices, itemIndex, updateResultCB, event) =>
+let checkboxOnChange = (choices, allowMultiple, itemIndex, updateResultCB, event) =>
   ReactEvent.Form.target(event)["checked"]
-    ? updateResultCB(ChecklistItem.MultiChoice(choices, Some(itemIndex)))
-    : updateResultCB(ChecklistItem.MultiChoice(choices, None))
+    ? updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, Some(itemIndex)))
+    : updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, None))
 
-let showMultiChoice = (choices, choice, id, updateResultCB) =>
+let showMultiChoice = (choices, allowMultiple, choice, id, updateResultCB) =>
   Js.Array2.mapi(choices, (label, index) => {
     let checked = Belt.Option.mapWithDefault(choice, false, i => i == index)
 
-    <Radio
-      key={index |> string_of_int}
-      id={id ++ (index |> string_of_int)}
-      label
-      onChange={checkboxOnChange(choices, index, updateResultCB)}
-      checked
-    />
+    if allowMultiple {
+      <Checkbox
+        key={index |> string_of_int}
+        id={id ++ (index |> string_of_int)}
+        onChange={checkboxOnChange(choices, allowMultiple, index, updateResultCB)}
+        checked={true}
+      />
+    } else {
+      <Radio
+        key={index |> string_of_int}
+        id={id ++ (index |> string_of_int)}
+        label
+        onChange={checkboxOnChange(choices, allowMultiple, index, updateResultCB)}
+        checked
+      />
+    }
   })->React.array
 
 let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
@@ -200,7 +210,8 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
       | Link(link) => showLink(link, id, updateResultCB)
       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
       | LongText(longText) => showLongText(longText, id, updateResultCB)
-      | MultiChoice(choices, selected) => showMultiChoice(choices, selected, id, updateResultCB)
+      | MultiChoice(choices, allowMultiple, selected) =>
+        showMultiChoice(choices, allowMultiple, selected, id, updateResultCB)
       | AudioRecord(_) => showAudioRecorder(attachingCB, updateResultCB, preview)
       }}
     </div>

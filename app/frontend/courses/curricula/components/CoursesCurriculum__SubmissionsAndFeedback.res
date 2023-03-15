@@ -131,9 +131,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
         <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
           <SubmissionChecklistShow
-            checklist={submission |> Submission.checklist}
-            updateChecklistCB=None
-            pending={submission |> Submission.pending}
+            checklist={submission |> Submission.checklist} updateChecklistCB=None
           />
         </div>
         {switch submission |> Submission.status {

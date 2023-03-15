@@ -75,6 +75,12 @@ let showStatus = status =>
   | NoAnswer => React.null
   }
 
+let showChoices = choices => {
+  choices
+  ->Js.Array2.map(choice => <p className="text-sm text-gray-800"> {("- " ++ choice)->str} </p>)
+  ->React.array
+}
+
 let statusButtonSelectedClasses = (status, currentStatus) =>
   "inline-flex items-center cursor-pointer leading-tight font-semibold inline-block text-xs relative hover:bg-gray-50 hover:text-gray-600 " ++
   switch ((currentStatus: ChecklistItem.status), (status: ChecklistItem.status)) {
@@ -117,7 +123,7 @@ let statusButton = (index, status, callback, checklist) =>
 let cardBodyClasses = pending => "pl-7 md:pl-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
-let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
+let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>
@@ -140,7 +146,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
         | ShortText(text) => <div> {text->str} </div>
         | LongText(markdown) => <MarkdownBlock profile=Markdown.Permissive markdown />
         | Link(link) => showlink(link)
-        | MultiChoice(text) => <div> {text->str} </div>
+        | MultiChoice(choices) => <div className="space-y-2"> {showChoices(choices)} </div>
         | Files(files) => showFiles(files)
         | AudioRecord(file) => <audio src={file.url} controls=true />
         }}

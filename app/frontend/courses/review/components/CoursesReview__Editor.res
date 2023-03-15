@@ -1290,7 +1290,7 @@ let make = (
             </div>
           </div>
           <div className="p-4 md:p-6">
-            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
+            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
           {switch submissionReport {
           | Some(report) =>

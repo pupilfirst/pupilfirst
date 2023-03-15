@@ -9,7 +9,7 @@ type result =
   | LongText(string)
   | Link(string)
   | Files(array<file>)
-  | MultiChoice(string)
+  | MultiChoice(array<string>)
   | AudioRecord(file)
 
 type status =
@@ -52,7 +52,7 @@ let makeResult = (json, kind, files) => {
   | "longText" => LongText(json |> field("result", string))
   | "audio" => AudioRecord(findAudioFile(files, json |> field("result", string)))
   | "link" => Link(json |> field("result", string))
-  | "multiChoice" => MultiChoice(json |> field("result", string))
+  | "multiChoice" => MultiChoice(json |> field("result", array(string)))
   | "files" => Files(findFiles(files, json |> field("result", array(string))))
   | randomKind =>
     Rollbar.error(
@@ -118,9 +118,9 @@ let encodeResult = t => {
   switch t.result {
   | ShortText(t)
   | LongText(t)
-  | Link(t)
-  | MultiChoice(t) =>
+  | Link(t) =>
     string(t)
+  | MultiChoice(t) => stringArray(t)
   | AudioRecord(file) => string(file.id)
   | Files(files) => stringArray(Js.Array.map(file => file.id, files))
   }

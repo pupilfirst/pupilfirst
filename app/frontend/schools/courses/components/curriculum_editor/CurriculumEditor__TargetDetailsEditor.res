@@ -694,14 +694,33 @@ let quizEditor = (state, send) =>
     </div>
   </div>
 
-let doRequiredStepsHaveUniqueTitles = checklist => {
+let hasValidChecklist = checklist => {
   let requiredSteps = checklist |> Js.Array.filter(item => !(item |> ChecklistItem.optional))
 
-  requiredSteps
-  |> Js.Array.map(ChecklistItem.title)
-  |> Js.Array.map(String.trim)
-  |> ArrayUtils.distinct
-  |> Js.Array.length == Js.Array.length(requiredSteps)
+  let hasUniqueTitles =
+    requiredSteps
+    ->Js.Array2.map(ChecklistItem.title)
+    ->Js.Array2.map(String.trim)
+    ->ArrayUtils.distinct
+    ->Js.Array.length == Js.Array.length(requiredSteps)
+
+  let multiChoiceSteps = checklist->Js.Array2.filter(item =>
+    switch ChecklistItem.kind(item) {
+    | MultiChoice(_, _) => true
+    | _ => false
+    }
+  )
+
+  let hasValidChoices = multiChoiceSteps->Js.Array2.every(item =>
+    switch ChecklistItem.kind(item) {
+    | MultiChoice(choices, _) =>
+      choices->Js.Array2.map(String.trim)->ArrayUtils.distinct->Js.Array.length ==
+        Js.Array.length(choices)
+    | _ => false
+    }
+  )
+
+  hasUniqueTitles && hasValidChoices
 }
 
 let isValidTitle = title => title |> String.trim |> String.length > 0
@@ -776,17 +795,6 @@ let isValidMethodOfCompletion = state =>
   | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   }
 
-let saveDisabled = (
-  ~hasValidTitle,
-  ~hasValidMethodOfCompletion,
-  ~requiredStepsHaveUniqueTitles,
-  ~dirty,
-  ~saving,
-) =>
-  !requiredStepsHaveUniqueTitles ||
-  (!hasValidTitle ||
-  (!hasValidMethodOfCompletion || (!dirty || saving)))
-
 module UpdateTargetQuery = %graphql(`
    mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
@@ -800,11 +808,11 @@ let updateTargetButton = (
   ~state,
   ~hasValidTitle,
   ~hasValidMethodOfCompletion,
-  ~requiredStepsHaveUniqueTitles,
+  ~hasValidChecklist,
 ) => {
   let onClick = Belt.Option.map(state.targetGroupId, callback)
   let disabled =
-    !requiredStepsHaveUniqueTitles ||
+    !hasValidChecklist ||
     (!hasValidTitle ||
     (!hasValidMethodOfCompletion || (!state.dirty || (state.saving || onClick == None))))
 
@@ -936,7 +944,7 @@ let make = (
     None
   }, [state.dirty])
 
-  let requiredStepsHaveUniqueTitles = doRequiredStepsHaveUniqueTitles(state.checklist)
+  let hasValidChecklist = hasValidChecklist(state.checklist)
   let hasValidTitle = isValidTitle(state.title)
   let hasValidMethodOfCompletion = isValidMethodOfCompletion(state)
 
@@ -1112,7 +1120,7 @@ let make = (
                     ~state,
                     ~hasValidTitle,
                     ~hasValidMethodOfCompletion,
-                    ~requiredStepsHaveUniqueTitles,
+                    ~hasValidChecklist,
                   )}
                 </div>
               </div>

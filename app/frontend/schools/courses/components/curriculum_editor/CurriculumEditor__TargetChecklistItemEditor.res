@@ -176,6 +176,12 @@ let multiChoiceEditor = (
       )
       |> React.array
     }
+    <div>
+      <School__InputGroupError
+        message={t("choices_not_unique")}
+        active={ArrayUtils.distinct(choices)->Js.Array.length != Js.Array2.length(choices)}
+      />
+    </div>
     <button
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
       className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-300 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">

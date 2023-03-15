@@ -1024,6 +1024,7 @@ en:
       multi_choice: Allow multiple selections
       not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: Not a valid choice
+      choices_not_unique: Choices must be unique
       optional: Optional
       question_cannot_empty: Question cannot be empty
       remove_choice: Remove Choice

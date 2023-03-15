@@ -297,6 +297,7 @@ ru:
         placeholder: Описание Главных Моментов
       move_down: Двинуть вниз
       move_up: Двинуть вверх
+      multi_choice: Разрешить множественный выбор
       select: Выбрать
       selected_button:
         title: Выбрать Иконку

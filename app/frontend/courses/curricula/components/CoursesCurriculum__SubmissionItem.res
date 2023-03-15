@@ -125,6 +125,7 @@ let showMultiChoice = (choices, allowMultiple, choice, id, updateResultCB) =>
     if allowMultiple {
       <Checkbox
         key={index |> string_of_int}
+        label={label |> str}
         id={id ++ (index |> string_of_int)}
         onChange={checkboxOnChange(choices, allowMultiple, index, updateResultCB)}
         checked={true}

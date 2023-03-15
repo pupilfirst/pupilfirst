@@ -100,7 +100,9 @@ let validLongText = s => validString(s, 5000)
 
 let validFiles = files => files != [] && files |> Array.length < 4
 
-let validMultiChoice = selected => selected |> Array.length > 0
+let validMultiChoice = (selected, choices) => {
+  selected->ArrayUtils.isNotEmpty && selected->Js.Array2.every(s => choices->Js.Array2.includes(s))
+}
 
 let validResponse = (response, allowBlank) => {
   let optional = allowBlank ? response.optional : false
@@ -114,9 +116,9 @@ let validResponse = (response, allowBlank) => {
   | (ShortText(t), true) => validShortText(t) || t == ""
   | (LongText(t), false) => validLongText(t)
   | (LongText(t), true) => validLongText(t) || t == ""
-  | (MultiChoice(_choices, _allowMultiple, selected), false) => validMultiChoice(selected)
-  | (MultiChoice(_choices, _allowMultiple, selected), true) =>
-    validMultiChoice(selected) || selected |> ArrayUtils.isEmpty
+  | (MultiChoice(choices, _allowMultiple, selected), false) => validMultiChoice(selected, choices)
+  | (MultiChoice(choices, _allowMultiple, selected), true) =>
+    selected |> ArrayUtils.isEmpty || validMultiChoice(selected, choices)
   | (AudioRecord(_), true) => true
   | (AudioRecord(file), false) => file.id != ""
   }

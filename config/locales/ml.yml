@@ -576,14 +576,17 @@ ml:
       close_button: അടയ്ക്കുക
       completion_tab_complete: പൂർത്തിയാക്കുക
       completion_tab_completed: പൂർത്തിയാക്കി
+      completion_tab_form_response: Form Responses
       completion_tab_locked: പൂട്ടി
       completion_tab_mark_complete: പൂർത്തിയായതായി അടയാളപ്പെടുത്തുക
       completion_tab_quiz_result: ക്വിസ് ഫലം
       completion_tab_submissions: സമർപ്പിക്കലുകളും ഫീഡ്‌ബാക്കും
+      completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: ക്വിസ് എടുക്കുക
       completion_tab_visit_link: പൂർത്തിയാക്കാൻ ലിങ്ക് സന്ദർശിക്കുക
       discuss_tab: ചർച്ച ചെയ്യുക
       learn_cta_submit_work: അവലോകനത്തിനായി ജോലി സമർപ്പിക്കുക
+      learn_cta_submit_form: Submit Form
       learn_cta_take_quiz: ഒരു ക്വിസ് എടുക്കുക
       learn_tab: പഠിക്കുക
       next_target_button: അടുത്ത ലക്ഷ്യം
@@ -614,9 +617,11 @@ ml:
       warning_length_limit: നിങ്ങളുടെ ഉത്തരം 5000 പ്രതീകങ്ങളിൽ താഴെ നീളത്തിൽ സൂക്ഷിക്കുക.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: മറ്റൊന്ന് ചേർക്കുക
+      add_another_response: Add another response
       add_another_submission: മറ്റൊരു സമർപ്പണം ചേർക്കുക
       cancel: റദ്ദാക്കുക
       completed: പൂർത്തിയാക്കി
+      form_response_number: "Response #"
       grading: ഗ്രേഡിംഗ്
       pending_review: അവശേഷിക്കുന്ന നിരൂപണം
       rejected: നിരസിച്ചു
@@ -625,6 +630,7 @@ ml:
       submitted_on: "ന് സമർപ്പിച്ചു "
       unknown_coach: അജ്ഞാത കോച്ച്
       your_submissions: നിങ്ങളുടെ സമർപ്പിക്കലുകൾ
+      your_responses: Your Responses
     CoursesCurriculum__TargetStatus:
       access_locked: നിങ്ങൾക്ക് ഇപ്പോൾ കോഴ്‌സിലേക്ക് പരിമിതമായ ആക്‌സസ് മാത്രമേയുള്ളൂ. നിങ്ങൾക്ക് ഉള്ളടക്കം പ്രിവ്യൂ ചെയ്യാൻ അനുവാദമുണ്ട് എന്നാൽ ഒരു ലക്ഷ്യവും പൂർത്തിയാക്കാൻ കഴിയില്ല.
       course_locked: ഈ കോഴ്സ് അവസാനിച്ചു.
@@ -1007,19 +1013,20 @@ ml:
       controls_checklist: ചെക്ക്‌ലിസ്റ്റ് ഇനത്തിനുള്ള നിയന്ത്രണങ്ങൾ
       copy: പകർത്തുക
       delete: ഇല്ലാതാക്കുക
-      describe_step: ഈ ഘട്ടം വിവരിക്കുക
+      describe_question: Type your question here
       editor_checklist: ചെക്ക്‌ലിസ്റ്റ് ഇനത്തിനായുള്ള എഡിറ്റർ
       limits_notice: വിദ്യാർത്ഥികൾക്ക് 3 ഫയലുകൾ വരെ സമർപ്പിക്കാം, ഓരോന്നിനും 5 MB ആയി പരിമിതപ്പെടുത്തിയിരിക്കുന്നു.
       move_down: താഴേക്ക് നീക്കുക
       move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
-      not_unique_step: അതുല്യമായ ഒരു നടപടിയല്ല; ആവശ്യമായ ഘട്ടങ്ങൾ അദ്വിതീയമായിരിക്കണം
+      multi_choice: Allow multiple selections
+      not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: സാധുവായ ഒരു തിരഞ്ഞെടുപ്പല്ല
+      choices_not_unique: Choices must be unique
       optional: ഓപ്ഷണൽ
+      question_cannot_empty: Question cannot be empty
       remove_choice: ചോയ്സ് നീക്കം ചെയ്യുക
-      step_cannot_empty: ഘട്ടം ശൂന്യമാക്കാൻ കഴിയില്ല
     CurriculumEditor__TargetDetailsEditor:
-      add_another_question: മറ്റൊരു ചോദ്യം ചേർക്കുക
-      add_step: ഒരു ഘട്ടം ചേർക്കുക
+      add_another_question: Add another question
       choose_target_group: ഒരു ടാർഗെറ്റ് ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക
       completion_instructions:
         help: പ്രധാനപ്പെട്ട ഒരു കാര്യത്തെക്കുറിച്ച് വിദ്യാർത്ഥിയെ ഓർമ്മിപ്പിക്കാൻ ഇത് ഉപയോഗിക്കുക. വിദ്യാർത്ഥികൾ ലക്ഷ്യം പൂർത്തീകരിക്കുന്ന സ്ഥലത്തിന് സമീപം ഈ നിർദ്ദേശങ്ങൾ പ്രദർശിപ്പിക്കും.
@@ -1027,7 +1034,7 @@ ml:
         label: നിങ്ങൾക്ക് വിദ്യാർത്ഥിക്ക് എന്തെങ്കിലും പൂർത്തീകരണ നിർദ്ദേശങ്ങൾ ഉണ്ടോ?
       could_not_find: ഐഡി ഉപയോഗിച്ച് തിരഞ്ഞെടുത്ത മൂല്യനിർണ്ണയ മാനദണ്ഡം കണ്ടെത്താൻ കഴിഞ്ഞില്ല
       describe_submission: നിങ്ങളുടെ സമർപ്പണം വിവരിക്കുക
-      empty_checklist_warning: ഈ ലക്ഷ്യത്തിന് നടപടികളില്ല. ഒരു നടപടിയും കൂടാതെ വിദ്യാർത്ഥികൾക്ക് ലക്ഷ്യം സമർപ്പിക്കാൻ കഴിയും!
+      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: സാധുവായ ഒരു ലിങ്ക് നൽകുക
       enter_valid_title: സാധുവായ ഒരു ശീർഷകം നൽകുക
       link_complete: പൂർത്തിയാക്കാനുള്ള ലിങ്ക്
@@ -1048,12 +1055,15 @@ ml:
       select_criterion_warning: കുറഞ്ഞത് ഒരാളെയെങ്കിലും തിരഞ്ഞെടുക്കണം
       selected_all_targets: നിങ്ങൾ എല്ലാ ലക്ഷ്യങ്ങളും തിരഞ്ഞെടുത്തു
       submit_individually: എല്ലാ വിദ്യാർത്ഥികളും വ്യക്തിഗതമായി സമർപ്പിക്കണം.
+      submit_form: Submit a form to complete the target.
       take_quiz: ലക്ഷ്യം പൂർത്തിയാക്കാൻ ഒരു ക്വിസ് എടുക്കുക.
       target_checklist:
+        form_label: What are the questions you would like the student to answer?
+        form_limit_warning: Maximum allowed questions is 25!
+        form_help: These are the questions a student must answer to complete the target.
         help: ഒരു ലക്ഷ്യത്തിൽ ജോലി സമർപ്പിക്കാൻ ഒരു വിദ്യാർത്ഥി പൂർത്തിയാക്കേണ്ട ഘട്ടങ്ങളാണിത്. ഈ വിവരം കോച്ചിനെ അവലോകനത്തിനായി കാണിക്കും.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: ഈ ലക്ഷ്യം പൂർത്തിയാക്കാൻ വിദ്യാർത്ഥി എന്ത് നടപടികളാണ് സ്വീകരിക്കേണ്ടത്?
-        limit_warning: അനുവദനീയമായ ചെക്ക്‌ലിസ്റ്റ് ഇനങ്ങൾ 25 ആണ്!
       target_group: ടാർഗെറ്റ് ഗ്രൂപ്പ്
       target_method_of_completion_label: വിദ്യാർത്ഥി ലക്ഷ്യം എങ്ങനെ പൂർത്തിയാക്കണമെന്നാണ് നിങ്ങൾ ആഗ്രഹിക്കുന്നത്?
       target_reviewed_by_coach: ഈ ലക്ഷ്യത്തെക്കുറിച്ചുള്ള സമർപ്പണങ്ങൾ ഒരു പരിശീലകൻ അവലോകനം ചെയ്യുമോ?
@@ -2190,6 +2200,7 @@ ml:
       success_notification: വിദ്യാർത്ഥി വിജയകരമായി സൃഷ്ടിച്ചു.
     create_submission:
       blocked_submission_status_error: ഈ ലക്ഷ്യത്തിന്റെ നില %{target_status}ആണ്, അതിനാൽ നിങ്ങൾക്ക് ഒരു പുതിയ സമർപ്പണം ചേർക്കാൻ കഴിയില്ല; ദയവായി പേജ് വീണ്ടും ലോഡുചെയ്യുക
+      form_success_notification: Your response has been saved.
       invalid_files_attached: അറ്റാച്ചുചെയ്ത ചില ഫയലുകൾ അസാധുവാണ്
       invalid_submission_checklist: സമർപ്പിക്കൽ ചെക്ക്‌ലിസ്റ്റ് സാധുതയുള്ളതല്ല.
       item_file_limit_error: ഒരു സമർപ്പണ ഇനത്തിൽ മൂന്നിൽ കൂടുതൽ ഫയലുകൾ അറ്റാച്ചുചെയ്യാൻ കഴിയില്ല

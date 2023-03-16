@@ -576,14 +576,17 @@ hi:
       close_button: बंद करना
       completion_tab_complete: पूरा
       completion_tab_completed: पूरा हुआ
+      completion_tab_form_response: Form Responses
       completion_tab_locked: बंद
       completion_tab_mark_complete: पूर्ण के रूप में चिह्नित करें
       completion_tab_quiz_result: प्रश्नोत्तरी परिणाम
       completion_tab_submissions: सबमिशन और फीडबैक
+      completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: प्रश्नोत्तरी लें
       completion_tab_visit_link: पूरा करने के लिए लिंक पर जाएं
       discuss_tab: विचार-विमर्श करना
       learn_cta_submit_work: समीक्षा के लिए कार्य सबमिट करें
+      learn_cta_submit_form: Submit Form
       learn_cta_take_quiz: कोई प्रश्नोत्तरी लें
       learn_tab: सीखना
       next_target_button: अगला निशाना
@@ -614,9 +617,11 @@ hi:
       warning_length_limit: कृपया अपना उत्तर 5000 वर्णों से कम लंबा रखें।
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: एक और जोड़ें
+      add_another_response: Add another response
       add_another_submission: एक और सबमिशन जोड़ें
       cancel: रद्द करना
       completed: पूरा हुआ
+      form_response_number: "Response #"
       grading: ग्रेडिंग
       pending_review: लंबित समीक्षा
       rejected: अस्वीकृत
@@ -625,6 +630,7 @@ hi:
       submitted_on: "पर प्रस्तुत की "
       unknown_coach: अज्ञात कोच
       your_submissions: आपके सबमिशन
+      your_responses: Your Responses
     CoursesCurriculum__TargetStatus:
       access_locked: अब आपके पास पाठ्यक्रम तक सीमित पहुंच है। आपको सामग्री का पूर्वावलोकन करने की अनुमति है लेकिन कोई लक्ष्य पूरा नहीं कर सकते।
       course_locked: यह कोर्स समाप्त हो गया है।
@@ -1007,19 +1013,20 @@ hi:
       controls_checklist: चेकलिस्ट आइटम के लिए नियंत्रण
       copy: प्रतिलिपि
       delete: मिटाना
-      describe_step: इस चरण का वर्णन करें
+      describe_question: Type your question here
       editor_checklist: चेकलिस्ट आइटम के लिए संपादक
       limits_notice: छात्र अधिकतम 3 फाइलें जमा कर सकते हैं, प्रत्येक 5 एमबी तक सीमित।
       move_down: नीचे की ओर
       move_up: बढ़ाना
-      not_unique_step: एक अनूठा कदम नहीं; आवश्यक कदम अद्वितीय होने चाहिए
+      multi_choice: Allow multiple selections
+      not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: मान्य विकल्प नहीं
+      choices_not_unique: Choices must be unique
       optional: वैकल्पिक
+      question_cannot_empty: Question cannot be empty
       remove_choice: पसंद हटाएं
-      step_cannot_empty: चरण खाली नहीं हो सकता
     CurriculumEditor__TargetDetailsEditor:
-      add_another_question: एक और प्रश्न जोड़ें
-      add_step: एक चरण जोड़ें
+      add_another_question: Add another question
       choose_target_group: एक लक्ष्य समूह चुनें
       completion_instructions:
         help: इसका उपयोग विद्यार्थी को किसी महत्वपूर्ण बात के बारे में याद दिलाने के लिए करें। जहां छात्र लक्ष्य पूरा करते हैं, वहां ये निर्देश प्रदर्शित किए जाएंगे।
@@ -1027,7 +1034,7 @@ hi:
         label: क्या आपके पास छात्र के लिए कोई पूर्णता निर्देश है?
       could_not_find: आईडी के साथ चयनित मूल्यांकन मानदंड नहीं मिल सका
       describe_submission: अपने सबमिशन का वर्णन करें
-      empty_checklist_warning: इस लक्ष्य का कोई चरण नहीं है। बिना कार्रवाई के जमा कर सकेंगे छात्र!
+      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: एक मान्य लिंक दर्ज करें
       enter_valid_title: एक मान्य शीर्षक दर्ज करें
       link_complete: पूरा करने के लिए लिंक
@@ -1048,12 +1055,15 @@ hi:
       select_criterion_warning: कम से कम एक का चयन करना होगा
       selected_all_targets: आपने सभी लक्ष्य चुन लिए हैं
       submit_individually: सभी छात्रों को व्यक्तिगत रूप से जमा करना होगा।
+      submit_form: Submit a form to complete the target.
       take_quiz: लक्ष्य को पूरा करने के लिए एक प्रश्नोत्तरी लें।
       target_checklist:
+        form_label: What are the questions you would like the student to answer?
+        form_limit_warning: Maximum allowed questions is 25!
+        form_help: These are the questions a student must answer to complete the target.
         help: लक्ष्य पर काम जमा करने के लिए एक छात्र को ये चरण पूरे करने होंगे। यह जानकारी कोच को समीक्षा के लिए दिखाई जाएगी।
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: इस लक्ष्य को पूरा करने के लिए विद्यार्थी को क्या कदम उठाने चाहिए?
-        limit_warning: अधिकतम अनुमत चेकलिस्ट आइटम 25 है!
       target_group: लक्ष्य समूह
       target_method_of_completion_label: आप कैसे चाहते हैं कि छात्र लक्ष्य को पूरा करे?
       target_reviewed_by_coach: क्या कोई कोच इस लक्ष्य पर सबमिशन की समीक्षा करेगा?
@@ -2190,6 +2200,7 @@ hi:
       success_notification: छात्र सफलतापूर्वक बनाया गया।
     create_submission:
       blocked_submission_status_error: इस लक्ष्य की स्थिति %{target_status}है, इसलिए आप एक नया सबमिशन नहीं जोड़ सकते; कृपया पृष्ठ को फिर से लोड करें
+      form_success_notification: Your response has been saved.
       invalid_files_attached: संलग्न कुछ फ़ाइलें अमान्य हैं
       invalid_submission_checklist: सबमिशन चेकलिस्ट मान्य नहीं है।
       item_file_limit_error: सबमिशन आइटम में तीन से अधिक फाइलें संलग्न नहीं की जा सकतीं

@@ -304,7 +304,7 @@ let make = (
         ~title=t("move_down"),
         ~handler=moveChecklistItemDownCB |> OptionUtils.map((cb, _) => cb()),
       )}
-      {controlIcon(~icon="fa-copy", ~title=t("Copy"), ~handler=Some(_ => copyChecklistItemCB()))}
+      {controlIcon(~icon="fa-copy", ~title=t("copy"), ~handler=Some(_ => copyChecklistItemCB()))}
       {controlIcon(
         ~icon="fa-trash-alt",
         ~title=t("delete"),

@@ -123,7 +123,7 @@ let multiChoiceEditor = (
   updateChecklistItemCB,
 ) => {
   <div className="ml-3 mt-3">
-    <div className="items-center">
+    <div className="flex items-center">
       <input
         className="leading-tight"
         type_="checkbox"
@@ -136,7 +136,7 @@ let multiChoiceEditor = (
         {t("multi_choice") |> str}
       </label>
     </div>
-    <div className="text-xs font-semibold mb-2"> {t("choices") ++ ":" |> str} </div>
+    <div className="text-xs font-semibold pb-2 pt-4"> {t("choices") ++ ":" |> str} </div>
     {
       let showRemoveIcon = Js.Array.length(choices) > 2
       choices

@@ -85,7 +85,7 @@ let longTextWarning = value => {
   showWarning
     ? <div className="flex justify-between items-center mt-1">
         <div
-          className={"hidden md:inline px-2 py-px rounded text-xs font-semibold inline-flex items-center " ++
+          className={"hidden md:inline-flex px-2 py-px rounded text-xs font-semibold items-center " ++
           colors}>
           <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
           <span> {tr("warning_length_limit") |> str} </span>
@@ -138,13 +138,15 @@ let radioOnChange = (choices, allowMultiple, label, updateResultCB, event) => {
 let showMultiChoice = (choices, allowMultiple, selected, id, updateResultCB) =>
   if allowMultiple {
     Js.Array2.mapi(choices, (label, index) => {
-      <Checkbox
-        key={index->string_of_int}
-        label={label->str}
-        id={id ++ index->string_of_int}
-        checked={selected->Js.Array2.includes(label)}
-        onChange={checkboxOnChange(choices, allowMultiple, label, selected, updateResultCB)}
-      />
+      <div>
+        <Checkbox
+          key={index->string_of_int}
+          label={label->str}
+          id={id ++ index->string_of_int}
+          checked={selected->Js.Array2.includes(label)}
+          onChange={checkboxOnChange(choices, allowMultiple, label, selected, updateResultCB)}
+        />
+      </div>
     })->React.array
   } else {
     Js.Array2.mapi(choices, (label, index) => {
@@ -221,7 +223,7 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
   let id = computeId(index, checklistItem)
   <div className="mt-4" ariaLabel=id>
     {placeholder(id, checklistItem)}
-    <div className="md:pl-7 pt-2 pr-0 pb-4">
+    <div className="md:pl-7 pt-2 pr-0 pb-4 space-y-2">
       {switch checklistItem |> ChecklistItem.result {
       | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB, index)
       | Link(link) => showLink(link, id, updateResultCB)

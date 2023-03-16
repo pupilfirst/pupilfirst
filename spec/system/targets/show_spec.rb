@@ -50,6 +50,17 @@ feature 'Target Overlay', js: true do
   let!(:target_l2) do
     create :target, :with_content, target_group: target_group_l2
   end
+
+  let!(:target_l3) do
+    create :target,
+           :with_content,
+           :with_default_checklist,
+           target_group: target_group_l1,
+           role: Target::ROLE_TEAM,
+           completion_instructions: Faker::Lorem.sentence,
+           sort_index: 4
+  end
+
   let!(:prerequisite_target) do
     create :target,
            :with_content,
@@ -229,6 +240,65 @@ feature 'Target Overlay', js: true do
       '.course-overlay__body-tab-item',
       text: 'Complete'
     )
+  end
+
+  scenario 'student submits form on a target' do
+    sign_in_user student.user, referrer: target_path(target_l3)
+
+    # This target should have a 'Submit Form' section.
+    find('.course-overlay__body-tab-item', text: 'Submit Form').click
+
+    # completion instructions should be show on 'Submit Form' section.
+    expect(page).to have_text(target_l3.completion_instructions)
+
+    # There should also be a link to the 'Submit Form' section at the bottom of content.
+    find('.course-overlay__body-tab-item', text: 'Learn').click
+    find('.curriculum-overlay__learn-submit-btn', text: 'Submit Form').click
+
+    expect(page).to have_button('Submit', disabled: true)
+
+    long_answer = Faker::Lorem.sentence
+
+    replace_markdown long_answer
+
+    click_button 'Submit'
+
+    expect(page).to have_text('Your response has been saved')
+
+    dismiss_notification
+
+    # Student should be looking at their responses now.
+    expect(page).to have_content('Your Responses')
+
+    # The state of the target should change.
+    within('.course-overlay__header-title-card') do
+      expect(page).to have_content('Completed')
+    end
+
+    # The form submission should be completed
+    expect(page).to have_content('Completed')
+    expect(page).to have_content(long_answer)
+
+
+    # Let's check the database to make sure the submission was created correctly
+    last_submission = TimelineEvent.last
+    expect(last_submission.checklist).to eq(
+      [
+        {
+          'kind' => Target::CHECKLIST_KIND_LONG_TEXT,
+          'title' => 'Write something about your submission',
+          'result' => long_answer,
+          'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        }
+      ]
+    )
+
+    # The status should also be updated on the dashboard page.
+    click_button 'Close'
+
+    within("a[data-target-id='#{target_l3.id}']") do
+      expect(page).to have_content('Completed')
+    end
   end
 
   scenario "student visits the target's link with a mangled ID" do
@@ -999,7 +1069,7 @@ feature 'Target Overlay', js: true do
     click_link 'Next Target'
 
     expect(page).to have_text(quiz_target.title)
-    expect(page).not_to have_link('Next Target')
+    expect(page).to have_link('Next Target')
 
     click_link 'Previous Target'
 

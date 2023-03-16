@@ -47,7 +47,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
     target_group.targets.create!(
       title: "Quiz: #{Faker::Lorem.sentence}",
       role: Target.valid_roles.sample,
-      resubmittable: true,
+      resubmittable: false,
       visibility: 'live',
       sort_index: 3
     )
@@ -70,5 +70,42 @@ after 'development:evaluation_criteria', 'development:target_groups' do
       safe_to_change_visibility: true,
       sort_index: 5
     )
+
+    form_submission =
+      target_group.targets.create!(
+        title: Faker::Lorem.sentence,
+        role: Target.valid_roles.sample,
+        resubmittable: true,
+        visibility: 'live',
+        sort_index: 6,
+        checklist: [
+          {
+            'kind': Target::CHECKLIST_KIND_MULTI_CHOICE,
+            'title': 'Do you play cricket?',
+            'optional': false,
+            'metadata': {
+              'choices': %w[Yes No],
+              'allowMultiple': false
+            }
+          },
+          {
+            kind: Target::CHECKLIST_KIND_LONG_TEXT,
+            title: 'Describe your cricketing experience',
+            optional: false
+          },
+          {
+            'kind': Target::CHECKLIST_KIND_SHORT_TEXT,
+            'title': 'Are you morning person or night owl?',
+            'optional': false,
+            'metadata': {}
+          },
+          {
+            'kind': Target::CHECKLIST_KIND_LINK,
+            'title': 'Please, fill your portifolio link',
+            'optional': true,
+            'metadata': {}
+          }
+        ]
+      )
   end
 end

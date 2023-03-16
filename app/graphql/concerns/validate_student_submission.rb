@@ -12,7 +12,8 @@ module ValidateStudentSubmission
           .where(levels: { course_id: course })
           .first
       target_status = Targets::StatusService.new(target, student).status
-      submittable = target.evaluation_criteria.exists?
+      submittable =
+        target.checklist.present? || target.evaluation_criteria.present?
       submission_required =
         target_status.in?(
           [
@@ -63,13 +64,14 @@ module ValidateStudentSubmission
     def validate(_object, _context, value)
       checklist = value[:checklist]
 
-      if checklist.respond_to?(:all?) && checklist.all? do |item|
-           item['title'].is_a?(String) &&
-             item['kind'].in?(Target.valid_checklist_kind_types) &&
-             item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER &&
-             item['result'].present? &&
-             valid_result(item['kind'], item['result'], value[:file_ids])
-         end
+      if checklist.respond_to?(:all?) &&
+           checklist.all? do |item|
+             item['title'].is_a?(String) &&
+               item['kind'].in?(Target.valid_checklist_kind_types) &&
+               item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER &&
+               item['result'].present? &&
+               valid_result(item['kind'], item['result'], value[:file_ids])
+           end
         return
       end
 
@@ -118,9 +120,8 @@ module ValidateStudentSubmission
     def maximum_three_attachments_per_item
       return if @file_ids.blank?
 
-      if @file_items.select do |item|
-           item['result'].split.flatten.length > 3
-         end.empty?
+      if @file_items.select { |item| item['result'].split.flatten.length > 3 }
+           .empty?
         return
       end
 

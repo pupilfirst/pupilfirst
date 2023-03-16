@@ -8,10 +8,12 @@ type rec result =
   | Link(string)
   | ShortText(string)
   | LongText(string)
-  | MultiChoice(choices, option<int>)
+  | MultiChoice(choices, allowMultiple, selected)
   | AudioRecord(file)
 
 and choices = array<string>
+and allowMultiple = bool
+and selected = array<string>
 
 type t = {
   title: string,
@@ -27,7 +29,8 @@ let optional = t => t.optional
 
 let make = (~result, ~title, ~optional) => {result: result, title: title, optional: optional}
 
-let fromTargetChecklistItem = targetChecklist => targetChecklist |> Array.map(tc => {
+let fromTargetChecklistItem = targetChecklist =>
+  targetChecklist |> Array.map(tc => {
     let title = tc |> TargetChecklistItem.title
     let optional = tc |> TargetChecklistItem.optional
     let result = switch tc |> TargetChecklistItem.kind {
@@ -35,7 +38,7 @@ let fromTargetChecklistItem = targetChecklist => targetChecklist |> Array.map(tc
     | Link => Link("")
     | ShortText => ShortText("")
     | LongText => LongText("")
-    | MultiChoice(choices) => MultiChoice(choices, None)
+    | MultiChoice(choices, allowMultiple) => MultiChoice(choices, allowMultiple, [])
     | AudioRecord => AudioRecord({id: "", name: ""})
     }
     make(~title, ~optional, ~result)
@@ -51,13 +54,16 @@ let filename = file => file.name
 
 let fileId = file => file.id
 
-let fileIds = checklist => checklist |> Js.Array.map(c =>
+let fileIds = checklist =>
+  checklist
+  |> Js.Array.map(c =>
     switch c.result {
     | Files(files) => files |> Js.Array.map(a => a.id)
     | AudioRecord(file) => [file.id]
     | _anyOtherResult => []
     }
-  ) |> ArrayUtils.flattenV2
+  )
+  |> ArrayUtils.flattenV2
 
 let kindAsString = t =>
   switch t.result {
@@ -65,7 +71,7 @@ let kindAsString = t =>
   | Link(_) => "link"
   | ShortText(_) => "shortText"
   | LongText(_) => "longText"
-  | MultiChoice(_, _) => "multiChoice"
+  | MultiChoice(_, _, _) => "multiChoice"
   | AudioRecord(_) => "audio"
   }
 
@@ -78,10 +84,7 @@ let resultAsJson = t => {
   | LongText(t) =>
     t->string
   | AudioRecord(file) => file.id->string
-  | MultiChoice(choices, index) =>
-    string(
-      index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default(""),
-    )
+  | MultiChoice(_, _, selected) => selected->stringArray
   }
 }
 
@@ -97,8 +100,9 @@ let validLongText = s => validString(s, 5000)
 
 let validFiles = files => files != [] && files |> Array.length < 4
 
-let validMultiChoice = (choices, index) =>
-  index |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)
+let validMultiChoice = (selected, choices) => {
+  selected->ArrayUtils.isNotEmpty && selected->Js.Array2.every(s => choices->Js.Array2.includes(s))
+}
 
 let validResponse = (response, allowBlank) => {
   let optional = allowBlank ? response.optional : false
@@ -112,8 +116,9 @@ let validResponse = (response, allowBlank) => {
   | (ShortText(t), true) => validShortText(t) || t == ""
   | (LongText(t), false) => validLongText(t)
   | (LongText(t), true) => validLongText(t) || t == ""
-  | (MultiChoice(choices, index), false) => validMultiChoice(choices, index)
-  | (MultiChoice(choices, index), true) => validMultiChoice(choices, index) || index == None
+  | (MultiChoice(choices, _allowMultiple, selected), false) => validMultiChoice(selected, choices)
+  | (MultiChoice(choices, _allowMultiple, selected), true) =>
+    selected |> ArrayUtils.isEmpty || validMultiChoice(selected, choices)
   | (AudioRecord(_), true) => true
   | (AudioRecord(file), false) => file.id != ""
   }
@@ -143,13 +148,17 @@ let encodeArray = checklist =>
     array(encode)
   }
 
-let makeFiles = checklist => checklist |> Js.Array.map(item =>
+let makeFiles = checklist =>
+  checklist
+  |> Js.Array.map(item =>
     switch item.result {
     | Files(files) => files
     | AudioRecord(file) => [file]
     | _nonFileItem => []
     }
-  ) |> ArrayUtils.flattenV2 |> Array.map(f => {
+  )
+  |> ArrayUtils.flattenV2
+  |> Array.map(f => {
     let url = "/timeline_event_files/" ++ (f.id ++ "/download")
     SubmissionChecklistItem.makeFile(~name=f.name, ~id=f.id, ~url)
   })

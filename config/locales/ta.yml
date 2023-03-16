@@ -576,14 +576,17 @@ ta:
       close_button: நெருக்கமான
       completion_tab_complete: முழுமை
       completion_tab_completed: நிறைவு
+      completion_tab_form_response: Form Responses
       completion_tab_locked: பூட்டப்பட்டது
       completion_tab_mark_complete: முழுமையானதாகக் குறிக்கவும்
       completion_tab_quiz_result: வினாடி வினா முடிவு
       completion_tab_submissions: சமர்ப்பிப்புகள் & கருத்து
+      completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: வினாடி வினா எடுக்கவும்
       completion_tab_visit_link: முடிக்க இணைப்பைப் பார்வையிடவும்
       discuss_tab: விவாதிக்கவும்
       learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
+      learn_cta_submit_form: Submit Form
       learn_cta_take_quiz: வினாடி வினா எடுங்கள்
       learn_tab: அறிய
       next_target_button: அடுத்த இலக்கு
@@ -614,9 +617,11 @@ ta:
       warning_length_limit: தயவு செய்து உங்கள் பதிலை 5000 எழுத்துகளுக்கும் குறைவான நீளத்தில் வைக்கவும்.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: இன்னொன்றை சேர்
+      add_another_response: Add another response
       add_another_submission: மற்றொரு சமர்ப்பிப்பைச் சேர்க்கவும்
       cancel: ரத்து செய்
       completed: நிறைவு
+      form_response_number: "Response #"
       grading: தரப்படுத்துதல்
       pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
       rejected: நிராகரிக்கப்பட்டது
@@ -625,6 +630,7 @@ ta:
       submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
       unknown_coach: தெரியாத பயிற்சியாளர்
       your_submissions: உங்கள் சமர்ப்பிப்புகள்
+      your_responses: Your Responses
     CoursesCurriculum__TargetStatus:
       access_locked: நீங்கள் இப்போது பாடநெறிக்கு வரம்புக்குட்பட்ட அணுகல் மட்டுமே உள்ளது. நீங்கள் உள்ளடக்கத்தை முன்னோட்டமிட அனுமதிக்கப்படுகிறீர்கள், ஆனால் எந்த இலக்கையும் முடிக்க முடியாது.
       course_locked: இந்த பாடநெறி முடிந்தது.
@@ -1007,19 +1013,20 @@ ta:
       controls_checklist: சரிபார்ப்பு பட்டியல் உருப்படிக்கான கட்டுப்பாடுகள்
       copy: நகலெடுக்கவும்
       delete: அழி
-      describe_step: இந்த படியை விவரிக்கவும்
+      describe_question: Type your question here
       editor_checklist: சரிபார்ப்பு பட்டியல் உருப்படிக்கான எடிட்டர்
       limits_notice: மாணவர்கள் 3 கோப்புகள் வரை சமர்ப்பிக்கலாம், ஒவ்வொன்றும் 5 எம்பி வரை மட்டுமே.
       move_down: கீழே இறங்கு
       move_up: மேலே நகர்த்து
-      not_unique_step: ஒரு தனித்துவமான படி அல்ல; தேவையான படிகள் தனிப்பட்டதாக இருக்க வேண்டும்
+      multi_choice: Allow multiple selections
+      not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: சரியான தேர்வு அல்ல
+      choices_not_unique: Choices must be unique
       optional: விருப்பமானது
+      question_cannot_empty: Question cannot be empty
       remove_choice: தேர்வை அகற்று
-      step_cannot_empty: படி காலியாக இருக்க முடியாது
     CurriculumEditor__TargetDetailsEditor:
-      add_another_question: மற்றொரு கேள்வியைச் சேர்க்கவும்
-      add_step: ஒரு படி சேர்க்கவும்
+      add_another_question: Add another question
       choose_target_group: இலக்கு குழுவைத் தேர்ந்தெடுக்கவும்
       completion_instructions:
         help: முக்கியமான ஒன்றைப் பற்றி மாணவருக்கு நினைவூட்ட இதைப் பயன்படுத்தவும். மாணவர்கள் இலக்கை நிறைவு செய்யும் இடத்திற்கு அருகில் இந்த வழிமுறைகள் காட்டப்படும்.
@@ -1027,7 +1034,7 @@ ta:
         label: மாணவர்களுக்கான நிறைவு வழிமுறைகள் உங்களிடம் உள்ளதா?
       could_not_find: ஐடியுடன் தேர்ந்தெடுக்கப்பட்ட மதிப்பீட்டு அளவுகோலைக் கண்டறிய முடியவில்லை
       describe_submission: உங்கள் சமர்ப்பிப்பை விவரிக்கவும்
-      empty_checklist_warning: இந்த இலக்குக்கு படிகள் இல்லை. மாணவர்கள் எந்த நடவடிக்கையும் இல்லாமல் இலக்கை சமர்ப்பிக்க முடியும்!
+      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: சரியான இணைப்பை உள்ளிடவும்
       enter_valid_title: சரியான தலைப்பை உள்ளிடவும்
       link_complete: முடிக்க இணைப்பு
@@ -1048,12 +1055,15 @@ ta:
       select_criterion_warning: குறைந்தபட்சம் ஒருவரையாவது தேர்ந்தெடுக்க வேண்டும்
       selected_all_targets: நீங்கள் அனைத்து இலக்குகளையும் தேர்ந்தெடுத்துள்ளீர்கள்
       submit_individually: அனைத்து மாணவர்களும் தனித்தனியாக சமர்ப்பிக்க வேண்டும்.
+      submit_form: Submit a form to complete the target.
       take_quiz: இலக்கை முடிக்க வினாடி வினா எடுங்கள்.
       target_checklist:
+        form_label: What are the questions you would like the student to answer?
+        form_limit_warning: Maximum allowed questions is 25!
+        form_help: These are the questions a student must answer to complete the target.
         help: இலக்கில் பணியைச் சமர்ப்பிக்க ஒரு மாணவர் முடிக்க வேண்டிய படிகள் இவை. இந்தத் தகவல் பயிற்சியாளருக்கு மதிப்பாய்வுக்காகக் காண்பிக்கப்படும்.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: இந்த இலக்கை முடிக்க மாணவர் என்ன நடவடிக்கைகளை எடுக்க வேண்டும்?
-        limit_warning: அதிகபட்சமாக அனுமதிக்கப்பட்ட சரிபார்ப்புப் பட்டியல் உருப்படிகள் 25!
       target_group: இலக்கு குழு
       target_method_of_completion_label: மாணவர் இலக்கை எப்படி முடிக்க வேண்டும் என்று விரும்புகிறீர்கள்?
       target_reviewed_by_coach: இந்த இலக்கின் சமர்ப்பிப்புகளை பயிற்சியாளர் மதிப்பாய்வு செய்வாரா?
@@ -2190,6 +2200,7 @@ ta:
       success_notification: மாணவர் வெற்றிகரமாக உருவாக்கப்பட்டது.
     create_submission:
       blocked_submission_status_error: இந்த இலக்கின் நிலை %{target_status}ஆகும், எனவே நீங்கள் ஒரு புதிய சமர்ப்பிப்பைச் சேர்க்க முடியாது; பக்கத்தை மீண்டும் ஏற்றவும்
+      form_success_notification: Your response has been saved.
       invalid_files_attached: இணைக்கப்பட்ட சில கோப்புகள் தவறானவை
       invalid_submission_checklist: சமர்ப்பிப்பு சரிபார்ப்பு பட்டியல் தவறானது.
       item_file_limit_error: சமர்ப்பிக்கும் உருப்படியில் மூன்று கோப்புகளுக்கு மேல் இணைக்க முடியாது

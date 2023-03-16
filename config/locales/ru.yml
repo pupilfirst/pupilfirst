@@ -586,14 +586,17 @@ ru:
       close_button: Закрыть
       completion_tab_complete: Завершить
       completion_tab_completed: Завершено
+      completion_tab_form_response: Form Responses
       completion_tab_locked: Заблокировано
       completion_tab_mark_complete: Отметить как завершено
       completion_tab_quiz_result: Результаты Теста
       completion_tab_submissions: Работы и Отзывы
+      completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: Пройти Тест
       completion_tab_visit_link: Пройдите по Ссылке для Заввершения
       discuss_tab: Обсуждения
       learn_cta_submit_work: Отправить работу на рассмотрение
+      learn_cta_submit_form: Submit Form
       learn_cta_take_quiz: Пройти Тест
       learn_tab: Учиться
       next_target_button: След. Задача
@@ -624,9 +627,11 @@ ru:
       warning_length_limit: Пожалуйста, старайтесь, чтобы ваш ответ не превышал 5000 символов.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: Добавить другую
+      add_another_response: Add another response
       add_another_submission: Добавить другую работу
       cancel: Отмена
       completed: Завершено
+      form_response_number: "Response #"
       grading: Оценивается
       pending_review: Ожидает Оценки
       rejected: Отказано
@@ -635,6 +640,7 @@ ru:
       submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
       your_submissions: Ваши Работы
+      your_responses: Your Responses
     CoursesCurriculum__TargetStatus:
       access_locked: Сейчас у вас ограниченный доступ к курсу. Вам разрешен предварительный просмотр содержимого, но вы не можете выполнить ни одну цель.
       course_locked: Курс был окончен.
@@ -1023,19 +1029,20 @@ ru:
       controls_checklist: Управление для элемента списка
       copy: Копировать
       delete: Удалить
-      describe_step: Опишите этот этап
+      describe_question: Type your question here
       editor_checklist: Редактор элемента контрольного списка
       limits_notice: Учащиеся могут отправить до 3 файлов размером не более 5 МБ каждый.
       move_down: Двигать Вниз
       move_up: Двигать Вверх
-      not_unique_step: Не уникальный этап; требуемые этапы должны быть уникальными
+      multi_choice: Allow multiple selections
+      not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: Неверный выбор
+      choices_not_unique: Choices must be unique
       optional: Необязательный
+      question_cannot_empty: Question cannot be empty
       remove_choice: Убрать Выбор
-      step_cannot_empty: Этап не может быть пустым
     CurriculumEditor__TargetDetailsEditor:
-      add_another_question: Добавить еще один вопрос
-      add_step: Добавить этап
+      add_another_question: Add another question
       choose_target_group: Выберите группу задач
       completion_instructions:
         help: Используйте это, чтобы напомнить ученику о важном значении. Эти инструкции будут показаны вблизи того, где ученики достигнут цели.
@@ -1043,7 +1050,7 @@ ru:
         label: У вас есть инструкции для завершения обучения?
       could_not_find: Не удалось найти выбранный критерий оценки с идентификатором
       describe_submission: Опишите вашу работу
-      empty_checklist_warning: У этой задачи нет шагов. Студенты смогут отправить работу без каких-либо действий!
+      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: Введите действительную ссылку
       enter_valid_title: Введите правильный заголовок
       link_complete: Ссылка для завершения
@@ -1064,12 +1071,15 @@ ru:
       select_criterion_warning: По крайней мере, один должен быть выбран
       selected_all_targets: Вы выбрали все задачи
       submit_individually: Все студенты должны представить индивидуально.
+      submit_form: Submit a form to complete the target.
       take_quiz: Пройдите тест, чтобы выполнить задачу.
       target_checklist:
+        form_label: What are the questions you would like the student to answer?
+        form_limit_warning: Maximum allowed questions is 25!
+        form_help: These are the questions a student must answer to complete the target.
         help: Это шаги, которые должен пройти студент для сдачи работы над целью. Эта информация будет показана наставнику для проверки.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: Какие шаги должен предпринять студент для достижения этой цели?
-        limit_warning: 'Максимально допустимые элементы контрольного списка: 25!'
       target_group: Группа задач
       target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
       target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?
@@ -2214,6 +2224,7 @@ ru:
       success_notification: Студент успешно создан.
     create_submission:
       blocked_submission_status_error: Статус этой задачи - %{target_status}, поэтому вы не можете добавить новую работу; пожалуйста, перезагрузите страницу
+      form_success_notification: Your response has been saved.
       invalid_files_attached: Некоторые прикрепленные файлы недействительны
       invalid_submission_checklist: Список работ недействителен.
       item_file_limit_error: К отправке можно прикрепить не более трех файлов

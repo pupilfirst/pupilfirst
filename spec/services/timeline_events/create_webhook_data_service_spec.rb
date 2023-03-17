@@ -2,16 +2,24 @@ require 'rails_helper'
 
 describe TimelineEvents::CreateWebhookDataService do
   subject { described_class.new(submission) }
+
   let(:course) { create :course }
   let(:level) { create :level, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:criterion) { create :evaluation_criterion, course: course }
-  let!(:target) do
-    create :target, target_group: target_group, evaluation_criteria: [criterion]
+
+  let(:target) do
+    create :target,
+           :with_default_checklist,
+           target_group: target_group,
+           evaluation_criteria: [criterion]
   end
+
   let(:submission) { create :timeline_event, target: target }
   let(:student) { create :founder }
+
   let!(:pdf_file) { create :timeline_event_file, timeline_event: submission }
+
   let!(:png_file) do
     create :timeline_event_file,
            file_path: 'files/icon_pupilfirst.png',
@@ -85,6 +93,21 @@ describe TimelineEvents::CreateWebhookDataService do
 
         expect(data[:evaluator]).to eq(submission.evaluator.name)
         expect(data[:evaluated_at]).to eq(submission.evaluated_at)
+      end
+    end
+
+    context 'when the submission does not have evaluation criteria (auto-accepted)' do
+      let(:target) do
+        create :target,
+               :with_default_checklist,
+               target_group: target_group,
+               evaluation_criteria: []
+      end
+
+      let(:submission) { create :timeline_event, :passed, target: target }
+
+      it 'leaves out evaluation criteria from the data' do
+        expect(subject.data[:target][:evaluation_criteria]).to be_empty
       end
     end
   end

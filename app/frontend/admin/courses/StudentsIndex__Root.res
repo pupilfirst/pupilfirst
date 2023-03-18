@@ -130,12 +130,12 @@ let showTag = (~value=?, key, text, color, params) => {
 }
 
 let studentsList = (params, students) => {
-  <div className="space-y-4">
+  <div>
     {students
     ->Js.Array2.map(student => {
       <div
         key={StudentInfo.id(student)}
-        className="student-container h-full flex items-center bg-white">
+        className="student-container h-full flex items-center bg-white mt-4">
         <div
           className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex">
@@ -222,7 +222,12 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("user_tags", t("filter.user_tag"), DataLoad(#UserTag), "blue"),
     CourseResourcesFilter.makeFilter("email", t("filter.search_by_email"), Search, "gray"),
     CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
-    CourseResourcesFilter.makeFilter("status", "Status", CustomArray(["Active", "Ended", "Dropped"]), "orange"),
+    CourseResourcesFilter.makeFilter(
+      "status",
+      "Status",
+      CustomArray(["Active", "Ended", "Dropped"]),
+      "orange",
+    ),
   ]
 }
 
@@ -250,7 +255,7 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str(t("title"))} </title> </Helmet>
-    <div className="bg-gray-50 pt-8 min-h-full">
+    <div className="bg-gray-50 pt-8 min-h-full ">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
           <p className="font-semibold pl-1 capitalize"> {t("students")->str} </p>
@@ -261,29 +266,24 @@ let make = (~courseId, ~search) => {
             </Link>
           </div>
         </div>
-        <div className="sticky top-0 my-6">
-          <div className="border rounded-lg mx-auto bg-white ">
-            <div>
-              <div className="flex w-full items-start p-4">
-                <CourseResourcesFilter
-                  courseId
-                  filters={makeFilters()}
-                  search={search}
-                  sorter={CourseResourcesFilter.makeSorter(
-                    "sort_by",
-                    [
-                      t("sorter.name"),
-                      t("sorter.first_created"),
-                      t("sorter.last_created"),
-                      t("sorter.first_updated"),
-                      t("sorter.last_updated"),
-                    ],
-                    t("sorter.last_created"),
-                  )}
-                />
-              </div>
-            </div>
-          </div>
+        <div
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10 ">
+          <CourseResourcesFilter
+            courseId
+            filters={makeFilters()}
+            search={search}
+            sorter={CourseResourcesFilter.makeSorter(
+              "sort_by",
+              [
+                t("sorter.name"),
+                t("sorter.first_created"),
+                t("sorter.last_created"),
+                t("sorter.first_updated"),
+                t("sorter.last_updated"),
+              ],
+              t("sorter.last_created"),
+            )}
+          />
         </div>
         {PagedStudents.renderView(
           ~pagedItems=state.students,

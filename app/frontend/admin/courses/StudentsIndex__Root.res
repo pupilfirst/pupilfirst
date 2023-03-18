@@ -267,7 +267,7 @@ let make = (~courseId, ~search) => {
           </div>
         </div>
         <div
-          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10 ">
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10">
           <CourseResourcesFilter
             courseId
             filters={makeFilters()}

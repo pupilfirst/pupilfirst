@@ -6,6 +6,8 @@ external markIcon: string = "default"
 external linkIcon: string = "default"
 @module("./images/target-complete-quiz-icon.svg")
 external quizIcon: string = "default"
+@module("./images/target-complete-form-icon.svg")
+external formIcon: string = "default"
 
 let str = React.string
 
@@ -17,6 +19,7 @@ type methodOfCompletion =
   | VisitLink
   | TakeQuiz
   | MarkAsComplete
+  | SubmitForm
 
 type evaluationCriterion = (int, string, bool)
 
@@ -115,11 +118,13 @@ let computeMethodOfCompletion = targetDetails => {
   | Some(_) => true
   | None => false
   }
-  switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete) {
-  | (true, _y, _z) => Evaluated
-  | (_x, true, _z) => TakeQuiz
-  | (_x, _y, true) => VisitLink
-  | (false, false, false) => MarkAsComplete
+  let hasChecklist = targetDetails.checklist |> ArrayUtils.isNotEmpty
+  switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete, hasChecklist) {
+  | (true, _x, _y, _z) => Evaluated
+  | (_w, true, _y, _z) => TakeQuiz
+  | (_w, _x, true, _z) => VisitLink
+  | (_w, _x, _y, true) => SubmitForm
+  | (false, false, false, false) => MarkAsComplete
   }
 }
 
@@ -355,6 +360,7 @@ let targetEvaluated = methodOfCompletion =>
   | VisitLink => false
   | TakeQuiz => false
   | MarkAsComplete => false
+  | SubmitForm => false
   }
 
 let validNumberOfEvaluationCriteria = state => state.evaluationCriteria |> ArrayUtils.isNotEmpty
@@ -583,6 +589,7 @@ let methodOfCompletionSelection = polyMethodOfCompletion =>
   | #TakeQuiz => TakeQuiz
   | #VisitLink => VisitLink
   | #MarkAsComplete => MarkAsComplete
+  | #SubmitForm => SubmitForm
   }
 
 let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
@@ -590,12 +597,14 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #TakeQuiz => t("take_quiz")
   | #VisitLink => t("visit_link")
   | #MarkAsComplete => t("mark_as_complete")
+  | #SubmitForm => t("submit_form")
   }
 
   let selected = switch (state.methodOfCompletion, methodOfCompletion) {
   | (TakeQuiz, #TakeQuiz) => true
   | (VisitLink, #VisitLink) => true
   | (MarkAsComplete, #MarkAsComplete) => true
+  | (SubmitForm, #SubmitForm) => true
   | _anyOtherCombo => false
   }
 
@@ -603,6 +612,7 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #TakeQuiz => quizIcon
   | #VisitLink => linkIcon
   | #MarkAsComplete => markIcon
+  | #SubmitForm => formIcon
   }
 
   <div key={index |> string_of_int} className="w-1/3 px-2">
@@ -624,7 +634,7 @@ let methodOfCompletionSelector = (state, send) =>
         {t("target_method_of_completion_label") |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2 pl-6">
-        {[#MarkAsComplete, #VisitLink, #TakeQuiz]
+        {[#MarkAsComplete, #VisitLink, #TakeQuiz, #SubmitForm]
         |> Js.Array.mapi((methodOfCompletion, index) =>
           methodOfCompletionButton(methodOfCompletion, state, send, index)
         )
@@ -684,18 +694,97 @@ let quizEditor = (state, send) =>
     </div>
   </div>
 
-let doRequiredStepsHaveUniqueTitles = checklist => {
+let hasValidChecklist = checklist => {
   let requiredSteps = checklist |> Js.Array.filter(item => !(item |> ChecklistItem.optional))
 
-  requiredSteps
-  |> Js.Array.map(ChecklistItem.title)
-  |> Js.Array.map(String.trim)
-  |> ArrayUtils.distinct
-  |> Js.Array.length == Js.Array.length(requiredSteps)
+  let hasUniqueTitles =
+    requiredSteps
+    ->Js.Array2.map(ChecklistItem.title)
+    ->Js.Array2.map(String.trim)
+    ->ArrayUtils.distinct
+    ->Js.Array.length == Js.Array.length(requiredSteps)
+
+  let multiChoiceSteps = checklist->Js.Array2.filter(item =>
+    switch ChecklistItem.kind(item) {
+    | MultiChoice(_, _) => true
+    | _ => false
+    }
+  )
+
+  let hasValidChoices = multiChoiceSteps->Js.Array2.every(item =>
+    switch ChecklistItem.kind(item) {
+    | MultiChoice(choices, _) =>
+      choices->Js.Array2.map(String.trim)->ArrayUtils.distinct->Js.Array.length ==
+        Js.Array.length(choices)
+    | _ => false
+    }
+  )
+
+  hasUniqueTitles && hasValidChoices
 }
 
 let isValidTitle = title => title |> String.trim |> String.length > 0
 
+let formEditor = (state, send) => {
+  let status = targetEvaluated(state.methodOfCompletion)
+
+  <div className="mb-6">
+    <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
+      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
+      {status ? t("target_checklist.label")->str : t("target_checklist.form_label")->str}
+    </label>
+    {status
+      ? <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
+          {t("target_checklist.help")->str}
+        </HelpIcon>
+      : <HelpIcon className="ml-1"> {t("target_checklist.form_help")->str} </HelpIcon>}
+    <div className="ml-6 mb-6">
+      {state.checklist
+      |> Js.Array.mapi((checklistItem, index) => {
+        let moveChecklistItemUpCB = index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
+
+        let moveChecklistItemDownCB =
+          index != Js.Array.length(state.checklist) - 1
+            ? Some(() => send(MoveChecklistItemDown(index)))
+            : None
+
+        <CurriculumEditor__TargetChecklistItemEditor
+          checklist=state.checklist
+          key={index |> string_of_int}
+          checklistItem
+          index
+          updateChecklistItemCB={newChecklistItem =>
+            send(UpdateChecklistItem(index, newChecklistItem))}
+          removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
+          ?moveChecklistItemUpCB
+          ?moveChecklistItemDownCB
+          copyChecklistItemCB={() => send(CopyChecklistItem(index))}
+        />
+      })
+      |> React.array}
+      {ArrayUtils.isEmpty(state.checklist)
+        ? <div
+            className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+            <i className="fas fa-info-circle mr-2" /> {t("empty_questions_warning")->str}
+          </div>
+        : React.null}
+      {Js.Array.length(state.checklist) >= 25
+        ? <div
+            className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
+            <i className="fas fa-info-circle mr-2" />
+            {t("target_checklist.form_limit_warning")->str}
+          </div>
+        : React.null}
+      <button
+        className="flex justify-center bg-white items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500"
+        disabled={Js.Array.length(state.checklist) >= 25}
+        onClick={_ => send(AddNewChecklistItem)}>
+        <PfIcon className="fas fa-plus-circle text-lg" />
+        <span className="font-semibold ml-2"> {t("add_another_question")->str} </span>
+      </button>
+    </div>
+  </div>
+}
 let isValidMethodOfCompletion = state =>
   switch state.methodOfCompletion {
   | TakeQuiz => isValidQuiz(state.quiz)
@@ -703,18 +792,8 @@ let isValidMethodOfCompletion = state =>
   | Evaluated =>
     state.evaluationCriteria |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
+  | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
   }
-
-let saveDisabled = (
-  ~hasValidTitle,
-  ~hasValidMethodOfCompletion,
-  ~requiredStepsHaveUniqueTitles,
-  ~dirty,
-  ~saving,
-) =>
-  !requiredStepsHaveUniqueTitles ||
-  (!hasValidTitle ||
-  (!hasValidMethodOfCompletion || (!dirty || saving)))
 
 module UpdateTargetQuery = %graphql(`
    mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
@@ -729,11 +808,11 @@ let updateTargetButton = (
   ~state,
   ~hasValidTitle,
   ~hasValidMethodOfCompletion,
-  ~requiredStepsHaveUniqueTitles,
+  ~hasValidChecklist,
 ) => {
   let onClick = Belt.Option.map(state.targetGroupId, callback)
   let disabled =
-    !requiredStepsHaveUniqueTitles ||
+    !hasValidChecklist ||
     (!hasValidTitle ||
     (!hasValidMethodOfCompletion || (!state.dirty || (state.saving || onClick == None))))
 
@@ -780,6 +859,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   | VisitLink => ([], [], state.linkToComplete, [])
   | TakeQuiz => (quizAsJs, [], "", [])
   | MarkAsComplete => ([], [], "", [])
+  | SubmitForm => ([], [], "", state.checklist)
   }
 
   let visibility = switch state.visibility {
@@ -864,7 +944,7 @@ let make = (
     None
   }, [state.dirty])
 
-  let requiredStepsHaveUniqueTitles = doRequiredStepsHaveUniqueTitles(state.checklist)
+  let hasValidChecklist = hasValidChecklist(state.checklist)
   let hasValidTitle = isValidTitle(state.title)
   let hasValidMethodOfCompletion = isValidMethodOfCompletion(state)
 
@@ -924,65 +1004,10 @@ let make = (
                 </div>
               </div>
               {switch state.methodOfCompletion {
-              | Evaluated =>
-                <div className="mb-6">
-                  <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
-                    <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                    {t("target_checklist.label") |> str}
-                  </label>
-                  <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
-                    {t("target_checklist.help") |> str}
-                  </HelpIcon>
-                  <div className="ml-6 mb-6">
-                    {state.checklist
-                    |> Js.Array.mapi((checklistItem, index) => {
-                      let moveChecklistItemUpCB =
-                        index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
-
-                      let moveChecklistItemDownCB =
-                        index != Js.Array.length(state.checklist) - 1
-                          ? Some(() => send(MoveChecklistItemDown(index)))
-                          : None
-
-                      <CurriculumEditor__TargetChecklistItemEditor
-                        checklist=state.checklist
-                        key={index |> string_of_int}
-                        checklistItem
-                        index
-                        updateChecklistItemCB={newChecklistItem =>
-                          send(UpdateChecklistItem(index, newChecklistItem))}
-                        removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
-                        ?moveChecklistItemUpCB
-                        ?moveChecklistItemDownCB
-                        copyChecklistItemCB={() => send(CopyChecklistItem(index))}
-                      />
-                    })
-                    |> React.array}
-                    {ArrayUtils.isEmpty(state.checklist)
-                      ? <div
-                          className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-                          <i className="fas fa-info-circle mr-2" />
-                          {t("empty_checklist_warning")->str}
-                        </div>
-                      : React.null}
-                    {Js.Array.length(state.checklist) >= 25
-                      ? <div
-                          className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-                          <i className="fas fa-info-circle mr-2" />
-                          {t("target_checklist.limit_warning")->str}
-                        </div>
-                      : React.null}
-                    <button
-                      className="flex justify-center bg-white items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500"
-                      disabled={Js.Array.length(state.checklist) >= 25}
-                      onClick={_ => send(AddNewChecklistItem)}>
-                      <PfIcon className="fas fa-plus-circle text-lg" />
-                      <span className="font-semibold ml-2"> {t("add_step")->str} </span>
-                    </button>
-                  </div>
-                </div>
+              | Evaluated => formEditor(state, send)
               | VisitLink
               | TakeQuiz
+              | SubmitForm
               | MarkAsComplete => React.null
               }}
               {targetEvaluated(state.methodOfCompletion)
@@ -993,6 +1018,7 @@ let make = (
               | MarkAsComplete => React.null
               | TakeQuiz => quizEditor(state, send)
               | VisitLink => linkEditor(state, send)
+              | SubmitForm => formEditor(state, send)
               }}
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
@@ -1064,8 +1090,7 @@ let make = (
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
                     {t("target_visibility") |> str}
                   </label>
-                  <div
-                    id="visibility" className="flex toggle-button__group shrink-0 rounded-lg">
+                  <div id="visibility" className="flex toggle-button__group shrink-0 rounded-lg">
                     {[TargetDetails.Live, Archived, Draft]
                     |> Js.Array.mapi((visibility, index) =>
                       <button
@@ -1095,7 +1120,7 @@ let make = (
                     ~state,
                     ~hasValidTitle,
                     ~hasValidMethodOfCompletion,
-                    ~requiredStepsHaveUniqueTitles,
+                    ~hasValidChecklist,
                   )}
                 </div>
               </div>

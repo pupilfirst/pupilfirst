@@ -68,6 +68,7 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (Pending, TakeQuiz) => t("completion_tab_take_quiz")
   | (Pending, LinkToComplete) => t("completion_tab_visit_link")
   | (Pending, MarkAsComplete) => t("completion_tab_mark_complete")
+  | (Pending, SubmitForm) => t("completion_tab_submit_form")
   | (
       PendingReview
       | Completed
@@ -84,9 +85,17 @@ let completionTypeToString = (completionType, targetStatus) =>
       TakeQuiz,
     ) =>
     t("completion_tab_quiz_result")
+  | (
+      PendingReview
+      | Completed
+      | Rejected
+      | Locked(CourseLocked | AccessLocked),
+      SubmitForm,
+    ) =>
+    t("completion_tab_form_response")
   | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
     t("completion_tab_completed")
-  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) =>
+  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete | SubmitForm) =>
     t("completion_tab_locked")
   }
 
@@ -139,15 +148,14 @@ let tabLink = (tab, state, send, targetStatus) =>
 
 let tabOptions = (state, send, targetDetails, targetStatus) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType
-
   <div role="tablist" className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {selectableTabs(targetDetails)
     |> Js.Array.map(selection => tabButton(selection, state, send, targetStatus))
     |> React.array}
     {switch (targetStatus |> TargetStatus.status, completionType) {
-    | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz) =>
+    | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz | SubmitForm) =>
       tabButton(Complete(completionType), state, send, targetStatus)
-    | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
+    | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz | SubmitForm) =>
       TargetDetails.submissions(targetDetails) != []
         ? tabButton(Complete(completionType), state, send, targetStatus)
         : React.null
@@ -331,6 +339,8 @@ let learnSection = (
     Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
   | (Pending | Rejected, TakeQuiz) =>
     Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
+  | (Pending | Rejected, SubmitForm) =>
+    Some((Complete(completionType), t("learn_cta_submit_form"), "fas fa-feather-alt"))
   | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
   | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
   }
@@ -361,10 +371,10 @@ let discussSection = (target, targetDetails, tab) =>
 
 let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
-  | (Learn, TargetDetails.Evaluated | TakeQuiz)
-  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
+  | (Learn, TargetDetails.Evaluated | TakeQuiz | SubmitForm)
+  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => "hidden"
   | (Learn, MarkAsComplete | LinkToComplete)
-  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""
+  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => ""
   }
 
 let completeSection = (
@@ -392,6 +402,7 @@ let completeSection = (
         <CoursesCurriculum__SubmissionBuilder
           key="courses-curriculum-submission-form"
           target
+          targetDetails
           checklist={targetDetails |> TargetDetails.checklist}
           addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
           preview
@@ -411,12 +422,27 @@ let completeSection = (
         />,
       ] |> React.array
 
+    | (Pending, SubmitForm) =>
+      [
+        <CoursesCurriculum__CompletionInstructions
+          key="completion-instructions" targetDetails title="Instructions"
+        />,
+        <CoursesCurriculum__SubmissionBuilder
+          key="courses-curriculum-submission-form"
+          target
+          targetDetails
+          checklist={targetDetails |> TargetDetails.checklist}
+          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+          preview
+        />,
+      ] |> React.array
+
     | (
         PendingReview
         | Completed
         | Rejected
         | Locked(CourseLocked | AccessLocked),
-        Evaluated | TakeQuiz,
+        Evaluated | TakeQuiz | SubmitForm,
       ) =>
       <CoursesCurriculum__SubmissionsAndFeedback
         targetDetails
@@ -433,7 +459,7 @@ let completeSection = (
       <CoursesCurriculum__AutoVerify
         target targetDetails targetStatus addSubmissionCB=addVerifiedSubmissionCB preview
       />
-    | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
+    | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => React.null
     }}
   </div>
 }

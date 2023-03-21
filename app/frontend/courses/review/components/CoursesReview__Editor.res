@@ -994,7 +994,7 @@ let feedbackGenerator = (
               value=state.newFeedback
               profile=Markdown.Permissive
               maxLength=10000
-              disabled={SubmissionDetails.preview(submissionDetails)}
+              disabled={isSubmissionReviewAllowed(submissionDetails)}
               placeholder={t("feedback_placeholder")}
             />
           </div>
@@ -1213,7 +1213,7 @@ let make = (
       ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
           UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
         ) ||
-        SubmissionDetails.preview(submissionDetails)
+        isSubmissionReviewAllowed(submissionDetails)
           ? GradesEditor
           : AssignReviewer
       : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
@@ -1290,7 +1290,7 @@ let make = (
             </div>
           </div>
           <div className="p-4 md:p-6">
-            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
+            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
           {switch submissionReport {
           | Some(report) =>

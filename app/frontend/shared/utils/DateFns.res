@@ -129,6 +129,9 @@ let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string
 external differenceInSeconds: (Js.Date.t, Js.Date.t) => int = "differenceInSeconds"
 
 @module("date-fns")
+external differenceInCalendarMonths : (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
+
+@module("date-fns")
 external differenceInMinutes: (Js.Date.t, Js.Date.t) => int = "differenceInMinutes"
 
 @module("date-fns")
@@ -136,3 +139,6 @@ external differenceInDays: (Js.Date.t, Js.Date.t) => int = "differenceInDays"
 
 @module("date-fns")
 external addDays: (Js.Date.t, int) => Js.Date.t = "addDays"
+
+@module("date-fns")
+external getDaysInMonth: Js.Date.t => float = "getDaysInMonth"

@@ -18,6 +18,10 @@
   @apply mt-5 h-48 rounded-lg bg-gray-50;
 }
 
+.skeleton-placeholder__date {
+  @apply rounded-lg bg-gray-200 w-10 h-10;
+}
+
 .skeleton-animate {
   animation: skeletonShimmer 3s infinite linear;
   background: linear-gradient(to right, #f5f3f7 10%, #fbfafc 40%, #f5f3f7 70%);

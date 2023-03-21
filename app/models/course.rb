@@ -23,6 +23,8 @@ class Course < ApplicationRecord
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :targets
   has_many :evaluation_criteria, dependent: :restrict_with_error
+  has_many :calendars, dependent: :destroy
+  has_many :calendar_events, through: :calendars
 
   has_many :faculty, -> { distinct }, through: :cohorts
   has_many :community_course_connections, dependent: :restrict_with_error

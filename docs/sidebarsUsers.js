@@ -14,6 +14,7 @@ module.exports = {
       "school_customization",
       "school_admins",
       "course_authors",
+      "calendars",
     ],
     Coaching: ["reviewing_submissions", "student_reports"],
     Learning: ["signing_up", "taking_courses"],

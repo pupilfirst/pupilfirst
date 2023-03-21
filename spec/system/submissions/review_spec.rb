@@ -205,6 +205,10 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_text('The submission has been marked as reviewed')
 
+      student = submission_pending.founders.first
+      open_email(student.user.email)
+      expect(current_email).to have_content('grades')
+
       dismiss_notification
 
       expect(page).to have_button('Undo Grading')
@@ -624,7 +628,7 @@ feature 'Submission review overlay', js: true do
       submission_checklist_choice = {
         'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
         'title' => question_3,
-        'result' => answer_3,
+        'result' => [answer_3],
         'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_short_text = {
@@ -730,7 +734,7 @@ feature 'Submission review overlay', js: true do
         {
           'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
           'title' => question_3,
-          'result' => answer_3,
+          'result' => [answer_3],
           'status' => TimelineEvent::CHECKLIST_STATUS_FAILED
         },
         submission_checklist_short_text,
@@ -1061,7 +1065,7 @@ feature 'Submission review overlay', js: true do
       with_secret(inactive_submission_review_allowed_days: 1) { example.run }
     end
 
-    scenario 'coach visits pending submission page of inactive student with allowed submission review time has elapsed' do
+    scenario 'coach visits pending submission page of inactive student after submission review allowed time has elapsed' do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
@@ -1084,6 +1088,7 @@ feature 'Submission review overlay', js: true do
       dismiss_notification
       expect(page).to have_content('You can review the submission until')
       expect(page).to have_content('Add Your Feedback')
+      add_markdown('Some feedback about the submission.')
       expect(page).to have_content('Grade Card')
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content(evaluation_criterion_2.name)

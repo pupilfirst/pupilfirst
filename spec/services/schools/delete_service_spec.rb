@@ -30,6 +30,9 @@ describe Schools::DeleteService do
   end
   let!(:faculty_s1) { create :faculty, user: user_s1 }
 
+  let!(:calendar) { create :calendar, course: course_s1 }
+  let!(:calendar_event) { create :calendar_event, calendar: calendar }
+
   # School 2
   let(:school_2) { create :school }
   let(:organisation_s2) { create :organisation, school: school_2 }
@@ -57,6 +60,9 @@ describe Schools::DeleteService do
   end
   let!(:faculty_s2) { create :faculty, user: user_s2 }
 
+  let!(:calendar_s2) { create :calendar, course: course_s2 }
+  let!(:calendar_event_s2) { create :calendar_event, calendar: calendar_s2 }
+
   before do
     # Tag the schools.
     school_1.founder_tag_list.add('school 1 tag')
@@ -78,7 +84,9 @@ describe Schools::DeleteService do
       [Proc.new { Community.count }, 2, 1],
       [Proc.new { MarkdownAttachment.count }, 2, 1],
       [Proc.new { Domain.count }, 3, 1],
-      [Proc.new { AuditRecord.count }, 2, 1]
+      [Proc.new { AuditRecord.count }, 2, 1],
+      [Proc.new { Calendar.count }, 2, 1],
+      [Proc.new { CalendarEvent.count }, 2, 1]
     ]
   end
 
@@ -101,6 +109,8 @@ describe Schools::DeleteService do
       expect { domain_s2.reload }.not_to raise_error
       expect { audit_record_s2.reload }.not_to raise_error
       expect { faculty_s2.reload }.not_to raise_error
+      expect { calendar_s2.reload }.not_to raise_error
+      expect { calendar_event_s2.reload }.not_to raise_error
     end
   end
 end

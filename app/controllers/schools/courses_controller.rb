@@ -37,6 +37,23 @@ module Schools
       @course = authorize(course, policy_class: Schools::CoursePolicy)
     end
 
+    # GET /courses/:id/calendar_events
+    def calendar_events
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @presenter =
+        Schools::Courses::CalendarsPresenter.new(view_context, @course, params)
+    end
+
+    # GET /courses/:id/calendar_month_data
+    def calendar_month_data
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @presenter =
+        Schools::Courses::CalendarsPresenter.new(view_context, @course, params)
+      render json: @presenter.month_data
+    end
+
     # POST /school/courses/:course_id/delete_coach_enrollment
     def delete_coach_enrollment
       coach = current_school.faculty.find(params[:coach_id])

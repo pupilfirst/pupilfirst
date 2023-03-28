@@ -62,22 +62,29 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
 let reducer = (_state, searchString) => searchString
 
 @react.component
-let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTags) => {
+let make = (
+  ~unselectedTags,
+  ~selectedTags,
+  ~addTagCB,
+  ~removeTagCB,
+  ~allowNewTags,
+  ~disabled=false,
+) => {
   let (state, send) = React.useReducer(reducer, "")
   let results = search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
-  <div className="mt-2">
+  <div className="mt-1">
     {ReactUtils.nullUnless(
       <div className="flex flex-wrap">
         {Js.Array.map(
           tag =>
             <div
               key=tag
-              className="flex items-center bg-gray-50 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-              <span className="px-2 py-px"> {tag |> str} </span>
+              className="flex items-center bg-gray-50 border border-gray-500 rounded-full mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+              <p className="inline-block px-3"> {tag |> str} </p>
               <button
                 ariaLabel={t("remove_tag") ++ " " ++ tag}
                 title={t("remove_tag") ++ " " ++ tag}
-                className="flex items-center px-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-300"
+                className="flex items-center px-3 py-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-50 focus:outline-none focus:text-red-500 focus:bg-red-50 border-l border-gray-300"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
               </button>
@@ -90,10 +97,11 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
     <input
       value=state
       onChange={event => send(ReactEvent.Form.target(event)["value"])}
-      className="appearance-none block bg-white leading-snug border border-gray-300 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+      className="appearance-none block bg-white leading-snug border border-gray-300 rounded py-2.5 px-3 text-sm w-full mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       id="tags"
       type_="text"
       placeholder={allowNewTags ? t("search_for_add") : t("select_tags")}
+      disabled
     />
     {ReactUtils.nullUnless(
       <div

@@ -77,9 +77,6 @@ ru:
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
       unable_find_id: "Не удалось найти категорию темы с ID: "
     CourseApplicants__EditForm:
-      access_ends_at:
-        help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
-        label: Доступ студента заканчивается
       add_as_student_button: Добавить как студента
       affiliation:
         label: Принадлежность
@@ -258,9 +255,6 @@ ru:
         error_message: Требуется описание (2–150 знаков)
         label: Описание курса
         placeholder: Краткое описание этого курса
-      course_end_date:
-        help: Если указано, курс будет показан как закрыт для студентов в эту дату. Студенты больше не смогут подавать заявки.
-        label: Дата окончание курса
       course_highlights:
         label: Основные моменты курса
       course_name:
@@ -303,6 +297,7 @@ ru:
         placeholder: Описание Главных Моментов
       move_down: Двинуть вниз
       move_up: Двинуть вверх
+      multi_choice: Разрешить множественный выбор
       select: Выбрать
       selected_button:
         title: Выбрать Иконку
@@ -448,10 +443,12 @@ ru:
       close_button: Закрыть
       completion_tab_complete: Завершить
       completion_tab_completed: Завершено
+      completion_tab_form_response: Форма ответов
       completion_tab_locked: Заблокировано
       completion_tab_mark_complete: Отметить как завершено
       completion_tab_quiz_result: Результаты Теста
       completion_tab_submissions: Работы и Отзывы
+      completion_tab_submit_form: Представить форму
       completion_tab_take_quiz: Пройти Тест
       completion_tab_visit_link: Пройдите по Ссылке для Заввершения
       discuss_tab: Обсуждения
@@ -486,9 +483,11 @@ ru:
       warning_length_limit: Пожалуйста, старайтесь, чтобы ваш ответ не превышал 5000 символов.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: Добавить другую
+      add_another_response: Добавить еще один ответ
       add_another_submission: Добавить другую работу
       cancel: Отмена
       completed: Завершено
+      form_response_number: "Ответ #"
       grading: Оценивается
       pending_review: Ожидает Оценки
       rejected: Отказано
@@ -497,6 +496,8 @@ ru:
       submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
       your_submissions: Ваши Работы
+      your_responses: Ваши ответы
+
     CoursesCurriculum__TargetStatus:
       access_locked: Ваш доступ к этому курсу закончился.
       course_locked: Курс был окончен.
@@ -716,6 +717,7 @@ ru:
     CoursesStudents__CoachNotes:
       all_notes: Все Заметки
       has_archived_notes: У этого студента есть несколько архивных заметок.
+      help_text: Заметки можно использовать для отслеживания прогресса студент. Эти заметки показываются только менторам.
       new_note: Добавить Новую Заметку
       no_notes: Здесь нет заметок!
       save_note: Сохранить Заметку
@@ -865,25 +867,25 @@ ru:
       controls_checklist: Управление для элемента списка
       copy: Копировать
       delete: Удалить
-      describe_step: Опишите этот этап
+      describe_question: Введите ваш вопрос здесь
       editor_checklist: Редактор элемента контрольного списка
       limits_notice: Учащиеся могут отправить до 3 файлов размером не более 5 МБ каждый.
       move_down: Двигать Вниз
       move_up: Двигать Вверх
-      not_unique_step: Не уникальный этап; требуемые этапы должны быть уникальными
+      not_unique_question: Не уникальный вопрос; требуемые вопросы должны быть уникальными
       not_valid_choice: Неверный выбор
       optional: Необязательный
+      question_cannot_empty: Вопрос не может быть пустым
       remove_choice: Убрать Выбор
-      step_cannot_empty: Этап не может быть пустым
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Добавить еще один вопрос
-      add_step: Добавить этап
       choose_target_group: Выберите группу задач
       completion_instructions_help: Используйте это, чтобы напомнить ученику о чем-то важном. Эти инструкции будут отображаться рядом с тем местом, где учащиеся выполнят задание.
       completion_instructions_label: Есть ли у вас какие-либо инструкции для ученика?
       could_not_find: Не удалось найти выбранный критерий оценки с идентификатором
       describe_submission: Опишите вашу работу
       empty_checklist_warning: У этой задачи нет шагов. Студенты смогут отправить работу без каких-либо действий!
+      empty_questions_warning: Эта целевая форма не имеет вопросов. В форме должен быть хотя бы один вопрос.
       enter_valid_link: Введите действительную ссылку
       enter_valid_title: Введите правильный заголовок
       link_complete: Ссылка для завершения
@@ -905,9 +907,11 @@ ru:
       selected_all_targets: Вы выбрали все задачи
       submit_individually: Все студенты должны представить индивидуально.
       take_quiz: Пройдите тест, чтобы выполнить задачу.
-      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу по задаче. Эта информация будет показана ментору для ознакомления.
+      target_checklist_form_label: На какие вопросы вы бы хотели, чтобы студент ответил?
+      target_checklist_form_limit_warning: Максимально допустимое количество элементов формы — 25!
+      target_checklist_form_help: На эти вопросы студент должен ответить, чтобы выполнить задание.
+      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу позадаче. Эта информация будет показана ментору для ознакомления.
       target_checklist_label: Какие шаги должен предпринять ученик для достижения этой задачи?
-      target_checklist_limit_warning: Максимально допустимое количество элементов списка - 15!
       target_group: Группа задач
       target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
       target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?
@@ -990,6 +994,9 @@ ru:
       update_criterion: Критерий Обновления
     HelpIcon:
       read_more: Подробнее
+    LevelProgressBar:
+      heading: Прогресс Уровня
+      course_completed: Курс Пройден!
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -1171,9 +1178,9 @@ ru:
       update_images: Обновить Изображения
       updated_notification: Изображения успешно обновлены.
     SchoolCustomize__LinkComponent:
+      cancel_editing: Cancel Editing
       move_down: Move Down
       move_up: Move Up
-      cancel_editing: Cancel Editing
     SchoolCustomize__LinkEditor:
       add_new_link: Добавить Новую Ссылку
       adding_new_link: Добавление новой ссылки...
@@ -1323,7 +1330,7 @@ ru:
       success_notification: Импорт успешно начат! После завершения вы получите уведомление по электронной почте.
       valid_data_message: Данные успешно подтверждены!
       valid_data_summary_text: "Вот сводка данных о студентах на загруженном листе: "
-    StudentsEditor__CreateForm:
+    StudentCreator__CreateForm:
       added_full_description: Все ученики созданы успешно.
       added_none_description: Все студенты, которых вы пытались добавить, уже были частью этого курса.
       added_none_title: Ничего не изменилось
@@ -1483,6 +1490,7 @@ ru:
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
       name_placeholder: Введите ваше имя
+      preferred_name_placeholder: Введите предпочитаемое имя
       new_password: Новый пароль
       new_password_placeholder: Введите новый пароль
       notifications: Уведомления
@@ -1543,8 +1551,8 @@ ru:
       signed_out_notified: Теперь вы выйдете из аккаунта и получите уведомление по почте, как только удаление будет завершено.
     VerifyCertificate__Root:
       cancel: Отменить и Вернуться
-      description: Данный сертификат был выдан <strong class="whitespace-no-wrap">%{name}</strong> в <strong class="whitespace-no-wrap">%{issue_date}</strong> по курсу <strong>%{course_name}</strong>.
-      heading: Поздравляем, <strong class="whitespace-no-wrap">%{name}</strong>!<br/>Вы заслужили это.
+      description: Данный сертификат был выдан <strong class="whitespace-nowrap">%{name}</strong> в <strong class="whitespace-nowrap">%{issue_date}</strong> по курсу <strong>%{course_name}</strong>.
+      heading: Поздравляем, <strong class="whitespace-nowrap">%{name}</strong>!<br/>Вы заслужили это.
       originally_issued_to: Имя этого студента было обновлено после выдачи сертификата. Этот сертификат изначально был выдан <strong>%{name}</strong>.
       print_or_save: Распечатайте или сохраните как PDF
       serial_number: Серийный Номер %{serial}
@@ -1771,12 +1779,13 @@ ru:
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
     create_school_link:
-      success_notification: добавлена пользовательская ссылка.
       blank_title_error: Требуется заголовок
+      success_notification: добавлена пользовательская ссылка.
     create_student_from_applicant:
       success_notification: Студент успешно создан.
     create_submission:
       blocked_submission_status_error: Статус этой задачи - %{target_status}, поэтому вы не можете добавить новую работу; пожалуйста, перезагрузите страницу
+      form_success_notification: Ваш ответ сохранен.
       invalid_files_attached: Некоторые прикрепленные файлы недействительны
       invalid_submission_checklist: Список работ недействителен.
       item_file_limit_error: К отправке можно прикрепить не более трех файлов
@@ -1993,6 +2002,7 @@ ru:
     edit: Редактировать
     email: Почта
     email_error: Введите действительную почту
+    email_exists_error: Этот адрес электронной почты уже связан с другой учетной записью пользователя.
     email_placeholder: Добавьте почту здесь
     empty: Пусто
     fail: Провал
@@ -2014,6 +2024,7 @@ ru:
     move_down: Двигать Вниз
     move_up: Двигать Вверх
     name: Имя
+    preferred_name: Предпочитаемое имя
     name_email: Имя или Почта
     name_placeholder: Добавьте сюда имя
     next: След
@@ -2062,6 +2073,12 @@ ru:
     optional_braces: (необязательно)
     or: или
     pass: Пройдено
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
     percentage: Процент
     post: Пост
     prev: Пред
@@ -2114,6 +2131,9 @@ ru:
       question: Вопрос
       shared: Вы используете общее устройство?
       with_password: Войти с паролем
+    update_email:
+      frequent_request_error: Письмо было отправлено менее двух минут назад. Пожалуйста, подождите несколько минут, прежде чем повторить попытку.
+      link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
   validate_submission_gradable:
     owners_should_be_active:
       error: Невозможно обновить неактивные работы учащихся.
@@ -2159,6 +2179,10 @@ ru:
         use_link_html: Воспользуйтесь %{link_to}, чтобы войти в %{school_name} и просмотреть курс
       confirm_account_deletion:
         body_html: <p> Ваша учетная запись в %{school_name} успешно удалена. </p> <p> Вся ваша личная информация была удалена, и у вас больше не будет доступа к этой школе.</p>
+      confirm_email_update:
+        body:
+          html: <p> Ваш адрес электронной почты в <strong>%{school_name}</strong> успешно обновлен. </p>
+        subject: Ваш адрес электронной почты в школе %{school_name} успешно обновлен
       course_enrollement:
         added_coach_html: Вы добавлены в качестве ментора курса <strong>%{course_name}</strong> в %{school_name}. Это дает вам возможность просматривать материалы, отправленные учащимися, выставлять оценки и оставлять отзывы об их работе.
         can_sign_html: Теперь вы можете %{link_to}.
@@ -2171,7 +2195,7 @@ ru:
           control_emails_html: Вы можете управлять этими электронными письмами с %{link_to}.
           latest_topics: "Последние темы, опубликованные в ваших сообществах:"
           link_to: страница редактирования вашего профиля
-          main_html: "Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения на некоторых курсах, в которых вы являетесь тренером."
+          main_html: Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения на некоторых курсах, в которых вы являетесь тренером.
           older: "Старые, популярные темы, в которых появились новые действия:"
           replies: ответов
           views: просмотров
@@ -2193,6 +2217,9 @@ ru:
         welcome: Добро пожаловать в %{course_name}
       feedback_as_email:
         body:
+          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_feedback_header: Вот отзыв о вашей работе
+          grading_header: Ваша заявка получила следующие оценки от %{coach_name}
           link_to: полный отзыв
           main_html: Вот ответ от %{coach_name} о вашем %{update_for}
           recent_submission: недавней работе
@@ -2238,6 +2265,12 @@ ru:
           students_requested_html: <b>Учащихся запрошено:</b> %{report_params}
           summary_import_html: "Ваш запрос на импорт учащихся в курс <strong>%{course_name}</strong> успешно выполнен. Вот краткий обзор импорта:"
           view_html: Вы можете %{link_to}.
+      update_email_token:
+        body:
+          link_to: link
+          main_html: "<p>Мы получили запрос на обновление вашей электронной почты в %{school_name}.</p> <p> Нажмите на эту ссылку %{link_to}, чтобы обновить электронную почту. Ссылка действительна только в течение 30\_минут.</p>"
+          note_html: <p>Это действие необратимо.</p>
+        subject: Обновите свой адрес электронной почты в школе %{school_name}
     sign_in_with_email:
       type_password: Ваш Пароль
     students:

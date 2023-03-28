@@ -12,7 +12,11 @@ module Schools
 
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
-        render json: { id: faculty.id, image_url: faculty.user.image_or_avatar_url, error: nil }
+        render json: {
+                 id: faculty.id.to_s,
+                 image_url: faculty.user.image_or_avatar_url,
+                 error: nil
+               }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
       end
@@ -23,19 +27,29 @@ module Schools
 
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
-        render json: { id: faculty.id, image_url: faculty.user.image_or_avatar_url, error: nil }
+        render json: {
+                 id: faculty.id.to_s,
+                 image_url: faculty.user.image_or_avatar_url,
+                 error: nil
+               }
       else
         render json: { error: @form.errors.full_messages.join(', ') }
       end
     end
 
     def course_index
-      @course = policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope).find(params[:course_id])
+      @course =
+        policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope)
+          .find(params[:course_id])
       authorize(current_school, policy_class: Schools::FacultyPolicy)
     end
 
     def faculty
-      @faculty = authorize(Faculty.find(params[:id]), policy_class: Schools::FacultyPolicy)
+      @faculty =
+        authorize(
+          Faculty.find(params[:id]),
+          policy_class: Schools::FacultyPolicy
+        )
     end
   end
 end

@@ -7,16 +7,20 @@ module Users
     def execute
       raise 'user is a school admin' if @user.school_admin.present?
 
+      if @user.discord_user_id.present?
+        Discord::ClearRolesService.new(
+          @user.discord_user_id,
+          Schools::Configuration::Discord.new(@user.school)
+        ).execute
+      end
+
       User.transaction do
         delete_founder_data if @user.founders.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
-
-        UserMailer.confirm_account_deletion(
-          @user.name,
-          @user.email,
-          @user.school
-        ).deliver_later
+        name = @user.preferred_name.presence || @user.name
+        UserMailer.confirm_account_deletion(name, @user.email, @user.school)
+          .deliver_later
 
         create_audit_record
 
@@ -40,15 +44,15 @@ module Users
 
       # Cache teams with only the current user as member
       team_ids =
-        Startup
+        Team
           .joins(:founders)
           .group(:id)
           .having('count(founders.id) = 1')
-          .where(id: @user.founders.distinct(:startup_id).select(:startup_id))
+          .where(id: @user.founders.distinct(:team_id).select(:team_id))
           .pluck(:id)
 
       @user.founders.each(&:destroy!)
-      Startup.where(id: team_ids).each(&:destroy!)
+      Team.where(id: team_ids).each(&:destroy!)
     end
 
     def delete_coach_profile

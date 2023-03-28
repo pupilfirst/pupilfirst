@@ -1,26 +1,31 @@
 type t = {
   id: string,
   number: int,
+  filterName: string,
   studentsInLevel: int,
-  teamsInLevel: int,
   unlocked: bool,
 }
 
 let id = t => t.id
 let number = t => t.number
 let studentsInLevel = t => t.studentsInLevel
-let teamsInLevel = t => t.teamsInLevel
 let unlocked = t => t.unlocked
+let filterName = t => t.filterName
 
-let percentageStudents = (t, totalStudents) =>
-  float_of_int(t.studentsInLevel) /. float_of_int(totalStudents) *. 100.0
+let percentageStudents = (t, totalStudents) => {
+  if totalStudents == 0 {
+    0.0
+  } else {
+    float_of_int(t.studentsInLevel) /. float_of_int(totalStudents) *. 100.0
+  }
+}
 
-let fromJsObject = jsObject => {
-  id: jsObject["id"],
-  number: jsObject["number"],
-  studentsInLevel: jsObject["studentsInLevel"],
-  teamsInLevel: jsObject["teamsInLevel"],
-  unlocked: jsObject["unlocked"],
+let make = (~id, ~number, ~studentsInLevel, ~unlocked, ~filterName) => {
+  id: id,
+  number: number,
+  studentsInLevel: studentsInLevel,
+  unlocked: unlocked,
+  filterName: filterName,
 }
 
 let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
@@ -42,3 +47,15 @@ let levelsCompletedByAllStudents = levels => {
 }
 
 let shortName = t => LevelLabel.format(~short=true, t.number |> string_of_int)
+
+let decode = json => {
+  open Json.Decode
+
+  make(
+    ~id=field("id", string, json),
+    ~number=field("number", int, json),
+    ~studentsInLevel=field("studentsInLevel", int, json),
+    ~unlocked=field("unlocked", bool, json),
+    ~filterName=field("filterName", string, json),
+  )
+}

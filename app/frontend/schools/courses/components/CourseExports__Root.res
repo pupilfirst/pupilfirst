@@ -166,7 +166,7 @@ let toggleChoiceClasses = value => {
 let make = (~course, ~exports, ~tags) => {
   let (state, send) = React.useReducerWithMapState(reducer, exports, computeInitialState)
 
-  <div key="School admin coaches course index" className="flex flex-1 h-screen overflow-y-scroll">
+  <div className="bg-gray-50 h-full" key="School admin coaches course index">
     {state.drawerOpen
       ? <SchoolAdmin__EditorDrawer
           closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={t("close_export_form")}>
@@ -282,7 +282,7 @@ let make = (~course, ~exports, ~tags) => {
           </div>
         </SchoolAdmin__EditorDrawer>
       : React.null}
-    <div className="flex-1 flex flex-col bg-gray-50">
+    <div className="flex-1 flex flex-col">
       <div className="flex px-6 py-2 items-center justify-between">
         <button
           onClick={_ => send(OpenDrawer)}
@@ -292,11 +292,10 @@ let make = (~course, ~exports, ~tags) => {
         </button>
       </div>
       {state.courseExports |> ArrayUtils.isEmpty
-        ? <div
-            className="flex justify-center bg-gray-50 border rounded p-3 italic mx-auto max-w-2xl w-full">
+        ? <div className="flex justify-center border rounded p-3 italic mx-auto max-w-2xl w-full">
             {t("no_exports_notice")->str}
           </div>
-        : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-50">
+        : <div className="px-6 pb-4 mt-5 flex flex-1">
             <div className="max-w-2xl w-full mx-auto relative">
               <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
               <div className="flex mt-4 -mx-3 items-start flex-wrap">

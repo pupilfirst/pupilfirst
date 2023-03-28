@@ -36,4 +36,18 @@ class SchoolAdminMailer < SchoolMailer
       I18n.t('mailers.school_admin.students_bulk_import_complete.subject')
     )
   end
+
+  def email_updated_notification(school_admin, user, old_email)
+    @school_admin = school_admin
+    @old_email = old_email
+    @user = user
+    @school = school_admin.school
+    simple_mail(
+      school_admin.email,
+      I18n.t(
+        'mailers.school_admin.email_updated_notification.subject',
+        name: user.name
+      )
+    )
+  end
 end

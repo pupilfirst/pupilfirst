@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
         else
-         :rails_blob
+          :rails_blob
         end
       route_for(route, blob, only_path: true)
     else
@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     post 'users/send_reset_password_email', controller: 'users/sessions', action: 'send_reset_password_email', as: 'user_send_reset_password_email'
     get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
+    get 'users/auth_callback', controller: 'users/sessions', action: 'auth_callback', as: 'user_auth_callback'
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
     get 'users/sign_in_with_email', controller: 'users/sessions', action: 'sign_in_with_email', as: 'sign_in_with_email'
@@ -41,6 +42,8 @@ Rails.application.routes.draw do
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
+  get 'users/update_email', controller: 'users', action: 'update_email', as: 'update_email'
+
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'
     mount OverrideCsp.new(Flipper::UI.app(Flipper)), at: '/toggle'
@@ -54,38 +57,74 @@ Rails.application.routes.draw do
 
   resources :notifications, only: %i[show]
 
-  resource :school, only: %i[show update] do
+  resource :school, only: [] do
     get 'customize'
     get 'admins'
     post 'images'
   end
 
   namespace :school, module: 'schools' do
+    [
+      '/',
+      'courses',
+      'courses/new',
+      'courses/:course_id',
+      'courses/:course_id/details',
+      'courses/:course_id/images',
+      'courses/:course_id/actions',
+      'courses/:course_id/cohorts',
+      'courses/:course_id/cohorts/new',
+      'cohorts/:cohort_id/details',
+      'cohorts/:cohort_id/actions',
+      'courses/:course_id/students',
+      'courses/:course_id/students/new',
+      'courses/:course_id/students/import',
+      'students/:student_id/details',
+      'students/:student_id/actions',
+      'courses/:course_id/teams',
+      'courses/:course_id/teams/new',
+      'teams/:team_id/details',
+      'teams/:team_id/actions',
+    ].each do |path|
+      get path, action: 'school_router'
+    end
+
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do
         get '/', action: 'school_index'
       end
     end
 
+    resources :calendars, only: %i[update], controller: 'calendars'
+    resources :calendar_events, only: %i[update destroy], controller: 'calendar_events'
+
     resources :targets, only: [] do
       resource :content_block, only: %i[create]
     end
 
-    resources :courses, only: %i[index show new] do
+    resources :cohorts, only: [] do
+      member do
+        post 'bulk_import_students'
+      end
+    end
+
+    resources :courses, only: [] do
       member do
         get 'applicants'
-        get 'details'
-        get 'images', action: :details
-        get 'actions', action: :details
+        get 'calendar_events'
         get 'curriculum'
         get 'exports'
         get 'authors'
         get 'certificates'
         post 'certificates', action: 'create_certificate'
-        post 'bulk_import_students'
         get 'evaluation_criteria'
         post 'attach_images'
+        get 'calendar_month_data'
       end
+
+      resources :calendar_events, only: %i[new create show edit], controller: 'calendar_events'
+
+      resources :calendars, only: %i[new create edit], controller: 'calendars'
 
       resources :authors, only: %w[show new]
 
@@ -112,9 +151,7 @@ Rails.application.routes.draw do
         end
       end
 
-      post 'mark_teams_active'
       get 'students'
-      get 'inactive_students'
       post 'delete_coach_enrollment'
       post 'update_coach_enrollments'
     end
@@ -134,6 +171,22 @@ Rails.application.routes.draw do
     resources :communities, only: %i[index]
   end
 
+  resources :organisations, only: %i[show index] do
+    resources :cohorts, only: %i[show] do
+      member do
+        get 'students'
+      end
+    end
+  end
+
+  namespace :org, module: 'organisations' do
+    resources :students, only: %[show] do
+      member do
+        get 'submissions'
+      end
+    end
+  end
+
   resources :communities, only: %i[show] do
     member do
       get 'new_topic'
@@ -149,6 +202,7 @@ Rails.application.routes.draw do
 
   resource :user, only: %i[edit] do
     post 'upload_avatar'
+    post 'clear_discord_id'
   end
 
   resources :timeline_event_files, only: %i[create] do
@@ -191,6 +245,8 @@ Rails.application.routes.draw do
     member do
       get 'review', action: 'review'
       get 'students', action: 'students'
+      get 'calendar', action: 'calendar'
+      get 'calendar_month_data', action: 'calendar_month_data'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
       get 'report', action: 'report'

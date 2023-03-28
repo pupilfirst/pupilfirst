@@ -8,4 +8,5 @@ class SchoolPolicy < ApplicationPolicy
   alias customize? show?
   alias images? show?
   alias admins? show?
+  alias school_router? show?
 end

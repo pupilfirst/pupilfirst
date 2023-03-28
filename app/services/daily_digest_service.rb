@@ -147,6 +147,7 @@ class DailyDigestService
 
     coach
       .courses
+      .distinct
       .map do |course|
         pending_submissions =
           course
@@ -154,6 +155,7 @@ class DailyDigestService
             .live
             .where('timeline_events.created_at > ?', 1.week.ago)
             .pending_review
+
         pending_submissions_in_course = pending_submissions.count
 
         if pending_submissions_in_course.zero?
@@ -161,7 +163,7 @@ class DailyDigestService
         else
           students =
             Founder
-              .joins(startup: %i[faculty course])
+              .joins([:faculty, level: :course])
               .where(faculty: { id: coach }, courses: { id: course })
           {
             course_id: course.id,

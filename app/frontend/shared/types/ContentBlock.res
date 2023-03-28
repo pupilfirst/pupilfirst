@@ -282,7 +282,7 @@ module Query = %graphql(`
   }
 `)
 
-module Fragments = %graphql(`
+module Fragment = %graphql(`
   fragment ContentBlockFragment on ContentBlock {
     id
     blockType

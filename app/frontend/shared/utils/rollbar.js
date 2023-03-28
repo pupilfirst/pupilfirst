@@ -1,10 +1,10 @@
 var _rollbarConfig = {
-  accessToken: process.env.ROLLBAR_CLIENT_TOKEN,
-  captureUncaught: process.env.ROLLBAR_CAPTURE_UNCAUGHT === "true",
+  accessToken: window.pupilfirst.rollbar.accessToken,
+  captureUncaught: window.pupilfirst.rollbar.captureUncaught,
   captureUnhandledRejections:
-    process.env.ROLLBAR_CAPTURE_UNHANDLED_REJECTIONS === "true",
+    window.pupilfirst.rollbar.captureUnhandledRejections,
   payload: {
-    environment: process.env.RAILS_ENV,
+    environment: window.pupilfirst.environment,
   },
   checkIgnore: (_isUncaught, _args, _payload) => {
     const currentHost = window.location.host;
@@ -133,36 +133,37 @@ var _rollbarConfig = {
       (i.crossOrigin = ""),
         (i.src = n.rollbarJsUrl),
         o || (i.async = !0),
-        (i.onload = i.onreadystatechange = a(function () {
-          if (
-            !(
-              l ||
-              (this.readyState &&
-                "loaded" !== this.readyState &&
-                "complete" !== this.readyState)
-            )
-          ) {
-            i.onload = i.onreadystatechange = null;
-            try {
-              d.removeChild(i);
-            } catch (r) {}
-            (l = !0),
-              (function () {
-                var e;
-                if (void 0 === r._rollbarDidLoad) {
-                  e = new Error("rollbar.js did not load");
-                  for (var o, n, a, l, i = 0; (o = r._rollbarShims[i++]); )
-                    for (o = o.messages || []; (n = o.shift()); )
-                      for (a = n.args || [], i = 0; i < a.length; ++i)
-                        if ("function" == typeof (l = a[i])) {
-                          l(e);
-                          break;
-                        }
-                }
-                "function" == typeof t && t(e);
-              })();
-          }
-        })),
+        (i.onload = i.onreadystatechange =
+          a(function () {
+            if (
+              !(
+                l ||
+                (this.readyState &&
+                  "loaded" !== this.readyState &&
+                  "complete" !== this.readyState)
+              )
+            ) {
+              i.onload = i.onreadystatechange = null;
+              try {
+                d.removeChild(i);
+              } catch (r) {}
+              (l = !0),
+                (function () {
+                  var e;
+                  if (void 0 === r._rollbarDidLoad) {
+                    e = new Error("rollbar.js did not load");
+                    for (var o, n, a, l, i = 0; (o = r._rollbarShims[i++]); )
+                      for (o = o.messages || []; (n = o.shift()); )
+                        for (a = n.args || [], i = 0; i < a.length; ++i)
+                          if ("function" == typeof (l = a[i])) {
+                            l(e);
+                            break;
+                          }
+                  }
+                  "function" == typeof t && t(e);
+                })();
+            }
+          })),
         d.insertBefore(i, s);
     }),
       (i.prototype.wrap = function (r, e, o) {
@@ -208,9 +209,10 @@ var _rollbarConfig = {
         }
       });
     for (
-      var p = "log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleAnonymousErrors,handleUnhandledRejection,captureEvent,captureDomContentLoaded,captureLoad".split(
-          ","
-        ),
+      var p =
+          "log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleAnonymousErrors,handleUnhandledRejection,captureEvent,captureDomContentLoaded,captureLoad".split(
+            ","
+          ),
         f = 0;
       f < p.length;
       ++f
@@ -340,9 +342,10 @@ var _rollbarConfig = {
       if (r) {
         var t,
           a,
-          l = "EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload".split(
-            ","
-          );
+          l =
+            "EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload".split(
+              ","
+            );
         for (t = 0; t < l.length; ++t)
           r[(a = l[t])] && r[a].prototype && n(e, r[a].prototype, o);
       }
@@ -361,9 +364,10 @@ var _rollbarConfig = {
                   if (this.impl[r]) return this.impl[r].apply(this.impl, e);
                 };
               },
-              o = "log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleAnonymousErrors,handleUnhandledRejection,_createItem,wrap,loadFull,shimId,captureEvent,captureDomContentLoaded,captureLoad".split(
-                ","
-              ),
+              o =
+                "log,debug,info,warn,warning,error,critical,global,configure,handleUncaughtException,handleAnonymousErrors,handleUnhandledRejection,_createItem,wrap,loadFull,shimId,captureEvent,captureDomContentLoaded,captureLoad".split(
+                  ","
+                ),
               n = 0;
             n < o.length;
             n++
@@ -415,7 +419,11 @@ var _rollbarConfig = {
 // Set the user ID in the payload if its available.
 const userId = document.getElementsByTagName("html")[0].dataset.userId;
 
-if (typeof userId === "string" && userId !== "") {
+if (
+  typeof Rollbar === "object" &&
+  typeof userId === "string" &&
+  userId !== ""
+) {
   Rollbar.configure({
     payload: {
       person: {

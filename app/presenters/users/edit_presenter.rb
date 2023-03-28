@@ -8,6 +8,8 @@ module Users
       {
         current_user_id: current_user.id,
         name: current_user.name,
+        email: current_user.email,
+        preferred_name: current_user.preferred_name || '',
         about: current_user.about || '',
         locale: current_user.locale,
         available_locales: Rails.application.secrets.locale[:available],
@@ -22,6 +24,15 @@ module Users
         is_school_admin: current_user.school_admin.present?,
         has_valid_delete_account_token: valid_delete_account_token
       }
+    end
+
+    def discord_federated_login_url
+      "//#{Rails.application.secrets.sso_domain}/oauth/discord?fqdn=#{view.current_host}&session_id=#{encoded_private_session_id}&link_data=true"
+    end
+
+    def encoded_private_session_id
+      @encoded_private_session_id ||=
+        Base64.urlsafe_encode64(view.session.id.private_id)
     end
 
     private

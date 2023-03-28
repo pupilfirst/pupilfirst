@@ -115,7 +115,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
     | None => React.null
     | Some(answer) =>
       <div
-        className="quiz-root__answer-submit-section text-center py-4 border-t border-gray-300 fixed z-10 left-0 right-0 bottom-0 w-full">
+        className="quiz-root__answer-submit-section flex justify-center rounded-b-lg text-center p-4 border-t border-gray-200 w-full">
         {currentQuestion |> QuizQuestion.isLastQuestion(quizQuestions)
           ? <button
               disabled={saving || preview}

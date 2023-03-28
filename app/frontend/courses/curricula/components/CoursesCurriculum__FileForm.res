@@ -1,6 +1,9 @@
 exception FormNotFound(string)
 exception UnexpectedResponse(int)
 
+@val @scope(("window", "pupilfirst"))
+external maxUploadFileSize: int = "maxUploadFileSize"
+
 let str = React.string
 
 let tr = I18n.t(~scope="components.CoursesCurriculum__FileForm")
@@ -83,9 +86,8 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
       | [] => ()
       | files =>
         let file = files[0]
-        let maxFileSize = 5 * 1024 * 1024
 
-        let errors = file["size"] > maxFileSize ? list{tr("max_file_size")} : list{}
+        let errors = file["size"] > maxUploadFileSize ? list{tr("max_file_size")} : list{}
 
         if errors |> ListUtils.isEmpty {
           let filename = file["name"]
@@ -121,7 +123,7 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
         onChange={attachFile(state, send, attachingCB, attachFileCB, preview)}
       />
       <label
-        className="text-center cursor-pointer truncate bg-gray-50 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
+        className="text-center cursor-pointer truncate bg-gray-50 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 grow"
         htmlFor={"attachment_file_" ++ string_of_int(index)}>
         <span className="w-full">
           <i className="fas fa-upload mr-2 text-lg" />

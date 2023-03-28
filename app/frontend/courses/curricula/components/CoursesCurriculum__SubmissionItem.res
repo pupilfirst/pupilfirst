@@ -12,6 +12,7 @@ let kindIconClasses = result =>
   | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
   | MultiChoice(
       _choices,
+      _allowMultiple,
       _selected,
     ) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
@@ -28,7 +29,7 @@ let placeholder = (id, checklistItem) => {
   let optional = checklistItem |> ChecklistItem.optional
   <div className="flex items-start">
     <PfIcon className={kindIconClasses(checklistItem->ChecklistItem.result)} />
-    <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
+    <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide overflow-auto">
       <MarkdownBlock
         profile=Markdown.Permissive
         markdown={title ++ (optional ? " (" ++ ts("optional") ++ ")" : "")}
@@ -84,13 +85,13 @@ let longTextWarning = value => {
   showWarning
     ? <div className="flex justify-between items-center mt-1">
         <div
-          className={"hidden md:inline px-2 py-px rounded text-xs font-semibold inline-flex items-center " ++
+          className={"hidden md:inline-flex px-2 py-px rounded text-xs font-semibold items-center " ++
           colors}>
           <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
           <span> {tr("warning_length_limit") |> str} </span>
         </div>
         <div
-          className={"flex-shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded " ++
+          className={"shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded " ++
           colors}>
           {currentLength |> string_of_int |> str} {" / 5000" |> str}
         </div>
@@ -112,24 +113,52 @@ let showLongText = (value, id, updateResultCB) =>
     {longTextWarning(value)}
   </div>
 
-let checkboxOnChange = (choices, itemIndex, updateResultCB, event) =>
-  ReactEvent.Form.target(event)["checked"]
-    ? updateResultCB(ChecklistItem.MultiChoice(choices, Some(itemIndex)))
-    : updateResultCB(ChecklistItem.MultiChoice(choices, None))
+let checkboxOnChange = (choices, allowMultiple, label, selected, updateResultCB, event) => {
+  let checked = ReactEvent.Form.target(event)["checked"]
+  checked
+    ? updateResultCB(
+        ChecklistItem.MultiChoice(choices, allowMultiple, Js.Array2.concat(selected, [label])),
+      )
+    : updateResultCB(
+        ChecklistItem.MultiChoice(
+          choices,
+          allowMultiple,
+          selected->Js.Array2.filter(i => i != label),
+        ),
+      )
+}
 
-let showMultiChoice = (choices, choice, id, updateResultCB) =>
-  Js.Array2.mapi(choices, (label, index) => {
-    let checked = Belt.Option.mapWithDefault(choice, false, i => i == index)
+let radioOnChange = (choices, allowMultiple, label, updateResultCB, event) => {
+  let checked = ReactEvent.Form.target(event)["checked"]
+  checked
+    ? updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, [label]))
+    : updateResultCB(ChecklistItem.MultiChoice(choices, allowMultiple, []))
+}
 
-    <Radio
-      key={index |> string_of_int}
-      id={id ++ (index |> string_of_int)}
-      label
-      onChange={checkboxOnChange(choices, index, updateResultCB)}
-      checked
-    />
-  })->React.array
-
+let showMultiChoice = (choices, allowMultiple, selected, id, updateResultCB) =>
+  if allowMultiple {
+    Js.Array2.mapi(choices, (label, index) => {
+      <div>
+        <Checkbox
+          key={index->string_of_int}
+          label={label->str}
+          id={id ++ index->string_of_int}
+          checked={selected->Js.Array2.includes(label)}
+          onChange={checkboxOnChange(choices, allowMultiple, label, selected, updateResultCB)}
+        />
+      </div>
+    })->React.array
+  } else {
+    Js.Array2.mapi(choices, (label, index) => {
+      <Radio
+        key={index |> string_of_int}
+        id={id ++ (index |> string_of_int)}
+        label
+        checked={selected->Js.Array2.includes(label)}
+        onChange={radioOnChange(choices, allowMultiple, label, updateResultCB)}
+      />
+    })->React.array
+  }
 let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false)
   updateResultCB(ChecklistItem.Files(files |> Array.append([ChecklistItem.makeFile(id, filename)])))
@@ -194,13 +223,14 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
   let id = computeId(index, checklistItem)
   <div className="mt-4" ariaLabel=id>
     {placeholder(id, checklistItem)}
-    <div className="md:pl-7 pt-2 pr-0 pb-4">
+    <div className="md:pl-7 pt-2 pr-0 pb-4 space-y-2">
       {switch checklistItem |> ChecklistItem.result {
       | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB, index)
       | Link(link) => showLink(link, id, updateResultCB)
       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
       | LongText(longText) => showLongText(longText, id, updateResultCB)
-      | MultiChoice(choices, selected) => showMultiChoice(choices, selected, id, updateResultCB)
+      | MultiChoice(choices, allowMultiple, selected) =>
+        showMultiChoice(choices, allowMultiple, selected, id, updateResultCB)
       | AudioRecord(_) => showAudioRecorder(attachingCB, updateResultCB, preview)
       }}
     </div>

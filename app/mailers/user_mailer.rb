@@ -49,14 +49,45 @@ class UserMailer < SchoolMailer
     )
   end
 
+  def update_email_token(user, new_email, update_email_url)
+    @user = user
+    @school = user.school
+    @update_email_url = update_email_url
+
+    simple_mail(
+      new_email,
+      I18n.t(
+        'mailers.user.update_email_token.subject',
+        school_name: @school.name
+      )
+    )
+  end
+
+  def confirm_email_update(name, email, school)
+    @name = name
+    @email = email
+    @school = school
+    simple_mail(
+      email,
+      I18n.t(
+        'mailers.user.confirm_email_update.subject',
+        school_name: @school.name
+      )
+    )
+  end
+
   def account_deletion_notification(user, sign_in_url, inactivity_months)
     @user = user
     @school = user.school
     @inactivity_months = inactivity_months
     @sign_in_url = sign_in_url
+
     simple_mail(
       user.email,
-      I18n.t('mailers.user.account_deletion_notification.subject')
+      I18n.t(
+        'mailers.user.account_deletion_notification.subject',
+        school_name: @school.name
+      )
     )
   end
 end

@@ -5,7 +5,6 @@ module Mutations
     argument :applicant_id, ID, required: true
     argument :title, String, required: false
     argument :affiliation, String, required: false
-    argument :access_ends_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :tags, [String], required: true
     argument :notify_student, Boolean, required: false
 
@@ -33,10 +32,6 @@ module Mutations
           affiliation:
             @params[:affiliation].presence || student.user.affiliation
         )
-
-        if @params[:access_ends_at].present?
-          student.startup.update!(access_ends_at: @params[:access_ends_at])
-        end
 
         # rubocop:disable Lint/LiteralAsCondition
         if @params[:notify_student].presence || false

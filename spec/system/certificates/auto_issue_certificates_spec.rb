@@ -5,20 +5,26 @@ feature 'Automatic issuance of certificates', js: true do
   include NotificationHelper
   include MarkdownEditorHelper
   include SubmissionsHelper
+  include HtmlSanitizerSpecHelper
 
   # The basics
   let!(:school) { create :school, :current }
   let(:course) { create :course, school: school }
+  let(:cohort) { create :cohort, course: course }
   let!(:certificate) { create :certificate, :active, course: course }
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
 
   # Create few teams
-  let!(:team) { create :team, level: level_1 }
+  let!(:team) { create :team, cohort: cohort }
 
   # Shortcut to a student we'll refer to frequently.
-  let!(:student_1) { create :student, startup: team }
-  let!(:student_2) { create :student, startup: team }
+  let!(:student_1) do
+    create :student, level: level_1, cohort: cohort, team: team
+  end
+  let!(:student_2) do
+    create :student, level: level_1, cohort: cohort, team: team
+  end
 
   let(:target_group_l1) do
     create :target_group, level: level_1, milestone: true
@@ -72,7 +78,12 @@ feature 'Automatic issuance of certificates', js: true do
   end
 
   context 'when the student is in the final level' do
-    let!(:team) { create :team, level: level_2 }
+    let!(:student_1) do
+      create :student, level: level_2, cohort: cohort, team: team
+    end
+    let!(:student_2) do
+      create :student, level: level_2, cohort: cohort, team: team
+    end
 
     scenario 'student receives certificate upon completion of sole milestone target' do
       sign_in_user student_1.user, referrer: target_path(target_l2)
@@ -96,13 +107,13 @@ feature 'Automatic issuance of certificates', js: true do
       # Two emails should also have been sent out.
       open_email(student_1.email)
 
-      expect(current_email.body).to include(
+      expect(sanitize_html(current_email.body)).to include(
         "http://test.host/c/#{issued_certificate.serial_number}"
       )
 
       open_email(student_2.email)
 
-      expect(current_email.body).to include(
+      expect(sanitize_html(current_email.body)).to include(
         "http://test.host/c/#{student_2.user.issued_certificates.first.serial_number}"
       )
     end
@@ -203,7 +214,7 @@ feature 'Automatic issuance of certificates', js: true do
         let(:coach) { create :faculty, user: student_1.user }
 
         before do
-          create :faculty_course_enrollment, faculty: coach, course: course
+          create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
         end
 
         scenario 'student completed second and final milestone target' do
@@ -330,7 +341,7 @@ feature 'Automatic issuance of certificates', js: true do
       let(:coach) { create :faculty }
 
       before do
-        create :faculty_course_enrollment, faculty: coach, course: course
+        create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
 
         # Student 1 completes the target.
         complete_target target_l2, student_1

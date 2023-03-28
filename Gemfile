@@ -1,11 +1,11 @@
-ruby '2.7.6'
+ruby '3.0.5'
 
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.5.1'
+gem 'rails', '~> 6.1.7.2'
 
-gem 'dotenv-rails', '~> 2.7.6', groups: %i[development test]
+gem 'dotenv-rails', '~> 2.8', groups: %i[development test]
 
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'active_storage_validations', '~> 0.9' # Better validations for active_storage.
@@ -44,22 +44,26 @@ gem 'rollbar', '~> 3.2' # Exception tracking and logging from Ruby to Rollbar ht
 gem 'humanize', '~> 2.5' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
-gem 'redis', '~> 4.6' # Redis client for use as cache store for rack-attack
+gem 'redis', '~> 5.0' # Redis client for use as cache store for rack-attack
 gem 'rack-attack', '~> 6.6' # A rack middleware for throttling and blocking abusive requests
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
+gem 'discordrb', '~> 3.4' # A Ruby wrapper for the Discord API.
+gem "groupdate", '~> 6.1.0' # Group ActiveRecord results by day, week, month, quarter, year, or hour.
+gem 'discorb', '~> 0.20.0' # A Ruby wrapper for the Discord Bot.
 
-# Omniauth providers
-gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
-gem 'omniauth-facebook', '~> 8.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
-gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
+# OmniAuth providers
+gem 'omniauth-google-oauth2', '~> 1.1' # Oauth2 strategy for Google.
+gem 'omniauth-facebook', '~> 9.0' # Facebook OAuth2 Strategy for OmniAuth.
+gem 'omniauth-github', github: 'pupilfirst/omniauth-github', branch: 'master' # GitHub strategy for OmniAuth. Forked because of incompatibility with omniauth-google-oauth2.
+gem 'omniauth-discord', '~> 1.0' # Discord OAuth2 Strategy for OmniAuth.
 
 gem 'file_validators', '~> 3.0' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.1', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem 'graphql', '~> 1.12.24' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '~> 2.0' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
-gem 'i18n-js', '~> 4.0.0.alpha1' # Provide Rails I18n translations on Javascript.
+gem 'i18n-js', '~> 4.0' # Export Rails I18n translations for the frontend.
 gem 'batch-loader', '~> 2.0' # Generic lazy batching mechanism to avoid N+1 DB queries.
 gem 'recaptcha', '~> 5.8' # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
@@ -81,7 +85,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.2' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.35' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
-gem 'webdrivers', '~> 5.0' # Keep your Selenium WebDrivers updated automatically.
+  gem 'webdrivers', '~> 5.2' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
   gem 'diffy', '~> 3.4' # Easy Diffing in Ruby. https://github.com/samg/diffy
@@ -94,14 +98,13 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9' # Pry debugger.
   gem 'webmock', '~> 3.14' # Mocking web requests.
   gem 'rubocop', '~> 1.21', require: false # Ruby Style Guide.
-  gem 'rubocop-rails', '~> 2.12', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem 'rubocop-rails', '~> 2.16.0', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem 'overcommit', '~> 0.58', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
   gem 'simplecov', '~> 0.21', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
 end
 
 group :production do
-  gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'newrelic_rpm', '~> 8.6' # Performance monitoring
   gem 'aws-sdk-s3', '~> 1.103', require: false
   gem 'aws-sdk-cloudfront', '~> 1.56', require: false

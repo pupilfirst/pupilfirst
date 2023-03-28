@@ -216,7 +216,7 @@ let suggestions = state => {
               </p>
             </div>
             <div
-              className={"text-xs px-1 py-px ml-2 rounded font-semibold flex-shrink-0 " ++
+              className={"text-xs px-1 py-px ml-2 rounded font-semibold shrink-0 " ++
               answersClasses}>
               {answersText |> str}
             </div>

@@ -106,8 +106,8 @@ let deleteCertificate = (certificate, send) => {
 let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
   let (state, send) = React.useReducerWithMapState(reducer, certificates, computeInitialState)
 
-  <DisablingCover containerClasses="w-full" disabled=state.deleting message={t("deleting")}>
-    <div className="flex flex-1 h-screen overflow-y-scroll">
+  <DisablingCover containerClasses="min-h-full bg-gray-50 w-full" disabled=state.deleting message={t("deleting")}>
+    <div className="flex">
       {switch state.drawer {
       | NewCertificate =>
         <CourseCertificates__CreateDrawer
@@ -125,7 +125,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
         />
       | Closed => React.null
       }}
-      <div className="flex-1 flex flex-col bg-gray-50">
+      <div className="flex flex-1 flex-col">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => send(OpenNewCertificateDrawer)}

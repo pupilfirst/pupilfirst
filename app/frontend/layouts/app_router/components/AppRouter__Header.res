@@ -90,7 +90,6 @@ let notificationButton = hasNotifications =>
     wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-50"
     iconClasses="app-router-header__notifications-unread-bullet"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
-    icon="if i-bell-regular text-xl"
     hasNotifications
   />
 
@@ -183,8 +182,9 @@ let make = (~school, ~currentUser) => {
         </div>
         {!menuHidden && !isMobile()
           ? <div
-              className="relative flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap flex-shrink-0 transition">
+              className="relative flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap shrink-0 transition">
               {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
+              <Layout__UserControls user={(currentUser)} />
             </div>
           : React.null}
       </nav>

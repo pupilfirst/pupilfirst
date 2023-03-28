@@ -34,3 +34,16 @@ let make = (~markdown, ~className=?, ~profile) => {
     dangerouslySetInnerHTML={Markdown.toSafeHTML(markdown, profile)}
   />
 }
+
+let makeFromJson = props => {
+  open Json.Decode
+
+  let markdown = field("markdown", string, props)
+  let className = optional(field("className", string), props)
+
+  make({
+    "markdown": markdown,
+    "className": className,
+    "profile": Markdown.Permissive,
+  })
+}

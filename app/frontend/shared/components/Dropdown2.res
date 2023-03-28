@@ -45,7 +45,7 @@ let make = (
     selected
     {showDropdown
       ? <div
-          className={"dropdown__list-2 bg-white shadow-lg rounded mt-1 border border-gray-300 absolute overflow-x-hidden z-30
+          className={"dropdown__list-2 bg-white shadow-lg rounded mt-1 border border-gray-300 divide-y divide-gray-200 absolute overflow-x-hidden z-30
  " ++
           width ++
           ((right ? " right-0 " : " left-0 ") ++
@@ -53,7 +53,7 @@ let make = (
           {Js.Array.mapi((content, index) =>
             <div
               key={"dropdown-" ++ index->string_of_int}
-              className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 md:whitespace-nowrap
+              className="cursor-pointer block text-sm font-semibold bg-white hover:text-primary-500 hover:bg-gray-50 md:whitespace-nowrap
 ">
               content
             </div>

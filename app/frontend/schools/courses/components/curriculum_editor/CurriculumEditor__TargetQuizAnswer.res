@@ -51,8 +51,8 @@ let make = (
         />
         <button
           className={answerOption |> CurriculumEditor__AnswerOption.correctAnswer
-            ? "w-28 flex-shrink-0 border-l border-gray-300 text-green-600 font-semibold cursor-default focus:outline-none text-xs py-1 px-2"
-            : "w-28 flex-shrink-0 border-l border-gray-300 text-gray-800 hover:text-gray-900 focus:outline-none focus:text-primary-500 text-xs py-1 px-2"}
+            ? "w-28 shrink-0 border-l border-gray-300 text-green-600 font-semibold cursor-default focus:outline-none text-xs py-1 px-2"
+            : "w-28 shrink-0 border-l border-gray-300 text-gray-800 hover:text-gray-900 focus:outline-none focus:text-primary-500 text-xs py-1 px-2"}
           type_="button"
           onClick={_event => {
             ReactEvent.Mouse.preventDefault(_event)
@@ -64,7 +64,7 @@ let make = (
         </button>
         {canBeDeleted
           ? <button
-              className="flex-shrink-0 border-l border-gray-300 text-gray-600 hover:text-red-500 focus:outline-none focus:text-red-500 text-xs py-1 px-3"
+              className="shrink-0 border-l border-gray-300 text-gray-600 hover:text-red-500 focus:outline-none focus:text-red-500 text-xs py-1 px-3"
               type_="button"
               title={tr("remove_answer_option")}
               ariaLabel={tr("remove_answer_option")}

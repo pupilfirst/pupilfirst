@@ -8,6 +8,8 @@ let encodeISO: Js.Date.t => Js.Json.t
 
 let differenceInSeconds: (Js.Date.t, Js.Date.t) => int
 
+let differenceInCalendarMonths: (Js.Date.t, Js.Date.t) => int
+
 let differenceInMinutes: (Js.Date.t, Js.Date.t) => int
 
 let differenceInDays: (Js.Date.t, Js.Date.t) => int
@@ -17,6 +19,8 @@ let addDays: (Js.Date.t, int) => Js.Date.t
 let isPast: Js.Date.t => bool
 
 let isFuture: Js.Date.t => bool
+
+let getDaysInMonth: Js.Date.t => float
 
 @ocaml.doc("
  * `format(date, fmt)` returns the date as a string in the desired format, and in the user's timezone.

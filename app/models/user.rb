@@ -7,8 +7,12 @@ class User < ApplicationRecord
   acts_as_taggable
 
   belongs_to :school
+  belongs_to :organisation, optional: true
+  has_many :organisation_admins, dependent: :restrict_with_error
+  has_many :organisations, through: :organisation_admins
   has_many :founders, dependent: :restrict_with_error
-  has_many :startups, through: :founders
+  has_many :teams, through: :founders
+  has_many :cohorts, through: :founders
   has_many :course_authors, dependent: :restrict_with_error
   has_many :communities, through: :founders
   has_many :courses, through: :founders
@@ -51,9 +55,9 @@ class User < ApplicationRecord
          :rememberable,
          :omniauthable,
          :recoverable,
-         omniauth_providers: %i[google_oauth2 facebook github]
+         omniauth_providers: %i[google_oauth2 facebook github discord]
 
-  normalize_attribute :name, :about, :affiliation
+  normalize_attribute :name, :about, :affiliation, :preferred_name
 
   validates :email,
             presence: true,
@@ -117,10 +121,27 @@ class User < ApplicationRecord
     )
   end
 
+  def original_update_email_token
+    @original_update_email_token ||
+      raise('Original update email token is unavailable')
+  end
+
+  def regenerate_update_email_token
+    @original_update_email_token = SecureRandom.urlsafe_base64
+    update!(
+      update_email_token:
+        Digest::SHA2.base64digest(@original_update_email_token)
+    )
+  end
+
   def self.find_by_hashed_delete_account_token(delete_account_token)
     find_by(
       delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token)
     )
+  end
+
+  def self.find_by_hashed_update_email_token(token)
+    find_by(update_email_token: token)
   end
 
   def regenerate_api_token
@@ -136,7 +157,7 @@ class User < ApplicationRecord
     (
       login_token_generated_at +
         Rails.application.secrets.login_token_time_limit
-    ).strftime('%B %-d, %Y at %l:%M %p')
+    ).strftime('%B %-d, %Y at %-l:%M %p')
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.
@@ -209,5 +230,9 @@ class User < ApplicationRecord
     else
       title.presence || affiliation.presence
     end
+  end
+
+  def discord_account_connected?
+    discord_user_id.present?
   end
 end

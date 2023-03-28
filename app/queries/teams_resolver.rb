@@ -1,110 +1,66 @@
 class TeamsResolver < ApplicationQuery
-  include AuthorizeReviewer
+  include AuthorizeSchoolAdmin
+  include FilterUtils
 
   property :course_id
-  property :coach_notes
-  property :level_id
-  property :coach_id
-  property :search
-  property :tags
+  property :filter_string
 
   def teams
-    # A sad side-effect of Ruby not having function piping. Is there a cleaner alternative?
-    teams = filter_by_level(teams_in_course)
-    teams = self.class.filter_by_coach(teams, coach_id)
-    teams = filter_by_search(teams)
-    teams = self.class.filter_by_coach_notes(teams, coach_notes)
-    teams = self.class.filter_by_tags(course, teams, tags)
+    scope = course.teams
 
-    teams.distinct('startups.id')
-      .select('"startups".*, LOWER(startups.name) AS startup_name').order('startup_name')
-  end
-
-  def self.filter_by_tags(course, teams, tags)
-    return teams if tags.blank?
-
-    user_tags =
-      tags.intersection(
-          course
-            .users
-            .joins(taggings: :tag)
-            .distinct('tags.name')
-            .pluck('tags.name')
-        )
-
-    team_tags =
-      tags.intersection(
-        course
-          .startups
-          .joins(taggings: :tag)
-          .distinct('tags.name')
-          .pluck('tags.name')
-      )
-
-    intersect_teams = user_tags.present? && team_tags.present?
-
-    teams_with_user_tags =
-      teams.joins({ founders: :user })
-        .where(
-          users: {
-            id: course.school.users.tagged_with(user_tags).select(:id)
-          }
-        )
-        .pluck(:id)
-
-    teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
-
-    if intersect_teams
-      teams.where(id: teams_with_user_tags.intersection(teams_with_tags))
+    case filter[:status]&.downcase
+    when 'active'
+      scope = scope.active
+    when 'inactive'
+      scope = scope.inactive
     else
-      teams.where(id: teams_with_user_tags + teams_with_tags)
+      scope
     end
-  end
 
-  def self.filter_by_coach_notes(teams, coach_notes)
-    case coach_notes
-    when 'WithCoachNotes'
-      teams.joins(founders: :coach_notes)
-    when 'WithoutCoachNotes'
-      teams.left_joins(founders: :coach_notes).where(coach_notes: { id: nil })
-    else
-      teams
-    end
-  end
+    scope = scope.where(cohort_id: cohort.id) if cohort.present?
+    scope = scope.where('teams.name ILIKE ?', "%#{filter[:name]}%") if filter[
+      :name
+    ].present?
 
-  def self.filter_by_coach(teams, coach_id)
-    if coach_id.present?
-      teams.joins(:faculty_startup_enrollments)
-        .where(faculty_startup_enrollments: { faculty_id: coach_id })
+    if filter[:sort_by].present?
+      scope.order("#{sort_by_string}")
     else
-      teams
+      scope.order('created_at DESC')
     end
   end
 
   private
 
-  def filter_by_level(teams)
-    if level_id.present?
-      teams.where(level_id: level_id)
-    else
-      teams
-    end
-  end
-
   def filter_by_search(teams)
-    if search.present?
-      teams.where('users.name ILIKE ?', "%#{search}%")
-        .or(teams.where('users.email ILIKE ?', "%#{search}%"))
-        .or(teams.where('startups.name ILIKE ?', "%#{search}%"))
+    search.present? ? teams.where('name ILIKE ?', "%#{search}%") : teams
+  end
+
+  def cohort
+    if filter[:cohort].blank? || id_from_filter_value(filter[:cohort]).blank?
+      return
+    end
+
+    course.cohorts.find_by(id: id_from_filter_value(filter[:cohort]))
+  end
+
+  def sort_by_string
+    case filter[:sort_by]
+    when 'Name'
+      'teams.name ASC'
+    when 'First Created'
+      'created_at ASC'
+    when 'Last Created'
+      'created_at DESC'
     else
-      teams
+      raise "#{filter[:sort_by]} is not a valid sort criterion"
     end
   end
 
-  def teams_in_course
-    course.startups.active
-      .joins({ founders: :user })
-      .includes(founders: [user: { avatar_attachment: :blob }])
-      .includes(:faculty)
+  def resource_school
+    course&.school
+  end
+
+  def course
+    @course ||= Course.find_by(id: course_id)
   end
 end

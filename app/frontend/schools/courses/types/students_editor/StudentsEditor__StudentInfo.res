@@ -20,7 +20,7 @@ let toJsObject = (~teamName, ~tags, t) => {
     "title": Some(t.title),
     "affiliation": Some(t.affiliation),
     "teamName": Some(teamName),
-    "tags": tags,
+    "tags": tags
   }
 }
 

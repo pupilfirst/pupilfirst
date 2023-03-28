@@ -6,7 +6,7 @@ let input = (id, onChange, checked, disabled) => {
 
 @react.component
 let make = (~id, ~onChange, ~checked=false, ~label=?, ~disabled=false) =>
-  <div className="relative">
+  <div>
     {switch label {
     | Some(element) =>
       <label className="checkbox__label flex items-center space-x-2" htmlFor=id>

@@ -10,16 +10,23 @@ module Students
     end
 
     def execute
-      Startups::IssueCertificateService.new(@student.startup).execute
+      students.each do |student|
+        if student.completed_at.blank?
+          student.update!(completed_at: Time.zone.now)
+        end
+
+        Students::IssueCertificateService.new(student).issue
+      end
 
       user = @student.user
       course = @student.course
-      @notification_service.execute(
-        course,
-        :course_completed,
-        user,
-        course
-      )
+      @notification_service.execute(course, :course_completed, user, course)
+    end
+
+    private
+
+    def students
+      @students ||= @student.team.present? ? @student.team.founders : [@student]
     end
   end
 end

@@ -11,6 +11,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <%= ::NewRelic::Agent.browser_timing_header(content_security_policy_nonce) if Rails.env.production? && Rails.application.secrets.new_relic_license_key.present? %>
     <link rel="manifest" href="/manifest.json" />
     <% if content_for?(:viewport) %>
       <%= yield :viewport %>
@@ -21,13 +22,19 @@
     <meta name="theme-color" content="#4D1E9A" />
     <%= tag :meta, name: :psj, action: action_name, controller: controller_path %>
     <!-- Load styles -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha256-M6KFoDq9eUpmogkDgw6+3R3ZgUPSuFXnQyr8tskSfQs=" crossorigin="anonymous">
     <!-- Prep for JS -->
     <%= javascript_tag(nonce: true) do %>
       window.pupilfirst = {
-      defaultLocale: '<%= I18n.default_locale %>',
-      locale: '<%= I18n.locale %>'
+      environment: "<%= Rails.env %>",
+      defaultLocale: "<%= I18n.default_locale %>",
+      locale: "<%= I18n.locale %>",
+      maxUploadFileSize: <%= Rails.application.secrets.max_upload_file_size %>,
+      rollbar: {
+      accessToken: "<%= ENV['ROLLBAR_CLIENT_TOKEN'] %>",
+      captureUncaught: "<%= ENV['ROLLBAR_CAPTURE_UNCAUGHT'] %>",
+      captureUnhandledRejections: "<%= ENV['ROLLBAR_CAPTURE_UNHANDLED_REJECTIONS'] %>",
+      }
       }
       // Prevent Prism from automatically highlighting all code elements on the page.
       window.Prism = window.Prism || {};
@@ -57,7 +64,7 @@
   <body data-host="<%= current_host %>">
         <section class="min-h-full flex flex-col items-stretch">
           <%= yield :nav %>
-          <main class="flex-grow bg-gray-50">
+          <main class="grow bg-white">
             <% if content_for?(:wrapper) %>
               <%= yield :wrapper %>
             <% else %>
@@ -69,5 +76,7 @@
         </section>
         <!-- Initialize Rollbar only at the very end. -->
         <%= vite_javascript_tag 'rollbar', nonce: true %>
+        <!-- Rails specific scripts. -->
+        <%= vite_javascript_tag 'application', nonce: true %>
       </body>
     </html>

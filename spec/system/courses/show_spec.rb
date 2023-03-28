@@ -39,10 +39,13 @@ feature 'Public view of Course', js: true do
   end
 
   context 'when the course has public preview enabled' do
-    let(:course) { create :course, school: school, public_preview: true }
+    let(:course) do
+      create :course, :with_cohort, school: school, public_preview: true
+    end
     let(:level) { create :level, course: course }
-    let(:team) { create :team, level: level }
-    let(:student) { create :student, startup: team }
+    let(:student) do
+      create :student, cohort: course.cohorts.first, level: level
+    end
 
     scenario 'non-signed-in user can see a link to preview the course' do
       visit course_path(course)

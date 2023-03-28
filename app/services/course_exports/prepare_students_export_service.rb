@@ -155,8 +155,9 @@ module CourseExports
             student.level.number,
             user.title,
             user.affiliation,
-            student.startup.tags.order(:name).pluck(:name).join(', '),
-            last_seen_at(user)
+            student.tags.order(:name).pluck(:name).join(', '),
+            last_seen_at(user),
+            student.completed_at&.iso8601 || ''
           ] + average_grades_for_student(student)
         end
 
@@ -170,7 +171,8 @@ module CourseExports
           'Title',
           'Affiliation',
           'Tags',
-          'Last Seen At'
+          'Last Seen At',
+          'Course Completed At'
         ] + evaluation_criteria_names
       ] + rows
     end
@@ -219,15 +221,7 @@ module CourseExports
             @course_export.include_inactive_students? ? scope : scope.active
 
           # Filter by tag, if applicable.
-          if tags.present?
-            applicable_startup_ids =
-              Startup.tagged_with(tags, any: true).pluck(:id)
-            scope
-              .joins(:startup)
-              .merge(Startup.where(id: applicable_startup_ids))
-          else
-            scope
-          end
+          tags.present? ? scope.tagged_with(tags, any: true) : scope
         end.order('users.email')
     end
 

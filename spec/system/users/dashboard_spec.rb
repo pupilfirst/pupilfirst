@@ -9,84 +9,114 @@ feature 'User Dashboard', js: true do
 
   # Course 1 - New Course
   let(:course_1) { create :course, school: school }
+  let(:course_1_cohort) { create :cohort, course: course_1 }
   let(:course_1_level_1) { create :level, :one, course: course_1 }
-  let(:course_1_startup_1) { create :startup, level: course_1_level_1 }
   let(:founder) do
-    create :founder, startup: course_1_startup_1, dashboard_toured: false
+    create :founder, level: course_1_level_1, cohort: course_1_cohort
   end
 
   # Course 2 - Existing course
   let(:course_2) { create :course, school: school }
+  let(:course_2_cohort) { create :cohort, course: course_2 }
   let(:course_2_level_1) { create :level, :one, course: course_2 }
-  let(:course_2_startup_1) { create :startup, level: course_2_level_1 }
   let!(:course_2_founder_1) do
     create :founder,
-           startup: course_2_startup_1,
+           cohort: course_2_cohort,
            user: founder.user,
-           dashboard_toured: true
+           level: course_2_level_1
   end
 
   # Course 3 - Ended course
-  let(:course_3) { create :course, school: school, ends_at: 1.day.ago }
+  let(:course_3) { create :course, school: school }
+  let(:course_3_cohort) { create :cohort, course: course_3, ends_at: 1.day.ago }
   let(:course_3_level_1) { create :level, :one, course: course_3 }
-  let(:course_3_startup_1) { create :startup, level: course_3_level_1 }
   let!(:course_3_founder_1) do
-    create :founder, startup: course_3_startup_1, user: founder.user
+    create :founder,
+           user: founder.user,
+           level: course_3_level_1,
+           cohort: course_3_cohort
   end
   let!(:course_3_student_profile_for_admin) do
-    create :founder, startup: course_3_startup_1, user: school_admin.user
+    create :founder,
+           user: school_admin.user,
+           level: course_3_level_1,
+           cohort: course_3_cohort
   end
 
   # Course 4 - Founder Exited
   let(:course_4) { create :course, school: school }
+  let(:course_4_cohort) { create :cohort, course: course_4 }
   let(:course_4_level_1) { create :level, :one, course: course_4 }
-  let(:course_4_startup_1) do
-    create :team, level: course_4_level_1, dropped_out_at: 1.day.ago
-  end
   let!(:course_4_founder_1) do
-    create :founder, startup: course_4_startup_1, user: founder.user
+    create :founder,
+           user: founder.user,
+           level: course_4_level_1,
+           cohort: course_4_cohort,
+           dropped_out_at: 1.day.ago
   end
 
   # Course 5 - Access Ended
   let(:course_5) { create :course, school: school }
-  let(:course_5_level_1) { create :level, :one, course: course_5 }
-  let(:course_5_startup_1) do
-    create :startup, level: course_5_level_1, access_ends_at: 1.day.ago
+  let(:course_5_cohort_ended) do
+    create :cohort, course: course_5, ends_at: 1.day.ago
   end
+  let!(:course_5_cohort_active) { create :cohort, course: course_5 }
+  let(:course_5_level_1) { create :level, :one, course: course_5 }
   let!(:course_5_founder_1) do
-    create :founder, startup: course_5_startup_1, user: founder.user
+    create :founder,
+           user: founder.user,
+           level: course_5_level_1,
+           cohort: course_5_cohort_ended
   end
 
   # Course 6 - Access end date set to a future date
   let(:course_6) { create :course, school: school }
-  let(:course_6_level_1) { create :level, :one, course: course_6 }
-  let(:course_6_startup_1) do
-    create :startup, level: course_6_level_1, access_ends_at: 1.day.from_now
+  let(:course_6_cohort) do
+    create :cohort, course: course_6, ends_at: 1.day.from_now
   end
+  let(:course_6_level_1) { create :level, :one, course: course_6 }
+
   let!(:course_6_founder_1) do
-    create :founder, startup: course_6_startup_1, user: founder.user
+    create :founder,
+           user: founder.user,
+           level: course_6_level_1,
+           cohort: course_6_cohort
   end
 
   # Course Archived
   let(:course_archived) do
     create :course, school: school, archived_at: 1.day.ago
   end
+  let(:course_archived_cohort) do
+    create :cohort, course: course_archived, ends_at: 1.day.ago
+  end
   let(:course_archived_level_1) { create :level, :one, course: course_archived }
   let(:course_archived_team_1) do
     create :team, level: course_archived_level_1, dropped_out_at: 1.day.ago
   end
   let!(:course_archived_student_1) do
-    create :founder, startup: course_archived_team_1, user: founder.user
+    create :founder,
+           user: founder.user,
+           level: course_archived_level_1,
+           cohort: course_archived_cohort
   end
   let!(:course_archived_student_2) do
-    create :founder, startup: course_archived_team_1
+    create :founder,
+           level: course_archived_level_1,
+           cohort: course_archived_cohort
   end
   let!(:course_archived_student_profile_for_admin) do
-    create :founder, startup: course_archived_team_1, user: school_admin.user
+    create :founder,
+           user: school_admin.user,
+           level: course_archived_level_1,
+           cohort: course_archived_cohort
   end
 
   # Course Ended - For Admin
-  let!(:course_ended) { create :course, school: school, ends_at: 1.day.ago }
+  let!(:course_ended) { create :course, school: school }
+  let!(:course_ended_cohort) do
+    create :cohort, course: course_ended, ends_at: 1.day.ago
+  end
 
   # seed community
   let!(:community_1) do
@@ -108,11 +138,13 @@ feature 'User Dashboard', js: true do
   let(:course_author) { create :course_author, course: course_1 }
 
   before do
-    create :faculty_course_enrollment, faculty: course_coach, course: course_1
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+    create :faculty_cohort_enrollment,
+           faculty: course_coach,
+           cohort: course_1_cohort
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: team_coach,
-           startup: course_2_founder_1.startup
+           founder: course_2_founder_1
     create :community_course_connection,
            course: course_1,
            community: community_1
@@ -179,7 +211,7 @@ feature 'User Dashboard', js: true do
     within("div[aria-label=\"#{course_5.name}\"]") do
       expect(page).to have_text(course_5.name)
       expect(page).to have_text(course_5.description)
-      expect(page).to have_text('Access Ended')
+      expect(page).to have_text('Preview/Limited Access')
       expect(page).to have_link(
         'View Curriculum',
         href: curriculum_course_path(course_5)
@@ -190,7 +222,7 @@ feature 'User Dashboard', js: true do
     within("div[aria-label=\"#{course_6.name}\"]") do
       expect(page).to have_text(course_6.name)
       expect(page).to have_text(course_6.description)
-      expect(page).to_not have_text('Access Ended')
+      expect(page).to_not have_text('Preview/Limited Access')
       expect(page).to have_link(
         'View Course',
         href: curriculum_course_path(course_6)
@@ -378,7 +410,9 @@ feature 'User Dashboard', js: true do
     let(:coach) { create :faculty, school: school, user: founder.user }
 
     before do
-      create :faculty_course_enrollment, faculty: coach, course: course_4
+      create :faculty_cohort_enrollment,
+             faculty: coach,
+             cohort: course_4.cohorts.first
     end
 
     scenario "dashboard doesn't show the dropped out warning for the course and shows relevant links" do

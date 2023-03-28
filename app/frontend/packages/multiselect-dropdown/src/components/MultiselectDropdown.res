@@ -45,16 +45,36 @@ module Make = (Selectable: Selectable) => {
   }
 
   let tagPillClasses = (color, showHover) => {
-    let bgColor200 = "bg-" ++ (color ++ "-200 ")
-    let bgColor300 = "bg-" ++ (color ++ "-300 ")
-    let textColor800 = "text-" ++ (color ++ "-800 ")
-    let textColor900 = "text-" ++ (color ++ "-900 ")
+    let bgColor = switch color {
+    | "primary" => "bg-primary-100"
+    | "orange" => "bg-orange-100"
+    | "green" => "bg-green-100"
+    | "red" => "bg-red-100"
+    | "yellow" => "bg-yellow-100"
+    | "blue" => "bg-blue-100"
+    | "gray" => "bg-gray-100"
+    | "focusColor" => "bg-focusColor-100"
+    | _ => "bg-orange-100"
+    }
+
+    let textColor = switch color {
+    | "primary" => "text-primary-800"
+    | "orange" => "text-orange-800"
+    | "green" => "text-green-800"
+    | "red" => "text-red-800"
+    | "yellow" => "text-yellow-800"
+    | "blue" => "text-blue-800"
+    | "gray" => "text-gray-800"
+    | "focusColor" => "text-focusColor-800"
+    | _ => "text-orange-800"
+    }
 
     "rounded text-sm text-left font-semibold overflow-hidden " ++
-    (bgColor200 ++
-    (textColor800 ++ (
-      showHover ? "px-2 py-px hover:" ++ (bgColor300 ++ ("hover:" ++ textColor900)) : "inline-flex"
-    )))
+    (bgColor ++
+    " " ++
+    textColor ++
+    " " ++
+    (showHover ? "px-2 py-px hover:saturate-50 focus:saturate-50" : "inline-flex"))
   }
 
   let applyFilter = (selection, onSelect, id, event) => {
@@ -87,7 +107,7 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="mr-2 flex-shrink-0 w-1/3 sm:w-auto md:w-1/3 text-right">
+              <span className="mr-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 text-right">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -123,22 +143,20 @@ module Make = (Selectable: Selectable) => {
   let showSelected = (onDeselect, labelSuffix, selected) =>
     selected |> Array.mapi((index, selection) => {
       let value = selection |> Selectable.value
-      <div key={index |> string_of_int} className="inline-flex py-1 mr-2">
-        <div className={tagPillClasses(selection |> Selectable.color, false)}>
-          <span className="pl-2 py-px">
-            {switch selection |> Selectable.label {
-            | Some(label) => label ++ (labelSuffix ++ value)
-            | None => value
-            } |> str}
-          </span>
-          <button
-            ariaLabel={"Remove selection: " ++ value}
-            title={"Remove selection: " ++ value}
-            className="ml-1 text-red-700 px-2 py-px focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
-            onClick={removeSelection(onDeselect, selection)}>
-            <PfIcon className="if i-times-light" />
-          </button>
-        </div>
+      <div key={index |> string_of_int} className={tagPillClasses(selection |> Selectable.color, false) ++ " flex gap-px"}>
+        <span className="pl-2 py-px text-xs leading-[unset]">
+          {switch selection |> Selectable.label {
+          | Some(label) => label ++ (labelSuffix ++ value)
+          | None => value
+          } |> str}
+        </span>
+        <button
+          ariaLabel={"Remove selection: " ++ value}
+          title={"Remove selection: " ++ value}
+          className="text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
+          onClick={removeSelection(onDeselect, selection)}>
+          <PfIcon className="if i-times-regular" />
+        </button>
       </div>
     })
 
@@ -217,14 +235,14 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-300 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
+          className="bg-gray-50 flex flex-wrap gap-2 items-center text-sm bg-white border border-gray-300 rounded-md w-full p-3 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-600 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
+            className="flex-1 grow appearance-none bg-transparent border-none text-gray-600 leading-snug focus:outline-none placeholder-gray-500"
             id=inputId
             type_="search"
             role="combobox"

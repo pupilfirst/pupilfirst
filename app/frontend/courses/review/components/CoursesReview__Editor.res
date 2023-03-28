@@ -432,12 +432,12 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             <span className="text-xs mt-0.5"> {str(t("close"))} </span>
           </button>
           <div className="flex space-x-4">
-            <CoursesStudents__TeamCoaches
+            <CoursesStudents__PersonalCoaches
               tooltipPosition=#Bottom
               defaultAvatarSize="8"
               mdAvatarSize="8"
               title={<span className="hidden"> {t("assigned_coaches")->str} </span>}
-              className="flex md:hidden items-center flex-shrink-0"
+              className="flex md:hidden items-center shrink-0"
               coaches={SubmissionDetails.coaches(submissionDetails)}
             />
             {reviewNextButton(
@@ -446,7 +446,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               SubmissionDetails.courseId(submissionDetails),
               filter,
               submissionId,
-              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
+              "flex shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
             )}
           </div>
         </div>
@@ -491,13 +491,13 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           </div>
         </div>
       </div>
-      <div className="hidden md:flex flex-shrink-0 space-x-6">
-        <CoursesStudents__TeamCoaches
+      <div className="hidden md:flex shrink-0 space-x-6">
+        <CoursesStudents__PersonalCoaches
           tooltipPosition=#Bottom
           defaultAvatarSize="8"
           mdAvatarSize="8"
           title={<span className="mr-2"> {t("assigned_coaches")->str} </span>}
-          className="flex w-full md:w-auto items-center flex-shrink-0"
+          className="flex w-full md:w-auto items-center shrink-0"
           coaches={SubmissionDetails.coaches(submissionDetails)}
         />
         {reviewNextButton(
@@ -994,7 +994,7 @@ let feedbackGenerator = (
               value=state.newFeedback
               profile=Markdown.Permissive
               maxLength=10000
-              disabled={SubmissionDetails.preview(submissionDetails)}
+              disabled={isSubmissionReviewAllowed(submissionDetails)}
               placeholder={t("feedback_placeholder")}
             />
           </div>
@@ -1010,7 +1010,7 @@ let showFeedback = feedback =>
           <div className="pt-6">
             <div className="flex">
               <div
-                className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
+                className="shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
                 {switch Feedback.coachAvatarUrl(f) {
                 | Some(avatarUrl) => <img src=avatarUrl />
                 | None => <Avatar name={Feedback.coachName(f)} />
@@ -1213,7 +1213,7 @@ let make = (
       ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
           UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
         ) ||
-        SubmissionDetails.preview(submissionDetails)
+        isSubmissionReviewAllowed(submissionDetails)
           ? GradesEditor
           : AssignReviewer
       : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
@@ -1290,7 +1290,7 @@ let make = (
             </div>
           </div>
           <div className="p-4 md:p-6">
-            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
+            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
           {switch submissionReport {
           | Some(report) =>
@@ -1395,7 +1395,7 @@ let make = (
                     <div className="flex justify-center ml-2 md:ml-4">
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
-                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                         <Icon className="if i-times-regular" />
                         <span className="ml-2"> {t("remove_assignment")->str} </span>
                       </button>

@@ -1,5 +1,6 @@
 class UpdateUserMutator < ApplicationQuery
   property :name, validates: { presence: true }
+  property :preferred_name, validates: { length: { maximum: 128 } }
   property :about, validates: { length: { maximum: 1000 } }
 
   property :locale,
@@ -46,6 +47,8 @@ class UpdateUserMutator < ApplicationQuery
   validate :new_passwords_should_match
 
   def update_user
+    user_name = current_user.name
+
     if new_password.blank?
       current_user.update!(user_params)
     else
@@ -55,6 +58,10 @@ class UpdateUserMutator < ApplicationQuery
           password_confirmation: confirm_new_password
         )
       )
+    end
+
+    if user_name != current_user.name
+      Discord::SyncNameJob.perform_later(current_user)
     end
   end
 
@@ -82,6 +89,12 @@ class UpdateUserMutator < ApplicationQuery
   def user_params
     preferences = current_user.preferences
     preferences[:daily_digest] = daily_digest
-    { name: name, about: about, locale: locale, preferences: preferences }
+    {
+      name: name,
+      preferred_name: preferred_name,
+      about: about,
+      locale: locale,
+      preferences: preferences
+    }
   end
 end

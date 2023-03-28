@@ -33,8 +33,31 @@
   }
 }
 
-.policy-body h1,.policy-body h2, .policy-body h3, .policy-body h4, .policy-body h5, .policy-body h6 {
-  @apply mt-4 mb-2;
+.policy-body h1,
+.policy-body h2,
+.policy-body h3,
+.policy-body h4,
+.policy-body h5,
+.policy-body h6 {
+  @apply mt-4 mb-2 font-bold;
+}
+
+.policy-body h1 {
+  @apply text-xl md:text-3xl;
+}
+
+.policy-body h2 {
+  @apply text-lg md:text-2xl;
+}
+
+.policy-body h3 {
+  @apply text-lg md:text-xl;
+}
+
+.policy-body h4,
+.policy-body h5,
+.policy-body h6 {
+  @apply text-lg;
 }
 
 .policy-body a {

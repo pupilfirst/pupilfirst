@@ -1,0 +1,7 @@
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @user.name) %>
+<% end %>
+<% content_for :body do %>
+  <%= t("mailers.user.update_email_token.body.main_html", school_name: @school.name, link_to: link_to(t("mailers.user.update_email_token.body.link_to"), @update_email_url)) %>
+  <%= render 'mailers/link_fallback', url: @update_email_url%>
+<% end %>

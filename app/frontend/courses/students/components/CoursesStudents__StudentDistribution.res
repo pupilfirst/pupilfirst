@@ -5,25 +5,13 @@ let str = React.string
 let tr = I18n.t(~scope="components.CoursesStudents__StudentDistribution")
 let ts = I18n.t(~scope="shared")
 
-module StudentDistributionQuery = %graphql(`
-    query StudentDistribution($courseId: ID!, $coachNotes: CoachNoteFilter!, $coachId: ID, $tags: [String!]!) {
-      studentDistribution(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, tags: $tags) {
-        id
-        number
-        studentsInLevel
-        teamsInLevel
-        unlocked
-      }
-    }
-  `)
-
 let stylingForLevelPills = percentageStudents => {
   let emptyStyle = ReactDOM.Style.make()
-  let styleWithWidth = ReactDOM.Style.make(
-    ~width=(percentageStudents |> Js.Float.toString) ++ "%",
-    (),
-  )
-  if 0.0 <= percentageStudents && percentageStudents < 5.0 {
+  let styleWithWidth = ReactDOM.Style.make(~width=percentageStudents->Js.Float.toString ++ "%", ())
+
+  if 0.0 == percentageStudents {
+    ("w-8 flex-grow", emptyStyle, "bg-green-200 text-green-800")
+  } else if 0.0 <= percentageStudents && percentageStudents < 5.0 {
     ("w-8 flex-shrink-0", emptyStyle, "bg-green-200 text-green-800")
   } else if 5.0 <= percentageStudents && percentageStudents < 20.0 {
     ("", styleWithWidth, "bg-green-300 text-green-800")
@@ -38,38 +26,20 @@ let stylingForLevelPills = percentageStudents => {
   }
 }
 
-let refreshStudentDistribution = (
-  courseId,
-  filterCoach,
-  filterCoachNotes,
-  filterTags,
-  setStudentDistribution,
-) => {
-  let coachId = filterCoach->Belt.Option.map(coach => Coach.id(coach))
-  let tags = filterTags->Belt.Set.String.toArray
-
-  let variables = StudentDistributionQuery.makeVariables(
-    ~courseId,
-    ~coachNotes=filterCoachNotes,
-    ~tags,
-    ~coachId?,
-    (),
-  )
-
-  StudentDistributionQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    let distribution =
-      response["studentDistribution"] |> Array.map(DistributionInLevel.fromJsObject)
-
-    setStudentDistribution(_ => Some(distribution))
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    setStudentDistribution(_ => Some([]))
-    Js.Promise.resolve()
-  })
-  |> ignore
+let onLevelSelect = (value, params, href) => {
+  switch params {
+  | Some(p) =>
+    Webapi.Url.URLSearchParams.set("level", value, p)
+    RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(p))
+  | None =>
+    let search = Webapi.Dom.location->Webapi.Dom.Location.search
+    let params = Webapi.Url.URLSearchParams.make(search)
+    Webapi.Url.URLSearchParams.set("level", value, params)
+    let currentPath = Webapi.Dom.location->Webapi.Dom.Location.pathname
+    let searchString = Webapi.Url.URLSearchParams.toString(params)
+    let path = Belt.Option.getWithDefault(href, currentPath)
+    Webapi.Dom.window->Webapi.Dom.Window.setLocation(`${path}?${searchString}`)
+  }
 }
 
 let studentDistributionSkeleton =
@@ -101,118 +71,99 @@ let studentDistributionSkeleton =
   </div>
 
 @react.component
-let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterTags, ~reloadAt) => {
-  let (studentDistribution, setStudentDistribution) = React.useState(() => None)
-
-  React.useEffect4(() => {
-    switch reloadAt {
-    | None => ()
-    | Some(_) =>
-      refreshStudentDistribution(
-        courseId,
-        filterCoach,
-        filterCoachNotes,
-        filterTags,
-        setStudentDistribution,
-      )
-    }
-
-    None
-  }, (filterCoach, filterCoachNotes, filterTags, reloadAt))
-
-  <div
-    ariaLabel="Students level-wise distribution"
-    className="w-full pt-8 max-w-3xl mx-auto hidden md:block">
-    {switch studentDistribution {
-    | None => studentDistributionSkeleton
-    | Some(distribution) =>
+let make = (~studentDistribution, ~params=?, ~href=?) => {
+  <div ariaLabel="Students level-wise distribution" className="w-full py-4">
+    {
       let totalStudentsInCourse =
-        distribution |> Array.fold_left((x, y) => x + DistributionInLevel.studentsInLevel(y), 0)
-      let completedLevels = DistributionInLevel.levelsCompletedByAllStudents(distribution)
-      totalStudentsInCourse > 0
-        ? <div className="flex w-full border bg-gray-50 rounded font-semibold ">
-            {distribution
-            |> Js.Array.filter(level => DistributionInLevel.number(level) != 0)
-            |> DistributionInLevel.sort
-            |> Array.map(level => {
-              let percentageStudents = DistributionInLevel.percentageStudents(
-                level,
-                totalStudentsInCourse,
-              )
-              let (pillClass, style, pillColor) = stylingForLevelPills(percentageStudents)
-              let tip =
-                <div className="text-left">
-                  <p>
-                    {LevelLabel.format(DistributionInLevel.number(level) |> string_of_int) |> str}
-                  </p>
-                  <p>
-                    {ts("students") ++
-                    ": " ++
-                    string_of_int(DistributionInLevel.studentsInLevel(level)) |> str}
-                  </p>
-                  {DistributionInLevel.studentsInLevel(level) !=
-                    DistributionInLevel.teamsInLevel(level)
-                    ? <p>
-                        {ts("teams") ++
-                        ": " ++
-                        string_of_int(DistributionInLevel.teamsInLevel(level)) |> str}
-                      </p>
-                    : React.null}
-                  <p>
-                    {ts("percentage") ++
-                    ": " ++
-                    Js.Float.toFixedWithPrecision(percentageStudents, ~digits=1) |> str}
-                  </p>
-                </div>
-              <div
-                key={DistributionInLevel.id(level)}
-                ariaLabel={"Students in level " ++
-                (DistributionInLevel.number(level) |> string_of_int)}
-                className={"student-distribution__container text-center relative focus-within:outline-none focus-within:opacity-75 " ++
-                pillClass}
-                style>
-                <label
-                  htmlFor={tr("students_level") ++
-                  (DistributionInLevel.number(level) |> string_of_int)}
-                  className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-600 text-center">
-                  {level |> DistributionInLevel.shortName |> str}
-                </label>
-                <Tooltip className="w-full" tip position=#Bottom>
-                  <button
-                    id={tr("students_level") ++
-                    (DistributionInLevel.number(level) |> string_of_int)}
-                    onClick={_ => DistributionInLevel.id(level)->selectLevelCB}
-                    className={"student-distribution__pill w-full hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (
-                      completedLevels |> Array.mem(level)
-                        ? "bg-yellow-300 text-yellow-900"
-                        : switch DistributionInLevel.unlocked(level) {
-                          | true => pillColor
-                          | false =>
-                            "student-distribution__pill--locked cursor-default bg-gray-300" ++ " text-gray-800"
-                          }
-                    )}>
-                    {completedLevels |> Array.mem(level)
-                      ? <PfIcon className="if i-check-solid text-tiny" />
-                      : <div>
-                          <div
-                            className={level |> DistributionInLevel.unlocked
-                              ? ""
-                              : "student-distribution__team-count-value"}>
-                            {level |> DistributionInLevel.teamsInLevel |> string_of_int |> str}
-                          </div>
-                          {level |> DistributionInLevel.unlocked
-                            ? React.null
-                            : <div className="student-distribution__locked-icon">
-                                <i className="fas fa-lock text-tiny" />
-                              </div>}
-                        </div>}
-                  </button>
-                </Tooltip>
-              </div>
-            })
-            |> React.array}
+        studentDistribution->Js.Array2.reduce(
+          (x, y) => x + DistributionInLevel.studentsInLevel(y),
+          0,
+        )
+
+      let completedLevels = DistributionInLevel.levelsCompletedByAllStudents(studentDistribution)
+
+      <div className="flex w-full border bg-gray-50 rounded font-semibold ">
+        {studentDistribution
+        ->Js.Array2.filter(level => DistributionInLevel.number(level) != 0)
+        ->DistributionInLevel.sort
+        ->Js.Array2.map(level => {
+          let percentageStudents = DistributionInLevel.percentageStudents(
+            level,
+            totalStudentsInCourse,
+          )
+          let (pillClass, style, pillColor) = stylingForLevelPills(percentageStudents)
+          let tip =
+            <div className="text-left">
+              <p> {LevelLabel.format(DistributionInLevel.number(level)->string_of_int)->str} </p>
+              <p>
+                {(ts("students") ++
+                ": " ++
+                DistributionInLevel.studentsInLevel(level)->string_of_int)->str}
+              </p>
+              <p>
+                {(ts("percentage") ++
+                ": " ++
+                percentageStudents->Js.Float.toFixedWithPrecision(~digits=1))->str}
+              </p>
+            </div>
+          <div
+            key={DistributionInLevel.id(level)}
+            ariaLabel={"Students in level " ++ DistributionInLevel.number(level)->string_of_int}
+            className={"student-distribution__container text-center relative focus-within:outline-none focus-within:opacity-75 " ++
+            pillClass}
+            style>
+            <label
+              htmlFor={tr("students_level") ++ DistributionInLevel.number(level)->string_of_int}
+              className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-600 text-center">
+              {level->DistributionInLevel.shortName->str}
+            </label>
+            <Tooltip className="w-full" tip position=#Bottom>
+              <button
+                id={tr("students_level") ++ DistributionInLevel.number(level)->string_of_int}
+                onClick={_ => onLevelSelect(DistributionInLevel.filterName(level), params, href)}
+                className={"student-distribution__pill w-full hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (
+                  completedLevels->Js.Array2.includes(level)
+                    ? "bg-yellow-300 text-yellow-900"
+                    : switch DistributionInLevel.unlocked(level) {
+                      | true => pillColor
+                      | false =>
+                        "student-distribution__pill--locked cursor-default bg-gray-300" ++ " text-gray-800"
+                      }
+                )}>
+                {completedLevels->Js.Array2.includes(level)
+                  ? <PfIcon className="if i-check-solid text-tiny" />
+                  : <div>
+                      <div
+                        className={level->DistributionInLevel.unlocked
+                          ? ""
+                          : "student-distribution__team-count-value"}>
+                        {level->DistributionInLevel.studentsInLevel->string_of_int->str}
+                      </div>
+                      {level->DistributionInLevel.unlocked
+                        ? React.null
+                        : <div className="student-distribution__locked-icon">
+                            <i className="fas fa-lock text-tiny" />
+                          </div>}
+                    </div>}
+              </button>
+            </Tooltip>
           </div>
-        : React.null
-    }}
+        })
+        ->React.array}
+      </div>
+    }
   </div>
+}
+
+let makeFromJson = props => {
+  open Json.Decode
+
+  let studentDistribution = field("studentDistribution", array(DistributionInLevel.decode), props)
+  let href = optional(field("href", string), props)
+
+  make({
+    "studentDistribution": studentDistribution,
+    "params": None,
+    "href": href,
+  })
 }

@@ -124,7 +124,7 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
-module UserProxyFragment = UserProxy.Fragments
+module UserProxyFragment = UserProxy.Fragment
 
 module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $personalCoachId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $coachIds: [ID!] $after: String) {
@@ -302,7 +302,7 @@ let submissionsSorter = filter => {
   | None => [#SubmittedAt]
   }
 
-  <div ariaLabel="Change submissions sorting" className="flex-shrink-0 md:ml-2">
+  <div ariaLabel="Change submissions sorting" className="shrink-0 md:ml-2">
     <label className="hidden md:block text-tiny font-semibold uppercase pb-1">
       {tc("sort_by")->str}
     </label>

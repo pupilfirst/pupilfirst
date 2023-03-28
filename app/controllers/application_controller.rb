@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_host
   helper_method :current_school
   helper_method :current_founder
-  helper_method :current_startup
   helper_method :current_coach
   helper_method :current_school_admin
 
@@ -113,10 +112,6 @@ class ApplicationController < ActionController::Base
       end
   end
 
-  def current_startup
-    @current_startup ||= current_founder&.startup
-  end
-
   def current_school_admin
     @current_school_admin ||=
       begin
@@ -194,7 +189,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def set_time_zone(&block) # rubocop:disable Naming/AccessorMethodName
+  def set_time_zone(&block)
     Time.use_zone(current_user.time_zone, &block)
   end
 
@@ -212,7 +207,7 @@ class ApplicationController < ActionController::Base
     # User must be logged in.
     authenticate_user!
 
-    return if current_founder.present? && !current_founder.dropped_out?
+    return if current_founder.present? && !current_founder.dropped_out_at?
 
     redirect_to root_path
   end
@@ -262,8 +257,8 @@ class ApplicationController < ActionController::Base
     return false if current_domain.blank?
 
     return false if current_domain.primary? || current_school.domains.one?
-
-    !current_school.configuration['disable_primary_domain_redirection']
+    !Schools::Configuration.new(current_school)
+      .disable_primary_domain_redirection?
   end
 
   def redirect_to_primary_domain
@@ -276,7 +271,8 @@ class ApplicationController < ActionController::Base
                     user_signed_in? &&
                       (
                         session[:last_seen_at] == nil ||
-                          Time.zone.parse(session[:last_seen_at]) < 15.minutes.ago
+                          Time.zone.parse(session[:last_seen_at]) <
+                            15.minutes.ago
                       )
                   }
 

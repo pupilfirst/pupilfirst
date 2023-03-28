@@ -1,4 +1,5 @@
-<% presenter = ::Layouts::SchoolPresenter.new(self) %>
+<% presenter = ::Layouts::AppRouterPresenter.new(self, @course) %>
+
 <% content_for(:viewport) do %>
   <meta name="viewport"/>
 <% end %>
@@ -6,9 +7,10 @@
   <%= vite_javascript_tag 'admin', nonce: true %>
 <% end %>
 <% content_for(:wrapper) do %>
-  <div class="antialiased flex h-screen overflow-hidden">
-    <div id="school-admin-navbar__root" class="flex school-admin-navbar flex-shrink-0" data-json-props="<%= presenter.props_to_json %>"></div>
-    <%= yield %>
-  </div>
+  <script id="school-router-data" type="application/json">
+    <%= presenter.props_to_json.html_safe %>
+  </script>
+  <div id="school-router"></div>
+  <%= yield %>
 <% end %>
 <%= render template: 'layouts/tailwind' %>

@@ -24,11 +24,11 @@
 
 <% content_for :body do %>
   <p>
-    <%= t("mailers.course_export.prepared.body.body", course_name: course.name, course_export_created_at: @course_export.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("mailers.course_export.prepared.body.link_to"), link)) %>
+    <%= t("mailers.course_export.prepared.body.header_html", course_name: course.name, course_export_created_at: @course_export.created_at.strftime('%b %e, %l:%M %p'), link: link) %>
   </p>
 
   <p>
-    <%= t("mailers.course_export.prepared.body.export_ods") %>
+    <%= t("mailers.course_export.prepared.body.footer") %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

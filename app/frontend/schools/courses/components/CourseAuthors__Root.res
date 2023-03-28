@@ -76,7 +76,7 @@ let removeCourseAuthor = (send, author, event) => {
 
 let renderAuthor = (rootPath, author, send) => {
   let authorPath = rootPath ++ ("/" ++ (author |> Author.id))
-  <div key={author |> Author.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
+  <div key={author |> Author.id} className="flex w-1/2 shrink-0 mb-5 px-3">
     <div
       className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
       <a
@@ -89,7 +89,7 @@ let renderAuthor = (rootPath, author, send) => {
           RescriptReactRouter.push(authorPath)
         }}>
         <div className="flex">
-          <span className="mr-4 flex-shrink-0">
+          <span className="mr-4 shrink-0">
             {switch author |> Author.avatarUrl {
             | Some(avatarUrl) =>
               <img className="w-10 h-10 rounded-full object-cover" src=avatarUrl />
@@ -122,7 +122,7 @@ let make = (~courseId, ~authors) => {
   let (state, send) = React.useReducer(reducer, {authors: authors, deleting: false})
   let rootPath = "/school/courses/" ++ (courseId ++ "/authors")
 
-  <div className="flex flex-1 h-full overflow-y-scroll bg-gray-50">
+  <div className="flex min-h-full bg-gray-50">
     <div className="flex-1 flex flex-col">
       {
         let url = RescriptReactRouter.useUrl()

@@ -75,10 +75,10 @@ let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
       {statusBar(~color=passed ? "green" : "red", ~text=passed ? tr("completed") : tr("rejected"))}
     </div>
     <div className="bg-white flex border-t flex-wrap items-center py-4">
-      <div className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-6">
+      <div className="w-full md:w-1/2 shrink-0 justify-center hidden md:flex border-l px-6">
         {submissionStatusIcon(~passed)}
       </div>
-      <div className="w-full md:w-1/2 flex-shrink-0 md:order-first px-4 md:px-6">
+      <div className="w-full md:w-1/2 shrink-0 md:order-first px-4 md:px-6">
         <h5 className="pb-1 border-b"> {tr("grading") |> str} </h5>
         <div className="mt-3">
           {grades
@@ -101,6 +101,8 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
   let submissions = TargetDetails.submissions(targetDetails)
   let totalSubmissions = Js.Array2.length(submissions)
 
+  let completionType = targetDetails->TargetDetails.computeCompletionType
+
   Js.Array2.mapi(Submission.sort(submissions), (submission, index) => {
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
 
@@ -110,7 +112,15 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
         <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
-          {str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)}
+          {switch completionType {
+          | SubmitForm =>
+            str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
+          | MarkAsComplete
+          | TakeQuiz
+          | LinkToComplete
+          | Evaluated =>
+            str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)
+          }}
         </h2>
         <div
           className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
@@ -121,9 +131,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
         <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
           <SubmissionChecklistShow
-            checklist={submission |> Submission.checklist}
-            updateChecklistCB=None
-            pending={submission |> Submission.pending}
+            checklist={submission |> Submission.checklist} updateChecklistCB=None
           />
         </div>
         {switch submission |> Submission.status {
@@ -133,7 +141,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
             className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
             <div
               className="flex items-center justify-center font-semibold text-sm pl-2 pr-3 py-1 bg-orange-100 text-orange-600 rounded">
-              <span className="fa-stack text-orange-400 mr-2 flex-shrink-0">
+              <span className="fa-stack text-orange-400 mr-2 shrink-0">
                 <i className="fas fa-circle fa-stack-2x" />
                 <i className="fas fa-hourglass-half fa-stack-1x fa-inverse" />
               </span>
@@ -175,8 +183,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           | None => (
               tr("unknown_coach"),
               None,
-              <div
-                className="w-10 h-10 rounded-full bg-gray-400 inline-block flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center">
                 <i className="fas fa-user-times" />
               </div>,
             )
@@ -185,7 +192,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           <div className="bg-white border-t p-4 md:p-6" key={feedback |> Feedback.id}>
             <div className="flex items-center">
               <div
-                className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
                 coachAvatar
               </div>
               <div>
@@ -237,10 +244,20 @@ let make = (
   ~checklist,
 ) => {
   let (showSubmissionForm, setShowSubmissionForm) = React.useState(() => false)
+  let completionType = targetDetails->TargetDetails.computeCompletionType
 
   <div>
     <div className="flex justify-between items-end border-b pb-2">
-      <h4 className="text-base md:text-xl"> {tr("your_submissions") |> str} </h4>
+      <h4 className="text-base md:text-xl">
+        {switch completionType {
+        | SubmitForm => tr("your_responses")->str
+        | MarkAsComplete
+        | TakeQuiz
+        | LinkToComplete
+        | Evaluated =>
+          tr("your_submissions")->str
+        }}
+      </h4>
       {targetStatus |> TargetStatus.canSubmit(~resubmittable=target |> Target.resubmittable)
         ? switch showSubmissionForm {
           | true =>
@@ -256,7 +273,16 @@ let make = (
               className="btn btn-primary"
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
               <PfIcon className="if i-plus-regular text-lg mr-2" />
-              <span className="hidden md:inline"> {tr("add_another_submission") |> str} </span>
+              <span className="hidden md:inline">
+                {switch completionType {
+                | SubmitForm => tr("add_another_response")->str
+                | MarkAsComplete
+                | TakeQuiz
+                | LinkToComplete
+                | Evaluated =>
+                  tr("add_another_submission")->str
+                }}
+              </span>
               <span className="md:hidden"> {tr("add_another") |> str} </span>
             </button>
           }
@@ -265,6 +291,7 @@ let make = (
     {showSubmissionForm
       ? <CoursesCurriculum__SubmissionBuilder
           target
+          targetDetails
           addSubmissionCB={addSubmission(setShowSubmissionForm, addSubmissionCB)}
           checklist
           preview

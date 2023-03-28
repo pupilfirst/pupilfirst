@@ -8,6 +8,7 @@ let decodeProps = json => {
     json |> field("communities", array(Community.decode)),
     json |> field("showUserEdit", bool),
     json |> field("userName", string),
+    json |> field("preferredName", nullable(string)) |> Js.Null.toOption,
     json |> field("userTitle", string),
     json |> optional(field("avatarUrl", string)),
     json |> field("issuedCertificates", array(IssuedCertificate.decode)),
@@ -21,6 +22,7 @@ Psj.match("users#dashboard", () => {
     communities,
     showUserEdit,
     userName,
+    preferredName,
     userTitle,
     avatarUrl,
     issuedCertificates,
@@ -36,6 +38,7 @@ Psj.match("users#dashboard", () => {
         communities
         showUserEdit
         userName
+        preferredName
         userTitle
         avatarUrl
         issuedCertificates

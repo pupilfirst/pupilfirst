@@ -1,8 +1,0 @@
-<% content_for(:head) do %>
-  <title><%= @course.name %> | <%= t(".title") %></title>
-<% end %>
-<% @presenter = Schools::Courses::StudentsPresenter.new(self, @course) %>
-<script type="application/json" id="sa-students-panel-data">
-  <%= @presenter.props_to_json.html_safe %>
-</script>
-<div id="sa-students-panel" class="flex flex-1 h-full"></div>

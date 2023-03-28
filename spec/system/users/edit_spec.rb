@@ -3,11 +3,12 @@ require 'rails_helper'
 feature 'User Edit', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include ConfigHelper
 
-  let(:startup) { create :startup }
   let(:student) { create :founder }
   let(:user) { student.user }
   let(:student_name) { Faker::Name.name }
+  let(:preferred_name) { Faker::Name.name }
   let(:about) { Faker::Lorem.paragraphs.join(' ') }
   let(:current_password) do
     Faker::Internet.password(min_length: 8, max_length: 16)
@@ -17,8 +18,6 @@ feature 'User Edit', js: true do
   def upload_path(file)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', file))
   end
-
-  before { startup.founders << student }
 
   scenario 'User tries to submit a blank form' do
     sign_in_user(user, referrer: edit_user_path)
@@ -52,6 +51,21 @@ feature 'User Edit', js: true do
 
     expect(student.avatar.filename).to eq('donald_duck.jpg')
     expect(user.reload.preferences['daily_digest']).to eq(true)
+  end
+
+  scenario 'User update the preferred name' do
+    sign_in_user(user, referrer: edit_user_path)
+    expect(page).to have_text('Edit').and have_text('profile')
+
+    fill_in 'preferred_name', with: preferred_name
+    click_button 'Save Changes'
+
+    expect(page).to have_text('Profile updated successfully!')
+    expect(user.reload).to have_attributes(preferred_name: preferred_name)
+
+    visit(dashboard_path)
+
+    expect(page).to have_text(preferred_name)
   end
 
   scenario 'User sets a new password' do
@@ -132,6 +146,53 @@ feature 'User Edit', js: true do
 
       expect(page).to have_text('Profile updated successfully!')
       expect(user.reload.valid_password?(new_password)).to eq(true)
+    end
+  end
+
+  context 'when the user is required to connect a Discord account for a course' do
+    let(:course) { student.course }
+
+    around do |example|
+      with_secret(sso: { discord: { key: 'DISCORD_KEY' } }) { example.run }
+    end
+
+    before do
+      course.update!(discord_account_required: true)
+      course.school.update(
+        configuration: {
+          discord: {
+            server_id: 'DISCORD_SERVER_ID',
+            bot_token: 'DISCORD_BOT_TOKEN'
+          }
+        }
+      )
+    end
+
+    scenario 'user is prompted to connect a Discord account; afterwards is shown link to course' do
+      sign_in_user(
+        user,
+        referrer: edit_user_path(course_requiring_discord: course.id)
+      )
+
+      expect(page).to have_text('You need to link your Discord account first')
+
+      # Visiting the page after setting the Discord user should show a CTA to return to the course..
+      user.update!(discord_user_id: 'DISCORD_USER_ID')
+
+      visit(edit_user_path)
+
+      expect(page).to have_link(
+        'take you back to the course',
+        href: curriculum_course_path(course)
+      )
+
+      # Visiting the page again should not show the prompt.
+      visit(edit_user_path)
+
+      expect(page).not_to have_link(
+        'take you back to the course',
+        href: curriculum_course_path(course)
+      )
     end
   end
 end

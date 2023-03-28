@@ -33,10 +33,6 @@ class TimelineEvent < ApplicationRecord
   delegate :founder_event?, to: :target
   delegate :title, to: :target
 
-  scope :from_admitted_startups,
-        -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
-  scope :not_private,
-        -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }
   scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
@@ -77,18 +73,6 @@ class TimelineEvent < ApplicationRecord
     return if score.blank?
 
     { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
-  end
-
-  # TODO: Remove TimelineEvent#startup when possible.
-  def startup
-    first_founder = founders.first
-
-    if first_founder.blank?
-      raise "TimelineEvent##{id} does not have any linked founders"
-    end
-
-    # TODO: This is a hack. Remove TimelineEvent#startup method after all of its usages have been deleted.
-    first_founder.startup
   end
 
   def founder

@@ -14,8 +14,11 @@ module TimelineEvents
     def execute
       submission =
         TimelineEvent.transaction do
+          timeline_event_params =
+            @target.evaluation_criteria.blank? ? @params.merge(passed_at: Time.zone.now) :
+              @params
           TimelineEvent
-            .create!(@params)
+            .create!(timeline_event_params)
             .tap do |s|
               @founder.timeline_event_owners.create!(
                 timeline_event: s,
@@ -59,11 +62,15 @@ module TimelineEvents
     end
 
     def owners
-      @target.team_target? ? @founder.startup.founders : @founder
+      if (@target.team_target? && @founder.team)
+        @founder.team.founders
+      else
+        @founder
+      end
     end
 
     def team_members
-      @founder.startup.founders - [@founder]
+      @founder.team ? @founder.team.founders - [@founder] : []
     end
 
     def old_events(timeline_event)

@@ -11,23 +11,24 @@ type view =
   | ShowCommunities
   | ShowCertificates
 
-let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
-  <div className="max-w-4xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
+let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit) => {
+  let name = Belt.Option.getWithDefault(preferredName, userName)
+  <div className="max-w-5xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
     <div className="flex">
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden flex-shrink-0 mr-4"
+          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 mr-4"
           src
         />
       | None =>
         <Avatar
-          name=userName
-          className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden flex-shrink-0"
+          name
+          className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
-        <div className="text-black font-bold inline-block"> {userName->str} </div>
+        <div className="text-black font-bold inline-block"> {name->str} </div>
         <div className="text-gray-600 inline-block"> {userTitle->str} </div>
       </div>
     </div>
@@ -39,6 +40,7 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
       showUserEdit,
     )}
   </div>
+}
 
 let navButtonClasses = selected =>
   "font-semibold border-b-2 text-sm py-4 mr-6 hover:text-primary-500 hover:border-gray-300 focus:border-gray-300 focus:text-primary-500 focus:outline-none " ++ (
@@ -47,7 +49,7 @@ let navButtonClasses = selected =>
 
 let navSection = (view, setView, communities, issuedCertificates) =>
   <div className="border-b mt-6">
-    <div role="tablist" className="flex max-w-4xl mx-auto px-3 lg:px-0">
+    <div role="tablist" className="flex max-w-5xl mx-auto px-3 lg:px-0">
       <button
         role="tab"
         ariaSelected={view == ShowCourses}
@@ -188,7 +190,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
 }
 
 let coursesSection = (courses, communities, currentSchoolAdmin) =>
-  <div className="w-full max-w-4xl mx-auto">
+  <div className="w-full max-w-5xl mx-auto">
     {ReactUtils.nullUnless(
       <div
         className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center mt-4">
@@ -246,7 +248,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
   </div>
 
 let communitiesSection = communities =>
-  <div className="w-full max-w-4xl mx-auto">
+  <div className="w-full max-w-5xl mx-auto">
     <div className="flex flex-wrap flex-1 lg:-mx-5">
       {Js.Array.map(
         community =>
@@ -275,7 +277,7 @@ let communitiesSection = communities =>
   </div>
 
 let certificatesSection = issuedCertificates =>
-  <div className="w-full max-w-4xl mx-auto">
+  <div className="w-full max-w-5xl mx-auto">
     <div className="flex flex-wrap flex-1 lg:-mx-5">
       {Js.Array.map(
         issuedCertificate =>
@@ -321,6 +323,7 @@ let make = (
   ~communities,
   ~showUserEdit,
   ~userName,
+  ~preferredName,
   ~userTitle,
   ~avatarUrl,
   ~issuedCertificates,
@@ -328,7 +331,7 @@ let make = (
   let (view, setView) = React.useState(() => ShowCourses)
   <div className="bg-gray-50">
     <div className="bg-white">
-      {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
+      {headerSectiom(userName, preferredName, userTitle, avatarUrl, showUserEdit)}
       {navSection(view, setView, communities, issuedCertificates)}
     </div>
     <div className="pb-8">

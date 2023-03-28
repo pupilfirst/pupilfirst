@@ -5,18 +5,11 @@ describe CourseExports::PrepareStudentsExportService do
 
   subject { described_class.new(course_export) }
 
-  let(:level_1) { create :level, :one }
-  let(:level_2) { create :level, :two, course: level_1.course }
-  let(:team_1) { create :team, level: level_2, tag_list: ['tag 1', 'tag 2'] }
-  let(:team_2) { create :team, level: level_1 }
-
-  let(:team_3_access_ended) do
-    create :team, level: level_1, access_ends_at: 1.day.ago, tag_list: ['tag 2']
-  end
-
-  let(:team_4_dropped_out) do
-    create :team, level: level_1, dropped_out_at: 1.day.ago, tag_list: ['tag 3']
-  end
+  let!(:course) { create :course }
+  let(:cohort_live) { create :cohort, course: course }
+  let(:cohort_ended) { create :cohort, course: course, ends_at: 1.day.ago }
+  let(:level_1) { create :level, :one, course: course }
+  let(:level_2) { create :level, :two, course: course }
 
   let(:user_1) do
     create :user, email: 'a@example.com', last_seen_at: 2.days.ago
@@ -26,15 +19,32 @@ describe CourseExports::PrepareStudentsExportService do
   let(:user_3) { create :user, email: 'c@example.com' }
   let(:user_4) { create :user, email: 'd@example.com' }
 
-  let(:student_1) { create :student, startup: team_1, user: user_1 }
-  let!(:student_2) { create :student, startup: team_2, user: user_2 }
+  let(:student_1) do
+    create :student,
+           cohort: cohort_live,
+           level: level_2,
+           tag_list: ['tag 1', 'tag 2'],
+           user: user_1
+  end
+  let!(:student_2) do
+    create :student, cohort: cohort_live, level: level_1, user: user_2
+  end
 
   let!(:student_3_access_ended) do
-    create :student, startup: team_3_access_ended, user: user_3
+    create :student,
+           cohort: cohort_ended,
+           user: user_3,
+           level: level_1,
+           tag_list: ['tag 2']
   end
 
   let!(:student_4_dropped_out) do
-    create :student, startup: team_4_dropped_out, user: user_4
+    create :student,
+           level: level_1,
+           cohort: cohort_live,
+           dropped_out_at: 1.day.ago,
+           tag_list: ['tag 3'],
+           user: user_4
   end
 
   let(:target_group_l1_non_milestone) do
@@ -83,8 +93,7 @@ describe CourseExports::PrepareStudentsExportService do
            evaluation_criteria: [evaluation_criterion_1]
   end
 
-  let(:school) { student_1.school }
-  let(:course) { student_1.course }
+  let(:school) { course.school }
   let!(:school_admin) { create :school_admin, school: school }
 
   let(:course_export) do
@@ -205,6 +214,7 @@ describe CourseExports::PrepareStudentsExportService do
             'Affiliation',
             'Tags',
             'Last Seen At',
+            'Course Completed At',
             'Criterion A (2,3) - Average',
             'Criterion B (2,3) - Average'
           ],
@@ -218,6 +228,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_1.affiliation,
             'tag 1, tag 2',
             last_seen_at(student_1),
+            student_1.completed_at&.iso8601 || '',
             student_1_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -241,6 +252,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_2.affiliation,
             '',
             last_seen_at(student_2),
+            student_2.completed_at&.iso8601 || '',
             student_2_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -374,6 +386,7 @@ describe CourseExports::PrepareStudentsExportService do
                 'Affiliation',
                 'Tags',
                 'Last Seen At',
+                'Course Completed At',
                 'Criterion A (2,3) - Average',
                 'Criterion B (2,3) - Average'
               ],
@@ -387,6 +400,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_1.affiliation,
                 'tag 1, tag 2',
                 last_seen_at(student_1),
+                student_1.completed_at&.iso8601 || '',
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -410,6 +424,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_3_access_ended.affiliation,
                 'tag 2',
                 last_seen_at(student_3_access_ended),
+                student_3_access_ended.completed_at&.iso8601 || '',
                 nil,
                 nil
               ],
@@ -423,6 +438,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_4_dropped_out.affiliation,
                 'tag 3',
                 last_seen_at(student_4_dropped_out),
+                student_4_dropped_out.completed_at&.iso8601 || '',
                 nil,
                 nil
               ]

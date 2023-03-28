@@ -48,17 +48,10 @@ module CourseExports
     def team_rows
       rows =
         teams.map do |team|
-          [
-            team.id,
-            team.name,
-            team.level.number,
-            team.founders.map(&:name).sort.join(', '),
-            team.faculty.map(&:name).sort.join(', '),
-            team.tags.order(:name).pluck(:name).join(', ')
-          ]
+          [team.id, team.name, team.founders.map(&:name).sort.join(', ')]
         end
 
-      [['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags']] + rows
+      [['ID', 'Team Name', 'Students']] + rows
     end
 
     def submission_rows
@@ -79,7 +72,9 @@ module CourseExports
         .order(:created_at)
         .distinct
         .each_with_object(Array.new(team_ids.length)) do |submission, grading|
-          team = submission.founders.first.startup
+          team = submission.founders.first.team
+
+          next if team.blank?
 
           next unless submission.founder_ids.sort == team.founder_ids.sort
 
@@ -105,9 +100,7 @@ module CourseExports
     end
 
     def teams_with_submissions(target)
-      submissions(target)
-        .distinct('founders.startup_id')
-        .count('founders.startup_id')
+      submissions(target).distinct('founders.team_id').count('founders.team_id')
     end
 
     def teams_pending_review(target)
@@ -117,8 +110,8 @@ module CourseExports
         .pending_review
         .joins(:founders)
         .where(founders: { id: student_ids })
-        .distinct('founders.startup_id')
-        .count('founders.startup_id')
+        .distinct('founders.team_id')
+        .count('founders.team_id')
     end
 
     def teams
@@ -126,20 +119,26 @@ module CourseExports
       @teams ||=
         begin
           scope =
-            Startup
-              .includes(:level, :founders, faculty: :user)
-              .joins(:course)
-              .where(courses: { id: course.id })
+            Team
+              .includes(founders: [faculty: :user])
+              .joins(:cohort)
+              .where(cohort: { course_id: course.id })
               .active
               .order(:id)
               .distinct
 
-          tags.present? ? scope.tagged_with(tags, any: true) : scope
+          applicable_student_ids =
+            course.founders.tagged_with(tags, any: true).pluck(:id)
+          if tags.present?
+            scope.where(founders: { id: applicable_student_ids })
+          else
+            scope
+          end
         end
     end
 
     def student_ids
-      @student_ids ||= Founder.where(startup_id: teams.pluck(:id))
+      @student_ids ||= Founder.where(team_id: teams.pluck(:id))
     end
   end
 end

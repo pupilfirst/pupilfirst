@@ -45,11 +45,11 @@ let userDetails = () =>
   </div>
 
 let heading = () =>
-  <div className="skeleton-body-container w-full pb-4 mx-auto">
-    <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">
-      <div className="skeleton-placeholder__line-md mt-4 w-1/2 skeleton-animate" />
-      <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
-      <div className="skeleton-placeholder__line-sm mt-4 w-2/3 skeleton-animate" />
+  <div className="skeleton-body-container pt-8 w-full pb-4 mx-auto">
+    <div className="skeleton-body-wrapper space-y-4 px-3 lg:px-0">
+      <div className="skeleton-placeholder__line-md w-1/2 skeleton-animate" />
+      <div className="skeleton-placeholder__line-sm skeleton-animate" />
+      <div className="skeleton-placeholder__line-sm w-2/3 skeleton-animate" />
     </div>
   </div>
 
@@ -113,6 +113,33 @@ let paragraph = () =>
     </div>
   </div>
 
+let input = () =>
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-placeholder__line-sm mt-4 w-1/4 skeleton-animate" />
+    <div className="p-4 mt-2 bg-white border border-gray-300 rounded-md">
+      <div className="skeleton-placeholder__line-sm skeleton-animate" />
+    </div>
+  </div>
+
+let button = () =>
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="p-4 mt-2 bg-gray-200 border border-gray-300 rounded-md flex justify-center">
+      <div className="skeleton-placeholder__line-sm w-1/4 skeleton-animate" />
+    </div>
+  </div>
+
+let singleLink = () => {
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-placeholder__line-md mt-4 skeleton-animate" />
+  </div>
+}
+
+let secondaryLink = () => {
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-placeholder__line-lg mt-2 skeleton-animate" />
+  </div>
+}
+
 let contents = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">
@@ -129,6 +156,57 @@ let contents = () =>
       <div className="skeleton-placeholder__line-sm mt-4 w-2/3 skeleton-animate" />
     </div>
   </div>
+
+let calendar = () =>
+  <div className="grid grid-cols-7 relative z-30 grid-rows-5 gap-1 mt-2">
+    <div className="skeleton-placeholder__date skeleton-animate col-start-4" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+  </div>
+
+let coursePage = () => {
+  <div>
+    <div className="bg-gray-50 pb-8">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+        <div className="skeleton-body-wrapper pt-10 px-3 lg:px-0">
+          <div className="skeleton-placeholder__line-md w-1/12 skeleton-animate" />
+        </div>
+        {heading()}
+      </div>
+    </div>
+    <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 pt-4">
+      <div> {input()} </div> <div> {input()} </div> <div> {input()} </div> <div> {button()} </div>
+    </div>
+  </div>
+}
 
 let multiple = (~count, ~element) =>
   Array.make(count, element)

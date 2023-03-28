@@ -137,6 +137,8 @@ FACEBOOK_KEY
 FACEBOOK_SECRET
 GITHUB_KEY
 GITHUB_SECRET
+DISCORD_KEY
+DISCORD_SECRET
 SSO_DOMAIN
 ```
 
@@ -196,3 +198,17 @@ Make sure that the access token has the following scopes enabled:
 - `video_files`
 
 > Note: You cannot upload private videos if your Vimeo account type is `basic`.
+
+### Alerts for repeated submission rejection by bots
+
+If you're using the API to review and reject submissions, it's possible that students may repeatedly submit values that get rejected by automation. To be notified of such events, so that you can manually intervene, set the following two environment variables to notify all _human_ coaches in a course about a bot repeatedly rejecting submissions.
+
+```
+# Comma-separated IDs of bot coaches (`faculty` table) members used to review submissions.
+BOT_EVALUATOR_IDS=1,2,3
+
+# Every n-th rejected submission by a bot will trigger an email to all non-bot coaches in a course.
+BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD=4
+```
+
+To deactivate this feature, simply avoid setting the `BOT_EVALUATOR_IDS` environment variable, or set `BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD` to zero.

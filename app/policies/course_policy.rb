@@ -15,7 +15,7 @@ class CoursePolicy < ApplicationPolicy
     return false if founder.blank?
 
     # Dropped out students cannot access course dashboard.
-    !founder.dropped_out?
+    !founder.dropped_out_at?
   end
 
   def leaderboard?
@@ -34,7 +34,7 @@ class CoursePolicy < ApplicationPolicy
     return false if founder.blank?
 
     # Dropped out students cannot access report
-    !founder.dropped_out?
+    !founder.dropped_out_at?
   end
 
   def show?
@@ -47,6 +47,8 @@ class CoursePolicy < ApplicationPolicy
 
   alias process_application? apply?
   alias students? review?
+  alias calendar? curriculum?
+  alias calendar_month_data? curriculum?
 
   class Scope < Scope
     def resolve

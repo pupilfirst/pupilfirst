@@ -79,17 +79,17 @@ let showSubmissionStatus = submission =>
   | Some(_datetime) =>
     submission |> Submission.failed
       ? <div
-          className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
+          className="bg-red-100 border border-red-500 shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
           {ts("rejected") |> str}
         </div>
       : <div
-          className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
+          className="bg-green-100 border border-green-500 shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
           {ts("completed") |> str}
         </div>
 
   | None =>
     <div
-      className="bg-orange-100 border border-orange-300 flex-shrink-0 leading-normal text-orange-600 font-semibold px-3 py-px rounded">
+      className="bg-orange-100 border border-orange-300 shrink-0 leading-normal text-orange-600 font-semibold px-3 py-px rounded">
       {submission |> Submission.timeDistance |> str}
     </div>
   }

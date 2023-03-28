@@ -4,7 +4,6 @@ module Mutations
     include DevelopersNotifications
     include ValidateSubmissionGradable
 
-    argument :submission_id, ID, required: true
     argument :grades, [Types::GradeInputType], required: true
     argument :feedback,
              String,
@@ -258,7 +257,7 @@ module Mutations
           timeline_event: submission
         )
 
-      StartupFeedbackModule::EmailService.new(startup_feedback).send
+      StartupFeedbackModule::EmailService.new(startup_feedback, include_grades: true).send
     end
   end
 end

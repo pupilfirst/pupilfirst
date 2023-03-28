@@ -1,0 +1,19 @@
+<% presenter = ::Layouts::AppRouterPresenter.new(self, @course) %>
+
+<% content_for(:viewport) do %>
+  <meta name="viewport"/>
+<% end %>
+
+<% content_for(:head) do %>
+  <%= vite_javascript_tag 'adminRouter', nonce: true %>
+<% end %>
+
+<% content_for(:wrapper) do %>
+  <script id="school-router-data" type="application/json">
+    <%= presenter.props_to_json.html_safe %>
+  </script>
+  <div id="school-router"></div>
+<% end %>
+
+
+<%= render template: 'layouts/tailwind' %>

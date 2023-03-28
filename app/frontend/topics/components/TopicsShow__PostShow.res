@@ -139,9 +139,8 @@ let optionsDropdown = (
 
   let contents = switch (moderator, isTopicCreator, isPostCreator) {
   | (true, _, _) => [editPostButton, historyButton, deletePostButton]
-  | (false, true, false) => [historyButton]
-  | (false, true, true) => [editPostButton, historyButton, deletePostButton]
-  | (false, false, true) => [editPostButton, historyButton, deletePostButton]
+  | (false, true, true) => [editPostButton, deletePostButton]
+  | (false, false, true) => [editPostButton, deletePostButton]
   | _ => []
   }
   <Dropdown selected contents right=true />
@@ -229,7 +228,7 @@ let make = (
         <div className="pt-2" id="body">
           <div className="flex justify-between lg:hidden">
             <TopicsShow__UserShow user=creator createdAt={post |> Post.createdAt} />
-            <div className="flex-shrink-0 mt-1">
+            <div className="shrink-0 mt-1">
               {isPostCreator || (moderator || isTopicCreator)
                 ? optionsDropdown(
                     post,
@@ -259,7 +258,7 @@ let make = (
                 />
               </div>
             : <div className="flex items-start justify-between min-w-0">
-                <div className="text-sm min-w-0">
+                <div className="text-sm min-w-0 w-full">
                   <MarkdownBlock
                     markdown={post |> Post.body}
                     className="leading-normal text-sm "
@@ -285,7 +284,7 @@ let make = (
                   | None => React.null
                   }}
                 </div>
-                <div className="hidden lg:block flex-shrink-0 ml-3">
+                <div className="hidden lg:block shrink-0 ml-3">
                   {isPostCreator || (moderator || isTopicCreator)
                     ? optionsDropdown(
                         post,

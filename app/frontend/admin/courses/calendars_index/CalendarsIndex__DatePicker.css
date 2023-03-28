@@ -1,0 +1,77 @@
+.courses-calendar__month-indicator {
+  @apply text-center font-semibold;
+}
+
+.courses-calendar__day-of-week,
+.courses-calendar__date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.courses-calendar__day-of-week {
+  margin-top: 1.25em;
+}
+
+.courses-calendar__day-of-week > * {
+  @apply text-xs font-semibold;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+/* Dates */
+
+.courses-calendar__date-grid {
+  margin-top: 0.5em;
+  grid-gap: 1px;
+}
+
+/* Positioning the first day */
+
+.courses-calendar__date-grid--start-on-sun
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 1;
+}
+
+.courses-calendar__date-grid--start-on-mon
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 2;
+}
+
+.courses-calendar__date-grid--start-on-tue
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 3;
+}
+
+.courses-calendar__date-grid--start-on-wed
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 4;
+}
+
+.courses-calendar__date-grid--start-on-thu
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 5;
+}
+
+.courses-calendar__date-grid--start-on-fri
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 6;
+}
+
+.courses-calendar__date-grid--start-on-sat
+  .courses-calendar__date-grid-button:first-child {
+  grid-column: 7;
+}
+
+.courses-calendar__date-grid-button {
+  @apply relative text-xs rounded-md;
+  height: 6ch;
+}
+
+.courses-calendar__date-grid-button--is-selected {
+  @apply text-white bg-primary-500;
+}
+
+.courses-calendar__date-grid-button--is-selected:hover,
+.courses-calendar__date-grid-button--is-selected:focus {
+  @apply text-white bg-primary-500;
+}

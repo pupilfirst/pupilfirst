@@ -8,7 +8,9 @@ feature 'Course Coaches Index', js: true do
   let!(:school) { create :school, :current }
   let!(:school_2) { create :school }
   let!(:course_1) { create :course, school: school }
+  let!(:cohort_1) { create :cohort, course: course_1 }
   let!(:course_2) { create :course, school: school }
+  let!(:cohort_2) { create :cohort, course: course_2 }
 
   let!(:coach_1) { create :faculty, school: school }
   let!(:coach_2) { create :faculty, school: school }
@@ -17,35 +19,34 @@ feature 'Course Coaches Index', js: true do
   let!(:coach_5) { create :faculty, school: school_2 }
   let!(:coach_6) { create :faculty, school: school, exited: true }
 
-  let!(:c1_level) { create :level, course: course_1 }
-  let!(:c2_level) { create :level, course: course_2 }
-  let!(:startup_c1) { create :startup, level: c1_level }
-  let!(:startup_c2) { create :startup, level: c2_level }
+  let!(:c1_level) { create :level, :one, course: course_1 }
+  let!(:c2_level) { create :level, :one, course: course_2 }
+  let!(:team_c1) { create :team_with_students, cohort: cohort_1 }
+  let!(:team_c2) { create :team_with_students, cohort: cohort_2 }
 
-  let(:team_with_one_student) { create :team, level: c2_level }
-  let!(:lone_student) { create :founder, startup: team_with_one_student }
+  let!(:lone_student) { create :founder, cohort: cohort_2, level: c2_level }
 
   let!(:school_admin) { create :school_admin, school: school }
 
   before do
-    create :faculty_course_enrollment, faculty: coach_1, course: course_1
-    create :faculty_course_enrollment, faculty: coach_2, course: course_1
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+    create :faculty_cohort_enrollment, faculty: coach_1, cohort: cohort_1
+    create :faculty_cohort_enrollment, faculty: coach_2, cohort: cohort_1
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: coach_2,
-           startup: startup_c1
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+           founder: team_c1.founders.first
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: coach_3,
-           startup: startup_c2
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+           founder: team_c2.founders.first
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: coach_3,
-           startup: team_with_one_student
-    create :faculty_startup_enrollment,
-           :with_course_enrollment,
+           founder: lone_student
+    create :faculty_founder_enrollment,
+           :with_cohort_enrollment,
            faculty: coach_4,
-           startup: startup_c2
+           founder: team_c2.founders.first
   end
 
   scenario 'school admin assigns faculty to a course' do
@@ -63,6 +64,7 @@ feature 'Course Coaches Index', js: true do
 
     find("button[title='Select #{coach_4.name}']").click
 
+    click_button "Select #{cohort_1.name}"
     click_button 'Add Course Coaches'
 
     within('div[aria-label="List of course coaches"]') do
@@ -76,10 +78,6 @@ feature 'Course Coaches Index', js: true do
     expect(current_email.subject).to include(
       "You have been added as a coach in #{course_1.name}"
     )
-
-    expect(current_email.body).to have_link(
-      "sign into #{school.name} and view your students' submissions"
-    )
   end
 
   scenario 'school admin removes a course coach' do
@@ -87,7 +85,7 @@ feature 'Course Coaches Index', js: true do
                  referrer: school_course_coaches_path(course_1)
 
     expect(page).to have_text(coach_1.name)
-    expect(coach_2.startups.count).to eq(1)
+    expect(coach_2.founders.count).to eq(1)
 
     accept_confirm { find("button[aria-label='Delete #{coach_2.name}']").click }
 
@@ -95,8 +93,8 @@ feature 'Course Coaches Index', js: true do
     expect(course_1.faculty.count).to eq(1)
     expect(course_1.faculty.first).to eq(coach_1)
 
-    # Removes the coach team enrollment as well
-    expect(coach_2.startups.count).to eq(0)
+    # Removes the coach student enrollment as well
+    expect(coach_2.founders.count).to eq(0)
   end
 
   scenario 'school admin checks teams assigned to a coach and deletes them' do
@@ -108,25 +106,17 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text('Students assigned to coach')
     expect(page).to have_text(coach_3.email)
 
-    within("div[aria-label='Team #{startup_c2.name}']") do
-      expect(page).to have_text(startup_c2.founders.first.name)
-      expect(page).to have_text(startup_c2.founders.last.name)
-      expect(page).to have_text(startup_c2.name)
-    end
+    expect(page).to have_text(team_c2.founders.first.name)
+    expect(page).to have_text(lone_student.name)
 
-    within("div[aria-label='Team #{team_with_one_student.name}']") do
-      expect(page).to have_text(lone_student.name)
-      expect(page).to_not have_text(team_with_one_student.name)
-    end
+    accept_confirm { click_button "Delete #{team_c2.founders.first.name}" }
 
-    accept_confirm { click_button "Delete #{startup_c2.name}" }
+    expect(page).to_not have_text(team_c2.founders.first.name)
 
-    expect(page).to_not have_text(startup_c2.name)
-
-    accept_confirm { click_button "Delete #{team_with_one_student.name}" }
+    accept_confirm { click_button "Delete #{lone_student.name}" }
 
     expect(page).to have_text('There are no students assigned to this coach.')
-    expect(coach_3.startups.count).to eq(0)
+    expect(coach_3.founders.count).to eq(0)
     expect(coach_3.courses.count).to eq(1)
     expect(course_2.faculty.count).to eq(2)
   end
@@ -136,14 +126,14 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text('Please sign in to continue.')
   end
 
-  context 'when a coach is assigned as a team coach to students in multiple courses' do
-    let!(:startup_c1_2) { create :startup, level: c1_level }
+  context 'when a coach is assigned as a student coach to students in multiple courses' do
+    let!(:team_c1_2) { create :team_with_students, cohort: cohort_1 }
 
     before do
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: coach_3,
-             startup: startup_c1_2
+             founder: team_c1_2.founders.first
     end
 
     scenario 'user sees team assignments for coaches in the list' do
@@ -152,13 +142,13 @@ feature 'Course Coaches Index', js: true do
 
       # Check teams assigned to coach_3 in course 2
       find("button[aria-label='View #{coach_3.name}']").click
-      expect(page).to have_text(startup_c2.name)
-      expect(page).not_to have_text(startup_c1_2.name)
+      expect(page).to have_text(team_c2.founders.first.name)
+      expect(page).not_to have_text(team_c1_2.founders.first.name)
     end
   end
 
   context 'when a coach has reviewed and pending submissions' do
-    let(:startup_c1_2) { create :startup, level: c1_level }
+    let!(:team_c1_2) { create :team_with_students, cohort: cohort_1 }
 
     let(:target_group_c1) { create :target_group, level: c1_level }
     let(:target_group_c2) { create :target_group, level: c2_level }
@@ -190,19 +180,23 @@ feature 'Course Coaches Index', js: true do
       target_c1_3.evaluation_criteria << evaluation_criteria_c1
       target_c2.evaluation_criteria << evaluation_criteria_c2
 
-      # Enroll the coach directly onto one startup in this course, an another in a different course.
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+      # Enroll the coach directly onto one student in this course, an another in a different course.
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: coach_1,
-             startup: startup_c1
-      create :faculty_startup_enrollment,
-             :with_course_enrollment,
+             founder: team_c1.founders.first
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
              faculty: coach_1,
-             startup: startup_c2
+             founder: team_c1.founders.last
+      create :faculty_founder_enrollment,
+             :with_cohort_enrollment,
+             faculty: coach_1,
+             founder: team_c2.founders.first
 
       # Put a few submissions in the two targets in course 1.
-      first_student = startup_c1.founders.first
-      second_student = startup_c1.founders.last
+      first_student = team_c1.founders.first
+      second_student = team_c1.founders.last
 
       complete_target(target_c1_1, first_student, evaluator: coach_1)
       complete_target(target_c1_3, first_student, evaluator: coach_1)
@@ -213,17 +207,13 @@ feature 'Course Coaches Index', js: true do
       complete_target(target_c1_2, first_student, evaluator: coach_2)
 
       # Pending submission from another team without direct enrollment shouldn't be counted.
-      submit_target(
-        target_c1_2,
-        startup_c1_2.founders.first,
-        evaluator: coach_1
-      )
+      submit_target(target_c1_2, team_c1_2.founders.first, evaluator: coach_1)
 
       # A submission pending review by this coach in another course should not be counted.
-      submit_target(target_c2, startup_c2.founders.first, evaluator: coach_1)
+      submit_target(target_c2, team_c2.founders.first, evaluator: coach_1)
 
       # A submission reviewed by this coach in another course should not be counted.
-      complete_target(target_c2, startup_c2.founders.second, evaluator: coach_1)
+      complete_target(target_c2, team_c2.founders.second, evaluator: coach_1)
     end
 
     scenario 'admin checks the counts of pending and reviewed submissions on an assigned coach' do

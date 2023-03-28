@@ -31,7 +31,8 @@ class UserMailerPreview < ActionMailer::Preview
   def confirm_account_deletion
     school = School.first
     user = school.users.first
-    UserMailer.confirm_account_deletion(user.name, user.school, school)
+    name = user.preferred_name.presence || user.name
+    UserMailer.confirm_account_deletion(name, user.school, school)
   end
 
   def account_deletion_notification
@@ -40,6 +41,20 @@ class UserMailerPreview < ActionMailer::Preview
       'https://test.school.com',
       24
     )
+  end
+
+  def update_email_token
+    school = School.first
+    user = school.users.first
+    new_email = Faker::Internet.email
+    update_email_url = Faker::Internet.url
+    UserMailer.update_email_token(user, new_email, update_email_url)
+  end
+
+  def confirm_email_update
+    school = School.first
+    user = school.users.first
+    UserMailer.confirm_email_update(user.name, user.email, user.school)
   end
 
   private

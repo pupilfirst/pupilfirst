@@ -167,109 +167,104 @@ let make = (
         </button>
       </div>
       <div className="border bg-white rounded-lg py-2 md:py-4 mt-2 space-y-4">
-        {Js.Array.mapi(
-          (reviewChecklistItem, itemIndex) =>
-            <Spread
-              props={"data-checklist-item": string_of_int(itemIndex)}
-              key={string_of_int(itemIndex)}>
-              <div>
-                <h4 className="relative text-sm font-semibold mt-2 md:mt-0 px-6 w-full md:w-4/5">
-                  <div className={checklistItemCheckedClasses(itemIndex, selection)} />
-                  {ReviewChecklistItem.title(reviewChecklistItem)->str}
-                </h4>
-                <div className="space-y-3 pt-3"> {Js.Array.mapi((checklistItem, resultIndex) =>
-                    <Spread
-                      props={"data-result-item": string_of_int(resultIndex)}
-                      key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
-                      <div className="px-6">
-                        <Checkbox
-                          id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
-                          label={str(checklistItem->ReviewChecklistResult.title)}
-                          onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
-                          checked={checklistItemChecked(itemIndex, resultIndex, selection)}
-                          disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-                        />
-                        {
-                          let isSelected =
-                            Js.Array.find(
-                              s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
-                              selection,
-                            )->Belt.Option.isSome
-                          ReactUtils.nullUnless(
-                            <div
-                              id={"result_item_" ++ (resultIndex->string_of_int ++ "_feedback")}
-                              className="pl-7 pt-2">
-                              <textarea
-                                rows=4
-                                cols=33
-                                className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                                id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
-                                type_="text"
-                                placeholder={t("feedback_placeholder")}
-                                disabled={!feedbackGeneratable(
-                                  submissionDetails,
-                                  overlaySubmission,
+        {Js.Array.mapi((reviewChecklistItem, itemIndex) =>
+          <Spread
+            props={"data-checklist-item": string_of_int(itemIndex)} key={string_of_int(itemIndex)}>
+            <div>
+              <h4 className="relative text-sm font-semibold mt-2 md:mt-0 px-6 w-full md:w-4/5">
+                <div className={checklistItemCheckedClasses(itemIndex, selection)} />
+                {ReviewChecklistItem.title(reviewChecklistItem)->str}
+              </h4>
+              <div className="space-y-3 pt-3"> {Js.Array.mapi((checklistItem, resultIndex) =>
+                  <Spread
+                    props={"data-result-item": string_of_int(resultIndex)}
+                    key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
+                    <div className="px-6">
+                      <Checkbox
+                        id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
+                        label={str(checklistItem->ReviewChecklistResult.title)}
+                        onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
+                        checked={checklistItemChecked(itemIndex, resultIndex, selection)}
+                        disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                      />
+                      {
+                        let isSelected =
+                          Js.Array.find(
+                            s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
+                            selection,
+                          )->Belt.Option.isSome
+                        ReactUtils.nullUnless(
+                          <div
+                            id={"result_item_" ++ (resultIndex->string_of_int ++ "_feedback")}
+                            className="pl-7 pt-2">
+                            <textarea
+                              rows=4
+                              cols=33
+                              className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                              id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
+                              type_="text"
+                              placeholder={t("feedback_placeholder")}
+                              disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                              value={Belt.Option.getWithDefault(
+                                ReviewChecklistResult.feedback(checklistItem),
+                                "",
+                              )}
+                              onChange={event =>
+                                updateChecklistResultFeedback(
+                                  itemIndex,
+                                  resultIndex,
+                                  ReactEvent.Form.target(event)["value"],
+                                  reviewChecklistItem,
+                                  checklistItem,
+                                  setChecklist,
                                 )}
-                                value={Belt.Option.getWithDefault(
-                                  ReviewChecklistResult.feedback(checklistItem),
-                                  "",
-                                )}
-                                onChange={event =>
-                                  updateChecklistResultFeedback(
-                                    itemIndex,
-                                    resultIndex,
-                                    ReactEvent.Form.target(event)["value"],
-                                    reviewChecklistItem,
-                                    checklistItem,
-                                    setChecklist,
-                                  )}
-                              />
-                            </div>,
-                            (isSelected ||
-                            !feedbackGeneratable(submissionDetails, overlaySubmission)) &&
-                              Belt.Option.isSome(ReviewChecklistResult.feedback(checklistItem)),
-                          )
-                        }
-                      </div>
-                    </Spread>
-                  , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
-              </div>
-            </Spread>,
-          checklist,
-        )->React.array}
-        {switch additionalFeedback {
-        | Some(feedback) =>
-          <div className="px-6">
-            <button
-              id={"remove_additional_feedback"}
-              className="flex gap-x-2 items-center text-red-500 py-1"
-              onClick={_ => setAdditionalFeedback(_ => None)}>
-              <i className="fas fa-minus" /> <div> {str(t("remove_additional_feedback"))} </div>
-            </button>
-            <div className="pl-7 pt-2">
-              <textarea
-                rows=4
-                cols=33
-                className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                id={"additional_result_feedback"}
-                type_="text"
-                placeholder={t("feedback_placeholder")}
-                disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-                value={feedback}
-                onChange={event => {
-                  setAdditionalFeedback(ReactEvent.Form.target(event)["value"])
-                }}
-              />
+                            />
+                          </div>,
+                          (isSelected ||
+                          !feedbackGeneratable(submissionDetails, overlaySubmission)) &&
+                            Belt.Option.isSome(ReviewChecklistResult.feedback(checklistItem)),
+                        )
+                      }
+                    </div>
+                  </Spread>
+                , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
+              {switch additionalFeedback {
+              | Some(feedback) =>
+                <div className="px-6">
+                  <button
+                    id={"remove_additional_feedback"}
+                    className="flex gap-x-2 items-center text-red-500 py-1"
+                    onClick={_ => setAdditionalFeedback(_ => None)}>
+                    <i className="fas fa-minus" />
+                    <div> {str(t("remove_additional_feedback"))} </div>
+                  </button>
+                  <div className="pl-7 pt-2">
+                    <textarea
+                      rows=4
+                      cols=33
+                      className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                      id={"additional_result_feedback"}
+                      type_="text"
+                      placeholder={t("feedback_placeholder")}
+                      disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                      value={feedback}
+                      onChange={event => {
+                        setAdditionalFeedback(ReactEvent.Form.target(event)["value"])
+                      }}
+                    />
+                  </div>
+                </div>
+              | None =>
+                <button
+                  id={"add_additional_feedback"}
+                  className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+                  onClick={_ => setAdditionalFeedback(_ => Some(""))}>
+                  <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+                </button>
+              }}
             </div>
-          </div>
-        | None =>
-          <button
-            id={"add_additional_feedback"}
-            className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
-            onClick={_ => setAdditionalFeedback(_ => Some(""))}>
-            <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
-          </button>
-        }}
+          </Spread>
+        , checklist)->React.array}
       </div>
     </div>
     <div className="flex justify-end border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">

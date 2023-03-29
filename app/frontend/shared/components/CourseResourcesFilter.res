@@ -232,7 +232,7 @@ let make = (
   }, [courseId])
 
   <div className="flex flex-col sm:flex-row gap-3">
-    <div className="w-full">
+    <div className="flex-1">
       <p className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </p>
       <Multiselect
         id

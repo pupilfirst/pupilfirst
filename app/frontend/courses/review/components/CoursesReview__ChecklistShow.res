@@ -131,6 +131,10 @@ let generateFeedbackButton = (
   </button>
 }
 
+// let updateChecklistAdditionalFeedback = (feedback, setAdditionalFeedback) => {
+//   setAdditionalFeedback(_ => Some(feedback))
+// }
+
 @react.component
 let make = (
   ~reviewChecklist,
@@ -145,6 +149,13 @@ let make = (
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
   let (additionalFeedback, setAdditionalFeedback) = React.useState(() => None)
+
+  let (addAdditionalFeedback, isAdditionalFeedback) = React.useState(() => false)
+
+  // let handleAdditionalFeedback = event => {
+  //   // setAdditionalFeedback(_ => !additionalFeedback)
+  //   isAdditionalFeedback(_ => true)
+  // }
   <div>
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
@@ -228,6 +239,35 @@ let make = (
                     </div>
                   </Spread>
                 , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
+              {if addAdditionalFeedback {
+                <div className="px-6">
+                  <button
+                    id={"remove_additional_feedback"}
+                    className="flex gap-x-2 items-center text-red-500 py-1"
+                    onClick={_ => isAdditionalFeedback(_ => false)}>
+                    <i className="fas fa-minus" />
+                    <div> {str(t("remove_additional_feedback"))} </div>
+                  </button>
+                  <div className="pl-7 pt-2">
+                    <textarea
+                      rows=4
+                      cols=33
+                      className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                      id={"additional_result_feedback"}
+                      type_="text"
+                      placeholder={t("feedback_placeholder")}
+                      disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                    />
+                  </div>
+                </div>
+              } else {
+                <button
+                  id={string_of_int(itemIndex) ++ "add_additional_feedback"}
+                  className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+                  onClick={_ => isAdditionalFeedback(_ => true)}>
+                  <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+                </button>
+              }}
               {switch additionalFeedback {
               | Some(feedback) =>
                 <div className="px-6">

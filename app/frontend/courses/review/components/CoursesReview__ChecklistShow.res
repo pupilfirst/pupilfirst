@@ -150,7 +150,11 @@ let make = (
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
   let (additionalFeedback, setAdditionalFeedback) = React.useState(() => None)
 
-  let (addAdditionalFeedback, isAdditionalFeedback) = React.useState(() => false)
+  let (addAdditionalFeedback, setAddAdditionalFeedback) = React.useState(() =>
+    Array.make(reviewChecklist->Js.Array2.length, false)
+  )
+
+  Js.log(addAdditionalFeedback)
 
   // let handleAdditionalFeedback = event => {
   //   // setAdditionalFeedback(_ => !additionalFeedback)
@@ -239,12 +243,33 @@ let make = (
                     </div>
                   </Spread>
                 , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
-              {if addAdditionalFeedback {
+              {if addAdditionalFeedback[itemIndex] === true {
                 <div className="px-6">
                   <button
                     id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
                     className="flex gap-x-2 items-center text-red-500 py-1"
-                    onClick={_ => isAdditionalFeedback(_ => false)}>
+                    onClick={_ => {
+                      // addAdditionalFeedback[itemIndex] = false
+                      let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                        if index == itemIndex {
+                          false
+                        } else {
+                          value
+                        }
+                      })
+
+                      {
+                        Js.log("Button is clicked false")
+                        Js.log(addAdditionalFeedback)
+                      }
+
+                      setAddAdditionalFeedback(_ => newValue)
+                    }}>
+                    // onClick={(event, itemIndex) =>
+                    //   setIsAdditionalFeedback(addAdditionalFeedback => {
+                    //     ...addAdditionalFeedback,
+                    //     itemIndex: false,
+                    //   })}>
                     <i className="fas fa-minus" />
                     <div> {str(t("remove_additional_feedback"))} </div>
                   </button>
@@ -253,7 +278,7 @@ let make = (
                       rows=4
                       cols=33
                       className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                      id={"additional_result_feedback" ++ string_of_int(itemIndex)}
+                      id={"additional-feedback-text-area" ++ string_of_int(itemIndex)}
                       type_="text"
                       placeholder={t("feedback_placeholder")}
                       disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
@@ -262,9 +287,25 @@ let make = (
                 </div>
               } else {
                 <button
-                  id={"add_additional_feedback-" ++ string_of_int(itemIndex)}
+                  id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
                   className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
-                  onClick={_ => isAdditionalFeedback(_ => true)}>
+                  onClick={_ => {
+                    // let currentValue = addAdditionalFeedback[itemIndex]
+                    let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                      if index == itemIndex {
+                        true
+                      } else {
+                        value
+                      }
+                    })
+
+                    {
+                      Js.log("Button is clicked")
+                      Js.log(addAdditionalFeedback)
+                    }
+
+                    setAddAdditionalFeedback(_ => newValue)
+                  }}>
                   <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
                 </button>
               }}

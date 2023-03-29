@@ -143,8 +143,10 @@ module Make = (Selectable: Selectable) => {
   let showSelected = (onDeselect, labelSuffix, selected) =>
     selected |> Array.mapi((index, selection) => {
       let value = selection |> Selectable.value
-      <div key={index |> string_of_int} className={tagPillClasses(selection |> Selectable.color, false) ++ " flex gap-px"}>
-        <span className="pl-2 py-px text-xs leading-[unset]">
+      <div
+        key={index |> string_of_int}
+        className={tagPillClasses(selection |> Selectable.color, false) ++ " space-x-1.5"}>
+        <span className="pl-1.5 py-px text-xs leading-[unset]">
           {switch selection |> Selectable.label {
           | Some(label) => label ++ (labelSuffix ++ value)
           | None => value
@@ -153,7 +155,7 @@ module Make = (Selectable: Selectable) => {
         <button
           ariaLabel={"Remove selection: " ++ value}
           title={"Remove selection: " ++ value}
-          className="text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
+          className="bg-black bg-opacity-5 text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
           onClick={removeSelection(onDeselect, selection)}>
           <PfIcon className="if i-times-regular" />
         </button>

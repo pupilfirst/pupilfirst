@@ -242,7 +242,7 @@ let make = (
               {if addAdditionalFeedback {
                 <div className="px-6">
                   <button
-                    id={"remove_additional_feedback"}
+                    id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
                     className="flex gap-x-2 items-center text-red-500 py-1"
                     onClick={_ => isAdditionalFeedback(_ => false)}>
                     <i className="fas fa-minus" />
@@ -253,7 +253,7 @@ let make = (
                       rows=4
                       cols=33
                       className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                      id={"additional_result_feedback"}
+                      id={"additional_result_feedback" ++ string_of_int(itemIndex)}
                       type_="text"
                       placeholder={t("feedback_placeholder")}
                       disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
@@ -262,7 +262,7 @@ let make = (
                 </div>
               } else {
                 <button
-                  id={string_of_int(itemIndex) ++ "add_additional_feedback"}
+                  id={"add_additional_feedback-" ++ string_of_int(itemIndex)}
                   className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
                   onClick={_ => isAdditionalFeedback(_ => true)}>
                   <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>

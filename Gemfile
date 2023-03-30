@@ -3,7 +3,7 @@ ruby '3.0.5'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 6.1.7.3'
 
 gem 'dotenv-rails', '~> 2.8', groups: %i[development test]
 
@@ -98,7 +98,7 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9' # Pry debugger.
   gem 'webmock', '~> 3.14' # Mocking web requests.
   gem 'rubocop', '~> 1.21', require: false # Ruby Style Guide.
-  gem 'rubocop-rails', '~> 2.12', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem 'rubocop-rails', '~> 2.16.0', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem 'overcommit', '~> 0.58', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
   gem 'simplecov', '~> 0.21', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov

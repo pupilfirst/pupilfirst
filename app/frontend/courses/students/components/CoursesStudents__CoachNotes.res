@@ -58,10 +58,14 @@ let saveNoteButtonText = (title, iconClasses) =>
 let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false})
   <div className="mt-3 text-sm">
-    <label
-      htmlFor="course-students__coach-notes-new-note" className="font-semibold text-sm block mb-1">
-      {tr("new_note") |> str}
-    </label>
+    <span className="flex">
+      <label
+        htmlFor="course-students__coach-notes-new-note"
+        className="font-semibold text-sm block mb-1">
+        {tr("new_note")->str}
+      </label>
+      <HelpIcon className="ml-1"> {tr("help_text")->str} </HelpIcon>
+    </span>
     <DisablingCover disabled=state.saving message="Saving...">
       <MarkdownEditor
         textareaId="course-students__coach-notes-new-note"

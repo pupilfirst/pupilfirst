@@ -150,7 +150,9 @@ let unselected = (state, filters: array<filter>) => {
         : [Selectable.make(config.key, state.filterInput, Some(config.label), config.color)]
     | Custom(value) => [Selectable.make(config.key, value, Some(config.label), config.color)]
     | CustomArray(values) =>
-      values->Js.Array2.map(value => Selectable.make(config.key, value, Some(config.label), config.color))
+      values->Js.Array2.map(value =>
+        Selectable.make(config.key, value, Some(config.label), config.color)
+      )
     }
   })
   ->ArrayUtils.flattenV2
@@ -194,8 +196,9 @@ let selected = (sorter: sorter, params) => {
     Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
   <button
     title={"Order by" ++ " " ++ value}
-    className="p-3 w-36 text-sm font-medium ltr:space-x-2 ltr:text-left rtl:text-right truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
-    <Icon className="if i-sort-alpha-ascending-regular" /> <span className="rtl:mr-2"> {value->str} </span>
+    className="p-3 w-full sm:w-36 flex items-center justify-center text-sm font-medium ltr:space-x-2 ltr:text-left rtl:text-right truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    <Icon className="if i-sort-alpha-ascending-regular" />
+    <span className="rtl:mr-2"> {value->str} </span>
   </button>
 }
 
@@ -229,7 +232,7 @@ let make = (
     None
   }, [courseId])
 
-  <div className="w-full flex gap-3">
+  <div className="flex flex-col sm:flex-row gap-3">
     <div className="flex-1">
       <p className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </p>
       <Multiselect

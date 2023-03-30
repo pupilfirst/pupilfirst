@@ -32,7 +32,7 @@ feature 'Course calendar feature for students and coaches', js: true do
     before { cohort_calendar.cohorts << cohort }
     before { calendar_cohort_2.cohorts << cohort_2 }
 
-    #  create some events for course calendar
+    # create some events for course calendar
     let!(:event_1) do
       create :calendar_event,
              :with_link,
@@ -145,6 +145,30 @@ feature 'Course calendar feature for students and coaches', js: true do
       sign_in_user student.user, referrer: calendar_course_path(course_2)
 
       expect(page).to have_text("The page you were looking for doesn't exist")
+    end
+
+    context 'when a coach in the school has a student profile' do
+      let(:coach) { create :faculty, school: school, user: student.user }
+
+      # Remove the coach from the cohorts of the course
+      before { coach.cohorts = [] }
+
+      scenario 'coach visits calendar page of the course he is a student' do
+        sign_in_user coach.user, referrer: calendar_course_path(course)
+
+        expect(page).to have_text('Events')
+
+        # Check that the events are displayed in the calendar
+        visit(
+          calendar_course_path(
+            course,
+            date: event_1.start_time.strftime('%Y-%m-%d')
+          )
+        )
+
+        expect(page).to have_text(event_1.title)
+        expect(page).to have_text(event_2.title)
+      end
     end
   end
 end

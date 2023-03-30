@@ -7,6 +7,7 @@ end
 feature 'Cohorts New', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include DateHelper
 
   let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
@@ -41,7 +42,7 @@ feature 'Cohorts New', js: true do
   end
 
   scenario 'School admin creates a cohort with an end date' do
-    ends_at = Date.tomorrow
+    ends_at = Date.tomorrow.iso8601
     sign_in_user school_admin.user, referrer: cohorts_new_path(course)
 
     expect(page).to have_text('Add new cohort')
@@ -61,9 +62,7 @@ feature 'Cohorts New', js: true do
 
     expect(cohort.name).to eq(name)
     expect(cohort.description).to eq(description)
-    expect(cohort.ends_at.strftime('%Y %m %d')).to eq(
-      ends_at.strftime('%Y %m %d')
-    )
+    expect(cohort.ends_at).to eq(date_to_zoned_time(ends_at))
   end
 
   scenario 'logged in user who is not a school admin tries to access create cohort page' do
@@ -74,6 +73,8 @@ feature 'Cohorts New', js: true do
   scenario 'school admin tries to access an invalid link' do
     sign_in_user school_admin.user,
                  referrer: '/school/courses/888888/cohorts/new'
-    expect(page).to have_text("Sorry, The page you are looking for doesn't exist or has been moved.")
+    expect(page).to have_text(
+      "Sorry, The page you are looking for doesn't exist or has been moved."
+    )
   end
 end

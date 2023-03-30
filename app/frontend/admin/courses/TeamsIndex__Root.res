@@ -198,23 +198,18 @@ let make = (~courseId, ~search) => {
             <span className="inline-block ltr:pl-2 rtl:pr-2"> {str(t("create_team"))} </span>
           </Link>
         </div>
-        <div className="sticky top-0 my-6">
-          <div className="border rounded-lg mx-auto bg-white ">
-            <div>
-              <div className="flex w-full items-start p-4">
-                <CourseResourcesFilter
-                  courseId
-                  filters={makeFilters()}
-                  search={search}
-                  sorter={CourseResourcesFilter.makeSorter(
-                    "sort_by",
-                    [t("sorter.name"), t("sorter.first_created"), t("sorter.last_created")],
-                    t("sorter.last_created"),
-                  )}
-                />
-              </div>
-            </div>
-          </div>
+        <div
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10">
+          <CourseResourcesFilter
+            courseId
+            filters={makeFilters()}
+            search={search}
+            sorter={CourseResourcesFilter.makeSorter(
+              "sort_by",
+              [t("sorter.name"), t("sorter.first_created"), t("sorter.last_created")],
+              t("sorter.last_created"),
+            )}
+          />
         </div>
         {PagedTeams.renderView(
           ~pagedItems=state.teams,

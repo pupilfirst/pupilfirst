@@ -205,6 +205,10 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_text('The submission has been marked as reviewed')
 
+      student = submission_pending.founders.first
+      open_email(student.user.email)
+      expect(current_email).to have_content('grades')
+
       dismiss_notification
 
       expect(page).to have_button('Undo Grading')
@@ -624,7 +628,7 @@ feature 'Submission review overlay', js: true do
       submission_checklist_choice = {
         'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
         'title' => question_3,
-        'result' => answer_3,
+        'result' => [answer_3],
         'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_short_text = {
@@ -730,7 +734,7 @@ feature 'Submission review overlay', js: true do
         {
           'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
           'title' => question_3,
-          'result' => answer_3,
+          'result' => [answer_3],
           'status' => TimelineEvent::CHECKLIST_STATUS_FAILED
         },
         submission_checklist_short_text,

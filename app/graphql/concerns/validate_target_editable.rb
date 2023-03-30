@@ -85,7 +85,7 @@ module ValidateTargetEditable
 
       return if evaluation_criteria.blank? && checklist.blank?
 
-      if evaluation_criteria.present? && validate_checklist(checklist) &&
+      if validate_checklist(checklist) &&
            required_items_have_unique_titles(checklist)
         return
       end
@@ -108,7 +108,8 @@ module ValidateTargetEditable
       end
 
       item['metadata']['choices'].length > 1 &&
-        item['metadata']['choices'].all? { |choice| valid_string(choice) }
+        item['metadata']['choices'].all? { |choice| valid_string(choice) } &&
+        item['metadata']['allowMultiple'] == !!item['metadata']['allowMultiple']
     end
 
     def validate_checklist(checklist)

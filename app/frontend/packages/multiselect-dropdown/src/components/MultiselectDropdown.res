@@ -107,7 +107,8 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="ltr:mr-2 rtl:ml-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
+              <span
+                className="ltr:mr-2 rtl:ml-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -143,7 +144,9 @@ module Make = (Selectable: Selectable) => {
   let showSelected = (onDeselect, labelSuffix, selected) =>
     selected |> Array.mapi((index, selection) => {
       let value = selection |> Selectable.value
-      <div key={index |> string_of_int} className={tagPillClasses(selection |> Selectable.color, false) ++ " flex gap-px"}>
+      <div
+        key={index |> string_of_int}
+        className={tagPillClasses(selection |> Selectable.color, false) ++ " space-x-1.5"}>
         <span className="ltr:pl-2 rtl:pr-2 py-px text-xs leading-[unset]">
           {switch selection |> Selectable.label {
           | Some(label) => label ++ (labelSuffix ++ value)
@@ -153,7 +156,7 @@ module Make = (Selectable: Selectable) => {
         <button
           ariaLabel={"Remove selection: " ++ value}
           title={"Remove selection: " ++ value}
-          className="text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
+          className="bg-black bg-opacity-5 text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
           onClick={removeSelection(onDeselect, selection)}>
           <PfIcon className="if i-times-regular" />
         </button>

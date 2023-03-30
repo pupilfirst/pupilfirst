@@ -5,7 +5,7 @@ WORKDIR /build
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.3.11'
+RUN gem install bundler -v '2.4.10'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
@@ -70,7 +70,7 @@ RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
 # Let's also upgrade bundler to the same version used in the build.
-RUN gem install bundler -v '2.3.11'
+RUN gem install bundler -v '2.4.10'
 
 WORKDIR /app
 COPY . /app

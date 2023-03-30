@@ -135,11 +135,6 @@ let generateFeedbackButton = (
 //   setAdditionalFeedback(_ => Some(feedback))
 // }
 
-let checkItemIndex = (itemIndex, selection) => {
-  let itemIndexes = Js.Array.map(selectionItem => selectionItem.itemIndex, selection)
-  Js.Array.some(i => i == itemIndex, itemIndexes)
-}
-
 @react.component
 let make = (
   ~reviewChecklist,
@@ -248,111 +243,106 @@ let make = (
                     </div>
                   </Spread>
                 , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
-              {switch checkItemIndex(itemIndex, selection) {
-              | true =>
-                if addAdditionalFeedback[itemIndex] === true {
-                  <div className="px-6">
-                    <button
-                      id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
-                      className="flex gap-x-2 items-center text-red-500 py-1"
-                      onClick={_ => {
-                        // addAdditionalFeedback[itemIndex] = false
-                        let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
-                          if index == itemIndex {
-                            false
-                          } else {
-                            value
-                          }
-                        })
-
-                        {
-                          Js.log("Button is clicked false")
-                          Js.log(addAdditionalFeedback)
-                        }
-
-                        setAddAdditionalFeedback(_ => newValue)
-                      }}>
-                      // onClick={(event, itemIndex) =>
-                      //   setIsAdditionalFeedback(addAdditionalFeedback => {
-                      //     ...addAdditionalFeedback,
-                      //     itemIndex: false,
-                      //   })}>
-                      <i className="fas fa-minus" />
-                      <div> {str(t("remove_additional_feedback"))} </div>
-                    </button>
-                    <div className="pl-7 pt-2">
-                      <textarea
-                        rows=4
-                        cols=33
-                        className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                        id={"additional-feedback-text-area" ++ string_of_int(itemIndex)}
-                        type_="text"
-                        placeholder={t("feedback_placeholder")}
-                        disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-                      />
-                    </div>
-                  </div>
-                } else {
+              {if addAdditionalFeedback[itemIndex] === true {
+                <div className="px-6">
                   <button
-                    id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
-                    className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+                    id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
+                    className="flex gap-x-2 items-center text-red-500 py-1"
                     onClick={_ => {
-                      // let currentValue = addAdditionalFeedback[itemIndex]
+                      // addAdditionalFeedback[itemIndex] = false
                       let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
                         if index == itemIndex {
-                          true
+                          false
                         } else {
                           value
                         }
                       })
 
                       {
-                        Js.log("Button is clicked")
-                        // Js.log(addAdditionalFeedback)
-                        Js.log(selection)
+                        Js.log("Button is clicked false")
+                        Js.log(addAdditionalFeedback)
                       }
 
                       setAddAdditionalFeedback(_ => newValue)
                     }}>
-                    <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+                    // onClick={(event, itemIndex) =>
+                    //   setIsAdditionalFeedback(addAdditionalFeedback => {
+                    //     ...addAdditionalFeedback,
+                    //     itemIndex: false,
+                    //   })}>
+                    <i className="fas fa-minus" />
+                    <div> {str(t("remove_additional_feedback"))} </div>
                   </button>
-                }
-              | false => React.null
+                  <div className="pl-7 pt-2">
+                    <textarea
+                      rows=4
+                      cols=33
+                      className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                      id={"additional-feedback-text-area" ++ string_of_int(itemIndex)}
+                      type_="text"
+                      placeholder={t("feedback_placeholder")}
+                      disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                    />
+                  </div>
+                </div>
+              } else {
+                <button
+                  id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
+                  className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+                  onClick={_ => {
+                    // let currentValue = addAdditionalFeedback[itemIndex]
+                    let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                      if index == itemIndex {
+                        true
+                      } else {
+                        value
+                      }
+                    })
+
+                    {
+                      Js.log("Button is clicked")
+                      Js.log(addAdditionalFeedback)
+                    }
+
+                    setAddAdditionalFeedback(_ => newValue)
+                  }}>
+                  <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+                </button>
               }}
-              // {switch additionalFeedback {
-              // | Some(feedback) =>
-              //   <div className="px-6">
-              //     <button
-              //       id={"remove_additional_feedback"}
-              //       className="flex gap-x-2 items-center text-red-500 py-1"
-              //       onClick={_ => setAdditionalFeedback(_ => None)}>
-              //       <i className="fas fa-minus" />
-              //       <div> {str(t("remove_additional_feedback"))} </div>
-              //     </button>
-              //     <div className="pl-7 pt-2">
-              //       <textarea
-              //         rows=4
-              //         cols=33
-              //         className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-              //         id={"additional_result_feedback"}
-              //         type_="text"
-              //         placeholder={t("feedback_placeholder")}
-              //         disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-              //         value={feedback}
-              //         onChange={event => {
-              //           setAdditionalFeedback(ReactEvent.Form.target(event)["value"])
-              //         }}
-              //       />
-              //     </div>
-              //   </div>
-              // | None =>
-              //   <button
-              //     id={"add_additional_feedback"}
-              //     className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
-              //     onClick={_ => setAdditionalFeedback(_ => Some(""))}>
-              //     <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
-              //   </button>
-              // }}
+              {switch additionalFeedback {
+              | Some(feedback) =>
+                <div className="px-6">
+                  <button
+                    id={"remove_additional_feedback"}
+                    className="flex gap-x-2 items-center text-red-500 py-1"
+                    onClick={_ => setAdditionalFeedback(_ => None)}>
+                    <i className="fas fa-minus" />
+                    <div> {str(t("remove_additional_feedback"))} </div>
+                  </button>
+                  <div className="pl-7 pt-2">
+                    <textarea
+                      rows=4
+                      cols=33
+                      className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                      id={"additional_result_feedback"}
+                      type_="text"
+                      placeholder={t("feedback_placeholder")}
+                      disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                      value={feedback}
+                      onChange={event => {
+                        setAdditionalFeedback(ReactEvent.Form.target(event)["value"])
+                      }}
+                    />
+                  </div>
+                </div>
+              | None =>
+                <button
+                  id={"add_additional_feedback"}
+                  className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+                  onClick={_ => setAdditionalFeedback(_ => Some(""))}>
+                  <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+                </button>
+              }}
             </div>
           </Spread>
         , checklist)->React.array}

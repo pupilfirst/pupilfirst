@@ -1,7 +1,9 @@
 type t = {
   title: string,
   feedback: option<string>,
+  // additionalFeedback: option<array<string>>,
 }
+
 let title = t => t.title
 let feedback = t => t.feedback
 

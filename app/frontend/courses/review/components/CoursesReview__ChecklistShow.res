@@ -27,6 +27,8 @@ let checkboxOnChange = (itemIndex, resultIndex, setSelecton, event) =>
     ? selectChecklist(itemIndex, resultIndex, setSelecton)
     : unSelectChecklist(itemIndex, resultIndex, setSelecton)
 
+// let getNotSelectedItemIndex = (checklist, )
+
 let generateFeedback = (
   checklist,
   selection,
@@ -34,38 +36,98 @@ let generateFeedback = (
   setSelecton,
   updateFeedbackCB,
   additionalFeedback,
+  addAdditionalFeedback,
 ) => {
+  Js.log("inside")
+  Js.log(selection)
+  let selectedFeedback = Js.Array2.mapi(checklist, (reviewChecklistItem, i) => {
+    let resultIndexList =
+      selection
+      ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
+      ->Js.Array2.map(item => item.resultIndex)
+    ReviewChecklistItem.result(reviewChecklistItem)
+    ->Js.Array2.mapi((resultItem, index) =>
+      resultIndexList->Js.Array2.some(i => i == index)
+        ? switch ReviewChecklistResult.feedback(resultItem) {
+          // | Some(feedback) => [feedback, addAdditionalFeedback[i]->Belt.Option.getWithDefault("")]
+          // | None => [addAdditionalFeedback[i]->Belt.Option.getWithDefault("")]
+          | Some(feedback) => [feedback]
+          | None => []
+          }
+        : []
+    )
+    ->ArrayUtils.flattenV2
+  })
+
+  Js.log("inside 2")
+  Js.log(selectedFeedback)
+  Js.log(addAdditionalFeedback)
+
+  let fullReviewChecklistFeedback = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+    // Js.log("inside 4")
+    // Js.log(addAdditionalFeedback)
+    // Js.log(selectedFeedback)
+    // Js.log(index)
+    // Js.log(addAdditionalFeedback[index])
+    // Js.log(itemFeedback)
+    // itemFeedback[index] =
+    //   itemFeedback[index] ++ "\n" ++ addAdditionalFeedback[index]->Belt.Option.getWithDefault("")
+    Js.log("inside 5")
+    // Js.log(itemFeedback[index])
+    switch value {
+    | Some(feedback) => Js.Array2.concat(selectedFeedback[index], [feedback])
+    | None => selectedFeedback[index]
+    }
+  })->ArrayUtils.flattenV2
+  Js.log("inside 2.5")
+  Js.log(fullReviewChecklistFeedback)
+
+  Js.log("inside 3")
+  Js.log(fullReviewChecklistFeedback)
+
   let newFeedback =
     feedback ++
     ((String.trim(feedback) == "" ? "" : "\n\n") ++
-    checklist
-    ->Js.Array2.mapi((reviewChecklistItem, i) => {
-      let resultIndexList =
-        selection
-        ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
-        ->Js.Array2.map(item => item.resultIndex)
-      ReviewChecklistItem.result(reviewChecklistItem)
-      ->Js.Array2.mapi((resultItem, index) =>
-        resultIndexList->Js.Array2.some(i => i == index)
-          ? switch ReviewChecklistResult.feedback(resultItem) {
-            | Some(feedback) => [feedback]
-            | None => []
-            }
-          : []
-      )
-      ->ArrayUtils.flattenV2
-    })
-    ->ArrayUtils.flattenV2
-    ->Js.Array2.joinWith("\n\n")) ++
+    fullReviewChecklistFeedback->Js.Array2.joinWith("\n\n")) ++
     "\n\n" ++
     switch additionalFeedback {
     | Some(fb) => fb
     | None => ""
     }
 
+  // let newFeedback =
+  //   feedback ++
+  //   ((String.trim(feedback) == "" ? "" : "\n\n") ++
+  //   Js.Array2.mapi(checklist, (reviewChecklistItem, i) => {
+  //     let resultIndexList =
+  //       selection
+  //       ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
+  //       ->Js.Array2.map(item => item.resultIndex)
+  //     ReviewChecklistItem.result(reviewChecklistItem)
+  //     ->Js.Array2.mapi((resultItem, index) =>
+  //       resultIndexList->Js.Array2.some(i => i == index)
+  //         ? switch ReviewChecklistResult.feedback(resultItem) {
+  //           // | Some(feedback) => [feedback, addAdditionalFeedback[i]->Belt.Option.getWithDefault("")]
+  //           // | None => [addAdditionalFeedback[i]->Belt.Option.getWithDefault("")]
+  //           | Some(feedback) => [feedback]
+  //           | None => []
+  //           }
+  //         : []
+  //     )
+  //     ->ArrayUtils.flattenV2
+  //   })
+  //   ->ArrayUtils.flattenV2
+  //   ->Js.Array2.joinWith("\n\n")) ++
+  //   "\n\n" ++
+  //   switch additionalFeedback {
+  //   | Some(fb) => fb
+  //   | None => ""
+  //   }
+
   setSelecton(_ => [])
   updateFeedbackCB(newFeedback)
 }
+
 let checklistItemCheckedClasses = (itemIndex, selection) =>
   "absolute w-1 inset-0 rounded-r-md " ++ (
     Js.Array.filter(s => s.itemIndex == itemIndex, selection)->ArrayUtils.isNotEmpty
@@ -114,6 +176,7 @@ let generateFeedbackButton = (
   setSelecton,
   updateFeedbackCB,
   additionalFeedback,
+  addAdditionalFeedback,
 ) => {
   <button
     className="btn btn-primary w-full md:w-auto"
@@ -126,6 +189,7 @@ let generateFeedbackButton = (
         setSelecton,
         updateFeedbackCB,
         additionalFeedback,
+        addAdditionalFeedback,
       )}>
     {t("generate_feedback_button")->str}
   </button>
@@ -151,15 +215,11 @@ let make = (
   let (additionalFeedback, setAdditionalFeedback) = React.useState(() => None)
 
   let (addAdditionalFeedback, setAddAdditionalFeedback) = React.useState(() =>
-    Array.make(reviewChecklist->Js.Array2.length, false)
+    Array.make(reviewChecklist->Js.Array2.length, None)
   )
 
   Js.log(addAdditionalFeedback)
 
-  // let handleAdditionalFeedback = event => {
-  //   // setAdditionalFeedback(_ => !additionalFeedback)
-  //   isAdditionalFeedback(_ => true)
-  // }
   <div>
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
@@ -243,7 +303,8 @@ let make = (
                     </div>
                   </Spread>
                 , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
-              {if addAdditionalFeedback[itemIndex] === true {
+              {switch addAdditionalFeedback[itemIndex] {
+              | Some(feedback) =>
                 <div className="px-6">
                   <button
                     id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
@@ -252,7 +313,7 @@ let make = (
                       // addAdditionalFeedback[itemIndex] = false
                       let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
                         if index == itemIndex {
-                          false
+                          None
                         } else {
                           value
                         }
@@ -282,10 +343,21 @@ let make = (
                       type_="text"
                       placeholder={t("feedback_placeholder")}
                       disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                      value={feedback}
+                      onChange={event => {
+                        let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                          if index == itemIndex {
+                            Some(ReactEvent.Form.target(event)["value"])
+                          } else {
+                            value
+                          }
+                        })
+                        setAddAdditionalFeedback(_ => newValue)
+                      }}
                     />
                   </div>
                 </div>
-              } else {
+              | None =>
                 <button
                   id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
                   className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
@@ -293,7 +365,7 @@ let make = (
                     // let currentValue = addAdditionalFeedback[itemIndex]
                     let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
                       if index == itemIndex {
-                        true
+                        Some("")
                       } else {
                         value
                       }
@@ -309,40 +381,40 @@ let make = (
                   <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
                 </button>
               }}
-              {switch additionalFeedback {
-              | Some(feedback) =>
-                <div className="px-6">
-                  <button
-                    id={"remove_additional_feedback"}
-                    className="flex gap-x-2 items-center text-red-500 py-1"
-                    onClick={_ => setAdditionalFeedback(_ => None)}>
-                    <i className="fas fa-minus" />
-                    <div> {str(t("remove_additional_feedback"))} </div>
-                  </button>
-                  <div className="pl-7 pt-2">
-                    <textarea
-                      rows=4
-                      cols=33
-                      className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                      id={"additional_result_feedback"}
-                      type_="text"
-                      placeholder={t("feedback_placeholder")}
-                      disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-                      value={feedback}
-                      onChange={event => {
-                        setAdditionalFeedback(ReactEvent.Form.target(event)["value"])
-                      }}
-                    />
-                  </div>
-                </div>
-              | None =>
-                <button
-                  id={"add_additional_feedback"}
-                  className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
-                  onClick={_ => setAdditionalFeedback(_ => Some(""))}>
-                  <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
-                </button>
-              }}
+              // {switch additionalFeedback {
+              // | Some(feedback) =>
+              //   <div className="px-6">
+              //     <button
+              //       id={"remove_additional_feedback"}
+              //       className="flex gap-x-2 items-center text-red-500 py-1"
+              //       onClick={_ => setAdditionalFeedback(_ => None)}>
+              //       <i className="fas fa-minus" />
+              //       <div> {str(t("remove_additional_feedback"))} </div>
+              //     </button>
+              //     <div className="pl-7 pt-2">
+              //       <textarea
+              //         rows=4
+              //         cols=33
+              //         className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+              //         id={"additional_result_feedback"}
+              //         type_="text"
+              //         placeholder={t("feedback_placeholder")}
+              //         disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+              //         value={feedback}
+              //         onChange={event => {
+              //           setAdditionalFeedback(ReactEvent.Form.target(event)["value"])
+              //         }}
+              //       />
+              //     </div>
+              //   </div>
+              // | None =>
+              //   <button
+              //     id={"add_additional_feedback"}
+              //     className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+              //     onClick={_ => setAdditionalFeedback(_ => Some(""))}>
+              //     <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+              //   </button>
+              // }}
             </div>
           </Spread>
         , checklist)->React.array}
@@ -357,6 +429,7 @@ let make = (
             setSelecton,
             updateFeedbackCB,
             additionalFeedback,
+            addAdditionalFeedback,
           )
         : React.null}
     </div>

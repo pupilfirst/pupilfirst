@@ -132,7 +132,7 @@ let multiChoiceEditor = (
         onChange={updateAllowMultiple(checklistItem, updateChecklistItemCB)}
       />
       <label
-        className="text-xs text-gray-600 ml-2" htmlFor={index->string_of_int ++ "-allow-multiple"}>
+        className="text-xs text-gray-600 ms-2" htmlFor={index->string_of_int ++ "-allow-multiple"}>
         {t("multi_choice") |> str}
       </label>
     </div>

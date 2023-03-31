@@ -21,7 +21,7 @@
 
 :not(.student-overlay__student-level-progress--completed)
   > .student-overlay__student-level--current:after {
-  @apply absolute w-1/2 h-full bg-yellow-500 ltr:left-0 rtl:right-0;
+  @apply absolute w-1/2 h-full bg-yellow-500 ltr:start-0 rtl:end-0;
   content: "";
 }
 

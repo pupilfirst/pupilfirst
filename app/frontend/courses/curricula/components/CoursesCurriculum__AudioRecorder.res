@@ -77,7 +77,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
     | Some(size) =>
       size > 5000000
         ? <div className="text-xs text-red-500 mt-2">
-            <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+            <FaIcon classes="fas fa-exclamation-triangle me-2" />
             {str(t("recording_size_limit_warning"))}
           </div>
         : React.null

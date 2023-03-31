@@ -71,7 +71,7 @@ let make = (
               handleRestoreVersionCB,
               selectedVersion |> Js.Json.string,
             )}
-            className="btn btn-warning border border-orange-500 mr-4">
+            className="btn btn-warning border border-orange-500 me-4">
             {tr("restore_version") |> str}
           </button>}
       <div className="relative">

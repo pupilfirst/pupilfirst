@@ -332,7 +332,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         </div>
       </div>
       <div className="relative bg-gray-200 rounded-lg">
-        <div className="absolute right-0 z-10 pt-3 pe-3 ">
+        <div className="absolute end-0 z-10 pt-3 pe-3 ">
           <button
             ariaLabel="Change cover"
             className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 focus:bg-primary-200 focus:border-primary-500 focus:text-primary-600px px-2 py-1 cursor-pointer rounded"
@@ -374,7 +374,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             onClick={showEditor(DetailsEditor, send)}
             className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 focus-within:border-primary-300 focus-within:text-primary-200 cursor-text">
-            <div className="absolute right-0 top-0 z-10 pt-2 pe-2">
+            <div className="absolute end-0 top-0 z-10 pt-2 pe-2">
               <button
                 ariaLabel={t("edit_school_details")}
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">

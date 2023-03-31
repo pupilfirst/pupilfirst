@@ -1,5 +1,5 @@
 .school-customize__header-links > :first-child {
-  @apply ml-0;
+  @apply ms-0;
 }
 
 .school-customize__cover-default {

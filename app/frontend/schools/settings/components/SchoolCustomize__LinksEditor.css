@@ -13,15 +13,15 @@
 }
 
 .nav-tab-item--selected:before {
-  @apply absolute w-full top-0 left-0;
-  content: '';
+  @apply absolute w-full top-0 start-0;
+  content: "";
   height: 3px;
-  background-color: theme('colors.primary.500');
+  background-color: theme("colors.primary.500");
 }
 
 .nav-tab-item--selected:after {
   position: absolute;
-  content: '';
+  content: "";
   bottom: -1px;
   left: 0;
   height: 1px;

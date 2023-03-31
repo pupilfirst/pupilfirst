@@ -50,7 +50,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
     <div className="container mx-auto px-3 max-w-5xl py-8">
       <div
         className="border border-gray-300 rounded-lg shadow-lg bg-white p-3 md:p-6 flex flex-col md:flex-row items-start md:items-center">
-        <div className="text-center md:w-5/12 pe-0  ltr:md:pr-5 rtl:md:pl-5">
+        <div className="text-center md:w-5/12 pe-0  md:pe-5">
           <img src=graduateIcon className="w-18 md:w-24 mx-auto" />
           <h3 className="font-semibold mt-1 md:mt-2">
             {heading(currentUser, issuedCertificate)}

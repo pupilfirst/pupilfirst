@@ -25,7 +25,7 @@
 }
 
 .toggle-label span {
-  @apply absolute w-5 h-5 top-0 left-0 block bg-white shadow-md rounded-full;
+  @apply absolute w-5 h-5 top-0 start-0 block bg-white shadow-md rounded-full;
   transition: all 0.2s ease;
 }
 
@@ -376,7 +376,7 @@
 .target-group__group-reorder {
   max-height: 4.5rem;
   top: 50%;
-  @apply ltr:-left-9	rtl:-right-9;
+  @apply ltr:-start-9	rtl:-end-9;
   z-index: -1;
   transform: translateY(-50%);
 }

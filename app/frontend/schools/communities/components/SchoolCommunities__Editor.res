@@ -189,7 +189,7 @@ let categoryList = categories =>
         let (backgroundColor, color) = Category.color(category)
         <span
           key={category |> Category.id}
-          className="border rounded mt-2 mr-2 px-2 py-1 text-xs font-semibold"
+          className="border rounded mt-2 me-2 px-2 py-1 text-xs font-semibold"
           style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
           {Category.name(category) |> str}
         </span>

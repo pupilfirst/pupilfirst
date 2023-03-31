@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="pt-5 md:pt-2 w-full md:flex-1 ltr:md:pr-5 rtl:md:pl-5">
+    <div class="pt-5 md:pt-2 w-full md:flex-1 md:pe-5">
       <% if presenter.social_links.any? %>
         <p
           class="uppercase font-bold text-xs py-2 tracking-wide text-center ltr:md:text-left rtl:md:text-right"
@@ -97,7 +97,7 @@
             <%= link_to t(".privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
           <% if presenter.terms_and_conditions? %>
-            <%= link_to t(".terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer ltr:md:mr-3 rtl:md:ml-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
+            <%= link_to t(".terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
 
           <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">

@@ -169,7 +169,7 @@ let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   let criteria = [sortBy]
   <div
     ariaLabel="Change submissions sorting"
-    className="shrink-0 mt-3 md:mt-0 ltr:md:ml-2 rtl:md:mr-2">
+    className="shrink-0 mt-3 md:mt-0 md:ms-2">
     <label className="block text-tiny font-semibold uppercase"> {tr("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
@@ -310,7 +310,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
           href=submissionHref>
           <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
-              <div className="block text-sm ltr:md:pr-2 rtl:md:pl-2">
+              <div className="block text-sm md:pe-2">
                 <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                   {submission |> Submission.levelId |> Level.levelLabel(levels) |> str}
                 </span>

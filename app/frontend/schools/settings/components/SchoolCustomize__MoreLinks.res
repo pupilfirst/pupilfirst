@@ -39,7 +39,7 @@ let make = (~links) => {
       onClick={toggleState(send)}
       key="more-links">
       <span> {t("more") |> str} </span>
-      <i className="fas fa-angle-down ml-1" />
+      <i className="fas fa-angle-down ms-1" />
       {additionalLinks(state, moreLinks)}
     </button>
   }

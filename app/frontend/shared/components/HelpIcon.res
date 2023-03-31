@@ -23,8 +23,8 @@ and alignment =
 
 let alignmentClass = alignment =>
   switch alignment {
-  | AlignLeft => " left-0"
-  | AlignRight => " right-0"
+  | AlignLeft => " start-0"
+  | AlignRight => " end-0"
   | AlignCenter => " help-icon__help-container--center"
   }
 
@@ -35,8 +35,8 @@ let responsiveAlignmentClass = responsiveAlignment =>
     let mobileClass = mobileAlignment |> alignmentClass
 
     let desktopClass = switch desktopAlignment {
-    | AlignLeft => " md:right-auto md:left-0"
-    | AlignRight => " md:left-auto md:right-0"
+    | AlignLeft => " md:right-auto md:start-0"
+    | AlignRight => " md:left-auto md:end-0"
     | AlignCenter => " help-icon__help-container--md-center"
     }
 

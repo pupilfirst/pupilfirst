@@ -254,7 +254,7 @@ let make = (
                 |> React.array}
               </select>
               <div
-                className="pointer-events-none absolute inset-y-0 ltr:right-0 rtl:left-0 flex items-center px-3 text-gray-800">
+                className="pointer-events-none absolute inset-y-0 ltr:end-0 rtl:start-0 flex items-center px-3 text-gray-800">
                 <i className="fas fa-chevron-down text-xs" />
               </div>
             </div>

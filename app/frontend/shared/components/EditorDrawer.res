@@ -64,7 +64,7 @@ let make = (
         </button>
       </div>
       <div className="w-full relative overflow-y-scroll">
-        <div className="md:hidden absolute right-0 pt-3 pe-4  z-50">
+        <div className="md:hidden absolute end-0 pt-3 pe-4  z-50">
           <button
             onClick={e => {
               e |> ReactEvent.Mouse.preventDefault

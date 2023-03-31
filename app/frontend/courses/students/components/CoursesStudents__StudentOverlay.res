@@ -404,7 +404,7 @@ let removeNote = (setState, studentDetails, noteId) =>
 let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
     {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
-    <div className="ms-2 ltr:md:ml-3 rtl:md:mr-3">
+    <div className="ms-2 md:ms-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {fulltitle |> str} </div>
     </div>
@@ -532,7 +532,7 @@ let make = (~studentId, ~userId) => {
   }, [studentId])
 
   <div
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
+    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
     {switch state.studentData {
     | Loaded(studentDetails) => {
         let student = studentDetails->StudentDetails.student
@@ -544,7 +544,7 @@ let make = (~studentId, ~userId) => {
                 ariaLabel={t("close_student_report")}
                 title={t("close_student_report")}
                 onClick={_ => closeOverlay(StudentDetails.courseId(studentDetails))}
-                className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                className="absolute z-50 start-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <Icon className="if i-times-regular text-xl lg:text-2xl" />
               </button>
               <div

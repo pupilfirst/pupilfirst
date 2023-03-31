@@ -233,7 +233,7 @@ let topicsList = (topicCategories, topics) =>
                       | None => "Unknown "
                       } |> str}
                     </span>
-                    <span className="hidden md:inline-block ltr:md:mr-2 rtl:md:ml-2">
+                    <span className="hidden md:inline-block md:me-2">
                       {"on " ++ Topic.createdAt(topic)->DateFns.formatPreset(~year=true, ()) |> str}
                     </span>
                     <span className="inline-block md:mt-0 md:px-2 md:border-l border-gray-300">
@@ -314,7 +314,7 @@ let topicsList = (topicCategories, topics) =>
             <div className="md:w-1/5">
               <CommunitiesShow__Participants
                 title=React.null
-                className="flex shrink-0 items-center justify-end pe-4 ltr:md:pr-6 rtl:md:pl-6"
+                className="flex shrink-0 items-center justify-end pe-4 md:pe-6"
                 participants={Topic.participants(topic)}
                 participantsCount={Topic.participantsCount(topic)}
               />

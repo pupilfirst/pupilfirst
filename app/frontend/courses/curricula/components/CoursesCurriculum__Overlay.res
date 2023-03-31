@@ -257,7 +257,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug ltr:md:mr-6 rtl:md:ml-6 md:text-xl">
+        <h1 className="text-base leading-snug md:me-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -600,7 +600,7 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}

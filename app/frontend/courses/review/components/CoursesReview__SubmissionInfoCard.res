@@ -60,7 +60,7 @@ let linkUrl = (submissionId, filterString) => {
 
 let submissionInfoCardContent = (submission, submissionNumber) => {
   <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
-    <div className="flex flex-col ltr:md:pr-6 rtl:md:pl-6">
+    <div className="flex flex-col md:pe-6">
       <h2 className="font-semibold text-sm leading-tight">
         <p className="hidden md:block">
           {(t("submission_hash") ++ " #" ++ string_of_int(submissionNumber))->str}

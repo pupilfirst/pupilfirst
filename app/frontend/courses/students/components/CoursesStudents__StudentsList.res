@@ -62,7 +62,7 @@ let showStudent = student => {
           student->StudentInfo.user->UserDetails.name,
         )}
         <div
-          className="ms-2 ltr:md:ml-3 rtl:md:mr-3 block text-sm ltr:md:pr-2 rtl:md:pl-2">
+          className="ms-2 md:ms-3 block text-sm md:pe-2">
           <p className="font-semibold inline-block leading-snug">
             {student->StudentInfo.user->UserDetails.name->str}
           </p>

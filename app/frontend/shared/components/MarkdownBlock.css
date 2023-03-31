@@ -49,22 +49,22 @@
 }
 
 .markdown-block__permissive ul {
-  @apply ml-7 pt-3 list-disc;
+  @apply ms-7 pt-3 list-disc;
 }
 
 @screen md {
   .markdown-block__permissive ul {
-    @apply pt-3 list-disc ml-10;
+    @apply pt-3 list-disc ms-10;
   }
 }
 
 .markdown-block__permissive ol {
-  @apply ml-7 pt-3 list-decimal;
+  @apply ms-7 pt-3 list-decimal;
 }
 
 @screen md {
   .markdown-block__permissive ol {
-    @apply pt-3 list-decimal ml-10;
+    @apply pt-3 list-decimal ms-10;
   }
 }
 

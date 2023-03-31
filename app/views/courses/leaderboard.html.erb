@@ -90,7 +90,7 @@
                     <% if student.delta.blank? %>
                       <span class="leaderboard__rank-change-new"><%= t(".new_new") %></span>
                     <% else %>
-                      <span class="leaderboard__rank-change-icon inline-block mr-1">
+                      <span class="leaderboard__rank-change-icon inline-block me-1">
                         <%= presenter.rank_change_icon(student.delta) %>
                       </span>
                     <% end %>

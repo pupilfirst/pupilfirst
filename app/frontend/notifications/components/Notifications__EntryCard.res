@@ -92,7 +92,7 @@ let make = (~entry, ~markNotificationCB) => {
           </span>
         </span>
         <div
-          className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 right-0 flex items-center ps-4 pe-4 ltr:md:pr-8 rtl:md:ps-8 transition ease-in-out duration-150">
+          className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 end-0 flex items-center ps-4 pe-4 ltr:md:pr-8 rtl:md:ps-8 transition ease-in-out duration-150">
           {ReactUtils.nullIf(
             <Tooltip tip={str(t("mark_read"))} position=#Left>
               <button

@@ -52,7 +52,7 @@ let saveNote = (studentId, setState, state, addNoteCB) => {
 let updateCoachNoteCB = (setState, newNote) => setState(state => {...state, newNote: newNote})
 
 let saveNoteButtonText = (title, iconClasses) =>
-  <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>
+  <span> <FaIcon classes={iconClasses ++ " me-2"} /> {title |> str} </span>
 
 @react.component
 let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {

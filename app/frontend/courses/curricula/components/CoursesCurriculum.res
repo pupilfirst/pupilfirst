@@ -267,7 +267,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
       {switch (previous, next) {
       | (Some(previousLevel), Some(nextLevel)) =>
         [
-          <div key="previous" className="w-1/2 mr-2">
+          <div key="previous" className="w-1/2 me-2">
             {navigationLink(#Previous, previousLevel, setState)}
           </div>,
           <div key="next" className="w-1/2 ms-2">

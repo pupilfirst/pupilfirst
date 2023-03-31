@@ -122,7 +122,7 @@ let containerClasses = mode =>
   | Windowed(_) => "relative bg-white overscroll-contain"
   | Fullscreen(
       _,
-    ) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col overscroll-contain"
+    ) => "bg-white fixed z-50 top-0 start-0 h-screen w-screen flex flex-col overscroll-contain"
   }
 
 let modeIcon = (desiredMode, currentMode) => {

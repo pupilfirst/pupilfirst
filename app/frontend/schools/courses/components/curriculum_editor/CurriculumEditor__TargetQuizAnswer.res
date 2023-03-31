@@ -34,7 +34,7 @@ let make = (
         </div>}
     <div
       id={answerOptionId ++ "-block"}
-      className="quiz-maker__answer-option-answer flex flex-col bg-white border border-gray-300 rounded-lg ml-12">
+      className="quiz-maker__answer-option-answer flex flex-col bg-white border border-gray-300 rounded-lg ms-12">
       <div className="flex">
         <textarea
           id=answerOptionId

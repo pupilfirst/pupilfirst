@@ -451,7 +451,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           </div>
         </div>
         <div className="px-4 py-3">
-          <div className="block text-sm ltr:md:pr-2 rtl:md:pl-2">
+          <div className="block text-sm md:pe-2">
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
             </span>
@@ -734,7 +734,7 @@ let submissionReviewStatus = (status, overlaySubmission) => {
       | (_, Grading)
       | (_, Ungraded) => React.null
       }}
-      <div className="flex justify-center ms-2 ltr:md:ml-4 rtl:md:mr-4">
+      <div className="flex justify-center ms-2 md:ms-4">
         <div className={gradeBadgeClasses(color, status, true)}>
           {switch status {
           | Graded(passed) =>
@@ -904,11 +904,11 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
         <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
-          <span className="ms-2 ltr:md:ml-4 rtl:md:mr-4 tracking-wide">
+          <span className="ms-2 md:ms-4 tracking-wide">
             <label htmlFor=textareaId> {t("write_a_note")->str} </label> help
           </span>
         | None =>
-          <div className="ms-2 ltr:md:ml-4 rtl:md:mr-4 tracking-wide w-full">
+          <div className="ms-2 md:ms-4 tracking-wide w-full">
             <div> <span> {(t("note_help") ++ (noteAbout ++ "?"))->str} </span> help </div>
             <button
               className="btn btn-default mt-2"
@@ -921,7 +921,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
       </div>
       {switch note {
       | Some(note) =>
-        <div className="ms-6 ltr:md:ml-7 rtl:md:mr-7 mt-2">
+        <div className="ms-6 md:ms-7 mt-2">
           <MarkdownEditor
             maxLength=10000
             textareaId
@@ -951,10 +951,10 @@ let feedbackGenerator = (
           <PfIcon
             className="if i-check-square-alt-light text-gray-800 text-base md:text-lg inline-block"
           />
-          <span className="ms-2 ltr:md:ml-3 rtl:md:mr-3 tracking-wide"> {t("review_checklist")->str} </span>
+          <span className="ms-2 md:ms-3 tracking-wide"> {t("review_checklist")->str} </span>
         </h5>
       </div>
-      <div className="mt-2 ltr:md:ml-8 rtl:md:mr-8">
+      <div className="mt-2 md:ms-8">
         <button
           disabled={isSubmissionReviewAllowed(submissionDetails)}
           className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
@@ -976,11 +976,11 @@ let feedbackGenerator = (
             <PfIcon
               className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
             />
-            <span className="ms-2 ltr:md:ml-3 rtl:md:mr-3 tracking-wide"> {t("add_your_feedback")->str} </span>
+            <span className="ms-2 md:ms-3 tracking-wide"> {t("add_your_feedback")->str} </span>
           </h5>
           {ReactUtils.nullUnless(
             <div
-              className="inline-flex items-center bg-green-200 mt-2 ltr:md:ml-8 rtl:md:mr-8 text-green-800 px-2 py-1 rounded-md">
+              className="inline-flex items-center bg-green-200 mt-2 md:ms-8 text-green-800 px-2 py-1 rounded-md">
               <Icon className="if i-check-circle-solid text-green-700 text-base" />
               <span className="ps-2 text-sm font-semibold">
                 {t("feedback_generated_text")->str}
@@ -988,7 +988,7 @@ let feedbackGenerator = (
             </div>,
             state.feedbackGenerated,
           )}
-          <div className="mt-2 ltr:md:ml-8 rtl:md:mr-8" ariaLabel="feedback">
+          <div className="mt-2 md:ms-8" ariaLabel="feedback">
             <MarkdownEditor
               onChange={feedback => send(UpdateFeedback(feedback))}
               value=state.newFeedback
@@ -1004,7 +1004,7 @@ let feedbackGenerator = (
 }
 
 let showFeedback = feedback =>
-  <div className="divide-y space-y-6 ltr:md:ml-8 rtl:md:mr-8"> {Js.Array.mapi((f, index) =>
+  <div className="divide-y space-y-6 md:ms-8"> {Js.Array.mapi((f, index) =>
       <Spread props={"data-title": "feedback-section"} key={index->string_of_int}>
         <div>
           <div className="pt-6">
@@ -1021,7 +1021,7 @@ let showFeedback = feedback =>
                   <p className="font-semibold text-sm leading-tight inline-flex">
                     {Feedback.coachName(f)->str}
                   </p>
-                  <p className="block md:inline-flex text-xs text-gray-800 ltr:md:ml-2 rtl:md:mr-2 leading-tight">
+                  <p className="block md:inline-flex text-xs text-gray-800 md:ms-2 leading-tight">
                     {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
                   </p>
                 </div>
@@ -1030,7 +1030,7 @@ let showFeedback = feedback =>
                 </p>
               </div>
             </div>
-            <div className="ltr:md:ml-14 rtl:md:mr-14">
+            <div className="md:ms-14">
               <MarkdownBlock
                 className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
               />
@@ -1392,7 +1392,7 @@ let make = (
                       </div>
                     | None => React.null
                     }}
-                    <div className="flex justify-center ms-2 ltr:md:ml-4 rtl:md:mr-4">
+                    <div className="flex justify-center ms-2 md:ms-4">
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
                         className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
@@ -1410,9 +1410,9 @@ let make = (
                 <div>
                   <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ms-2 ltr:md:ml-3 rtl:md:mr-3 tracking-wide"> {"Grade Card"->str} </span>
+                    <span className="ms-2 md:ms-3 tracking-wide"> {"Grade Card"->str} </span>
                   </h5>
-                  <div className="flex md:flex-row flex-col ltr:md:ml-8 rtl:md:mr-8 rounded-lg mt-2">
+                  <div className="flex md:flex-row flex-col md:ms-8 rounded-lg mt-2">
                     <div className="w-full md:w-9/12">
                       <div className="md:pr-8">
                         {renderGradePills(
@@ -1429,7 +1429,7 @@ let make = (
                 </div>
               </div>
               <div
-                className="flex justify-end bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 ltr:md:ml-8 rtl:md:mr-8">
+                className="flex justify-end bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ms-8">
                 <button
                   disabled={reviewButtonDisabled(status)}
                   className="btn btn-success btn-large w-full border border-green-600"
@@ -1452,7 +1452,7 @@ let make = (
                     <PfIcon
                       className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                     />
-                    <span className="ms-2 ltr:md:ml-3 rtl:md:mr-3 tracking-wide"> {t("feedback")->str} </span>
+                    <span className="ms-2 md:ms-3 tracking-wide"> {t("feedback")->str} </span>
                   </h5>
                   {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
                 </div>,
@@ -1496,7 +1496,7 @@ let make = (
                 <div className="flex items-center justify-between">
                   <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ms-2 ltr:md:ml-3 rtl:md:mr-3 tracking-wide"> {t("grade_card")->str} </span>
+                    <span className="ms-2 md:ms-3 tracking-wide"> {t("grade_card")->str} </span>
                   </h5>
                   <div>
                     {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
@@ -1519,7 +1519,7 @@ let make = (
                     }}
                   </div>
                 </div>
-                <div className="flex md:flex-row flex-col ltr:md:ml-8 rtl:md:mr-8 bg-gray-50 mt-2">
+                <div className="flex md:flex-row flex-col md:ms-8 bg-gray-50 mt-2">
                   <div className="w-full">
                     {showGrades(grades, evaluationCriteria, submissionDetails, state)}
                   </div>
@@ -1555,10 +1555,10 @@ let make = (
                   <PfIcon
                     className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                   />
-                  <span className="ms-2 ltr:md:ml-3 rtl:md:mr-3 tracking-wide"> {t("feedback")->str} </span>
+                  <span className="ms-2 md:ms-3 tracking-wide"> {t("feedback")->str} </span>
                 </h5>
                 {ReactUtils.nullIf(
-                  <div className="py-4 ltr:md:ml-8 rtl:md:mr-8 text-center">
+                  <div className="py-4 md:ms-8 text-center">
                     <button
                       onClick={_ => send(ShowAdditionalFeedbackEditor)}
                       disabled={isSubmissionReviewAllowed(submissionDetails)}

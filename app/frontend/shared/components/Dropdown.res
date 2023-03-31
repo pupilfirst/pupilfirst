@@ -39,7 +39,7 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
     {showDropdown
       ? <div
           className={"dropdown__list bg-white shadow-lg rounded mt-1 border border-gray-300 divide-y divide-gray-50 absolute overflow-x-hidden z-30 " ++ (
-            right ? "ltr:right-0 rtl:left-0" : "ltr:left-0 rtl:right-0"
+            right ? "ltr:end-0 rtl:start-0" : "ltr:start-0 rtl:end-0"
           )}>
           {contents
           |> Array.mapi((index, content) =>

@@ -4,7 +4,7 @@
 }
 
 .policy-body ul {
-  @apply ml-4 mt-4 list-disc;
+  @apply ms-4 mt-4 list-disc;
 }
 
 .policy-body ol {
@@ -29,7 +29,7 @@
 
 @screen md {
   .policy-body ul {
-    @apply ml-6;
+    @apply ms-6;
   }
 }
 

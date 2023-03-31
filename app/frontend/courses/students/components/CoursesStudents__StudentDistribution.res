@@ -114,7 +114,7 @@ let make = (~studentDistribution, ~params=?, ~href=?) => {
             style>
             <label
               htmlFor={tr("students_level") ++ DistributionInLevel.number(level)->string_of_int}
-              className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-600 text-center">
+              className="absolute -mt-5 start-0 end-0 inline-block text-xs text-gray-600 text-center">
               {level->DistributionInLevel.shortName->str}
             </label>
             <Tooltip className="w-full" tip position=#Bottom>

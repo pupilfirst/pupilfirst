@@ -256,11 +256,11 @@
     }
   }
   .dropdown__list-right {
-    @apply right-0;
+    @apply end-0;
   }
 
   .dropdown__list-left {
-    @apply left-0;
+    @apply start-0;
   }
 
   .dropdown__list-left:before,

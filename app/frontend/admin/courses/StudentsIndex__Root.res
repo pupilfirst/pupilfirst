@@ -152,7 +152,7 @@ let studentsList = (params, students) => {
                   className="h-9 w-9 md:h-12 md:w-12 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
                 />
               }}
-              <div className="rtl:mr-4">
+              <div className="me-4">
                 <Link
                   href={`/school/students/${StudentInfo.id(student)}/details`}
                   className="font-semibold inline-block hover:underline hover:text-primary-500 transition ">

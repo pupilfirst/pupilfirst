@@ -407,7 +407,7 @@ let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, cl
         nextSubmission == DataLoading,
       )}
       <p className="pr-2"> {str(t("review_next"))} </p>
-      <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl" />
+      <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl rtl:rotate-180" />
     </button>,
     nextSubmission == DataEmpty,
   )
@@ -462,13 +462,17 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
-          <div className="text-left mt-1 text-xs text-gray-800">
+          <div className="ltr:text-left rtl:text-right mt-1 text-xs text-gray-800">
             {switch SubmissionDetails.teamName(submissionDetails) {
             | Some(teamName) =>
               <span>
+                <span>
                 {t("submitted_by_team")->str}
+                </span>
                 <span className="font-semibold"> {teamName->str} </span>
+                <span>
                 {" - "->str}
+                </span>
               </span>
             | None => <span> {t("submitted_by")->str} </span>
             }}
@@ -691,7 +695,7 @@ let gradeBadgeClasses = (statusColor, status, badge) =>
   (
     badge
       ? "px-2 py-2 space-x-2 flex justify-center border rounded items-center "
-      : "w-12 h-10 p-1 me-2 md:mr-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
+      : "w-12 h-10 p-1 me-2 me-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
   ) ++
   badgeColorClasses(statusColor) ++
   switch status {
@@ -957,7 +961,7 @@ let feedbackGenerator = (
       <div className="mt-2 md:ms-8">
         <button
           disabled={isSubmissionReviewAllowed(submissionDetails)}
-          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
+          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-fullltr:text-left rtl:text-right font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
             {(
@@ -966,7 +970,7 @@ let feedbackGenerator = (
                 : t("show_review_checklist")
             )->str}
           </span>
-          <FaIcon classes="fas fa-arrow-right" />
+          <FaIcon classes="fas fa-arrow-right rtl:rotate-180" />
         </button>
       </div>
     </div>

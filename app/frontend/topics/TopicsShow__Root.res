@@ -370,7 +370,7 @@ let make = (
           {state.showTopicEditor
             ? <DisablingCover disabled=state.savingTopic>
                 <div
-                  className="flex flex-col ltr:lg:ml-14 rtl:lg:mr-14 bg-gray-50 p-2 rounded border border-primary-200">
+                  className="flex flex-col lg:ms-14 bg-gray-50 p-2 rounded border border-primary-200">
                   <input
                     onChange={event =>
                       send(UpdateTopicTitle(ReactEvent.Form.target(event)["value"]))}
@@ -491,7 +491,7 @@ let make = (
             topicSolutionId={topicSolutionId(state.replies)}
           />}
         </div>
-        <h5 className="pt-4 pb-2 ltr:lg:ml-14 rtl:lg:mr-14 border-b">
+        <h5 className="pt-4 pb-2 lg:ms-14 border-b">
           {Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
         </h5>
         {state.replies

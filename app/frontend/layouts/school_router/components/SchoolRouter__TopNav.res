@@ -19,7 +19,7 @@ let showUserLink = () => {
   [renderUserLink("power-off", "/users/sign_out")]
 }
 let navLinks = (path, text) => {
-  <div  className="rtl:mr-4">
+  <div  className="me-4">
     <a
       title={text}
       href=path
@@ -78,7 +78,7 @@ let make = (~courses, ~currentUser) => {
         {"Admin"->str}
       </div>
       {navLinks("/dashboard", "Dashboard")}
-      <div className="relative rtl:mr-4">
+      <div className="relative me-4">
         <Notifications__Root
           wrapperClasses=""
           iconClasses="school-admin-navbar__notifications-unread-bullet"

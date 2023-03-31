@@ -100,7 +100,7 @@ let statusBar = (string, linkToComplete) => {
       <span> {string |> str} </span>
     </div>
   let visitLink = link =>
-    <a className="text-right w-full" href=link target="_blank">
+    <a className="ltr:text-right rtl:text-left w-full" href=link target="_blank">
       <i className="fas fa-external-link-alt me-2" /> {tr("visit_link") |> str}
     </a>
 

@@ -322,7 +322,7 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
     ? <div className="mb-6">
         <label
           className="block tracking-wide text-sm font-semibold mb-2" htmlFor="prerequisite_targets">
-          <span className="me-2"> <i className="fas fa-list text-base" /> </span>
+          <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
           {t("prerequisite_targets_label") |> str}
         </label>
         <div id="prerequisite_targets" className="mb-6 ms-6">
@@ -348,7 +348,7 @@ let booleanButtonClasses = bool => {
 }
 
 let targetRoleClasses = selected =>
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer ltr:text-left rtl:text-right focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
       : "border-gray-300 hover:bg-gray-50 bg-white"
@@ -416,7 +416,7 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
     <label
       className="block tracking-wide text-sm font-semibold me-6 mb-2"
       htmlFor="evaluation_criteria">
-      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("select_criterion_label") |> str}
     </label>
     <div className="ms-6">
@@ -464,7 +464,7 @@ let updateVisibility = (visibility, send, event) => {
 let linkEditor = (state, send) =>
   <div className="mb-6">
     <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="link_to_complete">
-      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("link_complete") |> str}
     </label>
     <div className="ms-6">
@@ -560,7 +560,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
     <label
       className="block tracking-wide text-sm font-semibold me-6 mb-2"
       htmlFor="target_group">
-      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("target_group") |> str}
     </label>
     <div className="ms-6">
@@ -633,7 +633,7 @@ let methodOfCompletionSelector = (state, send) =>
       <label
         className="block tracking-wide text-sm font-semibold me-6 mb-3"
         htmlFor="method_of_completion">
-        <span className="me-2"> <i className="fas fa-list text-base" /> </span>
+        <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
         {t("target_method_of_completion_label") |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2 ps-6 ">
@@ -670,7 +670,7 @@ let quizEditor = (state, send) =>
     <label
       className="block tracking-wide text-sm font-semibold me-6 mb-3"
       htmlFor="Quiz question 1">
-      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("prepare_quiz") |> str}
     </label>
     <div className="ms-6">
@@ -734,7 +734,7 @@ let formEditor = (state, send) => {
 
   <div className="mb-6">
     <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
-      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {status ? t("target_checklist.label")->str : t("target_checklist.form_label")->str}
     </label>
     {status
@@ -965,7 +965,7 @@ let make = (
                   className="items-center inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
                   <span className="me-2">
-                    <i className="fas fa-list text-base" />
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
                   {t("title") |> str}
                 </label>
@@ -995,7 +995,7 @@ let make = (
                   className="block tracking-wide text-sm font-semibold me-6"
                   htmlFor="evaluated">
                   <span className="me-2">
-                    <i className="fas fa-list text-base" />
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
                   {t("target_reviewed_by_coach") |> str}
                 </label>
@@ -1032,7 +1032,7 @@ let make = (
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
                   <span className="me-2">
-                    <i className="fas fa-list text-base" />
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
                   {t("target_role.label") |> str}
                 </label>
@@ -1075,7 +1075,7 @@ let make = (
                 <label
                   className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
                   <span className="me-2">
-                    <i className="fas fa-list text-base" />
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
                   {t("completion_instructions.label") |> str}
                   <span className="ms-1 text-xs font-normal">
@@ -1105,7 +1105,7 @@ let make = (
                     className="block tracking-wide text-sm font-semibold me-3"
                     htmlFor="archived">
                     <span className="me-2">
-                      <i className="fas fa-list text-base" />
+                      <i className="fas fa-list rtl:rotate-180 text-base" />
                     </span>
                     {t("target_visibility") |> str}
                   </label>

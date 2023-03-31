@@ -192,7 +192,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           <div className="bg-white border-t p-4 md:p-6" key={feedback |> Feedback.id}>
             <div className="flex items-center">
               <div
-                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr-3 rtl:mr-3 object-cover">
+                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
                 coachAvatar
               </div>
               <div>
@@ -205,7 +205,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
                   {switch coachTitle {
                   | Some(title) =>
                     <span
-                      className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
+                      className="block md:inline-flex text-xs text-gray-800 ms-2 leading-tight self-end">
                       {"(" ++ (title ++ ")") |> str}
                     </span>
                   | None => React.null
@@ -215,7 +215,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
             </div>
             <MarkdownBlock
               profile=Markdown.Permissive
-              className="md:ml-15"
+              className="ms-15"
               markdown={feedback |> Feedback.feedback}
             />
           </div>

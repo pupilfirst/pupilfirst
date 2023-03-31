@@ -198,7 +198,7 @@ let selected = (sorter: sorter, params) => {
     title={"Order by" ++ " " ++ value}
     className="p-3 w-full sm:w-36 flex items-center justify-center text-sm font-medium ltr:space-x-2 ltr:text-left rtl:text-right truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <Icon className="if i-sort-alpha-ascending-regular" />
-    <span className="rtl:mr-2"> {value->str} </span>
+    <span className="me-2"> {value->str} </span>
   </button>
 }
 

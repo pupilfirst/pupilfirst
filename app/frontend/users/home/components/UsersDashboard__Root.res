@@ -98,7 +98,7 @@ let ctaButton = (title, href) =>
     <span>
       <i className="fas fa-book" /> <span className="ms-2"> {title->str} </span>
     </span>
-    <i className="fas fa-arrow-right" />
+    <i className="fas fa-arrow-right rtl:rotate-180" />
   </a>
 
 let ctaText = (message, icon) =>

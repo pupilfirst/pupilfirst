@@ -31,7 +31,7 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
     }
 
     <button
-      className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
+      className="flex focus:outline-none p-2 w-full ltr:text-left rtl:text-right whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
       <span className="me-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>

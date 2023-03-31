@@ -42,7 +42,7 @@ let make = (
             />
           </svg>
         </div>
-        <div className="mt-3 sm:mt-0 ltr:sm:ml-4 rtl:sm:mr-4">
+        <div className="mt-3 sm:mt-0 ms-4">
           <h3 className="text-lg text-center ltr:sm:text-left rtl:sm:text-right font-semibold" id="modal-headline">
             {title |> str}
           </h3>
@@ -50,7 +50,7 @@ let make = (
         </div>
       </div>
       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-        <span className="flex w-full rounded-md shadow-sm ltr:sm:ml-3 rtl:sm:mr-3 sm:w-auto">
+        <span className="flex w-full rounded-md shadow-sm ms-3 sm:w-auto">
           <button
             disabled=disableConfirm
             onClick={event => {

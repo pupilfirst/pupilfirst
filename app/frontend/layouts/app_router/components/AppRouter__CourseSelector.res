@@ -8,9 +8,9 @@ let selected = currentCourse =>
     className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-100 appearance-none flex items-center justify-between hover:bg-gray-800 md:hover:bg-gray-50 hover:text-gray-50 focus:bg-gray-50 md:hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
-      <span className="truncate ms-2 text-left"> {Course.name(currentCourse)->str} </span>
+      <span className="truncate ms-2ltr:text-left rtl:text-right"> {Course.name(currentCourse)->str} </span>
     </span>
-    <span className="w-1/6 text-right"> <i className="fas fa-chevron-down text-sm" /> </span>
+    <span className="w-1/6 ltr:text-right rtl:text-left"> <i className="fas fa-chevron-down text-sm" /> </span>
   </button>
 
 let contents = (courses, currentCourse, coursePage, selectedPage) => {

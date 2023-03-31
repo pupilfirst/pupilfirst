@@ -27,7 +27,7 @@ let handleEmpty = setState =>
           <i className="fa fa-plus" />
         </span>
       </span>
-      <span className="block text-left ms-4">
+      <span className="block ltr:text-left rtl:text-right ms-4">
         <span className="block text-base font-semibold text-primary-500">
           {t("create_review_checklist")->str}
         </span>

@@ -206,7 +206,7 @@ let make = (
           {
             let tip = <div className="text-center"> {t("mark_solution") |> str} </div>
             <div
-              className="hidden md:flex md:flex-col items-center text-center md:w-14 pe-3 ltr:md:pr-4 rtl:md:ps-4 md:mt-4">
+              className="hidden md:flex md:flex-col items-center text-center md:w-14 pe-3 md:pe-4 md:mt-4">
               <Tooltip tip position=#Top>
                 <button
                   ariaLabel={t("mark_solution")}
@@ -356,7 +356,7 @@ let make = (
               isFirstPost
                 ? <a
                     href={"#post-show-" ++ id}
-                    className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded me-3 text-left focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
+                    className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded me-3 ltr:text-left rtl:text-right focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
                     <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
                     <div className="text-xs font-semibold ps-2 ">
                       {t("go_to_solution_button") |> str}

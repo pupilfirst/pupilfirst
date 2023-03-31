@@ -294,7 +294,7 @@ let make = (
     </div>
     <div
       ariaLabel={t("controls_checklist") ++ " " ++ (index + 1 |> string_of_int)}
-      className="-ltr:-mr-10 rtl:-ml-10 shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
+      className="--me-10 shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
         ~icon="fa-arrow-up",
         ~title=t("move_up"),

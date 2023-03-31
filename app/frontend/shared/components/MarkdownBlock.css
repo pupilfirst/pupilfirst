@@ -129,7 +129,7 @@
 }
 
 .markdown-block__permissive .align-left {
-  @apply block text-left;
+  @apply block ltr:text-left rtl:text-right;
 }
 
 .markdown-block__permissive .align-center {
@@ -137,7 +137,7 @@
 }
 
 .markdown-block__permissive .align-right {
-  @apply block text-right;
+  @apply block ltr:text-right rtl:text-left;
 }
 
 /*

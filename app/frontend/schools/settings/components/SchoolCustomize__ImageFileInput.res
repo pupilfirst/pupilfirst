@@ -7,7 +7,7 @@ let imageLabel = (imageName, selectedImageName) =>
   | Some(name) =>
     <span>
       { t("you_selected_pre") ++ " " |> str}
-      <code className="mr-1"> {name |> str} </code>
+      <code className="me-1"> {name |> str} </code>
       {" " ++ t("you_selected_post") |> str}
     </span>
   | None =>

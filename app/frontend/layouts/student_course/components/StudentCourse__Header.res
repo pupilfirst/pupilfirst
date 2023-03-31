@@ -23,7 +23,7 @@ let courseDropdown = (currentCourse, otherCourses) =>
     | [] =>
       <div
         className="flex max-w-xs md:max-w-xl mx-auto items-center relative justify-between font-semibold relative rounded w-full text-lg md:text-2xl leading-tight text-white">
-        <span className="sm:truncate w-full text-left">
+        <span className="sm:truncate w-full ltr:text-left rtl:text-right">
           {CourseInfo.name(currentCourse)->str}
         </span>
       </div>
@@ -31,7 +31,7 @@ let courseDropdown = (currentCourse, otherCourses) =>
       let selected =
         <button
           className="dropdown__btn max-w-xs md:max-w-lg mx-auto text-white appearance-none flex items-center relative justify-between focus:outline-none font-semibold w-full text-lg md:text-2xl leading-tight">
-          <span className="sm:truncate w-full text-left">
+          <span className="sm:truncate w-full ltr:text-left rtl:text-right">
             {CourseInfo.name(currentCourse)->str}
           </span>
           <div

@@ -311,7 +311,7 @@ let showApplicant = (baseUrl, applicant) => {
         </div>
       </div>
       <div className="mt-1 space-x-2">
-        <div className="text-xs text-left"> {Applicant.email(applicant)->str} </div>
+        <div className="text-xs ltr:text-left rtl:text-right"> {Applicant.email(applicant)->str} </div>
         {Js.Array.map(
           a => <span key=a className="p-1 text-xs bg-gray-50 rounded shadow"> {str(a)} </span>,
           Applicant.tags(applicant),

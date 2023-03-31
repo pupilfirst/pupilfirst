@@ -5,7 +5,7 @@
     class="flex flex-col md:flex-row w-full lg:max-w-5xl mx-auto justify-between items-start py-8 px-3"
   >
     <div class="pt-2 w-full md:w-2/5">
-      <div class="flex flex-col items-left ltr:md:pr-5 rtl:md:ps-5 text-center ltr:md:text-left rtl:md:text-right">
+      <div class="flex flex-col items-left md:pe-5 text-center ltr:md:text-left rtl:md:text-right">
         <span class="uppercase font-bold text-xs py-2 tracking-wide"
           ><%= t('.sitemap') %></span
         >
@@ -92,7 +92,7 @@
           </a>
         </div>
 
-        <div class="w-3/4 md:w-2/5 text-right text-xs">
+        <div class="w-3/4 md:w-2/5 ltr:text-right rtl:text-left text-xs">
           <% if presenter.privacy_policy? %>
             <%= link_to t(".privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>

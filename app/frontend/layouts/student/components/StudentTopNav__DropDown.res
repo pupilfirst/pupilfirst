@@ -14,7 +14,7 @@ let additionalLinks = (linksVisible, links) =>
         |> Js.Array.mapi((link, index) =>
           <div key={index |> string_of_int} className="">
             <a
-              className="cursor-pointer block p-3 text-xs text-left font-medium text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
+              className="cursor-pointer block p-3 text-xs ltr:text-left rtl:text-right font-medium text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
               href={link |> NavLink.url}
               target="_blank"
               rel="noopener">

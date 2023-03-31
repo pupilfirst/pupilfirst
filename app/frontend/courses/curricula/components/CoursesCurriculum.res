@@ -42,7 +42,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium text-left leading-snug"> {Target.title(target)->str} </span>
+      <span className="font-medium ltr:text-left rtl:text-right leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -239,8 +239,8 @@ let computeNotice = (
 
 let navigationLink = (direction, level, setState) => {
   let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None)
-  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"))
+  | #Previous => (Some("fa-arrow-left rtl:rotate-180"), t("nav_previous_level"), "Previous", None)
+  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right rtl:rotate-180"))
   }
 
   let arrow = icon =>

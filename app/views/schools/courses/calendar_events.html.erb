@@ -48,7 +48,7 @@
         <div class="col-span-8 bg-white flex-1 rounded-r-lg">
           <div class="flex gap-4 items-center justify-between bg-gray-50 rounded-tr-lg p-6">
             <p class="text-lg font-semibold"><%= t(".events") %></p>
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
               <label class="text-sm font-medium flex-shrink-0 text-gray-600"><%= t(".calendar_filter_label") %></label>
               <div data-re-component="SelectLink" data-re-json="<%= @presenter.calendar_link_props.to_json %>"></div>
             </div>

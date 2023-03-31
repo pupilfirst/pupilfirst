@@ -64,7 +64,7 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
   }, [helpVisible])
 
   <div className={"inline-block relative " ++ className} onClick={toggleHelp(setHelpVisible)}>
-    <FaIcon classes="fas fa-question-circle hover:text-gray-600 cursor-pointer" />
+    <FaIcon classes="fas fa-question-circle rtl:scale-x-[-1] hover:text-gray-600 cursor-pointer" />
     {helpVisible
       ? <div
           onClick={event => event |> ReactEvent.Mouse.stopPropagation}

@@ -69,7 +69,7 @@ module Make = (Selectable: Selectable) => {
     | _ => "text-orange-800"
     }
 
-    "rounded text-sm text-left font-semibold overflow-hidden " ++
+    "rounded text-sm ltr:text-left rtl:text-right font-semibold overflow-hidden " ++
     (bgColor ++
     " " ++
     textColor ++
@@ -187,7 +187,7 @@ module Make = (Selectable: Selectable) => {
 
   let showHint = hint =>
     <p
-      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2 text-left border-t">
+      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2 ltr:text-left rtl:text-right border-t">
       {str(hint)}
     </p>
 

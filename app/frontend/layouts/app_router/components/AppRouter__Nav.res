@@ -59,7 +59,7 @@ let renderLinks = (courses, selectedPage) => {
             title,
             [
               <Icon key="icon" className={`if ${icon} rtl:right-0 text-xl if-fw`} />,
-              <div key="title" className="ltr:pl-3 rtl:pr-3"> {str(title)} </div>,
+              <div key="title" className="ps-3 "> {str(title)} </div>,
             ]->React.array,
           )
         })

@@ -54,7 +54,7 @@
 }
 
 .student-overlay__student-level:not(:last-child) {
-  @apply border-r-2 border-white;
+  @apply border-e-2 border-white;
 }
 
 .student-overlay__student-level-progress--completed:before {

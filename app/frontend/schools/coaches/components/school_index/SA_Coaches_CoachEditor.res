@@ -381,7 +381,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 <div className="mt-5" ariaLabel="public-profile-selector">
                   <div className="flex items-center shrink-0">
                     <label
-                      className="block tracking-wide text-xs font-semibold ltr:mr-3 rtl:ml-3"
+                      className="block tracking-wide text-xs font-semibold me-3"
                       htmlFor="evaluated">
                       {t("coach_public_q") |> str}
                     </label>
@@ -434,7 +434,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         )}
                     />
                     <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
-                      <i className="fas fa-upload ltr:mr-2 rtl:ml-2 text-gray-600 text-lg" />
+                      <i className="fas fa-upload me-2 text-gray-600 text-lg" />
                       <span className="truncate"> {avatarUploaderText() |> str} </span>
                     </label>
                   </div>
@@ -447,7 +447,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     | Some(_coach) =>
                       <div className="flex items-center shrink-0">
                         <label
-                          className="block tracking-wide  text-xs font-semibold ltr:mr-3 rtl:ml-3"
+                          className="block tracking-wide  text-xs font-semibold me-3"
                           htmlFor="evaluated">
                           {t("coach_left_q") |> str}
                         </label>

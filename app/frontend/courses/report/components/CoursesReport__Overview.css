@@ -54,7 +54,7 @@
 }
 
 .courses-report-overview__student-level:not(:last-child) {
-  @apply border-r-2 border-white;
+  @apply border-e-2 border-white;
 }
 
 .courses-report-overview__student-level-progress--completed:before {

@@ -34,11 +34,11 @@ let make = (~links) => {
   | moreLinks =>
     <button
       title={t("show_links")}
-      className="whitespace-nowrap ltr:ml-2 rtl:mr-2 font-medium text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
+      className="whitespace-nowrap ms-2 font-medium text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">
       <span> {t("more") |> str} </span>
-      <i className="fas fa-caret-down ltr:ml-2 rtl:mr-2" />
+      <i className="fas fa-caret-down ms-2" />
       {additionalLinks(linksVisible, moreLinks)}
     </button>
   }

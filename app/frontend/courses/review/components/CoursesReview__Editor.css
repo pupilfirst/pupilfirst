@@ -1,5 +1,5 @@
 .course-review-editor__grade-bar > .course-review-editor__grade-pill {
-  @apply border border-r-0;
+  @apply border border-e-0;
 }
 
 .course-review-editor__grade-bar

@@ -277,7 +277,7 @@ let averageGradeCharts = (
               cy="16"
             />
           </svg>
-          <span className="ltr:ml-3 rtl:mr-3 text-lg font-semibold">
+          <span className="ms-3 text-lg font-semibold">
             {(grade.grade |> Js.Float.toString) ++ ("/" ++ (criterion.maxGrade |> string_of_int))
               |> str}
           </span>
@@ -404,7 +404,7 @@ let removeNote = (setState, studentDetails, noteId) =>
 let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
     {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
-    <div className="ltr:ml-2 rtl:mr-2 ltr:md:ml-3 rtl:md:mr-3">
+    <div className="ms-2 ltr:md:ml-3 rtl:md:mr-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {fulltitle |> str} </div>
     </div>
@@ -487,7 +487,7 @@ let inactiveWarning = student => {
     warning =>
       <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
         <i className="fas fa-exclamation-triangle" />
-        <span className="ltr:ml-2 rtl:mr-2"> {warning |> str} </span>
+        <span className="ms-2"> {warning |> str} </span>
       </div>,
     React.null,
   )
@@ -508,7 +508,7 @@ let ids = student => {
       </span>
     </ClickToCopy>
     <ClickToCopy
-      copy={StudentInfo.id(student)} className="ltr:ml-2 rtl:mr-2 inline-block hover:text-primary-500">
+      copy={StudentInfo.id(student)} className="ms-2 inline-block hover:text-primary-500">
       <span className="text-xs"> {"Student ID "->str} </span>
       <span className="font-semibold text-sm underline text-primary-500">
         {`#${StudentInfo.id(student)}`->str}

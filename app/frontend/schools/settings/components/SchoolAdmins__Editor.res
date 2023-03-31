@@ -78,7 +78,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
           setState(state => {...state, editorAction: ShowEditor(Some(admin))})
         }}>
         <div className="flex">
-          <span className="ltr:mr-4 rtl:ml-4 shrink-0">
+          <span className="me-4 shrink-0">
             {switch admin |> SchoolAdmin.avatarUrl {
             | Some(avatarUrl) =>
               <img className="w-10 h-10 rounded-full object-cover" src=avatarUrl />
@@ -137,7 +137,7 @@ let make = (~currentSchoolAdminId, ~admins) => {
             onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
             className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
-            <h5 className="font-semibold ltr:ml-2 rtl:mr-2"> {t("add_new_admin") |> str} </h5>
+            <h5 className="font-semibold ms-2"> {t("add_new_admin") |> str} </h5>
           </button>
         </div>
         <div className="px-6 pb-4 mt-5 flex">

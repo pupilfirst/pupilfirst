@@ -25,7 +25,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
           href=url>
           <div className="flex items-center">
             <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />
-            <div className="ltr:pl-4 rtl:pr-4 leading-tight h-12 flex flex-col justify-center">
+            <div className="ps-4 leading-tight h-12 flex flex-col justify-center">
               <div className="text-lg font-semibold"> {title |> str} </div>
               <div className="text-sm italic text-gray-600"> {filename |> str} </div>
             </div>
@@ -44,7 +44,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
           maxLength=60
           type_="text"
           value=title
-          placeholder=ts("caption_image")
+          placeholder={ts("caption_image")}
         />
       </div>
     </div>

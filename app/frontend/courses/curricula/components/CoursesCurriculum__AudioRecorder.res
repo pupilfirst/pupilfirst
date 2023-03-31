@@ -35,7 +35,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
                 className="w-8 h-8 z-0 animate-ping absolute inline-flex rounded-full bg-red-600 opacity-75"
               />
             </div>
-            <span className="inline-block pl-3 pr-4 text-xs font-semibold">
+            <span className="inline-block ps-3 pe-4  text-xs font-semibold">
               {str(t("recording_string"))}
             </span>
           </button>
@@ -51,7 +51,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
               className="flex shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">
               <Icon className="if i-microphone-fill-light text-lg text-red-600" />
             </div>
-            <span className="inline-block pl-3 pr-4 text-xs font-semibold">
+            <span className="inline-block ps-3 pe-4  text-xs font-semibold">
               {str({
                 switch audioRecorder.url {
                 | Some(_url) => t("button_text_record_again")
@@ -67,7 +67,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
           {switch audioRecorder.url {
           | None => React.null
           | Some(_) =>
-            <div className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={_e => audioRecorder.downloadBlob()}>
+            <div className="btn btn-success ms-4" onClick={_e => audioRecorder.downloadBlob()}>
               <FaIcon classes="fas fa-download" />
             </div>
           }}

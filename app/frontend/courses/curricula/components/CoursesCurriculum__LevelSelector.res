@@ -34,7 +34,7 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
       className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
-      <span className="ltr:mr-2 rtl:ml-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
+      <span className="me-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
       {levelName(level) |> str}
     </button>
   })
@@ -50,7 +50,7 @@ let untabbedLevelSelector = (
   let selected =
     <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
       <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
-      <FaIcon classes="fas fa-caret-down ltr:ml-1 rtl:mr-1" />
+      <FaIcon classes="fas fa-caret-down ms-1" />
     </button>
 
   <Dropdown
@@ -74,7 +74,7 @@ let tabbedLevelSelector = (
     <button
       className="rounded-l-lg font-semibold w-full px-2 h-10 flex items-center justify-between">
       <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
-      <FaIcon classes={"fas fa-caret-down ltr:ml-1 rtl:mr-1" ++ (hideCaret ? " invisible" : "")} />
+      <FaIcon classes={"fas fa-caret-down ms-1" ++ (hideCaret ? " invisible" : "")} />
     </button>
 
   let numberedLevelSelector = showLevelZero

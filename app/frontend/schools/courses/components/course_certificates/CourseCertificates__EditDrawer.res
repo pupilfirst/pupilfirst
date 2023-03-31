@@ -211,10 +211,10 @@ let make = (
             <label className="tracking-wide text-sm font-semibold">
               {t("active.label")->str}
             </label>
-            <HelpIcon className="ltr:ml-1 rtl:mr-1" link={t("active.help_url")}>
+            <HelpIcon className="ms-1" link={t("active.help_url")}>
               <span dangerouslySetInnerHTML={"__html": t("active.help")} />
             </HelpIcon>
-            <div className="ltr:ml-4 rtl:mr-4 inline-flex toggle-button__group shrink-0">
+            <div className="ms-4 inline-flex toggle-button__group shrink-0">
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>
@@ -228,11 +228,13 @@ let make = (
             </div>
             {!canBeAutoIssued
               ? <div
-                  className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2">
+                  className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-r-md mt-2">
                   <div className="w-6 h-6 text-yellow-500 shrink-0">
                     <i className="fas fa-exclamation-triangle" />
                   </div>
-                  <span className="ltr:ml-2 rtl:mr-2"> {t("cannot_be_auto_issued_warning")->React.string} </span>
+                  <span className="ms-2">
+                    {t("cannot_be_auto_issued_warning")->React.string}
+                  </span>
                 </div>
               : React.null}
           </div>
@@ -243,7 +245,7 @@ let make = (
                 <IssuedCertificate__Root issuedCertificate=demoCertificate verifyImageUrl />
               </div>
             </div>
-            <div className="w-2/5 ltr:pl-5 rtl:pr-5">
+            <div className="w-2/5 ps-5 ">
               <div>
                 <div>
                   <label
@@ -310,14 +312,14 @@ let make = (
                 <label className="tracking-wide text-gray-900 text-xs font-semibold">
                   {t("qr_visibility.label")->str}
                 </label>
-                <HelpIcon className="ltr:ml-1 rtl:mr-1" link={t("qr_visibility.help_url")}>
+                <HelpIcon className="ms-1" link={t("qr_visibility.help_url")}>
                   <span
                     dangerouslySetInnerHTML={
                       "__html": t("qr_visibility.help"),
                     }
                   />
                 </HelpIcon>
-                <div className="ltr:ml-4 rtl:mr-4 inline-flex toggle-button__group shrink-0">
+                <div className="ms-4 inline-flex toggle-button__group shrink-0">
                   <button
                     className={qrVisiblityClasses(state.qrCorner, true)}
                     onClick={activateQrCode(state, send)}>
@@ -346,7 +348,7 @@ let make = (
                     </div>
                     <div className="flex mt-2">
                       <button
-                        className={"w-1/2 ltr:mr-2 rtl:ml-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
+                        className={"w-1/2 me-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #TopLeft)}
                         onClick={_ => send(UpdateQrCorner(#TopLeft))}>
                         <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
@@ -364,7 +366,7 @@ let make = (
                     </div>
                     <div className="flex mt-2">
                       <button
-                        className={"w-1/2 ltr:mr-2 rtl:ml-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
+                        className={"w-1/2 me-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #BottomLeft)}
                         onClick={_ => send(UpdateQrCorner(#BottomLeft))}>
                         {t("qr_bottom_left_label")->str}
@@ -413,12 +415,12 @@ let make = (
             <div className="flex-1">
               {issuedCount > 0 && !saveButtonDisabled
                 ? <div
-                    className="inline-flex bg-orange-100 ltr:mr-2 rtl:ml-2 p-2 rounded-r border border-l-4 border-orange-500 items-center">
+                    className="inline-flex bg-orange-100 me-2 p-2 rounded-r border border-s-4 border-orange-500 items-center">
                     <div className="text-orange-500 text-2xl">
                       <i className="fas fa-exclamation-triangle" />
                     </div>
                     <div
-                      className="ltr:ml-2 rtl:mr-2 text-xs font-semibold"
+                      className="ms-2 text-xs font-semibold"
                       dangerouslySetInnerHTML={
                         "__html": t(~count=issuedCount, "update_issued_certificates_warning"),
                       }
@@ -432,7 +434,9 @@ let make = (
                 disabled=saveButtonDisabled
                 className="w-auto btn btn-success">
                 <FaIcon classes={"fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")} />
-                <span className="ltr:ml-2 rtl:mr-2"> {t(state.saving ? "saving" : "save_changes")->str} </span>
+                <span className="ms-2">
+                  {t(state.saving ? "saving" : "save_changes")->str}
+                </span>
               </button>
             </div>
           </div>

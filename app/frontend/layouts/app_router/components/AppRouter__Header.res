@@ -12,7 +12,7 @@ let showLink = (icon, text, href) => {
       rel="nofollow"
       className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="ltr:pl-2 rtl:pr-2"> {str(text)} </span>
+      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="ps-2 "> {str(text)} </span>
     </a>
   </div>
 }
@@ -66,7 +66,8 @@ let signOutLink = () =>
         href="/users/sign_out"
         rel="nofollow"
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
-        <FaIcon classes="fas fa-power-off" /> <span className="ltr:ml-2 rtl:mr-2"> {t("sign_out")->str} </span>
+        <FaIcon classes="fas fa-power-off" />
+        <span className="ms-2"> {t("sign_out")->str} </span>
       </a>
     </div>
   </div>
@@ -79,7 +80,8 @@ let signInLink = () =>
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
-        <FaIcon classes="fas fa-power-off" /> <span className="ltr:ml-2 rtl:mr-2"> {t("sign_in")->str} </span>
+        <FaIcon classes="fas fa-power-off" />
+        <span className="ms-2"> {t("sign_in")->str} </span>
       </a>
     </div>
   </div>
@@ -184,7 +186,7 @@ let make = (~school, ~currentUser) => {
           ? <div
               className="relative flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap shrink-0 transition">
               {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
-              <Layout__UserControls user={(currentUser)} />
+              <Layout__UserControls user={currentUser} />
             </div>
           : React.null}
       </nav>

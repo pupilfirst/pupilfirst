@@ -103,7 +103,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
             <FaIcon classes={iconClasses(answerOption, selectedAnswer)} />
             <MarkdownBlock
               markdown={QuizQuestion.answerValue(answerOption)}
-              className="overflow-auto ltr:ml-2 rtl:mr-2 w-full"
+              className="overflow-auto ms-2 w-full"
               profile=Markdown.Permissive
             />
           </button>

@@ -227,7 +227,7 @@ let topicsList = (topicCategories, topics) =>
                   </h4>
                   <span className="block text-xs text-gray-800 pt-1">
                     <span> {t("topic_posted_by_text")->str} </span>
-                    <span className="font-semibold ltr:mr-2 rtl:ml-2">
+                    <span className="font-semibold me-2">
                       {switch Topic.creatorName(topic) {
                       | Some(name) => " " ++ (name ++ " ")
                       | None => "Unknown "
@@ -253,31 +253,31 @@ let topicsList = (topicCategories, topics) =>
                 </span>
                 <span className="flex flex-row flex-wrap mt-2 items-center">
                   <span
-                    className="flex text-center items-center ltr:mr-2 rtl:ml-2 py-1 px-2 rounded bg-gray-50"
+                    className="flex text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Likes">
-                    <i className="far fa-thumbs-up text-sm text-gray-600 ltr:mr-1 rtl:ml-1" />
+                    <i className="far fa-thumbs-up text-sm text-gray-600 me-1" />
                     <p className="text-xs font-semibold">
-                      <span className="ltr:ml-1 rtl:mr-1 hidden md:inline">
+                      <span className="ms-1 hidden md:inline">
                         {t(~count=Topic.likesCount(topic), "topic_stats_likes")->str}
                       </span>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center ltr:mr-2 rtl:ml-2 py-1 px-2 rounded bg-gray-50"
+                    className="flex justify-between text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Replies">
-                    <i className="far fa-comment-dots text-sm text-gray-600 ltr:mr-1 rtl:ml-1" />
+                    <i className="far fa-comment-dots text-sm text-gray-600 me-1" />
                     <p className="text-xs font-semibold">
-                      <span className="ltr:ml-1 rtl:mr-1 hidden md:inline">
+                      <span className="ms-1 hidden md:inline">
                         {t(~count=Topic.liveRepliesCount(topic), "topic_stats_replies")->str}
                       </span>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center ltr:mr-2 rtl:ml-2 py-1 px-2 rounded bg-gray-50"
+                    className="flex justify-between text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Views">
-                    <i className="far fa-eye text-sm text-gray-600 ltr:mr-1 rtl:ml-1" />
+                    <i className="far fa-eye text-sm text-gray-600 me-1" />
                     <p className="text-xs font-semibold">
-                      <span className="ltr:ml-1 rtl:mr-1 hidden md:inline">
+                      <span className="ms-1 hidden md:inline">
                         {t(~count=Topic.views(topic), "topic_stats_views")->str}
                       </span>
                     </p>
@@ -291,9 +291,12 @@ let topicsList = (topicCategories, topics) =>
                       )
                     let (color, _) = StringUtils.toColor(TopicCategory.name(topicCategory))
                     let style = ReactDOM.Style.make(~backgroundColor=color, ())
-                    <span className="flex items-center text-xs font-semibold py-1 ltr:mr-2 rtl:ml-2">
+                    <span
+                      className="flex items-center text-xs font-semibold py-1 me-2">
                       <div className="w-3 h-3 rounded" style />
-                      <span className="ltr:ml-1 rtl:mr-1"> {TopicCategory.name(topicCategory)->str} </span>
+                      <span className="ms-1">
+                        {TopicCategory.name(topicCategory)->str}
+                      </span>
                     </span>
                   | None => React.null
                   }}
@@ -311,7 +314,7 @@ let topicsList = (topicCategories, topics) =>
             <div className="md:w-1/5">
               <CommunitiesShow__Participants
                 title=React.null
-                className="flex shrink-0 items-center justify-end ltr:pr-4 rtl:pl-4 ltr:md:pr-6 rtl:md:pl-6"
+                className="flex shrink-0 items-center justify-end pe-4 ltr:md:pr-6 rtl:md:pl-6"
                 participants={Topic.participants(topic)}
                 participantsCount={Topic.participantsCount(topic)}
               />
@@ -472,11 +475,11 @@ let categoryDropdownSelected = topicCategory =>
 
       <div className="inline-flex items-center">
         <div className="h-3 w-3 border" style />
-        <span className="ltr:ml-2 rtl:mr-2"> {TopicCategory.name(topicCategory)->str} </span>
+        <span className="ms-2"> {TopicCategory.name(topicCategory)->str} </span>
       </div>
     | None => t("all_categories_button")->str
     }}
-    <FaIcon classes="ltr:ml-4 rtl:mr-4 fas fa-caret-down" />
+    <FaIcon classes="ms-4 fas fa-caret-down" />
   </div>
 
 let categoryDropdownContents = (availableTopicCategories, filter) => {
@@ -498,9 +501,10 @@ let categoryDropdownContents = (availableTopicCategories, filter) => {
 
     <div
       ariaLabel={"Select category " ++ categoryName}
-      className="ltr:pl-3 rtl:pr-3 ltr:pr-4 rtl:pl-4 py-2 font-normal flex items-center"
+      className="ps-3 pe-4 py-2 font-normal flex items-center"
       onClick={_ => updateParams({...filter, topicCategory: Some(topicCategory)})}>
-      <div className="w-3 h-3 rounded" style /> <span className="ltr:ml-1 rtl:mr-1"> {categoryName->str} </span>
+      <div className="w-3 h-3 rounded" style />
+      <span className="ms-1"> {categoryName->str} </span>
     </div>
   }, selectableTopicCategories)
 }
@@ -614,7 +618,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
             <div className="" />
           </div>
           <div className="flex w-full items-start flex-wrap">
-            <div className="flex-1 ltr:pr-2 rtl:pl-2">
+            <div className="flex-1 pe-2">
               <label className="block text-tiny font-semibold uppercase pl-px">
                 {t("filter_input_label")->str}
               </label>

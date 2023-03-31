@@ -122,7 +122,7 @@ let showTag = (~value=?, key, text, color, params) => {
   let paramsValue = Belt.Option.getWithDefault(value, text)
   <button
     key={text}
-    className={"rounded-lg mt-1 ltr:mr-1 rtl:ml-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
+    className={"rounded-lg mt-1 me-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
     color}
     onClick={_e => onSelect(key, paramsValue, params)}>
     {text->str}
@@ -197,7 +197,7 @@ let studentsList = (params, students) => {
                 className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
                 <span className="inline-flex items-center p-2">
                   <PfIcon className="if i-edit-regular if-fw" />
-                  <span className="ltr:ml-2 rtl:mr-2"> {t("edit")->str} </span>
+                  <span className="ms-2"> {t("edit")->str} </span>
                 </span>
               </Link>
             </div>
@@ -258,11 +258,11 @@ let make = (~courseId, ~search) => {
     <div className="bg-gray-50 pt-8 min-h-full ">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold ltr:pl-1 rtl:pr-1 capitalize"> {t("students")->str} </p>
+          <p className="font-semibold ps-1 capitalize"> {t("students")->str} </p>
           <div>
             <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
               <PfIcon className="if i-plus-regular" />
-              <span className="inline-block ltr:pl-2 rtl:pr-2"> {str(t("add_new_students"))} </span>
+              <span className="inline-block ps-2 "> {str(t("add_new_students"))} </span>
             </Link>
           </div>
         </div>

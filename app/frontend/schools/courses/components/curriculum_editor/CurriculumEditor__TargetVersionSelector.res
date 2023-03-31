@@ -90,7 +90,7 @@ let make = (
               <span className="truncate text-left"> {selectedVersion |> str} </span>
             </span>
             {versions |> Array.length > 1
-              ? <span className="text-right pl-3 py-2 border-l border-gray-300">
+              ? <span className="text-right ps-3 py-2 border-l border-gray-300">
                   <i className="fas fa-chevron-down text-sm" />
                 </span>
               : React.null}

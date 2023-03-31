@@ -316,7 +316,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
       <DisablingCover disabled=state.adding>
         <div className="flex mt-3" key="sc-links-editor__form-body">
           {if state->titleInputVisible {
-            <div className="grow ltr:mr-4 rtl:ml-4">
+            <div className="grow me-4">
               <label
                 className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-title">
                 {t("title")->str}

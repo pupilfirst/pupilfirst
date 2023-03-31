@@ -46,7 +46,7 @@ let showUser = user => {
             />,
         )}
       </div>
-      <div className="pl-2 flex justify-between w-full items-center">
+      <div className="ps-2 flex justify-between w-full items-center">
         // <p className="text-sm font-medium"> {str(User.name(user))} </p>
         <div> {showUserLink()->React.array} </div>
       </div>

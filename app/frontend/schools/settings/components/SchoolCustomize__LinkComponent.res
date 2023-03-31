@@ -187,12 +187,14 @@ let make = (
         <div className="flex items-center flex-1">
           {state.editing
             ? <LinkEditor state id kind send />
-            : <div className="ltr:pl-3 rtl:pr-3">
+            : <div className="ps-3 ">
                 {switch kind {
                 | HeaderLink
                 | FooterLink => <>
-                    <span className="inline-block ltr:mr-2 rtl:ml-2 font-semibold"> {title->str} </span>
-                    <PfIcon className="if i-link-regular if-fw ltr:mr-1 rtl:ml-1" />
+                    <span className="inline-block me-2 font-semibold">
+                      {title->str}
+                    </span>
+                    <PfIcon className="if i-link-regular if-fw me-1" />
                     <code> {url->str} </code>
                   </>
                 | SocialLink => <code> {url->str} </code>

@@ -322,10 +322,10 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
     ? <div className="mb-6">
         <label
           className="block tracking-wide text-sm font-semibold mb-2" htmlFor="prerequisite_targets">
-          <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-list text-base" /> </span>
+          <span className="me-2"> <i className="fas fa-list text-base" /> </span>
           {t("prerequisite_targets_label") |> str}
         </label>
-        <div id="prerequisite_targets" className="mb-6 ltr:ml-6 rtl:mr-6">
+        <div id="prerequisite_targets" className="mb-6 ms-6">
           <MultiSelectForPrerequisiteTargets
             placeholder={t("search_targets")}
             emptySelectionMessage={t("no_targets_selected")}
@@ -414,12 +414,12 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
     |> Js.Array.map(SelectableEvaluationCriterion.make)
   <div id="evaluation_criteria" className="mb-6">
     <label
-      className="block tracking-wide text-sm font-semibold ltr:mr-6 rtl:ml-6 mb-2"
+      className="block tracking-wide text-sm font-semibold me-6 mb-2"
       htmlFor="evaluation_criteria">
-      <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
       {t("select_criterion_label") |> str}
     </label>
-    <div className="ltr:ml-6 rtl:mr-6">
+    <div className="ms-6">
       {validNumberOfEvaluationCriteria(state)
         ? React.null
         : <div className="drawer-right-form__error-msg mb-2">
@@ -464,10 +464,10 @@ let updateVisibility = (visibility, send, event) => {
 let linkEditor = (state, send) =>
   <div className="mb-6">
     <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="link_to_complete">
-      <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
       {t("link_complete") |> str}
     </label>
-    <div className="ltr:ml-6 rtl:mr-6">
+    <div className="ms-6">
       <input
         className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="link_to_complete"
@@ -558,12 +558,12 @@ let targetGroupOnSelect = (state, send, targetGroups, selectable) => {
 let targetGroupEditor = (state, targetGroups, levels, send) =>
   <div id="target_group_id" className="mb-6">
     <label
-      className="block tracking-wide text-sm font-semibold ltr:mr-6 rtl:ml-6 mb-2"
+      className="block tracking-wide text-sm font-semibold me-6 mb-2"
       htmlFor="target_group">
-      <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
       {t("target_group") |> str}
     </label>
-    <div className="ltr:ml-6 rtl:mr-6">
+    <div className="ms-6">
       <TargetGroupSelector
         id="target_group"
         unselected={unselectedTargetGroups(levels, targetGroups, state.targetGroupId)}
@@ -631,12 +631,12 @@ let methodOfCompletionSelector = (state, send) =>
   <div>
     <div className="mb-6">
       <label
-        className="block tracking-wide text-sm font-semibold ltr:mr-6 rtl:ml-6 mb-3"
+        className="block tracking-wide text-sm font-semibold me-6 mb-3"
         htmlFor="method_of_completion">
-        <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-list text-base" /> </span>
+        <span className="me-2"> <i className="fas fa-list text-base" /> </span>
         {t("target_method_of_completion_label") |> str}
       </label>
-      <div id="method_of_completion" className="flex -mx-2 ltr:pl-6 rtl:pr-6">
+      <div id="method_of_completion" className="flex -mx-2 ps-6 ">
         {[#MarkAsComplete, #VisitLink, #TakeQuiz, #SubmitForm]
         |> Js.Array.mapi((methodOfCompletion, index) =>
           methodOfCompletionButton(methodOfCompletion, state, send, index)
@@ -668,12 +668,12 @@ let questionCanBeRemoved = state => state.quiz |> Js.Array.length > 1
 let quizEditor = (state, send) =>
   <div>
     <label
-      className="block tracking-wide text-sm font-semibold ltr:mr-6 rtl:ml-6 mb-3"
+      className="block tracking-wide text-sm font-semibold me-6 mb-3"
       htmlFor="Quiz question 1">
-      <span className="ltr:mr-2 rtl:ml-2"> <i className="fas fa-list text-base" /> </span>
+      <span className="me-2"> <i className="fas fa-list text-base" /> </span>
       {t("prepare_quiz") |> str}
     </label>
-    <div className="ltr:ml-6 rtl:mr-6">
+    <div className="ms-6">
       {isValidQuiz(state.quiz)
         ? React.null
         : <School__InputGroupError message={t("prepare_quiz_error")} active=true />}
@@ -693,7 +693,7 @@ let quizEditor = (state, send) =>
         onClick={addQuizQuestion(send)}
         className="flex w-full items-center bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
         <i className="fas fa-plus-circle text-lg" />
-        <h5 className="font-semibold ltr:ml-2 rtl:mr-2"> {t("add_another_question") |> str} </h5>
+        <h5 className="font-semibold ms-2"> {t("add_another_question") |> str} </h5>
       </button>
     </div>
   </div>
@@ -964,12 +964,12 @@ let make = (
                 <label
                   className="items-center inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
-                  <span className="ltr:mr-2 rtl:ml-2">
+                  <span className="me-2">
                     <i className="fas fa-list text-base" />
                   </span>
                   {t("title") |> str}
                 </label>
-                <div className="ltr:ml-6 rtl:mr-6">
+                <div className="ms-6">
                   <input
                     autoFocus=true
                     className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
@@ -992,9 +992,9 @@ let make = (
               )}
               <div className="flex items-center mb-6">
                 <label
-                  className="block tracking-wide text-sm font-semibold ltr:mr-6 rtl:ml-6"
+                  className="block tracking-wide text-sm font-semibold me-6"
                   htmlFor="evaluated">
-                  <span className="ltr:mr-2 rtl:ml-2">
+                  <span className="me-2">
                     <i className="fas fa-list text-base" />
                   </span>
                   {t("target_reviewed_by_coach") |> str}
@@ -1031,25 +1031,25 @@ let make = (
               }}
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
-                  <span className="ltr:mr-2 rtl:ml-2">
+                  <span className="me-2">
                     <i className="fas fa-list text-base" />
                   </span>
                   {t("target_role.label") |> str}
                 </label>
-                <HelpIcon className="ltr:ml-1 rtl:mr-1" link={t("target_role.help_url")}>
+                <HelpIcon className="ms-1" link={t("target_role.help_url")}>
                   {t("target_role.help") |> str}
                 </HelpIcon>
-                <div id="role" className="flex mt-4 ltr:ml-6 rtl:mr-6">
+                <div id="role" className="flex mt-4 ms-6">
                   <button
                     onClick={updateTargetRole(TargetDetails.Student, send)}
-                    className={"ltr:mr-4 rtl:ml-4 " ++
+                    className={"me-4 " ++
                     targetRoleClasses(
                       switch state.role {
                       | TargetDetails.Student => true
                       | Team => false
                       },
                     )}>
-                    <span className="ltr:mr-4 rtl:ml-4">
+                    <span className="me-4">
                       <Icon className="if i-users-check-light text-3xl" />
                     </span>
                     <span className="text-sm"> {t("submit_individually") |> str} </span>
@@ -1062,7 +1062,7 @@ let make = (
                       | Student => false
                       },
                     )}>
-                    <span className="ltr:mr-4 rtl:ml-4">
+                    <span className="me-4">
                       <Icon className="if i-user-check-light text-2xl" />
                     </span>
                     <span className="text-sm">
@@ -1074,19 +1074,19 @@ let make = (
               <div className="mb-6">
                 <label
                   className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
-                  <span className="ltr:mr-2 rtl:ml-2">
+                  <span className="me-2">
                     <i className="fas fa-list text-base" />
                   </span>
                   {t("completion_instructions.label") |> str}
-                  <span className="ltr:ml-1 rtl:mr-1 text-xs font-normal">
+                  <span className="ms-1 text-xs font-normal">
                     {ts("optional_braces") |> str}
                   </span>
                 </label>
                 <HelpIcon
-                  link={t("completion_instructions.help_url")} className="ltr:ml-1 rtl:mr-1">
+                  link={t("completion_instructions.help_url")} className="ms-1">
                   {t("completion_instructions.help") |> str}
                 </HelpIcon>
-                <div className="ltr:ml-6 rtl:mr-6">
+                <div className="ms-6">
                   <input
                     className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="completion-instructions"
@@ -1102,9 +1102,9 @@ let make = (
               <div className="flex max-w-3xl mx-auto px-3 justify-between items-center">
                 <div className="flex items-center shrink-0">
                   <label
-                    className="block tracking-wide text-sm font-semibold ltr:mr-3 rtl:ml-3"
+                    className="block tracking-wide text-sm font-semibold me-3"
                     htmlFor="archived">
-                    <span className="ltr:mr-2 rtl:ml-2">
+                    <span className="me-2">
                       <i className="fas fa-list text-base" />
                     </span>
                     {t("target_visibility") |> str}

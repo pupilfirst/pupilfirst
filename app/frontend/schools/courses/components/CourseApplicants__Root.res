@@ -175,7 +175,7 @@ module Sortable = {
 module ApplicantsSorter = Sorter.Make(Sortable)
 
 let applicantsSorter = (send, filter) =>
-  <div className="ltr:ml-2 rtl:mr-2 shrink-0">
+  <div className="ms-2 shrink-0">
     <label className="block text-tiny uppercase font-semibold"> {t("sorter.label") |> str} </label>
     <div className="mt-1">
       <ApplicantsSorter
@@ -299,7 +299,7 @@ let entriesLoadedData = (totalNotificationsCount, loadedNotificaionsCount) =>
   </div>
 
 let showApplicant = (baseUrl, applicant) => {
-  <div className="flex flex-1 items-center ltr:pr-4 rtl:pl-4 bg-white hover:shadow border rounded">
+  <div className="flex flex-1 items-center pe-4 bg-white hover:shadow border rounded">
     <button
       title={t("show_details") ++ Applicant.name(applicant)}
       className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-50 cursor-pointer"

@@ -40,7 +40,7 @@ let make = (~loading, ~message=ts("loading")) => {
               />
             </svg>
           </div>
-          <span className="inline-block ltr:ml-2 rtl:mr-2 text-xs text-white font-semibold tracking-wide">
+          <span className="inline-block ms-2 text-xs text-white font-semibold tracking-wide">
             {message |> str}
           </span>
         </div>

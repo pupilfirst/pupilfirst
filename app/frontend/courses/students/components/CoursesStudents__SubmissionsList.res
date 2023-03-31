@@ -95,7 +95,7 @@ let showSubmissionStatus = submission =>
   }
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md " ++
+  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-s-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md " ++
   switch submission |> Submission.evaluatedAt {
   | Some(_datetime) => submission |> Submission.failed ? "border-red-500" : "border-green-500"
   | None => "border-orange-400"
@@ -122,12 +122,12 @@ let showSubmission = (submissions, levels) =>
                 |> Level.unsafeLevelNumber(levels, "StudentSubmissionsList")
                 |> str}
               </span>
-              <span className="ltr:ml-2 rtl:mr-2 font-semibold text-base">
+              <span className="ms-2 font-semibold text-base">
                 {submission |> Submission.title |> str}
               </span>
             </div>
             <div className="mt-1 ml-px text-xs text-gray-900">
-              <span className="ltr:ml-1 rtl:mr-1">
+              <span className="ms-1">
                 {tr("submitted_on") ++ (submission |> Submission.createdAtPretty) |> str}
               </span>
             </div>

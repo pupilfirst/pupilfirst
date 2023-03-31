@@ -108,7 +108,7 @@ module Make = (Selectable: Selectable) => {
             {switch selection |> Selectable.label {
             | Some(label) =>
               <span
-                className="ltr:mr-2 rtl:ml-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
+                className="me-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -147,7 +147,7 @@ module Make = (Selectable: Selectable) => {
       <div
         key={index |> string_of_int}
         className={tagPillClasses(selection |> Selectable.color, false) ++ " space-x-1.5"}>
-        <span className="ltr:pl-2 rtl:pr-2 py-px text-xs leading-[unset]">
+        <span className="ps-2 py-px text-xs leading-[unset]">
           {switch selection |> Selectable.label {
           | Some(label) => label ++ (labelSuffix ++ value)
           | None => value

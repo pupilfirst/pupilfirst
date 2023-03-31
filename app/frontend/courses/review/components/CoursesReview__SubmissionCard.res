@@ -25,14 +25,14 @@ let submissionStatus = submission => {
 let feedbackSentNotice = feedbackSent =>
   ReactUtils.nullUnless(
     <div
-      className="bg-primary-100 text-primary-600 border border-transparent shrink-0 leading-normal font-semibold px-2 py-px rounded ltr:mr-3 rtl:ml-3">
+      className="bg-primary-100 text-primary-600 border border-transparent shrink-0 leading-normal font-semibold px-2 py-px rounded me-3">
       {str(t("feedback_sent"))}
     </div>,
     feedbackSent,
   )
 
 let submissionCardClasses = submission =>
-  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-l-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ if (
+  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-s-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ if (
     IndexSubmission.pendingReview(submission)
   ) {
     "border-orange-400"
@@ -58,7 +58,7 @@ let showSubmission = (submissions, filterString) =>
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {str(t("level") ++ string_of_int(IndexSubmission.levelNumber(submission)))}
             </span>
-            <span className="ltr:ml-2 rtl:mr-2 font-semibold text-sm md:text-base">
+            <span className="ms-2 font-semibold text-sm md:text-base">
               {IndexSubmission.title(submission)->str}
             </span>
           </div>
@@ -77,7 +77,7 @@ let showSubmission = (submissions, filterString) =>
               </span>
             }}
             <span
-              className="ltr:ml-1 rtl:mr-1"
+              className="ms-1"
               title={IndexSubmission.createdAt(submission)->DateFns.formatPreset(
                 ~year=true,
                 ~time=true,
@@ -92,13 +92,13 @@ let showSubmission = (submissions, filterString) =>
             </span>
             {switch IndexSubmission.reviewer(submission) {
             | Some(reviewer) =>
-              <span className="ltr:ml-1 rtl:mr-1">
+              <span className="ms-1">
                 {str(t("assigned_to"))}
-                <span className="ltr:ml-1 rtl:mr-1 font-semibold">
+                <span className="ms-1 font-semibold">
                   {{IndexSubmission.reviewerName(reviewer)}->str}
                 </span>
                 <span
-                  className="text-xs text-gray-800 ltr:ml-1 rtl:mr-1"
+                  className="text-xs text-gray-800 ms-1"
                   title={IndexSubmission.reviewerAssignedAt(reviewer)->DateFns.formatPreset(
                     ~year=true,
                     ~time=true,

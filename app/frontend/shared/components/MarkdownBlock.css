@@ -82,7 +82,7 @@
 }
 
 .markdown-block__permissive blockquote {
-  @apply border-l-4 border-gray-800 bg-gray-50 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
+  @apply border-s-4 border-gray-800 bg-gray-50 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
 }
 
 .markdown-block__permissive blockquote code,

@@ -49,7 +49,7 @@ let make = (
       />
       <label className="file-input-label mt-2" htmlFor=id>
         <i className="fas fa-upload" />
-        <span className="ltr:ml-2 rtl:mr-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
+        <span className="ms-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
       </label>
     </div>
     <School__InputGroupError message=errorMessage active=errorState />

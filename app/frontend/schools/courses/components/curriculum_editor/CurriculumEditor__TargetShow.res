@@ -8,11 +8,11 @@ let t = I18n.t(~scope="components.CurriculumEditor__TargetShow")
 let ts = I18n.ts
 
 let targetClasses = (target, targets) =>
-  "target-group__target flex justify-between items-center ltr:pl-2 rtl:pr-2 ltr:pr-5 rtl:pl-5 focus:outline-none focus:bg-gray-50 focus:text-primary-500 " ++
+  "target-group__target flex justify-between items-center ps-2 pe-5 focus:outline-none focus:bg-gray-50 focus:text-primary-500 " ++
   switch (Js.Array.length(targets) == 1, target |> Target.visibility) {
-  | (true, Archived) => "target-group__target--archived py-4 ltr:pl-5 rtl:pr-5"
+  | (true, Archived) => "target-group__target--archived py-4 ps-5 "
   | (false, Archived) => "target-group__target--archived py-4"
-  | (true, _) => "py-6 ltr:pl-5 rtl:pr-5"
+  | (true, _) => "py-6 ps-5 "
   | (false, _) => "py-6"
   }
 
@@ -91,9 +91,9 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
         {switch target |> Target.visibility {
         | Draft =>
           <span
-            className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 ltr:mr-2 rtl:ml-2 whitespace-nowrap">
+            className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 me-2 whitespace-nowrap">
             <i className="fas fa-file-signature text-sm" />
-            <span className="ltr:ml-1 rtl:mr-1"> {t("draft") |> str} </span>
+            <span className="ms-1"> {t("draft") |> str} </span>
           </span>
         | _ => React.null
         }}

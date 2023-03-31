@@ -348,7 +348,7 @@ let tab = (tab, state, send) => {
   let classes = selected ? defaultClasses ++ " level-editor__tab--selected" : defaultClasses
 
   <button onClick={_e => send(UpdateTab(tab))} className=classes>
-    <i className={"fas " ++ iconClass} /> <span className="ltr:ml-2 rtl:mr-2"> {title |> str} </span>
+    <i className={"fas " ++ iconClass} /> <span className="ms-2"> {title |> str} </span>
   </button>
 }
 

@@ -10,7 +10,7 @@ let showLink = (icon, text, href) => {
       rel="nofollow"
       className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="ltr:pl-2 rtl:pr-2"> {str(text)} </span>
+      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="ps-2 "> {str(text)} </span>
     </a>
   </div>
 }

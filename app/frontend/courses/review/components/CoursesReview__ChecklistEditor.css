@@ -3,7 +3,7 @@
 }
 
 .checklist-editor__checklist-result-item-title {
-  @apply appearance-none py-3 pl-4 pr-10 text-sm font-semibold leading-tight rounded-t w-full border border-gray-300;
+  @apply appearance-none py-3 ps-4 pe-10  text-sm font-semibold leading-tight rounded-t w-full border border-gray-300;
   border-bottom-color: transparent;
 }
 

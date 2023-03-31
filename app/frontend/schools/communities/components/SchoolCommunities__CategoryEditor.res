@@ -240,7 +240,7 @@ let make = (
           ? <button
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={createCategory(communityId, state.categoryName, createCategoryCB, send)}
-              className="btn btn-success ltr:ml-2 rtl:mr-2 text-sm">
+              className="btn btn-success ms-2 text-sm">
               {tr("save_category") |> str}
             </button>
           : React.null

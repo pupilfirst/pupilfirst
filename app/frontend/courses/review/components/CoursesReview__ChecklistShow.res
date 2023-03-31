@@ -125,7 +125,7 @@ let make = (
           className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left text-gray-500" />
-          <p className="ltr:pl-2 rtl:pr-2"> {str("Back to Review")} </p>
+          <p className="ps-2 "> {str("Back to Review")} </p>
         </button>
       </div>
     </div>
@@ -136,7 +136,7 @@ let make = (
         </h5>
         <button className="btn btn-small btn-default" onClick={_ => showEditorCB()}>
           <i className="far fa-edit" />
-          <div className="ltr:ml-2 rtl:mr-2"> {t("edit_checklist_button")->str} </div>
+          <div className="ms-2"> {t("edit_checklist_button")->str} </div>
         </button>
       </div>
       <div className="border bg-white rounded-lg py-2 md:py-4 mt-2 space-y-8">
@@ -170,7 +170,7 @@ let make = (
                             )->Belt.Option.isSome
 
                           ReactUtils.nullUnless(
-                            <div className="ltr:pl-7 rtl:pr-7 pt-2">
+                            <div className="ps-7 pt-2">
                               <textarea
                                 rows=4
                                 cols=33
@@ -210,7 +210,8 @@ let make = (
         )->React.array}
       </div>
     </div>
-    <div className="flex justify-end border-t bg-gray-50 opacity-90 sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
+    <div
+      className="flex justify-end border-t bg-gray-50 opacity-90 sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       {feedbackGeneratable(submissionDetails, overlaySubmission)
         ? generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
         : React.null}

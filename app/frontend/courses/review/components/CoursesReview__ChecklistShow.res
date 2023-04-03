@@ -238,7 +238,7 @@ let make = (
                 <div className="px-6">
                   <button
                     id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
-                    className="flex gap-x-2 items-center text-red-500 py-1"
+                    className="text-sm text-red-500 pl-1 py-1 text-left rtl:text-right mt-2 hover:text-red-600 transition"
                     onClick={_ => {
                       let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
                         if index == itemIndex {
@@ -250,7 +250,7 @@ let make = (
                       setAddAdditionalFeedback(_ => newValue)
                     }}>
                     <i className="fas fa-minus" />
-                    <div> {str(t("remove_additional_feedback"))} </div>
+                    <span className="pl-2"> {str(t("remove_additional_feedback"))} </span>
                   </button>
                   <div className="pl-7 pt-2">
                     <textarea
@@ -278,7 +278,7 @@ let make = (
               | None =>
                 <button
                   id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
-                  className="flex gap-x-2 items-center text-primary-500 px-2 py-1 mx-4"
+                  className="text-sm text-primary-500 px-2 py-1 ml-5 text-left rtl:text-right mt-2 hover:text-primary-600 transition"
                   onClick={_ => {
                     let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
                       if index == itemIndex {
@@ -289,7 +289,8 @@ let make = (
                     })
                     setAddAdditionalFeedback(_ => newValue)
                   }}>
-                  <i className="fas fa-plus" /> <div> {str(t("add_additional_feedback"))} </div>
+                  <i className="fas fa-plus" />
+                  <span className="pl-2 "> {str(t("add_additional_feedback"))} </span>
                 </button>
               }}
             </div>
@@ -297,7 +298,8 @@ let make = (
         , checklist)->React.array}
       </div>
     </div>
-    <div className="flex justify-end border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
+    <div
+      className="flex justify-end bg-gray-50 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       {feedbackGeneratable(submissionDetails, overlaySubmission)
         ? generateFeedbackButton(
             checklist,

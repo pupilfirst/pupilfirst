@@ -411,7 +411,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
               <div className="w-full">
                 <label
                   htmlFor="search_applicants"
-                  className="block text-tiny font-semibold uppercase pl-px ltr:text-left rtl:text-right">
+                  className="block text-tiny font-semibold uppercase ps-px ltr:text-left rtl:text-right">
                   {t("filter.input_label")->str}
                 </label>
                 <Multiselect

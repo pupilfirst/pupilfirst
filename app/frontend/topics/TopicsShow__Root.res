@@ -338,7 +338,7 @@ let make = (
   })
 
   <div className="bg-gray-50">
-    <div className="max-w-4xl w-full mt-5 ps-4 ltr:lg:ps-0 rtl:lg:pr-0 lg:mx-auto">
+    <div className="max-w-4xl w-full mt-5 ps-4 lg:ps-0 lg:mx-auto">
       {communityLink(community)}
     </div>
     <div className="flex-col items-center justify-between">
@@ -411,7 +411,7 @@ let make = (
                   className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                   <h3
                     ariaLabel={t("topic_title")}
-                    className="leading-snug ltr:lg:ps-14 rtl:lg:pr-14 text-base lg:text-2xl w-9/12">
+                    className="leading-snug lg:ps-14 text-base lg:text-2xl w-9/12">
                     {state.topic |> Topic.title |> str}
                   </h3>
                   <span className="flex">
@@ -455,7 +455,7 @@ let make = (
                   let (color, _) = TopicCategory.color(topicCategory)
                   let style = ReactDOM.Style.make(~backgroundColor=color, ())
                   <div
-                    className="py-2 flex items-center ltr:lg:ps-14 rtl:lg:pr-14 text-xs font-semibold">
+                    className="py-2 flex items-center lg:ps-14 text-xs font-semibold">
                     <div className="w-3 h-3 rounded" style />
                     <span className="ms-2">
                       {TopicCategory.name(topicCategory)->str}
@@ -463,7 +463,7 @@ let make = (
                   </div>
                 | None => React.null
                 }}
-                <div className="ltr:lg:ps-14 rtl:lg:pr-14">
+                <div className="lg:ps-14">
                   <TopicsShow__SubscriptionManager
                     subscribed={state.subscribed}
                     topicId={Topic.id(topic)}
@@ -523,7 +523,7 @@ let make = (
         {switch Topic.lockedAt(state.topic) {
         | Some(_lockedAt) =>
           <div
-            className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
+            className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-e-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
             <div className="w-6 h-6 text-yellow-500 shrink-0"> <i className="fa fa-lock" /> </div>
             <span className="ms-2"> {t("locked_topic_notice")->React.string} </span>
           </div>

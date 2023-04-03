@@ -738,11 +738,11 @@ let formEditor = (state, send) => {
       {status ? t("target_checklist.label")->str : t("target_checklist.form_label")->str}
     </label>
     {status
-      ? <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
+      ? <HelpIcon className="ms-1" link={t("target_checklist.help_url")}>
           {t("target_checklist.help")->str}
         </HelpIcon>
-      : <HelpIcon className="ml-1"> {t("target_checklist.form_help")->str} </HelpIcon>}
-    <div className="ml-6 mb-6">
+      : <HelpIcon className="ms-1"> {t("target_checklist.form_help")->str} </HelpIcon>}
+    <div className="ms-6 mb-6">
       {state.checklist
       |> Js.Array.mapi((checklistItem, index) => {
         let moveChecklistItemUpCB = index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None

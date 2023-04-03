@@ -228,7 +228,7 @@ let make = (
             </div>
             {!canBeAutoIssued
               ? <div
-                  className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-r-md mt-2">
+                  className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-e-md mt-2">
                   <div className="w-6 h-6 text-yellow-500 shrink-0">
                     <i className="fas fa-exclamation-triangle" />
                   </div>

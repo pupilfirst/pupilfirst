@@ -240,7 +240,7 @@ let make = (
                 }}
                 value={currentLevel |> Level.name}
                 ariaLabel="Select level"
-                className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 ltr:rounded-r-none rtl:rounded-l-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 {state.levels
                 |> Level.sort
                 |> Array.map(level =>
@@ -254,7 +254,7 @@ let make = (
                 |> React.array}
               </select>
               <div
-                className="pointer-events-none absolute inset-y-0 ltr:end-0 rtl:start-0 flex items-center px-3 text-gray-800">
+                className="pointer-events-none absolute inset-y-0 end-0 flex items-center px-3 text-gray-800">
                 <i className="fas fa-chevron-down text-xs" />
               </div>
             </div>

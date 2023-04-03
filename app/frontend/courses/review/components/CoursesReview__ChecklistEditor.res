@@ -227,7 +227,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       <Spread
                         props={"data-result-item": string_of_int(resultIndex)}
                         key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
-                        <div className="ps-2 ltr:md:ps-4 rtl:md:pr-4 mt-2">
+                        <div className="ps-2 md:ps-4 mt-2">
                           <div className="flex">
                             <label
                               title={t("disabled")}

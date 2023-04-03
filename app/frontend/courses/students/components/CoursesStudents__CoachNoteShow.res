@@ -97,7 +97,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
         showDeleteIcon ? deleteIcon(note, removeNoteCB, setArchiving, archiving) : React.null
       }
     </div>
-    <div className="ml-10 ms-13 mt-2">
+    <div className="ms-10 ms-13 mt-2">
       <p
         className="inline-block text-xs font-semibold leading-tight bg-gray-300 text-gray-800 mt-px px-1 py-px rounded">
         {tr("coach_on") ++ " " ++ (note |> CoachNote.noteOn) |> str}

@@ -318,7 +318,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                   {submission |> Submission.title |> str}
                 </span>
               </div>
-              <div className="mt-1 ml-px text-xs text-gray-900">
+              <div className="mt-1 ms-px text-xs text-gray-900">
                 <span className="ms-1">
                   {tr(
                     ~variables=[("date", submission |> Submission.createdAtPretty)],

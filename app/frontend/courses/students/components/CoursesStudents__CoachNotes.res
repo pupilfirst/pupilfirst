@@ -64,7 +64,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
         className="font-semibold text-sm block mb-1">
         {tr("new_note")->str}
       </label>
-      <HelpIcon className="ml-1"> {tr("help_text")->str} </HelpIcon>
+      <HelpIcon className="ms-1"> {tr("help_text")->str} </HelpIcon>
     </span>
     <DisablingCover disabled=state.saving message="Saving...">
       <MarkdownEditor

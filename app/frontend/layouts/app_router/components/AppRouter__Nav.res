@@ -155,7 +155,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
             <div>
               <div className="absolute top-0 end-0 -me-12 pt-2">
                 <button
-                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  className="ms-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={_e => setSidebarOpen(_ => false)}>
                   <span className="sr-only"> {str(t("close_sidebar"))} </span>
                 </button>

@@ -577,6 +577,12 @@ select.select {
   appearance: none;
 }
 
+[dir="rtl"] select.select {
+  background-position: left 0.5rem center;
+  padding-right: 0.5rem;
+  padding-left: 2.5rem;
+}
+
 @keyframes glowing {
   0% {
     box-shadow: 0 0 20px #7886d7;

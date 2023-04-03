@@ -188,7 +188,7 @@ let make = (~selectedDate, ~source, ~selectedCalendarId=?, ~courseId) => {
             <button
               onClick={_ => send(ChangeToNextMonth)}
               className="flex justify-center items-center cursor-pointer h-7 w-7 p-1 text-sm bg-gray-100 border border-gray-200 text-gray-500 rounded-md hover:text-primary-500 hover:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition">
-              <i className="fas fa-chevron-right rtl:rotate-180 ml-px" />
+              <i className="fas fa-chevron-right rtl:rotate-180 ms-px" />
             </button>
           </div>
           <button

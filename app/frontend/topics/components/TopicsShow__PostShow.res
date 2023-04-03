@@ -399,7 +399,7 @@ let make = (
         {showReplies
           ? <div
               ariaLabel={t("replies_post") ++ " " ++ Post.id(post)}
-              className="ltr:lg:ps-10 rtl:lg:pr-10 pt-2 topics-post-show__replies-container">
+              className="lg:ps-10 pt-2 topics-post-show__replies-container">
               {repliesToPost
               |> Array.map(post => <TopicsShow__PostReply key={post |> Post.id} post users />)
               |> React.array}

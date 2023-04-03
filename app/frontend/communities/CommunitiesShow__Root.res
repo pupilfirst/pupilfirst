@@ -619,7 +619,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
           </div>
           <div className="flex w-full items-start flex-wrap">
             <div className="flex-1 pe-2">
-              <label className="block text-tiny font-semibold uppercase pl-px">
+              <label className="block text-tiny font-semibold uppercase ps-px">
                 {t("filter_input_label")->str}
               </label>
               <Multiselect

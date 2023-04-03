@@ -35,7 +35,7 @@ let make = (~links) => {
   | moreLinks =>
     <button
       title={t("show_more_links")}
-      className="ml-6 font-semibold text-sm cursor-pointer relative z-40"
+      className="ms-6 font-semibold text-sm cursor-pointer relative z-40"
       onClick={toggleState(send)}
       key="more-links">
       <span> {t("more") |> str} </span>

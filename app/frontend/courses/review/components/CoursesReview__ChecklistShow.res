@@ -55,7 +55,7 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
   updateFeedbackCB(newFeedback)
 }
 let checklistItemCheckedClasses = (itemIndex, selection) =>
-  "absolute w-1 inset-0 rounded-r-md " ++ (
+  "absolute w-1 inset-0 rounded-e-md " ++ (
     Js.Array.filter(s => s.itemIndex == itemIndex, selection)->ArrayUtils.isNotEmpty
       ? "bg-green-400"
       : "bg-gray-500"

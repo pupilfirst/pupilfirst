@@ -406,7 +406,7 @@ let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, cl
         <i className="fas fa-spinner fa-pulse me-2" />,
         nextSubmission == DataLoading,
       )}
-      <p className="pr-2"> {str(t("review_next"))} </p>
+      <p className="pe-2"> {str(t("review_next"))} </p>
       <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl rtl:rotate-180" />
     </button>,
     nextSubmission == DataEmpty,
@@ -765,7 +765,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
     ariaLabel="submission-status"
     className="flex flex-1 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
     <div
-      className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
+      className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:ps-6">
       {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
       | (Some(date), Graded(_)) =>
         <div
@@ -918,7 +918,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
               className="btn btn-default mt-2"
               disabled={isSubmissionReviewAllowed(submissionDetails)}
               onClick={_ => send(UpdateNote(""))}>
-              <i className="far fa-edit" /> <span className="pl-2"> {t("write_a_note")->str} </span>
+              <i className="far fa-edit" /> <span className="ps-2"> {t("write_a_note")->str} </span>
             </button>
           </div>
         }}
@@ -1418,7 +1418,7 @@ let make = (
                   </h5>
                   <div className="flex md:flex-row flex-col md:ms-8 rounded-lg mt-2">
                     <div className="w-full md:w-9/12">
-                      <div className="md:pr-8">
+                      <div className="md:pe-8">
                         {renderGradePills(
                           evaluationCriteria,
                           targetEvaluationCriteriaIds,
@@ -1568,7 +1568,7 @@ let make = (
                       disabled={isSubmissionReviewAllowed(submissionDetails)}
                       className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                       <Icon className="if i-plus-regular" />
-                      <p className="pl-2">
+                      <p className="ps-2">
                         {switch OverlaySubmission.feedback(overlaySubmission) {
                         | [] => t("add_feedback")
                         | _ => t("add_another_feedback")

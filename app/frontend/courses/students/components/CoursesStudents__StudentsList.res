@@ -72,7 +72,7 @@ let showStudent = student => {
               {student->StudentInfo.user->UserDetails.fullTitle->str}
             </span>
             <span
-              className="ltr:sm:ps-2 rtl:sm:pr-2 ltr:sm:border-l rtl:sm:border-r border-gray-400 italic">
+              className="ltr:sm:ps-2 rtl:sm:pe-2 ltr:sm:border-l rtl:sm:border-r border-gray-400 italic">
               {switch student->StudentInfo.user->UserDetails.lastSeenAt {
               | Some(date) =>
                 t(

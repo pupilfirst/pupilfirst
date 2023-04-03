@@ -300,7 +300,7 @@ let certificatesSection = issuedCertificates =>
                   </h4>
                   <div className="text-xs">
                     <span> {t("issued_on")->str} </span>
-                    <span className="ml-1">
+                    <span className="ms-1">
                       {issuedCertificate
                       ->IssuedCertificate.createdAt
                       ->DateFns.formatPreset(~short=true, ~year=true, ())

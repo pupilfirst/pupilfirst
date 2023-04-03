@@ -87,7 +87,7 @@ let make = (~entry, ~markNotificationCB) => {
       </div>
       <div className="shrink-0">
         <span className="notifications__entry-card-time block text-xs text-gray-400">
-          <span className="hidden md:inline-block ltr:md:ps-4 rtl:md:pr-4">
+          <span className="hidden md:inline-block md:ps-4">
             {Entry.createdAt(entry)->DateFns.format("HH:mm") |> str}
           </span>
         </span>

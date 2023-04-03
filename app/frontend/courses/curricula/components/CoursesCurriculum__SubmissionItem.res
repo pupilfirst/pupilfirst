@@ -223,7 +223,7 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
   let id = computeId(index, checklistItem)
   <div className="mt-4" ariaLabel=id>
     {placeholder(id, checklistItem)}
-    <div className="ltr:md:ps-7 rtl:md:pr-7 pt-2 pe-0  pb-4 space-y-2">
+    <div className="md:ps-7 pt-2 pe-0  pb-4 space-y-2">
       {switch checklistItem |> ChecklistItem.result {
       | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB, index)
       | Link(link) => showLink(link, id, updateResultCB)

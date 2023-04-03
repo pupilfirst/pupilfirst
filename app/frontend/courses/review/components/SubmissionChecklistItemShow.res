@@ -120,7 +120,7 @@ let statusButton = (index, status, callback, checklist) =>
     </button>
   </div>
 
-let cardBodyClasses = pending => "ps-7 ltr:md:ps-8 rtl:md:pr-8 " ++ (pending ? "" : "rounded-b")
+let cardBodyClasses = pending => "ps-7 md:ps-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
 let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {

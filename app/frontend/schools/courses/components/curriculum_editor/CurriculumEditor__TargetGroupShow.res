@@ -141,7 +141,7 @@ let make = (
       </div>
       {targetGroups |> Js.Array.length > 1
         ? <div
-            className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-e-0 overflow-hidden text-gray-600 justify-between items-center bg-white">
+            className="target-group__group-reorder flex flex-col shadow rounded-s-lg absolute h-full border border-e-0 overflow-hidden text-gray-600 justify-between items-center bg-white">
             <button
               title={t("move_up")}
               ariaLabel={t("move_up")}

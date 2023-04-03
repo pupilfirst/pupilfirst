@@ -62,7 +62,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
           </button>
           {switch audioRecorder.url {
           | None => React.null
-          | Some(url) => <audio src={url} controls=true className="pt-3 md:pt-0 md:pl-4" />
+          | Some(url) => <audio src={url} controls=true className="pt-3 md:pt-0 md:ps-4" />
           }}
           {switch audioRecorder.url {
           | None => React.null

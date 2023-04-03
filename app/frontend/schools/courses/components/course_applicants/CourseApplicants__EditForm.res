@@ -217,7 +217,7 @@ let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
               <i className="fa fa-edit" /> <span className="ms-2"> {t("tabs.details")->str} </span>
             </button>
             <button
-              className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
+              className={"-ms-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
               onClick={_ =>
                 RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
               <i className="fa fa-cog" /> <span className="ms-2"> {t("tabs.actions")->str} </span>

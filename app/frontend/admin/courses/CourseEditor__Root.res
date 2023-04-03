@@ -667,7 +667,7 @@ let make = (~school) => {
         <div className="w-full sticky top-0 z-30 mt-4 px-6">
           <label
             htmlFor="search_courses"
-            className="block text-tiny font-semibold uppercase pl-px ltr:text-left rtl:text-right">
+            className="block text-tiny font-semibold uppercase ps-px ltr:text-left rtl:text-right">
             {t("filter.input_label")->str}
           </label>
           <Multiselect

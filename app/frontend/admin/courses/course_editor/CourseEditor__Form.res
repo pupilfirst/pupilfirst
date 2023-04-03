@@ -794,7 +794,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
                 <button
                   role="tab"
                   ariaSelected={selectedTab == ActionsTab}
-                  className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
+                  className={"-ms-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
                   onClick={_ => RescriptReactRouter.push("./actions")}>
                   <i className="fa fa-cog" />
                   <span className="ms-2"> {t("tabs.actions")->str} </span>

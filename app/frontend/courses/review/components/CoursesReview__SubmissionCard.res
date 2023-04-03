@@ -54,7 +54,7 @@ let showSubmission = (submissions, filterString) =>
         IndexSubmission.userNames(submission)}
         className={submissionCardClasses(submission)}>
         <div className="w-full lg:w-8/12">
-          <div className="block text-sm lg:pr-4">
+          <div className="block text-sm lg:pe-4">
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {str(t("level") ++ string_of_int(IndexSubmission.levelNumber(submission)))}
             </span>
@@ -62,7 +62,7 @@ let showSubmission = (submissions, filterString) =>
               {IndexSubmission.title(submission)->str}
             </span>
           </div>
-          <div className="mt-1 ml-px text-xs text-gray-900">
+          <div className="mt-1 ms-px text-xs text-gray-900">
             {switch IndexSubmission.teamName(submission) {
             | Some(name) =>
               <span>

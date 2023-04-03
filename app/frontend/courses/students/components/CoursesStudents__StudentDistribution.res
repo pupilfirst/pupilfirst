@@ -93,7 +93,7 @@ let make = (~studentDistribution, ~params=?, ~href=?) => {
           )
           let (pillClass, style, pillColor) = stylingForLevelPills(percentageStudents)
           let tip =
-            <div className="text-left">
+            <div className="ltr:text-left rtl:text-right">
               <p> {LevelLabel.format(DistributionInLevel.number(level)->string_of_int)->str} </p>
               <p>
                 {(ts("students") ++

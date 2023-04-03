@@ -147,7 +147,7 @@ let make = (
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
 
-  let (additionalFeedback, setAddAdditionalFeedback) = React.useState(() =>
+  let (additionalFeedback, setAdditionalFeedback) = React.useState(() =>
     Array.make(reviewChecklist->Js.Array2.length, None)
   )
   <div>
@@ -247,7 +247,7 @@ let make = (
                           value
                         }
                       })
-                      setAddAdditionalFeedback(_ => newValue)
+                      setAdditionalFeedback(_ => newValue)
                     }}>
                     <i className="fas fa-minus" />
                     <span className="pl-2"> {str(t("remove_additional_feedback"))} </span>
@@ -270,7 +270,7 @@ let make = (
                             value
                           }
                         })
-                        setAddAdditionalFeedback(_ => newValue)
+                        setAdditionalFeedback(_ => newValue)
                       }}
                     />
                   </div>
@@ -287,7 +287,7 @@ let make = (
                         value
                       }
                     })
-                    setAddAdditionalFeedback(_ => newValue)
+                    setAdditionalFeedback(_ => newValue)
                   }}>
                   <i className="fas fa-plus" />
                   <span className="pl-2 "> {str(t("add_additional_feedback"))} </span>

@@ -717,6 +717,8 @@ hi:
       feedback_placeholder: फ़ीडबैक जोड़ें (वैकल्पिक)
       generate_feedback_button: प्रतिक्रिया उत्पन्न करें
       review_checklist: चेकलिस्ट की समीक्षा करें
+      add_additional_feedback: Add Additional Feedback
+      remove_additional_feedback: Remove Additional Feedback
     CoursesReview__Editor:
       add_another_feedback: एक और प्रतिक्रिया जोड़ें
       add_feedback: प्रतिक्रिया जोड़ें

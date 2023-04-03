@@ -33,7 +33,7 @@ let generateFeedback = (
   feedback,
   setSelecton,
   updateFeedbackCB,
-  addAdditionalFeedback,
+  additionalFeedback,
 ) => {
   let reviewChecklistSelectedFeedback = Js.Array2.mapi(checklist, (reviewChecklistItem, i) => {
     let resultIndexList =
@@ -52,7 +52,7 @@ let generateFeedback = (
     ->ArrayUtils.flattenV2
   })
 
-  let reviewChecklistFeedback = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+  let reviewChecklistFeedback = Js.Array2.mapi(additionalFeedback, (value, index) => {
     switch value {
     | Some(feedback) => Js.Array2.concat(reviewChecklistSelectedFeedback[index], [feedback])
     | None => reviewChecklistSelectedFeedback[index]
@@ -115,7 +115,7 @@ let generateFeedbackButton = (
   feedback,
   setSelecton,
   updateFeedbackCB,
-  addAdditionalFeedback,
+  additionalFeedback,
 ) => {
   <button
     className="btn btn-primary w-full md:w-auto"
@@ -127,7 +127,7 @@ let generateFeedbackButton = (
         feedback,
         setSelecton,
         updateFeedbackCB,
-        addAdditionalFeedback,
+        additionalFeedback,
       )}>
     {t("generate_feedback_button")->str}
   </button>
@@ -147,7 +147,7 @@ let make = (
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
 
-  let (addAdditionalFeedback, setAddAdditionalFeedback) = React.useState(() =>
+  let (additionalFeedback, setAddAdditionalFeedback) = React.useState(() =>
     Array.make(reviewChecklist->Js.Array2.length, None)
   )
   <div>
@@ -233,14 +233,14 @@ let make = (
                     </div>
                   </Spread>
                 , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
-              {switch addAdditionalFeedback[itemIndex] {
+              {switch additionalFeedback[itemIndex] {
               | Some(feedback) =>
                 <div className="px-6">
                   <button
                     id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
                     className="text-sm text-red-500 pl-1 py-1 text-left rtl:text-right mt-2 hover:text-red-600 transition"
                     onClick={_ => {
-                      let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                      let newValue = Js.Array2.mapi(additionalFeedback, (value, index) => {
                         if index == itemIndex {
                           None
                         } else {
@@ -263,7 +263,7 @@ let make = (
                       disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
                       value={feedback}
                       onChange={event => {
-                        let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                        let newValue = Js.Array2.mapi(additionalFeedback, (value, index) => {
                           if index == itemIndex {
                             Some(ReactEvent.Form.target(event)["value"])
                           } else {
@@ -280,7 +280,7 @@ let make = (
                   id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
                   className="text-sm text-primary-500 px-2 py-1 ml-5 text-left rtl:text-right mt-2 hover:text-primary-600 transition"
                   onClick={_ => {
-                    let newValue = Js.Array2.mapi(addAdditionalFeedback, (value, index) => {
+                    let newValue = Js.Array2.mapi(additionalFeedback, (value, index) => {
                       if index == itemIndex {
                         Some("")
                       } else {
@@ -307,7 +307,7 @@ let make = (
             feedback,
             setSelecton,
             updateFeedbackCB,
-            addAdditionalFeedback,
+            additionalFeedback,
           )
         : React.null}
     </div>

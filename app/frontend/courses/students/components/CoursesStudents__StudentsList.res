@@ -61,8 +61,7 @@ let showStudent = student => {
           student->StudentInfo.user->UserDetails.avatarUrl,
           student->StudentInfo.user->UserDetails.name,
         )}
-        <div
-          className="ms-2 md:ms-3 block text-sm md:pe-2">
+        <div className="ms-2 md:ms-3 block text-sm md:pe-2">
           <p className="font-semibold inline-block leading-snug">
             {student->StudentInfo.user->UserDetails.name->str}
           </p>
@@ -71,8 +70,7 @@ let showStudent = student => {
             <span className="font-semibold pe-2">
               {student->StudentInfo.user->UserDetails.fullTitle->str}
             </span>
-            <span
-              className="ltr:sm:ps-2 rtl:sm:pe-2 ltr:sm:border-l rtl:sm:border-r border-gray-400 italic">
+            <span className="sm:ps-2 sm:border-s border-gray-400 italic">
               {switch student->StudentInfo.user->UserDetails.lastSeenAt {
               | Some(date) =>
                 t(

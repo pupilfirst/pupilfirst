@@ -148,6 +148,18 @@
   }
 }
 
+@keyframes slideIn--rtl {
+  0% {
+    left: -9999px;
+  }
+}
+
+[dir="rtl"] .drawer-right {
+  left: 0px;
+  right: auto;
+  animation: slideIn--rtl 0.3s cubic-bezier(0.63, 0.34, 0, 1) normal;
+}
+
 .drawer-right {
   background-color: white;
   display: flex;
@@ -191,6 +203,11 @@
   .drawer-right-large {
     width: 64rem;
   }
+}
+
+[dir="rtl"] .drawer-right__close {
+  right: -52px;
+  z-index: -1;
 }
 
 .drawer-right__close {

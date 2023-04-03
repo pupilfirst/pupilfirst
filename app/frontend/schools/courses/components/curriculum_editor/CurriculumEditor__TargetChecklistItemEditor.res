@@ -23,7 +23,7 @@ let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
 
 let selectedButtonIcon = kind =>
   switch kind {
-  | ChecklistItem.LongText => "i-long-text-regular"
+  | ChecklistItem.LongText => "i-long-text-regular rlt:rotate-180"
   | ShortText => "i-short-text-regular"
   | Files => "i-file-regular"
   | Link => "i-link-regular"
@@ -250,8 +250,7 @@ let make = (
             id={index |> string_of_int}
             checked={checklistItem |> ChecklistItem.optional}
           />
-          <label
-            className="text-xs text-gray-600 ms-2" htmlFor={index |> string_of_int}>
+          <label className="text-xs text-gray-600 ms-2" htmlFor={index |> string_of_int}>
             {t("optional") |> str}
           </label>
         </div>

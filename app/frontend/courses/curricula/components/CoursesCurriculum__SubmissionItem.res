@@ -8,7 +8,7 @@ let ts = I18n.ts
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {
   | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800 if-fw"
-  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800 if-fw"
+  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800 if-fw rlt:rotate-180"
   | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
   | MultiChoice(
       _choices,

@@ -107,8 +107,7 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span
-                className="me-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
+              <span className="me-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -146,8 +145,8 @@ module Make = (Selectable: Selectable) => {
       let value = selection |> Selectable.value
       <div
         key={index |> string_of_int}
-        className={tagPillClasses(selection |> Selectable.color, false) ++ " space-x-1.5"}>
-        <span className="ps-2 py-px text-xs leading-[unset]">
+        className={tagPillClasses(selection |> Selectable.color, false) ++ " "}>
+        <span className="px-2 py-px text-xs leading-[unset]">
           {switch selection |> Selectable.label {
           | Some(label) => label ++ (labelSuffix ++ value)
           | None => value

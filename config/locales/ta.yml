@@ -717,6 +717,8 @@ ta:
       feedback_placeholder: கருத்தைச் சேர் (விரும்பினால்)
       generate_feedback_button: கருத்தை உருவாக்கவும்
       review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
+      add_additional_feedback: Add Additional Feedback
+      remove_additional_feedback: Remove Additional Feedback
     CoursesReview__Editor:
       add_another_feedback: மற்றொரு கருத்தைச் சேர்க்கவும்
       add_feedback: கருத்தைச் சேர்க்கவும்

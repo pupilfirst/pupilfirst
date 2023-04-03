@@ -717,6 +717,8 @@ ml:
       feedback_placeholder: ഫീഡ്ബാക്ക് ചേർക്കുക (ഓപ്ഷണൽ)
       generate_feedback_button: ഫീഡ്‌ബാക്ക് സൃഷ്‌ടിക്കുക
       review_checklist: ചെക്ക്‌ലിസ്റ്റ് അവലോകനം ചെയ്യുക
+      add_additional_feedback: Add Additional Feedback
+      remove_additional_feedback: Remove Additional Feedback
     CoursesReview__Editor:
       add_another_feedback: മറ്റൊരു ഫീഡ്ബാക്ക് ചേർക്കുക
       add_feedback: ഫീഡ്ബാക്ക് ചേർക്കുക

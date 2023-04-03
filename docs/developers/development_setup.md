@@ -219,6 +219,19 @@ We recommend using Visual Studio Code with the following extensions...
 }
 ```
 
+### Ruby files
+
+We use [prettier/plugin-ruby](https://github.com/prettier/plugin-ruby) to enable Prettier to format Ruby code. This plugin required additional gems to be installed on the globally selected Ruby. I.e., if your ASDF's `global` Ruby version is different from what's specified in the LMS's `.tool-versions` file, you'll need to install these gems on the `global` version for the plugin to work properly.
+
+```bash
+# With your global Ruby version selected...
+gem install bundler prettier_print syntax_tree syntax_tree-haml syntax_tree-rbs
+```
+
+For up-to-date setup instructions, see the [_Getting Started_ section on prettier/plugin-ruby's GitHub repo](https://github.com/prettier/plugin-ruby#getting-started).
+
+### YAML files
+
 When editing YAML files (especially translations) please use the [YAML Sort extension](https://marketplace.visualstudio.com/items?itemName=PascalReitermann93.vscode-yaml-sort) to sort keys.
 
 ## Versioning
@@ -279,11 +292,9 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    sudo service nginx restart
    ```
 
-   On Debian/Ubuntu, NGINX comes with a `sites-enabled/default` file which may need to be removed before
-   the LMS will begin responding to requests.
+   On Debian/Ubuntu, NGINX comes with a `sites-enabled/default` file which may need to be removed before the LMS will begin responding to requests.
 
-3. You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to
-   `127.0.0.1` in the `/etc/hosts` file (on macOS and Ubuntu), and the `C:\Windows\System32\Drivers\etc\hosts` file on Windows:
+3. You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to `127.0.0.1` in the `/etc/hosts` file (on macOS and Ubuntu), and the `C:\Windows\System32\Drivers\etc\hosts` file on Windows:
 
    ```
    # Append to the /etc/hosts file.
@@ -297,4 +308,4 @@ If your Nginx reverse-proxy has been set up correctly, then visit the school usi
 
 ### Set up schools and domains
 
-Make sure that the `Domain` table is populated with FQDNs that you're going to use locally, and that they are all linked to the correct `School` entry. These will be verified on each request; verification failure will cause a redirect to `https://www.pupilfirst.com/?redirect_from=<UNVERIFIABLE_FQDN>`. So if this happens to you, check your `School` and `Domain` entries.
+Make sure that the `domains` table is populated with FQDNs that you're going to use locally, and that they are all linked to the correct `schools` table entry. These will be verified on each request; verification failure will cause a redirect to `https://www.pupilfirst.com/?redirect_from=<UNVERIFIABLE_FQDN>`. So if this happens to you, check your `schools` and `domains` table entries.

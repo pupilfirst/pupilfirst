@@ -729,6 +729,8 @@ ru:
       feedback_placeholder: Добавить отзыв (необязательно)
       generate_feedback_button: Создать отзыв
       review_checklist: Проверить список
+      add_additional_feedback: Add Additional Feedback
+      remove_additional_feedback: Remove Additional Feedback
     CoursesReview__Editor:
       add_another_feedback: Добавить еще один отзыв
       add_feedback: Добавить отзыв

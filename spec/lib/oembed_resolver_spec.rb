@@ -43,8 +43,8 @@ describe Oembed::Resolver do
     end
 
     context 'when supplied a Google Slides URL' do
-      let(:pasted_link) { 'https://docs.google.com/presentation/d/e/SLIDES-CODE/pub?start=false&loop=false&delayms=3000' }
-      let(:expected_embed_code) { "<iframe src='https://docs.google.com/presentation/d/e/SLIDES-CODE/embed?start=false&loop=false&delayms=3000' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>" }
+      let(:pasted_link) { 'https://docs.google.com/presentation/d/e/SLIDES-CODE/edit?start=false&loop=false&delayms=3000' }
+      let(:expected_embed_code) { "<iframe src='https://docs.google.com/presentation/d/e/SLIDES-CODE/edit?start=false&loop=false&delayms=3000' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>" }
 
       it 'returns embed code for Google Slides' do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
@@ -52,8 +52,8 @@ describe Oembed::Resolver do
     end
 
     context 'when supplied a Google Docs URL' do
-      let(:pasted_link) { 'https://docs.google.com/document/d/e/DOCS-CODE/pub' }
-      let(:expected_embed_code) { "<iframe src='https://docs.google.com/document/d/e/DOCS-CODE/pub?embedded=true' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>" }
+      let(:pasted_link) { 'https://docs.google.com/document/d/e/DOCS-CODE/edit' }
+      let(:expected_embed_code) { "<iframe src='https://docs.google.com/document/d/e/DOCS-CODE/edit?embedded=true' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>" }
 
       it 'returns embed code for Google Slides' do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
@@ -70,8 +70,8 @@ describe Oembed::Resolver do
     end
 
     context 'when supplied a Google Spreadsheets URL' do
-      let(:pasted_link) { 'https://docs.google.com/spreadsheets/d/e/SPREADSHEET-CODE/pubhtml' }
-      let(:expected_embed_code) { "<iframe src='https://docs.google.com/spreadsheets/d/e/SPREADSHEET-CODE/pubhtml?widget=true&headers=false' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>" }
+      let(:pasted_link) { 'https://docs.google.com/spreadsheets/d/e/SPREADSHEET-CODE/edit' }
+      let(:expected_embed_code) { "<iframe src='https://docs.google.com/spreadsheets/d/e/SPREADSHEET-CODE/edit?widget=true&headers=false' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>" }
 
       it 'returns embed code for Google Slides' do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)

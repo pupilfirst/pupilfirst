@@ -43,6 +43,7 @@ let renderLinks = (courses, selectedPage) => {
           | Students => (t("students"), "i-users-light")
           | Review => (t("review"), "i-clipboard-check-light")
           | Leaderboard => (t("leaderboard"), "i-tachometer-alt-light")
+          | Calendar => (t("calendar"), "i-calendar-regular")
           }
 
           let classes =
@@ -114,6 +115,7 @@ let renderLinksMobile = (courses, selectedPage) => {
         | Students => (t("students"), "i-users-regular")
         | Review => (t("review"), "i-clipboard-check-regular")
         | Leaderboard => (t("leaderboard"), "i-tachometer-alt-regular")
+        | Calendar => (t("calendar"), "i-calendar-regular")
         }
 
         let classes = {

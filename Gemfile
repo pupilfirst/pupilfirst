@@ -1,9 +1,9 @@
-ruby '2.7.6'
+ruby '3.0.6'
 
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 6.1.7.3'
 
 gem 'dotenv-rails', '~> 2.8', groups: %i[development test]
 
@@ -49,7 +49,8 @@ gem 'rack-attack', '~> 6.6' # A rack middleware for throttling and blocking abus
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
 gem 'discordrb', '~> 3.4' # A Ruby wrapper for the Discord API.
-
+gem "groupdate", '~> 6.1.0' # Group ActiveRecord results by day, week, month, quarter, year, or hour.
+gem 'discorb', '~> 0.20.0' # A Ruby wrapper for the Discord Bot.
 
 # OmniAuth providers
 gem 'omniauth-google-oauth2', '~> 1.1' # Oauth2 strategy for Google.
@@ -97,7 +98,7 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9' # Pry debugger.
   gem 'webmock', '~> 3.14' # Mocking web requests.
   gem 'rubocop', '~> 1.21', require: false # Ruby Style Guide.
-  gem 'rubocop-rails', '~> 2.12', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem 'rubocop-rails', '~> 2.16.0', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem 'overcommit', '~> 0.58', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
   gem 'simplecov', '~> 0.21', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov

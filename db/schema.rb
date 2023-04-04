@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_08_062525) do
+ActiveRecord::Schema.define(version: 2023_03_14_123822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -96,6 +96,36 @@ ActiveRecord::Schema.define(version: 2022_11_08_062525) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_bounce_reports_on_email", unique: true
+  end
+
+  create_table "calendar_cohorts", force: :cascade do |t|
+    t.bigint "calendar_id"
+    t.bigint "cohort_id"
+    t.index ["calendar_id"], name: "index_calendar_cohorts_on_calendar_id"
+    t.index ["cohort_id"], name: "index_calendar_cohorts_on_cohort_id"
+  end
+
+  create_table "calendar_events", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "calendar_id"
+    t.string "color"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "link_url"
+    t.string "link_title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.bigint "course_id"
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_calendars_on_course_id"
   end
 
   create_table "certificates", force: :cascade do |t|
@@ -204,6 +234,7 @@ ActiveRecord::Schema.define(version: 2022_11_08_062525) do
     t.string "processing_url"
     t.jsonb "highlights", default: []
     t.bigint "default_cohort_id"
+    t.boolean "discord_account_required", default: false
     t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
@@ -226,6 +257,22 @@ ActiveRecord::Schema.define(version: 2022_11_08_062525) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "discord_messages", force: :cascade do |t|
+    t.string "author_uuid", null: false
+    t.string "channel_uuid"
+    t.string "message_uuid", null: false
+    t.string "server_uuid", null: false
+    t.string "content"
+    t.datetime "timestamp"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_uuid"], name: "index_discord_messages_on_author_uuid"
+    t.index ["channel_uuid"], name: "index_discord_messages_on_channel_uuid"
+    t.index ["server_uuid"], name: "index_discord_messages_on_server_uuid"
+    t.index ["user_id"], name: "index_discord_messages_on_user_id"
   end
 
   create_table "domains", force: :cascade do |t|
@@ -813,6 +860,7 @@ ActiveRecord::Schema.define(version: 2022_11_08_062525) do
   add_foreign_key "course_exports", "users"
   add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
+  add_foreign_key "discord_messages", "users"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"

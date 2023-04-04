@@ -222,7 +222,9 @@ feature "Student's view of Course Curriculum", js: true do
 
     scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
-      expect(page).to have_text('You have only limited access to the course now. You are allowed preview the content but cannot complete any target.')
+      expect(page).to have_text(
+        'You have only limited access to the course now. You are allowed preview the content but cannot complete any target.'
+      )
     end
   end
 
@@ -580,6 +582,32 @@ feature "Student's view of Course Curriculum", js: true do
       click_button "L7: #{level_without_targets.name}"
 
       expect(page).to have_content("There's no published content on this level")
+    end
+  end
+
+  context 'when a course requires a Discord connection' do
+    let(:course) { create :course, discord_account_required: true }
+
+    scenario 'student without a connected Discord account is redirected to the user profile edit page' do
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      expect(page).to have_content('Edit your profile')
+    end
+
+    scenario 'student with a connected Discord account is shown the curriculum' do
+      student.user.update!(discord_user_id: 'DISCORD_USER_ID')
+
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      expect(page).to have_content(course.name)
+    end
+
+    scenario 'inactive student without a connection Discord account should not be redirected' do
+      cohort.update(ends_at: 1.day.ago)
+
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      expect(page).to have_content('The course has ended')
     end
   end
 end

@@ -1,10 +1,12 @@
 class CoursesController < ApplicationController
   include RecaptchaVerifiable
+  include DiscordAccountRequirable
 
   before_action :authenticate_user!,
                 except: %i[show apply process_application curriculum]
 
   before_action :preview_or_authenticate, only: %i[curriculum]
+  before_action :require_discord_account, only: %i[curriculum report]
 
   # GET /courses/:id/curriculum
   def curriculum
@@ -81,7 +83,24 @@ class CoursesController < ApplicationController
     render layout: 'student_course'
   end
 
+  # GET /courses/:id/calendar
+  def calendar
+    @course = authorize(find_course)
+    @presenter = Courses::CalendarsPresenter.new(view_context, @course, params)
+    render layout: 'student_course'
+  end
+
+  def calendar_month_data
+    @course = authorize(find_course)
+    @presenter = Courses::CalendarsPresenter.new(view_context, @course, params)
+    render json: @presenter.month_data
+  end
+
   private
+
+  def course
+    @course ||= Course.find(params[:id])
+  end
 
   def preview_or_authenticate
     course = find_course

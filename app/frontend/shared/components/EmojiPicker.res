@@ -34,10 +34,10 @@ let make = (~className, ~title, ~onChange) => {
 
   React.useEffect0(() => {
     picker({
-      title,
-      ref,
+      title: title,
+      ref: ref,
       theme: "light",
-      data,
+      data: data,
       onEmojiSelect: event => {
         onChange(event)
         setIsOpen(_ => false)
@@ -79,7 +79,11 @@ let make = (~className, ~title, ~onChange) => {
 
   <div className="sm:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
     <button
-      ariaLabel={title} title={title} onClick={_ => setIsOpen(prev => !prev)} className={className}>
+      type_="button"
+      ariaLabel={title}
+      title={title}
+      onClick={_ => setIsOpen(prev => !prev)}
+      className={className}>
       <i className="fas fa-smile" />
     </button>
     <div className={"transition-all " ++ emojiDivClassName(isOpen)}>

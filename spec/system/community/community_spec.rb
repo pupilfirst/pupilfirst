@@ -185,6 +185,8 @@ feature 'Community', js: true do
 
     fill_in 'edit-reason', with: first_reason
     click_button 'Update Reply'
+    dismiss_notification
+    expect(reply_1.reload.edit_reason).to eq(first_reason)
 
     # Edit a reply and set reason second time.
     find("div[aria-label='Options for post #{reply_1.id}']").click
@@ -196,13 +198,18 @@ feature 'Community', js: true do
 
     fill_in 'edit-reason', with: second_reason
     click_button 'Update Reply'
+    expect(page).to have_text('Reply updated successfully')
+    dismiss_notification
 
-    # Go to the history page history - the reason should be there.
+    # Student is denied access to the history page.
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_link 'History'
+    expect(page).to_not have_link('History')
 
-    expect(page).to have_text(first_reason)
-    expect(page).to have_text(second_reason)
+    expect(reply_1.reload.edit_reason).to eq(second_reason)
+    expect(reply_1.text_versions.last.reason).to eq(first_reason)
+
+    visit(post_version_path(reply_1))
+    expect(page).to have_text("The page you were looking for doesn't exist")
   end
 
   scenario 'an active student participates in a topic thread' do
@@ -256,20 +263,17 @@ feature 'Community', js: true do
 
     click_button 'Update Reply'
 
+    dismiss_notification
+
     expect(page).not_to have_text(reply_body)
     expect(new_reply.reload.body).to eq(reply_body_for_edit)
     expect(new_reply.text_versions.first.value).to eq(reply_body)
 
-    # can see post edit history
+    # student cannot see post edit history
     find("div[aria-label='Options for post #{new_reply.id}']").click
-    click_link 'History'
-    expect(page).to have_text('Post Edit History')
-    expect(page).to have_text(reply_body)
-    expect(page).to have_text(reply_body_for_edit)
-    click_link 'Back to Post'
+    expect(page).to_not have_link('History')
 
     # can archive his reply
-    find("div[aria-label='Options for post #{new_reply.id}']").click
     click_button 'Delete Reply'
     page.driver.browser.switch_to.alert.accept
 

@@ -95,7 +95,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500;
+    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition;
   }
 
   .btn:disabled {
@@ -129,11 +129,11 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow  !important;
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow !important;
   }
 
   .btn-primary:hover {
-    @apply bg-gradient-to-br from-primary-600 to-primary-700 text-white;
+    @apply bg-gradient-to-br from-primary-600 to-primary-700 text-white !important;
   }
 
   .btn-primary:focus {

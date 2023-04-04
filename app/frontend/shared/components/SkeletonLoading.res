@@ -157,6 +157,41 @@ let contents = () =>
     </div>
   </div>
 
+let calendar = () =>
+  <div className="grid grid-cols-7 relative z-30 grid-rows-5 gap-1 mt-2">
+    <div className="skeleton-placeholder__date skeleton-animate col-start-4" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+    <div className="skeleton-placeholder__date skeleton-animate" />
+  </div>
+
 let coursePage = () => {
   <div>
     <div className="bg-gray-50 pb-8">

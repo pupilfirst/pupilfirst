@@ -1,5 +1,7 @@
 type choices = array<string>
 
+type allowMultiple = bool
+
 let t = I18n.t(~scope="components.TargetChecklistItem")
 
 type kind =
@@ -7,7 +9,7 @@ type kind =
   | Link
   | ShortText
   | LongText
-  | MultiChoice(choices)
+  | MultiChoice(choices, allowMultiple)
   | AudioRecord
 
 type t = {
@@ -26,7 +28,7 @@ let actionStringForKind = kind =>
   | Link => t("action_string_attach_link")
   | ShortText => t("action_string_write_short_text")
   | LongText => t("action_string_write_long_text")
-  | MultiChoice(_choices) => t("action_string_choose_from_list")
+  | MultiChoice(_choices, _allowMultiple) => t("action_string_choose_from_list")
   | AudioRecord => t("action_string_record_audio")
   }
 
@@ -37,7 +39,7 @@ let kindAsString = kind =>
   | ShortText => "shortText"
   | AudioRecord => "audio"
   | LongText => "longText"
-  | MultiChoice(_choices) => "multiChoice"
+  | MultiChoice(_choices, _allowMultiple) => "multiChoice"
   }
 
 let make = (~title, ~kind, ~optional) => {
@@ -72,11 +74,11 @@ let copy = (index, array) =>
 
 let removeMultichoiceOption = (choiceIndex, t) =>
   switch t.kind {
-  | MultiChoice(choices) =>
+  | MultiChoice(choices, _allowMultiple) =>
     let updatedChoices =
       choices |> Array.mapi((i, choice) => i == choiceIndex ? [] : [choice]) |> ArrayUtils.flattenV2
 
-    updateKind(MultiChoice(updatedChoices), t)
+    updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
   | Files
   | Link
   | AudioRecord
@@ -86,9 +88,9 @@ let removeMultichoiceOption = (choiceIndex, t) =>
 
 let addMultichoiceOption = t =>
   switch t.kind {
-  | MultiChoice(choices) =>
+  | MultiChoice(choices, _allowMultiple) =>
     let updatedChoices = Js.Array.concat([""], choices)
-    updateKind(MultiChoice(updatedChoices), t)
+    updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
   | Files
   | Link
   | ShortText
@@ -98,11 +100,21 @@ let addMultichoiceOption = t =>
 
 let updateMultichoiceOption = (choiceIndex, newOption, t) =>
   switch t.kind {
-  | MultiChoice(choices) =>
+  | MultiChoice(choices, _allowMultiple) =>
     let updatedChoices =
       choices |> Js.Array.mapi((choice, i) => i == choiceIndex ? newOption : choice)
 
-    updateKind(MultiChoice(updatedChoices), t)
+    updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
+  | Files
+  | Link
+  | ShortText
+  | AudioRecord
+  | LongText => t
+  }
+
+let updateAllowMultiple = (allowMultiple, t) =>
+  switch t.kind {
+  | MultiChoice(choices, _) => updateKind(MultiChoice(choices, allowMultiple), t)
   | Files
   | Link
   | ShortText
@@ -115,7 +127,7 @@ let longText = {title: "", kind: LongText, optional: false}
 let isFilesKind = t =>
   switch t.kind {
   | Files => true
-  | MultiChoice(_choices) => false
+  | MultiChoice(_choices, _allowMultiple) => false
   | Link
   | ShortText
   | AudioRecord
@@ -126,9 +138,10 @@ let isValidChecklistItem = t => {
   let titleValid = Js.String.trim(t.title) |> Js.String.length >= 1
 
   switch t.kind {
-  | MultiChoice(choices) =>
-    choices |> Js.Array.filter(choice => String.trim(choice) == "") |> ArrayUtils.isEmpty &&
-      titleValid
+  | MultiChoice(choices, allowMultiple) =>
+    (choices |> Js.Array.filter(choice => String.trim(choice) == "") |> ArrayUtils.isEmpty &&
+    titleValid &&
+    allowMultiple === true) || allowMultiple === false
   | Files
   | Link
   | ShortText
@@ -137,14 +150,13 @@ let isValidChecklistItem = t => {
   }
 }
 
-let decodeMetadata = (kind, json) =>
+let decodeMetadata = (kind, json) => {
+  open Json.Decode
   switch kind {
   | #MultiChoice =>
-    json |> {
-      open Json.Decode
-      field("choices", array(string))
-    }
+    MultiChoice(json |> field("choices", array(string)), json |> field("allowMultiple", bool))
   }
+}
 
 let decode = json => {
   open Json.Decode
@@ -155,10 +167,10 @@ let decode = json => {
     | "shortText" => ShortText
     | "audio" => AudioRecord
     | "longText" => LongText
-    | "multiChoice" => MultiChoice(json |> field("metadata", decodeMetadata(#MultiChoice)))
+    | "multiChoice" => json |> field("metadata", decodeMetadata(#MultiChoice))
     | otherKind =>
       Rollbar.error(
-        "Unkown kind: " ++ (otherKind ++ "received in CurriculumEditor__TargetChecklistItem"),
+        "Unknown kind: " ++ (otherKind ++ " received in CurriculumEditor__TargetChecklistItem"),
       )
       LongText
     },
@@ -169,9 +181,9 @@ let decode = json => {
 
 let encodeMetadata = kind =>
   switch kind {
-  | MultiChoice(choices) =>
+  | MultiChoice(choices, allowMultiple) =>
     open Json.Encode
-    object_(list{("choices", stringArray(choices))})
+    object_(list{("choices", stringArray(choices)), ("allowMultiple", bool(allowMultiple))})
   | Files
   | Link
   | ShortText

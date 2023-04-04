@@ -30,6 +30,7 @@ type completionType =
   | TakeQuiz
   | LinkToComplete
   | MarkAsComplete
+  | SubmitForm
 
 let decodeNavigation = json => {
   open Json.Decode
@@ -68,11 +69,13 @@ let computeCompletionType = targetDetails => {
   | None => false
   }
 
-  switch (evaluated, hasQuiz, hasLinkToComplete) {
-  | (true, _, _) => Evaluated
-  | (false, true, _) => TakeQuiz
-  | (false, false, true) => LinkToComplete
-  | (_, _, _) => MarkAsComplete
+  let hasChecklist = Js.Array.length(targetDetails.checklist) > 0
+  switch (evaluated, hasQuiz, hasLinkToComplete, hasChecklist) {
+  | (true, _, _, _) => Evaluated
+  | (false, true, _, _) => TakeQuiz
+  | (false, false, true, _) => LinkToComplete
+  | (false, false, false, true) => SubmitForm
+  | (_, _, _, _) => MarkAsComplete
   }
 }
 

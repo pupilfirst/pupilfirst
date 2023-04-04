@@ -47,6 +47,8 @@ class CoursePolicy < ApplicationPolicy
 
   alias process_application? apply?
   alias students? review?
+  alias calendar? curriculum?
+  alias calendar_month_data? curriculum?
 
   class Scope < Scope
     def resolve

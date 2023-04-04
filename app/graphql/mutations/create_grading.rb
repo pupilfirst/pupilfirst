@@ -257,7 +257,7 @@ module Mutations
           timeline_event: submission
         )
 
-      StartupFeedbackModule::EmailService.new(startup_feedback).send
+      StartupFeedbackModule::EmailService.new(startup_feedback, include_grades: true).send
     end
   end
 end

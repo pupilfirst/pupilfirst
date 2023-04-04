@@ -35,9 +35,9 @@ module Discord
     rescue Discordrb::Errors::NoPermission
       Rails
         .logger.error "No permission to send message to channel #{@community.discord_channel_id}"
-    rescue RestClient::BadRequest
+    rescue RestClient::BadRequest => e
       Rails
-        .logger.error "Bad request with discord_channel_id: #{@community.discord_channel_id}"
+        .logger.error "Bad request with discord_channel_id: #{@community.discord_channel_id}; #{e.response.body}"
     end
 
     def url_options

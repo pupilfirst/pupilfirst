@@ -2,6 +2,7 @@ type t = {
   title: string,
   result: array<CoursesReview__ReviewChecklistResult.t>,
 }
+
 let title = t => t.title
 let result = t => t.result
 

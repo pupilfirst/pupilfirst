@@ -7,6 +7,7 @@ end
 feature 'Cohorts Details', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include DateHelper
 
   let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
@@ -18,7 +19,7 @@ feature 'Cohorts Details', js: true do
 
   let(:name) { Faker::Lorem.words(number: 2).join(' ') }
   let(:description) { Faker::Lorem.sentences.join(' ') }
-  let(:ends_at) { 15.days.from_now.strftime('%Y-%m-%d') }
+  let(:ends_at) { 15.days.from_now.to_date.iso8601 }
 
   scenario 'School admin updates name, description and ends at for a cohort' do
     sign_in_user school_admin.user, referrer: cohorts_details_path(live_cohort)
@@ -45,7 +46,7 @@ feature 'Cohorts Details', js: true do
 
     expect(live_cohort.reload.name).to eq(name)
     expect(live_cohort.description).to eq(description)
-    expect(live_cohort.ends_at.strftime('%Y-%m-%d')).to eq(ends_at)
+    expect(live_cohort.ends_at).to eq(date_to_zoned_time(ends_at))
   end
 
   scenario 'School admin updates name, description and ends at for a cohort' do
@@ -72,6 +73,8 @@ feature 'Cohorts Details', js: true do
 
   scenario 'school admin tries to access an invalid link' do
     sign_in_user school_admin.user, referrer: '/school/cohorts/888888/details'
-    expect(page).to have_text("Sorry, The page you are looking for doesn't exist or has been moved.")
+    expect(page).to have_text(
+      "Sorry, The page you are looking for doesn't exist or has been moved."
+    )
   end
 end

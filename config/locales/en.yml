@@ -28,6 +28,9 @@ en:
       color_error: Please select a valid color for the event
       invalid_url: Please enter a valid URL for the event
   cohorts:
+    auto_generated_cohort:
+      name: Purple (Auto-generated)
+      description: Auto generated cohort for active students in %{course_name}
     shared:
       overview_link: Overview
       students_link: Students
@@ -517,6 +520,7 @@ en:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
+      level1: Level 1
       milestone_targets: Milestone targets
       nav_next_level: Next Level
       nav_previous_level: Previous Level

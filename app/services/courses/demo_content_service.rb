@@ -18,7 +18,7 @@ module Courses
 
     def create_level_one
       Level.create!(
-        name: 'Level 1',
+        name: I18n.t('components.CoursesCurriculum.level1'),
         number: 1,
         course: @course
       )

@@ -25,9 +25,9 @@ module Mutations
 
         default_cohort =
           Cohort.create!(
-            name: 'Purple (Auto-generated)',
+            name: I18n.t('cohorts.auto_generated_cohort.name'),
             description:
-              "Auto generated cohort for active students in #{course.name}",
+              I18n.t('cohorts.auto_generated_cohort.description', course_name: course.name),
             course_id: course.id
           )
 

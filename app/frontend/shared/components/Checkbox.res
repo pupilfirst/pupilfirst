@@ -5,17 +5,16 @@ let input = (id, onChange, checked, disabled) => {
 }
 
 @react.component
-let make = (~id, ~onChange, ~checked=false, ~label=?, ~disabled=false) =>
-  <div>
-    {switch label {
-    | Some(element) =>
-      <label className="checkbox__label flex items-center space-x-2" htmlFor=id>
-        {input(id, onChange, checked, disabled)} <div className="text-sm flex-1"> {element} </div>
-      </label>
+let make = (~id, ~onChange, ~checked=false, ~label=?, ~disabled=false) => {
+  switch label {
+  | Some(element) =>
+    <label className="checkbox__label flex items-center space-x-2" htmlFor=id>
+      {input(id, onChange, checked, disabled)} <div className="text-sm flex-1"> {element} </div>
+    </label>
 
-    | None =>
-      <label className="checkbox__label flex items-center space-x-2" htmlFor=id>
-        {input(id, onChange, checked, disabled)}
-      </label>
-    }}
-  </div>
+  | None =>
+    <label className="checkbox__label flex items-center space-x-2" htmlFor=id>
+      {input(id, onChange, checked, disabled)}
+    </label>
+  }
+}

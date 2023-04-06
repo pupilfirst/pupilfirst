@@ -24,8 +24,8 @@ let updateTitle = (title, t, index, checklist) =>
   checklist |> replace(make(~title, ~feedback=t.feedback), index)
 
 let updateFeedback = (feedback, t, index, checklist) => {
-  // let optionalFeedback = feedback |> Js.String.trim == "" ? None : Some(feedback)
-  let optionalFeedback = Some(Js.String.trim(feedback))
+  let optionalFeedback = feedback |> Js.String.trim == "" ? None : Some(feedback)
+  // let optionalFeedback = Some(Js.String.trim(feedback))
 
   checklist |> replace(make(~title=t.title, ~feedback=optionalFeedback), index)
 }

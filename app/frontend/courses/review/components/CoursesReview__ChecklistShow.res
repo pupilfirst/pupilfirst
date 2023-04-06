@@ -119,9 +119,15 @@ let make = (
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
 
-  let (additionalFeedback, setAdditionalFeedback) = React.useState(() =>
-    Array.make(reviewChecklist->Js.Array2.length, None)
-  )
+  let additionalFeedback = Js.Array.map(item => {
+    Js.Array.map(result => {
+      switch ReviewChecklistResult.feedback(result) {
+      | Some(_) => true
+      | None => false
+      }
+    }, ReviewChecklistItem.result(item))
+  }, reviewChecklist)
+
   <div>
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">

@@ -102,7 +102,7 @@ let optionsDropdown = (
     <div
       ariaLabel={t("options_post") ++ " " ++ Post.id(post)}
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-50 text-gray-800 cursor-pointer hover:bg-gray-50">
-      <PfIcon className="if i-ellipsis-h-regular text-base" />
+      <PfIcon className="if i-ellipsis-regular text-base" />
     </div>
   let editPostButton =
     <button
@@ -373,9 +373,7 @@ let make = (
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                     className="border bg-white me-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-50">
                     {t(~count=Post.replies(post)->Js.Array2.length, "show_replies_button")->str}
-                    <FaIcon
-                      classes={"ms-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")}
-                    />
+                    <FaIcon classes={"ms-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")} />
                   </button>
                 : React.null}
             </div>

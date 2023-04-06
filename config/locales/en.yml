@@ -338,6 +338,7 @@ en:
       enrollment_delete_notificaion_success_body: Coach enrollment deleted successfully
       remove_confirm_post: from this course?
       remove_confirm_pre: Are you sure you want to remove
+      assign_coaches: Assign Coaches to Course
     CourseEditor__Form:
       actions:
         archive_course:

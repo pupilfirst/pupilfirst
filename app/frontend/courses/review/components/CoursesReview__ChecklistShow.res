@@ -264,55 +264,8 @@ let make = (
                                 switch Belt.Option.isSome(
                                   ReviewChecklistResult.feedback(checklistItem),
                                 ) {
-                                | true =>
-                                  <div className="flex-grow">
-                                    <button
-                                      id={"remove_additional_feedback-" ++ string_of_int(itemIndex)}
-                                      className="text-sm text-red-500 text-left rtl:text-right hover:text-red-600 transition"
-                                      onClick={_ => {
-                                        let newValue = Js.Array2.mapi(additionalFeedback, (
-                                          value,
-                                          index,
-                                        ) => {
-                                          if index == itemIndex {
-                                            None
-                                          } else {
-                                            value
-                                          }
-                                        })
-                                        setAdditionalFeedback(_ => newValue)
-                                      }}>
-                                      <i className="fas fa-minus" />
-                                      <span className="pl-2">
-                                        {str(t("remove_additional_feedback"))}
-                                      </span>
-                                    </button>
-                                    <div className="pt-2">
-                                      <textarea
-                                        rows=4
-                                        cols=33
-                                        className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                                        id={"additional-feedback-text-area-" ++
-                                        string_of_int(itemIndex)}
-                                        type_="text"
-                                        placeholder={t("feedback_placeholder")}
-                                        disabled={!feedbackGeneratable(
-                                          submissionDetails,
-                                          overlaySubmission,
-                                        )}
-                                        value={feedback}
-                                        onChange={event =>
-                                          updateChecklistResultFeedback(
-                                            itemIndex,
-                                            resultIndex,
-                                            ReactEvent.Form.target(event)["value"],
-                                            reviewChecklistItem,
-                                            checklistItem,
-                                            setChecklist,
-                                          )}
-                                      />
-                                    </div>
-                                  </div>
+                                | true => React.null
+
                                 | false =>
                                   <div>
                                     <button

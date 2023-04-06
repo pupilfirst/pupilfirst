@@ -14,6 +14,29 @@ let selectChecklist = (itemIndex, resultIndex, setSelecton) =>
     Js.Array2.concat(selection, [{itemIndex: itemIndex, resultIndex: resultIndex}])
   )
 
+let updateChecklistResultWithAdditionalFeedback = (
+  itemIndex,
+  resultIndex,
+  feedback,
+  reviewChecklistItem,
+  resultItem,
+  setChecklist,
+) => {
+  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
+    ReviewChecklistResult.updateAdditionalFeedback(
+      feedback,
+      resultItem,
+      resultIndex,
+      ReviewChecklistItem.result(reviewChecklistItem),
+    ),
+    reviewChecklistItem,
+  )
+
+  setChecklist(checklist =>
+    ReviewChecklistItem.replace(newReviewChecklistItem, itemIndex, checklist)
+  )
+}
+
 let unSelectChecklist = (itemIndex, resultIndex, setSelecton) =>
   setSelecton(selection =>
     Js.Array.filter(

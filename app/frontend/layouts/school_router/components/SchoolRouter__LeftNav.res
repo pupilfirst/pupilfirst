@@ -7,7 +7,7 @@ open SchoolRouter__Types
 let str = React.string
 
 let containerClasses = shrunk => {
-  let defaultClasses = "bg-white school-admin-navbar__primary-nav border-r border-gray-200 flex flex-col justify-between py-3 "
+  let defaultClasses = "bg-white school-admin-navbar__primary-nav border-e border-gray-200 flex flex-col justify-between py-3 "
 
   defaultClasses ++ (
     shrunk ? "school-admin-navbar__primary-nav--shrunk px-1" : "overflow-y-auto px-3 "
@@ -93,7 +93,7 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   | Page.Settings(_settingsSelection) =>
     <div
       key="secondary-nav"
-      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav border-e border-gray-200 pb-6 overflow-y-auto">
       <div className="p-4">
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
@@ -102,7 +102,7 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   | SelectedCourse(_courseSelection) =>
     <div
       key="secondary-nav"
-      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav border-e border-gray-200 pb-6 overflow-y-auto">
       <div>
         <div className="border-t px-4">
           {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}

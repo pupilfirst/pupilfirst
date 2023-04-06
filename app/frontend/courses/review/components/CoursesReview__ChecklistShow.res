@@ -27,43 +27,30 @@ let checkboxOnChange = (itemIndex, resultIndex, setSelecton, event) =>
     ? selectChecklist(itemIndex, resultIndex, setSelecton)
     : unSelectChecklist(itemIndex, resultIndex, setSelecton)
 
-let generateFeedback = (
-  checklist,
-  selection,
-  feedback,
-  setSelecton,
-  updateFeedbackCB,
-  additionalFeedback,
-) => {
-  let reviewChecklistSelectedFeedback = Js.Array2.mapi(checklist, (reviewChecklistItem, i) => {
-    let resultIndexList =
-      selection
-      ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
-      ->Js.Array2.map(item => item.resultIndex)
-    ReviewChecklistItem.result(reviewChecklistItem)
-    ->Js.Array2.mapi((resultItem, index) =>
-      resultIndexList->Js.Array2.some(i => i == index)
-        ? switch ReviewChecklistResult.feedback(resultItem) {
-          | Some(feedback) => [feedback]
-          | None => []
-          }
-        : []
-    )
-    ->ArrayUtils.flattenV2
-  })
-
-  let reviewChecklistFeedback = Js.Array2.mapi(additionalFeedback, (value, index) => {
-    switch value {
-    | Some(feedback) => Js.Array2.concat(reviewChecklistSelectedFeedback[index], [feedback])
-    | None => reviewChecklistSelectedFeedback[index]
-    }
-  })->ArrayUtils.flattenV2
-
+let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedbackCB) => {
   let newFeedback =
     feedback ++
     ((String.trim(feedback) == "" ? "" : "\n\n") ++
-    reviewChecklistFeedback->Js.Array2.joinWith("\n\n"))
+    checklist
+    ->Js.Array2.mapi((reviewChecklistItem, i) => {
+      let resultIndexList =
+        selection
+        ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
+        ->Js.Array2.map(item => item.resultIndex)
 
+      ReviewChecklistItem.result(reviewChecklistItem)
+      ->Js.Array2.mapi((resultItem, index) =>
+        resultIndexList->Js.Array2.some(i => i == index)
+          ? switch ReviewChecklistResult.feedback(resultItem) {
+            | Some(feedback) => [feedback]
+            | None => []
+            }
+          : []
+      )
+      ->ArrayUtils.flattenV2
+    })
+    ->ArrayUtils.flattenV2
+    ->Js.Array2.joinWith("\n\n"))
   setSelecton(_ => [])
   updateFeedbackCB(newFeedback)
 }
@@ -109,26 +96,11 @@ let updateChecklistResultFeedback = (
   )
 }
 
-let generateFeedbackButton = (
-  checklist,
-  selection,
-  feedback,
-  setSelecton,
-  updateFeedbackCB,
-  additionalFeedback,
-) => {
+let generateFeedbackButton = (checklist, selection, feedback, setSelecton, updateFeedbackCB) => {
   <button
     className="btn btn-primary w-full md:w-auto"
     disabled={selection->ArrayUtils.isEmpty}
-    onClick={_ =>
-      generateFeedback(
-        checklist,
-        selection,
-        feedback,
-        setSelecton,
-        updateFeedbackCB,
-        additionalFeedback,
-      )}>
+    onClick={_ => generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
     {t("generate_feedback_button")->str}
   </button>
 }
@@ -392,14 +364,7 @@ let make = (
     <div
       className="flex justify-end bg-gray-50 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       {feedbackGeneratable(submissionDetails, overlaySubmission)
-        ? generateFeedbackButton(
-            checklist,
-            selection,
-            feedback,
-            setSelecton,
-            updateFeedbackCB,
-            additionalFeedback,
-          )
+        ? generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
         : React.null}
     </div>
   </div>

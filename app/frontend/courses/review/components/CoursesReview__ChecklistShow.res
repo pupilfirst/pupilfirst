@@ -242,7 +242,7 @@ let make = (
                         </div>
                       | false =>
                         <div className="px-6">
-                          <div className="flex">
+                          <div className="flex flex-wrap">
                             <div className="">
                               <Checkbox
                                 id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
@@ -261,17 +261,19 @@ let make = (
                                   s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
                                   selection,
                                 )->Belt.Option.isSome
+
+                              let hasFeedback = Belt.Option.isSome(
+                                ReviewChecklistResult.feedback(checklistItem),
+                              )
                               switch isSelected {
                               | true =>
-                                switch Belt.Option.isSome(
-                                  ReviewChecklistResult.feedback(checklistItem),
-                                ) {
+                                switch hasFeedback {
                                 | true =>
                                   <div
                                     id={"result_item_" ++
                                     (resultIndex->string_of_int ++
                                     "_feedback")}
-                                    className="pl-7 pt-2 flex-grow">
+                                    className="pl-7 pt-2 w-full">
                                     <textarea
                                       rows=4
                                       cols=33
@@ -304,6 +306,7 @@ let make = (
                                   </div>
                                 | false =>
                                   <div>
+                                    // className="w-1/2">
                                     <button
                                       id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
                                       className="text-sm text-primary-500  text-left rtl:text-right  hover:text-primary-600 transition"
@@ -344,53 +347,6 @@ let make = (
                           </div>
                         </div>
                       }}
-                      // <div className="px-6">
-                      //   <Checkbox
-                      //     id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
-                      //     label={str(checklistItem->ReviewChecklistResult.title)}
-                      //     onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
-                      //     checked={checklistItemChecked(itemIndex, resultIndex, selection)}
-                      //     disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-                      //   />
-                      //   {
-                      //     let isSelected =
-                      //       Js.Array.find(
-                      //         s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
-                      //         selection,
-                      //       )->Belt.Option.isSome
-                      //     ReactUtils.nullUnless(
-                      //       <div
-                      //         id={"result_item_" ++ (resultIndex->string_of_int ++ "_feedback")}
-                      //         className="pl-7 pt-2">
-                      //         <textarea
-                      //           rows=4
-                      //           cols=33
-                      //           className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                      //           id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
-                      //           type_="text"
-                      //           placeholder={t("feedback_placeholder")}
-                      //           disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
-                      //           value={Belt.Option.getWithDefault(
-                      //             ReviewChecklistResult.feedback(checklistItem),
-                      //             "",
-                      //           )}
-                      //           onChange={event =>
-                      //             updateChecklistResultFeedback(
-                      //               itemIndex,
-                      //               resultIndex,
-                      //               ReactEvent.Form.target(event)["value"],
-                      //               reviewChecklistItem,
-                      //               checklistItem,
-                      //               setChecklist,
-                      //             )}
-                      //         />
-                      //       </div>,
-                      //       (isSelected ||
-                      //       !feedbackGeneratable(submissionDetails, overlaySubmission)) &&
-                      //         Belt.Option.isSome(ReviewChecklistResult.feedback(checklistItem)),
-                      //     )
-                      //   }
-                      // </div>
                     </Spread>
                   , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
               </div>

@@ -40,7 +40,7 @@
         <div class="mt-8">
           <p class="text-sm font-semibold text-gray-500"><%= t(".link_label") %></p>
           <a href=<%= @event.link_url %> target="_blank" class="block mt-3 text-lg text-primary-500 hover:underline">
-            <i class="if i-external-link-regular if-fw"></i> <%= @event.link_title.present? ? @event.link_title : @event.link_url %>
+            <i class="if i-external-link-regular if-fw rtl:-rotate-90"></i> <%= @event.link_title.present? ? @event.link_title : @event.link_url %>
           </a>
         </div>
       <% end %>

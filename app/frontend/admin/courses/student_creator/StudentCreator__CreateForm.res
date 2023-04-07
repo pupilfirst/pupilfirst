@@ -346,13 +346,13 @@ let make = (~courseId) => {
             id="notify-new-students"
             type_="checkbox"
           />
-          <label className="checkbox-label flex " htmlFor="notify-new-students">
+          <label className="checkbox-label flex gap-2 " htmlFor="notify-new-students">
             <span className="flex-shrink-0 mt-1">
               <svg width="12px" height="10px" viewBox="0 0 12 10">
                 <polyline points="1.5 6 4.5 9 10.5 1" />
               </svg>
             </span>
-            <span className="text-sm pe-2"> {t("notify_students_label")->str} </span>
+            <span className="text-sm"> {t("notify_students_label")->str} </span>
           </label>
         </div>
         <div className="flex mt-4">

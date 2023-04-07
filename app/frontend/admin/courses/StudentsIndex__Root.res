@@ -139,7 +139,7 @@ let studentsList = (params, students) => {
         <div
           className="py-4 px-4 flex gap-4 flex-1 items-center ltr:text-left rtl:text-right justify-between rounded-md shadow">
           <div className="flex">
-            <div className="text-sm flex items-center ltr:space-x-4">
+            <div className="text-sm flex gap-4 items-center ltr:space-x-4">
               {switch User.avatarUrl(StudentInfo.user(student)) {
               | Some(avatarUrl) =>
                 <img
@@ -152,7 +152,7 @@ let studentsList = (params, students) => {
                   className="h-9 w-9 md:h-12 md:w-12 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
                 />
               }}
-              <div className="me-4">
+              <div>
                 <Link
                   href={`/school/students/${StudentInfo.id(student)}/details`}
                   className="font-semibold inline-block hover:underline hover:text-primary-500 transition ">

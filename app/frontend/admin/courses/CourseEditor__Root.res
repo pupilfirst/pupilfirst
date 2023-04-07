@@ -395,7 +395,7 @@ let showCourse = course => {
                 href={"/courses/" ++ Course.id(course)}
                 target="_blank"
                 className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
-                <Icon className="if i-external-link-solid me-2" />
+                <Icon className="if i-external-link-solid me-2 rtl:-rotate-90" />
                 <span> {t("view_public_page")->str} </span>
               </a>
             </div>,
@@ -487,9 +487,7 @@ let showCourses = (courses, state) => {
                   RescriptReactRouter.push("/school/courses/new")
                 }}>
                 <PfIcon className="if i-plus-circle-regular if-fw" />
-                <span className="font-semibold ms-1">
-                  {str(t("add_new_course"))}
-                </span>
+                <span className="font-semibold ms-1"> {str(t("add_new_course"))} </span>
               </button>}
               image={<img src={addNewCourseSVG} />}
             />
@@ -637,7 +635,7 @@ let make = (~school) => {
               | Unloaded => React.null
               | Loaded(stats) =>
                 <div className="flex gap-6">
-                  <div className="ltr:border-r rtl:border-l pe-6">
+                  <div className="border-e pe-6">
                     <Spread props={"data-t": "school students"}>
                       <div>
                         <p className="text-sm text-gray-500"> {ts("students")->str} </p>
@@ -667,7 +665,7 @@ let make = (~school) => {
         <div className="w-full sticky top-0 z-30 mt-4 px-6">
           <label
             htmlFor="search_courses"
-            className="block text-tiny font-semibold uppercase ps-px ltr:text-left rtl:text-right">
+            className="block text-tiny font-semibold uppercase ps-px rtl:text-right">
             {t("filter.input_label")->str}
           </label>
           <Multiselect

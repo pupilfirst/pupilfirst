@@ -208,7 +208,7 @@ let make = (~communities, ~courses) => {
                 target="_blank"
                 href={"/communities/" ++ (community |> Community.id)}
                 className="text-sm flex items-center ltr:border-l rtl:border-r text-gray-600 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
-                <i className="fas fa-external-link-alt text-normal" />
+                <i className="fas fa-external-link-alt text-normal rtl:-rotate-90" />
                 <span className="ms-1"> {ts("view") |> str} </span>
               </a>
             </div>

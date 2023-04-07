@@ -19,7 +19,7 @@ let showUserLink = () => {
   [renderUserLink("power-off", "/users/sign_out")]
 }
 let navLinks = (path, text) => {
-  <div  className="me-4">
+  <div className="me-4">
     <a
       title={text}
       href=path

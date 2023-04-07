@@ -74,7 +74,7 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
           {link
           |> OptionUtils.map(link =>
             <a href=link target="_blank" className="block mt-1 text-blue-300 hover:text-blue:200">
-              <FaIcon classes="fas fa-external-link-square-alt" />
+              <FaIcon classes="fas fa-external-link-square-alt rtl:-rotate-90" />
               <span className="ms-1"> {t("read_more") |> str} </span>
             </a>
           )

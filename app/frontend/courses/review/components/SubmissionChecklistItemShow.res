@@ -45,7 +45,7 @@ let showlink = link =>
       {link->str}
     </span>
     <span className="flex w-10 justify-center items-center p-2 bg-blue-700 text-white">
-      <PfIcon className="if i-external-link-regular" />
+      <PfIcon className="if i-external-link-regular rtl:-rotate-90" />
     </span>
   </a>
 

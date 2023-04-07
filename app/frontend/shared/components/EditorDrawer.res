@@ -49,7 +49,6 @@ let make = (
   })
   <div>
     <div className="blanket" />
-    // <div className="editor-drawer__background" />
     <div className={drawerClasses(size, level, previousLevel)}>
       <div className="editor-drawer__close hidden md:block absolute">
         <button
@@ -64,7 +63,7 @@ let make = (
         </button>
       </div>
       <div className="w-full relative overflow-y-scroll">
-        <div className="md:hidden absolute end-0 pt-3 pe-4  z-50">
+        <div className="md:hidden absolute end-0 pt-3 pe-4 z-50">
           <button
             onClick={e => {
               e |> ReactEvent.Mouse.preventDefault

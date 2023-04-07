@@ -243,18 +243,13 @@ let make = (
                       | false =>
                         <div className="px-6">
                           <div className="flex flex-wrap">
-                            <div className="">
-                              <Checkbox
-                                id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
-                                label={str(checklistItem->ReviewChecklistResult.title)}
-                                onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
-                                checked={checklistItemChecked(itemIndex, resultIndex, selection)}
-                                disabled={!feedbackGeneratable(
-                                  submissionDetails,
-                                  overlaySubmission,
-                                )}
-                              />
-                            </div>
+                            <Checkbox
+                              id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
+                              label={str(checklistItem->ReviewChecklistResult.title)}
+                              onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
+                              checked={checklistItemChecked(itemIndex, resultIndex, selection)}
+                              disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
+                            />
                             {
                               let isSelected =
                                 Js.Array.find(
@@ -305,26 +300,23 @@ let make = (
                                     />
                                   </div>
                                 | false =>
-                                  <div>
-                                    // className="w-1/2">
-                                    <button
-                                      id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
-                                      className="text-sm text-primary-500  text-left rtl:text-right  hover:text-primary-600 transition"
-                                      onClick={event =>
-                                        updateChecklistResultWithAdditionalFeedback(
-                                          itemIndex,
-                                          resultIndex,
-                                          Some(""),
-                                          reviewChecklistItem,
-                                          checklistItem,
-                                          setChecklist,
-                                        )}>
-                                      <i className="fas fa-plus" />
-                                      <span className="pl-2 ">
-                                        {str(t("add_additional_feedback"))}
-                                      </span>
-                                    </button>
-                                  </div>
+                                  <button
+                                    id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
+                                    className="w-auto pl-4 text-sm text-primary-500  text-left rtl:text-right  hover:text-primary-600 transition"
+                                    onClick={event =>
+                                      updateChecklistResultWithAdditionalFeedback(
+                                        itemIndex,
+                                        resultIndex,
+                                        Some(""),
+                                        reviewChecklistItem,
+                                        checklistItem,
+                                        setChecklist,
+                                      )}>
+                                    <i className="fas fa-plus" />
+                                    <span className="pl-2 ">
+                                      {str(t("add_additional_feedback"))}
+                                    </span>
+                                  </button>
                                 }
                               | false =>
                                 switch Belt.Option.isSome(

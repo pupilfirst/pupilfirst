@@ -14,7 +14,7 @@ let selectChecklist = (itemIndex, resultIndex, setSelecton) =>
     Js.Array2.concat(selection, [{itemIndex: itemIndex, resultIndex: resultIndex}])
   )
 
-let updateChecklistResultWithAdditionalFeedback = (
+let updateEmptyChecklistResult = (
   itemIndex,
   resultIndex,
   feedback,
@@ -300,7 +300,7 @@ let make = (
                                   id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
                                   className="w-auto pl-4 text-sm text-primary-500  text-left rtl:text-right  hover:text-primary-600 transition"
                                   onClick={event =>
-                                    updateChecklistResultWithAdditionalFeedback(
+                                    updateEmptyChecklistResult(
                                       itemIndex,
                                       resultIndex,
                                       Some(""),
@@ -314,7 +314,7 @@ let make = (
                                   </span>
                                 </button>
                               | (false, true) =>
-                                updateChecklistResultWithAdditionalFeedback(
+                                updateEmptyChecklistResult(
                                   itemIndex,
                                   resultIndex,
                                   None,

@@ -22,6 +22,7 @@ type settingsPages =
 
 type t =
   | SchoolCoaches
+  | RootSettings
   | Settings(settingsPages)
   | Courses
   | SelectedCourse(coursePages)
@@ -31,6 +32,7 @@ let shrunk = t => {
   switch t {
   | SchoolCoaches
   | Courses
+  | RootSettings
   | Communities => false
   | Settings(_settingsPages) => true
   | SelectedCourse(_coursePages) => true
@@ -40,6 +42,7 @@ let shrunk = t => {
 let isSPA = t => {
   switch t {
   | SchoolCoaches
+  | RootSettings
   | Communities => false
   | Settings(_settingsPages) => false
   | SelectedCourse(coursePages) =>
@@ -84,6 +87,7 @@ let coursePath = (coursePage, courseId) => {
 let path = (~courseId=?, t) => {
   switch t {
   | SchoolCoaches => "/school/coaches"
+  | RootSettings => "/school/customize"
   | Settings(settingsPages) =>
     switch settingsPages {
     | Customization => "/school/customize"
@@ -99,6 +103,7 @@ let path = (~courseId=?, t) => {
 let name = t => {
   switch t {
   | SchoolCoaches => "Coaches"
+  | RootSettings => tt("settings")
   | Settings(settingsPages) =>
     switch settingsPages {
     | Customization => "Customization"
@@ -126,6 +131,7 @@ let name = t => {
 let icon = t => {
   switch t {
   | SchoolCoaches => "users"
+  | RootSettings => "cog"
   | Settings(_settingsPages) => "cog"
   | Courses => "journal-text"
   | SelectedCourse(_coursePages) => "fas fa-book"

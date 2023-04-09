@@ -718,6 +718,7 @@ en:
       edit_review_checklist: Edit Review Checklist
       save_checklist: Save Checklist
     CoursesReview__ChecklistShow:
+      back_to_review: Back to Review
       edit_checklist_button: Edit Checklist
       feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback

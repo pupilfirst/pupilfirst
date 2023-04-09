@@ -1272,7 +1272,7 @@ let make = (
             className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
             <div className="flex flex-1 items-center justify-between">
               <div>
-                <p className="font-semibold"> {str("Submission " ++ string_of_int(number))} </p>
+                <p className="font-semibold"> {str(t("submission") ++ string_of_int(number))} </p>
                 <p
                   className="text-gray-800 text-xs"
                   title={OverlaySubmission.createdAt(overlaySubmission)->DateFns.formatPreset(
@@ -1354,7 +1354,7 @@ let make = (
             <div>
               <div
                 className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
-                <p className="font-semibold"> {str("Review")} </p>
+                <p className="font-semibold"> {str(t("review"))} </p>
               </div>
               {feedbackGenerator(
                 submissionDetails,
@@ -1374,7 +1374,7 @@ let make = (
             <div>
               <div
                 className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
-                <p className="font-semibold"> {str("Review")} </p>
+                <p className="font-semibold"> {str(t("review"))} </p>
               </div>
               {ReactUtils.nullIf(
                 <div className="px-4 py-4 border-b border-gray-300" ariaLabel="Assigned to">
@@ -1410,7 +1410,7 @@ let make = (
                 <div>
                   <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+                    <span className="ml-2 md:ml-3 tracking-wide"> {t("grade_card")->str} </span>
                   </h5>
                   <div className="flex md:flex-row flex-col md:ml-8 rounded-lg mt-2">
                     <div className="w-full md:w-9/12">

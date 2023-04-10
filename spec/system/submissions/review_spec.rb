@@ -374,67 +374,26 @@ feature 'Submission review overlay', js: true do
         end
       end
 
-      # Add Additional Feedback
-
-      checkbox_21 = find(:css, "[id$='review-checkbox-21']", visible: false)
+      # Add Additional Feedback for empty checklist result item
+      checkbox_21 = find(:css, "[id$='review-checkbox-21']")
       expect(page).not_to have_button('Add Additional Feedback')
       checkbox_21.set(true)
       expect(checkbox_21).to be_checked
       expect(page).to have_button('Add Additional Feedback')
-      # expect(page).to have_css('button', text: 'Add Additional Feedback', visible: :visible)
       click_button "Add Additional Feedback"
       expect(page).to have_field("checklist_2_result_1_text_area", with: '')
-      # expect(find("checklist_2_result_0_text_area").value).to be_empty
       find("div[data-checklist-item='2']").fill_in 'checklist_2_result_1_text_area', with: "Additional Feedback for empty checklist result item 2"
       checkbox_21.set(false)
       expect(page).not_to have_button('Add Additional Feedback')
 
-
-
-      checkbox_20 = find(:css, "[id$='review-checkbox-20']", visible: false)
+      checkbox_20 = find(:css, "[id$='review-checkbox-20']")
       expect(page).not_to have_button('Add Additional Feedback')
-      # expect(page).to have_css('button', text: 'Add Additional Feedback', visible: :hidden)
       checkbox_20.set(true)
       expect(checkbox_20).to be_checked
       expect(page).to have_button('Add Additional Feedback')
-      # expect(page).to have_css('button', text: 'Add Additional Feedback', visible: :visible)
       click_button "Add Additional Feedback"
       expect(page).to have_field("checklist_2_result_0_text_area", with: '')
-      # expect(find("checklist_2_result_0_text_area").value).to be_empty
       find("div[data-checklist-item='2']").fill_in 'checklist_2_result_0_text_area', with: "Additional Feedback for empty checklist result item"
-
-
-      # within("div[data-checklist-item='2']") do
-      #   expect(page).to have_button('Add Additional Feedback')
-      #   within("div[data-result-item='0']") do
-      #     expect(page).to have_content(c3_result_0_title)
-      #     find('label', text: c3_result_0_title).click
-      #     expect(page).not_to have_button('Add Additional Feedback')
-      #   end
-
-      #   within("div[data-result-item='1']") do
-      #     expect(page).to have_content(c2_result_1_title)
-      #     find('label', text: c2_result_1_title).click
-      #   end
-      # end
-
-      # expect(page).to have_content('Add Additional Feedback')
-
-
-      # within("div[data-checklist-item='0']") do
-      #   click_button "Add Additional Feedback"
-      #   expect(page).to have_content("Remove Additional Feedback")
-      #   fill_in 'additional-feedback-text-area-0', with: c1_additional_feedback
-      # end
-
-      # within("div[data-checklist-item='1']") do
-      #   click_button "Add Additional Feedback"
-      #   expect(page).to have_content("Remove Additional Feedback")
-      #   click_button "Remove Additional Feedback"
-      #   expect(page).to have_content("Add Additional Feedback")
-      #   click_button "Add Additional Feedback"
-      #   fill_in 'additional-feedback-text-area-1', with: c2_additional_feedback
-      # end
 
       click_button 'Generate Feedback'
 
@@ -446,7 +405,6 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_content(c1_result_1_feedback)
         expect(page).to have_content(c2_result_0_feedback)
         expect(page).to have_content("Additional Feedback for empty checklist result item")
-        # expect(page).to have_content(c2_additional_feedback)
       end
 
       click_button 'Show Review Checklist'

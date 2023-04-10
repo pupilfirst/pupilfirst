@@ -1,7 +1,7 @@
 {
   "name": "pupil-first",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "private": true,
   "workspaces": {

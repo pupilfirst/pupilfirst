@@ -521,7 +521,7 @@ module Example = {
   @react.component
   let make = () => {
     let (searchString, setSearchString) = React.useState(() => "")
-    <div className="max-w-6xl mx-auto">
+    <div>
       <div className="flex items-center justify-between p-4">
         <h1 className="text-center text-2xl font-bold text-gray-700"> {"pf-icon" |> str} </h1>
         <a
@@ -546,7 +546,7 @@ module Example = {
             className=" w-full text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700"
           />
         </div>
-        <div className="grid md:grid-cols-3 gap-2 md:gap-4 flex-wrap p-4">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-4 flex-wrap p-4">
           {switch search(searchString) {
           | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
           | resultIcons =>
@@ -566,8 +566,7 @@ module Example = {
                     </button>
                   </div>
                   <div className="overflow-x-auto">
-                    <code
-                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-nowrap">
+                    <code className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px">
                       {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />") |> str}
                     </code>
                   </div>

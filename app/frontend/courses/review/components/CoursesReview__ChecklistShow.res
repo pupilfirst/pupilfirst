@@ -142,7 +142,7 @@ let make = (
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
 
-  let additionalFeedback = Js.Array.map(item => {
+  let hasFeedbackTemplate = Js.Array.map(item => {
     Js.Array.map(result => {
       switch ReviewChecklistResult.feedback(result) {
       | Some(_) => true
@@ -188,7 +188,7 @@ let make = (
                       props={"data-result-item": string_of_int(resultIndex)}
                       key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
                       {switch Belt.Option.isSome(ReviewChecklistResult.feedback(checklistItem)) &&
-                      additionalFeedback[itemIndex][resultIndex] == true {
+                      hasFeedbackTemplate[itemIndex][resultIndex] == true {
                       | true =>
                         <div className="px-6">
                           <Checkbox

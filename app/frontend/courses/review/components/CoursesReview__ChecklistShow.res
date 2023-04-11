@@ -189,7 +189,7 @@ let make = (
                             ReactUtils.nullUnless(
                               <div
                                 id={"result_item_" ++ (resultIndex->string_of_int ++ "_feedback")}
-                                className="pl-7 pt-2">
+                                className="ps-7 pt-2">
                                 <textarea
                                   rows=4
                                   cols=33
@@ -278,7 +278,7 @@ let make = (
                               | (true, false) =>
                                 <button
                                   id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
-                                  className="w-auto pl-4 text-sm text-primary-500  text-left rtl:text-right  hover:text-primary-600 transition"
+                                  className="w-auto text-sm text-primary-500 px-2 py-1 ms-5 text-left rtl:text-right mt-2 hover:text-primary-600 transition"
                                   onClick={event =>
                                     updateEmptyChecklistResult(
                                       itemIndex,
@@ -288,7 +288,7 @@ let make = (
                                       setChecklist,
                                     )}>
                                   <i className="fas fa-plus" />
-                                  <span className="pl-2 ">
+                                  <span className="ps-2 ">
                                     {str(t("add_additional_feedback"))}
                                   </span>
                                 </button>

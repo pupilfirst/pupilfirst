@@ -75,19 +75,22 @@ let updateChecklistResultFeedback = (
   resultIndex,
   feedback,
   reviewChecklistItem,
-  resultItem,
   send,
 ) => {
-  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-    ReviewChecklistResult.updateFeedback(
-      feedback,
-      resultItem,
-      resultIndex,
-      ReviewChecklistItem.result(reviewChecklistItem),
-    ),
-    reviewChecklistItem,
-  )
-  send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  // let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
+  //   ReviewChecklistResult.updateFeedback(
+  //     ReviewChecklistItem.result(reviewChecklistItem),
+  //     feedback,
+  //     resultIndex,
+  //   ),
+  //   reviewChecklistItem,
+  // )
+  // send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ReviewChecklistItem.result(reviewChecklistItem)
+  ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
+  ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
+  ->(newItem => UpdateChecklistItem(newItem, itemIndex))
+  ->send
 }
 
 let addEmptyResultItem = (send, reviewChecklistItem, itemIndex) =>
@@ -326,7 +329,6 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     resultIndex,
                                     ReactEvent.Form.target(event)["value"],
                                     reviewChecklistItem,
-                                    resultItem,
                                     send,
                                   )}
                               />

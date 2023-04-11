@@ -92,22 +92,26 @@ let updateChecklistResultFeedback = (
   resultIndex,
   feedback,
   reviewChecklistItem,
-  resultItem,
   setChecklist,
 ) => {
-  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-    ReviewChecklistResult.updateFeedback(
-      feedback,
-      resultItem,
-      resultIndex,
-      ReviewChecklistItem.result(reviewChecklistItem),
-    ),
-    reviewChecklistItem,
-  )
+  // let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
+  //   ReviewChecklistResult.updateFeedback(
+  //     feedback,
+  //     resultItem,
+  //     resultIndex,
+  //     ReviewChecklistItem.result(reviewChecklistItem),
+  //   ),
+  //   reviewChecklistItem,
+  // )
 
-  setChecklist(checklist =>
-    ReviewChecklistItem.replace(newReviewChecklistItem, itemIndex, checklist)
-  )
+  // setChecklist(checklist =>
+  //   ReviewChecklistItem.replace(newReviewChecklistItem, itemIndex, checklist)
+  // )
+  ReviewChecklistItem.result(reviewChecklistItem)
+  ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
+  ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
+  ->ReviewChecklistItem.replace(itemIndex)
+  ->setChecklist
 }
 
 let generateFeedbackButton = (checklist, selection, feedback, setSelecton, updateFeedbackCB) => {
@@ -220,7 +224,6 @@ let make = (
                                       resultIndex,
                                       ReactEvent.Form.target(event)["value"],
                                       reviewChecklistItem,
-                                      checklistItem,
                                       setChecklist,
                                     )}
                                 />
@@ -281,7 +284,6 @@ let make = (
                                         resultIndex,
                                         ReactEvent.Form.target(event)["value"],
                                         reviewChecklistItem,
-                                        checklistItem,
                                         setChecklist,
                                       )}
                                   />

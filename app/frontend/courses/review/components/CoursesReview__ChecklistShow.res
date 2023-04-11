@@ -19,11 +19,10 @@ let updateEmptyChecklistResult = (
   resultIndex,
   feedback,
   reviewChecklistItem,
-  resultItem,
   setChecklist,
 ) => {
   ReviewChecklistItem.result(reviewChecklistItem)
-  ->ReviewChecklistResult.updateAdditionalFeedback(feedback, resultItem, resultIndex, _)
+  ->ReviewChecklistResult.updateAdditionalFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
   ->ReviewChecklistItem.replace(itemIndex)
   ->setChecklist
@@ -297,7 +296,6 @@ let make = (
                                       resultIndex,
                                       Some(""),
                                       reviewChecklistItem,
-                                      checklistItem,
                                       setChecklist,
                                     )}>
                                   <i className="fas fa-plus" />
@@ -311,7 +309,6 @@ let make = (
                                   resultIndex,
                                   None,
                                   reviewChecklistItem,
-                                  checklistItem,
                                   setChecklist,
                                 )
                                 React.null

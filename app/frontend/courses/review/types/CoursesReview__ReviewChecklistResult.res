@@ -29,10 +29,13 @@ let updateFeedback = (feedback, t, index, checklist) => {
   checklist |> replace(make(~title=t.title, ~feedback=optionalFeedback), index)
 }
 
-let updateAdditionalFeedback = (feedback, t, index, checklist) => {
+let updateAdditionalFeedback = (resultItems, feedback, index) => {
   let addditionalFeedback = feedback
 
-  checklist |> replace(make(~title=t.title, ~feedback=addditionalFeedback), index)
+  resultItems |> replace(
+    make(~title=resultItems[index].title, ~feedback=addditionalFeedback),
+    index,
+  )
 }
 
 let trim = t => {...t, title: t.title |> String.trim}

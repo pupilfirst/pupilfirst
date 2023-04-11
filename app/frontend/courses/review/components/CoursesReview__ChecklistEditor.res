@@ -77,15 +77,6 @@ let updateChecklistResultFeedback = (
   reviewChecklistItem,
   send,
 ) => {
-  // let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-  //   ReviewChecklistResult.updateFeedback(
-  //     ReviewChecklistItem.result(reviewChecklistItem),
-  //     feedback,
-  //     resultIndex,
-  //   ),
-  //   reviewChecklistItem,
-  // )
-  // send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
   ReviewChecklistItem.result(reviewChecklistItem)
   ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)

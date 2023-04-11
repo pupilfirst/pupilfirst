@@ -94,19 +94,6 @@ let updateChecklistResultFeedback = (
   reviewChecklistItem,
   setChecklist,
 ) => {
-  // let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-  //   ReviewChecklistResult.updateFeedback(
-  //     feedback,
-  //     resultItem,
-  //     resultIndex,
-  //     ReviewChecklistItem.result(reviewChecklistItem),
-  //   ),
-  //   reviewChecklistItem,
-  // )
-
-  // setChecklist(checklist =>
-  //   ReviewChecklistItem.replace(newReviewChecklistItem, itemIndex, checklist)
-  // )
   ReviewChecklistItem.result(reviewChecklistItem)
   ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)

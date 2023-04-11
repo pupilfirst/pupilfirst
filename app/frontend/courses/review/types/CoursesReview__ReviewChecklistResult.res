@@ -17,34 +17,31 @@ let emptyTemplate = () => [
 
 let empty = () => make(~title="", ~feedback=None)
 
-let replace = (t, index, checklist) =>
+let replace = (checklist, t, index) =>
   checklist |> Array.mapi((resultIndex, result) => resultIndex == index ? t : result)
 
 let updateTitle = (title, t, index, checklist) =>
-  checklist |> replace(make(~title, ~feedback=t.feedback), index)
+  checklist->replace(make(~title, ~feedback=t.feedback), index)
 
 let updateFeedback = (feedback, t, index, checklist) => {
-  let optionalFeedback = feedback |> Js.String.trim == "" ? None : Some(feedback)
+  let optionalFeedback = feedback->Js.String.trim == "" ? None : Some(feedback)
 
-  checklist |> replace(make(~title=t.title, ~feedback=optionalFeedback), index)
+  checklist->replace(make(~title=t.title, ~feedback=optionalFeedback), index)
 }
 
 let updateAdditionalFeedback = (resultItems, feedback, index) => {
-  let addditionalFeedback = feedback
+  let additionalFeedback = feedback
 
-  resultItems |> replace(
-    make(~title=resultItems[index].title, ~feedback=addditionalFeedback),
-    index,
-  )
+  resultItems->replace(make(~title=resultItems[index].title, ~feedback=additionalFeedback), index)
 }
 
-let trim = t => {...t, title: t.title |> String.trim}
+let trim = t => {...t, title: t.title->String.trim}
 
 let encode = t => {
-  let title = list{("title", t.title |> Json.Encode.string)}
+  let title = list{("title", t.title->Json.Encode.string)}
 
   let feedback = switch t.feedback {
-  | Some(f) => list{("feedback", f |> Json.Encode.string)}
+  | Some(f) => list{("feedback", f->Json.Encode.string)}
   | None => list{}
   }
 

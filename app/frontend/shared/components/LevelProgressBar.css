@@ -3,7 +3,7 @@
 }
 
 .level-progress-bar__student-level:not(:last-child) {
-  @apply border-r-2 border-white;
+  @apply border-e-2 border-white;
 }
 
 .level-progress-bar__student-level--reached {
@@ -60,7 +60,7 @@
 
 :not(.level-progress-bar__student-progress--completed)
   > .level-progress-bar__student-level--current:after {
-  @apply absolute w-1/2 h-full bg-yellow-500 left-0;
+  @apply absolute w-1/2 h-full bg-yellow-500 start-0;
   content: "";
 }
 

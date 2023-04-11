@@ -85,6 +85,6 @@ let make = (~topicId, ~subscribed, ~subscribeCB, ~unsubscribeCB) => {
     onClick={handleSubscription(saving, subscribed, setSaving, topicId, subscribeCB, unsubscribeCB)}
     className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0">
     <FaIcon classes={iconClasses(subscribed, saving)} />
-    <span className="ml-2"> {str(subscribed ? t("unsubscribe") : t("subscribe"))} </span>
+    <span className="ms-2"> {str(subscribed ? t("unsubscribe") : t("subscribe"))} </span>
   </button>
 }

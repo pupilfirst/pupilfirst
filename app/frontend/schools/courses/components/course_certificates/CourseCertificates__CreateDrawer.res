@@ -120,7 +120,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       htmlFor="certificate-file-input">
                       {t("certificate_base_image.label")->str}
                     </label>
-                    <HelpIcon className="ml-2" link={t("certificate_base_image.help_url")}>
+                    <HelpIcon className="ms-2" link={t("certificate_base_image.help_url")}>
                       {t("certificate_base_image.help")->str}
                     </HelpIcon>
                   </div>
@@ -136,7 +136,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       onChange={selectFile(send)}
                     />
                     <label className="file-input-label mt-2" htmlFor="certificate-file-input">
-                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <i className="fas fa-upload me-2 text-gray-600 text-lg" />
                       <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
                     </label>
                   </div>

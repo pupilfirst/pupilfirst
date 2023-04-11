@@ -128,7 +128,7 @@ let detailsTab = (state, applicant) => {
 }
 
 let optionalText = () => {
-  <span className="text-xs ml-1"> {("(" ++ I18n.ts("optional") ++ ")")->str} </span>
+  <span className="text-xs ms-1"> {("(" ++ I18n.ts("optional") ++ ")")->str} </span>
 }
 
 let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicantCB) => {
@@ -186,7 +186,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
             <polyline points="1.5 6 4.5 9 10.5 1" />
           </svg>
         </span>
-        <span className="text-sm"> {t("notify_students.label")->str} </span>
+        <span className="text-sm pe-2"> {t("notify_students.label")->str} </span>
       </label>
     </div>
     <button
@@ -214,13 +214,13 @@ let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
               className={selectedTabClasses(selectedTab == DetailsTab)}
               onClick={_ =>
                 RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
-              <i className="fa fa-edit" /> <span className="ml-2"> {t("tabs.details")->str} </span>
+              <i className="fa fa-edit" /> <span className="ms-2"> {t("tabs.details")->str} </span>
             </button>
             <button
-              className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
+              className={"-ms-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
               onClick={_ =>
                 RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
-              <i className="fa fa-cog" /> <span className="ml-2"> {t("tabs.actions")->str} </span>
+              <i className="fa fa-cog" /> <span className="ms-2"> {t("tabs.actions")->str} </span>
             </button>
           </div>
           <Spread props={"applicant-id": Applicant.id(applicant)}>

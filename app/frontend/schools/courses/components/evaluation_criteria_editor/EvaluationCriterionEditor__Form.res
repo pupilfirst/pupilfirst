@@ -163,7 +163,7 @@ let saveDisabled = state => {
 let labelClasses = (grade, passGrade) => {
   let failGradeClasses = "bg-red-300 text-red-700 border-red-500"
   let passGradeClasses = "bg-green-300 text-green-700 border-green-500"
-  "w-12 p-3 text-center  mr-3 rounded-lg border  leading-tight " ++ (
+  "w-12 p-3 text-center  me-3 rounded-lg border  leading-tight " ++ (
     grade < passGrade ? failGradeClasses : passGradeClasses
   )
 }
@@ -259,7 +259,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
           <div className="max-w-2xl pt-6 mx-auto">
             <div className="mb-4">
               <span
-                className="inline-block tracking-wide text-sm font-semibold mr-2"
+                className="inline-block tracking-wide text-sm font-semibold me-2"
                 htmlFor="max_grades">
                 {t("max_grade") |> str}
               </span>
@@ -333,18 +333,18 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="grades">
                   {t("grade_labels.label") |> str}
                 </label>
-                <HelpIcon className="ml-2" link={t("grade_labels.help_url")}>
+                <HelpIcon className="ms-2" link={t("grade_labels.help_url")}>
                   {t("grade_labels.help") |> str}
                 </HelpIcon>
               </div>
               <div className="flex">
-                <div className="flex justify-center items-center ml-4">
+                <div className="flex justify-center items-center ms-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed" />
-                  <span className="ml-2 text-xs"> {ts("fail") |> str} </span>
+                  <span className="ms-2 text-xs"> {ts("fail") |> str} </span>
                 </div>
-                <div className="flex justify-center items-center ml-4">
+                <div className="flex justify-center items-center ms-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed" />
-                  <span className="ml-2 text-xs"> {ts("pass") |> str} </span>
+                  <span className="ms-2 text-xs"> {ts("pass") |> str} </span>
                 </div>
               </div>
             </div>

@@ -21,7 +21,7 @@ let fileContentBlock = (url, title, filename) =>
     href=url>
     <div className="flex items-center">
       <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />
-      <div className="pl-4 leading-tight">
+      <div className="ps-4 leading-tight">
         <div className="text-lg font-semibold"> {title |> str} </div>
         <div className="text-sm italic text-gray-600"> {filename |> str} </div>
       </div>

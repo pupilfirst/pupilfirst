@@ -187,7 +187,7 @@ let suggestions = state => {
           {tr("similar_topics") |> str}
         </span>
         {state.searching
-          ? <span className="ml-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
+          ? <span className="ms-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
           : React.null}
         {suggestions->Js.Array2.map(suggestion => {
           let askedOn =
@@ -208,7 +208,7 @@ let suggestions = state => {
             <div className="flex flex-col min-w-0">
               <h5
                 title={suggestion |> TopicSuggestion.title}
-                className="font-semibold text-sm leading-snug md:text-base pr-1 truncate flex-1">
+                className="font-semibold text-sm leading-snug md:text-base pe-1 truncate flex-1">
                 {suggestion |> TopicSuggestion.title |> str}
               </h5>
               <p className="text-xs mt-1 leading-tight text-gray-800">
@@ -216,7 +216,7 @@ let suggestions = state => {
               </p>
             </div>
             <div
-              className={"text-xs px-1 py-px ml-2 rounded font-semibold shrink-0 " ++
+              className={"text-xs px-1 py-px ms-2 rounded font-semibold shrink-0 " ++
               answersClasses}>
               {answersText |> str}
             </div>
@@ -228,7 +228,7 @@ let suggestions = state => {
 
 let searchingIndicator = state =>
   state.similar.suggestions |> ArrayUtils.isEmpty && state.searching
-    ? <div className="md:flex-1 pl-1 pb-3 md:p-0">
+    ? <div className="md:flex-1 ps-1 pb-3 md:p-0">
         <FaIcon classes="fas fa-spinner fa-pulse" />
       </div>
     : React.null
@@ -260,8 +260,8 @@ let make = (~communityId, ~target, ~topicCategories) => {
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
             <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
-              <i className="fas fa-arrow-left" />
-              <span className="ml-2"> {tr("back") |> str} </span>
+              <i className="fas fa-arrow-left rtl:rotate-180" />
+              <span className="ms-2"> {tr("back") |> str} </span>
             </a>
           </div>
         </div>
@@ -287,7 +287,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
             className="mb-8 max-w-3xl w-full mx-auto relative border-t border-b md:border-0 bg-white md:shadow md:rounded-lg">
             <div className="flex w-full flex-col p-3 md:p-6">
               <div className="flex">
-                <div className="flex-1 mr-2">
+                <div className="flex-1 me-2">
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                     htmlFor="title">

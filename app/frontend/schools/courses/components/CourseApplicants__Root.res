@@ -175,7 +175,7 @@ module Sortable = {
 module ApplicantsSorter = Sorter.Make(Sortable)
 
 let applicantsSorter = (send, filter) =>
-  <div className="ml-2 shrink-0">
+  <div className="ms-2 shrink-0">
     <label className="block text-tiny uppercase font-semibold"> {t("sorter.label") |> str} </label>
     <div className="mt-1">
       <ApplicantsSorter
@@ -299,7 +299,7 @@ let entriesLoadedData = (totalNotificationsCount, loadedNotificaionsCount) =>
   </div>
 
 let showApplicant = (baseUrl, applicant) => {
-  <div className="flex flex-1 items-center pr-4 bg-white hover:shadow border rounded">
+  <div className="flex flex-1 items-center pe-4 bg-white hover:shadow border rounded">
     <button
       title={t("show_details") ++ Applicant.name(applicant)}
       className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-50 cursor-pointer"
@@ -311,7 +311,7 @@ let showApplicant = (baseUrl, applicant) => {
         </div>
       </div>
       <div className="mt-1 space-x-2">
-        <div className="text-xs text-left"> {Applicant.email(applicant)->str} </div>
+        <div className="text-xs ltr:text-left rtl:text-right"> {Applicant.email(applicant)->str} </div>
         {Js.Array.map(
           a => <span key=a className="p-1 text-xs bg-gray-50 rounded shadow"> {str(a)} </span>,
           Applicant.tags(applicant),
@@ -411,7 +411,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
               <div className="w-full">
                 <label
                   htmlFor="search_applicants"
-                  className="block text-tiny font-semibold uppercase pl-px text-left">
+                  className="block text-tiny font-semibold uppercase ps-px ltr:text-left rtl:text-right">
                   {t("filter.input_label")->str}
                 </label>
                 <Multiselect

@@ -13,8 +13,8 @@ let buttonContents = (formState, checklist) => {
   let icon = switch formState {
   | Attaching
   | Saving =>
-    <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
-  | Ready => <FaIcon classes="fas fa-cloud-upload-alt mr-2" />
+    <FaIcon classes="fas fa-spinner fa-pulse me-2" />
+  | Ready => <FaIcon classes="fas fa-cloud-upload-alt me-2" />
   }
 
   let text = switch formState {

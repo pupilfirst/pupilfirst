@@ -8,11 +8,11 @@
 }
 
 .school-overview__course-list > :nth-child(even) {
-  @apply pl-3;
+  @apply ps-3;
 }
 
 .school-overview__course-list > :nth-child(odd) {
-  @apply pr-3;
+  @apply pe-3;
 }
 
 .school-overview__course-list-card-count::before {

@@ -229,7 +229,7 @@ let unlockTopic = (topicId, send) =>
 let communityLink = community =>
   <a href={Community.path(community)} className="btn btn-subtle">
     <i className="fas fa-users" />
-    <span className="ml-2"> {Community.name(community) |> str} </span>
+    <span className="ms-2"> {Community.name(community) |> str} </span>
   </a>
 
 let topicCategory = (topicCategories, topicCategoryId) =>
@@ -256,11 +256,11 @@ let categoryDropdownSelected = topicCategory =>
 
       <div className="inline-flex items-center">
         <div className="h-3 w-3 rounded mt-px" style />
-        <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>
+        <span className="ms-2"> {TopicCategory.name(topicCategory)->str} </span>
       </div>
     | None => str(ts("none"))
     }}
-    <FaIcon classes="ml-4 fas fa-caret-down" />
+    <FaIcon classes="ms-4 fas fa-caret-down" />
   </div>
 
 let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategories) => {
@@ -285,7 +285,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
       className="px-3 py-2 font-normal flex items-center"
       onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
       <div className="w-3 h-3 rounded mt-px" style />
-      <span className="ml-2"> {categoryName->str} </span>
+      <span className="ms-2"> {categoryName->str} </span>
     </div>
   }, selectableTopicCategories)
 
@@ -300,7 +300,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
           className="px-3 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(None))}>
           <div className="w-3 h-3 rounded bg-gray-300 mt-px" />
-          <span className="ml-2"> {ts("none")->str} </span>
+          <span className="ms-2"> {ts("none")->str} </span>
         </div>,
       ],
     )
@@ -338,7 +338,7 @@ let make = (
   })
 
   <div className="bg-gray-50">
-    <div className="max-w-4xl w-full mt-5 pl-4 lg:pl-0 lg:mx-auto">
+    <div className="max-w-4xl w-full mt-5 ps-4 lg:ps-0 lg:mx-auto">
       {communityLink(community)}
     </div>
     <div className="flex-col items-center justify-between">
@@ -370,7 +370,7 @@ let make = (
           {state.showTopicEditor
             ? <DisablingCover disabled=state.savingTopic>
                 <div
-                  className="flex flex-col lg:ml-14 bg-gray-50 p-2 rounded border border-primary-200">
+                  className="flex flex-col lg:ms-14 bg-gray-50 p-2 rounded border border-primary-200">
                   <input
                     onChange={event =>
                       send(UpdateTopicTitle(ReactEvent.Form.target(event)["value"]))}
@@ -380,7 +380,8 @@ let make = (
                   />
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
                     <div className="flex flex-col items-left shrink-0">
-                      <span className="inline-block text-gray-600 text-tiny font-semibold mr-2">
+                      <span
+                        className="inline-block text-gray-600 text-tiny font-semibold me-2">
                         {t("topic_category_label") |> str}
                       </span>
                       <Dropdown
@@ -391,7 +392,8 @@ let make = (
                     </div>
                     <div className="flex justify-end pt-4 md:pt-0">
                       <button
-                        onClick={_ => send(ShowTopicEditor(false))} className="btn btn-subtle mr-3">
+                        onClick={_ => send(ShowTopicEditor(false))}
+                        className="btn btn-subtle me-3">
                         {t("topic_editor_cancel_button") |> str}
                       </button>
                       <button
@@ -409,16 +411,16 @@ let make = (
                   className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                   <h3
                     ariaLabel={t("topic_title")}
-                    className="leading-snug lg:pl-14 text-base lg:text-2xl w-9/12">
+                    className="leading-snug lg:ps-14 text-base lg:text-2xl w-9/12">
                     {state.topic |> Topic.title |> str}
                   </h3>
                   <span className="flex">
                     {moderator || isTopicCreator(firstPost, currentUserId)
                       ? <button
                           onClick={_ => send(ShowTopicEditor(true))}
-                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ml-3">
+                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ms-3">
                           <i className="far fa-edit" />
-                          <span className="hidden md:inline-block ml-1">
+                          <span className="hidden md:inline-block ms-1">
                             {t("edit_topic_button") |> str}
                           </span>
                         </button>
@@ -426,6 +428,7 @@ let make = (
                     {
                       let isLocked = Topic.lockedAt(state.topic)->Belt.Option.isSome
                       let topicId = state.topic->Topic.id
+
                       {
                         moderator || isTopicCreator(firstPost, currentUserId)
                           ? <button
@@ -434,9 +437,9 @@ let make = (
                                 isLocked
                                   ? unlockTopic(topicId, send)
                                   : lockTopic(topicId, currentUserId, send)}
-                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ml-2">
+                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ms-2">
                               <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
-                              <span className="hidden md:inline-block ml-1">
+                              <span className="hidden md:inline-block ms-1">
                                 {(
                                   isLocked ? t("unlock_topic_button") : t("lock_topic_button")
                                 ) |> str}
@@ -451,13 +454,16 @@ let make = (
                 | Some(topicCategory) =>
                   let (color, _) = TopicCategory.color(topicCategory)
                   let style = ReactDOM.Style.make(~backgroundColor=color, ())
-                  <div className="py-2 flex items-center lg:pl-14 text-xs font-semibold">
+                  <div
+                    className="py-2 flex items-center lg:ps-14 text-xs font-semibold">
                     <div className="w-3 h-3 rounded" style />
-                    <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>
+                    <span className="ms-2">
+                      {TopicCategory.name(topicCategory)->str}
+                    </span>
                   </div>
                 | None => React.null
                 }}
-                <div className="lg:pl-14">
+                <div className="lg:ps-14">
                   <TopicsShow__SubscriptionManager
                     subscribed={state.subscribed}
                     topicId={Topic.id(topic)}
@@ -485,7 +491,7 @@ let make = (
             topicSolutionId={topicSolutionId(state.replies)}
           />}
         </div>
-        <h5 className="pt-4 pb-2 lg:ml-14 border-b">
+        <h5 className="pt-4 pb-2 lg:ms-14 border-b">
           {Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
         </h5>
         {state.replies
@@ -517,11 +523,9 @@ let make = (
         {switch Topic.lockedAt(state.topic) {
         | Some(_lockedAt) =>
           <div
-            className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
-            <div className="w-6 h-6 text-yellow-500 shrink-0">
-              <i className="fa fa-lock" />
-            </div>
-            <span className="ml-2"> {t("locked_topic_notice")->React.string} </span>
+            className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-e-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
+            <div className="w-6 h-6 text-yellow-500 shrink-0"> <i className="fa fa-lock" /> </div>
+            <span className="ms-2"> {t("locked_topic_notice")->React.string} </span>
           </div>
 
         | None =>

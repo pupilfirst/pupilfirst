@@ -42,7 +42,7 @@ let statusBar = (~color, ~text) => {
     className={"font-semibold p-2 py-4 flex border-t w-full items-center justify-center " ++
     (textColor ++
     bgColor)}>
-    <span className={"fa-stack text-lg mr-1 " ++ textColor}> icon </span> {text |> str}
+    <span className={"fa-stack text-lg me-1 " ++ textColor}> icon </span> {text |> str}
   </div>
 }
 
@@ -111,7 +111,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
-        <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
+        <h2 className="ms-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
           {switch completionType {
           | SubmitForm =>
             str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
@@ -123,7 +123,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           }}
         </h2>
         <div
-          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
+          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 me-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
           <span className="hidden md:inline"> {str(tr("submitted_on"))} </span>
           {submission |> Submission.createdAtPretty |> str}
         </div>
@@ -140,8 +140,8 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           <div
             className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
             <div
-              className="flex items-center justify-center font-semibold text-sm pl-2 pr-3 py-1 bg-orange-100 text-orange-600 rounded">
-              <span className="fa-stack text-orange-400 mr-2 shrink-0">
+              className="flex items-center justify-center font-semibold text-sm ps-2 pe-3 py-1 bg-orange-100 text-orange-600 rounded">
+              <span className="fa-stack text-orange-400 me-2 shrink-0">
                 <i className="fas fa-circle fa-stack-2x" />
                 <i className="fas fa-hourglass-half fa-stack-1x fa-inverse" />
               </span>
@@ -192,7 +192,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           <div className="bg-white border-t p-4 md:p-6" key={feedback |> Feedback.id}>
             <div className="flex items-center">
               <div
-                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
                 coachAvatar
               </div>
               <div>
@@ -205,7 +205,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
                   {switch coachTitle {
                   | Some(title) =>
                     <span
-                      className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
+                      className="block md:inline-flex text-xs text-gray-800 ms-2 leading-tight self-end">
                       {"(" ++ (title ++ ")") |> str}
                     </span>
                   | None => React.null
@@ -215,7 +215,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
             </div>
             <MarkdownBlock
               profile=Markdown.Permissive
-              className="md:ml-15"
+              className="ms-15"
               markdown={feedback |> Feedback.feedback}
             />
           </div>
@@ -264,7 +264,7 @@ let make = (
             <button
               className="btn btn-subtle"
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
-              <PfIcon className="if i-times-regular text-lg mr-2" />
+              <PfIcon className="if i-times-regular text-lg me-2" />
               <span className="hidden md:inline"> {tr("cancel") |> str} </span>
               <span className="md:hidden"> {tr("cancel") |> str} </span>
             </button>
@@ -272,7 +272,7 @@ let make = (
             <button
               className="btn btn-primary"
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
-              <PfIcon className="if i-plus-regular text-lg mr-2" />
+              <PfIcon className="if i-plus-regular text-lg me-2" />
               <span className="hidden md:inline">
                 {switch completionType {
                 | SubmitForm => tr("add_another_response")->str

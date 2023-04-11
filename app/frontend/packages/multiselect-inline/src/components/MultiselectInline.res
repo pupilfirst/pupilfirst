@@ -85,11 +85,11 @@ module Make = (Selectable: Selectable) => {
             |> Array.mapi((index, selected) =>
               <span
                 key={index |> string_of_int}
-                className={"inline-flex items-center font-semibold text-xs mb-2 mr-2 rounded-full overflow-hidden " ++
+                className={"inline-flex items-center font-semibold text-xs mb-2 me-2 rounded-full overflow-hidden " ++
                 selectedItemClasses(colorForSelected)}>
                 <span className="px-2 py-1 flex-1"> {selected |> Selectable.value |> str} </span>
                 <button
-                  className={"inline-flex shrink-0 px-2 py-1 text-sm border-l-0 rounded-r items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
+                  className={"inline-flex shrink-0 px-2 py-1 text-sm border-s-0 rounded-e items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
                   borderColor(colorForSelected)}
                   title={"Remove " ++ Selectable.value(selected)}
                   onClick={event => {
@@ -125,7 +125,7 @@ module Make = (Selectable: Selectable) => {
                 ? <div className="px-3 pt-3 pb-2">
                     <input
                       id=inputId
-                      className="appearance-none bg-transparent border-b w-full text-gray-600 pb-3 px-2 pl-0 leading-normal focus:outline-none"
+                      className="appearance-none bg-transparent border-b w-full text-gray-600 pb-3 px-2 ps-0 leading-normal focus:outline-none"
                       type_="text"
                       value
                       placeholder
@@ -151,7 +151,7 @@ module Make = (Selectable: Selectable) => {
                     <i
                       className="far fa-plus-square multiselect-inline__list-item-select-icon-selected text-xl"
                     />
-                    <span className="ml-2"> {item |> Selectable.value |> str} </span>
+                    <span className="ms-2"> {item |> Selectable.value |> str} </span>
                   </button>
                 )
                 |> React.array}

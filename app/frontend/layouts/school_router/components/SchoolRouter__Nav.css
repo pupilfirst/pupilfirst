@@ -60,6 +60,11 @@
   width: 0px;
 }
 
+[dir="rtl"] .school-admin-navbar__primary-nav-link--active::before {
+  left: auto;
+  right: 0px;
+}
+
 .school-admin-navbar__primary-nav-link--active::before {
   content: "";
   width: 3px;
@@ -79,7 +84,7 @@
 
 .school-admin-navbar__notifications-unread-bullet {
   @apply absolute block h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500 -top-0.5;
-    right: 4px;
+  right: 4px;
 }
 
 .school-admin-navbar__notifications-unread-bullet::before {

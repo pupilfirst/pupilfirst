@@ -27,7 +27,7 @@ let make = (~closeDrawerCB, ~closeButtonTitle=tr("close_editor"), ~size=Normal, 
           }}
           title=closeButtonTitle
           ariaLabel=closeButtonTitle
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-primary-700 focus:outline-none focus:text-primary-700 mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-s-full rounded-e-none hover:text-primary-700 focus:outline-none focus:text-primary-700 mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>

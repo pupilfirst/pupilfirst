@@ -37,7 +37,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
   let confirm = dirty ? Some(t("unsaved_confirm")) : None
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
-    <i className={"fas " ++ iconClass} /> <span className="ml-2"> {title |> str} </span>
+    <i className={"fas " ++ iconClass} /> <span className="ms-2"> {title |> str} </span>
   </Link>
 }
 

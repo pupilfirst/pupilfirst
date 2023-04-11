@@ -9,15 +9,15 @@
       <div class="flex items-end justify-between gap-2">
       </div>
       <div class="mt-4 grid md:grid-cols-12 md:bg-gray-50 gap-4 md:gap-0 rounded-lg md:border border-gray-200 relative">
-        <div class="md:col-span-5 lg:col-span-4 bg-gray-50 rounded-lg md:rounded-l-lg md:rounded-r-none p-3 md:p-6 md:border-r border-gray-200">
+        <div class="md:col-span-5 lg:col-span-4 bg-gray-50 rounded-lg md:rounded-s-lg md:rounded-e-none p-3 md:p-6 md:border-r border-gray-200">
           <div class="sticky top-4">
             <div id="course-calendar-picker" class="md:pb-4 " >
               <div data-re-component="CalendarsIndex__DatePicker" data-re-json=<%=@presenter.date_picker_props%>></div>
             </div>
           </div>
         </div>
-        <div class="md:col-span-7 lg:col-span-8 bg-gray-50 md:bg-white flex-1 rounded-lg md:rounded-l-none md:rounded-r-lg">
-          <div class="flex gap-4 items-center justify-between bg-gray-100 md:bg-gray-50 rounded-t-lg md:rounded-l-none md:rounded-tr-lg px-3 py-2 md:p-6">
+        <div class="md:col-span-7 lg:col-span-8 bg-gray-50 md:bg-white flex-1 rounded-lg md:rounded-s-none md:rounded-e-lg">
+          <div class="flex gap-4 items-center justify-between bg-gray-100 md:bg-gray-50 rounded-t-lg md:rounded-s-none md:rounded-tr-lg px-3 py-2 md:p-6">
             <p class="text-lg font-semibold"><%= t('.events')%></p>
           </div>
           <div class="flex flex-col gap-4 divide-y p-3 md:p-6">

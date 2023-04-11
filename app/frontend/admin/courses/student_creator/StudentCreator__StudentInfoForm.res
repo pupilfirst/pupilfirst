@@ -140,7 +140,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
     <div className="pt-6">
       <label className="block text-sm font-medium" htmlFor="title">
         {t("title.label")->str}
-        <span className="inline-block text-xs ml-1"> {ts("optional_braces")->str} </span>
+        <span className="inline-block text-xs ms-1"> {ts("optional_braces")->str} </span>
       </label>
       <input
         value=state.title
@@ -154,7 +154,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
     <div className="pt-6">
       <label className="block text-sm font-medium" htmlFor="affiliation">
         {t("affiliation.label")->str}
-        <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
+        <span className="text-xs ms-1"> {ts("optional_braces")->str} </span>
       </label>
       <input
         value=state.affiliation
@@ -166,12 +166,12 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
       />
     </div>
     <div className="pt-6">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center ltr:space-x-2">
         <label className="block text-sm font-medium" htmlFor="team_name">
           {t("team.label")->str}
-          <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
+          <span className="text-xs ms-1"> {ts("optional_braces")->str} </span>
         </label>
-        <HelpIcon className="ml-1"> {t("team.help")->str} </HelpIcon>
+        <HelpIcon className="ms-1"> {t("team.help")->str} </HelpIcon>
       </div>
       <input
         value=state.teamName
@@ -185,7 +185,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
     </div>
     <div className="pt-6">
       <label className="block text-sm font-medium" htmlFor="tags">
-        {t("tags.label")->str} <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
+        {t("tags.label")->str} <span className="text-xs ms-1"> {ts("optional_braces")->str} </span>
       </label>
     </div>
     <School__SearchableTagList
@@ -204,7 +204,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
       className={"btn btn-primary w-full mt-5" ++ (
         formInvalid(state, emailsToAdd) ? " disabled" : ""
       )}>
-      <i className="fas fa-plus mr-2" /> {t("add_to_list")->str}
+      <i className="fas fa-plus me-2" /> {t("add_to_list")->str}
     </button>
   </div>
 }

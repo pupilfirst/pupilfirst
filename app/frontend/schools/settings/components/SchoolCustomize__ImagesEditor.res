@@ -107,7 +107,7 @@ let imageUploader = (
       onChange
     />
     <label className="file-input-label mt-2" htmlFor=id>
-      <i className="fas fa-upload" /> <span className="ml-2 truncate"> optionalImageLabel </span>
+      <i className="fas fa-upload" /> <span className="ms-2 truncate"> optionalImageLabel </span>
     </label>
     <School__InputGroupError message=errorMessage active=errorState />
   </div>

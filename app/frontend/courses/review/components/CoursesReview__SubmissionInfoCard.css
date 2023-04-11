@@ -4,14 +4,23 @@
 .submission-info__tab::before {
   content: "";
   top: 50%;
-  @apply absolute left-0 h-3/4 w-1 rounded-r-md transform -translate-y-1/2;
+  @apply absolute start-0 h-3/4 w-1 rounded-e-md transform -translate-y-1/2;
 }
 .submission-info__tab-deleted::before {
   @apply bg-gray-500;
 }
 .submission-info__tab-deleted {
-  background-image: linear-gradient(120deg, #ffffff 25%, #f7f5fa 25%, #f7f5fa 50%, #ffffff 50%, #ffffff 75%, #f7f5fa 75%, #f7f5fa 100%);
-  background-size: 13.86px 24.00px;
+  background-image: linear-gradient(
+    120deg,
+    #ffffff 25%,
+    #f7f5fa 25%,
+    #f7f5fa 50%,
+    #ffffff 50%,
+    #ffffff 75%,
+    #f7f5fa 75%,
+    #f7f5fa 100%
+  );
+  background-size: 13.86px 24px;
 }
 .submission-info__tab-pending::before {
   @apply bg-yellow-500;

@@ -25,7 +25,7 @@
 }
 
 .toggle-label span {
-  @apply absolute w-5 h-5 top-0 left-0 block bg-white shadow-md rounded-full;
+  @apply absolute w-5 h-5 top-0 start-0 block bg-white shadow-md rounded-full;
   transition: all 0.2s ease;
 }
 
@@ -148,6 +148,18 @@
   }
 }
 
+@keyframes slideIn--rtl {
+  0% {
+    left: -9999px;
+  }
+}
+
+[dir="rtl"] .drawer-right {
+  left: 0px;
+  right: auto;
+  animation: slideIn--rtl 0.3s cubic-bezier(0.63, 0.34, 0, 1) normal;
+}
+
 .drawer-right {
   background-color: white;
   display: flex;
@@ -191,6 +203,11 @@
   .drawer-right-large {
     width: 64rem;
   }
+}
+
+[dir="rtl"] .drawer-right__close {
+  right: -52px;
+  z-index: -1;
 }
 
 .drawer-right__close {
@@ -298,15 +315,15 @@
 }
 
 .toggle-button__button:first-child {
-  @apply rounded-l;
+  @apply rounded-s;
 }
 
 .toggle-button__button:last-child {
-  @apply rounded-r;
+  @apply rounded-e;
 }
 
 .toggle-button__button:not(:last-of-type) {
-  border-right-color: transparent;
+  @apply border-e-transparent;
 }
 
 .toggle-button__button:hover {
@@ -376,7 +393,7 @@
 .target-group__group-reorder {
   max-height: 4.5rem;
   top: 50%;
-  left: -37px;
+  @apply ltr:-start-9	rtl:-end-9;
   z-index: -1;
   transform: translateY(-50%);
 }
@@ -570,11 +587,17 @@
 
 select.select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right .5rem center;
+  background-position: right 0.5rem center;
   background-repeat: no-repeat;
   background-size: 1.5em 1.5em;
   padding-right: 2.5rem;
   appearance: none;
+}
+
+[dir="rtl"] select.select {
+  background-position: left 0.5rem center;
+  padding-right: 0.5rem;
+  padding-left: 2.5rem;
 }
 
 @keyframes glowing {

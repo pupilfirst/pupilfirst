@@ -73,7 +73,7 @@
         </div>
       </div>
       <% if @course.highlights.present? %>
-        <div class="md:ml-4 md:w-1/3 flex flex-col justify-between">
+        <div class="md:ms-4 md:w-1/3 flex flex-col justify-between">
           <div
             class="py-4 md:py-6 bg-white border-transparent shadow rounded-lg md:-mt-7 z-10 relative md:sticky md:top-0"
           >
@@ -87,7 +87,7 @@
                       <i class="<%="if text-lg i-#{highlight['icon']}"%>"></i>
                     </div>
                   </div>
-                  <div class="ml-2">
+                  <div class="ms-2">
                     <div class="text-sm font-bold">
                       <%= highlight['title']%>
                     </div>

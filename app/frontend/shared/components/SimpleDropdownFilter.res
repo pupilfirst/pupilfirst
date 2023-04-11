@@ -142,8 +142,8 @@ let selectedSorter = (sorter: sorter, params) => {
 
   <button
     title={"Order by" ++ " " ++ value}
-    className="p-3 w-36 text-sm font-medium space-x-2 text-left truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
-    <Icon className="if i-sort-alpha-ascending-regular" /> <span> {value->str} </span>
+    className="p-3 w-36 text-sm font-medium ltr:space-x-2 ltr:text-left rtl:text-right truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    <Icon className="if i-sort-alpha-ascending-regular" /> <span className="me-2"> {value->str} </span>
   </button>
 }
 
@@ -152,7 +152,7 @@ let sortOptions = (sorter, params) => {
     <button
       key=sort
       title={"Order by" ++ " " ++ sort}
-      className="w-full cursor-pointer text-left block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
+      className="w-full cursor-pointer ltr:text-left rtl:text-right block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       onClick={_e => {
         setParams(sorter.key, sort, params)
         navigateTo(params)

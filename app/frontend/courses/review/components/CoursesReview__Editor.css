@@ -1,15 +1,15 @@
 .course-review-editor__grade-bar > .course-review-editor__grade-pill {
-  @apply border border-r-0;
+  @apply border border-e-0;
 }
 
 .course-review-editor__grade-bar
   > .course-review-editor__grade-pill:first-child {
-  @apply rounded-l-lg;
+  @apply rounded-s-lg;
 }
 
 .course-review-editor__grade-bar
   > .course-review-editor__grade-pill:last-child {
-  @apply border-r rounded-r-lg;
+  @apply border-r rounded-e-lg;
 }
 
 .course-review-editor__status-pulse {

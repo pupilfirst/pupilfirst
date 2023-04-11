@@ -22,19 +22,11 @@ let updateEmptyChecklistResult = (
   resultItem,
   setChecklist,
 ) => {
-  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-    ReviewChecklistResult.updateAdditionalFeedback(
-      feedback,
-      resultItem,
-      resultIndex,
-      ReviewChecklistItem.result(reviewChecklistItem),
-    ),
-    reviewChecklistItem,
-  )
-
-  setChecklist(checklist =>
-    ReviewChecklistItem.replace(newReviewChecklistItem, itemIndex, checklist)
-  )
+  ReviewChecklistItem.result(reviewChecklistItem)
+  ->ReviewChecklistResult.updateAdditionalFeedback(feedback, resultItem, resultIndex, _)
+  ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
+  ->ReviewChecklistItem.replace(itemIndex)
+  ->setChecklist
 }
 
 let unSelectChecklist = (itemIndex, resultIndex, setSelecton) =>

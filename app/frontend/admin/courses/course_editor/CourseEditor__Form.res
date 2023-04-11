@@ -358,7 +358,7 @@ let booleanButtonClasses = bool => {
 
 let publicSignupField = (publicSignup, send) =>
   <div className="flex items-center mt-5">
-    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
+    <label className="block tracking-wide text-xs font-semibold me-6" htmlFor="public-signup">
       {t("enable_public_signup_label")->str}
     </label>
     <div id="public-signup" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -377,7 +377,7 @@ let publicSignupField = (publicSignup, send) =>
 
 let publicPreviewField = (publicPreview, send) =>
   <div className="flex items-center mt-5">
-    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-preview">
+    <label className="block tracking-wide text-xs font-semibold me-6" htmlFor="public-preview">
       {t("enable_public_preview_label")->str}
     </label>
     <div id="public-preview" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -396,7 +396,7 @@ let publicPreviewField = (publicPreview, send) =>
 
 let featuredButton = (featured, send) =>
   <div className="flex items-center mt-5">
-    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
+    <label className="block tracking-wide text-xs font-semibold me-6" htmlFor="featured">
       {t("feature_course_in_homepage_label")->str}
     </label>
     <div id="featured" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -416,7 +416,7 @@ let processingUrlInput = (state, send) => {
       <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
         {t("processing_url.label")->str}
       </label>
-      <HelpIcon className="ml-2 mr-6" link={t("processing_url.help_url")}>
+      <HelpIcon className="ms-2 me-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
       <div id="processing-url" className="flex toggle-button__group shrink-0 rounded-lg">
@@ -587,13 +587,13 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       <label className="tracking-wide text-xs font-semibold">
         {t("progression_behavior.label")->str}
       </label>
-      <HelpIcon className="ml-2" link={t("progression_behavior.help_url")}>
+      <HelpIcon className="ms-2" link={t("progression_behavior.help_url")}>
         {t("progression_behavior.help")->str}
       </HelpIcon>
       <div className="flex mt-2">
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Limited))}
-          className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
+          className={progressionBehaviorButtonClasses(state, #Limited, "me-1")}>
           <div className="font-bold text-xl"> {t("progression_behavior.limited.title")->str} </div>
           <div className="text-xs mt-2">
             <div> {t("progression_behavior.limited.description_start")->str} </div>
@@ -620,7 +620,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         </button>
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Strict))}
-          className={progressionBehaviorButtonClasses(state, #Strict, "ml-1")}>
+          className={progressionBehaviorButtonClasses(state, #Strict, "ms-1")}>
           <div className="font-bold text-xl"> {t("progression_behavior.strict.title")->str} </div>
           <span className="text-xs"> {t("progression_behavior.strict.description")->str} </span>
         </button>
@@ -632,7 +632,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
     {ReactUtils.nullUnless(
       <div className="pt-5 flex flex-col">
-        <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="email">
+        <label className="block tracking-wide text-xs font-semibold me-6" htmlFor="email">
           {t("pick_default_cohort")->str}
         </label>
         <CohortsPicker
@@ -689,7 +689,7 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
               cloneCourse(send, reloadCoursesCB, course)
             )}>
           <FaIcon classes={cloneButtonIcons(state.saving)} />
-          <span className="ml-2"> {t("actions.clone_course.button_text")->str} </span>
+          <span className="ms-2"> {t("actions.clone_course.button_text")->str} </span>
         </button>
       </div>
     </div>
@@ -707,7 +707,7 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
                   unarchiveCourse(send, reloadCoursesCB, course)
                 )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {t("actions.unarchive_course.button_text")->str} </span>
+              <span className="ms-2"> {t("actions.unarchive_course.button_text")->str} </span>
             </button>
           </div>
         </div>
@@ -724,7 +724,7 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
                   archiveCourse(send, reloadCoursesCB, course)
                 )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
+              <span className="ms-2"> {t("actions.archive_course.button_text")->str} </span>
             </button>
           </div>
         </div>}
@@ -781,7 +781,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
                   className={selectedTabClasses(selectedTab == DetailsTab)}
                   onClick={_ => RescriptReactRouter.push("./details")}>
                   <i className="fa fa-edit" />
-                  <span className="ml-2"> {t("tabs.details")->str} </span>
+                  <span className="ms-2"> {t("tabs.details")->str} </span>
                 </button>
                 <button
                   role="tab"
@@ -789,15 +789,15 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
                   className={selectedTabClasses(selectedTab == ImagesTab)}
                   onClick={_ => RescriptReactRouter.push("./images")}>
                   <i className="fa fa-camera" />
-                  <span className="ml-2"> {t("tabs.images")->str} </span>
+                  <span className="ms-2"> {t("tabs.images")->str} </span>
                 </button>
                 <button
                   role="tab"
                   ariaSelected={selectedTab == ActionsTab}
-                  className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
+                  className={"-ms-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
                   onClick={_ => RescriptReactRouter.push("./actions")}>
                   <i className="fa fa-cog" />
-                  <span className="ml-2"> {t("tabs.actions")->str} </span>
+                  <span className="ms-2"> {t("tabs.actions")->str} </span>
                 </button>
               </div>
             </div>,

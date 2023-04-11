@@ -216,8 +216,8 @@ let make = (~courseId, ~coach) => {
       <div className="max-w-2xl mx-auto">
         <div className="flex">
           {switch coach |> CourseCoach.avatarUrl {
-          | Some(avatarUrl) => <img className="w-12 h-12 rounded-full mr-4" src=avatarUrl />
-          | None => <Avatar name={coach |> CourseCoach.name} className="w-12 h-12 mr-4" />
+          | Some(avatarUrl) => <img className="w-12 h-12 rounded-full me-4" src=avatarUrl />
+          | None => <Avatar name={coach |> CourseCoach.name} className="w-12 h-12 me-4" />
           }}
           <div className="text-sm flex flex-col justify-center">
             <div className="text-black font-bold inline-block">
@@ -231,12 +231,12 @@ let make = (~courseId, ~coach) => {
     <div className="max-w-2xl mx-auto pb-5">
       {state.loading
         ? <div className="py-3 flex">
-            {SkeletonLoading.card(~className="w-full mr-2", ())}
-            {SkeletonLoading.card(~className="w-full ml-2", ())}
+            {SkeletonLoading.card(~className="w-full me-2", ())}
+            {SkeletonLoading.card(~className="w-full ms-2", ())}
           </div>
         : <div className="py-3 flex mt-4">
             <div
-              className="w-full mr-2 rounded-lg shadow px-5 py-6"
+              className="w-full me-2 rounded-lg shadow px-5 py-6"
               ariaLabel={tr("revied_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("revied_submissions") |> str} </span>
@@ -246,7 +246,7 @@ let make = (~courseId, ~coach) => {
               </div>
             </div>
             <div
-              className="w-full ml-2 rounded-lg shadow px-5 py-6"
+              className="w-full ms-2 rounded-lg shadow px-5 py-6"
               ariaLabel={tr("pending_submissions")}>
               <div className="flex justify-between items-center">
                 <span> {tr("pending_submissions") |> str} </span>
@@ -256,7 +256,7 @@ let make = (~courseId, ~coach) => {
               </div>
             </div>
           </div>}
-      <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
+      <span className="inline-block me-1 my-2 text-sm font-semibold pt-5">
         {tr("students_assigned") |> str}
       </span>
       {state.loading
@@ -281,7 +281,7 @@ let make = (~courseId, ~coach) => {
                 |> React.array}
           </div>}
       <div>
-        <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
+        <span className="inline-block me-1 my-2 text-sm font-semibold pt-5">
           {tr("select_cohorts")->str}
         </span>
         {state.loading

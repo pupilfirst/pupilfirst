@@ -75,7 +75,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
                 className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
               />
             }}
-            <div className="ml-2">
+            <div className="ms-2">
               <p className="text-sm font-semibold">
                 {UserProxy.name(Reviewer.user(reviewer))->str}
               </p>
@@ -97,7 +97,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
             </div>
           </div>,
           <div className="flex flex-col md:flex-row items-center mt-4" key="change-reviewer-button">
-            <p className="text-sm pr-4">
+            <p className="text-sm pe-4">
               {t(
                 ~variables=[("current_coach_name", UserProxy.name(Reviewer.user(reviewer)))],
                 "remove_reviewer_assign_to_me",

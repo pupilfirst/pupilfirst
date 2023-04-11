@@ -188,7 +188,7 @@ let make = (
       key=categoryId
       ariaLabel={tr("editor_category_alt") ++ categoryId}
       className="flex justify-between items-center bg-gray-50 border-gray-300 shadow rounded mt-3 px-2 py-1 topic-category-editor">
-      <div className="flex-1 items-center mr-2">
+      <div className="flex-1 items-center me-2">
         <input
           id="category-name"
           onChange={event => {
@@ -196,13 +196,13 @@ let make = (
             send(UpdateCategoryName(newName))
           }}
           value=state.categoryName
-          className="text-sm mr-1 font-semibold px-2 py-1 w-full outline-none"
+          className="text-sm me-1 font-semibold px-2 py-1 w-full outline-none"
         />
       </div>
       <div>
         {presentCategoryName == state.categoryName
           ? <span
-              className="text-xs py-1 px-2 mr-2"
+              className="text-xs py-1 px-2 me-2"
               style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
               {tr(~count=Category.topicsCount(category), "topics")->str}
             </span>
@@ -210,7 +210,7 @@ let make = (
               title={tr("update_category")}
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={updateCategory(category, state.categoryName, updateCategoryCB, send)}
-              className="btn btn-success mr-2 text-xs">
+              className="btn btn-success me-2 text-xs">
               {tr("update_category") |> str}
             </button>}
         <button
@@ -240,7 +240,7 @@ let make = (
           ? <button
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={createCategory(communityId, state.categoryName, createCategoryCB, send)}
-              className="btn btn-success ml-2 text-sm">
+              className="btn btn-success ms-2 text-sm">
               {tr("save_category") |> str}
             </button>
           : React.null

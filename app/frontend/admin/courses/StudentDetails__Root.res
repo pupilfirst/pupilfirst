@@ -258,7 +258,7 @@ module Editor = {
             <label className="inline-block tracking-wide text-sm font-medium" htmlFor="affiliation">
               {t("affiliation")->str}
             </label>
-            <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
+            <span className="text-xs ms-1"> {ts("optional_braces")->str} </span>
             <input
               value=state.student.affiliation
               onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
@@ -296,7 +296,7 @@ module Editor = {
                   {state.student.usetTaggings
                   ->Js.Array2.map(tag =>
                     <div
-                      className="bg-blue-100 text-blue-700 border border-blue-500 rounded-full px-3 py-2 mt-1 mr-1 text-xs text-gray-900"
+                      className="bg-blue-100 text-blue-700 border border-blue-500 rounded-full px-3 py-2 mt-1 me-1 text-xs text-gray-900"
                       key={tag}>
                       {str(tag)}
                     </div>

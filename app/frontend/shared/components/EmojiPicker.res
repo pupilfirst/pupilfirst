@@ -21,7 +21,7 @@ type args = {
 
 let emojiDivClassName = isOpen => {
   switch isOpen {
-  | true => "absolute top-full -left-32 md:-translate-x-0 z-10 shadow "
+  | true => "absolute top-full -start-32 md:-translate-x-0 z-10 shadow "
   | false => "hidden"
   }
 }

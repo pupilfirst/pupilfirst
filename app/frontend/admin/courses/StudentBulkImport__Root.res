@@ -159,23 +159,23 @@ let loadData = (courseId, send) => {
 let tableHeader = {
   <thead>
     <tr className="bg-gray-300">
-      <th className="w-12 border border-gray-400 text-left text-xs px-2 py-1 font-semibold" />
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="w-12 border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold" />
+      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"name"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"email"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"title"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"team_name"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"tags"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"affiliation"->str}
       </th>
     </tr>
@@ -253,7 +253,7 @@ let csvDataTable = (csvData, fileInvalid) => {
     <div className="mt-4">
       <p
         className="flex items-center bg-green-200 text-green-800 font-semibold text-xs p-2 rounded">
-        <PfIcon className="if i-check-regular if-fw mr-2" />
+        <PfIcon className="if i-check-regular if-fw me-2" />
         <span> {t("valid_data_message")->str} </span>
       </p>
       <p className="font-semibold text-xs mt-4"> {t("valid_data_summary_text")->str} </p>
@@ -439,13 +439,13 @@ let make = (~courseId) => {
                     <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
                       {t("csv_file_input.label")->str}
                     </label>
-                    <HelpIcon className="ml-2" link={t("csv_file_input.help_url")}>
+                    <HelpIcon className="ms-2" link={t("csv_file_input.help_url")}>
                       {str(t("csv_file_input.help"))}
                     </HelpIcon>
                   </div>
                   <div
                     className="flex items-center text-primary-500 text-xs font-semibold hover:text-primary-700 hover:underline">
-                    <PfIcon className="if i-download-regular if-fw mr-2" />
+                    <PfIcon className="if i-download-regular if-fw me-2" />
                     <a
                       className="focus:outline-none focus:underline focus:text-primary-700 "
                       href={t("example_csv_link.url")}>
@@ -474,7 +474,7 @@ let make = (~courseId) => {
                     onClick={_event => clearFile(send)}
                     className="file-input-label mt-2"
                     htmlFor="csv-file-input">
-                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                    <i className="fas fa-upload me-2 text-gray-600 text-lg" />
                     <span className="truncate">
                       {fileInputText(~fileInfo=state.fileInfo)->str}
                     </span>

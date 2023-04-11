@@ -91,7 +91,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
   let tip = <div className="text-center"> {t("like_button_tooltip") |> str} </div>
 
   <div className="flex flex-row-reverse md:flex-row">
-    <div className="text-center pr-4 md:pt-4">
+    <div className="text-center pe-4 md:pt-4">
       <Tooltip tip position=#Top>
         <button
           ariaLabel={(liked ? t("unlike") : t("like")) ++

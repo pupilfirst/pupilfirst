@@ -27,7 +27,7 @@
   "devDependencies": {
     "parcel-bundler": "^1.12.5",
     "rescript": "9.1.4",
-    "tailwindcss": "^1.1.4"
+    "tailwindcss": "^3.3.1"
   },
   "dependencies": {
     "@rescript/react": "^0.10.3",

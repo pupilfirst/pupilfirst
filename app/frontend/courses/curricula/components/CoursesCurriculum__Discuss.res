@@ -41,7 +41,7 @@ let actionButtons = (community, targetId) => {
     <a
       title={"Browse all topics about this target in the " ++ (communityName ++ " community")}
       href={linkToCommunity(communityId, targetId)}
-      className="btn btn-default mr-3">
+      className="btn btn-default me-3">
       {tr("go_to") |> str}
     </a>
     <a

@@ -716,7 +716,7 @@ let make = (
             <label htmlFor=embedInputId className="text-xs font-semibold">
               {t("embed_url.label")->str}
             </label>
-            <HelpIcon className="ml-2 text-xs" link={t("embed_url.help_url")}>
+            <HelpIcon className="ms-2 text-xs" link={t("embed_url.help_url")}>
               {t("embed_url.help")->str}
             </HelpIcon>
             <div className="flex mt-1">
@@ -729,7 +729,7 @@ let make = (
                 onChange={updateEmbedUrl(send)}
               />
               <button
-                className="ml-2 btn btn-success"
+                className="ms-2 btn btn-success"
                 onClick={onEmbedFormSave(target, aboveContentBlock, url, send, addContentBlockCB)}>
                 {t("embed_url.save_button")->str}
               </button>

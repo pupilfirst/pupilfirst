@@ -93,7 +93,7 @@ module Users
         when :google
           'fab fa-google'
         when :facebook
-          'fab fa-facebook-f mr-1'
+          'fab fa-facebook-f me-1'
         when :github
           'fab fa-github'
         when :discord

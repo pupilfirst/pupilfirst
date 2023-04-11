@@ -95,7 +95,7 @@ let showSubmissionStatus = submission =>
   }
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md " ++
+  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-s-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-e-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md " ++
   switch submission |> Submission.evaluatedAt {
   | Some(_datetime) => submission |> Submission.failed ? "border-red-500" : "border-green-500"
   | None => "border-orange-400"
@@ -115,19 +115,19 @@ let showSubmission = (submissions, levels) =>
           ariaLabel={"student-submission-card-" ++ (submission |> Submission.id)}
           className={submissionCardClasses(submission)}>
           <div className="w-full md:w-3/4">
-            <div className="block text-sm md:pr-2">
+            <div className="block text-sm md:pe-2">
               <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                 {submission
                 |> Submission.levelId
                 |> Level.unsafeLevelNumber(levels, "StudentSubmissionsList")
                 |> str}
               </span>
-              <span className="ml-2 font-semibold text-base">
+              <span className="ms-2 font-semibold text-base">
                 {submission |> Submission.title |> str}
               </span>
             </div>
-            <div className="mt-1 ml-px text-xs text-gray-900">
-              <span className="ml-1">
+            <div className="mt-1 ms-px text-xs text-gray-900">
+              <span className="ms-1">
                 {tr("submitted_on") ++ (submission |> Submission.createdAtPretty) |> str}
               </span>
             </div>

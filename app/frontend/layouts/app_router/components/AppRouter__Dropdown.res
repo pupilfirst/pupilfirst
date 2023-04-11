@@ -23,9 +23,9 @@ let contents = moreLinks => {
 let selected = () => {
   <div
     title={t("show_more_links")}
-    className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-50 hover:text-primary-500"
+    className="ms-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-50 hover:text-primary-500"
     key="more-links">
-    <span> {t("more")->str} </span> <i className="fas fa-caret-down ml-2" />
+    <span> {t("more")->str} </span> <i className="fas fa-caret-down ms-2" />
   </div>
 }
 

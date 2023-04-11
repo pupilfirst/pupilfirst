@@ -221,17 +221,17 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       <Spread
                         props={"data-result-item": string_of_int(resultIndex)}
                         key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
-                        <div className="pl-2 md:pl-4 mt-2">
+                        <div className="ps-2 md:ps-4 mt-2">
                           <div className="flex">
                             <label
                               title={t("disabled")}
-                              className="shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
+                              className="shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 me-2 mt-3 cursor-not-allowed"
                             />
                             <div className="w-full bg-gray-50 relative">
                               <div
                                 className="flex justify-between gap-2 bg-white border border-gray-300 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
                                 <input
-                                  className="checklist-editor__checklist-result-item-title border-none h-10 pr-0 focus:outline-none"
+                                  className="checklist-editor__checklist-result-item-title border-none h-10 pe-0  focus:outline-none"
                                   id={"result_" ++
                                   string_of_int(itemIndex) ++
                                   string_of_int(resultIndex) ++ "_title"}
@@ -249,7 +249,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     )}
                                 />
                                 <div
-                                  className="flex h-10 mr-1 space-x-1 items-center justify-center">
+                                  className="flex h-10 me-1 space-x-1 items-center justify-center">
                                   {controlIcon(
                                     ~icon="fa-arrow-up",
                                     ~title={t("checklist_item_title.move_up_button_title")},
@@ -335,14 +335,15 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     ->React.array}
                     <button
                       onClick={_ => addEmptyResultItem(send, reviewChecklistItem, itemIndex)}
-                      className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
+                      className="checklist-editor__add-result-btn ms-2 md:ms-4 mt-3 flex items-center focus:outline-none">
                       <span
                         title={t("add_result")}
-                        className="checklist-editor__add-result-btn-check shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2"
+                        className="checklist-editor__add-result-btn-check shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 me-2"
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">
-                        <i className="fas fa-plus text-xs mr-2" /> {t("add_result")->str}
+                        <i className="fas fa-plus text-xs me-2" />
+                        {t("add_result")->str}
                       </span>
                     </button>
                   </div>
@@ -394,7 +395,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
           className="btn btn-success">
           {t("save_checklist")->str}
         </button>
-        <button className="btn btn-subtle mr-4" onClick={_ => closeEditModeCB()}>
+        <button className="btn btn-subtle me-4" onClick={_ => closeEditModeCB()}>
           {t("cancel")->str}
         </button>
       </div>

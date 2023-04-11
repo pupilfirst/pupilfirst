@@ -49,7 +49,6 @@ let make = (
   })
   <div>
     <div className="blanket" />
-    // <div className="editor-drawer__background" />
     <div className={drawerClasses(size, level, previousLevel)}>
       <div className="editor-drawer__close hidden md:block absolute">
         <button
@@ -59,12 +58,12 @@ let make = (
           }}
           title=closeButtonTitle
           ariaLabel=closeButtonTitle
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-primary-700 focus:outline-none focus:text-primary-700 mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-s-full rounded-e-none hover:text-primary-700 focus:outline-none focus:text-primary-700 mt-4">
           <Icon className={closeIconClassName ++ " text-xl"} />
         </button>
       </div>
       <div className="w-full relative overflow-y-scroll">
-        <div className="md:hidden absolute right-0 pt-3 pr-4 z-50">
+        <div className="md:hidden absolute end-0 pt-3 pe-4 z-50">
           <button
             onClick={e => {
               e |> ReactEvent.Mouse.preventDefault

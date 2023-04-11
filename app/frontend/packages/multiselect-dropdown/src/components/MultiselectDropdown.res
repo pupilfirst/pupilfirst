@@ -69,7 +69,7 @@ module Make = (Selectable: Selectable) => {
     | _ => "text-orange-800"
     }
 
-    "rounded text-sm text-left font-semibold overflow-hidden " ++
+    "rounded text-sm ltr:text-left rtl:text-right font-semibold overflow-hidden " ++
     (bgColor ++
     " " ++
     textColor ++
@@ -107,7 +107,7 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="mr-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 text-right">
+              <span className="me-2 shrink-0 w-1/3 sm:w-auto md:w-1/3 ltr:text-right rtl:text-left">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -145,8 +145,8 @@ module Make = (Selectable: Selectable) => {
       let value = selection |> Selectable.value
       <div
         key={index |> string_of_int}
-        className={tagPillClasses(selection |> Selectable.color, false) ++ " space-x-1.5"}>
-        <span className="pl-1.5 py-px text-xs leading-[unset]">
+        className={tagPillClasses(selection |> Selectable.color, false) ++ " "}>
+        <span className="px-2 py-px text-xs leading-[unset]">
           {switch selection |> Selectable.label {
           | Some(label) => label ++ (labelSuffix ++ value)
           | None => value
@@ -186,7 +186,7 @@ module Make = (Selectable: Selectable) => {
 
   let showHint = hint =>
     <p
-      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2 text-left border-t">
+      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2 ltr:text-left rtl:text-right border-t">
       {str(hint)}
     </p>
 

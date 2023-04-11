@@ -24,7 +24,7 @@ let make = (~loading, ~message=ts("loading")) => {
     None
   }, [loading])
   shouldRender
-    ? <div className="fixed bottom-0 z-50 w-full left-0 right-0 flex justify-center w-full">
+    ? <div className="fixed bottom-0 z-50 w-full start-0 end-0 flex justify-center w-full">
         <div
           className={"loading-spinner__container " ++ animationClass(loading)}
           onAnimationEnd={_ => onAnimationEnd(loading, setRender)}>
@@ -40,7 +40,7 @@ let make = (~loading, ~message=ts("loading")) => {
               />
             </svg>
           </div>
-          <span className="inline-block ml-2 text-xs text-white font-semibold tracking-wide">
+          <span className="inline-block ms-2 text-xs text-white font-semibold tracking-wide">
             {message |> str}
           </span>
         </div>

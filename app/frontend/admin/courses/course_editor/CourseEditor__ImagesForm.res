@@ -81,7 +81,7 @@ let optionalImageLabelText = (image, selectedFilename) =>
   | Some(name) =>
     <span>
       {t("image_label.start")->str}
-      <code className="mr-1"> {name->str} </code>
+      <code className="me-1"> {name->str} </code>
       {t("image_label.end")->str}
     </span>
   | None =>
@@ -159,7 +159,7 @@ let make = (~course, ~updateCourseCB) => {
           {t("thumbnail.label")->str}
         </label>
         <HelpIcon
-          className="text-xs ml-1"
+          className="text-xs ms-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link={t("thumbnail.help_url")}>
           {t("thumbnail.help")->str}
@@ -178,7 +178,7 @@ let make = (~course, ~updateCourseCB) => {
           />
           <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
             <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
+            <span className="ms-2 truncate">
               {optionalImageLabelText(thumbnail, state.filenameThumb)}
             </span>
           </label>
@@ -192,7 +192,7 @@ let make = (~course, ~updateCourseCB) => {
           {t("cover_image.label") |> str}
         </label>
         <HelpIcon
-          className="text-xs ml-1"
+          className="text-xs ms-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link={t("cover_image.help_url")}>
           {t("cover_image.help") |> str}
@@ -211,7 +211,7 @@ let make = (~course, ~updateCourseCB) => {
           />
           <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
             <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
+            <span className="ms-2 truncate">
               {optionalImageLabelText(cover, state.filenameCover)}
             </span>
           </label>

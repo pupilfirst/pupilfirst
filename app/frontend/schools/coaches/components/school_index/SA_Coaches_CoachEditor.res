@@ -253,7 +253,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
           ariaLabel="close"
           title="close"
           onClick={_e => closeFormCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-600 focus:outline-none focus:text-primary-500 mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-s-full rounded-e-none hover:text-gray-600 focus:outline-none focus:text-primary-500 mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>
@@ -381,7 +381,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 <div className="mt-5" ariaLabel="public-profile-selector">
                   <div className="flex items-center shrink-0">
                     <label
-                      className="block tracking-wide text-xs font-semibold mr-3"
+                      className="block tracking-wide text-xs font-semibold me-3"
                       htmlFor="evaluated">
                       {t("coach_public_q") |> str}
                     </label>
@@ -434,7 +434,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         )}
                     />
                     <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
-                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <i className="fas fa-upload me-2 text-gray-600 text-lg" />
                       <span className="truncate"> {avatarUploaderText() |> str} </span>
                     </label>
                   </div>
@@ -447,7 +447,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     | Some(_coach) =>
                       <div className="flex items-center shrink-0">
                         <label
-                          className="block tracking-wide  text-xs font-semibold mr-3"
+                          className="block tracking-wide  text-xs font-semibold me-3"
                           htmlFor="evaluated">
                           {t("coach_left_q") |> str}
                         </label>

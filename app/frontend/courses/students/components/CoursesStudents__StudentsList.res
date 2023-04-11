@@ -20,7 +20,7 @@ let userTags = student => {
         {tags
         |> Js.Array.map(tag =>
           <div
-            className="bg-blue-100 mt-1 mr-1 py-px px-2 text-tiny rounded-lg font-semibold text-gray-900
+            className="bg-blue-100 mt-1 me-1 py-px px-2 text-tiny rounded-lg font-semibold text-gray-900
             "
             key={tag}>
             {str(tag)}
@@ -37,7 +37,7 @@ let studentTags = student => {
         {StudentInfo.taggings(student)
         |> Js.Array.map(tag =>
           <div
-            className="bg-gray-100 rounded-lg font-semibold mt-1 mr-1 py-px px-2 text-tiny text-gray-900"
+            className="bg-gray-100 rounded-lg font-semibold mt-1 me-1 py-px px-2 text-tiny text-gray-900"
             key={tag}>
             {str(tag)}
           </div>
@@ -61,16 +61,16 @@ let showStudent = student => {
           student->StudentInfo.user->UserDetails.avatarUrl,
           student->StudentInfo.user->UserDetails.name,
         )}
-        <div className="ml-2 md:ml-3 block text-sm md:pr-2">
+        <div className="ms-2 md:ms-3 block text-sm md:pe-2">
           <p className="font-semibold inline-block leading-snug">
             {student->StudentInfo.user->UserDetails.name->str}
           </p>
           <div
             className="py-px text-gray-600 text-xs leading-snug flex flex-col sm:flex-row sm:items-center">
-            <span className="font-semibold pr-2">
+            <span className="font-semibold pe-2">
               {student->StudentInfo.user->UserDetails.fullTitle->str}
             </span>
-            <span className="sm:pl-2 sm:border-l border-gray-400 italic">
+            <span className="sm:ps-2 sm:border-s border-gray-400 italic">
               {switch student->StudentInfo.user->UserDetails.lastSeenAt {
               | Some(date) =>
                 t(

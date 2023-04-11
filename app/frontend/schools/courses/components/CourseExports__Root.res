@@ -176,7 +176,7 @@ let make = (~course, ~exports, ~tags) => {
                 {t("create_action_button")->str}
               </h5>
               <div className="mt-4">
-                <label className="block tracking-wide text-xs font-semibold mr-6 mb-2">
+                <label className="block tracking-wide text-xs font-semibold me-6 mb-2">
                   {t("export_type_label")->str}
                 </label>
                 <div className="flex -mx-2">
@@ -215,7 +215,7 @@ let make = (~course, ~exports, ~tags) => {
               </div>
               <div className="mt-5">
                 <label
-                  className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                  className="block tracking-wide text-xs font-semibold me-6 mb-2"
                   htmlFor="targets_filter">
                   {t("export_targets_label")->str}
                 </label>
@@ -240,7 +240,7 @@ let make = (~course, ~exports, ~tags) => {
               </div>
               <div className="mt-5">
                 <label
-                  className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                  className="block tracking-wide text-xs font-semibold me-6 mb-2"
                   htmlFor="inactive_students_filter">
                   {t("students_to_include_label")->str}
                 </label>
@@ -271,7 +271,7 @@ let make = (~course, ~exports, ~tags) => {
                   {if state.saving {
                     <span>
                       <FaIcon classes="fas fa-spinner fa-pulse" />
-                      <span className="ml-2"> {t("create_button_active_label")->str} </span>
+                      <span className="ms-2"> {t("create_button_active_label")->str} </span>
                     </span>
                   } else {
                     {t("create_button_text")->str}
@@ -288,7 +288,7 @@ let make = (~course, ~exports, ~tags) => {
           onClick={_ => send(OpenDrawer)}
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-file-export text-lg" />
-          <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
+          <h5 className="font-semibold ms-2"> {t("create_action")->str} </h5>
         </button>
       </div>
       {state.courseExports |> ArrayUtils.isEmpty
@@ -326,13 +326,13 @@ let make = (~course, ~exports, ~tags) => {
                           <div className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                             {courseExport->CourseExport.reviewedOnly
                               ? <span
-                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
                                   {t("reviewed_only_tag")->str}
                                 </span>
                               : React.null}
                             {courseExport->CourseExport.includeInactiveStudents
                               ? <span
-                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
                                   {t("include_inactive_students_tag")->str}
                                 </span>
                               : React.null}
@@ -341,7 +341,7 @@ let make = (~course, ~exports, ~tags) => {
                             |> Array.map(tag =>
                               <span
                                 key=tag
-                                className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
+                                className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 me-1">
                                 {tag |> str}
                               </span>
                             )

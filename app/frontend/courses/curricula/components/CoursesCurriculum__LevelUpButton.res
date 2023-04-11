@@ -13,7 +13,7 @@ module LevelUpQuery = %graphql(`
 
 let handleSubmitButton = saving => {
   let submitButtonText = (title, iconClasses) =>
-    <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>
+    <span> <FaIcon classes={iconClasses ++ " me-2"} /> {title |> str} </span>
 
   saving
     ? submitButtonText(t("button_text_saving"), "fas fa-spinner fa-spin")

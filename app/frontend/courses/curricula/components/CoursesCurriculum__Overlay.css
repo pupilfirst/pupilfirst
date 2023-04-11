@@ -90,7 +90,7 @@
 }
 
 .course-overlay__body-tab-item:not(:last-child) {
-  @apply mr-1;
+  @apply me-1;
 }
 
 .course-overlay__body-tab-item--selected {
@@ -153,7 +153,8 @@
 }
 
 @media print {
-  .curriculum-overlay__learn-submit-btn, .curriculum-overlay__learn-auto-verify-btn {
+  .curriculum-overlay__learn-submit-btn,
+  .curriculum-overlay__learn-auto-verify-btn {
     display: none;
   }
 }

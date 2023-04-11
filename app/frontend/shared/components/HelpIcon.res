@@ -23,8 +23,8 @@ and alignment =
 
 let alignmentClass = alignment =>
   switch alignment {
-  | AlignLeft => " left-0"
-  | AlignRight => " right-0"
+  | AlignLeft => " start-0"
+  | AlignRight => " end-0"
   | AlignCenter => " help-icon__help-container--center"
   }
 
@@ -35,8 +35,8 @@ let responsiveAlignmentClass = responsiveAlignment =>
     let mobileClass = mobileAlignment |> alignmentClass
 
     let desktopClass = switch desktopAlignment {
-    | AlignLeft => " md:right-auto md:left-0"
-    | AlignRight => " md:left-auto md:right-0"
+    | AlignLeft => " md:right-auto md:start-0"
+    | AlignRight => " md:left-auto md:end-0"
     | AlignCenter => " help-icon__help-container--md-center"
     }
 
@@ -64,7 +64,7 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
   }, [helpVisible])
 
   <div className={"inline-block relative " ++ className} onClick={toggleHelp(setHelpVisible)}>
-    <FaIcon classes="fas fa-question-circle hover:text-gray-600 cursor-pointer" />
+    <FaIcon classes="fas fa-question-circle rtl:scale-x-[-1] hover:text-gray-600 cursor-pointer" />
     {helpVisible
       ? <div
           onClick={event => event |> ReactEvent.Mouse.stopPropagation}
@@ -74,8 +74,8 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
           {link
           |> OptionUtils.map(link =>
             <a href=link target="_blank" className="block mt-1 text-blue-300 hover:text-blue:200">
-              <FaIcon classes="fas fa-external-link-square-alt" />
-              <span className="ml-1"> {t("read_more") |> str} </span>
+              <FaIcon classes="fas fa-external-link-square-alt rtl:-rotate-90" />
+              <span className="ms-1"> {t("read_more") |> str} </span>
             </a>
           )
           |> OptionUtils.default(React.null)}

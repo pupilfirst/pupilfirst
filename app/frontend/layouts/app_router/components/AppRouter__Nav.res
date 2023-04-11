@@ -58,8 +58,8 @@ let renderLinks = (courses, selectedPage) => {
             classes,
             title,
             [
-              <Icon key="icon" className={`if ${icon} text-xl if-fw`} />,
-              <div key="title" className="pl-3"> {str(title)} </div>,
+              <Icon key="icon" className={`if ${icon} rtl:end-0 text-xl if-fw`} />,
+              <div key="title" className="ps-3 "> {str(title)} </div>,
             ]->React.array,
           )
         })
@@ -153,9 +153,9 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div>
           <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
             <div>
-              <div className="absolute top-0 right-0 -mr-12 pt-2">
+              <div className="absolute top-0 end-0 -me-12 pt-2">
                 <button
-                  className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  className="ms-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={_e => setSidebarOpen(_ => false)}>
                   <span className="sr-only"> {str(t("close_sidebar"))} </span>
                 </button>

@@ -188,9 +188,9 @@ let make = (~courseId, ~cohort=?) => {
         <div className="flex">
           <label className="block text-sm font-medium" htmlFor="cohortEndsAt">
             {t("cohort_ends_at.label")->str}
-            <span className="text-xs ml-1 font-light"> {ts("optional_braces")->str} </span>
+            <span className="text-xs ms-1 font-light"> {ts("optional_braces")->str} </span>
           </label>
-          <HelpIcon className="ml-1 text-sm"> {t("cohort_ends_at.help")->str} </HelpIcon>
+          <HelpIcon className="ms-1 text-sm"> {t("cohort_ends_at.help")->str} </HelpIcon>
         </div>
         <div className="mt-1">
           <DatePicker

@@ -240,7 +240,7 @@ let make = (
                 }}
                 value={currentLevel |> Level.name}
                 ariaLabel="Select level"
-                className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-l hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 {state.levels
                 |> Level.sort
                 |> Array.map(level =>
@@ -254,21 +254,21 @@ let make = (
                 |> React.array}
               </select>
               <div
-                className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-800">
+                className="pointer-events-none absolute inset-y-0 end-0 flex items-center px-3 text-gray-800">
                 <i className="fas fa-chevron-down text-xs" />
               </div>
             </div>
             <button
               title={t("edit_selected_level")}
               ariaLabel={t("edit_selected_level")}
-              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-300 border-l-0 py-1 px-2 rounded-r focus:outline-none focus:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-300 border-s-0 py-1 px-2 rounded-e focus:outline-none focus:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(Some(state.selectedLevel))))}>
               <i className="fas fa-pencil-alt" />
             </button>
             <button
-              className="btn btn-primary ml-4"
+              className="btn btn-primary ms-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
-              <i className="fas fa-plus-square mr-2 text-lg" />
+              <i className="fas fa-plus-square me-2 text-lg" />
               <span> {t("create_level") |> str} </span>
             </button>
           </div>
@@ -304,7 +304,7 @@ let make = (
           <span className="flex bg-gray-50 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>
+          <h4 className="font-semibold ms-2"> {t("create_target_group") |> str} </h4>
         </button>
       </div>
     </div>

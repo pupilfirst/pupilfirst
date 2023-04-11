@@ -49,22 +49,22 @@
 }
 
 .markdown-block__permissive ul {
-  @apply ml-7 pt-3 list-disc;
+  @apply ms-7 pt-3 list-disc;
 }
 
 @screen md {
   .markdown-block__permissive ul {
-    @apply pt-3 list-disc ml-10;
+    @apply pt-3 list-disc ms-10;
   }
 }
 
 .markdown-block__permissive ol {
-  @apply ml-7 pt-3 list-decimal;
+  @apply ms-7 pt-3 list-decimal;
 }
 
 @screen md {
   .markdown-block__permissive ol {
-    @apply pt-3 list-decimal ml-10;
+    @apply pt-3 list-decimal ms-10;
   }
 }
 
@@ -82,7 +82,7 @@
 }
 
 .markdown-block__permissive blockquote {
-  @apply border-l-4 border-gray-800 bg-gray-50 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
+  @apply border-s-4 border-gray-800 bg-gray-50 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
 }
 
 .markdown-block__permissive blockquote code,
@@ -129,7 +129,7 @@
 }
 
 .markdown-block__permissive .align-left {
-  @apply block text-left;
+  @apply block ltr:text-left rtl:text-right;
 }
 
 .markdown-block__permissive .align-center {
@@ -137,7 +137,7 @@
 }
 
 .markdown-block__permissive .align-right {
-  @apply block text-right;
+  @apply block ltr:text-right rtl:text-left;
 }
 
 /*

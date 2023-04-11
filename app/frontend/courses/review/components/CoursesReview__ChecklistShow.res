@@ -278,7 +278,7 @@ let make = (
                               | (true, false) =>
                                 <button
                                   id={"add-additional-feedback-" ++ string_of_int(itemIndex)}
-                                  className="w-auto text-sm text-primary-500 px-2 py-1 ms-5 text-left rtl:text-right mt-2 hover:text-primary-600 transition"
+                                  className="w-auto ps-4 text-sm text-primary-500 text-left rtl:text-right  hover:text-primary-600 transition"
                                   onClick={event =>
                                     updateEmptyChecklistResult(
                                       itemIndex,

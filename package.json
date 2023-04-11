@@ -85,5 +85,8 @@
     "re:build": "rescript",
     "re:watch": "rescript clean && rescript build -w"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.2.1",
+  "devDependencies": {
+    "postcss-logical": "^6.1.0"
+  }
 }

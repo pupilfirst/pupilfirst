@@ -29,7 +29,7 @@ let replace = (t, itemIndex, result) =>
 let appendEmptyChecklistItem = t =>
   make(
     ~title=t.title,
-    ~result=[CoursesReview__ReviewChecklistResult.empty()] |> Array.append(t.result),
+    ~result=Js.Array2.concat(t.result, [CoursesReview__ReviewChecklistResult.empty()]),
   )
 
 let moveResultItemUp = (index, t) =>
@@ -53,8 +53,6 @@ let encode = t => {
   })
 }
 
-let encodeArray = checklist =>
-  checklist |> {
-    open Json.Encode
-    array(encode)
-  }
+let encodeArray = checklist => {
+  Json.Encode.array(encode, checklist)
+}

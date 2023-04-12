@@ -75,7 +75,7 @@ let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
       {statusBar(~color=passed ? "green" : "red", ~text=passed ? tr("completed") : tr("rejected"))}
     </div>
     <div className="bg-white flex border-t flex-wrap items-center py-4">
-      <div className="w-full md:w-1/2 shrink-0 justify-center hidden md:flex border-l px-6">
+      <div className="w-full md:w-1/2 shrink-0 justify-center hidden md:flex border-s px-6">
         {submissionStatusIcon(~passed)}
       </div>
       <div className="w-full md:w-1/2 shrink-0 md:order-first px-4 md:px-6">
@@ -123,7 +123,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           }}
         </h2>
         <div
-          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 me-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
+          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 me-2 rounded-t-lg border-t border-x text-gray-800 leading-tight">
           <span className="hidden md:inline"> {str(tr("submitted_on"))} </span>
           {submission |> Submission.createdAtPretty |> str}
         </div>
@@ -214,9 +214,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
               </div>
             </div>
             <MarkdownBlock
-              profile=Markdown.Permissive
-              className="ms-15"
-              markdown={feedback |> Feedback.feedback}
+              profile=Markdown.Permissive className="ms-15" markdown={feedback |> Feedback.feedback}
             />
           </div>
         })

@@ -29,7 +29,7 @@
     </p>
   <% end %>
   <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
-    <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">
+    <blockquote style="border-inline-start: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">
       <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
     </blockquote>
   </div>

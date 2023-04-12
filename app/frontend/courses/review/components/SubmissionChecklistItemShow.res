@@ -111,7 +111,7 @@ let statusButton = (index, status, callback, checklist) =>
       onClick={statusButtonOnClick(status == ChecklistItem.Failed, callback, checklist, index)}
       className={"border border-gray-500 rounded focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 " ++
       statusButtonSelectedClasses(ChecklistItem.Failed, status)}>
-      <span className="w-8 p-2 border-r border-gray-500 flex items-center justify-center">
+      <span className="w-8 p-2 border-e border-gray-500 flex items-center justify-center">
         <PfIcon className={statusButtonIcon(status == ChecklistItem.Failed)} />
       </span>
       <span className="p-2">

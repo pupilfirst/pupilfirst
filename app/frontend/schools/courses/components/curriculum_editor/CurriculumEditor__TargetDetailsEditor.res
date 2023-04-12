@@ -348,7 +348,7 @@ let booleanButtonClasses = bool => {
 }
 
 let targetRoleClasses = selected =>
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer ltr:text-left rtl:text-right focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer  focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
       : "border-gray-300 hover:bg-gray-50 bg-white"

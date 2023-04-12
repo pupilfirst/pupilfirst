@@ -42,7 +42,9 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium ltr:text-left rtl:text-right leading-snug"> {Target.title(target)->str} </span>
+      <span className="font-medium  leading-snug">
+        {Target.title(target)->str}
+      </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -55,7 +57,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
         title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         ariaLabel={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
-        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:bg-gray-50 focus:text-primary-500 focus:rounded-lg">
+        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-s border-transparent py-6 px-3 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:bg-gray-50 focus:text-primary-500 focus:rounded-lg">
         <i className="fas fa-pencil-alt" />
       </a>,
       author,

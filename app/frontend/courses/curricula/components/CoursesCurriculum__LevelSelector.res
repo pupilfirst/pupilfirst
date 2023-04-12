@@ -31,7 +31,7 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
     }
 
     <button
-      className="flex focus:outline-none p-2 w-full ltr:text-left rtl:text-right whitespace-normal"
+      className="flex focus:outline-none p-2 w-full  whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
       <span className="me-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
@@ -94,7 +94,7 @@ let tabbedLevelSelector = (
     numberedLevelSelector,
     <button
       key="level-zero-selector"
-      className={"border-l rounded-e-lg bg-white border-gray-300 font-semibold truncate hover:bg-gray-50 hover:text-primary-500 " ++
+      className={"border-s rounded-e-lg bg-white border-gray-300 font-semibold truncate hover:bg-gray-50 hover:text-primary-500 " ++
       levelZeroSelectorClasses(showLevelZero)}
       onClick={_e => setShowLevelZero(true)}>
       {levelZero |> Level.name |> str}

@@ -216,7 +216,7 @@ let make = (
         <button
           title={tr("delete_category")}
           onClick={deleteCategory(category, deleteCategoryCB, send)}
-          className="text-xs py-1 px-2 h-8 text-gray-600 hover:text-red-500 hover:bg-gray-50 focus:text-red-500 focus:bg-gray-50 border-l border-gray-300">
+          className="text-xs py-1 px-2 h-8 text-gray-600 hover:text-red-500 hover:bg-gray-50 focus:text-red-500 focus:bg-gray-50 border-s border-gray-300">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
         </button>
       </div>

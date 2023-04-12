@@ -311,7 +311,7 @@ let showApplicant = (baseUrl, applicant) => {
         </div>
       </div>
       <div className="mt-1 space-x-2">
-        <div className="text-xs ltr:text-left rtl:text-right"> {Applicant.email(applicant)->str} </div>
+        <div className="text-xs "> {Applicant.email(applicant)->str} </div>
         {Js.Array.map(
           a => <span key=a className="p-1 text-xs bg-gray-50 rounded shadow"> {str(a)} </span>,
           Applicant.tags(applicant),
@@ -411,7 +411,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
               <div className="w-full">
                 <label
                   htmlFor="search_applicants"
-                  className="block text-tiny font-semibold uppercase ps-px ltr:text-left rtl:text-right">
+                  className="block text-tiny font-semibold uppercase ps-px ">
                   {t("filter.input_label")->str}
                 </label>
                 <Multiselect

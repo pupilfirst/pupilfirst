@@ -9,7 +9,7 @@ let selected = currentCourse => {
     className="bg-gray-50 rounded text-sm w-full appearance-none flex items-center justify-between hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500 font-semibold relative px-2 py-2">
     <span className="w-5/6 flex items-center">
       <Icon className="if i-journal-text-light" />
-      <span className="block whitespace-nowrap px-2 ltr:text-left rtl:text-right">
+      <span className="block whitespace-nowrap px-2 ">
         {title->str}
       </span>
     </span>

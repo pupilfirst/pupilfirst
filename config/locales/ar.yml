@@ -1,0 +1,2732 @@
+ar:
+  applicants:
+    enroll:
+      link_expired: انتهت صلاحية هذا الرابط أو أنه غير صالح، في حال أنك أكملت التسجيل بالفعل فيرجى تسجيل الدخول
+      welcome: مرحبا بكم في %{school_name}!
+    resolve_applicant_path:
+      welcome: مرحبا بكم في %{school_name}!
+  calendars:
+    create:
+      success: Calendar created successfully!
+    update:
+      success: Calendar updated successfully!
+  calendar_events:
+    create:
+      success: Event created successfully!
+    update:
+      success: Event updated successfully!
+    delete:
+      success: Event deleted successfully!
+    create_or_update_form:
+      title_error: Please enter a valid title for the event
+      calendar_error: Please select a calendar from the list
+      start_time_error: Please select a valid time for the event
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
+  cohorts:
+    shared:
+      overview_link: Overview
+      students_link: Students
+    show:
+      distribution_heading: Level-wise student distribution
+      students_completed: Students Completed
+      total_students: Total Students
+      view_all: View All
+    student:
+      level_label: Level
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
+    students:
+      distribution_heading: Level-wise student distribution
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
+  communities:
+    show:
+      new_topic: موضوع جديد
+      note: "  يملك مشرفون الأكاديمية صلاحية لجميع المجتمعات"
+      welcome: مرحبا بكم في
+  components:
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: إضافة مجموعة جديدة
+      cohort:
+        label: اسم المجموعة
+        message: ادخل اسمًا مناسبًا للمجموعة
+        placeholder: مثال، المجموعة الأولى
+      cohort_description:
+        label: وصف المجموعة
+        message: ادخل وصفًا مناسبًا للمجموعة
+        placeholder: مثال، المجموعة الأولى من السنة الثانية
+      cohort_ends_at:
+        help: سيتم حفظ المجموعة في الارشيف في هذا التاريخ
+        label: تاريخ إنهاء المجموعة
+      update_cohort: تحديث المجموعة
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: تم اختيار جميع الطلاب
+      no_students_found: لا يوجد طلاب
+      no_students_selected: لم يتم اختيار أي طالب
+    AdminCoursesShared__TeamEditor:
+      add_new_team: أضف فريقًا جديدًا
+      select_cohort:
+        label: اختر مجموعة
+        placeholder: اختر إحدى المجموعات
+      team_name:
+        label: اسم الفريق
+        message: ادخل اسمًا مناسبًا للفريق
+        placeholder: مثال، الفريق الأول
+      update_team: تحديث الفريق
+    Api:
+      error_notification_body: تم إعلام فريق الدعم الفني بهذه المشكلة يرجى إعادة تحميل الصفحة والمحاولة مرة أخرى
+      error_notification_title: خطأ غير متوقع
+    AppRouter__Dropdown:
+      more: المزيد
+      show_more_links: عرض المزيد
+    AppRouter__Header:
+      edit_profile: تعديل الحساب
+      sign_in: تسجيل الدخول
+      sign_out: تسجيل الخروج
+    AppRouter__Nav:
+      close_sidebar: إغلاق
+      curriculum: المنهاج
+      leaderboard: لوحة المتفوقين
+      report: تقرير
+      review: مراجعة
+      sign_out: تسجيل الخروج
+      students: الطلاب
+      calendar: Calendar
+    ClickToCopy:
+      copied: Copied!
+      copy: Copy to clipboard
+    CoachesIndex__Root:
+      button_about: About
+      button_connect: Connect
+      filter_input_label: Filter by
+      filter_input_placeholder: Search by name, or select a course
+      filter_label_name_like: Name Like
+      filter_label_teaches_course: Teaches Course
+      filter_result_empty: The filters you've applied does not match any coach. Please change the filter and try again.
+      filter_search_string_course: teaches course %{name}
+      heading: Coaches
+    CohortsActions__Root:
+      button_text: Merge and delete
+      edit: Edit
+      merge_heading_html: Merge <em>%{cohort_name}</em> into another cohort
+      merge_help: Merging cohorts will move all students from the selected cohort to the target cohort. This action can be used to delete unnecessary cohorts. This action cannot be undone.
+      page_description: Actions for the cohort.
+      pick_a_cohort: Pick a Cohort
+    CohortsCreator__Root:
+      page_description: Create a new cohort for the course.
+      page_title: Add new cohort
+    CohortsDetails__Root:
+      page_description: Update cohort details
+      page_title: Edit %{cohort_name}
+    CohortsIndex__Root:
+      active_cohorts: Active Cohorts
+      add_new_cohort: Add new cohort
+      all_cohorts: All Cohorts
+      coaches: Coaches
+      cohort: cohort
+      cohorts: cohorts
+      cohorts_end_date: Cohort end date
+      edit: Edit
+      filter:
+        first_created: First Created
+        last_created: Last Created
+        last_ending: Last Ending
+        name: Name
+        search_by_name: Search by Name
+      load_more: Load More
+      no_cohorts_found: No Cohorts Found
+      students: Students
+    CommunitiesNewTopic__Root:
+      asked_on: "Asked on "
+      back: Back
+      be_descriptive: If you're asking a question, try to be as descriptive as possible to make it easier for others to post answers. You can use Markdown to format this text.
+      body: Body
+      clear: Clear
+      count_replies_label: " replies"
+      create_topic: Create Topic
+      create_topic_discussion: Create a new topic of discussion
+      done: Done!
+      failed_fetch_similar: We failed to fetch similar topics from the server! Our team has been notified about this error.
+      linked_target: "Linked Target: "
+      missing_info: Missing Info!
+      no_category_found: "Unable to find category with ID:"
+      no_replies: No replies
+      not_selected: Not Selected
+      one_reply: 1 reply
+      oops: Oops!
+      please_reload: Please reload the page before trying to post again.
+      redirecting: Redirecting to new topic now...
+      select_category: Select Category
+      similar_topics: Similar Topics
+      title: Title
+      title_placeholder: Title for the new topic
+      topic_body_present: Topic title and body must be present.
+    CommunitiesShow__Root:
+      all_categories_button: All Categories
+      button_load_more: Load More...
+      empty_topics: There's no discussion here yet.
+      filter_input_label: "Filter by:"
+      filter_input_placeholder_categories: Filter by category, solution or search within topics
+      filter_input_placeholder_default: Search within topics or filter by solution
+      sort_criterion_input_label: "Sort by:"
+      sort_criterion_last_activity: Last Activity
+      sort_criterion_posted_at: Posted At
+      sort_criterion_views: Views
+      topic_last_updated_text: Last updated
+      topic_posted_by_text: Posted by
+      topic_stats_likes:
+        one: 1 Like
+        other: "%{count} Likes"
+      topic_stats_replies:
+        one: 1 Reply
+        other: "%{count} Replies"
+      topic_stats_views:
+        one: 1 View
+        other: "%{count} Views"
+      topics_fully_loaded_text: Showing all %{total_topics} topics
+      topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
+      unable_find_id: "Unable to find topic category with ID: "
+    CourseApplicants__EditForm:
+      add_as_student_button: Add as Student
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        label: Email
+        placeholder: Student email here
+      name:
+        error: is not valid
+        label: Name
+        placeholder: Student name here
+      notify_students:
+        label: Notify students, and send them a link to sign into this school.
+      page_title: Add as a student
+      tabs:
+        actions: Actions
+        details: Details
+      tags:
+        label: Tags
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    CourseApplicants__Root:
+      applicants_fully_loaded_text: Showing all %{total_applicants} applicants
+      applicants_page_title: Applicants
+      applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
+      button_load_more: Load More Applicants...
+      empty_applicants: You don't have any applicants!
+      filter:
+        input_label: Search
+        input_placeholder: Filter and Search Applicants by name
+        label:
+          search: Search by name or email
+          tag: Tag
+      onboard_as_student: OnBoard as Student
+      show_actions: Show Actions
+      show_details: "Show Details: "
+      sort_criterion:
+        created_at: Created At
+        name: Name
+        updated_at: Updated At
+      sorter:
+        label: Sort by
+    CourseAuthors__Form:
+      add_new_author: Add new author
+      create_author: Create Author
+      email: Email
+      email_message: Enter a valid Email
+      email_placeholder: Add email here
+      name: Name
+      name_message: Enter a valid name
+      name_placeholder: Add name here
+      saving: Saving
+      update_author: Update Author
+    CourseAuthors__Root:
+      window_confirm_post: from the list of authors?
+      window_confirm_pre: Are you sure you want to remove
+    CourseCertificates__CreateDrawer:
+      certificate_base_image:
+        help: This base image must include a full line's space to insert a student's name.
+        help_url: https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate
+        label: Certificate Base Image
+        placeholder: Select a base image for certificate
+      create_action: Create New Certificate
+      create_button_text: Create Certificate
+      name_label: Name
+      name_placeholder: A name to identify this certificate
+      success_notification: You can now edit this certificate.
+    CourseCertificates__EditDrawer:
+      active:
+        help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
+        help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
+        label: Should students be automatically issued this certificate?
+      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
+      edit_action: Edit Certificate
+      font_size_label: Font Size
+      margin_label: Margin
+      name_error: Name can't be blank
+      name_label: Name
+      name_offset_top_label: Name Offset (from top)
+      name_placeholder: A short name for this certificate
+      qr_bottom_left_label: Bottom Left
+      qr_bottom_right_label: Bottom Right
+      qr_hidden_label: Hidden
+      qr_position_label: QR Code Position
+      qr_scale_label: QR Code Scale
+      qr_top_left_label: Top Left
+      qr_top_right_label: Top Right
+      qr_visibility:
+        help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
+        help_url: https://docs.pupilfirst.com/users/certificates
+        label: Add QR Code?
+      update_issued_certificates_warning:
+        one: This certificate has been issued once.<br/>These changes will also be applied to the issued certificate.
+        other: This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates.
+    CourseCertificates__Root:
+      auto_issue_tag: Auto-issue
+      certificate: Certificate
+      create_action: Create New Certificate
+      delete_button_title: Delete Certificate %{name}
+      delete_confirm: Are you sure you want to delete this certificate?
+      deleting: Deleting...
+      edit_button_title: Edit Certificate %{name}
+      heading: Certificates
+      issued_count:
+        one: Issued only once
+        other: Issued %{count} times
+        zero: Never issued
+      no_certificates: You haven't created any certificates yet!
+    CourseCoaches__EnrollmentForm:
+      add_course: Add Course Coaches
+      assign_coaches: ASSIGN COACHES TO THE COURSE
+      notification_coach_enrollment: Coach enrollments updated successfully
+      search_coaches_all: You have selected all coaches!
+      search_coaches_empty: No coaches selected
+      search_coaches_placeholder: Search coaches
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      select_coaches: Select coaches
+      select_cohorts: Select Cohorts
+    CourseCoaches__InfoForm:
+      no_students_assigned: There are no students assigned to this coach. You can assign coaches directly while editing the student details.
+      notification_coach_updated: Coach updated successfully
+      pending_submissions: Pending Submissions
+      revied_submissions: Reviewed Submissions
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      select_cohorts: "Cohorts assigned to coach:"
+      students_assigned: "Students assigned to coach:"
+      update_cohort_assignment: Update Cohort Assignment
+    CourseCoaches__InfoFormTeam:
+      remove_post_confirm: from the list of assigned teams?
+      remove_pre_confirm: "Are you sure you want to remove "
+    CourseCoaches__Root:
+      coaches_list: List of course coaches
+      course_empty: The course has no coaches assigned!
+      enrollment_delete_error_head_notification: Coach enrollment could not be deleted
+      enrollment_delete_error_notification_body: Please try again
+      enrollment_delete_notificaion_success_body: Coach enrollment deleted successfully
+      remove_confirm_post: from this course?
+      remove_confirm_pre: Are you sure you want to remove
+    CourseEditor__Form:
+      actions:
+        archive_course:
+          button_text: Archive Course
+          label: Do you want to archive the course?
+        clone_course:
+          button_text: Clone Course
+          label: Do you want to create a copy of the course?
+        unarchive_course:
+          button_text: Unarchive Course
+          label: Do you want to unarchive the course?
+      alert:
+        archive_message: Are you sure you want to archive the course?
+        clone_course_message: Are you sure you want to make a copy of the course?
+        unarchive_message: Are you sure you want to unarchive the course?
+      course_about:
+        label: About
+        placeholder: Add more details about the course.
+      course_description:
+        error_message: A description is required (2-150 characters)
+        label: Course description
+        placeholder: Short description for this course
+      course_highlights:
+        label: Course Highlights
+      course_name:
+        error_message: A name is required (2-50 characters)
+        label: Course name
+        placeholder: Type course name here
+      create_course: Create Course
+      enable_public_preview_label: Allow public to view course curriculum?
+      enable_public_signup_label: Enable public signup for this course?
+      feature_course_in_homepage_label: Feature course in school homepage?
+      pick_a_cohort: Pick a Cohort
+      pick_default_cohort: Pick the default cohort
+      processing_url:
+        error: Invalid processing url
+        help: You can send the applicants to a processing url once they apply for the course
+        help_url: https://docs.pupilfirst.com/users/courses#processing-url
+        label: Do you want to process applicant information before enrolling them?
+      progression_behavior:
+        help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
+        label: Progression Behavior
+        limited:
+          description_end: " without getting submissions reviewed."
+          description_start: Students can level up
+          once: once
+          thrice: thrice
+          title: Limited
+          twice: twice
+        strict:
+          description: Students can level up only after getting submissions reviewed, and passing.
+          title: Strict
+        unlimited:
+          description: Students can level up till the end of the course, without getting submissions reviewed.
+          title: Unlimited
+      tabs:
+        actions: Actions
+        details: Details
+        images: Images
+      title:
+        add_new_course: Add New Course
+        edit_course_details: Edit Course Details
+      update_course: Update Course
+    CourseEditor__HighlightsEditor:
+      add_highlight: Add Course Highlight
+      delete_highlight: Delete highlight
+      description:
+        placeholder: Description of highlight
+      move_down: Move Down
+      move_up: Move up
+      select: Select
+      selected_button:
+        title: Select Icon
+      title:
+        placeholder: Title of highlight
+    CourseEditor__ImagesForm:
+      button_text:
+        update_images: Update Images
+        updating: Updating...
+      cover_image:
+        error_message: must be a JPEG / PNG under 2 MB in size
+        help: The cover will be displayed at the top of all student pages within the course, and as the header of some course emails.
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
+        label: Cover Image
+      empty_image_label: Please choose an image file.
+      image_label:
+        end: . Click to replace the current image.
+        start: "You have selected "
+      notification_success:
+        description: Images have been updated successfully.
+        title: Done!
+      replace_image_label: "Please pick a file to replace "
+      thumbnail:
+        error_message: must be a JPEG / PNG under 2 MB in size
+        help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
+        label: Thumbnail
+    CourseEditor__Root:
+      add_new_course: Add New Course
+      button_load_more: Load More Courses...
+      course_links:
+        download_reports: Download Reports
+        edit_curriculum: Edit Curriculum
+        manage_coaches: Manage Coaches
+        manage_students: Manage Students
+        view_as_student: View as Student
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      edit_course_details: Edit Course Details
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+      notification_error_body: Our team has been notified about this error. Please try reloading this page.
+      notification_error_head: An unexpected error occurred
+      quick_links: Quick Links
+      view_public_page: View public page
+    CourseExport__Root:
+      active_students_label: Active Students
+      all_students_label: All Students
+      all_targets_label: All targets
+      close_export_form: Close Export Form
+      create_action: Create New Export
+      create_action_button: Export Course Data
+      create_button_active_label: Setting up an export...
+      create_button_text: Create Export
+      download_course_export: Download Course Export
+      export: Export
+      export_tags_label: Export only students with the following tags
+      export_targets_label: Which targets should the export include?
+      export_type_label: Please select the kind of export you need
+      heading: Exports
+      include_inactive_students_tag: Included Inactive Students
+      no_exports_notice: You haven't exported anything yet!
+      prepared: Prepared
+      requested: Requested
+      reviewed_only_tag: Reviewed Submissions Only
+      reviewed_only_targets_label: Only targets with reviewed submissions
+      search_tag_placeholder: Search for a tag
+      search_tags_empty: No tags selected
+      students_label: Students
+      students_to_include_label: Select the students to include in course export
+      teams_label: Teams
+    CourseSelect:
+      button_load_more: Load More Courses...
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+    CoursesApply__Root:
+      email_sent_message:
+        description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+        title: We've sent you a verification mail.
+    CoursesCurriculum:
+      edit_level_button: Edit Level
+      edit_target_button_title: Edit target %{title}
+      empty_level_content_notice: There's no published content on this level.
+      issued_certificate_button: View Certificate
+      issued_certificate_heading: Congratulations! You have been issued a certificate.
+      level_locked: Level locked
+      level_locked_explanation: You can access the content on %{date}.
+      level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
+      level_locked_notice: The level is currently locked!
+      milestone_targets: Milestone targets
+      nav_next_level: Next Level
+      nav_previous_level: Previous Level
+    CoursesCurriculum__AudioRecorder:
+      button_text_record_again: Record Again
+      button_text_start_recording: Start Recording
+      cannot_record: You cannot record audio.
+      preview_mode: Preview Mode
+      recording_size_limit_warning: The recording should not exceed 5mb in size. Please re-record
+      recording_string: Recording...
+    CoursesCurriculum__AutoVerify:
+      before_marking: Before marking as complete...
+      before_visiting: Before visiting the link...
+      mark_complete: Mark As Complete
+      saving: Saving
+      visit_complete: Visit Link To Complete
+      visit_link: "Visit Link "
+    CoursesCurriculum__Discuss:
+      create: Create a topic
+      go_to: Go to community
+      no_discussion: There's been no recent discussion about this target.
+      topics_post: " community"
+      topics_pre: "Topics From "
+      use_community: Use the community to clear your doubts, and to help your peers!
+    CoursesCurriculum__FileForm:
+      another_file: Please choose another file for upload.
+      cannot_attach: You cannot attach files.
+      choose_upload: Choose file to upload
+      error: "Error "
+      max_file_size: The maximum file size is 5 MB.
+      please_reload: Please reload the page and try again.
+      preview_mode: Preview Mode
+      smth_went_wrong: Something went wrong!
+    CoursesCurriculum__Learn:
+      edit_target_button: Edit Content
+    CoursesCurriculum__LevelUpButton:
+      button_text_level_up: Level Up
+      button_text_saving: Saving
+    CoursesCurriculum__NoticeManager:
+      access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
+      access_ended_title: Preview/Limited Access
+      course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
+      course_complete_title: Congratulations! You have completed all milestone targets in the final level.
+      course_ended_description: The course has ended and submissions are disabled for all targets!
+      course_ended_title: Course Ended
+      level_up_blocked:
+        body_middle_pending_review: "are still pending review by a coach. "
+        body_middle_rejected: "have been rejected. "
+        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
+        body_suffix: You need a passing grade on all milestone targets to level up.
+        title_pending_review: Pending Review
+        title_rejected: Level Up Blocked
+      level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
+      level_up_limited_description: You're at Level %{currentLevel}, but have targets in Level %{minimumRequiredLevel} that have been rejected, or are still pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up.
+      level_up_limited_title: Level Up Blocked
+      level_up_title: Ready to Level Up!
+      preview_mode_description: You are accessing the preview mode for this course
+      preview_mode_title: Preview Mode
+      team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
+      team_members_pending_title: Check With Your Team
+    CoursesCurriculum__Overlay:
+      close_button: Close
+      completion_tab_complete: Complete
+      completion_tab_completed: Completed
+      completion_tab_form_response: Form Responses
+      completion_tab_locked: Locked
+      completion_tab_mark_complete: Mark as Complete
+      completion_tab_quiz_result: Quiz Result
+      completion_tab_submissions: Submissions & Feedback
+      completion_tab_submit_form: Submit Form
+      completion_tab_take_quiz: Take Quiz
+      completion_tab_visit_link: Visit Link to Complete
+      discuss_tab: Discuss
+      learn_cta_submit_work: Submit work for review
+      learn_cta_submit_form: Submit Form
+      learn_cta_take_quiz: Take a Quiz
+      learn_tab: Learn
+      next_target_button: Next Target
+      pending_team_members_notice: "You have team members who have yet to complete this target:"
+      preview_mode_text: You are currently looking at a preview of this course.
+      previous_target_button: Previous Target
+      scroll_to_top: Scroll to Top
+    CoursesCurriculum__Quiz:
+      next_question: Next Question
+      question: Question
+      submit_quiz: Submit Quiz
+    CoursesCurriculum__SubmissionBuilder:
+      accessing_preview: You are accessing the preview mode
+      attaching: Attaching
+      compete_all: Please complete all the required
+      complete: Complete
+      for_course: for this course
+      no_actions: This target has no actions. Click submit to complete the target
+      steps_submit: steps to submit this target
+      submit: Submit
+      submitting: Submitting
+    CoursesCurriculum__SubmissionItem:
+      link_error: This doesn't look like a valid URL.
+      link_placeholder: Type full URL starting with https://...
+      remove: "Remove "
+      short_text_error: Answer should be less than 250 characters
+      short_text_placeholder: Add a short text
+      warning_length_limit: Please keep your answer to less than 5000 characters in length.
+    CoursesCurriculum__SubmissionsAndFeedback:
+      add_another: Add another
+      add_another_response: Add another response
+      add_another_submission: Add another submission
+      cancel: Cancel
+      completed: Completed
+      form_response_number: "Response #"
+      grading: Grading
+      pending_review: Pending Review
+      rejected: Rejected
+      submission_details: "Details about your submission on "
+      submission_number: "Submission #"
+      submitted_on: "Submitted on "
+      unknown_coach: Unknown Coach
+      your_submissions: Your Submissions
+      your_responses: Your Responses
+    CoursesCurriculum__TargetStatus:
+      access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
+      course_locked: This course has ended.
+      level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
+      prerequisites_incomplete: This target has prerequisites that are incomplete.
+      status:
+        completed: Completed
+        locked: Locked
+        pending: Pending
+        pending_review: Pending Review
+        rejected: Rejected
+    CoursesCurriculum__UndoButton:
+      notification_error_body: An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.
+      notification_error_head: Unexpected Error
+      notification_notice_body: Please reload the page and check the status of the submission before trying again.
+      notification_notice_head: Could not undo submission
+      undo_submission_title: Delete this submission
+      window_confirm: Are you sure you want to delete this submission?
+    CoursesCurriculum__UrlForm:
+      button_placeholder: Type full URL starting with https://...
+      button_text: Attach link
+      url_validate_error: does not look like a valid URL
+    CoursesReport:
+      button_overview_text: Overview
+      button_submissions_text: Submissions
+    CoursesReport__Overview:
+      average_grades: Average Grades
+      average_quiz_score: Average Quiz Score
+      course_completed: Course Completed!
+      incomplete_targets: "Incomplete: %{targetsCount}"
+      level_progress: Level Progress
+      personal_coaches: Personal Coaches
+      quizzes_attempted:
+        one: 1 Quiz Attempted
+        other: "%{count} Quizzes Attempted"
+        zero: No Quizzes Attempted
+      schedule_coaching_session: Schedule a coaching session
+      targets_completed: "Completed: %{targetsCount}"
+      targets_overview: Targets Overview
+      targets_pending_review: "Pending Review: %{targetsCount}"
+    CoursesReport__SubmissionsList:
+      completed: Completed
+      filter_by_another_level: Filter by another level
+      filter_by_another_level_or_status: Filter by another level, or by status
+      filter_by_level: Filter by level
+      filter_by_level_or_status: Filter by level, or by status
+      load_more: Load More...
+      no_submissions_to_show: "No submissions to show "
+      pending_review: Pending Review
+      rejected: Rejected
+      sort_by: "Sort by:"
+      status: Status
+      submission_not_considered: This submission is not counted toward the target's completion.
+      submission_not_considered_help: This is a <em>team</em> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <em>team</em> submission, or if your team's composition changed after a <em>team</em> submission was created.
+      submitted_at: Submitted At
+      submitted_on: Submitted on %{date}
+      view: "View "
+    CoursesReview__Checklist:
+      create_review_checklist: Create a review checklist
+      create_review_checklist_description: Prepare for your review by creating a checklist
+    CoursesReview__ChecklistEditor:
+      add_checklist_item: Add Checklist Item
+      add_result: Add Result
+      cancel: Cancel
+      checklist_item_description:
+        error_message: A check's result cannot be blank
+        placeholder: Add feedback (optional)
+      checklist_item_title:
+        move_down_button_title: Move Down checklist result
+        move_up_button_title: Move Up checklist result
+        placeholder: Add a result for this check
+        remove_button_title: Remove checklist result
+      checklist_title:
+        error_message: A checklist item cannot be blank
+        move_down_button_title: Move Down checklist item
+        move_up_button_title: Move Up checklist item
+        placeholder: Add an item to the checklist
+        remove_button_title: Remove checklist item
+      create_review_checklist: Create Review Checklist
+      disabled: Disabled
+      edit_review_checklist: Edit Review Checklist
+      save_checklist: Save Checklist
+    CoursesReview__ChecklistShow:
+      edit_checklist_button: Edit Checklist
+      feedback_placeholder: Add feedback (optional)
+      generate_feedback_button: Generate Feedback
+      review_checklist: Review Checklist
+      add_additional_feedback: Add Additional Feedback
+      remove_additional_feedback: Remove Additional Feedback
+    CoursesReview__Editor:
+      add_another_feedback: Add another feedback
+      add_feedback: Add feedback
+      add_your_feedback: Add Your Feedback
+      assigned_coaches: Assigned Coaches
+      assigned_to: Assigned to
+      close: close
+      close_submission_warning: Are you sure you want to close the submission without saving?
+      create_review_checklist: Create Review Checklist
+      deleted_coach: Deleted Coach
+      evaluated_at: on %{evaluated_at}
+      evaluated_by: Evaluated By
+      feedback: Feedback
+      feedback_generated_text: Feedback generated from review checklist.
+      feedback_placeholder: This feedback will be emailed to students when you finish grading.
+      get_next_submission:
+        notice:
+          done: Done!
+          done_description: There are no other similar submissions.
+      grade_card: Grade Card
+      help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
+      hide_test_report_button: Hide Test Report
+      level_acronym: L
+      note_help: "Would you like to write a note about this "
+      note_placeholder: Did you notice something while reviewing this submission?
+      remove_assignment: Remove assignment
+      report_description: Test Report
+      report_status_string:
+        completed:
+          error: Automated tests could not complete due to errors
+          failure: Some automated tests failed
+          success: All automated tests succeeded
+        in_progress: Automated tests are in progress
+        queued: Automated tests are queued
+      review: Review
+      review_checklist: Review Checklist
+      review_next: Next
+      save_grades: Save grades
+      save_grades_and_send_feedback: Save grades & send feedback
+      share_feedback: Share Feedback
+      show_review_checklist: Show Review Checklist
+      show_test_report_button: Show Test Report
+      status:
+        completed: Completed
+        pending_review: Pending Review
+        rejected: Rejected
+        reviewing: Reviewing
+      student: student
+      student_dropped_out_message_with_timestamp: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp: This submission is from a student whose access to the course has ended, or has dropped out.
+      students_dropped_out_message_with_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.You can review the submission until %{timestamp}
+      students_dropped_out_message_without_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+      submission: Submission
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      team: team
+      team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
+      test_report: Test Report
+      undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
+      undo_grading: Undo Grading
+      write_a_note: Write a Note
+    CoursesReview__ReviewerManager:
+      assigned_at: Assigned %{date}
+      change_reviewer_and_start_review: Yes, Assign Me
+      remove_reviewer_assign_to_me: Do you want to remove %{current_coach_name} & assign yourself to review?
+      start_review: Start Review
+    CoursesReview__Root:
+      assigned_to: Assigned To
+      assigned_to_coach: "assigned to:"
+      assigned_to_me: " assigned to me"
+      button_load_more: Load More Submissions...
+      coach_filter_by:
+        assigned_to: Filter by who's assigned to a submission
+        personal_coach: Filter by who's assigned to a student
+        reviewed_by: Filter by who reviewed a submission
+      filter_by: "Filter by:"
+      filter_by_another_level: Filter by another level
+      filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
+      filter_by_level: Filter by level
+      filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_target: Filter by target
+      filter_hint: ...or start typing to filter by student using their name or email address
+      filter_input:
+        assigned_to: "Assigned To: "
+        level: "Level: "
+        personal_coach: "Personal Coach: "
+        reviewed_by: "Reviewed By: "
+        target: "Target: "
+      inactive_students: Inactive Students
+      include: Include
+      level: Level
+      me: Me
+      name_or_email: Name or Email
+      now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
+      now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
+      pending: Pending
+      personal_coach: Personal Coach
+      review: Review
+      reviewed: Reviewed
+      reviewed_at: Reviewed At
+      reviewed_by: Reviewed By
+      search:
+        assigned_to: "assigned to:"
+        level: "level:"
+        personal_coach: "personal coach:"
+        reviewed_by: "reviewed by:"
+        status: "status: "
+        target: "target:"
+      sort_by: "Sort by:"
+      status: Status
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
+      submitted_at: Submitted At
+      target: Target
+    CoursesReview__SubmissionCard:
+      assigned_to: Assigned to
+      completed: Completed
+      created_at: on %{created_at}.
+      feedback_sent: Feedback Sent
+      level: "Level "
+      no_submissions_found: No submissions found
+      rejected: Rejected
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team "
+    CoursesReview__SubmissionInfoCard:
+      completed: Completed
+      deleted: Deleted
+      pending_review: Pending Review
+      rejected: Rejected
+      submission_hash: Submission
+    CoursesStudents__CoachNoteShow:
+      coach_on: "on"
+      delete_note: "Delete note "
+      deleted_coach: Deleted Coach
+      sure_delete: Are you sure you want to delete this note?
+      unknown: Unknown
+    CoursesStudents__CoachNotes:
+      all_notes: All Notes
+      has_archived_notes: This student has some archived notes.
+      help_text: Notes can be used to keep track of a student's progress. These notes are shown only to coaches.
+      new_note: Add a New Note
+      no_notes: No notes here!
+      save_note: Save Note
+    CoursesStudents__Root:
+      assigned_me: "Assigned to: Me"
+      assigned_to: Assigned to
+      coach_notes: Coach Notes
+      filter_level: Filter by level, assigned coach, or search by name or email address, and more...
+      has_notes: Has notes
+      level_distribution_label: Level-wise student distribution
+      me: Me
+      name_email: Name or Email
+      no_notes: Does not have notes
+      not_found: "Could not find level selected from distribution bar, with ID "
+      restore_filer_none: Now showing all students in this course.
+      search_assigned_me: " assigned to me"
+      search_assigned_to: "assigned to "
+      search_no_notes: does not have notes has notes coach notes
+      search_tag: "tag "
+      showing_assigned: "Now showing students assigned to "
+      tagged_with: Tagged with
+    CoursesStudents__StudentDistribution:
+      level_wise: Students level-wise distribution
+      students_level: Students in level
+    CoursesStudents__StudentOverlay:
+      access_ended_at: This student's access to the course ended on %{date}.
+      average_grades: Average Grades
+      average_quiz_score: Average Quiz Score
+      close_student_report: Close student report
+      course_completed: Course Completed!
+      dropped_out_at: This student dropped out of the course on %{date}.
+      level_progress: Level Progress
+      notes: Notes
+      other_team_members: Other Team Members
+      personal_coaches: Personal Coaches
+      quizzes_attempted:
+        one: 1 Quiz Attempted
+        other: "%{count} Quizzes Attempted"
+        zero: No Quizzes Attempted
+      submissions: Submissions
+      targets: " Targets"
+      targets_overview: Targets Overview
+      team_coaches: Team Coaches
+      total_targets_completed: Total Targets Completed
+    CoursesStudents__StudentsList:
+      last_seen: Last seen %{time_string}
+      no_last_seen: This student has never signed in
+      no_students: No students to show
+      personal_coaches: Personal Coaches
+      team_coaches: Team Coaches
+    CoursesStudents__SubmissionsList:
+      no_revied_submission: No Reviewed Submission
+      submitted_on: "Submitted on "
+    CurriculumEditor:
+      create_level: Create Level
+      create_target_group: Create target group
+      edit_selected_level: Edit selected level
+    CurriculumEditor__ContentBlockCreator:
+      audio_upload_size_limit_warning: Please select a file with a size less than 10 MB.
+      button_labels:
+        embed: Embed
+        file: File
+        image: Image
+        markdown: Markdown
+        video: Video
+      close_embed: Close Embed Form
+      creating: Creating...
+      description_video_placeholder: Description for your video
+      embed_url:
+        help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#content-block-types
+        label: URL to Embed
+        save_button: Save
+      failed_create_error: An unexpected error occured. Please reload the page and try again.
+      failed_upload_error: Failed to upload file. Please check message in notification, and try again.
+      failed_url_error: The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.
+      file:
+        upload_size_warning: Please select a file with a size less than 5 MB.
+      image:
+        invalid_image_warning: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
+      invalid_audio_file_error: Please select a valid audio file
+      preparing_upload: Preparing to Upload...
+      title_video_placeholder: Title of your video
+      toggle_content_block: Toggle Content Block Form
+      upload_success_notification: File uploaded successfully.
+      video:
+        description_label: Description
+        invalid_format_warning: Invalid file format, please select an MP4, MOV, WMV or AVI file.
+        select_file_button: Select File and Upload
+        title_label: Title
+        upload_limit_warning: Please select a file less than %{maximumVideoSize} in size.
+        uploading: Uploading
+    CurriculumEditor__ContentBlockEditor:
+      delete: Delete
+      delete_block_confirm: Are you sure you want to delete this block?
+      deleting: Deleting...
+      editor_content_block: "Editor for content block "
+      move_down: Move Down
+      move_up: Move Up
+      save_changes: Save Changes
+      undo_block_confirm: Are you sure you want to undo your changes to this block?
+      undo_changes: Undo Changes
+      uploading: Updating...
+    CurriculumEditor__ContentEditor:
+      last_updated: Last Updated
+      not_versioned: Not Versioned
+      view_as_student: View as Student
+    CurriculumEditor__EmbedBlockResolver:
+      error_notification: An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.
+      trying_embed: Trying to embed URL...
+      unable_embed: Unable to embed, retrying in 1 minute...
+      video_processed: Video is being processed, retrying in 1 minute...
+    CurriculumEditor__FileBlockEditor:
+      placeholder: A title for this file
+      title: Title
+    CurriculumEditor__ImageBlockEditor:
+      resize_panel_button_title:
+        auto: Automatic width
+        four_fifths: Four-fifths width
+        full: Full width
+        three_fifths: Three-fifths width
+        two_fifths: Two-fifths width
+    CurriculumEditor__LevelEditor:
+      actions_error_title: Oops!
+      clone_level_button: Copy Level
+      clone_level_confirm: Are you sure you want to make a copy of this level?
+      clone_level_error_message: Something went wrong when we tried to copy this level. Please reload this page before trying again.
+      clone_level_hint: Pick course to copy this level into. This action will copy all targets into selected course.
+      clone_level_label: Copy Into
+      create_level: Create New Level
+      create_success: Level created successfully
+      edit_level: Edit Level %{number}
+      level_name_invalid: not a valid name
+      level_name_label: Level Name
+      level_name_placeholder: Type level name here
+      merge_levels_button: Merge and Delete
+      merge_levels_confirm: Are you sure? This action cannot be undone.
+      merge_levels_error_message: Something went wrong when we tried to merge & delete this level. Please reload this page before trying again.
+      merge_levels_hint: Pick another level to merge this level into. This action will shift all targets and students in level.
+      merge_levels_label: Delete & Merge Into
+      merge_levels_select: Select a different level
+      optional: " (optional)"
+      success: Success
+      tabs:
+        actions: Actions
+        details: Details
+      unlock_on_label: Unlock level on
+      update_level: Update Level
+      update_success: Level updated successfully
+    CurriculumEditor__TargetChecklistItemEditor:
+      add_choice: Add a choice
+      choices: Choices
+      controls_checklist: Controls for checklist item
+      copy: Copy
+      delete: Delete
+      describe_question: Type your question here
+      editor_checklist: Editor for checklist item
+      limits_notice: Students can submit up to 3 files, limited to 5 MB each.
+      move_down: Move Down
+      move_up: Move Up
+      multi_choice: Allow multiple selections
+      not_unique_question: Not a unique question; required questions must be unique
+      not_valid_choice: Not a valid choice
+      choices_not_unique: Choices must be unique
+      optional: Optional
+      question_cannot_empty: Question cannot be empty
+      remove_choice: Remove Choice
+    CurriculumEditor__TargetDetailsEditor:
+      add_another_question: Add another question
+      choose_target_group: Choose a target group
+      completion_instructions:
+        help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: Do you have any completion instructions for the student?
+      could_not_find: Could not find selected evaluation criterion with ID
+      describe_submission: Describe your submission
+      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      enter_valid_link: Enter a valid link
+      enter_valid_title: Enter a valid title
+      link_complete: Link to complete
+      mark_as_complete: Simply mark the target as completed.
+      need_submit: " needs to submit."
+      no_targets_selected: No targets selected
+      one_student_team: Only one student in a team
+      optional_braces: (optional)
+      paste_link_complete: Paste link to complete
+      prepare_quiz: Prepare the quiz now.
+      prepare_quiz_error: All questions must be filled in, and all questions should have at least two answers.
+      prerequisite_targets_label: Are there any prerequisite targets?
+      search_criteria_all: You have selected all evaluation criteria!
+      search_criteria_empty: No criteria selected
+      search_criteria_placeholder: Search evaluation criteria
+      search_targets: Search targets
+      select_criterion_label: Choose evaluation criteria from your list
+      select_criterion_warning: At least one has to be selected
+      selected_all_targets: You have selected all targets
+      submit_individually: All students must submit individually.
+      submit_form: Submit a form to complete the target.
+      take_quiz: Take a quiz to complete the target.
+      target_checklist:
+        form_label: What are the questions you would like the student to answer?
+        form_limit_warning: Maximum allowed questions is 25!
+        form_help: These are the questions a student must answer to complete the target.
+        help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
+        label: What steps should the student take to complete this target?
+      target_group: Target Group
+      target_method_of_completion_label: How do you want the student to complete the target?
+      target_reviewed_by_coach: Will a coach review submissions on this target?
+      target_role:
+        help: Should students in a team submit work on a target individually, or together?
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: How should teams tackle this target?
+      target_title_placeholder: Type target title here
+      target_visibility: Target Visibility
+      title: Title
+      update_target: Update Target
+      visit_link: Visit a link to complete the target.
+    CurriculumEditor__TargetDrawer:
+      content: Content
+      details: Details
+      unexpected_error: Unexpected error. Please reload the page.
+      unsaved_confirm: There are unsaved changes. Are you sure you want to discard them?
+      versions: Versions
+    CurriculumEditor__TargetGroupEditor:
+      choose_level: Choose a level
+      create_group: Create Target Group
+      description: Description
+      description_placeholder: Type target group description
+      group_archived_q: Is this target group archived?
+      group_details: Target Group Details
+      milestone_q: Is this a milestone target group?
+      target_group_created_notification: Target Group created successfully
+      target_group_updated_notificaion: Target Group updated successfully
+      title: Title
+      title_name_error: not a valid Title
+      title_placeholder: Type target group name here
+      update_group: Update Target Group
+    CurriculumEditor__TargetGroupShow:
+      create: Create
+      create_a_target: Create a target
+      create_target: Create target
+      milestone_targets: Milestone Targets
+      move_down: Move Down
+      move_up: Move Up
+    CurriculumEditor__TargetQuizAnswer:
+      answer_placeholder: Answer option (supports markdown)
+      correct_answer: Correct Answer
+      mark_correct: Mark as correct
+      remove_answer_option: Remove this answer option
+    CurriculumEditor__TargetQuizQuestion:
+      add_another_answer: Add another Answer Option
+      answer_placeholder: Type the question here (supports markdown)
+      question: Question
+      remove_question: Remove Quiz Question
+    CurriculumEditor__TargetShow:
+      draft: Draft
+      edit: Edit
+      edit_content: Edit content of target
+      move_down: Move Down
+      move_up: Move Up
+      of_target: of target
+    CurriculumEditor__TargetVersionSelector:
+      edit: Edit
+      preview: Preview
+      restore_version: Restore this version
+    CurriculumEditor__VersionsEditor:
+      help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
+      help_url: https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions
+      restore_version: Restore this version
+      save_version: Save this version
+      select_version: Select version
+    EditorDrawer:
+      close_editor: Close Editor
+    EvaluationCriteria__Index:
+      add_new_criterion: Add New Evaluation Criterion
+    EvaluationCriterionEditor__Form:
+      add_criterion: Add Evaluation Criterion
+      create_criterion: Create Criterion
+      grade_labels:
+        help: Assign labels for each grade, to reflect in grade cards for students and coaches
+        help_url: https://docs.pupilfirst.com/users/evaluation_criteria
+        label: Grade and Labels
+      important: Important
+      important_details: The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
+      label_grade_placeholder: Label for grade
+      max_grade: Maximum grade is
+      name_error: Enter a valid name
+      name_placeholder: Evaluation criterion name
+      passing_grade: and the passing grade is
+      update_criterion: Update Criterion
+    HelpIcon:
+      read_more: Read more
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
+    LevelProgressBar:
+      heading: Level Progress
+      course_completed: Course Completed!
+    MarkdownEditor:
+      attach_file_label: Click here to attach a file.
+      bold_insert: bold
+      control_label_bold: Bold
+      control_label_italic: Italic
+      control_label_strikethrough: Strikethrough
+      emoji_picker: Emoji
+      error_maximum_file_size: The maximum file size is 5 MB. Please select another file.
+      error_prefix: Failed to attach file!
+      error_unexpected: An unexpected error occured! Please reload the page before trying again.
+      exit_full_screen_label: Exit full screen
+      file_upload_wait: Please wait for the file to upload...
+      help_aria_label: Need help with Markdown?
+      help_label: Need help?
+      italic_insert: italics
+      mode_label_fullscreen: Full screen
+      mode_label_fullscreen_exit: Exit full screen
+      mode_label_preview: Preview
+      mode_label_preview_exit: Edit
+      mode_label_split: View editor and preview in split view
+      mode_label_split_exit: Close split view
+      strikethrough_insert: strikethrough
+    Notifications__EntryCard:
+      mark_read: Mark as Read
+    Notifications__List:
+      button_load_more: Load More Notifications...
+      empty_notifications: You don't have any notifications!
+      filter:
+        events:
+          post_created_text: Post Created
+          topic_created_text: Topic Created
+        input_hint: Search by title name or event type
+        input_label: Search
+        input_placeholder: Search by title, event, read and unread
+        label:
+          event: Event
+          status: Status
+          title: Search by title
+        status:
+          all: All
+          new: new
+          read: Read
+          unread: Unread
+      mark_all_as_read_button: Mark All as Read
+      notifications: Notifications
+      notifications_fully_loaded_text: Showing all %{total_notifications} notifications
+      notifications_partially_loaded_text: Showing %{loaded_notifications_count} of %{total_notifications} notifications
+    Notifications__Root:
+      close: "Close "
+      show_notifications: Show Notifications
+    Pagination:
+      fully_loaded_text:
+        one: Only one %{singular_name} to show
+        other: Showing all %{count} %{plural_name}
+        zero: No %{plural_name} to show
+      partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
+    SA_Coaches_CoachEditor:
+      add_coach: Add New Coach
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      coach_add: Add Coach
+      coach_created: Coach created successfully
+      coach_email: Coach email address
+      coach_left_q: Has the coach left the school?
+      coach_name: Coach Name
+      coach_profile_warn: Since the coach profile isn't public, this won't be shown anywhere
+      coach_public_q: Should the coach profile be public?
+      coach_title: Coach Title/Expertise
+      coach_title_error: Must have at least two characters
+      coach_update: Update Coach
+      coach_updated: Coach updated successfully
+      connect_link: Connect Link
+      connect_link_error: This doesn't look like a valid URL
+      connect_link_placeholder: Student connect request link for the coach
+      email: Email
+      email_input_error: Please enter a valid email address
+      input_group_error: Must have at least two characters
+      name: Name
+      replace_avatar: Replace avatar
+      title: Title
+      upload_avatar: Upload an avatar
+    SA_Coaches_SchoolIndex:
+      add_new_coach: Add New Coach
+      avatar_of: "Avatar of "
+    SA_InactiveStudentsPanel:
+      all_students: All Students
+      inactive_students: Inactive Students
+      next: Next
+      prev: Prev
+      reactivate_students: Reactivate Students
+      search_empty: No inactive student matches your search criteria.
+      search_placeholder: Search by student or team name or student email...
+      team: Team
+    SchoolAdminNavbar__Root:
+      course_nav:
+        applicants: Applicants
+        authors: Authors
+        certificates: Certificates
+        coaches: Coaches
+        curriculum: Curriculum
+        evaluation_criteria: Evaluation Criteria
+        exports: Exports
+        students: Students
+      dashboard: Dashboard
+      navbar:
+        admins: Admins
+        coaches: Coaches
+        communities: Communities
+        courses: Courses
+        customization: Customization
+        overview: Overview
+        settings: Settings
+      notifications: Notifications
+      sign_out: Sign Out
+    SchoolAdmin__EditorDrawer:
+      close_editor: Close Editor
+    SchoolAdmins__Editor:
+      add_new_admin: Add New School Admin
+      remove_confirm_post: from the list of admins?
+      remove_confirm_pre: Are you sure you want to remove
+    SchoolAdmins__Form:
+      add_new_admin: Add new school admin
+      admin_created_notification: School Admin created successfully.
+      admin_updated_notification: School Admin updated successfully.
+      create_admin: Create School Admin
+      email_error: Enter a valid Email
+      email_placeholder: Add email here
+      name_placeholder: Add name here
+      update_admin: Update School Admin
+    SchoolCommunities__CategoryEditor:
+      add_new_category: Add new category
+      delete_category: Delete Category
+      editor_category_alt: "Editor for category "
+      save_category: Save Category
+      topics:
+        one: 1 topic
+        other: "%{count} topics"
+      topics_delete_confirm: There are topics assigned to this category! Are you sure you want to delete this category?
+      update_category: Update Category
+    SchoolCommunities__CategoryManager:
+      categories_in: Categories in
+    SchoolCommunities__Editor:
+      add_categories: Add Categories
+      allowed_targets_q: Should students be allowed to discuss targets in this community?
+      can_add_topic: You can add topic categories after creating this community!
+      community_editor: Community Editor
+      community_editor_error: is not a valid name
+      community_editor_label: What do you want to call this community?
+      community_editor_placeholder: This community needs a name!
+      community_updated_notification: Community updated successfully.
+      create_community: Create Community
+      edit_categories: Edit Categories
+      give_access: "Give access to students from:"
+      no_topic: There are currently no topic categories in this community!
+      note: " Coaches in your school have access to all communities."
+      notification_answer_cant_blank: Answer cant be blank
+      notification_reload_post: Please reload the page before trying to post again.
+      search_course: Search for a course
+      search_course_all: You have selected all available courses
+      search_course_empty: No courses selected
+      topic_categories: Topic Categories
+      update_community: Update Community
+    SchoolCommunities__Index:
+      add_new_community: Add New Community
+      close_category_editor: Close Category Editor
+      close_community_editor: Close Community Editor
+      unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
+    SchoolCustomize__AgreementsEditor:
+      agreement_body: Body of Agreement
+      agreement_placeholder: Leave the agreement body empty to hide the footer link.
+      manage: Manage
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms & Conditions
+      updated_notification: has been updated.
+    SchoolCustomize__ContactsEditor:
+      address_placeholder: Leave the address empty to hide the footer section.
+      contact_address: Contact Address
+      contact_updated_notification: Contact details have been updated.
+      email_address: Email Address
+      email_address_error: is not a valid email address
+      email_address_placeholder: Leave the email address empty to hide the footer link.
+      manage_contact: Manage Contact Details
+      partial_success_notification: Partial success!
+      update_address_notification: We were only able to update the address.
+      update_contact: Update Contact Details
+      update_email_notification: We were only able to update the email address.
+    SchoolCustomize__DetailsEditor:
+      about_label: About
+      details_placeholder: Add more details about the school.
+      max_characters: (Maximum 500 characters)
+      school_name: School Name
+      school_name_error: name should be greater than 2 characters in length
+      school_name_placeholder: Type school name here
+      update_details: Update Details
+    SchoolCustomize__ImageFileInput:
+      choose_customize: Please choose an image file to customize
+      image_error_message: must be a JPEG / PNG under 2 MB in size
+      pick_replace_pre: Please pick a file to replace
+      you_selected_post: to replace the current image.
+      you_selected_pre: You have selected
+    SchoolCustomize__ImagesEditor:
+      cover_image: Cover image
+      icon: Icon
+      logo_light_label: Logo on a light background
+      manage_images: Manage Images
+      update_images: Update Images
+      updated_notification: Images have been updated successfully.
+    SchoolCustomize__LinkComponent:
+      cancel_editing: Cancel Editing
+      move_down: Move Down
+      move_up: Move Up
+    SchoolCustomize__LinkEditor:
+      add_new_link: Add a New Link
+      adding_new_link: Adding new link...
+      cant_empty_message: can't be empty
+      done_notification_body: a custom link has been added.
+      error_body: It looks like the URL you've entered isn't valid. Please check, and try again.
+      error_head: Invalid URL
+      footer_link_title: View and edit footer links
+      footer_sitemap: Footer Sitemap
+      full_url: Full URL
+      full_url_error: is not a valid URL
+      full_url_placeholder: Full URL, staring with https://
+      header: Header
+      header_links: Current Header Links
+      location_link: Location of Link
+      manage_links: Manage custom links
+      no_custom_links: There are no custom links here. Add some?
+      show_header_title: View and edit header links
+      sitemap_links: Current Sitemap Links
+      social: Social
+      social_links: Current Social Media Links
+      social_links_title: View and edit social media links
+      title: Title
+      title_placeholder: A short title for a new link
+    SchoolCustomize__MoreLinks:
+      more: More
+      show_more_links: Show more links
+    SchoolCustomize__Root:
+      add_address_q: Add an address?
+      add_contact_email_q: Add a contact email?
+      add_more_details: Add more details about the school.
+      change_cover: Change cover
+      contact: Contact
+      customize_link_footer: You can customize links in the footer.
+      customize_link_header: You can customize links on the header.
+      edit_contact_details: Edit contact details
+      edit_footer_links: Edit footer links
+      edit_header_links: Edit header links
+      edit_icon: Edit icon
+      edit_logo_dark: Edit logo (on dark backgrounds)
+      edit_logo_light: Edit logo (on light backgrounds)
+      edit_privacy: Edit privacy policy
+      edit_school_details: Edit school details
+      edit_social_links: Edit social media links
+      edit_terms: Edit Terms & Conditions
+      featured_courses: Featured Courses
+      hello_welcome: Hello, welcome to
+      homepage: Home Page
+      icon: Icon
+      privacy_policy: Privacy Policy
+      reach_us_at: React us at
+      sitemap: Sitemap
+      social: Social
+      social_links_q: Add social media links?
+      terms_and_conditions: Terms & Conditions
+    School__SearchableTagList:
+      add_new_tag: Add new tag
+      pick_tag: Pick tag
+      remove_tag: Remove tag
+      search_for_add: Search for, or add new tags
+      select_tags: Select tags
+    School__SelectBox:
+      no_items_select: There are no items to select.
+      none_selected: None Selected
+      remove: Remove
+      select: Select
+      select_from_list: Select from the following list.
+      type_search: Type to Search
+    Sorter:
+      order_by: Order by
+      toggle_sort: Toggle sort order
+    StudentActions__Root:
+      active_label: Active
+      certificates_label: Course Certificates
+      details_certificate: Details of issued certificate
+      dropout_student:
+        button: Dropout Student
+        help: Marking a student as dropped out will remove all of their access to the course.
+        help_url: https://docs.pupilfirst.com/users/students#student-actions
+        label: Has this student dropped out?
+      edit: Edit
+      empty_course_certificates_text: This course does not have any certificates to issue.
+      empty_issued_certificates_text: This student has not been issued any certificates.
+      issue_certificate_button: Issue Certificate
+      issued_by_label: "Issued by:"
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      manage_certificates: Manage student certificates
+      new_certificate_label: "Issue new certificate:"
+      page_description: Actions for the student
+      re_activate_student:
+        button: Re-Activate Student
+      revoke_certificate_button: Revoke Certificate
+      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
+      revoked_by_label: "Revoked by:"
+      revoked_date_label: "Revoked on:"
+      revoked_status_label: Revoked
+      select_certificate_input_label: Select a certificate to issue
+    StudentBulkImport__Root:
+      csv_data_errors:
+        invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_email: Email has to be valid and can't be blank
+        invalid_name: Name column can't be blank and should be within 250 characters
+        invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+        invalid_team_name: Team name has to be less than 50 characters
+        invalid_title: Title has to be less than 250 characters
+      csv_file_errors:
+        empty: The selected CSV has no valid rows
+        exceeded_entries: The CSV file has more than 1000 entries.
+        invalid: Please select a valid CSV file with size less than 5 MB
+        invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
+        invalid_template: The selected CSV file does not have a valid template
+      csv_file_input:
+        help: This file will be used to import students in bulk. Check the sample file for the required format.
+        help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
+        label: CSV Import file
+        placeholder: Select CSV file to import
+      drawer_heading: Bulk Import Students
+      error_summary_title: "Here is a summary of the errors in the sheet: "
+      example_csv_link:
+        text: Download an example .csv file
+        url: https://docs.pupilfirst.com/files/student_import_sample.csv
+      import_button_text: Import Students
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      page_description: Upload the CSV file containing the students you want to add to the course.
+      page_title: Import students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+      pick_a_cohort: Pick a Cohort
+      select_a_cohort: Select a cohort
+      success_notification: Import initiated successfully! You will be notified in an email once complete.
+      valid_data_message: Data validated successfully!
+      valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
+    StudentCourse__Header:
+      calendar: Calendar
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
+      students: Students
+      unknown: Unknown
+    StudentCreator__CreateForm:
+      added_full_description: All students were created successfully.
+      added_none_description: All the students you tried to add were already a part of this course.
+      added_none_title: Nothing Changed
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_partial_title: Partially Added
+      drawer_heading: Add New Students
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      pick_a_cohort: Pick a Cohort
+      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
+      save_list_button: Save List
+      select_a_cohort: Select a cohort
+      select_cohort: Select Cohort
+      student_list: Student list
+      team_header_add_more_members: Add more team members!
+      team_header_label: TEAM %{team_name}
+      teams_to_add_empty: This list is empty! Add some students using the form above.
+      teams_to_add_label: "These new students will be added to the course:"
+    StudentCreator__Root:
+      page_description: You can add multiple students to a list and add them to course
+      page_title: Add new students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+    StudentCreator__StudentInfoForm:
+      add_to_list: Add to List
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        error:
+          invalid: invalid email
+          not_unique: email address not unique for student
+        label: Email
+        placeholder: Student email here
+      name:
+        label: Name
+        message: is not valid
+        placeholder: Student name here
+      tags:
+        label: Tags
+      team:
+        help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+        label: Team Name
+        placeholder: Avengers, Fantastic Four, etc.
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    StudentDetails__Root:
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      edit: Edit
+      name: Name
+      pages:
+        actions: Actions
+        details: Details
+      personal_coaches: Personal Coaches
+      pick_a_cohort: Pick a Cohort
+      search_coaches_all: You have selected all available coaches!
+      search_coaches_empty: No coaches selected
+      search_coaches_placeholder: Search coaches
+      select_a_cohort: Select a cohort
+      student_name_placeholder: Student name here
+      student_updated: Student updated successfully
+      student_updated_moved: Student has been updated, and moved to list of inactive students
+      tags_applied: Tags applied
+      tags_applied_team: Tags applied to team
+      tags_applied_user: Tags applied to user
+      team_coaches: Team Coaches
+      team_name: Team Name
+      team_name_error: Team Name must have at least two characters
+      team_name_placeholder: Team name here
+      team_updated_moved: Team has been updated, and moved to list of inactive students
+      title: Title
+      title_error: Title must have at least two characters
+      title_placeholder: Student, Coach, CEO, etc.
+      update_student: Update Student
+    StudentTopNav:
+      sign_in: Sign In
+      sign_out: Sign Out
+    StudentTopNav__DropDown:
+      more: More
+      show_links: Show more links
+    StudentTopNav__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
+    StudentsEditor__Root:
+      button_add_new_students: Add New Students
+      button_all_students: All Students
+      button_bulk_import: Bulk Import
+      button_inactive_students: Inactive Students
+      group_as_team: Group as Team
+      move_out_team: Move out from Team
+      sort_criterion_label: "Sort by:"
+      sort_criterion_last_created: Last Created
+      sort_criterion_last_updated: Last Updated
+      sort_criterion_name: Name
+      teams_updated_success: Teams updated successfully
+    StudentsEditor__Search:
+      filter_input_label: "Filter by:"
+      filter_input_placeholder: Type name, tag or level
+    StudentsEditor__StudentInfoForm:
+      add_list: Add to List
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      email: Email
+      email_not_unique: email address not unique for student
+      email_placeholder: Student email here
+      invalid_email: invalid email
+      name: Name
+      name_placeholder: Student name here
+      tags: Tags
+      team_name: Team Name
+      team_name_help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+      team_name_placeholder: Avengers, Fantastic Four, etc.
+      title: Title
+      title_placeholder: Student, Coach, CEO, etc.
+    StudentsEditor__TeamsList:
+      check_spelling: Make sure the spelling is correct.
+      clear_filter: Clear Filter
+      empty_message: No students here.
+      level: Level
+      load_more: "Load More "
+      no_results_found: Sorry, no results found.
+      students_fully_loaded_text:
+        one: There's only one student.
+        other: Showing all %{count} students
+      students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
+      team: Team
+      try_removing_filter: Try removing the search filter options.
+    StudentsEditor__UpdateForm:
+      actions: Actions
+      details: Details
+    StudentsIndex__Root:
+      add_new_students: Add New Students
+      cohort: Cohort
+      edit: Edit
+      filter:
+        search_by_email: Search by Email
+        search_by_name: Search by Name
+        user_tag: User Tag
+      level: Level
+      load_more: Load More
+      pagination:
+        empty_message: No Students Found
+      sorter:
+        first_created: First Created
+        first_updated: First Updated
+        last_created: Last Created
+        last_updated: Last Updated
+        name: Name
+      student: student
+      students: students
+      title: Students
+    SubmissionChecklistItemShow:
+      correct: Correct
+      incorrect: Incorrect
+      mark_correct: Mark as correct
+      mark_incorrect: Mark as incorrect
+    SubmissionChecklistShow:
+      target_marked_as_complete: Target was marked as complete.
+    TargetChecklistItem:
+      action_string_attach_link: Attach a Link
+      action_string_choose_from_list: Choose from a list
+      action_string_record_audio: Record Audio
+      action_string_upload_files: Upload Files
+      action_string_write_long_text: Write Long Text
+      action_string_write_short_text: Write Short Text
+    TeamsActions__Root:
+      delete: Delete
+      delete_team: Delete team
+      delete_team_info: Delete will remove all the students from the team and delete the team
+      edit: Edit
+      pages:
+        actions: Actions
+        links: Details
+      team_actions: Team actions
+    TeamsCreator__Root:
+      title: Create new team
+    TeamsDetails__Root:
+      edit: Edit
+      page_description: Edit team details
+      pages:
+        actions: Actions
+        details: Details
+    TeamsIndex__Root:
+      create_team: Create Team
+      edit: Edit
+      filter:
+        search_by_team_name: Search by Team Name
+      load_more: Load More
+      page_title: Teams
+      pagination:
+        empty_message: No Teams Found
+      sorter:
+        first_created: First Created
+        last_created: Last Created
+        name: Name
+      team: team
+      teams: teams
+    TopicsShow__LikeManager:
+      like: Like
+      like_button_tooltip: Like this post
+      post: post
+      unlike: Unlike
+    TopicsShow__PostEditor:
+      cancel: Cancel
+      cant_blank: Reply can't be blank
+      empty: Empty
+      post_reply: Post Your Reply
+      reason_edit: Reason for this edit (optional)
+      reply_to: Reply To
+      type_reply: Type in your reply. You can use Markdown to format your response.
+      update_post: Update Post
+      update_reply: Update Reply
+      your_reply: Your Reply
+    TopicsShow__PostReply:
+      jump_reply: Jump to reply
+      navigate_post: Navigate to post
+    TopicsShow__PostShow:
+      add_reply_post: "Add reply to post "
+      add_reply_topic: Add reply to topic
+      delete_post_confirm_dialog: Are you sure you want to delete the post? This cannot be undone.
+      delete_reply_string: Delete Reply
+      delete_topic_confirm_dialog: Are you sure you want to delete the topic? This cannot be undone.
+      delete_topic_string: Delete Topic
+      deleted_user_name: Deleted User
+      edit_post_string: Edit Post
+      edit_reply_string: Edit Reply
+      go_to_solution_button: Go to solution
+      history_button_text: History
+      last_edited_by_label: "Last edited by "
+      mark_as_solution_label: Mark as solution
+      mark_solution: Mark as solution
+      mark_solution_confirm: Are you sure you want to mark this post as solution?
+      marked_solution_icon: Marked as solution icon
+      new_reply_button: Reply
+      options_post: Options for post
+      replies_post: Replies to post
+      show_replies: Show replies of post
+      show_replies_button:
+        one: 1 Reply
+        other: "%{count} Replies"
+      solution: Solution
+      solution_icon_label: Solution
+      unmark_solution: Unmark as solution
+      unmark_solution_confirm: Are you sure you want to unmark this post as solution?
+    TopicsShow__Root:
+      edit_topic_button: Edit Topic
+      linked_target_label: "Linked Target: "
+      lock_topic_button: Lock Topic
+      lock_topic_confirm: Are you sure you want to lock this topic?
+      locked_topic_notice: This topic thread has been locked; no new replies can be posted.
+      select_category: Select category
+      select_no_category: Select no category
+      selected_category: Selected category
+      topic_category_label: "Topic Category: "
+      topic_details: Topic Details
+      topic_editor_cancel_button: Cancel
+      topic_title: Topic Title
+      unlock_topic_button: Unlock Topic
+      unlock_topic_confirm: Are you sure you want to unlock this topic?
+      update_topic_button: Update Topic
+      view_target_button: View Target
+    TopicsShow__SubscriptionManager:
+      subscribe: Subscribe
+      unsubscribe: Unsubscribe
+    UserEdit:
+      about: About
+      about_placeholder: A brief introduction about yourself
+      account: Account
+      account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
+      already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
+      avatar_uploaded_notification: Avatar uploaded successfully.
+      cancel: Cancel
+      change_password: Change your current password
+      change_photo: Change photo
+      community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
+      confirm_dialog_aria: Confirm dialog for account deletion
+      confirm_email: Confirm your email
+      confirm_password: Confirm password
+      confirm_password_error: New password and confirmation should match and must have atleast 8 characters
+      confirm_password_placeholder: Confirm new password
+      current_password: Current password
+      delete_account: Delete account
+      delete_your_account: Delete your account
+      deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
+      disable_email_radio: Disable
+      displayed_publicly: This information will be displayed publicly so be careful what you share.
+      edit_profile: Edit your profile
+      email_label: Email
+      email_placeholder: Type your email
+      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      initiate_deletion: Initiate Deletion
+      language: Language
+      localization: Localization
+      manage_account: Manage your account in this school
+      name_error: Name can't be blank
+      name_placeholder: Type your name
+      new_password: New password
+      new_password_placeholder: Type new password
+      notifications: Notifications
+      password_placeholder: Type current password
+      photo: Photo
+      preferred_name_placeholder: Type your preferred name
+      save_changes: Save Changes
+      security: Security
+      select_image_limit: Please select an image with a size less than 5 MB
+      select_language: Select the language that you would prefer the user interface to dislpay.
+      send_email_radio: Send me a daily email
+      set_password: Set password for your account
+      update_credentials: Update your login credentials for the school.
+      update_email_notifications: Update settings for email notifications.
+      update_locale: Update settings related to your locale.
+      upload_failed: Failed to upload
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+    UserSessionResetPassword:
+      confirm_password: Confirm Password
+      confirm_password_placeholder: Please re-enter your password
+      confirm_your_password: Confirm your password
+      enter_new_password: Enter new password
+      new_password: New Password
+      new_password_placeholder: Enter a strong password
+      password_short: Password is too short
+      passwords_not_match: Passwords do not match
+      set_new_password: Set new password
+      update_password: Update Password
+      updating_password: Updating password...
+    UsersDashboard__Root:
+      certificates: Certificates
+      communities: Communities
+      course_locked_message: Your student profile for this course is locked, and cannot be updated.
+      cta:
+        access_ended: Preview/Limited Access
+        course_ended: Course Ended
+        dropped_out: Dropped out
+        edit_curriculum: Edit Curriculum
+        leaderboard: Leaderboard
+        my_students: My Students
+        review_submissions: Review Submissions
+        view_certificate: View Certificate
+        view_course: View Course
+        view_curriculum: View Curriculum
+        visit_community: Visit Community
+      edit_curricullum: Edit Curriculum
+      edit_profile: Edit Profile
+      empty_courses: You don't have any active courses right now.
+      issued_on: "Issued on:"
+      my_courses: My Courses
+    UsersDeleteAccount:
+      cancel: Cancel
+      click_button_below: Please click the button below to permanently delete your account in this school
+      delete_account: Delete Account
+      deletion_progresss: Account deletion is in progress.
+      head: We're sorry to see you go.
+      please_wait: Please wait...
+      queuing_deletion: We're queuing your account for deletion.
+      signed_out_notified: You will now be signed out, and you will be notified over email once deletion is complete.
+    VerifyCertificate__Root:
+      cancel: Cancel and return
+      description: This certificate was issued to <strong class="whitespace-nowrap">%{name}</strong> on <strong class="whitespace-nowrap">%{issue_date}</strong> for the course <strong>%{course_name}</strong>.
+      heading: Congratulations <strong class="whitespace-nowrap">%{name}</strong>!<br/>You've earned it.
+      originally_issued_to: This student's name was updated after the certificate was issued. This certificate was originally issued to <strong>%{name}</strong>.
+      print_or_save: Print, or save as PDF
+      serial_number: Serial No. %{serial}
+    WebPushSubscriptionManager:
+      notification_rejected: Permission Rejected
+      notification_rejected_message: If you change your mind, click the lock icon to give your browser permission to send you desktop notifications.
+      subscribe: Subscribe
+      subscribed_on_another_device: Subscribe on this Device
+      unsubscribe: Unsubscribe
+  courses:
+    apply:
+      apply_button: Apply
+      email_label: Email
+      email_placeholder: john@example.com
+      enroll: Enroll in
+      heading: Enroll in %{course_name} course
+      name_label: Name
+      name_placeholder: John Doe
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms & Conditions
+    calendar:
+      no_events_text: No event scheduled for the selected date
+      today: Today
+      upcoming_events: Upcoming events in %{month}
+      events: Events
+    leaderboard:
+      active_students: Active Students
+      change: Change
+      inactive_students: Inactive Students
+      level: Level
+      new_new: New
+      no_entries: The leaderboard doesn't have any entries for this period.
+      note_html: This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
+      page_title: Enroll in %{course_name}
+      rank: Rank
+      score: Score
+      student: Student
+    process_application:
+      errors: "There were errors with your submission: %{form_errors}"
+      sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+    show:
+      apply_button: Apply
+      apply_now: Apply Now
+      continue_course: Continue Course
+      enroll: Enroll in
+      preview_course: Preview Course
+  errors:
+    internal_server_error:
+      details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      title: Server Error
+      went_wrong: We're sorry, but something went wrong.
+    messages:
+      content_type_invalid: has an invalid content type
+      limit_out_of_range: total number is out of range
+    not_acceptable:
+      details: It looks like your browser requested a response in a format that our server cannot fulfil. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      invalid_format: Your browser requested an invalid format.
+      title: Invalid Request
+    not_found:
+      mistyped_moved: You may have mistyped the address, or the page may have moved.
+      not_exist: The page you were looking for doesn't exist!
+      title: Not Found
+      try_homepage: Try heading back to our homepage?
+    service_unavailable:
+      title: Timed out
+      too_long: This page took too long to load.
+      try_reloading: Could you please try reloading this page?
+    unprocessable_entity:
+      invalid_request: Your browser made an invalid request.
+      title: Invalid Request
+      wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+  faculty:
+    index:
+      coaches_at: المشرفون في
+      title: المشرفون
+  help:
+    show:
+      title: مساعدة
+  home:
+    agreement:
+      privacy_policy: الحقوق والخصوصية
+      terms_and_conditions: مبادئ حقوق الملكية الفكرية وحقوق النشر
+    index:
+      access_ended: مراجعة محتوى الدورة
+      active: متابعة الدورة
+      dropped_out: مفصول
+      featured_courses_heading: البرامج الحالية
+      get_started: البدء
+      learn_more: قراءة المزيد
+      welcome_prefix: مرحبًا، اهلا بكم في
+    offline:
+      heading: انت غير متصل
+      message_html: يبدو أن هناك مشكلة في الاتصال<br/> الرجاء التحقق من حالة الشبكة
+      title: انت غير متصل
+  issued_certificates:
+    verify:
+      title: شهادة
+  jobs:
+    courses:
+      clone_course:
+        new_name: "%{name} - نسخ"
+    notifications:
+      create:
+        message:
+          post_created: "رد %{user_name} على نقاش شاركت فيه في مجتمع %{community_name}"
+          topic_created: "أنشئ %{user_name} نقاشا جديدا في مجتمع %{community_name}"
+  layouts:
+    student_footer:
+      contact: تواصل معنا
+      logo: الشعار
+      privacy_policy: سياسة الخصوصية
+      reach_us: البريد
+      sitemap: خريطة الموقع
+      social: شبكات التواصل الاجتماعي
+      support: الدعم الفني
+      terms_conditions: شروط وأحكام
+  mailers:
+    applicant:
+      enrollment_verification:
+        body_html: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this %{link_to} will verify your email-address and confirm that you wish to create an account at %{school_name}.
+        body_processing_url_html: We've received your application to the %{course_name} course at %{school_name}.<br/> Please verify your email address by clicking %{link_to}. Once your email address is verified, you will be shown the next steps required to complete your application.
+        link_text: one-time link
+        link_text_processing_url: this link
+        subject: Verify Your Email Address
+        subject_with_processing_url: Complete your %{course_name} course application
+    coach:
+      course_enrollment:
+        subject: You have been added as a coach in %{course_name}
+      repeat_rejections_alert:
+        body_html: Please consider going through <a href="%{review_url}">the student's submission</a> to see if there's some feedback you can give to help the student progress.
+        header: A bot has rejected a student's submission %{rejection_count} times in the %{course_name} course.
+        subject: Repeated rejection of a student's submission (%{rejection_count} times)
+    course_author:
+      addition:
+        body:
+          added_author_html: You have been added as an author in the course <strong>%{course_name}</strong>, on %{school_name}. This gives you the ability to use the school administration interface to edit the contents of the course, and to <em>preview</em> the course as a student.
+          link_to: this link
+          use_link_html: Use %{link_to} to sign into %{school_name} and view the course
+        subject: You have been added as an author in %{course_name}
+    course_enrollement:
+      added_coach_html: You have been added as a coach in the course <strong>%{course_name}</strong>, on %{school_name}. This gives you the ability to review submissions from students, assign grades, and give them feedback on their work.
+    course_export:
+      prepared:
+        body:
+          footer: The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all popular spreadsheet applications.
+          header_html: The export that you requested for the course %{course_name} on %{course_export_created_at} is now ready for download. Please visit <a href="%{link}">the course exports page</a> to download the export.
+          link_to: link
+        subject: Export of %{course_export} course is ready for download
+        subtitle: The export of data from course %{course_name} is ready for download.
+        title: Export of course is ready
+        title_button_text: Visit Exports Page
+    issued_certificate:
+      issued:
+        body:
+          awarded_certificate_html: You've been awarded a certificate for completing the <strong>%{course_name}</strong> course.
+          congratulations: Congratulations!
+          issued_on_html: The certificate was issued on %{issued_certificate} and can be viewed or printed by %{link_to}.
+          link_to: visiting the certificate's public link
+        subject: You have been awarded a certificate!
+    layouts:
+      mail:
+        thanks: Thanks,
+    link_fallback:
+      link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+    school_admin:
+      email_updated_notification:
+        body:
+          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
+          user_html: <strong>%{name}</strong> from your school has updated the email address.
+        subject: "%{name} has changed email address."
+      school_admin_added:
+        body:
+          admin_name_html: The new admin's name is <strong>%{new_school_admin_name}</strong>, and has the registered email address <a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>.
+          link_to: link
+          new_admin_html: A new administrator was added to your school <strong>%{school_name}</strong>, on %{new_school_admin} by %{adding_user_name}.
+          not_recognized_html: If you do not recognize this user, you can can remove them from the school administration interface using this %{link_to}.
+        subject: New School Admin Added
+      students_bulk_import_complete:
+        body:
+          link_to: view these newly added students in the school administration interface
+          report_attachments: Some of the students you tried to import were already enrolled in the course. These students were ignored during the import. A list of email addresses of such students has been included as an attachment with this email.
+          students_added_html: <b>Students added:</b> %{report_params}
+          students_requested_html: <b>Students requested:</b> %{report_params}
+          summary_import_html: "Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here's a small summary on the import:"
+          view_html: You can %{link_to}.
+        subject: Import of Students Completed
+    startup:
+      feedback_as_email:
+        body:
+          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_feedback_header: Here is some feedback on your submission
+          grading_header: Your submission was awarded the following grades by %{coach_name}
+          link_to: the full feedback
+          main_html: Here is some feedback from %{coach_name} on your %{update_for}
+          recent_submission: recent submission
+          recent_updates: recent updates
+          view_html: You can view %{link_to}, including any files attached to the feedback.
+        subject: New feedback from %{startup_feedback} on your submission
+    student:
+      enrollment:
+        body:
+          link_to: sign into %{school_name} and start working on this course
+          main_html: You have been enrolled as a student in the course <strong>%{course_name}</strong>, on %{school_name}.
+          sign_html: You can now %{link_to}.
+          team: You have also been teamed up with %{team_members}; this means that you will be expected to work together to progress in this course.
+        subject: You have been added as a student in %{school_name}
+    user:
+      account_deletion_notification:
+        body:
+          link_to: please sign into the school
+          main_html: <p> We noticed that you haven't used your account in %{school_name} for over %{inactivity_months} months.  </p> <p> We will automatically delete your account after one month. Once your account is deleted, all your personal information will be removed and you will no longer have access to the school.</p> <p> If you would like to keep your account, %{link_to} before %{one_month_from_now}.  </p>
+        subject: Your account in %{school_name} will be deleted in 30 days
+      confirm_account_deletion:
+        body:
+          html: <p> Your account in %{school_name} has been successfully deleted. </p> <p> All your personal information has been removed and you will no longer have access to this school.</p>
+        subject: Account deleted successfully from %{school_name}
+      confirm_email_update:
+        body:
+          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+        subject: Your email in %{school_name} school updated successfully
+      daily_digest:
+        body:
+          asked: asked %{days_ago} days ago.
+          assigned: (%{stats} assigned to you)
+          assigned_none: (none of which are assigned to you)
+          control_emails_html: You can control these emails from %{link_to}.
+          latest_topics: "Latest topics posted on your communities:"
+          link_to: your profile edit page
+          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in some courses that you are a coach in:"
+          older: "Older, popular topics that have seen new activity:"
+          replies: replies
+          views: views
+        subject: Daily Digest
+      delete_account_token:
+        body:
+          link_to: link
+          main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
+        subject: Delete account from %{school_name}
+      new_post:
+        body:
+          link_to: view the reply on the %{community_name} community
+          main_html: <p>%{author_name} has posted a reply to something you said on the %{community_name} community.</p> <p>You can %{link_to}.
+        subject: New reply for your post
+      update_email_token:
+        body:
+          link_to: link
+          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible.</p>
+        subject: Update your email address in %{school_name} school
+    user_session:
+      send_login_token:
+        body:
+          link_to: click here
+          main_html: <p> Please %{link_to} to login to your %{school_name} account.  </p>
+        subject: Log in to
+      send_reset_password_token:
+        body:
+          link_to: click here
+          main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
+        subject: account recovery
+  models:
+    faculty:
+      commitment:
+        full_time: دوام كامل
+        part_time: دوام جزئى
+    target:
+      role:
+        founder: كل المؤسسين
+        team: الفريق
+  mutations:
+    archive_coach_note:
+      note_removed_notification: Note removed successfully
+    archive_course:
+      success_notification: Course archived successfully.
+    archive_post:
+      post_archived_notification: Post archived successfully
+    assign_reviewer:
+      submission_already_assigned: This submission has been already assigned to a coach.
+      submission_graded_error: You can only assign yourself to pending submissions.
+      success_notification: This submission has been assigned to you.
+    auto_verify_submission:
+      success_notification: Target has been marked as complete.
+    clone_course:
+      success_notification: Course copy requested. It will appear here soon!
+    clone_level:
+      success_notification: Level copy requested. It will apppear in target course soon!
+    create_coach_note:
+      note_added_notification: Note added successfully
+    create_cohort:
+      success_notification: Cohort created successfully.
+    create_community:
+      community_created_notification: Community created successfully
+    create_course:
+      success_notification: Course created successfully!
+    create_course_author:
+      author_created_notification: Author Created
+      new_author_added_notification: A new author has been added to this course.
+    create_evaluation_criterion:
+      eval_crit_notification: Evaluation criterion created successfully!
+    create_feedback:
+      success_notification:
+        description: Your feedback will be e-mailed to the student.
+        title: Feedback Sent
+    create_grading:
+      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      grade_recorded: Grades Recorded
+      invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
+      invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
+      invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
+      submission_graded_error: Submission already graded
+      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      success_notification: The submission has been marked as reviewed.
+    create_post:
+      reply_added_notification: Reply added successfully
+    create_quiz_submission:
+      responses_saved_notification: Your responses have been saved.
+    create_school_link:
+      blank_title_error: A title is required
+      success_notification: A custom link has been added.
+    create_student_from_applicant:
+      success_notification: Student created successfully.
+    create_submission:
+      blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
+      form_success_notification: Your response has been saved.
+      invalid_files_attached: Some files attached are invalid
+      invalid_submission_checklist: Submission checklist is not valid.
+      item_file_limit_error: No more than three files can be attached to a submission item
+      linked_file_exists_error: Some file attachments have already been linked to a submission
+      missing_answer_error: "Missing answer for question: %{title}"
+      success_notification: Your submission has been queued for review.
+    create_target:
+      success_notification: Target created successfully.
+    create_target_version:
+      new_version_notification: A new version has been created.
+    create_team:
+      success_notification: Team created successfully
+    create_topic_subscription:
+      success_notification: You will be notified about all the updates.
+    delete_certificate:
+      success_notification: Certificate has been deleted.
+    delete_course_author:
+      author_deleted_details_notification: The author has been removed from this course.
+      author_deleted_notification: Author Deleted
+    destroy_team:
+      success_notification: Team deleted successfully
+    dropout_student:
+      student_updated_notification: Student updated successfully
+    export_course_report:
+      course_not_found_error: Could not find a course with the given ID
+      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
+      tag_not_found_error: Could not find tags with the given IDs
+    initiate_account_deletion:
+      check_inbox_notification: Check your inbox for further steps!
+      deletion_init_notification: Account Deletion Initiated
+    issue_certificate:
+      success_notification: Certificate issued successfully!
+    lock_topic:
+      success_notification: This topic has been locked. No new replies will be accepted.
+    mark_post_as_solution:
+      reply_marked_notification: Reply marked as solution successfully
+    merge_cohort:
+      success_notification: Cohorts merged successfully.
+    merge_levels:
+      merge_complete_notification: Merge complete!
+    quiz:
+      correct_answer: Correct Answer
+      question: Question
+      your_answer: Your Answer
+      your_correct_answer: Your Correct Answer
+    re_activate_student:
+      success_notification: Student re-activated successfully!
+    reassign_reviewer:
+      submission_graded_error: You can only assign yourself to pending submissions.
+      submission_not_assigned_to_coach: The submission is already assigned to you.
+      success_notification: The submission has been assigned to you.
+    revoke_issued_certificate:
+      success_notification: Certificate revoked!
+    send_update_email_token:
+      success_notification: We've sent you a link to verify your new email!
+    unarchive_course:
+      success_notification: Course unarchived successfully
+    unassign_reviewer:
+      submission_assigned_to_another_coach: The submission is assigned to another coach.
+      submission_graded_error: This submission has already been graded.
+      submission_not_assigned: The submission is not yet assigned.
+      success_notification: You're no longer assigned to this submission.
+    undo_grading:
+      must_be_graded: Could not find a graded submission with the given ID
+      success_notification:
+        description: The submission is now pending review.
+        title: Grades Removed
+    unlock_topic:
+      success_notification: This topic has been unlocked. Community members can now post replies again.
+    unmark_post_as_solution:
+      reply_unmarked_notification: Reply unmarked as solution!
+    update_certificate:
+      success_notification: Certificate details have been updated.
+    update_cohort:
+      success_notification: Cohort updated successfully.
+    update_course:
+      success_notification: Course updated successfully!
+    update_course_author:
+      author_name_updated_notification: The author's name has been updated.
+      author_updated_notification: Author Updated
+    update_evaluation_criterion:
+      eval_crit_updated_notification: Evaluation criterion updated successfully!
+    update_post:
+      updated_success_notification: updated successfully
+    update_review_checklist:
+      review_updated_notification: Review checklist updated successfully
+    update_school:
+      details_updated_notification: Details updated successfully!
+    update_school_link:
+      link_not_found_error: Unable to find link!
+      success_notification: Link updated successfully!
+    update_student_details:
+      success_notification: Student updated successfully
+    update_target:
+      checklist_items_exceeded_error: Checklist should not have more than 25 items
+      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
+      invalid_checklist_error: Checklist not valid
+      multiple_method_of_completion: More than one method of completion
+      prerequisities_archived_error: Cannot have archived prerequisites
+      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      success_notification: Target updated successfully!
+      target_group_not_present_error: Target group does not exist
+      target_missing_error: Target does not exist
+    update_team:
+      success_notification: Team updated successfully
+    update_topic:
+      topic_updated_notification: Topic updated successfully!
+    update_user:
+      profile_saved_notification: Profile updated successfully!
+  organisations:
+    index:
+      heading: Organisations
+    show:
+      active_students_label: Active Students
+      cohorts_subheading: Cohorts
+      organisation_label: Organisation
+      students_enrolled_heading: Students enrolled in
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> active cohort
+        other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+      total_students_label: Total Students
+    students:
+      show:
+        average_grades: Average Grades
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
+  posts:
+    versions:
+      back_to_post: العودة إلى المنشور
+      created_by: أنشئ بواسطة
+      current_version: النسخة الحالية
+      edit_history: سجل تعديل المنشور
+      edited_by: تم التعديل بواسطة
+      reason: السبب
+  presenters:
+    apply:
+      page_title: سجّل في %{course_name}
+    communities:
+      new_topic:
+        page_title:
+          community: مجتمع
+          new_topic: موضوع جديد
+      show:
+        page_title:
+          community: مجتمع
+    courses:
+      leaderboard:
+        heading:
+          multiple_mid_text: "يتصدرون لوحة المتفوقين هذا الاسبوع بنتيجة "
+          others: آخرون
+          top_leaderboard_html: <span class="font-bold">أنت</span> تحتل مرتبة الصدارة في لوحة المتفوقين<span class="font-bold"> تهانينا! </span>
+          top_week: يتصدر لوحة المتفوقين هذا الاسبوع بنتيجة
+        rank_change_icon:
+          rank_down_alt: تخفيص المرتبة
+          rank_down_double_alt: تخفيص المرتبة درجتين
+          rank_no_change_alt: عدم التغيير
+          rank_up_alt: رفع المرتبة
+          rank_up_double_alt: رفع المرتبة درجتين
+      report:
+        student_report: تقرير الطلب
+      review:
+        review_dashboard: مراجعة اللوحة الرئيسية
+      students:
+        students_in_course: الطلاب في الدورة
+    layouts:
+      app_router:
+        admin_link:
+          title: المدير
+        coaches_link:
+          title: المشرفون
+        dashboard_link:
+          title: اللوحة الرئيسية
+      footer:
+        nav_links:
+          dashboard: لوحة المعلومات
+          home: الرئيسية
+      students_top_nav:
+        admin_link:
+          title: الأكاديمية
+        coaches_link:
+          title: الكادر
+        dashboard_link:
+          title: دوراتي
+        organisations_link:
+          title: My Org
+    posts:
+      versions:
+        page_title:
+          title: الإصدارات | المنشورات
+    users:
+      sessions_new:
+        button_text:
+          continue_as_developer: المتابعة كمطور
+          continue_with_discord: Continue with Discord
+          continue_with_email_link: المتابعة بالبريد الالكتروني
+          continue_with_facebook: المتابعة بفيسبوك
+          continue_with_github: المتابعة بغيتهاب
+          continue_with_google: المتابعة بجوجل
+        page_title:
+          title: تسجيل الدخول
+  queries:
+    delete_certificate_mutator:
+      issued_error: تم إصدار هذه الشهادة لطالب واحد أو أكثر - لا يمكن حذفها.
+    issue_certificate_mutator:
+      certificate_error: تعذر العثور على الشهادة المحددة.
+      issued_error: لقد تم بالفعل إصدار شهادة لهذا الطالب لهذه الدورة.
+  schools:
+    admins:
+      title: المدراء
+    calendars:
+      new:
+        title: 'Create new calendar'
+        name_label: Calendar name
+        cohorts_label: Link calendar to cohorts
+        no_cohorts_selected: No cohorts selected
+        all_cohorts_selected: All cohorts selected
+        add_calendar_button: Add calendar
+      edit:
+        update_calendar: Update calendar
+        link_to_cohorts: Link calendar to cohorts
+        calendar_name: Calendar name
+    calendar_events:
+      new:
+        title: 'Add new event'
+        new_event: 'Add new event'
+        edit_event: 'Edit event'
+        title_label: Event Title
+        select_calendar_label: Add event to
+        select_color_label: Color
+        start_time_label: Date and Time
+        add_link_section_title: Add an event link (optional)
+        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
+        event_link_title_label: Event link title
+        event_link_url_label: Event link URL
+        description_label: Description
+        add_event_button: Add event
+        link_title_placeholder: eg. Zoom meeting link
+      show:
+        title: 'Calendar event details'
+        link_label: Event Link
+        description_label: Description
+        date_and_time: Date and time
+        confirm_delete: Are you sure to delete the event?
+    communities:
+      index:
+        title: المجتمعات
+    courses:
+      applicants:
+        title: المتقدمون
+      authors:
+        title: المؤلفون
+      calendar_events:
+        title: Calendars and Events
+        add_calendar_button: Add Calendar
+        calendar: Calendar
+        calendars: Calendars
+        calendar_filter_label: Showing events from
+        select_calendar_filter: Select a calendar
+        upcoming_events_in: Upcoming events in
+        add_event_button: Add an event
+        events: Events
+        empty_events: No event scheduled for the selected date
+        today: Today
+        no_calendars_message: No calendars yet
+        no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
+      certificates:
+        title: الشهادات
+      curriculum:
+        title: المنهاج
+      evaluation_criteria:
+        title: معيار التقييم
+      exports:
+        title: التصديرات
+      inactive_students:
+        title: الطلاب
+      index:
+        title: الدورات
+      mark_teams_active:
+        teams_active: تم إعادة تنشيط الفريق بنجاح
+      students:
+        title: الطلاب
+    customize:
+      title: الإعداد
+    faculty:
+      course_index:
+        title: المشرفون
+      school_index:
+        title: المشرفون
+    show:
+      coaches: المشرفون
+      courses: الدورات
+      levels: المستويات
+      no_submissions: لا يوجد إرساليات
+      overview: null
+      students: الطلاب
+      submissions_reviewed: الإرساليات المدققة
+      title: نظرة عامة
+  services:
+    discord:
+      community_message_service:
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: يجب أن ينتمي الطلاب إلى نفس المستوى للانضمام إلى فريق
+  shared:
+    _no: لا
+    _yes: نعم
+    all: الكل
+    and: و
+    archived: مؤرشف
+    are: هو
+    avatar: صورة رمزية
+    back_link: Back
+    cancel: إلغاء
+    caption_image: أضف وصفا لهذه الصورة
+    close: إغلاق
+    coaches: المشرفون
+    cohorts: المجموعات
+    community: المجتمع
+    completed: مكتمل
+    dashboard: اللوحة الرئيسية
+    delete: حذف
+    deleting: جار الحذف
+    draft: مسودة
+    edit: تعديل
+    email: بريد
+    email_exists_error: عذرًا! هذا البريد خاص بمستخدم آخر
+    empty: فارغ
+    fail: رسوب
+    file_invalid: يرجى اختيار ملف حجمه أقل من 5 ميغابايت
+    image_file_invalid: يُرجى تحديد صورة (PNG ، JPEG ، GIF) بحجم أقل من 5 ميغابايت وأقل من 4096 بكسل من حيث العرض أو الارتفاع.
+    invalid_authenticity_token_error: يبدو أنك قمت بالخروج من المنصة، يرجى تحديث الصفحة والمتابعة
+    is: is
+    level: المستوى
+    level_label:
+      long_with_name: "المستوى %{number}: %{name}"
+      long_without_name: المستوى %{number}
+      short_with_name: "المستوى %{number}: %{name}"
+      short_without_name: المستوى %{number}
+    levels: Levels
+    live: منشور
+    load_more: تحميل المزيد...
+    loading: جار التحميل...
+    login_token_expiration_warning_html: ستنتهي صلاحية الرابط في %{timestamp}. في حال انتهاء صلاحية الرابط, يمكنك تجديد الرابط من خلال <a href="%{login_url}" %>صفحة تسجيل الدخول</a>. يرجى الانتباه أن هذا الرابط مخصص لك ولا يفترض مشاركته.
+    name: الاسم
+    name_email: اسم أو بريد
+    no_email_found: لا يوجد مستخدم بهذا البريد. يرجى مراجعة البريد المدخل
+    none: بدون
+    note: "ملاحظة:"
+    notes: ملاحظات
+    notifications:
+      done: تم!
+      done_dot: تم
+      done_exclamation: تم!
+      empty: فارغ
+      error: خطأ
+      notice: تنويه
+      please_reload: فضلا أعد تحميل الصفحة وحاول مرة أخرى
+      something_wrong: يوجد خطأ ما
+      success: تم
+      try_again: يرجى الملاحظة مرة أخرى
+      unexpected_error: خطأ غير متوقع!
+    optional: اختياري
+    optional_braces: (اختياري)
+    or: أو
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      next: "&rsaquo;"
+      previous: "&lsaquo; Previous"
+      truncate: "&hellip;"
+    pass: نجاح
+    percentage: نسبة
+    post: Post
+    preferred_name: الاسم
+    processing: معالجة
+    rejected: مرفوض
+    replies: ردود
+    reply: ردّ
+    salutation: مرحبا،
+    salutation_name: مرحبا %{name}،
+    save_changes: حفظ التغييرات
+    saving: حفظ...
+    school: الأكاديمية
+    search: بحث
+    settings: الإعدادات
+    sign_out: خروج
+    students: الطلاب
+    tag: علامة
+    tags: علامات
+    target: هدف
+    team: فريق
+    team_name: اسم الفريق
+    teams: الفرق
+    update: تحديث
+    updating: جار التحديث
+    uploading: جار الرفع
+    version: الإصدار
+    versions: الإصدارات
+    view: عرض
+  timeline_events:
+    show:
+      accepted_on: تم المراجعة والقبول في %{date}
+      question_with_number: "سؤال #%{number}"
+      rejected_on: تم المراجعة والرفض في %{date}
+      submitted_on: مرسل في %{date}
+  users:
+    clear_discord_id:
+      success: Discord unlinked successfully.
+    delete_account:
+      link_expired: That link has expired or is invalid. Please try again.
+      title: Edit User
+    edit:
+      course_discord_requirement_met:
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
+        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+      course_requires_discord_account:
+        heading: Wait a second! You need to link your Discord account first.
+        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
+      discord_connect: Join Our Discord Community
+      discord_connected_account: Go to Discord Community
+      discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
+      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_how_it_works_title: How it works
+      discord_title: Join Our Discord Server
+      title: Edit User
+    omniauth_callbacks:
+      failure:
+        denied: Authentication was denied. Please try again.
+        denied_by: Authentication was denied by %{provider}. Please try again.
+      oauth_callback:
+        add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
+        add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
+        add_other: Please sign in using another method.
+        email_unregistered: "Your email address: %{email} is unregistered."
+        not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
+        oauth_origin_missing:
+          details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+          invalid_request: Your browser made an invalid request.
+    sessions:
+      auth_callback:
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: We were unable to link your Discord account. Please try again.
+        error: Invalid login credentials
+        invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
+      email_sent:
+        image_alt: An email flying into to your inbox
+        magic_link:
+          description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
+          heading: We've sent you a magic link!
+          notice: This link will work only once.
+          page_title: Magic link is on its way!
+        reset_password_link:
+          description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
+          heading: We've sent you a link to reset your password!
+          notice: This link will work only once.
+          page_title: Confirm your request
+      new:
+        already_signed: You are already signed in.
+        continue_with_email_link: Continue with email
+        heading: Sign in to %{school_name}
+        sign_in_options_separator: OR
+      request_password_reset:
+        cancel_link: Sign in with Google, Facebook, or Github
+        email_label: Email
+        email_placeholder: john@example.com
+        heading: Reset your password
+        image_alt: A student holding a giant key with a reset symbol on it
+        page_title: Reset password
+        submit_button: Request password reset
+        subtitle: Enter your email for password recovery.
+      reset_password:
+        link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+      sign_in_with_email:
+        already_signed: You are already signed in.
+        email: Continue with email
+        email_address: Email Address
+        email_me: Email me a link to sign in
+        magic_link: We can email you a magic link so you can sign in without having to type your password.
+        oauth: Sign in with Google, Facebook, or Github
+        password: Password
+        password_free: Password-free sign in
+        password_new: Reset Your Password
+        shared: Are you using a shared device?
+        type_password: Type your password
+        with_password: Sign in with password.
+      sign_in_with_password_form:
+        check_credentials:
+          error: The supplied email address and password do not match. Please check your credentials and try again.
+      token:
+        link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+    update_email:
+      frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      link_expired: That link has expired or is invalid. Please try again.
+  validate_submission_gradable:
+    owners_should_be_active:
+      error: لا يمكن تحديث إرسالية الطلاب غير النشطين
+    submission_should_be_live:
+      error: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة

@@ -3,39 +3,11 @@
   display: flex;
   height: 100vh;
   position: fixed;
-  right: -48rem;
+  right: 0px;
   top: 0px;
   width: 100%;
   z-index: 501;
-}
-
-.editor-drawer-2--l0-to-l1 {
-  right: 0;
-  animation: slide-l1 0.25s ease 0s 1 normal forwards;
-}
-
-.editor-drawer-2--l1-to-l0 {
-  right: 0;
-}
-
-.editor-drawer-2--l0 {
-  animation: slide-l0 0.25s ease 0s 1 normal forwards;
-}
-
-.editor-drawer-2--l1 {
-  right: 16rem;
-}
-
-@keyframes slide-l0 {
-  100% {
-    right: 0;
-  }
-}
-
-@keyframes slide-l1 {
-  100% {
-    right: 16rem;
-  }
+  animation: slideIn 0.25s ease 0s 1 normal forwards;
 }
 
 @screen xl {
@@ -51,4 +23,27 @@
 .editor-drawer-2__close {
   left: -52px;
   z-index: -1;
+}
+
+[dir="rtl"] .editor-drawer-2__close {
+  left: auto;
+  right: -52px;
+}
+
+[dir="rtl"] .editor-drawer-2 {
+  right: auto;
+  left: 0;
+  animation: slideIn--rtl 0.25s ease 0s 1 normal forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    right: -9999px;
+  }
+}
+
+@keyframes slideIn--rtl {
+  0% {
+    left: -9999px;
+  }
 }

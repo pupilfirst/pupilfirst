@@ -25,7 +25,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
           href=url>
           <div className="flex items-center">
             <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />
-            <div className="pl-4 leading-tight h-12 flex flex-col justify-center">
+            <div className="ps-4 leading-tight h-12 flex flex-col justify-center">
               <div className="text-lg font-semibold"> {title |> str} </div>
               <div className="text-sm italic text-gray-600"> {filename |> str} </div>
             </div>
@@ -36,7 +36,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
     <div className="flex border-t justify-end">
       <div className="flex-1 content-block__action-bar-input p-3">
         <label htmlFor=titleInputId className="text-sm font-semibold"> {t("title") |> str} </label>
-        <span className="text-sm ml-1"> {ts("optional_braces") |> str} </span>
+        <span className="text-sm ms-1"> {ts("optional_braces") |> str} </span>
         <input
           id=titleInputId
           className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-300 leading-tight focus:outline-none focus:bg-white focus:border-gray"
@@ -44,7 +44,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
           maxLength=60
           type_="text"
           value=title
-          placeholder=ts("caption_image")
+          placeholder={ts("caption_image")}
         />
       </div>
     </div>

@@ -4,11 +4,11 @@
 }
 
 .policy-body ul {
-  @apply ml-4 mt-4 list-disc;
+  @apply ms-4 mt-4 list-disc;
 }
 
 .policy-body ol {
-  @apply pl-6 mt-4 list-decimal;
+  @apply ps-6 mt-4 list-decimal;
 }
 
 .policy-body ol[type="a"] {
@@ -29,7 +29,7 @@
 
 @screen md {
   .policy-body ul {
-    @apply ml-6;
+    @apply ms-6;
   }
 }
 

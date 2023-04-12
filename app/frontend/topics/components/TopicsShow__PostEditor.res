@@ -159,7 +159,7 @@ let replyToUserInfo = user => {
         className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
       />
     }}
-    <span className="text-xs font-semibold ml-2"> {name |> str} </span>
+    <span className="text-xs font-semibold ms-2"> {name |> str} </span>
   </div>
 }
 
@@ -262,7 +262,7 @@ let make = (
               <button
                 disabled=state.saving
                 onClick={_ => handleCloseCB()}
-                className="btn btn-subtle mr-2">
+                className="btn btn-subtle me-2">
                 {tr("cancel") |> str}
               </button>
             | None => React.null

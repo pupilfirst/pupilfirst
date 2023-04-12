@@ -35,7 +35,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
                 className="w-8 h-8 z-0 animate-ping absolute inline-flex rounded-full bg-red-600 opacity-75"
               />
             </div>
-            <span className="inline-block pl-3 pr-4 text-xs font-semibold">
+            <span className="inline-block ps-3 pe-4  text-xs font-semibold">
               {str(t("recording_string"))}
             </span>
           </button>
@@ -51,7 +51,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
               className="flex shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">
               <Icon className="if i-microphone-fill-light text-lg text-red-600" />
             </div>
-            <span className="inline-block pl-3 pr-4 text-xs font-semibold">
+            <span className="inline-block ps-3 pe-4  text-xs font-semibold">
               {str({
                 switch audioRecorder.url {
                 | Some(_url) => t("button_text_record_again")
@@ -62,12 +62,12 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
           </button>
           {switch audioRecorder.url {
           | None => React.null
-          | Some(url) => <audio src={url} controls=true className="pt-3 md:pt-0 md:pl-4" />
+          | Some(url) => <audio src={url} controls=true className="pt-3 md:pt-0 md:ps-4" />
           }}
           {switch audioRecorder.url {
           | None => React.null
           | Some(_) =>
-            <div className="btn btn-success ml-4" onClick={_e => audioRecorder.downloadBlob()}>
+            <div className="btn btn-success ms-4" onClick={_e => audioRecorder.downloadBlob()}>
               <FaIcon classes="fas fa-download" />
             </div>
           }}
@@ -77,7 +77,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
     | Some(size) =>
       size > 5000000
         ? <div className="text-xs text-red-500 mt-2">
-            <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+            <FaIcon classes="fas fa-exclamation-triangle me-2" />
             {str(t("recording_size_limit_warning"))}
           </div>
         : React.null

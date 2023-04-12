@@ -99,7 +99,7 @@ let renderUpdatePassword = (
         updatePassword(authenticityToken, token, newPassword, confirmPassword, setSaving)}
       className="btn btn-success btn-large text-center w-full mt-4">
       <FaIcon classes={saving ? "fas fa-spinner fa-spin" : "fas fa-lock"} />
-      <span className="ml-2">
+      <span className="ms-2">
         {submitButtonText(saving, newPassword, confirmPassword) |> str}
       </span>
     </button>

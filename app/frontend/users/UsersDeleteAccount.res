@@ -52,7 +52,7 @@ let make = (~token) => {
         <h3> {t("head") |> str} </h3>
         <p className="mt-1"> {t("click_button_below") |> str} </p>
         <div className="flex mt-4 justify-center">
-          <a href="/dashboard" className="btn btn-default mr-2"> {t("cancel") |> str} </a>
+          <a href="/dashboard" className="btn btn-default me-2"> {t("cancel") |> str} </a>
           <button onClick={deleteAccount(token, setState)} className="btn btn-danger">
             {t("delete_account") |> str}
           </button>

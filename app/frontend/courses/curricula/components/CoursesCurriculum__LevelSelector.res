@@ -31,10 +31,10 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
     }
 
     <button
-      className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
+      className="flex focus:outline-none p-2 w-full ltr:text-left rtl:text-right whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
-      <span className="mr-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
+      <span className="me-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
       {levelName(level) |> str}
     </button>
   })
@@ -50,7 +50,7 @@ let untabbedLevelSelector = (
   let selected =
     <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
       <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
-      <FaIcon classes="fas fa-caret-down ml-1" />
+      <FaIcon classes="fas fa-caret-down ms-1" />
     </button>
 
   <Dropdown
@@ -72,14 +72,14 @@ let tabbedLevelSelector = (
 ) => {
   let selected = hideCaret =>
     <button
-      className="rounded-l-lg font-semibold w-full px-2 h-10 flex items-center justify-between">
+      className="rounded-s-lg font-semibold w-full px-2 h-10 flex items-center justify-between">
       <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
-      <FaIcon classes={"fas fa-caret-down ml-1" ++ (hideCaret ? " invisible" : "")} />
+      <FaIcon classes={"fas fa-caret-down ms-1" ++ (hideCaret ? " invisible" : "")} />
     </button>
 
   let numberedLevelSelector = showLevelZero
     ? <div
-        className="cursor-pointer text-sm grow rounded-l-lg hover:bg-gray-50 hover:text-primary-500"
+        className="cursor-pointer text-sm grow rounded-s-lg hover:bg-gray-50 hover:text-primary-500"
         onClick={_ => setShowLevelZero(false)}>
         {selected(true)}
       </div>
@@ -87,14 +87,14 @@ let tabbedLevelSelector = (
         key="numbered-level-selector"
         selected={selected(false)}
         contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
-        className="cursor-pointer grow rounded-l-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
+        className="cursor-pointer grow rounded-s-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
       />
 
   [
     numberedLevelSelector,
     <button
       key="level-zero-selector"
-      className={"border-l rounded-r-lg bg-white border-gray-300 font-semibold truncate hover:bg-gray-50 hover:text-primary-500 " ++
+      className={"border-l rounded-e-lg bg-white border-gray-300 font-semibold truncate hover:bg-gray-50 hover:text-primary-500 " ++
       levelZeroSelectorClasses(showLevelZero)}
       onClick={_e => setShowLevelZero(true)}>
       {levelZero |> Level.name |> str}

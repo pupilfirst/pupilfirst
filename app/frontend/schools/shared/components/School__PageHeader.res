@@ -30,7 +30,7 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
           <Link
             href={exitUrl}
             className="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500 ">
-            <i className="fas fa-arrow-left" /> <span className="ml-2"> {str("Back")} </span>
+            <i className="fas fa-arrow-left rtl:rotate-180" /> <span className="ms-2"> {str("Back")} </span>
           </Link>
         </div>
         <h1 className="text-2xl font-bold mt-4"> {str(title)} </h1>
@@ -43,14 +43,14 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
                   key={string_of_int(index)}
                   href={link.href}
                   className={selectedClasses(link.selected)}>
-                  <i className={link.icon} /> <span className="ml-2"> {str(link.title)} </span>
+                  <i className={link.icon} /> <span className="ms-2"> {str(link.title)} </span>
                 </div>
               : <Link
                   href={link.href}
                   className={selectedClasses(link.selected)}
                   key={string_of_int(index)}>
                   <div>
-                    <i className={link.icon} /> <span className="ml-2"> {str(link.title)} </span>
+                    <i className={link.icon} /> <span className="ms-2"> {str(link.title)} </span>
                   </div>
                 </Link>
           })

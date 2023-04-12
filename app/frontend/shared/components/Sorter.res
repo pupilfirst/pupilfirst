@@ -15,7 +15,7 @@ module Make = (Sortable: Sortable) => {
         title={t("order_by") ++ " " ++ (selectedCriterion |> Sortable.criterion)}
         className="flex w-full items-center justify-between leading-relaxed font-semibold bg-white border border-gray-300 rounded focus:outline-none px-2 md:px-3 py-1 md:py-2 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
         <span> {selectedCriterion |> Sortable.criterion |> str} </span>
-        <i className="fas fa-caret-down ml-3" />
+        <i className="fas fa-caret-down ms-3" />
       </button>
     let dropDownContents =
       criteria
@@ -28,9 +28,9 @@ module Make = (Sortable: Sortable) => {
           ariaLabel={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
           title={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
           onClick={_ => onCriterionChange(criterion)}
-          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
+          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 ltr:text-left rtl:text-right focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
           <Icon className="if i-clock-regular text-sm if-fw text-gray-600" />
-          <span className="ml-2"> {Sortable.criterion(criterion) |> str} </span>
+          <span className="ms-2"> {Sortable.criterion(criterion) |> str} </span>
         </button>
       )
     <Dropdown selected=selectedForDropdown contents=dropDownContents />
@@ -54,7 +54,7 @@ module Make = (Sortable: Sortable) => {
             className="inline-flex flex-1 md:flex-auto items-center bg-gray-50 leading-relaxed font-semibold text-gray-600 border border-gray-300 rounded px-3 py-1 md:py-2 text-sm ">
             <div> {selectedCriterion |> Sortable.criterion |> str} </div>
           </div>}
-      <span className="flex ml-1">
+      <span className="flex ms-1">
         <button
           ariaLabel={t("toggle_sort")}
           title="toggle-sort-order"

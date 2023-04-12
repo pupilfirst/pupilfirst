@@ -27,12 +27,12 @@ let showEvaluationCriterion = (evaluationCriterion, setState) =>
         onClick={event => openEditor(event, evaluationCriterion, setState)}
         className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-lg hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:outline-none focus:bg-gray-50 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
         <div className="flex w-full text-sm justify-between">
-          <span className="flex-1 font-semibold py-5 px-5 text-left">
+          <span className="flex-1 font-semibold py-5 px-5 ltr:text-left rtl:text-right">
             {evaluationCriterion |> EvaluationCriterion.name |> str}
           </span>
-          <span className="ml-2 py-5 px-5 font-medium text-gray-600 hover:text-primary-500">
+          <span className="ms-2 py-5 px-5 font-medium text-gray-600 hover:text-primary-500">
             <i className="fas fa-edit text-normal" />
-            <span className="ml-1"> {ts("edit") |> str} </span>
+            <span className="ms-1"> {ts("edit") |> str} </span>
           </span>
         </div>
       </button>
@@ -72,7 +72,7 @@ let make = (~courseId, ~evaluationCriteria) => {
         onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {t("add_new_criterion") |> str} </h5>
+        <h5 className="font-semibold ms-2"> {t("add_new_criterion") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">

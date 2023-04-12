@@ -167,7 +167,9 @@ module SubmissionsSorter = Sorter.Make(Sortable)
 
 let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   let criteria = [sortBy]
-  <div ariaLabel="Change submissions sorting" className="shrink-0 mt-3 md:mt-0 md:ml-2">
+  <div
+    ariaLabel="Change submissions sorting"
+    className="shrink-0 mt-3 md:mt-0 md:ms-2">
     <label className="block text-tiny font-semibold uppercase"> {tr("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
@@ -281,7 +283,7 @@ let showSubmissionStatus = submission =>
   }
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-focusColor-500 " ++
+  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-s-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-focusColor-500 " ++
   switch submission |> Submission.status {
   | #Rejected => "border-red-500"
   | #Completed => "border-green-500"
@@ -308,16 +310,16 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
           href=submissionHref>
           <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
-              <div className="block text-sm md:pr-2">
+              <div className="block text-sm md:pe-2">
                 <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
                   {submission |> Submission.levelId |> Level.levelLabel(levels) |> str}
                 </span>
-                <span className="ml-2 font-semibold text-base">
+                <span className="ms-2 font-semibold text-base">
                   {submission |> Submission.title |> str}
                 </span>
               </div>
-              <div className="mt-1 ml-px text-xs text-gray-900">
-                <span className="ml-1">
+              <div className="mt-1 ms-px text-xs text-gray-900">
+                <span className="ms-1">
                   {tr(
                     ~variables=[("date", submission |> Submission.createdAtPretty)],
                     "submitted_on",
@@ -334,11 +336,11 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
           ? <div
               ariaLabel={"Team change notice for submission " ++ Submission.id(submission)}
               className="w-full text-xs rounded-b bg-blue-100 text-blue-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
-              <div className="flex flex-1 justify-start items-center pr-8">
+              <div className="flex flex-1 justify-start items-center pe-8">
                 <FaIcon classes="fas fa-exclamation-triangle text-sm md:text-base mt-1" />
-                <div className="inline-block pl-3">
+                <div className="inline-block ps-3 ">
                   {tr("submission_not_considered") |> str}
-                  <HelpIcon className="ml-1">
+                  <HelpIcon className="ms-1">
                     <span
                       dangerouslySetInnerHTML={"__html": tr("submission_not_considered_help")}
                     />
@@ -350,7 +352,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                 className="shrink-0 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200 hover:text-blue-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <span className="hidden md:inline"> {tr("view") |> str} </span>
                 {ts("target") |> str}
-                <FaIcon classes="fas fa-arrow-right ml-2" />
+                <FaIcon classes="fas fa-arrow-right ms-2 rtl:rotate-180" />
               </a>
             </div>
           : React.null}

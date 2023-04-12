@@ -167,7 +167,7 @@ let teamHeader = (teamName, studentsCount) =>
     </span>
     {studentsCount < 2
       ? <span className="text-tiny">
-          <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
+          <i className="fas fa-exclamation-triangle text-orange-600 me-1" />
           {t("team_header_add_more_members")->str}
         </span>
       : React.null}
@@ -184,7 +184,7 @@ let renderTitleAndAffiliation = (title, affiliation) => {
   switch text {
   | Some(text) =>
     <div className="flex items-center">
-      <div className="mr-1 text-xs text-gray-600"> {str(text)} </div>
+      <div className="me-1 text-xs text-gray-600"> {str(text)} </div>
     </div>
   | None => React.null
   }
@@ -224,7 +224,7 @@ let tagBoxes = tags =>
     |> Array.map(tag =>
       <div
         key=tag
-        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 me-1 text-xs text-gray-900 overflow-hidden">
         {str(tag)}
       </div>
     )
@@ -241,7 +241,7 @@ let studentCard = (studentInfo, send, team, tags) => {
   <div key={studentInfo |> StudentInfo.email} className=containerClasses>
     <div className="flex flex-col flex-1 flex-wrap p-3">
       <div className="flex items-center">
-        <div className="mr-1 font-semibold"> {StudentInfo.name(studentInfo)->str} </div>
+        <div className="me-1 font-semibold"> {StudentInfo.name(studentInfo)->str} </div>
         <div className="text-xs text-gray-600">
           {" (" ++ StudentInfo.email(studentInfo) ++ ")" |> str}
         </div>
@@ -346,7 +346,7 @@ let make = (~courseId) => {
             id="notify-new-students"
             type_="checkbox"
           />
-          <label className="checkbox-label flex " htmlFor="notify-new-students">
+          <label className="checkbox-label flex gap-2 " htmlFor="notify-new-students">
             <span className="flex-shrink-0 mt-1">
               <svg width="12px" height="10px" viewBox="0 0 12 10">
                 <polyline points="1.5 6 4.5 9 10.5 1" />

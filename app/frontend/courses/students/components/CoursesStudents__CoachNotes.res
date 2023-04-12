@@ -52,7 +52,7 @@ let saveNote = (studentId, setState, state, addNoteCB) => {
 let updateCoachNoteCB = (setState, newNote) => setState(state => {...state, newNote: newNote})
 
 let saveNoteButtonText = (title, iconClasses) =>
-  <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>
+  <span> <FaIcon classes={iconClasses ++ " me-2"} /> {title |> str} </span>
 
 @react.component
 let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
@@ -64,7 +64,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
         className="font-semibold text-sm block mb-1">
         {tr("new_note")->str}
       </label>
-      <HelpIcon className="ml-1"> {tr("help_text")->str} </HelpIcon>
+      <HelpIcon className="ms-1"> {tr("help_text")->str} </HelpIcon>
     </span>
     <DisablingCover disabled=state.saving message="Saving...">
       <MarkdownEditor

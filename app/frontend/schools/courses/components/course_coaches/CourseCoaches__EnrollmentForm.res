@@ -227,13 +227,13 @@ let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
           {ReactUtils.nullIf(
             <div>
               <div id="course_coaches">
-                <span className="inline-block mr-1 mb-2 text-xs font-semibold">
+                <span className="inline-block me-1 mb-2 text-xs font-semibold">
                   {(tr("select_coaches") ++ ":")->str}
                 </span>
                 {courseCoachEditor(coaches, state, send)}
               </div>
               <div>
-                <span className="inline-block mr-1 mb-2 text-xs font-semibold">
+                <span className="inline-block me-1 mb-2 text-xs font-semibold">
                   {(tr("select_cohorts") ++ ":")->str}
                 </span>
                 {state.loading

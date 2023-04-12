@@ -160,7 +160,7 @@ let button = (saving, onClick, icon, text) =>
     onClick
     disabled=saving
     className="inline-flex items-center font-semibold px-2 py-1 md:py-1 bg-gray-50 hover:bg-gray-300 focus:bg-gray-300 border rounded text-xs shrink-0">
-    <FaIcon classes={"mr-2 fa-fw fas fa-" ++ (saving ? "spinner fa-spin" : icon)} /> {str(text)}
+    <FaIcon classes={"me-2 fa-fw fas fa-" ++ (saving ? "spinner fa-spin" : icon)} /> {str(text)}
   </button>
 
 @react.component

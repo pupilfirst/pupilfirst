@@ -75,7 +75,7 @@
               <tr>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".rank") %></th>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".change") %></th>
-                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b text-left"><%= t(".student") %></th>
+                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b ltr:text-left rtl:text-right"><%= t(".student") %></th>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".level") %></th>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".score") %></th>
               </tr>
@@ -90,13 +90,13 @@
                     <% if student.delta.blank? %>
                       <span class="leaderboard__rank-change-new"><%= t(".new_new") %></span>
                     <% else %>
-                      <span class="leaderboard__rank-change-icon inline-block mr-1">
+                      <span class="leaderboard__rank-change-icon inline-block me-1">
                         <%= presenter.rank_change_icon(student.delta) %>
                       </span>
                     <% end %>
                     <span class="leaderboard__rank-delta font-semibold"><%= presenter.format_delta(student.delta) %></span>
                   </td>
-                  <td class="py-3 px-3 border-b text-left text-sm">
+                  <td class="py-3 px-3 border-b ltr:text-left rtl:text-right text-sm">
                     <span class="font-semibold inline-block leading-tight"><%= student.name %></span>
                     <span class="leaderboard__student-affiliation block text-xs text-gray-600 leading-tight"> <%= student.user.affiliation %></span>
                   </td>

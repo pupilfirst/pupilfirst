@@ -20,10 +20,10 @@
             href="<%= presenter.federated_login_url(provider) %>"
             rel="nofollow"
           >
-            <span class="w-1/5 text-right text-lg">
+            <span class="w-1/5 ltr:text-right rtl:text-left text-lg">
               <i class="<%= presenter.icon_classes(provider) %>"></i>
             </span>
-            <span class="w-4/5 pl-3 text-left">
+            <span class="w-4/5 ps-3 ltr:text-left rtl:text-right">
               <%= presenter.button_text(provider) %>
             </span>
           </a>
@@ -44,10 +44,10 @@
         href="/users/sign_in_with_email"
         class="flex justify-center items-center px-3 py-2 leading-snug border border-gray-300 text-primary-500 hover:bg-gray-50 hover:border-primary-500 focus:bg-gray-50 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full"
       >
-        <span class="w-1/5 text-right text-lg">
+        <span class="w-1/5 ltr:text-right rtl:text-left text-lg">
           <i class="fas fa-envelope"></i>
         </span>
-        <span class="w-4/5 pl-3 text-left">
+        <span class="w-4/5 ps-3 ltr:text-left rtl:text-right">
           <%= t('.continue_with_email_link') %>
         </span>
       </a>

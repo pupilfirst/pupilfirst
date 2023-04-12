@@ -521,7 +521,7 @@ module Example = {
   @react.component
   let make = () => {
     let (searchString, setSearchString) = React.useState(() => "")
-    <div>
+    <div className="max-w-6xl mx-auto">
       <div className="flex items-center justify-between p-4">
         <h1 className="text-center text-2xl font-bold text-gray-700"> {"pf-icon" |> str} </h1>
         <a
@@ -532,7 +532,7 @@ module Example = {
             className="w-8 h-8"
             src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
           />
-          <span className="pl-2"> {"Docs"->str} </span>
+          <span className="ps-2"> {"Docs"->str} </span>
         </a>
       </div>
       <div className="relative">
@@ -546,7 +546,7 @@ module Example = {
             className=" w-full text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700"
           />
         </div>
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-4 flex-wrap p-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 flex-wrap p-4">
           {switch search(searchString) {
           | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
           | resultIcons =>
@@ -555,20 +555,23 @@ module Example = {
               let iconClasses = "if i-" ++ icon
               <div key=icon className="flex items-center p-4 shadow bg-white rounded-md">
                 <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
-                <div className="ml-4 overflow-x-auto">
+                <div className="ms-4 overflow-x-auto">
                   <div className="flex gap-4 items-center justify-between">
                     <p className="font-semibold text-base"> {icon |> str} </p>
+                  </div>
+                  <div className="flex gap-4">
                     <button
                       onClick={_ =>
                         writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
                       className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
-                      {"Copy"->str}
+                      {"Copy JSX"->str}
                     </button>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <code className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px">
-                      {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />") |> str}
-                    </code>
+                    <button
+                      onClick={_ =>
+                        writeText("<i className=\"" ++ (iconClasses ++ " if-fw\" ></i>"))}
+                      className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
+                      {"Copy HTML"->str}
+                    </button>
                   </div>
                 </div>
               </div>

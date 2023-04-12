@@ -228,7 +228,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
         <button
           title="close"
           onClick={_ => hideEditorActionCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-600 focus:outline-none mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-s-full rounded-e-none hover:text-gray-600 focus:outline-none mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>
@@ -255,7 +255,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 />
                 {state.hasNameError
                   ? <div className="drawer-right-form__error-msg">
-                      <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
+                      <span className="me-2"> <i className="fas fa-exclamation-triangle" /> </span>
                       <span> {tr("title_name_error") |> str} </span>
                     </div>
                   : React.null}
@@ -278,7 +278,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
               {levelEditor(state, levels, send)}
               <div className="mt-5">
                 <div className="flex items-center shrink-0">
-                  <label className="block tracking-wide text-xs font-semibold mr-3">
+                  <label className="block tracking-wide text-xs font-semibold me-3">
                     {tr("milestone_q") |> str}
                   </label>
                   <div
@@ -307,8 +307,8 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
               <div className="max-w-2xl p-6 mx-auto flex w-full justify-between items-center">
                 {switch targetGroup {
                 | Some(_) =>
-                  <div className="flex items-center mr-2">
-                    <label className="block tracking-wide text-xs font-semibold mr-6">
+                  <div className="flex items-center me-2">
+                    <label className="block tracking-wide text-xs font-semibold me-6">
                       {tr("group_archived_q") |> str}
                     </label>
                     <div

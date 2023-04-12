@@ -302,7 +302,7 @@ let submissionsSorter = filter => {
   | None => [#SubmittedAt]
   }
 
-  <div ariaLabel="Change submissions sorting" className="shrink-0 md:ml-2">
+  <div ariaLabel="Change submissions sorting" className="shrink-0 md:ms-2">
     <label className="hidden md:block text-tiny font-semibold uppercase pb-1">
       {tc("sort_by")->str}
     </label>

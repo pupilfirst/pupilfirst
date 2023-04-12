@@ -20,7 +20,7 @@ let contents = links => {
 
 let showSelected = (placeholder, selected) => {
   <button
-    className="mt-1 flex space-x-2 items-center justify-between appearance-none w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+    className="mt-1 flex gap-2 items-center justify-between appearance-none w-full bg-white border border-gray-300 rounded py-2.5 px-3 text-sm focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
     key="selected">
     <span>
       {switch selected {

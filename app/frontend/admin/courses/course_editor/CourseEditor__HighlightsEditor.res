@@ -59,7 +59,7 @@ let selected = (highlight: Course.Highlight.t) => {
   <button
     title={t("selected_button.title")}
     ariaLabel={t("selected_button.title")}
-    className="flex items-center justify-center cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-lg p-3 w-12 h-12 me-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
 }
@@ -85,7 +85,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
       let replaceCB = replace(index, highlights, updateHighlightsCB)
       <Spread props={"data-highlight-index": index} key={string_of_int(index)}>
         <div key={string_of_int(index)} className="flex items-start py-2 relative">
-          <div className="flex items-start w-full bg-gray-50 border rounded-lg p-4 mr-1">
+          <div className="flex items-start w-full bg-gray-50 border rounded-lg p-4 me-1">
             <Dropdown2
               selected={selected(highlight)}
               contents={contents(replaceCB, highlight)}

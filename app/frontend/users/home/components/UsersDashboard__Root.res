@@ -18,13 +18,13 @@ let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 mr-4"
+          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 me-4"
           src
         />
       | None =>
         <Avatar
           name
-          className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden shrink-0"
+          className="w-16 h-16 me-4 border border-gray-300 rounded-full overflow-hidden shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
@@ -34,7 +34,7 @@ let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit
     </div>
     {ReactUtils.nullUnless(
       <a className="btn" href="/user/edit">
-        <i className="fas fa-edit text-xs md:text-sm mr-2" />
+        <i className="fas fa-edit text-xs md:text-sm me-2" />
         <span> {t("edit_profile")->str} </span>
       </a>,
       showUserEdit,
@@ -43,7 +43,7 @@ let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit
 }
 
 let navButtonClasses = selected =>
-  "font-semibold border-b-2 text-sm py-4 mr-6 hover:text-primary-500 hover:border-gray-300 focus:border-gray-300 focus:text-primary-500 focus:outline-none " ++ (
+  "font-semibold border-b-2 text-sm py-4 me-6 hover:text-primary-500 hover:border-gray-300 focus:border-gray-300 focus:text-primary-500 focus:outline-none " ++ (
     selected ? "text-primary-500 border-primary-500" : "border-transparent"
   )
 
@@ -55,7 +55,8 @@ let navSection = (view, setView, communities, issuedCertificates) =>
         ariaSelected={view == ShowCourses}
         className={navButtonClasses(view == ShowCourses)}
         onClick={_ => setView(_ => ShowCourses)}>
-        <i className="fas fa-book text-xs md:text-sm mr-2" /> <span> {t("my_courses")->str} </span>
+        <i className="fas fa-book text-xs md:text-sm me-2" />
+        <span> {t("my_courses")->str} </span>
       </button>
       {ReactUtils.nullUnless(
         <button
@@ -63,7 +64,7 @@ let navSection = (view, setView, communities, issuedCertificates) =>
           ariaSelected={view == ShowCommunities}
           className={navButtonClasses(view == ShowCommunities)}
           onClick={_ => setView(_ => ShowCommunities)}>
-          <i className="fas fa-users text-xs md:text-sm mr-2" />
+          <i className="fas fa-users text-xs md:text-sm me-2" />
           <span> {t("communities")->str} </span>
         </button>,
         ArrayUtils.isNotEmpty(communities),
@@ -74,7 +75,7 @@ let navSection = (view, setView, communities, issuedCertificates) =>
           ariaSelected={view == ShowCertificates}
           className={navButtonClasses(view == ShowCertificates)}
           onClick={_ => setView(_ => ShowCertificates)}>
-          <i className="fas fa-certificate text-xs md:text-sm mr-2" />
+          <i className="fas fa-certificate text-xs md:text-sm me-2" />
           <span> {t("certificates")->str} </span>
         </button>,
         ArrayUtils.isNotEmpty(issuedCertificates),
@@ -86,22 +87,24 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
-    <i className=icon /> <span className="font-medium ml-2"> {title->str} </span>
+    className="px-2 py-1 me-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+    <i className=icon /> <span className="font-medium ms-2"> {title->str} </span>
   </a>
 
 let ctaButton = (title, href) =>
   <a
     href
     className="w-full bg-primary-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-primary-100 focus:outline-none focus:bg-primary-100">
-    <span> <i className="fas fa-book" /> <span className="ml-2"> {title->str} </span> </span>
-    <i className="fas fa-arrow-right" />
+    <span>
+      <i className="fas fa-book" /> <span className="ms-2"> {title->str} </span>
+    </span>
+    <i className="fas fa-arrow-right rtl:rotate-180" />
   </a>
 
 let ctaText = (message, icon) =>
   <div
     className="w-full bg-red-100 text-red-600 mt-4 px-6 py-4 flex text-sm font-semibold justify-center items-center ">
-    <span> <i className=icon /> <span className="ml-2"> {message->str} </span> </span>
+    <span> <i className=icon /> <span className="ms-2"> {message->str} </span> </span>
   </div>
 
 let studentLink = (courseId, suffix) => "/courses/" ++ (courseId ++ ("/" ++ suffix))
@@ -144,9 +147,9 @@ let communityLinks = (communityIds, communities) => Js.Array.map(id => {
       <a
         key={Community.id(c)}
         href={Community.path(c)}
-        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+        className="px-2 py-1 me-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
         <i className="fas fa-users" />
-        <span className="font-medium ml-2"> {Community.name(c)->str} </span>
+        <span className="font-medium ms-2"> {Community.name(c)->str} </span>
       </a>
     | None => React.null
     }
@@ -224,7 +227,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
                   className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                   key={course->Course.id}>
                   <h4
-                    className="user-dashboard-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
+                    className="user-dashboard-course__title text-white font-semibold leading-tight ps-6 pe-4 text-lg md:text-xl">
                     {Course.name(course)->str}
                   </h4>
                 </div>
@@ -297,7 +300,7 @@ let certificatesSection = issuedCertificates =>
                   </h4>
                   <div className="text-xs">
                     <span> {t("issued_on")->str} </span>
-                    <span className="ml-1">
+                    <span className="ms-1">
                       {issuedCertificate
                       ->IssuedCertificate.createdAt
                       ->DateFns.formatPreset(~short=true, ~year=true, ())

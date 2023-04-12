@@ -46,7 +46,7 @@ let make = (~student, ~coach, ~removeStudentEnrollmentCB) => {
   let (deleting, setDeleting) = React.useState(() => false)
   <div
     ariaLabel={ts("student") ++ " " ++ student->Student.name}
-    className="flex items-center justify-between bg-gray-50 text-xs text-gray-900 border rounded pl-3 mt-2"
+    className="flex items-center justify-between bg-gray-50 text-xs text-gray-900 border rounded ps-3 mt-2"
     key={student->Student.id}>
     <div className="flex flex-1 justify-between items-center">
       <div className="font-semibold w-1/2"> {student->Student.name->str} </div>

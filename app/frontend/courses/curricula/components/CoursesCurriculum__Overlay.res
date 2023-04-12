@@ -243,7 +243,7 @@ let overlayHeaderTitleCardClasses = targetStatus =>
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fas fa-lock text-lg" /> <span className="ml-2"> {text |> str} </span>
+    <i className="fas fa-lock text-lg" /> <span className="ms-2"> {text |> str} </span>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
@@ -257,7 +257,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:mr-6 md:text-xl">
+        <h1 className="text-base leading-snug md:me-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -294,7 +294,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
           className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
-          <span className="font-semibold text-left leading-snug">
+          <span className="font-semibold ltr:text-left rtl:text-right leading-snug">
             {target |> Target.title |> str}
           </span>
           {renderTargetStatus(targetStatus)}
@@ -353,7 +353,7 @@ let learnSection = (
     <button
       onClick={_ => send(Select(tab))}
       className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-      <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
+      <span> <FaIcon classes={iconClasses ++ " me-2"} /> {str(linkText)} </span>
     </button>
   })
 
@@ -516,7 +516,7 @@ let navigationLink = (direction, url, send) => {
   }
 
   let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
+    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />)
 
   <Link
     href=url
@@ -542,7 +542,7 @@ let quickNavigationLinks = (targetDetails, send) => {
   <div className="pb-6">
     <hr className="my-6" />
     <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
-      <div className="w-1/3 mr-2">
+      <div className="w-1/3 me-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
         )}
@@ -555,7 +555,7 @@ let quickNavigationLinks = (targetDetails, send) => {
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
-      <div className="w-1/3 ml-2">
+      <div className="w-1/3 ms-2">
         {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
           navigationLink(#Next, nextUrl, send)
         )}
@@ -600,7 +600,7 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}

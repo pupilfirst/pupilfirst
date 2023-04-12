@@ -78,19 +78,21 @@ let make = (~entry, ~markNotificationCB) => {
           </span>->ReactUtils.nullUnless(Entry.readAt(entry)->Belt.Option.isNone)}
         </div>
         {Entry.notifiableId(entry)->Belt.Option.isSome
-          ? <a className="ml-4 outline-none" href={"/notifications/" ++ Entry.id(entry)}>
+          ? <a
+              className="ms-4 outline-none"
+              href={"/notifications/" ++ Entry.id(entry)}>
               {str(Entry.message(entry))}
             </a>
-          : <div className="ml-4"> {str(Entry.message(entry))} </div>}
+          : <div className="ms-4"> {str(Entry.message(entry))} </div>}
       </div>
       <div className="shrink-0">
         <span className="notifications__entry-card-time block text-xs text-gray-400">
-          <span className="hidden md:inline-block md:pl-4">
+          <span className="hidden md:inline-block md:ps-4">
             {Entry.createdAt(entry)->DateFns.format("HH:mm") |> str}
           </span>
         </span>
         <div
-          className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 right-0 flex items-center pl-4 pr-4 md:pr-8 transition ease-in-out duration-150">
+          className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 end-0 flex items-center ps-4 pe-4 md:pe-8 transition ease-in-out duration-150">
           {ReactUtils.nullIf(
             <Tooltip tip={str(t("mark_read"))} position=#Left>
               <button

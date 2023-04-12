@@ -15,7 +15,7 @@
       </div>
       <% @submission.checklist.each_with_index do |item, index| %>
         <div class="mb-3 bg-gray-50 rounded">
-          <div class="text-lg font-bold pl-3 pt-3"><%= t('.question_with_number', number: index + 1) %></div>
+          <div class="text-lg font-bold ps-3 pt-3"><%= t('.question_with_number', number: index + 1) %></div>
           <div class="convert-markdown p-3 pt-1 text-sm" data-json-props="<%= presenter.markdown_prop(item['title']) %>">
             <%= item['title'] %>
           </div>

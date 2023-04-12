@@ -562,7 +562,7 @@ module Example = {
                       onClick={_ =>
                         writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
                       className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
-                      {"Copy"->str}
+                      {"Copy JSX"->str}
                     </button>
                   </div>
                   <div className="overflow-x-auto">

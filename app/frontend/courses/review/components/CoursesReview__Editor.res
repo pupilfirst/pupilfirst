@@ -425,13 +425,13 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             ariaLabel="submissions-overlay-close"
             onClick={_ =>
               closeOverlay(state, SubmissionDetails.courseId(submissionDetails), filter)}
-            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-e bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
             <div className="flex items-center justify-center bg-gray-100 rounded-full w-8 h-8">
               <Icon className="if i-times-regular text-lg lg:text-2xl" />
             </div>
             <span className="text-xs mt-0.5"> {str(t("close"))} </span>
           </button>
-          <div className="flex space-x-4">
+          <div className="flex ltr:space-x-4">
             <CoursesStudents__PersonalCoaches
               tooltipPosition=#Bottom
               defaultAvatarSize="8"
@@ -446,7 +446,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               SubmissionDetails.courseId(submissionDetails),
               filter,
               submissionId,
-              "flex shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
+              "flex shrink-0 items-center md:hidden border-s text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
             )}
           </div>
         </div>
@@ -495,7 +495,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           </div>
         </div>
       </div>
-      <div className="hidden md:flex shrink-0 space-x-6">
+      <div className="hidden md:flex shrink-0 ltr:space-x-6">
         <CoursesStudents__PersonalCoaches
           tooltipPosition=#Bottom
           defaultAvatarSize="8"
@@ -510,7 +510,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           SubmissionDetails.courseId(submissionDetails),
           filter,
           submissionId,
-          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
+          "flex items-center border-s text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
         )}
       </div>
     </div>

@@ -518,6 +518,11 @@
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
 }
 
+[dir="rtl"] .quiz-maker__answer-option-pointer {
+  left: 0px;
+  right: 13px;
+}
+
 .quiz-maker__answer-option-pointer--correct {
   background: #10ab4c;
   @apply border border-white;

@@ -466,13 +466,9 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             {switch SubmissionDetails.teamName(submissionDetails) {
             | Some(teamName) =>
               <span>
-                <span>
-                {t("submitted_by_team")->str}
-                </span>
+                <span> {t("submitted_by_team")->str} </span>
                 <span className="font-semibold"> {teamName->str} </span>
-                <span>
-                {" - "->str}
-                </span>
+                <span> {" - "->str} </span>
               </span>
             | None => <span> {t("submitted_by")->str} </span>
             }}
@@ -1081,9 +1077,14 @@ let pageTitle = (number, submissionDetails) => {
     )
   }
 
-  `${t("submission")} ${number->string_of_int} | ${t(
-      "level_acronym",
-    )}${SubmissionDetails.levelNumber(submissionDetails)} | ${studentOrTeamName}`
+  t(
+    ~variables=[
+      ("submission_number", string_of_int(number)),
+      ("level_number", SubmissionDetails.levelNumber(submissionDetails)),
+      ("name", studentOrTeamName),
+    ],
+    "page_title",
+  )
 }
 
 let reportStatusString = report => {
@@ -1276,7 +1277,9 @@ let make = (
             className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
             <div className="flex flex-1 items-center justify-between">
               <div>
-                <p className="font-semibold"> {str(t("submission") ++ string_of_int(number))} </p>
+                <p className="font-semibold">
+                  {t(~variables=[("number", string_of_int(number))], "submission_number")->str}
+                </p>
                 <p
                   className="text-gray-800 text-xs"
                   title={OverlaySubmission.createdAt(overlaySubmission)->DateFns.formatPreset(

@@ -753,7 +753,7 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
-      level_acronym: L
+      page_title: Submission %{submission_number} | L%{level_number} | %{name}
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       remove_assignment: Remove assignment
@@ -783,7 +783,7 @@ en:
       student_dropped_out_message_without_timestamp: This submission is from a student whose access to the course has ended, or has dropped out.
       students_dropped_out_message_with_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.You can review the submission until %{timestamp}
       students_dropped_out_message_without_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
-      submission: Submission
+      submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
       team: team

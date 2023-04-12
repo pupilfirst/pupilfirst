@@ -1,7 +1,6 @@
 let str = React.string
 let t = I18n.t(~scope="shared")
 
-
 type link = {
   title: string,
   href: string,
@@ -32,7 +31,8 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
           <Link
             href={exitUrl}
             className="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500 ">
-            <i className="fas fa-arrow-left rtl:rotate-180" /> <span className="ms-2"> {str(t("back_link")} </span>
+            <i className="fas fa-arrow-left rtl:rotate-180" />
+            <span className="ms-2"> {t("back_link")->str} </span>
           </Link>
         </div>
         <h1 className="text-2xl font-bold mt-4"> {str(title)} </h1>

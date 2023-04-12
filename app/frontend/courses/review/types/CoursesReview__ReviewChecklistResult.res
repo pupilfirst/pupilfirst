@@ -20,7 +20,7 @@ let empty = () => make(~title="", ~feedback=None)
 let replace = (checklist, t, index) =>
   checklist->Js.Array2.mapi((result, resultIndex) => resultIndex == index ? t : result)
 
-let updateTitle = (title, t, index, checklist) =>
+let updateTitle = (checklist, title, t, index) =>
   checklist->replace(make(~title, ~feedback=t.feedback), index)
 
 let updateFeedback = (resultItems, feedback, index) => {

@@ -58,16 +58,11 @@ let updateChecklistResultTitle = (
   resultItem,
   send,
 ) => {
-  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-    ReviewChecklistResult.updateTitle(
-      title,
-      resultItem,
-      resultIndex,
-      ReviewChecklistItem.results(reviewChecklistItem),
-    ),
-    reviewChecklistItem,
-  )
-  send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ReviewChecklistItem.results(reviewChecklistItem)
+  ->ReviewChecklistResult.updateTitle(title, resultItem, resultIndex)
+  ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 }
 
 let updateChecklistResultFeedback = (
@@ -80,25 +75,19 @@ let updateChecklistResultFeedback = (
   ReviewChecklistItem.results(reviewChecklistItem)
   ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
-  ->(newItem => UpdateChecklistItem(newItem, itemIndex))
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
   ->send
 }
 
 let addEmptyResultItem = (send, reviewChecklistItem, itemIndex) =>
-  send(
-    UpdateChecklistItem(
-      ReviewChecklistItem.appendEmptyChecklistItem(reviewChecklistItem),
-      itemIndex,
-    ),
-  )
+  ReviewChecklistItem.appendEmptyChecklistItem(reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 
 let removeChecklistResult = (itemIndex, resultIndex, reviewChecklistItem, send) =>
-  send(
-    UpdateChecklistItem(
-      ReviewChecklistItem.deleteResultItem(resultIndex, reviewChecklistItem),
-      itemIndex,
-    ),
-  )
+  ReviewChecklistItem.deleteResultItem(resultIndex, reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 
 let initialStateForReviewChecklist = reviewChecklist =>
   ArrayUtils.isEmpty(reviewChecklist) ? ReviewChecklistItem.emptyTemplate() : reviewChecklist

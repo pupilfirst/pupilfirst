@@ -1667,7 +1667,7 @@ en:
     StudentsIndex__Root:
       add_new_students: Add New Students
       cohort: Cohort
-      edit: Edit
+      edit_details: Edit %{name}'s details
       filter:
         search_by_email: Search by Email
         search_by_name: Search by Name

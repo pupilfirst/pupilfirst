@@ -72,7 +72,7 @@ let make = (~coaches, ~authenticityToken) => {
                       src={coach |> Coach.imageUrl}
                       alt={tr("avatar_of") ++ (coach |> Coach.name)}
                     />
-                    <div className="text-sm ltr:text-left rtl:text-right">
+                    <div className="text-sm ">
                       <p className="font-semibold"> {coach |> Coach.name |> str} </p>
                       <p className="text-gray-600 text-xs mt-px"> {coach |> Coach.title |> str} </p>
                     </div>

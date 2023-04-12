@@ -87,7 +87,7 @@ let make = (
                 : "border-transparent cursor-auto"
             )}>
             <span className="flex items-center py-2">
-              <span className="truncate ltr:text-left rtl:text-right">
+              <span className="truncate ">
                 {selectedVersion |> str}
               </span>
             </span>

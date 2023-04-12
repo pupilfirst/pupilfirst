@@ -42,7 +42,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium ltr:text-left rtl:text-right leading-snug">
+      <span className="font-medium  leading-snug">
         {Target.title(target)->str}
       </span>
       {ReactUtils.nullIf(

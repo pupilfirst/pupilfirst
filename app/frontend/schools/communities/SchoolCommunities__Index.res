@@ -192,7 +192,7 @@ let make = (~communities, ~courses) => {
                   ReactEvent.Mouse.preventDefault(_event)
                   send(UpdateEditorAction(ShowEditor(Some(community))))
                 }}
-                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-s-lg ltr:text-left rtl:text-right hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-50 focus:text-primary-500">
+                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-s-lg  hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-50 focus:text-primary-500">
                 <div className="flex w-full text-sm justify-between">
                   <span className="flex-1 font-semibold py-5 px-5">
                     {community |> Community.name |> str}

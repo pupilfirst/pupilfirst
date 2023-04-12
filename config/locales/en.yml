@@ -2483,6 +2483,7 @@ en:
         description_label: Description
         add_event_button: Add event
         link_title_placeholder: eg. Zoom meeting link
+        event_title_placeholder: Enter Event Title
       edit:
         title: 'Edit event'
         new_event: 'Add new event'
@@ -2499,7 +2500,8 @@ en:
         add_event_button: Add event
         update_event_button: Update event
         link_title_placeholder: eg. Zoom meeting link
-        event_title_placeholder: Enter Event Title 
+        event_name_placeholder: Enter Event Title
+        event_title_placeholder: Enter Event Title
       show:
         title: 'Calendar event details'
         link_label: Event Link

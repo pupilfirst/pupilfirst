@@ -2483,6 +2483,7 @@ ar:
         description_label: Description
         add_event_button: Add event
         link_title_placeholder: eg. Zoom meeting link
+        event_title_placeholder: Enter Event Title
       edit:
         title: 'تعديل الفعالية'
         new_event: 'إضافة فعالية جديدة'
@@ -2518,6 +2519,7 @@ ar:
       calendar_events:
         title: Calendars and Events
         add_calendar_button: Add Calendar
+        add_new_calendar: Add New Calendar
         calendar: Calendar
         calendars: Calendars
         calendar_filter_label: Showing events from

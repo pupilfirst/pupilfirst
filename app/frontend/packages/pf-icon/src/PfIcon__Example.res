@@ -558,18 +558,20 @@ module Example = {
                 <div className="ms-4 overflow-x-auto">
                   <div className="flex gap-4 items-center justify-between">
                     <p className="font-semibold text-base"> {icon |> str} </p>
+                  </div>
+                  <div className="flex gap-4">
                     <button
                       onClick={_ =>
                         writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
                       className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
                       {"Copy JSX"->str}
                     </button>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <code
-                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-nowrap">
-                      {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />") |> str}
-                    </code>
+                    <button
+                      onClick={_ =>
+                        writeText("<i className=\"" ++ (iconClasses ++ " if-fw\" ></i>"))}
+                      className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
+                      {"Copy HTML"->str}
+                    </button>
                   </div>
                 </div>
               </div>

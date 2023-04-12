@@ -33,7 +33,11 @@ module Home
     def school_name_classes
       classes =
         'relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10'
-      @school.about.present? ? "#{classes} text-left" : "#{classes} text-center"
+      if @school.about.present?
+        "#{classes} ltr:text-left rtl:text-right"
+      else
+        "#{classes} text-center"
+      end
     end
 
     def courses_as_student

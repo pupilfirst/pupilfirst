@@ -57,7 +57,7 @@ let make = (~selectedPage, ~selectedCourse, ~currentUser) =>
   | Page.Settings(_settingsSelection) =>
     <div
       key="secondary-nav"
-      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav border-e border-gray-200 pb-6 overflow-y-auto">
       <div className="p-4">
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
@@ -66,7 +66,7 @@ let make = (~selectedPage, ~selectedCourse, ~currentUser) =>
   | SelectedCourse(_courseSelection) =>
     <div
       key="secondary-nav"
-      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav border-e border-gray-200 pb-6 overflow-y-auto">
       <div>
         <div className="px-4 pt-2 bg-white">
           {secondaryNavLinks(selectedPage, selectedCourse, currentUser)->React.array}

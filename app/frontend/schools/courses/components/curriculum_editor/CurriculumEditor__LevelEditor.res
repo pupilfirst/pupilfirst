@@ -287,7 +287,7 @@ let actionsForm = (level, levels, state, send) => {
         htmlFor="delete-and-merge-level">
         {t("merge_levels_label") |> str}
       </label>
-      <HelpIcon className="ml-1 text-sm"> {str(t("merge_levels_hint"))} </HelpIcon>
+      <HelpIcon className="ms-1 text-sm"> {str(t("merge_levels_hint"))} </HelpIcon>
       <select
         id="delete-and-merge-level"
         onChange={handleSelectLevelForDeletion(send)}
@@ -318,7 +318,7 @@ let actionsForm = (level, levels, state, send) => {
           <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="clone-level">
             {t("clone_level_label") |> str}
           </label>
-          <HelpIcon className="ml-1 text-sm"> {str(t("clone_level_hint"))} </HelpIcon>
+          <HelpIcon className="ms-1 text-sm"> {str(t("clone_level_hint"))} </HelpIcon>
           <CourseSelect
             id="clone-level"
             onChange={handleSelectCourseForCloneInto(send)}
@@ -348,7 +348,7 @@ let tab = (tab, state, send) => {
   let classes = selected ? defaultClasses ++ " level-editor__tab--selected" : defaultClasses
 
   <button onClick={_e => send(UpdateTab(tab))} className=classes>
-    <i className={"fas " ++ iconClass} /> <span className="ml-2"> {title |> str} </span>
+    <i className={"fas " ++ iconClass} /> <span className="ms-2"> {title |> str} </span>
   </button>
 }
 

@@ -44,7 +44,7 @@ let make = (
         ? <div className="flex rounded-lg border border-gray-300">
             <button
               onClick={handleViewMode(switchViewModeCB, true)}
-              className={"w-1/2 py-2 px-3 font-semibold rounded-l-lg text-sm focus:outline-none " ++ (
+              className={"w-1/2 py-2 px-3 font-semibold rounded-s-lg text-sm focus:outline-none " ++ (
                 previewMode
                   ? previewModeButtonEnableClass
                   : "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-50"
@@ -53,7 +53,7 @@ let make = (
             </button>
             <button
               onClick={handleViewMode(switchViewModeCB, false)}
-              className={"w-1/2 py-2 px-3 font-semibold rounded-r-lg text-sm focus:outline-none " ++ (
+              className={"w-1/2 py-2 px-3 font-semibold rounded-e-lg text-sm focus:outline-none " ++ (
                 previewMode
                   ? "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-50"
                   : previewModeButtonEnableClass
@@ -71,7 +71,7 @@ let make = (
               handleRestoreVersionCB,
               selectedVersion |> Js.Json.string,
             )}
-            className="btn btn-warning border border-orange-500 mr-4">
+            className="btn btn-warning border border-orange-500 me-4">
             {tr("restore_version") |> str}
           </button>}
       <div className="relative">
@@ -87,10 +87,10 @@ let make = (
                 : "border-transparent cursor-auto"
             )}>
             <span className="flex items-center py-2">
-              <span className="truncate text-left"> {selectedVersion |> str} </span>
+              <span className="truncate ltr:text-left rtl:text-right"> {selectedVersion |> str} </span>
             </span>
             {versions |> Array.length > 1
-              ? <span className="text-right pl-3 py-2 border-l border-gray-300">
+              ? <span className="ltr:text-right rtl:text-left ps-3 py-2 border-l border-gray-300">
                   <i className="fas fa-chevron-down text-sm" />
                 </span>
               : React.null}

@@ -8,7 +8,7 @@
         <div class="w-11">
           <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
         </div>
-        <h1 class="text-xl md:text-2xl font-semibold pl-4"><%= @presenter.student.name %></h1>
+        <h1 class="text-xl md:text-2xl font-semibold ps-4 "><%= @presenter.student.name %></h1>
       </div>
     </div>
   </section>
@@ -64,7 +64,7 @@
         <h2 class="text-base md:text-xl font-semibold mt-8"><%= t(".reviewed_submissions.heading") %></h2>
         <a class="mt-4 p-5 flex bg-white items-center border border-gray-200 rounded-lg shadow-lg font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500 cursor-pointer" href="<%= submissions_org_student_path(@presenter.student) %>">
           <i class="if i-clipboard-check-regular if-fw"></i>
-          <span class="pl-2 text-sm"><%= t('.reviewed_submissions.button') %></span>
+          <span class="ps-2 text-sm"><%= t('.reviewed_submissions.button') %></span>
         </a>
       <% end %>
     </div>

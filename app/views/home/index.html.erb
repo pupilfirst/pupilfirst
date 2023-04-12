@@ -54,7 +54,7 @@
             <% presenter.courses.map do |course| %>
               <div class="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
                 <div
-                  class="flex overflow-hidden shadow bg-white rounded-lg flex flex-col h-full"
+                  class="flex overflow-hidden shadow bg-white rounded-lg flex-col h-full"
                   aria-label="<%= course.name %>"
                 >
                   <div class="relative">
@@ -75,7 +75,7 @@
                       class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                     >
                       <h4
-                        class="school-index-course__title text-white font-medium leading-tight pl-6 pr-4 text-lg md:text-xl"
+                        class="school-index-course__title text-white font-medium leading-tight ps-6 pe-4 text-lg md:text-xl"
                       >
                         <%= course.name %>
                       </h4>
@@ -95,10 +95,10 @@
                           href="/courses/<%= course.id %>"
                         >
                         <% if course.public_signup? %>
-                          <i class="fas fa-feather-alt mr-2"></i>
+                          <i class="fas fa-feather-alt me-2"></i>
                           <%= t('.get_started') %>
                         <% else %>
-                          <i class="fas fa-info-circle mr-2"></i>
+                          <i class="fas fa-info-circle me-2"></i>
                           <%= t('.learn_more') %>
                         <% end %>
                       </a>
@@ -106,7 +106,7 @@
                       <div
                           class="w-full bg-red-100 text-red-600 py-2 px-4 rounded flex text-sm font-semibold justify-center items-center"
                         >
-                        <i class="fas fa-user-slash mr-2"></i>
+                        <i class="fas fa-user-slash me-2"></i>
                         <%= t('.dropped_out') %>
                       </div>
                       <% when :access_ended %>
@@ -114,7 +114,7 @@
                           class="w-full btn btn-secondary"
                           href="/courses/<%= course.id %>/curriculum"
                         >
-                        <i class="fas fa-eye mr-2"></i>
+                        <i class="fas fa-eye me-2"></i>
                         <%= t('.access_ended') %>
                       </a>
                       <% when :active %>
@@ -122,7 +122,7 @@
                           class="w-full btn btn-secondary"
                           href="/courses/<%= course.id %>/curriculum"
                         >
-                        <i class="fas fa-book mr-2"></i>
+                        <i class="fas fa-book me-2"></i>
                         <%= t('.active') %>
                       </a>
                     <% else %>

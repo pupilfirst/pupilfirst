@@ -46,7 +46,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   }
 
 let headerLink = ((id, title, _, _)) =>
-  <div className="ml-6 text-sm font-semibold cursor-default" key=id>
+  <div className="ms-6 text-sm font-semibold cursor-default" key=id>
     <span> {title->str} </span>
   </div>
 
@@ -81,7 +81,7 @@ let sitemap = links =>
     <div className="flex flex-wrap">
       {links
       ->Js.Array2.map(((id, title, _, _)) =>
-        <div className="w-1/3 pr-4 mt-3 text-xs font-semibold" key=id> {title->str} </div>
+        <div className="w-1/3 pe-4 mt-3 text-xs font-semibold" key=id> {title->str} </div>
       )
       ->React.array}
     </div>
@@ -143,7 +143,7 @@ let editIcon = (additionalClasses, clickHandler, title) =>
     ariaLabel=title
     onClick=clickHandler>
     <i className="fas fa-pencil-alt text-xs" />
-    <span className="text-xs font-semibold ml-2"> {ts("edit")->str} </span>
+    <span className="text-xs font-semibold ms-2"> {ts("edit")->str} </span>
   </button>
 
 let showEditor = (editor, send, event) => {
@@ -313,7 +313,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-50 rounded p-2">
           {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
-          {editIcon("ml-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
+          {editIcon("ms-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
         </div>
         <div className="flex items-center">
           <div
@@ -323,18 +323,22 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               |> Customizations.filterLinks(~header=true)
               |> Customizations.unpackLinks,
             )}
-            {editIcon("ml-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
+            {editIcon(
+              "ms-3",
+              showEditor(LinksEditor(HeaderLink), send),
+              t("edit_header_links"),
+            )}
           </div>
         </div>
       </div>
       <div className="relative bg-gray-200 rounded-lg">
-        <div className="absolute right-0 z-10 pt-3 pr-3">
+        <div className="absolute end-0 z-10 pt-3 pe-3 ">
           <button
             ariaLabel="Change cover"
             className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 focus:bg-primary-200 focus:border-primary-500 focus:text-primary-600px px-2 py-1 cursor-pointer rounded"
             onClick={showEditor(ImagesEditor, send)}>
             <i className="fas fa-pencil-alt" />
-            <span className="font-semibold ml-2"> {t("change_cover")->str} </span>
+            <span className="font-semibold ms-2"> {t("change_cover")->str} </span>
           </button>
         </div>
         <div className="relative pb-1/2 md:pb-1/4 rounded-b-lg overflow-hidden">
@@ -361,7 +365,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               <span> {state.schoolName->str} </span>
               <button
                 ariaLabel="Edit School name"
-                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ml-1 cursor-pointer rounded"
+                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ms-1 cursor-pointer rounded"
                 onClick={showEditor(DetailsEditor, send)}>
                 <i className="fas fa-pencil-alt" />
               </button>
@@ -370,7 +374,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             onClick={showEditor(DetailsEditor, send)}
             className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 focus-within:border-primary-300 focus-within:text-primary-200 cursor-text">
-            <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
+            <div className="absolute end-0 top-0 z-10 pt-2 pe-2">
               <button
                 ariaLabel={t("edit_school_details")}
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">
@@ -396,11 +400,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div className="school-customize__footer-top-container rounded-t-lg p-6 flex">
           <div className="w-2/5">
             <div
-              className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full mr-2">
+              className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full me-2">
               <div className="flex items-center">
                 <span className="uppercase font-bold text-sm"> {t("sitemap")->str} </span>
                 {editIcon(
-                  "ml-3",
+                  "ms-3",
                   showEditor(LinksEditor(FooterLink), send),
                   t("edit_footer_links"),
                 )}
@@ -416,11 +420,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="flex">
               <div className="w-3/5">
                 <div
-                  className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full mr-2">
+                  className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full me-2">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {t("social")->str} </span>
                     {editIcon(
-                      "ml-3",
+                      "ms-3",
                       showEditor(LinksEditor(SocialLink), send),
                       t("edit_social_links"),
                     )}
@@ -437,7 +441,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                   className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {t("contact")->str} </span>
-                    {editIcon("ml-3", showEditor(ContactsEditor, send), t("edit_contact_details"))}
+                    {editIcon(
+                      "ms-3",
+                      showEditor(ContactsEditor, send),
+                      t("edit_contact_details"),
+                    )}
                   </div>
                   {address(state.customizations |> Customizations.address)}
                   {emailAddress(state.customizations |> Customizations.emailAddress)}
@@ -450,23 +458,23 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div className="flex items-center border border-dashed border-gray-500 rounded p-2">
             {footerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
-            {editIcon("ml-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
+            {editIcon("ms-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
           </div>
           <div className="flex items-center text-sm">
             <div
               className="flex items-center border border-dashed border-gray-500 rounded p-2 text-xs">
               <div> {t("privacy_policy")->str} </div>
               {editIcon(
-                "ml-3",
+                "ms-3",
                 showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.PrivacyPolicy), send),
                 t("edit_privacy"),
               )}
             </div>
             <div
-              className="flex items-center border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 ms-6 text-xs">
               <div> {t("terms_and_conditions")->str} </div>
               {editIcon(
-                "ml-3",
+                "ms-3",
                 showEditor(
                   AgreementsEditor(SchoolCustomize__AgreementsEditor.TermsAndConditions),
                   send,
@@ -474,9 +482,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 t("edit_terms"),
               )}
             </div>
-            <div className="ml-6 flex items-center text-xs text-gray-600">
+            <div className="ms-6 flex items-center text-xs text-gray-600">
               <i className="far fa-copyright" />
-              <span className="ml-1">
+              <span className="ms-1">
                 {(Js.Date.make()->Js.Date.getFullYear->int_of_float->string_of_int ++
                   (" " ++
                   schoolName))->str}
@@ -488,20 +496,20 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <div className="mt-6 font-bold"> {t("icon")->str} </div>
       <div className="mt-3 w-1/2 max-w-sm">
         <div className="bg-gray-300 rounded-t-lg h-12 flex items-end">
-          <div className="w-full flex items-center pr-3">
-            <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
-            <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
-            <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
-            <div className="p-3 ml-4 bg-gray-50 rounded-t-lg flex items-center">
+          <div className="w-full flex items-center pe-3">
+            <div className="h-3 w-3 rounded-full bg-gray-500 ms-4" />
+            <div className="h-3 w-3 rounded-full bg-gray-500 ms-2" />
+            <div className="h-3 w-3 rounded-full bg-gray-500 ms-2" />
+            <div className="p-3 ms-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
                 src={state.customizations |> Customizations.icon |> Customizations.url}
                 className="h-5 w-5"
               />
-              <span className="ml-1 text-xs font-semibold max-w-xs truncate">
+              <span className="ms-1 text-xs font-semibold max-w-xs truncate">
                 {schoolName->str}
               </span>
             </div>
-            {editIcon("ml-2", showEditor(ImagesEditor, send), t("edit_icon"))}
+            {editIcon("ms-2", showEditor(ImagesEditor, send), t("edit_icon"))}
           </div>
         </div>
         <div className="bg-gray-50 border border-t-0 h-16 rounded-b-lg" />

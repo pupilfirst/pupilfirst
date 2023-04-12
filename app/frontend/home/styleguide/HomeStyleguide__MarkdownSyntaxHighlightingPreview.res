@@ -158,7 +158,7 @@ let make = () => {
 
   <div>
     <span> {"Select a language to preview:" |> str} </span>
-    <select className="ml-2" onChange={handleChange(setLanguage)}>
+    <select className="ms-2" onChange={handleChange(setLanguage)}>
       <option value="reasonml"> {"ReasonML" |> str} </option>
       <option value="ruby"> {"Ruby" |> str} </option>
       <option value="javascript"> {"Javascript" |> str} </option>

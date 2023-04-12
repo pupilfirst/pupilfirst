@@ -15,7 +15,7 @@ let avatar = (avatarUrl, name) => {
 let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
   <div key className="w-full md:w-1/2 shadow rounded-lg p-4 flex items-center mt-2 bg-white">
     {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
-    <div className="ml-2 md:ml-3">
+    <div className="ms-2 md:ms-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {title |> str} </div>
     </div>
@@ -63,7 +63,7 @@ let targetsCompletionStatus = overview => {
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex items-center">
       <div> {doughnutChart("purple", targetCompletionPercent)} </div>
-      <div className="ml-4">
+      <div className="ms-4">
         <p className="text-sm text-gray-600 font-semibold mt-1">
           {t(
             ~variables=[("targetsCount", string_of_int(incompleteTargets))],
@@ -93,7 +93,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
     <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
       <div className="courses-report-overview__doughnut-chart-container bg-white">
         <div> {doughnutChart("pink", score |> int_of_float |> string_of_int)} </div>
-        <div className="ml-4">
+        <div className="ms-4">
           <p className="text-sm font-semibold mt-3"> {t("average_quiz_score") |> str} </p>
           <p className="text-sm text-gray-600 font-semibold leading-tight mt-1">
             {t(~count=quizzesAttempted, "quizzes_attempted")->str}
@@ -139,7 +139,7 @@ let averageGradeCharts = (
               cy="16"
             />
           </svg>
-          <span className="ml-3 text-lg font-semibold">
+          <span className="ms-3 text-lg font-semibold">
             {(grade.grade |> Js.Float.toString) ++ ("/" ++ (criterion.maxGrade |> string_of_int))
               |> str}
           </span>
@@ -182,7 +182,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
       <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
       {courseCompleted
         ? <p className="text-green-600 font-semibold">
-            {`🎉` |> str} <span className="text-xs ml-px"> {t("course_completed") |> str} </span>
+            {`🎉` |> str} <span className="text-xs ms-px"> {t("course_completed") |> str} </span>
           </p>
         : React.null}
     </div>

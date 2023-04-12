@@ -55,7 +55,7 @@ let make = (
           <Tooltip
             position=tooltipPosition
             tip={coach |> UserProxy.name |> str}
-            className="-mr-1"
+            className="-me-1"
             key={coach |> UserProxy.userId}>
             {avatar(
               ~size=(defaultAvatarSize, mdAvatarSize),
@@ -67,7 +67,7 @@ let make = (
         |> React.array}
         {otherCoaches |> OptionUtils.mapWithDefault(
           ((names, count)) =>
-            <Tooltip tip=names className="-mr-1">
+            <Tooltip tip=names className="-me-1">
               <Avatar
                 name={"+ " ++ (count |> string_of_int)}
                 className={avatarClasses((defaultAvatarSize, mdAvatarSize))}

@@ -58,7 +58,7 @@ let make = (~attachUrlCB, ~typingCB) => {
         value=state.url
         type_="text"
         placeholder=tr("button_placeholder")
-        className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm grow mr-2"
+        className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm grow me-2"
         onChange={updateUrl(send, typingCB)}
       />
       <button
@@ -71,7 +71,7 @@ let make = (~attachUrlCB, ~typingCB) => {
     {state.errors
     |> List.map(error =>
       <div className="mt-2 text-red-600 text-sm" key=error>
-        <i className="fas fa-exclamation-circle mr-2" /> <span> {error |> str} </span>
+        <i className="fas fa-exclamation-circle me-2" /> <span> {error |> str} </span>
       </div>
     )
     |> Array.of_list

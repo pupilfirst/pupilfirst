@@ -69,7 +69,7 @@ let make = (
             {nonSelectedList |> List.length > 3
               ? <div className="px-3 pt-3 pb-2">
                   <input
-                    className="appearance-none bg-transparent border-b w-full text-gray-600 pb-3 px-2 pl-0 leading-normal focus:outline-none"
+                    className="appearance-none bg-transparent border-b w-full text-gray-600 pb-3 px-2 ps-0 leading-normal focus:outline-none"
                     type_="text"
                     placeholder={t("type_search")}
                     onChange={event => setSearchString(ReactEvent.Form.target(event)["value"])}

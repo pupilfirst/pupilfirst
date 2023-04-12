@@ -12,7 +12,7 @@ let showLink = (icon, text, href) => {
       rel="nofollow"
       className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="pl-2"> {str(text)} </span>
+      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="ps-2 "> {str(text)} </span>
     </a>
   </div>
 }
@@ -27,7 +27,7 @@ let links = () => {
 let selected = user => {
   <button
     title="Show user controls"
-    className="md:hidden md:ml-2 h-10 w-10 rounded-full border-2 border-gray-300 hover:border-primary-500 focus:border-primary-500">
+    className="md:hidden md:ms-2 h-10 w-10 rounded-full border-2 border-gray-300 hover:border-primary-500 focus:border-primary-500">
     {User.avatarUrl(user)->Belt.Option.mapWithDefault(
       <Avatar
         name={User.name(user)} className="inline-block object-contain rounded-full text-tiny"
@@ -47,7 +47,7 @@ let renderLinks = user => {
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
+    className="md:ms-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <a
       className="no-underline bg-gray-50 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
       href={link->School.linkUrl}
@@ -60,13 +60,14 @@ let headerLink = (key, link) =>
 let signOutLink = () =>
   <div
     key="Logout-button"
-    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
+    className="md:ms-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <div className="flex items-center justify-center">
       <a
         href="/users/sign_out"
         rel="nofollow"
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
-        <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_out")->str} </span>
+        <FaIcon classes="fas fa-power-off" />
+        <span className="ms-2"> {t("sign_out")->str} </span>
       </a>
     </div>
   </div>
@@ -74,12 +75,13 @@ let signOutLink = () =>
 let signInLink = () =>
   <div
     key="SignIn-button"
-    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
+    className="md:ms-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <div className="flex items-center justify-center">
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
-        <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_in")->str} </span>
+        <FaIcon classes="fas fa-power-off" />
+        <span className="ms-2"> {t("sign_in")->str} </span>
       </a>
     </div>
   </div>
@@ -87,7 +89,7 @@ let signInLink = () =>
 let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
-    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-50"
+    wrapperClasses="relative md:ms-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-50"
     iconClasses="app-router-header__notifications-unread-bullet"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
     hasNotifications
@@ -184,7 +186,7 @@ let make = (~school, ~currentUser) => {
           ? <div
               className="relative flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap shrink-0 transition">
               {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
-              <Layout__UserControls user={(currentUser)} />
+              <Layout__UserControls user={currentUser} />
             </div>
           : React.null}
       </nav>

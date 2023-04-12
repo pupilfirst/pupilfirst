@@ -30,10 +30,10 @@ let nameCanvas = issuedCertificate =>
 let qrPositionClasses = issuedCertificate =>
   switch issuedCertificate |> IssuedCertificate.qrCorner {
   | #Hidden => "hidden"
-  | #TopLeft => "top-0 left-0"
-  | #TopRight => "top-0 right-0"
-  | #BottomRight => "bottom-0 right-0"
-  | #BottomLeft => "bottom-0 left-0"
+  | #TopLeft => "top-0 start-0"
+  | #TopRight => "top-0 end-0"
+  | #BottomRight => "bottom-0 end-0"
+  | #BottomLeft => "bottom-0 start-0"
   }
 
 let qrContainerStyle = issuedCertificate => {
@@ -134,7 +134,7 @@ let make = (~issuedCertificate, ~verifyImageUrl) => {
   <div className="relative w-full h-full">
     <img className="w-full object-contain" src={IssuedCertificate.imageUrl(issuedCertificate)} />
     <div
-      className="absolute top-0 left-0 w-full h-full"
+      className="absolute top-0 start-0 w-full h-full"
       style={certificateContainerStyle(issuedCertificate)}>
       <div className="relative w-full h-full">
         {nameCanvas(issuedCertificate)} {qrCode(issuedCertificate, verifyImageUrl)}

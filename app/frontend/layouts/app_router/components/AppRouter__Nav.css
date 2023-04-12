@@ -32,7 +32,7 @@
   height: 20px;
   position: absolute;
   top: 50%;
-  left: 0px;
+  @apply start-0;
   transform: translateY(-50%);
   background-color: var(--color-primary-500);
   border-radius: 2px;

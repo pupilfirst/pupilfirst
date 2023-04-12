@@ -22,7 +22,7 @@ let showFiles = files =>
         key={"file-" ++ ChecklistItem.fileUrl(file)}
         href={ChecklistItem.fileUrl(file)}
         target="_blank"
-        className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-red-300 bg-white text-red-600 hover:border-red-500 hover:text-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+        className="mt-1 me-3 flex border overflow-hidden rounded hover:shadow-md border-red-300 bg-white text-red-600 hover:border-red-500 hover:text-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
         <span
           className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
           {ChecklistItem.fileName(file)->str}
@@ -39,13 +39,13 @@ let showlink = link =>
   <a
     href=link
     target="_blank"
-    className="max-w-fc mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-blue-400 bg-white text-blue-700 hover:border-blue-600 hover:text-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+    className="max-w-fc mt-1 me-3 flex border overflow-hidden rounded hover:shadow-md border-blue-400 bg-white text-blue-700 hover:border-blue-600 hover:text-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
     <span
       className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
       {link->str}
     </span>
     <span className="flex w-10 justify-center items-center p-2 bg-blue-700 text-white">
-      <PfIcon className="if i-external-link-regular" />
+      <PfIcon className="if i-external-link-regular rtl:-rotate-90" />
     </span>
   </a>
 
@@ -74,6 +74,12 @@ let showStatus = status =>
     <div className="bg-red-200 rounded px-1 py-px text-red-800 text-tiny"> {"Incorrect"->str} </div>
   | NoAnswer => React.null
   }
+
+let showChoices = choices => {
+  choices
+  ->Js.Array2.map(choice => <p className="text-sm text-gray-800"> {("- " ++ choice)->str} </p>)
+  ->React.array
+}
 
 let statusButtonSelectedClasses = (status, currentStatus) =>
   "inline-flex items-center cursor-pointer leading-tight font-semibold inline-block text-xs relative hover:bg-gray-50 hover:text-gray-600 " ++
@@ -114,10 +120,10 @@ let statusButton = (index, status, callback, checklist) =>
     </button>
   </div>
 
-let cardBodyClasses = pending => "pl-7 md:pl-8 " ++ (pending ? "" : "rounded-b")
+let cardBodyClasses = pending => "ps-7 md:ps-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
-let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
+let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>
@@ -128,19 +134,19 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
           <MarkdownBlock
             profile=Markdown.Permissive
             markdown={ChecklistItem.title(checklistItem)}
-            className="ml-3 pr-2 tracking-wide"
+            className="ms-3 pe-2 tracking-wide"
           />
         </div>
         {statusIcon(updateChecklistCB, status)}
       </div>
     </div>
-    <div className="pl-7 mt-2 text-sm">
+    <div className="ps-7 mt-2 text-sm">
       <div>
         {switch ChecklistItem.result(checklistItem) {
         | ShortText(text) => <div> {text->str} </div>
         | LongText(markdown) => <MarkdownBlock profile=Markdown.Permissive markdown />
         | Link(link) => showlink(link)
-        | MultiChoice(text) => <div> {text->str} </div>
+        | MultiChoice(choices) => <div className="space-y-2"> {showChoices(choices)} </div>
         | Files(files) => showFiles(files)
         | AudioRecord(file) => <audio src={file.url} controls=true />
         }}

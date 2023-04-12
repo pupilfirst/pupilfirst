@@ -11,11 +11,11 @@
           <h3 class="text-sm text-gray-600"><%= t('.total_reviewed_submissions') %></h3>
           <p class="text-xl font-bold"><%= @presenter.reviewed_submissions.total_count %></p>
         </div>
-        <div class="pl-5 border-l border-gray-300">
+        <div class="ps-5 ltr:border-l rtl:border-r border-gray-300">
           <h3 class="text-sm text-gray-600"><%= t('.accepted_submissions_label') %></h3>
           <p class="text-xl font-bold"><%= @presenter.reviewed_submissions_passed_count %></p>
         </div>
-        <div class="pl-5 border-l border-gray-300">
+        <div class="ps-5 ltr:border-l rtl:border-r border-gray-300">
           <h3 class="text-sm text-gray-600"><%= t('.rejected_submissions_label') %></h3>
           <p class="text-xl font-bold"><%= @presenter.reviewed_submissions_failed_count %></p>
         </div>

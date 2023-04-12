@@ -205,6 +205,10 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_text('The submission has been marked as reviewed')
 
+      student = submission_pending.founders.first
+      open_email(student.user.email)
+      expect(current_email).to have_content('grades')
+
       dismiss_notification
 
       expect(page).to have_button('Undo Grading')
@@ -281,6 +285,7 @@ feature 'Submission review overlay', js: true do
       c1_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c1_result_1_title = Faker::Lorem.sentence
       c1_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c1_additional_feedback = "Additional feedback 1"
 
       # Checklist item 2
       checklist_title_2 = Faker::Lorem.sentence
@@ -288,6 +293,7 @@ feature 'Submission review overlay', js: true do
       c2_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c2_result_1_title = Faker::Lorem.sentence
       c2_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c2_additional_feedback = "Additional feedback 2"
 
       expect(target.review_checklist).to eq([])
       click_button 'Start Review'
@@ -352,6 +358,24 @@ feature 'Submission review overlay', js: true do
         end
       end
 
+      # Add Additional Feedback
+      expect(page).to have_content('Add Additional Feedback')
+
+      within("div[data-checklist-item='0']") do
+        click_button "Add Additional Feedback"
+        expect(page).to have_content("Remove Additional Feedback")
+        fill_in 'additional-feedback-text-area-0', with: c1_additional_feedback
+      end
+
+      within("div[data-checklist-item='1']") do
+        click_button "Add Additional Feedback"
+        expect(page).to have_content("Remove Additional Feedback")
+        click_button "Remove Additional Feedback"
+        expect(page).to have_content("Add Additional Feedback")
+        click_button "Add Additional Feedback"
+        fill_in 'additional-feedback-text-area-1', with: c2_additional_feedback
+      end
+
       click_button 'Generate Feedback'
 
       expect(page).not_to have_button('Generate Feedback')
@@ -361,6 +385,8 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_content(c1_result_0_feedback)
         expect(page).to have_content(c1_result_1_feedback)
         expect(page).to have_content(c2_result_0_feedback)
+        expect(page).to have_content(c1_additional_feedback)
+        expect(page).to have_content(c2_additional_feedback)
       end
 
       click_button 'Show Review Checklist'
@@ -624,7 +650,7 @@ feature 'Submission review overlay', js: true do
       submission_checklist_choice = {
         'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
         'title' => question_3,
-        'result' => answer_3,
+        'result' => [answer_3],
         'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_short_text = {
@@ -730,7 +756,7 @@ feature 'Submission review overlay', js: true do
         {
           'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE,
           'title' => question_3,
-          'result' => answer_3,
+          'result' => [answer_3],
           'status' => TimelineEvent::CHECKLIST_STATUS_FAILED
         },
         submission_checklist_short_text,

@@ -48,7 +48,7 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
   |> ignore
 }
 let answerOptionClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer text-left "
+  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer ltr:text-left rtl:text-right "
   switch selectedAnswer {
   | Some(answer) if answer == answerOption =>
     defaultClasses ++ "bg-primary-100 border-primary-500 text-primary-500 shadow-md quiz-root__answer-selected "
@@ -103,7 +103,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
             <FaIcon classes={iconClasses(answerOption, selectedAnswer)} />
             <MarkdownBlock
               markdown={QuizQuestion.answerValue(answerOption)}
-              className="overflow-auto ml-2 w-full"
+              className="overflow-auto ms-2 w-full"
               profile=Markdown.Permissive
             />
           </button>

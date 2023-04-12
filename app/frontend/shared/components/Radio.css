@@ -10,7 +10,7 @@
 }
 
 .radio-label span:first-child {
-  @apply relative rounded-full align-middle border border-gray-500 bg-white mr-3;
+  @apply relative rounded-full align-middle border border-gray-500 bg-white me-3;
   width: 1.125rem;
   height: 1.125rem;
   transform: scale(1);

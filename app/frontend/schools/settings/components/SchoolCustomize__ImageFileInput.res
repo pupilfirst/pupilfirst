@@ -7,7 +7,7 @@ let imageLabel = (imageName, selectedImageName) =>
   | Some(name) =>
     <span>
       { t("you_selected_pre") ++ " " |> str}
-      <code className="mr-1"> {name |> str} </code>
+      <code className="me-1"> {name |> str} </code>
       {" " ++ t("you_selected_post") |> str}
     </span>
   | None =>
@@ -49,7 +49,7 @@ let make = (
       />
       <label className="file-input-label mt-2" htmlFor=id>
         <i className="fas fa-upload" />
-        <span className="ml-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
+        <span className="ms-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
       </label>
     </div>
     <School__InputGroupError message=errorMessage active=errorState />

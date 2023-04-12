@@ -36,7 +36,7 @@ let make = (
         target="_blank"
         className="text-primary-500 font-medium hover:underline focus:underline">
         <div className="py-4 flex gap-2 items-center">
-          <PfIcon className="if i-external-link-regular if-fw" />
+          <PfIcon className="if i-external-link-regular if-fw rtl:-rotate-90" />
           <p>
             {switch eventTitle {
             | Some(eventTitle) => eventTitle

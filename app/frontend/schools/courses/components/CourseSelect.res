@@ -275,7 +275,7 @@ let showCourse = (course: course, selected, onChangeCB) => {
       className={"w-full flex cursor-pointer hover:bg-gray-300" ++ selectedClass}
       onClick={_ => onChangeCB(course.id)}
       key={course.id}>
-      <span className="p-1 pr-4 text-gray-900"> {str(course.name)} </span>
+      <span className="p-1 pe-4  text-gray-900"> {str(course.name)} </span>
     </div>
   </Spread>
 }

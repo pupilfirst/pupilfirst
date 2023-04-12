@@ -20,6 +20,11 @@ let make = (~levels, ~currentLevelNumber, ~courseCompleted, ~className="") => {
   <div className>
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {t("heading") |> str} </h6>
+      {courseCompleted
+        ? <p className="text-green-600 font-semibold">
+            {`🎉` |> str} <span className="text-xs ms-px"> {t("course_completed") |> str} </span>
+          </p>
+        : React.null}
     </div>
     <div className="h-12 flex items-center">
       <ul

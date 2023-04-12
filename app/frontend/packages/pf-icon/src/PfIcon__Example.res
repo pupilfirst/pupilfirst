@@ -532,7 +532,7 @@ module Example = {
             className="w-8 h-8"
             src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
           />
-          <span className="pl-2"> {"Docs"->str} </span>
+          <span className="ps-2"> {"Docs"->str} </span>
         </a>
       </div>
       <div className="relative">
@@ -555,7 +555,7 @@ module Example = {
               let iconClasses = "if i-" ++ icon
               <div key=icon className="flex items-center p-4 shadow bg-white rounded-md">
                 <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
-                <div className="ml-4 overflow-x-auto">
+                <div className="ms-4 overflow-x-auto">
                   <div className="flex gap-4 items-center justify-between">
                     <p className="font-semibold text-base"> {icon |> str} </p>
                     <button

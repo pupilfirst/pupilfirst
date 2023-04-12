@@ -143,30 +143,30 @@ let cohortsList = cohorts => {
               <Link
                 href={`/school/cohorts/${cohort.id}/details`}
                 className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-                <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
+                <span className="inline-block pe-2"> <i className="fas fa-edit" /> </span>
                 <span> {t("edit")->str} </span>
               </Link>
             </div>
           </div>
           <div className="flex gap-6 flex-wrap mt-6">
             <div>
-              <p className="pr-6 text-sm text-gray-500 font-medium"> {t("students")->str} </p>
-              <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+              <p className="pe-6 text-sm text-gray-500 font-medium"> {t("students")->str} </p>
+              <p className="pe-3 mt-2 border-e-2 border-gray-200 font-semibold">
                 {cohort.studentsCount->string_of_int->str}
               </p>
             </div>
             <div>
-              <p className="pr-6 text-sm text-gray-500 font-medium"> {t("coaches")->str} </p>
-              <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+              <p className="pe-6 text-sm text-gray-500 font-medium"> {t("coaches")->str} </p>
+              <p className="pe-3 mt-2 border-e-2 border-gray-200 font-semibold">
                 {cohort.coachesCount->string_of_int->str}
               </p>
             </div>
             {cohort.endsAt->Belt.Option.mapWithDefault(React.null, endsAt =>
               <div>
-                <p className="pr-6 text-sm text-gray-500 font-medium">
+                <p className="pe-6 text-sm text-gray-500 font-medium">
                   {t("cohorts_end_date")->str}
                 </p>
-                <p className="pr-3 mt-2 border-r-2 border-gray-200 font-semibold">
+                <p className="pe-3 mt-2 border-e-2 border-gray-200 font-semibold">
                   {endsAt->DateFns.format("MMMM d, yyyy")->str}
                 </p>
               </div>
@@ -192,8 +192,6 @@ let renderLoadMore = (send, courseId, params, cursor) => {
   </div>
 }
 
-
-
 @react.component
 let make = (~courseId, ~search) => {
   let params = Webapi.Url.URLSearchParams.make(search)
@@ -207,34 +205,29 @@ let make = (~courseId, ~search) => {
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex gap-2 items-end justify-between">
-          <p className="font-semibold pl-1 capitalize"> {t("cohorts")->str} </p>
+          <p className="font-semibold ps-1 capitalize"> {t("cohorts")->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/cohorts/new`}>
             <PfIcon className="if i-plus-regular" />
-            <span className="inline-block pl-2"> {str(t("add_new_cohort"))} </span>
+            <span className="inline-block ps-2 "> {str(t("add_new_cohort"))} </span>
           </Link>
         </div>
-        <div className="sticky top-0 my-6">
-          <div className="border rounded-lg mx-auto bg-white ">
-            <div>
-              <div className="flex w-full items-start p-4">
-                <CourseResourcesFilter
-                  courseId
-                  filters={makeFilters()}
-                  search={search}
-                  sorter={CourseResourcesFilter.makeSorter(
-                    "sort_by",
-                    [
-                      t("filter.name"),
-                      t("filter.first_created"),
-                      t("filter.last_created"),
-                      t("filter.last_ending"),
-                    ],
-                    t("filter.last_created"),
-                  )}
-                />
-              </div>
-            </div>
-          </div>
+        <div
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10">
+          <CourseResourcesFilter
+            courseId
+            filters={makeFilters()}
+            search={search}
+            sorter={CourseResourcesFilter.makeSorter(
+              "sort_by",
+              [
+                t("filter.name"),
+                t("filter.first_created"),
+                t("filter.last_created"),
+                t("filter.last_ending"),
+              ],
+              t("filter.last_created"),
+            )}
+          />
         </div>
         {PagedCohorts.renderView(
           ~pagedItems=state.cohorts,

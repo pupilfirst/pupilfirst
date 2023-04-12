@@ -243,7 +243,7 @@ module Editor = {
                     <span className="font font-semibold text-xs">
                       {t("issued_date_label")->str}
                     </span>
-                    <span className="text-xs ml-2">
+                    <span className="text-xs ms-2">
                       {IssuedCertificate.createdAt(ic)->DateFns.format("MMMM d, yyyy")->str}
                     </span>
                   </div>
@@ -251,7 +251,7 @@ module Editor = {
                     <span className="font font-semibold text-xs">
                       {t("issued_by_label")->str}
                     </span>
-                    <span className="text-xs ml-2"> {IssuedCertificate.issuedBy(ic)->str} </span>
+                    <span className="text-xs ms-2"> {IssuedCertificate.issuedBy(ic)->str} </span>
                   </div>
                 </div>
                 {switch IssuedCertificate.revokedAt(ic) {
@@ -261,7 +261,7 @@ module Editor = {
                       <span className="font font-semibold text-xs">
                         {t("revoked_date_label")->str}
                       </span>
-                      <span className="text-xs ml-2">
+                      <span className="text-xs ms-2">
                         {revokedAt->DateFns.format("MMMM d, yyyy")->str}
                       </span>
                     </div>
@@ -269,7 +269,7 @@ module Editor = {
                       <span className="font font-semibold text-xs">
                         {t("revoked_by_label")->str}
                       </span>
-                      <span className="text-xs ml-2">
+                      <span className="text-xs ms-2">
                         {IssuedCertificate.revokedBy(ic)
                         ->Belt.Option.mapWithDefault("Unknown", r => r)
                         ->str}
@@ -352,9 +352,9 @@ module Editor = {
                     <button
                       onClick={issueNewCertificate(studentId, state, send)}
                       disabled={state.issuing || state.selectedCertificateId == "0"}
-                      className="btn btn-success ml-2 text-sm h-10">
+                      className="btn btn-success ms-2 text-sm h-10">
                       <FaIcon classes={issueButtonIcons(state.issuing)} />
-                      <span className="ml-2"> {t("issue_certificate_button")->str} </span>
+                      <span className="ms-2"> {t("issue_certificate_button")->str} </span>
                     </button>
                   </div>
                 </div>,
@@ -366,7 +366,7 @@ module Editor = {
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
           {t("dropout_student.label")->str}
         </label>
-        <HelpIcon className="ml-2" link={t("dropout_student.help_url")}>
+        <HelpIcon className="ms-2" link={t("dropout_student.help_url")}>
           {t("dropout_student.help")->str}
         </HelpIcon>
         <div className="mt-2">
@@ -376,14 +376,14 @@ module Editor = {
                 className="btn btn-danger"
                 onClick={dropoutStudent(studentId, send)}>
                 <FaIcon classes={submitButtonIcons(state.saving)} />
-                <span className="ml-2"> {t("dropout_student.button")->str} </span>
+                <span className="ms-2"> {t("dropout_student.button")->str} </span>
               </button>
             : <button
                 disabled=state.saving
                 className="btn btn-success"
                 onClick={reActivateStudent(studentId, send)}>
                 <FaIcon classes={submitButtonIcons(state.saving)} />
-                <span className="ml-2"> {t("re_activate_student.button")->str} </span>
+                <span className="ms-2"> {t("re_activate_student.button")->str} </span>
               </button>}
         </div>
       </div>

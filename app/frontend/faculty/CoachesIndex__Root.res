@@ -127,7 +127,7 @@ let overlay = (coach, about) =>
         role="dialog"
         ariaModal=true
         ariaLabelledby="modal-headline">
-        <div className="block absolute top-0 left-0 -mt-12">
+        <div className="block absolute top-0 start-0 -mt-12">
           <Link
             href="/coaches"
             className="flex justify-center items-center bg-gray-900 rounded-full p-2 w-10 h-10 text-gray-400 hover:opacity-75 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"

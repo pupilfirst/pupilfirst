@@ -151,7 +151,7 @@ let showTeams = teams => {
             <Link
               href={`/school/teams/${Team.id(team)}/details`}
               className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-              <span className="inline-block pr-2"> <i className="fas fa-edit" /> </span>
+              <span className="inline-block pe-2"> <i className="fas fa-edit" /> </span>
               <span> {t("edit")->str} </span>
             </Link>
           </div>
@@ -192,29 +192,24 @@ let make = (~courseId, ~search) => {
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold pl-1"> {t("page_title")->str} </p>
+          <p className="font-semibold ps-1 "> {t("page_title")->str} </p>
           <Link className="btn btn-primary" href={`/school/courses/${courseId}/teams/new`}>
             <PfIcon className="if i-plus-regular" />
-            <span className="inline-block pl-2"> {str(t("create_team"))} </span>
+            <span className="inline-block ps-2 "> {str(t("create_team"))} </span>
           </Link>
         </div>
-        <div className="sticky top-0 my-6">
-          <div className="border rounded-lg mx-auto bg-white ">
-            <div>
-              <div className="flex w-full items-start p-4">
-                <CourseResourcesFilter
-                  courseId
-                  filters={makeFilters()}
-                  search={search}
-                  sorter={CourseResourcesFilter.makeSorter(
-                    "sort_by",
-                    [t("sorter.name"), t("sorter.first_created"), t("sorter.last_created")],
-                    t("sorter.last_created"),
-                  )}
-                />
-              </div>
-            </div>
-          </div>
+        <div
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10">
+          <CourseResourcesFilter
+            courseId
+            filters={makeFilters()}
+            search={search}
+            sorter={CourseResourcesFilter.makeSorter(
+              "sort_by",
+              [t("sorter.name"), t("sorter.first_created"), t("sorter.last_created")],
+              t("sorter.last_created"),
+            )}
+          />
         </div>
         {PagedTeams.renderView(
           ~pagedItems=state.teams,

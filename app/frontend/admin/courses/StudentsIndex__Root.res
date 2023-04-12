@@ -122,7 +122,7 @@ let showTag = (~value=?, key, text, color, params) => {
   let paramsValue = Belt.Option.getWithDefault(value, text)
   <button
     key={text}
-    className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
+    className={"rounded-lg mt-1 me-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
     color}
     onClick={_e => onSelect(key, paramsValue, params)}>
     {text->str}
@@ -130,16 +130,16 @@ let showTag = (~value=?, key, text, color, params) => {
 }
 
 let studentsList = (params, students) => {
-  <div className="space-y-4">
+  <div>
     {students
     ->Js.Array2.map(student => {
       <div
         key={StudentInfo.id(student)}
-        className="student-container h-full flex items-center bg-white">
+        className="student-container h-full flex items-center bg-white mt-4">
         <div
-          className="py-4 px-4 flex gap-4 flex-1 items-center text-left justify-between rounded-md shadow">
+          className="py-4 px-4 flex gap-4 flex-1 items-center ltr:text-left rtl:text-right justify-between rounded-md shadow">
           <div className="flex">
-            <div className="text-sm flex items-center space-x-4">
+            <div className="text-sm flex gap-4 items-center ltr:space-x-4">
               {switch User.avatarUrl(StudentInfo.user(student)) {
               | Some(avatarUrl) =>
                 <img
@@ -197,7 +197,7 @@ let studentsList = (params, students) => {
                 className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
                 <span className="inline-flex items-center p-2">
                   <PfIcon className="if i-edit-regular if-fw" />
-                  <span className="ml-2"> {t("edit")->str} </span>
+                  <span className="ms-2"> {t("edit")->str} </span>
                 </span>
               </Link>
             </div>
@@ -222,7 +222,12 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("user_tags", t("filter.user_tag"), DataLoad(#UserTag), "blue"),
     CourseResourcesFilter.makeFilter("email", t("filter.search_by_email"), Search, "gray"),
     CourseResourcesFilter.makeFilter("name", t("filter.search_by_name"), Search, "gray"),
-    CourseResourcesFilter.makeFilter("status", "Status", CustomArray(["Active", "Ended", "Dropped"]), "orange"),
+    CourseResourcesFilter.makeFilter(
+      "status",
+      "Status",
+      CustomArray(["Active", "Ended", "Dropped"]),
+      "orange",
+    ),
   ]
 }
 
@@ -250,40 +255,35 @@ let make = (~courseId, ~search) => {
 
   <>
     <Helmet> <title> {str(t("title"))} </title> </Helmet>
-    <div className="bg-gray-50 pt-8 min-h-full">
+    <div className="bg-gray-50 pt-8 min-h-full ">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">
-          <p className="font-semibold pl-1 capitalize"> {t("students")->str} </p>
+          <p className="font-semibold ps-1 capitalize"> {t("students")->str} </p>
           <div>
             <Link className="btn btn-primary" href={`/school/courses/${courseId}/students/new`}>
               <PfIcon className="if i-plus-regular" />
-              <span className="inline-block pl-2"> {str(t("add_new_students"))} </span>
+              <span className="inline-block ps-2 "> {str(t("add_new_students"))} </span>
             </Link>
           </div>
         </div>
-        <div className="sticky top-0 my-6">
-          <div className="border rounded-lg mx-auto bg-white ">
-            <div>
-              <div className="flex w-full items-start p-4">
-                <CourseResourcesFilter
-                  courseId
-                  filters={makeFilters()}
-                  search={search}
-                  sorter={CourseResourcesFilter.makeSorter(
-                    "sort_by",
-                    [
-                      t("sorter.name"),
-                      t("sorter.first_created"),
-                      t("sorter.last_created"),
-                      t("sorter.first_updated"),
-                      t("sorter.last_updated"),
-                    ],
-                    t("sorter.last_created"),
-                  )}
-                />
-              </div>
-            </div>
-          </div>
+        <div
+          className="p-5 mt-6 bg-white rounded-md border border-gray-300 md:sticky md:top-0 z-10">
+          <CourseResourcesFilter
+            courseId
+            filters={makeFilters()}
+            search={search}
+            sorter={CourseResourcesFilter.makeSorter(
+              "sort_by",
+              [
+                t("sorter.name"),
+                t("sorter.first_created"),
+                t("sorter.last_created"),
+                t("sorter.first_updated"),
+                t("sorter.last_updated"),
+              ],
+              t("sorter.last_created"),
+            )}
+          />
         </div>
         {PagedStudents.renderView(
           ~pagedItems=state.students,

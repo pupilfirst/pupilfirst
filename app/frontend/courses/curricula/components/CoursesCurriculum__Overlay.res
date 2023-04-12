@@ -68,6 +68,7 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (Pending, TakeQuiz) => t("completion_tab_take_quiz")
   | (Pending, LinkToComplete) => t("completion_tab_visit_link")
   | (Pending, MarkAsComplete) => t("completion_tab_mark_complete")
+  | (Pending, SubmitForm) => t("completion_tab_submit_form")
   | (
       PendingReview
       | Completed
@@ -84,9 +85,17 @@ let completionTypeToString = (completionType, targetStatus) =>
       TakeQuiz,
     ) =>
     t("completion_tab_quiz_result")
+  | (
+      PendingReview
+      | Completed
+      | Rejected
+      | Locked(CourseLocked | AccessLocked),
+      SubmitForm,
+    ) =>
+    t("completion_tab_form_response")
   | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
     t("completion_tab_completed")
-  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) =>
+  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete | SubmitForm) =>
     t("completion_tab_locked")
   }
 
@@ -139,15 +148,14 @@ let tabLink = (tab, state, send, targetStatus) =>
 
 let tabOptions = (state, send, targetDetails, targetStatus) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType
-
   <div role="tablist" className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {selectableTabs(targetDetails)
     |> Js.Array.map(selection => tabButton(selection, state, send, targetStatus))
     |> React.array}
     {switch (targetStatus |> TargetStatus.status, completionType) {
-    | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz) =>
+    | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz | SubmitForm) =>
       tabButton(Complete(completionType), state, send, targetStatus)
-    | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
+    | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz | SubmitForm) =>
       TargetDetails.submissions(targetDetails) != []
         ? tabButton(Complete(completionType), state, send, targetStatus)
         : React.null
@@ -235,7 +243,7 @@ let overlayHeaderTitleCardClasses = targetStatus =>
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fas fa-lock text-lg" /> <span className="ml-2"> {text |> str} </span>
+    <i className="fas fa-lock text-lg" /> <span className="ms-2"> {text |> str} </span>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
@@ -249,7 +257,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:mr-6 md:text-xl">
+        <h1 className="text-base leading-snug md:me-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -286,7 +294,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
           className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
-          <span className="font-semibold text-left leading-snug">
+          <span className="font-semibold ltr:text-left rtl:text-right leading-snug">
             {target |> Target.title |> str}
           </span>
           {renderTargetStatus(targetStatus)}
@@ -331,6 +339,8 @@ let learnSection = (
     Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
   | (Pending | Rejected, TakeQuiz) =>
     Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
+  | (Pending | Rejected, SubmitForm) =>
+    Some((Complete(completionType), t("learn_cta_submit_form"), "fas fa-feather-alt"))
   | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
   | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
   }
@@ -343,7 +353,7 @@ let learnSection = (
     <button
       onClick={_ => send(Select(tab))}
       className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-      <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
+      <span> <FaIcon classes={iconClasses ++ " me-2"} /> {str(linkText)} </span>
     </button>
   })
 
@@ -361,10 +371,10 @@ let discussSection = (target, targetDetails, tab) =>
 
 let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
-  | (Learn, TargetDetails.Evaluated | TakeQuiz)
-  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
+  | (Learn, TargetDetails.Evaluated | TakeQuiz | SubmitForm)
+  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => "hidden"
   | (Learn, MarkAsComplete | LinkToComplete)
-  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""
+  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => ""
   }
 
 let completeSection = (
@@ -392,6 +402,7 @@ let completeSection = (
         <CoursesCurriculum__SubmissionBuilder
           key="courses-curriculum-submission-form"
           target
+          targetDetails
           checklist={targetDetails |> TargetDetails.checklist}
           addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
           preview
@@ -411,12 +422,27 @@ let completeSection = (
         />,
       ] |> React.array
 
+    | (Pending, SubmitForm) =>
+      [
+        <CoursesCurriculum__CompletionInstructions
+          key="completion-instructions" targetDetails title="Instructions"
+        />,
+        <CoursesCurriculum__SubmissionBuilder
+          key="courses-curriculum-submission-form"
+          target
+          targetDetails
+          checklist={targetDetails |> TargetDetails.checklist}
+          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+          preview
+        />,
+      ] |> React.array
+
     | (
         PendingReview
         | Completed
         | Rejected
         | Locked(CourseLocked | AccessLocked),
-        Evaluated | TakeQuiz,
+        Evaluated | TakeQuiz | SubmitForm,
       ) =>
       <CoursesCurriculum__SubmissionsAndFeedback
         targetDetails
@@ -433,7 +459,7 @@ let completeSection = (
       <CoursesCurriculum__AutoVerify
         target targetDetails targetStatus addSubmissionCB=addVerifiedSubmissionCB preview
       />
-    | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
+    | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => React.null
     }}
   </div>
 }
@@ -490,7 +516,7 @@ let navigationLink = (direction, url, send) => {
   }
 
   let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
+    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />)
 
   <Link
     href=url
@@ -516,7 +542,7 @@ let quickNavigationLinks = (targetDetails, send) => {
   <div className="pb-6">
     <hr className="my-6" />
     <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
-      <div className="w-1/3 mr-2">
+      <div className="w-1/3 me-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
         )}
@@ -529,7 +555,7 @@ let quickNavigationLinks = (targetDetails, send) => {
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
-      <div className="w-1/3 ml-2">
+      <div className="w-1/3 ms-2">
         {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
           navigationLink(#Next, nextUrl, send)
         )}
@@ -574,7 +600,7 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}

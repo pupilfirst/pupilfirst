@@ -8,7 +8,7 @@ let make = (~message, ~active, ~warn=false) =>
     <div
       className={"mt-1 px-1 py-px rounded text-xs font-semibold inline-flex items-center " ++
       colors}>
-      <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
+      <span className="me-2"> <i className="fas fa-exclamation-triangle" /> </span>
       <span> {message |> str} </span>
     </div>
   } else {

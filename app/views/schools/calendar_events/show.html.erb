@@ -7,7 +7,7 @@
     <div class="max-w-4xl 2xl:max-w-5xl mx-auto p-6">
       <div class="mt-4">
         <%= link_to school_course_calendar_events_path(@course), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
-          <i class="if i-arrow-left-regular if-fw" ></i>
+          <i class="if i-arrow-left-regular if-fw rtl:rotate-180" ></i>
           <%= t('shared.back_link') %>
         <% end %>
       </div>
@@ -40,7 +40,7 @@
         <div class="mt-8">
           <p class="text-sm font-semibold text-gray-500"><%= t(".link_label") %></p>
           <a href=<%= @event.link_url %> target="_blank" class="block mt-3 text-lg text-primary-500 hover:underline">
-            <i class="if i-external-link-regular if-fw"></i> <%= @event.link_title.present? ? @event.link_title : @event.link_url %>
+            <i class="if i-external-link-regular if-fw rtl:-rotate-90"></i> <%= @event.link_title.present? ? @event.link_title : @event.link_url %>
           </a>
         </div>
       <% end %>

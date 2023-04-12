@@ -297,6 +297,7 @@ ru:
         placeholder: Описание Главных Моментов
       move_down: Двинуть вниз
       move_up: Двинуть вверх
+      multi_choice: Разрешить множественный выбор
       select: Выбрать
       selected_button:
         title: Выбрать Иконку
@@ -442,10 +443,12 @@ ru:
       close_button: Закрыть
       completion_tab_complete: Завершить
       completion_tab_completed: Завершено
+      completion_tab_form_response: Форма ответов
       completion_tab_locked: Заблокировано
       completion_tab_mark_complete: Отметить как завершено
       completion_tab_quiz_result: Результаты Теста
       completion_tab_submissions: Работы и Отзывы
+      completion_tab_submit_form: Представить форму
       completion_tab_take_quiz: Пройти Тест
       completion_tab_visit_link: Пройдите по Ссылке для Заввершения
       discuss_tab: Обсуждения
@@ -480,9 +483,11 @@ ru:
       warning_length_limit: Пожалуйста, старайтесь, чтобы ваш ответ не превышал 5000 символов.
     CoursesCurriculum__SubmissionsAndFeedback:
       add_another: Добавить другую
+      add_another_response: Добавить еще один ответ
       add_another_submission: Добавить другую работу
       cancel: Отмена
       completed: Завершено
+      form_response_number: "Ответ #"
       grading: Оценивается
       pending_review: Ожидает Оценки
       rejected: Отказано
@@ -491,6 +496,8 @@ ru:
       submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
       your_submissions: Ваши Работы
+      your_responses: Ваши ответы
+
     CoursesCurriculum__TargetStatus:
       access_locked: Ваш доступ к этому курсу закончился.
       course_locked: Курс был окончен.
@@ -710,6 +717,7 @@ ru:
     CoursesStudents__CoachNotes:
       all_notes: Все Заметки
       has_archived_notes: У этого студента есть несколько архивных заметок.
+      help_text: Заметки можно использовать для отслеживания прогресса студент. Эти заметки показываются только менторам.
       new_note: Добавить Новую Заметку
       no_notes: Здесь нет заметок!
       save_note: Сохранить Заметку
@@ -859,25 +867,25 @@ ru:
       controls_checklist: Управление для элемента списка
       copy: Копировать
       delete: Удалить
-      describe_step: Опишите этот этап
+      describe_question: Введите ваш вопрос здесь
       editor_checklist: Редактор элемента контрольного списка
       limits_notice: Учащиеся могут отправить до 3 файлов размером не более 5 МБ каждый.
       move_down: Двигать Вниз
       move_up: Двигать Вверх
-      not_unique_step: Не уникальный этап; требуемые этапы должны быть уникальными
+      not_unique_question: Не уникальный вопрос; требуемые вопросы должны быть уникальными
       not_valid_choice: Неверный выбор
       optional: Необязательный
+      question_cannot_empty: Вопрос не может быть пустым
       remove_choice: Убрать Выбор
-      step_cannot_empty: Этап не может быть пустым
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Добавить еще один вопрос
-      add_step: Добавить этап
       choose_target_group: Выберите группу задач
       completion_instructions_help: Используйте это, чтобы напомнить ученику о чем-то важном. Эти инструкции будут отображаться рядом с тем местом, где учащиеся выполнят задание.
       completion_instructions_label: Есть ли у вас какие-либо инструкции для ученика?
       could_not_find: Не удалось найти выбранный критерий оценки с идентификатором
       describe_submission: Опишите вашу работу
       empty_checklist_warning: У этой задачи нет шагов. Студенты смогут отправить работу без каких-либо действий!
+      empty_questions_warning: Эта целевая форма не имеет вопросов. В форме должен быть хотя бы один вопрос.
       enter_valid_link: Введите действительную ссылку
       enter_valid_title: Введите правильный заголовок
       link_complete: Ссылка для завершения
@@ -899,9 +907,11 @@ ru:
       selected_all_targets: Вы выбрали все задачи
       submit_individually: Все студенты должны представить индивидуально.
       take_quiz: Пройдите тест, чтобы выполнить задачу.
-      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу по задаче. Эта информация будет показана ментору для ознакомления.
+      target_checklist_form_label: На какие вопросы вы бы хотели, чтобы студент ответил?
+      target_checklist_form_limit_warning: Максимально допустимое количество элементов формы — 25!
+      target_checklist_form_help: На эти вопросы студент должен ответить, чтобы выполнить задание.
+      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу позадаче. Эта информация будет показана ментору для ознакомления.
       target_checklist_label: Какие шаги должен предпринять ученик для достижения этой задачи?
-      target_checklist_limit_warning: Максимально допустимое количество элементов списка - 15!
       target_group: Группа задач
       target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
       target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?
@@ -984,6 +994,9 @@ ru:
       update_criterion: Критерий Обновления
     HelpIcon:
       read_more: Подробнее
+    LevelProgressBar:
+      heading: Прогресс Уровня
+      course_completed: Курс Пройден!
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -1772,6 +1785,7 @@ ru:
       success_notification: Студент успешно создан.
     create_submission:
       blocked_submission_status_error: Статус этой задачи - %{target_status}, поэтому вы не можете добавить новую работу; пожалуйста, перезагрузите страницу
+      form_success_notification: Ваш ответ сохранен.
       invalid_files_attached: Некоторые прикрепленные файлы недействительны
       invalid_submission_checklist: Список работ недействителен.
       item_file_limit_error: К отправке можно прикрепить не более трех файлов
@@ -2203,6 +2217,9 @@ ru:
         welcome: Добро пожаловать в %{course_name}
       feedback_as_email:
         body:
+          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_feedback_header: Вот отзыв о вашей работе
+          grading_header: Ваша заявка получила следующие оценки от %{coach_name}
           link_to: полный отзыв
           main_html: Вот ответ от %{coach_name} о вашем %{update_for}
           recent_submission: недавней работе

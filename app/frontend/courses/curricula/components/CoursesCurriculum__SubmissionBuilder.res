@@ -13,8 +13,8 @@ let buttonContents = (formState, checklist) => {
   let icon = switch formState {
   | Attaching
   | Saving =>
-    <FaIcon classes="fas fa-spinner fa-pulse mr-2" />
-  | Ready => <FaIcon classes="fas fa-cloud-upload-alt mr-2" />
+    <FaIcon classes="fas fa-spinner fa-pulse me-2" />
+  | Ready => <FaIcon classes="fas fa-cloud-upload-alt me-2" />
   }
 
   let text = switch formState {
@@ -77,7 +77,7 @@ let isButtonDisabled = state =>
   } ||
   !(state.checklist |> ChecklistItem.validChecklist)
 
-let submit = (state, send, target, addSubmissionCB, event) => {
+let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
 
   send(SetSaving)
@@ -93,10 +93,19 @@ let submit = (state, send, target, addSubmissionCB, event) => {
       let files = state.checklist |> ChecklistItem.makeFiles
       let submissionChecklist =
         checklist |> Json.Decode.array(SubmissionChecklistItem.decode(files))
+      let completionType = targetDetails |> TargetDetails.computeCompletionType
+      let status = switch completionType {
+      | Evaluated => Submission.Pending
+      | TakeQuiz
+      | LinkToComplete
+      | MarkAsComplete
+      | SubmitForm =>
+        Submission.MarkedAsComplete
+      }
       let newSubmission = Submission.make(
         ~id=submission["id"],
         ~createdAt=DateFns.decodeISO(submission["createdAt"]),
-        ~status=Submission.Pending,
+        ~status,
         ~checklist=submissionChecklist,
       )
       let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(
@@ -141,7 +150,7 @@ let tooltipText = preview =>
   }
 
 @react.component
-let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
+let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist))
   <div className="bg-gray-50 p-4 my-4 border rounded-lg" id="submission-builder">
     <DisablingCover disabled={isBusy(state.formState)} message={statusText(state.formState)}>
@@ -162,7 +171,7 @@ let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
       <div className={buttonClasses(state.checklist)}>
         <Tooltip tip={tooltipText(preview)} position=#Left disabled={!isButtonDisabled(state)}>
           <button
-            onClick={submit(state, send, target, addSubmissionCB)}
+            onClick={submit(state, send, target, targetDetails, addSubmissionCB)}
             disabled={isButtonDisabled(state) || preview}
             className="btn btn-primary flex justify-center grow md:grow-0">
             {buttonContents(state.formState, checklist)}

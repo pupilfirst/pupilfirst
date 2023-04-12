@@ -58,20 +58,20 @@ let make = (~note, ~userId, ~removeNoteCB) => {
           switch user |> User.avatarUrl {
           | Some(avatarUrl) =>
             <img
-              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 mt-1 md:mt-0 me-2 md:me-3 object-cover"
               src=avatarUrl
             />
           | None =>
             <Avatar
               name={user |> User.name}
-              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 mt-1 md:mt-0 me-2 md:me-3 object-cover"
             />
           }
 
         | None =>
           <Avatar
             name="?"
-            className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+            className="w-8 h-8 md:w-10 md:h-10 text-xs border rounded-full overflow-hidden shrink-0 mt-1 md:mt-0 me-2 md:e-3 object-cover"
           />
         }}
         <div>
@@ -97,7 +97,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
         showDeleteIcon ? deleteIcon(note, removeNoteCB, setArchiving, archiving) : React.null
       }
     </div>
-    <div className="ml-10 md:ml-13 mt-2">
+    <div className="ms-10md:ms-13 mt-2">
       <p
         className="inline-block text-xs font-semibold leading-tight bg-gray-300 text-gray-800 mt-px px-1 py-px rounded">
         {tr("coach_on") ++ " " ++ (note |> CoachNote.noteOn) |> str}

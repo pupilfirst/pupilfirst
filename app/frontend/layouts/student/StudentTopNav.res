@@ -9,7 +9,7 @@ open StudentTopNav__Types
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ms-2 text-sm font-medium text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ms-2 text-sm font-medium text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-e border-b md:border-0">
     <a
       className="whitespace-nowrap no-underline bg-gray-50 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
       href={link |> NavLink.url}
@@ -22,7 +22,7 @@ let headerLink = (key, link) =>
 let signOutLink = () =>
   <div
     key="Logout-button"
-    className="md:ms-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ms-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-e border-b md:border-0">
     <div className="flex items-center justify-center">
       <a
         href="/users/sign_out"
@@ -36,7 +36,7 @@ let signOutLink = () =>
 let signInLink = () =>
   <div
     key="SignIn-button"
-    className="md:ms-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ms-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-e border-b md:border-0">
     <div className="flex items-center justify-center">
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"

@@ -159,23 +159,31 @@ let loadData = (courseId, send) => {
 let tableHeader = {
   <thead>
     <tr className="bg-gray-300">
-      <th className="w-12 border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold" />
-      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
+      <th
+        className="w-12 border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold"
+      />
+      <th
+        className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"name"->str}
       </th>
-      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
+      <th
+        className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"email"->str}
       </th>
-      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
+      <th
+        className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"title"->str}
       </th>
-      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
+      <th
+        className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"team_name"->str}
       </th>
-      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
+      <th
+        className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"tags"->str}
       </th>
-      <th className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
+      <th
+        className="border border-gray-400 ltr:text-left rtl:text-right text-xs px-2 py-1 font-semibold">
         {"affiliation"->str}
       </th>
     </tr>
@@ -222,7 +230,7 @@ let truncatedTable = csvData => {
     <table className="table-fixed relative w-full overflow-x-scroll">
       <tbody>
         <tr
-          className="divide-x divide-dashed divide-gray-400 border-l border-r border-dashed border-gray-400">
+          className="divide-x divide-dashed divide-gray-400 border-x border-dashed border-gray-400">
           <td className="w-12 px-2 py-3" />
           <td className="px-2 py-3" />
           <td colSpan=3 className="px-2 py-3">

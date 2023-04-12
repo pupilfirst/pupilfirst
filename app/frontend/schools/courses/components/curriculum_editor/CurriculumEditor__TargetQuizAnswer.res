@@ -64,7 +64,7 @@ let make = (
         </button>
         {canBeDeleted
           ? <button
-              className="shrink-0 border-l border-gray-300 text-gray-600 hover:text-red-500 focus:outline-none focus:text-red-500 text-xs py-1 px-3"
+              className="shrink-0 border-s border-gray-300 text-gray-600 hover:text-red-500 focus:outline-none focus:text-red-500 text-xs py-1 px-3"
               type_="button"
               title={tr("remove_answer_option")}
               ariaLabel={tr("remove_answer_option")}

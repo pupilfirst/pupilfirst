@@ -96,7 +96,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
       title={tr("select_version") ++ " " ++ (selectedVersion |> Version.id)}
       className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-focusColor-500 hover:bg-gray-50 hover:shadow-lg px-3 h-full">
       <span> {versionText(selectedVersion)} </span>
-      <span className="border-l border-gray-300 ms-2 ps-2 ">
+      <span className="border-s border-gray-300 ms-2 ps-2 ">
         <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>

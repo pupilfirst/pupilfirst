@@ -20,7 +20,7 @@ let onChangeWidth = (contentBlock, updateContentBlockCB, width, event) => {
 let imageResizeButton = (~width, ~currentWidth, ~contentBlock, ~updateContentBlockCB) => {
   let active = width == currentWidth
 
-  let defaultClasses = "rounded-l flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 hover:text-green-400 transition duration-500 ease-in-out"
+  let defaultClasses = "rounded-s flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 hover:text-green-400 transition duration-500 ease-in-out"
 
   let classes = defaultClasses ++ (active ? " bg-primary-900 text-green-500" : "")
 

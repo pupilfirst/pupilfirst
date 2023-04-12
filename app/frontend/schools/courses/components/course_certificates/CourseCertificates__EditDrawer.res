@@ -232,9 +232,7 @@ let make = (
                   <div className="w-6 h-6 text-yellow-500 shrink-0">
                     <i className="fas fa-exclamation-triangle" />
                   </div>
-                  <span className="ms-2">
-                    {t("cannot_be_auto_issued_warning")->React.string}
-                  </span>
+                  <span className="ms-2"> {t("cannot_be_auto_issued_warning")->React.string} </span>
                 </div>
               : React.null}
           </div>
@@ -415,7 +413,7 @@ let make = (
             <div className="flex-1">
               {issuedCount > 0 && !saveButtonDisabled
                 ? <div
-                    className="inline-flex bg-orange-100 me-2 p-2 rounded-r border border-s-4 border-orange-500 items-center">
+                    className="inline-flex bg-orange-100 me-2 p-2 rounded-e border border-s-4 border-orange-500 items-center">
                     <div className="text-orange-500 text-2xl">
                       <i className="fas fa-exclamation-triangle" />
                     </div>
@@ -434,9 +432,7 @@ let make = (
                 disabled=saveButtonDisabled
                 className="w-auto btn btn-success">
                 <FaIcon classes={"fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")} />
-                <span className="ms-2">
-                  {t(state.saving ? "saving" : "save_changes")->str}
-                </span>
+                <span className="ms-2"> {t(state.saving ? "saving" : "save_changes")->str} </span>
               </button>
             </div>
           </div>

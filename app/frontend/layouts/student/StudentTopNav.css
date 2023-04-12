@@ -20,7 +20,7 @@
 }
 
 [dir="rtl"] .student-navbar__links-container:before {
-  right: unset;
+  right: auto;
   left: 23px;
 }
 
@@ -33,7 +33,7 @@
 }
 
 [dir="rtl"] .student-navbar__links-container:after {
-  right: unset;
+  right: auto;
   left: 24px;
 }
 

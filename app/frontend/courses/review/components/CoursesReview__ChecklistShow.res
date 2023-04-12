@@ -165,17 +165,20 @@ let make = (
                   <div className={checklistItemCheckedClasses(itemIndex, selection)} />
                   {ReviewChecklistItem.title(reviewChecklistItem)->str}
                 </h4>
-                <div className="space-y-3 pt-3"> {Js.Array.mapi((checklistItem, resultIndex) =>
+                <div className="space-y-3 pt-3">
+                  {Js.Array.mapi((reviewChecklistResult, resultIndex) =>
                     <Spread
                       props={"data-result-item": string_of_int(resultIndex)}
                       key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
-                      {switch Belt.Option.isSome(ReviewChecklistResult.feedback(checklistItem)) &&
+                      {switch Belt.Option.isSome(
+                        ReviewChecklistResult.feedback(reviewChecklistResult),
+                      ) &&
                       hasFeedbackTemplate[itemIndex][resultIndex] == true {
                       | true =>
                         <div className="px-6">
                           <Checkbox
                             id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
-                            label={str(checklistItem->ReviewChecklistResult.title)}
+                            label={str(reviewChecklistResult->ReviewChecklistResult.title)}
                             onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
                             checked={checklistItemChecked(itemIndex, resultIndex, selection)}
                             disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
@@ -202,7 +205,7 @@ let make = (
                                     overlaySubmission,
                                   )}
                                   value={Belt.Option.getWithDefault(
-                                    ReviewChecklistResult.feedback(checklistItem),
+                                    ReviewChecklistResult.feedback(reviewChecklistResult),
                                     "",
                                   )}
                                   onChange={event =>
@@ -217,7 +220,9 @@ let make = (
                               </div>,
                               (isSelected ||
                               !feedbackGeneratable(submissionDetails, overlaySubmission)) &&
-                                Belt.Option.isSome(ReviewChecklistResult.feedback(checklistItem)),
+                                Belt.Option.isSome(
+                                  ReviewChecklistResult.feedback(reviewChecklistResult),
+                                ),
                             )
                           }
                         </div>
@@ -226,7 +231,7 @@ let make = (
                           <div className="flex flex-wrap">
                             <Checkbox
                               id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
-                              label={str(checklistItem->ReviewChecklistResult.title)}
+                              label={str(reviewChecklistResult->ReviewChecklistResult.title)}
                               onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
                               checked={checklistItemChecked(itemIndex, resultIndex, selection)}
                               disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
@@ -239,7 +244,7 @@ let make = (
                                 )->Belt.Option.isSome
 
                               let hasFeedback = Belt.Option.isSome(
-                                ReviewChecklistResult.feedback(checklistItem),
+                                ReviewChecklistResult.feedback(reviewChecklistResult),
                               )
                               switch (isSelected, hasFeedback) {
                               | (true, true) =>
@@ -262,7 +267,7 @@ let make = (
                                       overlaySubmission,
                                     )}
                                     value={Belt.Option.getWithDefault(
-                                      ReviewChecklistResult.feedback(checklistItem),
+                                      ReviewChecklistResult.feedback(reviewChecklistResult),
                                       "",
                                     )}
                                     onChange={event =>
@@ -308,7 +313,8 @@ let make = (
                         </div>
                       }}
                     </Spread>
-                  , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
+                  , ReviewChecklistItem.result(reviewChecklistItem))->React.array}
+                </div>
               </div>
             </Spread>,
           checklist,

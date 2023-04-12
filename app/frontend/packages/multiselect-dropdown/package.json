@@ -19,6 +19,9 @@
   "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-dropdown",
   "license": "MIT",
   "main": "components/MultiselectDropdown.re",
+  "targets": {
+    "main": false
+  },
   "publishConfig": {
     "access": "public"
   },

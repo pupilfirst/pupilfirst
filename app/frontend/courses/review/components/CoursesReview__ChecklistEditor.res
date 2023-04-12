@@ -63,7 +63,7 @@ let updateChecklistResultTitle = (
       title,
       resultItem,
       resultIndex,
-      ReviewChecklistItem.result(reviewChecklistItem),
+      ReviewChecklistItem.results(reviewChecklistItem),
     ),
     reviewChecklistItem,
   )
@@ -77,7 +77,7 @@ let updateChecklistResultFeedback = (
   reviewChecklistItem,
   send,
 ) => {
-  ReviewChecklistItem.result(reviewChecklistItem)
+  ReviewChecklistItem.results(reviewChecklistItem)
   ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
   ->(newItem => UpdateChecklistItem(newItem, itemIndex))
@@ -109,7 +109,7 @@ let invalidChecklist = reviewChecklist =>
   reviewChecklist
   ->Js.Array2.map(reviewChecklistItem =>
     invalidTitle(ReviewChecklistItem.title(reviewChecklistItem)) ||
-    ReviewChecklistItem.result(reviewChecklistItem)
+    ReviewChecklistItem.results(reviewChecklistItem)
     ->Js.Array2.filter(resultItem => invalidTitle(ReviewChecklistResult.title(resultItem)))
     ->ArrayUtils.isNotEmpty
   )
@@ -212,7 +212,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     </div>
                   </div>
                   <div>
-                    {ReviewChecklistItem.result(reviewChecklistItem)
+                    {ReviewChecklistItem.results(reviewChecklistItem)
                     ->Js.Array2.mapi((resultItem, resultIndex) => {
                       let feedback = Belt.Option.getWithDefault(
                         ReviewChecklistResult.feedback(resultItem),
@@ -273,7 +273,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     ~hidden={
                                       resultIndex ==
                                         Js.Array.length(
-                                          ReviewChecklistItem.result(reviewChecklistItem),
+                                          ReviewChecklistItem.results(reviewChecklistItem),
                                         ) - 1
                                     },
                                     {
@@ -342,8 +342,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">
-                        <i className="fas fa-plus text-xs me-2" />
-                        {t("add_result")->str}
+                        <i className="fas fa-plus text-xs me-2" /> {t("add_result")->str}
                       </span>
                     </button>
                   </div>

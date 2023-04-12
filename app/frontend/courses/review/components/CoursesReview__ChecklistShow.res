@@ -21,7 +21,7 @@ let updateEmptyChecklistResult = (
   reviewChecklistItem,
   setChecklist,
 ) => {
-  ReviewChecklistItem.result(reviewChecklistItem)
+  ReviewChecklistItem.results(reviewChecklistItem)
   ->ReviewChecklistResult.updateAdditionalFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
   ->ReviewChecklistItem.replace(itemIndex)
@@ -52,7 +52,7 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
         ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
         ->Js.Array2.map(item => item.resultIndex)
 
-      ReviewChecklistItem.result(reviewChecklistItem)
+      ReviewChecklistItem.results(reviewChecklistItem)
       ->Js.Array2.mapi((resultItem, index) =>
         resultIndexList->Js.Array2.some(i => i == index)
           ? switch ReviewChecklistResult.feedback(resultItem) {
@@ -94,7 +94,7 @@ let updateChecklistResultFeedback = (
   reviewChecklistItem,
   setChecklist,
 ) => {
-  ReviewChecklistItem.result(reviewChecklistItem)
+  ReviewChecklistItem.results(reviewChecklistItem)
   ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
   ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
   ->ReviewChecklistItem.replace(itemIndex)
@@ -130,7 +130,7 @@ let make = (
       | Some(_) => true
       | None => false
       }
-    }, ReviewChecklistItem.result(item))
+    }, ReviewChecklistItem.results(item))
   }, reviewChecklist)
 
   <div>
@@ -313,7 +313,7 @@ let make = (
                         </div>
                       }}
                     </Spread>
-                  , ReviewChecklistItem.result(reviewChecklistItem))->React.array}
+                  , ReviewChecklistItem.results(reviewChecklistItem))->React.array}
                 </div>
               </div>
             </Spread>,

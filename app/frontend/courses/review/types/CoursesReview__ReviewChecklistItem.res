@@ -1,55 +1,55 @@
 type t = {
   title: string,
-  result: array<CoursesReview__ReviewChecklistResult.t>,
+  results: array<CoursesReview__ReviewChecklistResult.t>,
 }
 
 let title = t => t.title
-let result = t => t.result
+let results = t => t.results
 
-let make = (~title, ~result) => {title: title, result: result}
+let make = (~title, ~results) => {title: title, results: results}
 
 let makeFromJs = data =>
   data->Js.Array2.map(rc =>
-    make(~title=rc["title"], ~result=rc["result"]->CoursesReview__ReviewChecklistResult.makeFromJs)
+    make(~title=rc["title"], ~results=rc["result"]->CoursesReview__ReviewChecklistResult.makeFromJs)
   )
 
-let empty = () => [make(~title="", ~result=[CoursesReview__ReviewChecklistResult.empty()])]
+let empty = () => [make(~title="", ~results=[CoursesReview__ReviewChecklistResult.empty()])]
 
 let emptyTemplate = () => [
-  make(~title="Default checklist", ~result=CoursesReview__ReviewChecklistResult.emptyTemplate()),
+  make(~title="Default checklist", ~results=CoursesReview__ReviewChecklistResult.emptyTemplate()),
 ]
 
-let updateTitle = (title, t) => make(~title, ~result=t.result)
+let updateTitle = (title, t) => make(~title, ~results=t.results)
 
-let updateChecklist = (result, t) => make(~title=t.title, ~result)
+let updateChecklist = (results, t) => make(~title=t.title, ~results)
 
-let replace = (t, itemIndex, result) =>
-  result->Js.Array2.mapi((item, index) => index == itemIndex ? t : item)
+let replace = (t, itemIndex, results) =>
+  results->Js.Array2.mapi((item, index) => index == itemIndex ? t : item)
 
 let appendEmptyChecklistItem = t =>
   make(
     ~title=t.title,
-    ~result=Js.Array2.concat(t.result, [CoursesReview__ReviewChecklistResult.empty()]),
+    ~results=Js.Array2.concat(t.results, [CoursesReview__ReviewChecklistResult.empty()]),
   )
 
 let moveResultItemUp = (index, t) =>
-  make(~title=t.title, ~result=ArrayUtils.swapUp(index, t.result))
+  make(~title=t.title, ~results=ArrayUtils.swapUp(index, t.results))
 let moveResultItemDown = (index, t) =>
-  make(~title=t.title, ~result=ArrayUtils.swapDown(index, t.result))
+  make(~title=t.title, ~results=ArrayUtils.swapDown(index, t.results))
 
 let deleteResultItem = (index, t) =>
-  make(~title=t.title, ~result=t.result->Js.Array2.filteri((_el, i) => i != index))
+  make(~title=t.title, ~results=t.results->Js.Array2.filteri((_el, i) => i != index))
 
 let trim = t => {
   title: t.title->String.trim,
-  result: t.result->Js.Array2.map(CoursesReview__ReviewChecklistResult.trim),
+  results: t.results->Js.Array2.map(CoursesReview__ReviewChecklistResult.trim),
 }
 
 let encode = t => {
   open Json.Encode
   object_(list{
     ("title", string(t.title)),
-    ("result", array(CoursesReview__ReviewChecklistResult.encode, t.result)),
+    ("result", array(CoursesReview__ReviewChecklistResult.encode, t.results)),
   })
 }
 

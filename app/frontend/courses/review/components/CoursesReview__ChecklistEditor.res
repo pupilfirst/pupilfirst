@@ -58,16 +58,11 @@ let updateChecklistResultTitle = (
   resultItem,
   send,
 ) => {
-  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-    ReviewChecklistResult.updateTitle(
-      title,
-      resultItem,
-      resultIndex,
-      ReviewChecklistItem.result(reviewChecklistItem),
-    ),
-    reviewChecklistItem,
-  )
-  send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ReviewChecklistItem.results(reviewChecklistItem)
+  ->ReviewChecklistResult.updateTitle(title, resultItem, resultIndex)
+  ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 }
 
 let updateChecklistResultFeedback = (
@@ -75,36 +70,24 @@ let updateChecklistResultFeedback = (
   resultIndex,
   feedback,
   reviewChecklistItem,
-  resultItem,
   send,
 ) => {
-  let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
-    ReviewChecklistResult.updateFeedback(
-      feedback,
-      resultItem,
-      resultIndex,
-      ReviewChecklistItem.result(reviewChecklistItem),
-    ),
-    reviewChecklistItem,
-  )
-  send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ReviewChecklistItem.results(reviewChecklistItem)
+  ->ReviewChecklistResult.updateFeedback(feedback, resultIndex)
+  ->ReviewChecklistItem.updateChecklist(reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 }
 
 let addEmptyResultItem = (send, reviewChecklistItem, itemIndex) =>
-  send(
-    UpdateChecklistItem(
-      ReviewChecklistItem.appendEmptyChecklistItem(reviewChecklistItem),
-      itemIndex,
-    ),
-  )
+  ReviewChecklistItem.appendEmptyChecklistItem(reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 
 let removeChecklistResult = (itemIndex, resultIndex, reviewChecklistItem, send) =>
-  send(
-    UpdateChecklistItem(
-      ReviewChecklistItem.deleteResultItem(resultIndex, reviewChecklistItem),
-      itemIndex,
-    ),
-  )
+  ReviewChecklistItem.deleteResultItem(resultIndex, reviewChecklistItem)
+  ->(newReviewChecklistItem => UpdateChecklistItem(newReviewChecklistItem, itemIndex))
+  ->send
 
 let initialStateForReviewChecklist = reviewChecklist =>
   ArrayUtils.isEmpty(reviewChecklist) ? ReviewChecklistItem.emptyTemplate() : reviewChecklist
@@ -115,7 +98,7 @@ let invalidChecklist = reviewChecklist =>
   reviewChecklist
   ->Js.Array2.map(reviewChecklistItem =>
     invalidTitle(ReviewChecklistItem.title(reviewChecklistItem)) ||
-    ReviewChecklistItem.result(reviewChecklistItem)
+    ReviewChecklistItem.results(reviewChecklistItem)
     ->Js.Array2.filter(resultItem => invalidTitle(ReviewChecklistResult.title(resultItem)))
     ->ArrayUtils.isNotEmpty
   )
@@ -218,7 +201,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     </div>
                   </div>
                   <div>
-                    {ReviewChecklistItem.result(reviewChecklistItem)
+                    {ReviewChecklistItem.results(reviewChecklistItem)
                     ->Js.Array2.mapi((resultItem, resultIndex) => {
                       let feedback = Belt.Option.getWithDefault(
                         ReviewChecklistResult.feedback(resultItem),
@@ -279,7 +262,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     ~hidden={
                                       resultIndex ==
                                         Js.Array.length(
-                                          ReviewChecklistItem.result(reviewChecklistItem),
+                                          ReviewChecklistItem.results(reviewChecklistItem),
                                         ) - 1
                                     },
                                     {
@@ -326,7 +309,6 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     resultIndex,
                                     ReactEvent.Form.target(event)["value"],
                                     reviewChecklistItem,
-                                    resultItem,
                                     send,
                                   )}
                               />
@@ -349,8 +331,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">
-                        <i className="fas fa-plus text-xs me-2" />
-                        {t("add_result")->str}
+                        <i className="fas fa-plus text-xs me-2" /> {t("add_result")->str}
                       </span>
                     </button>
                   </div>

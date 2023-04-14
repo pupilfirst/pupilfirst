@@ -12,17 +12,22 @@ module TimelineEvents
       final_milestone_targets.all? do |target|
         if target.team_target?
           # Need to check for just one student.
-          target.status(student) == Targets::StatusService::STATUS_PASSED
+          target_status(target, student) ==
+            Targets::StatusService::STATUS_PASSED
         else
           # Need to check for each student in team.
           students.all? do |s|
-            target.status(s) == Targets::StatusService::STATUS_PASSED
+            target_status(target, s) == Targets::StatusService::STATUS_PASSED
           end
         end
       end
     end
 
     private
+
+    def target_status(target, student)
+      Targets::StatusService.new(target, student).status_from_event
+    end
 
     def student
       @student ||= @submission.founders.first

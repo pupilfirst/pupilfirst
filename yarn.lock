@@ -7858,7 +7858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"papaparse@npm:^5.3.0":
+"papaparse@npm:^5.3.0, papaparse@npm:^5.4.1":
   version: 5.4.1
   resolution: "papaparse@npm:5.4.1"
   checksum: fc9e52f7158dca3517c229e3309065b1ab5da6c7194572fba4f31ff138bc43e3c91182cc40365cc828f97fe10d0aca416068fd731661058bea0f69ddb84a411a
@@ -8881,6 +8881,7 @@ __metadata:
     markdown-it-task-checkbox: ^1.0.6
     markdown-it-video: ^0.6.3
     node-gyp: ^9.1.0
+    papaparse: ^5.4.1
     pnotify: ^5.2.0
     postcss: ^8.4.16
     postcss-flexbugs-fixes: ^5.0.2

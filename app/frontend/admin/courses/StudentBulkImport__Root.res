@@ -497,7 +497,9 @@ let make = (~courseId) => {
                   <input
                     className="absolute w-0 h-0 overflow-hidden"
                     id="csv-file-input"
+                    name="csv"
                     type_="file"
+                    accept=".csv"
                     onChange={event => onSelectFile(event, send)}
                   />
                   <label

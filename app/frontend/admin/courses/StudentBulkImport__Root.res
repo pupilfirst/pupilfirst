@@ -5,13 +5,13 @@ open StudentsEditor__Types
 let t = I18n.t(~scope="components.StudentBulkImport__Root")
 let ts = I18n.ts
 
-module CSVData = {
-  type t = StudentCSVData.t
+type fileInfo = {
+  size: int,
+  name: string,
 }
 
-module CSVReader = CSVReader.Make(CSVData)
-
 type fileInvalid =
+  | ParseError(string)
   | InvalidCSVFile
   | EmptyFile
   | InvalidTemplate
@@ -19,9 +19,9 @@ type fileInvalid =
   | InvalidData(array<CSVDataError.t>)
 
 type state = {
-  fileInfo: option<CSVReader.fileInfo>,
+  fileInfo: option<fileInfo>,
   saving: bool,
-  csvData: array<StudentCSVData.t>,
+  csvData: array<StudentCSVRow.t>,
   fileInvalid: option<fileInvalid>,
   notifyStudents: bool,
   loading: bool,
@@ -42,11 +42,11 @@ let initialState = {
 
 let validTemplate = csvData => {
   let firstRow = Js.Array.unsafe_get(csvData, 0)
-  StudentCSVData.name(firstRow)->Belt.Option.isSome
+  StudentCSVRow.name(firstRow)->Belt.Option.isSome
 }
 
 let validateFile = (csvData, fileInfo) => {
-  CSVReader.fileSize(fileInfo) > FileUtils.maxUploadFileSize
+  fileInfo.size > FileUtils.maxUploadFileSize
     ? Some(InvalidCSVFile)
     : ArrayUtils.isEmpty(csvData)
     ? Some(EmptyFile)
@@ -62,7 +62,7 @@ let validateFile = (csvData, fileInfo) => {
 
 type action =
   | UpdateFileInvalid(option<fileInvalid>)
-  | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
+  | LoadCSVData(array<StudentCSVRow.t>, fileInfo)
   | ClearCSVData
   | ToggleNotifyStudents
   | BeginSaving
@@ -73,7 +73,41 @@ type action =
   | SetLoading
   | ClearLoading
 
-let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
+module ParserType = {
+  type t = StudentCSVRow.t
+}
+
+module CSVReader = CSVReader.Make(ParserType)
+
+module CSVParser = Papaparse.Make(ParserType)
+
+let onParseComplete = (send, results, file) => {
+  let fileInfo = {
+    size: file["size"],
+    name: file["name"],
+  }
+
+  if ArrayUtils.isNotEmpty(results["errors"]) {
+    let errorMessage = CSVParser.errorMessage(results["errors"][0])
+    send(UpdateFileInvalid(Some(ParseError(errorMessage))))
+  } else {
+    send(LoadCSVData(results["data"], fileInfo))
+  }
+}
+
+let onSelectFile = (event, send) => {
+  let csvFile = ReactEvent.Form.target(event)["files"][0]
+
+  let config = CSVParser.config(
+    ~header=true,
+    ~skipEmptyLines=true,
+    ~complete=(results, file) => onParseComplete(send, results, file),
+    (),
+  )
+  CSVParser.parseFile(csvFile, config)->ignore
+}
+
+let fileInputText = (~fileInfo: option<fileInfo>) =>
   fileInfo->Belt.Option.mapWithDefault(t("csv_file_input.placeholder"), info => info.name)
 
 let reducer = (state, action) =>
@@ -198,22 +232,22 @@ let tableRows = (csvData, ~startingRow=0, ()) => {
           {string_of_int(startingRow + index + 2)->str}
         </td>
         <td className="border border-gray-400 truncate text-xs px-2 py-1">
-          {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("")->str}
+          {StudentCSVRow.name(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
         <td className="border border-gray-400 truncate text-xs px-2 py-1">
-          {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("")->str}
+          {StudentCSVRow.email(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
         <td className="border border-gray-400 truncate text-xs px-2 py-1">
-          {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("")->str}
+          {StudentCSVRow.title(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
         <td className="border border-gray-400 truncate text-xs px-2 py-1">
-          {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("")->str}
+          {StudentCSVRow.teamName(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
         <td className="border border-gray-400 truncate text-xs px-2 py-1">
-          {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("")->str}
+          {StudentCSVRow.tags(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
         <td className="border border-gray-400 truncate text-xs px-2 py-1">
-          {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
+          {StudentCSVRow.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
       </tr>,
     csvData,
@@ -275,12 +309,8 @@ let csvDataTable = (csvData, fileInvalid) => {
   )
 }
 
-let clearFile = send => {
-  DomUtils.Element.clearFileInput(
-    ~inputId="csv-file-input",
-    ~callBack={() => send(ClearCSVData)},
-    (),
-  )
+let clearFile = (send, inputId) => {
+  DomUtils.Element.clearFileInput(~inputId, ~callBack={() => send(ClearCSVData)}, ())
 }
 
 let rowClasses = hasError =>
@@ -296,22 +326,22 @@ let errorsTable = (csvData, errors) => {
         <tr key={string_of_int(index)}>
           <td className={rowClasses(false)}> {rowNumber->string_of_int->str} </td>
           <td className={rowClasses(CSVDataError.hasNameError(error))}>
-            {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("")->str}
+            {StudentCSVRow.name(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td className={rowClasses(CSVDataError.hasEmailError(error))}>
-            {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("")->str}
+            {StudentCSVRow.email(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td className={rowClasses(CSVDataError.hasTitleError(error))}>
-            {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("")->str}
+            {StudentCSVRow.title(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td className={rowClasses(CSVDataError.hasTeamNameError(error))}>
-            {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("")->str}
+            {StudentCSVRow.teamName(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td className={rowClasses(CSVDataError.hasTagsError(error))}>
-            {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("")->str}
+            {StudentCSVRow.tags(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td className={rowClasses(CSVDataError.hasAffiliationError(error))}>
-            {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
+            {StudentCSVRow.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
         </tr>
       }, errors)->React.array} </tbody>
@@ -474,12 +504,14 @@ let make = (~courseId) => {
                       (),
                     )}
                     onFileLoaded={(x, y) => {
-                      send(LoadCSVData(x, y))
+                      send(
+                        LoadCSVData(x, {size: CSVReader.fileSize(y), name: CSVReader.fileName(y)}),
+                      )
                     }}
                     onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
                   />
                   <label
-                    onClick={_event => clearFile(send)}
+                    onClick={_event => clearFile(send, "csv-file-input")}
                     className="file-input-label mt-2"
                     htmlFor="csv-file-input">
                     <i className="fas fa-upload me-2 text-gray-600 text-lg" />
@@ -488,7 +520,36 @@ let make = (~courseId) => {
                     </span>
                   </label>
                 </div>
-                <div> {str("New input goes here")} <CsvReaderExperiment /> </div>
+                <div
+                  className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+                  // <CSVReader
+                  //   label=""
+                  //   inputId="csv-file-input"
+                  //   inputName="csv"
+                  //   cssClass="absolute w-0 h-0 overflow-hidden"
+                  //   parserOptions={CSVReader.parserOptions(
+                  //     ~header=true,
+                  //     ~skipEmptyLines="true",
+                  //     (),
+                  //   )}
+                  //   onFileLoaded={(x, y) => {
+                  //     send(LoadCSVData(x, y))
+                  //   }}
+                  //   onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
+                  // />
+                  <input
+                    id="csv-file-input-2" type_="file" onChange={event => onSelectFile(event, send)}
+                  />
+                  <label
+                    onClick={_event => clearFile(send, "csv-file-input-2")}
+                    className="file-input-label mt-2"
+                    htmlFor="csv-file-input-2">
+                    <i className="fas fa-upload me-2 text-gray-600 text-lg" />
+                    <span className="truncate">
+                      {fileInputText(~fileInfo=state.fileInfo)->str}
+                    </span>
+                  </label>
+                </div>
                 {ReactUtils.nullIf(
                   csvDataTable(state.csvData, state.fileInvalid),
                   ArrayUtils.isEmpty(state.csvData),
@@ -497,6 +558,7 @@ let make = (~courseId) => {
                   message={switch state.fileInvalid {
                   | Some(invalidStatus) =>
                     switch invalidStatus {
+                    | ParseError(message) => t(~variables=[("message", message)], "csv_parse_error")
                     | InvalidCSVFile => t("csv_file_errors.invalid")
                     | EmptyFile => t("csv_file_errors.empty")
                     | InvalidTemplate => t("csv_file_errors.invalid_template")

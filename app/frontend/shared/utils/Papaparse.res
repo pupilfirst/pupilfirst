@@ -3,24 +3,27 @@ module type RowData = {
 }
 
 module Make = (RowData: RowData) => {
-  type fileType = Dom.element
+  type file = {"name": string, "size": int}
 
-  type completionType = {"data": array<RowData.t>}
+  type error = {
+    @as("type") type_: string,
+    code: string,
+    message: string,
+    row: int,
+  }
+
+  let errorMessage = error => error.message ++ " on row " ++ string_of_int(error.row)
+
+  type results = {"data": array<RowData.t>, "errors": array<error>}
 
   @deriving(abstract)
   type config = {
     @optional
-    delimiter: string,
-    @optional
-    newline: string,
-    @optional
-    quoteChar: string,
-    @optional
-    escapeChar: string,
-    @optional
     header: bool,
-    complete: (completionType, fileType) => unit,
+    @optional
+    skipEmptyLines: bool,
+    complete: (results, file) => unit,
   }
 
-  @module("papaparse") external parseFile: (fileType, config) => unit = "parse"
+  @module("papaparse") external parseFile: (file, config) => unit = "parse"
 }

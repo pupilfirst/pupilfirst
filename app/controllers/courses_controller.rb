@@ -96,6 +96,13 @@ class CoursesController < ApplicationController
     render json: @presenter.month_data
   end
 
+  def organisation_course_show
+    @organisation = policy_scope(Organisation).find(params[:organisation_id])
+    @course = authorize(find_course)
+    @cohorts = @course.cohorts
+    render layout: 'student'
+  end
+
   private
 
   def course

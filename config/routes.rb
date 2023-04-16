@@ -177,6 +177,8 @@ Rails.application.routes.draw do
         get 'students'
       end
     end
+
+    resources :courses, only: %i[show]
   end
 
   namespace :org, module: 'organisations' do

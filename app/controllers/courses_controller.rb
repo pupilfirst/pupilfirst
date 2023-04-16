@@ -99,7 +99,7 @@ class CoursesController < ApplicationController
   def organisation_course_show
     @organisation = policy_scope(Organisation).find(params[:organisation_id])
     @course = authorize(find_course)
-    @cohorts = @course.cohorts
+    @cohorts = @organisation.cohorts.where(course_id: @course.id).distinct
     render layout: 'student'
   end
 

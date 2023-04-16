@@ -2323,6 +2323,7 @@ en:
       active_students_label: Active Students
       cohorts_subheading: Cohorts
       organisation_label: Organisation
+      previous_cohorts: Previous Cohorts
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled
@@ -2331,6 +2332,10 @@ en:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
+    course_show:
+      active_cohorts_label: Active Cohorts
+      ended_cohorts_label: Ended Cohorts
+      course_label: Course
     students:
       show:
         average_grades: Average Grades

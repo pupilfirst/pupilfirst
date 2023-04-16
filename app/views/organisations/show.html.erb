@@ -40,7 +40,7 @@
                 <% end %>
               <% end %>
                 <%= link_to organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-                  <span class="inline-block font-medium">Previous Cohorts</span>
+                  <span class="inline-block font-medium"><%= t('.previous_cohorts') %></span>
                   <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
                 <% end %>
             </div>

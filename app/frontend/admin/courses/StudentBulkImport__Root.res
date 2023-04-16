@@ -77,8 +77,6 @@ module ParserType = {
   type t = StudentCSVRow.t
 }
 
-module CSVReader = CSVReader.Make(ParserType)
-
 module CSVParser = Papaparse.Make(ParserType)
 
 let onParseComplete = (send, results, file) => {
@@ -474,7 +472,10 @@ let make = (~courseId) => {
               <div className="mt-5">
                 <div className="flex justify-between items-center text-center">
                   <div>
-                    <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
+                    <label
+                      className="tracking-wide text-xs font-semibold"
+                      htmlFor="csv-file-input"
+                      onClick={_event => clearFile(send, "csv-file-input")}>
                       {t("csv_file_input.label")->str}
                     </label>
                     <HelpIcon className="ms-2" link={t("csv_file_input.help_url")}>
@@ -493,57 +494,16 @@ let make = (~courseId) => {
                 </div>
                 <div
                   className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
-                  <CSVReader
-                    label=""
-                    inputId="csv-file-input"
-                    inputName="csv"
-                    cssClass="absolute w-0 h-0 overflow-hidden"
-                    parserOptions={CSVReader.parserOptions(
-                      ~header=true,
-                      ~skipEmptyLines="true",
-                      (),
-                    )}
-                    onFileLoaded={(x, y) => {
-                      send(
-                        LoadCSVData(x, {size: CSVReader.fileSize(y), name: CSVReader.fileName(y)}),
-                      )
-                    }}
-                    onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
+                  <input
+                    className="absolute w-0 h-0 overflow-hidden"
+                    id="csv-file-input"
+                    type_="file"
+                    onChange={event => onSelectFile(event, send)}
                   />
                   <label
                     onClick={_event => clearFile(send, "csv-file-input")}
                     className="file-input-label mt-2"
                     htmlFor="csv-file-input">
-                    <i className="fas fa-upload me-2 text-gray-600 text-lg" />
-                    <span className="truncate">
-                      {fileInputText(~fileInfo=state.fileInfo)->str}
-                    </span>
-                  </label>
-                </div>
-                <div
-                  className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
-                  // <CSVReader
-                  //   label=""
-                  //   inputId="csv-file-input"
-                  //   inputName="csv"
-                  //   cssClass="absolute w-0 h-0 overflow-hidden"
-                  //   parserOptions={CSVReader.parserOptions(
-                  //     ~header=true,
-                  //     ~skipEmptyLines="true",
-                  //     (),
-                  //   )}
-                  //   onFileLoaded={(x, y) => {
-                  //     send(LoadCSVData(x, y))
-                  //   }}
-                  //   onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
-                  // />
-                  <input
-                    id="csv-file-input-2" type_="file" onChange={event => onSelectFile(event, send)}
-                  />
-                  <label
-                    onClick={_event => clearFile(send, "csv-file-input-2")}
-                    className="file-input-label mt-2"
-                    htmlFor="csv-file-input-2">
                     <i className="fas fa-upload me-2 text-gray-600 text-lg" />
                     <span className="truncate">
                       {fileInputText(~fileInfo=state.fileInfo)->str}

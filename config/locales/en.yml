@@ -2323,7 +2323,7 @@ en:
       active_students_label: Active Students
       cohorts_subheading: Cohorts
       organisation_label: Organisation
-      previous_cohorts: Previous Cohorts
+      view_all_cohorts: View All Cohorts
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled

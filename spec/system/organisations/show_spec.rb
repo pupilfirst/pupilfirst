@@ -94,6 +94,9 @@ feature 'Organisation show' do
 
       # ...but not to the inactive cohort.
       expect(page).not_to have_link(cohort_3.name)
+
+      # There should be a link to view all cohorts.
+      expect(page).to have_link("View All Cohorts")
     end
   end
 
@@ -107,6 +110,9 @@ feature 'Organisation show' do
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
 
+      # There should be a link to view all cohorts.
+      expect(page).to have_link("View All Cohorts")
+
       # Both orgs should be accessible.
       sign_in_user(
         school_admin_user,
@@ -115,6 +121,9 @@ feature 'Organisation show' do
 
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
+
+      # There should be a link to view all cohorts.
+      expect(page).to have_link("View All Cohorts")
     end
   end
 

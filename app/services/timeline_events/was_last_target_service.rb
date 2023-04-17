@@ -12,21 +12,19 @@ module TimelineEvents
       final_milestone_targets.all? do |target|
         if target.team_target?
           # Need to check for just one student.
-          target_status(target, student) ==
-            Targets::StatusService::STATUS_PASSED
+          status_passed?(target, student)
         else
           # Need to check for each student in team.
-          students.all? do |s|
-            target_status(target, s) == Targets::StatusService::STATUS_PASSED
-          end
+          students.all? { |s| status_passed?(target, s) }
         end
       end
     end
 
     private
 
-    def target_status(target, student)
-      Targets::StatusService.new(target, student).status_from_event
+    def status_passed?(target, student)
+      Targets::StatusService.new(target, student).status_from_event ==
+        Targets::StatusService::STATUS_PASSED
     end
 
     def student

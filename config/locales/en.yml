@@ -52,6 +52,7 @@ en:
       new_topic: New Topic
       note: " Coaches in your school have access to all communities."
       welcome: Welcome to the
+      community_title: "%{name} Community"
   components:
     AdminCoursesShared__CohortsEditor:
       add_new_cohort: Add new cohort

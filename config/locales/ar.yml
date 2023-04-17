@@ -50,8 +50,9 @@ ar:
   communities:
     show:
       new_topic: موضوع جديد
-      note: "  يملك مشرفون الأكاديمية صلاحية لجميع المجتمعات"
+      note: " يملك مشرفون الأكاديمية صلاحية لجميع المجتمعات"
       welcome: مرحبا بكم في
+      community_title: "مجتمع %{name}"
   components:
     AdminCoursesShared__CohortsEditor:
       add_new_cohort: إضافة مجموعة جديدة

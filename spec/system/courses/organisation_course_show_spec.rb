@@ -70,19 +70,222 @@ feature 'Organisation show' do
       expect(page).to have_text("Active Cohorts\n2")
       expect(page).to have_text("Ended Cohorts\n1")
 
-      expect(page).to have_text("Active Cohorts")
-      expect(page).to have_text("Ended Cohorts")
+      # Checking active cohorts.
+      within(
+        "div[class='border border-green-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Active Cohorts")
 
-      # There should be links to three active cohorts...
+        expect(page).to have_link(
+          cohort_1.name,
+          href: organisation_cohort_path(organisation_1, cohort_1)
+        )
+
+        expect(page).to have_link(
+          cohort_2.name,
+          href: organisation_cohort_path(organisation_1, cohort_2)
+        )
+      end
+
+      # Checking ended cohorts.
+      within(
+        "div[class='border border-red-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Ended Cohorts")
+
+        expect(page).not_to have_link(
+          cohort_1.name,
+          href: organisation_cohort_path(organisation_1, cohort_1)
+        )
+
+        expect(page).to have_link(
+          cohort_3.name,
+          href: organisation_cohort_path(organisation_1, cohort_3)
+        )
+      end
+
+      # Visit the course 2 page.
+      visit organisation_course_path(organisation_1, course_2)
+
+      expect(page).to have_text("#{course_2.name}")
+
+      expect(page).to have_text("Active Cohorts\n1")
+      expect(page).to have_text("Ended Cohorts\n0")
+
+      # Checking active cohorts.
+      within(
+        "div[class='border border-green-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Active Cohorts")
+
+        expect(page).to have_link(
+          cohort_4.name,
+          href: organisation_cohort_path(organisation_1, cohort_4)
+        )
+      end
+
+      # Checking ended cohorts.
+      within(
+        "div[class='border border-red-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Ended Cohorts")
+        expect(page).to have_text("No ended cohorts for this course.")
+      end
+    end
+
+    scenario 'check the working of back button' do
+      sign_in_user(org_admin_user, referrer: organisation_course_path(organisation_1, course_1))
+
+      expect(page).to have_text("#{course_1.name}")
+
+      click_link cohort_1.name
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_text("#{cohort_1.name}")
+      expect(page).to have_link("Back")
+
+      click_link "Back"
+
+      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+
+      click_link cohort_1.name
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_text("#{cohort_1.name}")
+      expect(page).to have_link("Back")
+
+
       expect(page).to have_link(
-        cohort_1.name,
-        href: organisation_cohort_path(organisation_1, cohort_1)
+        "Students",
+        href: students_organisation_cohort_path(organisation_1, cohort_1)
       )
 
+      click_link "Students"
+      expect(page).to have_current_path(students_organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+    end
+  end
+
+  context 'when the user is a school admin' do
+    scenario 'user can see all the active and inactive cohorts' do
+      sign_in_user(school_admin_user, referrer: organisation_course_path(organisation_1, course_1))
+
+      expect(page).to have_text("#{course_1.name}")
+
+      expect(page).to have_text("Active Cohorts\n2")
+      expect(page).to have_text("Ended Cohorts\n1")
+
+      # Checking active cohorts.
+      within(
+        "div[class='border border-green-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Active Cohorts")
+
+        expect(page).to have_link(
+          cohort_1.name,
+          href: organisation_cohort_path(organisation_1, cohort_1)
+        )
+
+        expect(page).to have_link(
+          cohort_2.name,
+          href: organisation_cohort_path(organisation_1, cohort_2)
+        )
+      end
+
+      # Checking ended cohorts.
+      within(
+        "div[class='border border-red-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Ended Cohorts")
+
+        expect(page).not_to have_link(
+          cohort_1.name,
+          href: organisation_cohort_path(organisation_1, cohort_1)
+        )
+
+        expect(page).to have_link(
+          cohort_3.name,
+          href: organisation_cohort_path(organisation_1, cohort_3)
+        )
+      end
+
+      # Visit the course 2 page.
+      visit organisation_course_path(organisation_1, course_2)
+
+      expect(page).to have_text("#{course_2.name}")
+
+      expect(page).to have_text("Active Cohorts\n1")
+      expect(page).to have_text("Ended Cohorts\n0")
+
+      # Checking active cohorts.
+      within(
+        "div[class='border border-green-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Active Cohorts")
+
+        expect(page).to have_link(
+          cohort_4.name,
+          href: organisation_cohort_path(organisation_1, cohort_4)
+        )
+      end
+
+      # Checking ended cohorts.
+      within(
+        "div[class='border border-red-500 bg-gray-50 rounded-lg p-5']"
+      ) do
+        expect(page).to have_text("Ended Cohorts")
+        expect(page).to have_text("No ended cohorts")
+      end
+    end
+
+    scenario 'check the working of back button' do
+      sign_in_user(school_admin_user, referrer: organisation_course_path(organisation_1, course_1))
+
+      expect(page).to have_text("#{course_1.name}")
+
+      click_link cohort_1.name
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_text("#{cohort_1.name}")
+      expect(page).to have_link("Back")
+
+      click_link "Back"
+
+      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+
+      click_link cohort_1.name
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_text("#{cohort_1.name}")
+      expect(page).to have_link("Back")
+
+
       expect(page).to have_link(
-        cohort_2.name,
-        href: organisation_cohort_path(organisation_1, cohort_2)
+        "Students",
+        href: students_organisation_cohort_path(organisation_1, cohort_1)
       )
+
+      click_link "Students"
+      expect(page).to have_current_path(students_organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+    end
+  end
+
+  context 'when the user is a non-admin' do
+    scenario 'user can not see the course show page' do
+      sign_in_user(regular_user, referrer: organisation_course_path(organisation_1, course_1))
+
+      expect(page).to have_http_status(:not_found)
     end
   end
 end

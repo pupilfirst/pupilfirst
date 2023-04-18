@@ -98,6 +98,40 @@ feature 'Organisation show' do
       # There should be a link to view all cohorts.
       expect(page).to have_link("View All Cohorts", href: organisation_course_path(organisation_1, course_1))
     end
+
+    scenario 'check the working of back button from cohort page' do
+      sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
+
+      click_link cohort_1.name
+
+      # expect(current_path).to eq(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link 'Back'
+
+      # expect(current_path).to eq(organisation_path(organisation_1))
+      expect(page).to have_current_path(organisation_path(organisation_1))
+
+      click_link cohort_1.name
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_text("#{cohort_1.name}")
+      expect(page).to have_link("Back")
+
+      expect(page).to have_link(
+        "Students",
+        href: students_organisation_cohort_path(organisation_1, cohort_1)
+      )
+
+      click_link "Students"
+      expect(page).to have_current_path(students_organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+    end
   end
 
   context 'when the user is a school admin' do
@@ -124,6 +158,40 @@ feature 'Organisation show' do
 
       # There should be a link to view all cohorts.
       expect(page).to have_link("View All Cohorts", href: organisation_course_path(organisation_2, course_1))
+    end
+
+    scenario 'check the working of back button from cohort page' do
+      sign_in_user(school_admin_user, referrer: organisation_path(organisation_1))
+
+      click_link cohort_1.name
+
+      # expect(current_path).to eq(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link 'Back'
+
+      # expect(current_path).to eq(organisation_path(organisation_1))
+      expect(page).to have_current_path(organisation_path(organisation_1))
+
+      click_link cohort_1.name
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_text("#{cohort_1.name}")
+      expect(page).to have_link("Back")
+
+      expect(page).to have_link(
+        "Students",
+        href: students_organisation_cohort_path(organisation_1, cohort_1)
+      )
+
+      click_link "Students"
+      expect(page).to have_current_path(students_organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+
+      click_link "Back"
+      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
     end
   end
 

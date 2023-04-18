@@ -104,12 +104,10 @@ feature 'Organisation show' do
 
       click_link cohort_1.name
 
-      # expect(current_path).to eq(organisation_cohort_path(organisation_1, cohort_1))
       expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
 
       click_link 'Back'
 
-      # expect(current_path).to eq(organisation_path(organisation_1))
       expect(page).to have_current_path(organisation_path(organisation_1))
 
       click_link cohort_1.name
@@ -165,12 +163,10 @@ feature 'Organisation show' do
 
       click_link cohort_1.name
 
-      # expect(current_path).to eq(organisation_cohort_path(organisation_1, cohort_1))
       expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
 
       click_link 'Back'
 
-      # expect(current_path).to eq(organisation_path(organisation_1))
       expect(page).to have_current_path(organisation_path(organisation_1))
 
       click_link cohort_1.name

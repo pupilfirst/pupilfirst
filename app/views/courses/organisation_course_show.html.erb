@@ -2,7 +2,7 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-6">
       <div class="mt-4 flex">
-      <%= link_to t('shared.back_link'), organisation_path(@organisation), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
+        <%= link_to t('shared.back_link'), organisation_path(@organisation), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
       </div>
       <p class="mt-5 text-gray-600 text-sm"><%= t('organisations.course_show.course_label') %></p>
       <h1 class="text-xl md:text-3xl font-bold">
@@ -20,47 +20,51 @@
       </div>
     </div>
   </section>
-    <section class="bg-white">
-      <div class="max-w-5xl mx-auto pl-6 pr-6 pb-6">
-        <div class="border border-red-500 bg-gray-50 rounded-lg p-5">
-            <p class="text-black text-sm font-semibold"><%= t('organisations.course_show.ended_cohorts_label') %></p>
-            <% if @ended_cohorts.present? %>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-              <% @ended_cohorts.each do |cohort| %>
-                <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-                  <span class="inline-block font-medium"><%= cohort.name %></span>
-                  <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
-                <% end %>
-              <% end %>
-          </div>
+  <section class="bg-white">
+    <div class="max-w-5xl mx-auto pl-6 pr-6 pb-6">
+      <div class="border border-red-500 bg-gray-50 rounded-lg p-5">
+        <p class="text-black text-sm font-semibold">
+          <%= t('organisations.course_show.ended_cohorts_label') %>
+        </p>
+      <% if @ended_cohorts.present? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+          <% @ended_cohorts.each do |cohort| %>
+            <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+              <span class="inline-block font-medium"><%= cohort.name %></span>
+              <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+            <% end %>
+          <% end %>
         </div>
-        <div class="mt-6 flex items-center justify-center">
-          <%= paginate @ended_cohorts, param_name: :ended_cohort_page%>
-        </div>
-        <% if @ended_cohorts.total_pages > 1 %>
-          <div class="text-center text-sm italic mt-4">
-            <%= t('organisations.course_show.pagination_notice', page_start: kaminari_page_start(@ended_cohorts), page_end: kaminari_page_end(@ended_cohorts), count: @ended_cohorts.total_count, cohort_status: "ended")  %>
-          </div>
-        <% end %>
       </div>
+      <div class="mt-6 flex items-center justify-center">
+        <%= paginate @ended_cohorts, param_name: :ended_cohort_page%>
+      </div>
+      <% if @ended_cohorts.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4">
+          <%= t('organisations.course_show.pagination_notice', page_start: kaminari_page_start(@ended_cohorts), page_end: kaminari_page_end(@ended_cohorts), count: @ended_cohorts.total_count, cohort_status: "ended")  %>
+        </div>
+      <% end %>
+    </div>
     <% else %>
       <% if @ended_cohorts.empty? %>
         <div class="text-center text-sm italic mt-4"><%= t('organisations.course_show.ended_cohorts_empty') %></div>
       <% end %>
     <% end %>
-    </section>
+  </section>
   <section class="bg-white">
     <div class="max-w-5xl mx-auto pl-6 pr-6 pb-6">
       <div class="border border-green-500 bg-gray-50 rounded-lg p-5">
-        <p class="text-black text-sm font-semibold"><%= t('organisations.course_show.active_cohorts_label') %></p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-            <% @active_cohorts.each do |cohort| %>
-              <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-                <span class="inline-block font-medium"><%= cohort.name %></span>
-                <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
-              <% end %>
+        <p class="text-black text-sm font-semibold">
+          <%= t('organisations.course_show.active_cohorts_label') %>
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+          <% @active_cohorts.each do |cohort| %>
+            <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+              <span class="inline-block font-medium"><%= cohort.name %></span>
+              <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
             <% end %>
-          </div>
+          <% end %>
+        </div>
       </div>
       <div class="mt-6 flex items-center justify-center">
         <%= paginate @active_cohorts, param_name: :active_cohort_page%>

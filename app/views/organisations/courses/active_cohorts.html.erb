@@ -12,7 +12,7 @@
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold">
           <%= t('.label') %> <%= t('.count', count: @cohorts.active.length)%>
         </p>
-        <%= link_to  inactive_cohorts_organisation_course_path(@organisation, @course.id), class: "p-2 hover:text-primary-500 hover:bg-primary-100" do%>
+        <%= link_to  inactive_cohorts_organisation_course_path(@organisation, @course), class: "p-2 hover:text-primary-500 hover:bg-primary-100" do%>
           <%= t('organisations.courses.inactive_cohorts.label') %>
           <span><%= t('organisations.courses.inactive_cohorts.count', count: @cohorts.ended.length)%></span>
         <% end %>
@@ -30,6 +30,9 @@
             <% end %>
           <% end %>
         </div>
+        <% if @active_cohorts.empty? %>
+          <div class="text-center text-sm italic mt-4"><%= t('.empty') %></div>
+        <% end %>
       </div>
       <div class="mt-6 flex items-center justify-center">
         <%= paginate @active_cohorts, param_name: :active_cohort_page%>
@@ -38,9 +41,6 @@
         <div class="text-center text-sm italic mt-4">
           <%= t('.pagination_notice', page_start: kaminari_page_start(@active_cohorts), page_end: kaminari_page_end(@active_cohorts), count: @active_cohorts.total_count) %>
         </div>
-      <% end %>
-      <% if @active_cohorts.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('.empty') %></div>
       <% end %>
     </div>
   </section>

@@ -53,6 +53,27 @@ feature 'User Edit', js: true do
     expect(user.reload.preferences['daily_digest']).to eq(true)
   end
 
+  context "when user updates name" do
+    let(:new_name) { Faker::Name.name }
+    let(:old_name) { user.name }
+
+    before do
+      sign_in_user(user, referrer: edit_user_path)
+      fill_in 'user_name', with: new_name
+      click_button 'Save Changes'
+    end
+
+    it "creates an audit record" do
+      audit_record = AuditRecord.last
+      metadata = audit_record.metadata
+      expect(audit_record.audit_type).to eq(AuditRecord::TYPE_UPDATE_NAME)
+      expect(audit_record.school_id).to eq(user.school_id)
+      expect(metadata['user_id']).to eq(user.id)
+      expect(metadata['old_name']).to eq(old_name)
+      expect(metadata['new_name']).to eq(new_name)
+    end
+  end
+
   scenario 'User update the preferred name' do
     sign_in_user(user, referrer: edit_user_path)
     expect(page).to have_text('Edit').and have_text('profile')

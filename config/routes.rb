@@ -178,7 +178,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :courses, only: %i[show], module: 'organisations'
+    resources :courses,  module: 'organisations' do
+      member do
+        get 'active_cohorts', action: 'show'
+        get 'inactive_cohorts', action: 'show'
+      end
+    end
   end
 
   namespace :org, module: 'organisations' do

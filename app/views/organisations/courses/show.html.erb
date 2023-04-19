@@ -4,19 +4,18 @@
       <div class="mt-4 flex">
         <%= link_to t('shared.back_link'), organisation_path(@organisation), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
       </div>
-      <p class="mt-5 text-gray-600 text-sm"><%= t('organisations.course_show.course_label') %></p>
+      <p class="mt-5 text-gray-600 text-sm"><%= t('.course_label') %></p>
       <h1 class="text-xl md:text-3xl font-bold">
         <%= @course.name %>
       </h1>
-      <div class="mt-6 flex items-center gap-12">
-        <div>
-          <h3 class="text-sm text-gray-600"><%= t('organisations.course_show.active_cohorts_label') %></h3>
-          <p class="text-xl font-bold"><%= @cohorts.active.length %></p>
-        </div>
-        <div class="ps-5 border-s border-gray-300">
-          <h3 class="text-sm text-gray-600"><%= t('organisations.course_show.ended_cohorts_label') %></h3>
-          <p class="text-xl font-bold"><%= @cohorts.ended.length %></p>
-        </div>
+      <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold">
+          <%= t('.active_cohorts_label') %> <%= t('.active_cohorts_count', count: @cohorts.active.length)%>
+        </p>
+        <%= link_to  organisation_path(@organisation), class: "p-2 hover:text-primary-500 hover:bg-primary-100" do%>
+          <%= t('.inactive_cohorts_label') %>
+          <span><%= t('.inactive_cohorts_count', count: @cohorts.ended.length)%></span>
+        <% end %>
       </div>
     </div>
   </section>
@@ -24,7 +23,7 @@
     <div class="max-w-5xl mx-auto pl-6 pr-6 pb-6">
       <div class="border border-red-500 bg-gray-50 rounded-lg p-5">
         <p class="text-black text-sm font-semibold">
-          <%= t('organisations.course_show.ended_cohorts_label') %>
+          <%= t('.inactive_cohorts_label') %>
         </p>
       <% if @ended_cohorts.present? %>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
@@ -41,13 +40,13 @@
       </div>
       <% if @ended_cohorts.total_pages > 1 %>
         <div class="text-center text-sm italic mt-4">
-          <%= t('organisations.course_show.pagination_notice', page_start: kaminari_page_start(@ended_cohorts), page_end: kaminari_page_end(@ended_cohorts), count: @ended_cohorts.total_count, cohort_status: "ended")  %>
+          <%= t('.pagination_notice', page_start: kaminari_page_start(@ended_cohorts), page_end: kaminari_page_end(@ended_cohorts), count: @ended_cohorts.total_count, cohort_status: "ended")  %>
         </div>
       <% end %>
     </div>
     <% else %>
       <% if @ended_cohorts.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('organisations.course_show.ended_cohorts_empty') %></div>
+        <div class="text-center text-sm italic mt-4"><%= t('.inactive_cohorts_empty') %></div>
       <% end %>
     <% end %>
   </section>
@@ -55,7 +54,7 @@
     <div class="max-w-5xl mx-auto pl-6 pr-6 pb-6">
       <div class="border border-green-500 bg-gray-50 rounded-lg p-5">
         <p class="text-black text-sm font-semibold">
-          <%= t('organisations.course_show.active_cohorts_label') %>
+          <%= t('.active_cohorts_label') %>
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
           <% @active_cohorts.each do |cohort| %>
@@ -71,11 +70,11 @@
       </div>
       <% if @active_cohorts.total_pages > 1 %>
         <div class="text-center text-sm italic mt-4">
-          <%= t('organisations.course_show.pagination_notice', page_start: kaminari_page_start(@active_cohorts), page_end: kaminari_page_end(@active_cohorts), count: @active_cohorts.total_count, cohort_status: "active") %>
+          <%= t('.pagination_notice', page_start: kaminari_page_start(@active_cohorts), page_end: kaminari_page_end(@active_cohorts), count: @active_cohorts.total_count, cohort_status: "active") %>
         </div>
       <% end %>
       <% if @active_cohorts.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('organisations.course_show.ended_cohorts_empty') %></div>
+        <div class="text-center text-sm italic mt-4"><%= t('.active_cohorts_empty') %></div>
       <% end %>
     </div>
   </section>

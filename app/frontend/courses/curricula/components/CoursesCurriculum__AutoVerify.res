@@ -13,7 +13,6 @@ module AutoVerifySubmissionQuery = %graphql(`
         id
         createdAt
       }
-      levelUpEligibility
      }
    }
  `)
@@ -24,7 +23,7 @@ let redirect = link => {
   window |> Webapi.Dom.Window.open_(~url=link, ~name="_blank", ~features="") |> ignore
 }
 
-let handleSuccess = (submission, levelUpEligibility, linkToComplete, addSubmissionCB) => {
+let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
   addSubmissionCB(
     Submission.make(
       ~id=submission["id"],
@@ -32,7 +31,6 @@ let handleSuccess = (submission, levelUpEligibility, linkToComplete, addSubmissi
       ~status=Submission.MarkedAsComplete,
       ~checklist=[],
     ),
-    levelUpEligibility,
   )
 
   switch linkToComplete {
@@ -48,12 +46,7 @@ let createAutoVerifySubmission = (target, linkToComplete, setSaving, addSubmissi
   AutoVerifySubmissionQuery.make({targetId: Target.id(target)})
   |> Js.Promise.then_(response => {
     switch response["autoVerifySubmission"]["submission"] {
-    | Some(details) =>
-      let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(
-        response["autoVerifySubmission"]["levelUpEligibility"],
-      )
-
-      handleSuccess(details, levelUpEligibility, linkToComplete, addSubmissionCB)
+    | Some(details) => handleSuccess(details, linkToComplete, addSubmissionCB)
     | None => setSaving(_ => false)
     }
     Js.Promise.resolve()

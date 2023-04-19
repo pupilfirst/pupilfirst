@@ -1,13 +1,11 @@
 module Mutations
   class CreateSubmission < ApplicationQuery
     include QueryAuthorizeStudent
-    include LevelUpEligibilityComputable
     include ValidateStudentSubmission
 
     description 'Create a new submission for a target'
 
     field :submission, Types::SubmissionType, null: true
-    field :level_up_eligibility, Types::LevelUpEligibility, null: true
 
     def resolve(_params)
       submission = create_submission
@@ -20,7 +18,7 @@ module Mutations
         success_message
       )
 
-      { submission: submission, level_up_eligibility: level_up_eligibility }
+      { submission: submission }
     end
 
     def create_submission

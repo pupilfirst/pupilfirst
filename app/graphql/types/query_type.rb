@@ -7,7 +7,7 @@ module Types
         self.resolved_fields ||= []
         self.resolved_fields << args[0]
 
-        field(*args, &block)
+        field(args[0], args[1], **args[2], &block)
       end
     end
 

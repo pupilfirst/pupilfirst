@@ -166,7 +166,7 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
   </div>
 }
 
-let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
+let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch state.targetDetails {
   | Some(targetDetails) =>
     let newTargetDetails = targetDetails |> TargetDetails.addSubmission(submission)
@@ -177,15 +177,8 @@ let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEl
 
   switch submission |> Submission.status {
   | MarkedAsComplete =>
-    addSubmissionCB(
-      LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
-      levelUpEligibility,
-    )
-  | Pending =>
-    addSubmissionCB(
-      LatestSubmission.make(~pending=true, ~targetId=target |> Target.id),
-      levelUpEligibility,
-    )
+    addSubmissionCB(LatestSubmission.make(~pending=false, ~targetId=target |> Target.id))
+  | Pending => addSubmissionCB(LatestSubmission.make(~pending=true, ~targetId=target |> Target.id))
   | Completed =>
     raise(
       UnexpectedSubmissionStatus(
@@ -201,14 +194,7 @@ let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEl
   }
 }
 
-let addVerifiedSubmission = (
-  target,
-  state,
-  send,
-  addSubmissionCB,
-  submission,
-  levelUpEligibility,
-) => {
+let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch state.targetDetails {
   | Some(targetDetails) =>
     let newTargetDetails = targetDetails |> TargetDetails.addSubmission(submission)
@@ -216,10 +202,7 @@ let addVerifiedSubmission = (
   | None => ()
   }
 
-  addSubmissionCB(
-    LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
-    levelUpEligibility,
-  )
+  addSubmissionCB(LatestSubmission.make(~pending=false, ~targetId=target |> Target.id))
 }
 
 let targetStatusClass = (prefix, targetStatus) =>
@@ -294,9 +277,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
           className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
-          <span className="font-semibold  leading-snug">
-            {target |> Target.title |> str}
-          </span>
+          <span className="font-semibold  leading-snug"> {target |> Target.title |> str} </span>
           {renderTargetStatus(targetStatus)}
         </Link>
       })
@@ -516,7 +497,9 @@ let navigationLink = (direction, url, send) => {
   }
 
   let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />)
+    icon->Belt.Option.mapWithDefault(React.null, icon =>
+      <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />
+    )
 
   <Link
     href=url
@@ -564,15 +547,9 @@ let quickNavigationLinks = (targetDetails, send) => {
   </div>
 }
 
-let updatePendingUserIdsWhenAddingSubmission = (
-  send,
-  target,
-  addSubmissionCB,
-  submission,
-  levelUpEligibility,
-) => {
+let updatePendingUserIdsWhenAddingSubmission = (send, target, addSubmissionCB, submission) => {
   send(AddSubmission(target |> Target.role))
-  addSubmissionCB(submission, levelUpEligibility)
+  addSubmissionCB(submission)
 }
 
 @react.component

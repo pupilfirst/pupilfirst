@@ -14,7 +14,6 @@ type state = {
   latestSubmissions: array<LatestSubmission.t>,
   statusOfTargets: array<TargetStatus.t>,
   notice: Notice.t,
-  levelUpEligibility: LevelUpEligibility.t,
 }
 
 let targetStatusClasses = targetStatus => {
@@ -42,9 +41,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium  leading-snug">
-        {Target.title(target)->str}
-      </span>
+      <span className="font-medium  leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -98,19 +95,16 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
   </div>
 }
 
-let addSubmission = (setState, latestSubmission, levelUpEligibility) =>
+let addSubmission = (setState, latestSubmission) =>
   setState(state => {
     let withoutSubmissionForThisTarget =
       state.latestSubmissions |> Js.Array.filter(s =>
         s |> LatestSubmission.targetId != (latestSubmission |> LatestSubmission.targetId)
       )
 
-    let eligibility = Belt.Option.getWithDefault(levelUpEligibility, state.levelUpEligibility)
-
     {
       ...state,
       latestSubmissions: Js.Array.concat([latestSubmission], withoutSubmissionForThisTarget),
-      levelUpEligibility: eligibility,
     }
   })
 
@@ -163,62 +157,6 @@ let issuedCertificate = course =>
   | None => React.null
   }
 
-let computeLevelUp = (
-  levelUpEligibility,
-  course,
-  studentLevel,
-  targetGroups,
-  targets,
-  statusOfTargets,
-) => {
-  let progressionBehavior = course |> Course.progressionBehavior
-  let currentLevelNumber = studentLevel |> Level.number
-
-  let statusOfCurrentMilestoneTargets = statusOfMilestoneTargets(
-    targetGroups,
-    targets,
-    studentLevel,
-    statusOfTargets,
-  )
-
-  switch levelUpEligibility {
-  | LevelUpEligibility.Eligible => Notice.LevelUp
-  | AtMaxLevel =>
-    TargetStatus.allComplete(statusOfCurrentMilestoneTargets) ? CourseComplete : Nothing
-  | NoMilestonesInLevel => Nothing
-  | CurrentLevelIncomplete =>
-    switch progressionBehavior {
-    | #Strict =>
-      let currentLevelAttempted = TargetStatus.allAttempted(statusOfCurrentMilestoneTargets)
-
-      if currentLevelAttempted {
-        let hasRejectedSubmissions = TargetStatus.anyRejected(statusOfCurrentMilestoneTargets)
-        LevelUpBlocked(currentLevelNumber, hasRejectedSubmissions)
-      } else {
-        Nothing
-      }
-    | #Unlimited => Nothing
-    | #Limited(_progressionLimit) => Nothing
-    }
-  | PreviousLevelIncomplete =>
-    switch progressionBehavior {
-    | #Strict
-    | #Unlimited =>
-      Nothing
-    | #Limited(progressionLimit) =>
-      let minimumLevelNumber = currentLevelNumber - progressionLimit
-
-      if minimumLevelNumber >= 1 {
-        LevelUpLimited(currentLevelNumber, minimumLevelNumber)
-      } else {
-        Nothing
-      }
-    }
-  | TeamMembersPending => TeamMembersPending
-  | DateLocked => Nothing
-  }
-}
-
 let computeNotice = (
   studentLevel,
   targetGroups,
@@ -227,7 +165,6 @@ let computeNotice = (
   course,
   student,
   preview,
-  levelUpEligibility,
 ) =>
   if preview {
     Notice.Preview
@@ -236,7 +173,7 @@ let computeNotice = (
   } else if Student.accessEnded(student) {
     AccessEnded
   } else {
-    computeLevelUp(levelUpEligibility, course, studentLevel, targetGroups, targets, statusOfTargets)
+    Nothing
   }
 
 let navigationLink = (direction, level, setState) => {
@@ -301,7 +238,6 @@ let make = (
   ~evaluationCriteria,
   ~preview,
   ~accessLockedLevels,
-  ~levelUpEligibility,
 ) => {
   let url = RescriptReactRouter.useUrl()
 
@@ -387,9 +323,7 @@ let make = (
         course,
         student,
         preview,
-        levelUpEligibility,
       ),
-      levelUpEligibility: levelUpEligibility,
     }
   })
 
@@ -429,7 +363,6 @@ let make = (
           course,
           student,
           preview,
-          state.levelUpEligibility,
         ),
       })
     }

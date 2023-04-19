@@ -3,14 +3,6 @@ open CoursesCurriculum__Types
 let t = I18n.t(~scope="components.CoursesCurriculum__LevelUpButton")
 let str = React.string
 
-module LevelUpQuery = %graphql(`
-   mutation LevelUpMutation($courseId: ID!) {
-    levelUp(courseId: $courseId){
-      success
-      }
-    }
- `)
-
 let handleSubmitButton = saving => {
   let submitButtonText = (title, iconClasses) =>
     <span> <FaIcon classes={iconClasses ++ " me-2"} /> {title |> str} </span>
@@ -25,25 +17,10 @@ let refreshPage = () => {
   location |> Location.reload
 }
 
-let createLevelUpQuery = (course, setSaving, event) => {
-  event |> ReactEvent.Mouse.preventDefault
-  setSaving(_ => true)
-
-  LevelUpQuery.fetch({courseId: Course.id(course)})
-  |> Js.Promise.then_((response: LevelUpQuery.t) => {
-    response.levelUp.success ? refreshPage() : setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
-}
-
 @react.component
 let make = (~course) => {
   let (saving, setSaving) = React.useState(() => false)
-  <button
-    disabled=saving
-    onClick={createLevelUpQuery(course, setSaving)}
-    className="btn btn-success btn-large w-full md:w-2/3 mt-4">
+  <button disabled=saving className="btn btn-success btn-large w-full md:w-2/3 mt-4">
     {handleSubmitButton(saving)}
   </button>
 }

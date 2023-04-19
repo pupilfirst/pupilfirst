@@ -288,7 +288,7 @@ GEM
     graphiql-rails (1.8.0)
       railties
       sprockets-rails
-    graphql (2.0.14)
+    graphql (1.12.24)
     groupdate (6.1.0)
       activesupport (>= 5.2)
     hashdiff (1.0.1)
@@ -698,7 +698,7 @@ DEPENDENCIES
   fuubar (~> 2.5)
   gaffe (~> 1.2)
   graphiql-rails (~> 1.8)
-  graphql (~> 2.0)
+  graphql (~> 1.12.24)
   groupdate (~> 6.1.0)
   humanize (~> 2.5)
   i18n-js (~> 4.0)

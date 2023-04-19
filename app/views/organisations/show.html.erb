@@ -34,8 +34,8 @@
               </p>
             </div>
             <%= link_to organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "inline-flex bg-white items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg border border-gray-300 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-              <i class="fa fa-eye rtl:rotate-180 inline-block text-primary-500" aria-hidden="true" style="margin-right: 6px;"></i>
               <span class="inline-block font-medium"><%= t('.view_all_cohorts') %></span>
+              <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true" style="margin-right: 6px;"></i>
             <% end %>
           </div>
           <div class="mt-4">

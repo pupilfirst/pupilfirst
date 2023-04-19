@@ -178,8 +178,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :courses, only: %i[show], to: 'courses#organisation_course_show'
+    resources :courses, only: %i[show]
   end
+
+  # namespace :organisations, module: 'organisations' do
+  #   resources :courses, only: %i[show]
+  # end
 
   namespace :org, module: 'organisations' do
     resources :students, only: %[show] do

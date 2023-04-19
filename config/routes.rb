@@ -100,6 +100,10 @@ Rails.application.routes.draw do
 
     resources :targets, only: [] do
       resource :content_block, only: %i[create]
+      member do
+        get 'action', action: 'action'
+        patch 'update_action', action: 'update_action'
+      end
     end
 
     resources :cohorts, only: [] do

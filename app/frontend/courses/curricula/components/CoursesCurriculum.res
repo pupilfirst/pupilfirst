@@ -247,7 +247,7 @@ let navigationLink = (direction, level, setState) => {
     icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
 
   <button
-    ariaLabel={"Go to " ++ longText}
+    ariaLabel={t("go_to") ++ longText}
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
     className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
     {arrow(leftIcon)}

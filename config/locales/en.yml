@@ -526,6 +526,7 @@ en:
       milestone_targets: Milestone targets
       nav_next_level: Next Level
       nav_previous_level: Previous Level
+      go_to: "Go to "
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording

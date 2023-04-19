@@ -2333,15 +2333,17 @@ en:
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
     courses:
-      show:
-        active_cohorts_count: "%{count}"
-        active_cohorts_empty: No active cohorts for this course.
-        active_cohorts_label: Active Cohorts
-        course_label: Course
-        inactive_cohorts_count:  "%{count}"
-        inactive_cohorts_empty: No inactive cohorts for this course.
-        inactive_cohorts_label: Inactive Cohorts
-        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status} cohorts.
+      course_label: Course
+      active_cohorts:
+        count: "%{count}"
+        empty: No active cohorts for this course.
+        label: Active Cohorts
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} active cohorts.
+      inactive_cohorts:
+        count: "%{count}"
+        empty: No inactive cohorts for this course.
+        label: Inactive Cohorts
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} inactive cohorts.
     students:
       show:
         average_grades: Average Grades

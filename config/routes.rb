@@ -180,8 +180,8 @@ Rails.application.routes.draw do
 
     resources :courses,  module: 'organisations' do
       member do
-        get 'active_cohorts', action: 'show'
-        get 'inactive_cohorts', action: 'show'
+        get 'active_cohorts'
+        get 'inactive_cohorts'
       end
     end
   end

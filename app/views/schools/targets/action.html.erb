@@ -1,5 +1,4 @@
 <div class="max-w-7xl mx-auto bg-primary-200 rounded">
-<%# add a back button to school target page %>
   <%= link_to "Back", details_school_course_target_path(@target.course, @target), class: "text-primary-500" %>
   <h1 class="text-2xl font-bold text-center">Edit Target Action</h1>
   <%= form_with model: @target, url: update_action_school_target_path(@target), method: :patch do |f| %>

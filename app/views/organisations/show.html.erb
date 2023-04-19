@@ -25,11 +25,19 @@
       <h2 class="text-xl font-semibold mt-4"><%= t('.students_enrolled_heading') %></h2>
       <% @courses_with_cohorts.each do |course_with_cohorts| %>
         <div class="border border-gray-200 bg-gray-50 rounded-lg p-5 my-4">
-          <h3 class="text-lg font-semibold" ><%= course_with_cohorts[:course].name %></h3>
-          <p class="text-sm text-gray-600">
-            <%= t('.students_enrolled_prefix_html', count: course_with_cohorts[:total_students]) %>
-            <%= t('.students_enrolled_suffix_html', count: course_with_cohorts[:cohorts].count) %>
-          </p>
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <div class="mb-2">
+              <h3 class="text-lg font-semflex flex-colibold" ><%= course_with_cohorts[:course].name %></h3>
+              <p class="text-sm text-gray-600">
+                <%= t('.students_enrolled_prefix_html', count: course_with_cohorts[:total_students]) %>
+                <%= t('.students_enrolled_suffix_html', count: course_with_cohorts[:cohorts].count) %>
+              </p>
+            </div>
+            <%= link_to organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "inline-flex bg-white items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg border border-gray-300 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+              <i class="fa fa-eye rtl:rotate-180 inline-block text-primary-500" aria-hidden="true" style="margin-right: 6px;"></i>
+              <span class="inline-block font-medium"><%= t('.view_all_cohorts') %></span>
+            <% end %>
+          </div>
           <div class="mt-4">
             <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
@@ -39,10 +47,6 @@
                   <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
                 <% end %>
               <% end %>
-                <%= link_to organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-                  <span class="inline-block font-medium"><%= t('.view_all_cohorts') %></span>
-                  <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
-                <% end %>
             </div>
           </div>
         </div>

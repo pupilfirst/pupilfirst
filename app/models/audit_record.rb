@@ -7,6 +7,7 @@ class AuditRecord < ApplicationRecord
   TYPE_DROPOUT_STUDENT = 'dropout_student'
   TYPE_MERGE_USER_ACCOUNTS = 'merge_user_accounts'
   TYPE_UPDATE_EMAIL = 'update_email'
+  TYPE_UPDATE_NAME = 'update_name'
 
   def self.valid_audit_types
     [
@@ -15,7 +16,8 @@ class AuditRecord < ApplicationRecord
       TYPE_REMOVE_SCHOOL_ADMIN,
       TYPE_DROPOUT_STUDENT,
       TYPE_MERGE_USER_ACCOUNTS,
-      TYPE_UPDATE_EMAIL
+      TYPE_UPDATE_EMAIL,
+      TYPE_UPDATE_NAME
     ].freeze
   end
 

@@ -660,6 +660,9 @@ ar:
       notification_notice_head: Could not undo submission
       undo_submission_title: Delete this submission
       window_confirm: Are you sure you want to delete this submission?
+      undoing: يتم التراجع...
+      undo_submission: تراجع عن الإرسال
+      undo: تراجع
     CoursesCurriculum__UrlForm:
       button_placeholder: Type full URL starting with https://...
       button_text: Attach link

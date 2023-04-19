@@ -660,6 +660,9 @@ en:
       notification_notice_head: Could not undo submission
       undo_submission_title: Delete this submission
       window_confirm: Are you sure you want to delete this submission?
+      undoing: Undoing...
+      undo_submission: Undo submission
+      undo: Undo
     CoursesCurriculum__UrlForm:
       button_placeholder: Type full URL starting with https://...
       button_text: Attach link

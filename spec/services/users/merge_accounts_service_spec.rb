@@ -121,7 +121,7 @@ describe Users::MergeAccountsService do
       audit_record = AuditRecord.first
       expect(audit_record.school_id).to eq(new_user.school_id)
       expect(audit_record.audit_type).to eq(
-        AuditRecord::TYPE_MERGE_USER_ACCOUNTS
+        AuditRecord.audit_types[:merge_user_accounts]
       )
       expect(audit_record.metadata.to_h).to eq(
         { 'user_id' => new_user.id, 'old_account_email' => old_user_email }

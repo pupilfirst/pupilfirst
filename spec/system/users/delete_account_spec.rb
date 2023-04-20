@@ -90,7 +90,7 @@ feature 'User Delete Account' do
 
       # Check audit records
       audit_record = AuditRecord.last
-      expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DELETE_ACCOUNT)
+      expect(audit_record.audit_type).to eq(AuditRecord.audit_types[:delete_account])
       expect(audit_record.school_id).to eq(user.school_id)
       expect(audit_record.metadata['email']).to eq(user.email)
     end

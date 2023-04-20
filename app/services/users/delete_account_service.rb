@@ -65,7 +65,7 @@ module Users
 
     def create_audit_record
       AuditRecord.create!(
-        audit_type: AuditRecord::TYPE_DELETE_ACCOUNT,
+        audit_type: :delete_account,
         school_id: @user.school_id,
         metadata: {
           email: @user.email,

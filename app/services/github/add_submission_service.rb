@@ -117,7 +117,8 @@ module Github
       file = submission_data_service.files.first
 
       begin
-        file_content = URI.open(file['url']) { |f| f.read }
+        uri = URI.parse(file['url'])
+        file_content = Net::HTTP.get(uri)
       rescue StandardError
         raise 'Unable to read file or source file missing'
       else
@@ -145,7 +146,7 @@ module Github
       begin
         github_client.contents(repo_name, path: '.github/workflows/ci.js.yml')
       rescue StandardError
-        puts 'Error'
+        Rails.logger.error 'Error while fetching the ci.js.yml file'
       end
     end
 

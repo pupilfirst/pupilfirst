@@ -7,4 +7,8 @@ module ApplicationHelper
     max = paged_scope.current_page * paged_scope.limit_value
     max > paged_scope.total_count ? paged_scope.total_count : max
   end
+
+  def breadcrumbs(*crumbs)
+    content_for :breadcrumbs, render(partial: "shared/breadcrumbs", locals: { crumbs: crumbs })
+  end
 end

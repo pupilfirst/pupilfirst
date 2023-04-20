@@ -1470,6 +1470,7 @@ hi:
       revoked_status_label: निरस्त किया गया
       select_certificate_input_label: जारी करने के लिए प्रमाणपत्र चुनें
     StudentBulkImport__Root:
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: संबद्धता 250 वर्णों से कम होनी चाहिए
         invalid_email: ईमेल मान्य होना चाहिए और खाली नहीं हो सकता
@@ -1482,7 +1483,7 @@ hi:
         exceeded_entries: CSV फ़ाइल में 1000 से अधिक प्रविष्टियाँ हैं।
         invalid: कृपया 5 एमबी से कम आकार वाली एक मान्य सीएसवी फ़ाइल चुनें
         invalid_data: CSV फ़ाइल में कुछ सेल में अमान्य डेटा है। कृपया नीचे सूचीबद्ध त्रुटियों को ठीक करें और पुनः प्रयास करें।
-        invalid_template: चुनी गई CSV फ़ाइल में मान्य टेम्प्लेट नहीं है
+        invalid_template: The selected CSV file does not have a valid template; please check the sample file for the required format.
       csv_file_input:
         help: इस फ़ाइल का उपयोग छात्रों को थोक में आयात करने के लिए किया जाएगा। आवश्यक प्रारूप के लिए नमूना फ़ाइल की जाँच करें।
         help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'

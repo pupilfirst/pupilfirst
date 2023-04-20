@@ -86,7 +86,7 @@ feature 'User Update Email', js: true do
 
     # Check audit records
     audit_record = AuditRecord.last
-    expect(audit_record.audit_type).to eq(AuditRecord::TYPE_UPDATE_EMAIL)
+    expect(audit_record.audit_type).to eq(AuditRecord.audit_types[:update_email])
     expect(audit_record.school_id).to eq(user_1.school_id)
     expect(audit_record.metadata['user_id']).to eq(user_1.id)
     expect(audit_record.metadata['email']).to eq(new_email)

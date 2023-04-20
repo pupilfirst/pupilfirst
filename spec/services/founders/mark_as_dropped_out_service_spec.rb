@@ -18,7 +18,7 @@ describe Founders::MarkAsDroppedOutService do
 
       # Check audit records
       audit_record = AuditRecord.last
-      expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DROPOUT_STUDENT)
+      expect(audit_record.audit_type).to eq(AuditRecord.audit_types[:dropout_student])
       expect(audit_record.school_id).to eq(user.school.id)
       expect(audit_record.metadata['user_id']).to eq(user.id)
       expect(audit_record.metadata['email']).to eq(student.email)

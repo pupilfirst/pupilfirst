@@ -37,7 +37,7 @@ class DeleteSchoolAdminMutator < ApplicationQuery
 
   def create_audit_record(school_admin)
     AuditRecord.create!(
-      audit_type: AuditRecord::TYPE_REMOVE_SCHOOL_ADMIN,
+      audit_type: :remove_school_admin,
       school_id: current_school.id,
       metadata: {
         user_id: current_user.id,

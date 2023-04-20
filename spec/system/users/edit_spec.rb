@@ -66,7 +66,7 @@ feature 'User Edit', js: true do
     it "creates an audit record" do
       audit_record = AuditRecord.last
       metadata = audit_record.metadata
-      expect(audit_record.audit_type).to eq(AuditRecord::TYPE_UPDATE_NAME)
+      expect(audit_record.audit_type).to eq(AuditRecord.audit_types[:update_name])
       expect(audit_record.school_id).to eq(user.school_id)
       expect(metadata['user_id']).to eq(user.id)
       expect(metadata['old_name']).to eq(old_name)

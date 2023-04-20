@@ -127,7 +127,7 @@ describe Users::DeleteAccountService do
 
         # Check audit record is created
         audit_record = AuditRecord.last
-        expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DELETE_ACCOUNT)
+        expect(audit_record.audit_type).to eq(AuditRecord.audit_types[:delete_account])
         expect(audit_record.metadata['email']).to eq(user.email)
         expect(
           audit_record.metadata['account_deletion_notification_sent_at']

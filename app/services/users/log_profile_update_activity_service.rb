@@ -14,8 +14,7 @@ module Users
           user_id: @user.id,
           current_user_id: @current_user.id,
           old_name: @user.name,
-          new_name: @new_name,
-          email: @user.email
+          new_name: @new_name
         }
       )
     end

@@ -71,27 +71,6 @@ class User < ApplicationRecord
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
 
   before_save :capitalize_name_fragments
-  before_save :record_name_change, if: :will_save_change_to_name?
-
-  def record_name_change
-    if id
-      old_name = User.find(id).name
-      return if old_name == name.strip # return if name hasn't changed
-    else
-      return # user is new
-    end
-
-    # Create Audit Record, if name is changed
-    AuditRecord.create!(
-      school_id: school.id,
-      audit_type: AuditRecord::TYPE_UPDATE_NAME,
-      metadata: {
-        user_id: id,
-        old_name: old_name,
-        new_name: name
-      }
-    )
-  end
 
   def capitalize_name_fragments
     return unless name_changed?

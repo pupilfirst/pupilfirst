@@ -8,7 +8,7 @@ class AuditRecord < ApplicationRecord
     dropout_student: 'dropout_student',
     merge_user_accounts: 'merge_user_accounts',
     update_email: 'update_email',
-    update_name: 'update_name'
+    update_name: 'update_name',
   }
 
   validates :audit_type, presence: true, inclusion: { in: audit_types.values }

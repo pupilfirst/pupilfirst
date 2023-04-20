@@ -1,7 +1,7 @@
 <div>
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto pt-6 px-6">
-      <div class="mt-4 flex">
+      <div class="mt-4 flex overflow-x-auto">
         <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
       </div>
       <p class="mt-5 text-gray-600 text-sm"><%= t('.course_label') %></p>
@@ -17,7 +17,7 @@
             <%= t('organisations.courses.active_cohorts.count', count: @cohorts.active.length)%>
           </span>
         <% end %>
-        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
+        <p class="flex flex-nowrap items-center p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
           <span>
             <%= t('.label') %>
           </span>
@@ -30,7 +30,7 @@
   </section>
   <section class="bg-white">
     <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
-      <div class="border border-red-500 bg-gray-50 rounded-lg p-5">
+      <div class="border border-gray-200 bg-gray-50 rounded-lg p-5">
       <% if @ended_cohorts.present? %>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
           <% @ended_cohorts.each do |cohort| %>

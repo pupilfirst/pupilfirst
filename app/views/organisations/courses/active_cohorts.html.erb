@@ -1,6 +1,6 @@
 <div>
   <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6">
+    <div class="max-w-5xl mx-auto pt-6 px-6">
       <div class="mt-4 flex">
         <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
       </div>
@@ -9,18 +9,27 @@
         <%= @course.name %>
       </h1>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold">
-          <%= t('.label') %> <%= t('.count', count: @cohorts.active.length)%>
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
+          <span>
+            <%= t('.label') %>
+          </span>
+          <span class="bg-primary-500 rounded-lg px-1.5 py-0.5 text-white">
+            <%= t('.count', count: @cohorts.active.length)%>
+          </span>
         </p>
-        <%= link_to  inactive_cohorts_organisation_course_path(@organisation, @course), class: "p-2 hover:text-primary-500 hover:bg-primary-100" do%>
-          <%= t('organisations.courses.inactive_cohorts.label') %>
-          <span><%= t('organisations.courses.inactive_cohorts.count', count: @cohorts.ended.length)%></span>
+        <%= link_to  inactive_cohorts_organisation_course_path(@organisation, @course), class: "p-2 hover:text-primary-500 hover:bg-primary-100 space-x-1.5" do%>
+          <span>
+            <%= t('organisations.courses.inactive_cohorts.label') %>
+          </span>
+          <span class="bg-gray-300 rounded-lg px-1.5 py-0.5 text-gray-900">
+            <%= t('organisations.courses.inactive_cohorts.count', count: @cohorts.ended.length)%>
+          </span>
         <% end %>
       </div>
     </div>
   </section>
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto pl-6 pr-6 pb-6">
+    <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
       <div class="border border-green-500 bg-gray-50 rounded-lg p-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
           <% @active_cohorts.each do |cohort| %>

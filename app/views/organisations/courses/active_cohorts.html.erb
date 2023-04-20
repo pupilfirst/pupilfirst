@@ -2,7 +2,7 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto pt-6 px-6">
       <div class="mt-4 overflow-x-auto">
-        <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
+        <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [['My Org', '/organisations'], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
       </div>
       <p class="mt-5 text-gray-600 text-sm"><%= t('organisations.courses.course_label') %></p>
       <h1 class="text-xl md:text-3xl font-bold">
@@ -11,46 +11,24 @@
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
           <span>
-            <%= t('.label') %>
+            <%= t('organisations.courses.active_cohorts_label') %>
           </span>
           <span class="bg-primary-500 rounded-lg px-1.5 py-0.5 text-white">
-            <%= t('.count', count: @cohorts.active.length)%>
+            <%= t('organisations.courses.active_cohorts_count', count: @cohorts.active.length) %>
           </span>
         </p>
-        <%= link_to  inactive_cohorts_organisation_course_path(@organisation, @course), class: "p-2 hover:text-primary-500 hover:bg-primary-100 space-x-1.5" do%>
+        <%= link_to inactive_cohorts_organisation_course_path(@organisation, @course), class: 'p-2 hover:text-primary-500 hover:bg-primary-100 space-x-1.5' do %>
           <span>
-            <%= t('organisations.courses.inactive_cohorts.label') %>
+            <%= t('organisations.courses.inactive_cohorts_label') %>
           </span>
           <span class="bg-gray-300 rounded-lg px-1.5 py-0.5 text-gray-900">
-            <%= t('organisations.courses.inactive_cohorts.count', count: @cohorts.ended.length)%>
+            <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length) %>
           </span>
         <% end %>
       </div>
     </div>
   </section>
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
-      <div class="border border-gray-200 bg-gray-50 rounded-lg p-5">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-          <% @active_cohorts.each do |cohort| %>
-            <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-              <span class="inline-block font-medium"><%= cohort.name %></span>
-              <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
-            <% end %>
-          <% end %>
-        </div>
-        <% if @active_cohorts.empty? %>
-          <div class="text-center text-sm italic mt-4"><%= t('.empty') %></div>
-        <% end %>
-      </div>
-      <div class="mt-6 flex items-center justify-center">
-        <%= paginate @active_cohorts, param_name: :active_cohort_page%>
-      </div>
-      <% if @active_cohorts.total_pages > 1 %>
-        <div class="text-center text-sm italic mt-4">
-          <%= t('.pagination_notice', page_start: kaminari_page_start(@active_cohorts), page_end: kaminari_page_end(@active_cohorts), count: @active_cohorts.total_count) %>
-        </div>
-      <% end %>
-    </div>
+    <%= render partial: 'cohorts', locals: { cohorts: @active_cohorts, organisation: @organisation, active: true } %>
   </section>
 </div>

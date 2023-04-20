@@ -2,19 +2,19 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto pt-6 px-6">
       <div class="mt-4 flex overflow-x-auto">
-        <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
+        <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [['My Org', '/organisations'], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
       </div>
       <p class="mt-5 text-gray-600 text-sm"><%= t('organisations.courses.course_label') %></p>
       <h1 class="text-xl md:text-3xl font-bold">
         <%= @course.name %>
       </h1>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <%= link_to  active_cohorts_organisation_course_path(@organisation, @course), class: "p-2 hover:text-primary-500 hover:bg-primary-100" do%>
+        <%= link_to active_cohorts_organisation_course_path(@organisation, @course), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' do %>
           <span>
             <%= t('organisations.courses.active_cohorts_label') %>
           </span>
           <span class="bg-gray-300 rounded-lg px-1.5 py-0.5 text-gray-900">
-            <%= t('organisations.courses.active_cohorts.count', count: @cohorts.active.length)%>
+            <%= t('organisations.courses.active_cohorts.count', count: @cohorts.active.length) %>
           </span>
         <% end %>
         <p class="flex flex-nowrap items-center p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
@@ -22,13 +22,13 @@
             <%= t('organisations.courses.inactive_cohorts_label') %>
           </span>
           <span class="bg-primary-500 rounded-lg px-1.5 py-0.5 text-white">
-            <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length)%>
+            <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length) %>
           </span>
         </p>
       </div>
     </div>
   </section>
   <section class="bg-white">
-      <%= render partial: 'cohorts', locals: { cohorts: @ended_cohorts, organisation: @organisation, empty_message: t('organisations.courses.active_cohorts.empty'), active: false } %>
+      <%= render partial: 'cohorts', locals: { cohorts: @ended_cohorts, organisation: @organisation, active: false } %>
   </section>
 </div>

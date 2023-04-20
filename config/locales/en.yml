@@ -2340,11 +2340,6 @@ en:
       inactive_cohorts_label: Inactive Cohorts
       inactive_cohorts_count: "%{count}"
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
-      active_cohorts:
-        count: "%{count}"
-        empty: No active cohorts for this course.
-        label: Active Cohorts
-        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} active cohorts.
     students:
       show:
         average_grades: Average Grades

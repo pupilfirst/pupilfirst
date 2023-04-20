@@ -2,7 +2,7 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-6">
       <div class="mt-4 flex">
-        <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)]] } %>
+        <%= render partial: 'breadcrumbs/breadcrumbs', locals: { crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], @course.name] } %>
       </div>
       <p class="mt-5 text-gray-600 text-sm"><%= t('.course_label') %></p>
       <h1 class="text-xl md:text-3xl font-bold">

@@ -1,10 +1,13 @@
-<ol class="breadcrumb">
+<ol class="list-none p-0 inline-flex space-x-2 text-gray-400">
   <% crumbs.each_with_index do |crumb, index| %>
-    <li class="<%= 'active' if index == crumbs.size - 1 %>">
+    <li class="<%= 'text-gray-900' if index == crumbs.size - 1 %>">
       <% if crumb.is_a?(Array) %>
-        <%= link_to crumb[0], crumb[1] %>
+        <%= link_to crumb[0].to_s, crumb[1], class: "hover:text-gray-600 transition-colors duration-200" %>
       <% else %>
-        <%= crumb %>
+        <%= crumb.to_s %>
+      <% end %>
+      <% if index != crumbs.size - 1 %>
+        <span>/</span>
       <% end %>
     </li>
   <% end %>

@@ -18,6 +18,9 @@
   "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-inline",
   "license": "MIT",
   "main": "components/MultiselectInline.re",
+  "targets": {
+    "main": false
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -26,7 +29,7 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-inline"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.5",
+    "parcel": "^2.8.3",
     "rescript": "9.1.4",
     "tailwindcss": "^3.3.1"
   },

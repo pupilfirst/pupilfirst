@@ -114,7 +114,7 @@ jobs:
       - name: Specs (On non-master branches)
         if: env.GIT_BRANCH != 'master'
         run: bundle exec rspec -fd
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: Logs

@@ -1,0 +1,27 @@
+<% cohort_status = active ? t('organisations.courses.active_cohorts_label') : t('organisations.courses.inactive_cohorts_label') %>
+<div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
+  <div class="border border-gray-200 bg-gray-50 rounded-lg p-5">
+    <% if cohorts.present? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+        <% cohorts.each do |cohort| %>
+          <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+            <span class="inline-block font-medium"><%= cohort.name %></span>
+            <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+          <% end %>
+        <% end %>
+      </div>
+  </div>
+    <div class="max-w-5xl mx-auto mt-6 flex items-center justify-center overflow-x-auto pb-3">
+      <%= paginate cohorts, param_name: :ended_cohort_page%>
+    </div>
+    <% if cohorts.total_pages > 1 %>
+      <div class="text-center text-sm italic mt-4">
+        <%= t('organisations.courses.pagination_notice', page_start: kaminari_page_start(cohorts), page_end: kaminari_page_end(cohorts), count: cohorts.total_count, cohort_status: cohort_status)  %>
+      </div>
+    <% end %>
+</div>
+  <% else %>
+    <% if cohorts.empty? %>
+      <div class="text-center text-sm italic mt-4"><%= t('organisations.courses.empty', cohort_status: cohort_status) %></div>
+    <% end %>
+  <% end %>

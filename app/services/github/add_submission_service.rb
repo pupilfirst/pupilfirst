@@ -11,7 +11,7 @@ module Github
       end
 
       repository = find_or_create_repository
-      branch = create_branch(repository)
+      branch = create_branch(repository, re_run)
       add_contents(branch, repository)
     end
 
@@ -41,9 +41,11 @@ module Github
       repository_name
     end
 
-    def create_branch(repo)
+    def create_branch(repo, re_run)
       # Create a branch with the name submission-<student_id>
       branch_name = "submission-#{@submission.id}"
+
+      branch_name = "#{branch_name}-#{Time.now.to_i}" if re_run
 
       # Create the respository name with the organization name
       repo_name = "#{github_configuration.organization_id}/#{repo}"

@@ -1,0 +1,11 @@
+<ol class="breadcrumb">
+  <% crumbs.each_with_index do |crumb, index| %>
+    <li class="<%= 'active' if index == crumbs.size - 1 %>">
+      <% if crumb.is_a?(Array) %>
+        <%= link_to crumb[0], crumb[1] %>
+      <% else %>
+        <%= crumb %>
+      <% end %>
+    </li>
+  <% end %>
+</ol>

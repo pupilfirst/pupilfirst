@@ -285,7 +285,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           ariaSelected={state.kind == FooterLink}
           ariaLabel={t("footer_link_title")}
           title={t("footer_link_title")}
-          className={kindClasses(state.kind == FooterLink) ++ " ltr:border-l rtl:border-r"}
+          className={kindClasses(state.kind == FooterLink) ++ " border-s"}
           onClick={handleKindChange(send, FooterLink)}>
           {"Footer Sitemap"->str}
         </button>
@@ -294,7 +294,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
           ariaSelected={state.kind == SocialLink}
           ariaLabel={t("social_links_title")}
           title={t("social_links_title")}
-          className={kindClasses(state.kind == SocialLink) ++ " ltr:border-l rtl:border-r"}
+          className={kindClasses(state.kind == SocialLink) ++ " border-s"}
           onClick={handleKindChange(send, SocialLink)}>
           {"Social"->str}
         </button>

@@ -19,12 +19,22 @@
   border-bottom-color: theme("colors.gray.400");
 }
 
+[dir="rtl"] .student-navbar__links-container:before {
+  right: auto;
+  left: 23px;
+}
+
 .student-navbar__links-container:after {
   top: -9px;
   right: 24px;
   border-right: 9px solid transparent;
   border-bottom: 9px solid theme("colors.gray.100");
   border-left: 9px solid transparent;
+}
+
+[dir="rtl"] .student-navbar__links-container:after {
+  right: auto;
+  left: 24px;
 }
 
 @screen md {

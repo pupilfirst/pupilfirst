@@ -425,13 +425,13 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             ariaLabel="submissions-overlay-close"
             onClick={_ =>
               closeOverlay(state, SubmissionDetails.courseId(submissionDetails), filter)}
-            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-e bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
             <div className="flex items-center justify-center bg-gray-100 rounded-full w-8 h-8">
               <Icon className="if i-times-regular text-lg lg:text-2xl" />
             </div>
             <span className="text-xs mt-0.5"> {str(t("close"))} </span>
           </button>
-          <div className="flex space-x-4">
+          <div className="flex">
             <CoursesStudents__PersonalCoaches
               tooltipPosition=#Bottom
               defaultAvatarSize="8"
@@ -446,11 +446,11 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               SubmissionDetails.courseId(submissionDetails),
               filter,
               submissionId,
-              "flex shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
+              "flex shrink-0 items-center md:hidden border-s text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
             )}
           </div>
         </div>
-        <div className="px-4 py-3">
+        <div className="px-4 py-3 flex flex-col justify-center">
           <div className="block text-sm md:pe-2">
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
@@ -462,17 +462,13 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
-          <div className="ltr:text-left rtl:text-right mt-1 text-xs text-gray-800">
+          <div className="mt-1 text-xs text-gray-800">
             {switch SubmissionDetails.teamName(submissionDetails) {
             | Some(teamName) =>
               <span>
-                <span>
-                {t("submitted_by_team")->str}
-                </span>
+                <span> {t("submitted_by_team")->str} </span>
                 <span className="font-semibold"> {teamName->str} </span>
-                <span>
-                {" - "->str}
-                </span>
+                <span> {" - "->str} </span>
               </span>
             | None => <span> {t("submitted_by")->str} </span>
             }}
@@ -495,7 +491,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           </div>
         </div>
       </div>
-      <div className="hidden md:flex shrink-0 space-x-6">
+      <div className="hidden md:flex shrink-0 gap-6">
         <CoursesStudents__PersonalCoaches
           tooltipPosition=#Bottom
           defaultAvatarSize="8"
@@ -510,7 +506,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           SubmissionDetails.courseId(submissionDetails),
           filter,
           submissionId,
-          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
+          "flex items-center border-s text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
         )}
       </div>
     </div>
@@ -719,7 +715,7 @@ let submissionReviewStatus = (status, overlaySubmission) => {
   | Grading => (t("status.reviewing"), Orange)
   | Ungraded => (t("status.pending_review"), Gray)
   }
-  <div ariaLabel="submission-status" className="hidden md:flex space-x-4 justify-end w-3/4">
+  <div ariaLabel="submission-status" className="hidden md:flex gap-4 justify-end w-3/4">
     <div className="flex items-center">
       {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
       | (Some(_date), Graded(_)) =>
@@ -763,7 +759,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
   }
   <div
     ariaLabel="submission-status"
-    className="flex flex-1 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
+    className="flex flex-1 flex-col items-center justify-center md:border-s mt-4 md:mt-0">
     <div
       className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:ps-6">
       {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
@@ -961,7 +957,7 @@ let feedbackGenerator = (
       <div className="mt-2 md:ms-8">
         <button
           disabled={isSubmissionReviewAllowed(submissionDetails)}
-          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-fullltr:text-left rtl:text-right font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
+          className="bg-primary-100 flex gap-3 items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
             {(
@@ -1246,8 +1242,7 @@ let make = (
         <div> {inactiveWarning(submissionDetails)} </div>
         {headerSection(state, state.nextSubmission, send, submissionDetails, filter, submissionId)}
         {ReactUtils.nullIf(
-          <div
-            className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
+          <div className="flex gap-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
             {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
               submission,
               index,
@@ -1269,9 +1264,9 @@ let make = (
       </div>,
       <DisablingCover
         key="submission-editor"
-        containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 md:overflow-y-auto"
+        containerClasses="flex flex-col md:flex-row flex-1 gap-6 md:gap-0 md:overflow-y-auto"
         disabled=state.saving>
-        <div className="md:w-1/2 w-full bg-white md:border-r relative md:overflow-y-auto">
+        <div className="md:w-1/2 w-full bg-white md:border-e relative md:overflow-y-auto">
           <div
             className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
             <div className="flex flex-1 items-center justify-between">
@@ -1301,7 +1296,7 @@ let make = (
             <div className="p-4 md:p-6 space-y-8">
               <div className="bg-gray-300 p-4 rounded-md">
                 <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-start space-x-3">
+                  <div className="flex items-start gap-3">
                     <div className="pt-1">
                       <Icon className={reportStatusIconClasses(report)} />
                     </div>

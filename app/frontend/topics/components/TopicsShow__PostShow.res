@@ -356,7 +356,7 @@ let make = (
               isFirstPost
                 ? <a
                     href={"#post-show-" ++ id}
-                    className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded me-3 ltr:text-left rtl:text-right focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
+                    className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded me-3  focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
                     <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
                     <div className="text-xs font-semibold ps-2 ">
                       {t("go_to_solution_button") |> str}

@@ -31,7 +31,7 @@ let navigateToPost = postId => {
 @react.component
 let make = (~post, ~users) => {
   let user = Post.user(users, post)
-  let tip = <div className="ltr:text-left rtl:text-right"> {t("jump_reply") |> str} </div>
+  let tip = <div className=""> {t("jump_reply") |> str} </div>
   <div
     className="topics-post-reply-show__replies flex flex-col border bg-gray-50 rounded-lg mb-2 p-2 md:p-4">
     <div className="flex justify-between">

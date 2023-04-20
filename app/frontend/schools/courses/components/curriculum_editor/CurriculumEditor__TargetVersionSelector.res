@@ -87,10 +87,12 @@ let make = (
                 : "border-transparent cursor-auto"
             )}>
             <span className="flex items-center py-2">
-              <span className="truncate ltr:text-left rtl:text-right"> {selectedVersion |> str} </span>
+              <span className="truncate ">
+                {selectedVersion |> str}
+              </span>
             </span>
             {versions |> Array.length > 1
-              ? <span className="ltr:text-right rtl:text-left ps-3 py-2 border-l border-gray-300">
+              ? <span className="ltr:text-right rtl:text-left ps-3 py-2 border-s border-gray-300">
                   <i className="fas fa-chevron-down text-sm" />
                 </span>
               : React.null}

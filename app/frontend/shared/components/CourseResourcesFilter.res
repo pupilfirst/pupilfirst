@@ -196,7 +196,7 @@ let selected = (sorter: sorter, params) => {
     Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
   <button
     title={"Order by" ++ " " ++ value}
-    className="p-3 w-full sm:w-36 flex items-center justify-center text-sm font-medium ltr:space-x-2 ltr:text-left rtl:text-right truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    className="p-3 w-full sm:w-36 flex items-center justify-center text-sm font-medium ltr:space-x-2  truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <Icon className="if i-sort-alpha-ascending-regular" />
     <span className="ms-2"> {value->str} </span>
   </button>
@@ -207,7 +207,7 @@ let contents = (sorter, params) => {
     <button
       key=sort
       title={"Order by" ++ " " ++ sort}
-      className="w-full cursor-pointer ltr:text-left rtl:text-right block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
+      className="w-full cursor-pointer  block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       onClick={_e => setParams(sorter.key, sort, params)}>
       {sort->str}
     </button>

@@ -9,7 +9,7 @@
 
 .course-review-editor__grade-bar
   > .course-review-editor__grade-pill:last-child {
-  @apply border-r rounded-e-lg;
+  @apply border-e rounded-e-lg;
 }
 
 .course-review-editor__status-pulse {

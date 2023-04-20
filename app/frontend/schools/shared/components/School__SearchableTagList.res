@@ -84,7 +84,7 @@ let make = (
               <button
                 ariaLabel={t("remove_tag") ++ " " ++ tag}
                 title={t("remove_tag") ++ " " ++ tag}
-                className="flex items-center px-3 py-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-50 focus:outline-none focus:text-red-500 focus:bg-red-50 border-l border-gray-300"
+                className="flex items-center px-3 py-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-50 focus:outline-none focus:text-red-500 focus:bg-red-50 border-s border-gray-300"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
               </button>

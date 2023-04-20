@@ -179,7 +179,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="md:hidden"> {courseSelector(courses, selectedPage)} </div>
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
-        <div className="flex h-full flex-col flex-1 border-r bg-white">
+        <div className="flex h-full flex-col flex-1 border-e bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
           </div>

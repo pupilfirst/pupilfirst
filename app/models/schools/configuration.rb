@@ -45,16 +45,18 @@ module Schools
     end
 
     class Github
-      attr_accessor :access_token, :organization_id
+      attr_accessor :access_token, :organization_id, :default_team_id
 
       def initialize(school)
         @github = school.configuration['github'].presence || {}
         @access_token = @github['access_token']
         @organization_id = @github['organization_id']
+        @default_team_id = @github['default_team_id']
       end
 
       def configured?
-        @access_token.present? && @organization_id.present?
+        @access_token.present? && @organization_id.present? &&
+          @default_team_id.present?
       end
     end
 

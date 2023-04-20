@@ -4,7 +4,7 @@ module Github
       @submission = submission
     end
 
-    def execute
+    def execute(re_run: false)
       unless github_configuration.configured? &&
                submission.target.action_config.present?
         return
@@ -28,7 +28,10 @@ module Github
         github_client.create_repository(
           repository_name,
           organization: organization,
-          private: 'true'
+          private: 'true',
+          team_id: team_id,
+          description:
+            "Submissions from #{@submission.founders.first.user.name}"
         )
 
         # Create the main branch for the repository and add the workflow starter file
@@ -140,6 +143,12 @@ module Github
     def submission_data_service
       @submission_data_service ||=
         TimelineEvents::CreateWebhookDataService.new(@submission)
+    end
+
+    def team_id
+      @team_id ||=
+        @submission.course.github_team_id.presence ||
+          github_configuration.default_team_id
     end
 
     def ci_file(repo_name)

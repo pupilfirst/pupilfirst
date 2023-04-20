@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_18_103221) do
+ActiveRecord::Schema.define(version: 2023_04_20_110933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(version: 2023_04_18_103221) do
     t.jsonb "highlights", default: []
     t.bigint "default_cohort_id"
     t.boolean "discord_account_required", default: false
+    t.integer "github_team_id"
     t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end

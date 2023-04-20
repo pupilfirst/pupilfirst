@@ -5,7 +5,10 @@ module Github
     end
 
     def execute
-      return unless github_configuration.configured?
+      unless github_configuration.configured? &&
+               submission.target.action_config.present?
+        return
+      end
 
       repository = find_or_create_repository
       branch = create_branch(repository)

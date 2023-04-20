@@ -9,7 +9,6 @@ class HomeController < ApplicationController
   def styleguide
     @skip_container = true
     @hide_layout_header = true
-    render layout: 'tailwind'
   end
 
   # GET /agreements/:agreement_type

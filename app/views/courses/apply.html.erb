@@ -1,7 +1,6 @@
 <% presenter = Courses::ApplyPresenter.new(self, @course, @show_checkbox_recaptcha) %>
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
-  <%= vite_javascript_tag 'tailwind', nonce: true %>
 <% end %>
 <div class="flex min-h-screen bg-gray-50 items-center justify-center">
   <div class="py-8 w-full">

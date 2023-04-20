@@ -22,18 +22,17 @@ module Schools
     def action
       @target = current_school.targets.find(params[:id])
       authorize(@target, policy_class: Schools::TargetPolicy)
-      render layout: 'tailwind'
     end
 
     # PATCH /school/targets/:id/update_action
     def update_action
-      @target = current_school.targets.find(params[:id])
-      authorize(@target, policy_class: Schools::TargetPolicy)
+      target = current_school.targets.find(params[:id])
+      authorize(target, policy_class: Schools::TargetPolicy)
 
-      @target.action_config = params[:target][:action_config]
-      @target.save!
+      target.action_config = params[:target][:action_config]
+      target.save!
 
-      redirect_to action_school_target_path(@target)
+      redirect_to details_school_course_target_path(target.course, target)
     end
   end
 end

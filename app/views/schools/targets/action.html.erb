@@ -1,9 +1,15 @@
-<div class="max-w-7xl mx-auto bg-primary-200 rounded">
-  <%= link_to "Back", details_school_course_target_path(@target.course, @target), class: "text-primary-500" %>
+<div class="max-w-7xl mx-auto bg-gray-50 mt-4 rounded p-4">
+  <%= link_to "Back", details_school_course_target_path(@target.course, @target), class: "mt-4 py-2 px-3 font-semibold rounded-lg text-sm bg-primary-100 text-primary-500 hhover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" %>
   <h1 class="text-2xl font-bold text-center">Edit Target Action</h1>
   <%= form_with model: @target, url: update_action_school_target_path(@target), method: :patch do |f| %>
-    <%= f.label :action_config %>
-    <%= f.text_area :action_config %>
-    <%= f.submit "Update Action" %>
+  <div>
+    <%= f.label :action_config, class: "tracking-wide text-sm font-semibold" %>
+    </div>
+    <div>
+    <%= f.text_area :action_config, rows: 20, class: 'mt-2 w-full outline-none font-mono align-top focus:ring-1 focus:ring-focusColor-500 p-3' %>
+    </div>
+    <div>
+    <%= f.submit "Update Action", class:"mt-4 py-2 px-3 font-semibold rounded-lg text-sm bg-primary-100 text-primary-500 hhover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" %>
+    </div>
   <% end %>
 </div>

@@ -27,8 +27,6 @@ class CoursesController < ApplicationController
     @show_checkbox_recaptcha = params[:visible_recaptcha].present?
 
     save_tag
-
-    render layout: 'tailwind'
   end
 
   # POST /courses/:id/apply

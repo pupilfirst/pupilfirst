@@ -1,5 +1,3 @@
-import "./tailwind";
-
 // Layout-specific JavaScript
 import "~/packs/StudentTopNavPack.bs.js";
 

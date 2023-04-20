@@ -1490,6 +1490,7 @@ ru:
       revoked_status_label: Аннулировано
       select_certificate_input_label: Выберите сертификат для выдачи
     StudentBulkImport__Root:
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: Аффилиация должна быть меньше 250 символов
         invalid_email: Электронная почта должна быть действительной и не может быть пустой
@@ -1502,7 +1503,7 @@ ru:
         exceeded_entries: Файл CSV содержит более 1000 записей.
         invalid: Пожалуйста, выберите действительный CSV-файл размером менее 5 МБ.
         invalid_data: Файл CSV содержит недопустимые данные в нескольких ячейках. Исправьте ошибки, перечисленные ниже, и повторите попытку.
-        invalid_template: Выбранный CSV-файл не имеет допустимого шаблона.
+        invalid_template: The selected CSV file does not have a valid template; please check the sample file for the required format.
       csv_file_input:
         help: Этот файл будет использоваться для массового импорта учащихся. Проверьте образец файла на наличие необходимого формата.
         help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'

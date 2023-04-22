@@ -22,7 +22,7 @@ let courseDropdown = (currentCourse, otherCourses) =>
     {switch otherCourses {
     | [] =>
       <div
-        className="flex max-w-xs md:max-w-xl mx-auto items-center relative justify-between font-semibold relative rounded w-full text-lg md:text-2xl leading-tight text-white">
+        className="flex max-w-xs md:max-w-xl mx-auto items-center relative justify-between font-semibold rounded w-full text-lg md:text-2xl leading-tight text-white">
         <span className="sm:truncate w-full ltr:text-left rtl:text-right">
           {CourseInfo.name(currentCourse)->str}
         </span>

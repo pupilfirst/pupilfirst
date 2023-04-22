@@ -480,7 +480,7 @@ let showCourses = (courses, state) => {
             className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
             <EmptyState
               title={t("add_new_course")}
-              description={"Let's create another course."}
+              description={t("create_description")}
               primaryAction={<button
                 className="btn btn-primary btn-lg"
                 onClick={_ => {

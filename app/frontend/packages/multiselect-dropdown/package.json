@@ -1,5 +1,8 @@
 {
   "name": "@pupilfirst/multiselect-dropdown",
+  "engines": {
+    "node": "18.x"
+  },
   "version": "2.0.0",
   "description": "Tailwind styled Reason React multiselect dropdown component",
   "keywords": [

@@ -74,7 +74,7 @@
           </div>
       </div>
         <div class="max-w-5xl mx-auto mt-6 flex items-center justify-center overflow-x-auto pb-3">
-          <%= paginate cohorts, param_name: active ? :active_cohort_page : :ended_cohort_page %>
+          <%= paginate cohorts, param_name: active ? :active_cohort_page : :inactive_cohort_page %>
         </div>
         <% if cohorts.total_pages > 1 %>
           <div class="text-center text-sm italic mt-4">

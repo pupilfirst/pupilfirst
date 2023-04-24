@@ -1,20 +1,19 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RACK_ENV'] = ENV['RAILS_ENV'] ||= 'test'
+ENV["RACK_ENV"] = ENV["RAILS_ENV"] ||= "test"
 
 # Enable coverage checking when requested.
-if ENV['COVERAGE'] == 'true'
-  require 'simplecov'
-  SimpleCov.start('rails')
+if ENV["COVERAGE"] == "true"
+  require "simplecov"
+  SimpleCov.start("rails")
 end
 
-require 'spec_helper'
-require File.expand_path('../config/environment', __dir__)
-require 'rspec/rails'
+require "spec_helper"
+require File.expand_path("../config/environment", __dir__)
+require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
-require 'webmock/rspec'
-require 'support/flipper'
-require 'support/missing_translations'
+require "webmock/rspec"
+require "support/missing_translations"
 
 # Disable all net connections except ones to localhost, and to locations the webdrivers gem downloads its binaries from.
 WebMock.disable_net_connect!(
@@ -22,18 +21,18 @@ WebMock.disable_net_connect!(
   allow: [
     %r{github.com/mozilla/geckodriver/releases},
     /github-production-release-asset/,
-    'chromedriver.storage.googleapis.com'
+    "chromedriver.storage.googleapis.com"
   ]
 )
 
 # Let's spec emails.
-require 'capybara/email/rspec'
+require "capybara/email/rspec"
 
 # Let's spec policies.
-require 'pundit/rspec'
+require "pundit/rspec"
 
 # Load all web-drivers.
-require 'webdrivers'
+require "webdrivers"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -48,7 +47,7 @@ require 'webdrivers'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -56,7 +55,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = ::Rails.root.join('spec/fixtures')
+  config.fixture_path = ::Rails.root.join("spec/fixtures")
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -80,7 +79,7 @@ RSpec.configure do |config|
 
   # Set type to :service for all service_spec-s.
   config.define_derived_metadata(
-    file_path: Regexp.new('/spec/services/')
+    file_path: Regexp.new("/spec/services/")
   ) { |metadata| metadata[:type] = :service }
 
   # Include email helpers in service and job specs.
@@ -97,7 +96,7 @@ RSpec.configure do |config|
   config.filter_run_excluding broken: true
 
   # Remember failures. Run only failed tests with the --only-failures flag.
-  config.example_status_persistence_file_path = 'examples.txt'
+  config.example_status_persistence_file_path = "examples.txt"
 
   config.before(:each, js: true) do
     Capybara.page.driver.browser.manage.window.maximize
@@ -108,10 +107,7 @@ RSpec.configure do |config|
   end
 
   # Faker clear store for unique generator after run
-  config.before(:each) do
-    Faker::UniqueGenerator.clear
-    TestFlippers.call
-  end
+  config.before(:each) { Faker::UniqueGenerator.clear }
 
   include AnObjectLikeMatcher
 end
@@ -122,9 +118,9 @@ end
 
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-  options.add_argument('--window-size=1920,1080')
-  options.add_argument('use-fake-ui-for-media-stream')
-  options.add_argument('use-fake-device-for-media-stream')
+  options.add_argument("--window-size=1920,1080")
+  options.add_argument("use-fake-ui-for-media-stream")
+  options.add_argument("use-fake-device-for-media-stream")
   options.headless!
 
   Capybara::Selenium::Driver.new app, browser: :chrome, capabilities: [options]
@@ -132,11 +128,11 @@ end
 
 Capybara.register_driver :headless_chrome_codespaces do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-  options.add_argument('--window-size=1920,1080')
-  options.add_argument("--no-sandbox");
-  options.add_argument("--disable-dev-shm-usage");
-  options.add_argument('use-fake-ui-for-media-stream')
-  options.add_argument('use-fake-device-for-media-stream')
+  options.add_argument("--window-size=1920,1080")
+  options.add_argument("--no-sandbox")
+  options.add_argument("--disable-dev-shm-usage")
+  options.add_argument("use-fake-ui-for-media-stream")
+  options.add_argument("use-fake-device-for-media-stream")
   options.headless!
 
   Capybara::Selenium::Driver.new app, browser: :chrome, capabilities: [options]
@@ -154,14 +150,14 @@ Capybara.register_driver :headless_firefox do |app|
 end
 
 Capybara.javascript_driver =
-  if ENV['JAVASCRIPT_DRIVER'].present?
-    ENV['JAVASCRIPT_DRIVER'].to_sym
+  if ENV["JAVASCRIPT_DRIVER"].present?
+    ENV["JAVASCRIPT_DRIVER"].to_sym
   else
     :headless_chrome
   end
 
 # Use rspec-retry to retry pesky intermittent failures.
-require 'rspec/retry'
+require "rspec/retry"
 
 RSpec.configure do |config|
   # Show retry status in spec process.
@@ -172,7 +168,7 @@ RSpec.configure do |config|
 
   # Run retry only on JS-enabled tests.
   config.around :each, :js do |ex|
-    ex.run_with_retry retry: ENV['SPEC_RETRY_COUNT'].to_i
+    ex.run_with_retry retry: ENV["SPEC_RETRY_COUNT"].to_i
   end
 
   # callback to be run between retries
@@ -185,14 +181,14 @@ end
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).
 Capybara.default_max_wait_time =
-  if ENV['CAPYBARA_MAX_WAIT_TIME'].present?
-    ENV['CAPYBARA_MAX_WAIT_TIME'].to_i
+  if ENV["CAPYBARA_MAX_WAIT_TIME"].present?
+    ENV["CAPYBARA_MAX_WAIT_TIME"].to_i
   else
     5
   end
 
 # Save screenshots on failure (and more).
-require 'capybara-screenshot/rspec'
+require "capybara-screenshot/rspec"
 Capybara::Screenshot.prune_strategy = { keep: 20 }
 
 %i[chrome headless_chrome firefox headless_firefox].each do |driver_name|

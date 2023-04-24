@@ -38,15 +38,18 @@ const createSvg = (className) => {
     "class",
     className
       .replace("if", "if-svg-icon__baseline")
-      .concat(viewboxClass(icon[0]))
+      .concat(
+        viewboxClass(icon.size),
+        `${icon.rtlFlip ? " rtlFlip" : ""} if-h-16`
+      )
   );
   el.setAttribute("role", "img");
   el.setAttribute("xmlns", xmlns);
-  el.setAttribute("viewBox", "0 0 ".concat(icon[0]).concat(" 512"));
+  el.setAttribute("viewBox", "0 0 ".concat(icon.size).concat(" 512"));
 
   const path = document.createElementNS(xmlns, "path");
   path.setAttribute("fill", "currentColor");
-  path.setAttribute("d", icon[1]);
+  path.setAttribute("d", icon.path);
   el.appendChild(path);
   return el;
 };

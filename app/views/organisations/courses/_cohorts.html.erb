@@ -12,16 +12,22 @@
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
         <% if active %>
           <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
-            <span>
+            <span class="hidden sm:inline">
               <%= t('organisations.courses.active_cohorts_label') %>
+            </span>
+            <span class="inline sm:hidden">
+              <%= t('organisations.courses.active_cohorts_label').split.first %>
             </span>
             <span class="bg-primary-500 rounded-lg px-1.5 py-0.5 text-white">
               <%= t('organisations.courses.active_cohorts_count', count: @cohorts.active.length) %>
             </span>
           </p>
           <%= link_to inactive_cohorts_organisation_course_path(@organisation, @course), class: 'p-2 hover:text-primary-500 hover:bg-primary-100 space-x-1.5' do %>
-            <span>
+            <span class="hidden sm:inline">
               <%= t('organisations.courses.inactive_cohorts_label') %>
+            </span>
+            <span class="inline sm:hidden">
+              <%= t('organisations.courses.inactive_cohorts_label').split.first %>
             </span>
             <span class="bg-gray-300 rounded-lg px-1.5 py-0.5 text-gray-900">
               <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length) %>
@@ -29,16 +35,22 @@
           <% end %>
         <% else %>
           <%= link_to active_cohorts_organisation_course_path(@organisation, @course), class: 'p-2 hover:text-primary-500 hover:bg-primary-100 space-x-1.5' do %>
-            <span>
+            <span class="hidden sm:inline">
               <%= t('organisations.courses.active_cohorts_label') %>
+            </span>
+            <span class="inline sm:hidden">
+              <%= t('organisations.courses.active_cohorts_label').split.first %>
             </span>
             <span class="bg-gray-300 rounded-lg px-1.5 py-0.5 text-gray-900">
               <%= t('organisations.courses.active_cohorts_count', count: @cohorts.active.length) %>
             </span>
           <% end %>
           <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold space-x-1.5">
-            <span class="text-sm">
+            <span class="hidden sm:inline">
               <%= t('organisations.courses.inactive_cohorts_label') %>
+            </span>
+            <span class="inline sm:hidden">
+              <%= t('organisations.courses.inactive_cohorts_label').split.first %>
             </span>
             <span class="bg-primary-500 rounded-lg px-1.5 py-0.5 text-white">
               <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length) %>

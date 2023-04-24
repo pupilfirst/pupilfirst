@@ -136,10 +136,9 @@ let studentsList = (params, students) => {
       <div
         key={StudentInfo.id(student)}
         className="student-container h-full flex items-center bg-white mt-4">
-        <div
-          className="py-4 px-4 flex gap-4 flex-1 items-center justify-between rounded-md shadow">
+        <div className="py-4 px-4 flex gap-4 flex-1 items-center justify-between rounded-md shadow">
           <div className="flex">
-            <div className="text-sm flex gap-4 items-center ltr:space-x-4">
+            <div className="text-sm flex gap-4 items-center">
               {switch User.avatarUrl(StudentInfo.user(student)) {
               | Some(avatarUrl) =>
                 <img

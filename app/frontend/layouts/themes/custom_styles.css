@@ -89,13 +89,16 @@
   }
 
   /* Button */
+  button {
+    text-align: initial;
+  }
 
   button:focus {
     outline: none;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition;
+    @apply inline-flex text-center items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition;
   }
 
   .btn:disabled {

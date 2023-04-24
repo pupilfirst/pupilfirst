@@ -1,7 +1,6 @@
 %%raw(`import "./PfIcon__Example.css"`)
-
-@val @scope(("window", "navigator", "clipboard"))
-external writeText: string => unit = "writeText"
+@module external iconsSvg: string = "./assets/header-img.svg"
+@module external pupilfirstLogo: string = "./assets/pupilfirst.svg"
 
 let str = React.string
 
@@ -521,22 +520,79 @@ module Example = {
   @react.component
   let make = () => {
     let (searchString, setSearchString) = React.useState(() => "")
-    <div className="max-w-6xl mx-auto">
-      <div className="flex items-center justify-between p-4">
-        <h1 className="text-center text-2xl font-bold text-gray-700"> {"pf-icon" |> str} </h1>
-        <a
-          className="flex items-center cursor-pointer hover:text-gray-600"
-          href="https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon"
-          target="_blank">
-          <img
-            className="w-8 h-8"
-            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-          />
-          <span className="ps-2"> {"Docs"->str} </span>
-        </a>
+    <div className="bg-indigo-50/5">
+      <div className="bg-[#EBF0FE]">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="flex items-center justify-between py-6">
+            <img className="h-6" src={pupilfirstLogo} />
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500 font-semibold"> {"PF-ICONS"->str} </p>
+              <h1 className="text-4xl font-bold w-9/12">
+                {"Beautifully crafted handmade icons."->str}
+              </h1>
+              <div className="flex items-center gap-5 my-8">
+                <a
+                  className="flex items-center gap-2 hover:underline"
+                  href="https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M15 22V18C15.1391 16.7473 14.7799 15.4901 14 14.5C17 14.5 20 12.5 20 9C20.08 7.75 19.73 6.52 19 5.5C19.28 4.35 19.28 3.15 19 2C19 2 18 2 16 3.5C13.36 3 10.64 3 8.00001 3.5C6.00001 2 5.00001 2 5.00001 2C4.70001 3.15 4.70001 4.35 5.00001 5.5C4.27188 6.51588 3.91848 7.75279 4.00001 9C4.00001 12.5 7.00001 14.5 10 14.5C9.61001 14.99 9.32001 15.55 9.15001 16.15C8.98001 16.75 8.93001 17.38 9.00001 18V22"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9 18C4.49 20 4 16 2 16"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <p> {"GitHub"->str} </p>
+                </a>
+                <a
+                  className="flex items-center gap-1 hover:underline"
+                  href="https://www.figma.com/file/Ea0WlsJiKszwX9lbeePdTV/PF-Icons?node-id=0%3A1&t=Xq3fNpMfjMP9F9I9-1">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M12 2H8.5C7.57174 2 6.6815 2.36875 6.02513 3.02513C5.36875 3.6815 5 4.57174 5 5.5C5 6.42826 5.36875 7.3185 6.02513 7.97487C6.6815 8.63125 7.57174 9 8.5 9H12M12 2V9M12 2H15.5C15.9596 2 16.4148 2.09053 16.8394 2.26642C17.264 2.44231 17.6499 2.70012 17.9749 3.02513C18.2999 3.35013 18.5577 3.73597 18.7336 4.16061C18.9095 4.58525 19 5.04037 19 5.5C19 5.95963 18.9095 6.41475 18.7336 6.83939C18.5577 7.26403 18.2999 7.64987 17.9749 7.97487C17.6499 8.29988 17.264 8.55769 16.8394 8.73358C16.4148 8.90947 15.9596 9 15.5 9H12"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M8.5 16C7.57174 16 6.6815 16.3687 6.02513 17.0251C5.36875 17.6815 5 18.5717 5 19.5C5 20.4283 5.36875 21.3185 6.02513 21.9749C6.6815 22.6313 7.57174 23 8.5 23C9.42826 23 10.3185 22.6313 10.9749 21.9749C11.6313 21.3185 12 20.4283 12 19.5V16M8.5 16H12M8.5 16C7.57174 16 6.6815 15.6313 6.02513 14.9749C5.36875 14.3185 5 13.4283 5 12.5C5 11.5717 5.36875 10.6815 6.02513 10.0251C6.6815 9.36875 7.57174 9 8.5 9H12V16M12 12.5C12 12.0404 12.0905 11.5852 12.2664 11.1606C12.4423 10.736 12.7001 10.3501 13.0251 10.0251C13.3501 9.70012 13.736 9.44231 14.1606 9.26642C14.5852 9.09053 15.0404 9 15.5 9C15.9596 9 16.4148 9.09053 16.8394 9.26642C17.264 9.44231 17.6499 9.70012 17.9749 10.0251C18.2999 10.3501 18.5577 10.736 18.7336 11.1606C18.9095 11.5852 19 12.0404 19 12.5C19 12.9596 18.9095 13.4148 18.7336 13.8394C18.5577 14.264 18.2999 14.6499 17.9749 14.9749C17.6499 15.2999 17.264 15.5577 16.8394 15.7336C16.4148 15.9095 15.9596 16 15.5 16C15.0404 16 14.5852 15.9095 14.1606 15.7336C13.736 15.5577 13.3501 15.2999 13.0251 14.9749C12.7001 14.6499 12.4423 14.264 12.2664 13.8394C12.0905 13.4148 12 12.9596 12 12.5Z"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <p> {"Figma"->str} </p>
+                </a>
+              </div>
+            </div>
+            <div> <img className="h-64" src={iconsSvg} /> </div>
+          </div>
+        </div>
       </div>
-      <div className="relative">
-        <div className="px-4 py-6 bg-gray-100 rounded-md sticky top-0">
+      <div className=" bg-white sticky top-0">
+        <div className="px-4 py-4 rounded-md max-w-6xl mx-auto">
           <input
             autoComplete="off"
             value=searchString
@@ -546,37 +602,38 @@ module Example = {
             className=" w-full text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700"
           />
         </div>
-        <div className="grid md:grid-cols-3 gap-2 md:gap-4 flex-wrap p-4">
-          {switch search(searchString) {
-          | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
-          | resultIcons =>
-            resultIcons
-            |> Array.map(icon => {
-              let iconClasses = "if i-" ++ icon
-              <div key=icon className="flex items-center p-4 shadow bg-white rounded-md">
-                <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
-                <div className="ms-4 overflow-x-auto">
-                  <div className="flex gap-4 items-center justify-between">
-                    <p className="font-semibold text-base"> {icon |> str} </p>
-                    <button
-                      onClick={_ =>
-                        writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
-                      className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
-                      {"Copy"->str}
-                    </button>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <code
-                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-nowrap">
-                      {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />") |> str}
-                    </code>
-                  </div>
+      </div>
+      <div
+        className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 flex-wrap p-4">
+        {switch search(searchString) {
+        | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
+        | resultIcons =>
+          resultIcons
+          |> Array.map(icon => {
+            let iconClasses = "if i-" ++ icon
+            <div
+              key=icon
+              className="flex items-center p-4 border border-gray-200 border-dashed bg-white rounded-md">
+              <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
+              <div className="ms-4 overflow-x-auto flex-1">
+                <div className="flex gap-4 items-center justify-between">
+                  <p className="font-semibold text-base"> {icon |> str} </p>
+                </div>
+                <div className="grid grid-cols-3 gap-1 w-full">
+                  <CopyButton
+                    textToCopy={"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />")}
+                    label="Copy JSX"
+                  />
+                  <CopyButton
+                    textToCopy={"<i class=\"" ++ (iconClasses ++ " if-fw\" ></i>")}
+                    label="Copy HTML"
+                  />
                 </div>
               </div>
-            })
-            |> React.array
-          }}
-        </div>
+            </div>
+          })
+          |> React.array
+        }}
       </div>
     </div>
   }

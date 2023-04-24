@@ -235,7 +235,7 @@ module Editor = {
                 )}
               </div>
               <div className="text-xs text-gray-700">
-                {IssuedCertificate.serialNumber(ic)->str}
+                <a href={"/c/" ++ IssuedCertificate.serialNumber(ic)}>{IssuedCertificate.serialNumber(ic)->str}</a>
               </div>
               <div className="flex justify-between mt-2 items-end">
                 <div className="flex flex-col">

@@ -65,6 +65,11 @@ feature 'Organisation show' do
     scenario 'user can see overview of all student activity in their org' do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
+      # There should not be a link to the My Org page.
+      within("main[class='grow bg-white']") do
+        expect(page).not_to have_link('My Org', href: organisation_path(organisation_1))
+      end
+
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
 
@@ -95,40 +100,25 @@ feature 'Organisation show' do
       # ...but not to the inactive cohort.
       expect(page).not_to have_link(cohort_3.name)
 
-      # There should be a link to view all cohorts.
-      expect(page).to have_link("View All Cohorts", href: organisation_course_path(organisation_1, course_1))
+      # There should be a link to view all cohorts of course 1 .
+      expect(page).to have_link("View All Cohorts", href: active_cohorts_organisation_course_path(organisation_1, course_1))
     end
 
-    scenario 'check the working of back button from cohort page' do
+    scenario 'check for view all cohorts links' do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
-      click_link cohort_1.name
+      # There should be two view all cohorts links.
+      expect(all('a', text: "View All Cohorts").count).to eq(2)
 
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      # Click on the first link.
+      within(
+        first("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']")
+      ) do
+        click_link 'View All Cohorts', href: active_cohorts_organisation_course_path(organisation_1, course_1)
+      end
 
-      click_link 'Back'
-
-      expect(page).to have_current_path(organisation_path(organisation_1))
-
-      click_link cohort_1.name
-
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
-      expect(page).to have_text("#{cohort_1.name}")
-      expect(page).to have_link("Back")
-
-      expect(page).to have_link(
-        "Students",
-        href: students_organisation_cohort_path(organisation_1, cohort_1)
-      )
-
-      click_link "Students"
-      expect(page).to have_current_path(students_organisation_cohort_path(organisation_1, cohort_1))
-
-      click_link "Back"
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
-
-      click_link "Back"
-      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+      # The user should be taken to the active cohorts page.
+      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
     end
   end
 
@@ -139,11 +129,16 @@ feature 'Organisation show' do
         referrer: organisation_path(organisation_1)
       )
 
+      # There should be a link to the My Org page.
+      within("main[class='grow bg-white']") do
+        expect(page).to have_link('My Org', href: "/organisations")
+      end
+
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
 
-      # There should be a link to view all cohorts.
-      expect(page).to have_link("View All Cohorts", href: organisation_course_path(organisation_1, course_1))
+      # There should be a link to view all cohorts of course 1.
+      expect(page).to have_link("View All Cohorts", href: active_cohorts_organisation_course_path(organisation_1, course_1))
 
       # Both orgs should be accessible.
       sign_in_user(
@@ -154,40 +149,25 @@ feature 'Organisation show' do
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
 
-      # There should be a link to view all cohorts.
-      expect(page).to have_link("View All Cohorts", href: organisation_course_path(organisation_2, course_1))
+      # There should be a link to view all cohorts of course 1.
+      expect(page).to have_link("View All Cohorts", href: active_cohorts_organisation_course_path(organisation_2, course_1))
     end
 
-    scenario 'check the working of back button from cohort page' do
+    scenario 'check for view all cohorts links' do
       sign_in_user(school_admin_user, referrer: organisation_path(organisation_1))
 
-      click_link cohort_1.name
+      # There should be two view all cohorts links.
+      expect(all('a', text: "View All Cohorts").count).to eq(2)
 
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      # Click on the first link.
+      within(
+        first("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']")
+      ) do
+        click_link 'View All Cohorts', href: active_cohorts_organisation_course_path(organisation_1, course_1)
+      end
 
-      click_link 'Back'
-
-      expect(page).to have_current_path(organisation_path(organisation_1))
-
-      click_link cohort_1.name
-
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
-      expect(page).to have_text("#{cohort_1.name}")
-      expect(page).to have_link("Back")
-
-      expect(page).to have_link(
-        "Students",
-        href: students_organisation_cohort_path(organisation_1, cohort_1)
-      )
-
-      click_link "Students"
-      expect(page).to have_current_path(students_organisation_cohort_path(organisation_1, cohort_1))
-
-      click_link "Back"
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
-
-      click_link "Back"
-      expect(page).to have_current_path(organisation_course_path(organisation_1, course_1))
+      # The user should be taken to the active cohorts page.
+      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
     end
   end
 

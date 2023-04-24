@@ -20,7 +20,7 @@ module Organisations
     def find_organisation_and_course
       @organisation = policy_scope(Organisation).find(params[:organisation_id])
       @course = authorize current_school.courses.find(params[:id]), policy_class: Organisations::CoursePolicy
-      @cohorts = @organisation.cohorts.where(course_id: @course.id)
+      @cohorts = @organisation.cohorts.where(course_id: @course.id).distinct
     end
 
     def find_cohorts(status)

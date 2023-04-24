@@ -78,6 +78,7 @@ group :development do
   gem 'web-console', '~> 4.1' # Rails Console on the Browser.
   gem 'listen', '~> 3.7' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'graphiql-rails', '~> 1.8'
+  gem 'htmlbeautifier', '~> 1.4' # A normaliser/beautifier for HTML that also understands embedded Ruby.
 end
 
 group :test do

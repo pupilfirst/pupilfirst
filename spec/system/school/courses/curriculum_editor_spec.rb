@@ -1,9 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Curriculum Editor', js: true do
+feature "Curriculum Editor", js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
+  include FlipperHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -59,7 +60,7 @@ feature 'Curriculum Editor', js: true do
     Time.use_zone(school_admin.user.time_zone) { example.run }
   end
 
-  scenario 'admin creates a basic course framework by adding level, target group and targets' do
+  scenario "admin creates a basic course framework by adding level, target group and targets" do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course, level: 1)
 
@@ -79,13 +80,13 @@ feature 'Curriculum Editor', js: true do
     expect(page).not_to have_text(target_2.title)
 
     # he should be able to create a new level
-    click_button 'Create Level'
-    expect(page).to have_text('Level Name')
-    fill_in 'Level Name', with: new_level_name
-    fill_in 'Unlock level on', with: date.iso8601
-    click_button 'Create New Level'
+    click_button "Create Level"
+    expect(page).to have_text("Level Name")
+    fill_in "Level Name", with: new_level_name
+    fill_in "Unlock level on", with: date.iso8601
+    click_button "Create New Level"
 
-    expect(page).to have_text('Level created successfully')
+    expect(page).to have_text("Level created successfully")
     dismiss_notification
 
     level = course.reload.levels.last
@@ -95,23 +96,23 @@ feature 'Curriculum Editor', js: true do
     # he should be able to edit the level
     find('button[title="Edit selected level"').click
     expect(page).to have_text(new_level_name)
-    fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
-    click_button 'Update Level'
+    fill_in "Unlock level on", with: "", fill_options: { clear: :backspace }
+    click_button "Update Level"
 
-    expect(page).to have_text('Level updated successfully')
+    expect(page).to have_text("Level updated successfully")
     dismiss_notification
 
     expect(level.reload.unlock_at).to eq(nil)
 
     # he should be able to create a new target group
-    find('.target-group__create').click
-    expect(page).to have_text('TARGET GROUP DETAILS')
-    fill_in 'Title', with: new_target_group_name
-    replace_markdown(new_target_group_description, id: 'description')
-    click_button 'Yes'
-    click_button 'Create Target Group'
+    find(".target-group__create").click
+    expect(page).to have_text("TARGET GROUP DETAILS")
+    fill_in "Title", with: new_target_group_name
+    replace_markdown(new_target_group_description, id: "description")
+    click_button "Yes"
+    click_button "Create Target Group"
 
-    expect(page).to have_text('Target Group created successfully')
+    expect(page).to have_text("Target Group created successfully")
     dismiss_notification
 
     level.reload
@@ -122,16 +123,16 @@ feature 'Curriculum Editor', js: true do
 
     # he should be able to update a target group
     current_sort_index = target_group.sort_index
-    find('.target-group__header', text: target_group.name).click
+    find(".target-group__header", text: target_group.name).click
     expect(page).to have_text(target_group.name)
     expect(page).to have_text(target_group.description)
-    fill_in 'Description', with: '', fill_options: { clear: :backspace }
+    fill_in "Description", with: "", fill_options: { clear: :backspace }
 
-    within('.milestone') { click_button 'No' }
+    within(".milestone") { click_button "No" }
 
-    click_button 'Update Target Group'
+    click_button "Update Target Group"
 
-    expect(page).to have_text('Target Group updated successfully')
+    expect(page).to have_text("Target Group updated successfully")
     dismiss_notification
 
     target_group.reload
@@ -140,13 +141,13 @@ feature 'Curriculum Editor', js: true do
     expect(target_group.sort_index).to eq(current_sort_index)
 
     # he should be able to create another target group
-    find('.target-group__create').click
-    expect(page).to have_text('TARGET GROUP DETAILS')
-    fill_in 'Title', with: new_target_group_name_2
-    click_button 'Yes'
-    click_button 'Create Target Group'
+    find(".target-group__create").click
+    expect(page).to have_text("TARGET GROUP DETAILS")
+    fill_in "Title", with: new_target_group_name_2
+    click_button "Yes"
+    click_button "Create Target Group"
 
-    expect(page).to have_text('Target Group created successfully')
+    expect(page).to have_text("Target Group created successfully")
     dismiss_notification
 
     # Update sort index
@@ -163,9 +164,9 @@ feature 'Curriculum Editor', js: true do
     # user should be able to create a draft target from the curriculum index
     find("#create-target-input#{target_group.id}").click
     fill_in "create-target-input#{target_group.id}", with: new_target_1_title
-    click_button 'Create'
+    click_button "Create"
 
-    expect(page).to have_text('Target created successfully')
+    expect(page).to have_text("Target created successfully")
     dismiss_notification
 
     target = target_group.reload.targets.last
@@ -173,10 +174,10 @@ feature 'Curriculum Editor', js: true do
     expect(target.title).to eq(new_target_1_title)
     expect(page).to have_text(new_target_1_title)
 
-    within("a#target-show-#{target.id}") { expect(page).to have_text('Draft') }
+    within("a#target-show-#{target.id}") { expect(page).to have_text("Draft") }
   end
 
-  scenario 'course author can navigate only to assigned courses and modify content of those courses' do
+  scenario "course author can navigate only to assigned courses and modify content of those courses" do
     sign_in_user course_author.user,
                  referrer: curriculum_school_course_path(course)
 
@@ -187,18 +188,18 @@ feature 'Curriculum Editor', js: true do
       href: "/school/courses/#{course_2.id}/curriculum"
     )
     expect(page).to_not have_link(
-                          course_3.name,
-                          href: "/school/courses/#{course_3.id}/curriculum"
-                        )
+      course_3.name,
+      href: "/school/courses/#{course_3.id}/curriculum"
+    )
 
     click_link course_2.name
 
     expect(page).to have_button(course_2.name)
-    expect(page).to_not have_link(href: '/school/coaches')
-    expect(page).to_not have_link(href: '/school/customize')
-    expect(page).to_not have_link(href: '/school/courses')
-    expect(page).to_not have_link(href: '/school/communities')
-    expect(page).to have_link(href: '/dashboard')
+    expect(page).to_not have_link(href: "/school/coaches")
+    expect(page).to_not have_link(href: "/school/customize")
+    expect(page).to_not have_link(href: "/school/courses")
+    expect(page).to_not have_link(href: "/school/communities")
+    expect(page).to have_link(href: "/dashboard")
 
     [
       school_path,
@@ -215,9 +216,9 @@ feature 'Curriculum Editor', js: true do
     visit curriculum_school_course_path(course)
     find("#create-target-input#{target_group_2.id}").click
     fill_in "create-target-input#{target_group_2.id}", with: new_target_1_title
-    click_button 'Create'
+    click_button "Create"
 
-    expect(page).to have_text('Target created successfully')
+    expect(page).to have_text("Target created successfully")
 
     dismiss_notification
   end
@@ -227,14 +228,14 @@ feature 'Curriculum Editor', js: true do
                  referrer: curriculum_school_course_path(course)
 
     find('button[title="Edit selected level"').click
-    fill_in 'Unlock level on', with: date.iso8601
-    click_button 'Update Level'
+    fill_in "Unlock level on", with: date.iso8601
+    click_button "Update Level"
 
-    expect(page).to have_text('Level updated successfully')
+    expect(page).to have_text("Level updated successfully")
     expect(level_2.reload.unlock_at).to eq(Time.zone.now.beginning_of_day)
   end
 
-  context 'when there is a level zero and three other levels' do
+  context "when there is a level zero and three other levels" do
     let(:level_0) { create :level, :zero, course: course }
     let(:level_3) { create :level, :three, course: course }
     let!(:target_group_l0) { create :target_group, level: level_0 }
@@ -243,15 +244,15 @@ feature 'Curriculum Editor', js: true do
       create :founder, level: level_3, cohort: course.cohorts.first
     end
 
-    scenario 'author merges third level into the first' do
+    scenario "author merges third level into the first" do
       sign_in_user course_author.user,
                    referrer: curriculum_school_course_path(course)
 
       find('button[title="Edit selected level"').click
-      click_button 'Actions'
-      select "L1: #{level_1.name}", from: 'Delete & Merge Into'
+      click_button "Actions"
+      select "L1: #{level_1.name}", from: "Delete & Merge Into"
 
-      accept_confirm { click_button 'Merge and Delete' }
+      accept_confirm { click_button "Merge and Delete" }
 
       expect(page).to have_text(target_group_2.name)
       expect { level_3.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -259,30 +260,31 @@ feature 'Curriculum Editor', js: true do
       expect(student_l3.reload.level).to eq(level_1)
     end
 
-    scenario 'author is not allowed to merge third level into level zero' do
+    scenario "author is not allowed to merge third level into level zero" do
       sign_in_user course_author.user,
                    referrer: curriculum_school_course_path(course)
 
       find('button[title="Edit selected level"').click
-      click_button 'Actions'
+
+      click_button "Actions"
       expect(page).not_to have_text("L0: #{level_0.name}")
     end
   end
 
-  scenario 'admin moves a target group from one level to another' do
+  scenario "admin moves a target group from one level to another" do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course)
-    find('.target-group__header', text: target_group_2.name).click
+    find(".target-group__header", text: target_group_2.name).click
 
     expect(page).to have_text(
       "Level #{target_group_2.level.number}: #{target_group_2.level.name}"
     )
 
-    fill_in 'level_id', with: level_1.name
+    fill_in "level_id", with: level_1.name
     click_button "Pick Level 1: #{level_1.name}"
 
-    click_button 'Update Target Group'
-    expect(page).to have_text('Target Group updated successfully')
+    click_button "Update Target Group"
+    expect(page).to have_text("Target Group updated successfully")
     dismiss_notification
 
     expect(target_group_2.reload.level).to eq(level_1)
@@ -291,68 +293,85 @@ feature 'Curriculum Editor', js: true do
     expect(target_4.reload.prerequisite_targets).to eq([])
   end
 
-  scenario 'user who is not logged in gets redirected to sign in page' do
+  scenario "user who is not logged in gets redirected to sign in page" do
     visit curriculum_school_course_path(course)
 
-    expect(page).to have_text('Please sign in to continue.')
+    expect(page).to have_text("Please sign in to continue.")
   end
 
-  context 'copy level into course' do
-    let!(:target_1) do
-      create :target, :with_content, target_group: target_group_1
-    end
-    let!(:target_2) do
-      create :target,
-             :with_content,
-             target_group: target_group_1,
-             prerequisite_targets: [target_5]
-    end
-    let!(:target_3) do
-      create :target, :with_content, target_group: target_group_2
-    end
-    let!(:target_4) do
-      create :target,
-             :with_content,
-             target_group: target_group_2,
-             prerequisite_targets: [target_3]
-    end
+  scenario "The copy level function shouldn't be visible" do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
 
-    scenario 'admin copies level into the same course' do
-      sign_in_user school_admin.user,
-                   referrer: curriculum_school_course_path(course)
+    find('button[title="Edit selected level"').click
+    click_button "Actions"
 
-      find('button[title="Edit selected level"').click
-      click_button 'Actions'
+    expect(page).not_to have_text("Copy Level")
+  end
 
-      find("div[data-course-id=\"#{course.name}\"]").click
+  context "when the clone_level feature is enabled" do
+    around { |example| with_features(:clone_level) { example.run } }
 
-      accept_confirm { click_button 'Copy Level' }
+    context "copy level into course" do
+      let!(:target_1) do
+        create :target, :with_content, target_group: target_group_1
+      end
 
-      expect(page).to have_content(
-        'Level copy requested. It will apppear in target course soon!'
-      )
+      let!(:target_2) do
+        create :target,
+               :with_content,
+               target_group: target_group_1,
+               prerequisite_targets: [target_5]
+      end
 
-      visit curriculum_school_course_path(course)
-      expect(all('option').last.text).to eq("Level 3: #{level_2.name}")
-    end
+      let!(:target_3) do
+        create :target, :with_content, target_group: target_group_2
+      end
 
-    scenario 'admin copies level into another course' do
-      sign_in_user school_admin.user,
-                   referrer: curriculum_school_course_path(course)
+      let!(:target_4) do
+        create :target,
+               :with_content,
+               target_group: target_group_2,
+               prerequisite_targets: [target_3]
+      end
 
-      find('button[title="Edit selected level"').click
-      click_button 'Actions'
+      scenario "admin copies level into the same course" do
+        sign_in_user school_admin.user,
+                     referrer: curriculum_school_course_path(course)
 
-      find("div[data-course-id=\"#{course_2.name}\"]").click
+        find('button[title="Edit selected level"').click
+        click_button "Actions"
 
-      accept_confirm { click_button 'Copy Level' }
+        find("div[data-course-id=\"#{course.name}\"]").click
 
-      expect(page).to have_content(
-        'Level copy requested. It will apppear in target course soon!'
-      )
+        accept_confirm { click_button "Copy Level" }
 
-      visit curriculum_school_course_path(course_2)
-      expect(all('option').last.text).to eq("Level 1: #{level_2.name}")
+        expect(page).to have_content(
+          "Level copy requested. It will apppear in target course soon!"
+        )
+
+        visit curriculum_school_course_path(course)
+        expect(all("option").last.text).to eq("Level 3: #{level_2.name}")
+      end
+
+      scenario "admin copies level into another course" do
+        sign_in_user school_admin.user,
+                     referrer: curriculum_school_course_path(course)
+
+        find('button[title="Edit selected level"').click
+        click_button "Actions"
+
+        find("div[data-course-id=\"#{course_2.name}\"]").click
+
+        accept_confirm { click_button "Copy Level" }
+
+        expect(page).to have_content(
+          "Level copy requested. It will apppear in target course soon!"
+        )
+
+        visit curriculum_school_course_path(course_2)
+        expect(all("option").last.text).to eq("Level 1: #{level_2.name}")
+      end
     end
   end
 end

@@ -45,14 +45,6 @@ class CoursePolicy < ApplicationPolicy
     record.public_signup?
   end
 
-  def organisation_course_show?
-    if user.school_admin.present?
-      user.school.organisations
-    else
-      user.organisations
-    end
-  end
-
   alias process_application? apply?
   alias students? review?
   alias calendar? curriculum?

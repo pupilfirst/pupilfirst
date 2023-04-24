@@ -96,15 +96,6 @@ class CoursesController < ApplicationController
     render json: @presenter.month_data
   end
 
-  def organisation_course_show
-    @organisation = policy_scope(Organisation).find(params[:organisation_id])
-    @course = authorize(find_course)
-    @cohorts = @organisation.cohorts.where(course_id: @course.id).distinct
-    @ended_cohorts = @cohorts.ended.page(params[:ended_cohort_page]).per(10)
-    @active_cohorts = @cohorts.active.page(params[:active_cohort_page]).per(10)
-    render layout: 'student'
-  end
-
   private
 
   def course

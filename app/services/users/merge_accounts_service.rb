@@ -189,7 +189,7 @@ module Users
     def add_audit_record
       AuditRecord.create!(
         school_id: @old_user.school_id,
-        audit_type: :merge_user_accounts,
+        audit_type: AuditRecord.audit_types[:merge_user_accounts],
         metadata: {
           user_id: @new_user.id,
           old_account_email: @old_user.email

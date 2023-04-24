@@ -81,7 +81,7 @@ class UsersController < ApplicationController
 
       # Create audit record
       AuditRecord.create!(
-        audit_type: :update_email,
+        audit_type: AuditRecord.audit_types[:update_email],
         school_id: current_school.id,
         metadata: {
           user_id: current_user.id,

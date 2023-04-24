@@ -62,6 +62,16 @@ feature 'Organisation show' do
 
       expect(page).to have_text("Total Students\n2")
     end
+
+    scenario 'check the working of breadcrumb' do
+      sign_in_user(org_admin_user, referrer: organisation_cohort_path(organisation, cohort))
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation, cohort))
+
+      expect(page).to have_link("#{course.name}", href: active_cohorts_organisation_course_path(organisation, course))
+      click_link course.name
+      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation, course))
+    end
   end
 
   context 'when the user is a school admin' do
@@ -78,6 +88,16 @@ feature 'Organisation show' do
                      organisation_cohort_path(organisation, cohort_inactive)
 
       expect(page).to have_text("Total Students\n2")
+    end
+
+    scenario 'check the working of breadcrumb' do
+      sign_in_user(school_admin_user, referrer: organisation_cohort_path(organisation, cohort))
+
+      expect(page).to have_current_path(organisation_cohort_path(organisation, cohort))
+
+      expect(page).to have_link("#{course.name}", href: active_cohorts_organisation_course_path(organisation, course))
+      click_link course.name
+      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation, course))
     end
   end
 

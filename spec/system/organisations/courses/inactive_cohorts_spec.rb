@@ -135,9 +135,7 @@ feature "Organisation show" do
       expect(page).to have_content("0")
 
       # Checking inactive cohorts.
-      within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
-        expect(page).to have_text("No Inactive Cohorts for this course.")
-      end
+      expect(page).to have_text("No Inactive Cohorts for this course.")
     end
 
     scenario "check the working of breadcrumb" do
@@ -273,9 +271,7 @@ feature "Organisation show" do
       expect(page).to have_content("0")
 
       # Checking inactive cohorts.
-      within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
-        expect(page).to have_text("No Inactive Cohorts for this course.")
-      end
+      expect(page).to have_text("No Inactive Cohorts for this course.")
     end
 
     scenario "check the working of breadcrumb" do

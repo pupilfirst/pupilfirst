@@ -77,5 +77,13 @@ FactoryBot.define do
         target.target_group = create(:target_group, level: evaluator.level, milestone: evaluator.milestone)
       end
     end
+
+    trait :with_evaluation_criterion do
+      after(:create) do |target|
+        evaluation_criteria = create :evaluation_criterion, course: target.target_group.level.course
+        create :target_evaluation_criterion, target: target, evaluation_criterion: evaluation_criteria
+        target.reload
+      end
+    end
   end
 end

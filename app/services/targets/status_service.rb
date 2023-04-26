@@ -18,6 +18,13 @@ module Targets
       reason_to_lock.presence || status_from_event.presence || STATUS_PENDING
     end
 
+    def status_from_event
+      return if linked_event.blank?
+      return STATUS_PASSED if linked_event.passed_at?
+
+      linked_event.evaluated_at ? STATUS_FAILED : STATUS_SUBMITTED
+    end
+
     private
 
     def linked_event
@@ -33,13 +40,6 @@ module Targets
               submission.founder_ids.sort == @founder.team_student_ids
             end
           end
-    end
-
-    def status_from_event
-      return if linked_event.blank?
-      return STATUS_PASSED if linked_event.passed_at?
-
-      linked_event.evaluated_at ? STATUS_FAILED : STATUS_SUBMITTED
     end
 
     def reason_to_lock

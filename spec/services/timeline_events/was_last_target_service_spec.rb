@@ -31,7 +31,7 @@ describe TimelineEvents::WasLastTargetService do
     end
   end
 
-  context "when cohort is ended" do
+  context "when cohort has ended" do
     before do
       cohort.ends_at = 1.day.ago
       cohort.save!

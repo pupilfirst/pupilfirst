@@ -6,7 +6,7 @@ module Organisations
     def active_cohorts
       find_organisation_and_course
       @active_cohorts = find_cohorts(:active)
-      render "_cohorts",
+      render "cohorts",
              locals: {
                cohorts: @active_cohorts,
                organisation: @organisation,
@@ -17,7 +17,7 @@ module Organisations
     def inactive_cohorts
       find_organisation_and_course
       @ended_cohorts = find_cohorts(:inactive)
-      render "_cohorts",
+      render "cohorts",
              locals: {
                cohorts: @ended_cohorts,
                organisation: @organisation,

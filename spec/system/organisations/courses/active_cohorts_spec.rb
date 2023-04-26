@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Organisation show' do
+feature "Organisation show" do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
@@ -61,239 +61,321 @@ feature 'Organisation show' do
       .each { |f| f.user.update!(organisation: organisation_2) }
   end
 
-  context 'when the user is an organisation admin' do
-    scenario 'user can see all the active cohorts' do
-      sign_in_user(org_admin_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+  context "when the user is an organisation admin" do
+    scenario "user can see all the active cohorts" do
+      sign_in_user(
+        org_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link('My Org', href: '/organisations')
-      expect(page).to have_link("#{organisation_1.name}", href: "/organisations/#{organisation_1.id}")
+      expect(page).to have_link("My Org", href: "/organisations")
+      expect(page).to have_link(
+        "#{organisation_1.name}",
+        href: "/organisations/#{organisation_1.id}"
+      )
 
       expect(page).to have_text("#{course_1.name}")
 
-      expect(page).to have_content('Active Cohorts')
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Active')
-      expect(page).to have_content('2')
+      expect(page).to have_text("Active")
+      expect(page).to have_content("2")
 
-      expect(page).to have_content('Inactive Cohorts')
+      expect(page).to have_content("Inactive Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Inactive')
-      expect(page).to have_content('1')
+      expect(page).to have_text("Inactive")
+      expect(page).to have_content("1")
 
       # checking for a link to inactive cohorts page.
-      expect(page).to have_link('Inactive Cohorts', href: inactive_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_link(
+        "Inactive Cohorts",
+        href:
+          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
       # Checking active cohorts.
-      within(
-        "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']"
-      ) do
+      within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_1.name,
-          href: organisation_cohort_path(organisation_1, cohort_1),
+          href: organisation_cohort_path(organisation_1, cohort_1)
         )
 
         expect(page).to have_link(
           cohort_2.name,
-          href: organisation_cohort_path(organisation_1, cohort_2),
+          href: organisation_cohort_path(organisation_1, cohort_2)
         )
 
         expect(page).not_to have_link(
           cohort_3.name,
-          href: organisation_cohort_path(organisation_1, cohort_3),
+          href: organisation_cohort_path(organisation_1, cohort_3)
         )
 
         expect(page).not_to have_link(
           cohort_4.name,
-          href: organisation_cohort_path(organisation_2, cohort_4),
+          href: organisation_cohort_path(organisation_2, cohort_4)
         )
       end
 
       click_link cohort_1.name
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_current_path(
+        organisation_cohort_path(organisation_1, cohort_1)
+      )
 
       # Visit the course 2 page.
       visit active_cohorts_organisation_course_path(organisation_1, course_2)
 
-      expect(page).to have_link('My Org', href: '/organisations')
-      expect(page).to have_link("#{organisation_1.name}", href: "/organisations/#{organisation_1.id}")
+      expect(page).to have_link("My Org", href: "/organisations")
+      expect(page).to have_link(
+        "#{organisation_1.name}",
+        href: "/organisations/#{organisation_1.id}"
+      )
 
       expect(page).to have_text("#{course_2.name}")
 
-      expect(page).to have_content('Active Cohorts')
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Active')
-      expect(page).to have_content('1')
+      expect(page).to have_text("Active")
+      expect(page).to have_content("1")
 
-      expect(page).to have_content('Inactive Cohorts')
+      expect(page).to have_content("Inactive Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Inactive')
-      expect(page).to have_content('0')
+      expect(page).to have_text("Inactive")
+      expect(page).to have_content("0")
 
       # Checking active cohorts.
-      within(
-        "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']"
-      ) do
+      within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_4.name,
-          href: organisation_cohort_path(organisation_1, cohort_4),
+          href: organisation_cohort_path(organisation_1, cohort_4)
         )
       end
     end
 
-    scenario 'check the working of breadcrumb' do
-      sign_in_user(org_admin_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+    scenario "check the working of breadcrumb" do
+      sign_in_user(
+        org_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link("#{organisation_1.name}", href: "/organisations/#{organisation_1.id}")
+      expect(page).to have_link(
+        "#{organisation_1.name}",
+        href: "/organisations/#{organisation_1.id}"
+      )
       click_link organisation_1.name
       expect(page).to have_current_path(organisation_path(organisation_1))
 
       visit active_cohorts_organisation_course_path(organisation_1, course_1)
 
-      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link('My Org', href: '/organisations')
-      click_link 'My Org'
+      expect(page).to have_link("My Org", href: "/organisations")
+      click_link "My Org"
       expect(page).to have_current_path("/organisations/#{organisation_1.id}")
     end
 
-    scenario 'user can not see the active cohorts page of an org, where he is not an admin' do
-      sign_in_user(org_admin_user, referrer: active_cohorts_organisation_course_path(organisation_2, course_1))
+    scenario "user can not see the active cohorts page of an org, where he is not an admin" do
+      sign_in_user(
+        org_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_2, course_1)
+      )
 
       expect(page).to have_http_status(:not_found)
     end
 
-    scenario 'user can visit inactive cohorts page from active cohorts page' do
-      sign_in_user(org_admin_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+    scenario "user can visit inactive cohorts page from active cohorts page" do
+      sign_in_user(
+        org_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link('Inactive Cohorts', href: inactive_cohorts_organisation_course_path(organisation_1, course_1))
-      click_link 'Inactive Cohorts'
-      expect(page).to have_current_path(inactive_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_link(
+        "Inactive Cohorts",
+        href:
+          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+      )
+      click_link "Inactive Cohorts"
+      expect(page).to have_current_path(
+        inactive_cohorts_organisation_course_path(organisation_1, course_1)
+      )
     end
   end
 
-  context 'when the user is an school admin' do
-    scenario 'user can see all the active cohorts' do
-      sign_in_user(school_admin_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+  context "when the user is an school admin" do
+    scenario "user can see all the active cohorts" do
+      sign_in_user(
+        school_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link('My Org', href: '/organisations')
-      expect(page).to have_link("#{organisation_1.name}", href: "/organisations/#{organisation_1.id}")
+      expect(page).to have_link("My Org", href: "/organisations")
+      expect(page).to have_link(
+        "#{organisation_1.name}",
+        href: "/organisations/#{organisation_1.id}"
+      )
 
       expect(page).to have_text("#{course_1.name}")
 
       # This is visbile only on devices with screen width greater than 640px.
-      expect(page).to have_content('Active Cohorts')
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Active')
-      expect(page).to have_content('2')
+      expect(page).to have_text("Active")
+      expect(page).to have_content("2")
 
       # This is visbile only on devices with screen width greater than 640px.
-      expect(page).to have_content('Inactive Cohorts')
+      expect(page).to have_content("Inactive Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Inactive')
-      expect(page).to have_content('1')
+      expect(page).to have_text("Inactive")
+      expect(page).to have_content("1")
 
       # checking for a link to inactive cohorts page.
-      expect(page).to have_link('Inactive Cohorts', href: inactive_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_link(
+        "Inactive Cohorts",
+        href:
+          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
       # Checking active cohorts.
-      within(
-        "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']"
-      ) do
+      within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_1.name,
-          href: organisation_cohort_path(organisation_1, cohort_1),
+          href: organisation_cohort_path(organisation_1, cohort_1)
         )
 
         expect(page).to have_link(
           cohort_2.name,
-          href: organisation_cohort_path(organisation_1, cohort_2),
+          href: organisation_cohort_path(organisation_1, cohort_2)
         )
 
         expect(page).not_to have_link(
           cohort_3.name,
-          href: organisation_cohort_path(organisation_1, cohort_3),
+          href: organisation_cohort_path(organisation_1, cohort_3)
         )
 
         expect(page).not_to have_link(
           cohort_4.name,
-          href: organisation_cohort_path(organisation_2, cohort_4),
+          href: organisation_cohort_path(organisation_2, cohort_4)
         )
       end
 
       click_link cohort_1.name
-      expect(page).to have_current_path(organisation_cohort_path(organisation_1, cohort_1))
+      expect(page).to have_current_path(
+        organisation_cohort_path(organisation_1, cohort_1)
+      )
 
       # Visit the course 2 page.
       visit active_cohorts_organisation_course_path(organisation_1, course_2)
 
-      expect(page).to have_link('My Org', href: '/organisations')
-      expect(page).to have_link("#{organisation_1.name}", href: "/organisations/#{organisation_1.id}")
+      expect(page).to have_link("My Org", href: "/organisations")
+      expect(page).to have_link(
+        "#{organisation_1.name}",
+        href: "/organisations/#{organisation_1.id}"
+      )
 
       expect(page).to have_text("#{course_2.name}")
 
-      expect(page).to have_content('Active Cohorts')
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Active')
-      expect(page).to have_content('1')
+      expect(page).to have_text("Active")
+      expect(page).to have_content("1")
 
-      expect(page).to have_content('Inactive Cohorts')
+      expect(page).to have_content("Inactive Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text('Inactive')
-      expect(page).to have_content('0')
+      expect(page).to have_text("Inactive")
+      expect(page).to have_content("0")
 
       # Checking active cohorts.
-      within(
-        "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']"
-      ) do
+      within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_4.name,
-          href: organisation_cohort_path(organisation_1, cohort_4),
+          href: organisation_cohort_path(organisation_1, cohort_4)
         )
       end
     end
 
-    scenario 'check the working of breadcrumb' do
-      sign_in_user(school_admin_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+    scenario "check the working of breadcrumb" do
+      sign_in_user(
+        school_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link("#{organisation_1.name}", href: "/organisations/#{organisation_1.id}")
+      expect(page).to have_link(
+        "#{organisation_1.name}",
+        href: "/organisations/#{organisation_1.id}"
+      )
       click_link organisation_1.name
       expect(page).to have_current_path(organisation_path(organisation_1))
 
       visit active_cohorts_organisation_course_path(organisation_1, course_1)
 
-      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link('My Org', href: '/organisations')
-      click_link 'My Org'
-      expect(page).to have_current_path('/organisations')
+      expect(page).to have_link("My Org", href: "/organisations")
+      click_link "My Org"
+      expect(page).to have_current_path("/organisations")
     end
 
-    scenario 'user can see the active cohorts page of all the organisations' do
-      sign_in_user(school_admin_user, referrer: active_cohorts_organisation_course_path(organisation_2, course_1))
+    scenario "user can see the active cohorts page of all the organisations" do
+      sign_in_user(
+        school_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_2, course_1)
+      )
 
       expect(page).not_to have_http_status(:not_found)
     end
 
-    scenario 'user can visit inactive cohorts page from active cohorts page' do
-      sign_in_user(school_admin_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+    scenario "user can visit inactive cohorts page from active cohorts page" do
+      sign_in_user(
+        school_admin_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_current_path(active_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
-      expect(page).to have_link('Inactive Cohorts', href: inactive_cohorts_organisation_course_path(organisation_1, course_1))
-      click_link 'Inactive Cohorts'
-      expect(page).to have_current_path(inactive_cohorts_organisation_course_path(organisation_1, course_1))
+      expect(page).to have_link(
+        "Inactive Cohorts",
+        href:
+          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+      )
+      click_link "Inactive Cohorts"
+      expect(page).to have_current_path(
+        inactive_cohorts_organisation_course_path(organisation_1, course_1)
+      )
     end
   end
 
-  context 'when the user is a non-admin' do
-    scenario 'user can not see the inactive cohorts page' do
-      sign_in_user(regular_user, referrer: active_cohorts_organisation_course_path(organisation_1, course_1))
+  context "when the user is a non-admin" do
+    scenario "user can not see the inactive cohorts page" do
+      sign_in_user(
+        regular_user,
+        referrer:
+          active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
       expect(page).to have_http_status(:not_found)
     end

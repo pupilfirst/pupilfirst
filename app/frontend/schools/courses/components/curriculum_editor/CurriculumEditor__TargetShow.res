@@ -45,7 +45,7 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
     (linkSuffix ++
     (" " ++ t("of_target") ++ " " ++ (target |> Target.title)))}
     href=link
-    className="curriculum-editor__target-show-quick-link text-gray-400 ltr:border-l rtl:border-r border-transparent py-6 px-3 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+    className="curriculum-editor__target-show-quick-link text-gray-400 border-s border-transparent py-6 px-3 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
     <i className={"fas fa-fw " ++ iconClass} />
   </Link>
 }
@@ -59,7 +59,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
     className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
     {Js.Array.length(targets) > 1
       ? <div
-          className="target-group__target-reorder relative flex flex-col z-10 h-full ltr:border-r rtl:border-l border-transparent text-gray-600 justify-between items-center">
+          className="target-group__target-reorder relative flex flex-col z-10 h-full border-e border-transparent text-gray-600 justify-between items-center">
           <button
             title={t("move_up")}
             ariaLabel={t("move_up") ++ (target |> Target.title)}

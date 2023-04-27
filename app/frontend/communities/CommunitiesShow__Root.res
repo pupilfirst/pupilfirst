@@ -236,7 +236,7 @@ let topicsList = (topicCategories, topics) =>
                     <span className="hidden md:inline-block md:me-2">
                       {"on " ++ Topic.createdAt(topic)->DateFns.formatPreset(~year=true, ()) |> str}
                     </span>
-                    <span className="inline-block md:mt-0 md:px-2 md:border-l border-gray-300">
+                    <span className="inline-block md:mt-0 md:px-2 md:border-s border-gray-300">
                       {switch Topic.lastActivityAt(topic) {
                       | Some(date) =>
                         <span>
@@ -291,12 +291,9 @@ let topicsList = (topicCategories, topics) =>
                       )
                     let (color, _) = StringUtils.toColor(TopicCategory.name(topicCategory))
                     let style = ReactDOM.Style.make(~backgroundColor=color, ())
-                    <span
-                      className="flex items-center text-xs font-semibold py-1 me-2">
+                    <span className="flex items-center text-xs font-semibold py-1 me-2">
                       <div className="w-3 h-3 rounded" style />
-                      <span className="ms-1">
-                        {TopicCategory.name(topicCategory)->str}
-                      </span>
+                      <span className="ms-1"> {TopicCategory.name(topicCategory)->str} </span>
                     </span>
                   | None => React.null
                   }}
@@ -503,8 +500,7 @@ let categoryDropdownContents = (availableTopicCategories, filter) => {
       ariaLabel={"Select category " ++ categoryName}
       className="ps-3 pe-4 py-2 font-normal flex items-center"
       onClick={_ => updateParams({...filter, topicCategory: Some(topicCategory)})}>
-      <div className="w-3 h-3 rounded" style />
-      <span className="ms-1"> {categoryName->str} </span>
+      <div className="w-3 h-3 rounded" style /> <span className="ms-1"> {categoryName->str} </span>
     </div>
   }, selectableTopicCategories)
 }

@@ -145,7 +145,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                       <button
                         ariaLabel={"View " ++ CourseCoach.name(coach)}
                         onClick={_ => send(UpdateFormVisible(CoachInfoForm(coach)))}
-                        className="flex flex-1 py-4 px-4 items-center ltr:text-left rtl:text-right focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+                        className="flex flex-1 py-4 px-4 items-center  focus:outline-none focus:bg-gray-50 focus:text-primary-500">
                         <span className="me-4 shrink-0">
                           {switch coach |> CourseCoach.avatarUrl {
                           | Some(avatarUrl) =>

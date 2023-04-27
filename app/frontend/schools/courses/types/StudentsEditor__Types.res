@@ -8,5 +8,5 @@ module Page = StudentsEditor__Page
 module Filter = StudentsEditor__Filter
 module SelectedStudent = StudentsEditor__SelectedStudent
 module Certificate = StudentsEditor__Certificate
-module StudentCSVData = StudentsEditor__StudentCSVData
+module StudentCSVRow = StudentsEditor__StudentCSVRow
 module CSVDataError = StudentsEditor__CSVDataError

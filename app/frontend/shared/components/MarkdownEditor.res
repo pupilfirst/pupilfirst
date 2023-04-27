@@ -334,7 +334,7 @@ let controls = (disabled, value, state, send, onChange) => {
           ariaLabel={t("control_label_italic")}
           title={t("control_label_italic")}
           type_="button"
-          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-300"}
+          className={buttonClasses ++ "border-s border-gray-300"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
@@ -343,13 +343,13 @@ let controls = (disabled, value, state, send, onChange) => {
           ariaLabel={t("control_label_strikethrough")}
           title={t("control_label_strikethrough")}
           type_="button"
-          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-300"}
+          className={buttonClasses ++ "border-s border-gray-300"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
         <EmojiPicker
           onChange={handleEmojiChange}
-          className={buttonClasses ++ "ltr:border-l rtl:border-r border-gray-400 hidden md:block"}
+          className={buttonClasses ++ "border-s border-gray-400 hidden md:block"}
           title={t("emoji_picker")}
         />
       </div>
@@ -400,9 +400,9 @@ let modeClasses = mode =>
   }
 
 let editorContainerClasses = mode =>
-  "border-r border-gray-300 " ++
+  "border-e border-gray-300 " ++
   switch mode {
-  | Windowed(#Editor) => "border-l"
+  | Windowed(#Editor) => "border-s"
   | Windowed(#Preview) => "hidden"
   | Fullscreen(#Editor) => "w-full"
   | Fullscreen(#Preview) => "hidden"
@@ -422,7 +422,7 @@ let previewType = mode =>
 let previewContainerClasses = mode =>
   "border-gray-300 bg-gray-50 " ++
   switch mode |> previewType {
-  | #WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-3"
+  | #WindowedPreview => "markdown-editor__windowed-preview-container border-s border-b rounded-b px-2 md:px-3"
   | #FullscreenPreview => "w-screen mx-auto"
   | #FullscreenSplit => "w-1/2 relative"
   }

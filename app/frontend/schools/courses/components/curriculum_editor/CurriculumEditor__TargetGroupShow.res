@@ -187,7 +187,7 @@ let make = (
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
             placeholder={t("create_target")}
-            className="target-create__input ltr:text-left rtl:text-right bg-gray-50 pe-5 ps-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-medium leading-tight hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-gray-500"
+            className="target-create__input  bg-gray-50 pe-5 ps-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-medium leading-tight hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-gray-500"
           />
           {state.validTargetTitle
             ? <button

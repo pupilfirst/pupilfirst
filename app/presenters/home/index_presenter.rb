@@ -34,7 +34,7 @@ module Home
       classes =
         'relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10'
       if @school.about.present?
-        "#{classes} ltr:text-left rtl:text-right"
+        "#{classes} "
       else
         "#{classes} text-center"
       end

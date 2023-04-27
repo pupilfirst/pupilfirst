@@ -10,7 +10,7 @@ module Make = (Selectable: Selectable) => {
       <button
         key={string_of_int(index)}
         onClick={_ => onSelect(selectable)}
-        className="w-full ltr:text-left rtl:text-right cursor-pointer block p-3 bg-white hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50">
+        className="w-full  cursor-pointer block p-3 bg-white hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50">
         {Selectable.name(selectable)->React.string}
       </button>
     )

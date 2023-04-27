@@ -28,7 +28,7 @@ module Make = (Sortable: Sortable) => {
           ariaLabel={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
           title={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
           onClick={_ => onCriterionChange(criterion)}
-          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 ltr:text-left rtl:text-right focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
+          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
           <Icon className="if i-clock-regular text-sm if-fw text-gray-600" />
           <span className="ms-2"> {Sortable.criterion(criterion) |> str} </span>
         </button>

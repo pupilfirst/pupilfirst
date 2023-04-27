@@ -21,7 +21,7 @@
 }
 
 .leaderboard__students-count-container > :first-child {
-  @apply border-r border-gray-300;
+  @apply border-e border-gray-300;
 }
 
 .leaderboard__current-student-row {

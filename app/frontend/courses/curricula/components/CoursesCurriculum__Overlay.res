@@ -294,7 +294,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
           className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
-          <span className="font-semibold ltr:text-left rtl:text-right leading-snug">
+          <span className="font-semibold  leading-snug">
             {target |> Target.title |> str}
           </span>
           {renderTargetStatus(targetStatus)}

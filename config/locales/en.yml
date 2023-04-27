@@ -525,9 +525,12 @@ en:
       level_locked_notice: The level is currently locked!
       level1: Level 1
       milestone_targets: Milestone targets
-      nav_next_level: Next Level
-      nav_previous_level: Previous Level
-      go_to: "Go to "
+      nav_aria_previous_level: Go to the previous level
+      nav_long_previous_level: Previous Level
+      nav_short_previous_level: Previous
+      nav_aria_next_level: Go to the next level
+      nav_long_next_level: Next Level
+      nav_short_next_level: Next
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording

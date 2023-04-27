@@ -1,7 +1,6 @@
 exception UnsafeFindFailed(string)
 
-let ct = I18n.t(~scope="components.SchoolAdminNavbar__Root.course_nav")
-let tt = I18n.t(~scope="components.SchoolAdminNavbar__Root.navbar")
+let tr = I18n.t(~scope="components.SchoolRouter__Page")
 
 type courseId = string
 type id = string
@@ -101,28 +100,28 @@ let path = (~courseId=?, t) => {
 
 let name = t => {
   switch t {
-  | SchoolCoaches => tt("coaches")
+  | SchoolCoaches => tr("nav.main.coaches")
   | Settings(settingsPages) =>
     switch settingsPages {
-    | Customization => tt("customization")
-    | Admins => tt("admins")
+    | Customization => tr("nav.main.customization")
+    | Admins => tr("nav.main.admins")
     }
-  | Courses => tt("courses")
+  | Courses => tr("nav.main.courses")
   | SelectedCourse(coursePages) =>
     switch coursePages {
-    | Students => ct("students")
-    | CourseCoaches => ct("coaches")
-    | Curriculum => ct("curriculum")
-    | EvaluationCriteria => ct("evaluation_criteria")
-    | CourseExports => ct("exports")
-    | Authors => ct("authors")
-    | Certificates => ct("certificates")
-    | Applicants => ct("applicants")
-    | Teams => I18n.t("components.TeamsIndex__Root.teams")
-    | Cohorts => I18n.t("components.CohortsIndex__Root.cohorts")
-    | Calendars => ct("calendar")
+    | Students => tr("nav.course.students")
+    | CourseCoaches => tr("nav.course.coaches")
+    | Curriculum => tr("nav.course.curriculum")
+    | EvaluationCriteria => tr("nav.course.evaluation_criteria")
+    | CourseExports => tr("nav.course.exports")
+    | Authors => tr("nav.course.authors")
+    | Certificates => tr("nav.course.certificates")
+    | Applicants => tr("nav.course.applicants")
+    | Teams => tr("nav.course.teams")
+    | Cohorts => tr("nav.course.cohorts")
+    | Calendars => tr("nav.course.calendar")
     }
-  | Communities => tt("communities")
+  | Communities => tr("nav.main.communities")
   }
 }
 

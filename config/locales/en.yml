@@ -1276,28 +1276,6 @@ en:
       search_empty: No inactive student matches your search criteria.
       search_placeholder: Search by student or team name or student email...
       team: Team
-    SchoolAdminNavbar__Root:
-      course_nav:
-        applicants: Applicants
-        authors: Authors
-        calendar: Calendars
-        certificates: Certificates
-        coaches: Coaches
-        curriculum: Curriculum
-        evaluation_criteria: Evaluation Criteria
-        exports: Exports
-        students: Students
-      dashboard: Dashboard
-      navbar:
-        admins: Admins
-        coaches: Coaches
-        communities: Communities
-        courses: Courses
-        customization: Customization
-        overview: Overview
-        settings: Settings
-      notifications: Notifications
-      sign_out: Sign Out
     SchoolAdmin__EditorDrawer:
       close_editor: Close Editor
     SchoolAdmins__Editor:
@@ -1450,6 +1428,28 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Applicants
+          authors: Authors
+          calendar: Calendars
+          certificates: Certificates
+          coaches: Coaches
+          cohorts: Cohorts
+          curriculum: Curriculum
+          evaluation_criteria: Evaluation Criteria
+          exports: Exports
+          students: Students
+          teams: Teams
+        main:
+          admins: Admins
+          coaches: Coaches
+          communities: Communities
+          courses: Courses
+          customization: Customization
+          overview: Overview
+          settings: Settings
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag

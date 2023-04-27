@@ -104,7 +104,9 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
           ? "courses-calendar__date-grid-button--is-selected"
           : "hover:text-primary-500 hover:bg-primary-100 focus:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition"
       )}>
-      <time dateTime=dayAsString> {day->string_of_int->str} </time>
+      <div className="flex justify-center">
+        <time dateTime=dayAsString> {day->string_of_int->str} </time>
+      </div>
       {
         let dayStatus = parsedStatuses->Js.Dict.get(dayAsString)->Belt.Option.getWithDefault([])
 

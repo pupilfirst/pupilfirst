@@ -27,15 +27,15 @@
         <div class="border border-gray-200 bg-gray-50 rounded-lg p-5 my-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div class="mb-2">
-              <h3 class="text-lg font-semflex flex-colibold" ><%= course_with_cohorts[:course].name %></h3>
+              <h3 class="text-lg font-semibold" ><%= course_with_cohorts[:course].name %></h3>
               <p class="text-sm text-gray-600">
                 <%= t('.students_enrolled_prefix_html', count: course_with_cohorts[:total_students]) %>
                 <%= t('.students_enrolled_suffix_html', count: course_with_cohorts[:cohorts].count) %>
               </p>
             </div>
-            <%= link_to active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-primary-500 hover:text-primary-800 hover:underline" do %>
+            <%= link_to active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
               <span><%= t('.view_all_cohorts') %></span>
-              <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true" style="margin-right: 6px;"></i>
+              <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-1.5" aria-hidden="true" style="margin-right: 6px;"></i>
             <% end %>
           </div>
           <div class="mt-4">
@@ -44,7 +44,7 @@
               <% course_with_cohorts[:cohorts].each do |cohort| %>
                 <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
                   <span class="inline-block font-medium"><%= cohort.name %></span>
-                  <i class="fa fa-arrow-right rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+                  <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
                 <% end %>
               <% end %>
             </div>

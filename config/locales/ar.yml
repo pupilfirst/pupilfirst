@@ -28,9 +28,6 @@ ar:
     update:
       success: Calendar updated successfully!
   cohorts:
-    auto_generated_cohort:
-      description: Auto generated cohort for active students in %{course_name}
-      name: Purple (Auto-generated)
     shared:
       overview_link: Overview
       students_link: Students
@@ -2198,6 +2195,8 @@ ar:
     create_community:
       community_created_notification: Community created successfully
     create_course:
+      auto_generated_cohort_description: Auto generated cohort for active students in %{course_name}
+      auto_generated_cohort_name: Purple (Auto-generated)
       success_notification: Course created successfully!
     create_course_author:
       author_created_notification: Author Created

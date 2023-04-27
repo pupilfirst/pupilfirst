@@ -3,15 +3,15 @@ module Mutations
     include QueryAuthorizeSchoolAdmin
     include ValidateCourseEditable
 
-    description 'Create a new course.'
+    description "Create a new course."
 
     field :course, Types::CourseType, null: true
 
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.create_course.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.create_course.success_notification")
       )
 
       { course: create_course }
@@ -25,9 +25,12 @@ module Mutations
 
         default_cohort =
           Cohort.create!(
-            name: I18n.t('cohorts.auto_generated_cohort.name'),
+            name: I18n.t("mutations.create_course.auto_generated_cohort_name"),
             description:
-              I18n.t('cohorts.auto_generated_cohort.description', course_name: course.name),
+              I18n.t(
+                "mutations.create_course.auto_generated_cohort_description",
+                course_name: course.name
+              ),
             course_id: course.id
           )
 

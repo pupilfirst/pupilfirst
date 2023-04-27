@@ -2585,6 +2585,7 @@ en:
   shared:
     _no: "No"
     _yes: "Yes"
+    admin: Admin
     all: All
     and: and
     archived: Archived

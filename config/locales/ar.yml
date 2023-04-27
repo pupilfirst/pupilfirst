@@ -2585,6 +2585,7 @@ ar:
   shared:
     _no: لا
     _yes: نعم
+    admin: إدارة
     all: الكل
     and: و
     archived: مؤرشف

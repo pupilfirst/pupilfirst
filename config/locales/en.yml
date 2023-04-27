@@ -516,7 +516,6 @@ en:
       empty_level_content_notice: There's no published content on this level.
       issued_certificate_button: View Certificate
       issued_certificate_heading: Congratulations! You have been issued a certificate.
-      level1: Level 1
       level_locked: Level locked
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
@@ -2573,6 +2572,17 @@ en:
       submissions_reviewed: submissions reviewed
       title: Overview
   services:
+    courses:
+      demo_content_service:
+        criterion_one: Correctness of implementation
+        criterion_two: Quality of submission
+        grade_1: Bad
+        grade_2: Good
+        grade_3: Great
+        level_1: Level 1
+        target_group_description: Description of demo target group
+        target_group_name: Demo Target Group
+        target_name: Demo Target
     discord:
       community_message_service:
         post_topic_created: |-

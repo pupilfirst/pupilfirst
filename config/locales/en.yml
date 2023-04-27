@@ -2304,9 +2304,9 @@ en:
     update_cohort:
       success_notification: Cohort updated successfully.
     update_course:
-      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with id: %{value}"
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Course updated successfully!
-      unable_to_find_course: "Unable to find course with id: %{value}"
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated

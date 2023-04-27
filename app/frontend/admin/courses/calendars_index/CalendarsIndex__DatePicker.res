@@ -112,10 +112,10 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
 
         selectedDateAsString == dayAsString || dayStatus->ArrayUtils.isEmpty
           ? React.null
-          : <div className="flex justify-center mt-1 space-x-1">
+          : <div className="flex justify-center mt-1">
               {dayStatus
               ->Js.Array2.map(color => {
-                <span className={`h-1.5 w-1.5 bg-${color}-500 rounded-full`} />
+                <span className={`h-1.5 w-1.5 bg-${color}-500 rounded-full ms-0.5`} />
               })
               ->React.array}
             </div>

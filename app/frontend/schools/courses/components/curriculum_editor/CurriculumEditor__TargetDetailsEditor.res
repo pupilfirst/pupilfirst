@@ -619,7 +619,8 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
     <button
       onClick={updateMethodOfCompletion(methodOfCompletion |> methodOfCompletionSelection, send)}
       className={methodOfCompletionButtonClasses(selected)}>
-      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div> {buttonString |> str}
+      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div>
+      <div className="text-center"> {buttonString |> str} </div>
     </button>
   </div>
 }

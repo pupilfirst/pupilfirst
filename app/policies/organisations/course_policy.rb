@@ -4,6 +4,7 @@ module Organisations
       return true if user.school_admin.present?
 
       organisation_ids = user.organisations.pluck(:id)
+
       return false if organisation_ids.blank?
 
       record

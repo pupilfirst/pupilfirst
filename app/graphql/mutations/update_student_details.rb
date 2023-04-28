@@ -82,7 +82,7 @@ module Mutations
 
     def update_student_details
       if student&.name != @params[:name].strip
-        Users::LogProfileUpdateActivityService.new(current_user, @params[:name], student.user).execute
+        Users::LogUsernameUpdateService.new(current_user, @params[:name], student.user).execute
       end
       Founder.transaction do
         student.user.update!(

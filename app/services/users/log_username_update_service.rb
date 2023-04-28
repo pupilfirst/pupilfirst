@@ -1,7 +1,8 @@
 module Users
-  class LogProfileUpdateActivityService
+  class LogUsernameUpdateService
     def initialize(current_user, new_name, user = nil)
-      @user = user || current_user # user is nil when user == current_user
+      # when current_user updates their own name, user == current_user
+      @user = user || current_user
       @current_user = current_user
       @new_name = new_name
     end

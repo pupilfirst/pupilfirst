@@ -50,7 +50,7 @@ class UpdateUserMutator < ApplicationQuery
     user_name = current_user.name
 
     if current_user.name != name.strip
-      Users::LogProfileUpdateActivityService.new(current_user, name).execute
+      Users::LogUsernameUpdateService.new(current_user, name).execute
     end
 
     if new_password.blank?

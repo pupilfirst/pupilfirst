@@ -11,5 +11,5 @@ class AuditRecord < ApplicationRecord
     update_name: 'update_name'
   }
 
-  validates :audit_type, presence: true, inclusion: { in: audit_types.values }
+  validates :audit_type, presence: true
 end

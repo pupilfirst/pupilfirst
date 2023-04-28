@@ -1,16 +1,12 @@
 <ol class="list-none inline-flex space-x-1 text-gray-400 items-center pb-3">
-  <% crumbs.each_with_index do |crumb, index| %>
+  <% crumbs.each do |title, link| %>
     <li>
       <div class="flex items-center">
-        <% if crumb.is_a?(Array) %>
-          <%= link_to crumb[1],  class: "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm underline font-medium text-gray-600 hover:text-primary-500 transition-colors duration-200" do %>
-              <%= crumb[0].to_s %>
-          <% end %>
+        <%= link_to link.presence || '#',  class: "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm underline font-medium text-gray-600 hover:text-primary-500 transition-colors duration-200" do %>
+          <span><%= title %></span>
+        <% end %>
+        <% if link %>
           <span><i class="if i-chevron-right-regular ms-1"></i></span>
-        <% else %>
-          <p class= "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm font-medium text-gray-500">
-            <%= crumb.to_s %>
-          <p>
         <% end %>
       </div>
     </li>

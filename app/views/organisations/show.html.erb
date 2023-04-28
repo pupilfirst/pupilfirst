@@ -3,7 +3,7 @@
     <div class="max-w-5xl mx-auto p-6">
       <% if policy_scope(Organisation).count > 1 %>
         <div class="mt-4 overflow-x-auto">
-          <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], @organisation.name] %>
+          <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], [@organisation.name]] %>
         </div>
       <% end %>
       <p class="mt-5 text-gray-600 text-sm"><%= t('.organisation_label') %></p>

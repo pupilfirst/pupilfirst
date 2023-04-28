@@ -99,25 +99,29 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
     <button
       key=dayAsString
       onClick={_ => reloadPage(dayAsString)}
-      className={"courses-calendar__date-grid-button " ++ (
+      className={"courses-calendar__date-grid-button flex flex-col items-center justify-center pt-3 " ++ (
         selectedDateAsString == dayAsString
           ? "courses-calendar__date-grid-button--is-selected"
           : "hover:text-primary-500 hover:bg-primary-100 focus:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition"
       )}>
-      <time dateTime=dayAsString> {day->string_of_int->str} </time>
-      {
-        let dayStatus = parsedStatuses->Js.Dict.get(dayAsString)->Belt.Option.getWithDefault([])
+      <div className="flex justify-center">
+        <time dateTime=dayAsString> {day->string_of_int->str} </time>
+      </div>
+      <div className="h-3 flex items-center">
+        {
+          let dayStatus = parsedStatuses->Js.Dict.get(dayAsString)->Belt.Option.getWithDefault([])
 
-        selectedDateAsString == dayAsString || dayStatus->ArrayUtils.isEmpty
-          ? React.null
-          : <div className="flex justify-center mt-1 space-x-1">
-              {dayStatus
-              ->Js.Array2.map(color => {
-                <span className={`h-1.5 w-1.5 bg-${color}-500 rounded-full`} />
-              })
-              ->React.array}
-            </div>
-      }
+          selectedDateAsString == dayAsString || dayStatus->ArrayUtils.isEmpty
+            ? React.null
+            : <div className="flex gap-0.5">
+                {dayStatus
+                ->Js.Array2.map(color => {
+                  <div className={`h-1.5 w-1.5 bg-${color}-500 rounded-full`} />
+                })
+                ->React.array}
+              </div>
+        }
+      </div>
     </button>
   })
   ->React.array

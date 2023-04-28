@@ -1,10 +1,12 @@
 module Organisations
   class CoursesController < ApplicationController
     before_action :authenticate_user!
+    before_action :find_organisation_and_course,
+                  only: %i[active_cohorts inactive_cohorts]
+
     layout "student"
 
     def active_cohorts
-      find_organisation_and_course
       @active_cohorts = find_cohorts(:active)
       render "cohorts",
              locals: {
@@ -15,7 +17,6 @@ module Organisations
     end
 
     def inactive_cohorts
-      find_organisation_and_course
       @ended_cohorts = find_cohorts(:inactive)
       render "cohorts",
              locals: {

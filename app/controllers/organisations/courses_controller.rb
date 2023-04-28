@@ -8,22 +8,10 @@ module Organisations
 
     def active_cohorts
       @active_cohorts = find_cohorts(:active)
-      render "cohorts",
-             locals: {
-               cohorts: @active_cohorts,
-               organisation: @organisation,
-               active: true
-             }
     end
 
     def inactive_cohorts
       @ended_cohorts = find_cohorts(:inactive)
-      render "cohorts",
-             locals: {
-               cohorts: @ended_cohorts,
-               organisation: @organisation,
-               active: false
-             }
     end
 
     private

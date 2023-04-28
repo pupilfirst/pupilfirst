@@ -3,12 +3,12 @@
     <li>
       <div class="flex items-center">
         <% if crumb.is_a?(Array) %>
-          <%= link_to crumb[1],  class: "max-w-[60px] sm:max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis text-sm underline font-medium text-gray-600 hover:text-primary-500 transition-colors duration-200" do %>
+          <%= link_to crumb[1],  class: "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm underline font-medium text-gray-600 hover:text-primary-500 transition-colors duration-200" do %>
               <%= crumb[0].to_s %>
           <% end %>
           <span><i class="if i-chevron-right-regular ms-1"></i></span>
         <% else %>
-          <p class= "max-w-[60px] sm:max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis text-sm font-medium text-gray-500">
+          <p class= "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm font-medium text-gray-500">
             <%= crumb.to_s %>
           <p>
         <% end %>

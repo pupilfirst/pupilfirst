@@ -52,18 +52,20 @@ module Users
 
     def merge_markdown_attachments
       Rails.logger.info("Merging markdown attachments...")
-
+      # rubocop:disable Rails/SkipsModelValidations
       MarkdownAttachment.where(user_id: @old_user).update_all(
         user_id: @new_user.id
-      ) # rubocop:disable Rails/SkipsModelValidations
+      )
+      # rubocop:enable Rails/SkipsModelValidations
     end
 
     def merge_issued_certificates
       Rails.logger.info("Merging issued certificates...")
-
+      # rubocop:disable Rails/SkipsModelValidations
       IssuedCertificate.where(user_id: @old_user).update_all(
         user_id: @new_user.id
-      ) # rubocop:disable Rails/SkipsModelValidations
+      )
+      # rubocop:enable Rails/SkipsModelValidations
     end
 
     def merge_course_exports

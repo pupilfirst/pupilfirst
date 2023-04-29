@@ -152,7 +152,7 @@ feature "Organisation show" do
       end
     end
 
-    scenario "check the working of breadcrumb" do
+    scenario "user checks navigation links in the breadcrumb" do
       sign_in_user(
         org_admin_user,
         referrer:
@@ -307,7 +307,7 @@ feature "Organisation show" do
       end
     end
 
-    scenario "check the working of breadcrumb" do
+    scenario "user checks navigation links in the breadcrumb" do
       sign_in_user(
         school_admin_user,
         referrer:

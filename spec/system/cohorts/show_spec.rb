@@ -63,7 +63,7 @@ feature "Organisation show" do
       expect(page).to have_text("Total Students\n2")
     end
 
-    scenario "check the working of breadcrumb" do
+    scenario "user checks navigation links in the breadcrumb" do
       sign_in_user(
         org_admin_user,
         referrer: organisation_cohort_path(organisation, cohort)
@@ -100,7 +100,7 @@ feature "Organisation show" do
       expect(page).to have_text("Total Students\n2")
     end
 
-    scenario "check the working of breadcrumb" do
+    scenario "user checks navigation links in the breadcrumb" do
       sign_in_user(
         school_admin_user,
         referrer: organisation_cohort_path(organisation, cohort)

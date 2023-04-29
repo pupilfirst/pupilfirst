@@ -11,7 +11,7 @@ module Organisations
     end
 
     def inactive_cohorts
-      @ended_cohorts = find_cohorts(:inactive)
+      @inactive_cohorts = find_cohorts(:inactive)
     end
 
     private

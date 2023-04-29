@@ -1,4 +1,4 @@
-<% cohort_status = active ? t('organisations.courses.active_cohorts_label') : t('organisations.courses.inactive_cohorts_label') %>
+<% cohort_status = t("organisations.courses.#{page_name}_cohorts_label") %>
 <div>
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto pt-6 px-6">
@@ -10,59 +10,22 @@
         <%= @course.name %>
       </h1>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <% if active %>
-          <p class="flex items-center p-2 border-b-2 border-primary-500 text-primary-500 font-medium">
-            <span class="hidden sm:inline">
-              <%= t('organisations.courses.active_cohorts_label') %>
-            </span>
-            <span class="inline sm:hidden">
-              <%= t('organisations.courses.active_cohorts_label').split.first %>
-            </span>
-            <span class="bg-primary-500 text-xs leading-none rounded-md px-1.5 py-1 text-white ms-1.5">
-              <%= t('organisations.courses.active_cohorts_count', count: @cohorts.active.length) %>
-            </span>
-          </p>
-          <%= link_to inactive_cohorts_organisation_course_path(@organisation, @course), class: 'flex items-center font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' do %>
-            <span class="hidden sm:inline">
-              <%= t('organisations.courses.inactive_cohorts_label') %>
-            </span>
-            <span class="inline sm:hidden">
-              <%= t('organisations.courses.inactive_cohorts_label').split.first %>
-            </span>
-            <span class="bg-gray-300 text-xs leading-none rounded-md px-1.5 py-1 text-gray-900 ms-1.5">
-              <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length) %>
+        <% ['active', 'inactive'].each do |status| %>
+          <% is_current_page = status == page_name %>
+          <%= link_to send("#{status}_cohorts_organisation_course_path", @organisation, @course), class: "flex items-center #{'p-2 border-b-2 border-primary-500 text-primary-500 font-medium' if is_current_page} #{'font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' unless is_current_page}" do %>
+            <span class="hidden sm:inline"><%= t("organisations.courses.#{status}_cohorts_label") %></span>
+            <span class="inline sm:hidden"><%= t("organisations.courses.#{status}_cohorts_label").split.first %></span>
+            <span class="<%= is_current_page ? 'bg-primary-500 text-white' : 'bg-gray-300 text-gray-900' %> text-xs leading-none rounded-md px-1.5 py-1 ms-1.5">
+              <%= t("organisations.courses.#{status}_cohorts_count", count: @cohorts.send(status).length) %>
             </span>
           <% end %>
-        <% else %>
-          <%= link_to active_cohorts_organisation_course_path(@organisation, @course), class: 'flex items-center font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' do %>
-            <span class="hidden sm:inline">
-              <%= t('organisations.courses.active_cohorts_label') %>
-            </span>
-            <span class="inline sm:hidden">
-              <%= t('organisations.courses.active_cohorts_label').split.first %>
-            </span>
-            <span class="bg-gray-300 text-xs leading-none rounded-md px-1.5 py-1 text-gray-900 ms-1.5">
-              <%= t('organisations.courses.active_cohorts_count', count: @cohorts.active.length) %>
-            </span>
-          <% end %>
-          <p class="flex items-center p-2 border-b-2 border-primary-500 text-primary-500 font-medium">
-            <span class="hidden sm:inline">
-              <%= t('organisations.courses.inactive_cohorts_label') %>
-            </span>
-            <span class="inline sm:hidden">
-              <%= t('organisations.courses.inactive_cohorts_label').split.first %>
-            </span>
-            <span class="bg-primary-500 text-xs leading-none rounded-md px-1.5 py-1 text-white ms-1.5">
-              <%= t('organisations.courses.inactive_cohorts_count', count: @cohorts.ended.length) %>
-            </span>
-          </p>
         <% end %>
       </div>
     </div>
   </section>
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
-      <% if cohorts.present? %>
+    <% if cohorts.present? %>
+      <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
         <div class="border border-gray-200 bg-gray-50 rounded-lg p-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
             <% cohorts.each do |cohort| %>
@@ -74,7 +37,7 @@
           </div>
         </div>
         <div class="max-w-5xl mx-auto mt-6 flex items-center justify-center overflow-x-auto pb-3">
-          <%= paginate cohorts, param_name: active ? :active_cohort_page : :inactive_cohort_page %>
+          <%= paginate cohorts, param_name: "#{page_name}_cohort_page"%>
         </div>
         <% if cohorts.total_pages > 1 %>
           <div class="text-center text-sm italic mt-4">
@@ -83,9 +46,7 @@
         <% end %>
       </div>
     <% else %>
-      <% if cohorts.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('organisations.courses.empty', cohort_status: cohort_status) %></div>
-      <% end %>
+      <div class="text-center text-sm italic mt-4 pt-4"><%= t('organisations.courses.empty', cohort_status: cohort_status) %></div>
     <% end %>
   </section>
 </div>

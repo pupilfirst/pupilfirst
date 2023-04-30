@@ -3,7 +3,7 @@ open CoursesCurriculum__Types
 let str = React.string
 
 let levelZeroSelectorClasses = isSelected => {
-  let defaultClasses = "w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold "
+  let defaultClasses = "w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold flex items-center justify-center "
   defaultClasses ++ (
     isSelected ? "bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500" : ""
   )

@@ -1194,6 +1194,23 @@ let make = (
     },
   )
 
+  React.useEffect1(() => {
+    let handleBeforeUnload = event => {
+      if state.newFeedback != "" {
+        event |> Webapi.Dom.Event.preventDefault
+        DomUtils.Event.setReturnValue(event, "")
+      }
+    }
+
+    Webapi.Dom.Window.addEventListener("beforeunload", handleBeforeUnload, Webapi.Dom.window)
+
+    let cleanup = () => {
+      Webapi.Dom.Window.removeEventListener("beforeunload", handleBeforeUnload, Webapi.Dom.window)
+    }
+
+    Some(cleanup)
+  }, [state.newFeedback])
+
   let status = computeStatus(
     overlaySubmission,
     state.grades,

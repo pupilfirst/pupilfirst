@@ -1815,6 +1815,7 @@ hi:
       localization: स्थानीयकरण
       manage_account: इस स्कूल में अपना खाता प्रबंधित करें
       name_error: नाम खाली नहीं हो सकता
+      name_error_length: Name should be at least 2 characters long
       name_placeholder: अपना नाम डालें
       new_password: नया पासवर्ड
       new_password_placeholder: नया पासवर्ड टाइप करें

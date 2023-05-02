@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Users::DeleteAccountService do
   subject { described_class.new(user) }
@@ -74,15 +74,15 @@ describe Users::DeleteAccountService do
     create :course_export, :teams, user: user, course: course
   end
 
-  describe '#execute' do
-    context 'user is an admin in school' do
+  describe "#execute" do
+    context "user is an admin in school" do
       before { create(:school_admin, user: user, school: user.school) }
-      it 'an exception is raised' do
-        expect { subject.execute }.to raise_error('user is a school admin')
+      it "an exception is raised" do
+        expect { subject.execute }.to raise_error("user is a school admin")
       end
     end
 
-    context 'user is not an admin in school' do
+    context "user is not an admin in school" do
       before do
         post.text_versions.create!(
           value: post.body,
@@ -90,7 +90,7 @@ describe Users::DeleteAccountService do
           edited_at: post.updated_at
         )
       end
-      it 'deletes data and nullifies references in applicable records' do
+      it "deletes data and nullifies references in applicable records" do
         subject.execute
 
         # Check only applicable records are destroyed
@@ -127,10 +127,12 @@ describe Users::DeleteAccountService do
 
         # Check audit record is created
         audit_record = AuditRecord.last
-        expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DELETE_ACCOUNT)
-        expect(audit_record.metadata['email']).to eq(user.email)
+        expect(audit_record.audit_type).to eq(
+          AuditRecord.audit_types[:delete_account]
+        )
+        expect(audit_record.metadata["email"]).to eq(user.email)
         expect(
-          audit_record.metadata['account_deletion_notification_sent_at']
+          audit_record.metadata["account_deletion_notification_sent_at"]
         ).to eq(user.account_deletion_notification_sent_at.iso8601)
       end
     end

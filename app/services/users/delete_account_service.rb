@@ -5,7 +5,7 @@ module Users
     end
 
     def execute
-      raise 'user is a school admin' if @user.school_admin.present?
+      raise "user is a school admin" if @user.school_admin.present?
 
       if @user.discord_user_id.present?
         Discord::ClearRolesService.new(
@@ -19,8 +19,11 @@ module Users
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
         name = @user.preferred_name.presence || @user.name
-        UserMailer.confirm_account_deletion(name, @user.email, @user.school)
-          .deliver_later
+        UserMailer.confirm_account_deletion(
+          name,
+          @user.email,
+          @user.school
+        ).deliver_later
 
         create_audit_record
 
@@ -65,7 +68,7 @@ module Users
 
     def create_audit_record
       AuditRecord.create!(
-        audit_type: AuditRecord::TYPE_DELETE_ACCOUNT,
+        audit_type: AuditRecord.audit_types[:delete_account],
         school_id: @user.school_id,
         metadata: {
           email: @user.email,

@@ -1072,15 +1072,19 @@ let make = (
                   <span className="me-2">
                     <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
-                  {"Enable GIthub Actions" |> str}
-                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
+                  {t("github_action.title")->str}
+                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces")->str} </span>
                 </label>
-                <div className="ms-6">
+                <HelpIcon link={t("github_action.help_url")} className="ms-1">
+                  {t("github_action.help_description")->str}
+                </HelpIcon>
+                <div> {t("github_action.description")->str} </div>
+                <div className="ms-6 mt-2">
                   <a
                     href={`/school/targets/${Target.id(target)}/action`}
-                    className="flex items-center">
+                    className="btn btn-ghost btn-primary-ghost">
                     <i className="fas fa-external-link-alt text-xs mr-2" />
-                    {"Configure Github Actions"->str}
+                    {t("github_action.button_text")->str}
                   </a>
                 </div>
               </div>

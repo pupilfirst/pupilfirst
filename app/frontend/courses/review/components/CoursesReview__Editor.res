@@ -559,7 +559,7 @@ let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
 
 let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   let defaultClasses =
-    "course-review-editor__grade-pill border-gray-300 py-1 px-2 text-sm flex-1 font-semibold transition " ++
+    "course-review-editor__grade-pill border-gray-300 flex items-center justify-center py-1 px-2 text-sm flex-1 font-semibold transition " ++
     switch send {
     | Some(_) =>
       "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (

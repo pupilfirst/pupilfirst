@@ -1,6 +1,6 @@
 let str = React.string
 
-type resource = [#Level | #Cohort | #StudentTag | #UserTag | #Coach]
+type resource = [#Cohort | #StudentTag | #UserTag | #Coach]
 
 type filterType =
   | DataLoad(resource)

@@ -48,9 +48,6 @@ module StudentDetailsQuery = %graphql(`
           user {
             ...UserDetailsFragment
           }
-          level {
-            ...LevelFragment
-          }
           cohort {
             ...CohortFragment
           }
@@ -81,9 +78,6 @@ module StudentDetailsQuery = %graphql(`
             taggings
             user {
               ...UserDetailsFragment
-            }
-            level {
-              ...LevelFragment
             }
             cohort {
               ...CohortFragment
@@ -156,7 +150,6 @@ let getStudentDetails = (studentId, setState) => {
         ~id=s.id,
         ~taggings=s.taggings,
         ~user=UserDetails.makeFromFragment(s.user),
-        ~level=Shared__Level.makeFromFragment(s.level),
         ~cohort=Cohort.makeFromFragment(s.cohort),
         ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
         ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
@@ -170,7 +163,6 @@ let getStudentDetails = (studentId, setState) => {
               ~id=s.id,
               ~taggings=s.taggings,
               ~user=UserDetails.makeFromFragment(s.user),
-              ~level=Shared__Level.makeFromFragment(s.level),
               ~cohort=Cohort.makeFromFragment(s.cohort),
               ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
               ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
@@ -335,55 +327,6 @@ let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
   let completed = levelCompleted ? " student-overlay__student-level--completed" : ""
 
   reached ++ (current ++ completed)
-}
-
-let levelProgressBar = (levelId, levels, levelsCompleted) => {
-  let applicableLevels = levels |> Js.Array.filter(level => Level.number(level) != 0)
-
-  let courseCompleted =
-    applicableLevels |> Array.for_all(level => levelsCompleted |> Array.mem(level |> Level.id))
-
-  let currentLevelNumber =
-    applicableLevels
-    |> ArrayUtils.unsafeFind(
-      level => Level.id(level) == levelId,
-      "Unable to find level with id" ++ (levelId ++ "in StudentOverlay"),
-    )
-    |> Level.number
-
-  <div className="mb-8">
-    <div className="flex justify-between items-end">
-      <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
-      {courseCompleted
-        ? <p className="text-green-600 font-semibold">
-            {`🎉` |> str} <span className="text-xs ms-px"> {t("course_completed") |> str} </span>
-          </p>
-        : React.null}
-    </div>
-    <div className="h-12 flex items-center">
-      <ul
-        className={"student-overlay__student-level-progress flex w-full " ++ (
-          courseCompleted ? "student-overlay__student-level-progress--completed" : ""
-        )}>
-        {applicableLevels
-        |> Level.sort
-        |> Array.map(level => {
-          let levelNumber = level |> Level.number
-          let levelCompleted = levelsCompleted |> Array.mem(level |> Level.id)
-
-          <li
-            key={level |> Level.id}
-            className={"flex-1 student-overlay__student-level " ++
-            studentLevelClasses(levelNumber, levelCompleted, currentLevelNumber)}>
-            <span className="student-overlay__student-level-count">
-              {levelNumber |> string_of_int |> str}
-            </span>
-          </li>
-        })
-        |> React.array}
-      </ul>
-    </div>
-  </div>
 }
 
 let addNote = (setState, studentDetails, onAddCoachNotesCB, note) => {
@@ -566,11 +509,6 @@ let make = (~studentId, ~userId) => {
               {ids(student)}
               {inactiveWarning(student)}
             </div>
-            {levelProgressBar(
-              student->StudentInfo.level->Shared__Level.id,
-              StudentDetails.levels(studentDetails),
-              studentDetails->StudentDetails.completedLevelIds,
-            )}
             <div className="mb-8">
               <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
               <div className="flex -mx-2 flex-wrap mt-2">

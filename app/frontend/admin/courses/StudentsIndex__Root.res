@@ -53,9 +53,6 @@ module CourseStudentsQuery = %graphql(`
           user {
             ...AdminUserFragment
           }
-          level {
-            ...LevelFragment
-          }
           cohort {
             ...CohortFragment
           }
@@ -89,7 +86,6 @@ let getStudents = (send, courseId, cursor, params) => {
             ~id=studentDetails.id,
             ~taggings=studentDetails.taggings,
             ~user=Admin__User.makeFromFragment(studentDetails.user),
-            ~level=Shared__Level.makeFromFragment(studentDetails.level),
             ~cohort=Cohort.makeFromFragment(studentDetails.cohort),
           )
         ),
@@ -166,13 +162,6 @@ let studentsList = (params, students) => {
                       params,
                       ~value=Cohort.filterValue(StudentInfo.cohort(student)),
                     )}
-                    {showTag(
-                      "level",
-                      Level.shortName(StudentInfo.level(student)),
-                      "bg-yellow-100 text-yellow-900",
-                      params,
-                      ~value=Level.filterValue(StudentInfo.level(student)),
-                    )}
                     {StudentInfo.taggings(student)
                     ->Js.Array2.map(tag => {
                       showTag("student_tags", tag, "bg-gray-200 text-gray-900", params)
@@ -211,7 +200,6 @@ let studentsList = (params, students) => {
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", t("cohort"), DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("level", t("level"), DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
       "Student Tag",

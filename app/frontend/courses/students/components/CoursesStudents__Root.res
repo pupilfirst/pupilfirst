@@ -83,9 +83,6 @@ module StudentsQuery = %graphql(`
           user {
             ...UserDetailsFragment
           }
-          level {
-            ...LevelFragment
-          }
           cohort {
             ...CohortFragment
           }
@@ -130,7 +127,6 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
           ~id=s.id,
           ~taggings=s.taggings,
           ~user=UserDetails.makeFromFragment(s.user),
-          ~level=Shared__Level.makeFromFragment(s.level),
           ~cohort=Cohort.makeFromFragment(s.cohort),
           ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
           ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
@@ -168,7 +164,6 @@ let applicableLevels = levels => levels |> Js.Array.filter(level => Level.number
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter("personal_coach", "Personal Coach", DataLoad(#Coach), "pink"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
@@ -239,7 +234,7 @@ let make = (~courseId) => {
         {ReactUtils.nullIf(
           <div className="p-5 bg-gray-100 rounded-lg mt-6">
             <p className="text-gray-600 text-sm font-medium">
-              {tr("level_distribution_label")->str}
+              {"Student Distribution Milestone Completion"->str}
             </p>
             <CoursesStudents__StudentDistribution
               params studentDistribution={state.studentDistribution}

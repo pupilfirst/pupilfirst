@@ -99,7 +99,6 @@ let showStudent = student => {
         className="hidden md:inline-block"
         coaches={StudentInfo.personalCoaches(student)}
       />
-      {levelInfo(student->StudentInfo.level)}
     </div>
   </Link>
 }

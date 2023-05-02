@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'User Update Email', js: true do
+feature "User Update Email", js: true do
   include UserSpecHelper
   include NotificationHelper
   include ActiveSupport::Testing::TimeHelpers
@@ -14,19 +14,19 @@ feature 'User Update Email', js: true do
   end
   let(:domain) { school.domains.where(primary: true).first }
 
-  scenario 'Send update email token when user update email' do
+  scenario "Send update email token when user update email" do
     sign_in_user(user_1, referrer: edit_user_path)
-    expect(page).to have_text('Edit').and have_text('profile')
+    expect(page).to have_text("Edit").and have_text("profile")
 
-    click_button 'Edit'
-    fill_in 'user_email', with: 'testing@updateemail.com'
-    click_button 'Update'
+    click_button "Edit"
+    fill_in "user_email", with: "testing@updateemail.com"
+    click_button "Update"
     dismiss_notification
 
-    expect(user_1.reload.new_email).to eq('testing@updateemail.com')
+    expect(user_1.reload.new_email).to eq("testing@updateemail.com")
     expect(user_1.update_email_token).to be_present
 
-    open_email('testing@updateemail.com')
+    open_email("testing@updateemail.com")
     expect(current_email.subject).to eq(
       "Update your email address in #{school.name} school"
     )
@@ -35,24 +35,24 @@ feature 'User Update Email', js: true do
     )
   end
 
-  scenario 'Error if user try to update to existing email' do
+  scenario "Error if user try to update to existing email" do
     sign_in_user(user_1, referrer: edit_user_path)
-    expect(page).to have_text('Edit').and have_text('profile')
+    expect(page).to have_text("Edit").and have_text("profile")
 
-    click_button 'Edit'
-    fill_in 'user_email', with: user_2.email
-    click_button 'Update'
+    click_button "Edit"
+    fill_in "user_email", with: user_2.email
+    click_button "Update"
     expect(page).to have_content(
-      'This email is already associated with another user account.'
+      "This email is already associated with another user account."
     )
 
     expect(user_1.reload.new_email).to be_blank
   end
 
-  scenario 'User visits the update email link with valid token', js: true do
+  scenario "User visits the update email link with valid token", js: true do
     sign_in_user(user_1)
     old_email = user_1.email
-    new_email = 'testing@updateemail.com'
+    new_email = "testing@updateemail.com"
     user_1.regenerate_update_email_token
     user_1.update!(
       new_email: new_email,
@@ -86,22 +86,24 @@ feature 'User Update Email', js: true do
 
     # Check audit records
     audit_record = AuditRecord.last
-    expect(audit_record.audit_type).to eq(AuditRecord::TYPE_UPDATE_EMAIL)
+    expect(audit_record.audit_type).to eq(
+      AuditRecord.audit_types[:update_email]
+    )
     expect(audit_record.school_id).to eq(user_1.school_id)
-    expect(audit_record.metadata['user_id']).to eq(user_1.id)
-    expect(audit_record.metadata['email']).to eq(new_email)
-    expect(audit_record.metadata['old_email']).to eq(old_email)
+    expect(audit_record.metadata["user_id"]).to eq(user_1.id)
+    expect(audit_record.metadata["email"]).to eq(new_email)
+    expect(audit_record.metadata["old_email"]).to eq(old_email)
   end
 
-  scenario 'user visits the update email link with invalid token', js: true do
-    sign_in_user(user_1, referrer: update_email_path(token: 'test_token'))
+  scenario "user visits the update email link with invalid token", js: true do
+    sign_in_user(user_1, referrer: update_email_path(token: "test_token"))
 
     expect(page).to have_text(
-      'That link has expired or is invalid. Please try again'
+      "That link has expired or is invalid. Please try again"
     )
   end
 
-  scenario 'user visits the update email link with an expired token',
+  scenario "user visits the update email link with an expired token",
            js: true do
     sign_in_user(user_1)
     user_1.regenerate_update_email_token
@@ -109,7 +111,7 @@ feature 'User Update Email', js: true do
     travel_to 35.minutes.from_now do
       visit update_email_path(token: user_1.update_email_token)
 
-      expect(page).to have_text('That link has expired or is invalid')
+      expect(page).to have_text("That link has expired or is invalid")
     end
   end
 end

@@ -1819,6 +1819,7 @@ en:
       localization: Localization
       manage_account: Manage your account in this school
       name_error: Name can't be blank
+      name_error_length: Name should be at least 2 characters long
       name_placeholder: Type your name
       new_password: New password
       new_password_placeholder: Type new password

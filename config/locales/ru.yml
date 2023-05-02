@@ -1839,6 +1839,7 @@ ru:
       localization: Локализация
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
+      name_error_length: Name should be at least 2 characters long
       name_placeholder: Введите ваше имя
       new_password: Новый пароль
       new_password_placeholder: Введите новый пароль

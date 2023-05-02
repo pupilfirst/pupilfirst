@@ -6,7 +6,7 @@ module Github
 
     def execute(re_run: false)
       unless github_configuration.configured? &&
-               submission.target.action_config.present?
+               @submission.target.action_config.present?
         return
       end
 
@@ -18,12 +18,16 @@ module Github
     private
 
     def find_or_create_repository
+      return @submission.founders.first.github_repository if @submission.founders.first.github_repository.present?
+
       organization = github_configuration.organization_id
       repository_name = "student-#{@submission.founders.first.id}"
-      repository =
-        github_client.repository(organization + '/' + repository_name)
+      repository_full_name = "#{organization}/#{repository_name}"
 
-      if repository.id.blank?
+      if github_client.repository?(repository_full_name)
+        repository = github_client.repository(repository_full_name)
+        @submission.founders.first.update(github_repository: repository_full_name)
+      else
         # Create a new repository with the name student-<student_id>
         github_client.create_repository(
           repository_name,
@@ -34,11 +38,12 @@ module Github
             "Submissions from #{@submission.founders.first.user.name}"
         )
 
+        @submission.founders.first.update(github_repository: repository_full_name)
         # Create the main branch for the repository and add the workflow starter file
-        add_workflow_starter("#{organization}/#{repository_name}")
+        add_workflow_starter(repository_full_name)
       end
 
-      repository_name
+      repository_full_name
     end
 
     def create_branch(repo, re_run)
@@ -48,7 +53,7 @@ module Github
       branch_name = "#{branch_name}-#{Time.now.to_i}" if re_run
 
       # Create the respository name with the organization name
-      repo_name = "#{github_configuration.organization_id}/#{repo}"
+      repo_name = @submission.founders.first.github_repository
 
       # Get the sha of the last commit on the main branch
       latest_sha = get_main_branch_sha(repo_name)
@@ -92,7 +97,7 @@ module Github
     end
 
     def add_contents(branch, repo)
-      repo_name = "#{github_configuration.organization_id}/#{repo}"
+      repo_name = @submission.founders.first.github_repository
       github_client.update_contents(
         repo_name,
         '.github/workflows/ci.js.yml',
@@ -139,7 +144,7 @@ module Github
 
     def github_configuration
       @github_configuration ||=
-        Schools::Configuration::Github.new(@submission.school)
+        Schools::Configuration::Github.new(@submission.course.school)
     end
 
     def submission_data_service

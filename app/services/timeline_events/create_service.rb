@@ -38,6 +38,10 @@ module TimelineEvents
         submission
       )
 
+      if submission.target.action_config.present?
+        Github::RunActionsJob.perform_later(submission)
+      end
+      
       submission
     end
 

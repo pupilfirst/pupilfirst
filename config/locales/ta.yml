@@ -1815,6 +1815,7 @@ ta:
       localization: உள்ளூர்மயமாக்கல்
       manage_account: இந்தப் பள்ளியில் உங்கள் கணக்கை நிர்வகிக்கவும்
       name_error: பெயர் காலியாக இருக்க முடியாது
+      name_error_length: Name should be at least 2 characters long
       name_placeholder: உங்கள் பெயரை உள்ளிடவும்
       new_password: புதிய கடவுச்சொல்
       new_password_placeholder: புதிய கடவுச்சொல்லை உள்ளிடவும்

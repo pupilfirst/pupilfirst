@@ -1204,11 +1204,11 @@ let make = (
 
     Webapi.Dom.Window.addEventListener("beforeunload", handleBeforeUnload, Webapi.Dom.window)
 
-    let cleanup = () => {
+    let removeEventListener = () => {
       Webapi.Dom.Window.removeEventListener("beforeunload", handleBeforeUnload, Webapi.Dom.window)
     }
 
-    Some(cleanup)
+    Some(removeEventListener)
   }, [state.newFeedback])
 
   let status = computeStatus(

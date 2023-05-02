@@ -1815,6 +1815,7 @@ ml:
       localization: പ്രാദേശികവൽക്കരണം
       manage_account: ഈ സ്കൂളിൽ നിങ്ങളുടെ അക്കൗണ്ട് മാനേജ് ചെയ്യുക
       name_error: പേര് ശൂന്യമാക്കാൻ കഴിയില്ല
+      name_error_length: Name should be at least 2 characters long
       name_placeholder: നിങ്ങളുടെ പേര് ടൈപ്പ് ചെയ്യുക
       new_password: പുതിയ പാസ്വേഡ്
       new_password_placeholder: പുതിയ പാസ്‌വേഡ് ടൈപ്പ് ചെയ്യുക

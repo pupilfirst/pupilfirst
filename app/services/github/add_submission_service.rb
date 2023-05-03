@@ -10,49 +10,22 @@ module Github
         return
       end
 
-      repository = find_or_create_repository
-      branch = create_branch(repository, re_run)
+      if @submission.founders.first.github_repository.blank?
+        Github::SetupRepositoryService.new(@submission.founders.first).execute
+      end
+
+      branch = create_branch(re_run)
       add_contents(branch, repository)
     end
 
     private
 
-    def find_or_create_repository
-      return @submission.founders.first.github_repository if @submission.founders.first.github_repository.present?
-
-      organization = github_configuration.organization_id
-      repository_name = "student-#{@submission.founders.first.id}"
-      repository_full_name = "#{organization}/#{repository_name}"
-
-      if github_client.repository?(repository_full_name)
-        repository = github_client.repository(repository_full_name)
-        @submission.founders.first.update(github_repository: repository_full_name)
-      else
-        # Create a new repository with the name student-<student_id>
-        github_client.create_repository(
-          repository_name,
-          organization: organization,
-          private: 'true',
-          team_id: team_id,
-          description:
-            "Submissions from #{@submission.founders.first.user.name}"
-        )
-
-        @submission.founders.first.update(github_repository: repository_full_name)
-        # Create the main branch for the repository and add the workflow starter file
-        add_workflow_starter(repository_full_name)
-      end
-
-      repository_full_name
-    end
-
-    def create_branch(repo, re_run)
+    def create_branch(re_run)
       # Create a branch with the name submission-<student_id>
       branch_name = "submission-#{@submission.id}"
 
       branch_name = "#{branch_name}-#{Time.now.to_i}" if re_run
 
-      # Create the respository name with the organization name
       repo_name = @submission.founders.first.github_repository
 
       # Get the sha of the last commit on the main branch
@@ -72,28 +45,9 @@ module Github
         commits_from_main_branch.first&.sha
       else
         # Create the main branch and get the Sha of the last commit
-        last_commit = add_workflow_starter(repo_name)
+        last_commit = Github::SetupRepositoryService.new(@submission.founders.first).add_workflow_starter(repo_name)
         last_commit.content.sha
       end
-    end
-
-    def add_workflow_starter(repo_name)
-      # Add Readme file to the repo
-      github_client.create_contents(
-        repo_name,
-        'README.md',
-        'skip ci',
-        'workflow_node'
-      )
-
-      # Add a workflow starter file to the repo to trigger the GA workflow for the first time
-      # This is needed because the GA workflow will not run on first push of a workflow file
-      github_client.create_contents(
-        repo_name,
-        '.github/workflows/ci.js.yml',
-        'Add workflow [skip ci]',
-        starter_workflow_content
-      )
     end
 
     def add_contents(branch, repo)
@@ -114,11 +68,6 @@ module Github
         submission_data_service.data.to_json,
         branch: branch
       )
-    end
-
-    def github_client
-      @github_client ||=
-        Octokit::Client.new(access_token: github_configuration.access_token)
     end
 
     def add_submission_file(branch, repo)
@@ -142,6 +91,14 @@ module Github
       end
     end
 
+    def ci_file(repo_name)
+      begin
+        github_client.contents(repo_name, path: '.github/workflows/ci.js.yml')
+      rescue StandardError
+        Rails.logger.error 'Error while fetching the ci.js.yml file'
+      end
+    end
+
     def github_configuration
       @github_configuration ||=
         Schools::Configuration::Github.new(@submission.course.school)
@@ -152,36 +109,9 @@ module Github
         TimelineEvents::CreateWebhookDataService.new(@submission)
     end
 
-    def team_id
-      @team_id ||=
-        @submission.course.github_team_id.presence ||
-          github_configuration.default_team_id
-    end
-
-    def ci_file(repo_name)
-      begin
-        github_client.contents(repo_name, path: '.github/workflows/ci.js.yml')
-      rescue StandardError
-        Rails.logger.error 'Error while fetching the ci.js.yml file'
-      end
-    end
-
-    def starter_workflow_content
-      <<-DOC
-name: Node.js Test Runner
-on:
-  push:
-    branches: [ "submission-*" ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 14.x ]
-    steps:
-      - run: |
-          echo "Let the tests begin"
-      DOC
+    def github_client
+      @github_client ||=
+        Octokit::Client.new(access_token: github_configuration.access_token)
     end
   end
 end

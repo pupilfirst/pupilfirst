@@ -7,8 +7,8 @@ class Faculty < ApplicationRecord
   has_one :school, through: :user
   has_many :startup_feedback, dependent: :nullify
   has_many :evaluated_events,
-           class_name: 'TimelineEvent',
-           foreign_key: 'evaluator_id',
+           class_name: "TimelineEvent",
+           foreign_key: "evaluator_id",
            inverse_of: :evaluator,
            dependent: :nullify
   has_many :targets, dependent: :restrict_with_error
@@ -20,18 +20,21 @@ class Faculty < ApplicationRecord
   has_many :faculty_founder_enrollments, dependent: :destroy
   has_many :founders, through: :faculty_founder_enrollments
 
-  CATEGORY_TEAM = 'team'
-  CATEGORY_VISITING_COACHES = 'visiting_coaches'
-  CATEGORY_DEVELOPER_COACHES = 'developer_coaches'
-  CATEGORY_ADVISORY_BOARD = 'advisory_board'
-  CATEGORY_ALUMNI = 'alumni'
-  CATEGORY_VR_COACHES = 'vr_coaches'
+  scope :archived, -> { where.not(archived_at: nil) }
+  scope :active, -> { where(archived_at: nil) }
 
-  COMPENSATION_VOLUNTEER = 'volunteer'
-  COMPENSATION_PAID = 'paid'
+  CATEGORY_TEAM = "team"
+  CATEGORY_VISITING_COACHES = "visiting_coaches"
+  CATEGORY_DEVELOPER_COACHES = "developer_coaches"
+  CATEGORY_ADVISORY_BOARD = "advisory_board"
+  CATEGORY_ALUMNI = "alumni"
+  CATEGORY_VR_COACHES = "vr_coaches"
 
-  COMMITMENT_PART_TIME = 'part_time'
-  COMMITMENT_FULL_TIME = 'full_time'
+  COMPENSATION_VOLUNTEER = "volunteer"
+  COMPENSATION_PAID = "paid"
+
+  COMMITMENT_PART_TIME = "part_time"
+  COMMITMENT_FULL_TIME = "full_time"
 
   def self.valid_categories
     [

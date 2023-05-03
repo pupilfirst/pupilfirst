@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Organisation show' do
+feature "Organisation show" do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
@@ -61,9 +61,17 @@ feature 'Organisation show' do
       .each { |f| f.user.update!(organisation: organisation_2) }
   end
 
-  context 'when the user is an organisation admin' do
-    scenario 'user can see overview of all student activity in their org' do
+  context "when the user is an organisation admin" do
+    scenario "user can see overview of all student activity in their org" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
+
+      # There should not be a link to the My Org page.
+      within("main[class='grow bg-white']") do
+        expect(page).not_to have_link(
+          "My Org",
+          href: organisation_path(organisation_1)
+        )
+      end
 
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
@@ -94,18 +102,61 @@ feature 'Organisation show' do
 
       # ...but not to the inactive cohort.
       expect(page).not_to have_link(cohort_3.name)
+
+      # There should be a link to view all cohorts of course 1 .
+      expect(page).to have_link(
+        "View All Cohorts",
+        href: active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
+    end
+
+    scenario "check for view all cohorts links" do
+      sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
+
+      # There should be two view all cohorts links.
+      expect(all("a", text: "View All Cohorts").count).to eq(2)
+
+      # Click on the first link.
+      within(
+        first(
+          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
+        )
+      ) do
+        click_link "View All Cohorts",
+                   href:
+                     active_cohorts_organisation_course_path(
+                       organisation_1,
+                       course_1
+                     )
+      end
+
+      # The user should be taken to the active cohorts page.
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
     end
   end
 
-  context 'when the user is a school admin' do
-    scenario 'user can access the organisation page' do
+  context "when the user is a school admin" do
+    scenario "user can access the organisation page" do
       sign_in_user(
         school_admin_user,
         referrer: organisation_path(organisation_1)
       )
 
+      # There should be a link to the My Org page.
+      within("main[class='grow bg-white']") do
+        expect(page).to have_link("My Org", href: "/organisations")
+      end
+
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
+
+      # There should be a link to view all cohorts of course 1.
+      expect(page).to have_link(
+        "View All Cohorts",
+        href: active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
 
       # Both orgs should be accessible.
       sign_in_user(
@@ -115,11 +166,46 @@ feature 'Organisation show' do
 
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
+
+      # There should be a link to view all cohorts of course 1.
+      expect(page).to have_link(
+        "View All Cohorts",
+        href: active_cohorts_organisation_course_path(organisation_2, course_1)
+      )
+    end
+
+    scenario "check for view all cohorts links" do
+      sign_in_user(
+        school_admin_user,
+        referrer: organisation_path(organisation_1)
+      )
+
+      # There should be two view all cohorts links.
+      expect(all("a", text: "View All Cohorts").count).to eq(2)
+
+      # Click on the first link.
+      within(
+        first(
+          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
+        )
+      ) do
+        click_link "View All Cohorts",
+                   href:
+                     active_cohorts_organisation_course_path(
+                       organisation_1,
+                       course_1
+                     )
+      end
+
+      # The user should be taken to the active cohorts page.
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
     end
   end
 
-  context 'when the user is a non-admin' do
-    scenario 'user cannot see the organisation page' do
+  context "when the user is a non-admin" do
+    scenario "user cannot see the organisation page" do
       sign_in_user(regular_user, referrer: organisation_path(organisation_1))
 
       expect(page).to have_http_status(:not_found)

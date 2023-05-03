@@ -177,6 +177,13 @@ Rails.application.routes.draw do
         get 'students'
       end
     end
+
+    resources :courses,  module: 'organisations' do
+      member do
+        get 'active_cohorts'
+        get 'inactive_cohorts'
+      end
+    end
   end
 
   namespace :org, module: 'organisations' do

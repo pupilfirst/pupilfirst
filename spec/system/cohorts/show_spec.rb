@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Organisation show' do
+feature "Organisation show" do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
@@ -40,49 +40,89 @@ feature 'Organisation show' do
     team_2.students.each { |f| f.update!(completed_at: 1.day.ago) }
   end
 
-  context 'when the user is an organisation admin' do
-    scenario 'user can access org overview of active cohort', js: true do
+  context "when the user is an organisation admin" do
+    scenario "user can access org overview of active cohort", js: true do
       sign_in_user org_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text("Total Students\n4")
       expect(page).to have_text("Students Completed\n2")
-      expect(page).to have_text('Level-wise student distribution')
+      expect(page).to have_text("Level-wise student distribution")
 
       expect(page).to have_link(
-        'Students',
+        "Students",
         href: students_organisation_cohort_path(organisation, cohort)
       )
     end
 
-    scenario 'user can access org overview of inactive cohort' do
+    scenario "user can access org overview of inactive cohort" do
       sign_in_user org_admin_user,
                    referrer:
                      organisation_cohort_path(organisation, cohort_inactive)
 
       expect(page).to have_text("Total Students\n2")
     end
+
+    scenario "user checks navigation links in the breadcrumb" do
+      sign_in_user(
+        org_admin_user,
+        referrer: organisation_cohort_path(organisation, cohort)
+      )
+
+      expect(page).to have_current_path(
+        organisation_cohort_path(organisation, cohort)
+      )
+
+      expect(page).to have_link(
+        "#{course.name}",
+        href: active_cohorts_organisation_course_path(organisation, course)
+      )
+      click_link course.name
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation, course)
+      )
+    end
   end
 
-  context 'when the user is a school admin' do
-    scenario 'user can access org overview of active cohort' do
+  context "when the user is a school admin" do
+    scenario "user can access org overview of active cohort" do
       sign_in_user school_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text("Total Students\n4")
     end
 
-    scenario 'user can access org overview of inactive cohort' do
+    scenario "user can access org overview of inactive cohort" do
       sign_in_user school_admin_user,
                    referrer:
                      organisation_cohort_path(organisation, cohort_inactive)
 
       expect(page).to have_text("Total Students\n2")
     end
+
+    scenario "user checks navigation links in the breadcrumb" do
+      sign_in_user(
+        school_admin_user,
+        referrer: organisation_cohort_path(organisation, cohort)
+      )
+
+      expect(page).to have_current_path(
+        organisation_cohort_path(organisation, cohort)
+      )
+
+      expect(page).to have_link(
+        "#{course.name}",
+        href: active_cohorts_organisation_course_path(organisation, course)
+      )
+      click_link course.name
+      expect(page).to have_current_path(
+        active_cohorts_organisation_course_path(organisation, course)
+      )
+    end
   end
 
-  context 'when the user is a regular user' do
-    scenario 'user cannot access org overview of a cohort' do
+  context "when the user is a regular user" do
+    scenario "user cannot access org overview of a cohort" do
       sign_in_user regular_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 

@@ -2345,6 +2345,7 @@ ru:
       active_students_label: Активные студенты
       cohorts_subheading: Когорты
       organisation_label: Организация
+      view_all_cohorts: View All Cohorts
       students_enrolled_heading: Студенты, зачисленные в
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> студент зачислен
@@ -2357,6 +2358,14 @@ ru:
         many: в <span class="font-semibold text-black">%{count}</span> активных когортах
         other: в <span class="font-semibold text-black">%{count}</span> активных когортах
       total_students_label: Всего студентов
+    courses:
+      active_cohorts_label: Active Cohorts
+      active_cohorts_count: "%{count}"
+      course_label: Course
+      empty: "No %{cohort_status} for this course."
+      inactive_cohorts_label: Inactive Cohorts
+      inactive_cohorts_count: "%{count}"
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     students:
       show:
         average_grades: Average Grades

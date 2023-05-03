@@ -2321,6 +2321,7 @@ ml:
       active_students_label: സജീവ വിദ്യാർത്ഥികൾ
       cohorts_subheading: കൂട്ടുകാർ
       organisation_label: സംഘടന
+      view_all_cohorts: View All Cohorts
       students_enrolled_heading: വിദ്യാർത്ഥികൾ എൻറോൾ ചെയ്തു
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> വിദ്യാർത്ഥി എൻറോൾ ചെയ്തു
@@ -2329,6 +2330,14 @@ ml:
         one: <span class="font-semibold text-black">1</span> സജീവ കൂട്ടായ്മയിൽ
         other: <span class="font-semibold text-black">%{count}</span> സജീവ കൂട്ടങ്ങളിൽ
       total_students_label: മൊത്തം വിദ്യാർത്ഥികൾ
+    courses:
+      active_cohorts_label: Active Cohorts
+      active_cohorts_count: "%{count}"
+      course_label: Course
+      empty: "No %{cohort_status} for this course."
+      inactive_cohorts_label: Inactive Cohorts
+      inactive_cohorts_count: "%{count}"
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     students:
       show:
         average_grades: Average Grades

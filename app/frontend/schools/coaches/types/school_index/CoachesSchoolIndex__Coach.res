@@ -9,6 +9,7 @@ type t = {
   connectLink: option<string>,
   imageFileName: option<string>,
   affiliation: option<string>,
+  archived: bool,
 }
 
 let name = t => t.name
@@ -31,6 +32,8 @@ let imageFileName = t => t.imageFileName
 
 let affiliation = t => t.affiliation
 
+let archived = t => t.archived
+
 let decode = json => {
   open Json.Decode
   {
@@ -44,6 +47,7 @@ let decode = json => {
     exited: json |> field("exited", bool),
     imageFileName: json |> field("imageFileName", nullable(string)) |> Js.Null.toOption,
     affiliation: json |> field("affiliation", nullable(string)) |> Js.Null.toOption,
+    archived: json |> field("archived", bool),
   }
 }
 
@@ -58,6 +62,7 @@ let make = (
   ~exited,
   ~imageFileName,
   ~affiliation,
+  ~archived,
 ) => {
   id: id,
   name: name,
@@ -69,6 +74,7 @@ let make = (
   exited: exited,
   imageFileName: imageFileName,
   affiliation: affiliation,
+  archived: archived,
 }
 
 let updateList = (coaches, coach) => {

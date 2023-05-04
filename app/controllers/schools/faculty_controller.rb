@@ -18,12 +18,15 @@ module Schools
                  error: nil
                }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        render json: { error: @form.errors.full_messages.join(", ") }
       end
     end
 
     def update
       @form = Schools::Coaches::UpdateForm.new(faculty)
+      params[:faculty].transform_keys! do |key|
+        key == "archived" ? "archived_at" : key # map archived to archived_at
+      end
 
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
@@ -33,14 +36,16 @@ module Schools
                  error: nil
                }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        render json: { error: @form.errors.full_messages.join(", ") }
       end
     end
 
     def course_index
       @course =
-        policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope)
-          .find(params[:course_id])
+        policy_scope(
+          Course,
+          policy_scope_class: Schools::CoursePolicy::Scope
+        ).find(params[:course_id])
       authorize(current_school, policy_class: Schools::FacultyPolicy)
     end
 

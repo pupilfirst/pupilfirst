@@ -18,6 +18,8 @@ let connectLink: t => option<string>
 
 let exited: t => bool
 
+let archived: t => bool
+
 let updateList: (list<t>, t) => list<t>
 
 let affiliation: t => option<string>
@@ -35,4 +37,5 @@ let make: (
   ~exited: bool,
   ~imageFileName: option<string>,
   ~affiliation: option<string>,
+  ~archived: bool,
 ) => t

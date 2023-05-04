@@ -24,6 +24,7 @@ module Schools
                }
       property :school_id, virtual: true, validates: { presence: true }
       property :affiliation, virtual: true
+      property :archived_at
 
       def save
         Faculty.transaction do
@@ -50,7 +51,13 @@ module Schools
       end
 
       def faculty_params
-        { connect_link: connect_link, public: public, exited: exited }
+        {
+          connect_link: connect_link,
+          public: public,
+          exited: exited,
+          # Form archived_at is a boolean string and model archived_at is DateTime
+          archived_at: archived_at == "true" ? Time.zone.now : nil
+        }
       end
 
       def faculty

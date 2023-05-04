@@ -27,6 +27,7 @@ type state = {
   hasLinkedInUrlError: bool,
   hasConnectLinkError: bool,
   affiliation: string,
+  archived: bool,
 }
 
 type action =
@@ -39,6 +40,7 @@ type action =
   | UpdateExited(bool)
   | UpdateAffiliation(string)
   | UpdateSaving
+  | UpdateArchived(bool)
 
 let reducer = (state, action) =>
   switch action {
@@ -76,6 +78,7 @@ let reducer = (state, action) =>
     }
   | UpdateExited(exited) => {...state, exited: exited, dirty: true}
   | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation, dirty: true}
+  | UpdateArchived(archived) => {...state, archived: archived, dirty: true}
   }
 
 let str = React.string
@@ -123,6 +126,7 @@ let computeInitialState = coach =>
       hasConnectLinkError: false,
       imageFileName: "",
       affiliation: "",
+      archived: false,
     }
   | Some(coach) => {
       name: coach |> Coach.name,
@@ -146,6 +150,7 @@ let computeInitialState = coach =>
       | None => ""
       },
       affiliation: coach |> Coach.affiliation |> OptionUtils.toString,
+      archived: coach |> Coach.archived,
     }
   }
 
@@ -174,6 +179,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
       ~exited=state.exited,
       ~imageFileName=Some(state.imageFileName),
       ~affiliation=Some(state.affiliation),
+      ~archived=state.archived,
     )
     switch coach {
     | Some(_) => Notification.success(ts("notifications.success"), t("coach_updated"))
@@ -437,6 +443,46 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       <i className="fas fa-upload me-2 text-gray-600 text-lg" />
                       <span className="truncate"> {avatarUploaderText() |> str} </span>
                     </label>
+                  </div>
+                </div>
+                <div className="mt-5">
+                  <div className="flex items-center shrink-0">
+                    <label
+                      className="block tracking-wide text-sm font-semibold me-3" htmlFor="archived">
+                      <span className="me-2">
+                        <i className="fas fa-list rtl:rotate-180 text-base" />
+                      </span>
+                      {t("coach_visibility")->str} //{t("target_visibility") |> str}
+                    </label>
+                    <div
+                      id="visibility" className="flex toggle-button__group shrink-0 rounded-lg"
+                    />
+                    <div id="exited" className="flex shrink-0 overflow-hidden">
+                      <div>
+                        <button
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdateArchived(true))
+                          }}
+                          name="faculty[exited]"
+                          className={booleanButtonClasses(state.archived)}>
+                          {t("archived")->str}
+                        </button>
+                        <button
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdateArchived(false))
+                          }}
+                          className={booleanButtonClasses(!state.archived)}>
+                          {t("active")->str}
+                        </button>
+                      </div>
+                      <input
+                        type_="hidden"
+                        name="faculty[archived]"
+                        value={state.archived |> string_of_bool}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

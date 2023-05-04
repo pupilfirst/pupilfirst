@@ -1245,6 +1245,9 @@ en:
       replace_avatar: Replace avatar
       title: Title
       upload_avatar: Upload an avatar
+      archived: Archived
+      active: Active
+      coach_visibility: Coach Visibility
     SA_Coaches_SchoolIndex:
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "

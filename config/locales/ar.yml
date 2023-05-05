@@ -2486,23 +2486,21 @@ ar:
         link_label: Event Link
         title: Calendar event details
     calendars:
-      edit:
-        all_cohorts_selected: تم تحديد كل المجموعات
-        calendar_name: Calendar name
-        calendar_name_place_holder: مثال، تقويم الدفعة 11
-        link_to_cohorts: Link calendar to cohorts
-        no_cohorts_selected: لم يتم تحديد أي مجموعة
-        title: تعديل التقويم
-        update_calendar: Update calendar
-      new:
-        add_calendar_button: Add calendar
-        all_cohorts_selected: All cohorts selected
-        calendar_name_place_holder: مثال، تقويم الدفعة 11
+      form:
+        edit_calendar_heading: Edit %{calendar_name}
+        add_calendar_heading: Create new calendar
+        name_label: Calendar name
+        name_placeholder: مثال، تقويم الدفعة 11
         cohorts_label: Link calendar to cohorts
         cohorts_label_hint: من هنا يتم ربط التقويم مع مجموعات محددة
-        name_label: Calendar name
-        no_cohorts_selected: No cohorts selected
-        title: Create new calendar
+        all_cohorts_selected: تم تحديد كل المجموعات
+        no_cohorts_selected: لم يتم تحديد أي مجموعة
+        add_calendar_button: Add calendar
+        update_calendar_button: Update calendar
+      edit:
+        page_title: تعديل التقويم
+      new:
+        page_title: Create new calendar
     communities:
       index:
         title: المجتمعات

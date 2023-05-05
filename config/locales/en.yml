@@ -2496,23 +2496,21 @@ en:
         link_label: Event Link
         title: Calendar event details
     calendars:
-      edit:
-        all_cohorts_selected: All cohorts selected
-        calendar_name: Calendar name
-        calendar_name_place_holder: eg, Batch 1 calendar
-        link_to_cohorts: Link calendar to cohorts
-        no_cohorts_selected: No cohorts selected
-        title: Create new calendar
-        update_calendar: Update calendar
-      new:
-        add_calendar_button: Add calendar
-        all_cohorts_selected: All cohorts selected
-        calendar_name_place_holder: eg, Batch 1 calendar
+      form:
+        edit_calendar_heading: Edit %{calendar_name}
+        add_calendar_heading: Create new calendar
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
         cohorts_label: Link calendar to cohorts
         cohorts_label_hint: This will link calendar to specified cohorts
-        name_label: Calendar name
+        all_cohorts_selected: All available cohorts have been selected
         no_cohorts_selected: No cohorts selected
-        title: Create new calendar
+        add_calendar_button: Add calendar
+        update_calendar_button: Update calendar
+      edit:
+        page_title: Update calendar
+      new:
+        page_title: Create new calendar
     communities:
       index:
         title: Communities

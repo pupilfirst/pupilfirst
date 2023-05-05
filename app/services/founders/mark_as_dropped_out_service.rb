@@ -24,7 +24,7 @@ module Founders
 
     def create_audit_record(student)
       AuditRecord.create!(
-        audit_type: AuditRecord::TYPE_DROPOUT_STUDENT,
+        audit_type: AuditRecord.audit_types[:dropout_student],
         school_id: @current_user.school_id,
         metadata: {
           user_id: @current_user.id,

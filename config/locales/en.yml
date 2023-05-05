@@ -2459,39 +2459,26 @@ en:
       title: Admins
     calendar_events:
       edit:
-        add_event_button: Add event
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        add_link_section_title: Add an event link (optional)
-        description_label: Description
-        edit_event: Edit event
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        event_name_placeholder: Enter Event Title
-        event_title_placeholder: Enter Event Title
-        link_title_placeholder: eg. Zoom meeting link
-        new_event: Add new event
-        select_calendar_label: Add event to
-        select_color_label: Color
-        start_time_label: Date and Time
-        title: Edit event
+        page_title: Edit event
+      form:
+        edit_event_heading: Edit %{event_title}
+        add_event_heading: Add new event
         title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        color_label: Color
+        calendar_label: Add event to
+        add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
+        add_link_section_title: Add an event link (optional)
+        link_title_label: Event link title
+        link_title_placeholder: eg. Google Meet
+        link_url_label: Event link URL
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        description_label: Event description
+        add_event_button: Add event
         update_event_button: Update event
-      new:
-        add_event_button: Add event
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        add_link_section_title: Add an event link (optional)
-        description_label: Description
-        edit_event: Edit event
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        event_title_placeholder: Enter Event Title
-        link_title_placeholder: eg. Zoom meeting link
-        new_event: Add new event
-        select_calendar_label: Add event to
-        select_color_label: Color
         start_time_label: Date and Time
-        title: Add new event
-        title_label: Event Title
+      new:
+        page_title: Add new event
       show:
         confirm_delete: Are you sure to delete the event?
         date_and_time: Date and time

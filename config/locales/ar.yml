@@ -2459,39 +2459,26 @@ ar:
       title: المدراء
     calendar_events:
       edit:
-        add_event_button: إضافة الفعالية
+        page_title: تعديل الفعالية
+      form:
+        edit_event_heading: تعديل الفعالية
+        add_event_heading: إضافة فعالية جديدة
+        title_label: عنوان الفعالية
+        title_placeholder: اسم الفعالية
+        color_label: اللون
+        calendar_label: إضافة الفعالية الى
         add_link_section_subtitle: إضف رابط للفعالية الرابط يمكن أن يكون زوم - جوجل ميت أو اي رابط أخر
         add_link_section_title: إضافة رابط للفعالية (إختياري)
-        description_label: الوصف
-        edit_event: تعديل الفعالية
-        event_link_title_label: عنوان الرابط
-        event_link_url_label: رابط الفعالية
-        event_name_placeholder: اسم الفعالية
-        event_title_placeholder: أدخل اسم الفعالية
+        link_title_label: عنوان الرابط
         link_title_placeholder: مثال، رابط خدمة زوم
-        new_event: إضافة فعالية جديدة
-        select_calendar_label: إضافة الفعالية الى
-        select_color_label: اللون
-        start_time_label: التاريخ والوقت
-        title: تعديل الفعالية
-        title_label: عنوان الفعالية
+        link_url_label: رابط الفعالية
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        description_label: الوصف
+        add_event_button: إضافة الفعالية
         update_event_button: تعديل الفعالية
+        start_time_label: التاريخ والوقت
       new:
-        add_event_button: Add event
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        add_link_section_title: Add an event link (optional)
-        description_label: Description
-        edit_event: Edit event
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        event_title_placeholder: Enter Event Title
-        link_title_placeholder: eg. Zoom meeting link
-        new_event: Add new event
-        select_calendar_label: Add event to
-        select_color_label: Color
-        start_time_label: Date and Time
-        title: Add new event
-        title_label: Event Title
+        page_title: Add new event
       show:
         confirm_delete: Are you sure to delete the event?
         date_and_time: Date and time

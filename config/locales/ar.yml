@@ -2512,7 +2512,6 @@ ar:
       calendar_events:
         add_calendar_button: Add Calendar
         add_event_button: Add an event
-        add_new_calendar: Add New Calendar
         calendar: Calendar
         calendar_filter_label: Showing events from
         calendars: Calendars

@@ -24,8 +24,6 @@
               <p class="text-lg font-semibold "><%= t(".calendars") %> </p>
               <a
                 class="block btn btn-default btn-small"
-                ariaLabel="<%= t(".add_new_calendar") %>"
-                title="<%= t(".add_new_calendar") %>"
                 href=<%= new_school_course_calendar_path(@course)%>>
                 <i class="if i-plus-regular if-fw" ></i>
                 <span><%= t(".add_calendar_button") %> </span>
@@ -101,8 +99,6 @@
         <p class="text-sm"><%= t(".no_calendars_sub_text") %></p>
         <a
           class="block btn btn-primary mt-4"
-          ariaLabel="<%= t(".add_new_calendar") %>"
-          title="<%= t(".add_new_calendar") %>"
           href=<%= new_school_course_calendar_path(@course)%>>
           <i class="if i-plus-regular if-fw" ></i>
           <span><%= t(".add_calendar_button") %> </span>

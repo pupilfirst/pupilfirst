@@ -2461,22 +2461,22 @@ ar:
       edit:
         page_title: تعديل الفعالية
       form:
-        edit_event_heading: تعديل الفعالية
+        add_event_button: إضافة الفعالية
         add_event_heading: إضافة فعالية جديدة
-        title_label: عنوان الفعالية
-        title_placeholder: اسم الفعالية
-        color_label: اللون
-        calendar_label: إضافة الفعالية الى
         add_link_section_subtitle: إضف رابط للفعالية الرابط يمكن أن يكون زوم - جوجل ميت أو اي رابط أخر
         add_link_section_title: إضافة رابط للفعالية (إختياري)
+        calendar_label: إضافة الفعالية الى
+        color_label: اللون
+        description_label: الوصف
+        edit_event_heading: تعديل الفعالية
         link_title_label: عنوان الرابط
         link_title_placeholder: مثال، رابط خدمة زوم
         link_url_label: رابط الفعالية
         link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
-        description_label: الوصف
-        add_event_button: إضافة الفعالية
-        update_event_button: تعديل الفعالية
         start_time_label: التاريخ والوقت
+        title_label: عنوان الفعالية
+        title_placeholder: اسم الفعالية
+        update_event_button: تعديل الفعالية
       new:
         page_title: Add new event
       show:
@@ -2486,19 +2486,19 @@ ar:
         link_label: Event Link
         title: Calendar event details
     calendars:
-      form:
-        edit_calendar_heading: Edit %{calendar_name}
-        add_calendar_heading: Create new calendar
-        name_label: Calendar name
-        name_placeholder: مثال، تقويم الدفعة 11
-        cohorts_label: Link calendar to cohorts
-        cohorts_label_hint: من هنا يتم ربط التقويم مع مجموعات محددة
-        all_cohorts_selected: تم تحديد كل المجموعات
-        no_cohorts_selected: لم يتم تحديد أي مجموعة
-        add_calendar_button: Add calendar
-        update_calendar_button: Update calendar
       edit:
         page_title: تعديل التقويم
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: تم تحديد كل المجموعات
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: من هنا يتم ربط التقويم مع مجموعات محددة
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: مثال، تقويم الدفعة 11
+        no_cohorts_selected: لم يتم تحديد أي مجموعة
+        update_calendar_button: Update calendar
       new:
         page_title: Create new calendar
     communities:

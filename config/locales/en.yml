@@ -2340,13 +2340,20 @@ en:
     update_user:
       profile_saved_notification: Profile updated successfully!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: Inactive Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
       active_students_label: Active Students
       cohorts_subheading: Cohorts
       organisation_label: Organisation
-      view_all_cohorts: View All Cohorts
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled
@@ -2355,14 +2362,7 @@ en:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
-    courses:
-      active_cohorts_label: Active Cohorts
-      active_cohorts_count: "%{count}"
-      course_label: Course
-      empty: "No %{cohort_status} for this course."
-      inactive_cohorts_label: Inactive Cohorts
-      inactive_cohorts_count: "%{count}"
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+      view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades
@@ -2471,22 +2471,22 @@ en:
       edit:
         page_title: Edit event
       form:
-        edit_event_heading: Edit %{event_title}
+        add_event_button: Add event
         add_event_heading: Add new event
-        title_label: Event Title
-        title_placeholder: eg. Group Discussion
-        color_label: Color
-        calendar_label: Add event to
         add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
         add_link_section_title: Add an event link (optional)
+        calendar_label: Add event to
+        color_label: Color
+        description_label: Event description
+        edit_event_heading: Edit %{event_title}
         link_title_label: Event link title
         link_title_placeholder: eg. Google Meet
         link_url_label: Event link URL
         link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
-        description_label: Event description
-        add_event_button: Add event
-        update_event_button: Update event
         start_time_label: Date and Time
+        title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        update_event_button: Update event
       new:
         page_title: Add new event
       show:
@@ -2496,19 +2496,19 @@ en:
         link_label: Event Link
         title: Calendar event details
     calendars:
-      form:
-        edit_calendar_heading: Edit %{calendar_name}
-        add_calendar_heading: Create new calendar
-        name_label: Calendar name
-        name_placeholder: eg. Holidays
-        cohorts_label: Link calendar to cohorts
-        cohorts_label_hint: This will link calendar to specified cohorts
-        all_cohorts_selected: All available cohorts have been selected
-        no_cohorts_selected: No cohorts selected
-        add_calendar_button: Add calendar
-        update_calendar_button: Update calendar
       edit:
         page_title: Update calendar
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: All available cohorts have been selected
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: This will link calendar to specified cohorts
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: No cohorts selected
+        update_calendar_button: Update calendar
       new:
         page_title: Create new calendar
     communities:

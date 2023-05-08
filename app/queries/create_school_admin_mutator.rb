@@ -17,7 +17,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
     SchoolAdmin.transaction do
       user =
         persisted_user ||
-          current_school.users.create!(email: email, title: 'School Admin')
+          current_school.users.create!(email: email, title: "School Admin")
       user.update!(name: name)
       new_school_admin = current_school.school_admins.create!(user: user)
 
@@ -25,8 +25,11 @@ class CreateSchoolAdminMutator < ApplicationQuery
         .school_admins
         .where.not(user_id: user.id)
         .each do |admin|
-          SchoolAdminMailer.school_admin_added(admin, new_school_admin, current_user)
-            .deliver_later
+          SchoolAdminMailer.school_admin_added(
+            admin,
+            new_school_admin,
+            current_user
+          ).deliver_later
         end
 
       create_audit_record(user)
@@ -45,7 +48,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
     return if persisted_user.school_admin.blank?
 
-    errors.add(:base, 'Already enrolled as admin')
+    errors.add(:base, "Already enrolled as admin")
   end
 
   def persisted_user
@@ -54,7 +57,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
   def create_audit_record(user)
     AuditRecord.create!(
-      audit_type: AuditRecord::TYPE_ADD_SCHOOL_ADMIN,
+      audit_type: AuditRecord.audit_types[:add_school_admin],
       school_id: current_school.id,
       metadata: {
         user_id: current_user.id,

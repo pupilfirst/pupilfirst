@@ -64,6 +64,7 @@ feature "User Edit", js: true do
     end
 
     it "creates an audit record" do
+      sleep 1
       audit_record = AuditRecord.last
       metadata = audit_record.metadata
       expect(audit_record.audit_type).to eq(

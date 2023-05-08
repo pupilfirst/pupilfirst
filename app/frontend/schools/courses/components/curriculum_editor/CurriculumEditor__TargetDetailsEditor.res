@@ -1079,11 +1079,12 @@ let make = (
                 <HelpIcon link={t("github_action.help_url")} className="ms-1">
                   {t("github_action.help_description")->str}
                 </HelpIcon>
-                <div> {t("github_action.description")->str} </div>
-                <div className="ms-6 mt-2">
+                <div className="ms-6 text-sm text-gray-600">
+                  {t("github_action.description")->str}
+                </div>
+                <div className="ms-6 mt-4">
                   <a
-                    href={`/school/targets/${Target.id(target)}/action`}
-                    className="btn btn-ghost btn-primary-ghost">
+                    href={`/school/targets/${Target.id(target)}/action`} className="btn btn-subtle">
                     <i className="fas fa-external-link-alt text-xs mr-2" />
                     {t("github_action.button_text")->str}
                   </a>

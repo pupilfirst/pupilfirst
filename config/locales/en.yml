@@ -788,7 +788,7 @@ en:
       student_dropped_out_message_without_timestamp: This submission is from a student whose access to the course has ended, or has dropped out.
       students_dropped_out_message_with_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.You can review the submission until %{timestamp}
       students_dropped_out_message_without_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
-      submission_number: "Submission #%{number}"
+      submission_number: "Submission %{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
       team: team

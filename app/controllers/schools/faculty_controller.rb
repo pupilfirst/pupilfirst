@@ -11,9 +11,7 @@ module Schools
       @school = authorize(current_school, policy_class: Schools::FacultyPolicy)
       @form = Schools::Coaches::CreateForm.new(Faculty.new)
 
-      if @form.validate(
-           transformed_params(params).merge(school_id: current_school.id)
-         )
+      if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
         render json: {
                  id: faculty.id.to_s,
@@ -25,12 +23,11 @@ module Schools
       end
     end
 
+    # PATCH /school/coaches/:id
     def update
       @form = Schools::Coaches::UpdateForm.new(faculty)
 
-      if @form.validate(
-           transformed_params(params).merge(school_id: current_school.id)
-         )
+      if @form.validate(params[:faculty].merge(school_id: current_school.id))
         faculty = @form.save
         render json: {
                  id: faculty.id.to_s,
@@ -57,13 +54,6 @@ module Schools
           Faculty.find(params[:id]),
           policy_class: Schools::FacultyPolicy
         )
-    end
-
-    # work around for mismatch of archived_at key
-    def transformed_params(params)
-      params[:faculty].transform_keys do |key|
-        key == "archived" ? "archived_at" : key # map archived to archived_at
-      end
     end
   end
 end

@@ -31,7 +31,7 @@ module Schools
                }
       property :school_id, virtual: true, validates: { presence: true }
       property :affiliation, virtual: true
-      property :archived_at
+      property :archived, virtual: true
 
       def save
         Faculty.transaction do
@@ -55,7 +55,7 @@ module Schools
           public: public,
           image: image,
           affiliation: affiliation,
-          archived_at: archived_at == "true" ? Time.zone.now : nil
+          archived_at: archived == "true" ? Time.zone.now : nil
         }
       end
     end

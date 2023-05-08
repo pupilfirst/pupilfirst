@@ -40,7 +40,7 @@ module Schools
             exited: faculty.exited,
             imageFileName: faculty.image_filename,
             affiliation: faculty.user.affiliation,
-            archived: faculty.archived_at ? true : false
+            archived: faculty.archived_at?
           }
         end
       end

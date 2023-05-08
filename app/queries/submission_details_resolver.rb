@@ -7,7 +7,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       submission: submission,
       target_id: target.id,
       target_title: target.title,
-      students: students,
+      students: students_data,
       level_number: level.number,
       level_id: level.id,
       team_name: team_name,
@@ -24,7 +24,9 @@ class SubmissionDetailsResolver < ApplicationQuery
       submission_report_poll_time:
         Rails.application.secrets.submission_report_poll_time,
       inactive_submission_review_allowed_days:
-        Rails.application.secrets.inactive_submission_review_allowed_days
+        Rails.application.secrets.inactive_submission_review_allowed_days,
+      github_actions_enabled: target.action_config.present?,
+      github_repository: students&.first&.github_repository,
     }
   end
 
@@ -94,10 +96,11 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def students
-    submission
-      .founders
-      .joins(:user)
-      .map { |student| { id: student.id, name: student.name } }
+    @students ||= submission.founders.includes(:user)
+  end
+
+  def students_data
+    students.map { |student| { id: student.id, name: student.name } }
   end
 
   def authorized?

@@ -113,6 +113,14 @@ module UndoGradingMutation = %graphql(`
     }
   `)
 
+module ReRunGithubActionMutation = %graphql(`
+    mutation ReRunGithubActionMutation($submissionId: ID!) {
+      reRunGithubAction(submissionId: $submissionId){
+        success
+      }
+    }
+  `)
+
 module CreateFeedbackMutation = %graphql(`
     mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
       createFeedback(submissionId: $submissionId, feedback: $feedback){
@@ -163,6 +171,23 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
       send(UnassignReviewer)
     }
     send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_ => {
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let reRunGithubAction = (submissionId, send) => {
+  send(BeginSaving)
+
+  ReRunGithubActionMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: ReRunGithubActionMutation.t) => {
+    if response.reRunGithubAction.success {
+      send(FinishSaving)
+    }
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
@@ -1169,6 +1194,8 @@ let make = (
   ~submissionReport,
   ~updateSubmissionReportCB,
   ~submissionReportPollTime,
+  ~githubActionsEnabled,
+  ~githubRepository,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1291,6 +1318,27 @@ let make = (
           <div className="p-4 md:p-6">
             <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
+          {switch (githubRepository, githubActionsEnabled) {
+          | (Some(repo), true) =>
+            <div className="flex justify-between items-center p-4 md:p-6 bg-gray-50">
+              <div>
+                <a
+                  className="btn btn-primary-ghost"
+                  href={`https://github.com/${repo}/actions`}
+                  target="_blank">
+                  {"View Github Action"->str}
+                </a>
+              </div>
+              <div>
+                <button
+                  className="btn btn-primary-ghost"
+                  onClick={_ => reRunGithubAction(submissionId, send)}>
+                  <span> {"Re-Run Github Action"->str} </span>
+                </button>
+              </div>
+            </div>
+          | (_, _) => React.null
+          }}
           {switch submissionReport {
           | Some(report) =>
             <div className="p-4 md:p-6 space-y-8">

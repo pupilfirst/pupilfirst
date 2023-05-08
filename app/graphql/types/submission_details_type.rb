@@ -20,5 +20,7 @@ module Types
     field :reviewer_details, Types::ReviewerDetailType, null: true
     field :submission_report_poll_time, Integer, null: false
     field :inactive_submission_review_allowed_days, Integer, null: false
+    field :github_actions_enabled, Boolean, null: false
+    field :github_repository, String, null: true
   end
 end

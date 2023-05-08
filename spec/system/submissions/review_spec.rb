@@ -1913,4 +1913,40 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_text('A new report description')
     end
   end
+
+  # When a student has github repository linked to their account, the coach can re-run actions
+  # on the repository.
+
+  context 'when a student a linked GitHub repository' do
+    let(:github_repo) { 'test_user/test_repo' }
+    let(:student) { create :student, github_repository: github_repo }
+    let(:target) { create :target, action_config: 'test_action' }
+    let!(:submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [student],
+        latest: true,
+        target: target
+      )
+    end
+
+    around do |example|
+      original_adapter = ActiveJob::Base.queue_adapter
+      ActiveJob::Base.queue_adapter = :test
+      example.run
+      ActiveJob::Base.queue_adapter = original_adapter
+    end
+
+    scenario 'coach can re-run actions on the repository' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission)
+
+      click_button 'Re-Run Github Action'
+      expect(page).to have_text('Submission queued for re-run on Github')
+      expect(page).to have_link('View Github Action', href: "https://github.com/#{github_repo}/actions")
+      expect(Github::RunActionsJob).to have_been_enqueued.with(submission, re_run: true)
+      dismiss_notification
+    end
+  end
 end

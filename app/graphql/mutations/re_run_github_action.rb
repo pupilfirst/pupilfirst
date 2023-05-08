@@ -19,7 +19,7 @@ module Mutations
 
     class StudentHasAGithubAccount < GraphQL::Schema::Validator
       def validate(_object, _context, value)
-        submission = Submission.find_by(id: value[:submission_id])
+        submission = TimelineEvent.find_by(id: value[:submission_id])
 
         if submission.founders.first.github_repository.blank?
           return I18n.t("mutations.re_run_github_action.validation_error.student_has_no_github_account")
@@ -29,7 +29,7 @@ module Mutations
 
     class TargetHasAnActionConfigured < GraphQL::Schema::Validator
       def validate(_object, _context, value)
-        submission = Submission.find_by(id: value[:submission_id])
+        submission = TimelineEvent.find_by(id: value[:submission_id])
 
         if submission.target.action_config.blank?
           return I18n.t("mutations.re_run_github_action.validation_error.target_does_not_have_github_action")
@@ -42,7 +42,11 @@ module Mutations
     private
 
     def submission
-      @submission ||= Submission.find_by(id: submission_id)
+      @submission ||= TimelineEvent.find_by(id: @params[:submission_id])
+    end
+
+    def course
+      @course ||= submission&.target&.course
     end
   end
 end

@@ -2260,6 +2260,11 @@ en:
       your_correct_answer: Your Correct Answer
     re_activate_student:
       success_notification: Student re-activated successfully!
+    re_run_github_action:
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
+      success_notification: Submission queued for re-run on Github
     reassign_reviewer:
       submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.

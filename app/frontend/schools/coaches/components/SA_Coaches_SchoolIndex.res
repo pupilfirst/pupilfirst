@@ -12,11 +12,18 @@ type formVisible =
 type state = {
   coaches: list<Coach.t>,
   formVisible: formVisible,
+  coachCount: int,
 }
 
 type action =
   | UpdateFormVisible(formVisible)
   | UpdateCoaches(Coach.t)
+  | UpdateCoachCount(bool)
+
+let isSelectedTabArchived = () => {
+  let searchQuery = RescriptReactRouter.useUrl().search
+  searchQuery |> Js.String.includes("archived")
+}
 
 let reducer = (state, action) =>
   switch action {
@@ -24,14 +31,30 @@ let reducer = (state, action) =>
   | UpdateCoaches(coach) =>
     let newCoachesList = coach |> Coach.updateList(state.coaches)
     {...state, coaches: newCoachesList}
+  | UpdateCoachCount(isArchivedTabSelected) =>
+    let count =
+      List.filter(
+        coach => Coach.archived(coach) === isArchivedTabSelected,
+        state.coaches,
+      )->List.length
+    {...state, coachCount: count}
   }
 
 @react.component
 let make = (~coaches, ~authenticityToken) => {
-  let (state, send) = React.useReducer(reducer, {coaches: coaches, formVisible: None})
+  let (state, send) = React.useReducer(
+    reducer,
+    {coaches: coaches, formVisible: None, coachCount: Belt.List.length(coaches)},
+  )
+
+  let currentPath = "coaches?status="
+  let isArchivedTabSelected = isSelectedTabArchived()
 
   let closeFormCB = () => send(UpdateFormVisible(None))
-  let updateCoachCB = coach => send(UpdateCoaches(coach))
+  let updateCoachCB = coach => {
+    send(UpdateCoaches(coach))
+    send(UpdateCoachCount(isArchivedTabSelected))
+  }
   <div role="main" className="flex min-h-full bg-gray-50">
     {switch state.formVisible {
     | None => React.null
@@ -39,6 +62,42 @@ let make = (~coaches, ~authenticityToken) => {
       <SA_Coaches_CoachEditor coach closeFormCB updateCoachCB authenticityToken />
     }}
     <div className="flex-1 flex flex-col">
+      <div className="w-full pt-2 relative md:sticky top-0 z-20 bg-gray-50 border-b">
+        <div className="max-w-3xl mx-auto">
+          <div className="px-12 flex justify-start ">
+            <div
+              className={`px-5 py-2 flex items-center p-2 font-medium
+               ${!isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
+              <a href={`${currentPath}active`}>
+                <span className="hidden sm:inline"> {tr("active_coaches")->str} </span>
+                {switch isArchivedTabSelected {
+                | false =>
+                  <span
+                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1 ms-1.5`>
+                    {state.coachCount->Belt.Int.toString->str}
+                  </span>
+                | true => <span />
+                }}
+              </a>
+            </div>
+            <div
+              className={`px-5 py-2  flex items-center p-2 font-medium
+              ${isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
+              <a href={`${currentPath}archived`}>
+                <span className="hidden sm:inline"> {tr("archived_coaches")->str} </span>
+                {switch isArchivedTabSelected {
+                | true =>
+                  <span
+                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1 ms-1.5`>
+                    {state.coachCount->Belt.Int.toString->str}
+                  </span>
+                | false => <span />
+                }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="flex px-6 py-2 items-center justify-between">
         <button
           onClick={_event => {
@@ -54,6 +113,7 @@ let make = (~coaches, ~authenticityToken) => {
         <div className="max-w-2xl w-full mx-auto relative">
           {state.coaches
           |> List.sort((x, y) => int_of_string(Coach.id(x)) - int_of_string(Coach.id(y)))
+          |> List.filter(coach => Coach.archived(coach) === isArchivedTabSelected)
           |> List.map(coach =>
             <div
               key={coach->Coach.id}

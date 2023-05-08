@@ -452,7 +452,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       <span className="me-2">
                         <i className="fas fa-list rtl:rotate-180 text-base" />
                       </span>
-                      {t("coach_visibility")->str} //{t("target_visibility") |> str}
+                      {t("coach_visibility")->str}
                     </label>
                     <div
                       id="visibility" className="flex toggle-button__group shrink-0 rounded-lg"
@@ -462,19 +462,19 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         <button
                           onClick={_event => {
                             ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdateArchived(false))
+                          }}
+                          className={booleanButtonClasses(!state.archived)}>
+                          {t("active")->str}
+                        </button>
+                        <button
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
                             send(UpdateArchived(true))
                           }}
                           name="faculty[exited]"
                           className={booleanButtonClasses(state.archived)}>
                           {t("archived")->str}
-                        </button>
-                        <button
-                          onClick={_event => {
-                            ReactEvent.Mouse.preventDefault(_event)
-                            send(UpdateArchived(false))
-                          }}
-                          className={booleanButtonClasses(!state.archived)}>
-                          {t("active")->str}
                         </button>
                       </div>
                       <input

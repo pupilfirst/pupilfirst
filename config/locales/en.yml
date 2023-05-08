@@ -1251,6 +1251,8 @@ en:
     SA_Coaches_SchoolIndex:
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
+      active_coaches: Active Coaches
+      archived_coaches: Archived Coaches
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students

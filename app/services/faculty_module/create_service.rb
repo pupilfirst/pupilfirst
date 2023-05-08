@@ -8,9 +8,10 @@ module FacultyModule
       school = @faculty_params[:school]
 
       user =
-        User
-          .where(email: @faculty_params[:email], school: school)
-          .first_or_create!(title: 'Coach')
+        User.where(
+          email: @faculty_params[:email],
+          school: school
+        ).first_or_create!(title: "Coach")
 
       return user.faculty if user.faculty.present?
 
@@ -29,7 +30,8 @@ module FacultyModule
           user: user,
           category: Faculty::CATEGORY_VISITING_COACHES,
           connect_link: @faculty_params[:connect_link],
-          public: @faculty_params[:public]
+          public: @faculty_params[:public],
+          archived_at: @faculty_params[:archived_at]
         )
       end
     end

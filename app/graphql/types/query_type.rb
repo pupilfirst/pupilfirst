@@ -3,11 +3,11 @@ module Types
     class << self
       attr_accessor :resolved_fields
 
-      def resolved_field(*args, &block)
+      def resolved_field(*args, null: nil, &block)
         self.resolved_fields ||= []
         self.resolved_fields << args[0]
 
-        field(*args, &block)
+        field(*args, null: null, &block)
       end
     end
 

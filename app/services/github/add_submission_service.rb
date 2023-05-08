@@ -15,7 +15,29 @@ module Github
       end
 
       branch = create_branch(re_run)
-      add_contents(branch, repository)
+      repo_name = @submission.founders.first.github_repository
+
+      # Add the workflow file
+      github_client.update_contents(
+        repo_name,
+        '.github/workflows/ci.js.yml',
+        'Update workflow [skip ci]',
+        ci_file(repo_name).sha,
+        @submission.target.action_config,
+        branch: branch
+      )
+
+      # Add files to the repo
+      add_submission_file(branch, repo_name)
+
+      # Dump the submission data to a file
+      github_client.create_contents(
+        repo_name,
+        'submission.json',
+        'Add submission data',
+        submission_data_service.data.to_json,
+        branch: branch
+      )
     end
 
     private
@@ -48,26 +70,6 @@ module Github
         last_commit = Github::SetupRepositoryService.new(@submission.founders.first).add_workflow_starter(repo_name)
         last_commit.content.sha
       end
-    end
-
-    def add_contents(branch, repo)
-      repo_name = @submission.founders.first.github_repository
-      github_client.update_contents(
-        repo_name,
-        '.github/workflows/ci.js.yml',
-        'Update workflow [skip ci]',
-        ci_file(repo_name).sha,
-        @submission.target.action_config,
-        branch: branch
-      )
-      add_submission_file(branch, repo_name)
-      github_client.create_contents(
-        repo_name,
-        'submission.json',
-        'Add submission data',
-        submission_data_service.data.to_json,
-        branch: branch
-      )
     end
 
     def add_submission_file(branch, repo)

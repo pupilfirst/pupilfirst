@@ -1435,13 +1435,14 @@ ml:
           students: Students
           teams: Teams
         main:
-          admins: Admins
           coaches: Coaches
           communities: Communities
           courses: Courses
-          customization: Customization
           overview: Overview
           settings: Settings
+        settings:
+          admins: Admins
+          customization: Customization
     School__SearchableTagList:
       add_new_tag: പുതിയ ടാഗ് ചേർക്കുക
       pick_tag: ടാഗ് തിരഞ്ഞെടുക്കുക

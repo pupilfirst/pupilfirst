@@ -14,7 +14,6 @@ module Github
       repository_full_name = "#{github_configuration.organization_id}/#{repository_name}"
 
       if github_client.repository?(repository_full_name)
-        repository = github_client.repository(repository_full_name)
         @student.update!(github_repository: repository_full_name)
       else
         # Create a new repository with the name student-<student_id>

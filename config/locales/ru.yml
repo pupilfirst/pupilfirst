@@ -1,28 +1,32 @@
 ru:
   applicants:
     enroll:
+      errors:
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
       link_expired: Данная разовая ссылка недействительна. Если вы завершили регистрацию, пожалуйста войдите.
       welcome: Добро пожаловать в %{school_name}!
     resolve_applicant_path:
       welcome: Добро пожаловать в %{school_name}!
+  calendar_events:
+    create:
+      success: Event created successfully!
+    create_or_update_form:
+      calendar_error: Please select a calendar from the list
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
+      start_time_error: Please select a valid time for the event
+      title_error: Please enter a valid title for the event
+    delete:
+      success: Event deleted successfully!
+    update:
+      success: Event updated successfully!
   calendars:
     create:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  calendar_events:
-    create:
-      success: Event created successfully!
-    update:
-      success: Event updated successfully!
-    delete:
-      success: Event deleted successfully!
-    create_or_update_form:
-      title_error: Please enter a valid title for the event
-      calendar_error: Please select a calendar from the list
-      start_time_error: Please select a valid time for the event
-      color_error: Please select a valid color for the event
-      invalid_url: Please enter a valid URL for the event
   cohorts:
     shared:
       overview_link: Обзор
@@ -42,6 +46,7 @@ ru:
       pagination_notice: Сейчас показаны %{page_start}-%{page_end} из %{count} таких студентов.
   communities:
     show:
+      community_title: "%{name} Community"
       new_topic: Новая тема
       note: " Преподаватели в вашей школе имеют доступ ко всем сообществам."
       welcome: Добро пожаловать в
@@ -85,6 +90,7 @@ ru:
       sign_in: Войти
       sign_out: Выйти
     AppRouter__Nav:
+      calendar: Calendar
       close_sidebar: Закрыть боковую панель
       curriculum: Силлабус
       leaderboard: Таблица Лидеров
@@ -92,7 +98,6 @@ ru:
       review: Оценить
       sign_out: Выйти
       students: Студенты
-      calendar: Calendar
     ClickToCopy:
       copied: Скопировано!
       copy: Скопировать в буфер обмена
@@ -333,6 +338,7 @@ ru:
       remove_post_confirm: из списка назначенных команд?
       remove_pre_confirm: "Вы уверены что хочешь удалить "
     CourseCoaches__Root:
+      assign_coaches: Assign Coaches to Course
       coaches_list: Список тренеров курса
       course_empty: У курса нет назначенных тренеров!
       enrollment_delete_error_head_notification: Зачисление тренера не может быть удалена
@@ -449,6 +455,7 @@ ru:
         view_as_student: Посмотреть как студент
       courses_fully_loaded_text: Показаны все %{total_courses} курсов
       courses_partially_loaded_text: Показано %{loaded_courses_count} из %{total_courses} курсов
+      create_description: Let's create another course.
       edit_course_details: Изменить сведения о курсе
       empty_courses: У вас нет курсов!
       filter:
@@ -523,8 +530,12 @@ ru:
       level_locked_for_students_notice: Этот уровень по-прежнему заблокирован для учащихся и будет разблокирован <strong>%{date}</strong>.
       level_locked_notice: Уровень в настоящее время заблокирован!
       milestone_targets: Контрольные задачи
-      nav_next_level: След. Уровень
-      nav_previous_level: Пред. Уровень
+      nav_aria_next_level: Go to the next level
+      nav_aria_previous_level: Go to the previous level
+      nav_long_next_level: Next Level
+      nav_long_previous_level: Previous Level
+      nav_short_next_level: Next
+      nav_short_previous_level: Previous
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Записать Снова
       button_text_start_recording: Начать Запись
@@ -595,8 +606,8 @@ ru:
       completion_tab_take_quiz: Пройти Тест
       completion_tab_visit_link: Пройдите по Ссылке для Заввершения
       discuss_tab: Обсуждения
-      learn_cta_submit_work: Отправить работу на рассмотрение
       learn_cta_submit_form: Submit Form
+      learn_cta_submit_work: Отправить работу на рассмотрение
       learn_cta_take_quiz: Пройти Тест
       learn_tab: Учиться
       next_target_button: След. Задача
@@ -639,8 +650,8 @@ ru:
       submission_number: "Работа #"
       submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
-      your_submissions: Ваши Работы
       your_responses: Your Responses
+      your_submissions: Ваши Работы
     CoursesCurriculum__TargetStatus:
       access_locked: Сейчас у вас ограниченный доступ к курсу. Вам разрешен предварительный просмотр содержимого, но вы не можете выполнить ни одну цель.
       course_locked: Курс был окончен.
@@ -657,7 +668,10 @@ ru:
       notification_error_head: Непредвиденная ошибка
       notification_notice_body: Пожалуйста, перезагрузите страницу и проверьте статус отправки перед повторной попыткой.
       notification_notice_head: Не удалось отменить отправку
+      undo: Undo
+      undo_submission: Undo submission
       undo_submission_title: Удалить эту работу
+      undoing: Undoing...
       window_confirm: Вы уверены, что хотите удалить это задачу?
     CoursesCurriculum__UrlForm:
       button_placeholder: Введите полный URL, начинающийся с https://...
@@ -725,12 +739,13 @@ ru:
       edit_review_checklist: Изменить список оценки
       save_checklist: Сохранить список оценки
     CoursesReview__ChecklistShow:
+      add_additional_feedback: Add Additional Feedback
+      back_to_review: Back to Review
       edit_checklist_button: Редактировать список
       feedback_placeholder: Добавить отзыв (необязательно)
       generate_feedback_button: Создать отзыв
-      review_checklist: Проверить список
-      add_additional_feedback: Add Additional Feedback
       remove_additional_feedback: Remove Additional Feedback
+      review_checklist: Проверить список
     CoursesReview__Editor:
       add_another_feedback: Добавить еще один отзыв
       add_feedback: Добавить отзыв
@@ -753,9 +768,9 @@ ru:
       grade_card: Оценочная Карта
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
       hide_test_report_button: Скрыть Отчет Тестов
-      level_acronym: У
       note_help: "Хотели бы вы написать об этом заметку "
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
+      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
       report_status_string:
@@ -783,7 +798,7 @@ ru:
       student_dropped_out_message_without_timestamp: Это задание от студента, доступ к которому закончился или у которого закончился.
       students_dropped_out_message_with_timestamp: Эта работа связана с одним или несколькими студентами, доступ к курсу закончился или закончился. ou может просмотреть представление до %{timestamp}
       students_dropped_out_message_without_timestamp: Эта работа связана с одним или несколькими студентами, доступ к курсу закончился или закончился.
-      submission: Работа
+      submission_number: "Submission #%{number}"
       submitted_by: "Отправлен от "
       submitted_by_team: "Отправлено командой: "
       team: команда
@@ -1028,6 +1043,7 @@ ru:
     CurriculumEditor__TargetChecklistItemEditor:
       add_choice: Добавить выбор
       choices: Выборов
+      choices_not_unique: Choices must be unique
       controls_checklist: Управление для элемента списка
       copy: Копировать
       delete: Удалить
@@ -1039,7 +1055,6 @@ ru:
       multi_choice: Allow multiple selections
       not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: Неверный выбор
-      choices_not_unique: Choices must be unique
       optional: Необязательный
       question_cannot_empty: Question cannot be empty
       remove_choice: Убрать Выбор
@@ -1072,13 +1087,13 @@ ru:
       select_criterion_label: Выберите критерии оценки из вашего списка
       select_criterion_warning: По крайней мере, один должен быть выбран
       selected_all_targets: Вы выбрали все задачи
-      submit_individually: Все студенты должны представить индивидуально.
       submit_form: Submit a form to complete the target.
+      submit_individually: Все студенты должны представить индивидуально.
       take_quiz: Пройдите тест, чтобы выполнить задачу.
       target_checklist:
+        form_help: These are the questions a student must answer to complete the target.
         form_label: What are the questions you would like the student to answer?
         form_limit_warning: Maximum allowed questions is 25!
-        form_help: These are the questions a student must answer to complete the target.
         help: Это шаги, которые должен пройти студент для сдачи работы над целью. Эта информация будет показана наставнику для проверки.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: Какие шаги должен предпринять студент для достижения этой цели?
@@ -1175,8 +1190,8 @@ ru:
       sign_out: Выход
       user_controls: Показать пользовательские элементы управления
     LevelProgressBar:
-      heading: Level Progress
       course_completed: Course Completed!
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -1271,27 +1286,6 @@ ru:
       search_empty: Ни один неактивный учащийся не соответствует вашим критериям поиска.
       search_placeholder: Поиск по названию студента или команды...
       team: Команда
-    SchoolAdminNavbar__Root:
-      course_nav:
-        applicants: Абитуренты
-        authors: Авторы
-        certificates: Сертификаты
-        coaches: Менторы
-        curriculum: Силлабус
-        evaluation_criteria: Критерии Оценивания
-        exports: Экспорты
-        students: Студенты
-      dashboard: Обучение
-      navbar:
-        admins: Админы
-        coaches: Менторы
-        communities: Сообщество
-        courses: Курсы
-        customization: Кастомизация
-        overview: Обзор
-        settings: Настройки
-      notifications: Уведомления
-      sign_out: Выйти
     SchoolAdmin__EditorDrawer:
       close_editor: Закрыть Редактор
     SchoolAdmins__Editor:
@@ -1446,6 +1440,28 @@ ru:
       social: Соцсети
       social_links_q: Добавить ссылки на социальные сети?
       terms_and_conditions: Условия использования
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Applicants
+          authors: Authors
+          calendar: Calendars
+          certificates: Certificates
+          coaches: Coaches
+          cohorts: Cohorts
+          curriculum: Curriculum
+          evaluation_criteria: Evaluation Criteria
+          exports: Exports
+          students: Students
+          teams: Teams
+        main:
+          admins: Admins
+          coaches: Coaches
+          communities: Communities
+          courses: Courses
+          customization: Customization
+          overview: Overview
+          settings: Settings
     School__SearchableTagList:
       add_new_tag: Добавить новый тег
       pick_tag: Выберите тег
@@ -1490,7 +1506,6 @@ ru:
       revoked_status_label: Аннулировано
       select_certificate_input_label: Выберите сертификат для выдачи
     StudentBulkImport__Root:
-      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: Аффилиация должна быть меньше 250 символов
         invalid_email: Электронная почта должна быть действительной и не может быть пустой
@@ -1509,6 +1524,7 @@ ru:
         help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
         label: CSV-файл импорта
         placeholder: Выберите файл CSV для импорта
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       drawer_heading: Массовый импорт студентов
       error_summary_title: "Вот краткое изложение ошибок в листе: "
       example_csv_link:
@@ -1675,7 +1691,7 @@ ru:
     StudentsIndex__Root:
       add_new_students: Добавить новых студентов
       cohort: Когорта
-      edit: Редактировать
+      edit_details: Edit %{name}'s details
       filter:
         search_by_email: Поиск по электронной почте
         search_by_name: Поиск по имени
@@ -1818,6 +1834,7 @@ ru:
       cancel: Отмена
       change_password: Изменить текущий пароль
       change_photo: Изменить фото
+      community_digest: Community Digest
       community_digest_emails: Дайджесты сообщества содержат новые вопросы от ваших сообществ, а также подборку оставшихся без ответа вопросов за прошедшую неделю.
       confirm_dialog_aria: Диалоговое окно подтверждения удаления учетной записи
       confirm_email: Подтвердите вашу почту
@@ -1925,10 +1942,10 @@ ru:
       privacy_policy: Политика конфиденциальности
       terms_and_conditions: Условия использования
     calendar:
+      events: Events
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
-      events: Events
     leaderboard:
       active_students: Активные Студенты
       change: Изменить
@@ -2198,6 +2215,8 @@ ru:
     create_community:
       community_created_notification: Сообщество успешно создано
     create_course:
+      auto_generated_cohort_description: Auto generated cohort for active students in %{course_name}
+      auto_generated_cohort_name: Purple (Auto-generated)
       success_notification: Курс успешно создан!
     create_course_author:
       author_created_notification: Автор создан
@@ -2305,7 +2324,9 @@ ru:
     update_cohort:
       success_notification: Когорта успешно обновлена.
     update_course:
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Курс успешно обновлен!
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_course_author:
       author_name_updated_notification: Имя автора обновлено.
       author_updated_notification: Автор обновлён
@@ -2339,13 +2360,20 @@ ru:
     update_user:
       profile_saved_notification: Профиль успешно обновлен!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: Inactive Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Организации
     show:
       active_students_label: Активные студенты
       cohorts_subheading: Когорты
       organisation_label: Организация
-      view_all_cohorts: View All Cohorts
       students_enrolled_heading: Студенты, зачисленные в
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> студент зачислен
@@ -2358,14 +2386,7 @@ ru:
         many: в <span class="font-semibold text-black">%{count}</span> активных когортах
         other: в <span class="font-semibold text-black">%{count}</span> активных когортах
       total_students_label: Всего студентов
-    courses:
-      active_cohorts_label: Active Cohorts
-      active_cohorts_count: "%{count}"
-      course_label: Course
-      empty: "No %{cohort_status} for this course."
-      inactive_cohorts_label: Inactive Cohorts
-      inactive_cohorts_count: "%{count}"
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+      view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades
@@ -2470,40 +2491,50 @@ ru:
   schools:
     admins:
       title: Админы
-    calendars:
-      new:
-        title: 'Create new calendar'
-        name_label: Calendar name
-        cohorts_label: Link calendar to cohorts
-        no_cohorts_selected: No cohorts selected
-        all_cohorts_selected: All cohorts selected
-        add_calendar_button: Add calendar
-      edit:
-        update_calendar: Update calendar
-        link_to_cohorts: Link calendar to cohorts
-        calendar_name: Calendar name
     calendar_events:
-      new:
-        title: 'Add new event'
-        new_event: 'Add new event'
-        edit_event: 'Edit event'
-        title_label: Event Title
-        select_calendar_label: Add event to
-        select_color_label: Color
-        start_time_label: Date and Time
-        add_link_section_title: Add an event link (optional)
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        description_label: Description
+      edit:
+        page_title: Edit event
+      form:
         add_event_button: Add event
-        link_title_placeholder: eg. Zoom meeting link
+        add_event_heading: Add new event
+        add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
+        add_link_section_title: Add an event link (optional)
+        calendar_label: Add event to
+        color_label: Color
+        description_label: Event description
+        edit_event_heading: Edit %{event_title}
+        link_title_label: Event link title
+        link_title_placeholder: eg. Google Meet
+        link_url_label: Event link URL
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        start_time_label: Date and Time
+        title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        update_event_button: Update event
+      new:
+        page_title: Add new event
       show:
-        title: 'Calendar event details'
-        link_label: Event Link
-        description_label: Description
-        date_and_time: Date and time
         confirm_delete: Are you sure to delete the event?
+        date_and_time: Date and time
+        description_label: Description
+        link_label: Event Link
+        title: Calendar event details
+    calendars:
+      edit:
+        page_title: Update calendar
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: All available cohorts have been selected
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: This will link calendar to specified cohorts
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: No cohorts selected
+        update_calendar_button: Update calendar
+      new:
+        page_title: Create new calendar
     communities:
       index:
         title: Сообщества
@@ -2513,19 +2544,19 @@ ru:
       authors:
         title: Авторы
       calendar_events:
-        title: Calendars and Events
         add_calendar_button: Add Calendar
-        calendar: Calendar
-        calendars: Calendars
-        calendar_filter_label: Showing events from
-        select_calendar_filter: Select a calendar
-        upcoming_events_in: Upcoming events in
         add_event_button: Add an event
-        events: Events
+        calendar: Calendar
+        calendar_filter_label: Showing events from
+        calendars: Calendars
         empty_events: No event scheduled for the selected date
-        today: Today
+        events: Events
         no_calendars_message: No calendars yet
         no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
+        select_calendar_filter: Select a calendar
+        title: Calendars and Events
+        today: Today
+        upcoming_events_in: Upcoming events in
       certificates:
         title: Сертификаты
       curriculum:
@@ -2559,6 +2590,17 @@ ru:
       submissions_reviewed: сабмиты проверены
       title: Общий обзор
   services:
+    courses:
+      demo_content_service:
+        criterion_one: Correctness of implementation
+        criterion_two: Quality of submission
+        grade_1: Bad
+        grade_2: Good
+        grade_3: Great
+        level_1: Level 1
+        target_group_description: Description of demo target group
+        target_group_name: Demo Target Group
+        target_name: Demo Target
     discord:
       community_message_service:
         post_topic_created: |-
@@ -2570,6 +2612,7 @@ ru:
   shared:
     _no: "Нет"
     _yes: "Да"
+    admin: Admin
     all: Все
     and: и
     archived: Архивирован
@@ -2677,11 +2720,11 @@ ru:
       title: Изменить пользователя
     edit:
       course_discord_requirement_met:
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
         description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
       course_requires_discord_account:
-        heading: Wait a second! You need to link your Discord account first.
         description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
+        heading: Wait a second! You need to link your Discord account first.
       discord_connect: Присоединяйтесь к нашему сообществу Discord
       discord_connected_account: Перейти в сообщество раздора
       discord_connected_message: <li>Ваш никнейм на сервере Discord будет синхронизирован с вашим именем здесь.</li><li>Вам были назначены дополнительные роли в Discord.</li>

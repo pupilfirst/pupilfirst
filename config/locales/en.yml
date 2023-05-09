@@ -1439,13 +1439,14 @@ en:
           students: Students
           teams: Teams
         main:
-          admins: Admins
           coaches: Coaches
           communities: Communities
           courses: Courses
-          customization: Customization
           overview: Overview
           settings: Settings
+        settings:
+          admins: Admins
+          customization: Customization
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag

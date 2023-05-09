@@ -27,7 +27,7 @@ let imageContainerClasses = shrunk => {
 let topNavButtonContents = page => {
   [
     <PfIcon key="icon" className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
-    <span key="content" className="ms-2"> {Page.name(page)->str} </span>,
+    <span key="content" className="ms-2"> {Page.primaryNavName(page)->str} </span>,
   ]->React.array
 }
 
@@ -46,9 +46,11 @@ let showLink = (selectedPage, selectedCourse, page, classes, title, contents) =>
 
 let topLink = (selectedPage, selectedCourse, page) => {
   let defaultClasses = "school-admin-navbar__primary-nav-link py-3 px-2 mb-1"
+
   let classes =
     defaultClasses ++ (selectedPage == page ? " school-admin-navbar__primary-nav-link--active" : "")
-  let title = Page.shrunk(selectedPage) ? Some(Page.name(page)) : None
+
+  let title = Page.shrunk(selectedPage) ? Some(Page.primaryNavName(page)) : None
 
   showLink(selectedPage, selectedCourse, page, classes, title, topNavButtonContents(page))
 }
@@ -62,8 +64,8 @@ let secondaryNavOption = (selectedPage, selectedCourse, page) => {
         : " font-medium text-gray-500"
     )
 
-  <div key={Page.name(page)}>
-    {showLink(selectedPage, selectedCourse, page, classes, None, Page.name(page)->str)}
+  <div key={Page.secondaryNavName(page)}>
+    {showLink(selectedPage, selectedCourse, page, classes, None, Page.secondaryNavName(page)->str)}
   </div>
 }
 
@@ -151,7 +153,9 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           <ul>
             {[Page.Courses, SchoolCoaches, Communities, Settings(Customization)]
             ->Js.Array2.map(page =>
-              <li key={Page.name(page)}> {topLink(selectedPage, selectedCourse, page)} </li>
+              <li key={Page.primaryNavName(page)}>
+                {topLink(selectedPage, selectedCourse, page)}
+              </li>
             )
             ->React.array}
             <li>

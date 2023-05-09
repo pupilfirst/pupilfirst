@@ -30,8 +30,7 @@ module FacultyModule
           user: user,
           category: Faculty::CATEGORY_VISITING_COACHES,
           connect_link: @faculty_params[:connect_link],
-          public: @faculty_params[:public],
-          archived_at: @faculty_params[:archived_at]
+          public: @faculty_params[:public]
         )
       end
     end

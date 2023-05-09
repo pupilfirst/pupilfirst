@@ -39,6 +39,7 @@ module Schools
       end
     end
 
+    # GET /school/courses/:course_id/coaches
     def course_index
       @course =
         policy_scope(

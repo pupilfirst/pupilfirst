@@ -158,7 +158,9 @@ let computeInitialState = coach =>
 let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
   let (state, send) = React.useReducerWithMapState(reducer, coach, computeInitialState)
 
+  let (isNewCoach, _) = React.useState(_ => state.email == "")
   let formId = "coach-create-form"
+
   let addCoach = json => {
     let id = json |> {
       open Json.Decode
@@ -473,7 +475,8 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                             send(UpdateArchived(true))
                           }}
                           name="faculty[exited]"
-                          className={booleanButtonClasses(state.archived)}>
+                          className={booleanButtonClasses(state.archived)}
+                          disabled={isNewCoach}>
                           {t("archived")->str}
                         </button>
                       </div>

@@ -1320,21 +1320,26 @@ let make = (
           </div>
           {switch (githubRepository, githubActionsEnabled) {
           | (Some(repo), true) =>
-            <div className="flex justify-between items-center p-4 md:p-6 bg-gray-50">
-              <div>
-                <a
-                  className="btn btn-primary-ghost"
-                  href={`https://github.com/${repo}/actions`}
-                  target="_blank">
-                  {"View Github Action"->str}
-                </a>
-              </div>
-              <div>
-                <button
-                  className="btn btn-primary-ghost"
-                  onClick={_ => reRunGithubAction(submissionId, send)}>
-                  <span> {"Re-Run Github Action"->str} </span>
-                </button>
+            <div className="p-4 md:p-6 bg-gray-50">
+              <div className="bg-white shadow p-4 rounded-lg">
+                <div className="flex items-center justify-between border-b pb-1.5">
+                  <p className="font-semibold"> {"Github Actions"->str} </p>
+                  <a
+                    className="px-2 py-1 font-medium text-sm underline rounded text-primary-500 hover:bg-primary-50 hover:text-primary-700 transition"
+                    href={`https://github.com/${repo}/actions`}
+                    target="_blank">
+                    <Icon className="if i-external-link-regular me-2" /> {"View Github Action"->str}
+                  </a>
+                </div>
+                <div className="flex flex-col md:flex-row justify-between md:space-x-2 pt-4">
+                  <p> {"Do you want to re-run the Github action on this submission?"->str} </p>
+                  <button
+                    className="btn btn-default mt-2 md:mt-0"
+                    onClick={_ => reRunGithubAction(submissionId, send)}>
+                    <Icon className="if i-redo-regular text-lg me-2" />
+                    <span> {"Yes, Re-Run Github Action"->str} </span>
+                  </button>
+                </div>
               </div>
             </div>
           | (_, _) => React.null
@@ -1342,7 +1347,7 @@ let make = (
           {switch submissionReport {
           | Some(report) =>
             <div className="p-4 md:p-6 space-y-8">
-              <div className="bg-gray-300 p-4 rounded-md">
+              <div className="bg-gray-100 p-4 rounded-md">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-start gap-3">
                     <div className="pt-1">

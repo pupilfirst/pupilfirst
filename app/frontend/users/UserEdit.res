@@ -260,7 +260,7 @@ let hasInvalidPassword = state =>
     : true
 
 let saveDisabled = state =>
-  hasInvalidPassword(state) || (state.name->String.trim->String.length == 0 || !state.dirty)
+  hasInvalidPassword(state) || (state.name->String.trim->String.length < 2 || !state.dirty)
 
 let confirmDeletionWindow = (state, send) =>
   state.showDeleteAccountForm
@@ -364,7 +364,10 @@ let make = (
               placeholder={t("name_placeholder")}
             />
             <School__InputGroupError
-              message={t("name_error")} active={state.name->String.trim->String.length < 2}
+              message={t("name_error")} active={state.name->String.trim->String.length < 1}
+            />
+            <School__InputGroupError
+              message={t("name_error_length")} active={state.name->String.trim->String.length == 1}
             />
             <div className="mt-6">
               <label htmlFor="user_preferred_name" className="block text-sm font-semibold">
@@ -542,7 +545,7 @@ let make = (
             <p className="mt-1 text-sm text-gray-600"> {t("update_email_notifications")->str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
-            <p className="font-semibold"> {"Community Digest"->str} </p>
+            <p className="font-semibold"> {t("community_digest")->str} </p>
             <p className="text-sm text-gray-600"> {t("community_digest_emails")->str} </p>
             <div className="mt-6">
               <div className="flex items-center">
@@ -620,8 +623,7 @@ let make = (
             </p>
             <div className="mt-4">
               {isSchoolAdmin || hasValidDeleteAccountToken
-                ? <div
-                    className="bg-orange-100 border-s-4 border-orange-400 p-4">
+                ? <div className="bg-orange-100 border-s-4 border-orange-400 p-4">
                     <div className="flex">
                       <FaIcon classes="fas fa-exclamation-triangle text-orange-400" />
                       <div className="ms-3">

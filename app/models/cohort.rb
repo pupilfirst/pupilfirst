@@ -9,8 +9,9 @@ class Cohort < ApplicationRecord
   has_many :calendars, through: :calendar_cohorts
 
   scope :active,
-        -> { where('ends_at > ?', Time.zone.now).or(where(ends_at: nil)) }
-  scope :ended, -> { where('ends_at < ?', Time.zone.now) }
+        -> { where("ends_at > ?", Time.zone.now).or(where(ends_at: nil)) }
+  scope :ended, -> { where("ends_at < ?", Time.zone.now) }
+  scope :inactive, -> { ended }
 
   normalize_attribute :description
 

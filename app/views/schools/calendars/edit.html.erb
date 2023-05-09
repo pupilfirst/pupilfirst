@@ -1,36 +1,4 @@
 <% content_for(:head) do %>
-  <title><%= @course.name %> | <%= t(".title") %> </title>
+  <title><%= @course.name %> | <%= t(".page_title") %> </title>
 <% end %>
-<div id="schoolrouter-innerpage-data">
-  <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6">
-      <div class="mt-4">
-        <%= link_to calendar_events_school_course_path(@course), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
-          <i class="if i-arrow-left-regular if-fw rtl:rotate-180" ></i>
-          <%= t('shared.back_link') %>
-        <% end %>
-      </div>
-      <div class="">
-          <h1 class="text-xl md:text-2xl font-bold mt-4">
-            <%= t(".update_calendar") %>
-          </h1>
-          <p class="text-sm font-medium text-gray-500"><%= @course.name %></p>
-      </div>
-    </div>
-  </section>
-  <section class="bg-white" >
-    <%= form_with  model: @calendar, url: school_calendar_path(@calendar, method: 'patch'), class: "max-w-5xl mx-auto p-6" do |f|  %>
-      <label for="name">
-        <span class="text-sm font-medium"><%= t('.calendar_name') %></span>
-      </label>
-      <%= f.text_field :name, placeholder: "eg, Batch 1 calendar", required: true, id: "name", class: "mt-2 text-sm block w-full border border-gray-400 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500"  %>
-      <label class="mt-5 block flex-1">
-        <span class="text-sm font-medium pe-1"><%= t('.link_to_cohorts') %></span><span title="This will link calendar to specified cohorts"><i class="if i-question-circle-regular if-fw cursor-help rtl:scale-x-[-1]" aria-hidden="true"></i></span>
-      </label>
-      <div class="mt-1">
-        <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= { selected: @calendar.cohorts.map {|c| {id: c.id.to_s, name: c.name}}, allItems:  @course.cohorts.map { |cohort| { id: cohort.id.to_s, name: cohort.name }}, inputName: "calendar[cohort_ids][]", allItemsSelectedMessage: "All cohorts selected", emptySelectionMessage: "No cohorts selected" }.to_json %>"></div>
-      </div>
-      <button type="submit" class="btn btn-primary w-full mt-5"><%= t(".update_calendar") %></button>
-    <% end %>
-  </section>
-</div>
+<%= render partial: 'form', locals: { course: @course, calendar: @calendar } %>

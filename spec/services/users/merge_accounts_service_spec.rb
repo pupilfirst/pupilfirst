@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Users::MergeAccountsService do
   subject { described_class }
@@ -78,8 +78,8 @@ describe Users::MergeAccountsService do
     create :course_export, :students, user: old_user, course: course_2
   end
 
-  describe '#execute' do
-    it 'merges the old user account to a new account and updates applicable records' do
+  describe "#execute" do
+    it "merges the old user account to a new account and updates applicable records" do
       old_user_id = old_user.id
       old_user_email = old_user.email
 
@@ -121,21 +121,21 @@ describe Users::MergeAccountsService do
       audit_record = AuditRecord.first
       expect(audit_record.school_id).to eq(new_user.school_id)
       expect(audit_record.audit_type).to eq(
-        AuditRecord::TYPE_MERGE_USER_ACCOUNTS
+        AuditRecord.audit_types[:merge_user_accounts]
       )
       expect(audit_record.metadata.to_h).to eq(
-        { 'user_id' => new_user.id, 'old_account_email' => old_user_email }
+        { "user_id" => new_user.id, "old_account_email" => old_user_email }
       )
     end
 
-    context 'both users have student profiles in the same course' do
+    context "both users have student profiles in the same course" do
       let!(:student_new_user_c1) do
         create :student,
                user: new_user,
                level: level_1_c1,
                cohort: course_1.cohorts.first
       end
-      it 'prompts to select the student profile to be used' do
+      it "prompts to select the student profile to be used" do
         expect {
           subject.new(old_user: old_user, new_user: new_user).execute
         }.to raise_error(
@@ -144,7 +144,7 @@ describe Users::MergeAccountsService do
         )
       end
 
-      it 'throws an error if both profile ids are passed to the service' do
+      it "throws an error if both profile ids are passed to the service" do
         expect {
           subject.new(
             old_user: old_user,
@@ -160,7 +160,7 @@ describe Users::MergeAccountsService do
         )
       end
 
-      it 'retains the student profile of the new account if selected' do
+      it "retains the student profile of the new account if selected" do
         subject.new(
           old_user: old_user,
           new_user: new_user,
@@ -178,7 +178,7 @@ describe Users::MergeAccountsService do
         expect(current_student_profile).to eq(student_new_user_c1)
       end
 
-      it 'switches to the student profile of the old account if selected' do
+      it "switches to the student profile of the old account if selected" do
         new_user_student_profile_id = student_new_user_c1.id
         subject.new(
           old_user: old_user,

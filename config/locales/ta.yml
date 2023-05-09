@@ -1435,13 +1435,14 @@ ta:
           students: Students
           teams: Teams
         main:
-          admins: Admins
           coaches: Coaches
           communities: Communities
           courses: Courses
-          customization: Customization
           overview: Overview
           settings: Settings
+        settings:
+          admins: Admins
+          customization: Customization
     School__SearchableTagList:
       add_new_tag: புதிய குறிச்சொல்லைச் சேர்க்கவும்
       pick_tag: குறிச்சொல்லைத் தேர்ந்தெடு

@@ -447,47 +447,51 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     </label>
                   </div>
                 </div>
-                <div className="mt-5">
-                  <div className="flex items-center shrink-0">
-                    <label
-                      className="block tracking-wide text-sm font-semibold me-3" htmlFor="archived">
-                      <span className="me-2">
-                        <i className="fas fa-list rtl:rotate-180 text-base" />
-                      </span>
-                      {t("coach_visibility")->str}
-                    </label>
-                    <div
-                      id="visibility" className="flex toggle-button__group shrink-0 rounded-lg"
-                    />
-                    <div id="exited" className="flex shrink-0 overflow-hidden">
-                      <div>
-                        <button
-                          onClick={_event => {
-                            ReactEvent.Mouse.preventDefault(_event)
-                            send(UpdateArchived(false))
-                          }}
-                          className={booleanButtonClasses(!state.archived)}>
-                          {t("active")->str}
-                        </button>
-                        <button
-                          onClick={_event => {
-                            ReactEvent.Mouse.preventDefault(_event)
-                            send(UpdateArchived(true))
-                          }}
-                          name="faculty[exited]"
-                          className={booleanButtonClasses(state.archived)}
-                          disabled={isNewCoach}>
-                          {t("archived")->str}
-                        </button>
-                      </div>
-                      <input
-                        type_="hidden"
-                        name="faculty[archived]"
-                        value={state.archived |> string_of_bool}
+                {switch isNewCoach {
+                | false =>
+                  <div className="mt-5">
+                    <div className="flex items-center shrink-0">
+                      <label
+                        className="block tracking-wide text-sm font-semibold me-3"
+                        htmlFor="archived">
+                        <span className="me-2">
+                          <i className="fas fa-list rtl:rotate-180 text-base" />
+                        </span>
+                        {t("coach_visibility")->str}
+                      </label>
+                      <div
+                        id="visibility" className="flex toggle-button__group shrink-0 rounded-lg"
                       />
+                      <div id="exited" className="flex shrink-0 overflow-hidden">
+                        <div>
+                          <button
+                            onClick={_event => {
+                              ReactEvent.Mouse.preventDefault(_event)
+                              send(UpdateArchived(false))
+                            }}
+                            className={booleanButtonClasses(!state.archived)}>
+                            {t("active")->str}
+                          </button>
+                          <button
+                            onClick={_event => {
+                              ReactEvent.Mouse.preventDefault(_event)
+                              send(UpdateArchived(true))
+                            }}
+                            name="faculty[exited]"
+                            className={booleanButtonClasses(state.archived)}>
+                            {t("archived")->str}
+                          </button>
+                        </div>
+                        <input
+                          type_="hidden"
+                          name="faculty[archived]"
+                          value={state.archived |> string_of_bool}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
+                | true => <div />
+                }}
               </div>
               <div className="p-6 bg-gray-50">
                 <div className="max-w-2xl px-6 mx-auto">

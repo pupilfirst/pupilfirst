@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'School Admin Navbar', js: true do
+feature "School Admin Navbar", js: true do
   include UserSpecHelper
 
   let(:school_1) { create :school, :current }
@@ -16,17 +16,17 @@ feature 'School Admin Navbar', js: true do
   # And another in a different school.
   let!(:course_3) { create :course, school: school_2 }
 
-  scenario 'school admin visits the admin interface' do
+  scenario "school admin visits the admin interface" do
     sign_in_user school_admin.user, referrer: school_path
 
     # User should be on the school admin overview page.
-    expect(current_path).to eq('/school')
+    expect(current_path).to eq("/school")
 
     # There should be additional links on the navbar.
-    expect(page).to have_link('Coaches', href: '/school/coaches')
-    expect(page).to have_link('Customization', href: '/school/customize')
-    expect(page).to have_link('Courses', href: '/school/courses')
-    expect(page).to have_link('Communities', href: '/school/communities')
+    expect(page).to have_link("Coaches", href: "/school/coaches")
+    expect(page).to have_link("Settings", href: "/school/customize")
+    expect(page).to have_link("Courses", href: "/school/courses")
+    expect(page).to have_link("Communities", href: "/school/communities")
 
     # Links to the student page for all courses in school should also be there.
     expect(page).to have_link(
@@ -49,28 +49,28 @@ feature 'School Admin Navbar', js: true do
     # Courses from other schools should not be listed.
     expect(page).not_to have_link(course_3.name)
 
-    click_button 'Show user controls'
+    click_button "Show user controls"
 
     # There should also be a link to Sign Out
-    expect(page).to have_link('Sign Out')
+    expect(page).to have_link("Sign Out")
 
     # Check out the settings submenu.
-    click_link('Customization')
-    expect(page).to have_link('Customization', href: '/school/customize')
+    click_link("Settings")
+    expect(page).to have_link("Customization", href: "/school/customize")
 
     # Check out the course submenu.
     find('a[title="Courses"]').click
     click_link(course_1.name)
     expect(page).to have_link(
-      'Students',
+      "Students",
       href: "/school/courses/#{course_1.id}/students?status=Active"
     )
     expect(page).to have_link(
-      'Coaches',
+      "Coaches",
       href: "/school/courses/#{course_1.id}/coaches"
     )
     expect(page).to have_link(
-      'Curriculum',
+      "Curriculum",
       href: "/school/courses/#{course_1.id}/curriculum"
     )
 
@@ -87,15 +87,15 @@ feature 'School Admin Navbar', js: true do
     click_link course_2.name
 
     expect(page).to have_link(
-      'Curriculum',
+      "Curriculum",
       href: "/school/courses/#{course_2.id}/curriculum"
     )
 
     # Navbar should also include links to dashboard page
-    expect(page).to have_link('Dashboard', href: '/dashboard')
+    expect(page).to have_link("Dashboard", href: "/dashboard")
   end
 
-  scenario 'school admin visits an ended course' do
+  scenario "school admin visits an ended course" do
     sign_in_user school_admin.user,
                  referrer: school_course_students_path(course_ended)
 

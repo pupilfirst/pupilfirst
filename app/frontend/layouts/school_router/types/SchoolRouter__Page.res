@@ -98,15 +98,22 @@ let path = (~courseId=?, t) => {
   }
 }
 
-let name = t => {
+let primaryNavName = t =>
   switch t {
   | SchoolCoaches => tr("nav.main.coaches")
+  | Settings(_) => tr("nav.main.settings")
+  | Courses => tr("nav.main.courses")
+  | Communities => tr("nav.main.communities")
+  | SelectedCourse(_) => "Invalid"
+  }
+
+let secondaryNavName = t =>
+  switch t {
   | Settings(settingsPages) =>
     switch settingsPages {
-    | Customization => tr("nav.main.customization")
-    | Admins => tr("nav.main.admins")
+    | Customization => tr("nav.settings.customization")
+    | Admins => tr("nav.settings.admins")
     }
-  | Courses => tr("nav.main.courses")
   | SelectedCourse(coursePages) =>
     switch coursePages {
     | Students => tr("nav.course.students")
@@ -121,9 +128,10 @@ let name = t => {
     | Cohorts => tr("nav.course.cohorts")
     | Calendars => tr("nav.course.calendar")
     }
-  | Communities => tr("nav.main.communities")
+  | Courses
+  | Communities
+  | SchoolCoaches => "Invalid"
   }
-}
 
 let icon = t => {
   switch t {

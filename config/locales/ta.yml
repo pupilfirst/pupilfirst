@@ -1,28 +1,32 @@
 ta:
   applicants:
     enroll:
+      errors:
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
       link_expired: அந்த ஒரு முறை இணைப்பு காலாவதியானது அல்லது தவறானது. நீங்கள் ஏற்கனவே பதிவுசெய்தலை முடித்திருந்தால், உள்நுழையவும்.
       welcome: '%{school_name}க்கு வரவேற்கிறோம்!'
     resolve_applicant_path:
       welcome: '%{school_name}க்கு வரவேற்கிறோம்!'
+  calendar_events:
+    create:
+      success: Event created successfully!
+    create_or_update_form:
+      calendar_error: Please select a calendar from the list
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
+      start_time_error: Please select a valid time for the event
+      title_error: Please enter a valid title for the event
+    delete:
+      success: Event deleted successfully!
+    update:
+      success: Event updated successfully!
   calendars:
     create:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  calendar_events:
-    create:
-      success: Event created successfully!
-    update:
-      success: Event updated successfully!
-    delete:
-      success: Event deleted successfully!
-    create_or_update_form:
-      title_error: Please enter a valid title for the event
-      calendar_error: Please select a calendar from the list
-      start_time_error: Please select a valid time for the event
-      color_error: Please select a valid color for the event
-      invalid_url: Please enter a valid URL for the event
   cohorts:
     shared:
       overview_link: கண்ணோட்டம்
@@ -42,6 +46,7 @@ ta:
       pagination_notice: இப்போது %{page_start}-%{page_end} என மொத்தம் %{count} மாணவர்களைக் காட்டுகிறது.
   communities:
     show:
+      community_title: "%{name} Community"
       new_topic: புது தலைப்பு
       note: " உங்கள் பள்ளியில் உள்ள பயிற்சியாளர்களுக்கு அனைத்து சமூகங்களுக்கும் அணுகல் உள்ளது."
       welcome: க்கு வரவேற்கிறோம்
@@ -85,6 +90,7 @@ ta:
       sign_in: உள்நுழையவும்
       sign_out: வெளியேறு
     AppRouter__Nav:
+      calendar: Calendar
       close_sidebar: பக்கப்பட்டியை மூடு
       curriculum: பாடத்திட்டம்
       leaderboard: லீடர்போர்டு
@@ -92,7 +98,6 @@ ta:
       review: விமர்சனம்
       sign_out: வெளியேறு
       students: மாணவர்கள்
-      calendar: Calendar
     ClickToCopy:
       copied: நகலெடுக்கப்பட்டது!
       copy: கிளிப்போர்டுக்கு நகலெடுக்கவும்
@@ -323,6 +328,7 @@ ta:
       remove_post_confirm: ஒதுக்கப்பட்ட அணிகளின் பட்டியலில் இருந்து?
       remove_pre_confirm: "நீங்கள் நிச்சயமாக அகற்ற விரும்புகிறீர்களா "
     CourseCoaches__Root:
+      assign_coaches: Assign Coaches to Course
       coaches_list: பயிற்சியாளர்களின் பட்டியல்
       course_empty: பாடநெறிக்கு பயிற்சியாளர்கள் நியமிக்கப்படவில்லை!
       enrollment_delete_error_head_notification: பயிற்சியாளர் சேர்க்கையை நீக்க முடியவில்லை
@@ -439,6 +445,7 @@ ta:
         view_as_student: மாணவராகப் பார்க்கவும்
       courses_fully_loaded_text: அனைத்து %{total_courses} படிப்புகளையும் காட்டுகிறது
       courses_partially_loaded_text: '%{loaded_courses_count} இல் %{total_courses} பாடங்களைக் காட்டுகிறது'
+      create_description: Let's create another course.
       edit_course_details: படிப்பு விவரங்களைத் திருத்தவும்
       empty_courses: உங்களிடம் படிப்புகள் எதுவும் இல்லை!
       filter:
@@ -513,8 +520,12 @@ ta:
       level_locked_for_students_notice: இந்த நிலை இன்னும் மாணவர்களுக்கு பூட்டப்பட்டுள்ளது மற்றும் <strong>%{date}</strong>இல் திறக்கப்படும்.
       level_locked_notice: நிலை தற்போது பூட்டப்பட்டுள்ளது!
       milestone_targets: மைல்கல் இலக்குகள்
-      nav_next_level: அடுத்த நிலை
-      nav_previous_level: முந்தைய நிலை
+      nav_aria_next_level: Go to the next level
+      nav_aria_previous_level: Go to the previous level
+      nav_long_next_level: Next Level
+      nav_long_previous_level: Previous Level
+      nav_short_next_level: Next
+      nav_short_previous_level: Previous
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: மீண்டும் பதிவு செய்யுங்கள்
       button_text_start_recording: பதிவைத் தொடங்கவும்
@@ -585,8 +596,8 @@ ta:
       completion_tab_take_quiz: வினாடி வினா எடுக்கவும்
       completion_tab_visit_link: முடிக்க இணைப்பைப் பார்வையிடவும்
       discuss_tab: விவாதிக்கவும்
-      learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
       learn_cta_submit_form: Submit Form
+      learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
       learn_cta_take_quiz: வினாடி வினா எடுங்கள்
       learn_tab: அறிய
       next_target_button: அடுத்த இலக்கு
@@ -629,8 +640,8 @@ ta:
       submission_number: "சமர்ப்பிப்பு #"
       submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
       unknown_coach: தெரியாத பயிற்சியாளர்
-      your_submissions: உங்கள் சமர்ப்பிப்புகள்
       your_responses: Your Responses
+      your_submissions: உங்கள் சமர்ப்பிப்புகள்
     CoursesCurriculum__TargetStatus:
       access_locked: நீங்கள் இப்போது பாடநெறிக்கு வரம்புக்குட்பட்ட அணுகல் மட்டுமே உள்ளது. நீங்கள் உள்ளடக்கத்தை முன்னோட்டமிட அனுமதிக்கப்படுகிறீர்கள், ஆனால் எந்த இலக்கையும் முடிக்க முடியாது.
       course_locked: இந்த பாடநெறி முடிந்தது.
@@ -647,7 +658,10 @@ ta:
       notification_error_head: எதிர்பாராத பிழை
       notification_notice_body: மீண்டும் முயற்சிக்கும் முன், பக்கத்தை மீண்டும் ஏற்றி, சமர்ப்பிப்பின் நிலையைச் சரிபார்க்கவும்.
       notification_notice_head: சமர்ப்பித்தலை செயல்தவிர்க்க முடியவில்லை
+      undo: Undo
+      undo_submission: Undo submission
       undo_submission_title: இந்த சமர்ப்பிப்பை நீக்கவும்
+      undoing: Undoing...
       window_confirm: இந்தச் சமர்ப்பிப்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
     CoursesCurriculum__UrlForm:
       button_placeholder: https://... என தொடங்கி முழு URL ஐ உள்ளிடவும்
@@ -713,12 +727,13 @@ ta:
       edit_review_checklist: மதிப்பாய்வு சரிபார்ப்புப் பட்டியலைத் திருத்து
       save_checklist: சரிபார்ப்புப் பட்டியலைச் சேமிக்கவும்
     CoursesReview__ChecklistShow:
+      add_additional_feedback: Add Additional Feedback
+      back_to_review: Back to Review
       edit_checklist_button: சரிபார்ப்புப் பட்டியலைத் திருத்தவும்
       feedback_placeholder: கருத்தைச் சேர் (விரும்பினால்)
       generate_feedback_button: கருத்தை உருவாக்கவும்
-      review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
-      add_additional_feedback: Add Additional Feedback
       remove_additional_feedback: Remove Additional Feedback
+      review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
     CoursesReview__Editor:
       add_another_feedback: மற்றொரு கருத்தைச் சேர்க்கவும்
       add_feedback: கருத்தைச் சேர்க்கவும்
@@ -741,9 +756,9 @@ ta:
       grade_card: தர அட்டை
       help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
       hide_test_report_button: சோதனை அறிக்கையை மறை
-      level_acronym: எல்
       note_help: "இதைப் பற்றி ஒரு குறிப்பு எழுத விரும்புகிறீர்களா "
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
+      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: வேலையை அகற்று
       report_description: சோதனை அறிக்கை
       report_status_string:
@@ -771,7 +786,7 @@ ta:
       student_dropped_out_message_without_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய மாணவரிடமிருந்து.
       students_dropped_out_message_with_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுடன் இணைக்கப்பட்டுள்ளது. நீங்கள் சமர்ப்பிப்பை %{timestamp}வரை மதிப்பாய்வு செய்யலாம்
       students_dropped_out_message_without_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுடன் இணைக்கப்பட்டுள்ளது.
-      submission: சமர்ப்பணம்
+      submission_number: "Submission #%{number}"
       submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
       submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது: "
       team: அணி
@@ -1012,6 +1027,7 @@ ta:
     CurriculumEditor__TargetChecklistItemEditor:
       add_choice: ஒரு தேர்வைச் சேர்க்கவும்
       choices: தேர்வுகள்
+      choices_not_unique: Choices must be unique
       controls_checklist: சரிபார்ப்பு பட்டியல் உருப்படிக்கான கட்டுப்பாடுகள்
       copy: நகலெடுக்கவும்
       delete: அழி
@@ -1023,7 +1039,6 @@ ta:
       multi_choice: Allow multiple selections
       not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: சரியான தேர்வு அல்ல
-      choices_not_unique: Choices must be unique
       optional: விருப்பமானது
       question_cannot_empty: Question cannot be empty
       remove_choice: தேர்வை அகற்று
@@ -1056,13 +1071,13 @@ ta:
       select_criterion_label: உங்கள் பட்டியலில் இருந்து மதிப்பீட்டு அளவுகோலைத் தேர்வு செய்யவும்
       select_criterion_warning: குறைந்தபட்சம் ஒருவரையாவது தேர்ந்தெடுக்க வேண்டும்
       selected_all_targets: நீங்கள் அனைத்து இலக்குகளையும் தேர்ந்தெடுத்துள்ளீர்கள்
-      submit_individually: அனைத்து மாணவர்களும் தனித்தனியாக சமர்ப்பிக்க வேண்டும்.
       submit_form: Submit a form to complete the target.
+      submit_individually: அனைத்து மாணவர்களும் தனித்தனியாக சமர்ப்பிக்க வேண்டும்.
       take_quiz: இலக்கை முடிக்க வினாடி வினா எடுங்கள்.
       target_checklist:
+        form_help: These are the questions a student must answer to complete the target.
         form_label: What are the questions you would like the student to answer?
         form_limit_warning: Maximum allowed questions is 25!
-        form_help: These are the questions a student must answer to complete the target.
         help: இலக்கில் பணியைச் சமர்ப்பிக்க ஒரு மாணவர் முடிக்க வேண்டிய படிகள் இவை. இந்தத் தகவல் பயிற்சியாளருக்கு மதிப்பாய்வுக்காகக் காண்பிக்கப்படும்.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: இந்த இலக்கை முடிக்க மாணவர் என்ன நடவடிக்கைகளை எடுக்க வேண்டும்?
@@ -1159,8 +1174,8 @@ ta:
       sign_out: வெளியேறு
       user_controls: பயனர் கட்டுப்பாடுகளைக் காட்டு
     LevelProgressBar:
-      heading: Level Progress
       course_completed: Course Completed!
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: கோப்பை இணைக்க இங்கே கிளிக் செய்யவும்.
       bold_insert: தைரியமான
@@ -1253,27 +1268,6 @@ ta:
       search_empty: உங்கள் தேடல் அளவுகோல்களுடன் எந்த செயலற்ற மாணவரும் பொருந்தவில்லை.
       search_placeholder: மாணவர் அல்லது குழு பெயர் அல்லது மாணவர் மின்னஞ்சல் மூலம் தேடவும்...
       team: குழு
-    SchoolAdminNavbar__Root:
-      course_nav:
-        applicants: விண்ணப்பதாரர்கள்
-        authors: ஆசிரியர்கள்
-        certificates: சான்றிதழ்கள்
-        coaches: பயிற்சியாளர்கள்
-        curriculum: பாடத்திட்டம்
-        evaluation_criteria: மதிப்பீட்டு அளவுகோல்கள்
-        exports: ஏற்றுமதி
-        students: மாணவர்கள்
-      dashboard: டாஷ்போர்டு
-      navbar:
-        admins: நிர்வாகிகள்
-        coaches: பயிற்சியாளர்கள்
-        communities: சமூகங்கள்
-        courses: படிப்புகள்
-        customization: தனிப்பயனாக்கம்
-        overview: கண்ணோட்டம்
-        settings: அமைப்புகள்
-      notifications: அறிவிப்புகள்
-      sign_out: வெளியேறு
     SchoolAdmin__EditorDrawer:
       close_editor: எடிட்டரை மூடு
     SchoolAdmins__Editor:
@@ -1426,6 +1420,28 @@ ta:
       social: சமூக
       social_links_q: சமூக ஊடக இணைப்புகளைச் சேர்க்கவா?
       terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Applicants
+          authors: Authors
+          calendar: Calendars
+          certificates: Certificates
+          coaches: Coaches
+          cohorts: Cohorts
+          curriculum: Curriculum
+          evaluation_criteria: Evaluation Criteria
+          exports: Exports
+          students: Students
+          teams: Teams
+        main:
+          admins: Admins
+          coaches: Coaches
+          communities: Communities
+          courses: Courses
+          customization: Customization
+          overview: Overview
+          settings: Settings
     School__SearchableTagList:
       add_new_tag: புதிய குறிச்சொல்லைச் சேர்க்கவும்
       pick_tag: குறிச்சொல்லைத் தேர்ந்தெடு
@@ -1470,7 +1486,6 @@ ta:
       revoked_status_label: ரத்து செய்யப்பட்டது
       select_certificate_input_label: வழங்குவதற்கான சான்றிதழைத் தேர்ந்தெடுக்கவும்
     StudentBulkImport__Root:
-      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: இணைப்பு 250 எழுத்துகளுக்கு குறைவாக இருக்க வேண்டும்
         invalid_email: மின்னஞ்சல் சரியானதாக இருக்க வேண்டும் மற்றும் காலியாக இருக்க முடியாது
@@ -1489,6 +1504,7 @@ ta:
         help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
         label: CSV இறக்குமதி கோப்பு
         placeholder: இறக்குமதி செய்ய CSV கோப்பைத் தேர்ந்தெடுக்கவும்
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       drawer_heading: மொத்த இறக்குமதி மாணவர்கள்
       error_summary_title: "தாளில் உள்ள பிழைகளின் சுருக்கம் இங்கே: "
       example_csv_link:
@@ -1653,7 +1669,7 @@ ta:
     StudentsIndex__Root:
       add_new_students: புதிய மாணவர்களைச் சேர்க்கவும்
       cohort: கோஹார்ட்
-      edit: தொகு
+      edit_details: Edit %{name}'s details
       filter:
         search_by_email: மின்னஞ்சல் மூலம் தேடவும்
         search_by_name: பெயர் மூலம் தேடவும்
@@ -1794,6 +1810,7 @@ ta:
       cancel: ரத்து செய்
       change_password: உங்கள் தற்போதைய கடவுச்சொல்லை மாற்றவும்
       change_photo: புகைப்படத்தை மாற்று
+      community_digest: Community Digest
       community_digest_emails: Community digest மின்னஞ்சல்களில் உங்கள் சமூகங்களில் இருந்து புதிய கேள்விகள் மற்றும் கடந்த வாரத்தில் இருந்து பதிலளிக்கப்படாத கேள்விகள் உள்ளன.
       confirm_dialog_aria: கணக்கை நீக்குவதற்கான உரையாடலை உறுதிப்படுத்தவும்
       confirm_email: உங்கள் மின்னஞ்சலை உறுதிப்படுத்தவும்
@@ -1901,10 +1918,10 @@ ta:
       privacy_policy: தனியுரிமைக் கொள்கை
       terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
     calendar:
+      events: Events
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
-      events: Events
     leaderboard:
       active_students: செயலில் மாணவர்கள்
       change: மாற்றவும்
@@ -2174,6 +2191,8 @@ ta:
     create_community:
       community_created_notification: சமூகம் வெற்றிகரமாக உருவாக்கப்பட்டது
     create_course:
+      auto_generated_cohort_description: Auto generated cohort for active students in %{course_name}
+      auto_generated_cohort_name: Purple (Auto-generated)
       success_notification: பாடநெறி வெற்றிகரமாக உருவாக்கப்பட்டது!
     create_course_author:
       author_created_notification: ஆசிரியர் உருவாக்கப்பட்டது
@@ -2281,7 +2300,9 @@ ta:
     update_cohort:
       success_notification: Cohort வெற்றிகரமாக புதுப்பிக்கப்பட்டது.
     update_course:
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: பாடநெறி வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_course_author:
       author_name_updated_notification: ஆசிரியரின் பெயர் புதுப்பிக்கப்பட்டது.
       author_updated_notification: ஆசிரியர் புதுப்பிக்கப்பட்டார்
@@ -2315,13 +2336,20 @@ ta:
     update_user:
       profile_saved_notification: சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: Inactive Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: நிறுவனங்கள்
     show:
       active_students_label: செயலில் மாணவர்கள்
       cohorts_subheading: கூட்டாளிகள்
       organisation_label: அமைப்பு
-      view_all_cohorts: View All Cohorts
       students_enrolled_heading: மாணவர்கள் சேர்ந்தனர்
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> மாணவர் சேர்ந்தார்
@@ -2330,14 +2358,7 @@ ta:
         one: <span class="font-semibold text-black">1</span> செயலில் உள்ள குழுவில்
         other: <span class="font-semibold text-black">%{count}</span> செயலில் உள்ள கூட்டாளிகளில்
       total_students_label: மொத்த மாணவர்கள்
-    courses:
-      active_cohorts_label: Active Cohorts
-      active_cohorts_count: "%{count}"
-      course_label: Course
-      empty: "No %{cohort_status} for this course."
-      inactive_cohorts_label: Inactive Cohorts
-      inactive_cohorts_count: "%{count}"
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+      view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades
@@ -2442,40 +2463,50 @@ ta:
   schools:
     admins:
       title: நிர்வாகிகள்
-    calendars:
-      new:
-        title: 'Create new calendar'
-        name_label: Calendar name
-        cohorts_label: Link calendar to cohorts
-        no_cohorts_selected: No cohorts selected
-        all_cohorts_selected: All cohorts selected
-        add_calendar_button: Add calendar
-      edit:
-        update_calendar: Update calendar
-        link_to_cohorts: Link calendar to cohorts
-        calendar_name: Calendar name
     calendar_events:
-      new:
-        title: 'Add new event'
-        new_event: 'Add new event'
-        edit_event: 'Edit event'
-        title_label: Event Title
-        select_calendar_label: Add event to
-        select_color_label: Color
-        start_time_label: Date and Time
-        add_link_section_title: Add an event link (optional)
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        description_label: Description
+      edit:
+        page_title: Edit event
+      form:
         add_event_button: Add event
-        link_title_placeholder: eg. Zoom meeting link
+        add_event_heading: Add new event
+        add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
+        add_link_section_title: Add an event link (optional)
+        calendar_label: Add event to
+        color_label: Color
+        description_label: Event description
+        edit_event_heading: Edit %{event_title}
+        link_title_label: Event link title
+        link_title_placeholder: eg. Google Meet
+        link_url_label: Event link URL
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        start_time_label: Date and Time
+        title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        update_event_button: Update event
+      new:
+        page_title: Add new event
       show:
-        title: 'Calendar event details'
-        link_label: Event Link
-        description_label: Description
-        date_and_time: Date and time
         confirm_delete: Are you sure to delete the event?
+        date_and_time: Date and time
+        description_label: Description
+        link_label: Event Link
+        title: Calendar event details
+    calendars:
+      edit:
+        page_title: Update calendar
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: All available cohorts have been selected
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: This will link calendar to specified cohorts
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: No cohorts selected
+        update_calendar_button: Update calendar
+      new:
+        page_title: Create new calendar
     communities:
       index:
         title: சமூகங்கள்
@@ -2485,19 +2516,19 @@ ta:
       authors:
         title: ஆசிரியர்கள்
       calendar_events:
-        title: Calendars and Events
         add_calendar_button: Add Calendar
-        calendar: Calendar
-        calendars: Calendars
-        calendar_filter_label: Showing events from
-        select_calendar_filter: Select a calendar
-        upcoming_events_in: Upcoming events in
         add_event_button: Add an event
-        events: Events
+        calendar: Calendar
+        calendar_filter_label: Showing events from
+        calendars: Calendars
         empty_events: No event scheduled for the selected date
-        today: Today
+        events: Events
         no_calendars_message: No calendars yet
         no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
+        select_calendar_filter: Select a calendar
+        title: Calendars and Events
+        today: Today
+        upcoming_events_in: Upcoming events in
       certificates:
         title: சான்றிதழ்கள்
       curriculum:
@@ -2531,6 +2562,17 @@ ta:
       submissions_reviewed: சமர்ப்பிப்புகள் மதிப்பாய்வு செய்யப்பட்டன
       title: கண்ணோட்டம்
   services:
+    courses:
+      demo_content_service:
+        criterion_one: Correctness of implementation
+        criterion_two: Quality of submission
+        grade_1: Bad
+        grade_2: Good
+        grade_3: Great
+        level_1: Level 1
+        target_group_description: Description of demo target group
+        target_group_name: Demo Target Group
+        target_name: Demo Target
     discord:
       community_message_service:
         post_topic_created: |-
@@ -2542,6 +2584,7 @@ ta:
   shared:
     _no: "இல்லை"
     _yes: "ஆம்"
+    admin: Admin
     all: அனைத்து
     and: மற்றும்
     archived: காப்பகப்படுத்தப்பட்டது
@@ -2649,11 +2692,11 @@ ta:
       title: பயனரைத் திருத்து
     edit:
       course_discord_requirement_met:
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
         description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
       course_requires_discord_account:
-        heading: Wait a second! You need to link your Discord account first.
         description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
+        heading: Wait a second! You need to link your Discord account first.
       discord_connect: எங்கள் டிஸ்கார்ட் சமூகத்தில் சேரவும்
       discord_connected_account: டிஸ்கார்ட் சமூகத்திற்குச் செல்லவும்
       discord_connected_message: <li>டிஸ்கார்ட் சர்வரில் உள்ள உங்கள் புனைப்பெயர் இங்கே உங்கள் பெயருடன் ஒத்திசைக்கப்படும்.</li><li>டிஸ்கார்டில் உங்களுக்கு கூடுதல் பொறுப்புகள் ஒதுக்கப்பட்டுள்ளன.</li>

@@ -9,8 +9,14 @@ module Courses
         level_one = create_level_one
         new_target_group = create_target_group(level_one)
         create_target(new_target_group)
-        create_evaluation_criterion("Correctness of implementation")
-        create_evaluation_criterion("Quality of submission")
+
+        create_evaluation_criterion(
+          I18n.t("services.courses.demo_content_service.criterion_one")
+        )
+
+        create_evaluation_criterion(
+          I18n.t("services.courses.demo_content_service.criterion_two")
+        )
       end
     end
 
@@ -18,7 +24,7 @@ module Courses
 
     def create_level_one
       Level.create!(
-        name: 'Level 1',
+        name: I18n.t("services.courses.demo_content_service.level_1"),
         number: 1,
         course: @course
       )
@@ -26,8 +32,11 @@ module Courses
 
     def create_target_group(level)
       TargetGroup.create!(
-        name: "Demo Target Group",
-        description: "Description of demo target group",
+        name: I18n.t("services.courses.demo_content_service.target_group_name"),
+        description:
+          I18n.t(
+            "services.courses.demo_content_service.target_group_description"
+          ),
         sort_index: 1,
         milestone: true,
         level: level
@@ -35,14 +44,15 @@ module Courses
     end
 
     def create_target(target_group)
-      target = Target.create!(
-        role: Target::ROLE_STUDENT,
-        title: "Demo Target",
-        target_action_type: Target::TYPE_TODO,
-        target_group: target_group,
-        sort_index: 1,
-        visibility: Target::VISIBILITY_LIVE
-      )
+      target =
+        Target.create!(
+          role: Target::ROLE_STUDENT,
+          title: I18n.t("services.courses.demo_content_service.target_name"),
+          target_action_type: Target::TYPE_TODO,
+          target_group: target_group,
+          sort_index: 1,
+          visibility: Target::VISIBILITY_LIVE
+        )
       ContentBlocks::DemoMarkdownBlockService.new(target).execute
     end
 
@@ -52,7 +62,20 @@ module Courses
         course: @course,
         max_grade: 3,
         pass_grade: 2,
-        grade_labels: [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }]
+        grade_labels: [
+          {
+            "grade" => 1,
+            "label" => I18n.t("services.courses.demo_content_service.grade_1")
+          },
+          {
+            "grade" => 2,
+            "label" => I18n.t("services.courses.demo_content_service.grade_2")
+          },
+          {
+            "grade" => 3,
+            "label" => I18n.t("services.courses.demo_content_service.grade_3")
+          }
+        ]
       )
     end
   end

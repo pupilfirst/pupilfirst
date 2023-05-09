@@ -24,8 +24,8 @@ let secondaryNavOption = (selectedPage, selectedCourse, page) => {
         : " font-medium text-gray-500"
     )
 
-  <div key={Page.name(page)}>
-    {showLink(selectedPage, selectedCourse, page, classes, None, Page.name(page)->str)}
+  <div key={Page.secondaryNavName(page)}>
+    {showLink(selectedPage, selectedCourse, page, classes, None, Page.secondaryNavName(page)->str)}
   </div>
 }
 

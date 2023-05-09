@@ -1,28 +1,32 @@
 hi:
   applicants:
     enroll:
+      errors:
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
       link_expired: वह लिंक समाप्त हो गया है, या अमान्य है। यदि आपने पहले ही नामांकन पूरा कर लिया है, तो कृपया साइन इन करें।
       welcome: '%{school_name} में आपका स्वागत है!'
     resolve_applicant_path:
       welcome: '%{school_name} में आपका स्वागत है!'
+  calendar_events:
+    create:
+      success: Event created successfully!
+    create_or_update_form:
+      calendar_error: Please select a calendar from the list
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
+      start_time_error: Please select a valid time for the event
+      title_error: Please enter a valid title for the event
+    delete:
+      success: Event deleted successfully!
+    update:
+      success: Event updated successfully!
   calendars:
     create:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  calendar_events:
-    create:
-      success: Event created successfully!
-    update:
-      success: Event updated successfully!
-    delete:
-      success: Event deleted successfully!
-    create_or_update_form:
-      title_error: Please enter a valid title for the event
-      calendar_error: Please select a calendar from the list
-      start_time_error: Please select a valid time for the event
-      color_error: Please select a valid color for the event
-      invalid_url: Please enter a valid URL for the event
   cohorts:
     shared:
       overview_link: अवलोकन
@@ -42,6 +46,7 @@ hi:
       pagination_notice: अब ऐसे %{page_start}%{page_end} विद्यार्थियों में से %{count} दिखा रहे हैं।
   communities:
     show:
+      community_title: "%{name} Community"
       new_topic: नया विषय
       note: " आपके विद्यालय के प्रशिक्षकों की पहुंच सभी समुदायों तक है।"
       welcome: आपका स्वागत है
@@ -85,6 +90,7 @@ hi:
       sign_in: साइन इन करें
       sign_out: साइन आउट करें
     AppRouter__Nav:
+      calendar: Calendar
       close_sidebar: साइडबार बंद करें
       curriculum: पाठ्यक्रम
       leaderboard: लीडरबोर्ड
@@ -92,7 +98,6 @@ hi:
       review: समीक्षा
       sign_out: साइन आउट करें
       students: छात्र
-      calendar: Calendar
     ClickToCopy:
       copied: कॉपी किया गया!
       copy: क्लिपबोर्ड पर कॉपी करें
@@ -323,6 +328,7 @@ hi:
       remove_post_confirm: सौंपी गई टीमों की सूची से?
       remove_pre_confirm: "क्या आप वाकई निकालना चाहते हैं "
     CourseCoaches__Root:
+      assign_coaches: Assign Coaches to Course
       coaches_list: कोर्स कोचों की सूची
       course_empty: पाठ्यक्रम में कोई कोच नियुक्त नहीं किया गया है!
       enrollment_delete_error_head_notification: कोच नामांकन हटाया नहीं जा सका
@@ -439,6 +445,7 @@ hi:
         view_as_student: छात्र के रूप में देखें
       courses_fully_loaded_text: सभी %{total_courses} पाठ्यक्रम दिखा रहा है
       courses_partially_loaded_text: '%{total_courses} में से %{loaded_courses_count} पाठ्यक्रम दिखा रहे हैं'
+      create_description: Let's create another course.
       edit_course_details: पाठ्यक्रम विवरण संपादित करें
       empty_courses: आपके पास कोई कोर्स नहीं है!
       filter:
@@ -513,8 +520,12 @@ hi:
       level_locked_for_students_notice: यह स्तर अभी भी छात्रों के लिए बंद है और <strong>%{date}</strong>को अनलॉक किया जाएगा।
       level_locked_notice: स्तर वर्तमान में बंद है!
       milestone_targets: मील का पत्थर लक्ष्य
-      nav_next_level: अगला स्तर
-      nav_previous_level: पिछला स्तर
+      nav_aria_next_level: Go to the next level
+      nav_aria_previous_level: Go to the previous level
+      nav_long_next_level: Next Level
+      nav_long_previous_level: Previous Level
+      nav_short_next_level: Next
+      nav_short_previous_level: Previous
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: फिर से रिकॉर्ड करें
       button_text_start_recording: रिकॉर्डिंग शुरू
@@ -585,8 +596,8 @@ hi:
       completion_tab_take_quiz: प्रश्नोत्तरी लें
       completion_tab_visit_link: पूरा करने के लिए लिंक पर जाएं
       discuss_tab: विचार-विमर्श करना
-      learn_cta_submit_work: समीक्षा के लिए कार्य सबमिट करें
       learn_cta_submit_form: Submit Form
+      learn_cta_submit_work: समीक्षा के लिए कार्य सबमिट करें
       learn_cta_take_quiz: कोई प्रश्नोत्तरी लें
       learn_tab: सीखना
       next_target_button: अगला निशाना
@@ -629,8 +640,8 @@ hi:
       submission_number: "जमा करना #"
       submitted_on: "पर प्रस्तुत की "
       unknown_coach: अज्ञात कोच
-      your_submissions: आपके सबमिशन
       your_responses: Your Responses
+      your_submissions: आपके सबमिशन
     CoursesCurriculum__TargetStatus:
       access_locked: अब आपके पास पाठ्यक्रम तक सीमित पहुंच है। आपको सामग्री का पूर्वावलोकन करने की अनुमति है लेकिन कोई लक्ष्य पूरा नहीं कर सकते।
       course_locked: यह कोर्स समाप्त हो गया है।
@@ -647,7 +658,10 @@ hi:
       notification_error_head: अप्रत्याशित त्रुटि
       notification_notice_body: कृपया पृष्ठ को पुनः लोड करें और पुनः प्रयास करने से पहले सबमिशन की स्थिति जांचें।
       notification_notice_head: सबमिशन पूर्ववत नहीं किया जा सका
+      undo: Undo
+      undo_submission: Undo submission
       undo_submission_title: इस सबमिशन को हटाएं
+      undoing: Undoing...
       window_confirm: क्या आप वाकई इस सबमिशन को हटाना चाहते हैं?
     CoursesCurriculum__UrlForm:
       button_placeholder: https:// से शुरू होने वाला पूरा यूआरएल टाइप करें...
@@ -713,12 +727,13 @@ hi:
       edit_review_checklist: समीक्षा चेकलिस्ट संपादित करें
       save_checklist: चेकलिस्ट सहेजें
     CoursesReview__ChecklistShow:
+      add_additional_feedback: Add Additional Feedback
+      back_to_review: Back to Review
       edit_checklist_button: चेकलिस्ट संपादित करें
       feedback_placeholder: फ़ीडबैक जोड़ें (वैकल्पिक)
       generate_feedback_button: प्रतिक्रिया उत्पन्न करें
-      review_checklist: चेकलिस्ट की समीक्षा करें
-      add_additional_feedback: Add Additional Feedback
       remove_additional_feedback: Remove Additional Feedback
+      review_checklist: चेकलिस्ट की समीक्षा करें
     CoursesReview__Editor:
       add_another_feedback: एक और प्रतिक्रिया जोड़ें
       add_feedback: प्रतिक्रिया जोड़ें
@@ -741,9 +756,9 @@ hi:
       grade_card: ग्रेड कार्ड
       help_text: नोट्स का उपयोग %{note_about}की प्रगति पर नज़र रखने के लिए किया जा सकता है। ये नोट केवल एक छात्र की रिपोर्ट में कोचों को दिखाए जाते हैं। %{additional_help}
       hide_test_report_button: परीक्षण रिपोर्ट छुपाएं
-      level_acronym: ली
       note_help: "क्या आप इसके बारे में एक नोट लिखना चाहेंगे "
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
+      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: असाइनमेंट हटाएं
       report_description: जाँच रिपोर्ट
       report_status_string:
@@ -771,7 +786,7 @@ hi:
       student_dropped_out_message_without_timestamp: यह सबमिशन उस छात्र की ओर से है जिसकी पाठ्यक्रम तक पहुंच समाप्त हो गई है, या बाहर हो गई है।
       students_dropped_out_message_with_timestamp: यह सबमिशन एक या अधिक छात्रों से जुड़ा हुआ है, जिनकी कोर्स तक पहुंच समाप्त हो गई है, या बाहर हो गए हैं। आप %{timestamp}तक सबमिशन की समीक्षा कर सकते हैं।
       students_dropped_out_message_without_timestamp: यह सबमिशन एक या अधिक छात्रों से जुड़ा हुआ है, जिनकी पाठ्यक्रम तक पहुंच समाप्त हो गई है, या बाहर हो गए हैं।
-      submission: जमा करना
+      submission_number: "Submission #%{number}"
       submitted_by: "द्वारा प्रस्तुत "
       submitted_by_team: "टीम द्वारा प्रस्तुत: "
       team: टीम
@@ -1012,6 +1027,7 @@ hi:
     CurriculumEditor__TargetChecklistItemEditor:
       add_choice: एक विकल्प जोड़ें
       choices: विकल्प
+      choices_not_unique: Choices must be unique
       controls_checklist: चेकलिस्ट आइटम के लिए नियंत्रण
       copy: प्रतिलिपि
       delete: मिटाना
@@ -1023,7 +1039,6 @@ hi:
       multi_choice: Allow multiple selections
       not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: मान्य विकल्प नहीं
-      choices_not_unique: Choices must be unique
       optional: वैकल्पिक
       question_cannot_empty: Question cannot be empty
       remove_choice: पसंद हटाएं
@@ -1056,13 +1071,13 @@ hi:
       select_criterion_label: अपनी सूची से मूल्यांकन मानदंड चुनें
       select_criterion_warning: कम से कम एक का चयन करना होगा
       selected_all_targets: आपने सभी लक्ष्य चुन लिए हैं
-      submit_individually: सभी छात्रों को व्यक्तिगत रूप से जमा करना होगा।
       submit_form: Submit a form to complete the target.
+      submit_individually: सभी छात्रों को व्यक्तिगत रूप से जमा करना होगा।
       take_quiz: लक्ष्य को पूरा करने के लिए एक प्रश्नोत्तरी लें।
       target_checklist:
+        form_help: These are the questions a student must answer to complete the target.
         form_label: What are the questions you would like the student to answer?
         form_limit_warning: Maximum allowed questions is 25!
-        form_help: These are the questions a student must answer to complete the target.
         help: लक्ष्य पर काम जमा करने के लिए एक छात्र को ये चरण पूरे करने होंगे। यह जानकारी कोच को समीक्षा के लिए दिखाई जाएगी।
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
         label: इस लक्ष्य को पूरा करने के लिए विद्यार्थी को क्या कदम उठाने चाहिए?
@@ -1159,8 +1174,8 @@ hi:
       sign_out: साइन आउट
       user_controls: उपयोगकर्ता नियंत्रण दिखाएं
     LevelProgressBar:
-      heading: Level Progress
       course_completed: Course Completed!
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: फ़ाइल संलग्न करने के लिए यहां क्लिक करें।
       bold_insert: साहसिक
@@ -1253,27 +1268,6 @@ hi:
       search_empty: कोई भी निष्क्रिय छात्र आपके खोज मापदंड से मेल नहीं खाता।
       search_placeholder: छात्र या टीम के नाम या छात्र ईमेल द्वारा खोजें...
       team: टीम
-    SchoolAdminNavbar__Root:
-      course_nav:
-        applicants: आवेदक
-        authors: लेखकों
-        certificates: प्रमाण पत्र
-        coaches: डिब्बों
-        curriculum: पाठ्यक्रम
-        evaluation_criteria: मूल्यांकन पैमाना
-        exports: निर्यात
-        students: छात्र
-      dashboard: डैशबोर्ड
-      navbar:
-        admins: व्यवस्थापक
-        coaches: डिब्बों
-        communities: समुदाय
-        courses: पाठ्यक्रम
-        customization: अनुकूलन
-        overview: अवलोकन
-        settings: समायोजन
-      notifications: सूचनाएं
-      sign_out: साइन आउट करें
     SchoolAdmin__EditorDrawer:
       close_editor: बंद संपादक
     SchoolAdmins__Editor:
@@ -1426,6 +1420,28 @@ hi:
       social: सामाजिक
       social_links_q: सोशल मीडिया लिंक जोड़ें?
       terms_and_conditions: नियम एवं शर्तें
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Applicants
+          authors: Authors
+          calendar: Calendars
+          certificates: Certificates
+          coaches: Coaches
+          cohorts: Cohorts
+          curriculum: Curriculum
+          evaluation_criteria: Evaluation Criteria
+          exports: Exports
+          students: Students
+          teams: Teams
+        main:
+          admins: Admins
+          coaches: Coaches
+          communities: Communities
+          courses: Courses
+          customization: Customization
+          overview: Overview
+          settings: Settings
     School__SearchableTagList:
       add_new_tag: नया टैग जोड़ें
       pick_tag: टैग चुनें
@@ -1470,7 +1486,6 @@ hi:
       revoked_status_label: निरस्त किया गया
       select_certificate_input_label: जारी करने के लिए प्रमाणपत्र चुनें
     StudentBulkImport__Root:
-      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: संबद्धता 250 वर्णों से कम होनी चाहिए
         invalid_email: ईमेल मान्य होना चाहिए और खाली नहीं हो सकता
@@ -1489,6 +1504,7 @@ hi:
         help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
         label: सीएसवी आयात फ़ाइल
         placeholder: आयात करने के लिए CSV फ़ाइल चुनें
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       drawer_heading: थोक आयात छात्र
       error_summary_title: "यहाँ शीट में त्रुटियों का सारांश दिया गया है: "
       example_csv_link:
@@ -1653,7 +1669,7 @@ hi:
     StudentsIndex__Root:
       add_new_students: नए छात्र जोड़ें
       cohort: जत्था
-      edit: संपादन करना
+      edit_details: Edit %{name}'s details
       filter:
         search_by_email: ईमेल द्वारा खोजें
         search_by_name: नाम से खोजें
@@ -1794,6 +1810,7 @@ hi:
       cancel: रद्द करना
       change_password: अपना वर्तमान पासवर्ड बदलें
       change_photo: तस्वीर बदलिये
+      community_digest: Community Digest
       community_digest_emails: समुदाय डाइजेस्ट ईमेल में आपके समुदायों के नए प्रश्न और पिछले सप्ताह के अनुत्तरित प्रश्नों का चयन होता है।
       confirm_dialog_aria: खाता हटाने के लिए संवाद की पुष्टि करें
       confirm_email: आपके ईमेल की पुष्टि करें
@@ -1901,10 +1918,10 @@ hi:
       privacy_policy: गोपनीयता नीति
       terms_and_conditions: नियम एवं शर्तें
     calendar:
+      events: Events
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
-      events: Events
     leaderboard:
       active_students: सक्रिय छात्र
       change: परिवर्तन
@@ -2174,6 +2191,8 @@ hi:
     create_community:
       community_created_notification: समुदाय सफलतापूर्वक बनाया गया
     create_course:
+      auto_generated_cohort_description: Auto generated cohort for active students in %{course_name}
+      auto_generated_cohort_name: Purple (Auto-generated)
       success_notification: पाठ्यक्रम सफलतापूर्वक बनाया गया!
     create_course_author:
       author_created_notification: लेखक बनाया
@@ -2281,7 +2300,9 @@ hi:
     update_cohort:
       success_notification: सहगण सफलतापूर्वक अपडेट किया गया.
     update_course:
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: कोर्स सफलतापूर्वक अपडेट किया गया!
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_course_author:
       author_name_updated_notification: लेखक का नाम अपडेट कर दिया गया है।
       author_updated_notification: लेखक अपडेट किया गया
@@ -2315,13 +2336,20 @@ hi:
     update_user:
       profile_saved_notification: प्रोफाइल को सफलतापूर्वक अपडेट किया गया!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: Inactive Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: संगठनों
     show:
       active_students_label: सक्रिय छात्र
       cohorts_subheading: समानता रखने वाले लोग
       organisation_label: संगठन
-      view_all_cohorts: View All Cohorts
       students_enrolled_heading: में नामांकित छात्र
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> छात्र नामांकित
@@ -2330,14 +2358,7 @@ hi:
         one: <span class="font-semibold text-black">1</span> सक्रिय समूह में
         other: <span class="font-semibold text-black">%{count}</span> सक्रिय समूह में
       total_students_label: कुल छात्र
-    courses:
-      active_cohorts_label: Active Cohorts
-      active_cohorts_count: "%{count}"
-      course_label: Course
-      empty: "No %{cohort_status} for this course."
-      inactive_cohorts_label: Inactive Cohorts
-      inactive_cohorts_count: "%{count}"
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+      view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades
@@ -2442,40 +2463,50 @@ hi:
   schools:
     admins:
       title: व्यवस्थापक
-    calendars:
-      new:
-        title: 'Create new calendar'
-        name_label: Calendar name
-        cohorts_label: Link calendar to cohorts
-        no_cohorts_selected: No cohorts selected
-        all_cohorts_selected: All cohorts selected
-        add_calendar_button: Add calendar
-      edit:
-        update_calendar: Update calendar
-        link_to_cohorts: Link calendar to cohorts
-        calendar_name: Calendar name
     calendar_events:
-      new:
-        title: 'Add new event'
-        new_event: 'Add new event'
-        edit_event: 'Edit event'
-        title_label: Event Title
-        select_calendar_label: Add event to
-        select_color_label: Color
-        start_time_label: Date and Time
-        add_link_section_title: Add an event link (optional)
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        description_label: Description
+      edit:
+        page_title: Edit event
+      form:
         add_event_button: Add event
-        link_title_placeholder: eg. Zoom meeting link
+        add_event_heading: Add new event
+        add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
+        add_link_section_title: Add an event link (optional)
+        calendar_label: Add event to
+        color_label: Color
+        description_label: Event description
+        edit_event_heading: Edit %{event_title}
+        link_title_label: Event link title
+        link_title_placeholder: eg. Google Meet
+        link_url_label: Event link URL
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        start_time_label: Date and Time
+        title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        update_event_button: Update event
+      new:
+        page_title: Add new event
       show:
-        title: 'Calendar event details'
-        link_label: Event Link
-        description_label: Description
-        date_and_time: Date and time
         confirm_delete: Are you sure to delete the event?
+        date_and_time: Date and time
+        description_label: Description
+        link_label: Event Link
+        title: Calendar event details
+    calendars:
+      edit:
+        page_title: Update calendar
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: All available cohorts have been selected
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: This will link calendar to specified cohorts
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: No cohorts selected
+        update_calendar_button: Update calendar
+      new:
+        page_title: Create new calendar
     communities:
       index:
         title: समुदाय
@@ -2485,19 +2516,19 @@ hi:
       authors:
         title: लेखकों
       calendar_events:
-        title: Calendars and Events
         add_calendar_button: Add Calendar
-        calendar: Calendar
-        calendars: Calendars
-        calendar_filter_label: Showing events from
-        select_calendar_filter: Select a calendar
-        upcoming_events_in: Upcoming events in
         add_event_button: Add an event
-        events: Events
+        calendar: Calendar
+        calendar_filter_label: Showing events from
+        calendars: Calendars
         empty_events: No event scheduled for the selected date
-        today: Today
+        events: Events
         no_calendars_message: No calendars yet
         no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
+        select_calendar_filter: Select a calendar
+        title: Calendars and Events
+        today: Today
+        upcoming_events_in: Upcoming events in
       certificates:
         title: प्रमाण पत्र
       curriculum:
@@ -2531,6 +2562,17 @@ hi:
       submissions_reviewed: प्रस्तुतियाँ की समीक्षा की गई
       title: अवलोकन
   services:
+    courses:
+      demo_content_service:
+        criterion_one: Correctness of implementation
+        criterion_two: Quality of submission
+        grade_1: Bad
+        grade_2: Good
+        grade_3: Great
+        level_1: Level 1
+        target_group_description: Description of demo target group
+        target_group_name: Demo Target Group
+        target_name: Demo Target
     discord:
       community_message_service:
         post_topic_created: |-
@@ -2542,6 +2584,7 @@ hi:
   shared:
     _no: "नहीं"
     _yes: "हाँ"
+    admin: Admin
     all: सभी
     and: तथा
     archived: संग्रहीत
@@ -2649,11 +2692,11 @@ hi:
       title: यूजर को संपादित करो
     edit:
       course_discord_requirement_met:
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
         description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
       course_requires_discord_account:
-        heading: Wait a second! You need to link your Discord account first.
         description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
+        heading: Wait a second! You need to link your Discord account first.
       discord_connect: हमारे कलह समुदाय में शामिल हों
       discord_connected_account: डिस्कॉर्ड समुदाय पर जाएं
       discord_connected_message: <li>डिस्कॉर्ड सर्वर पर आपका उपनाम यहां आपके नाम के साथ समन्वयित रहेगा।</li><li>आपको Discord पर अतिरिक्त भूमिकाएँ सौंपी गई हैं।</li>

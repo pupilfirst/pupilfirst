@@ -53,12 +53,12 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
 
 let buttonContents = status =>
   switch status {
-  | Undoing => <span> <FaIcon classes="fas fa-spinner fa-spin me-2" /> {"Undoing..." |> str} </span>
+  | Undoing => <span> <FaIcon classes="fas fa-spinner fa-spin me-2" /> {tr("undoing") |> str} </span>
   | Pending =>
     <span>
       <FaIcon classes="fas fa-undo me-2" />
-      <span className="hidden md:inline"> {"Undo submission" |> str} </span>
-      <span className="md:hidden"> {"Undo" |> str} </span>
+      <span className="hidden md:inline"> {tr("undo_submission") |> str} </span>
+      <span className="md:hidden"> {tr("undo") |> str} </span>
     </span>
   | Errored =>
     <span> <FaIcon classes="fas fa-exclamation-triangle me-2" /> {"Error!" |> str} </span>

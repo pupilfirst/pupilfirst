@@ -1,28 +1,32 @@
 en:
   applicants:
     enroll:
+      errors:
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
       link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
       welcome: Welcome to %{school_name}!
     resolve_applicant_path:
       welcome: Welcome to %{school_name}!
+  calendar_events:
+    create:
+      success: Event created successfully!
+    create_or_update_form:
+      calendar_error: Please select a calendar from the list
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
+      start_time_error: Please select a valid time for the event
+      title_error: Please enter a valid title for the event
+    delete:
+      success: Event deleted successfully!
+    update:
+      success: Event updated successfully!
   calendars:
     create:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  calendar_events:
-    create:
-      success: Event created successfully!
-    update:
-      success: Event updated successfully!
-    delete:
-      success: Event deleted successfully!
-    create_or_update_form:
-      title_error: Please enter a valid title for the event
-      calendar_error: Please select a calendar from the list
-      start_time_error: Please select a valid time for the event
-      color_error: Please select a valid color for the event
-      invalid_url: Please enter a valid URL for the event
   cohorts:
     shared:
       overview_link: Overview
@@ -42,6 +46,7 @@ en:
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
+      community_title: "%{name} Community"
       new_topic: New Topic
       note: " Coaches in your school have access to all communities."
       welcome: Welcome to the
@@ -85,6 +90,7 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
     AppRouter__Nav:
+      calendar: Calendar
       close_sidebar: Close sidebar
       curriculum: Curriculum
       leaderboard: Leaderboard
@@ -92,7 +98,6 @@ en:
       review: Review
       sign_out: Sign Out
       students: Students
-      calendar: Calendar
     ClickToCopy:
       copied: Copied!
       copy: Copy to clipboard
@@ -324,6 +329,7 @@ en:
       remove_post_confirm: from the list of assigned teams?
       remove_pre_confirm: "Are you sure you want to remove "
     CourseCoaches__Root:
+      assign_coaches: Assign Coaches to Course
       coaches_list: List of course coaches
       course_empty: The course has no coaches assigned!
       enrollment_delete_error_head_notification: Coach enrollment could not be deleted
@@ -440,6 +446,7 @@ en:
         view_as_student: View as Student
       courses_fully_loaded_text: Showing all %{total_courses} courses
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      create_description: Let's create another course.
       edit_course_details: Edit Course Details
       empty_courses: You don't have any courses!
       filter:
@@ -514,8 +521,12 @@ en:
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
       milestone_targets: Milestone targets
-      nav_next_level: Next Level
-      nav_previous_level: Previous Level
+      nav_aria_next_level: Go to the next level
+      nav_aria_previous_level: Go to the previous level
+      nav_long_next_level: Next Level
+      nav_long_previous_level: Previous Level
+      nav_short_next_level: Next
+      nav_short_previous_level: Previous
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
@@ -586,8 +597,8 @@ en:
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
-      learn_cta_submit_work: Submit work for review
       learn_cta_submit_form: Submit Form
+      learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       next_target_button: Next Target
@@ -630,8 +641,8 @@ en:
       submission_number: "Submission #"
       submitted_on: "Submitted on "
       unknown_coach: Unknown Coach
-      your_submissions: Your Submissions
       your_responses: Your Responses
+      your_submissions: Your Submissions
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
@@ -648,7 +659,10 @@ en:
       notification_error_head: Unexpected Error
       notification_notice_body: Please reload the page and check the status of the submission before trying again.
       notification_notice_head: Could not undo submission
+      undo: Undo
+      undo_submission: Undo submission
       undo_submission_title: Delete this submission
+      undoing: Undoing...
       window_confirm: Are you sure you want to delete this submission?
     CoursesCurriculum__UrlForm:
       button_placeholder: Type full URL starting with https://...
@@ -715,12 +729,13 @@ en:
       edit_review_checklist: Edit Review Checklist
       save_checklist: Save Checklist
     CoursesReview__ChecklistShow:
+      add_additional_feedback: Add Additional Feedback
+      back_to_review: Back to Review
       edit_checklist_button: Edit Checklist
       feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback
-      review_checklist: Review Checklist
-      add_additional_feedback: Add Additional Feedback
       remove_additional_feedback: Remove Additional Feedback
+      review_checklist: Review Checklist
     CoursesReview__Editor:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
@@ -743,9 +758,9 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
-      level_acronym: L
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
+      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
       report_description: Test Report
       report_status_string:
@@ -773,7 +788,7 @@ en:
       student_dropped_out_message_without_timestamp: This submission is from a student whose access to the course has ended, or has dropped out.
       students_dropped_out_message_with_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.You can review the submission until %{timestamp}
       students_dropped_out_message_without_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
-      submission: Submission
+      submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
       team: team
@@ -1015,6 +1030,7 @@ en:
     CurriculumEditor__TargetChecklistItemEditor:
       add_choice: Add a choice
       choices: Choices
+      choices_not_unique: Choices must be unique
       controls_checklist: Controls for checklist item
       copy: Copy
       delete: Delete
@@ -1026,7 +1042,6 @@ en:
       multi_choice: Allow multiple selections
       not_unique_question: Not a unique question; required questions must be unique
       not_valid_choice: Not a valid choice
-      choices_not_unique: Choices must be unique
       optional: Optional
       question_cannot_empty: Question cannot be empty
       remove_choice: Remove Choice
@@ -1059,13 +1074,13 @@ en:
       select_criterion_label: Choose evaluation criteria from your list
       select_criterion_warning: At least one has to be selected
       selected_all_targets: You have selected all targets
-      submit_individually: All students must submit individually.
       submit_form: Submit a form to complete the target.
+      submit_individually: All students must submit individually.
       take_quiz: Take a quiz to complete the target.
       target_checklist:
+        form_help: These are the questions a student must answer to complete the target.
         form_label: What are the questions you would like the student to answer?
         form_limit_warning: Maximum allowed questions is 25!
-        form_help: These are the questions a student must answer to complete the target.
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
         label: What steps should the student take to complete this target?
@@ -1162,8 +1177,8 @@ en:
       sign_out: Sign Out
       user_controls: Show user controls
     LevelProgressBar:
-      heading: Level Progress
       course_completed: Course Completed!
+      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -1257,27 +1272,6 @@ en:
       search_empty: No inactive student matches your search criteria.
       search_placeholder: Search by student or team name or student email...
       team: Team
-    SchoolAdminNavbar__Root:
-      course_nav:
-        applicants: Applicants
-        authors: Authors
-        certificates: Certificates
-        coaches: Coaches
-        curriculum: Curriculum
-        evaluation_criteria: Evaluation Criteria
-        exports: Exports
-        students: Students
-      dashboard: Dashboard
-      navbar:
-        admins: Admins
-        coaches: Coaches
-        communities: Communities
-        courses: Courses
-        customization: Customization
-        overview: Overview
-        settings: Settings
-      notifications: Notifications
-      sign_out: Sign Out
     SchoolAdmin__EditorDrawer:
       close_editor: Close Editor
     SchoolAdmins__Editor:
@@ -1430,6 +1424,28 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Applicants
+          authors: Authors
+          calendar: Calendars
+          certificates: Certificates
+          coaches: Coaches
+          cohorts: Cohorts
+          curriculum: Curriculum
+          evaluation_criteria: Evaluation Criteria
+          exports: Exports
+          students: Students
+          teams: Teams
+        main:
+          admins: Admins
+          coaches: Coaches
+          communities: Communities
+          courses: Courses
+          customization: Customization
+          overview: Overview
+          settings: Settings
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -1474,7 +1490,6 @@ en:
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
     StudentBulkImport__Root:
-      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_email: Email has to be valid and can't be blank
@@ -1493,6 +1508,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
         label: CSV Import file
         placeholder: Select CSV file to import
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       drawer_heading: Bulk Import Students
       error_summary_title: "Here is a summary of the errors in the sheet: "
       example_csv_link:
@@ -1657,7 +1673,7 @@ en:
     StudentsIndex__Root:
       add_new_students: Add New Students
       cohort: Cohort
-      edit: Edit
+      edit_details: Edit %{name}'s details
       filter:
         search_by_email: Search by Email
         search_by_name: Search by Name
@@ -1798,6 +1814,7 @@ en:
       cancel: Cancel
       change_password: Change your current password
       change_photo: Change photo
+      community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
       confirm_dialog_aria: Confirm dialog for account deletion
       confirm_email: Confirm your email
@@ -1905,10 +1922,10 @@ en:
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
     calendar:
+      events: Events
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
-      events: Events
     leaderboard:
       active_students: Active Students
       change: Change
@@ -2178,6 +2195,8 @@ en:
     create_community:
       community_created_notification: Community created successfully
     create_course:
+      auto_generated_cohort_description: Auto generated cohort for active students in %{course_name}
+      auto_generated_cohort_name: Purple (Auto-generated)
       success_notification: Course created successfully!
     create_course_author:
       author_created_notification: Author Created
@@ -2285,7 +2304,9 @@ en:
     update_cohort:
       success_notification: Cohort updated successfully.
     update_course:
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Course updated successfully!
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated
@@ -2319,13 +2340,20 @@ en:
     update_user:
       profile_saved_notification: Profile updated successfully!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: Inactive Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
       active_students_label: Active Students
       cohorts_subheading: Cohorts
       organisation_label: Organisation
-      view_all_cohorts: View All Cohorts
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled
@@ -2334,14 +2362,7 @@ en:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
-    courses:
-      active_cohorts_label: Active Cohorts
-      active_cohorts_count: "%{count}"
-      course_label: Course
-      empty: "No %{cohort_status} for this course."
-      inactive_cohorts_label: Inactive Cohorts
-      inactive_cohorts_count: "%{count}"
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+      view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades
@@ -2446,40 +2467,50 @@ en:
   schools:
     admins:
       title: Admins
-    calendars:
-      new:
-        title: 'Create new calendar'
-        name_label: Calendar name
-        cohorts_label: Link calendar to cohorts
-        no_cohorts_selected: No cohorts selected
-        all_cohorts_selected: All cohorts selected
-        add_calendar_button: Add calendar
-      edit:
-        update_calendar: Update calendar
-        link_to_cohorts: Link calendar to cohorts
-        calendar_name: Calendar name
     calendar_events:
-      new:
-        title: 'Add new event'
-        new_event: 'Add new event'
-        edit_event: 'Edit event'
-        title_label: Event Title
-        select_calendar_label: Add event to
-        select_color_label: Color
-        start_time_label: Date and Time
-        add_link_section_title: Add an event link (optional)
-        add_link_section_subtitle: Add a link to your event. The link can be GMeet, zoom or any other link
-        event_link_title_label: Event link title
-        event_link_url_label: Event link URL
-        description_label: Description
+      edit:
+        page_title: Edit event
+      form:
         add_event_button: Add event
-        link_title_placeholder: eg. Zoom meeting link
+        add_event_heading: Add new event
+        add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
+        add_link_section_title: Add an event link (optional)
+        calendar_label: Add event to
+        color_label: Color
+        description_label: Event description
+        edit_event_heading: Edit %{event_title}
+        link_title_label: Event link title
+        link_title_placeholder: eg. Google Meet
+        link_url_label: Event link URL
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        start_time_label: Date and Time
+        title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        update_event_button: Update event
+      new:
+        page_title: Add new event
       show:
-        title: 'Calendar event details'
-        link_label: Event Link
-        description_label: Description
-        date_and_time: Date and time
         confirm_delete: Are you sure to delete the event?
+        date_and_time: Date and time
+        description_label: Description
+        link_label: Event Link
+        title: Calendar event details
+    calendars:
+      edit:
+        page_title: Update calendar
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: All available cohorts have been selected
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: This will link calendar to specified cohorts
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: No cohorts selected
+        update_calendar_button: Update calendar
+      new:
+        page_title: Create new calendar
     communities:
       index:
         title: Communities
@@ -2489,19 +2520,19 @@ en:
       authors:
         title: Authors
       calendar_events:
-        title: Calendars and Events
         add_calendar_button: Add Calendar
-        calendar: Calendar
-        calendars: Calendars
-        calendar_filter_label: Showing events from
-        select_calendar_filter: Select a calendar
-        upcoming_events_in: Upcoming events in
         add_event_button: Add an event
-        events: Events
+        calendar: Calendar
+        calendar_filter_label: Showing events from
+        calendars: Calendars
         empty_events: No event scheduled for the selected date
-        today: Today
+        events: Events
         no_calendars_message: No calendars yet
         no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
+        select_calendar_filter: Select a calendar
+        title: Calendars and Events
+        today: Today
+        upcoming_events_in: Upcoming events in
       certificates:
         title: Certificates
       curriculum:
@@ -2535,6 +2566,17 @@ en:
       submissions_reviewed: submissions reviewed
       title: Overview
   services:
+    courses:
+      demo_content_service:
+        criterion_one: Correctness of implementation
+        criterion_two: Quality of submission
+        grade_1: Bad
+        grade_2: Good
+        grade_3: Great
+        level_1: Level 1
+        target_group_description: Description of demo target group
+        target_group_name: Demo Target Group
+        target_name: Demo Target
     discord:
       community_message_service:
         post_topic_created: |-
@@ -2546,6 +2588,7 @@ en:
   shared:
     _no: "No"
     _yes: "Yes"
+    admin: Admin
     all: All
     and: and
     archived: Archived
@@ -2653,11 +2696,11 @@ en:
       title: Edit User
     edit:
       course_discord_requirement_met:
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
         description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
+        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
       course_requires_discord_account:
-        heading: Wait a second! You need to link your Discord account first.
         description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
+        heading: Wait a second! You need to link your Discord account first.
       discord_connect: Join Our Discord Community
       discord_connected_account: Go to Discord Community
       discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>

@@ -42,9 +42,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium  leading-snug">
-        {Target.title(target)->str}
-      </span>
+      <span className="font-medium  leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -240,21 +238,33 @@ let computeNotice = (
   }
 
 let navigationLink = (direction, level, setState) => {
-  let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left rtl:rotate-180"), t("nav_previous_level"), "Previous", None)
-  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right rtl:rotate-180"))
+  let (leftIcon, ariaLabel, longText, shortText, rightIcon) = switch direction {
+  | #Previous => (
+      Some("fa-arrow-left rtl:rotate-180"),
+      t("nav_aria_previous_level"),
+      t("nav_long_previous_level"),
+      t("nav_short_previous_level"),
+      None,
+    )
+  | #Next => (
+      None,
+      t("nav_aria_next_level"),
+      t("nav_long_next_level"),
+      t("nav_short_next_level"),
+      Some("fa-arrow-right rtl:rotate-180"),
+    )
   }
 
   let arrow = icon =>
     icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
 
   <button
-    ariaLabel={"Go to " ++ longText}
-    onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
+    ariaLabel
+    onClick={_ => setState(state => {...state, selectedLevelId: Level.id(level)})}
     className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
     {arrow(leftIcon)}
-    <span className="mx-2 hidden md:inline"> {longText |> str} </span>
-    <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
+    <span className="mx-2 hidden md:inline"> {longText->str} </span>
+    <span className="mx-2 inline md:hidden"> {shortText->str} </span>
     {arrow(rightIcon)}
   </button>
 }

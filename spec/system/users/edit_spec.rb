@@ -57,18 +57,20 @@ feature "User Edit", js: true do
     let(:new_name) { Faker::Name.name }
     let(:old_name) { user.name }
 
-    before do
+    it "creates an audit record" do
       sign_in_user(user, referrer: edit_user_path)
       fill_in "user_name", with: new_name
       click_button "Save Changes"
-    end
 
-    it "creates an audit record" do
+      expect(page).to have_text("Profile updated successfully!")
+
       audit_record = AuditRecord.last
       metadata = audit_record.metadata
+
       expect(audit_record.audit_type).to eq(
         AuditRecord.audit_types[:update_name]
       )
+
       expect(audit_record.school_id).to eq(user.school_id)
       expect(metadata["user_id"]).to eq(user.id)
       expect(metadata["old_name"]).to eq(old_name)

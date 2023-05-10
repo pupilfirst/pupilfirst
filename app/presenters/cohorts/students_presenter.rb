@@ -59,7 +59,7 @@ module Cohorts
         hint: "...or start typing to search by student's name of email",
         sorter: {
           key: "sort_by",
-          default: "Last Created",
+          default: "Recently Seen",
           options: [
             "Recently Seen",
             "Name",
@@ -128,10 +128,10 @@ module Cohorts
         scope.order(created_at: :asc)
       when "Earliest Seen"
         scope.joins(:user).order("users.last_seen_at ASC NULLS FIRST")
-      when "Recently Seen"
-        scope.joins(:user).order("users.last_seen_at DESC NULLS LAST")
-      else
+      when "Last Created"
         scope.order(created_at: :desc)
+      else
+        scope.joins(:user).order("users.last_seen_at DESC NULLS LAST")
       end
     end
 

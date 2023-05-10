@@ -1328,16 +1328,17 @@ let make = (
                     className="px-2 py-1 font-medium text-sm underline rounded text-primary-500 hover:bg-primary-50 hover:text-primary-700 transition"
                     href={`https://github.com/${repo}/actions`}
                     target="_blank">
-                    <Icon className="if i-external-link-regular me-2" /> {"View Github Action"->str}
+                    <Icon className="if i-external-link-regular me-2" />
+                    {t("github_action.view_action_button")->str}
                   </a>
                 </div>
                 <div className="flex flex-col md:flex-row justify-between md:space-x-2 pt-4">
-                  <p> {"Do you want to re-run the Github action on this submission?"->str} </p>
+                  <p> {t("github_action.description")->str} </p>
                   <button
                     className="btn btn-default mt-2 md:mt-0"
                     onClick={_ => reRunGithubAction(submissionId, send)}>
                     <Icon className="if i-redo-regular text-lg me-2" />
-                    <span> {"Yes, Re-Run Github Action"->str} </span>
+                    <span> {t("github_action.re_run_action_button")->str} </span>
                   </button>
                 </div>
               </div>

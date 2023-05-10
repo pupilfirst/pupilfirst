@@ -1059,6 +1059,21 @@ feature 'Target Details Editor', js: true do
 
         expect(target_1_l1.reload.timeline_events.count).to eq(0)
       end
+
+      scenario 'admin checks out github actions for a target' do
+        sign_in_user school_admin.user,
+                     referrer:
+                       details_school_course_target_path(
+                         course_id: course.id,
+                         id: target_1_l1.id
+                       )
+
+        expect(page).to have_text('Github Actions')
+        click_link 'Configure Github Actions'
+
+        expect(page).to have_text('You will need to configure Github before you can use this feature')
+        expect(page).to have_button('Update Action', disabled: true)
+      end
     end
   end
 end

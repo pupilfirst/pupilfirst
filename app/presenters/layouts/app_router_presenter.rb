@@ -54,7 +54,7 @@ module Layouts
         current_school.courses.live
       else
         # current course if course has public preview.
-        previewed_course = @course.public_preview? ? [@course] : []
+        previewed_course = @course&.public_preview? ? [@course] : []
 
         (
           courses_with_author_access + courses_with_review_access +

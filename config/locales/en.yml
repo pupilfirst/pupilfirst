@@ -740,6 +740,10 @@ en:
         notice:
           done: Done!
           done_description: There are no other similar submissions.
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
@@ -1044,8 +1048,7 @@ en:
       enter_valid_title: Enter a valid title
       github_action:
         button_text: Configure Github Actions
-        description: You can configure Github Actions to automatically grade this target when a student submits a submission.
-        help_description: Github Actions documentation
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor/#github-actions
         title: Github Actions
       link_complete: Link to complete
@@ -1480,7 +1483,6 @@ en:
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
     StudentBulkImport__Root:
-      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_email: Email has to be valid and can't be blank
@@ -1499,6 +1501,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
         label: CSV Import file
         placeholder: Select CSV file to import
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       drawer_heading: Bulk Import Students
       error_summary_title: "Here is a summary of the errors in the sheet: "
       example_csv_link:
@@ -2263,10 +2266,10 @@ en:
     re_activate_student:
       success_notification: Student re-activated successfully!
     re_run_github_action:
+      success_notification: Submission queued for re-run on Github
       validation_error:
         student_has_no_github_account: Student does not have a Github account
         target_does_not_have_github_action: Target does not have a Github action configured
-      success_notification: Submission queued for re-run on Github
     reassign_reviewer:
       submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.
@@ -2330,13 +2333,20 @@ en:
     update_user:
       profile_saved_notification: Profile updated successfully!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: Inactive Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
       active_students_label: Active Students
       cohorts_subheading: Cohorts
       organisation_label: Organisation
-      view_all_cohorts: View All Cohorts
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled
@@ -2345,14 +2355,7 @@ en:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
-    courses:
-      active_cohorts_label: Active Cohorts
-      active_cohorts_count: "%{count}"
-      course_label: Course
-      empty: "No %{cohort_status} for this course."
-      inactive_cohorts_label: Inactive Cohorts
-      inactive_cohorts_count: "%{count}"
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+      view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades

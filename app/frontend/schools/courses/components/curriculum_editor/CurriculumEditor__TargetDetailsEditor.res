@@ -1079,9 +1079,6 @@ let make = (
                 <HelpIcon link={t("github_action.help_url")} className="ms-1">
                   {t("github_action.help_description")->str}
                 </HelpIcon>
-                <div className="ms-6 text-sm text-gray-600">
-                  {t("github_action.description")->str}
-                </div>
                 <div className="ms-6 mt-4">
                   <a
                     href={`/school/targets/${Target.id(target)}/action`} className="btn btn-subtle">

@@ -32,6 +32,7 @@ module Schools
       target.action_config = params[:target][:action_config]
       target.save!
 
+      flash[:success] = 'Action updated successfully'
       redirect_to details_school_course_target_path(target.course, target)
     end
   end

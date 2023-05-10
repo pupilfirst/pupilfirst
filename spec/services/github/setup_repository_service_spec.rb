@@ -5,7 +5,7 @@ RSpec.describe Github::SetupRepositoryService, type: :service do
     {
       access_token: 'access_token',
       organization_id: 'organization_id',
-      team_id: 'team_id'
+      default_team_id: 'default_team_id'
     }
   end
 

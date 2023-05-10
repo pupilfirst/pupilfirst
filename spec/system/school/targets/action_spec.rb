@@ -34,7 +34,7 @@ feature 'Target Details Editor', js: true do
     expect(target_1_l1.reload.action_config).to eq(action_config)
   end
 
-  scenario 'author checks out github actions for a target' do
+  scenario 'author configures out github actions for a target' do
     sign_in_user course_author.user, referrer: action_school_target_path(id: target_1_l1.id)
 
     fill_in 'target_action_config', with: action_config

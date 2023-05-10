@@ -545,7 +545,7 @@ let make = (
             <p className="mt-1 text-sm text-gray-600"> {t("update_email_notifications")->str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
-            <p className="font-semibold"> {"Community Digest"->str} </p>
+            <p className="font-semibold"> {t("community_digest")->str} </p>
             <p className="text-sm text-gray-600"> {t("community_digest_emails")->str} </p>
             <div className="mt-6">
               <div className="flex items-center">

@@ -34,7 +34,7 @@ let reducer = (state, action) =>
   | UpdateCoachCount(isArchivedTabSelected) =>
     let count =
       List.filter(
-        coach => Coach.archived(coach) === isArchivedTabSelected,
+        coach => Coach.exited(coach) === isArchivedTabSelected,
         state.coaches,
       )->List.length
     {...state, coachCount: count}
@@ -84,7 +84,7 @@ let make = (~coaches, ~authenticityToken) => {
               className={`px-5 py-2  flex items-center p-2 font-medium
               ${isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
               <a href={`${currentPath}archived`}>
-                <span className="hidden sm:inline"> {tr("archived_coaches")->str} </span>
+                <span className="hidden sm:inline"> {tr("exited_coaches")->str} </span>
                 {switch isArchivedTabSelected {
                 | true =>
                   <span
@@ -113,7 +113,7 @@ let make = (~coaches, ~authenticityToken) => {
         <div className="max-w-2xl w-full mx-auto relative">
           {state.coaches
           |> List.sort((x, y) => int_of_string(Coach.id(x)) - int_of_string(Coach.id(y)))
-          |> List.filter(coach => Coach.archived(coach) === isArchivedTabSelected)
+          |> List.filter(coach => Coach.exited(coach) === isArchivedTabSelected)
           |> List.map(coach =>
             <div
               key={coach->Coach.id}

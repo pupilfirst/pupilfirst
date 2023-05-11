@@ -1248,11 +1248,14 @@ en:
       archived: Archived
       active: Active
       coach_visibility: Coach Visibility
+      exited: Exited
+      coach_status: Coach Status
+
     SA_Coaches_SchoolIndex:
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
       active_coaches: Active Coaches
-      archived_coaches: Archived Coaches
+      exited_coaches: Exited Coaches
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students

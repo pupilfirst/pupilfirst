@@ -100,15 +100,15 @@ feature "Coaches Index", js: true do
     expect(page).to have_text(coach_2.name)
 
     find("p", text: coach_1.name).click
-    click_button "Archive"
+    click_button "Exited"
     click_button "Update Coach"
 
     expect(page).to have_text("Coach updated successfully")
 
-    expect(coach_1.reload.archived_at).not_to eq(nil)
+    expect(coach_1.reload.exited).to eq(true)
     expect(page).to_not have_text(coach_1.name)
 
-    find("span", text: "Archived Coaches").click
+    find("span", text: "Exited Coaches").click
     expect(page).to have_text(coach_1.name)
     expect(page).to_not have_text(coach_2.name)
   end

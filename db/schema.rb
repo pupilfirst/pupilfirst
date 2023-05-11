@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_02_130217) do
+ActiveRecord::Schema.define(version: 2023_03_14_123822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -310,7 +310,6 @@ ActiveRecord::Schema.define(version: 2023_05_02_130217) do
     t.string "connect_link"
     t.boolean "notify_for_submission", default: false
     t.boolean "exited", default: false
-    t.datetime "archived_at"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end

@@ -20,8 +20,8 @@ class Faculty < ApplicationRecord
   has_many :faculty_founder_enrollments, dependent: :destroy
   has_many :founders, through: :faculty_founder_enrollments
 
-  scope :archived, -> { where.not(archived_at: nil) }
-  scope :active, -> { where(archived_at: nil) }
+  scope :archived, -> { where(exited: true) }
+  scope :active, -> { where(exited: false) }
 
   CATEGORY_TEAM = "team"
   CATEGORY_VISITING_COACHES = "visiting_coaches"

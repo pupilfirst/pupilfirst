@@ -26,6 +26,8 @@ module Schools
       property :affiliation, virtual: true
 
       def save
+        # Important to call this service before update
+        Schools::ArchiveCoachService.new(faculty, exited).execute
         Faculty.transaction do
           user = model.user
           user.update!(user_params)
@@ -33,8 +35,6 @@ module Schools
 
           model.update!(faculty_params)
         end
-
-        clear_faculty_enrollments if model.exited?
 
         model
       end
@@ -50,16 +50,11 @@ module Schools
       end
 
       def faculty_params
-        { connect_link: connect_link, public: public, exited: exited }
+        { connect_link: connect_link, public: public }
       end
 
       def faculty
         @faculty ||= school.faculty.find_by(id: id)
-      end
-
-      def clear_faculty_enrollments
-        FacultyCohortEnrollment.where(faculty: faculty).destroy_all
-        FacultyFounderEnrollment.where(faculty: faculty).destroy_all
       end
     end
   end

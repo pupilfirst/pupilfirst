@@ -28,9 +28,6 @@ module Schools
       @form = Schools::Coaches::UpdateForm.new(faculty)
 
       if @form.validate(params[:faculty].merge(school_id: current_school.id))
-        if params[:faculty][:archived] == "true"
-          Schools::ArchiveCoachService.new(faculty).execute
-        end
         faculty = @form.save
         render json: {
                  id: faculty.id.to_s,

@@ -39,8 +39,7 @@ module Schools
             connectLink: faculty.connect_link,
             exited: faculty.exited,
             imageFileName: faculty.image_filename,
-            affiliation: faculty.user.affiliation,
-            archived: faculty.archived_at?
+            affiliation: faculty.user.affiliation
           }
         end
       end

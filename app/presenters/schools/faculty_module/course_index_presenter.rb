@@ -38,7 +38,6 @@ module Schools
           .school
           .faculty
           .active
-          .where.not(exited: true)
           .includes(:user)
           .map { |coach| { id: coach.id, name: coach.user.name } }
       end

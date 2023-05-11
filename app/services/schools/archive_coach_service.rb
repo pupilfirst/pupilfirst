@@ -1,15 +1,19 @@
 module Schools
   class ArchiveCoachService
-    def initialize(faculty)
+    def initialize(faculty, archive)
       @faculty = faculty
+      @should_archive = archive == "true" ? true : false
     end
 
     def execute
-      if !@faculty.archived_at?
-        @faculty.archived_at = Time.zone.now
+      if !@faculty.exited? && @should_archive
+        @faculty.exited = true
         @faculty.save!
         FacultyCohortEnrollment.where(faculty: @faculty).destroy_all
         FacultyFounderEnrollment.where(faculty: @faculty).destroy_all
+      elsif @faculty.exited? && !@should_archive
+        @faculty.exited = false # unarchive
+        @faculty.save!
       end
     end
   end

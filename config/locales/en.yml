@@ -1256,6 +1256,7 @@ en:
       avatar_of: "Avatar of "
       active_coaches: Active Coaches
       exited_coaches: Exited Coaches
+      coaches: Coaches
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students

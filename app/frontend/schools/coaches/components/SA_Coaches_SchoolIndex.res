@@ -64,6 +64,20 @@ let make = (~coaches, ~authenticityToken) => {
     <div className="flex-1 flex flex-col">
       <div className="w-full pt-2 relative md:sticky top-0 z-20 bg-gray-50 border-b">
         <div className="max-w-3xl mx-auto">
+          <div className="px-12 py-5 flex justify-between items-baseline">
+            <h2 className="font-bold ms-2 text-xl"> {tr("coaches")->str} </h2>
+            <button
+              onClick={_event => {
+                ReactEvent.Mouse.preventDefault(_event)
+                send(UpdateFormVisible(CoachEditor(None)))
+              }}
+              className="flex items-center bg-primary-500 text-white py-3 px-6 justify-between rounded-lg text-primary-500 hover:text-white hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-white">
+              <i className="fas fa-plus-circle text-lg" />
+              <h5 className="ms-2 text-sm font-medium"> {tr("add_new_coach") |> str} </h5>
+            </button>
+          </div>
+        </div>
+        <div className="max-w-3xl mx-auto">
           <div className="px-12 flex justify-start ">
             <div
               className={`px-5 py-2 flex items-center p-2 font-medium
@@ -97,17 +111,6 @@ let make = (~coaches, ~authenticityToken) => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex px-6 py-2 items-center justify-between">
-        <button
-          onClick={_event => {
-            ReactEvent.Mouse.preventDefault(_event)
-            send(UpdateFormVisible(CoachEditor(None)))
-          }}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-primary-600 border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
-          <i className="fas fa-plus-circle text-lg" />
-          <h5 className="font-semibold ms-2"> {tr("add_new_coach") |> str} </h5>
-        </button>
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
         <div className="max-w-2xl w-full mx-auto relative">

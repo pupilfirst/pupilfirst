@@ -1194,21 +1194,30 @@ let make = (
     },
   )
 
-  React.useEffect1(() => {
+  let newFeedbackRef = React.useRef(state.newFeedback)
+
+  React.useEffect0(() => {
+    open Webapi.Dom
+
     let handleBeforeUnload = event => {
-      if state.newFeedback != "" {
-        event |> Webapi.Dom.Event.preventDefault
+      if newFeedbackRef.current != "" {
+        Event.preventDefault(event)
         DomUtils.Event.setReturnValue(event, "")
       }
     }
 
-    Webapi.Dom.Window.addEventListener("beforeunload", handleBeforeUnload, Webapi.Dom.window)
+    Window.addEventListener("beforeunload", handleBeforeUnload, window)
 
     let removeEventListener = () => {
-      Webapi.Dom.Window.removeEventListener("beforeunload", handleBeforeUnload, Webapi.Dom.window)
+      Window.removeEventListener("beforeunload", handleBeforeUnload, window)
     }
 
     Some(removeEventListener)
+  })
+
+  React.useEffect1(() => {
+    newFeedbackRef.current = state.newFeedback
+    None
   }, [state.newFeedback])
 
   let status = computeStatus(

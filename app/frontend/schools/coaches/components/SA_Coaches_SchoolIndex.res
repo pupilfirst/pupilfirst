@@ -72,40 +72,40 @@ let make = (~coaches, ~authenticityToken) => {
                 send(UpdateFormVisible(CoachEditor(None)))
               }}
               className="flex items-center bg-primary-500 text-white py-3 px-6 justify-between rounded-lg text-primary-500 hover:text-white hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-white">
-              <i className="fas fa-plus-circle text-lg" />
-              <h5 className="ms-2 text-sm font-medium"> {tr("add_new_coach") |> str} </h5>
+              <PfIcon className="if i-plus-circle-solid if-fw" />
+              <span className="ms-2 text-sm font-medium"> {tr("add_new_coach") |> str} </span>
             </button>
           </div>
         </div>
         <div className="max-w-3xl mx-auto">
           <div className="px-12 flex justify-start ">
             <div
-              className={`px-5 py-2 flex items-center p-2 font-medium
+              className={`px-5 py-2 items-center p-2 font-medium
                ${!isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
-              <a href={`${currentPath}active`}>
-                <span className="hidden sm:inline"> {tr("active_coaches")->str} </span>
+              <a href={`${currentPath}active`} className="flex gap-1.5">
+                <span className="sm:inline"> {tr("active_coaches")->str} </span>
                 {switch isArchivedTabSelected {
                 | false =>
                   <span
-                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1 ms-1.5`>
+                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1`>
                     {state.coachCount->Belt.Int.toString->str}
                   </span>
-                | true => <span />
+                | true => React.null
                 }}
               </a>
             </div>
             <div
-              className={`px-5 py-2  flex items-center p-2 font-medium
+              className={`px-5 py-2 items-center p-2 font-medium
               ${isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
-              <a href={`${currentPath}archived`}>
-                <span className="hidden sm:inline"> {tr("exited_coaches")->str} </span>
+              <a href={`${currentPath}archived`} className="flex gap-1.5">
+                <span className="sm:inline"> {tr("exited_coaches")->str} </span>
                 {switch isArchivedTabSelected {
                 | true =>
                   <span
-                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1 ms-1.5`>
+                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1`>
                     {state.coachCount->Belt.Int.toString->str}
                   </span>
-                | false => <span />
+                | false => React.null
                 }}
               </a>
             </div>

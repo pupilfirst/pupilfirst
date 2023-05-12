@@ -75,9 +75,9 @@ let make = (~courses, ~currentUser) => {
     <div className="flex items-center ltr:space-x-4">
       <div
         className="py-1 px-2 flex text-sm font-medium border-b-2 border-primary-400 text-primary-500 bg-gray-50 items-center">
-        {"Admin"->str}
+        {I18n.t("shared.admin")->str}
       </div>
-      {navLinks("/dashboard", "Dashboard")}
+      {navLinks("/dashboard", I18n.t("shared.dashboard"))}
       <div className="relative me-4">
         <Notifications__Root
           wrapperClasses=""

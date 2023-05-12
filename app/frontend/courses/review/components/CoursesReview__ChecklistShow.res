@@ -140,7 +140,7 @@ let make = (
           className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left text-gray-500" />
-          <p className="ps-2 "> {str("Back to Review")} </p>
+          <p className="ps-2 "> {str(t("back_to_review"))} </p>
         </button>
       </div>
     </div>

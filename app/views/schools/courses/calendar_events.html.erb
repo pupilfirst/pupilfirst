@@ -1,7 +1,6 @@
 <% content_for(:head) do %>
   <title><%= @course.name %> | <%= t(".title") %> </title>
 <% end %>
-
 <div class="relative" id="schoolrouter-innerpage-data">
   <% if @course.calendars.present? %>
     <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
@@ -24,14 +23,11 @@
               <p class="text-lg font-semibold "><%= t(".calendars") %> </p>
               <a
                 class="block btn btn-default btn-small"
-                ariaLabel="Add new calendar"
-                title="Add new calendar"
                 href=<%= new_school_course_calendar_path(@course)%>>
                 <i class="if i-plus-regular if-fw" ></i>
                 <span><%= t(".add_calendar_button") %> </span>
               </a>
             </div>
-
             <% @course.calendars.each do |calendar|  %>
               <div class="bg-white mt-2 px-2 py-1 rounded-md text-sm flex items-center justify-between">
                 <span class="flex items-center gap-2 font-medium">
@@ -42,7 +38,6 @@
                 </a>
               </div>
             <% end %>
-
           </div>
         </div>
         <div class="col-span-8 bg-white flex-1 rounded-e-lg">
@@ -56,9 +51,11 @@
           <div class="flex flex-col gap-8 divide-y p-6">
             <div>
               <div>
-                <p class="font-semibold text-sm text-gray-600"><%=@presenter.selected_date%>
+                <p class="font-semibold text-sm text-gray-600">
+                  <%= @presenter.selected_date %>
                   <% if @presenter.today? %>
-                    <span aria-hidden="true"></span>- </span> <em class="font-normal"><%= t(".today") %></em>
+                    <span aria-hidden="true">-</span>
+                    <em class="font-normal"><%= t(".today") %></em>
                   <% end %>
                 </p>
                 <% if @presenter.events_for_day.blank? %>
@@ -77,13 +74,14 @@
               </div>
             </div>
             <% if @presenter.upcoming_events_for_month.present? %>
-            <div class="pt-4">
-              <p class="font-semibold text-sm text-gray-600"> <%= t(".upcoming_events_in") + " " + @presenter.selected_month %></p>
-              <div>
-                <div class="mt-3 flex flex-col gap-4">
-                  <% @presenter.upcoming_events_for_month.each do |event|%>
-                    <%= render partial: "event_card", locals: {event: event} %>
-                  <% end %>
+              <div class="pt-4">
+                <p class="font-semibold text-sm text-gray-600"> <%= t(".upcoming_events_in") + " " + @presenter.selected_month %></p>
+                <div>
+                  <div class="mt-3 flex flex-col gap-4">
+                    <% @presenter.upcoming_events_for_month.each do |event|%>
+                      <%= render partial: "event_card", locals: {event: event} %>
+                    <% end %>
+                  </div>
                 </div>
               </div>
             <% end %>
@@ -101,8 +99,6 @@
         <p class="text-sm"><%= t(".no_calendars_sub_text") %></p>
         <a
           class="block btn btn-primary mt-4"
-          ariaLabel="Add new calendar"
-          title="Add new calendar"
           href=<%= new_school_course_calendar_path(@course)%>>
           <i class="if i-plus-regular if-fw" ></i>
           <span><%= t(".add_calendar_button") %> </span>

@@ -2342,12 +2342,12 @@ en:
       profile_saved_notification: Profile updated successfully!
   organisations:
     courses:
-      active_cohorts_count: "%{count}"
-      active_cohorts_label: Ongoing Cohorts
+      ongoing_cohorts_count: "%{count}"
+      ongoing_cohorts_label: Ongoing Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      inactive_cohorts_count: "%{count}"
-      inactive_cohorts_label: Ended Cohorts
+      ended_cohorts_count: "%{count}"
+      ended_cohorts_label: Ended Cohorts
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations

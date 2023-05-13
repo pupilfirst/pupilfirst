@@ -12,6 +12,7 @@ class Cohort < ApplicationRecord
         -> { where("ends_at > ?", Time.zone.now).or(where(ends_at: nil)) }
   scope :ended, -> { where("ends_at < ?", Time.zone.now) }
   scope :inactive, -> { ended }
+  scope :ongoing, -> { active }
 
   normalize_attribute :description
 

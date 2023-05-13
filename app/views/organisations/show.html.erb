@@ -33,7 +33,7 @@
                 <%= t('.students_enrolled_suffix_html', count: course_with_cohorts[:cohorts].count) %>
               </p>
             </div>
-            <%= link_to active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+            <%= link_to ongoing_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
               <span><%= t('.view_all_cohorts') %></span>
               <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-1.5" aria-hidden="true" style="margin-right: 6px;"></i>
             <% end %>

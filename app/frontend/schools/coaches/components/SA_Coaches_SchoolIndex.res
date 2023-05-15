@@ -78,37 +78,35 @@ let make = (~coaches, ~authenticityToken) => {
           </div>
         </div>
         <div className="max-w-3xl mx-auto">
-          <div className="px-12 flex justify-start ">
-            <div
-              className={`px-5 py-2 items-center p-2 font-medium
-               ${!isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
-              <a href={`${currentPath}active`} className="flex gap-1.5">
-                <span className="sm:inline"> {tr("active_coaches")->str} </span>
-                {switch isArchivedTabSelected {
-                | false =>
-                  <span
-                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1`>
-                    {state.coachCount->Belt.Int.toString->str}
-                  </span>
-                | true => React.null
-                }}
-              </a>
-            </div>
-            <div
-              className={`px-5 py-2 items-center p-2 font-medium
-              ${isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
-              <a href={`${currentPath}archived`} className="flex gap-1.5">
-                <span className="sm:inline"> {tr("exited_coaches")->str} </span>
-                {switch isArchivedTabSelected {
-                | true =>
-                  <span
-                    className=`bg-primary-500 text-white text-xs leading-none rounded-md px-1.5 py-1`>
-                    {state.coachCount->Belt.Int.toString->str}
-                  </span>
-                | false => React.null
-                }}
-              </a>
-            </div>
+          <div className="px-12 flex justify-start" role="tablist">
+            <a
+              role="tab"
+              href={`${currentPath}active`}
+              className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500
+               ${isArchivedTabSelected ? "" : "border-b-2 border-primary-500 text-primary-500"}`}>
+              <span> {tr("active_coaches")->str} </span>
+              {switch isArchivedTabSelected {
+              | true => React.null
+              | false =>
+                <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
+                  {state.coachCount->Belt.Int.toString->str}
+                </span>
+              }}
+            </a>
+            <a
+              role="tab"
+              href={`${currentPath}archived`}
+              className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500
+               ${isArchivedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
+              <span className="sm:inline"> {tr("exited_coaches")->str} </span>
+              {switch isArchivedTabSelected {
+              | true =>
+                <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
+                  {state.coachCount->Belt.Int.toString->str}
+                </span>
+              | false => React.null
+              }}
+            </a>
           </div>
         </div>
       </div>

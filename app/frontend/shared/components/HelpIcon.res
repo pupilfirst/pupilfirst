@@ -92,7 +92,7 @@ let makeFromJson = json => {
     json,
   )->Belt.Option.map(responsiveAlignment =>
     switch responsiveAlignment {
-    | "nlr" => NonResponsive(AlignLeft)
+    | "nrl" => NonResponsive(AlignLeft)
     | "nrc" => NonResponsive(AlignCenter)
     | "nrr" => NonResponsive(AlignRight)
     | "rlr" => Responsive(AlignLeft, AlignRight)

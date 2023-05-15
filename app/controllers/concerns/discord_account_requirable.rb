@@ -17,7 +17,9 @@ module DiscordAccountRequirable
     end
 
     if course.discord_account_required?
-      redirect_to edit_user_path(course_requiring_discord: course.id)
+      redirect_to discord_account_required_user_path(
+                    course_requiring_discord: course.id
+                  )
     end
   end
 end

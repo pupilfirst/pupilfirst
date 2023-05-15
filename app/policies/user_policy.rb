@@ -8,4 +8,9 @@ class UserPolicy < ApplicationPolicy
     # All users can edit their profile.
     true
   end
+
+  def discord_account_required?
+    # All users can visit the Discord account requirement page.
+    true
+  end
 end

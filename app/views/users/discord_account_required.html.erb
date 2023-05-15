@@ -1,0 +1,60 @@
+<% content_for(:head) do %>
+  <title><%= t(".page_title") %></title>
+  <%= vite_javascript_tag 'tailwind', nonce: true %>
+<% end %>
+<div class="flex min-h-screen bg-gray-50 items-center justify-center">
+  <div class="py-8 w-full">
+    <div class="container mx-auto px-3 max-w-3xl">
+      <div class="flex">
+        <div class="p-2 w-1/2">
+          <% if false %>
+            <h1 class="text-2xl font-bold"><%= t(".unlinked.heading") %></h1>
+            <p class="mt-2"><%= t(".unlinked.description", school_name: current_school.name) %></p>
+            <section class="mt-4">
+              <p class="font-semibold"><%= t(".unlinked.process.prefix") %></p>
+              <div class="flex mt-4">
+                <span class="shrink-0 h-8 w-8 font-semibold border rounded-full border-transparent bg-green-100 text-green-600 flex items-center justify-center">
+                  <%= t(".unlinked.process.step_1_label") %>
+                </span>
+                <span class="ml-3"><%= t(".unlinked.process.step_1_description_html") %></span>
+              </div>
+              <div class="flex mt-2">
+                <span class="shrink-0 h-8 w-8 font-semibold border rounded-full border-transparent bg-green-100 text-green-600 flex items-center justify-center">
+                  <%= t(".unlinked.process.step_2_label") %>
+                </span>
+                <span class="ml-3">
+                  <%= t(".unlinked.process.step_2_description_html") %>
+                  <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".unlinked.process.step_2_help_html"), className: 'text-xs'}.to_json %>'></span>
+                </span>
+              </div>
+              <div class="flex mt-2">
+                <span class="shrink-0 h-8 w-8 font-semibold border rounded-full border-transparent bg-green-100 text-green-600 flex items-center justify-center">
+                  <%= t(".unlinked.process.step_3_label") %>
+                </span>
+                <span class="ml-3"><%= t(".unlinked.process.step_3_description_html") %></span>
+              </div>
+            </section>
+            <button class="btn btn-primary btn-large mt-4">
+              <i class="if i-discord if-fw"></i>
+              <span class="ml-2">
+                <%= t(".unlinked.link_discord_button") %>
+              </span>
+            </button>
+          <% else %>
+            <i class="text-green-600 text-5xl if i-badge-check-solid if-fw" ></i>
+            <h1 class="mt-3 text-2xl font-bold"><%= t(".linked.heading") %></h1>
+            <p class="mt-4"><%= t(".linked.description", school_name: current_school.name) %></p>
+            <p class="mt-4"><%= t(".linked.footer_html", school_name: current_school.name) %></p>
+            <button class="btn btn-primary btn-large mt-4">
+              <i class="if i-book-regular if-fw" ></i>
+              <span class="ml-2">
+                <%= t(".linked.go_to_course_button") %>
+              </span>
+            </button>
+          <% end %>
+        </div>
+        <div class="p-2 w-1/2">Right side</div>
+      </div>
+    </div>
+  </div>
+</div>

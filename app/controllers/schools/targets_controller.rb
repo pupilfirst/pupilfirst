@@ -26,14 +26,26 @@ module Schools
 
     # PATCH /school/targets/:id/update_action
     def update_action
-      target = current_school.targets.find(params[:id])
-      authorize(target, policy_class: Schools::TargetPolicy)
+      @target = current_school.targets.find(params[:id])
+      authorize(@target, policy_class: Schools::TargetPolicy)
 
-      target.action_config = params[:target][:action_config]
-      target.save!
+      @target.action_config = params[:target][:action_config]
+      if valid_yaml_string?(params[:target][:action_config]) && @target.save
+        flash[:success] = 'Action updated successfully'
+        redirect_to details_school_course_target_path(@target.course, @target)
+      else
+        flash[:error] = 'Action could not be updated, please check the YAML syntax'
+        render 'action'
+      end
+    end
 
-      flash[:success] = 'Action updated successfully'
-      redirect_to details_school_course_target_path(target.course, target)
+    private
+
+    def valid_yaml_string?(yaml)
+      !!YAML.load(yaml)
+    rescue Exception => e
+      STDERR.puts e.message
+      return false
     end
   end
 end

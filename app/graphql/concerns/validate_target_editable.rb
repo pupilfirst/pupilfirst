@@ -36,20 +36,6 @@ module ValidateTargetEditable
     end
   end
 
-  class PrerequisitesInSameLevel < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      level = Target.find_by(id: value[:id]).level
-      prerequisite_targets = value[:prerequisite_targets]
-
-      if level.targets.where(id: prerequisite_targets).count ==
-           prerequisite_targets.count
-        return
-      end
-
-      I18n.t('mutations.update_target.prerequisities_in_same_level')
-    end
-  end
-
   class PrerequisitesNotArchived < GraphQL::Schema::Validator
     def validate(_object, _context, value)
       prerequisite_targets = value[:prerequisite_targets]

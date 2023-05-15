@@ -264,27 +264,9 @@ let updateTitle = (send, event) => {
   send(UpdateTitle(title))
 }
 
-let eligiblePrerequisiteTargets = (targetId, targetGroupId, targets, targetGroups) =>
-  targetGroupId->Belt.Option.mapWithDefault([], targetGroupId => {
-    let targetGroup =
-      targetGroupId |> TargetGroup.unsafeFind(
-        targetGroups,
-        "TargetDetailsEditor.eligiblePrerequisiteTargets",
-      )
-
-    let levelId = targetGroup |> TargetGroup.levelId
-    let targetGroupsInSameLevel =
-      targetGroups
-      |> Js.Array.filter(tg => TargetGroup.levelId(tg) == levelId)
-      |> Js.Array.map(TargetGroup.id)
-
-    targets
-    |> Js.Array.filter(target => !Target.archived(target))
-    |> Js.Array.filter(target =>
-      targetGroupsInSameLevel |> Js.Array.includes(Target.targetGroupId(target))
-    )
-    |> Js.Array.filter(target => Target.id(target) != targetId)
-  })
+let eligiblePrerequisiteTargets = targets => {
+  targets |> Js.Array.filter(target => !Target.archived(target))
+}
 
 let setPrerequisiteSearch = (send, value) => send(UpdatePrerequisiteSearchInput(value))
 
@@ -414,8 +396,7 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
     |> Js.Array.map(SelectableEvaluationCriterion.make)
   <div id="evaluation_criteria" className="mb-6">
     <label
-      className="block tracking-wide text-sm font-semibold me-6 mb-2"
-      htmlFor="evaluation_criteria">
+      className="block tracking-wide text-sm font-semibold me-6 mb-2" htmlFor="evaluation_criteria">
       <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("select_criterion_label") |> str}
     </label>
@@ -557,9 +538,7 @@ let targetGroupOnSelect = (state, send, targetGroups, selectable) => {
 
 let targetGroupEditor = (state, targetGroups, levels, send) =>
   <div id="target_group_id" className="mb-6">
-    <label
-      className="block tracking-wide text-sm font-semibold me-6 mb-2"
-      htmlFor="target_group">
+    <label className="block tracking-wide text-sm font-semibold me-6 mb-2" htmlFor="target_group">
       <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("target_group") |> str}
     </label>
@@ -668,8 +647,7 @@ let questionCanBeRemoved = state => state.quiz |> Js.Array.length > 1
 let quizEditor = (state, send) =>
   <div>
     <label
-      className="block tracking-wide text-sm font-semibold me-6 mb-3"
-      htmlFor="Quiz question 1">
+      className="block tracking-wide text-sm font-semibold me-6 mb-3" htmlFor="Quiz question 1">
       <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
       {t("prepare_quiz") |> str}
     </label>
@@ -985,15 +963,10 @@ let make = (
                 </div>
               </div>
               {targetGroupEditor(state, targetGroups, levels, send)}
-              {prerequisiteTargetEditor(
-                send,
-                eligiblePrerequisiteTargets(targetId, state.targetGroupId, targets, targetGroups),
-                state,
-              )}
+              {prerequisiteTargetEditor(send, eligiblePrerequisiteTargets(targets), state)}
               <div className="flex items-center mb-6">
                 <label
-                  className="block tracking-wide text-sm font-semibold me-6"
-                  htmlFor="evaluated">
+                  className="block tracking-wide text-sm font-semibold me-6" htmlFor="evaluated">
                   <span className="me-2">
                     <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
@@ -1078,12 +1051,9 @@ let make = (
                     <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
                   {t("completion_instructions.label") |> str}
-                  <span className="ms-1 text-xs font-normal">
-                    {ts("optional_braces") |> str}
-                  </span>
+                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
                 </label>
-                <HelpIcon
-                  link={t("completion_instructions.help_url")} className="ms-1">
+                <HelpIcon link={t("completion_instructions.help_url")} className="ms-1">
                   {t("completion_instructions.help") |> str}
                 </HelpIcon>
                 <div className="ms-6">
@@ -1102,8 +1072,7 @@ let make = (
               <div className="flex max-w-3xl mx-auto px-3 justify-between items-center">
                 <div className="flex items-center shrink-0">
                   <label
-                    className="block tracking-wide text-sm font-semibold me-3"
-                    htmlFor="archived">
+                    className="block tracking-wide text-sm font-semibold me-3" htmlFor="archived">
                     <span className="me-2">
                       <i className="fas fa-list rtl:rotate-180 text-base" />
                     </span>

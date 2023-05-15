@@ -20,10 +20,6 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
 
     let icon = if preview {
       "fas fa-eye"
-    } else if levelNumber < studentLevelNumber {
-      "fas fa-check text-green-500"
-    } else if levelNumber == studentLevelNumber {
-      "fas fa-map-marker-alt text-blue-400"
     } else if level |> Level.isUnlocked {
       "inline-block"
     } else {

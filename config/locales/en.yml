@@ -2714,7 +2714,7 @@ en:
       linked:
         heading: You're all set!
         description: Your Discord account has been linked to your %{school_name} account. You can now browse the course and post messages on our Discord server. If you ever need help, don't hesitate to ask for it on the server.
-        footer_html: Happy learning! <i class="if i-heart-solid if-fw"></i>
+        footer_html: Happy learning! <i class="text-primary-500 if i-heart-solid if-fw"></i>
         go_to_course_button: Begin course
     edit:
       course_discord_requirement_met:

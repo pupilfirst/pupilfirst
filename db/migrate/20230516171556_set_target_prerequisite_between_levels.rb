@@ -1,22 +1,8 @@
-class CreateMilestonesFromCourseLevelsAndTargets < ActiveRecord::Migration[6.1]
-  def change
+class SetTargetPrerequisiteBetweenLevels < ActiveRecord::Migration[6.1]
+  def up
     courses = Course.all.includes(:levels, :target_groups, :targets)
 
-    courses.each do |course|
-      sort_index = 0
-      course.levels.each do |level|
-        level.target_groups.where(milestone: true).order(:sort_index).each do |target_group|
-          milestone = Milestone.create!(sort_index: sort_index, name: target_group.name)
-          sort_index += 1
-          target_group.targets.each do |target|
-            milestone.targets << target
-          end
-        end
-      end
-    end
-
-  #  Assign lower level targets in a milestone as a prerequisit to next level milestone targets
-
+    #  Assign lower level targets in a milestone as a prerequisit to next level milestone targets
     courses.each do |course|
       course.levels.order(number: :desc).each do |level|
         level_number = level.number
@@ -34,5 +20,9 @@ class CreateMilestonesFromCourseLevelsAndTargets < ActiveRecord::Migration[6.1]
         end
       end
     end
+  end
+
+  def down
+    raise ActiveRecord::IrreversibleMigration
   end
 end

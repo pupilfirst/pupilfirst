@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_08_125650) do
+ActiveRecord::Schema.define(version: 2023_05_16_171556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -424,13 +424,6 @@ ActiveRecord::Schema.define(version: 2023_05_08_125650) do
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
   end
 
-  create_table "milestones", force: :cascade do |t|
-    t.string "name"
-    t.integer "sort_index", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "notifications", force: :cascade do |t|
     t.bigint "actor_id"
     t.bigint "recipient_id"
@@ -673,10 +666,9 @@ ActiveRecord::Schema.define(version: 2023_05_08_125650) do
     t.string "visibility"
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
-    t.bigint "milestone_id"
+    t.boolean "milestone", default: false
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
-    t.index ["milestone_id"], name: "index_targets_on_milestone_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 
@@ -905,7 +897,6 @@ ActiveRecord::Schema.define(version: 2023_05_08_125650) do
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_versions", "targets"
-  add_foreign_key "targets", "milestones"
   add_foreign_key "teams", "cohorts"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"

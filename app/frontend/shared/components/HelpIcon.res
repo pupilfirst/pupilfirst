@@ -107,7 +107,7 @@ let makeFromJson = json => {
 
   make({
     "className": optional(field("className", string), json),
-    "link": optional(field("className", string), json),
+    "link": optional(field("link", string), json),
     "responsiveAlignment": responsiveAlignment,
     "children": <div dangerouslySetInnerHTML={{"__html": field("children", string, json)}} />,
   })

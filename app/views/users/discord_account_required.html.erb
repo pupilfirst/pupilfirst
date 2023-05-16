@@ -1,14 +1,35 @@
+<% user_edit_presenter = Users::EditPresenter.new(self) %>
 <% content_for(:head) do %>
   <title><%= t(".page_title") %></title>
   <%= vite_javascript_tag 'tailwind', nonce: true %>
 <% end %>
 <div class="flex min-h-screen bg-gray-50 items-center justify-center">
   <div class="py-8 w-full">
-    <div class="container mx-auto px-3 max-w-3xl">
+    <div class="container mx-auto px-3 max-w-4xl">
       <div class="flex">
-        <div class="p-2 w-1/2">
-          <% if false %>
-            <h1 class="text-2xl font-bold"><%= t(".unlinked.heading") %></h1>
+        <div class="mr-6 w-1/2">
+          <% if current_user.discord_account_connected? %>
+            <i class="text-green-600 text-5xl if i-badge-check-solid if-fw" ></i>
+            <h1 class="mt-3 text-3xl font-bold"><%= t(".linked.heading") %></h1>
+            <p class="mt-4"><%= t(".linked.description", school_name: current_school.name) %></p>
+            <p class="mt-4"><%= t(".linked.footer_html", school_name: current_school.name) %></p>
+            <% if @course_requiring_discord_account.present? %>
+              <%= link_to curriculum_course_path(@course_requiring_discord_account), class: "btn btn-primary btn-large mt-4" do %>
+                <i class="if i-book-regular if-fw text-lg" ></i>
+                <span class="ml-2">
+                  <%= t(".linked.go_to_course_button") %>
+                </span>
+              <% end %>
+            <% else %>
+              <%= link_to dashboard_path, class: "btn btn-primary btn-large mt-4" do %>
+                <i class="if i-home-regular if-fw text-lg" ></i>
+                <span class="ml-2">
+                  <%= t(".linked.go_to_dashboard_button") %>
+                </span>
+              <% end %>
+            <% end %>
+          <% else %>
+            <h1 class="text-3xl font-bold"><%= t(".unlinked.heading") %></h1>
             <p class="mt-2"><%= t(".unlinked.description", school_name: current_school.name) %></p>
             <section class="mt-4">
               <p class="font-semibold"><%= t(".unlinked.process.prefix") %></p>
@@ -34,26 +55,15 @@
                 <span class="ml-3"><%= t(".unlinked.process.step_3_description_html") %></span>
               </div>
             </section>
-            <button class="btn btn-primary btn-large mt-4">
-              <i class="if i-discord if-fw"></i>
+            <%= link_to user_edit_presenter.discord_federated_login_url, class: 'btn btn-primary btn-large mt-4' do %>
+              <i class="if i-discord if-fw text-lg"></i>
               <span class="ml-2">
                 <%= t(".unlinked.link_discord_button") %>
               </span>
-            </button>
-          <% else %>
-            <i class="text-green-600 text-5xl if i-badge-check-solid if-fw" ></i>
-            <h1 class="mt-3 text-2xl font-bold"><%= t(".linked.heading") %></h1>
-            <p class="mt-4"><%= t(".linked.description", school_name: current_school.name) %></p>
-            <p class="mt-4"><%= t(".linked.footer_html", school_name: current_school.name) %></p>
-            <button class="btn btn-primary btn-large mt-4">
-              <i class="if i-book-regular if-fw" ></i>
-              <span class="ml-2">
-                <%= t(".linked.go_to_course_button") %>
-              </span>
-            </button>
+            <% end %>
           <% end %>
         </div>
-        <div class="p-2 w-1/2">Right side</div>
+        <div class="ml-2 p-4 w-1/2 border border-gray-300">Right side: fancy-schmancy image goes here.</div>
       </div>
     </div>
   </div>

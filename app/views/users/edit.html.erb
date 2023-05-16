@@ -8,32 +8,23 @@
 </script>
 <% if Rails.application.secrets.sso[:discord][:key].present? && discord_config.configured? %>
   <div class="container mx-auto px-3 py-8 max-w-5xl">
-    <% if @course_requiring_discord_account.present? %>
-      <% if current_user.discord_account_connected? %>
-        <div class="bg-green-100 border-s-4 border-green-400 p-4">
-          <div class="flex items-center">
-            <i class="fas fa-check-circle text-green-400 text-4xl"></i>
-            <div class="ms-3">
-              <h3 class="text-lg font-semibold"><%= t('.course_discord_requirement_met.heading_html', course_path: curriculum_course_path(@course_requiring_discord_account)) %></h3>
-              <p class="text-sm text-green-900"><%= t('.course_discord_requirement_met.description_html', school_name: current_school.name, course_path: curriculum_course_path(@course_requiring_discord_account)) %></p>
-            </div>
-          </div>
-        </div>
-      <% else %>
-        <div class="bg-orange-100 border-s-4 border-orange-400 p-4">
-          <div class="flex items-center">
-            <i class="fas fa-exclamation-triangle text-orange-400 text-4xl"></i>
-            <div class="ms-3">
-              <h3 class="text-lg font-semibold"><%= t('.course_requires_discord_account.heading') %></h3>
-              <p class="text-sm text-orange-900"><%= t('.course_requires_discord_account.description_html', course_name: @course_requiring_discord_account.name) %></p>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
     <div class="bg-white shadow rounded-lg mt-4 ">
       <div class="flex flex-col md:flex-row">
-        <% if current_user.discord_user_id.blank? %>
+        <% if current_user.discord_account_connected? %>
+          <div class="flex items-center justify-center w-full md:w-1/3 bg-primary-50 rounded-t-md md:rounded-s-lg px-4 py-5 sm:p-6">
+            <%= image_tag 'users/edit/discord-logo-blue.svg', class: 'w-1/2' %>
+          </div>
+          <div class="px-4 py-5 sm:p-6 md:mt-0 w-full md:w-2/3">
+            <h4 class="font-semibold"><%= t(".discord_connected_message_title", school_name: current_school.name) %></h4>
+            <ul class="mt-1 text-sm md:text-base text-gray-700 ms-5 list-disc">
+              <%= simple_format(t(".discord_connected_message")) %>
+            </ul>
+            <div class="mt-3">
+              <a href="https://discord.com/channels/<%=discord_config.server_id%>" target="_blank" rel="noopener" class='btn btn-default w-full md:w-auto'><%= t(".discord_connected_account") %></a>
+              <%= button_to "Disconnect Discord", clear_discord_id_user_path, class: 'mt-4 md:mt-8 p-2 text-sm text-gray-500 font-semibold bg-transparent rounded-md cursor-pointer underline hover:text-red-500 hover:bg-gray-100', method: :post %>
+            </div>
+          </div>
+        <% else %>
           <div class="flex flex-col justify-between w-full md:w-1/3 bg-primary-50 px-4 py-5 sm:p-6">
             <div>
               <h3 class="text-lg font-semibold"><%= t(".discord_title") %></h3>
@@ -51,20 +42,6 @@
                 <i class="if i-discord text-lg"></i>
                 <span class="ms-2"><%= t(".discord_connect") %></span>
               <% end %>
-            </div>
-          </div>
-        <% else %>
-          <div class="flex items-center justify-center w-full md:w-1/3 bg-primary-50 rounded-t-md md:rounded-s-lg px-4 py-5 sm:p-6">
-            <%= image_tag 'users/edit/discord-logo-blue.svg', class: 'w-1/2' %>
-          </div>
-          <div class="px-4 py-5 sm:p-6 md:mt-0 w-full md:w-2/3">
-            <h4 class="font-semibold"><%= t(".discord_connected_message_title", school_name: current_school.name) %></h4>
-            <ul class="mt-1 text-sm md:text-base text-gray-700 ms-5 list-disc">
-              <%= simple_format(t(".discord_connected_message")) %>
-            </ul>
-            <div class="mt-3">
-              <a href="https://discord.com/channels/<%=discord_config.server_id%>" target="_blank" rel="noopener" class='btn btn-default w-full md:w-auto'><%= t(".discord_connected_account") %></a>
-              <%= button_to "Disconnect Discord", clear_discord_id_user_path, class: 'mt-4 md:mt-8 p-2 text-sm text-gray-500 font-semibold bg-transparent rounded-md cursor-pointer underline hover:text-red-500 hover:bg-gray-100', method: :post %>
             </div>
           </div>
         <% end %>

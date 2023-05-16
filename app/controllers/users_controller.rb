@@ -111,7 +111,7 @@ class UsersController < ApplicationController
 
   # GET /user/discord_account_required?course_requiring_discord
   def discord_account_required
-    @user = authorize(current_user)
+    authorize(current_user)
 
     @course_requiring_discord_account =
       if params[:course_requiring_discord].present? &&

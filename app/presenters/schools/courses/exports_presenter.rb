@@ -11,7 +11,8 @@ module Schools
         {
           tags: tag_details,
           course: course_details,
-          exports: course_export_details
+          exports: course_export_details,
+          cohorts: cohorts
         }
       end
 
@@ -56,6 +57,15 @@ module Schools
             .with_attached_file
             .limit(50)
             .load
+      end
+
+      def cohorts
+        @cohorts ||= @course.cohorts.map do |cohort|
+          {
+            id: cohort.id,
+            name: cohort.name
+          }
+        end
       end
     end
   end

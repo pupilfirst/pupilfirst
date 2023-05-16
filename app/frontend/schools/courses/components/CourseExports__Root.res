@@ -12,6 +12,8 @@ type state = {
   tagSearch: string,
   courseExports: array<CourseExport.t>,
   exportType: CourseExport.exportType,
+  selectedCohorts: array<Cohort.t>,
+  cohortSearch: string,
 }
 
 let computeInitialState = exports => {
@@ -23,6 +25,8 @@ let computeInitialState = exports => {
   tagSearch: "",
   courseExports: exports,
   exportType: CourseExport.Students,
+  selectedCohorts: [],
+  cohortSearch: "",
 }
 
 type action =
@@ -37,6 +41,9 @@ type action =
   | DeselectTag(Tag.t)
   | SelectExportType(CourseExport.exportType)
   | UpdateTagSearch(string)
+  | SelectChort(Cohort.t)
+  | DeselectCohort(Cohort.t)
+  | UpdateCohortSearch(string)
 
 let reducer = (state, action) =>
   switch action {
@@ -65,6 +72,20 @@ let reducer = (state, action) =>
     }
   | SelectExportType(exportType) => {...state, exportType: exportType}
   | UpdateTagSearch(tagSearch) => {...state, tagSearch: tagSearch}
+  | SelectChort(cohort) => {
+      ...state,
+      selectedCohorts: state.selectedCohorts |> Array.append([cohort]),
+    }
+  | DeselectCohort(cohort) => {
+      ...state,
+      selectedCohorts: state.selectedCohorts |> Js.Array.filter(t =>
+        t->Cohort.id != Cohort.id(cohort)
+      ),
+    }
+  | UpdateCohortSearch(cohortSearch) => {
+      ...state,
+      cohortSearch: cohortSearch,
+    }
   }
 
 let readinessString = courseExport =>
@@ -80,22 +101,35 @@ let readinessString = courseExport =>
     t("prepared") ++ " " ++ timeDistance
   }
 
-module Selectable = {
+module TagSelectable = {
   type t = Tag.t
   let value = t => t |> Tag.name
   let searchString = t => t |> Tag.name
 }
 
-module TagsSelector = MultiselectInline.Make(Selectable)
+module CohortSelectable = {
+  type t = Cohort.t
+  let value = t => t->Cohort.name
+  let searchString = t => t->Cohort.name
+}
+
+module CohortSelector = MultiselectInline.Make(CohortSelectable)
+
+module TagsSelector = MultiselectInline.Make(TagSelectable)
 
 let unselected = (allTags, selectedTags) => {
   let selectedTagIds = selectedTags |> Array.map(Tag.id)
   allTags |> Js.Array.filter(t => !(selectedTagIds |> Array.mem(t |> Tag.id)))
 }
 
+let unselectedCohort = (allCohorts, selectedCohorts) => {
+  let selectedCohortIds = Cohort.id->Array.map(selectedCohorts)
+  allCohorts |> Js.Array.filter(t => !(selectedCohortIds |> Array.mem(t |> Cohort.id)))
+}
+
 module CreateCourseExportQuery = %graphql(`
- mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactiveStudents: Boolean!, $exportType: Export!) {
-  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactiveStudents: $includeInactiveStudents, exportType: $exportType){
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactiveStudents: Boolean!, $exportType: Export!, $cohortIds: [ID!]!) {
+  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactiveStudents: $includeInactiveStudents, exportType: $exportType, cohortIds: $cohortIds){
     courseExport {
       id
       createdAt
@@ -112,6 +146,7 @@ let createCourseExport = (state, send, course, event) => {
   send(BeginSaving)
 
   let tagIds = state.selectedTags |> Array.map(Tag.id)
+  let cohortIds = state.selectedCohorts |> Array.map(Cohort.id)
 
   let exportType = switch state.exportType {
   | CourseExport.Students => #Students
@@ -124,6 +159,7 @@ let createCourseExport = (state, send, course, event) => {
     ~reviewedOnly=state.reviewedOnly,
     ~includeInactiveStudents=state.includeInactiveStudents,
     ~exportType,
+    ~cohortIds,
     (),
   )
 
@@ -163,7 +199,8 @@ let toggleChoiceClasses = value => {
 }
 
 @react.component
-let make = (~course, ~exports, ~tags) => {
+let make = (~course, ~exports, ~tags, ~cohorts) => {
+  cohorts->Js.log
   let (state, send) = React.useReducerWithMapState(reducer, exports, computeInitialState)
 
   <div className="bg-gray-50 h-full" key="School admin coaches course index">
@@ -211,6 +248,21 @@ let make = (~course, ~exports, ~tags) => {
                   value=state.tagSearch
                   onSelect={tag => send(SelectTag(tag))}
                   onDeselect={tag => send(DeselectTag(tag))}
+                />
+              </div>
+              <div className="mt-4">
+                <label className="block tracking-wide text-xs font-semibold mb-2">
+                  {t("export_tags_label")->str}
+                </label>
+                <CohortSelector
+                  placeholder={t("search_tag_placeholder")}
+                  emptySelectionMessage={t("search_tags_empty")}
+                  selected=state.selectedCohorts
+                  unselected={unselectedCohort(cohorts, state.selectedCohorts)}
+                  onChange={cohortSearch => send(UpdateCohortSearch(cohortSearch))}
+                  value=state.cohortSearch
+                  onSelect={cohort => send(SelectChort(cohort))}
+                  onDeselect={cohort => send(DeselectCohort(cohort))}
                 />
               </div>
               <div className="mt-5">

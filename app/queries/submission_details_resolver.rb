@@ -11,7 +11,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       level_number: level.number,
       level_id: level.id,
       team_name: team_name,
-      submission_report: submission.submission_report,
+      submission_reports: submission.submission_reports,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,

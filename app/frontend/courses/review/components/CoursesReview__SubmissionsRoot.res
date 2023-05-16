@@ -15,13 +15,12 @@ module SubmissionDetailsQuery = %graphql(`
           id
           name
         },
-        submissionReport {
+        submissionReports {
           id
           testReport
           status
           startedAt
           completedAt
-          conclusion
           queuedAt
         }
         evaluationCriteria{
@@ -101,9 +100,9 @@ let updateReviewer = (submissionDetails, setState, reviewer) => {
   setState(_ => Loaded(SubmissionDetails.updateReviewer(reviewer, submissionDetails)))
 }
 
-let updateSubmissionReport = (submissionDetails, setState, submissionReport) => {
+let updateSubmissionReport = (submissionDetails, setState, submissionReports) => {
   setState(_ => Loaded(
-    SubmissionDetails.updateSubmissionReport(submissionReport, submissionDetails),
+    SubmissionDetails.updateSubmissionReport(submissionReports, submissionDetails),
   ))
 }
 
@@ -126,7 +125,7 @@ let make = (~submissionId, ~currentUser) => {
         reviewChecklist={SubmissionDetails.reviewChecklist(submissionDetails)}
         updateSubmissionCB={updateSubmission(setState, submissionDetails)}
         updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
-        submissionReport={SubmissionDetails.submissionReport(submissionDetails)}
+        submissionReports={SubmissionDetails.submissionReports(submissionDetails)}
         targetId={SubmissionDetails.targetId(submissionDetails)}
         number={currentSubmissionIndex(
           submissionId,

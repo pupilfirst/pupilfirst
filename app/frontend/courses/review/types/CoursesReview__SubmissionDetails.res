@@ -16,7 +16,7 @@ type t = {
   students: array<Student.t>,
   levelNumber: string,
   levelId: string,
-  submissionReport: option<SubmissionReport.t>,
+  submissionReports: array<SubmissionReport.t>,
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
@@ -48,7 +48,7 @@ let courseId = t => t.courseId
 let createdAt = t => t.createdAt
 let preview = t => t.preview
 let reviewer = t => t.reviewer
-let submissionReport = t => t.submissionReport
+let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
 let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
 let githubActionsEnabled = t => t.githubActionsEnabled
@@ -66,7 +66,7 @@ let make = (
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
   ~inactiveStudents,
-  ~submissionReport,
+  ~submissionReports,
   ~coaches,
   ~teamName,
   ~courseId,
@@ -89,7 +89,7 @@ let make = (
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
   inactiveStudents: inactiveStudents,
-  submissionReport: submissionReport,
+  submissionReports: submissionReports,
   coaches: coaches,
   teamName: teamName,
   courseId: courseId,
@@ -131,7 +131,7 @@ let decodeJs = details =>
     ),
     ~reviewChecklist=ReviewChecklistItem.makeFromJs(details["reviewChecklist"]),
     ~coaches=Js.Array.map(Coach.makeFromJs, details["coaches"]),
-    ~submissionReport=Belt.Option.map(details["submissionReport"], SubmissionReport.makeFromJS),
+    ~submissionReports=details["submissionReports"]->Js.Array2.map(SubmissionReport.makeFromJS),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
     ~preview=details["preview"],
@@ -172,7 +172,7 @@ let updateReviewer = (user, t) => {
   reviewer: Belt.Option.map(user, Reviewer.setReviewer),
 }
 
-let updateSubmissionReport = (report, t) => {
+let updateSubmissionReport = (reports, t) => {
   ...t,
-  submissionReport: report,
+  submissionReports: reports,
 }

@@ -148,15 +148,16 @@ module UnassignReviewerMutation = %graphql(`
   `)
 
 module SubmissionReportQuery = %graphql(`
-    query SubmissionReportQuery($id: ID!) {
-      submissionReport(id: $id) {
-        id
-        status
-        testReport
-        startedAt
-        completedAt
-        conclusion
-        queuedAt
+    query SubmissionReportQuery($submissionId: ID!) {
+      submissionDetails(submissionId: $submissionId) {
+        submissionReports {
+          id
+          testReport
+          status
+          startedAt
+          completedAt
+          queuedAt
+        }
       }
     }
   `)
@@ -1114,70 +1115,73 @@ let pageTitle = (number, submissionDetails) => {
 
 let reportStatusString = report => {
   switch SubmissionReport.status(report) {
-  | Queued(_) => t("report_status_string.queued")
-  | InProgress(_) => t("report_status_string.in_progress")
-  | Completed(_timeStamps, conclusion) =>
-    switch conclusion {
-    | Success => t("report_status_string.completed.success")
-    | Failure => t("report_status_string.completed.failure")
-    | Error => t("report_status_string.completed.error")
-    }
+  | Queued => t("report_status_string.queued")
+  | InProgress => t("report_status_string.in_progress")
+  | Success => t("report_status_string.completed.success")
+  | Failure => t("report_status_string.completed.failure")
+  | Error => t("report_status_string.completed.error")
   }
 }
 
 let reportStatusIconClasses = report => {
   switch SubmissionReport.status(report) {
-  | Queued(_) => "if i-clock-light text-2xl text-gray-600 rounded-full"
-  | InProgress(_) => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
-  | Completed(_timeStamps, conclusion) =>
-    switch conclusion {
-    | Success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
-    | Failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
-    | Error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
-    }
+  | Queued => "if i-clock-light text-2xl text-gray-600 rounded-full"
+  | InProgress => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | Success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
+  | Failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
+  | Error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
   }
 }
 
 let reportConclusionTimeString = report => {
   switch SubmissionReport.status(report) {
-  | Queued(queuedAt) =>
-    "Queued " ++ DateFns.formatDistanceToNowStrict(queuedAt, ~addSuffix=true, ())
-  | InProgress(startedAt) =>
-    "Started " ++ DateFns.formatDistanceToNowStrict(startedAt, ~addSuffix=true, ())
-
-  | Completed(completedTimestamps, _conclusion) =>
-    "Finished " ++
-    DateFns.formatDistanceToNowStrict(completedTimestamps.completedAt, ~addSuffix=true, ()) ++
-    ", and took " ++
-    DateFns.formatDistance(
-      completedTimestamps.completedAt,
-      completedTimestamps.startedAt,
-      ~includeSeconds=true,
-      (),
+  | Queued =>
+    "Queued " ++
+    DateFns.formatDistanceToNowStrict(SubmissionReport.queuedAt(report), ~addSuffix=true, ())
+  | InProgress =>
+    "Started " ++
+    Belt.Option.mapWithDefault(SubmissionReport.startedAt(report), "", t =>
+      DateFns.formatDistanceToNowStrict(t, ~addSuffix=true, ())
     )
+
+  | Error | Failure | Success =>
+    "Finished " ++
+    Belt.Option.mapWithDefault(SubmissionReport.completedAt(report), "", t =>
+      DateFns.formatDistanceToNowStrict(t, ~addSuffix=true, ())
+    ) ++
+    switch (SubmissionReport.startedAt(report), SubmissionReport.completedAt(report)) {
+    | (Some(startedAt), Some(completedAt)) =>
+      ", and took " ++ DateFns.formatDistance(completedAt, startedAt, ~includeSeconds=true, ())
+    | (_, _) => ""
+    }
   }
 }
 
-let loadSubmissionReport = (report, updateSubmissionReportCB) => {
-  let id = SubmissionReport.id(report)
-  SubmissionReportQuery.make({id: id})
+let loadSubmissionReport = (submissionId, updateSubmissionReportCB) => {
+  SubmissionReportQuery.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
-    let reportData = response["submissionReport"]
-    let updatedReport = SubmissionReport.makeFromJS(reportData)
+    let updatedReports = response["submissionReport"]->Js.Array2.map(SubmissionReport.makeFromJS)
 
-    updateSubmissionReportCB(Some(updatedReport))
+    updateSubmissionReportCB(updatedReports)
 
     Js.Promise.resolve()
   })
   |> ignore
 }
 
-let reloadSubmissionReport = (report, updateSubmissionReportCB) => {
-  switch SubmissionReport.status(report) {
-  | Queued(_)
-  | InProgress(_) =>
-    loadSubmissionReport(report, updateSubmissionReportCB)
-  | Completed(_, _) => ()
+let reloadSubmissionReport = (submissionId, reports, updateSubmissionReportCB) => {
+  let shouldReload =
+    reports
+    ->Js.Array2.filter(report =>
+      switch SubmissionReport.status(report) {
+      | Queued | InProgress => true
+      | Error | Failure | Success => false
+      }
+    )
+    ->ArrayUtils.isNotEmpty
+
+  if shouldReload {
+    loadSubmissionReport(submissionId, updateSubmissionReportCB)
   }
 }
 
@@ -1196,7 +1200,7 @@ let make = (
   ~submissionDetails,
   ~submissionId,
   ~updateReviewerCB,
-  ~submissionReport,
+  ~submissionReports,
   ~updateSubmissionReportCB,
   ~submissionReportPollTime,
   ~githubActionsEnabled,
@@ -1252,16 +1256,15 @@ let make = (
   }
 
   React.useEffect0(() => {
-    switch submissionReport {
-    | Some(report) => {
-        let intervalId = Js.Global.setInterval(
-          () => reloadSubmissionReport(report, updateSubmissionReportCB),
-          submissionReportPollTime * 1000,
-        )
-        Some(() => Js.Global.clearInterval(intervalId))
-      }
-    | None => None
-    }
+    ArrayUtils.isNotEmpty(submissionReports)
+      ? {
+          let intervalId = Js.Global.setInterval(
+            () => reloadSubmissionReport(submissionId, submissionReports, updateSubmissionReportCB),
+            submissionReportPollTime * 1000,
+          )
+          Some(() => Js.Global.clearInterval(intervalId))
+        }
+      : None
   })
 
   let url = RescriptReactRouter.useUrl()
@@ -1352,9 +1355,9 @@ let make = (
             </div>
           | (_, _) => React.null
           }}
-          {switch submissionReport {
-          | Some(report) =>
-            <div className="p-4 md:p-6 space-y-8">
+          {submissionReports
+          ->Js.Array2.map(report =>
+            <div className="p-4 space-y-8">
               <div className="bg-gray-100 p-4 rounded-md">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-start gap-3">
@@ -1405,8 +1408,8 @@ let make = (
                 }}
               </div>
             </div>
-          | None => React.null
-          }}
+          )
+          ->React.array}
         </div>
         <div className="md:w-1/2 w-full md:overflow-y-auto">
           {switch state.editor {

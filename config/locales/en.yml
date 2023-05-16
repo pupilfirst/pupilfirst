@@ -2182,6 +2182,8 @@ en:
         founder: All Founders
         team: Team
   mutations:
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: Note removed successfully
     archive_course:

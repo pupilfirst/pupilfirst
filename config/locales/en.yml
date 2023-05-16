@@ -2699,7 +2699,7 @@ en:
       page_title: Discord Account Required
       unlinked:
         heading: Let's link your Discord account first.
-        description: The course you're trying to access requires you to connect to your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
+        description: The course you're trying to access requires you to connect your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
         link_discord_button: Link Discord
         no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
         process:
@@ -2708,7 +2708,7 @@ en:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_2_label: 2
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: "If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>To assign additional roles to your account on our Discord server.</li></ul>"
+          step_2_help_html: "If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>"
           step_3_label: 3
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
       linked:

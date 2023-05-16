@@ -2,7 +2,7 @@ module Types
   class SubmissionDetailsType < Types::BaseObject
     field :all_submissions, [Types::SubmissionInfoType], null: false
     field :submission, Types::SubmissionType, null: false
-    field :submission_report, Types::SubmissionReportType, null: true
+    field :submission_reports, [Types::SubmissionReportType], null: false
     field :target_id, ID, null: false
     field :course_id, ID, null: false
     field :target_title, String, null: false

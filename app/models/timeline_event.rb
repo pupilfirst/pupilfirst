@@ -25,7 +25,7 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_owners, dependent: :destroy
   has_many :founders, through: :timeline_event_owners
   has_one :course, through: :target
-  has_one :submission_report,
+  has_many :submission_reports,
           foreign_key: 'submission_id',
           inverse_of: :submission,
           dependent: :destroy

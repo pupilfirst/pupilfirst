@@ -3,6 +3,17 @@ module Mutations
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
+
+    class ValidConclusionStatuses < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        if status.in?(%w[queued in_progress])
+          return I18n.t('mutations.conclude_submission_report.invalid_status')
+        end
+      end
+    end
+
+    validates ValidConclusionStatuses => {}
+
     argument :test_report,
              String,
              required: false,
@@ -11,7 +22,7 @@ module Mutations
                  maximum: 10_000
                }
              }
-    argument :conclusion, Types::SubmissionReportConclusionType, required: true
+    argument :status, Types::SubmissionReportStatusType, required: true
 
     description 'Create completed report for a submission'
 
@@ -30,18 +41,16 @@ module Mutations
           SubmissionReport.find_by(submission_id: @params[:submission_id])
         if report.present?
           report.update!(
-            status: 'completed',
             test_report: @params[:test_report],
-            conclusion: @params[:conclusion],
+            status: @params[:status],
             started_at: report.started_at || time_now,
             completed_at: time_now
           )
         else
           SubmissionReport.create!(
             submission_id: @params[:submission_id],
-            status: 'completed',
             test_report: @params[:test_report],
-            conclusion: @params[:conclusion],
+            status: @params[:status],
             started_at: time_now,
             completed_at: time_now
           )

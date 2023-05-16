@@ -5717,14 +5717,14 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "conclusion",
+                  "name": "status",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "SubmissionReportConclusion",
+                      "name": "SubmissionReportStatus",
                       "ofType": null
                     }
                   },
@@ -15620,20 +15620,6 @@
               "deprecationReason": null
             },
             {
-              "name": "submissionReport",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "SubmissionReport",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "submissionReportPollTime",
               "description": null,
               "args": [
@@ -15646,6 +15632,32 @@
                   "kind": "SCALAR",
                   "name": "Int",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "submissionReports",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SubmissionReport",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
@@ -16264,15 +16276,19 @@
               "deprecationReason": null
             },
             {
-              "name": "conclusion",
+              "name": "context",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "ENUM",
-                "name": "SubmissionReportConclusion",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -16346,6 +16362,20 @@
               "deprecationReason": null
             },
             {
+              "name": "targetUrl",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "testReport",
               "description": null,
               "args": [
@@ -16369,12 +16399,24 @@
         },
         {
           "kind": "ENUM",
-          "name": "SubmissionReportConclusion",
+          "name": "SubmissionReportStatus",
           "description": null,
           "fields": null,
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
+            {
+              "name": "queued",
+              "description": "Checks are queued",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "in_progress",
+              "description": "Checks in progress for the submission",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "error",
               "description": "Checks could not be completed successfully",
@@ -16390,35 +16432,6 @@
             {
               "name": "success",
               "description": "Checks successfully completed for the submission",
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "possibleTypes": null
-        },
-        {
-          "kind": "ENUM",
-          "name": "SubmissionReportStatus",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
-            {
-              "name": "queued",
-              "description": "Automated tests are queued",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "in_progress",
-              "description": "Checks in progress for the submission",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "completed",
-              "description": "Checks completed for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             }

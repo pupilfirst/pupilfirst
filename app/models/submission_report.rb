@@ -17,7 +17,9 @@ class SubmissionReport < ApplicationRecord
          error: 'error'
        }
 
-
+  def conclusion_statuses
+    %w[success failure error]
+  end
 
   def queued_state_is_valid
     return unless queued?

@@ -1199,6 +1199,32 @@ let make = (
     },
   )
 
+  let newFeedbackRef = React.useRef(state.newFeedback)
+
+  React.useEffect0(() => {
+    open Webapi.Dom
+
+    let handleBeforeUnload = event => {
+      if newFeedbackRef.current != "" {
+        Event.preventDefault(event)
+        DomUtils.Event.setReturnValue(event, "")
+      }
+    }
+
+    Window.addEventListener("beforeunload", handleBeforeUnload, window)
+
+    let removeEventListener = () => {
+      Window.removeEventListener("beforeunload", handleBeforeUnload, window)
+    }
+
+    Some(removeEventListener)
+  })
+
+  React.useEffect1(() => {
+    newFeedbackRef.current = state.newFeedback
+    None
+  }, [state.newFeedback])
+
   let status = computeStatus(
     overlaySubmission,
     state.grades,

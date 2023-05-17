@@ -574,12 +574,12 @@ ActiveRecord::Schema.define(version: 2023_05_16_050603) do
     t.datetime "started_at"
     t.datetime "completed_at"
     t.bigint "submission_id"
-    t.text "test_report"
+    t.text "report"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.citext "context_name", default: "Virtual Teaching Assistant", null: false
-    t.string "context_title"
+    t.citext "reporter", null: false
     t.string "target_url"
+    t.string "heading"
     t.index ["submission_id"], name: "index_submission_reports_on_submission_id"
   end
 

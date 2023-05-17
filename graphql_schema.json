@@ -5578,7 +5578,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "testReport",
+                  "name": "report",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -5590,7 +5590,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "contextName",
+                  "name": "reporter",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -5606,7 +5606,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "contextTitle",
+                  "name": "heading",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -5745,7 +5745,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "testReport",
+                  "name": "report",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -5773,7 +5773,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "contextName",
+                  "name": "reporter",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -5789,7 +5789,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "contextTitle",
+                  "name": "heading",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -8555,7 +8555,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "testReport",
+                  "name": "report",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -8567,7 +8567,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "contextName",
+                  "name": "reporter",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -8583,7 +8583,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "contextTitle",
+                  "name": "heading",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -15534,38 +15534,6 @@
               "deprecationReason": null
             },
             {
-              "name": "githubActionsEnabled",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "githubRepository",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "inactiveStudents",
               "description": null,
               "args": [
@@ -16396,25 +16364,7 @@
               "deprecationReason": null
             },
             {
-              "name": "contextName",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "contextTitle",
+              "name": "heading",
               "description": null,
               "args": [
 
@@ -16464,6 +16414,38 @@
               "deprecationReason": null
             },
             {
+              "name": "report",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reporter",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "startedAt",
               "description": null,
               "args": [
@@ -16497,20 +16479,6 @@
             },
             {
               "name": "targetUrl",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "testReport",
               "description": null,
               "args": [
 

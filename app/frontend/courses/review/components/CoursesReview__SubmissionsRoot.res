@@ -10,20 +10,20 @@ module UserProxyFragment = UserProxy.Fragment
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime, inactiveSubmissionReviewAllowedDays, githubActionsEnabled, githubRepository
+        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime, inactiveSubmissionReviewAllowedDays
         students {
           id
           name
         },
         submissionReports {
           id
-          testReport
+          report
           status
           startedAt
           completedAt
           queuedAt
-          contextName
-          contextTitle
+          reporter
+          heading
           targetUrl
         }
         evaluationCriteria{
@@ -140,8 +140,6 @@ let make = (~submissionId, ~currentUser) => {
         updateReviewerCB={updateReviewer(submissionDetails, setState)}
         updateSubmissionReportCB={updateSubmissionReport(submissionDetails, setState)}
         submissionReportPollTime={SubmissionDetails.submissionReportPollTime(submissionDetails)}
-        githubActionsEnabled={SubmissionDetails.githubActionsEnabled(submissionDetails)}
-        githubRepository={SubmissionDetails.githubRepository(submissionDetails)}
       />
 
     | Loading =>

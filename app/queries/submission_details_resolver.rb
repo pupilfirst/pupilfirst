@@ -24,9 +24,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       submission_report_poll_time:
         Rails.application.secrets.submission_report_poll_time,
       inactive_submission_review_allowed_days:
-        Rails.application.secrets.inactive_submission_review_allowed_days,
-      github_actions_enabled: target.action_config.present?,
-      github_repository: students&.first&.github_repository,
+        Rails.application.secrets.inactive_submission_review_allowed_days
     }
   end
 
@@ -50,7 +48,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   def submissions_from_same_set_of_students
     submissions
       .includes(:startup_feedback)
-      .order('timeline_events.created_at DESC')
+      .order("timeline_events.created_at DESC")
       .select do |s|
         s.timeline_event_owners.pluck(:founder_id).sort == student_ids
       end

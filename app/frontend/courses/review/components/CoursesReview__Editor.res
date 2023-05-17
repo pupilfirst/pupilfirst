@@ -152,13 +152,13 @@ module SubmissionReportQuery = %graphql(`
       submissionDetails(submissionId: $submissionId) {
         submissionReports {
           id
-          testReport
+          report
           status
           startedAt
           completedAt
           queuedAt
-          contextName
-          contextTitle
+          reporter
+          heading
           targetUrl
         }
       }
@@ -1117,8 +1117,8 @@ let pageTitle = (number, submissionDetails) => {
 }
 
 let reportStatusString = report => {
-  switch SubmissionReport.contextTitle(report) {
-  | Some(title) => title
+  switch SubmissionReport.heading(report) {
+  | Some(heading) => heading
   | None =>
     switch SubmissionReport.status(report) {
     | Queued => t("report_status_string.queued")
@@ -1210,8 +1210,6 @@ let make = (
   ~submissionReports,
   ~updateSubmissionReportCB,
   ~submissionReportPollTime,
-  ~githubActionsEnabled,
-  ~githubRepository,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1335,33 +1333,6 @@ let make = (
           <div className="p-4 md:p-6">
             <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
-          {switch (githubRepository, githubActionsEnabled) {
-          | (Some(repo), true) =>
-            <div className="p-4 md:p-6 bg-gray-50">
-              <div className="bg-white shadow p-4 rounded-lg">
-                <div className="flex items-center justify-between border-b pb-1.5">
-                  <p className="font-semibold"> {"Github Actions"->str} </p>
-                  <a
-                    className="px-2 py-1 font-medium text-sm underline rounded text-primary-500 hover:bg-primary-50 hover:text-primary-700 transition"
-                    href={`https://github.com/${repo}/actions`}
-                    target="_blank">
-                    <Icon className="if i-external-link-regular me-2" />
-                    {t("github_action.view_action_button")->str}
-                  </a>
-                </div>
-                <div className="flex flex-col md:flex-row justify-between md:space-x-2 pt-4">
-                  <p> {t("github_action.description")->str} </p>
-                  <button
-                    className="btn btn-default mt-2 md:mt-0"
-                    onClick={_ => reRunGithubAction(submissionId, send)}>
-                    <Icon className="if i-redo-regular text-lg me-2" />
-                    <span> {t("github_action.re_run_action_button")->str} </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          | (_, _) => React.null
-          }}
           {submissionReports
           ->Js.Array2.map(report =>
             <div className="p-4 space-y-8">
@@ -1372,6 +1343,19 @@ let make = (
                       <Icon className={reportStatusIconClasses(report)} />
                     </div>
                     <div>
+                      <div className="text-xs">
+                        {switch SubmissionReport.targetUrl(report) {
+                        | Some(url) =>
+                          <a
+                            className="text-primary-500 hover:text-primary-700"
+                            href={url}
+                            target="_blank">
+                            {SubmissionReport.reporter(report)->str}
+                            <FaIcon classes="if i-external-link-regular ms-1" />
+                          </a>
+                        | None => SubmissionReport.reporter(report)->str
+                        }}
+                      </div>
                       <p className="font-semibold"> {str(reportStatusString(report))} </p>
                       <p className="text-gray-800 text-xs">
                         {str(reportConclusionTimeString(report))}
@@ -1398,23 +1382,10 @@ let make = (
                         </span>
                       }
                     </button>,
-                    SubmissionReport.testReport(report)->Belt.Option.isNone,
+                    SubmissionReport.report(report)->Belt.Option.isNone,
                   )}
                 </div>
-                <div className="bg-white rounded-lg px-2 py-px mt-2">
-                  {switch SubmissionReport.targetUrl(report) {
-                  | Some(url) =>
-                    <a
-                      className="text-primary-500 hover:text-primary-700"
-                      href={url}
-                      target="_blank">
-                      {SubmissionReport.contextName(report)->str}
-                      <FaIcon classes="if i-external-link-regular ms-1" />
-                    </a>
-                  | None => SubmissionReport.contextName(report)->str
-                  }}
-                </div>
-                {switch (state.showReport, SubmissionReport.testReport(report)) {
+                {switch (state.showReport, SubmissionReport.report(report)) {
                 | (true, Some(testReport)) =>
                   state.showReport
                     ? <div>

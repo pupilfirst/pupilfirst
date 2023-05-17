@@ -28,8 +28,6 @@ type t = {
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
   inactiveSubmissionReviewAllowedDays: int,
-  githubActionsEnabled: bool,
-  githubRepository: option<string>,
 }
 
 let submission = t => t.submission
@@ -51,8 +49,6 @@ let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
 let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
-let githubActionsEnabled = t => t.githubActionsEnabled
-let githubRepository = t => t.githubRepository
 
 let make = (
   ~submission,
@@ -75,8 +71,6 @@ let make = (
   ~reviewer,
   ~submissionReportPollTime,
   ~inactiveSubmissionReviewAllowedDays,
-  ~githubActionsEnabled,
-  ~githubRepository,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -98,8 +92,6 @@ let make = (
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
   inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
-  githubActionsEnabled: githubActionsEnabled,
-  githubRepository: githubRepository,
 }
 
 let decodeJs = details =>
@@ -138,8 +130,6 @@ let decodeJs = details =>
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
     ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
-    ~githubActionsEnabled=details["githubActionsEnabled"],
-    ~githubRepository=details["githubRepository"],
   )
 
 let updateMetaSubmission = submission => {

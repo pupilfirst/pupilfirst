@@ -6,14 +6,14 @@ module Mutations
     class ValidConclusionStatuses < GraphQL::Schema::Validator
       def validate(_object, _context, value)
         if value[:status].in?(%w[queued in_progress])
-          return I18n.t('mutations.conclude_submission_report.invalid_status')
+          return I18n.t("mutations.conclude_submission_report.invalid_status")
         end
       end
     end
 
     validates ValidConclusionStatuses => {}
 
-    argument :test_report,
+    argument :report,
              String,
              required: false,
              validates: {
@@ -22,11 +22,11 @@ module Mutations
                }
              }
     argument :status, Types::SubmissionReportStatusType, required: true
-    argument :context_name, String, required: true
-    argument :context_title, String, required: false
+    argument :reporter, String, required: true
+    argument :heading, String, required: false
     argument :target_url, String, required: false
 
-    description 'Create completed report for a submission'
+    description "Create completed report for a submission"
 
     field :success, Boolean, null: false
 
@@ -40,25 +40,28 @@ module Mutations
     def save_report
       SubmissionReport.transaction do
         report =
-          SubmissionReport.find_by(submission_id: @params[:submission_id], context_name: @params[:context_name])
+          SubmissionReport.find_by(
+            submission_id: @params[:submission_id],
+            reporter: @params[:reporter]
+          )
         if report.present?
           report.update!(
-            test_report: @params[:test_report],
+            report: @params[:report],
             status: @params[:status],
             started_at: report.started_at || time_now,
             completed_at: time_now,
-            context_title: @params[:context_title],
+            heading: @params[:heading],
             target_url: @params[:target_url]
           )
         else
           SubmissionReport.create!(
             submission_id: @params[:submission_id],
-            test_report: @params[:test_report],
+            report: @params[:report],
             status: @params[:status],
             started_at: time_now,
             completed_at: time_now,
-            context_name: @params[:context_name],
-            context_title: @params[:context_title],
+            reporter: @params[:reporter],
+            heading: @params[:heading],
             target_url: @params[:target_url]
           )
         end

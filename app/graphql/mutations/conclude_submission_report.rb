@@ -5,7 +5,7 @@ module Mutations
 
     class ValidConclusionStatuses < GraphQL::Schema::Validator
       def validate(_object, _context, value)
-        if status.in?(%w[queued in_progress])
+        if value[:status].in?(%w[queued in_progress])
           return I18n.t('mutations.conclude_submission_report.invalid_status')
         end
       end

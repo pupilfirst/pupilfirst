@@ -42,8 +42,8 @@ module Schools
     private
 
     def valid_yaml_string?(yaml)
-      !!YAML.load(yaml)
-    rescue Exception => e
+      !!YAML.safe_load(yaml)
+    rescue Psych::SyntaxError => e
       STDERR.puts e.message
       return false
     end

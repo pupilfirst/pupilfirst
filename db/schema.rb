@@ -648,7 +648,6 @@ ActiveRecord::Schema.define(version: 2023_05_28_092206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
-    t.integer "faculty_id"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -667,7 +666,6 @@ ActiveRecord::Schema.define(version: 2023_05_28_092206) do
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
     t.index ["archived"], name: "index_targets_on_archived"
-    t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 

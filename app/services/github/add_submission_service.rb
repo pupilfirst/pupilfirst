@@ -12,6 +12,10 @@ module Github
 
       if @submission.founders.first.github_repository.blank?
         Github::SetupRepositoryService.new(@submission.founders.first).execute
+        @submission
+          .submission_reports
+          .find_by(reporter: SubmissionReport::VIRTUAL_TEACHING_ASSISTANT)
+          .update!(target_url: @submission.actions_url)
       end
 
       branch = create_branch(re_run)
@@ -20,8 +24,8 @@ module Github
       # Add the workflow file
       github_client.update_contents(
         repo_name,
-        '.github/workflows/ci.js.yml',
-        'Update workflow [skip ci]',
+        ".github/workflows/ci.js.yml",
+        "Update workflow [skip ci]",
         ci_file(repo_name).sha,
         @submission.target.action_config,
         branch: branch
@@ -33,8 +37,8 @@ module Github
       # Dump the submission data to a file
       github_client.create_contents(
         repo_name,
-        'submission.json',
-        'Add submission data',
+        "submission.json",
+        "Add submission data",
         submission_data_service.data.to_json,
         branch: branch
       )
@@ -60,14 +64,17 @@ module Github
     end
 
     def get_main_branch_sha(repo_name)
-      commits_from_main_branch = github_client.commits(repo_name, 'heads/main')
+      commits_from_main_branch = github_client.commits(repo_name, "heads/main")
 
       if commits_from_main_branch.class == Array
         # Get Sha of last commit
         commits_from_main_branch.first&.sha
       else
         # Create the main branch and get the Sha of the last commit
-        last_commit = Github::SetupRepositoryService.new(@submission.founders.first).add_workflow_starter(repo_name)
+        last_commit =
+          Github::SetupRepositoryService.new(
+            @submission.founders.first
+          ).add_workflow_starter(repo_name)
         last_commit.content.sha
       end
     end
@@ -78,15 +85,15 @@ module Github
       file = submission_data_service.files.first
 
       begin
-        uri = URI.parse(file['url'])
+        uri = URI.parse(file["url"])
         file_content = Net::HTTP.get(uri)
       rescue StandardError
-        raise 'Unable to read file or source file missing'
+        raise "Unable to read file or source file missing"
       else
         github_client.create_contents(
           repo,
-          'script' + File.extname(file['filename']),
-          'Add submission file[skip ci]',
+          "script" + File.extname(file["filename"]),
+          "Add submission file[skip ci]",
           file_content,
           branch: branch
         )
@@ -95,9 +102,9 @@ module Github
 
     def ci_file(repo_name)
       begin
-        github_client.contents(repo_name, path: '.github/workflows/ci.js.yml')
+        github_client.contents(repo_name, path: ".github/workflows/ci.js.yml")
       rescue StandardError
-        Rails.logger.error 'Error while fetching the ci.js.yml file'
+        Rails.logger.error "Error while fetching the ci.js.yml file"
       end
     end
 

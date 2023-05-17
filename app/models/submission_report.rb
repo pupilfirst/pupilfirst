@@ -1,5 +1,6 @@
 class SubmissionReport < ApplicationRecord
-  belongs_to :submission, class_name: 'TimelineEvent'
+  VIRTUAL_TEACHING_ASSISTANT = "Virtual Teaching Assistant".freeze
+  belongs_to :submission, class_name: "TimelineEvent"
 
   validates :status, presence: true
 
@@ -10,11 +11,11 @@ class SubmissionReport < ApplicationRecord
   validate :queued_state_is_valid
 
   enum status: {
-         queued: 'queued',
-         in_progress: 'in_progress',
-         success: 'success',
-         failure: 'failure',
-         error: 'error'
+         queued: "queued",
+         in_progress: "in_progress",
+         success: "success",
+         failure: "failure",
+         error: "error"
        }
 
   def conclusion_statuses
@@ -26,7 +27,7 @@ class SubmissionReport < ApplicationRecord
 
     return if [started_at, completed_at].all?(&:blank?)
 
-    errors.add(:status, 'invalid queued report status')
+    errors.add(:status, "invalid queued report status")
   end
 
   def in_progress_state_is_valid
@@ -34,7 +35,7 @@ class SubmissionReport < ApplicationRecord
 
     return if started_at.present? && [completed_at].all?(&:blank?)
 
-    errors.add(:status, 'invalid in-progress report status')
+    errors.add(:status, "invalid in-progress report status")
   end
 
   def completed_state_is_valid

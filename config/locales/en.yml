@@ -769,11 +769,11 @@ en:
       report_description: Test Report
       report_status_string:
         completed:
-          error: Automated tests could not complete due to errors
-          failure: Some automated tests failed
-          success: All automated tests succeeded
-        in_progress: Automated tests are in progress
-        queued: Automated tests are queued
+          error: Actions could not complete due to errors
+          failure: Some actions failed
+          success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
       review: Review
       review_checklist: Review Checklist
       review_next: Next

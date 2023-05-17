@@ -6,7 +6,8 @@ module Types
     field :started_at, GraphQL::Types::ISO8601DateTime, null: true
     field :completed_at, GraphQL::Types::ISO8601DateTime, null: true
     field :queued_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :context, String, null: false
+    field :context_name, String, null: false
+    field :context_title, String, null: true
     field :target_url, String, null: true
 
     def queued_at

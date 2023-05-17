@@ -157,6 +157,9 @@ module SubmissionReportQuery = %graphql(`
           startedAt
           completedAt
           queuedAt
+          contextName
+          contextTitle
+          targetUrl
         }
       }
     }
@@ -1114,12 +1117,16 @@ let pageTitle = (number, submissionDetails) => {
 }
 
 let reportStatusString = report => {
-  switch SubmissionReport.status(report) {
-  | Queued => t("report_status_string.queued")
-  | InProgress => t("report_status_string.in_progress")
-  | Success => t("report_status_string.completed.success")
-  | Failure => t("report_status_string.completed.failure")
-  | Error => t("report_status_string.completed.error")
+  switch SubmissionReport.contextTitle(report) {
+  | Some(title) => title
+  | None =>
+    switch SubmissionReport.status(report) {
+    | Queued => t("report_status_string.queued")
+    | InProgress => t("report_status_string.in_progress")
+    | Success => t("report_status_string.completed.success")
+    | Failure => t("report_status_string.completed.failure")
+    | Error => t("report_status_string.completed.error")
+    }
   }
 }
 
@@ -1393,6 +1400,19 @@ let make = (
                     </button>,
                     SubmissionReport.testReport(report)->Belt.Option.isNone,
                   )}
+                </div>
+                <div className="bg-white rounded-lg px-2 py-px mt-2">
+                  {switch SubmissionReport.targetUrl(report) {
+                  | Some(url) =>
+                    <a
+                      className="text-primary-500 hover:text-primary-700"
+                      href={url}
+                      target="_blank">
+                      {SubmissionReport.contextName(report)->str}
+                      <FaIcon classes="if i-external-link-regular ms-1" />
+                    </a>
+                  | None => SubmissionReport.contextName(report)->str
+                  }}
                 </div>
                 {switch (state.showReport, SubmissionReport.testReport(report)) {
                 | (true, Some(testReport)) =>

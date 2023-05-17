@@ -9,8 +9,9 @@ type t = {
   completedAt: option<Js.Date.t>,
   testReport: option<string>,
   queuedAt: Js.Date.t,
-  context: string,
-  target_url: option<string>,
+  contextName: string,
+  contextTitle: option<string>,
+  targetUrl: option<string>,
 }
 
 let decodeStatus = status => {
@@ -31,8 +32,9 @@ let makeFromJS = object => {
     startedAt: object["startedAt"]->Belt.Option.map(DateFns.decodeISO),
     completedAt: object["completedAt"]->Belt.Option.map(DateFns.decodeISO),
     status: decodeStatus(object["status"]),
-    context: object["context"],
-    target_url: object["target_url"],
+    contextName: object["contextName"],
+    contextTitle: object["contextTitle"]->Js.Nullable.toOption,
+    targetUrl: object["targetUrl"],
   }
 }
 
@@ -47,3 +49,9 @@ let startedAt = t => t.startedAt
 let queuedAt = t => t.queuedAt
 
 let completedAt = t => t.completedAt
+
+let contextName = t => t.contextName
+
+let contextTitle = t => t.contextTitle
+
+let targetUrl = t => t.targetUrl

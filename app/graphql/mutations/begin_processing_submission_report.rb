@@ -11,6 +11,9 @@ module Mutations
                  maximum: 1000
                }
              }
+    argument :context_name, String, required: true
+    argument :context_title, String, required: false
+    argument :target_url, String, required: false
 
     description 'Create in progress report for a submission'
 
@@ -25,15 +28,29 @@ module Mutations
 
     def save_report
       SubmissionReport.transaction do
-        SubmissionReport
-          .where(submission_id: @params[:submission_id])
-          .first_or_create!(
-            status: 'in_progress',
+        report = SubmissionReport.find_by(submission_id: @params[:submission_id], context_name: @params[:context_name])
+
+        if report.present?
+          report.update!(
             test_report: @params[:test_report],
+            status: 'in_progress',
             started_at: Time.zone.now,
             completed_at: nil,
-            conclusion: nil
+            context_title: @params[:context_title],
+            target_url: @params[:target_url]
           )
+        else
+          SubmissionReport.create!(
+            submission_id: @params[:submission_id],
+            test_report: @params[:test_report],
+            status: 'in_progress',
+            started_at: Time.zone.now,
+            completed_at: nil,
+            context_name: @params[:context_name],
+            context_title: @params[:context_title],
+            target_url: @params[:target_url]
+          )
+        end
       end
     end
 

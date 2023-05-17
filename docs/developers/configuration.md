@@ -104,6 +104,18 @@ vapid_key.private_key
 
 Detailed Documentation: https://github.com/zaru/webpush#generating-vapid-keys
 
+### Defaults
+
+Some essential variables (not listed elsewhere in this document) have defaults which should be changed depending on your requirements. The following are their defaults for the production environment:
+
+```bash
+# Timeout for general web requests.
+SLOWPOKE_TIMEOUT=15
+
+# The port that the server will listen on to receive requests.
+PORT=3000
+```
+
 ## Optional
 
 ### Cloudfront

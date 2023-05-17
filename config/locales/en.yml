@@ -761,7 +761,7 @@ en:
         view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-      hide_test_report_button: Hide Test Report
+      hide_report_button: Hide Report
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
@@ -781,7 +781,7 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
-      show_test_report_button: Show Test Report
+      show_report_button: Show Report
       status:
         completed: Completed
         pending_review: Pending Review

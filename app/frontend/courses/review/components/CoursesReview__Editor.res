@@ -1335,7 +1335,7 @@ let make = (
           </div>
           {submissionReports
           ->Js.Array2.map(report =>
-            <div className="p-4 space-y-8">
+            <div className="px-4 py-2">
               <div className="bg-gray-100 p-4 rounded-md">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-start gap-3">
@@ -1367,11 +1367,7 @@ let make = (
                       onClick={_ => send(ChangeReportVisibility)}
                       className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition">
                       <span className="hidden md:block pe-3 ">
-                        {str(
-                          state.showReport
-                            ? t("hide_test_report_button")
-                            : t("show_test_report_button"),
-                        )}
+                        {str(state.showReport ? t("hide_report_button") : t("show_report_button"))}
                       </span>
                       {
                         let toggleTestReportIcon = state.showReport

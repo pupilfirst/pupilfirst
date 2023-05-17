@@ -1257,6 +1257,9 @@ en:
       active_coaches: Active Coaches
       exited_coaches: Exited Coaches
       coaches: Coaches
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
+      no_active_coaches: Your school doesn't have active coaches.
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students

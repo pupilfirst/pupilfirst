@@ -129,6 +129,7 @@ class UsersController < ApplicationController
         course
       else
         redirect_to dashboard_path
+        return
       end
 
     render layout: "tailwind"

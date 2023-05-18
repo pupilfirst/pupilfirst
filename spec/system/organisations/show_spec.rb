@@ -135,6 +135,30 @@ feature "Organisation show" do
         active_cohorts_organisation_course_path(organisation_1, course_1)
       )
     end
+
+    scenario "check for view all cohorts link when a course has only inactive cohorts" do
+      sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
+
+      # There should be two view all cohorts links.
+      expect(all("a", text: "View All Cohorts").count).to eq(2)
+
+      # update ends_at of cohort 4 to be in the past
+      cohort_4.update!(ends_at: 1.day.ago)
+
+      visit organisation_path(organisation_1)
+
+      click_link "View All Cohorts",
+                 href:
+                   inactive_cohorts_organisation_course_path(
+                     organisation_1,
+                     course_2
+                   )
+
+      # The user should be taken to the inactive cohorts page.
+      expect(page).to have_current_path(
+        inactive_cohorts_organisation_course_path(organisation_1, course_2)
+      )
+    end
   end
 
   context "when the user is a school admin" do
@@ -200,6 +224,40 @@ feature "Organisation show" do
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(
         active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
+    end
+
+    scenario "check for view all cohorts link when a course has only inactive cohorts" do
+      sign_in_user(
+        school_admin_user,
+        referrer: organisation_path(organisation_2)
+      )
+
+      # There should be two view all cohorts links.
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
+
+      # update ends_at of cohort 1 to be in the past
+      cohort_1.update!(ends_at: 1.day.ago)
+
+      visit organisation_path(organisation_2)
+
+      # Click on the first link.
+      within(
+        first(
+          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
+        )
+      ) do
+        click_link "View All Cohorts",
+                   href:
+                     inactive_cohorts_organisation_course_path(
+                       organisation_2,
+                       course_1
+                     )
+      end
+
+      # The user should be taken to the inactive cohorts page.
+      expect(page).to have_current_path(
+        inactive_cohorts_organisation_course_path(organisation_2, course_1)
       )
     end
   end

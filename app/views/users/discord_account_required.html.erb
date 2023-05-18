@@ -4,8 +4,8 @@
   <%= vite_javascript_tag 'tailwind', nonce: true %>
 <% end %>
 <% content_for(:container) do %>
-  <div class="flex flex-col items-stretch">
-    <div class="flex grow bg-gray-50 items-center justify-center">
+  <div class="flex flex-col items-stretch min-h-screen">
+    <section class="flex grow bg-gray-50 items-center justify-center">
       <div class="container mx-auto p-4 max-w-4xl">
         <div class="flex md:items-center flex-col-reverse items-start md:flex-row">
           <div class="mt-4 md:mt-0 md:mr-6 md:w-1/2">
@@ -67,7 +67,7 @@
           <%= image_tag presenter.image_path, class: "h-48 md:h-auto md:ml-6 md:w-1/2" %>
         </div>
       </div>
-    </div>
+    </section>
     <%= render 'layouts/footer_bottom', presenter: ::Layouts::FooterPresenter.new(self) %>
   </div>
 <% end %>

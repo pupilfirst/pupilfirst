@@ -285,7 +285,7 @@ GEM
     glob (0.3.1)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    graphiql-rails (1.8.0)
+    graphiql-rails (1.9.0)
       railties
       sprockets-rails
     graphql (1.13.19)
@@ -704,7 +704,7 @@ DEPENDENCIES
   font-awesome-rails (~> 4.7)
   fuubar (~> 2.5)
   gaffe (~> 1.2)
-  graphiql-rails (~> 1.8)
+  graphiql-rails (~> 1.9)
   graphql (~> 1.13.19)
   groupdate (~> 6.1.0)
   htmlbeautifier (~> 1.4)

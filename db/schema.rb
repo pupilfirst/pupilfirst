@@ -580,6 +580,7 @@ ActiveRecord::Schema.define(version: 2023_05_16_050603) do
     t.citext "reporter", null: false
     t.string "target_url"
     t.string "heading"
+    t.index ["submission_id", "reporter"], name: "index_submission_reports_on_submission_id_and_reporter", unique: true
     t.index ["submission_id"], name: "index_submission_reports_on_submission_id"
   end
 

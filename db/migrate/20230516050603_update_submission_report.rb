@@ -9,9 +9,13 @@ class UpdateSubmissionReport < ActiveRecord::Migration[6.1]
 
     SubmissionReport.reset_column_information
     SubmissionReport.all.each do |report|
-      report.update(status: report.conclusion.presence || report.status, reporter: 'Virtual Teaching Assistant',)
+      report.update(
+        status: report.conclusion.presence || report.status,
+        reporter: "Virtual Teaching Assistant"
+      )
     end
 
     change_column_null :submission_reports, :reporter, false
+    add_index :submission_reports, %i[submission_id reporter], unique: true
   end
 end

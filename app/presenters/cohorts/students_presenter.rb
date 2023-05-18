@@ -9,7 +9,7 @@ module Cohorts
     def distribution
       @distribution ||=
         begin
-          counts = scope.joins(:level).group('levels.number').count
+          counts = scope.joins(:level).group("levels.number").count
 
           dist =
             @cohort
@@ -34,43 +34,41 @@ module Cohorts
     end
 
     def filter
-      @filter ||=
-        {
-          id: 'organisation-cohort-students-filter',
-          filters: [
-            {
-              key: 'level',
-              label: 'Level',
-              filterType: 'MultiSelect',
-              values:
-                @cohort
-                  .course
-                  .levels
-                  .map { |l| "#{l.number};L#{l.number}: #{l.name}" },
-              color: 'green'
-            },
-            { key: 'name', label: 'Name', filterType: 'Search', color: 'red' },
-            {
-              key: 'email',
-              label: 'Email',
-              filterType: 'Search',
-              color: 'yellow'
-            }
-          ],
-          placeholder: 'Filter by level, or search by name or email',
-          hint: "...or start typing to search by student's name of email",
-          sorter: {
-            key: 'sort_by',
-            default: 'Last Created',
-            options: [
-              'Name',
-              'First Created',
-              'Last Created',
-              'Earliest Seen',
-              'Recently Seen'
-            ]
+      @filter ||= {
+        id: "organisation-cohort-students-filter",
+        filters: [
+          {
+            key: "level",
+            label: "Level",
+            filterType: "MultiSelect",
+            values:
+              @cohort.course.levels.map do |l|
+                "#{l.number};L#{l.number}: #{l.name}"
+              end,
+            color: "green"
+          },
+          { key: "name", label: "Name", filterType: "Search", color: "red" },
+          {
+            key: "email",
+            label: "Email",
+            filterType: "Search",
+            color: "yellow"
           }
+        ],
+        placeholder: "Filter by level, or search by name or email",
+        hint: "...or start typing to search by student's name of email",
+        sorter: {
+          key: "sort_by",
+          default: "Recently Seen",
+          options: [
+            "Recently Seen",
+            "Name",
+            "First Created",
+            "Last Created",
+            "Earliest Seen"
+          ]
         }
+      }
     end
 
     def counts
@@ -105,7 +103,7 @@ module Cohorts
 
     def filter_students_by_name(scope)
       if params[:name].present?
-        scope.joins(:user).where('users.name ILIKE ?', "%#{params[:name]}%")
+        scope.joins(:user).where("users.name ILIKE ?", "%#{params[:name]}%")
       else
         scope
       end
@@ -113,9 +111,10 @@ module Cohorts
 
     def filter_students_by_email(scope)
       if params[:email].present?
-        scope
-          .joins(:user)
-          .where('lower(users.email) ILIKE ?', "%#{params[:email].downcase}%")
+        scope.joins(:user).where(
+          "lower(users.email) ILIKE ?",
+          "%#{params[:email].downcase}%"
+        )
       else
         scope
       end
@@ -123,16 +122,16 @@ module Cohorts
 
     def sort_students(scope)
       case params[:sort_by]
-      when 'Name'
-        scope.joins(:user).order('users.name')
-      when 'First Created'
+      when "Name"
+        scope.joins(:user).order("users.name")
+      when "First Created"
         scope.order(created_at: :asc)
-      when 'Earliest Seen'
-        scope.joins(:user).order('users.last_seen_at ASC NULLS FIRST')
-      when 'Recently Seen'
-        scope.joins(:user).order('users.last_seen_at DESC NULLS LAST')
-      else
+      when "Earliest Seen"
+        scope.joins(:user).order("users.last_seen_at ASC NULLS FIRST")
+      when "Last Created"
         scope.order(created_at: :desc)
+      else
+        scope.joins(:user).order("users.last_seen_at DESC NULLS LAST")
       end
     end
 

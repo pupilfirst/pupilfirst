@@ -10,7 +10,7 @@
         <div class="flex items-center">
           <div class="py-4 md:py-0 md:mr-6 md:w-1/2">
             <% if current_user.discord_account_connected? %>
-              <i class="text-green-600 text-5xl if i-badge-check-solid if-fw" ></i>
+              <i class="text-green-600 text-7xl if i-badge-check-solid if-fw" ></i>
               <h1 class="mt-3 text-3xl font-bold"><%= t(".linked.heading") %></h1>
               <p class="mt-4"><%= t(".linked.description", school_name: current_school.name) %></p>
               <p class="mt-4"><%= t(".linked.footer_html", school_name: current_school.name) %></p>

@@ -29,26 +29,30 @@
             <div class="mb-2">
               <h3 class="text-lg font-semibold" ><%= course_with_cohorts[:course].name %></h3>
               <p class="text-sm text-gray-600">
-                <%= t('.students_enrolled_prefix_html', count: course_with_cohorts[:total_students]) %>
+                <% if course_with_cohorts[:cohorts].present? %>
+                  <%= t('.students_enrolled_prefix_html', count: course_with_cohorts[:total_students]) %>
+                <% end %>
                 <%= t('.students_enrolled_suffix_html', count: course_with_cohorts[:cohorts].count) %>
               </p>
             </div>
-            <%= link_to active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+            <%= link_to course_with_cohorts[:cohorts].empty? ? inactive_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id) : active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
               <span><%= t('.view_all_cohorts') %></span>
               <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-1.5" aria-hidden="true" style="margin-right: 6px;"></i>
             <% end %>
           </div>
-          <div class="mt-4">
-            <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-              <% course_with_cohorts[:cohorts].each do |cohort| %>
-                <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-                  <span class="inline-block font-medium"><%= cohort.name %></span>
-                  <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+          <% if course_with_cohorts[:cohorts].present? %>
+            <div class="mt-4">
+              <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                <% course_with_cohorts[:cohorts].each do |cohort| %>
+                  <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+                    <span class="inline-block font-medium"><%= cohort.name %></span>
+                    <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
             </div>
-          </div>
+          <% end %>
         </div>
       <% end %>
     </div>

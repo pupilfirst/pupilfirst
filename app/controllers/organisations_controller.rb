@@ -25,8 +25,7 @@ class OrganisationsController < ApplicationController
   private
 
   def prepare_courses
-    cohorts =
-      @organisation.cohorts.includes(:course).order(created_at: :desc).uniq
+    cohorts = @organisation.cohorts.includes(:course).uniq
 
     courses =
       cohorts.each_with_object({}) do |cohort, courses|

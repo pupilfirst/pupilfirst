@@ -11193,7 +11193,7 @@
           "fields": [
             {
               "name": "applicant",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "applicantId",
@@ -11213,16 +11213,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Applicant",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Applicant",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "applicants",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -11354,16 +11358,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "ApplicantConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ApplicantConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "coach",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "id",
@@ -11383,16 +11391,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Coach",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Coach",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "coachNotes",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "studentId",
@@ -11412,15 +11424,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CoachNote",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CoachNote",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -11429,7 +11445,7 @@
             },
             {
               "name": "coachStats",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "coachId",
@@ -11465,16 +11481,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "CoachStats",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CoachStats",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "coaches",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -11514,15 +11534,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "UserProxy",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "UserProxy",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -11531,7 +11555,7 @@
             },
             {
               "name": "cohort",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "id",
@@ -11551,16 +11575,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Cohort",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Cohort",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "cohorts",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -11640,16 +11668,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "CohortConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CohortConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "contentBlocks",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "targetId",
@@ -11681,15 +11713,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentBlock",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "ContentBlock",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -11698,7 +11734,7 @@
             },
             {
               "name": "course",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "id",
@@ -11718,16 +11754,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Course",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Course",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "courseResourceInfo",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -11771,15 +11811,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CourseResourceInfo",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CourseResourceInfo",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -11788,7 +11832,7 @@
             },
             {
               "name": "courseStudents",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -11868,16 +11912,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "StudentConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "StudentConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "courses",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -11965,16 +12013,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "CourseConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CourseConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "evaluationCriteria",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -11994,15 +12046,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "EvaluationCriterion",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "EvaluationCriterion",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -12011,7 +12067,7 @@
             },
             {
               "name": "hasArchivedCoachNotes",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "studentId",
@@ -12031,16 +12087,20 @@
                 }
               ],
               "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "level",
-              "description": "{:null=>true}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -12081,7 +12141,7 @@
             },
             {
               "name": "levels",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -12101,15 +12161,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Level",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Level",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -12118,7 +12182,7 @@
             },
             {
               "name": "notifications",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -12206,16 +12270,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "NotificationConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "NotificationConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "reviewedTargetsInfo",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -12235,15 +12303,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "TargetInfo",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "TargetInfo",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -12252,21 +12324,25 @@
             },
             {
               "name": "schoolStats",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "SchoolStats",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SchoolStats",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "similarTopics",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "communityId",
@@ -12302,15 +12378,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Topic",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Topic",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -12319,7 +12399,7 @@
             },
             {
               "name": "student",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "studentId",
@@ -12339,16 +12419,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Student",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Student",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "studentDetails",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "studentId",
@@ -12368,16 +12452,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "StudentDetails",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "StudentDetails",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "studentDistribution",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -12409,15 +12497,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "DistributionInLevel",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "DistributionInLevel",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -12426,7 +12518,7 @@
             },
             {
               "name": "studentSubmissions",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -12534,16 +12626,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "StudentSubmissionConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "StudentSubmissionConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "submissionDetails",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "submissionId",
@@ -12563,16 +12659,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "SubmissionDetails",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SubmissionDetails",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "submissionReport",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "id",
@@ -12592,16 +12692,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "SubmissionReport",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SubmissionReport",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "submissions",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -12809,16 +12913,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "SubmissionInfoConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SubmissionInfoConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "targetDetails",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "targetId",
@@ -12838,16 +12946,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "TargetDetails",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TargetDetails",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "targetInfo",
-              "description": "{:null=>true}",
+              "description": null,
               "args": [
                 {
                   "name": "courseId",
@@ -12888,7 +13000,7 @@
             },
             {
               "name": "targetVersions",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "targetId",
@@ -12908,15 +13020,19 @@
                 }
               ],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
+                  "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "TargetVersion",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "TargetVersion",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -12925,7 +13041,7 @@
             },
             {
               "name": "team",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "id",
@@ -12945,16 +13061,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Team",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Team",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "teams",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -13034,16 +13154,20 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "TeamConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TeamConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "topics",
-              "description": "{:null=>false}",
+              "description": null,
               "args": [
                 {
                   "name": "after",
@@ -13195,9 +13319,13 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "TopicConnection",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TopicConnection",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

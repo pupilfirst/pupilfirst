@@ -36,7 +36,9 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     <Link
       props={"data-target-id": targetId}
       href={"/targets/" ++ targetId}
-      className="p-6 flex grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg"
+      className={"p-6 flex grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg" ++ (
+        Target.milestone(target) ? " border-l-4 border-primary-500" : ""
+      )}
       ariaLabel={"Select Target: " ++
       (Target.title(target) ++
       ", Status: " ++
@@ -71,12 +73,6 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
       className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
-      {targetGroup |> TargetGroup.milestone
-        ? <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-            {t("milestone_targets") |> str}
-          </div>
-        : React.null}
       <div className="p-6 pt-5">
         <div className="text-2xl font-bold leading-snug">
           {TargetGroup.name(targetGroup)->str}

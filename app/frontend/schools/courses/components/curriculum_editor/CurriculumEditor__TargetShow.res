@@ -9,6 +9,7 @@ let ts = I18n.ts
 
 let targetClasses = (target, targets) =>
   "target-group__target flex justify-between items-center ps-2 pe-5 focus:outline-none focus:bg-gray-50 focus:text-primary-500 " ++
+  (Target.milestone(target) ? "border-l-4 border-primary-500 " : "") ++
   switch (Js.Array.length(targets) == 1, target |> Target.visibility) {
   | (true, Archived) => "target-group__target--archived py-4 ps-5 "
   | (false, Archived) => "target-group__target--archived py-4"

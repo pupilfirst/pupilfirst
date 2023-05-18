@@ -78,12 +78,19 @@ module StudentReportOverviewQuery = %graphql(`
           evaluationCriterionId
           averageGrade
         }
+        milestoneTargetsCompletionStatus {
+          id
+          title
+          completed
+          milestoneNumber
+        }
       }
     }
   `)
 
-let saveOverviewData = (studentId, send, data) =>
+let saveOverviewData = (studentId, send, data) => {
   send(SaveOverviewData(Loaded(data |> StudentOverview.makeFromJs(studentId))))
+}
 
 let getOverviewData = (studentId, send, ()) => {
   StudentReportOverviewQuery.make({studentId: studentId})
@@ -148,7 +155,7 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
     </div>
     <div className="">
       {switch state.selectedTab {
-      | #Overview => <CoursesReport__Overview overviewData=state.overviewData levels coaches />
+      | #Overview => <CoursesReport__Overview overviewData=state.overviewData coaches />
       | #Submissions =>
         <CoursesReport__SubmissionsList
           studentId

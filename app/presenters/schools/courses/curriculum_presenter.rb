@@ -65,7 +65,8 @@ module Schools
             target_group_id: target.target_group_id,
             title: target.title,
             sort_index: target.sort_index,
-            visibility: target.visibility
+            visibility: target.visibility,
+            milestone: target.milestone
           }
         end
       end

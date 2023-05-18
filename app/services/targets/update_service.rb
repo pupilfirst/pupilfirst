@@ -10,6 +10,7 @@ module Targets
         @target.title = target_params[:title]
         @target.target_action_type = Target::TYPE_TODO
         @target.link_to_complete = target_params[:link_to_complete]
+        @target.milestone = target_params[:milestone]
 
         @target.resubmittable =
           target_params[:checklist].present?

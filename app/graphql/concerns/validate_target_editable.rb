@@ -136,9 +136,9 @@ module ValidateTargetEditable
     argument :link_to_complete, GraphQL::Types::String, required: false
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :visibility, GraphQL::Types::String, required: true
+    argument :milestone, GraphQL::Types::Boolean, required: true
 
     validates ValidateTargetAndEvaluationCriteria => {}
-    validates PrerequisitesInSameLevel => {}
     validates PrerequisitesNotArchived => {}
     validates OnlyOneMethodOfCompletion => {}
     validates ChecklistHasValidData => {}

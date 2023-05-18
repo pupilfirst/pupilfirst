@@ -11,6 +11,7 @@ type t = {
   title: string,
   sortIndex: int,
   visibility: visibility,
+  milestone: bool,
 }
 
 let id = t => t.id
@@ -22,6 +23,8 @@ let targetGroupId = t => t.targetGroupId
 let sortIndex = t => t.sortIndex
 
 let visibility = t => t.visibility
+
+let milestone = t => t.milestone
 
 let decodeVisbility = visibilityString =>
   switch visibilityString {
@@ -39,6 +42,7 @@ let decode = json => {
     title: json |> field("title", string),
     sortIndex: json |> field("sortIndex", int),
     visibility: decodeVisbility(json |> field("visibility", string)),
+    milestone: json |> field("milestone", bool),
   }
 }
 
@@ -52,6 +56,7 @@ let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility) => {
   title: title,
   sortIndex: sortIndex,
   visibility: visibility,
+  milestone: false,
 }
 
 let sort = targets => targets |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)

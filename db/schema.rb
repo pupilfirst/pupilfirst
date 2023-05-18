@@ -667,6 +667,7 @@ ActiveRecord::Schema.define(version: 2023_05_16_171556) do
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
     t.boolean "milestone", default: false
+    t.integer "milestone_number"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"

@@ -6,17 +6,16 @@ type averageGrade = {
 type t = {
   id: string,
   evaluationCriteria: array<CoursesReport__EvaluationCriterion.t>,
-  levelId: string,
   totalTargets: int,
   targetsPendingReview: int,
   targetsCompleted: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
   completedLevelIds: array<string>,
+  milestoneTargetsCompletionStatus: array<CoursesReport__MilestoneTargetCompletionStatus.t>,
 }
 
 let id = t => t.id
-let levelId = t => t.levelId
 let evaluationCriteria = t => t.evaluationCriteria
 
 let totalTargets = t => t.totalTargets |> float_of_int
@@ -37,6 +36,8 @@ let makeAverageGrade = gradesData =>
     evaluationCriterionId: gradeData["evaluationCriterionId"],
     grade: gradeData["averageGrade"],
   })
+
+let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria) =>
   evaluationCriteria |> ArrayUtils.unsafeFind(
@@ -78,10 +79,10 @@ let makeFromJs = (id, studentData) => {
   id: id,
   evaluationCriteria: studentData["evaluationCriteria"] |> CoursesReport__EvaluationCriterion.makeFromJs,
   totalTargets: studentData["totalTargets"],
-  levelId: studentData["student"]["level"]["id"],
   targetsCompleted: studentData["targetsCompleted"],
   quizScores: studentData["quizScores"],
   averageGrades: studentData["averageGrades"] |> makeAverageGrade,
   completedLevelIds: studentData["completedLevelIds"],
   targetsPendingReview: studentData["targetsPendingReview"],
+  milestoneTargetsCompletionStatus: studentData["milestoneTargetsCompletionStatus"] |> CoursesReport__MilestoneTargetCompletionStatus.makeFromJs,
 }

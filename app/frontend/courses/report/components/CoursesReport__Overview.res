@@ -213,17 +213,52 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
 }
 
 @react.component
-let make = (~overviewData, ~levels, ~coaches) =>
+let make = (~overviewData, ~coaches) =>
   <div className="max-w-3xl mx-auto">
     {switch overviewData {
     | OverviewData.Loaded(overview) =>
       <div className="flex flex-col">
         <div className="w-full">
-          {levelProgressBar(
-            overview |> StudentOverview.levelId,
-            levels,
-            overview |> StudentOverview.completedLevelIds,
-          )}
+          <div className="mb-8">
+            <h6 className="font-semibold mb-4"> {"Milestone Targets Completion Status" |> str} </h6>
+            <div className="flex flex-col">
+              {ArrayUtils.copyAndSort(
+                (a, b) =>
+                  a->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber -
+                    b->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber,
+                StudentOverview.milestoneTargetsCompletionStatus(overview),
+              )
+              ->Js.Array2.map(data => {
+                <div className="flex">
+                  <div className="mr-2">
+                    <p className="text-sm font-semibold">
+                      {<FaIcon
+                        classes={data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                          ? "fas fa-check-circle text-green-600"
+                          : "fa fa-times-circle text-gray-600"}
+                      />}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold mr-2">
+                      {data
+                      ->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber
+                      ->string_of_int
+                      ->str}
+                    </p>
+                  </div>
+                  <div className="flex-1">
+                    <Link
+                      href={"/targets" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
+                      className="underline">
+                      {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
+                    </Link>
+                  </div>
+                </div>
+              })
+              ->React.array}
+            </div>
+          </div>
           <div className="mb-8">
             <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
             <div className="flex -mx-2 flex-wrap mt-2">

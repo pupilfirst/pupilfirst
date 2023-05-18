@@ -135,7 +135,7 @@ module Courses
     end
 
     def targets
-      attributes = %w[id role title target_group_id sort_index resubmittable]
+      attributes = %w[id role title target_group_id sort_index resubmittable milestone]
 
       scope =
         @course

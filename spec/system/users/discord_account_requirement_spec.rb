@@ -51,6 +51,6 @@ feature "Discord account requirement", js: true do
     # to their dashboard.
     visit(discord_account_required_user_path)
 
-    expect(page).not_to have_text("My Courses")
+    expect(page).to have_text("My Courses")
   end
 end

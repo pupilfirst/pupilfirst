@@ -21,6 +21,15 @@ module ValidateCourseExport
     end
   end
 
+  class RequireValidCohorts < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      course = Course.find_by(id: value[:course_id])
+      cohorts = course.cohorts.where(id: value[:cohort_ids])
+      return if value[:cohort_ids].count == cohorts.count
+      I18n.t("mutations.export_course_report.cohorts_not_found_error")
+    end
+  end
+
   included do
     argument :course_id, GraphQL::Types::ID, required: true
     argument :export_type, Types::ExportType, required: true
@@ -31,5 +40,6 @@ module ValidateCourseExport
 
     validates RequireValidCourse => {}
     validates RequireValidTags => {}
+    validates RequireValidCohorts => {}
   end
 end

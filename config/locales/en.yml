@@ -2256,6 +2256,7 @@ en:
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_14_123822) do
+ActiveRecord::Schema.define(version: 2023_05_17_172431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -163,6 +163,13 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "discord_role_ids", default: [], array: true
     t.index ["course_id"], name: "index_cohorts_on_course_id"
+  end
+
+  create_table "cohorts_course_exports", force: :cascade do |t|
+    t.bigint "cohort_id"
+    t.bigint "course_export_id"
+    t.index ["cohort_id"], name: "index_cohorts_course_exports_on_cohort_id"
+    t.index ["course_export_id"], name: "index_cohorts_course_exports_on_course_export_id"
   end
 
   create_table "communities", force: :cascade do |t|
@@ -648,7 +655,6 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
-    t.integer "faculty_id"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -667,7 +673,6 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
     t.index ["archived"], name: "index_targets_on_archived"
-    t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 

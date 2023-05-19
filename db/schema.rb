@@ -672,7 +672,6 @@ ActiveRecord::Schema.define(version: 2023_05_16_050603) do
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
     t.text "action_config"
-    t.integer "faculty_id"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end

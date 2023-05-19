@@ -10,8 +10,8 @@ module Schools
 
       def faculty
         @faculty ||=
-          if @status == "archived"
-            current_school.faculty.archived
+          if @status == "exited"
+            current_school.faculty.exited
           else
             current_school.faculty.active
           end.includes(user: { avatar_attachment: :blob })

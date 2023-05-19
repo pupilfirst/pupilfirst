@@ -20,11 +20,10 @@ type state = {
 type action =
   | UpdateFormVisible(formVisible)
   | UpdateCoaches(Coach.t)
-  | UpdateCoachCount(bool)
 
-let isSelectedTabArchived = () => {
+let isSelectedTabExited = () => {
   let searchQuery = RescriptReactRouter.useUrl().search
-  searchQuery |> Js.String.includes("archived")
+  searchQuery |> Js.String.includes("exited")
 }
 
 let reducer = (state, action) =>
@@ -33,13 +32,6 @@ let reducer = (state, action) =>
   | UpdateCoaches(coach) =>
     let newCoachesList = coach |> Coach.updateList(state.coaches)
     {...state, coaches: newCoachesList}
-  | UpdateCoachCount(isArchivedTabSelected) =>
-    let count =
-      List.filter(
-        coach => Coach.exited(coach) === isArchivedTabSelected,
-        state.coaches,
-      )->List.length
-    {...state, coachCount: count}
   }
 
 @react.component
@@ -50,13 +42,11 @@ let make = (~coaches, ~authenticityToken) => {
   )
 
   let currentPath = "coaches?status="
-  let isExitedTabSelected = isSelectedTabArchived()
+  let isExitedTabSelected = isSelectedTabExited()
 
   let closeFormCB = () => send(UpdateFormVisible(None))
-  let updateCoachCB = coach => {
-    send(UpdateCoaches(coach))
-    send(UpdateCoachCount(isExitedTabSelected))
-  }
+  let updateCoachCB = coach => send(UpdateCoaches(coach))
+
   <div role="main" className="flex min-h-full bg-gray-50">
     {switch state.formVisible {
     | None => React.null
@@ -97,7 +87,7 @@ let make = (~coaches, ~authenticityToken) => {
             </a>
             <a
               role="tab"
-              href={`${currentPath}archived`}
+              href={`${currentPath}exited`}
               className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500
                ${isExitedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
               <span className="sm:inline"> {tr("exited_coaches")->str} </span>
@@ -114,9 +104,7 @@ let make = (~coaches, ~authenticityToken) => {
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
         <div className="max-w-2xl w-full mx-auto relative">
-          {switch state.coaches->Belt.List.some(coach =>
-            Coach.exited(coach) == isExitedTabSelected
-          ) {
+          {switch state.coaches->Belt.List.some(_ => true) {
           | true =>
             state.coaches
             |> List.sort((x, y) => int_of_string(Coach.id(x)) - int_of_string(Coach.id(y)))
@@ -157,7 +145,7 @@ let make = (~coaches, ~authenticityToken) => {
             )
             |> Array.of_list
             |> React.array
-          | _ =>
+          | false =>
             <div className="mt-15 pt-10">
               <img className="mx-auto h-40" src={noCoachesFoundIcon} />
               <div className=" text-center mt-14">

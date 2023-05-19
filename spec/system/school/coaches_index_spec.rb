@@ -103,13 +103,18 @@ feature "Coaches Index", js: true do
     click_button "Exited"
     click_button "Update Coach"
 
-    expect(page).to have_text("Coach updated successfully")
-
-    expect(coach_1.reload.exited).to eq(true)
     expect(page).to_not have_text(coach_1.name)
+    expect(page).to have_text(coach_2.name)
+    expect(coach_1.reload.exited).to eq(true)
+  end
 
-    find("span", text: "Exited Coaches").click
+  scenario "school admin visits exited tab" do
+    coach_1.update!(exited: true)
+
+    sign_in_user school_admin.user,
+                 referrer: school_coaches_path(status: "exited")
     expect(page).to have_text(coach_1.name)
     expect(page).to_not have_text(coach_2.name)
+    expect(page).to_not have_text(coach_3.name)
   end
 end

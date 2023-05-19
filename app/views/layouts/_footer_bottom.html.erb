@@ -9,7 +9,7 @@
             <img
                 class="w-27"
                 src="<%= presenter.logo_url %>"
-                alt="t('.logo') <%= presenter.school_name %>"
+                alt="<%= t(".logo_alt", school_name: presenter.school_name) %>"
               />
             <% else %>
               <span><%= presenter.school_name %></span>

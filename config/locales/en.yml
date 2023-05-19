@@ -2009,15 +2009,16 @@ en:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
+    footer_bottom:
+      logo_alt: Logo of %{school_name}
+      privacy_policy: Privacy Policy
+      terms_conditions: Terms & Conditions
     student_footer:
       contact: Contact
-      logo: Logo
-      privacy_policy: Privacy Policy
       reach_us: Reach us at
       sitemap: Sitemap
       social: Social
       support: Contact Support
-      terms_conditions: Terms & Conditions
   mailers:
     applicant:
       enrollment_verification:

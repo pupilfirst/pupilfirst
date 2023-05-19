@@ -36,7 +36,8 @@ type action =
   | UpdateConnectLink(string, bool)
   | UpdatePublic(bool)
   | UpdateImageFileName(string)
-  | UpdateExited(bool)
+  | MarkAsActive
+  | MarkAsExited
   | UpdateAffiliation(string)
   | UpdateSaving
 
@@ -74,7 +75,8 @@ let reducer = (state, action) =>
       imageFileName: imageFileName,
       dirty: true,
     }
-  | UpdateExited(exited) => {...state, exited: exited, dirty: true}
+  | MarkAsActive => {...state, exited: false, dirty: true}
+  | MarkAsExited => {...state, exited: true, dirty: true}
   | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation, dirty: true}
   }
 
@@ -457,7 +459,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                             <button
                               onClick={_event => {
                                 ReactEvent.Mouse.preventDefault(_event)
-                                send(UpdateExited(false))
+                                send(MarkAsActive)
                               }}
                               name="faculty[exited]"
                               className={booleanButtonClasses(!state.exited)}>
@@ -466,7 +468,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                             <button
                               onClick={_event => {
                                 ReactEvent.Mouse.preventDefault(_event)
-                                send(UpdateExited(true))
+                                send(MarkAsExited)
                               }}
                               className={booleanButtonClasses(state.exited)}>
                               {t("exited")->str}

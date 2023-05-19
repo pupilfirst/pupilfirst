@@ -1227,7 +1227,6 @@ en:
       coach_add: Add Coach
       coach_created: Coach created successfully
       coach_email: Coach email address
-      coach_left_q: Has the coach left the school?
       coach_name: Coach Name
       coach_profile_warn: Since the coach profile isn't public, this won't be shown anywhere
       coach_public_q: Should the coach profile be public?

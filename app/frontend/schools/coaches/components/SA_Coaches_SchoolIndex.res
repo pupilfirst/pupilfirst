@@ -163,10 +163,7 @@ let make = (~coaches, ~authenticityToken) => {
               <div className=" text-center mt-14">
                 <span className="text-lg sm:text-2xl font-bold"> {tr("no_coaches")->str} </span>
                 <p className="pt-3 text-gray-500 font-medium">
-                  {switch isExitedTabSelected {
-                  | true => tr("no_exited_coaches")
-                  | false => tr("no_active_coaches")
-                  }->str}
+                  {(isExitedTabSelected ? tr("no_exited_coaches") : tr("no_active_coaches"))->str}
                 </p>
               </div>
             </div>

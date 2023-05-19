@@ -26,9 +26,9 @@ module Schools
       property :affiliation, virtual: true
 
       def save
-        # Important to call this service before update
-        Schools::ArchiveCoachService.new(faculty, exited).execute
         Faculty.transaction do
+          mark_faculty_as_exited(exited)
+
           user = model.user
           user.update!(user_params)
           user.avatar.attach(image) if image.present?
@@ -55,6 +55,24 @@ module Schools
 
       def faculty
         @faculty ||= school.faculty.find_by(id: id)
+      end
+
+      def mark_faculty_as_exited(exited)
+        should_exit = exited == "true" ? true : false
+
+        if !faculty.exited? && should_exit
+          faculty.exited = true
+          faculty.save!
+          clear_faculty_enrollments
+        elsif faculty.exited? && !should_exit
+          faculty.exited = false # unarchive
+          faculty.save!
+        end
+      end
+
+      def clear_faculty_enrollments
+        FacultyCohortEnrollment.where(faculty: faculty).destroy_all
+        FacultyFounderEnrollment.where(faculty: faculty).destroy_all
       end
     end
   end

@@ -20,9 +20,11 @@ module Organisations
     def level_progress_bar_props
       {
         levels:
-          course.levels
-                .where('number > ?', 0).order(:number)
-                .map { |level| completed_level_ids.include?(level.id) },
+          course
+            .levels
+            .where("number > ?", 0)
+            .order(:number)
+            .map { |level| completed_level_ids.include?(level.id) },
         currentLevelNumber: level.number,
         courseCompleted: student.completed_at.present?
       }
@@ -56,8 +58,9 @@ module Organisations
                 criteria[average_grade[:evaluation_criterion_id]]
               )
 
-            merged[:percentage] =
-              ((merged[:average_grade] / merged[:max_grade]) * 100).floor
+            merged[:percentage] = (
+              (merged[:average_grade] / merged[:max_grade]) * 100
+            ).floor
 
             merged
           end
@@ -127,7 +130,7 @@ module Organisations
     end
 
     def levels
-      @levels ||= course.levels.unlocked.where('number <= ?', level.number)
+      @levels ||= course.levels.unlocked.where("number <= ?", level.number)
     end
 
     def level
@@ -160,7 +163,7 @@ module Organisations
                 }
               )
               .distinct(:id)
-              .pluck(:id, 'target_groups.level_id')
+              .pluck(:id, "target_groups.level_id")
               .each_with_object(
                 {}
               ) do |(target_id, level_id), required_targets_by_level|
@@ -179,8 +182,9 @@ module Organisations
           levels
             .pluck(:id)
             .select do |level_id|
-              ((required_targets_by_level[level_id] || []) - passed_target_ids)
-                .empty?
+              (
+                (required_targets_by_level[level_id] || []) - passed_target_ids
+              ).empty?
             end
         end
     end

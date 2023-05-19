@@ -11,7 +11,6 @@ class Faculty < ApplicationRecord
            foreign_key: "evaluator_id",
            inverse_of: :evaluator,
            dependent: :nullify
-  has_many :targets, dependent: :restrict_with_error
   has_many :faculty_cohort_enrollments, dependent: :destroy
   has_many :cohorts, through: :faculty_cohort_enrollments
   has_many :courses, through: :cohorts

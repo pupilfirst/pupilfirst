@@ -4,7 +4,7 @@ module Mutations
       def validate(_object, _context, value)
         course = Course.find_by(id: value[:id])
 
-        return "Unable to find course with id: #{value[:id]}" if course.blank?
+        return I18n.t("mutations.update_course.unable_to_find_course", value: value[:id]) if course.blank?
       end
     end
 
@@ -18,7 +18,7 @@ module Mutations
 
         if cohort.blank?
           return(
-            "Please select a valid cohort; Unable to find cohort with id: #{value[:default_cohort_id]}"
+            I18n.t("mutations.update_course.select_valid_cohort", value: value[:default_cohort_id])
           )
         end
       end

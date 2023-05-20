@@ -30,7 +30,9 @@ class OrganisationsController < ApplicationController
     courses =
       cohorts.each_with_object({}) do |cohort, courses|
         courses[cohort.course.id] ||= { course: cohort.course, cohorts: [] }
-        courses[cohort.course.id][:cohorts] << cohort if cohort.ends_at.nil?
+        if cohort.ends_at.nil? || cohort.ends_at.future?
+          courses[cohort.course.id][:cohorts] << cohort
+        end
       end
 
     courses.values.map do |course|

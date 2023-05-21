@@ -22,10 +22,7 @@ module Mutations
           )
 
         cohorts.map do |cohort|
-          CohortsCourseExport.create!(
-            cohort: cohort,
-            course_export: export
-          )
+          CohortsCourseExport.create!(cohort: cohort, course_export: export)
         end
         # Queue a job to prepare the report.
         CourseExports::PrepareJob.perform_later(export)

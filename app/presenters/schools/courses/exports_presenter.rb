@@ -12,7 +12,7 @@ module Schools
           tags: tag_details,
           course: course_details,
           exports: course_export_details,
-          cohorts: cohorts
+          cohorts: cohort_details
         }
       end
 
@@ -43,7 +43,8 @@ module Schools
             export_type: export.export_type,
             tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only,
-            includeInactiveStudents: export.include_inactive_students
+            includeInactiveStudents: export.include_inactive_students,
+            cohorts: export.cohort.pluck(:name)
           }
         end
       end
@@ -59,13 +60,8 @@ module Schools
             .load
       end
 
-      def cohorts
-        @cohorts ||= @course.cohorts.map do |cohort|
-          {
-            id: cohort.id,
-            name: cohort.name
-          }
-        end
+      def cohort_details
+        @course.cohorts.as_json(only: %i[id name])
       end
     end
   end

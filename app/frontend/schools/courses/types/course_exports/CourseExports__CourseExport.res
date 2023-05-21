@@ -19,6 +19,7 @@ type t = {
   reviewedOnly: bool,
   includeInactiveStudents: bool,
   exportType: exportType,
+  cohorts: array<string>,
 }
 
 let id = t => t.id
@@ -30,6 +31,7 @@ let reviewedOnly = t => t.reviewedOnly
 let includeInactiveStudents = t => t.includeInactiveStudents
 let fileCreatedAt = (file: file) => file.createdAt
 let filePath = file => file.path
+let cohorts = t => t.cohorts
 
 let decodeFile = json => {
   open Json.Decode
@@ -55,10 +57,19 @@ let decode = json => {
     },
     reviewedOnly: json |> field("reviewedOnly", bool),
     includeInactiveStudents: json |> field("includeInactiveStudents", bool),
+    cohorts: json |> field("cohorts", array(string)),
   }
 }
 
-let make = (~id, ~exportType, ~createdAt, ~tags, ~reviewedOnly, ~includeInactiveStudents) => {
+let make = (
+  ~id,
+  ~exportType,
+  ~createdAt,
+  ~tags,
+  ~reviewedOnly,
+  ~includeInactiveStudents,
+  ~cohorts,
+) => {
   id: id,
   createdAt: createdAt,
   tags: tags,
@@ -66,6 +77,7 @@ let make = (~id, ~exportType, ~createdAt, ~tags, ~reviewedOnly, ~includeInactive
   reviewedOnly: reviewedOnly,
   includeInactiveStudents: includeInactiveStudents,
   file: None,
+  cohorts: cohorts,
 }
 
 let exportTypeToString = t =>

@@ -11,5 +11,9 @@ module Types
     def tags
       object.tag_list
     end
+
+    def cohorts
+      object.cohort.pluck(:name)
+    end
   end
 end

@@ -136,6 +136,7 @@ module CreateCourseExportQuery = %graphql(`
       tags
       reviewedOnly
       includeInactiveStudents
+      cohorts
     }
    }
  }
@@ -175,6 +176,7 @@ let createCourseExport = (state, send, course, event) => {
         ~tags=\"export"["tags"],
         ~reviewedOnly=\"export"["reviewedOnly"],
         ~includeInactiveStudents=\"export"["includeInactiveStudents"],
+        ~cohorts=\"export"["cohorts"],
       )
 
       send(FinishSaving(courseExport))
@@ -200,7 +202,6 @@ let toggleChoiceClasses = value => {
 
 @react.component
 let make = (~course, ~exports, ~tags, ~cohorts) => {
-  cohorts->Js.log
   let (state, send) = React.useReducerWithMapState(reducer, exports, computeInitialState)
 
   <div className="bg-gray-50 h-full" key="School admin coaches course index">
@@ -388,6 +389,16 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                                   {t("include_inactive_students_tag")->str}
                                 </span>
                               : React.null}
+                            {courseExport
+                            |> CourseExport.cohorts
+                            |> Array.map(cohort =>
+                              <span
+                                key=cohort
+                                className="px-2 py-1 border rounded bg-red-100 text-primary-600 mt-1 me-1">
+                                {cohort |> str}
+                              </span>
+                            )
+                            |> React.array}
                             {courseExport
                             |> CourseExport.tags
                             |> Array.map(tag =>

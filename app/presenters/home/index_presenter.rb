@@ -30,16 +30,6 @@ module Home
       @school.about
     end
 
-    def school_name_classes
-      classes =
-        'relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10'
-      if @school.about.present?
-        "#{classes} "
-      else
-        "#{classes} text-center"
-      end
-    end
-
     def courses_as_student
       @courses_as_student ||=
         begin

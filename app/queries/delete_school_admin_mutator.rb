@@ -22,13 +22,13 @@ class DeleteSchoolAdminMutator < ApplicationQuery
   def must_be_admin_of_this_school
     return if school_admin.present?
 
-    errors.add(:base, 'The ID that was supplied is invalid')
+    errors.add(:base, "The ID that was supplied is invalid")
   end
 
   def at_least_one_admin_must_exist
     return if current_school.school_admins.count > 1
 
-    errors.add(:base, 'Your school must have at least one admin')
+    errors.add(:base, "Your school must have at least one admin")
   end
 
   def school_admin
@@ -37,7 +37,7 @@ class DeleteSchoolAdminMutator < ApplicationQuery
 
   def create_audit_record(school_admin)
     AuditRecord.create!(
-      audit_type: AuditRecord::TYPE_REMOVE_SCHOOL_ADMIN,
+      audit_type: AuditRecord.audit_types[:remove_school_admin],
       school_id: current_school.id,
       metadata: {
         user_id: current_user.id,

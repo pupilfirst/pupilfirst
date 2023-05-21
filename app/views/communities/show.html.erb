@@ -7,7 +7,9 @@
     <div class="max-w-3xl w-full flex flex-col items-center justify-center mx-auto px-3 md:px-0">
       <h1 class="text-center font-normal text-2xl md:text-3xl leading-tight">
         <%= t(".welcome") %>
-        <span class="block font-bold text-3xl md:text-4xl"><%= @community.name %> <%= t("shared.community") %></span>
+        <span class="block font-bold text-3xl md:text-4xl">
+          <%= t(".community_title", name: @community.name) %>
+        </span>
       </h1>
       <div class="max-w-lg flex w-full mt-3 justify-center">
         <a class="no-underline btn btn-primary relative" href=<%= new_topic_community_path(@community) %>>

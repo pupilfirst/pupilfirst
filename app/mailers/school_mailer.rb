@@ -49,7 +49,7 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
 
   def school_name
     # sanitize school name to remove special characters
-    @school.name.gsub(/[^0-9A-Za-z ]/, '')
+    @school.name.gsub(/[.^$*+{}()@%<>!#]/, '')
   end
 
   def sender_signature

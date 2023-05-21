@@ -85,6 +85,7 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
     AppRouter__Nav:
+      current_course_not_found: "Could not find currentCourse with ID "
       close_sidebar: Close sidebar
       curriculum: Curriculum
       leaderboard: Leaderboard
@@ -243,6 +244,8 @@ en:
       saving: Saving
       update_author: Update Author
     CourseAuthors__Root:
+      author_not_found: "Could not find author with ID "
+      in_the_list: " in the list of known authors for course with ID "
       window_confirm_post: from the list of authors?
       window_confirm_pre: Are you sure you want to remove
     CourseCertificates__CreateDrawer:
@@ -504,6 +507,13 @@ en:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
         title: We've sent you a verification mail.
     CoursesCurriculum:
+      target_status_for_selected_target_not_found: "Could not find targetStatus for selectedTarget with ID "
+      selected_level_not_found: "Could not find selectedLevel with id "
+      current_level_not_found: "Could not find currentLevel with id "
+      target_group_not_found: "Could not find targetGroup with ID "
+      student_level_not_found: "Could not find studentLevel with ID "
+      selected_target_not_found: "Could not find selectedTarget with ID "
+      target_status_not_found: "Could not find targetStatus for listed target with ID "
       edit_level_button: Edit Level
       edit_target_button_title: Edit target %{title}
       empty_level_content_notice: There's no published content on this level.
@@ -574,6 +584,7 @@ en:
       team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
       team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
+      status_of_target_not_found: "Could not find status of target with ID "
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
@@ -633,6 +644,10 @@ en:
       your_submissions: Your Submissions
       your_responses: Your Responses
     CoursesCurriculum__TargetStatus:
+      level_not_found: "Could not find level with ID "
+      create_target_cache: " to create target cache"
+      target_group_not_found: "Could not find target group with ID "
+      student_level_not_found: "Could not find student's level with ID "
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
@@ -788,6 +803,7 @@ en:
       remove_reviewer_assign_to_me: Do you want to remove %{current_coach_name} & assign yourself to review?
       start_review: Start Review
     CoursesReview__Root:
+      current_course_not_found: "Could not find currentCourse with ID "
       assigned_to: Assigned To
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
@@ -1082,6 +1098,7 @@ en:
       update_target: Update Target
       visit_link: Visit a link to complete the target.
     CurriculumEditor__TargetDrawer:
+      target_for_editor_not_found: "Could not find target for editor drawer with the ID "
       content: Content
       details: Details
       unexpected_error: Unexpected error. Please reload the page.
@@ -1512,6 +1529,7 @@ en:
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentCourse__Header:
+      current_course_not_found: "Could not find currentCourse with ID "
       calendar: Calendar
       curriculum: Curriculum
       leaderboard: Leaderboard

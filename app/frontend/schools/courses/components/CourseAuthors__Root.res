@@ -135,9 +135,9 @@ let make = (~courseId, ~authors) => {
             Some(
               state.authors |> ArrayUtils.unsafeFind(
                 author => author |> Author.id == authorId,
-                "Could not find author with ID " ++
+                t("author_not_found") ++
                 (authorId ++
-                (" in the list of known authors for course with ID " ++ courseId)),
+                (t("in_the_list") ++ courseId)),
               ),
             )
           }

@@ -28,7 +28,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
   let targetStatus =
     statusOfTargets |> ArrayUtils.unsafeFind(
       ts => ts |> TargetStatus.targetId == targetId,
-      "Could not find targetStatus for listed target with ID " ++ targetId,
+      t("target_status_not_found") ++ targetId,
     )
 
   <div
@@ -312,7 +312,7 @@ let make = (
     ->Belt.Option.map(targetId =>
       targets |> ArrayUtils.unsafeFind(
         t => t |> Target.id == targetId,
-        "Could not find selectedTarget with ID " ++ targetId,
+        t("selected_target_not_found") ++ targetId,
       )
     )
   | _ => None
@@ -332,7 +332,7 @@ let make = (
   let studentLevel =
     levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == studentLevelId,
-      "Could not find studentLevel with ID " ++ studentLevelId,
+      t("student_level_not_found") ++ studentLevelId,
     )
 
   let targetLevelId = switch selectedTarget {
@@ -342,7 +342,7 @@ let make = (
     let targetGroup =
       targetGroups |> ArrayUtils.unsafeFind(
         t => t |> TargetGroup.id == targetGroupId,
-        "Could not find targetGroup with ID " ++ targetGroupId,
+        t("target_group_not_found") ++ targetGroupId,
       )
 
     Some(targetGroup |> TargetGroup.levelId)
@@ -403,13 +403,13 @@ let make = (
   let currentLevel =
     levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == currentLevelId,
-      "Could not find currentLevel with id " ++ currentLevelId,
+      t("current_level_not_found") ++ currentLevelId,
     )
 
   let selectedLevel =
     levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == state.selectedLevelId,
-      "Could not find selectedLevel with id " ++ state.selectedLevelId,
+      t("selected_level_not_found") ++ state.selectedLevelId,
     )
 
   React.useEffect1(() => {
@@ -445,7 +445,7 @@ let make = (
       let targetStatus =
         state.statusOfTargets |> ArrayUtils.unsafeFind(
           ts => ts |> TargetStatus.targetId == (target |> Target.id),
-          "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
+          t("target_status_for_selected_target_not_found") ++ (target |> Target.id),
         )
 
       <CoursesCurriculum__Overlay

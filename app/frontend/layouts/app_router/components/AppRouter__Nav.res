@@ -17,7 +17,7 @@ let renderLinks = (courses, selectedPage) => {
   | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
       course => Course.id(course) == courseId,
-      "Could not find currentCourse with ID " ++ courseId,
+      t("current_course_not_found") ++ courseId,
       courses,
     )
 
@@ -75,7 +75,7 @@ let courseSelector = (courses, selectedPage) => {
   | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
       course => Course.id(course) == courseId,
-      "Could not find currentCourse with ID " ++ courseId,
+      t("current_course_not_found") ++ courseId,
       courses,
     )
 
@@ -102,7 +102,7 @@ let renderLinksMobile = (courses, selectedPage) => {
   | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
       course => Course.id(course) == courseId,
-      "Could not find currentCourse with ID " ++ courseId,
+      t("current_course_not_found") ++ courseId,
       courses,
     )
 

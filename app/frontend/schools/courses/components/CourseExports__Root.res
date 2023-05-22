@@ -253,11 +253,11 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
               </div>
               <div className="mt-4">
                 <label className="block tracking-wide text-xs font-semibold mb-2">
-                  {t("export_tags_label")->str}
+                  {t("export_cohorts_label")->str}
                 </label>
                 <CohortSelector
-                  placeholder={t("search_tag_placeholder")}
-                  emptySelectionMessage={t("search_tags_empty")}
+                  placeholder={t("search_cohort_placeholder")}
+                  emptySelectionMessage={t("search_cohorts_empty")}
                   selected=state.selectedCohorts
                   unselected={unselectedCohort(cohorts, state.selectedCohorts)}
                   onChange={cohortSearch => send(UpdateCohortSearch(cohortSearch))}

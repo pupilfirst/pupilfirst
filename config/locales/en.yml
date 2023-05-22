@@ -490,6 +490,9 @@ en:
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses

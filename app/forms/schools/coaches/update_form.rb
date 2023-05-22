@@ -27,14 +27,14 @@ module Schools
 
       def save
         Faculty.transaction do
-          mark_faculty_as_exited(exited)
-
           user = model.user
           user.update!(user_params)
           user.avatar.attach(image) if image.present?
 
           model.update!(faculty_params)
         end
+
+        clear_faculty_enrollments if model.exited?
 
         model
       end
@@ -50,24 +50,11 @@ module Schools
       end
 
       def faculty_params
-        { connect_link: connect_link, public: public }
+        { connect_link: connect_link, public: public, exited: exited }
       end
 
       def faculty
         @faculty ||= school.faculty.find_by(id: id)
-      end
-
-      def mark_faculty_as_exited(exited)
-        should_exit = exited == "true" ? true : false
-
-        if !faculty.exited? && should_exit
-          faculty.exited = true
-          faculty.save!
-          clear_faculty_enrollments
-        elsif faculty.exited? && !should_exit
-          faculty.exited = false # unarchive
-          faculty.save!
-        end
       end
 
       def clear_faculty_enrollments

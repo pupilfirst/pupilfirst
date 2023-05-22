@@ -107,7 +107,6 @@ let make = (~coaches, ~authenticityToken) => {
           {switch state.coaches->Belt.List.some(_ => true) {
           | true =>
             state.coaches
-            |> List.sort((x, y) => int_of_string(Coach.id(x)) - int_of_string(Coach.id(y)))
             |> List.filter(coach => Coach.exited(coach) === isExitedTabSelected)
             |> List.map(coach =>
               <div

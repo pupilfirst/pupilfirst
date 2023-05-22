@@ -158,10 +158,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
   let formId = "coach-create-form"
 
   // Reload page when admin updates `coach.exited` property
-  let reloadOnExitedChange = if coach->Belt.Option.isSome {
-    Coach.exited(coach->Belt.Option.getExn) != state.exited
-  } else {
-    false
+  let reloadOnExitedChange = switch coach {
+  | Some(coach) => Coach.exited(coach) != state.exited
+  | None => false
   }
 
   let addCoach = json => {
@@ -250,7 +249,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     })
     |> ignore
   }
-  let submitForm = (event, refreshPage: bool) => {
+  let submitForm = (event, refreshPage) => {
     ReactEvent.Form.preventDefault(event)
     send(UpdateSaving)
     let element = ReactDOM.querySelector("#" ++ formId)

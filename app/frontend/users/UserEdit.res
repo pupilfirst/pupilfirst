@@ -294,7 +294,7 @@ let confirmDeletionWindow = (state, send) =>
           cancelButtonText={t("cancel")}
           onConfirm={() => initiateAccountDeletion(state, send)}
           onCancel={() => send(ChangeDeleteAccountFormVisibility(false))}
-          disableConfirm=state.deletingAccount
+          disableConfirm={state.deletingAccount || state.email != state.emailForAccountDeletion}
           alertType=#Critical
         />
       }

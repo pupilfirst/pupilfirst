@@ -516,6 +516,7 @@ en:
       milestone_targets: Milestone targets
       nav_next_level: Next Level
       nav_previous_level: Previous Level
+      milestone_target_label: Milestone
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
@@ -595,6 +596,7 @@ en:
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+      milestone_target_label: Milestone
     CoursesCurriculum__Quiz:
       next_question: Next Question
       question: Question
@@ -672,6 +674,8 @@ en:
       targets_completed: "Completed: %{targetsCount}"
       targets_overview: Targets Overview
       targets_pending_review: "Pending Review: %{targetsCount}"
+      milestone_completed: "Completed"
+      milestone_pending: "Pending"
     CoursesReport__SubmissionsList:
       completed: Completed
       filter_by_another_level: Filter by another level

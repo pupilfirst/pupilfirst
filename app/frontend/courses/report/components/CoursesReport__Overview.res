@@ -221,7 +221,7 @@ let make = (~overviewData, ~coaches) =>
         <div className="w-full">
           <div className="mb-8">
             <h6 className="font-semibold mb-4"> {"Milestone Targets Completion Status" |> str} </h6>
-            <div className="flex flex-col">
+            <div className="flex flex-col space-y-1">
               {ArrayUtils.copyAndSort(
                 (a, b) =>
                   a->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber -
@@ -229,15 +229,29 @@ let make = (~overviewData, ~coaches) =>
                 StudentOverview.milestoneTargetsCompletionStatus(overview),
               )
               ->Js.Array2.map(data => {
-                <div className="flex">
+                <Link
+                  href={"/targets" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
+                  className="flex group items-center p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="mr-2">
-                    <p className="text-sm font-semibold">
-                      {<FaIcon
-                        classes={data->CoursesReport__MilestoneTargetCompletionStatus.completed
-                          ? "fas fa-check-circle text-green-600"
-                          : "fa fa-times-circle text-gray-600"}
+                    <span
+                      className={"text-xs font-medium " ++ {
+                        data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                          ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
+                          : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
+                      }}>
+                      {<Icon
+                        className={data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                          ? "if i-check-circle-solid text-green-600"
+                          : "if i-dashed-circle-light text-orange-600"}
                       />}
-                    </p>
+                      {data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                        ? <span className="ms-1 hidden group-hover:inline-flex">
+                            {t("milestone_completed") |> str}
+                          </span>
+                        : <span className="ms-1 hidden group-hover:inline-flex">
+                            {t("milestone_pending") |> str}
+                          </span>}
+                    </span>
                   </div>
                   <div>
                     <p className="text-sm font-semibold mr-2">
@@ -247,14 +261,13 @@ let make = (~overviewData, ~coaches) =>
                       ->str}
                     </p>
                   </div>
-                  <div className="flex-1">
-                    <Link
-                      href={"/targets" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
-                      className="underline">
-                      {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
-                    </Link>
+                  <div className="flex-1 text-sm">
+                    {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
                   </div>
-                </div>
+                  <Icon
+                    className="if i-arrow-right-regular text-primary-500 hidden group-hover:inline-flex"
+                  />
+                </Link>
               })
               ->React.array}
             </div>

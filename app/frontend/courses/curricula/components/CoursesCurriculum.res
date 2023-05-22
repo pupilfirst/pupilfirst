@@ -19,7 +19,7 @@ type state = {
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--" ++ (targetStatus |> TargetStatus.statusClassesSufix)
-  "curriculum__target-status px-3 py-px ms-4 h-6 " ++ statusClasses
+  "curriculum__target-status px-1 md:px-3 py-px ms-4 h-6 " ++ statusClasses
 }
 
 let rendertarget = (target, statusOfTargets, author, courseId) => {
@@ -36,14 +36,21 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     <Link
       props={"data-target-id": targetId}
       href={"/targets/" ++ targetId}
-      className={"p-6 flex grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg" ++ (
-        Target.milestone(target) ? " border-l-4 border-primary-500" : ""
-      )}
+      className={"p-3 md:p-6 flex flex-1 items-start justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg"}
       ariaLabel={"Select Target: " ++
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium  leading-snug"> {Target.title(target)->str} </span>
+      <div className="flex items-start font-medium leading-snug">
+        {Target.milestone(target)
+          ? <div
+              className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 px-1.5 md:px-2 py-1 rounded-md mr-2">
+              <Icon className="if i-milestone-solid text-sm" />
+              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
+            </div>
+          : React.null}
+        <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
+      </div>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -72,8 +79,8 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
-      className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
-      <div className="p-6 pt-5">
+      className="curriculum__target-group max-w-3xl mx-auto bg-white rounded-lg shadow-md relative z-10 overflow-hidden ">
+      <div className="p-3 md:p-6 pt-5 text-center">
         <div className="text-2xl font-bold leading-snug">
           {TargetGroup.name(targetGroup)->str}
         </div>

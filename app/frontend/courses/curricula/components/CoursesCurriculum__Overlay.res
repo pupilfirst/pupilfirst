@@ -220,7 +220,7 @@ let renderTargetStatus = targetStatus => {
 }
 
 let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 " ++
+  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-3 md:p-6 " ++
   targetStatusClass("course-overlay__header-title-card--", targetStatus)
 
 let renderLocked = text =>
@@ -240,9 +240,19 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:me-6 md:text-xl">
-          {target |> Target.title |> str}
-        </h1>
+        <div
+          className="flex flex-col md:flex-row items-start md:items-center font-medium leading-snug">
+          {Target.milestone(target)
+            ? <div
+                className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 px-1.5 md:px-2 py-1 rounded-md mr-2">
+                <Icon className="if i-milestone-solid text-sm" />
+                <span className="ms-1"> {t("milestone_target_label") |> str} </span>
+              </div>
+            : React.null}
+          <h1 className="text-base leading-snug md:me-6 md:text-xl">
+            {target |> Target.title |> str}
+          </h1>
+        </div>
         {renderTargetStatus(targetStatus)}
       </div>
     </div>

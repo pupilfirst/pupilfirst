@@ -2,6 +2,12 @@
   <title><%= @course.name %> | <%= t(".title") %></title>
 <% end %>
 <% presenter = Schools::Courses::ExportsPresenter.new(self, @course) %>
+<div class="mt-4 mx-auto">
+  <%= paginate presenter.course_exports %>
+  <div class="text-center text-sm">
+    <%= page_entries_info presenter.course_exports, entry_name: 'Export' %>
+  </div>
+</div>
 <script id="schools-courses-exports__props" type="application/json">
   <%= presenter.props_to_json.html_safe %>
 </script>

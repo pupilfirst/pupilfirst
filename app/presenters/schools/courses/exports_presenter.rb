@@ -16,6 +16,17 @@ module Schools
         }
       end
 
+      def course_exports
+        @course_exports ||=
+          @course
+            .course_exports
+            .order(created_at: :DESC)
+            .includes(:tags)
+            .with_attached_file
+            .page(params[:page])
+            .per(10)
+      end
+
       private
 
       def tag_details
@@ -47,17 +58,6 @@ module Schools
             cohorts: export.cohort.pluck(:name)
           }
         end
-      end
-
-      def course_exports
-        @course_exports ||=
-          @course
-            .course_exports
-            .order(created_at: :DESC)
-            .includes(:tags)
-            .with_attached_file
-            .limit(50)
-            .load
       end
 
       def cohort_details

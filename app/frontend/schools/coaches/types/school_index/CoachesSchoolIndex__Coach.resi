@@ -18,7 +18,7 @@ let connectLink: t => option<string>
 
 let exited: t => bool
 
-let updateList: (list<t>, t) => list<t>
+let updateList: (array<t>, t) => array<t>
 
 let affiliation: t => option<string>
 

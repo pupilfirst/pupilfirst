@@ -12,7 +12,7 @@ type formVisible =
   | CoachEditor(option<Coach.t>)
 
 type state = {
-  coaches: list<Coach.t>,
+  coaches: array<Coach.t>,
   formVisible: formVisible,
   coachCount: int,
 }
@@ -38,7 +38,7 @@ let reducer = (state, action) =>
 let make = (~coaches, ~authenticityToken) => {
   let (state, send) = React.useReducer(
     reducer,
-    {coaches: coaches, formVisible: None, coachCount: Belt.List.length(coaches)},
+    {coaches: coaches, formVisible: None, coachCount: Js.Array2.length(coaches)},
   )
 
   let currentPath = "coaches?status="
@@ -104,11 +104,11 @@ let make = (~coaches, ~authenticityToken) => {
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
         <div className="max-w-2xl w-full mx-auto relative">
-          {switch state.coaches->Belt.List.some(_ => true) {
+          {switch state.coaches->Js.Array2.some(_ => true) {
           | true =>
             state.coaches
-            |> List.filter(coach => Coach.exited(coach) === isExitedTabSelected)
-            |> List.map(coach =>
+            ->Js.Array2.filter(coach => Coach.exited(coach) === isExitedTabSelected)
+            ->Js.Array2.map(coach =>
               <div
                 key={coach->Coach.id}
                 className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
@@ -142,8 +142,7 @@ let make = (~coaches, ~authenticityToken) => {
                 </div>
               </div>
             )
-            |> Array.of_list
-            |> React.array
+            ->React.array
           | false =>
             <div className="mt-15 pt-10">
               <img className="mx-auto h-40" src={noCoachesFoundIcon} />

@@ -77,7 +77,6 @@ let make = (
     reducer,
     {targetTitle: "", savingNewTarget: false, validTargetTitle: false},
   )
-  let milestone = targetGroup |> TargetGroup.milestone
   let targetGroupArchived = targetGroup |> TargetGroup.archived
 
   let targetsInGroup =

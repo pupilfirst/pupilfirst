@@ -1076,6 +1076,7 @@ en:
       target_group: Target Group
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
+      target_setting_milestone: Is this target a milestone?
       target_role:
         help: Should students in a team submit work on a target individually, or together?
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
@@ -1098,7 +1099,6 @@ en:
       description_placeholder: Type target group description
       group_archived_q: Is this target group archived?
       group_details: Target Group Details
-      milestone_q: Is this a milestone target group?
       target_group_created_notification: Target Group created successfully
       target_group_updated_notificaion: Target Group updated successfully
       title: Title

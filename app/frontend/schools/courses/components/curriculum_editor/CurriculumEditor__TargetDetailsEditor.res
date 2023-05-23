@@ -42,6 +42,7 @@ type state = {
   checklist: array<ChecklistItem.t>,
   completionInstructions: string,
   targetDetails: option<TargetDetails.t>,
+  milestone: bool,
 }
 
 type action =
@@ -71,6 +72,7 @@ type action =
   | UpdateSaving
   | ClearTargetGroupId
   | ResetEditor
+  | UpdateMilestone(bool)
 
 module TargetDetailsQuery = %graphql(`
     query TargetDetailsQuery($targetId: ID!) {
@@ -94,6 +96,7 @@ module TargetDetailsQuery = %graphql(`
         linkToComplete
         role
         checklist
+        milestone
       }
   }
 `)
@@ -157,6 +160,7 @@ let reducer = (state, action) =>
       checklist: checklist,
       loading: false,
       targetDetails: Some(targetDetails),
+      milestone: targetDetails.milestone,
     }
   | UpdateTitle(title) => {...state, title: title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
@@ -257,6 +261,7 @@ let reducer = (state, action) =>
       prerequisiteTargets: [],
     }
   | ClearTargetGroupId => {...state, targetGroupId: None, dirty: true}
+  | UpdateMilestone(milestone) => {...state, milestone: milestone, dirty: true}
   }
 
 let updateTitle = (send, event) => {
@@ -430,6 +435,11 @@ let updateCompletionInstructions = (send, event) =>
 let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateMethodOfCompletion(methodOfCompletion))
+}
+
+let updateMilestone = (milestone, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateMilestone(milestone))
 }
 
 let updateTargetRole = (role, send, event) => {
@@ -862,7 +872,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
     ~linkToComplete,
     ~visibility=visibilityAsString,
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
-    ~milestone=false,
+    ~milestone=state.milestone,
     (),
   )
 
@@ -914,6 +924,7 @@ let make = (
       completionInstructions: "",
       targetGroupSearchInput: "",
       targetDetails: None,
+      milestone: false,
     },
   )
   let targetId = target |> Target.id
@@ -1042,6 +1053,27 @@ let make = (
                     <span className="text-sm">
                       {t("one_student_team") |> str} <br /> {t("need_submit") |> str}
                     </span>
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center mb-6">
+                <label
+                  className="block tracking-wide text-sm font-semibold me-6" htmlFor="milestone">
+                  <span className="me-2">
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
+                  </span>
+                  {t("target_setting_milestone")->str}
+                </label>
+                <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
+                  <button
+                    onClick={updateMilestone(true, send)}
+                    className={booleanButtonClasses(state.milestone)}>
+                    {ts("_yes") |> str}
+                  </button>
+                  <button
+                    onClick={updateMilestone(false, send)}
+                    className={booleanButtonClasses(!state.milestone)}>
+                    {ts("_no") |> str}
                   </button>
                 </div>
               </div>

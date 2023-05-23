@@ -1094,7 +1094,6 @@ ar:
       description_placeholder: Type target group description
       group_archived_q: Is this target group archived?
       group_details: Target Group Details
-      milestone_q: Is this a milestone target group?
       target_group_created_notification: Target Group created successfully
       target_group_updated_notificaion: Target Group updated successfully
       title: Title

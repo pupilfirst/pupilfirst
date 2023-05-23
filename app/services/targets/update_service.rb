@@ -12,8 +12,7 @@ module Targets
         @target.link_to_complete = target_params[:link_to_complete]
         @target.milestone = target_params[:milestone]
 
-        @target.resubmittable =
-          target_params[:checklist].present?
+        @target.resubmittable = target_params[:checklist].present?
 
         @target.link_to_complete = target_params[:link_to_complete]
 
@@ -99,10 +98,9 @@ module Targets
     end
 
     def destroy_quiz
-      @target
-        .quiz
-        .quiz_questions
-        .each { |quiz_question| quiz_question.answer_options.delete_all }
+      @target.quiz.quiz_questions.each do |quiz_question|
+        quiz_question.answer_options.delete_all
+      end
 
       @target.quiz.quiz_questions.destroy_all
       @target.quiz.destroy

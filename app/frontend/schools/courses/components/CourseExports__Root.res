@@ -204,7 +204,7 @@ let toggleChoiceClasses = value => {
 let make = (~course, ~exports, ~tags, ~cohorts) => {
   let (state, send) = React.useReducerWithMapState(reducer, exports, computeInitialState)
 
-  <div className="bg-gray-50 h-full" key="School admin coaches course index">
+  <div className="bg-gray-50 min-h-full" key="School admin coaches course index">
     {state.drawerOpen
       ? <SchoolAdmin__EditorDrawer
           closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={t("close_export_form")}>
@@ -349,7 +349,7 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
             {t("no_exports_notice")->str}
           </div>
         : <div className="px-6 pb-4 mt-5 flex flex-1">
-            <div className="max-w-2xl w-full mx-auto relative">
+            <div className="max-w-2xl w-full mx-auto relative pb-20">
               <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
               <div className="flex mt-4 -mx-3 items-start flex-wrap">
                 {state.courseExports

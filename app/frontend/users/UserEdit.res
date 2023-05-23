@@ -284,6 +284,11 @@ let confirmDeletionWindow = (state, send) =>
                 className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 placeholder={t("email_placeholder")}
               />
+              <School__InputGroupError
+                message={t("incorrect_email_for_deletion")}
+                active={state.emailForAccountDeletion != state.email &&
+                  state.emailForAccountDeletion->String.length > 0}
+              />
             </div>
           </div>
 

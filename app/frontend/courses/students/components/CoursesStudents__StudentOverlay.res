@@ -70,6 +70,12 @@ module StudentDetailsQuery = %graphql(`
           evaluationCriterionId
           averageGrade
         }
+        milestoneTargetsCompletionStatus {
+          id
+          title
+          milestoneNumber
+          completed
+        }
         team {
           id
           name
@@ -134,6 +140,16 @@ let getStudentDetails = (studentId, setState) => {
         )
       )
 
+    let milestoneTargetsCompletionStatus =
+      response.studentDetails.milestoneTargetsCompletionStatus->Js.Array2.map(milestoneTarget =>
+        CoursesStudents__MilestoneTargetsCompletionStatus.make(
+          ~id=milestoneTarget.id,
+          ~title=milestoneTarget.title,
+          ~milestoneNumber=milestoneTarget.milestoneNumber,
+          ~completed=milestoneTarget.completed,
+        )
+      )
+
     let studentDetails = StudentDetails.make(
       ~id=studentId,
       ~hasArchivedNotes=response.hasArchivedCoachNotes,
@@ -170,6 +186,7 @@ let getStudentDetails = (studentId, setState) => {
           ),
         )
       ),
+      ~milestoneTargetsCompletionStatus,
     )
 
     setState(state => {...state, studentData: Loaded(studentDetails)})
@@ -508,6 +525,49 @@ let make = (~studentId, ~userId) => {
               </p>
               {ids(student)}
               {inactiveWarning(student)}
+            </div>
+            <div className="mt-8">
+              <h6 className="font-semibold"> {"Milestone Targets Completion Status"->str} </h6>
+              {ArrayUtils.copyAndSort(
+                (a, b) =>
+                  a->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber -
+                    b->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber,
+                StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
+              )
+              ->Js.Array2.map(data => {
+                <div
+                  className="flex group items-center p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
+                  <div className="mr-2">
+                    <span
+                      className={"text-xs font-medium " ++ {
+                        data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                          ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
+                          : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
+                      }}>
+                      {<Icon
+                        className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                          ? "if i-check-circle-solid text-green-600"
+                          : "if i-dashed-circle-light text-orange-600"}
+                      />}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold mr-2">
+                      {("M" ++
+                      string_of_int(
+                        CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
+                      ))->str}
+                    </p>
+                  </div>
+                  <div className="flex-1 text-sm">
+                    {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
+                  </div>
+                  <Icon
+                    className="if i-arrow-right-regular text-primary-500 hidden group-hover:inline-flex"
+                  />
+                </div>
+              })
+              ->React.array}
             </div>
             <div className="mb-8">
               <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>

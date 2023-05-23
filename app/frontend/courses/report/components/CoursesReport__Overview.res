@@ -229,8 +229,9 @@ let make = (~overviewData, ~coaches) =>
                 StudentOverview.milestoneTargetsCompletionStatus(overview),
               )
               ->Js.Array2.map(data => {
-                <Link
-                  href={"/targets" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
+                <a
+                  href={"/targets/" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
+                  target="_blank"
                   className="flex group items-center p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="mr-2">
                     <span
@@ -255,10 +256,10 @@ let make = (~overviewData, ~coaches) =>
                   </div>
                   <div>
                     <p className="text-sm font-semibold mr-2">
-                      {data
-                      ->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber
-                      ->string_of_int
-                      ->str}
+                      {("M" ++
+                      string_of_int(
+                        CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
+                      ))->str}
                     </p>
                   </div>
                   <div className="flex-1 text-sm">
@@ -267,7 +268,7 @@ let make = (~overviewData, ~coaches) =>
                   <Icon
                     className="if i-arrow-right-regular text-primary-500 hidden group-hover:inline-flex"
                   />
-                </Link>
+                </a>
               })
               ->React.array}
             </div>

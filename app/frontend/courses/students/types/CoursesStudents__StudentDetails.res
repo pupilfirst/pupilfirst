@@ -22,6 +22,7 @@ type t = {
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
   levels: array<Shared__Level.t>,
+  milestoneTargetsCompletionStatus: array<CoursesStudents__MilestoneTargetsCompletionStatus.t>,
   courseId: string,
 }
 
@@ -40,8 +41,8 @@ let levels = t => t.levels
 let courseId = t => t.courseId
 
 let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
-  evaluationCriterionId,
-  grade,
+  evaluationCriterionId: evaluationCriterionId,
+  grade: grade,
 }
 
 let totalTargets = t => t.totalTargets |> float_of_int
@@ -65,6 +66,8 @@ let averageGrades = t => t.averageGrades
 let completedLevelIds = t => t.completedLevelIds
 
 let gradeValue = averageGrade => averageGrade.grade
+
+let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) =>
   evaluationCriteria |> ArrayUtils.unsafeFind(
@@ -102,7 +105,7 @@ let computeAverageQuizScore = quizScores => {
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
-let makeTeam = (~id, ~name, ~students) => {id, name, students}
+let makeTeam = (~id, ~name, ~students) => {id: id, name: name, students: students}
 
 let make = (
   ~id,
@@ -118,18 +121,20 @@ let make = (
   ~team,
   ~levels,
   ~courseId,
+  ~milestoneTargetsCompletionStatus,
 ) => {
-  id,
-  coachNotes,
-  hasArchivedNotes,
-  evaluationCriteria,
-  totalTargets,
-  targetsCompleted,
-  quizScores,
-  averageGrades,
-  completedLevelIds,
-  student,
-  team,
-  levels,
-  courseId,
+  id: id,
+  coachNotes: coachNotes,
+  hasArchivedNotes: hasArchivedNotes,
+  evaluationCriteria: evaluationCriteria,
+  totalTargets: totalTargets,
+  targetsCompleted: targetsCompleted,
+  quizScores: quizScores,
+  averageGrades: averageGrades,
+  completedLevelIds: completedLevelIds,
+  student: student,
+  team: team,
+  levels: levels,
+  courseId: courseId,
+  milestoneTargetsCompletionStatus: milestoneTargetsCompletionStatus,
 }

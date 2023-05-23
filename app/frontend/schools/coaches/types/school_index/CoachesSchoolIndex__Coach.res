@@ -73,5 +73,7 @@ let make = (
 
 let updateList = (coaches, coach) => {
   let oldList = coaches->Js.Array2.filter(t => t.id !== coach.id)
-  oldList->Js.Array2.concat([coach])
+  oldList
+  ->Js.Array2.concat([coach])
+  ->Js.Array2.sortInPlaceWith((c1, c2) => int_of_string(c1.id) - int_of_string(c2.id))
 }

@@ -127,15 +127,15 @@ let computeInitialState = coach =>
       affiliation: "",
     }
   | Some(coach) => {
-      name: coach |> Coach.name,
-      email: coach |> Coach.email,
-      title: coach |> Coach.title,
-      public: coach |> Coach.public,
-      connectLink: switch coach |> Coach.connectLink {
+      name: coach->Coach.name,
+      email: coach->Coach.email,
+      title: coach->Coach.title,
+      public: coach->Coach.public,
+      connectLink: switch coach->Coach.connectLink {
       | Some(connectLink) => connectLink
       | None => ""
       },
-      exited: coach |> Coach.exited,
+      exited: coach->Coach.exited,
       dirty: false,
       saving: false,
       hasNameError: false,
@@ -143,11 +143,11 @@ let computeInitialState = coach =>
       hasTitleError: false,
       hasLinkedInUrlError: false,
       hasConnectLinkError: false,
-      imageFileName: switch coach |> Coach.imageFileName {
+      imageFileName: switch coach->Coach.imageFileName {
       | Some(imageFileName) => imageFileName
       | None => ""
       },
-      affiliation: coach |> Coach.affiliation |> OptionUtils.toString,
+      affiliation: coach->Coach.affiliation->OptionUtils.toString,
     }
   }
 
@@ -157,10 +157,10 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
 
   let formId = "coach-create-form"
 
-  // Reload page when admin updates `coach.exited` property
+  // Reload page when admin updates `coach.exited` property or when new coach is added
   let reloadOnExitedChange = switch coach {
   | Some(coach) => Coach.exited(coach) != state.exited
-  | None => false
+  | None => true
   }
 
   let addCoach = json => {
@@ -213,7 +213,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
   }
   let sendCoach = (formData, reloadOnSuccess) => {
     let endPoint = switch coach {
-    | Some(coach) => "/school/coaches/" ++ (coach |> Coach.id)
+    | Some(coach) => "/school/coaches/" ++ coach->Coach.id
     | None => "/school/coaches/"
     }
     let httpMethod = switch coach {
@@ -275,9 +275,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
             <div className="max-w-2xl px-6 pt-5 mx-auto">
               <h5 className="uppercase text-center border-b border-gray-300 pb-2">
                 {switch coach {
-                | Some(coach) => coach |> Coach.name
+                | Some(coach) => coach->Coach.name
                 | None => t("add_coach")
-                } |> str}
+                }->str}
               </h5>
             </div>
             <form key="xxx" id=formId onSubmit={event => submitForm(event, reloadOnExitedChange)}>
@@ -287,9 +287,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
                     htmlFor="name">
-                    {t("name") |> str}
+                    {t("name")->str}
                   </label>
-                  <span> {"*" |> str} </span>
+                  <span> {"*"->str} </span>
                   <input
                     autoFocus=true
                     className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
@@ -310,9 +310,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <div className="mt-5">
                     <label
                       className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-                      {t("email") |> str}
+                      {t("email")->str}
                     </label>
-                    <span> {"*" |> str} </span>
+                    <span> {"*"->str} </span>
                     <input
                       className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                       id="email"
@@ -330,9 +330,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 <div className="mt-5">
                   <label
                     className="inline-block tracking-wide text-xs font-semibold" htmlFor="title">
-                    {t("title") |> str}
+                    {t("title")->str}
                   </label>
-                  <span> {"*" |> str} </span>
+                  <span> {"*"->str} </span>
                   <input
                     className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="title"
@@ -350,7 +350,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="affiliation">
-                    {t("affiliation") |> str}
+                    {t("affiliation")->str}
                   </label>
                   <input
                     value=state.affiliation
@@ -367,7 +367,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="connectLink">
-                    {t("connect_link") |> str}
+                    {t("connect_link")->str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
@@ -395,7 +395,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     <label
                       className="block tracking-wide text-xs font-semibold me-3"
                       htmlFor="evaluated">
-                      {t("coach_public_q") |> str}
+                      {t("coach_public_q")->str}
                     </label>
                     <div id="notification" className="flex shrink-0 overflow-hidden ">
                       <div>
@@ -408,7 +408,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                           name="faculty[public]"
                           value="true"
                           className={booleanButtonClasses(state.public)}>
-                          {ts("_yes") |> str}
+                          {ts("_yes")->str}
                         </button>
                         <button
                           onClick={_event => {
@@ -416,7 +416,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                             send(UpdatePublic(false))
                           }}
                           className={booleanButtonClasses(!state.public)}>
-                          {ts("_no") |> str}
+                          {ts("_no")->str}
                         </button>
                       </div>
                       <input
@@ -428,7 +428,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 <div className="mt-5">
                   <label
                     className="block tracking-wide text-xs font-semibold" htmlFor="avatarUploader">
-                    {ts("avatar") |> str}
+                    {ts("avatar")->str}
                   </label>
                   <div
                     className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
@@ -447,7 +447,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     />
                     <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
                       <i className="fas fa-upload me-2 text-gray-600 text-lg" />
-                      <span className="truncate"> {avatarUploaderText() |> str} </span>
+                      <span className="truncate"> {avatarUploaderText()->str} </span>
                     </label>
                   </div>
                 </div>
@@ -497,7 +497,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       {switch coach {
                       | Some(_coach) => t("coach_update")
                       | None => t("coach_add")
-                      } |> str}
+                      }->str}
                     </button>
                   </div>
                 </div>

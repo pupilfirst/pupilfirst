@@ -14,34 +14,50 @@ type formVisible =
 type state = {
   coaches: array<Coach.t>,
   formVisible: formVisible,
-  coachCount: int,
 }
 
 type action =
   | UpdateFormVisible(formVisible)
   | UpdateCoaches(Coach.t)
 
+type currentTab = ActiveCoaches | ExitedCoaches
+
 let isSelectedTabExited = () => {
   let searchQuery = RescriptReactRouter.useUrl().search
-  searchQuery |> Js.String.includes("exited")
+  "exited"->Js.String.includes(searchQuery)
 }
 
 let reducer = (state, action) =>
   switch action {
   | UpdateFormVisible(formVisible) => {...state, formVisible: formVisible}
   | UpdateCoaches(coach) =>
-    let newCoachesList = coach |> Coach.updateList(state.coaches)
+    let newCoachesList = state.coaches->Coach.updateList(coach)
     {...state, coaches: newCoachesList}
   }
 
+let coachesTab = (currentTab, coachCount, isActive) => {
+  let activeTabStyle = isActive ? "border-b-2 border-primary-500 text-primary-500" : ""
+  let (label, currentPath) = switch currentTab {
+  | ActiveCoaches => (tr("active_coaches"), "coaches?status=active")
+  | ExitedCoaches => (tr("exited_coaches"), "coaches?status=exited")
+  }
+  <a
+    role="tab"
+    href={currentPath}
+    className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${activeTabStyle}`}>
+    <span> {label->str} </span>
+    {isActive
+      ? <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
+          {string_of_int(coachCount)->str}
+        </span>
+      : React.null}
+  </a>
+}
+
 @react.component
 let make = (~coaches, ~authenticityToken) => {
-  let (state, send) = React.useReducer(
-    reducer,
-    {coaches: coaches, formVisible: None, coachCount: Js.Array2.length(coaches)},
-  )
+  let (state, send) = React.useReducer(reducer, {coaches: coaches, formVisible: None})
 
-  let currentPath = "coaches?status="
   let isExitedTabSelected = isSelectedTabExited()
 
   let closeFormCB = () => send(UpdateFormVisible(None))
@@ -65,95 +81,67 @@ let make = (~coaches, ~authenticityToken) => {
               }}
               className="flex items-center bg-primary-500 text-white py-3 px-6 justify-between rounded-lg text-primary-500 hover:text-white hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-white">
               <PfIcon className="if i-plus-circle-solid if-fw" />
-              <span className="ms-2 text-sm font-medium"> {tr("add_new_coach") |> str} </span>
+              <span className="ms-2 text-sm font-medium"> {tr("add_new_coach")->str} </span>
             </button>
           </div>
         </div>
         <div className="max-w-3xl mx-auto">
           <div className="px-12 flex justify-start" role="tablist">
-            <a
-              role="tab"
-              href={`${currentPath}active`}
-              className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500
-               ${isExitedTabSelected ? "" : "border-b-2 border-primary-500 text-primary-500"}`}>
-              <span> {tr("active_coaches")->str} </span>
-              {switch isExitedTabSelected {
-              | true => React.null
-              | false =>
-                <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
-                  {state.coachCount->Belt.Int.toString->str}
-                </span>
-              }}
-            </a>
-            <a
-              role="tab"
-              href={`${currentPath}exited`}
-              className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500
-               ${isExitedTabSelected ? "border-b-2 border-primary-500 text-primary-500" : ""}`}>
-              <span className="sm:inline"> {tr("exited_coaches")->str} </span>
-              {switch isExitedTabSelected {
-              | true =>
-                <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
-                  {state.coachCount->Belt.Int.toString->str}
-                </span>
-              | false => React.null
-              }}
-            </a>
+            {coachesTab(
+              ActiveCoaches,
+              state.coaches->Js.Array2.length,
+              isExitedTabSelected == false,
+            )}
+            {coachesTab(ExitedCoaches, state.coaches->Js.Array2.length, isExitedTabSelected)}
           </div>
         </div>
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
         <div className="max-w-2xl w-full mx-auto relative">
-          {switch state.coaches->Js.Array2.some(_ => true) {
-          | true =>
-            state.coaches
-            ->Js.Array2.filter(coach => Coach.exited(coach) === isExitedTabSelected)
-            ->Js.Array2.map(coach =>
-              <div
-                key={coach->Coach.id}
-                className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
-                <div className="course-faculty__list-item flex w-full">
-                  <button
-                    ariaLabel={"Edit: " ++ (coach |> Coach.name)}
-                    className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer rounded-lg hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
-                    onClick={_event => {
-                      ReactEvent.Mouse.preventDefault(_event)
-                      send(UpdateFormVisible(CoachEditor(Some(coach))))
-                    }}>
-                    <div className="flex flex-1 py-4 px-4">
-                      <img
-                        className="w-10 h-10 rounded-full me-4 object-cover"
-                        src={coach |> Coach.imageUrl}
-                        alt={tr("avatar_of") ++ (coach |> Coach.name)}
-                      />
-                      <div className="text-sm ">
-                        <p className="font-semibold"> {coach |> Coach.name |> str} </p>
-                        <p className="text-gray-600 text-xs mt-px">
-                          {coach |> Coach.title |> str}
-                        </p>
-                      </div>
-                    </div>
-                    <span
-                      className="flex items-center shrink-0 ms-2 py-4 px-4 text-gray-600 hover:text-primary-500 text-sm">
-                      <i className="fas fa-edit text-normal" />
-                      <span className="ms-1"> {ts("edit") |> str} </span>
-                    </span>
-                  </button>
+          {state.coaches->ArrayUtils.isEmpty
+            ? <div className="mt-15 pt-10">
+                <img className="mx-auto h-40" src={noCoachesFoundIcon} />
+                <div className=" text-center mt-14">
+                  <span className="text-lg sm:text-2xl font-bold"> {tr("no_coaches")->str} </span>
+                  <p className="pt-3 text-gray-500 font-medium">
+                    {(isExitedTabSelected ? tr("no_exited_coaches") : tr("no_active_coaches"))->str}
+                  </p>
                 </div>
               </div>
-            )
-            ->React.array
-          | false =>
-            <div className="mt-15 pt-10">
-              <img className="mx-auto h-40" src={noCoachesFoundIcon} />
-              <div className=" text-center mt-14">
-                <span className="text-lg sm:text-2xl font-bold"> {tr("no_coaches")->str} </span>
-                <p className="pt-3 text-gray-500 font-medium">
-                  {(isExitedTabSelected ? tr("no_exited_coaches") : tr("no_active_coaches"))->str}
-                </p>
-              </div>
-            </div>
-          }}
+            : state.coaches
+              ->Js.Array2.map(coach =>
+                <div
+                  key={coach->Coach.id}
+                  className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
+                  <div className="course-faculty__list-item flex w-full">
+                    <button
+                      ariaLabel={"Edit: " ++ Coach.name(coach)}
+                      className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer rounded-lg hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+                      onClick={_event => {
+                        ReactEvent.Mouse.preventDefault(_event)
+                        send(UpdateFormVisible(CoachEditor(Some(coach))))
+                      }}>
+                      <div className="flex flex-1 py-4 px-4">
+                        <img
+                          className="w-10 h-10 rounded-full me-4 object-cover"
+                          src={Coach.imageUrl(coach)}
+                          alt={tr("avatar_of") ++ Coach.name(coach)}
+                        />
+                        <div className="text-sm ">
+                          <p className="font-semibold"> {Coach.name(coach)->str} </p>
+                          <p className="text-gray-600 text-xs mt-px"> {Coach.title(coach)->str} </p>
+                        </div>
+                      </div>
+                      <span
+                        className="flex items-center shrink-0 ms-2 py-4 px-4 text-gray-600 hover:text-primary-500 text-sm">
+                        <i className="fas fa-edit text-normal" />
+                        <span className="ms-1"> {ts("edit")->str} </span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )
+              ->React.array}
         </div>
       </div>
     </div>

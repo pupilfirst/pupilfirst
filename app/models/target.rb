@@ -19,7 +19,6 @@ class Target < ApplicationRecord
     STATUS_PENDING_MILESTONE
   ].freeze
 
-  belongs_to :faculty, optional: true
   has_many :timeline_events, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
@@ -44,29 +43,29 @@ class Target < ApplicationRecord
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
 
-  ROLE_STUDENT = 'student'
-  ROLE_TEAM = 'team'
+  ROLE_STUDENT = "student"
+  ROLE_TEAM = "team"
 
   # See en.yml's target.role
   def self.valid_roles
     [ROLE_STUDENT, ROLE_TEAM].freeze
   end
 
-  TYPE_TODO = 'Todo'
-  TYPE_ATTEND = 'Attend'
-  TYPE_READ = 'Read'
-  TYPE_LEARN = 'Learn'
+  TYPE_TODO = "Todo"
+  TYPE_ATTEND = "Attend"
+  TYPE_READ = "Read"
+  TYPE_LEARN = "Learn"
 
-  VISIBILITY_LIVE = 'live'
-  VISIBILITY_ARCHIVED = 'archived'
-  VISIBILITY_DRAFT = 'draft'
+  VISIBILITY_LIVE = "live"
+  VISIBILITY_ARCHIVED = "archived"
+  VISIBILITY_DRAFT = "draft"
 
-  CHECKLIST_KIND_SHORT_TEXT = 'shortText'
-  CHECKLIST_KIND_LONG_TEXT = 'longText'
-  CHECKLIST_KIND_LINK = 'link'
-  CHECKLIST_KIND_FILES = 'files'
-  CHECKLIST_KIND_MULTI_CHOICE = 'multiChoice'
-  CHECKLIST_KIND_AUDIO = 'audio'
+  CHECKLIST_KIND_SHORT_TEXT = "shortText"
+  CHECKLIST_KIND_LONG_TEXT = "longText"
+  CHECKLIST_KIND_LINK = "link"
+  CHECKLIST_KIND_FILES = "files"
+  CHECKLIST_KIND_MULTI_CHOICE = "multiChoice"
+  CHECKLIST_KIND_AUDIO = "audio"
 
   def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
@@ -107,9 +106,9 @@ class Target < ApplicationRecord
     return if days_to_complete.blank? && session_at.blank?
     return if [days_to_complete, session_at].one?
 
-    errors.add(:base, 'One of days_to_complete, or session_at should be set.')
-    errors.add(:days_to_complete, 'if blank, session_at should be set')
-    errors.add(:session_at, 'if blank, days_to_complete should be set')
+    errors.add(:base, "One of days_to_complete, or session_at should be set.")
+    errors.add(:days_to_complete, "if blank, session_at should be set")
+    errors.add(:session_at, "if blank, days_to_complete should be set")
   end
 
   validate :avoid_level_mismatch_with_group
@@ -118,7 +117,7 @@ class Target < ApplicationRecord
     return if target_group.blank? || level.blank?
     return if level == target_group.level
 
-    errors.add(:level, 'should match level of target group')
+    errors.add(:level, "should match level of target group")
   end
 
   validate :must_be_safe_to_change_visibility
@@ -130,7 +129,7 @@ class Target < ApplicationRecord
     end
     return if safe_to_change_visibility
 
-    errors.add(:visibility, 'cannot be modified unsafely')
+    errors.add(:visibility, "cannot be modified unsafely")
   end
 
   validate :same_course_for_target_and_evaluation_criteria
@@ -143,7 +142,7 @@ class Target < ApplicationRecord
 
       errors.add(
         :base,
-        'Target and evaluation criterion must belong to same course'
+        "Target and evaluation criterion must belong to same course"
       )
     end
   end
@@ -163,7 +162,7 @@ class Target < ApplicationRecord
   end
 
   def founder_role?
-    ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
+    ActiveSupport::Deprecation.warn("Use `individual_target?` instead")
     role == Target::ROLE_STUDENT
   end
 
@@ -189,7 +188,7 @@ class Target < ApplicationRecord
   end
 
   def founder_event?
-    ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
+    ActiveSupport::Deprecation.warn("Use `individual_target?` instead")
     role == ROLE_STUDENT
   end
 

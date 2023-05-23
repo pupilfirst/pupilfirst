@@ -81,7 +81,9 @@ let sitemap = links =>
     <div className="flex flex-wrap">
       {links
       ->Js.Array2.map(((id, title, _, _)) =>
-        <div className="w-1/3 pe-4 mt-3 text-xs font-semibold" key=id> {title->str} </div>
+        <div className="w-1/3 pe-4 mt-3 text-xs font-semibold break-words" key=id>
+          {title->str}
+        </div>
       )
       ->React.array}
     </div>
@@ -106,7 +108,7 @@ let address = a =>
   switch a {
   | Some(a) =>
     <div
-      className="text-xs font-semibold mt-3 leading-normal"
+      className="text-xs font-semibold mt-3 leading-normal break-words"
       dangerouslySetInnerHTML={Markdown.toSafeHTML(a, Markdown.Permissive)}
     />
   | None =>
@@ -323,11 +325,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               |> Customizations.filterLinks(~header=true)
               |> Customizations.unpackLinks,
             )}
-            {editIcon(
-              "ms-3",
-              showEditor(LinksEditor(HeaderLink), send),
-              t("edit_header_links"),
-            )}
+            {editIcon("ms-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
           </div>
         </div>
       </div>
@@ -441,11 +439,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                   className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {t("contact")->str} </span>
-                    {editIcon(
-                      "ms-3",
-                      showEditor(ContactsEditor, send),
-                      t("edit_contact_details"),
-                    )}
+                    {editIcon("ms-3", showEditor(ContactsEditor, send), t("edit_contact_details"))}
                   </div>
                   {address(state.customizations |> Customizations.address)}
                   {emailAddress(state.customizations |> Customizations.emailAddress)}

@@ -127,9 +127,6 @@ class UsersController < ApplicationController
 
         session.delete(:course_requiring_discord)
         course
-      else
-        redirect_to dashboard_path
-        return
       end
 
     render layout: "tailwind"

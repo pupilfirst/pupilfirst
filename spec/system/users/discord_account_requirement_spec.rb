@@ -47,10 +47,13 @@ feature "Discord account requirement", js: true do
       href: curriculum_course_path(course)
     )
 
-    # Trying to visit the Discord account required page again should redirect the student
-    # to their dashboard.
+    # Trying to visit the Discord account required page again, after connecting Discord
+    # account should ask the student to return to their dashboard.
     visit(discord_account_required_user_path)
 
-    expect(page).to have_text("My Courses")
+    expect(page).to have_link(
+      "Return to dashboard",
+      href: dashboard_path
+    )
   end
 end

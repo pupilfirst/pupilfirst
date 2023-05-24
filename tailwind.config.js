@@ -1,7 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  content: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx"],
+  content: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx", "config/locales/*.yml"],
   safelist: [
     {
       pattern: /bg-(red|yellow|orange|green|blue|primary|focusColor|gray)-(50|100|200|300|400|500|600|700|800|900)/,

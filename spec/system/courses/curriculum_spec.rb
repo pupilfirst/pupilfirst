@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 feature "Student's view of Course Curriculum", js: true do
   include NotificationHelper
@@ -205,13 +205,13 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content("The page you were looking for doesn't exist!")
   end
 
-  context 'when the course the student belongs has ended' do
+  context "when the course the student belongs has ended" do
     let!(:cohort) { create :cohort, course: course, ends_at: 1.day.ago }
 
-    scenario 'student visits the course curriculum page' do
+    scenario "student visits the course curriculum page" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
       expect(page).to have_text(
-        'The course has ended and submissions are disabled for all targets!'
+        "The course has ended and submissions are disabled for all targets!"
       )
     end
   end
@@ -220,15 +220,15 @@ feature "Student's view of Course Curriculum", js: true do
     let!(:cohort) { create :cohort, course: course, ends_at: 1.day.ago }
     let!(:another_cohort) { create :cohort, course: course }
 
-    scenario 'student visits the course curriculum page' do
+    scenario "student visits the course curriculum page" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
       expect(page).to have_text(
-        'You have only limited access to the course now. You are allowed preview the content but cannot complete any target.'
+        "You have only limited access to the course now. You are allowed preview the content but cannot complete any target."
       )
     end
   end
 
-  scenario 'student visits the course curriculum page' do
+  scenario "student visits the course curriculum page" do
     sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Course name should be displayed.
@@ -248,31 +248,31 @@ feature "Student's view of Course Curriculum", js: true do
 
     # All targets should have the right status written next to their titles.
     within("a[data-target-id='#{completed_target_l4.id}']") do
-      expect(page).to have_content('Completed')
+      expect(page).to have_content("Completed")
     end
 
     within("a[data-target-id='#{submitted_target.id}']") do
-      expect(page).to have_content('Pending Review')
+      expect(page).to have_content("Pending Review")
     end
 
     within("a[data-target-id='#{failed_target.id}']") do
-      expect(page).to have_content('Rejected')
+      expect(page).to have_content("Rejected")
     end
 
     within("a[data-target-id='#{target_with_prerequisites.id}']") do
-      expect(page).to have_content('Locked')
+      expect(page).to have_content("Locked")
     end
 
     expect(page).to have_content(target_group_l4_1.name)
     expect(page).to have_content(target_group_l4_1.description)
 
     # There should only be two target groups...
-    expect(page).to have_selector('.curriculum__target-group', count: 2)
+    expect(page).to have_selector(".curriculum__target-group", count: 2)
 
     # ...and only one of thoese should be a milestone target group.
     expect(page).to have_selector(
-      '.curriculum__target-group',
-      text: 'MILESTONE TARGETS',
+      ".curriculum__target-group",
+      text: "MILESTONE TARGETS",
       count: 1
     )
 
@@ -292,11 +292,11 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(completed_target_l2.title)
 
     within("a[data-target-id='#{completed_target_l2.id}']") do
-      expect(page).to have_content('Completed')
+      expect(page).to have_content("Completed")
     end
   end
 
-  scenario 'student browses a level she has not reached' do
+  scenario "student browses a level she has not reached" do
     sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Switch to Level 5.
@@ -308,7 +308,7 @@ feature "Student's view of Course Curriculum", js: true do
 
     # There should be two locked targets in L5 right now.
     expect(page).to have_selector(
-      '.curriculum__target-status--locked',
+      ".curriculum__target-status--locked",
       count: 2
     )
 
@@ -316,35 +316,35 @@ feature "Student's view of Course Curriculum", js: true do
     click_link l5_non_reviewed_target_with_prerequisite.title
 
     expect(page).to have_text(
-      'This target has prerequisites that are incomplete.'
+      "This target has prerequisites that are incomplete."
     )
     expect(page).to have_link(l5_non_reviewed_target.title)
 
-    click_button 'Close'
+    click_button "Close"
 
     # Non-reviewed targets that do not have prerequisites should be unlocked for completion.
     click_link l5_non_reviewed_target.title
-    click_button 'Mark As Complete'
+    click_button "Mark As Complete"
 
-    expect(page).to have_text('Target has been marked as complete')
+    expect(page).to have_text("Target has been marked as complete")
 
     dismiss_notification
-    click_button 'Close'
+    click_button "Close"
 
     # Completing the prerequisite should unlock the previously locked non-reviewed target.
     expect(page).to have_selector(
-      '.curriculum__target-status--locked',
+      ".curriculum__target-status--locked",
       count: 1
     )
 
     click_link l5_non_reviewed_target_with_prerequisite.title
 
     expect(page).not_to have_text(
-      'This target has prerequisites that are incomplete.'
+      "This target has prerequisites that are incomplete."
     )
-    expect(page).to have_button 'Mark As Complete'
+    expect(page).to have_button "Mark As Complete"
 
-    click_button 'Close'
+    click_button "Close"
 
     # Reviewed targets, even those without prerequisites, must be locked.
     click_link l5_reviewed_target.title
@@ -353,10 +353,10 @@ feature "Student's view of Course Curriculum", js: true do
       "You're in Level 4. Complete all milestone targets in Level 4 first."
     )
 
-    click_button 'Close'
+    click_button "Close"
   end
 
-  scenario 'student opens a locked level' do
+  scenario "student opens a locked level" do
     sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Switch to the locked Level 6.
@@ -364,34 +364,34 @@ feature "Student's view of Course Curriculum", js: true do
     click_button "L6: #{locked_level_6.name}"
 
     # Ensure level 6 is displayed as locked. - the content should not be visible.
-    expect(page).to have_text('The level is currently locked!')
-    expect(page).to have_text('You can access the content on')
+    expect(page).to have_text("The level is currently locked!")
+    expect(page).to have_text("You can access the content on")
     expect(page).not_to have_text(target_group_l6.name)
     expect(page).not_to have_text(target_group_l6.description)
     expect(page).not_to have_text(level_6_target.title)
   end
 
-  scenario 'student navigates between levels using the quick navigation links' do
+  scenario "student navigates between levels using the quick navigation links" do
     sign_in_user student.user, referrer: curriculum_course_path(course)
 
     expect(page).to have_button("L4: #{level_4.name}")
 
-    click_button 'Next Level'
+    click_button "Next Level"
 
     expect(page).to have_button("L5: #{level_5.name}")
 
-    click_button 'Next Level'
+    click_button "Next Level"
 
     expect(page).to have_button("L6: #{locked_level_6.name}")
-    expect(page).not_to have_button('Next Level')
+    expect(page).not_to have_button("Next Level")
 
-    click_button 'Previous Level'
+    click_button "Previous Level"
     click_button "L5: #{level_5.name}"
     click_button "L2: #{level_2.name}"
-    click_button 'Previous Level'
+    click_button "Previous Level"
 
     expect(page).to have_button("L1: #{level_1.name}")
-    expect(page).not_to have_button('Previous Level')
+    expect(page).not_to have_button("Previous Level")
   end
 
   context "when the students's course has a level 0 in it" do
@@ -401,7 +401,7 @@ feature "Student's view of Course Curriculum", js: true do
       create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
     end
 
-    scenario 'student visits the dashboard' do
+    scenario "student visits the dashboard" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_button(level_0.name)
@@ -425,7 +425,7 @@ feature "Student's view of Course Curriculum", js: true do
              description: Faker::Lorem.sentence
     end
 
-    scenario 'archived target groups are not displayed' do
+    scenario "archived target groups are not displayed" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_content(target_group_l4_1.name)
@@ -434,8 +434,8 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context 'when a user has more than one student profile' do
-    context 'when the profile is in the same school' do
+  context "when a user has more than one student profile" do
+    context "when the profile is in the same school" do
       let(:course_2) { create :course }
       let(:cohort_2) { create :cohort, course: course_2 }
       let(:c2_level_1) { create :level, :one, course: course_2 }
@@ -447,7 +447,7 @@ feature "Student's view of Course Curriculum", js: true do
         create :student, level: c2_level_1, user: student.user, cohort: cohort_2
       end
 
-      scenario 'student switches to another course' do
+      scenario "student switches to another course" do
         # Sign into the first course.
         sign_in_user c2_student.user, referrer: curriculum_course_path(course)
 
@@ -462,7 +462,7 @@ feature "Student's view of Course Curriculum", js: true do
       end
     end
 
-    context 'when the profile is in another school' do
+    context "when the profile is in another school" do
       let(:school_2) { create :school }
       let(:course_2) { create :course, school: school_2 }
       let(:c2_level_1) { create :level, :one, course: course_2 }
@@ -470,12 +470,12 @@ feature "Student's view of Course Curriculum", js: true do
         create :student, level: c2_level_1, user: student.user
       end
 
-      scenario 'courses in other schools are not displayed' do
+      scenario "courses in other schools are not displayed" do
         # Sign into the first course.
         sign_in_user c2_student.user, referrer: curriculum_course_path(course)
 
         # There should be no option to switch to course in second school.
-        expect(page).not_to have_selector('button.student-course__dropdown-btn')
+        expect(page).not_to have_selector("button.student-course__dropdown-btn")
 
         # Attempting to visit the course page directly should show a 404.
         visit curriculum_course_path(course_2)
@@ -486,20 +486,20 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context 'when accessing preview mode of curriculum' do
+  context "when accessing preview mode of curriculum" do
     let(:school_admin) { create :school_admin }
 
-    scenario 'preview contents in the curriculum' do
+    scenario "preview contents in the curriculum" do
       sign_in_user school_admin.user, referrer: curriculum_course_path(course)
 
-      expect(page).to have_text('Preview Mode')
+      expect(page).to have_text("Preview Mode")
 
       # Course name should be displayed.
       expect(page).to have_content(course.name)
 
       # An admin should be shown links to edit the level and its targets.
       expect(page).to have_link(
-        'Edit Level',
+        "Edit Level",
         href: curriculum_school_course_path(id: course.id, level: 1)
       )
       expect(page).to have_selector(
@@ -517,7 +517,7 @@ feature "Student's view of Course Curriculum", js: true do
 
       # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for 'regular' students.
       expect(page).to have_content(
-        "This level is still locked for students and will be unlocked on #{locked_level_6.unlock_at.strftime('%b %-d')}"
+        "This level is still locked for students and will be unlocked on #{locked_level_6.unlock_at.strftime("%b %-d")}"
       )
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)
@@ -537,12 +537,12 @@ feature "Student's view of Course Curriculum", js: true do
       click_link l5_reviewed_target.title
 
       expect(page).to have_content(
-        'You are currently looking at a preview of this course.'
+        "You are currently looking at a preview of this course."
       )
     end
   end
 
-  context 'when the student is also a coach' do
+  context "when the student is also a coach" do
     let(:coach) { create :faculty, user: student.user }
 
     before do
@@ -553,7 +553,7 @@ feature "Student's view of Course Curriculum", js: true do
              student: student
     end
 
-    scenario 'coach accesses content in locked levels' do
+    scenario "coach accesses content in locked levels" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       click_button "L4: #{level_4.name}"
@@ -561,7 +561,7 @@ feature "Student's view of Course Curriculum", js: true do
 
       # Being a coach, level 6 should be accessible, but there should be a notice saying when the level will open for 'regular' students.
       expect(page).to have_content(
-        "This level is still locked for students and will be unlocked on #{locked_level_6.unlock_at.strftime('%b %-d')}"
+        "This level is still locked for students and will be unlocked on #{locked_level_6.unlock_at.strftime("%b %-d")}"
       )
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)
@@ -572,10 +572,10 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context 'when a level has no live targets' do
+  context "when a level has no live targets" do
     let!(:level_without_targets) { create :level, number: 7, course: course }
 
-    scenario 'level empty message is displayed' do
+    scenario "level empty message is displayed" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       click_button "L4: #{level_4.name}"
@@ -585,29 +585,29 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context 'when a course requires a Discord connection' do
+  context "when a course requires a Discord connection" do
     let(:course) { create :course, discord_account_required: true }
 
-    scenario 'student without a connected Discord account is redirected to the user profile edit page' do
+    scenario "student without a connected Discord account is redirected to the user profile edit page" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
-      expect(page).to have_content('Edit your profile')
+      expect(page).to have_content("Let's link your Discord account first")
     end
 
-    scenario 'student with a connected Discord account is shown the curriculum' do
-      student.user.update!(discord_user_id: 'DISCORD_USER_ID')
+    scenario "student with a connected Discord account is shown the curriculum" do
+      student.user.update!(discord_user_id: "DISCORD_USER_ID")
 
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_content(course.name)
     end
 
-    scenario 'inactive student without a connection Discord account should not be redirected' do
+    scenario "inactive student without a connection Discord account should not be redirected" do
       cohort.update(ends_at: 1.day.ago)
 
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
-      expect(page).to have_content('The course has ended')
+      expect(page).to have_content("The course has ended")
     end
   end
 end

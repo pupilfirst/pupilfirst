@@ -2005,15 +2005,16 @@ ml:
           post_created: "നിങ്ങൾ %{community_name} കമ്മ്യൂണിറ്റിയുടെ ഭാഗമായ ഒരു ത്രെഡിനോട് %{user_name} പ്രതികരിച്ചു"
           topic_created: "%{user_name} %{community_name} കമ്മ്യൂണിറ്റിയിൽ ഒരു പുതിയ വിഷയം സൃഷ്ടിച്ചു"
   layouts:
+    footer_bottom:
+      logo_alt: Logo of %{school_name}
+      privacy_policy: Privacy Policy
+      terms_conditions: Terms & Conditions
     student_footer:
       contact: ബന്ധപ്പെടുക
-      logo: ലോഗോ
-      privacy_policy: സ്വകാര്യതാനയം
       reach_us: ഞങ്ങളെ സമീപിക്കുക
       sitemap: സൈറ്റ്മാപ്പ്
       social: സാമൂഹിക
       support: പിന്തുണയുമായി ബന്ധപ്പെടുക
-      terms_conditions: നിബന്ധനകളും വ്യവസ്ഥകളും
   mailers:
     applicant:
       enrollment_verification:
@@ -2691,19 +2692,35 @@ ml:
     delete_account:
       link_expired: ആ ലിങ്ക് കാലഹരണപ്പെട്ടു അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.
       title: ഉപയോക്താവിനെ എഡിറ്റ് ചെയ്യുക
+    discord_account_required:
+      linked:
+        description: Your Discord account has been linked to your %{school_name} account. You can now browse the course and post messages on our Discord server. If you ever need help, don't hesitate to ask for it on the server.
+        footer_html: Happy learning! <i class="text-primary-500 if i-heart-solid if-fw"></i>
+        go_to_course_button: Begin course
+        go_to_dashboard_button: Return to dashboard
+        heading: You're all set!
+      page_title: Discord Account Required
+      unlinked:
+        description: The course you're trying to access requires you to connect your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
+        heading: Let's link your Discord account first.
+        link_discord_button: Link Discord
+        no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
+        process:
+          prefix: "The process is simple:"
+          step_1_description_html: Click on the <em>Link Discord</em> button below.
+          step_1_label: 1
+          step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_label: 2
+          step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
+          step_3_label: 3
     edit:
-      course_discord_requirement_met:
-        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
-      course_requires_discord_account:
-        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
-        heading: Wait a second! You need to link your Discord account first.
       discord_connect: ഞങ്ങളുടെ ഡിസ്കോർഡ് കമ്മ്യൂണിറ്റിയിൽ ചേരുക
       discord_connected_account: ഡിസ്കോർഡ് കമ്മ്യൂണിറ്റിയിലേക്ക് പോകുക
       discord_connected_message: <li>ഡിസ്കോർഡ് സെർവറിലെ നിങ്ങളുടെ വിളിപ്പേര് ഇവിടെ നിങ്ങളുടെ പേരുമായി സമന്വയിപ്പിച്ച് സൂക്ഷിക്കും.</li><li>ഡിസ്കോർഡിൽ നിങ്ങൾക്ക് അധിക റോളുകൾ നൽകിയിട്ടുണ്ട്.</li>
       discord_connected_message_title: നിങ്ങളുടെ %{school_name} അക്കൗണ്ട് ഇപ്പോൾ നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ടുമായി ലിങ്ക് ചെയ്‌തിരിക്കുന്നു.
       discord_description: ഞങ്ങളുടെ ഡിസ്‌കോർഡ് സെർവറിൽ ചേരുന്നത് ഞങ്ങളുടെ ടീമുമായും പരിശീലകരുമായും നിങ്ങളുടെ സമപ്രായക്കാരുമായും തൽക്ഷണം ബന്ധപ്പെടാൻ നിങ്ങളെ അനുവദിക്കും.
-      discord_how_it_works_html: <li> ഞങ്ങളുടെ ഡിസ്‌കോർഡ് സെർവറിൽ ചേരുക (ഇത് സൗജന്യമാണ്!) </li><li>നിങ്ങളുടെ ഡിസ്‌കോർഡ് അക്കൗണ്ട് ഈ സ്കൂളിന്റെ അക്കൗണ്ടുമായി ലിങ്ക് ചെയ്യുക.</li><li>ഡിസ്കോർഡിൽ ഞങ്ങളുടെ കമ്മ്യൂണിറ്റിയിലേക്ക് പ്രവേശനം നേടുക!</li>
+      discord_how_it_works_html: <li>Join our Discord server (it's free!)</li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
       discord_how_it_works_title: ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നു
       discord_title: ഞങ്ങളുടെ ഡിസ്കോർഡ് സെർവറിൽ ചേരുക
       title: ഉപയോക്താവിനെ എഡിറ്റ് ചെയ്യുക

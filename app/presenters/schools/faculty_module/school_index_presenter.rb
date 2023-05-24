@@ -15,6 +15,9 @@ module Schools
           else
             current_school.faculty.active
           end.includes(user: { avatar_attachment: :blob })
+            .order(created_at: :desc)
+            .page(params[:page])
+            .per(10)
       end
 
       def props

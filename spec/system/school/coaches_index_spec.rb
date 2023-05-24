@@ -40,9 +40,6 @@ feature "Coaches Index", js: true do
 
     click_button "Add Coach"
 
-    expect(page).to have_text("Coach created successfully")
-    dismiss_notification
-
     expect(page).to have_text(new_coach_name)
 
     coach = Faculty.last
@@ -77,7 +74,8 @@ feature "Coaches Index", js: true do
     fill_in "Affiliation", with: ""
     click_button "Update Coach"
 
-    expect(page).to have_text("Coach updated successfully")
+    # expect(page).to have_text("Coach updated successfully")
+    expect(page).to have_text(updated_coach_name) # wait for page to reload
 
     expect(coach.reload.connect_link).to eq("https://www.connect.com/xyz")
     expect(coach.public).to eq(true)
@@ -116,5 +114,33 @@ feature "Coaches Index", js: true do
     expect(page).to have_text(coach_1.name)
     expect(page).to_not have_text(coach_2.name)
     expect(page).to_not have_text(coach_3.name)
+  end
+
+  context "with multiple pages of coaches" do
+    before { 15.times { create :faculty } }
+    scenario "school admin paginates through coaches on active tab" do
+      sign_in_user school_admin.user,
+                   referrer: school_coaches_path(status: "active")
+
+      expect(page).to have_link("2", href: "/school/coaches?page=2") #/school/coaches?page=2
+      expect(page).to have_selector(".course-faculty__list-item ", count: 10)
+      click_link "2"
+      expect(page).to have_selector(
+        ".course-faculty__list-item",
+        count: 8 # 3 coaches are created above
+      )
+    end
+
+    scenario "school admin paginates through coaches on exited tab" do
+      Faculty.all.limit(5).each { |faculty| faculty.update!(exited: true) }
+      sign_in_user school_admin.user,
+                   referrer: school_coaches_path(status: "exited")
+
+      expect(page).to have_link(
+        "2",
+        href: "/school/coaches?page=2&status=exited"
+      )
+      expect(page).to have_selector(".course-faculty__list-item", count: 5)
+    end
   end
 end

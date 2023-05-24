@@ -157,11 +157,8 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
 
   let formId = "coach-create-form"
 
-  // Reload page when admin updates `coach.exited` property or when new coach is added
-  let reloadOnExitedChange = switch coach {
-  | Some(coach) => Coach.exited(coach) != state.exited
-  | None => true
-  }
+  // Reload page every time a coach is updated or a new coach is added
+  let reloadOnDataChange = true
 
   let addCoach = json => {
     let id = json |> {
@@ -280,7 +277,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 }->str}
               </h5>
             </div>
-            <form key="xxx" id=formId onSubmit={event => submitForm(event, reloadOnExitedChange)}>
+            <form key="xxx" id=formId onSubmit={event => submitForm(event, reloadOnDataChange)}>
               <input name="authenticity_token" type_="hidden" value=authenticityToken />
               <div className="max-w-2xl px-6 pb-6 mx-auto">
                 <div className="mt-5">

@@ -2009,15 +2009,16 @@ en:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
+    footer_bottom:
+      logo_alt: Logo of %{school_name}
+      privacy_policy: Privacy Policy
+      terms_conditions: Terms & Conditions
     student_footer:
       contact: Contact
-      logo: Logo
-      privacy_policy: Privacy Policy
       reach_us: Reach us at
       sitemap: Sitemap
       social: Social
       support: Contact Support
-      terms_conditions: Terms & Conditions
   mailers:
     applicant:
       enrollment_verification:
@@ -2695,19 +2696,35 @@ en:
     delete_account:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
+    discord_account_required:
+      linked:
+        description: Your Discord account has been linked to your %{school_name} account. You can now browse the course and post messages on our Discord server. If you ever need help, don't hesitate to ask for it on the server.
+        footer_html: Happy learning! <i class="text-primary-500 if i-heart-solid if-fw"></i>
+        go_to_course_button: Begin course
+        go_to_dashboard_button: Return to dashboard
+        heading: You're all set!
+      page_title: Discord Account Required
+      unlinked:
+        description: The course you're trying to access requires you to connect your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
+        heading: Let's link your Discord account first.
+        link_discord_button: Link Discord
+        no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
+        process:
+          prefix: "The process is simple:"
+          step_1_description_html: Click on the <em>Link Discord</em> button below.
+          step_1_label: 1
+          step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_label: 2
+          step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
+          step_3_label: 3
     edit:
-      course_discord_requirement_met:
-        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
-      course_requires_discord_account:
-        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
-        heading: Wait a second! You need to link your Discord account first.
       discord_connect: Join Our Discord Community
       discord_connected_account: Go to Discord Community
       discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
       discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
       discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
-      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
+      discord_how_it_works_html: <li>Join our Discord server (it's free!)</li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
       discord_how_it_works_title: How it works
       discord_title: Join Our Discord Server
       title: Edit User

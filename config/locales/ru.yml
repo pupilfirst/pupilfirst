@@ -2029,15 +2029,16 @@ ru:
           post_created: "%{user_name} ответил на тему в сообществе %{community_name}"
           topic_created: "%{user_name} создал новую тему в сообществе %{community_name}"
   layouts:
+    footer_bottom:
+      logo_alt: Logo of %{school_name}
+      privacy_policy: Privacy Policy
+      terms_conditions: Terms & Conditions
     student_footer:
       contact: Контакт
-      logo: Логотип
-      privacy_policy: Политика конфиденциальности
       reach_us: Свяжитесь с нами в
       sitemap: Sitemap
       social: Соцсети
       support: Обратитесь в службу поддержки
-      terms_conditions: Условия использования
   mailers:
     applicant:
       enrollment_verification:
@@ -2719,19 +2720,35 @@ ru:
     delete_account:
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       title: Изменить пользователя
+    discord_account_required:
+      linked:
+        description: Your Discord account has been linked to your %{school_name} account. You can now browse the course and post messages on our Discord server. If you ever need help, don't hesitate to ask for it on the server.
+        footer_html: Happy learning! <i class="text-primary-500 if i-heart-solid if-fw"></i>
+        go_to_course_button: Begin course
+        go_to_dashboard_button: Return to dashboard
+        heading: You're all set!
+      page_title: Discord Account Required
+      unlinked:
+        description: The course you're trying to access requires you to connect your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
+        heading: Let's link your Discord account first.
+        link_discord_button: Link Discord
+        no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
+        process:
+          prefix: "The process is simple:"
+          step_1_description_html: Click on the <em>Link Discord</em> button below.
+          step_1_label: 1
+          step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_label: 2
+          step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
+          step_3_label: 3
     edit:
-      course_discord_requirement_met:
-        description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
-        heading_html: All done! Let's <a class="underline" href="%{course_path}">take you back to the course</a>.
-      course_requires_discord_account:
-        description_html: The <em>%{course_name}</em> course you're trying to access requires that you link a Discord account to your profile. Use the button below to link your Discord account and continue with the course.
-        heading: Wait a second! You need to link your Discord account first.
       discord_connect: Присоединяйтесь к нашему сообществу Discord
       discord_connected_account: Перейти в сообщество раздора
       discord_connected_message: <li>Ваш никнейм на сервере Discord будет синхронизирован с вашим именем здесь.</li><li>Вам были назначены дополнительные роли в Discord.</li>
       discord_connected_message_title: Ваша учетная запись %{school_name} теперь связана с вашей учетной записью Discord.
       discord_description: Присоединение к нашему серверу Discord позволит вам мгновенно связаться с нашей командой, тренерами и коллегами.
-      discord_how_it_works_html: <li> Присоединяйтесь к нашему серверу Discord (это бесплатно!) </li><li>Свяжите свою учетную запись Discord с учетной записью этой школы.</li><li>Получите доступ к нашему сообществу в Discord!</li>
+      discord_how_it_works_html: <li>Join our Discord server (it's free!)</li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
       discord_how_it_works_title: Как это работает
       discord_title: Присоединяйтесь к нашему Discord-серверу
       title: Изменить пользователя

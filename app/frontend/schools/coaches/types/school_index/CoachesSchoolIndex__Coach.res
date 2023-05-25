@@ -70,8 +70,3 @@ let make = (
   imageFileName: imageFileName,
   affiliation: affiliation,
 }
-
-let updateList = (coaches, coach) => {
-  let oldList = coaches->Js.Array2.filter(t => t.id !== coach.id)
-  oldList->Js.Array2.concat([coach])
-}

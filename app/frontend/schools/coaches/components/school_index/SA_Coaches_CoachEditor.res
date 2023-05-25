@@ -152,44 +152,17 @@ let computeInitialState = coach =>
   }
 
 @react.component
-let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
+let make = (~coach, ~closeFormCB, ~authenticityToken) => {
   let (state, send) = React.useReducerWithMapState(reducer, coach, computeInitialState)
 
   let formId = "coach-create-form"
 
-  let addCoach = json => {
-    let id = json |> {
-      open Json.Decode
-      field("id", string)
-    }
-    let imageUrl = json |> {
-      open Json.Decode
-      field("image_url", string)
-    }
-    let newCoach = Coach.make(
-      ~id,
-      ~name=state.name,
-      ~imageUrl,
-      ~email=state.email,
-      ~title=state.title,
-      ~public=state.public,
-      ~connectLink=Some(state.connectLink),
-      ~exited=state.exited,
-      ~imageFileName=Some(state.imageFileName),
-      ~affiliation=Some(state.affiliation),
-    )
-    switch coach {
-    | Some(_) => Notification.success(ts("notifications.success"), t("coach_updated"))
-    | None => Notification.success(ts("notifications.success"), t("coach_created"))
-    }
-    updateCoachCB(newCoach)
-    closeFormCB()
-  }
   let avatarUploaderText = () =>
     switch state.imageFileName {
     | "" => t("upload_avatar")
     | _ => t("replace_avatar") ++ ": " ++ state.imageFileName
     }
+
   let handleResponseJSON = json => {
     let error =
       json
@@ -198,11 +171,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
         field("error", nullable(string))
       }
       |> Js.Null.toOption
+
     switch error {
     | Some(err) =>
       send(UpdateSaving)
       Notification.error(ts("notifications.something_wrong"), err)
-    | None => addCoach(json)
+    | None => ()
     }
   }
   let sendCoach = formData => {

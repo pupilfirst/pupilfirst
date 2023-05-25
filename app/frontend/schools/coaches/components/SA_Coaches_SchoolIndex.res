@@ -11,14 +11,9 @@ type formVisible =
   | None
   | CoachEditor(option<Coach.t>)
 
-type state = {
-  coaches: array<Coach.t>,
-  formVisible: formVisible,
-}
+type state = {formVisible: formVisible}
 
-type action =
-  | UpdateFormVisible(formVisible)
-  | UpdateCoaches(Coach.t)
+type action = UpdateFormVisible(formVisible)
 
 type currentTab = ActiveCoaches | ExitedCoaches
 
@@ -29,9 +24,6 @@ let currentTab = () => {
 let reducer = (state, action) =>
   switch action {
   | UpdateFormVisible(formVisible) => {...state, formVisible: formVisible}
-  | UpdateCoaches(coach) =>
-    let newCoachesList = state.coaches->Coach.updateList(coach)
-    {...state, coaches: newCoachesList}
   }
 
 let coachesTab = (count, tab) => {
@@ -59,16 +51,14 @@ let coachesTab = (count, tab) => {
 
 @react.component
 let make = (~coaches, ~authenticityToken) => {
-  let (state, send) = React.useReducer(reducer, {coaches: coaches, formVisible: None})
+  let (state, send) = React.useReducer(reducer, {formVisible: None})
 
   let closeFormCB = () => send(UpdateFormVisible(None))
-  let updateCoachCB = coach => send(UpdateCoaches(coach))
 
   <div role="main" className="flex min-h-full bg-gray-50 pb-18">
     {switch state.formVisible {
     | None => React.null
-    | CoachEditor(coach) =>
-      <SA_Coaches_CoachEditor coach closeFormCB updateCoachCB authenticityToken />
+    | CoachEditor(coach) => <SA_Coaches_CoachEditor coach closeFormCB authenticityToken />
     }}
     <div className="flex-1 flex flex-col">
       <div className="w-full pt-2 relative md:sticky top-0 z-20 bg-gray-50 border-b">
@@ -89,14 +79,14 @@ let make = (~coaches, ~authenticityToken) => {
         <div className="max-w-3xl mx-auto">
           <div className="px-12 flex justify-start" role="tablist">
             {[ActiveCoaches, ExitedCoaches]
-            ->Js.Array2.map(coachesTab(Js.Array2.length(state.coaches)))
+            ->Js.Array2.map(coachesTab(Js.Array2.length(coaches)))
             ->React.array}
           </div>
         </div>
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
         <div className="max-w-2xl w-full mx-auto relative">
-          {state.coaches->ArrayUtils.isEmpty
+          {coaches->ArrayUtils.isEmpty
             ? <div className="mt-15 pt-10">
                 <img className="mx-auto h-40" src={noCoachesFoundIcon} />
                 <div className=" text-center mt-14">
@@ -109,7 +99,7 @@ let make = (~coaches, ~authenticityToken) => {
                   </p>
                 </div>
               </div>
-            : state.coaches
+            : coaches
               ->Js.Array2.map(coach =>
                 <div
                   key={coach->Coach.id}

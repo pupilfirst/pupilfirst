@@ -221,7 +221,7 @@ let make = (~overviewData, ~coaches) =>
         <div className="w-full">
           <div className="mb-8">
             <h6 className="font-semibold mb-4"> {"Milestone Targets Completion Status" |> str} </h6>
-            <div className="flex flex-col space-y-1">
+            <div className="grid md:grid-cols-2 gap-2">
               {ArrayUtils.copyAndSort(
                 (a, b) =>
                   a->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber -
@@ -232,8 +232,22 @@ let make = (~overviewData, ~coaches) =>
                 <a
                   href={"/targets/" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
                   target="_blank"
-                  className="flex group items-center p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
-                  <div className="mr-2">
+                  className="flex col-span-1 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
+                  <div className="flex items-center">
+                    <p className="text-sm font-semibold mr-2">
+                      {("M" ++
+                      string_of_int(
+                        CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
+                      ))->str}
+                    </p>
+                    <div
+                      className="flex-1 text-sm truncate max-w-[20ch] sm:max-w-[30ch] md:max-w-[28ch]">
+                      <p className="text-ellipsis overflow-hidden">
+                        {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 me-2">
                     <span
                       className={"text-xs font-medium " ++ {
                         data->CoursesReport__MilestoneTargetCompletionStatus.completed
@@ -246,28 +260,10 @@ let make = (~overviewData, ~coaches) =>
                           : "if i-dashed-circle-light text-orange-600"}
                       />}
                       {data->CoursesReport__MilestoneTargetCompletionStatus.completed
-                        ? <span className="ms-1 hidden group-hover:inline-flex">
-                            {t("milestone_completed") |> str}
-                          </span>
-                        : <span className="ms-1 hidden group-hover:inline-flex">
-                            {t("milestone_pending") |> str}
-                          </span>}
+                        ? <span className="ms-1"> {t("milestone_completed") |> str} </span>
+                        : <span className="ms-1"> {t("milestone_pending") |> str} </span>}
                     </span>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold mr-2">
-                      {("M" ++
-                      string_of_int(
-                        CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
-                      ))->str}
-                    </p>
-                  </div>
-                  <div className="flex-1 text-sm">
-                    {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
-                  </div>
-                  <Icon
-                    className="if i-arrow-right-regular text-primary-500 hidden group-hover:inline-flex"
-                  />
                 </a>
               })
               ->React.array}

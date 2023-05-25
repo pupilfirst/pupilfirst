@@ -1129,6 +1129,7 @@ en:
       move_down: Move Down
       move_up: Move Up
       of_target: of target
+      milestone_target_label: Milestone
     CurriculumEditor__TargetVersionSelector:
       edit: Edit
       preview: Preview

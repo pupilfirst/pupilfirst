@@ -9,7 +9,6 @@ let ts = I18n.ts
 
 let targetClasses = (target, targets) =>
   "target-group__target flex justify-between items-center ps-2 pe-5 focus:outline-none focus:bg-gray-50 focus:text-primary-500 " ++
-  (Target.milestone(target) ? "border-l-4 border-primary-500 " : "") ++
   switch (Js.Array.length(targets) == 1, target |> Target.visibility) {
   | (true, Archived) => "target-group__target--archived py-4 ps-5 "
   | (false, Archived) => "target-group__target--archived py-4"
@@ -87,7 +86,16 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
       ariaLabel={t("edit_content") ++ " " ++ (target |> Target.title)}
       className={targetClasses(target, targets)}
       href={linkPrefix ++ "content"}>
-      <p className="font-medium text-sm"> {target |> Target.title |> str} </p>
+      <div className="flex items-start font-medium leading-snug">
+        {Target.milestone(target)
+          ? <div
+              className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 px-1.5 md:px-2 py-1 rounded-md mr-2">
+              <Icon className="if i-milestone-solid text-sm" />
+              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
+            </div>
+          : React.null}
+        <p className="font-medium text-sm"> {target |> Target.title |> str} </p>
+      </div>
       <div className="items-center">
         {switch target |> Target.visibility {
         | Draft =>

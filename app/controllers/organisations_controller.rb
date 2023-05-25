@@ -29,23 +29,36 @@ class OrganisationsController < ApplicationController
 
     courses =
       cohorts.each_with_object({}) do |cohort, courses|
-        courses[cohort.course.id] ||= { course: cohort.course, cohorts: [] }
+        courses[cohort.course.id] ||= {
+          course: cohort.course,
+          cohorts: [],
+          inactive_cohorts_ids: []
+        }
         if cohort.ends_at.nil? || cohort.ends_at.future?
           courses[cohort.course.id][:cohorts] << cohort
+        else
+          courses[cohort.course.id][:inactive_cohorts_ids] << cohort.id
         end
       end
 
     courses.values.map do |course|
       cohort_ids = course[:cohorts].map(&:id)
 
-      course[:total_students] = @organisation
-        .users
-        .joins(:founders)
-        .where(founders: { cohort_id: cohort_ids })
-        .distinct
-        .count
+      course[:inactive_cohorts] = course[:inactive_cohorts_ids].any?
+      course[:active_students] = student_count(cohort_ids)
+      course[:inactive_students] = student_count(course[:inactive_cohorts_ids])
+
       course
     end
+  end
+
+  def student_count(cohort_ids)
+    @organisation
+      .users
+      .joins(:founders)
+      .where(founders: { cohort_id: cohort_ids })
+      .distinct
+      .count
   end
 
   def prepare_counts

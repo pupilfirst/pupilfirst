@@ -495,9 +495,8 @@ ru:
       submission_number: "Работа #"
       submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
-      your_submissions: Ваши Работы
       your_responses: Ваши ответы
-
+      your_submissions: Ваши Работы
     CoursesCurriculum__TargetStatus:
       access_locked: Ваш доступ к этому курсу закончился.
       course_locked: Курс был окончен.
@@ -907,9 +906,9 @@ ru:
       selected_all_targets: Вы выбрали все задачи
       submit_individually: Все студенты должны представить индивидуально.
       take_quiz: Пройдите тест, чтобы выполнить задачу.
+      target_checklist_form_help: На эти вопросы студент должен ответить, чтобы выполнить задание.
       target_checklist_form_label: На какие вопросы вы бы хотели, чтобы студент ответил?
       target_checklist_form_limit_warning: Максимально допустимое количество элементов формы — 25!
-      target_checklist_form_help: На эти вопросы студент должен ответить, чтобы выполнить задание.
       target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу позадаче. Эта информация будет показана ментору для ознакомления.
       target_checklist_label: Какие шаги должен предпринять ученик для достижения этой задачи?
       target_group: Группа задач
@@ -995,8 +994,8 @@ ru:
     HelpIcon:
       read_more: Подробнее
     LevelProgressBar:
-      heading: Прогресс Уровня
       course_completed: Курс Пройден!
+      heading: Прогресс Уровня
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -1075,25 +1074,6 @@ ru:
       reactivate_students: Реактивировать студентов
       search_empty: Ни один неактивный учащийся не соответствует вашим критериям поиска.
       search_placeholder: Поиск по названию студента или команды...
-    SchoolRouter__Page:
-      nav:
-        course:
-          applicants: Абитуренты
-          authors: Авторы
-          certificates: Сертификаты
-          coaches: Менторы
-          curriculum: Силлабус
-          evaluation_criteria: Критерии Оценивания
-          exports: Экспорты
-          students: Студенты
-        main:
-          admins: Админы
-          coaches: Менторы
-          communities: Сообщество
-          courses: Курсы
-          customization: Кастомизация
-          overview: Обзор
-          settings: Настройки
     SchoolAdmin__EditorDrawer:
       close_editor: Закрыть Редактор
     SchoolAdmins__Editor:
@@ -1227,6 +1207,25 @@ ru:
       homepage: домашняя страница
       reach_us_at: Свяжитесь с нами по адресу
       social_links_q: Добавить ссылки на социальные сети?
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Абитуренты
+          authors: Авторы
+          certificates: Сертификаты
+          coaches: Менторы
+          curriculum: Силлабус
+          evaluation_criteria: Критерии Оценивания
+          exports: Экспорты
+          students: Студенты
+        main:
+          admins: Админы
+          coaches: Менторы
+          communities: Сообщество
+          courses: Курсы
+          customization: Кастомизация
+          overview: Обзор
+          settings: Настройки
     School__SearchableTagList:
       add_new_tag: Добавить новый тег
       pick_tag: Выберите тег
@@ -1251,6 +1250,20 @@ ru:
       review: Проверка
       students: Студенты
       unknown: Неизвестно
+    StudentCreator__CreateForm:
+      added_full_description: Все ученики созданы успешно.
+      added_none_description: Все студенты, которых вы пытались добавить, уже были частью этого курса.
+      added_none_title: Ничего не изменилось
+      added_partial_description: "%{students_added} из %{students_requested} студентов были добавлены. Остальные студенты уже прошли курс."
+      added_partial_title: Частично добавлено
+      drawer_heading: Добавить новых студентов
+      notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
+      reload_add_students: Наша команда была уведомлена об этой ошибке. Пожалуйста, перезагрузите эту страницу перед повторной попыткой добавить учащихся.
+      save_list_button: Сохранить Список
+      team_header_add_more_members: Добавьте больше членов команды!
+      team_header_label: КОМАНДА %{team_name}
+      teams_to_add_empty: Этот список пуст! Добавьте несколько студентов, используя форму выше.
+      teams_to_add_label: "Эти новые студенты будут добавлены к курсу.:"
     StudentEditor__UpdateDetailsForm:
       access_ends: Доступ заканчивается
       personal_coaches: Персональные Менторы
@@ -1328,20 +1341,6 @@ ru:
       success_notification: Импорт успешно начат! После завершения вы получите уведомление по электронной почте.
       valid_data_message: Данные успешно подтверждены!
       valid_data_summary_text: "Вот сводка данных о студентах на загруженном листе: "
-    StudentCreator__CreateForm:
-      added_full_description: Все ученики созданы успешно.
-      added_none_description: Все студенты, которых вы пытались добавить, уже были частью этого курса.
-      added_none_title: Ничего не изменилось
-      added_partial_description: "%{students_added} из %{students_requested} студентов были добавлены. Остальные студенты уже прошли курс."
-      added_partial_title: Частично добавлено
-      drawer_heading: Добавить новых студентов
-      notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
-      reload_add_students: Наша команда была уведомлена об этой ошибке. Пожалуйста, перезагрузите эту страницу перед повторной попыткой добавить учащихся.
-      save_list_button: Сохранить Список
-      team_header_add_more_members: Добавьте больше членов команды!
-      team_header_label: КОМАНДА %{team_name}
-      teams_to_add_empty: Этот список пуст! Добавьте несколько студентов, используя форму выше.
-      teams_to_add_label: "Эти новые студенты будут добавлены к курсу.:"
     StudentsEditor__Root:
       button_add_new_students: Добавить новых студентов
       button_all_students: Все Студенты
@@ -1488,12 +1487,12 @@ ru:
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
       name_placeholder: Введите ваше имя
-      preferred_name_placeholder: Введите предпочитаемое имя
       new_password: Новый пароль
       new_password_placeholder: Введите новый пароль
       notifications: Уведомления
       password_placeholder: Введите текущий пароль
       photo: Фото
+      preferred_name_placeholder: Введите предпочитаемое имя
       save_changes: Сохранить изменения
       security: Безопасность
       select_image_limit: "Выберите изображение размером менее 5\_МБ."
@@ -1647,6 +1646,19 @@ ru:
     terms_conditions: Правила и Условия
   help:
     help: Помощь
+  helpers:
+    page_entries_info:
+      entry:
+        one: запись
+        other: записей
+        zero: записей
+      more_pages:
+        display_entries: Показать %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> из <b>%{total}</b> из всего
+      one_page:
+        display_entries:
+          one: Показываем <b>1</b> %{entry_name}
+          other: показываем <b>все %{count}</b> %{entry_name}
+          zero: "%{entry_name} не найден"
   home:
     index:
       course_status:
@@ -2022,7 +2034,6 @@ ru:
     move_down: Двигать Вниз
     move_up: Двигать Вверх
     name: Имя
-    preferred_name: Предпочитаемое имя
     name_email: Имя или Почта
     name_placeholder: Добавьте сюда имя
     next: След
@@ -2070,15 +2081,16 @@ ru:
     optional: необязательно
     optional_braces: (необязательно)
     or: или
-    pass: Пройдено
     pagination:
       first: "&laquo;"
       last: "&raquo;"
-      previous: "&lsaquo;"
       next: "&rsaquo;"
+      previous: "&lsaquo;"
       truncate: "&hellip;"
+    pass: Пройдено
     percentage: Процент
     post: Пост
+    preferred_name: Предпочитаемое имя
     prev: Пред
     processing: Обрабатывается
     rejected: Отклонено

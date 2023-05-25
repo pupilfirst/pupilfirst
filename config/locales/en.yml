@@ -1236,44 +1236,43 @@ en:
         zero: No %{plural_name} to show
       partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: Add New Coach
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
+      archived: Archived
       coach_add: Add Coach
       coach_created: Coach created successfully
       coach_email: Coach email address
       coach_name: Coach Name
       coach_profile_warn: Since the coach profile isn't public, this won't be shown anywhere
       coach_public_q: Should the coach profile be public?
+      coach_status: Coach Status
       coach_title: Coach Title/Expertise
       coach_title_error: Must have at least two characters
       coach_update: Update Coach
       coach_updated: Coach updated successfully
+      coach_visibility: Coach Visibility
       connect_link: Connect Link
       connect_link_error: This doesn't look like a valid URL
       connect_link_placeholder: Student connect request link for the coach
       email: Email
       email_input_error: Please enter a valid email address
+      exited: Exited
       input_group_error: Must have at least two characters
       name: Name
       replace_avatar: Replace avatar
       title: Title
       upload_avatar: Upload an avatar
-      archived: Archived
-      active: Active
-      coach_visibility: Coach Visibility
-      exited: Exited
-      coach_status: Coach Status
-
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
-      active_coaches: Active Coaches
-      exited_coaches: Exited Coaches
       coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
       no_coaches: No Coaches Found
       no_exited_coaches: Your school doesn't have exited coaches.
-      no_active_coaches: Your school doesn't have active coaches.
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students
@@ -1991,6 +1990,19 @@ en:
   help:
     show:
       title: Help
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+        zero: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
+          zero: No %{entry_name} found
   home:
     agreement:
       privacy_policy: Privacy Policy

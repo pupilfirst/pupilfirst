@@ -157,9 +157,6 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
 
   let formId = "coach-create-form"
 
-  // Reload page every time a coach is updated or a new coach is added
-  let reloadOnDataChange = true
-
   let addCoach = json => {
     let id = json |> {
       open Json.Decode
@@ -208,7 +205,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     | None => addCoach(json)
     }
   }
-  let sendCoach = (formData, reloadOnSuccess) => {
+  let sendCoach = formData => {
     let endPoint = switch coach {
     | Some(coach) => "/school/coaches/" ++ coach->Coach.id
     | None => "/school/coaches/"
@@ -229,9 +226,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     )
     |> then_(response =>
       if Fetch.Response.ok(response) || Fetch.Response.status(response) == 422 {
-        if reloadOnSuccess {
-          DomUtils.reload()
-        }
+        DomUtils.reload()
         response |> Fetch.Response.json
       } else {
         Js.Promise.reject(UnexpectedResponse(response |> Fetch.Response.status))
@@ -246,12 +241,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     })
     |> ignore
   }
-  let submitForm = (event, refreshPage) => {
+  let submitForm = event => {
     ReactEvent.Form.preventDefault(event)
     send(UpdateSaving)
     let element = ReactDOM.querySelector("#" ++ formId)
     switch element {
-    | Some(element) => sendCoach(DomUtils.FormData.create(element), refreshPage)
+    | Some(element) => sendCoach(DomUtils.FormData.create(element))
     | None => ()
     }
   }
@@ -277,7 +272,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 }->str}
               </h5>
             </div>
-            <form key="xxx" id=formId onSubmit={event => submitForm(event, reloadOnDataChange)}>
+            <form key="xxx" id=formId onSubmit={event => submitForm(event)}>
               <input name="authenticity_token" type_="hidden" value=authenticityToken />
               <div className="max-w-2xl px-6 pb-6 mx-auto">
                 <div className="mt-5">

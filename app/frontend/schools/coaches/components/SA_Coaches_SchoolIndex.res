@@ -22,9 +22,8 @@ type action =
 
 type currentTab = ActiveCoaches | ExitedCoaches
 
-let isSelectedTabExited = () => {
-  let searchQuery = RescriptReactRouter.useUrl().search
-  "exited"->Js.String.includes(searchQuery)
+let currentTab = () => {
+  Js.String.includes("exited", RescriptReactRouter.useUrl().search) ? ExitedCoaches : ActiveCoaches
 }
 
 let reducer = (state, action) =>
@@ -35,30 +34,32 @@ let reducer = (state, action) =>
     {...state, coaches: newCoachesList}
   }
 
-let coachesTab = (currentTab, coachCount, isActive) => {
-  let activeTabStyle = isActive ? "border-b-2 border-primary-500 text-primary-500" : ""
-  let (label, currentPath) = switch currentTab {
+let coachesTab = (count, tab) => {
+  let (label, currentPath) = switch tab {
   | ActiveCoaches => (tr("active_coaches"), "coaches?status=active")
   | ExitedCoaches => (tr("exited_coaches"), "coaches?status=exited")
   }
   <a
     role="tab"
+    key={label}
     href={currentPath}
-    className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${activeTabStyle}`}>
+    className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${currentTab() ==
+        tab
+        ? "border-b-2 border-primary-500 text-primary-500"
+        : ""}`}>
     <span> {label->str} </span>
-    {isActive
-      ? <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
-          {string_of_int(coachCount)->str}
-        </span>
-      : React.null}
+    {ReactUtils.nullUnless(
+      <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
+        {string_of_int(count)->str}
+      </span>,
+      currentTab() == tab,
+    )}
   </a>
 }
 
 @react.component
 let make = (~coaches, ~authenticityToken) => {
   let (state, send) = React.useReducer(reducer, {coaches: coaches, formVisible: None})
-
-  let isExitedTabSelected = isSelectedTabExited()
 
   let closeFormCB = () => send(UpdateFormVisible(None))
   let updateCoachCB = coach => send(UpdateCoaches(coach))
@@ -87,12 +88,9 @@ let make = (~coaches, ~authenticityToken) => {
         </div>
         <div className="max-w-3xl mx-auto">
           <div className="px-12 flex justify-start" role="tablist">
-            {coachesTab(
-              ActiveCoaches,
-              state.coaches->Js.Array2.length,
-              isExitedTabSelected == false,
-            )}
-            {coachesTab(ExitedCoaches, state.coaches->Js.Array2.length, isExitedTabSelected)}
+            {[ActiveCoaches, ExitedCoaches]
+            ->Js.Array2.map(coachesTab(Js.Array2.length(state.coaches)))
+            ->React.array}
           </div>
         </div>
       </div>
@@ -104,7 +102,10 @@ let make = (~coaches, ~authenticityToken) => {
                 <div className=" text-center mt-14">
                   <span className="text-lg sm:text-2xl font-bold"> {tr("no_coaches")->str} </span>
                   <p className="pt-3 text-gray-500 font-medium">
-                    {(isExitedTabSelected ? tr("no_exited_coaches") : tr("no_active_coaches"))->str}
+                    {switch currentTab() {
+                    | ActiveCoaches => tr("no_active_coaches")
+                    | ExitedCoaches => tr("no_exited_coaches")
+                    }->str}
                   </p>
                 </div>
               </div>

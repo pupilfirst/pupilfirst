@@ -99,6 +99,8 @@ en:
       review: Review
       sign_out: Sign Out
       students: Students
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: Copied!
       copy: Copy to clipboard
@@ -2242,6 +2244,11 @@ en:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2483,6 +2490,8 @@ en:
     issue_certificate_mutator:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: Admins
@@ -2634,6 +2643,8 @@ en:
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     is: is
+    last_question_not_found: "Could not find last question at index "
+    question_not_found: "Could not find a question at index "
     level: Level
     level_label:
       long_with_name: "Level %{number}: %{name}"
@@ -2695,6 +2706,7 @@ en:
     team: Team
     team_name: Team Name
     teams: Teams
+    thousand_student: You can only onboard 1000 students at a time
     update: Update
     updating: Updating
     uploading: Uploading

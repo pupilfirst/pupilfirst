@@ -44,19 +44,19 @@ module Cohorts
 
       return unless invalid
 
-      errors.add(:base, 'One or more entries have an invalid email address')
+      errors.add(:base, I18n.t("mutations.create_students.invalid_emails"))
     end
 
     def students_must_have_unique_email
       return if csv_rows.map { |r| r['email'] }.uniq.count == csv_rows.count
 
-      errors.add(:base, 'Email addresses must be unique')
+      errors.add(:base, I18n.t("mutations.create_students.unique_emails"))
     end
 
     def soft_limit_student_count
       return if csv_rows.count <= 1000
 
-      errors.add(:base, 'You can only onboard 1000 students at a time')
+      errors.add(:base, I18n.t("shared.thousand_student"))
     end
 
     def valid_string?(string:, max_length:, optional: false)
@@ -86,7 +86,7 @@ module Cohorts
         return
       end
 
-      errors.add(:base, 'One or more entries have invalid strings')
+      errors.add(:base, I18n.t("mutations.create_students.invalid_strings"))
     end
   end
 end

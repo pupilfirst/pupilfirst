@@ -99,6 +99,8 @@ ar:
       review: مراجعة
       sign_out: تسجيل الخروج
       students: الطلاب
+    CalendarsIndex__DatePicker:
+      today: اليوم
     ClickToCopy:
       copied: Copied!
       copy: Copy to clipboard
@@ -2240,6 +2242,11 @@ ar:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
+    create_students:
+      invalid_emails: واحد أو أكثر من الإدخالات بها عنوان بريد إلكتروني غير صالح
+      soft_limit_number: لقد وصلت إلى الحد الأدنى لعدد الطلاب في هذه الدورة
+      unique_emails: يجب أن تكون عناوين البريد الإلكتروني فريدة
+      invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2472,6 +2479,8 @@ ar:
     issue_certificate_mutator:
       certificate_error: تعذر العثور على الشهادة المحددة.
       issued_error: لقد تم بالفعل إصدار شهادة لهذا الطالب لهذه الدورة.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "تعذر العثور على معيار التقييم بالمعرف %{id}"
   schools:
     admins:
       title: المدراء
@@ -2623,6 +2632,8 @@ ar:
     image_file_invalid: يُرجى تحديد صورة (PNG ، JPEG ، GIF) بحجم أقل من 5 ميغابايت وأقل من 4096 بكسل من حيث العرض أو الارتفاع.
     invalid_authenticity_token_error: يبدو أنك قمت بالخروج من المنصة، يرجى تحديث الصفحة والمتابعة
     is: is
+    last_question_not_found: "لا يمكن العثور على السؤال الأخير في الفهرس "
+    question_not_found: "تعذر العثور على سؤال في الفهرس "
     level: المستوى
     level_label:
       long_with_name: "المستوى %{number}: %{name}"
@@ -2684,6 +2695,7 @@ ar:
     team: فريق
     team_name: اسم الفريق
     teams: الفرق
+    thousand_student: يمكنك فقط ضم 1000 طالب في المرة الواحدة
     update: تحديث
     updating: جار التحديث
     uploading: جار الرفع

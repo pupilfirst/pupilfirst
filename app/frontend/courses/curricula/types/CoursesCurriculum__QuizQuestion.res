@@ -42,14 +42,14 @@ let lastQuestion = questions => {
 
   questions |> ArrayUtils.unsafeFind(
     q => q.index == maxIndex,
-    "Could not find last question at index " ++ string_of_int(maxIndex),
+    I18n.t("shared.last_question_not_found") ++ string_of_int(maxIndex),
   )
 }
 
 let nextQuestion = (questions, question) =>
   questions |> ArrayUtils.unsafeFind(
     q => q.index == question.index + 1,
-    "Could not find a question at index " ++ string_of_int(question.index + 1),
+    I18n.t("shared.question_not_found") ++ string_of_int(question.index + 1),
   )
 
 let isLastQuestion = (questions, question) => questions |> lastQuestion == question

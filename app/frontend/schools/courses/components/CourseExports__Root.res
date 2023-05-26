@@ -418,7 +418,7 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                             ariaLabel={t("download_course_export") ++
                             " " ++
                             (courseExport |> CourseExport.id)}
-                            className="pr-6 pl-4 w-10 text-xs course-faculty__list-item-remove text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
+                            className="pe-6 ps-4 w-10 text-xs course-faculty__list-item-remove text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                             href={file |> CourseExport.filePath}>
                             <FaIcon classes="fas fa-file-download" />
                           </a>

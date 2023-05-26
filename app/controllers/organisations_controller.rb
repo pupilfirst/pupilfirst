@@ -44,7 +44,6 @@ class OrganisationsController < ApplicationController
     courses.values.map do |course|
       cohort_ids = course[:cohorts].map(&:id)
 
-      course[:inactive_cohorts] = course[:inactive_cohorts_ids].any?
       course[:active_students] = student_count(cohort_ids)
       course[:inactive_students] = student_count(course[:inactive_cohorts_ids])
 

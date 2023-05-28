@@ -398,7 +398,8 @@ ActiveRecord::Schema.define(version: 2023_05_28_092206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "student_id"
-    t.index ["student_id"], name: "index_leaderboard_entries_on_student_id", unique: true
+    t.index ["student_id", "period_from", "period_to"], name: "index_leaderboard_on_student_id_and_period_from_and_to", unique: true
+    t.index ["student_id"], name: "index_leaderboard_entries_on_student_id"
   end
 
   create_table "levels", id: :serial, force: :cascade do |t|

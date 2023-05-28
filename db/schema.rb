@@ -884,8 +884,6 @@ ActiveRecord::Schema.define(version: 2023_05_28_092206) do
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
-  add_foreign_key "shared_accesses", "rooms", name: "shared_accesses_room_id_fkey"
-  add_foreign_key "shared_accesses", "users", name: "shared_accesses_user_id_fkey"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "students", "cohorts"

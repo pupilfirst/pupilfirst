@@ -21,7 +21,7 @@ FactoryBot.define do
       days_to_complete { nil }
     end
 
-    trait :for_founders do
+    trait :for_students do
       role { Target::ROLE_STUDENT }
     end
 

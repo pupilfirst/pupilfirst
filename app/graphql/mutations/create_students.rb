@@ -74,7 +74,7 @@ module Mutations
 
       def soft_limit_student_count
         if @cohort.blank? || @cohort.course.blank? ||
-             @cohort.course.founders.count < 100_000
+             @cohort.course.students.count < 100_000
           return
         end
 

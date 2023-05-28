@@ -15,7 +15,7 @@ module Users
       end
 
       User.transaction do
-        delete_founder_data if @user.founders.present?
+        delete_student_data if @user.students.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
         name = @user.preferred_name.presence || @user.name
@@ -30,11 +30,11 @@ module Users
 
     private
 
-    def delete_founder_data
+    def delete_student_data
       # Clear links with all submissions, and delete submissions owned just by this user.
       TimelineEventOwner
         .includes(:timeline_event)
-        .where(founder: @user.founders)
+        .where(student: @user.students)
         .find_each do |submission_ownership|
           submission = submission_ownership.timeline_event
           only_one_owner = submission.timeline_event_owners.one?
@@ -45,13 +45,13 @@ module Users
       # Cache teams with only the current user as member
       team_ids =
         Team
-          .joins(:founders)
+          .joins(:students)
           .group(:id)
-          .having('count(founders.id) = 1')
-          .where(id: @user.founders.distinct(:team_id).select(:team_id))
+          .having('count(students.id) = 1')
+          .where(id: @user.students.distinct(:team_id).select(:team_id))
           .pluck(:id)
 
-      @user.founders.each(&:destroy!)
+      @user.students.each(&:destroy!)
       Team.where(id: team_ids).each(&:destroy!)
     end
 

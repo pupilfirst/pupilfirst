@@ -20,15 +20,15 @@ class CoachStatsResolver < ApplicationQuery
   def pending_submissions
     TimelineEvent
       .pending_review
-      .joins(:founders)
-      .where(founders: { id: assigned_student_ids })
+      .joins(:students)
+      .where(students: { id: assigned_student_ids })
       .distinct
       .count
   end
 
   def assigned_student_ids
     @assigned_student_ids ||=
-      coach.founders.joins(:course).where(courses: { id: course.id }).pluck(:id)
+      coach.students.joins(:course).where(courses: { id: course.id }).pluck(:id)
   end
 
   def authorized?

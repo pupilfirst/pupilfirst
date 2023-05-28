@@ -8,7 +8,7 @@ feature "Student's view of Course Curriculum", js: true do
   let(:course) { create :course }
   let(:cohort) { create :cohort, course: course }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
-  let!(:student) { create :founder, level: level_4, cohort: cohort }
+  let!(:student) { create :student, level: level_4, cohort: cohort }
   let(:faculty) { create :faculty }
 
   # Levels.
@@ -444,7 +444,7 @@ feature "Student's view of Course Curriculum", js: true do
         create :target, target_group: c2_target_group, role: Target::ROLE_TEAM
       end
       let!(:c2_student) do
-        create :founder, level: c2_level_1, user: student.user, cohort: cohort_2
+        create :student, level: c2_level_1, user: student.user, cohort: cohort_2
       end
 
       scenario 'student switches to another course' do
@@ -467,7 +467,7 @@ feature "Student's view of Course Curriculum", js: true do
       let(:course_2) { create :course, school: school_2 }
       let(:c2_level_1) { create :level, :one, course: course_2 }
       let!(:c2_student) do
-        create :founder, level: c2_level_1, user: student.user
+        create :student, level: c2_level_1, user: student.user
       end
 
       scenario 'courses in other schools are not displayed' do
@@ -547,10 +547,10 @@ feature "Student's view of Course Curriculum", js: true do
 
     before do
       # Enroll the student as a coach who can review her own submissions.
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: coach,
-             founder: student
+             student: student
     end
 
     scenario 'coach accesses content in locked levels' do

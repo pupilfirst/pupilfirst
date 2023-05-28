@@ -32,7 +32,7 @@ module Cohorts
 
       applicable_emails =
         csv_rows.map { |row| row['email'].downcase } -
-          Founder
+          Student
             .where(id: student_ids)
             .joins(:user)
             .pluck(:email)

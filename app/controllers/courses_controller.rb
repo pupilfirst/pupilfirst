@@ -117,7 +117,7 @@ class CoursesController < ApplicationController
   def save_tag
     return if params[:tag].blank?
 
-    if params[:tag].in?(current_school.founder_tag_list)
+    if params[:tag].in?(current_school.student_tag_list)
       session[:applicant_tag] = params[:tag]
     end
   end

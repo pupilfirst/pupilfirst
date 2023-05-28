@@ -7,7 +7,7 @@ module ValidateStudentSubmission
       course = target.course
       student =
         context[:current_user]
-          .founders
+          .students
           .joins(:level)
           .where(levels: { course_id: course })
           .first

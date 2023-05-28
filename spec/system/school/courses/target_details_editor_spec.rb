@@ -1008,7 +1008,7 @@ feature 'Target Details Editor', js: true do
     end
 
     context 'admin modifies target that currently has submissions' do
-      # let!(:student) { create :founder, course: course }
+      # let!(:student) { create :student, course: course }
       let!(:submission_for_auto_verified_target) do
         create :timeline_event, target: target_1_l1, passed_at: 1.day.ago
       end

@@ -6,15 +6,15 @@ describe FacultyPolicy do
   permissions :connect? do
     let(:coach_1) { create :faculty }
     let(:coach_2) { create :faculty, connect_link: Faker::Internet.url }
-    let(:current_founder) { create :founder }
+    let(:current_student) { create :student }
     let(:current_coach) { nil }
     let(:current_school_admin) { nil }
 
     let(:pundit_user) do
       OpenStruct.new(
-        current_user: current_founder&.user,
-        current_founder: current_founder,
-        current_school: current_founder&.school,
+        current_user: current_student&.user,
+        current_student: current_student,
+        current_school: current_student&.school,
         current_coach: current_coach,
         current_school_admin: current_school_admin
       )
@@ -22,16 +22,16 @@ describe FacultyPolicy do
 
     context 'when the coaches are enrolled in a students course' do
       let!(:enrollment_1) do
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                :with_cohort_enrollment,
                faculty: coach_1,
-               founder: current_founder
+               student: current_student
       end
       let!(:enrollment_2) do
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                :with_cohort_enrollment,
                faculty: coach_2,
-               founder: current_founder
+               student: current_student
       end
 
       it 'grants access to student when the coach has a connect link' do
@@ -51,7 +51,7 @@ describe FacultyPolicy do
     end
 
     context 'when accessed by the public' do
-      let(:current_founder) { nil }
+      let(:current_student) { nil }
 
       it 'denies access' do
         expect(subject).not_to permit(pundit_user, coach_1)
@@ -74,8 +74,8 @@ describe FacultyPolicy do
     context 'when accessed by a school admin' do
       let(:current_school_admin) do
         create :school_admin,
-               school: current_founder.school,
-               user: current_founder.user
+               school: current_student.school,
+               user: current_student.user
       end
 
       it 'grants access even without coach enrollment' do

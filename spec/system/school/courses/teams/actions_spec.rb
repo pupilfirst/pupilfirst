@@ -16,7 +16,7 @@ feature 'Team Actions', js: true do
   let!(:team_2) { create :team_with_students, cohort: live_cohort }
 
   scenario 'School admin merges ended cohort into live cohort' do
-    founders = team_1.founders
+    students = team_1.students
 
     sign_in_user school_admin.user, referrer: teams_actions_path(team_1)
 
@@ -28,12 +28,12 @@ feature 'Team Actions', js: true do
     expect(page).to have_text(team_2.name)
     expect(page).not_to have_text(team_1.name)
 
-    founders.each { |founder| expect(founder.reload.team).to eq(nil) }
+    students.each { |student| expect(student.reload.team).to eq(nil) }
     expect(course.teams.count).to eq(1)
   end
 
   scenario 'logged in user who is not a school admin tries to access teams action page' do
-    sign_in_user team_1.founders.first.user,
+    sign_in_user team_1.students.first.user,
                  referrer: teams_actions_path(team_1)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end

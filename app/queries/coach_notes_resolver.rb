@@ -12,6 +12,6 @@ class CoachNotesResolver < ApplicationQuery
   end
 
   def student
-    @student ||= Founder.find_by(id: student_id)
+    @student ||= Student.find_by(id: student_id)
   end
 end

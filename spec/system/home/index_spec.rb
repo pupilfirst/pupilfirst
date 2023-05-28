@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Index spec', js: true do
   include UserSpecHelper
 
-  # Setup a course with founders and target for community.
+  # Setup a course with students and target for community.
   let(:school) { create :school, :current }
 
   let!(:course_1) do

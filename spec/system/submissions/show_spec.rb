@@ -66,7 +66,7 @@ feature 'Submissions show' do
 
   let(:submission_2) { create(:timeline_event, target: target) }
   let(:team) { create :team_with_students, cohort: cohort }
-  let(:student) { team.founders.first }
+  let(:student) { team.students.first }
 
   before do
     # Link submission files after they are created.
@@ -79,8 +79,8 @@ feature 'Submissions show' do
     before do
       target.evaluation_criteria << [evaluation_criterion]
 
-      submission.founders << student
-      submission_2.founders << team.founders.last
+      submission.students << student
+      submission_2.students << team.students.last
     end
 
     scenario 'student visits show page of submission he is linked to',
@@ -126,7 +126,7 @@ feature 'Submissions show' do
   end
 
   context 'submission is of an auto-verified target' do
-    before { submission.founders << student }
+    before { submission.students << student }
 
     scenario 'student visits show page of submission', js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)

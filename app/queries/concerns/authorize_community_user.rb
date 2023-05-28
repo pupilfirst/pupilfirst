@@ -9,7 +9,7 @@ module AuthorizeCommunityUser
     return true if moderator?
 
     # User should have access to the community
-    current_user.founders.includes(:course).where(courses: { id: community.courses }).any?
+    current_user.students.includes(:course).where(courses: { id: community.courses }).any?
   end
 
   def authorized_update?

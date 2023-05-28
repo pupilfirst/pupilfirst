@@ -38,9 +38,8 @@ class Target < ApplicationRecord
 
   scope :live, -> { where(visibility: VISIBILITY_LIVE) }
   scope :draft, -> { where(visibility: VISIBILITY_DRAFT) }
-  scope :founder, -> { where(role: ROLE_STUDENT) } # rubocop:disable Rails/DuplicateScope
-  scope :student, -> { where(role: ROLE_STUDENT) } # rubocop:disable Rails/DuplicateScope
-  scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
+  scope :student, -> { where(role: ROLE_STUDENT) }
+  scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
 
@@ -162,22 +161,22 @@ class Target < ApplicationRecord
     end
   end
 
-  def founder_role?
+  def student_role?
     ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
     role == Target::ROLE_STUDENT
   end
 
-  def status(founder)
+  def status(student)
     @status ||= {}
-    @status[founder.id] ||= Targets::StatusService.new(self, founder).status
+    @status[student.id] ||= Targets::StatusService.new(self, student).status
   end
 
-  def pending?(founder)
-    status(founder) == STATUS_PENDING
+  def pending?(student)
+    status(student) == STATUS_PENDING
   end
 
-  def verified?(founder)
-    status(founder) == STATUS_COMPLETE
+  def verified?(student)
+    status(student) == STATUS_COMPLETE
   end
 
   def session?
@@ -188,7 +187,7 @@ class Target < ApplicationRecord
     session_at.blank?
   end
 
-  def founder_event?
+  def student_event?
     ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
     role == ROLE_STUDENT
   end

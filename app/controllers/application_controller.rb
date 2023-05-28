@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   helper_method :avatar
   helper_method :current_host
   helper_method :current_school
-  helper_method :current_founder
+  helper_method :current_student
   helper_method :current_coach
   helper_method :current_school_admin
 
@@ -89,25 +89,25 @@ class ApplicationController < ActionController::Base
     @current_coach ||= current_user&.faculty
   end
 
-  def current_founder
-    @current_founder ||=
+  def current_student
+    @current_student ||=
       begin
         if current_user.present?
-          founder_id = read_cookie(:founder_id)
+          student_id = read_cookie(:student_id)
 
-          # Founders in current school for the user
-          founders = current_user.founders
+          # Students in current school for the user
+          students = current_user.students
 
-          # Try to select founder from value stored in cookie.
-          founder =
-            if founder_id.present?
-              founders.not_dropped_out.find_by(id: founder_id)
+          # Try to select student from value stored in cookie.
+          student =
+            if student_id.present?
+              students.not_dropped_out.find_by(id: student_id)
             else
               nil
             end
 
-          # Return selected founder, if any, or return the first founder (if any).
-          founder.presence || founders.not_dropped_out.first
+          # Return selected student, if any, or return the first student (if any).
+          student.presence || students.not_dropped_out.first
         end
       end
   end
@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
   def pundit_user
     OpenStruct.new(
       current_user: current_user,
-      current_founder: current_founder,
+      current_student: current_student,
       current_school: current_school,
       current_coach: current_coach,
       current_school_admin: current_school_admin
@@ -203,11 +203,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_url if service.signed_out?
   end
 
-  def authenticate_founder!
+  def authenticate_student!
     # User must be logged in.
     authenticate_user!
 
-    return if current_founder.present? && !current_founder.dropped_out_at?
+    return if current_student.present? && !current_student.dropped_out_at?
 
     redirect_to root_path
   end
@@ -230,7 +230,7 @@ class ApplicationController < ActionController::Base
 
   def avatar(
     name,
-    founder: nil,
+    student: nil,
     faculty: nil,
     version: :mid,
     background_shape: :circle
@@ -239,8 +239,8 @@ class ApplicationController < ActionController::Base
       return helpers.image_tag(faculty.image).html_safe
     end
 
-    if founder.present? && founder.avatar.attached?
-      return helpers.image_tag(founder.avatar_variant(version)).html_safe
+    if student.present? && student.avatar.attached?
+      return helpers.image_tag(student.avatar_variant(version)).html_safe
     end
 
     Scarf::InitialAvatar

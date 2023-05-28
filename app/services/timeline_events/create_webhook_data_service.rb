@@ -7,7 +7,7 @@ module TimelineEvents
     def data
       {
         id: @submission.id,
-        students: @submission.founders.pluck(:id),
+        students: @submission.students.pluck(:id),
         created_at: @submission.created_at,
         updated_at: @submission.updated_at,
         target_id: @submission.target_id,
@@ -25,7 +25,7 @@ module TimelineEvents
     private
 
     def students
-      @submission.founders.map do |student|
+      @submission.students.map do |student|
         { id: student.id, name: student.name }
       end
     end

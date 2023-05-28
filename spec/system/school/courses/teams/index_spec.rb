@@ -28,7 +28,7 @@ feature 'Teams Index', js: true do
       expect(page).to have_content(team_1.name)
       expect(page).to have_content(team_1.cohort.name)
 
-      team_1.founders.each do |student|
+      team_1.students.each do |student|
         expect(page).to have_content(student.name)
       end
     end
@@ -54,7 +54,7 @@ feature 'Teams Index', js: true do
       expect(page).to have_content(team_ended.name)
       expect(page).to have_content(team_ended.cohort.name)
 
-      team_ended.founders.each do |student|
+      team_ended.students.each do |student|
         expect(page).to have_content(student.name)
       end
     end

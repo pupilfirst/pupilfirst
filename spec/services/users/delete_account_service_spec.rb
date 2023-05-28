@@ -12,7 +12,7 @@ describe Users::DeleteAccountService do
   let!(:course) { create :course, :with_cohort, school: user.school }
   let!(:course_author) { create :course_author, user: user, course: course }
 
-  # Coach notes for the founder profiles
+  # Coach notes for the student profiles
   let!(:coach_note_1) { create :coach_note, student: student }
 
   # Create submissions by the student profile
@@ -20,7 +20,7 @@ describe Users::DeleteAccountService do
   let(:level_1) { create :level, :one, course: course_1 }
   let(:target_group_1) { create :target_group, level: level_1 }
   let!(:target_1) do
-    create :target, :for_founders, target_group: target_group_1
+    create :target, :for_students, target_group: target_group_1
   end
   let!(:target_2) { create :target, :for_team, target_group: target_group_1 }
   let!(:submission_by_student) do
@@ -34,7 +34,7 @@ describe Users::DeleteAccountService do
     create :timeline_event,
            :with_owners,
            latest: true,
-           owners: team.founders,
+           owners: team.students,
            target: target_1
   end
 
@@ -46,18 +46,18 @@ describe Users::DeleteAccountService do
   end
   let!(:team_2) { create :team_with_students }
   let!(:coach_student_enrollment) do
-    create :faculty_founder_enrollment,
-           founder: team_2.founders.first,
+    create :faculty_student_enrollment,
+           student: team_2.students.first,
            faculty: coach
   end
   let!(:coach_note_by_user) do
-    create :coach_note, author: user, student: team_2.founders.first
+    create :coach_note, author: user, student: team_2.students.first
   end
   let!(:submission_reviewed_by_user) do
     create :timeline_event,
            :with_owners,
            latest: true,
-           owners: team_2.founders,
+           owners: team_2.students,
            target: target_1,
            evaluator: coach,
            evaluated_at: Time.zone.now
@@ -95,15 +95,15 @@ describe Users::DeleteAccountService do
 
         # Check only applicable records are destroyed
         expect(User.find_by(id: user.id)).to eq(nil)
-        expect(Founder.find_by(id: student.id)).to eq(nil)
+        expect(Student.find_by(id: student.id)).to eq(nil)
         expect(Team.find_by(id: team.id)).to_not eq(nil)
         expect(
-          TimelineEventOwner.where(founder_id: user.founders.select(:id))
+          TimelineEventOwner.where(student_id: user.students.select(:id))
         ).to eq([])
         expect(TimelineEvent.find_by(id: submission_by_student.id)).to eq(nil)
         expect(TimelineEvent.find_by(id: submission_by_team.id)).to_not eq(nil)
-        expect(submission_by_team.founders.pluck(:id).sort).to eq(
-          team.founders.reload.pluck(:id).sort
+        expect(submission_by_team.students.pluck(:id).sort).to eq(
+          team.students.reload.pluck(:id).sort
         )
         expect(CourseAuthor.find_by(id: course_author.id)).to eq(nil)
         expect(Faculty.find_by(id: coach.id)).to eq(nil)
@@ -112,7 +112,7 @@ describe Users::DeleteAccountService do
           FacultyCohortEnrollment.find_by(id: coach_cohort_enrollment.id)
         ).to eq(nil)
         expect(
-          FacultyFounderEnrollment.find_by(id: coach_student_enrollment.id)
+          FacultyStudentEnrollment.find_by(id: coach_student_enrollment.id)
         ).to eq(nil)
 
         # Check user_id is nullified in applicable records

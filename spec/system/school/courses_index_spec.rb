@@ -6,7 +6,7 @@ feature 'Courses Index', js: true do
   include MarkdownEditorHelper
   include DevelopersNotificationsHelper
 
-  # Setup a course with a single founder target, ...
+  # Setup a course with a single student target, ...
   let!(:school) { create :school, :current }
   let!(:course_1) { create :course, :with_default_cohort, school: school }
   let!(:course_2) do

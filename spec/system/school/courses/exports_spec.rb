@@ -32,7 +32,7 @@ feature 'Course Exports', js: true do
 
   before do
     # Add those tags to school's list of team tags.
-    school.founder_tag_list.add('tag 1', 'tag 2', 'tag 3')
+    school.student_tag_list.add('tag 1', 'tag 2', 'tag 3')
     school.save!
   end
 

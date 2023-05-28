@@ -65,9 +65,9 @@ describe Schools::DeleteService do
 
   before do
     # Tag the schools.
-    school_1.founder_tag_list.add('school 1 tag')
+    school_1.student_tag_list.add('school 1 tag')
     school_1.save!
-    school_2.founder_tag_list.add('school 2 tag')
+    school_2.student_tag_list.add('school 2 tag')
     school_2.save!
   end
 

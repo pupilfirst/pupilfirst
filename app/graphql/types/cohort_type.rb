@@ -25,7 +25,7 @@ module Types
       BatchLoader::GraphQL
         .for(object.id)
         .batch(default_value: 0) do |cohort_ids, loader|
-          Founder
+          Student
             .not_dropped_out
             .where(cohort_id: cohort_ids)
             .group(:cohort_id)

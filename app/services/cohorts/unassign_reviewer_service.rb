@@ -6,12 +6,12 @@ module Cohorts
 
     def unassign(faculty)
       Faculty.transaction do
-        students_in_cohorts = Founder.where(cohorts: @course.cohorts)
+        students_in_cohorts = Student.where(cohorts: @course.cohorts)
 
         # Remove links to all students in course, if any.
         faculty
-          .faculty_founder_enrollments
-          .where(founder: students_in_cohorts)
+          .faculty_student_enrollments
+          .where(student: students_in_cohorts)
           .each(&:destroy!)
 
         faculty

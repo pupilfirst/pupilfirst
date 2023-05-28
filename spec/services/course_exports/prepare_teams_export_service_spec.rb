@@ -32,8 +32,8 @@ describe CourseExports::PrepareTeamsExportService do
 
   let(:user_t3) { create :user }
 
-  let!(:student_1) { team_1.founders.first }
-  let!(:student_2) { team_2.founders.first }
+  let!(:student_1) { team_1.students.first }
+  let!(:student_2) { team_2.students.first }
   let!(:student_3) do
     create :student,
            cohort: cohort_live,
@@ -115,14 +115,14 @@ describe CourseExports::PrepareTeamsExportService do
   before do
     # Assign all three coaches to the course, but only two of those coaches directly to the first student. These two
     # should be the only ones listed in the report.
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: coach_1,
-           founder: student_l2_1
-    create :faculty_founder_enrollment,
+           student: student_l2_1
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: coach_2,
-           founder: student_l2_1
+           student: student_l2_1
 
     create :faculty_cohort_enrollment, faculty: coach_3, cohort: cohort_live
 
@@ -151,7 +151,7 @@ describe CourseExports::PrepareTeamsExportService do
   end
 
   def sorted_student_names(team)
-    team.founders.joins(:user).pluck('users.name').sort.join(', ')
+    team.students.joins(:user).pluck('users.name').sort.join(', ')
   end
 
   def submission_grading(submission)

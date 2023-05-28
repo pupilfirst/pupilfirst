@@ -21,7 +21,7 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 This version adds a `completed_at` attribute to students. This attribute will be used to determine if a student has completed a course. After upgrading, you should run the following script via the Rails console to set the `completed_at` attribute for all eligible students:
 
 ```rb
-Founder
+Student
   .all
   .each_with_object(nil) do |student, _x|
     # Get the latest submission for each student.

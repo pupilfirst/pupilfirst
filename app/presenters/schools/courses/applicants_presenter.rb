@@ -28,7 +28,7 @@ module Schools
       end
 
       def tags
-        @tags ||= current_school.founder_tag_list
+        @tags ||= current_school.student_tag_list
       end
     end
   end

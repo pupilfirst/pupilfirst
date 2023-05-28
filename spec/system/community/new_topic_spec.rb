@@ -79,7 +79,7 @@ feature 'Topic creator', js: true do
 
     before do
       create :faculty_cohort_enrollment, faculty: coach_1, cohort: cohort
-      create :faculty_founder_enrollment, faculty: coach_2, founder: student
+      create :faculty_student_enrollment, faculty: coach_2, student: student
     end
 
     scenario 'user creates a new topic that automatically subscribes personal coaches' do

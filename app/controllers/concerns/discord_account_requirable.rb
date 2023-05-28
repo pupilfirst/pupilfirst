@@ -8,7 +8,7 @@ module DiscordAccountRequirable
 
     # Redirect only if the user is an active student in the course.
     unless current_user
-             .founders
+             .students
              .joins(cohort: :course)
              .where(courses: { id: course.id })
              .merge(Cohort.active)

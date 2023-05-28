@@ -39,8 +39,8 @@ describe Users::MergeAccountsService do
     create :student, cohort: course_1.cohorts.first, level: level_1_c1
   end
   let!(:student_enrollment) do
-    create :faculty_founder_enrollment,
-           founder: student_in_c1,
+    create :faculty_student_enrollment,
+           student: student_in_c1,
            faculty: coach_old_user
   end
 
@@ -170,7 +170,7 @@ describe Users::MergeAccountsService do
         student_profiles_for_c1 =
           new_user
             .reload
-            .founders
+            .students
             .joins(:course)
             .where(courses: { id: course_1.id })
         current_student_profile = student_profiles_for_c1.first
@@ -189,13 +189,13 @@ describe Users::MergeAccountsService do
         student_profiles_for_c1 =
           new_user
             .reload
-            .founders
+            .students
             .joins(:course)
             .where(courses: { id: course_1.id })
         current_student_profile = student_profiles_for_c1.first
         expect(student_profiles_for_c1.count).to eq(1)
         expect(current_student_profile).to eq(student_old_user_c1)
-        expect(Founder.find_by(id: new_user_student_profile_id)).to eq(nil)
+        expect(Student.find_by(id: new_user_student_profile_id)).to eq(nil)
       end
     end
   end

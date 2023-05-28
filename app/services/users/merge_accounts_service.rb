@@ -95,7 +95,7 @@ module Users
       end
 
       # rubocop:disable Rails/SkipsModelValidations
-      old_user_coach.faculty_founder_enrollments.update_all(
+      old_user_coach.faculty_student_enrollments.update_all(
         faculty_id: new_user_coach.id
       )
 
@@ -125,9 +125,9 @@ module Users
 
     def handle_two_student_profiles_for_same_course(course)
       old_student_profile =
-        @old_user.founders.joins(:course).where(courses: { id: course }).first
+        @old_user.students.joins(:course).where(courses: { id: course }).first
       new_student_profile =
-        @new_user.founders.joins(:course).where(courses: { id: course }).first
+        @new_user.students.joins(:course).where(courses: { id: course }).first
 
       if @student_profile_ids.include?(old_student_profile.id) ^
            @student_profile_ids.include?(new_student_profile.id)
@@ -141,7 +141,7 @@ module Users
     end
 
     def merge_student_profiles
-      return if @old_user.founders.blank?
+      return if @old_user.students.blank?
 
       Rails.logger.info('Merging student profiles...')
 
@@ -155,16 +155,16 @@ module Users
         raise "Both users have student profiles in courses with IDs: #{common_courses.join(', ')}. Select one student profile for each course, and pass an array of their IDs using the keyword argument `student_profile_ids`"
       end
 
-      @old_user.founders.each do |founder|
-        course = founder.course
+      @old_user.students.each do |student|
+        course = student.course
         if @new_user
-             .founders
+             .students
              .joins(:course)
              .where(courses: { id: course.id })
              .present?
           handle_two_student_profiles_for_same_course(course)
         else
-          founder.update!(user_id: @new_user.id)
+          student.update!(user_id: @new_user.id)
         end
       end
     end

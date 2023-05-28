@@ -23,13 +23,13 @@ describe Levels::MergeService do
     let(:level_to_merge_into) { Level.find_by(number: merge_into_number) }
 
     it 'links teams and target groups in level marked for deletion to another level' do
-      chosen_level_students = level_to_delete.founders.pluck(:id)
+      chosen_level_students = level_to_delete.students.pluck(:id)
       chosen_level_target_groups = level_to_delete.target_groups.pluck(:id)
 
       subject.new(level_to_delete).merge_into(level_to_merge_into)
 
       expect(
-        level_to_merge_into.founders.where(id: chosen_level_students).count
+        level_to_merge_into.students.where(id: chosen_level_students).count
       ).to eq(chosen_level_students.count)
       expect(
         level_to_merge_into

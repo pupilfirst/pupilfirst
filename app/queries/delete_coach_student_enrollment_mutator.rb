@@ -13,7 +13,7 @@ class DeleteCoachStudentEnrollmentMutator < ApplicationQuery
   private
 
   def resource_school
-    coach_student_enrollment&.founder&.school
+    coach_student_enrollment&.student&.school
   end
 
   def coach_student_enrollment_must_exist
@@ -24,8 +24,8 @@ class DeleteCoachStudentEnrollmentMutator < ApplicationQuery
 
   def coach_student_enrollment
     @coach_student_enrollment ||=
-      FacultyFounderEnrollment.find_by(
-        founder_id: student_id,
+      FacultyStudentEnrollment.find_by(
+        student_id: student_id,
         faculty_id: coach_id
       )
   end

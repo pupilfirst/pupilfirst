@@ -78,11 +78,11 @@ module Mutations
     def create_subscribers(topic)
       users =
         User
-          .joins(faculty: :faculty_founder_enrollments)
+          .joins(faculty: :faculty_student_enrollments)
           .where(
             faculty: {
-              faculty_founder_enrollments: {
-                founder_id: current_user.founders.active
+              faculty_student_enrollments: {
+                student_id: current_user.students.active
               }
             }
           )
@@ -107,7 +107,7 @@ module Mutations
     def target_accessible?(some_target)
       current_school_admin.present? || current_user.faculty.present? ||
         current_user
-          .founders
+          .students
           .joins(:course)
           .exists?(courses: { id: some_target.course.id })
     end

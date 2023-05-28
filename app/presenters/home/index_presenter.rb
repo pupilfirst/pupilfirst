@@ -45,7 +45,7 @@ module Home
         begin
           if current_user.present?
             current_user
-              .founders
+              .students
               .includes(:cohort, :level)
               .each_with_object({}) do |student, courses|
                 status =

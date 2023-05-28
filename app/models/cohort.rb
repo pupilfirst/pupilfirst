@@ -1,7 +1,7 @@
 class Cohort < ApplicationRecord
   belongs_to :course
   has_many :teams, dependent: :destroy
-  has_many :founders, dependent: :destroy
+  has_many :students, dependent: :destroy
   has_many :faculty_cohort_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_cohort_enrollments
   has_one :school, through: :course

@@ -8,7 +8,7 @@ after 'development:timeline_events', 'development:faculty' do
   coach_user = school.users.joins(:faculty).first
 
   # Get the student entry with submissions.
-  student = user.founders.joins(:timeline_events).first
+  student = user.students.joins(:timeline_events).first
 
   student.coach_notes.create!(
     author: coach_user,

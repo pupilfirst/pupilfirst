@@ -39,7 +39,7 @@ module Mutations
     end
 
     def tags
-      @tags ||= current_school.founder_tags.where(id: @params[:tag_ids])
+      @tags ||= current_school.student_tags.where(id: @params[:tag_ids])
     end
 
     def resource_school

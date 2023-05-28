@@ -6,7 +6,7 @@ feature "Curriculum Editor", js: true do
   include NotificationHelper
   include FlipperHelper
 
-  # Setup a course with a single founder target, ...
+  # Setup a course with a single student target, ...
   let!(:school) { create :school, :current }
   let!(:course) { create :course, :with_cohort, school: school }
   let!(:course_2) { create :course, :with_cohort, school: school }
@@ -241,7 +241,7 @@ feature "Curriculum Editor", js: true do
     let!(:target_group_l0) { create :target_group, level: level_0 }
     let!(:target_group_l3) { create :target_group, level: level_3 }
     let!(:student_l3) do
-      create :founder, level: level_3, cohort: course.cohorts.first
+      create :student, level: level_3, cohort: course.cohorts.first
     end
 
     scenario "author merges third level into the first" do

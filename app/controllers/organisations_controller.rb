@@ -39,8 +39,8 @@ class OrganisationsController < ApplicationController
       course[:total_students] =
         @organisation
           .users
-          .joins(:founders)
-          .where(founders: { cohort_id: cohort_ids })
+          .joins(:students)
+          .where(students: { cohort_id: cohort_ids })
           .distinct
           .count
 
@@ -52,9 +52,9 @@ class OrganisationsController < ApplicationController
     scope = @organisation.users
 
     {
-      total_students: scope.joins(:founders).distinct.count,
+      total_students: scope.joins(:students).distinct.count,
       active_students:
-        scope.joins(founders: :cohort).merge(Cohort.active).distinct.count
+        scope.joins(students: :cohort).merge(Cohort.active).distinct.count
     }
   end
 end

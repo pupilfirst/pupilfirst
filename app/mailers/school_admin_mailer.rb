@@ -6,9 +6,10 @@ class SchoolAdminMailer < SchoolMailer
     @new_school_admin = new_school_admin
     @adding_user = adding_user
     @school = school_admin.user.school
+
     simple_mail(
       school_admin.email,
-      I18n.t('mailers.school_admin.school_admin_added.subject')
+      I18n.t("mailers.school_admin.school_admin_added.subject"),
     )
   end
 
@@ -19,7 +20,7 @@ class SchoolAdminMailer < SchoolMailer
     school_admin,
     course,
     report_params,
-    report_attachment: nil
+    report_attachment
   )
     @report_params = report_params
     @school_admin = school_admin
@@ -28,12 +29,12 @@ class SchoolAdminMailer < SchoolMailer
     @report_attachment = report_attachment
 
     if report_attachment.present?
-      attachments['students_not_added.csv'] = report_attachment
+      attachments["students_not_added.csv"] = report_attachment
     end
 
     simple_mail(
       school_admin.email,
-      I18n.t('mailers.school_admin.students_bulk_import_complete.subject')
+      I18n.t("mailers.school_admin.students_bulk_import_complete.subject"),
     )
   end
 
@@ -42,12 +43,13 @@ class SchoolAdminMailer < SchoolMailer
     @old_email = old_email
     @user = user
     @school = school_admin.school
+
     simple_mail(
       school_admin.email,
       I18n.t(
-        'mailers.school_admin.email_updated_notification.subject',
-        name: user.name
-      )
+        "mailers.school_admin.email_updated_notification.subject",
+        name: user.name,
+      ),
     )
   end
 end

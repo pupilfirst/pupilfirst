@@ -8,7 +8,7 @@ gem "rails", "~> 6.1.7.3"
 gem "dotenv-rails", "~> 2.8", groups: %i[development test]
 
 gem "attribute_normalizer", "~> 1.2.0.b" # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem "active_storage_validations", "~> 0.9" # Better validations for active_storage.
+gem "active_storage_validations", "~> 1.0" # Better validations for active_storage.
 gem "fastimage", "~> 2.2"
 gem "image_processing", "~> 1.12" # Gem to support variants in ActiveStorage
 
@@ -99,7 +99,7 @@ group :test do
 end
 
 group :development, :test do
-  gem "faker", "~> 2.19" # A library for generating fake data such as names, addresses, and phone numbers.
+  gem "faker", "~> 3.2" # A library for generating fake data such as names, addresses, and phone numbers.
   gem "rspec-rails", "~> 5.0" # RSpec for Rails 5+.
   gem "coderay", "~> 1.1" # Pretty syntax highlighting on rspec failure snippets.
   gem "pry-rails", "~> 0.3.9" # Pry debugger.

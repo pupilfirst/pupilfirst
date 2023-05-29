@@ -56,7 +56,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_storage_validations (0.9.8)
+    active_storage_validations (1.0.3)
       activejob (>= 5.2.0)
       activemodel (>= 5.2.0)
       activestorage (>= 5.2.0)
@@ -254,7 +254,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.23.0)
+    faker (3.2.0)
       i18n (>= 1.8.11, < 2)
     faraday (2.7.5)
       faraday-net_http (>= 2.0, < 3.1)
@@ -685,7 +685,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  active_storage_validations (~> 0.9)
+  active_storage_validations (~> 1.0)
   activerecord-nulldb-adapter (~> 0.8)
   activerecord-precounter (~> 0.4)
   acts-as-taggable-on (~> 9.0)
@@ -708,7 +708,7 @@ DEPENDENCIES
   dry-validation (~> 1.7)
   email_inquire (~> 0.11)
   factory_bot_rails (~> 6.2)
-  faker (~> 2.19)
+  faker (~> 3.2)
   fastimage (~> 2.2)
   file_validators (~> 3.0)
   flipper (~> 0.22)

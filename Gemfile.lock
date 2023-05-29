@@ -385,7 +385,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     netrc (0.11.0)
-    newrelic_rpm (8.16.0)
+    newrelic_rpm (9.2.2)
     nio4r (2.5.9)
     nokogiri (1.15.2)
       mini_portile2 (~> 2.8.2)
@@ -731,7 +731,7 @@ DEPENDENCIES
   listen (~> 3.7)
   motion-markdown-it (~> 13.0)
   motion-markdown-it-plugins (~> 8.4)
-  newrelic_rpm (~> 8.6)
+  newrelic_rpm (~> 9.2)
   omniauth-discord (~> 1.0)
   omniauth-facebook (~> 9.0)
   omniauth-github!

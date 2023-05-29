@@ -17,7 +17,8 @@ class SetTargetPrerequisiteBetweenLevels < ActiveRecord::Migration[6.1]
           previous_level_milestones =
             Target.where(
               target_group:
-                TargetGroup.where(level: previous_level, milestone: true)
+                TargetGroup.where(level: previous_level, milestone: true),
+              visibility: Target::VISIBILITY_LIVE
             )
 
           level

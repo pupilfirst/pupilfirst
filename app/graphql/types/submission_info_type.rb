@@ -11,6 +11,7 @@ module Types
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
     field :reviewer, Types::ReviewerDetailInfoType, null: true
+    field :milestone_number, Int, null: true
 
     def title
       BatchLoader::GraphQL
@@ -21,6 +22,17 @@ module Types
             .each { |target| loader.call(target.id, target.title) }
         end
       # object.target.title
+    end
+
+    def milestone_number
+      BatchLoader::GraphQL
+        .for(object.target_id)
+        .batch do |target_ids, loader|
+          Target
+            .where(id: target_ids)
+            .each { |target| loader.call(target.id, target.milestone_number) }
+        end
+      # object.target.milestone_number
     end
 
     def level_number
@@ -50,7 +62,7 @@ module Types
                 submission
                   .founders
                   .map { |founder| founder.user.name }
-                  .join(', ')
+                  .join(", ")
               )
             end
         end

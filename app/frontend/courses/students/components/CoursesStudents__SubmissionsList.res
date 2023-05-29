@@ -116,13 +116,7 @@ let showSubmission = (submissions, levels) =>
           className={submissionCardClasses(submission)}>
           <div className="w-full md:w-3/4">
             <div className="block text-sm md:pe-2">
-              <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                {submission
-                |> Submission.levelId
-                |> Level.unsafeLevelNumber(levels, "StudentSubmissionsList")
-                |> str}
-              </span>
-              <span className="ms-2 font-semibold text-base">
+              <span className="ms-1 font-semibold text-base">
                 {submission |> Submission.title |> str}
               </span>
             </div>

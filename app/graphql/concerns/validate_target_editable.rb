@@ -44,7 +44,7 @@ module ValidateTargetEditable
           .where(id: prerequisite_targets)
           .where.not(visibility: Target::VISIBILITY_ARCHIVED)
 
-      return if prerequisite_targets.count == non_archived_targets.count
+      return if prerequisite_targets.uniq.count == non_archived_targets.count
 
       I18n.t("mutations.update_target.prerequisities_archived_error")
     end

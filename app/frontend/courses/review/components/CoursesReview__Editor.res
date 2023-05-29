@@ -179,7 +179,6 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.defaultDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
-    ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
     ~assignedCoachId=?Filter.assignedCoachId(filter),
     ~targetId=?Filter.targetId(filter),
@@ -452,13 +451,10 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
         </div>
         <div className="px-4 py-3 flex flex-col justify-center">
           <div className="block text-sm md:pe-2">
-            <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-              {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
-            </span>
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ms-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+              className="font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>

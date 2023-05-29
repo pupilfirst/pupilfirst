@@ -801,10 +801,7 @@ en:
         personal_coach: Filter by who's assigned to a student
         reviewed_by: Filter by who reviewed a submission
       filter_by: "Filter by:"
-      filter_by_another_level: Filter by another level
-      filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
-      filter_by_level: Filter by level
-      filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:

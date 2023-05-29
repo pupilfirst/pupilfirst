@@ -1465,6 +1465,9 @@ ar:
           customization: Customization
           overview: Overview
           settings: Settings
+        settings:
+          admins: المشرفون
+          customization: التخصيص
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -1856,6 +1859,7 @@ ar:
       localization: Localization
       manage_account: Manage your account in this school
       name_error: Name can't be blank
+      name_error_length: يجب أن يتكون الاسم من حرفين على الأقل
       name_placeholder: Type your name
       new_password: New password
       new_password_placeholder: Type new password
@@ -2364,6 +2368,14 @@ ar:
     update_user:
       profile_saved_notification: Profile updated successfully!
   organisations:
+    courses:
+      active_cohorts_count: "%{count}"
+      active_cohorts_label: الأفواج النشطة
+      course_label: دورة
+      empty: لا يوجد %{cohort_status} لهذه الدورة التدريبية.
+      inactive_cohorts_count: "%{count}"
+      inactive_cohorts_label: الأفواج غير النشطة
+      pagination_notice: يظهر الآن %{page_start}-%{page_end} من إجمالي %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
@@ -2378,6 +2390,7 @@ ar:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
+      view_all_cohorts: عرض كل المجموعات
     students:
       show:
         average_grades: Average Grades

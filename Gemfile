@@ -104,8 +104,8 @@ group :development, :test do
   gem "coderay", "~> 1.1" # Pretty syntax highlighting on rspec failure snippets.
   gem "pry-rails", "~> 0.3.9" # Pry debugger.
   gem "webmock", "~> 3.14" # Mocking web requests.
-  gem "rubocop", "~> 1.21", require: false # Ruby Style Guide.
-  gem "rubocop-rails", "~> 2.16.0", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem "rubocop", "~> 1.51", require: false # Ruby Style Guide.
+  gem "rubocop-rails", "~> 2.19", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
   gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov

@@ -11,7 +11,7 @@ class EvaluationCriterion < ApplicationRecord
             presence: true,
             numericality: {
               greater_than: 0,
-              less_than_or_equal_to: :max_grade
+              less_than_or_equal_to: :max_grade,
             }
 
   validates :grade_labels, presence: true
@@ -20,7 +20,7 @@ class EvaluationCriterion < ApplicationRecord
   validates :name,
             presence: true,
             uniqueness: {
-              scope: %i[course_id max_grade pass_grade]
+              scope: %i[course_id max_grade pass_grade],
             }
 
   def display_name
@@ -30,12 +30,8 @@ class EvaluationCriterion < ApplicationRecord
   private
 
   def grade_labels_must_match_grades
-    if grade_labels.map { |grade_label| grade_label['grade'] } == [
-         *1..max_grade
-       ]
-      return
-    end
+    return if grade_labels.pluck("grade") == [*1..max_grade]
 
-    errors.add(:grade_labels, 'do not match available grades')
+    errors.add(:grade_labels, "do not match available grades")
   end
 end

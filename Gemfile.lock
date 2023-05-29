@@ -742,7 +742,7 @@ DEPENDENCIES
   postmark-rails (~> 0.21)
   prettier_print
   pry-rails (~> 0.3.9)
-  puma (< 6)
+  puma (~> 5.0)
   pundit (~> 2.1)
   rack-attack (~> 6.6)
   rack-cors (~> 1.1)

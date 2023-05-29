@@ -28,8 +28,8 @@ gem "delayed-web", "~> 0.4" # A rails engine that provides a simple web interfac
 gem "seedbank", "~> 0.5" # Better organized seed data.
 gem "font-awesome-rails", "~> 4.7" # Icons from font-awesome!
 gem "kramdown", "~> 2.3" # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
-gem "motion-markdown-it", "~> 8.4.1" # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
-gem "motion-markdown-it-plugins", "~> 8.4.2" # Plugins for motion-markdown-it.
+gem "motion-markdown-it", "~> 13.0" # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
+gem "motion-markdown-it-plugins", "~> 8.4" # Plugins for motion-markdown-it.
 gem "gaffe", "~> 1.2" # Custom error pages. https://github.com/mirego/gaffe
 gem "acts-as-taggable-on", "~> 9.0" # Tag a single model on several contexts.
 gem "email_inquire", "~> 0.11" # Validate email for format, common typos and one-time email providers

@@ -21,8 +21,8 @@ WebMock.disable_net_connect!(
   allow: [
     %r{github.com/mozilla/geckodriver/releases},
     /github-production-release-asset/,
-    "chromedriver.storage.googleapis.com"
-  ]
+    "chromedriver.storage.googleapis.com",
+  ],
 )
 
 # Let's spec emails.
@@ -79,7 +79,7 @@ RSpec.configure do |config|
 
   # Set type to :service for all service_spec-s.
   config.define_derived_metadata(
-    file_path: Regexp.new("/spec/services/")
+    file_path: Regexp.new("/spec/services/"),
   ) { |metadata| metadata[:type] = :service }
 
   # Include email helpers in service and job specs.
@@ -121,9 +121,9 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument("--window-size=1920,1080")
   options.add_argument("use-fake-ui-for-media-stream")
   options.add_argument("use-fake-device-for-media-stream")
-  options.headless!
+  options.add_argument("--headless=new")
 
-  Capybara::Selenium::Driver.new app, browser: :chrome, capabilities: [options]
+  Capybara::Selenium::Driver.new app, browser: :chrome, options: options
 end
 
 Capybara.register_driver :headless_chrome_codespaces do |app|
@@ -133,9 +133,9 @@ Capybara.register_driver :headless_chrome_codespaces do |app|
   options.add_argument("--disable-dev-shm-usage")
   options.add_argument("use-fake-ui-for-media-stream")
   options.add_argument("use-fake-device-for-media-stream")
-  options.headless!
+  options.add_argument("--headless=new")
 
-  Capybara::Selenium::Driver.new app, browser: :chrome, capabilities: [options]
+  Capybara::Selenium::Driver.new app, browser: :chrome, options: options
 end
 
 Capybara.register_driver :firefox do |app|
@@ -146,7 +146,7 @@ Capybara.register_driver :headless_firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
   options.headless!
 
-  Capybara::Selenium::Driver.new app, browser: :firefox, capabilities: [options]
+  Capybara::Selenium::Driver.new app, browser: :firefox, options: options
 end
 
 Capybara.javascript_driver =

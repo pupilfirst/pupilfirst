@@ -100,7 +100,7 @@ end
 
 group :development, :test do
   gem "faker", "~> 3.2" # A library for generating fake data such as names, addresses, and phone numbers.
-  gem "rspec-rails", "~> 5.0" # RSpec for Rails 5+.
+  gem "rspec-rails", "~> 6.0" # RSpec for Rails 5+.
   gem "coderay", "~> 1.1" # Pretty syntax highlighting on rspec failure snippets.
   gem "pry-rails", "~> 0.3.9" # Pry debugger.
   gem "webmock", "~> 3.14" # Mocking web requests.

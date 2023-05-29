@@ -291,7 +291,7 @@ GEM
       railties
       sprockets-rails
     graphql (2.0.22)
-    groupdate (6.1.0)
+    groupdate (6.2.1)
       activesupport (>= 5.2)
     haml (6.1.1)
       temple (>= 0.8.2)
@@ -719,7 +719,7 @@ DEPENDENCIES
   gaffe (~> 1.2)
   graphiql-rails (~> 1.8)
   graphql (~> 2.0)
-  groupdate (~> 6.1.0)
+  groupdate (~> 6.1)
   htmlbeautifier (~> 1.4)
   humanize (~> 2.5)
   i18n-js (~> 4.0)

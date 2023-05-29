@@ -49,7 +49,7 @@ gem "rack-attack", "~> 6.6" # A rack middleware for throttling and blocking abus
 gem "webpush", "~> 1.1.0" # Encryption Utilities for Web Push protocol
 gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates database interactions into no-ops.
 gem "discordrb", "~> 3.4" # A Ruby wrapper for the Discord API.
-gem "groupdate", "~> 6.1.0" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
+gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
 
 # OmniAuth providers

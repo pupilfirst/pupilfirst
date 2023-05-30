@@ -18,7 +18,7 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2023.1
 
-This version mergers the `conclusion` with `status` in the `submission_reports` table. This change is not backwards compatible. If you are using the GraphQL API, you will need to ensure that `submissionReports` query is called with the `status` argument instead of `conclusion`.
+This version merges the `conclusion` with `status` in the `submission_reports` table. This change is not backwards compatible. If you are using the GraphQL API, you will need to ensure that `submissionReports` query is called with the `status` argument instead of `conclusion`.
 
 ### 2022.4
 

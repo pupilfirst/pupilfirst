@@ -746,6 +746,16 @@ ru:
       generate_feedback_button: Создать отзыв
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: Проверить список
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: Добавить еще один отзыв
       add_feedback: Добавить отзыв
@@ -765,21 +775,17 @@ ru:
         notice:
           done: Сделано!
           done_description: Других подобных работ нет.
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: Оценочная Карта
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
-      hide_test_report_button: Скрыть Отчет Тестов
       note_help: "Хотели бы вы написать об этом заметку "
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
-      report_status_string:
-        completed:
-          error: Автоматические тесты не могут быть завершены из-за ошибок
-          failure: Некоторые автоматические тесты не прошли
-          success: Все автоматические тесты прошли успешно
-        in_progress: Автоматические тесты в ходе выполнения
-        queued: Автоматические тесты поставлены в очередь
       review: Проверить
       review_checklist: Проверить список
       review_next: След.
@@ -787,7 +793,6 @@ ru:
       save_grades_and_send_feedback: Сохранить оценки и отправить отзыв
       share_feedback: Поделиться Отзывом
       show_review_checklist: Показать список оценок
-      show_test_report_button: Показать Отчет Тестов
       status:
         completed: Выполнен
         pending_review: Ожидает оценки
@@ -803,7 +808,6 @@ ru:
       submitted_by_team: "Отправлено командой: "
       team: команда
       team_notice: " Это заявление от команды, поэтому добавленная здесь заметка будет опубликована в отчете всех студентов в команде."
-      test_report: Протокол испытания
       undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
       undo_grading: Отменить Оценивание
       write_a_note: Написать Заметку
@@ -1070,6 +1074,11 @@ ru:
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: Введите действительную ссылку
       enter_valid_title: Введите правильный заголовок
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor/#github-actions'
+        title: Github Actions
       link_complete: Ссылка для завершения
       mark_as_complete: Просто отметьте задачу как выполненную.
       need_submit: " должен отправить"
@@ -2194,6 +2203,8 @@ ru:
         founder: Все учредители
         team: Команда
   mutations:
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: Заметка успешно удалена
     archive_course:
@@ -2297,6 +2308,11 @@ ru:
       your_correct_answer: Ваш правильный ответ
     re_activate_student:
       success_notification: Студент повторно активирован успешно!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
     reassign_reviewer:
       submission_graded_error: Вы можете назначить себя только участникам, ожидающим рассмотрения.
       submission_not_assigned_to_coach: Работа уже назначена вам.

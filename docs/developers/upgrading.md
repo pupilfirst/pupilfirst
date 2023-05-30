@@ -16,6 +16,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2023.1
+
+This version mergers the `conclusion` with `status` in the `submission_reports` table. This change is not backwards compatible. If you are using the GraphQL API, you will need to ensure that `submissionReports` query is called with the `status` argument instead of `conclusion`.
+
 ### 2022.4
 
 This version adds a `completed_at` attribute to students. This attribute will be used to determine if a student has completed a course. After upgrading, you should run the following script via the Rails console to set the `completed_at` attribute for all eligible students:
@@ -26,12 +30,13 @@ Founder
   .each_with_object(nil) do |student, _x|
     # Get the latest submission for each student.
     latest_submission =
-      student.latest_submissions.order('created_at DESC').first
+      student.latest_submissions.order("created_at DESC").first
 
     # If a student has no submission, skip.
     if latest_submission.present? &&
-         TimelineEvents::WasLastTargetService.new(latest_submission)
-           .was_last_target?
+         TimelineEvents::WasLastTargetService.new(
+           latest_submission,
+         ).was_last_target?
       # If the students has a submission, and it was the last target, set `completed_at`
       student.update!(completed_at: latest_submission.created_at)
     end

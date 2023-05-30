@@ -734,6 +734,16 @@ hi:
       generate_feedback_button: प्रतिक्रिया उत्पन्न करें
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: चेकलिस्ट की समीक्षा करें
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: एक और प्रतिक्रिया जोड़ें
       add_feedback: प्रतिक्रिया जोड़ें
@@ -753,21 +763,17 @@ hi:
         notice:
           done: पूर्ण!
           done_description: कोई अन्य समान प्रस्तुतियाँ नहीं हैं।
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: ग्रेड कार्ड
       help_text: नोट्स का उपयोग %{note_about}की प्रगति पर नज़र रखने के लिए किया जा सकता है। ये नोट केवल एक छात्र की रिपोर्ट में कोचों को दिखाए जाते हैं। %{additional_help}
-      hide_test_report_button: परीक्षण रिपोर्ट छुपाएं
       note_help: "क्या आप इसके बारे में एक नोट लिखना चाहेंगे "
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: असाइनमेंट हटाएं
       report_description: जाँच रिपोर्ट
-      report_status_string:
-        completed:
-          error: त्रुटियों के कारण स्वचालित परीक्षण पूर्ण नहीं हो सके
-          failure: कुछ स्वचालित परीक्षण विफल
-          success: सभी स्वचालित परीक्षण सफल रहे
-        in_progress: स्वचालित परीक्षण प्रगति पर हैं
-        queued: स्वचालित परीक्षण कतारबद्ध हैं
       review: समीक्षा
       review_checklist: चेकलिस्ट की समीक्षा करें
       review_next: अगला
@@ -775,7 +781,6 @@ hi:
       save_grades_and_send_feedback: ग्रेड सहेजें और फ़ीडबैक भेजें
       share_feedback: प्रतिक्रिया साझा करें
       show_review_checklist: समीक्षा चेकलिस्ट दिखाएं
-      show_test_report_button: टेस्ट रिपोर्ट दिखाएं
       status:
         completed: पूरा हुआ
         pending_review: लंबित समीक्षा
@@ -791,7 +796,6 @@ hi:
       submitted_by_team: "टीम द्वारा प्रस्तुत: "
       team: टीम
       team_notice: " यह सबमिशन एक टीम की ओर से है, इसलिए यहां जोड़ा गया एक नोट टीम के सभी छात्रों की रिपोर्ट में पोस्ट किया जाएगा।"
-      test_report: जाँच रिपोर्ट
       undo_grade_warning: क्या आप वाकई इन ग्रेड को हटाना चाहते हैं? यह सबमिशन को 'लंबित समीक्षा' स्थिति में लौटा देगा।
       undo_grading: ग्रेडिंग पूर्ववत करें
       write_a_note: एक लेख लिखो
@@ -1054,6 +1058,11 @@ hi:
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: एक मान्य लिंक दर्ज करें
       enter_valid_title: एक मान्य शीर्षक दर्ज करें
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor/#github-actions'
+        title: Github Actions
       link_complete: पूरा करने के लिए लिंक
       mark_as_complete: बस लक्ष्य को पूर्ण के रूप में चिह्नित करें।
       need_submit: " प्रस्तुत करने की आवश्यकता है।"
@@ -2170,6 +2179,8 @@ hi:
         founder: सभी संस्थापक
         team: टीम
   mutations:
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: नोट सफलतापूर्वक हटा दिया गया
     archive_course:
@@ -2273,6 +2284,11 @@ hi:
       your_correct_answer: आपका सही उत्तर
     re_activate_student:
       success_notification: विद्यार्थी सफलतापूर्वक पुनः सक्रिय हो गया!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
     reassign_reviewer:
       submission_graded_error: आप केवल अपने आप को लंबित सबमिशन के लिए असाइन कर सकते हैं।
       submission_not_assigned_to_coach: सबमिशन आपको पहले ही सौंपा जा चुका है।

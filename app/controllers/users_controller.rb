@@ -7,24 +7,13 @@ class UsersController < ApplicationController
     @user = authorize(current_user)
   end
 
+  # GET /user/edit
   def edit
     @user = authorize(current_user)
 
-    @course_requiring_discord_account =
-      if params[:course_requiring_discord].present? &&
-           !current_user.discord_account_connected?
-        course =
-          current_user.courses.find_by(id: params[:course_requiring_discord])
-
-        session[:course_requiring_discord] = course.id if course.present?
-        course
-      elsif session.key?(:course_requiring_discord)
-        course =
-          current_user.courses.find_by(id: session[:course_requiring_discord])
-
-        session.delete(:course_requiring_discord)
-        course
-      end
+    if session.key?(:course_requiring_discord)
+      redirect_to discord_account_required_user_path
+    end
   end
 
   # GET /users/delete_account
@@ -118,5 +107,28 @@ class UsersController < ApplicationController
       flash[:error] = t(".link_expired")
       redirect_to edit_user_path
     end
+  end
+
+  # GET /user/discord_account_required?course_requiring_discord
+  def discord_account_required
+    authorize(current_user)
+
+    @course_requiring_discord_account =
+      if params[:course_requiring_discord].present? &&
+           !current_user.discord_account_connected?
+        course =
+          current_user.courses.find_by(id: params[:course_requiring_discord])
+
+        session[:course_requiring_discord] = course.id if course.present?
+        course
+      elsif session.key?(:course_requiring_discord)
+        course =
+          current_user.courses.find_by(id: session[:course_requiring_discord])
+
+        session.delete(:course_requiring_discord)
+        course
+      end
+
+    render layout: "tailwind"
   end
 end

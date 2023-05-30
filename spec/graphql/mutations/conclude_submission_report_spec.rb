@@ -83,7 +83,7 @@ describe Mutations::ConcludeSubmissionReport, type: :request do
           as: :json,
           headers: @headers,
         )
-      end.not_to change { SubmissionReport.count }
+      end.not_to { change { SubmissionReport.count } }
 
       json = JSON.parse(response.body)
       data = json["data"]["concludeSubmissionReport"]

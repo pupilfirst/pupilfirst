@@ -68,6 +68,7 @@ describe Mutations::ConcludeSubmissionReport, type: :request do
     end
 
     it "updates the existing submission report" do
+      # rubocop:disable Lint/AmbiguousBlockAssociation
       expect do
         post(
           "/graphql",
@@ -83,7 +84,8 @@ describe Mutations::ConcludeSubmissionReport, type: :request do
           as: :json,
           headers: @headers,
         )
-      end.not_to { change { SubmissionReport.count } }
+      end.not_to change { SubmissionReport.count }
+      # rubocop:enable Lint/AmbiguousBlockAssociation
 
       json = JSON.parse(response.body)
       data = json["data"]["concludeSubmissionReport"]

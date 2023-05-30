@@ -224,3 +224,90 @@ BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD=4
 ```
 
 To deactivate this feature, simply avoid setting the `BOT_EVALUATOR_IDS` environment variable, or set `BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD` to zero.
+
+## School Specific Configuration
+
+LMS allows you to configure specific settings for a school using various integrations such as Discord, Email Sender Signature, Vimeo, and Github. The following documentation describes how to set up the configurations field in school model.
+
+### Discord Configuration
+
+To set up the Discord integration, provide the following keys in the discord object:
+
+- bot_token: The Discord bot token.
+- server_id: The Discord server ID.
+- default_role_ids: An array of default role IDs for new users.
+  Example:
+
+```json
+"discord": {
+  "bot_token": "your_bot_token",
+  "server_id": "your_server_id",
+  "default_role_ids": [ "role_id_1", "role_id_2" ]
+}
+```
+
+### Email Sender Signature Configuration
+
+To set up the Email Sender Signature integration, provide the following keys in the email_sender_signature object:
+
+- name: The name of the email sender.
+- email: The email address of the email sender.
+- confirmed_at: The date and time when the email address was confirmed (in ISO 8601 format).
+  Example:
+
+```json
+"email_sender_signature": {
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "confirmed_at": "2023-05-10T00:00:00Z"
+}
+```
+
+### Vimeo Configuration
+
+To set up the Vimeo integration, provide the following keys in the vimeo object:
+
+- account_type: The Vimeo account type (e.g., "basic", "plus", "pro", "business", or "premium").
+- access_token: The Vimeo API access token.
+
+Example
+
+```json
+Copy code
+"vimeo": {
+  "account_type": "pro",
+  "access_token": "your_access_token"
+}
+```
+
+### Github Configuration
+
+To set up the Github integration, provide the following keys in the github object:
+
+- access_token: The Github API access token.
+- organization_id: The Github organization ID.
+- default_team_id: The default Github team ID to be added to a repository.
+  Example:
+
+```json
+"github": {
+  "access_token": "your_access_token",
+  "organization_id": "your_organization_id",
+  "default_team_id": "your_default_team_id"
+}
+```
+
+### General Options
+
+1. disable_primary_domain_redirection: Set this to true if you want to disable primary domain redirection. Default is false.
+
+2. delete_inactive_users_after: Set the number of days after which inactive users should be deleted. For example, 30 would delete inactive users after 30 days.
+
+Example:
+
+```json
+"disable_primary_domain_redirection": true,
+"delete_inactive_users_after": 30
+```
+
+> All of these configurations are optional. You can provide any combination of these configurations in the school configurations field.

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Mutations::ConcludeSubmissionReport, type: :request do
   include TokenAuthHelper
@@ -23,48 +23,90 @@ describe Mutations::ConcludeSubmissionReport, type: :request do
            target: target
   end
 
-  let(:test_report) { 'This is the test report' }
+  let(:report) { "This is the test report" }
 
   before(:each) { @headers = request_spec_headers(user) }
 
-  context 'when the submission report does not exist already' do
-    it 'creates a new submission report' do
+  context "when the submission report does not exist already" do
+    it "creates a new submission report" do
       expect do
         post(
-          '/graphql',
+          "/graphql",
           params: {
             query:
               query(
                 submission_id: submission.id,
-                test_report: test_report,
-                conclusion: 'success'
-              )
+                report: report,
+                status: :success,
+                reporter: "Virtual Teaching Assistant",
+              ),
           },
           as: :json,
-          headers: @headers
+          headers: @headers,
         )
       end.to change { SubmissionReport.count }.from(0).to(1)
 
       json = JSON.parse(response.body)
-      data = json['data']['concludeSubmissionReport']
+      data = json["data"]["concludeSubmissionReport"]
 
-      expect(data['success']).to eq(true)
+      expect(data["success"]).to eq(true)
 
       submission_report = SubmissionReport.find_by(submission_id: submission.id)
 
-      expect(submission_report.completed?).to eq(true)
       expect(submission_report.success?).to eq(true)
-      expect(submission_report.test_report).to eq(test_report)
+      expect(submission_report.report).to eq(report)
     end
   end
 
-  def query(submission_id:, test_report: nil, conclusion:)
+  # when the submission report already exists, it should update the existing one
+  context "when the submission report already exists" do
+    let!(:submission_report) do
+      create :submission_report,
+             submission: submission,
+             status: :queued,
+             reporter: "Virtual Teaching Assistant"
+    end
+
+    it "updates the existing submission report" do
+      # rubocop:disable Lint/AmbiguousBlockAssociation
+      expect do
+        post(
+          "/graphql",
+          params: {
+            query:
+              query(
+                submission_id: submission.id,
+                report: report,
+                status: :success,
+                reporter: "Virtual Teaching Assistant",
+              ),
+          },
+          as: :json,
+          headers: @headers,
+        )
+      end.not_to change { SubmissionReport.count }
+      # rubocop:enable Lint/AmbiguousBlockAssociation
+
+      json = JSON.parse(response.body)
+      data = json["data"]["concludeSubmissionReport"]
+
+      expect(data["success"]).to eq(true)
+
+      submission_report.reload
+
+      expect(submission_report.success?).to eq(true)
+      expect(submission_report.report).to eq(report)
+    end
+  end
+
+  def query(submission_id:, report: nil, status:, reporter:)
     <<~GQL
       mutation {
         concludeSubmissionReport(
           submissionId: #{submission_id}
-          testReport: "#{test_report}"
-          conclusion: #{conclusion}
+          status: #{status}
+          report: "#{report}"
+          reporter: "#{reporter}"
         ) {
           success
         }

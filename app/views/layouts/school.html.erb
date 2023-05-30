@@ -4,7 +4,7 @@
   <meta name="viewport"/>
 <% end %>
 <% content_for(:head) do %>
-  <%= vite_javascript_tag 'admin', nonce: true %>
+  <%= vite_javascript_tag 'school', nonce: true %>
 <% end %>
 <% content_for(:wrapper) do %>
   <script id="school-router-data" type="application/json">
@@ -13,4 +13,4 @@
   <div id="school-router"></div>
   <%= yield %>
 <% end %>
-<%= render template: 'layouts/tailwind' %>
+<%= render template: 'layouts/application' %>

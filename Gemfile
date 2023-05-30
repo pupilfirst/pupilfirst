@@ -51,6 +51,7 @@ gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates
 gem "discordrb", "~> 3.4" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
+gem 'octokit', '~> 6.1.1' # A Ruby toolkit for the GitHub API.
 
 # OmniAuth providers
 gem "omniauth-google-oauth2", "~> 1.1" # Oauth2 strategy for Google.

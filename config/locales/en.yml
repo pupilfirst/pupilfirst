@@ -736,6 +736,16 @@ en:
       generate_feedback_button: Generate Feedback
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: Review Checklist
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
@@ -755,21 +765,18 @@ en:
         notice:
           done: Done!
           done_description: There are no other similar submissions.
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-      hide_test_report_button: Hide Test Report
+
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
       report_description: Test Report
-      report_status_string:
-        completed:
-          error: Automated tests could not complete due to errors
-          failure: Some automated tests failed
-          success: All automated tests succeeded
-        in_progress: Automated tests are in progress
-        queued: Automated tests are queued
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -777,7 +784,6 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
-      show_test_report_button: Show Test Report
       status:
         completed: Completed
         pending_review: Pending Review
@@ -793,7 +799,6 @@ en:
       submitted_by_team: "Submitted by team: "
       team: team
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
-      test_report: Test Report
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
       write_a_note: Write a Note
@@ -1057,6 +1062,11 @@ en:
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: Enter a valid link
       enter_valid_title: Enter a valid title
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor/#github-actions
+        title: Github Actions
       link_complete: Link to complete
       mark_as_complete: Simply mark the target as completed.
       need_submit: " needs to submit."
@@ -2174,6 +2184,8 @@ en:
         founder: All Founders
         team: Team
   mutations:
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: Note removed successfully
     archive_course:
@@ -2277,6 +2289,11 @@ en:
       your_correct_answer: Your Correct Answer
     re_activate_student:
       success_notification: Student re-activated successfully!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
     reassign_reviewer:
       submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.

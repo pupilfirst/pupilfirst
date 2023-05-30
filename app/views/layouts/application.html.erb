@@ -41,6 +41,8 @@
       window.Prism = window.Prism || {};
       Prism.manual = true;
     <% end %>
+    <!-- Rails specific scripts. -->
+    <%= vite_javascript_tag 'application', nonce: true %>
     <%= yield :head %>
     <% if Rails.env.test? %>
       <style>
@@ -81,7 +83,5 @@
         <% end %>
         <!-- Initialize Rollbar only at the very end. -->
         <%= vite_javascript_tag 'rollbar', nonce: true %>
-        <!-- Rails specific scripts. -->
-        <%= vite_javascript_tag 'application', nonce: true %>
       </body>
     </html>

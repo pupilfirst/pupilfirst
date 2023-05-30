@@ -1,82 +1,40 @@
 exception InvalidSubmissionReportCompletionStatus
 
-type startedAt = Js.Date.t
-type queuedAt = Js.Date.t
-
-type conclusion = Success | Failure | Error
-
-type completedTimestamps = {startedAt: Js.Date.t, completedAt: Js.Date.t}
-
-type status = Queued(queuedAt) | InProgress(startedAt) | Completed(completedTimestamps, conclusion)
+type status = Queued | InProgress | Success | Failure | Error
 
 type t = {
   id: string,
   status: status,
-  testReport: option<string>,
+  startedAt: option<Js.Date.t>,
+  completedAt: option<Js.Date.t>,
+  report: option<string>,
   queuedAt: Js.Date.t,
+  reporter: string,
+  heading: option<string>,
+  targetUrl: option<string>,
 }
 
-let decodeConclusion = conclusion => {
-  switch conclusion {
+let decodeStatus = status => {
+  switch status {
+  | #queued => Queued
+  | #in_progress => InProgress
   | #success => Success
   | #failure => Failure
   | #error => Error
   }
 }
 
-let decodeCompletedStatus = (startedAt, completedAt, conclusion) => {
-  switch (startedAt, completedAt, conclusion) {
-  | (None, _, _) =>
-    Rollbar.critical(
-      "Invalid completion status of submission report - start time missing for completed test",
-    )
-    raise(InvalidSubmissionReportCompletionStatus)
-  | (_, None, _) =>
-    Rollbar.critical(
-      "Invalid completion status of submission report - end time missing for completed test",
-    )
-    raise(InvalidSubmissionReportCompletionStatus)
-  | (_, _, None) =>
-    Rollbar.critical(
-      "Invalid completion status of submission report - conclusion missing for completed test",
-    )
-    raise(InvalidSubmissionReportCompletionStatus)
-  | (Some(startedAt), Some(completedAt), Some(conclusion)) =>
-    Completed(
-      {startedAt: DateFns.decodeISO(startedAt), completedAt: DateFns.decodeISO(completedAt)},
-      decodeConclusion(conclusion),
-    )
-  }
-}
-
-let decodeStatus = (status, conclusion, queuedAt, startedAt, completedAt) => {
-  switch status {
-  | #queued => Queued(DateFns.decodeISO(queuedAt))
-  | #in_progress =>
-    switch startedAt {
-    | Some(startedAt) => InProgress(DateFns.decodeISO(startedAt))
-    | None =>
-      Rollbar.critical(
-        "Invalid completion status of submission report - start time missing for test in progress",
-      )
-      raise(InvalidSubmissionReportCompletionStatus)
-    }
-  | #completed => decodeCompletedStatus(startedAt, completedAt, conclusion)
-  }
-}
-
 let makeFromJS = object => {
   {
     id: object["id"],
-    testReport: object["testReport"],
+    report: object["report"]->Js.Nullable.toOption,
     queuedAt: object["queuedAt"]->DateFns.decodeISO,
-    status: decodeStatus(
-      object["status"],
-      object["conclusion"],
-      object["queuedAt"],
-      object["startedAt"],
-      object["completedAt"],
-    ),
+    startedAt: object["startedAt"]->Belt.Option.map(DateFns.decodeISO),
+    completedAt: object["completedAt"]->Belt.Option.map(DateFns.decodeISO),
+    status: decodeStatus(object["status"]),
+    reporter: object["reporter"],
+    heading: object["heading"]->Js.Nullable.toOption,
+    targetUrl: object["targetUrl"],
   }
 }
 
@@ -84,6 +42,16 @@ let id = t => t.id
 
 let status = t => t.status
 
-let testReport = t => t.testReport
+let report = t => t.report
 
 let startedAt = t => t.startedAt
+
+let queuedAt = t => t.queuedAt
+
+let completedAt = t => t.completedAt
+
+let reporter = t => t.reporter
+
+let heading = t => t.heading
+
+let targetUrl = t => t.targetUrl

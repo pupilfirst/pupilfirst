@@ -736,6 +736,16 @@ en:
       generate_feedback_button: Generate Feedback
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: Review Checklist
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
@@ -761,19 +771,12 @@ en:
         view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-      hide_report_button: Hide Report
+
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
       report_description: Test Report
-      report_status_string:
-        completed:
-          error: Actions could not complete due to errors
-          failure: Some actions failed
-          success: All actions succeeded
-        in_progress: Actions are in progress
-        queued: Actions are queued
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -781,7 +784,6 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
-      show_report_button: Show Report
       status:
         completed: Completed
         pending_review: Pending Review
@@ -797,7 +799,6 @@ en:
       submitted_by_team: "Submitted by team: "
       team: team
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
-      test_report: Test Report
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
       write_a_note: Write a Note

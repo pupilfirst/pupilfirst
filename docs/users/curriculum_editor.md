@@ -214,10 +214,8 @@ A new branch will be created for each submission, allowing for isolated testing 
 
 We have also created a few actions wrapping our API's that you directly use on your workflow file to automate the testing and reviewing process. These actions are:
 
-1. Check Repo: Use this action when a student's submission includes a URL to a GitHub repository. It clones the repository and checks for the presence of required files or folders, ensuring that the submission is complete.
-2. Reporting: This action reports the test running status back to the LMS, enabling easy tracking of student progress and performance.
-3. Grading: This action grades student submissions based on predefined criteria or test outcomes, offering a standardized and automated evaluation process.
-
-[visit the documentation for github actions](https://github.com/pupilfirst/actions)
+1. [Check Repo Action](https://github.com/pupilfirst/check-repo-action): Use this action when a student's submission includes a URL to a GitHub repository. It clones the repository and checks for the presence of required files or folders, ensuring that the submission is complete.
+2. [Report Action](https://github.com/pupilfirst/report-action): This action reports the test running status back to the LMS, enabling easy tracking of student progress and performance.
+3. [Grade Action](https://github.com/pupilfirst/grade-action): This action grades student submissions based on predefined criteria or test outcomes, offering a standardized and automated evaluation process.
 
 You can also find a workflows that we are currently using for our courses at [Test Scripts Repo](https://github.com/pupilfirst/vta-test-scripts)

@@ -734,6 +734,16 @@ ta:
       generate_feedback_button: கருத்தை உருவாக்கவும்
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: மற்றொரு கருத்தைச் சேர்க்கவும்
       add_feedback: கருத்தைச் சேர்க்கவும்
@@ -753,21 +763,17 @@ ta:
         notice:
           done: முடிந்தது!
           done_description: இதே போன்ற சமர்ப்பிப்புகள் எதுவும் இல்லை.
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: தர அட்டை
       help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
-      hide_test_report_button: சோதனை அறிக்கையை மறை
       note_help: "இதைப் பற்றி ஒரு குறிப்பு எழுத விரும்புகிறீர்களா "
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: வேலையை அகற்று
       report_description: சோதனை அறிக்கை
-      report_status_string:
-        completed:
-          error: பிழைகள் காரணமாக தானியங்கு சோதனைகளை முடிக்க முடியவில்லை
-          failure: சில தானியங்கு சோதனைகள் தோல்வியடைந்தன
-          success: அனைத்து தானியங்கி சோதனைகளும் வெற்றி பெற்றன
-        in_progress: தானியங்கி சோதனைகள் நடந்து வருகின்றன
-        queued: தானியங்கு சோதனைகள் வரிசையில் உள்ளன
       review: விமர்சனம்
       review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
       review_next: அடுத்தது
@@ -775,7 +781,6 @@ ta:
       save_grades_and_send_feedback: கிரேடுகளைச் சேமித்து கருத்து அனுப்பவும்
       share_feedback: கருத்துக்களைப் பகிரவும்
       show_review_checklist: மதிப்பாய்வு சரிபார்ப்புப் பட்டியலைக் காட்டு
-      show_test_report_button: சோதனை அறிக்கையைக் காட்டு
       status:
         completed: நிறைவு
         pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
@@ -791,7 +796,6 @@ ta:
       submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது: "
       team: அணி
       team_notice: " இந்தச் சமர்ப்பிப்பு ஒரு குழுவிடமிருந்து வந்தது, எனவே இங்கு சேர்க்கப்பட்ட குறிப்பு, குழுவில் உள்ள அனைத்து மாணவர்களின் அறிக்கையிலும் இடுகையிடப்படும்."
-      test_report: சோதனை அறிக்கை
       undo_grade_warning: இந்த கிரேடுகளை நிச்சயமாக அகற்ற விரும்புகிறீர்களா? இது சமர்ப்பிப்பை 'நிலுவையில் உள்ள மதிப்பாய்வு' நிலைக்குத் திருப்பும்.
       undo_grading: கிரேடிங்கை செயல்தவிர்
       write_a_note: ஒரு குறிப்பு எழுதவும்
@@ -1054,6 +1058,11 @@ ta:
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: சரியான இணைப்பை உள்ளிடவும்
       enter_valid_title: சரியான தலைப்பை உள்ளிடவும்
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor/#github-actions'
+        title: Github Actions
       link_complete: முடிக்க இணைப்பு
       mark_as_complete: இலக்கை முடிந்ததாகக் குறிக்கவும்.
       need_submit: " சமர்ப்பிக்க வேண்டும்."
@@ -2170,6 +2179,8 @@ ta:
         founder: அனைத்து நிறுவனர்கள்
         team: குழு
   mutations:
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: குறிப்பு வெற்றிகரமாக அகற்றப்பட்டது
     archive_course:
@@ -2273,6 +2284,11 @@ ta:
       your_correct_answer: உங்கள் சரியான பதில்
     re_activate_student:
       success_notification: மாணவர் வெற்றிகரமாக மீண்டும் செயல்படுத்தப்பட்டார்!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
     reassign_reviewer:
       submission_graded_error: நிலுவையில் உள்ள சமர்ப்பிப்புகளுக்கு மட்டுமே நீங்கள் உங்களை ஒதுக்க முடியும்.
       submission_not_assigned_to_coach: சமர்ப்பிப்பு ஏற்கனவே உங்களுக்கு ஒதுக்கப்பட்டுள்ளது.

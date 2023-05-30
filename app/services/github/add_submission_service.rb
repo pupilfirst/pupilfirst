@@ -14,7 +14,9 @@ module Github
         Github::SetupRepositoryService.new(@submission.founders.first).execute
         @submission
           .submission_reports
-          .find_by(reporter: SubmissionReport::VIRTUAL_TEACHING_ASSISTANT)
+          .find_or_create_by!(
+            reporter: SubmissionReport::VIRTUAL_TEACHING_ASSISTANT,
+          )
           .update!(target_url: @submission.actions_url)
       end
 
@@ -26,9 +28,9 @@ module Github
         repo_name,
         ".github/workflows/ci.js.yml",
         "Update workflow [skip ci]",
-        ci_file(repo_name).sha,
+        ci_file_sha(repo_name),
         @submission.target.action_config,
-        branch: branch
+        branch: branch,
       )
 
       # Add files to the repo
@@ -40,7 +42,7 @@ module Github
         "submission.json",
         "Add submission data",
         submission_data_service.data.to_json,
-        branch: branch
+        branch: branch,
       )
     end
 
@@ -73,7 +75,7 @@ module Github
         # Create the main branch and get the Sha of the last commit
         last_commit =
           Github::SetupRepositoryService.new(
-            @submission.founders.first
+            @submission.founders.first,
           ).add_workflow_starter(repo_name)
         last_commit.content.sha
       end
@@ -95,14 +97,17 @@ module Github
           "script" + File.extname(file["filename"]),
           "Add submission file[skip ci]",
           file_content,
-          branch: branch
+          branch: branch,
         )
       end
     end
 
-    def ci_file(repo_name)
+    def ci_file_sha(repo_name)
       begin
-        github_client.contents(repo_name, path: ".github/workflows/ci.js.yml")
+        github_client.contents(
+          repo_name,
+          path: ".github/workflows/ci.js.yml",
+        ).sha
       rescue StandardError
         Rails.logger.error "Error while fetching the ci.js.yml file"
       end

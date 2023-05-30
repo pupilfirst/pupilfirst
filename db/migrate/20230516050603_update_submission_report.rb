@@ -11,10 +11,11 @@ class UpdateSubmissionReport < ActiveRecord::Migration[6.1]
     SubmissionReport.all.each do |report|
       report.update(
         status: report.conclusion.presence || report.status,
-        reporter: "Virtual Teaching Assistant"
+        reporter: "Virtual Teaching Assistant",
       )
     end
 
+    change_column_default :submission_reports, :status, "queued"
     change_column_null :submission_reports, :reporter, false
     add_index :submission_reports, %i[submission_id reporter], unique: true
   end

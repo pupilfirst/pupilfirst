@@ -569,7 +569,7 @@ ActiveRecord::Schema.define(version: 2023_05_16_050603) do
   end
 
   create_table "submission_reports", force: :cascade do |t|
-    t.string "status"
+    t.string "status", default: "queued"
     t.string "conclusion"
     t.datetime "started_at"
     t.datetime "completed_at"

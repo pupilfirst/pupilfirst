@@ -6,9 +6,9 @@ class HomeController < ApplicationController
     render layout: "student"
   end
 
+  # GET /styleguide
   def styleguide
-    @skip_container = true
-    @hide_layout_header = true
+    # noop
   end
 
   # GET /agreements/:agreement_type

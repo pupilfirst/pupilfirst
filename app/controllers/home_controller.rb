@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def index
     @courses = current_school.courses.where(featured: true)
-    render layout: 'student'
+    render layout: "student"
   end
 
   def styleguide
@@ -15,9 +15,9 @@ class HomeController < ApplicationController
   def agreement
     klass =
       case params[:agreement_type]
-      when 'privacy-policy'
+      when "privacy-policy"
         SchoolString::PrivacyPolicy
-      when 'terms-and-conditions'
+      when "terms-and-conditions"
         SchoolString::TermsAndConditions
       else
         raise_not_found
@@ -29,13 +29,13 @@ class HomeController < ApplicationController
 
     @agreement_type =
       case klass.name.demodulize.titleize
-      when 'Privacy Policy'
-        t('.privacy_policy')
-      when 'Terms and Conditions'
-        t('.terms_and_conditions')
+      when "Privacy Policy"
+        t(".privacy_policy")
+      when "Terms and Conditions"
+        t(".terms_and_conditions")
       end
 
-    render layout: 'student'
+    render layout: "student"
   end
 
   # GET /oauth/:provider?fqdn=FQDN&referrer=
@@ -51,12 +51,14 @@ class HomeController < ApplicationController
         provider: params[:provider],
         fqdn: params[:fqdn],
         session_id: params[:session_id],
-        link_data: params[:link_data]
-      }.to_json
+        link_data: params[:link_data],
+      }.to_json,
     )
 
-    redirect_to OmniauthProviderUrlService.new(params[:provider], current_host)
-                  .oauth_url
+    redirect_to OmniauthProviderUrlService.new(
+                  params[:provider],
+                  current_host,
+                ).oauth_url
   end
 
   # GET /oauth_error?error=
@@ -69,21 +71,22 @@ class HomeController < ApplicationController
   def favicon
     if current_school.present? && current_school.icon.attached?
       redirect_to view_context.rails_public_blob_url(
-                    current_school.icon_variant(:thumb)
+                    current_school.icon_variant(:thumb),
                   )
     else
-      redirect_to '/favicon.png'
+      redirect_to "/favicon.png"
     end
   end
 
   # GET /service-worker.js
   def service_worker
-    # noop
+    render layout: false, content_type: "text/javascript"
   end
 
   # GET /manifest.json
   def manifest
-    render json: GenerateManifestService.new(current_school).json
+    render json: GenerateManifestService.new(current_school).json,
+           content_type: "application/json"
   end
 
   # GET /offline
@@ -108,7 +111,7 @@ class HomeController < ApplicationController
   def hero_text_alignment
     @hero_text_alignment ||=
       begin
-        { 1 => 'center', 2 => 'right', 3 => 'right', 4 => 'right' }[
+        { 1 => "center", 2 => "right", 3 => "right", 4 => "right" }[
           background_image_number
         ]
       end

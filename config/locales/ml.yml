@@ -734,6 +734,16 @@ ml:
       generate_feedback_button: ഫീഡ്‌ബാക്ക് സൃഷ്‌ടിക്കുക
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: ചെക്ക്‌ലിസ്റ്റ് അവലോകനം ചെയ്യുക
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        success: All actions succeeded
+        in_progress: Actions are in progress
+        queued: Actions are queued
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: മറ്റൊരു ഫീഡ്ബാക്ക് ചേർക്കുക
       add_feedback: ഫീഡ്ബാക്ക് ചേർക്കുക
@@ -753,21 +763,17 @@ ml:
         notice:
           done: ചെയ്തു!
           done_description: സമാനമായ മറ്റ് സമർപ്പിക്കലുകളൊന്നുമില്ല.
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: ഗ്രേഡ് കാർഡ്
       help_text: '%{note_about}ന്റെ പുരോഗതി ട്രാക്ക് ചെയ്യാൻ കുറിപ്പുകൾ ഉപയോഗിക്കാം. ഈ കുറിപ്പുകൾ ഒരു വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ടിൽ പരിശീലകർക്ക് മാത്രം കാണിക്കുന്നു. %{additional_help}'
-      hide_test_report_button: ടെസ്റ്റ് റിപ്പോർട്ട് മറയ്ക്കുക
       note_help: "ഇതിനെക്കുറിച്ച് ഒരു കുറിപ്പ് എഴുതാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നു "
       note_placeholder: ഈ സമർപ്പണം അവലോകനം ചെയ്യുമ്പോൾ നിങ്ങൾ എന്തെങ്കിലും ശ്രദ്ധിച്ചോ?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: അസൈൻമെന്റ് നീക്കം ചെയ്യുക
       report_description: പരിശോധനാ ഫലം
-      report_status_string:
-        completed:
-          error: പിശകുകൾ കാരണം ഓട്ടോമേറ്റഡ് ടെസ്റ്റുകൾ പൂർത്തിയാക്കാനായില്ല
-          failure: ചില ഓട്ടോമേറ്റഡ് ടെസ്റ്റുകൾ പരാജയപ്പെട്ടു
-          success: എല്ലാ ഓട്ടോമേറ്റഡ് ടെസ്റ്റുകളും വിജയിച്ചു
-        in_progress: ഓട്ടോമേറ്റഡ് ടെസ്റ്റുകൾ പുരോഗമിക്കുകയാണ്
-        queued: ഓട്ടോമേറ്റഡ് ടെസ്റ്റുകൾ ക്യൂവിലാണ്
       review: അവലോകനം
       review_checklist: ചെക്ക്‌ലിസ്റ്റ് അവലോകനം ചെയ്യുക
       review_next: അടുത്തത്
@@ -775,7 +781,6 @@ ml:
       save_grades_and_send_feedback: ഗ്രേഡുകൾ സംരക്ഷിച്ച് ഫീഡ്ബാക്ക് അയയ്ക്കുക
       share_feedback: ഫീഡ്‌ബാക്ക് പങ്കിടുക
       show_review_checklist: അവലോകന ചെക്ക്‌ലിസ്റ്റ് കാണിക്കുക
-      show_test_report_button: ടെസ്റ്റ് റിപ്പോർട്ട് കാണിക്കുക
       status:
         completed: പൂർത്തിയാക്കി
         pending_review: അവശേഷിക്കുന്ന നിരൂപണം
@@ -791,7 +796,6 @@ ml:
       submitted_by_team: "ടീം സമർപ്പിച്ചത്: "
       team: ടീം
       team_notice: " ഈ സമർപ്പിക്കൽ ഒരു ടീമിൽ നിന്നുള്ളതാണ്, അതിനാൽ ഇവിടെ ചേർത്ത ഒരു കുറിപ്പ് ടീമിലെ എല്ലാ വിദ്യാർത്ഥികളുടെയും റിപ്പോർട്ടിൽ പോസ്റ്റ് ചെയ്യും."
-      test_report: പരിശോധനാ ഫലം
       undo_grade_warning: ഈ ഗ്രേഡുകൾ നീക്കം ചെയ്യണമെന്ന് തീർച്ചയാണോ? ഇത് സമർപ്പണത്തെ 'തീർച്ചപ്പെടുത്താത്ത അവലോകനം' നിലയിലേക്ക് തിരികെ കൊണ്ടുവരും.
       undo_grading: ഗ്രേഡിംഗ് പഴയപടിയാക്കുക
       write_a_note: ഒരു കുറിപ്പ് എഴുതുക
@@ -1054,6 +1058,11 @@ ml:
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: സാധുവായ ഒരു ലിങ്ക് നൽകുക
       enter_valid_title: സാധുവായ ഒരു ശീർഷകം നൽകുക
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor/#github-actions'
+        title: Github Actions
       link_complete: പൂർത്തിയാക്കാനുള്ള ലിങ്ക്
       mark_as_complete: ലക്ഷ്യം പൂർത്തിയായതായി അടയാളപ്പെടുത്തുക.
       need_submit: " സമർപ്പിക്കേണ്ടതുണ്ട്."
@@ -2170,6 +2179,8 @@ ml:
         founder: എല്ലാ സ്ഥാപകരും
         team: ടീം
   mutations:
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: കുറിപ്പ് നീക്കം ചെയ്തു
     archive_course:
@@ -2273,6 +2284,11 @@ ml:
       your_correct_answer: നിങ്ങളുടെ ശരിയായ ഉത്തരം
     re_activate_student:
       success_notification: വിദ്യാർത്ഥി വീണ്ടും സജീവമാക്കി!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
     reassign_reviewer:
       submission_graded_error: തീർപ്പുകൽപ്പിക്കാത്ത സമർപ്പിക്കലുകൾക്ക് മാത്രമേ നിങ്ങൾക്ക് സ്വയം അസൈൻ ചെയ്യാനാകൂ.
       submission_not_assigned_to_coach: സമർപ്പിക്കൽ ഇതിനകം തന്നെ നിങ്ങൾക്ക് അസൈൻ ചെയ്തിട്ടുണ്ട്.

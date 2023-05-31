@@ -41,13 +41,17 @@ class OrganisationsController < ApplicationController
         end
       end
 
-    courses.values.map do |course|
+    courses = courses.values.map do |course|
       cohort_ids = course[:cohorts].map(&:id)
 
       course[:active_students] = student_count(cohort_ids)
       course[:inactive_students] = student_count(course[:inactive_cohorts_ids])
 
       course
+    end
+
+    courses.sort_by do |course_data|
+      course_data[:cohorts].all? { |cohort| cohort.ends_at && cohort.ends_at.past? } ? 1 : 0
     end
   end
 

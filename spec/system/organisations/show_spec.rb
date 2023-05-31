@@ -77,11 +77,11 @@ feature "Organisation show" do
       expect(page).to have_text("Active Students\n6")
 
       expect(page).to have_text(
-        "#{course_1.name}\n4 students enrolled in 2 active cohorts"
+        "#{course_1.name}\n4 students enrolled in 2 ongoing cohorts and 2 students were part of 1 ended cohort"
       )
 
       expect(page).to have_text(
-        "#{course_2.name}\n2 students enrolled in 1 active cohort"
+        "#{course_2.name}\n2 students enrolled in 1 ongoing cohort and 0 ended cohorts"
       )
 
       # There should be links to three active cohorts...

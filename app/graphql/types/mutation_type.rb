@@ -194,5 +194,6 @@ module Types
     field :create_team, mutation: Mutations::CreateTeam, null: false
     field :update_team, mutation: Mutations::UpdateTeam, null: false
     field :destroy_team, mutation: Mutations::DestroyTeam, null: false
+    field :re_run_github_action, mutation: Mutations::ReRunGithubAction, null: false
   end
 end

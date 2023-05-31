@@ -5604,7 +5604,47 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "testReport",
+                  "name": "report",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "reporter",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "heading",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "targetUrl",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -5731,7 +5771,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "testReport",
+                  "name": "report",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -5743,16 +5783,56 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "conclusion",
+                  "name": "status",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "SubmissionReportConclusion",
+                      "name": "SubmissionReportStatus",
                       "ofType": null
                     }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "reporter",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "heading",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "targetUrl",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -8525,7 +8605,47 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "testReport",
+                  "name": "report",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "reporter",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "heading",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "targetUrl",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -8576,6 +8696,35 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "ReActivateStudentPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reRunGithubAction",
+              "description": "Re-run the Github Action for a submission",
+              "args": [
+                {
+                  "name": "submissionId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ReRunGithubActionPayload",
                   "ofType": null
                 }
               },
@@ -13402,6 +13551,37 @@
         },
         {
           "kind": "OBJECT",
+          "name": "ReRunGithubActionPayload",
+          "description": "Autogenerated return type of ReRunGithubAction",
+          "fields": [
+            {
+              "name": "success",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "ReassignReviewerPayload",
           "description": "Autogenerated return type of ReassignReviewer",
           "fields": [
@@ -13978,6 +14158,20 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "ISO8601DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "githubRepository",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -15564,20 +15758,6 @@
               "deprecationReason": null
             },
             {
-              "name": "submissionReport",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "SubmissionReport",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "submissionReportPollTime",
               "description": null,
               "args": [
@@ -15590,6 +15770,32 @@
                   "kind": "SCALAR",
                   "name": "Int",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "submissionReports",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SubmissionReport",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
@@ -16208,14 +16414,14 @@
               "deprecationReason": null
             },
             {
-              "name": "conclusion",
+              "name": "heading",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "ENUM",
-                "name": "SubmissionReportConclusion",
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -16258,6 +16464,38 @@
               "deprecationReason": null
             },
             {
+              "name": "report",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reporter",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "startedAt",
               "description": null,
               "args": [
@@ -16290,7 +16528,7 @@
               "deprecationReason": null
             },
             {
-              "name": "testReport",
+              "name": "targetUrl",
               "description": null,
               "args": [
 
@@ -16313,12 +16551,24 @@
         },
         {
           "kind": "ENUM",
-          "name": "SubmissionReportConclusion",
+          "name": "SubmissionReportStatus",
           "description": null,
           "fields": null,
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
+            {
+              "name": "queued",
+              "description": "Checks are queued",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "in_progress",
+              "description": "Checks in progress for the submission",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "error",
               "description": "Checks could not be completed successfully",
@@ -16334,35 +16584,6 @@
             {
               "name": "success",
               "description": "Checks successfully completed for the submission",
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "possibleTypes": null
-        },
-        {
-          "kind": "ENUM",
-          "name": "SubmissionReportStatus",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
-            {
-              "name": "queued",
-              "description": "Automated tests are queued",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "in_progress",
-              "description": "Checks in progress for the submission",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "completed",
-              "description": "Checks completed for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -19792,24 +20013,6 @@
               "deprecationReason": null
             },
             {
-              "name": "isOneOf",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "kind",
               "description": null,
               "args": [
@@ -19878,7 +20081,7 @@
               "deprecationReason": null
             },
             {
-              "name": "specifiedByURL",
+              "name": "specifiedByUrl",
               "description": null,
               "args": [
 
@@ -20036,16 +20239,6 @@
               "isDeprecated": false,
               "deprecationReason": null
             }
-          ]
-        },
-        {
-          "name": "oneOf",
-          "description": "Requires that exactly one field must be supplied and that field must not be `null`.",
-          "locations": [
-            "INPUT_OBJECT"
-          ],
-          "args": [
-
           ]
         }
       ]

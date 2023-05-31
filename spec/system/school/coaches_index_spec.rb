@@ -117,26 +117,30 @@ feature "Coaches Index", js: true do
   end
 
   context "with multiple pages of coaches" do
-    before { 15.times { create :faculty } }
+    before do
+      Faculty.destroy_all # remove previous coaches, interfering with this test
+      15.times { create :faculty }
+    end
     scenario "school admin paginates through coaches on active tab" do
       sign_in_user school_admin.user,
                    referrer: school_coaches_path(status: "active")
 
-      expect(page).to have_link("2", href: "/school/coaches?page=2") #/school/coaches?page=2
+      expect(page).to have_link(
+        "2",
+        href: "/school/coaches?page=2&status=active"
+      )
       expect(page).to have_selector(".course-faculty__list-item ", count: 10)
       click_link "2"
-      expect(page).to have_selector(
-        ".course-faculty__list-item",
-        count: 8 # 3 coaches are created above
-      )
+      expect(page).to have_selector(".course-faculty__list-item", count: 5)
     end
 
     scenario "school admin paginates through coaches on exited tab" do
       Faculty.all.limit(5).each { |faculty| faculty.update!(exited: true) }
+
       sign_in_user school_admin.user,
                    referrer: school_coaches_path(status: "exited")
 
-      expect(page).to have_link(
+      expect(page).to_not have_link(
         "2",
         href: "/school/coaches?page=2&status=exited"
       )

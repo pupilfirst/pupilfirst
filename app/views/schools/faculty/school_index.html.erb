@@ -2,7 +2,7 @@
   <title><%= current_school.name %> | <%= t(".title") %></title>
 <% end %>
 <% @presenter = Schools::FacultyModule::SchoolIndexPresenter.new(self, @school, @status) %>
-<div class="bg-gray-50 border-t border-gray-300 p-5 fixed bottom-0 right-0 flex flex-col items-center" style="width: calc(100% - 14rem)">
+<div class="bg-gray-50 border-t border-gray-300 p-5 fixed bottom-0 end-0 flex flex-col items-center" style="width: calc(100% - 14rem)">
   <%= paginate @presenter.faculty %>
   <div class="text-center text-sm mt-2">
     <%= page_entries_info @presenter.faculty, entry_name: 'Coach' %>

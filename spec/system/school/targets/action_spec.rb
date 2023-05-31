@@ -59,7 +59,7 @@ feature "Target Details Editor", js: true do
     text_version = target_1_l1.text_versions.last
     expect(text_version.value).to eq(action_config)
     expect(text_version.user).to eq(school_admin.user)
-    expect(text_version.edited_at).to be_within(10.second).of(Time.zone.now)
+    expect(text_version.edited_at).to be_within(10.seconds).of(Time.zone.now)
     expect(text_version.reason).to eq("Action config was updated")
   end
 

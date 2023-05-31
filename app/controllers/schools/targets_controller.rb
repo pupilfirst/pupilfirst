@@ -1,15 +1,15 @@
 module Schools
   class TargetsController < SchoolsController
-    layout 'school'
+    layout "school"
 
     # GET /school/courses/:course_id/targets/:id/content
     def content
       @course = current_school.courses.find(params[:course_id])
       authorize(
         @course.targets.find(params[:id]),
-        policy_class: Schools::TargetPolicy
+        policy_class: Schools::TargetPolicy,
       )
-      render 'schools/courses/curriculum'
+      render "schools/courses/curriculum"
     end
 
     # GET /school/courses/:course_id/targets/:id/details
@@ -28,14 +28,24 @@ module Schools
     def update_action
       @target = current_school.targets.find(params[:id])
       authorize(@target, policy_class: Schools::TargetPolicy)
+      old_value = @target.action_config
 
       @target.action_config = params[:target][:action_config]
       if valid_yaml_string?(params[:target][:action_config]) && @target.save
-        flash[:success] = 'Action updated successfully'
+        @target.text_versions.create!(
+          value: old_value,
+          user: current_user,
+          edited_at: Time.zone.now,
+          reason: "Action config was updated",
+        )
+
+        flash[:success] = "Action updated successfully"
         redirect_to details_school_course_target_path(@target.course, @target)
       else
-        flash[:error] = 'Action could not be updated, please check the YAML syntax'
-        render 'action'
+        flash[
+          :error
+        ] = "Action could not be updated, please check the YAML syntax"
+        render "action"
       end
     end
 

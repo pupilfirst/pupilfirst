@@ -1,4 +1,8 @@
 ta:
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
   applicants:
     enroll:
       errors:

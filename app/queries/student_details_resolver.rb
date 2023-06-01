@@ -24,7 +24,7 @@ class StudentDetailsResolver < ApplicationQuery
         .joins(:target_group)
         .where(target_groups: { milestone: true, level_id: levels.select(:id) })
         .distinct(:id)
-        .pluck(:id, 'target_groups.level_id')
+        .pluck(:id, "target_groups.level_id")
         .each_with_object(
           {}
         ) do |(target_id, level_id), required_targets_by_level|
@@ -33,12 +33,7 @@ class StudentDetailsResolver < ApplicationQuery
         end
 
     passed_target_ids =
-      TimelineEvent
-        .joins(:founders)
-        .where(founders: { id: student.id })
-        .where.not(passed_at: nil)
-        .distinct(:target_id)
-        .pluck(:target_id)
+      student.latest_submissions.passed.distinct(:target_id).pluck(:target_id)
 
     levels
       .pluck(:id)
@@ -93,7 +88,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def levels
-    @levels ||= course.levels.unlocked.where('number <= ?', level.number)
+    @levels ||= course.levels.unlocked.where("number <= ?", level.number)
   end
 
   def level

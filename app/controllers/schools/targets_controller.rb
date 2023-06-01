@@ -42,9 +42,7 @@ module Schools
         flash[:success] = "Action updated successfully"
         redirect_to details_school_course_target_path(@target.course, @target)
       else
-        flash[
-          :error
-        ] = "Action could not be updated, please check the YAML syntax"
+        flash[:error] = I18n.t("school.targets.update_action.error_message")
         render "action"
       end
     end

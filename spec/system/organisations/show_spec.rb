@@ -214,7 +214,7 @@ feature "Organisation show" do
       )
     end
 
-    scenario "check for view all cohorts link when a course has only inactive cohorts" do
+    scenario "check for view ended cohorts link when a course has only inactive cohorts" do
       sign_in_user(
         school_admin_user,
         referrer: organisation_path(organisation_2)

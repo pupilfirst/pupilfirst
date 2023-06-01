@@ -50,9 +50,9 @@
               <% end %>
             <% end %>
           </div>
-          <div class="mt-4">
-            <p class="text-black text-sm font-semibold"><%= t('.active_cohorts_subheading')  %></p>
-            <% if course_with_cohorts[:cohorts].present? %>
+          <% if course_with_cohorts[:cohorts].present? %>
+            <div class="mt-4">
+              <p class="text-black text-sm font-semibold"><%= t('.ongoing_cohorts_subheading')  %></p>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
                 <% course_with_cohorts[:cohorts].each do |cohort| %>
                   <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
@@ -61,7 +61,7 @@
                       <% if cohort.ends_at.present? %>
                         <div>
                           <span class="text-sm text-gray-500 font-medium" ><%= t(".end_date") %> </span>
-                          <span class="inline-block font-semibold text-sm"><%= cohort.ends_at.strftime("%d %b %Y") %></span>
+                          <span class="inline-block font-semibold text-sm"><%= cohort.ends_at.strftime("%B %d, %Y") %></span>
                         </div>
                       <% end %>
                     </div>
@@ -69,10 +69,10 @@
                   <% end %>
                 <% end %>
               </div>
-            <% else %>
-              <p class="text-center text-sm italic font-medium"><%= t('.no_ongoing_cohorts') %></p>
-            <% end %>
-          </div>
+            </div>
+          <% else %>
+            <p class="text-center text-sm italic font-medium bg-gray-100 p-4"><%= t('.no_ongoing_cohorts') %></p>
+          <% end %>
         </div>
       <% end %>
     </div>

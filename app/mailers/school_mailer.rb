@@ -1,6 +1,6 @@
 # TODO: The SchoolMailer class should be renamed to ApplicationMailer.
 class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
-  layout 'mail/school'
+  layout "mail/school"
 
   after_action :prevent_delivery_to_bounced_addresses
 
@@ -49,7 +49,7 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
 
   def school_name
     # sanitize school name to remove special characters
-    @school.name.gsub(/[^0-9A-Za-z ]/, '')
+    @school.name.gsub(/[^\p{Alnum}\p{Space}]/, "")
   end
 
   def sender_signature

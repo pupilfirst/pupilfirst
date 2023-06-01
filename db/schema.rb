@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_14_123822) do
+ActiveRecord::Schema.define(version: 2023_05_16_050603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.jsonb "highlights", default: []
     t.bigint "default_cohort_id"
     t.boolean "discord_account_required", default: false
+    t.integer "github_team_id"
     t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
@@ -367,6 +368,7 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.bigint "level_id"
     t.bigint "team_id"
     t.datetime "completed_at"
+    t.string "github_repository"
     t.index ["cohort_id"], name: "index_founders_on_cohort_id"
     t.index ["level_id"], name: "index_founders_on_level_id"
     t.index ["team_id"], name: "index_founders_on_team_id"
@@ -567,14 +569,18 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
   end
 
   create_table "submission_reports", force: :cascade do |t|
-    t.string "status"
+    t.string "status", default: "queued"
     t.string "conclusion"
     t.datetime "started_at"
     t.datetime "completed_at"
     t.bigint "submission_id"
-    t.text "test_report"
+    t.text "report"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.citext "reporter", null: false
+    t.string "target_url"
+    t.string "heading"
+    t.index ["submission_id", "reporter"], name: "index_submission_reports_on_submission_id_and_reporter", unique: true
     t.index ["submission_id"], name: "index_submission_reports_on_submission_id"
   end
 
@@ -648,7 +654,6 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "slideshow_embed"
-    t.integer "faculty_id"
     t.integer "days_to_complete"
     t.string "target_action_type"
     t.integer "target_group_id"
@@ -666,8 +671,8 @@ ActiveRecord::Schema.define(version: 2023_03_14_123822) do
     t.string "visibility"
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
+    t.text "action_config"
     t.index ["archived"], name: "index_targets_on_archived"
-    t.index ["faculty_id"], name: "index_targets_on_faculty_id"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 

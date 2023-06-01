@@ -1,0 +1,33 @@
+<% github_configuration = Schools::Configuration::Github.new(current_school) %>
+<div class="max-w-7xl mx-auto mt-8">
+  <%= link_to details_school_course_target_path(@target.course, @target), class: "mt-4 py-1 px-2 font-semibold rounded-lg text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" do %>
+    <i class="if i-arrow-left-regular"></i>
+    <span>Back</span>
+  <% end %>
+  <% if !github_configuration.configured? %>
+    <div class="mt-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+      You will need to configure Github before you can use this feature.
+    </div>
+  <%end%>
+  <div class="bg-gray-50 mt-4 rounded p-4">
+    <div class="flex items-end justify-between">
+      <div>
+        <p class="text-lg font-semibold pb-1">Edit Target Action</p>
+        <p class="text-sm text-gray-600 pb-2">
+          You can configure Github Actions to automatically grade this target when a student submits a submission.
+        </p>
+      </div>
+      <span class="me-2 bg-gray-100 border border-b-0 rounded-t-lg text-xs px-1.5 py-1">YAML</span>
+    </div>
+    <div>
+      <%= form_with model: @target, url: update_action_school_target_path(@target), method: :patch do |f| %>
+        <div>
+          <%= f.text_area :action_config, rows: 20, class: 'rounded-md w-full border outline-none font-mono align-top focus:ring-1 focus:ring-focusColor-500 p-3' %>
+        </div>
+        <div>
+          <%= f.submit "Update Action", class:"mt-4 btn btn-primary py-2 px-3 ", disabled: !github_configuration.configured? %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

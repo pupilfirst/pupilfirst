@@ -1,5 +1,3 @@
-import "./tailwind";
-
 import "~/schools/shared/shared.css";
 import "~/shared/components/SkeletonLoading.css";
 

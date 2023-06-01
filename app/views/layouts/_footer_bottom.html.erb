@@ -1,0 +1,32 @@
+<section class="w-full footer__bottom">
+  <div
+      class="flex flex-row w-full xl:max-w-5xl mx-auto justify-between items-start px-3"
+    >
+    <div class="w-full flex flex-row justify-between items-center">
+      <div class="w-1/4 my-4">
+        <a class="text-xs focus:outline-none" href="/">
+          <% if presenter.logo? %>
+            <img
+                class="w-27"
+                src="<%= presenter.logo_url %>"
+                alt="<%= t(".logo_alt", school_name: presenter.school_name) %>"
+              />
+            <% else %>
+              <span><%= presenter.school_name %></span>
+          <% end %>
+        </a>
+      </div>
+      <div class="w-3/4 md:w-2/5 ltr:text-right rtl:text-left text-xs">
+        <% if presenter.privacy_policy? %>
+          <%= link_to t(".privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
+        <% end %>
+        <% if presenter.terms_and_conditions? %>
+          <%= link_to t(".terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
+        <% end %>
+        <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">
+          &copy; <%= Time.zone.now.year %> <%= presenter.school_name %>.
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

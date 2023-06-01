@@ -1073,6 +1073,26 @@ let make = (
                   <span className="me-2">
                     <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
+                  {t("github_action.title")->str}
+                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces")->str} </span>
+                </label>
+                <HelpIcon link={t("github_action.help_url")} className="ms-1">
+                  {t("github_action.help_description")->str}
+                </HelpIcon>
+                <div className="ms-6 mt-4">
+                  <a
+                    href={`/school/targets/${Target.id(target)}/action`} className="btn btn-subtle">
+                    <i className="fas fa-external-link-alt text-xs mr-2" />
+                    {t("github_action.button_text")->str}
+                  </a>
+                </div>
+              </div>
+              <div className="mb-6">
+                <label
+                  className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
+                  <span className="me-2">
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
+                  </span>
                   {t("completion_instructions.label") |> str}
                   <span className="ms-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
                 </label>

@@ -2353,7 +2353,9 @@ en:
       heading: Organisations
     show:
       active_students_label: Active Students
-      cohorts_subheading: Cohorts
+      active_cohorts_subheading: Ongoing Cohorts
+      end_date: "End date:"
+      no_ongoing_cohorts: No ongoing cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
       students_enrolled_active_prefix_html:
@@ -2370,6 +2372,7 @@ en:
         other: <span class="font-semibold text-black">%{count}</span> ended cohorts
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
+      view_ended_cohorts: View Ended Cohorts
     students:
       show:
         average_grades: Average Grades

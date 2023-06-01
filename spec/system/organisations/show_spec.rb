@@ -114,7 +114,7 @@ feature "Organisation show" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
       # There should be two view all cohorts links.
-      expect(all("a", text: "View All Cohorts").count).to eq(2)
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
 
       # Click on the first link.
       within(
@@ -136,18 +136,18 @@ feature "Organisation show" do
       )
     end
 
-    scenario "check for view all cohorts link when a course has only inactive cohorts" do
+    scenario "check for view ended cohorts link when a course has only inactive cohorts" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
       # There should be two view all cohorts links.
-      expect(all("a", text: "View All Cohorts").count).to eq(2)
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
 
       # update ends_at of cohort 4 to be in the past
       cohort_4.update!(ends_at: 1.day.ago)
 
       visit organisation_path(organisation_1)
 
-      click_link "View All Cohorts",
+      click_link "View Ended Cohorts",
                  href:
                    inactive_cohorts_organisation_course_path(
                      organisation_1,
@@ -190,12 +190,6 @@ feature "Organisation show" do
 
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
-
-      # There should be a link to view all cohorts of course 1.
-      expect(page).to have_link(
-        "View All Cohorts",
-        href: active_cohorts_organisation_course_path(organisation_2, course_1)
-      )
     end
 
     scenario "check for view all cohorts links" do
@@ -205,21 +199,14 @@ feature "Organisation show" do
       )
 
       # There should be two view all cohorts links.
-      expect(all("a", text: "View All Cohorts").count).to eq(2)
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
 
-      # Click on the first link.
-      within(
-        first(
-          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
-        )
-      ) do
-        click_link "View All Cohorts",
-                   href:
-                     active_cohorts_organisation_course_path(
-                       organisation_1,
-                       course_1
-                     )
-      end
+      click_link "View All Cohorts",
+                 href:
+                   active_cohorts_organisation_course_path(
+                     organisation_1,
+                     course_1
+                   )
 
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(
@@ -233,11 +220,8 @@ feature "Organisation show" do
         referrer: organisation_path(organisation_2)
       )
 
-      # There should be two view all cohorts links.
-      expect(all("a", text: "View All Cohorts").count).to eq(1)
-
       # update ends_at of cohort 1 to be in the past
-      cohort_1.update!(ends_at: 1.day.ago)
+      cohort_1.update!(ends_at: 2.days.ago)
 
       visit organisation_path(organisation_2)
 
@@ -247,7 +231,7 @@ feature "Organisation show" do
           "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
         )
       ) do
-        click_link "View All Cohorts",
+        click_link "View Ended Cohorts",
                    href:
                      inactive_cohorts_organisation_course_path(
                        organisation_2,

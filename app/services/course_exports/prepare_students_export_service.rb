@@ -156,7 +156,7 @@ module CourseExports
             student.level.number,
             user.title,
             user.affiliation,
-            student.cohort&.name,
+            student.cohort.name,
             student.tags.order(:name).pluck(:name).join(", "),
             last_seen_at(user),
             student.completed_at&.iso8601 || ""

@@ -1,7 +1,9 @@
 class CourseExport < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :course
-  has_and_belongs_to_many :cohort
+
+  has_many :course_exports_cohorts, dependent: :destroy
+  has_many :cohorts, through: :course_exports_cohorts
 
   has_one_attached :file
 

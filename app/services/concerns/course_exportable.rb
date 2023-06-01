@@ -3,7 +3,7 @@ module CourseExportable
 
   def initialize(course_export)
     @course_export = course_export
-    @cohorts = course_export.cohort
+    @cohorts = course_export.cohorts
 
     add_custom_styles
   end

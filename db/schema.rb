@@ -165,13 +165,6 @@ ActiveRecord::Schema.define(version: 2023_05_17_172431) do
     t.index ["course_id"], name: "index_cohorts_on_course_id"
   end
 
-  create_table "cohorts_course_exports", force: :cascade do |t|
-    t.bigint "cohort_id"
-    t.bigint "course_export_id"
-    t.index ["cohort_id"], name: "index_cohorts_course_exports_on_cohort_id"
-    t.index ["course_export_id"], name: "index_cohorts_course_exports_on_course_export_id"
-  end
-
   create_table "communities", force: :cascade do |t|
     t.string "name"
     t.boolean "target_linkable", default: false
@@ -221,6 +214,13 @@ ActiveRecord::Schema.define(version: 2023_05_17_172431) do
     t.boolean "include_inactive_students", default: false
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
+  end
+
+  create_table "course_exports_cohorts", force: :cascade do |t|
+    t.bigint "cohort_id"
+    t.bigint "course_export_id"
+    t.index ["cohort_id"], name: "index_course_exports_cohorts_on_cohort_id"
+    t.index ["course_export_id"], name: "index_course_exports_cohorts_on_course_export_id"
   end
 
   create_table "courses", force: :cascade do |t|

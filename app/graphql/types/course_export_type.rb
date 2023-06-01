@@ -13,7 +13,7 @@ module Types
     end
 
     def cohorts
-      object.cohort.pluck(:name)
+      object.cohorts.pluck(:name)
     end
   end
 end

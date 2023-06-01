@@ -101,7 +101,7 @@ describe CourseExports::PrepareTeamsExportService do
            :teams,
            course: course,
            user: school_admin.user,
-           cohort: [cohort_live]
+           cohorts: [cohort_live]
   end
 
   let!(:team_1_reviewed_submission_1) do

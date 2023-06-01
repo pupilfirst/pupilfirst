@@ -7,7 +7,9 @@ class Cohort < ApplicationRecord
   has_one :school, through: :course
   has_many :calendar_cohorts, dependent: :destroy
   has_many :calendars, through: :calendar_cohorts
-  has_and_belongs_to_many :course_export
+
+  has_many :course_exports_cohorts, dependent: :destroy
+  has_many :course_exports, through: :course_exports_cohorts
 
   scope :active,
         -> { where("ends_at > ?", Time.zone.now).or(where(ends_at: nil)) }

@@ -21,6 +21,7 @@ module Schools
           @course
             .course_exports
             .order(created_at: :DESC)
+            .includes(:cohorts)
             .includes(:tags)
             .with_attached_file
             .page(params[:page])
@@ -55,7 +56,7 @@ module Schools
             tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only,
             includeInactiveStudents: export.include_inactive_students,
-            cohorts: export.cohort.pluck(:name)
+            cohorts: export.cohorts.pluck(:name)
           }
         end
       end

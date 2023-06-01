@@ -35,7 +35,6 @@ feature "Target Details Editor", js: true do
     click_button "Update Action"
 
     expect(page).to have_text("Action updated successfully")
-    dismiss_notification
 
     expect(target_1_l1.reload.action_config).to eq(action_config)
   end
@@ -52,7 +51,6 @@ feature "Target Details Editor", js: true do
     click_button "Update Action"
 
     expect(page).to have_text("Action updated successfully")
-    dismiss_notification
 
     expect(target_1_l1.reload.action_config).to eq(new_action_config)
     expect(target_1_l1.text_versions.count).to eq(1)
@@ -73,7 +71,6 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text(
       "Action could not be updated, please check the YAML syntax",
     )
-    dismiss_notification
 
     expect(target_1_l1.reload.action_config).to be_nil
   end

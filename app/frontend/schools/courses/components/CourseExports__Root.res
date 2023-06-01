@@ -53,7 +53,7 @@ let reducer = (state, action) =>
   | FinishSaving(courseExport) => {
       ...state,
       saving: false,
-      courseExports: state.courseExports |> Array.append([courseExport]),
+      courseExports: state.courseExports->Js.Array2.concat([courseExport]),
       drawerOpen: false,
     }
   | FailSaving => {...state, saving: false}
@@ -64,21 +64,21 @@ let reducer = (state, action) =>
     }
   | SelectTag(tag) => {
       ...state,
-      selectedTags: state.selectedTags |> Array.append([tag]),
+      selectedTags: state.selectedTags->Js.Array2.concat([tag]),
     }
   | DeselectTag(tag) => {
       ...state,
-      selectedTags: state.selectedTags |> Js.Array.filter(t => t |> Tag.id != Tag.id(tag)),
+      selectedTags: state.selectedTags->Js.Array2.filter(t => t->Tag.id != Tag.id(tag)),
     }
   | SelectExportType(exportType) => {...state, exportType: exportType}
   | UpdateTagSearch(tagSearch) => {...state, tagSearch: tagSearch}
   | SelectChort(cohort) => {
       ...state,
-      selectedCohorts: state.selectedCohorts |> Array.append([cohort]),
+      selectedCohorts: state.selectedCohorts->Js.Array2.concat([cohort]),
     }
   | DeselectCohort(cohort) => {
       ...state,
-      selectedCohorts: state.selectedCohorts |> Js.Array.filter(t =>
+      selectedCohorts: state.selectedCohorts->Js.Array2.filter(t =>
         t->Cohort.id != Cohort.id(cohort)
       ),
     }
@@ -89,7 +89,7 @@ let reducer = (state, action) =>
   }
 
 let readinessString = courseExport =>
-  switch courseExport |> CourseExport.file {
+  switch courseExport->CourseExport.file {
   | None =>
     let timeDistance =
       courseExport->CourseExport.createdAt->DateFns.formatDistanceToNow(~addSuffix=true, ())
@@ -103,8 +103,8 @@ let readinessString = courseExport =>
 
 module TagSelectable = {
   type t = Tag.t
-  let value = t => t |> Tag.name
-  let searchString = t => t |> Tag.name
+  let value = t => t->Tag.name
+  let searchString = t => t->Tag.name
 }
 
 module CohortSelectable = {
@@ -118,13 +118,13 @@ module CohortSelector = MultiselectInline.Make(CohortSelectable)
 module TagsSelector = MultiselectInline.Make(TagSelectable)
 
 let unselected = (allTags, selectedTags) => {
-  let selectedTagIds = selectedTags |> Array.map(Tag.id)
-  allTags |> Js.Array.filter(t => !(selectedTagIds |> Array.mem(t |> Tag.id)))
+  let selectedTagIds = selectedTags->Js.Array2.map(Tag.id)
+  allTags->Js.Array2.filter(t => !(selectedTagIds->Js.Array2.includes(t->Tag.id)))
 }
 
 let unselectedCohort = (allCohorts, selectedCohorts) => {
-  let selectedCohortIds = Cohort.id->Array.map(selectedCohorts)
-  allCohorts |> Js.Array.filter(t => !(selectedCohortIds |> Array.mem(t |> Cohort.id)))
+  let selectedCohortIds = selectedCohorts->Js.Array2.map(Cohort.id)
+  allCohorts->Js.Array2.filter(t => !(selectedCohortIds->Js.Array2.includes(t->Cohort.id)))
 }
 
 module CreateCourseExportQuery = %graphql(`
@@ -143,11 +143,11 @@ module CreateCourseExportQuery = %graphql(`
 `)
 
 let createCourseExport = (state, send, course, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
   send(BeginSaving)
 
-  let tagIds = state.selectedTags |> Array.map(Tag.id)
-  let cohortIds = state.selectedCohorts |> Array.map(Cohort.id)
+  let tagIds = state.selectedTags->Js.Array2.map(Tag.id)
+  let cohortIds = state.selectedCohorts->Js.Array2.map(Cohort.id)
 
   let exportType = switch state.exportType {
   | CourseExport.Students => #Students
@@ -155,7 +155,7 @@ let createCourseExport = (state, send, course, event) => {
   }
 
   let variables = CreateCourseExportQuery.makeVariables(
-    ~courseId=course |> Course.id,
+    ~courseId=course->Course.id,
     ~tagIds,
     ~reviewedOnly=state.reviewedOnly,
     ~includeInactiveStudents=state.includeInactiveStudents,
@@ -344,7 +344,7 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
           <h5 className="font-semibold ms-2"> {t("create_action")->str} </h5>
         </button>
       </div>
-      {state.courseExports |> ArrayUtils.isEmpty
+      {state.courseExports->ArrayUtils.isEmpty
         ? <div className="flex justify-center border rounded p-3 italic mx-auto max-w-2xl w-full">
             {t("no_exports_notice")->str}
           </div>
@@ -352,17 +352,18 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
             <div className="max-w-2xl w-full mx-auto relative pb-20">
               <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
               <div className="flex mt-4 -mx-3 items-start flex-wrap">
-                {state.courseExports
-                |> ArrayUtils.copyAndSort((x, y) =>
-                  DateFns.differenceInSeconds(
-                    y |> CourseExport.createdAt,
-                    x |> CourseExport.createdAt,
-                  )
+                {ArrayUtils.copyAndSort(
+                  (x, y) =>
+                    DateFns.differenceInSeconds(
+                      y->CourseExport.createdAt,
+                      x->CourseExport.createdAt,
+                    ),
+                  state.courseExports,
                 )
-                |> Array.map(courseExport =>
+                ->Js.Array2.map(courseExport =>
                   <div
-                    key={courseExport |> CourseExport.id}
-                    ariaLabel={t("export") ++ " " ++ (courseExport |> CourseExport.id)}
+                    key={courseExport->CourseExport.id}
+                    ariaLabel={t("export") ++ " " ++ courseExport->CourseExport.id}
                     className="flex w-1/2 items-center mb-4 px-3">
                     <div
                       className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
@@ -370,10 +371,10 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                         <div className="pt-4 pb-3 px-4">
                           <div className="text-sm">
                             <p className="text-black font-semibold">
-                              {courseExport |> CourseExport.exportTypeToString |> str}
+                              {courseExport->CourseExport.exportTypeToString->str}
                             </p>
                             <p className="text-gray-600 text-xs mt-px">
-                              {courseExport |> readinessString |> str}
+                              {courseExport->readinessString->str}
                             </p>
                           </div>
                           <div className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
@@ -390,36 +391,36 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                                 </span>
                               : React.null}
                             {courseExport
-                            |> CourseExport.cohorts
-                            |> Array.map(cohort =>
+                            ->CourseExport.cohorts
+                            ->Js.Array2.map(cohort =>
                               <span
                                 key=cohort
                                 className="px-2 py-1 border rounded bg-red-100 text-primary-600 mt-1 me-1">
-                                {cohort |> str}
+                                {cohort->str}
                               </span>
                             )
-                            |> React.array}
+                            ->React.array}
                             {courseExport
-                            |> CourseExport.tags
-                            |> Array.map(tag =>
+                            ->CourseExport.tags
+                            ->Js.Array2.map(tag =>
                               <span
                                 key=tag
                                 className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 me-1">
-                                {tag |> str}
+                                {tag->str}
                               </span>
                             )
-                            |> React.array}
+                            ->React.array}
                           </div>
                         </div>
-                        {switch courseExport |> CourseExport.file {
+                        {switch courseExport->CourseExport.file {
                         | None => React.null
                         | Some(file) =>
                           <a
                             ariaLabel={t("download_course_export") ++
                             " " ++
-                            (courseExport |> CourseExport.id)}
+                            courseExport->CourseExport.id}
                             className="pe-6 ps-4 w-10 text-xs course-faculty__list-item-remove text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
-                            href={file |> CourseExport.filePath}>
+                            href={file->CourseExport.filePath}>
                             <FaIcon classes="fas fa-file-download" />
                           </a>
                         }}
@@ -427,7 +428,7 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                     </div>
                   </div>
                 )
-                |> React.array}
+                ->React.array}
               </div>
             </div>
           </div>}

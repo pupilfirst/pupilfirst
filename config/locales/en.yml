@@ -1345,6 +1345,8 @@ en:
       close_community_editor: Close Community Editor
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: Body of Agreement
       agreement_placeholder: Leave the agreement body empty to hide the footer link.
       manage: Manage
@@ -1443,6 +1445,8 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:

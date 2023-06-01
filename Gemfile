@@ -46,7 +46,7 @@ gem "scarf", "~> 0.2" # A Ruby library for generating initial avatars and identi
 gem "kaminari", "~> 1.2" # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem "redis", "~> 5.0" # Redis client for use as cache store for rack-attack
 gem "rack-attack", "~> 6.6" # A rack middleware for throttling and blocking abusive requests
-gem "webpush", "~> 1.1.0" # Encryption Utilities for Web Push protocol
+gem "web-push", "~> 3.0" # Web Push library for Ruby (RFC8030).
 gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates database interactions into no-ops.
 gem "discordrb", "~> 3.4" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.

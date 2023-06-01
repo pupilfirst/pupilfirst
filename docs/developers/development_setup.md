@@ -106,7 +106,7 @@ Then, in the PostgreSQL CLI, set a new password and quit.
 
    ```ruby
    # In the Rails console...
-   vapid_key = Webpush.generate_key
+   vapid_key = WebPush.generate_key
    
    # Save the printed string in your .env file.
    puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"

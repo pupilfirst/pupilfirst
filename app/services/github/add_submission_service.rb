@@ -87,14 +87,14 @@ module Github
       file = submission_data_service.files.first
 
       begin
-        uri = URI.parse(file["url"])
+        uri = URI.parse(file[:url])
         file_content = Net::HTTP.get(uri)
       rescue StandardError
         raise "Unable to read file or source file missing"
       else
         github_client.create_contents(
           repo,
-          "script" + File.extname(file["filename"]),
+          "script" + File.extname(file[:filename]),
           "Add submission file[skip ci]",
           file_content,
           branch: branch,

@@ -64,8 +64,8 @@ let reportConclusionTimeString = report => {
 @react.component
 let make = (~report) => {
   let (state, send) = React.useReducer(reducer, {showReport: false})
-  <div className="px-4 py-2">
-    <div className="bg-gray-100 p-4 rounded-md">
+  <div className="px-4 py-1 md:py-2">
+    <div className="bg-gray-100 p-2 md:p-4 rounded-md">
       <div className="flex items-center justify-between text-sm">
         <div className="flex items-start gap-3">
           <div className="pt-1"> <Icon className={reportStatusIconClasses(report)} /> </div>
@@ -73,7 +73,10 @@ let make = (~report) => {
             <div className="text-xs">
               {switch SubmissionReport.targetUrl(report) {
               | Some(url) =>
-                <a className="text-primary-500 hover:text-primary-700" href={url} target="_blank">
+                <a
+                  className="text-primary-500 underline font-medium hover:text-primary-600"
+                  href={url}
+                  target="_blank">
                   {SubmissionReport.reporter(report)->str}
                   <FaIcon classes="if i-external-link-regular ms-1" />
                 </a>
@@ -81,13 +84,15 @@ let make = (~report) => {
               }}
             </div>
             <p className="font-semibold"> {str(reportStatusString(report))} </p>
-            <p className="text-gray-800 text-xs"> {str(reportConclusionTimeString(report))} </p>
+            <p className="text-gray-600 text-xs mt-1">
+              {str(reportConclusionTimeString(report))}
+            </p>
           </div>
         </div>
         {ReactUtils.nullIf(
           <button
             onClick={_ => send(ChangeReportVisibility)}
-            className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition">
+            className="inline-flex items-center text-xs text-gray-800 px-2 py-2 rounded font-semibold hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition">
             <span className="hidden md:block pe-3 ">
               {str(state.showReport ? t("hide_report_button") : t("show_report_button"))}
             </span>
@@ -108,7 +113,7 @@ let make = (~report) => {
         state.showReport
           ? <div>
               <p className="text-sm font-semibold mt-4"> {str(t("test_report"))} </p>
-              <div className="bg-white p-3 rounded-md border mt-2">
+              <div className="bg-white p-3 rounded-md border mt-1">
                 <MarkdownBlock profile=Markdown.Permissive markdown={testReport} />
               </div>
             </div>

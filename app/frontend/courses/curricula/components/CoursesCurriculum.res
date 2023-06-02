@@ -41,22 +41,22 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <div className="flex items-start font-medium leading-snug">
+      <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
+      <div className="flex">
+        {ReactUtils.nullIf(
+          <span className={targetStatusClasses(targetStatus)}>
+            {TargetStatus.statusToString(targetStatus)->str}
+          </span>,
+          TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
+        )}
         {Target.milestone(target)
           ? <div
-              className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 px-1.5 md:px-2 py-1 rounded-md mr-2">
+              className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
               <Icon className="if i-milestone-solid text-sm" />
               <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
             </div>
           : React.null}
-        <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
       </div>
-      {ReactUtils.nullIf(
-        <span className={targetStatusClasses(targetStatus)}>
-          {TargetStatus.statusToString(targetStatus)->str}
-        </span>,
-        TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
-      )}
     </Link>
     {ReactUtils.nullUnless(
       <a

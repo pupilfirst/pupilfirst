@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Users::InactivityNotificationAndDeletionService do
   include ActiveSupport::Testing::TimeHelpers
@@ -8,14 +8,14 @@ describe Users::InactivityNotificationAndDeletionService do
 
   # Setup the basics
   let(:school_1) do
-    create :school, configuration: { 'delete_inactive_users_after' => 4 }
+    create :school, configuration: { "delete_inactive_users_after" => 4 }
   end
   let!(:domain_school_1) do
-    create :domain, school: school_1, primary: true, fqdn: 'school1.host'
+    create :domain, school: school_1, primary: true, fqdn: "school1.host"
   end
   let(:school_2) { create :school }
   let!(:domain_school_2) do
-    create :domain, school: school_2, primary: true, fqdn: 'school2.host'
+    create :domain, school: school_2, primary: true, fqdn: "school2.host"
   end
 
   # Users in school_1
@@ -46,8 +46,8 @@ describe Users::InactivityNotificationAndDeletionService do
     create :user, school: school_2, last_sign_in_at: 100.days.ago
   end
 
-  describe '#execute' do
-    context 'inactivity configuration for user deletion is absent in environment' do
+  describe "#execute" do
+    context "inactivity configuration for user deletion is absent in environment" do
       around do |example|
         original_value = Rails.application.secrets.delete_inactive_users_after
         Rails.application.secrets.delete_inactive_users_after = 0
@@ -56,7 +56,7 @@ describe Users::InactivityNotificationAndDeletionService do
 
         Rails.application.secrets.delete_inactive_users_after = original_value
       end
-      it 'sends notification and deletes users only in school with configuration' do
+      it "sends notification and deletes users only in school with configuration" do
         subject.execute
 
         # Check emails of all users
@@ -71,7 +71,7 @@ describe Users::InactivityNotificationAndDeletionService do
         )
 
         expect(sanitize_html(current_email.body)).to include(
-          'https://school1.host/users/sign_in'
+          "https://school1.host/users/sign_in"
         )
 
         open_email(active_user_school_1.email)
@@ -104,19 +104,21 @@ describe Users::InactivityNotificationAndDeletionService do
 
         # Check audit record is created
         audit_record = AuditRecord.last
-        expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DELETE_ACCOUNT)
-        expect(audit_record.metadata['email']).to eq(
+        expect(audit_record.audit_type).to eq(
+          AuditRecord.audit_types[:delete_account]
+        )
+        expect(audit_record.metadata["email"]).to eq(
           notified_user_school_1.email
         )
         expect(
-          audit_record.metadata['account_deletion_notification_sent_at']
+          audit_record.metadata["account_deletion_notification_sent_at"]
         ).to eq(
           notified_user_school_1.account_deletion_notification_sent_at.iso8601
         )
       end
     end
 
-    context 'inactivity configuration for user deletion is present in environment' do
+    context "inactivity configuration for user deletion is present in environment" do
       let!(:inactive_user_2_school_2) do
         create :user, school: school_2, last_sign_in_at: 160.days.ago
       end
@@ -136,13 +138,13 @@ describe Users::InactivityNotificationAndDeletionService do
         Rails.application.secrets.delete_inactive_users_after = original_value
       end
 
-      it 'uses configuration in the environment to address inactivity if school has no configuration set' do
+      it "uses configuration in the environment to address inactivity if school has no configuration set" do
         subject.execute
 
         # Check emails of users in school_2
         open_email(inactive_user_2_school_2.email)
         expect(sanitize_html(current_email.body)).to include(
-          'https://school2.host/users/sign_in'
+          "https://school2.host/users/sign_in"
         )
         expect(
           inactive_user_2_school_2.reload.account_deletion_notification_sent_at

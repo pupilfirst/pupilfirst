@@ -8,7 +8,7 @@ module Users
 
     def execute
       if @old_user.school != @new_user.school
-        raise 'Users have to be in the same school'
+        raise "Users have to be in the same school"
       end
 
       User.transaction do
@@ -25,18 +25,18 @@ module Users
         delete_old_account
       end
 
-      Rails.logger.info('Accounts merged successfully!')
+      Rails.logger.info("Accounts merged successfully!")
     end
 
     private
 
     def merge_community_data
-      Rails.logger.info('Merging community data...')
+      Rails.logger.info("Merging community data...")
 
       # rubocop:disable Rails/SkipsModelValidations
-      TopicSubscription
-        .where(user_id: @old_user)
-        .update_all(user_id: @new_user.id)
+      TopicSubscription.where(user_id: @old_user).update_all(
+        user_id: @new_user.id
+      )
       TextVersion.where(user_id: @old_user).update_all(user_id: @new_user.id)
       Post.where(creator_id: @old_user).update_all(creator_id: @new_user.id)
       Post.where(editor_id: @old_user).update_all(editor_id: @new_user.id)
@@ -45,29 +45,31 @@ module Users
     end
 
     def merge_coach_notes
-      Rails.logger.info('Merging coach notes...')
+      Rails.logger.info("Merging coach notes...")
 
       CoachNote.where(author_id: @old_user).update_all(author_id: @new_user.id) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def merge_markdown_attachments
-      Rails.logger.info('Merging markdown attachments...')
-
-      MarkdownAttachment
-        .where(user_id: @old_user)
-        .update_all(user_id: @new_user.id) # rubocop:disable Rails/SkipsModelValidations
+      Rails.logger.info("Merging markdown attachments...")
+      # rubocop:disable Rails/SkipsModelValidations
+      MarkdownAttachment.where(user_id: @old_user).update_all(
+        user_id: @new_user.id
+      )
+      # rubocop:enable Rails/SkipsModelValidations
     end
 
     def merge_issued_certificates
-      Rails.logger.info('Merging issued certificates...')
-
-      IssuedCertificate
-        .where(user_id: @old_user)
-        .update_all(user_id: @new_user.id) # rubocop:disable Rails/SkipsModelValidations
+      Rails.logger.info("Merging issued certificates...")
+      # rubocop:disable Rails/SkipsModelValidations
+      IssuedCertificate.where(user_id: @old_user).update_all(
+        user_id: @new_user.id
+      )
+      # rubocop:enable Rails/SkipsModelValidations
     end
 
     def merge_course_exports
-      Rails.logger.info('Merging course exports...')
+      Rails.logger.info("Merging course exports...")
 
       CourseExport.where(user_id: @old_user).update_all(user_id: @new_user.id) # rubocop:disable Rails/SkipsModelValidations
     end
@@ -77,7 +79,7 @@ module Users
 
       return if @old_user.faculty.blank?
 
-      Rails.logger.info('Merging coach profiles...')
+      Rails.logger.info("Merging coach profiles...")
 
       new_user_coach =
         @new_user.faculty.presence ||
@@ -99,20 +101,20 @@ module Users
         faculty_id: new_user_coach.id
       )
 
-      StartupFeedback
-        .where(faculty_id: old_user_coach)
-        .update_all(faculty_id: new_user_coach.id)
+      StartupFeedback.where(faculty_id: old_user_coach).update_all(
+        faculty_id: new_user_coach.id
+      )
 
-      TimelineEvent
-        .where(evaluator_id: old_user_coach.id)
-        .update_all(evaluator_id: new_user_coach.id)
+      TimelineEvent.where(evaluator_id: old_user_coach.id).update_all(
+        evaluator_id: new_user_coach.id
+      )
       # rubocop:enable Rails/SkipsModelValidations
     end
 
     def merge_course_authors
       return if @old_user.course_authors.blank?
 
-      Rails.logger.info('Merging course author profiles...')
+      Rails.logger.info("Merging course author profiles...")
 
       @old_user.course_authors.each do |course_author|
         if @new_user.course_authors.where(course: course_author.course).present?
@@ -143,7 +145,7 @@ module Users
     def merge_student_profiles
       return if @old_user.founders.blank?
 
-      Rails.logger.info('Merging student profiles...')
+      Rails.logger.info("Merging student profiles...")
 
       old_user_course_ids = @old_user.courses.pluck(:id)
 
@@ -152,7 +154,7 @@ module Users
       common_courses = old_user_course_ids & new_user_course_ids
 
       if common_courses.present? && @student_profile_ids.empty?
-        raise "Both users have student profiles in courses with IDs: #{common_courses.join(', ')}. Select one student profile for each course, and pass an array of their IDs using the keyword argument `student_profile_ids`"
+        raise "Both users have student profiles in courses with IDs: #{common_courses.join(", ")}. Select one student profile for each course, and pass an array of their IDs using the keyword argument `student_profile_ids`"
       end
 
       @old_user.founders.each do |founder|
@@ -172,7 +174,7 @@ module Users
     def handle_admin_profile
       return if @old_user.school_admin.blank?
 
-      Rails.logger.info('Merging school admin...')
+      Rails.logger.info("Merging school admin...")
 
       if @new_user.school_admin.present?
         @old_user.school_admin.destroy!
@@ -189,7 +191,7 @@ module Users
     def add_audit_record
       AuditRecord.create!(
         school_id: @old_user.school_id,
-        audit_type: AuditRecord::TYPE_MERGE_USER_ACCOUNTS,
+        audit_type: AuditRecord.audit_types[:merge_user_accounts],
         metadata: {
           user_id: @new_user.id,
           old_account_email: @old_user.email

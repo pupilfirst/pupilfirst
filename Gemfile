@@ -51,6 +51,7 @@ gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates
 gem 'discordrb', '~> 3.4' # A Ruby wrapper for the Discord API.
 gem "groupdate", '~> 6.1.0' # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem 'discorb', '~> 0.20.0' # A Ruby wrapper for the Discord Bot.
+gem 'octokit', '~> 6.1.1' # A Ruby toolkit for the GitHub API.
 
 # OmniAuth providers
 gem 'omniauth-google-oauth2', '~> 1.1' # Oauth2 strategy for Google.
@@ -61,7 +62,7 @@ gem 'omniauth-discord', '~> 1.0' # Discord OAuth2 Strategy for OmniAuth.
 gem 'file_validators', '~> 3.0' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.1', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem 'graphql', '~> 1.12.24' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '~> 1.13.19' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 4.0' # Export Rails I18n translations for the frontend.
 gem 'batch-loader', '~> 2.0' # Generic lazy batching mechanism to avoid N+1 DB queries.
@@ -77,7 +78,7 @@ group :development do
   gem 'bullet', '~> 7.0' # Detect N+1 queries.
   gem 'web-console', '~> 4.1' # Rails Console on the Browser.
   gem 'listen', '~> 3.7' # The Listen gem listens to file modifications and notifies you about the changes.
-  gem 'graphiql-rails', '~> 1.8'
+  gem 'graphiql-rails', '~> 1.9' # Mount GraphiQL in your Rails app.
   gem 'htmlbeautifier', '~> 1.4' # A normaliser/beautifier for HTML that also understands embedded Ruby.
 end
 

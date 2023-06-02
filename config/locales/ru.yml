@@ -607,10 +607,9 @@ ru:
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
       report_status_string:
-        completed:
-          error: Автоматические тесты не могут быть завершены из-за ошибок
-          failure: Некоторые автоматические тесты не прошли
-          success: Все автоматические тесты прошли успешно
+        error: Автоматические тесты не могут быть завершены из-за ошибок
+        failure: Некоторые автоматические тесты не прошли
+        success: Все автоматические тесты прошли успешно
         in_progress: Автоматические тесты в ходе выполнения
         queued: Автоматические тесты поставлены в очередь
       review: Проверить
@@ -1075,27 +1074,25 @@ ru:
       reactivate_students: Реактивировать студентов
       search_empty: Ни один неактивный учащийся не соответствует вашим критериям поиска.
       search_placeholder: Поиск по названию студента или команды...
-    SchoolAdminNavbar__Root:
-      course_nav:
-        applicants: Абитуренты
-        authors: Авторы
-        certificates: Сертификаты
-        coaches: Менторы
-        curriculum: Силлабус
-        evaluation_criteria: Критерии Оценивания
-        exports: Экспорты
-        students: Студенты
-      dashboard: Обучение
-      navbar:
-        admins: Админы
-        coaches: Менторы
-        communities: Сообщество
-        courses: Курсы
-        customization: Кастомизация
-        overview: Обзор
-        settings: Настройки
-      notifications: Уведомления
-      sign_out: Выйти
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: Абитуренты
+          authors: Авторы
+          certificates: Сертификаты
+          coaches: Менторы
+          curriculum: Силлабус
+          evaluation_criteria: Критерии Оценивания
+          exports: Экспорты
+          students: Студенты
+        main:
+          admins: Админы
+          coaches: Менторы
+          communities: Сообщество
+          courses: Курсы
+          customization: Кастомизация
+          overview: Обзор
+          settings: Настройки
     SchoolAdmin__EditorDrawer:
       close_editor: Закрыть Редактор
     SchoolAdmins__Editor:

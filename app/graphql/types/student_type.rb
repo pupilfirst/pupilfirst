@@ -8,6 +8,7 @@ module Types
     field :personal_coaches, [Types::UserProxyType], null: false
     field :cohort, Types::CohortType, null: false
     field :course, Types::CourseType, null: false
+    field :github_repository, String, null: true
 
     def issued_certificates
       # rubocop:disable Lint/UselessAssignment

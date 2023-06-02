@@ -83,3 +83,32 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
       : React.null}
   </div>
 }
+
+let makeFromJson = json => {
+  open Json.Decode
+
+  let responsiveAlignment = optional(
+    field("responsiveAlignment", string),
+    json,
+  )->Belt.Option.map(responsiveAlignment =>
+    switch responsiveAlignment {
+    | "nrl" => NonResponsive(AlignLeft)
+    | "nrc" => NonResponsive(AlignCenter)
+    | "nrr" => NonResponsive(AlignRight)
+    | "rlr" => Responsive(AlignLeft, AlignRight)
+    | "rrl" => Responsive(AlignRight, AlignLeft)
+    | "rlc" => Responsive(AlignLeft, AlignCenter)
+    | "rcl" => Responsive(AlignCenter, AlignLeft)
+    | "rrc" => Responsive(AlignRight, AlignCenter)
+    | "rcr" => Responsive(AlignCenter, AlignRight)
+    | _ => NonResponsive(AlignCenter)
+    }
+  )
+
+  make({
+    "className": optional(field("className", string), json),
+    "link": optional(field("link", string), json),
+    "responsiveAlignment": responsiveAlignment,
+    "children": <div dangerouslySetInnerHTML={{"__html": field("children", string, json)}} />,
+  })
+}

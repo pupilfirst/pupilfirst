@@ -1,0 +1,14 @@
+<ol class="list-none inline-flex space-x-1 text-gray-400 items-center pb-3">
+  <% crumbs.each do |title, link| %>
+    <li>
+      <div class="flex items-center">
+        <%= link_to link.presence || '#',  class: link.presence ? "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm underline font-medium text-gray-600 hover:text-primary-500 transition-colors duration-200" : "max-w-[16ch] sm:max-w-[30ch] overflow-hidden whitespace-nowrap text-ellipsis text-sm font-medium text-gray-500" do %>
+          <span><%= title %></span>
+        <% end %>
+        <% if link %>
+          <span><i class="if i-chevron-right-regular ms-1"></i></span>
+        <% end %>
+      </div>
+    </li>
+  <% end %>
+</ol>

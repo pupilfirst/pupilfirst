@@ -180,7 +180,10 @@ let studentsList = (params, students) => {
           <Spread props={"data-student-name": User.name(StudentInfo.user(student))}>
             <div>
               <Link
-                ariaLabel={`Edit ${User.name(StudentInfo.user(student))}'s profile`}
+                ariaLabel={t(
+                  ~variables=[("name", StudentInfo.user(student)->User.name)],
+                  "edit_details",
+                )}
                 href={`/school/students/${StudentInfo.id(student)}/details`}
                 className="flex flex-1 items-center rounded-md hover:bg-primary-50 hover:text-primary-500 focus:bg-primary-50 focus:text-primary-500 justify-between">
                 <span className="inline-flex items-center p-2">

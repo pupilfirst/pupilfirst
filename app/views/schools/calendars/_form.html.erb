@@ -1,0 +1,38 @@
+<div id="schoolrouter-innerpage-data">
+  <section class="bg-gray-50">
+    <div class="max-w-4xl 2xl:max-w-5xl mx-auto p-6">
+      <div class="mt-4">
+        <%= link_to calendar_events_school_course_path(course), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
+          <i class="if i-arrow-left-regular if-fw rtl:rotate-180" ></i>
+          <%= t('shared.back_link') %>
+        <% end %>
+      </div>
+      <div class="">
+        <h1 class="text-xl md:text-2xl font-bold mt-4">
+          <%= calendar.persisted? ? t(".edit_calendar_heading", calendar_name: calendar.name) : t(".add_calendar_heading") %>
+        </h1>
+        <p class="text-sm font-medium text-gray-500"><%= course.name %></p>
+      </div>
+    </div>
+  </section>
+  <section class="bg-white" >
+    <%= form_with model: calendar, url: calendar.persisted? ? school_calendar_path(calendar) : school_course_calendars_path(course), class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6" do |f|  %>
+      <label>
+        <span class="text-sm font-medium"><%= t(".name_label") %> </span>
+        <%= f.text_field :name, placeholder: t(".name_placeholder"), required: true, class: "mt-1 text-sm block w-full border border-gray-300 outline-none py-3 px-4 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500"  %>
+      </label>
+      <div class="mt-5">
+        <label>
+          <span class="text-sm font-medium"><%= t(".cohorts_label") %></span>
+          <span title="<%= t(".cohorts_label_hint") %>">
+            <i class="if i-question-circle-regular if-fw cursor-help" aria-hidden="true"></i>
+          </span>
+        </label>
+        <div class="mt-1">
+          <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= { selected: [], allItems: course.cohorts.map { |cohort| { id: cohort.id.to_s, name: cohort.name }}, inputName: "calendar[cohort_ids][]", allItemsSelectedMessage: t(".all_cohorts_selected"), emptySelectionMessage: t(".no_cohorts_selected") }.to_json %>"></div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-large w-full mt-5"><%= calendar.persisted? ? t(".update_calendar_button") : t(".add_calendar_button") %> </button>
+    <% end %>
+  </section>
+</div>

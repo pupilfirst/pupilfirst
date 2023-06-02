@@ -2,16 +2,15 @@ module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
     include RecaptchaVerifiable
-    before_action :skip_container, only: %i[new]
     before_action :must_have_current_school
-    layout 'student'
+    layout "student"
 
-    # GET /user/sign_in?referrer
+    # GET /users/sign_in?referrer
     def new
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if current_user.present?
-        flash[:notice] = t('.already_signed')
+        flash[:notice] = t(".already_signed")
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -23,7 +22,7 @@ module Users
       @form.current_school = current_school
 
       recaptcha_success =
-        recaptcha_success?(@form, action: 'user_password_reset')
+        recaptcha_success?(@form, action: "user_password_reset")
 
       unless recaptcha_success
         redirect_to sign_in_with_email_path(visible_recaptcha: 1)
@@ -32,9 +31,9 @@ module Users
 
       if @form.validate(params)
         @form.save
-        render 'email_sent', locals: { kind: :reset_password_link }
+        render "email_sent", locals: { kind: :reset_password_link }
       else
-        flash[:error] = @form.errors.full_messages.join(', ')
+        flash[:error] = @form.errors.full_messages.join(", ")
         redirect_to request_password_reset_path
       end
     end
@@ -42,19 +41,21 @@ module Users
     # GET /user/token?referrer - link to sign_in user with token in params
     def token
       user =
-        Users::AuthenticationService.new(current_school, params[:token])
-          .authenticate
+        Users::AuthenticationService.new(
+          current_school,
+          params[:token],
+        ).authenticate
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if user.present?
         sign_in user
-        remember_me(user) unless params[:shared_device] == 'true'
+        remember_me(user) unless params[:shared_device] == "true"
         Users::ConfirmationService.new(user).execute
         user.update!(account_deletion_notification_sent_at: nil)
 
         redirect_to after_sign_in_path_for(user)
       else
-        flash[:error] = t('.link_expired')
+        flash[:error] = t(".link_expired")
         redirect_to new_user_session_path
       end
     end
@@ -65,7 +66,7 @@ module Users
       if user.present?
         @token = params[:token]
       else
-        flash[:error] = t('.link_used')
+        flash[:error] = t(".link_used")
         redirect_to new_user_session_path
       end
     end
@@ -82,12 +83,12 @@ module Users
           sign_in @form.user
           render json: {
                    error: nil,
-                   path: after_sign_in_path_for(current_user)
+                   path: after_sign_in_path_for(current_user),
                  }
         else
           render json: {
-                   error: @form.errors.full_messages.join(', '),
-                   path: nil
+                   error: @form.errors.full_messages.join(", "),
+                   path: nil,
                  }
         end
       end
@@ -105,7 +106,7 @@ module Users
       @form&.current_school = current_school
 
       recaptcha_success =
-        recaptcha_success?(@form, action: 'user_password_login')
+        recaptcha_success?(@form, action: "user_password_login")
 
       unless recaptcha_success
         redirect_to sign_in_with_email_path(visible_recaptcha: 1)
@@ -124,7 +125,7 @@ module Users
     # GET /users/sign_in_with_email
     def sign_in_with_email
       if current_user.present?
-        flash[:notice] = t('.already_signed')
+        flash[:notice] = t(".already_signed")
         redirect_to after_sign_in_path_for(current_user)
         return
       end
@@ -149,13 +150,13 @@ module Users
 
         data =
           crypt.decrypt(
-            Base64.urlsafe_decode64(params[:encrypted_token].presence || '')
+            Base64.urlsafe_decode64(params[:encrypted_token].presence || ""),
           )
         session_id = Base64.urlsafe_decode64(data[:session_id])
 
         # Abort if the session is invalid
         if session_id.to_s != session.id.private_id.to_s
-          flash[:error] = t('.invalid_session')
+          flash[:error] = t(".invalid_session")
           redirect_to new_user_session_path
           return
         end
@@ -164,26 +165,24 @@ module Users
         if data[:login_token].blank? && current_user.present? &&
              data[:auth_hash]&.dig(:discord)&.dig(:uid).present?
           if current_school.users.exists?(
-               discord_user_id: data[:auth_hash][:discord][:uid]
+               discord_user_id: data[:auth_hash][:discord][:uid],
              )
-            flash[:error] = t('.discord_already_linked')
+            flash[:error] = t(".discord_already_linked")
             redirect_to edit_user_path
             return
           end
 
           onboard_user =
-            Discord::AddMemberService
-              .new(current_user)
-              .execute(
-                data[:auth_hash][:discord][:uid],
-                data[:auth_hash][:discord][:tag],
-                data[:auth_hash][:discord][:access_token]
-              )
+            Discord::AddMemberService.new(current_user).execute(
+              data[:auth_hash][:discord][:uid],
+              data[:auth_hash][:discord][:tag],
+              data[:auth_hash][:discord][:access_token],
+            )
 
           if onboard_user
-            flash[:success] = t('.success')
+            flash[:success] = t(".success")
           else
-            flash[:error] = t('.discord_link_error')
+            flash[:error] = t(".discord_link_error")
           end
 
           redirect_to edit_user_path
@@ -191,19 +190,21 @@ module Users
         end
 
         user =
-          Users::AuthenticationService.new(current_school, data[:login_token])
-            .authenticate
+          Users::AuthenticationService.new(
+            current_school,
+            data[:login_token],
+          ).authenticate
 
         if user.present?
           sign_in user
           remember_me(user)
           redirect_to after_sign_in_path_for(user)
         else
-          flash[:error] = t('.error')
+          flash[:error] = t(".error")
           redirect_to new_user_session_path
         end
       rescue ActiveSupport::MessageEncryptor::InvalidMessage
-        flash[:error] = t('.error')
+        flash[:error] = t(".error")
         redirect_to new_user_session_path
       end
     end
@@ -217,7 +218,7 @@ module Users
         remember_me(@form.user) unless @form.shared_device?
         redirect_to after_sign_in_path_for(current_user)
       else
-        flash[:error] = @form.errors.full_messages.join(', ')
+        flash[:error] = @form.errors.full_messages.join(", ")
         redirect_to sign_in_with_email_path
       end
     end
@@ -225,15 +226,11 @@ module Users
     def process_link_login
       if @form.validate(params.merge(referrer: stored_location_for(:user)))
         @form.save
-        render 'email_sent', locals: { kind: :magic_link }
+        render "email_sent", locals: { kind: :magic_link }
       else
-        flash[:error] = @form.errors.full_messages.join(', ')
+        flash[:error] = @form.errors.full_messages.join(", ")
         redirect_to sign_in_with_email_path
       end
-    end
-
-    def skip_container
-      @skip_container = true
     end
 
     def must_have_current_school

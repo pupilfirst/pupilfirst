@@ -3,11 +3,11 @@ module Types
     class << self
       attr_accessor :resolved_fields
 
-      def resolved_field(*args, &block)
+      def resolved_field(*args, null: nil, &block)
         self.resolved_fields ||= []
         self.resolved_fields << args[0]
 
-        field(args[0], args[1], **args[2], &block)
+        field(*args, null: null, &block)
       end
     end
 
@@ -22,7 +22,7 @@ module Types
     def method_missing(name, *args)
       if resolved_fields.include?(name)
         resolver =
-          (name.to_s + '_resolver').camelcase.constantize.new(
+          (name.to_s + "_resolver").camelcase.constantize.new(
             context,
             args[0] || {}
           )

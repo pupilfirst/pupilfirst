@@ -9,7 +9,7 @@ module Mutations
     argument :affiliation, String, required: false
     argument :taggings, [String], required: true
 
-    description 'Update details of a student'
+    description "Update details of a student"
 
     field :success, Boolean, null: false
 
@@ -17,8 +17,8 @@ module Mutations
       update_student_details
       notify(
         :success,
-        I18n.t('shared.notifications.success'),
-        I18n.t('mutations.update_student_details.success_notification')
+        I18n.t("shared.notifications.success"),
+        I18n.t("mutations.update_student_details.success_notification")
       )
       { success: true }
     end
@@ -60,19 +60,19 @@ module Mutations
           return
         end
 
-        'One or more of the entries have invalid strings'
+        "One or more of the entries have invalid strings"
       end
 
       def cohort_should_belong_to_the_same_course
         return if @student.course.cohorts.include?(@cohort)
 
-        'The cohort does not belong to the same course'
+        "The cohort does not belong to the same course"
       end
 
       def coaches_should_belong_to_the_same_course
         return if @coaches.count == @value[:coach_ids].count
 
-        'One or more of the coaches do not belong to the same course'
+        "One or more of the coaches do not belong to the same course"
       end
     end
 
@@ -81,6 +81,13 @@ module Mutations
     private
 
     def update_student_details
+      if student&.name != @params[:name].strip
+        Users::LogUsernameUpdateService.new(
+          current_user,
+          @params[:name],
+          student.user
+        ).execute
+      end
       Founder.transaction do
         student.user.update!(
           name: @params[:name],
@@ -101,9 +108,9 @@ module Mutations
         resource_school.save!
 
         if @params[:coach_ids].present?
-          ::Founders::AssignReviewerService
-            .new(student)
-            .assign(@params[:coach_ids])
+          ::Founders::AssignReviewerService.new(student).assign(
+            @params[:coach_ids]
+          )
         end
       end
     end

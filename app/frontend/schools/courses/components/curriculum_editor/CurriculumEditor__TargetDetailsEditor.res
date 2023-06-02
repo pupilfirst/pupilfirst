@@ -611,7 +611,8 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
     <button
       onClick={updateMethodOfCompletion(methodOfCompletion |> methodOfCompletionSelection, send)}
       className={methodOfCompletionButtonClasses(selected)}>
-      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div> {buttonString |> str}
+      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div>
+      <div className="text-center"> {buttonString |> str} </div>
     </button>
   </div>
 }
@@ -970,7 +971,7 @@ let make = (
                     value=state.title
                   />
                   <School__InputGroupError
-                    message={ts("enter_valid_title")} active={!hasValidTitle}
+                    message={t("enter_valid_title")} active={!hasValidTitle}
                   />
                 </div>
               </div>
@@ -1075,6 +1076,26 @@ let make = (
                     className={booleanButtonClasses(!state.milestone)}>
                     {ts("_no") |> str}
                   </button>
+                </div>
+              </div>
+              <div className="mb-6">
+                <label
+                  className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
+                  <span className="me-2">
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
+                  </span>
+                  {t("github_action.title")->str}
+                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces")->str} </span>
+                </label>
+                <HelpIcon link={t("github_action.help_url")} className="ms-1">
+                  {t("github_action.help_description")->str}
+                </HelpIcon>
+                <div className="ms-6 mt-4">
+                  <a
+                    href={`/school/targets/${Target.id(target)}/action`} className="btn btn-subtle">
+                    <i className="fas fa-external-link-alt text-xs mr-2" />
+                    {t("github_action.button_text")->str}
+                  </a>
                 </div>
               </div>
               <div className="mb-6">

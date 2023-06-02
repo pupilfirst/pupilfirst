@@ -101,7 +101,7 @@ describe CourseExports::PrepareStudentsExportService do
            :students,
            course: course,
            user: school_admin.user,
-           cohort: [cohort_live]
+           cohorts: [cohort_live]
   end
 
   let!(:student_1_reviewed_submission) do

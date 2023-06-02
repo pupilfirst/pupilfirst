@@ -105,6 +105,8 @@ jobs:
         run: yarn run re:build
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
       - name: Specs (On master branch)
         if: env.GIT_BRANCH == 'master'
         run: |

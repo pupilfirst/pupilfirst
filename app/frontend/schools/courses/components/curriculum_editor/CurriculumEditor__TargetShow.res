@@ -86,26 +86,24 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
       ariaLabel={t("edit_content") ++ " " ++ (target |> Target.title)}
       className={targetClasses(target, targets)}
       href={linkPrefix ++ "content"}>
-      <div className="flex items-start font-medium leading-snug">
-        {Target.milestone(target)
-          ? <div
-              className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 px-1.5 md:px-2 py-1 rounded-md mr-2">
-              <Icon className="if i-milestone-solid text-sm" />
-              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
-            </div>
-          : React.null}
-        <p className="font-medium text-sm"> {target |> Target.title |> str} </p>
-      </div>
-      <div className="items-center">
+      <span className="font-medium text-sm"> {target |> Target.title |> str} </span>
+      <div className="flex items-center">
         {switch target |> Target.visibility {
         | Draft =>
           <span
-            className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 me-2 whitespace-nowrap">
+            className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 whitespace-nowrap">
             <i className="fas fa-file-signature text-sm" />
             <span className="ms-1"> {t("draft") |> str} </span>
           </span>
         | _ => React.null
         }}
+        {Target.milestone(target)
+          ? <div
+              className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
+              <Icon className="if i-milestone-solid text-sm" />
+              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
+            </div>
+          : React.null}
       </div>
     </Link>
     {editorLink(linkPrefix, "details", target, "fa-list-alt")}

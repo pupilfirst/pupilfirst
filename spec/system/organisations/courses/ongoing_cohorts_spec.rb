@@ -90,8 +90,7 @@ feature "Organisation show" do
       # checking for a link to ended cohorts page.
       expect(page).to have_link(
         "Ended Cohorts",
-        href:
-          ended_cohorts_organisation_course_path(organisation_1, course_1)
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       # Checking ongoing cohorts.
@@ -204,8 +203,7 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         "Ended Cohorts",
-        href:
-          ended_cohorts_organisation_course_path(organisation_1, course_1)
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
       click_link "Ended Cohorts"
       expect(page).to have_current_path(
@@ -245,8 +243,7 @@ feature "Organisation show" do
       # checking for a link to ended cohorts page.
       expect(page).to have_link(
         "Ended Cohorts",
-        href:
-          ended_cohorts_organisation_course_path(organisation_1, course_1)
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       # Checking ongoing cohorts.
@@ -359,8 +356,7 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         "Ended Cohorts",
-        href:
-          ended_cohorts_organisation_course_path(organisation_1, course_1)
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
       click_link "Ended Cohorts"
       expect(page).to have_current_path(

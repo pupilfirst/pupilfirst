@@ -103,10 +103,10 @@ jobs:
         run: bundle exec i18n export
       - name: Compile ReScript files
         run: yarn run re:build
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
+      # - name: Setup Chrome
+      #   uses: browser-actions/setup-chrome@v1
+      #   with:
+      #     chrome-version: stable
       - name: Specs (On master branch)
         if: env.GIT_BRANCH == 'master'
         run: |
@@ -117,7 +117,7 @@ jobs:
           ./cc-test-reporter after-build -t simplecov --exit-code $?
       - name: Specs (On non-master branches)
         if: env.GIT_BRANCH != 'master'
-        run: WD_CHROME_PATH=$(which chrome) bundle exec rspec spec/system/community/community_spec.rb -fd
+        run: bundle exec rspec spec/system/community/community_spec.rb -fd
       - uses: actions/upload-artifact@v3
         if: failure()
         with:

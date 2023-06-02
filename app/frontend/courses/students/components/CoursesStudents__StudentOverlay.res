@@ -218,7 +218,7 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   let targetCompletionPercent =
     targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
-    <div className="student-overlay__doughnut-chart-container">
+    <div className="student-overlay__doughnut-chart-container bg-gray-50">
       {doughnutChart("purple", targetCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
         {t("total_targets_completed") |> str}
@@ -394,7 +394,7 @@ let navigateToStudent = (setState, _event) => setState(_ => initialState)
 let otherTeamMembers = (setState, studentId, studentDetails) =>
   switch studentDetails->StudentDetails.team {
   | Some(team) =>
-    <div className="block mb-8">
+    <div className="block mt-8">
       <h6 className="font-semibold"> {t("other_team_members") |> str} </h6>
       {team
       ->StudentDetails.students
@@ -403,7 +403,7 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
         let path = "/students/" ++ (student->StudentInfo.id ++ "/report")
 
         <Link
-          className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+          className="block mt-2 rounded-lg border border-transparent hover:bg-primary-50 hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 transition"
           href=path
           onClick={navigateToStudent(setState)}
           key={student->StudentInfo.id}>
@@ -526,50 +526,49 @@ let make = (~studentId, ~userId) => {
               {ids(student)}
               {inactiveWarning(student)}
             </div>
-            <div className="mt-8">
+            <div className="mt-4">
               <h6 className="font-semibold"> {"Milestone Targets Completion Status"->str} </h6>
-              {ArrayUtils.copyAndSort(
-                (a, b) =>
-                  a->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber -
-                    b->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber,
-                StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
-              )
-              ->Js.Array2.map(data => {
-                <div
-                  className="flex group items-center p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
-                  <div className="mr-2">
-                    <span
-                      className={"text-xs font-medium " ++ {
-                        data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
-                          ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
-                          : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
-                      }}>
-                      {<Icon
-                        className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
-                          ? "if i-check-circle-solid text-green-600"
-                          : "if i-dashed-circle-light text-orange-600"}
-                      />}
-                    </span>
+              <div className="space-y-2">
+                {ArrayUtils.copyAndSort(
+                  (a, b) =>
+                    a->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber -
+                      b->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber,
+                  StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
+                )
+                ->Js.Array2.map(data => {
+                  <div
+                    className="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
+                    <div className="mr-2">
+                      <span
+                        className={"text-xs font-medium " ++ {
+                          data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                            ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
+                            : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
+                        }}>
+                        {<Icon
+                          className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                            ? "if i-check-circle-solid text-green-600"
+                            : "if i-dashed-circle-light text-orange-600"}
+                        />}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold mr-2">
+                        {("M" ++
+                        string_of_int(
+                          CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
+                        ))->str}
+                      </p>
+                    </div>
+                    <div className="flex-1 text-sm">
+                      {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold mr-2">
-                      {("M" ++
-                      string_of_int(
-                        CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
-                      ))->str}
-                    </p>
-                  </div>
-                  <div className="flex-1 text-sm">
-                    {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
-                  </div>
-                  <Icon
-                    className="if i-arrow-right-regular text-primary-500 hidden group-hover:inline-flex"
-                  />
-                </div>
-              })
-              ->React.array}
+                })
+                ->React.array}
+              </div>
             </div>
-            <div className="mb-8">
+            <div className="mt-8">
               <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
               <div className="flex -mx-2 flex-wrap mt-2">
                 {targetsCompletionStatus(
@@ -583,7 +582,7 @@ let make = (~studentId, ~userId) => {
               </div>
             </div>
             {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
-              ? <div className="mb-8">
+              ? <div className="mt-8">
                   <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
                   <div className="flex -mx-2 flex-wrap">
                     {averageGradeCharts(
@@ -608,7 +607,7 @@ let make = (~studentId, ~userId) => {
                   role="tab"
                   ariaSelected={state.selectedTab === Notes}
                   onClick={_event => setSelectedTab(Notes, setState)}
-                  className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
+                  className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
                   switch state.selectedTab {
                   | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
                   | Submissions => " "
@@ -620,7 +619,7 @@ let make = (~studentId, ~userId) => {
                   role="tab"
                   ariaSelected={state.selectedTab === Submissions}
                   onClick={_event => setSelectedTab(Submissions, setState)}
-                  className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
+                  className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
                   switch state.selectedTab {
                   | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
                   | Notes => " "

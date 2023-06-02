@@ -75,11 +75,11 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         "#{course.name}",
-        href: active_cohorts_organisation_course_path(organisation, course)
+        href: ongoing_cohorts_organisation_course_path(organisation, course)
       )
       click_link course.name
       expect(page).to have_current_path(
-        active_cohorts_organisation_course_path(organisation, course)
+        ongoing_cohorts_organisation_course_path(organisation, course)
       )
     end
   end
@@ -112,11 +112,11 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         "#{course.name}",
-        href: active_cohorts_organisation_course_path(organisation, course)
+        href: ongoing_cohorts_organisation_course_path(organisation, course)
       )
       click_link course.name
       expect(page).to have_current_path(
-        active_cohorts_organisation_course_path(organisation, course)
+        ongoing_cohorts_organisation_course_path(organisation, course)
       )
     end
   end

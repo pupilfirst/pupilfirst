@@ -2376,7 +2376,7 @@ en:
     show:
       active_students_label: Active Students
       ongoing_cohorts_subheading: Ongoing Cohorts
-      end_date: "End date:"
+      end_date: "End Date:"
       no_ongoing_cohorts: No ongoing cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in

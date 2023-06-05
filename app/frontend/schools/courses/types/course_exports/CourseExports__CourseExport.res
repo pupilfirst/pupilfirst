@@ -19,7 +19,7 @@ type t = {
   reviewedOnly: bool,
   includeInactiveStudents: bool,
   exportType: exportType,
-  cohorts: array<string>,
+  cohortIds: array<string>,
 }
 
 let id = t => t.id
@@ -31,33 +31,33 @@ let reviewedOnly = t => t.reviewedOnly
 let includeInactiveStudents = t => t.includeInactiveStudents
 let fileCreatedAt = (file: file) => file.createdAt
 let filePath = file => file.path
-let cohorts = t => t.cohorts
+let cohortIds = t => t.cohortIds
 
 let decodeFile = json => {
   open Json.Decode
   {
-    path: json |> field("path", string),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
+    path: field("path", string, json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
   }
 }
 
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    file: json |> field("file", nullable(decodeFile)) |> Js.Null.toOption,
-    tags: json |> field("tags", array(string)),
-    exportType: switch json |> field("exportType", string) {
+    id: field("id", string, json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
+    file: field("file", nullable(decodeFile), json)->Js.Null.toOption,
+    tags: field("tags", array(string), json),
+    exportType: switch field("exportType", string, json) {
     | "Students" => Students
     | "Teams" => Teams
     | otherExportType =>
       Rollbar.error("Unexpected exportType encountered: " ++ otherExportType)
       raise(UnexpectedExportType(otherExportType))
     },
-    reviewedOnly: json |> field("reviewedOnly", bool),
-    includeInactiveStudents: json |> field("includeInactiveStudents", bool),
-    cohorts: json |> field("cohorts", array(string)),
+    reviewedOnly: field("reviewedOnly", bool, json),
+    includeInactiveStudents: field("includeInactiveStudents", bool, json),
+    cohortIds: field("cohortIds", array(string), json),
   }
 }
 
@@ -68,7 +68,7 @@ let make = (
   ~tags,
   ~reviewedOnly,
   ~includeInactiveStudents,
-  ~cohorts,
+  ~cohortIds,
 ) => {
   id: id,
   createdAt: createdAt,
@@ -77,7 +77,7 @@ let make = (
   reviewedOnly: reviewedOnly,
   includeInactiveStudents: includeInactiveStudents,
   file: None,
-  cohorts: cohorts,
+  cohortIds: cohortIds,
 }
 
 let exportTypeToString = t =>

@@ -56,13 +56,13 @@ module Schools
             tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only,
             includeInactiveStudents: export.include_inactive_students,
-            cohorts: export.cohorts.pluck(:name)
+            cohort_ids: export.course_exports_cohorts.pluck(:cohort_id)
           }
         end
       end
 
       def cohort_details
-        @course.cohorts.as_json(only: %i[id name])
+        @course.cohorts.as_json
       end
     end
   end

@@ -29,6 +29,17 @@ let makeFromJs = cohort => {
   )
 }
 
+let decode = json => {
+  open Json.Decode
+  {
+    id: field("id", string, json),
+    name: field("name", string, json),
+    description: optional(field("description", string), json),
+    endsAt: optional(field("endsAt", DateFns.decodeISO), json),
+    courseId: field("courseId", string, json),
+  }
+}
+
 let filterValue = t => t.id ++ ";" ++ t.name
 
 module Fragment = %graphql(`

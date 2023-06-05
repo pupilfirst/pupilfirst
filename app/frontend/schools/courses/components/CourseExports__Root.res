@@ -136,7 +136,9 @@ module CreateCourseExportQuery = %graphql(`
       tags
       reviewedOnly
       includeInactiveStudents
-      cohorts
+      cohorts {
+        id
+      }
     }
    }
  }
@@ -176,7 +178,7 @@ let createCourseExport = (state, send, course, event) => {
         ~tags=\"export"["tags"],
         ~reviewedOnly=\"export"["reviewedOnly"],
         ~includeInactiveStudents=\"export"["includeInactiveStudents"],
-        ~cohorts=\"export"["cohorts"],
+        ~cohortIds=\"export"["cohorts"]->Js.Array2.map(c => c["id"]),
       )
 
       send(FinishSaving(courseExport))
@@ -390,13 +392,17 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                                   {t("include_inactive_students_tag")->str}
                                 </span>
                               : React.null}
-                            {courseExport
-                            ->CourseExport.cohorts
+                            {cohorts
+                            ->Js.Array2.filter(cohort =>
+                              CourseExport.cohortIds(courseExport)->Js.Array2.includes(
+                                Cohort.id(cohort),
+                              )
+                            )
                             ->Js.Array2.map(cohort =>
                               <span
-                                key=cohort
+                                key={Cohort.name(cohort)}
                                 className="px-2 py-1 border rounded bg-red-100 text-primary-600 mt-1 me-1">
-                                {cohort->str}
+                                {Cohort.name(cohort)->str}
                               </span>
                             )
                             ->React.array}

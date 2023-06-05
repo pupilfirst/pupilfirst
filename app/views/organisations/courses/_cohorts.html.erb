@@ -34,7 +34,7 @@
                   <span class="inline-block font-medium me-4"><%= cohort.name %></span>
                   <% if cohort.ends_at.present? %>
                     <div>
-                      <span class="text-sm text-gray-500 font-medium" ><%= t(".end_date") %> </span>
+                      <span class="text-sm text-gray-500 font-medium" ><%= t("organisations.courses.end_date") %> </span>
                       <span class="font-semibold text-sm"><%= cohort.ends_at.strftime("%B %d, %Y") %></span>
                     </div>
                   <% end %>

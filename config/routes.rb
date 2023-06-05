@@ -266,6 +266,12 @@ Rails.application.routes.draw do
       post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
     end
+
+    resources :cohorts, only: %i[show], module: 'courses' do
+      member do
+        get 'students', action: 'students'
+      end
+    end
   end
 
   resources :markdown_attachments, only: %i[create] do

@@ -61,9 +61,9 @@ let isSPA = t => {
     | Curriculum
     | Report
     | Calendar
+    | Students
     | Leaderboard => false
-    | Review
-    | Students => true
+    | Review => true
     }
   | Student__SubmissionShow(_)
   | Student__StudentsReport(_) => true

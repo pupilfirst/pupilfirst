@@ -34,12 +34,7 @@ class StudentDetailsResolver < ApplicationQuery
         end
 
     passed_target_ids =
-      TimelineEvent
-        .joins(:founders)
-        .where(founders: { id: student.id })
-        .where.not(passed_at: nil)
-        .distinct(:target_id)
-        .pluck(:target_id)
+      student.latest_submissions.passed.distinct(:target_id).pluck(:target_id)
 
     levels
       .pluck(:id)

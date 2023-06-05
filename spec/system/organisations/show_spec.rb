@@ -66,12 +66,10 @@ feature "Organisation show" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
       # There should not be a link to the My Org page.
-      within("main[class='grow bg-white']") do
-        expect(page).not_to have_link(
-          "My Org",
-          href: organisation_path(organisation_1)
-        )
-      end
+      expect(page).not_to have_link(
+        "My Org",
+        href: organisation_path(organisation_1)
+      )
 
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
@@ -117,18 +115,12 @@ feature "Organisation show" do
       expect(all("a", text: "View All Cohorts").count).to eq(2)
 
       # Click on the first link.
-      within(
-        first(
-          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
-        )
-      ) do
-        click_link "View All Cohorts",
-                   href:
-                     active_cohorts_organisation_course_path(
-                       organisation_1,
-                       course_1
-                     )
-      end
+      click_link "View All Cohorts",
+                 href:
+                   active_cohorts_organisation_course_path(
+                     organisation_1,
+                     course_1
+                   )
 
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(
@@ -145,9 +137,7 @@ feature "Organisation show" do
       )
 
       # There should be a link to the My Org page.
-      within("main[class='grow bg-white']") do
-        expect(page).to have_link("My Org", href: "/organisations")
-      end
+      expect(page).to have_link("My Org", href: "/organisations")
 
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
@@ -184,18 +174,12 @@ feature "Organisation show" do
       expect(all("a", text: "View All Cohorts").count).to eq(2)
 
       # Click on the first link.
-      within(
-        first(
-          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
-        )
-      ) do
-        click_link "View All Cohorts",
-                   href:
-                     active_cohorts_organisation_course_path(
-                       organisation_1,
-                       course_1
-                     )
-      end
+      click_link "View All Cohorts",
+                 href:
+                   active_cohorts_organisation_course_path(
+                     organisation_1,
+                     course_1
+                   )
 
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(

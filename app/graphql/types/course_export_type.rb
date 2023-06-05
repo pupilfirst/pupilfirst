@@ -21,7 +21,7 @@ module Types
             .where(course_export_id: course_export_ids)
             .each do |course_export_cohort|
               loader.call(course_export_cohort.course_export_id) do |memo|
-                memo |= [course_export_cohort.cohort].compact
+                memo |= [course_export_cohort.cohort].compact # rubocop:disable Lint/UselessAssignment
               end
             end
         end

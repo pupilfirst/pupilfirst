@@ -38,7 +38,7 @@
               </p>
             </div>
             <% if course_with_cohorts[:ended_cohorts_ids].present? %>
-              <%= link_to course_with_cohorts[:cohorts].empty? ? inactive_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id) : active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "group border border-transparent rounded-lg p-2 text-sm font-medium text-primary-500 hover:text-primary-800 hover:bg-primary-50 hover:border-primary-400 whitespace-nowrap" do %>
+              <%= link_to course_with_cohorts[:cohorts].empty? ? inactive_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id) : active_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "group border border-primary-400 sm:border-transparent rounded-lg p-2 text-sm font-medium text-primary-500 hover:text-primary-800 hover:bg-primary-50 sm:hover:border-primary-400 whitespace-nowrap" do %>
                 <span><%= t('.view_all_cohorts') %></span>
                 <span class="bg-gray-300 text-gray-900 group-hover:bg-primary-500 group-hover:text-white text-xs leading-none rounded-md px-1.5 py-1 ms-1.5">
                   <%= course_with_cohorts[:ended_cohorts_ids].count + course_with_cohorts[:cohorts].count %>
@@ -67,7 +67,7 @@
               </div>
             </div>
           <% else %>
-            <p class="text-center text-sm italic font-medium bg-gray-100 p-4"><%= t('.no_ongoing_cohorts') %></p>
+            <p class="text-center text-sm italic font-medium bg-gray-100 p-4 mt-4 sm:mt-2"><%= t('.no_ongoing_cohorts') %></p>
           <% end %>
         </div>
       <% end %>

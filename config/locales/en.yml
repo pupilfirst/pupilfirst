@@ -950,6 +950,8 @@ en:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level

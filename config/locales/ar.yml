@@ -950,6 +950,8 @@ ar:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
+      hide_archived: إخفاء الأهداف المؤرشفة
+      show_archived: إظهار الأهداف المؤرشفة
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level

@@ -2370,15 +2370,17 @@ hi:
       heading: संगठनों
     show:
       active_students_label: सक्रिय छात्र
-      cohorts_subheading: समानता रखने वाले लोग
+      ongoing_cohorts_subheading: Ongoing Cohorts
+      end_date: "End Date:"
+      no_ongoing_cohorts: There are no ongoing cohorts for this course.
       organisation_label: संगठन
       students_enrolled_heading: में नामांकित छात्र
-      students_enrolled_prefix_html:
-        one: <span class="font-semibold text-black">1</span> छात्र नामांकित
-        other: <span class="font-semibold text-black">%{count}</span> छात्र नामांकित
-      students_enrolled_suffix_html:
-        one: <span class="font-semibold text-black">1</span> सक्रिय समूह में
-        other: <span class="font-semibold text-black">%{count}</span> सक्रिय समूह में
+      ongoing_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      ongoing_suffix_html:
+        one: <span class="font-semibold text-black">1</span> ongoing cohort.
+        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
       total_students_label: कुल छात्र
       view_all_cohorts: View All Cohorts
     students:

@@ -2,7 +2,7 @@ module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include Devise::Controllers::Rememberable
 
-    skip_before_action :verify_authenticity_token, only: [:developer] # rubocop:disable Rails/LexicallyScopedActionFilter
+    skip_before_action :verify_authenticity_token, only: [:developer]
 
     # GET /users/auth/:action/callback
     def oauth_callback
@@ -14,14 +14,14 @@ module Users
         elsif @email.blank?
           redirect_to oauth_error_url(
                         host: oauth_origin[:fqdn],
-                        error: email_blank_flash
+                        error: email_blank_flash,
                       )
           nil
         else
           sign_in_at_oauth_origin
         end
       else
-        render 'oauth_origin_missing', layout: 'error'
+        render "oauth_origin_missing", layout: "error"
       end
     end
 
@@ -33,10 +33,10 @@ module Users
 
     def failure
       if oauth_origin.present?
-        message = t('.denied_by', provider: oauth_origin[:provider].capitalize)
+        message = t(".denied_by", provider: oauth_origin[:provider].capitalize)
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
       else
-        flash[:error] = t('.denied')
+        flash[:error] = t(".denied")
         redirect_to new_user_session_path
       end
     end
@@ -62,12 +62,12 @@ module Users
     def passthru_oauth_data
       encrypted_token =
         EncryptorService.new.encrypt(
-          { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] }
+          { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] },
         )
 
       token_url_options = {
         encrypted_token: Base64.urlsafe_encode64(encrypted_token),
-        host: oauth_origin[:fqdn]
+        host: oauth_origin[:fqdn],
       }
 
       redirect_to user_auth_callback_url(token_url_options)
@@ -83,13 +83,13 @@ module Users
             {
               login_token: user.original_login_token,
               auth_hash: auth_hash_data,
-              session_id: oauth_origin[:session_id]
-            }
+              session_id: oauth_origin[:session_id],
+            },
           )
 
         token_url_options = {
           encrypted_token: Base64.urlsafe_encode64(encrypted_token),
-          host: oauth_origin[:fqdn]
+          host: oauth_origin[:fqdn],
         }
 
         redirect_to user_auth_callback_url(token_url_options)
@@ -98,9 +98,9 @@ module Users
                       host: oauth_origin[:fqdn],
                       error:
                         t(
-                          'users.omniauth_callbacks.oauth_callback.email_unregistered',
-                          email: @email
-                        )
+                          "users.omniauth_callbacks.oauth_callback.email_unregistered",
+                          email: @email,
+                        ),
                     )
       end
     end
@@ -120,16 +120,16 @@ module Users
     # This method is used to pass the auth_hash data to the oauth_origin.
     def auth_hash_data
       case auth_hash[:provider]
-      when 'google_oauth2', 'facebook', 'github', 'developer'
+      when "google_oauth2", "facebook", "github", "developer"
         {}
-      when 'discord'
+      when "discord"
         {
           discord: {
             uid: auth_hash[:uid],
             tag:
               "#{auth_hash[:extra][:raw_info][:username]}##{auth_hash[:extra][:raw_info][:discriminator]}",
-            access_token: auth_hash[:credentials][:token]
-          }
+            access_token: auth_hash[:credentials][:token],
+          },
         }
       else
         raise_unexpected_provider(provider)
@@ -140,14 +140,14 @@ module Users
     # For an unknown reason, the request env variable omniauth.origin defaults to the sign in path when no origin is
     # supplied to the omniauth provider login path. This method detects and removes that default.
     def origin
-      supplied_origin = request.env['omniauth.origin']
+      supplied_origin = request.env["omniauth.origin"]
       %r{users/sign_in}.match?(supplied_origin) ? nil : supplied_origin
     end
 
     # Omniauth returns authentication details in the 'omniauth.auth' request environment variable after the provider
     # redirects back to our website. The format for this return value is documented by Omniauth.
     def auth_hash
-      request.env['omniauth.auth']
+      request.env["omniauth.auth"]
     end
 
     # This method validates the format of auth_hash. This ensures that we capture any 'oddities' as crashes, instead of
@@ -159,24 +159,24 @@ module Users
     end
 
     def provider_name
-      params[:action].split('_').first.capitalize
+      params[:action].split("_").first.capitalize
     end
 
     def email_blank_flash
       message =
         t(
-          'users.omniauth_callbacks.oauth_callback.not_receive_email',
-          provider_name: provider_name
+          "users.omniauth_callbacks.oauth_callback.not_receive_email",
+          provider_name: provider_name,
         )
 
       message +=
         case provider_name
-        when 'Github'
-          t('users.omniauth_callbacks.oauth_callback.add_github')
-        when 'Facebook'
-          t('users.omniauth_callbacks.oauth_callback.add_facebook')
+        when "Github"
+          t("users.omniauth_callbacks.oauth_callback.add_github")
+        when "Facebook"
+          t("users.omniauth_callbacks.oauth_callback.add_facebook")
         else
-          t('users.omniauth_callbacks.oauth_callback.add_other')
+          t("users.omniauth_callbacks.oauth_callback.add_other")
         end
 
       message.html_safe

@@ -32,36 +32,33 @@ class OrganisationsController < ApplicationController
         courses[cohort.course.id] ||= {
           course: cohort.course,
           cohorts: [],
-          inactive_cohorts_ids: []
+          ended_cohorts_ids: []
         }
-        if cohort.ends_at.nil? || cohort.ends_at.future?
-          courses[cohort.course.id][:cohorts] << cohort
+
+        if cohort.ended?
+          courses[cohort.course.id][:ended_cohorts_ids] << cohort.id
         else
-          courses[cohort.course.id][:inactive_cohorts_ids] << cohort.id
+          courses[cohort.course.id][:cohorts] << cohort
         end
       end
 
-    courses = courses.values.map do |course|
-      cohort_ids = course[:cohorts].map(&:id)
+    courses =
+      courses.values.map do |course|
+        cohort_ids = course[:cohorts].map(&:id)
 
-      course[:active_students] = student_count(cohort_ids)
-      course[:inactive_students] = student_count(course[:inactive_cohorts_ids])
+        course[:active_students] = @organisation
+          .users
+          .joins(:founders)
+          .where(founders: { cohort_id: cohort_ids })
+          .distinct
+          .count
 
-      course
-    end
+        course
+      end
 
     courses.sort_by do |course_data|
-      course_data[:cohorts].all? { |cohort| cohort.ends_at && cohort.ends_at.past? } ? 1 : 0
+      course_data[:cohorts].all?(&:ended?) ? 1 : 0
     end
-  end
-
-  def student_count(cohort_ids)
-    @organisation
-      .users
-      .joins(:founders)
-      .where(founders: { cohort_id: cohort_ids })
-      .distinct
-      .count
   end
 
   def prepare_counts

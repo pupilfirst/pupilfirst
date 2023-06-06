@@ -2380,21 +2380,14 @@ en:
       no_ongoing_cohorts: No ongoing cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
-      students_enrolled_active_prefix_html:
+      ongoing_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled in
         other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      students_enrolled_active_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> ongoing cohort and
-        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts and
-      students_participated_ended_prefix_html:
-        one: <span class="font-semibold text-black">1</span> student was part of
-        other: <span class="font-semibold text-black">%{count}</span> students were part of
-      students_participated_ended_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> ended cohort
-        other: <span class="font-semibold text-black">%{count}</span> ended cohorts
+      ongoing_suffix_html:
+        one:  <span class="font-semibold text-black">1</span> ongoing cohort.
+        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
-      view_ended_cohorts: View Ended Cohorts
     students:
       show:
         average_grades: Average Grades

@@ -31,6 +31,24 @@
           <% end %>
         </div>
       <% end %>
+      <% @submission.startup_feedback.includes(:faculty).each do |feedback |%>
+        <div class="bg-white border-t p-4 md:p-6">
+          <div class="flex items-center">
+            <div class="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
+              <%= avatar(feedback.faculty.name, faculty: feedback.faculty, version: :thumb)%>
+            </div>
+            <div>
+              <p class="text-xs leading-tight">Feedback from:</p>
+              <div>
+                <h4 class="font-semibold text-base leading-tight block md:inline-flex self-end"><%= feedback.faculty.name %></h4>
+              </div>
+            </div>
+          </div>
+          <div class="markdown-block markdown-block__permissive ms-15" id="markdown-block-17385746210222486">
+            <p> <%= Kramdown::Document.new(feedback.feedback).to_html.html_safe  %></p>
+          </div>
+        </div>
+      <% end%>
     </div>
   </div>
 </div>

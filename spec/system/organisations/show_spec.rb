@@ -77,11 +77,11 @@ feature "Organisation show" do
       expect(page).to have_text("Active Students\n6")
 
       expect(page).to have_text(
-        "#{course_1.name}\n4 students enrolled in 2 ongoing cohorts and 2 students were part of 1 ended cohort"
+        "#{course_1.name}\n4 students enrolled in 2 ongoing cohorts."
       )
 
       expect(page).to have_text(
-        "#{course_2.name}\n2 students enrolled in 1 ongoing cohort and 0 ended cohorts"
+        "#{course_2.name}\n2 students enrolled in 1 ongoing cohort."
       )
 
       # There should be links to three active cohorts...
@@ -147,7 +147,7 @@ feature "Organisation show" do
 
       visit organisation_path(organisation_1)
 
-      click_link "View Ended Cohorts",
+      click_link "View All Cohorts",
                  href:
                    inactive_cohorts_organisation_course_path(
                      organisation_1,
@@ -231,7 +231,7 @@ feature "Organisation show" do
           "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
         )
       ) do
-        click_link "View Ended Cohorts",
+        click_link "View All Cohorts",
                    href:
                      inactive_cohorts_organisation_course_path(
                        organisation_2,

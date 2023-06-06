@@ -1,11 +1,11 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:3.0.6
+FROM ruby:3.2.2
 WORKDIR /build
 
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.4.10'
+RUN gem install bundler -v '2.4.13'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
@@ -50,7 +50,7 @@ RUN yarn run re:build
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
-FROM ruby:3.0.6-slim-bullseye
+FROM ruby:3.2.2-slim-bullseye
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \
@@ -70,7 +70,7 @@ RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
 # Let's also upgrade bundler to the same version used in the build.
-RUN gem install bundler -v '2.4.10'
+RUN gem install bundler -v '2.4.13'
 
 WORKDIR /app
 COPY . /app

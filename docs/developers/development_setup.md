@@ -106,8 +106,8 @@ Then, in the PostgreSQL CLI, set a new password and quit.
 
    ```ruby
    # In the Rails console...
-   vapid_key = Webpush.generate_key
-
+   vapid_key = WebPush.generate_key
+   
    # Save the printed string in your .env file.
    puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
    ```
@@ -218,17 +218,6 @@ We recommend using Visual Studio Code with the following extensions...
   }
 }
 ```
-
-### Ruby files
-
-We use [prettier/plugin-ruby](https://github.com/prettier/plugin-ruby) to enable Prettier to format Ruby code. This plugin required additional gems to be installed on the globally selected Ruby. I.e., if your ASDF's `global` Ruby version is different from what's specified in the LMS's `.tool-versions` file, you'll need to install these gems on the `global` version for the plugin to work properly.
-
-```bash
-# With your global Ruby version selected...
-gem install bundler prettier_print syntax_tree syntax_tree-haml syntax_tree-rbs
-```
-
-For up-to-date setup instructions, see the [_Getting Started_ section on prettier/plugin-ruby's GitHub repo](https://github.com/prettier/plugin-ruby#getting-started).
 
 ### YAML files
 

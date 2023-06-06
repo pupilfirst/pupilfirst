@@ -66,12 +66,10 @@ feature "Organisation show" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
       # There should not be a link to the My Org page.
-      within("main[class='grow bg-white']") do
-        expect(page).not_to have_link(
-          "My Org",
-          href: organisation_path(organisation_1)
-        )
-      end
+      expect(page).not_to have_link(
+        "My Org",
+        href: organisation_path(organisation_1)
+      )
 
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")
@@ -162,9 +160,7 @@ feature "Organisation show" do
       )
 
       # There should be a link to the My Org page.
-      within("main[class='grow bg-white']") do
-        expect(page).to have_link("My Org", href: "/organisations")
-      end
+      expect(page).to have_link("My Org", href: "/organisations")
 
       expect(page).to have_text("Total Students\n8")
       expect(page).to have_text("Active Students\n6")

@@ -116,19 +116,12 @@ feature "Organisation show" do
       # There should be only one View All Cohorts link.
       expect(all("a", text: "View All Cohorts").count).to eq(1)
 
-      # Click on the first link.
-      within(
-        first(
-          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
-        )
-      ) do
-        click_link "View All Cohorts",
-                   href:
-                     active_cohorts_organisation_course_path(
-                       organisation_1,
-                       course_1
-                     )
-      end
+      click_link "View All Cohorts",
+                 href:
+                   active_cohorts_organisation_course_path(
+                     organisation_1,
+                     course_1
+                   )
 
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(
@@ -225,19 +218,12 @@ feature "Organisation show" do
 
       visit organisation_path(organisation_2)
 
-      # Click on the first link.
-      within(
-        first(
-          "div[class='border border-gray-200 bg-gray-50 rounded-lg p-5 my-4']"
-        )
-      ) do
-        click_link "View All Cohorts",
-                   href:
-                     inactive_cohorts_organisation_course_path(
-                       organisation_2,
-                       course_1
-                     )
-      end
+      click_link "View All Cohorts",
+                 href:
+                   inactive_cohorts_organisation_course_path(
+                     organisation_2,
+                     course_1
+                   )
 
       # The user should be taken to the inactive cohorts page.
       expect(page).to have_current_path(

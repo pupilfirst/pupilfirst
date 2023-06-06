@@ -102,7 +102,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
   })
 
   <div className="border-b">
-    <div className="container mx-auto px-3 lg:px-0 max-w-5xl">
+    <div className="mx-auto px-4">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>

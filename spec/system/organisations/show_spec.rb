@@ -113,7 +113,7 @@ feature "Organisation show" do
     scenario "check for view all cohorts links" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
-      # There should be two view all cohorts links.
+      # There should be only one View All Cohorts link.
       expect(all("a", text: "View All Cohorts").count).to eq(1)
 
       # Click on the first link.

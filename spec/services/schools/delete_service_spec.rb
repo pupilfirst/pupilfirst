@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Schools::DeleteService do
   subject { described_class.new(school_1) }
@@ -65,9 +65,9 @@ describe Schools::DeleteService do
 
   before do
     # Tag the schools.
-    school_1.founder_tag_list.add('school 1 tag')
+    school_1.founder_tag_list.add("school 1 tag")
     school_1.save!
-    school_2.founder_tag_list.add('school 2 tag')
+    school_2.founder_tag_list.add("school 2 tag")
     school_2.save!
   end
 
@@ -86,16 +86,16 @@ describe Schools::DeleteService do
       [Proc.new { Domain.count }, 3, 1],
       [Proc.new { AuditRecord.count }, 2, 1],
       [Proc.new { Calendar.count }, 2, 1],
-      [Proc.new { CalendarEvent.count }, 2, 1]
+      [Proc.new { CalendarEvent.count }, 2, 1],
     ]
   end
 
-  describe '#execute' do
-    it 'deletes all data related to the course and the course itself' do
+  describe "#execute" do
+    it "deletes all data related to the course and the course itself" do
       expect { subject.execute }.to(
-        change { expectations.map { |e| e[0].call } }
-          .from(expectations.map { |e| e[1] })
-          .to(expectations.map { |e| e[2] })
+        change { expectations.map { |e| e[0].call } }.from(
+          expectations.pluck(1),
+        ).to(expectations.pluck(2)),
       )
 
       expect { school_2.reload }.not_to raise_error

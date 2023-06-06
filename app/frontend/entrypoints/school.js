@@ -1,5 +1,3 @@
-import "./tailwind";
-
 // Assets
 import "~/schools/shared/shared.css";
 import "~/schools/show.css";

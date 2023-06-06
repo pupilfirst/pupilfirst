@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 module Cohorts
   class BulkImportStudentsForm < Reform::Form
@@ -10,8 +10,8 @@ module Cohorts
              validates: {
                presence: true,
                file_size: {
-                 less_than: 5.megabytes
-               }
+                 less_than: 5.megabytes,
+               },
              }
 
     validate :soft_limit_student_count
@@ -24,7 +24,7 @@ module Cohorts
         model,
         csv_rows,
         current_user,
-        notify_students == 'true'
+        notify_students == "true",
       )
     end
 
@@ -38,8 +38,8 @@ module Cohorts
     def emails_must_be_valid
       invalid =
         csv_rows.any? do |r|
-          r['email'] !~ EmailValidator::REGULAR_EXPRESSION ||
-            r['email'].length > 254
+          r["email"] !~ EmailValidator::REGULAR_EXPRESSION ||
+            r["email"].length > 254
         end
 
       return unless invalid
@@ -48,7 +48,7 @@ module Cohorts
     end
 
     def students_must_have_unique_email
-      return if csv_rows.map { |r| r['email'] }.uniq.count == csv_rows.count
+      return if csv_rows.pluck("email").uniq.count == csv_rows.count
 
       errors.add(:base, I18n.t("mutations.create_students.unique_emails"))
     end
@@ -65,24 +65,24 @@ module Cohorts
     end
 
     def strings_must_not_be_too_long
-      if csv_rows.all? do |r|
-           valid_string?(string: r['name'], max_length: 250) &&
+      if csv_rows.all? { |r|
+           valid_string?(string: r["name"], max_length: 250) &&
              valid_string?(
-               string: r['title'],
+               string: r["title"],
                max_length: 250,
-               optional: true
+               optional: true,
              ) &&
              valid_string?(
-               string: r['affiliation'],
+               string: r["affiliation"],
                max_length: 250,
-               optional: true
+               optional: true,
              ) &&
              valid_string?(
-               string: r['team_name'],
+               string: r["team_name"],
                max_length: 50,
-               optional: true
+               optional: true,
              )
-         end
+         }
         return
       end
 

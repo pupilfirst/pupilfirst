@@ -15,8 +15,13 @@ module TimelineEvents
       submission =
         TimelineEvent.transaction do
           timeline_event_params =
-            @target.evaluation_criteria.blank? ? @params.merge(passed_at: Time.zone.now) :
-              @params
+            (
+              if @target.evaluation_criteria.blank?
+                @params.merge(passed_at: Time.zone.now)
+              else
+                @params
+              end
+            )
           TimelineEvent
             .create!(timeline_event_params)
             .tap do |s|
@@ -38,6 +43,16 @@ module TimelineEvents
         submission
       )
 
+      if submission.target.action_config.present?
+        Github::RunActionsJob.perform_later(submission)
+        SubmissionReport.create!(
+          submission_id: submission.id,
+          reporter: SubmissionReport::VIRTUAL_TEACHING_ASSISTANT,
+          status: SubmissionReport.statuses[:queued],
+          target_url: submission.actions_url
+        )
+      end
+
       submission
     end
 
@@ -53,12 +68,10 @@ module TimelineEvents
     end
 
     def update_latest_flag(timeline_event)
-      TimelineEventOwner
-        .where(
-          timeline_event_id: old_events(timeline_event).live,
-          founder: owners
-        )
-        .update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
+      TimelineEventOwner.where(
+        timeline_event_id: old_events(timeline_event).live,
+        founder: owners
+      ).update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def owners

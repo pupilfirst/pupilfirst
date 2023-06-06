@@ -41,6 +41,8 @@
       window.Prism = window.Prism || {};
       Prism.manual = true;
     <% end %>
+    <!-- Rails specific scripts. -->
+    <%= vite_javascript_tag 'application', nonce: true %>
     <%= yield :head %>
     <% if Rails.env.test? %>
       <style>
@@ -63,21 +65,23 @@
   </head>
 
   <body data-host="<%= current_host %>">
-        <section class="min-h-full flex flex-col items-stretch">
-          <%= yield :nav %>
-          <main class="grow bg-white">
-            <% if content_for?(:wrapper) %>
-              <%= yield :wrapper %>
-            <% else %>
-              <%= yield %>
-            <% end %>
-          </main>
-          <%= yield :tail %>
-          <%= yield :footer %>
-        </section>
+        <% if content_for?(:container) %>
+          <%= yield :container %>
+        <% else %>
+          <section class="min-h-full flex flex-col items-stretch">
+            <%= yield :nav %>
+            <main class="grow bg-white">
+              <% if content_for?(:wrapper) %>
+                <%= yield :wrapper %>
+              <% else %>
+                <%= yield %>
+              <% end %>
+            </main>
+            <%= yield :tail %>
+            <%= yield :footer %>
+          </section>
+        <% end %>
         <!-- Initialize Rollbar only at the very end. -->
         <%= vite_javascript_tag 'rollbar', nonce: true %>
-        <!-- Rails specific scripts. -->
-        <%= vite_javascript_tag 'application', nonce: true %>
       </body>
     </html>

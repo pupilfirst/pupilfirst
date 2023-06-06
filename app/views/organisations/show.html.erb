@@ -32,8 +32,6 @@
                 <% if course_with_cohorts[:cohorts].present? %>
                   <%= t('.ongoing_prefix_html', count: course_with_cohorts[:active_students]) %>
                   <%= t('.ongoing_suffix_html', count: course_with_cohorts[:cohorts].count) %>
-                <% else%>
-                  <%= t('.no_ongoing_students', count: course_with_cohorts[:cohorts].count) %>
                 <% end %>
               </p>
             </div>

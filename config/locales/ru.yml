@@ -2394,19 +2394,21 @@ ru:
       heading: Организации
     show:
       active_students_label: Активные студенты
-      cohorts_subheading: Когорты
+      ongoing_cohorts_subheading: Ongoing Cohorts
+      end_date: "End Date:"
+      no_ongoing_cohorts: There are no ongoing cohorts for this course.
       organisation_label: Организация
       students_enrolled_heading: Студенты, зачисленные в
-      students_enrolled_prefix_html:
-        one: <span class="font-semibold text-black">1</span> студент зачислен
-        few: <span class="font-semibold text-black">%{count}</span> учащихся зачислено
-        many: <span class="font-semibold text-black">%{count}</span> учащихся зачислено
-        other: <span class="font-semibold text-black">%{count}</span> учащихся зачислено
-      students_enrolled_suffix_html:
-        one: в <span class="font-semibold text-black">1</span> активной когорте
-        few: в <span class="font-semibold text-black">%{count}</span> активных когортах
-        many: в <span class="font-semibold text-black">%{count}</span> активных когортах
-        other: в <span class="font-semibold text-black">%{count}</span> активных когортах
+      ongoing_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        few: <span class="font-semibold text-black">%{count}</span> students enrolled in
+        many: <span class="font-semibold text-black">%{count}</span> students enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      ongoing_suffix_html:
+        one: <span class="font-semibold text-black">1</span> ongoing cohort.
+        few: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+        many: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
       total_students_label: Всего студентов
       view_all_cohorts: View All Cohorts
     students:

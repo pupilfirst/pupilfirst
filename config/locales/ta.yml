@@ -2370,15 +2370,17 @@ ta:
       heading: நிறுவனங்கள்
     show:
       active_students_label: செயலில் மாணவர்கள்
-      cohorts_subheading: கூட்டாளிகள்
+      ongoing_cohorts_subheading: Ongoing Cohorts
+      end_date: "End Date:"
+      no_ongoing_cohorts: There are no ongoing cohorts for this course.
       organisation_label: அமைப்பு
       students_enrolled_heading: மாணவர்கள் சேர்ந்தனர்
-      students_enrolled_prefix_html:
-        one: <span class="font-semibold text-black">1</span> மாணவர் சேர்ந்தார்
-        other: <span class="font-semibold text-black">%{count}</span> மாணவர்கள் சேர்ந்தனர்
-      students_enrolled_suffix_html:
-        one: <span class="font-semibold text-black">1</span> செயலில் உள்ள குழுவில்
-        other: <span class="font-semibold text-black">%{count}</span> செயலில் உள்ள கூட்டாளிகளில்
+      ongoing_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      ongoing_suffix_html:
+        one: <span class="font-semibold text-black">1</span> ongoing cohort.
+        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
       total_students_label: மொத்த மாணவர்கள்
       view_all_cohorts: View All Cohorts
     students:

@@ -9,6 +9,8 @@ type t = {
   answerOptions: array<answerOption>,
 }
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__QuizQuestion")
+
 let decodeAnswerOption = json => {
   open Json.Decode
   {
@@ -42,14 +44,14 @@ let lastQuestion = questions => {
 
   questions |> ArrayUtils.unsafeFind(
     q => q.index == maxIndex,
-    I18n.t("shared.last_question_not_found") ++ string_of_int(maxIndex),
+    tr("last_question_not_found") ++ string_of_int(maxIndex),
   )
 }
 
 let nextQuestion = (questions, question) =>
   questions |> ArrayUtils.unsafeFind(
     q => q.index == question.index + 1,
-    I18n.t("shared.question_not_found") ++ string_of_int(question.index + 1),
+    tr("question_not_found") ++ string_of_int(question.index + 1),
   )
 
 let isLastQuestion = (questions, question) => questions |> lastQuestion == question

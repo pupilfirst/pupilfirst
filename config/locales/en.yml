@@ -255,8 +255,7 @@ en:
       saving: Saving
       update_author: Update Author
     CourseAuthors__Root:
-      author_not_found: "Could not find author with ID "
-      in_the_list: " in the list of known authors for course with ID "
+      author_not_found: Could not find author with ID %{authorId} in the list of known authors for course with ID %{courseId}
       window_confirm_post: from the list of authors?
       window_confirm_pre: Are you sure you want to remove
     CourseCertificates__CreateDrawer:
@@ -515,6 +514,8 @@ en:
           active: Active
           archived: Archived
           ended: Ended
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -627,6 +628,9 @@ en:
       next_question: Next Question
       question: Question
       submit_quiz: Submit Quiz
+    CoursesCurriculum__QuizQuestion:
+      last_question_not_found: "Could not find last question at index "
+      question_not_found: "Could not find a question at index "
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching
@@ -792,8 +796,8 @@ en:
         view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-
-      note_help: "Would you like to write a note about this "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
@@ -829,7 +833,6 @@ en:
       remove_reviewer_assign_to_me: Do you want to remove %{current_coach_name} & assign yourself to review?
       start_review: Start Review
     CoursesReview__Root:
-      current_course_not_found: "Could not find currentCourse with ID "
       assigned_to: Assigned To
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
@@ -1236,6 +1239,8 @@ en:
       mode_label_split: View editor and preview in split view
       mode_label_split_exit: Close split view
       strikethrough_insert: strikethrough
+    MultiselectDropdown:
+      suggestions: "Suggestions:"
     Notifications__EntryCard:
       mark_read: Mark as Read
     Notifications__List:
@@ -2272,6 +2277,7 @@ en:
       soft_limit_number: You've hit the soft-limit for number of students in this course
       unique_emails: Email addresses must be unique
       invalid_strings: One or more of the entries have invalid strings
+      thousand_student: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2658,6 +2664,7 @@ en:
     cohorts: Cohorts
     community: Community
     completed: Completed
+    current_course_not_found: "Could not find currentCourse with ID "
     dashboard: Dashboard
     delete: Delete
     deleting: Deleting
@@ -2668,11 +2675,10 @@ en:
     empty: Empty
     fail: Fail
     file_invalid: Please select a file with a size less than 5 MB.
+    filter: Filter
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     is: is
-    last_question_not_found: "Could not find last question at index "
-    question_not_found: "Could not find a question at index "
     level: Level
     level_label:
       long_with_name: "Level %{number}: %{name}"
@@ -2728,13 +2734,13 @@ en:
     settings: Settings
     sign_out: Sign Out
     students: Students
+    sort_by: Sort by
     tag: Tag
     tags: Tags
     target: Target
     team: Team
     team_name: Team Name
     teams: Teams
-    thousand_student: You can only onboard 1000 students at a time
     update: Update
     updating: Updating
     uploading: Uploading

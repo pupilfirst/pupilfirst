@@ -59,7 +59,7 @@ let imageWrapperClasses = coverImage =>
 let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLinks) => {
   let currentCourse = ArrayUtils.unsafeFind(
     c => CourseInfo.id(c) == currentCourseId,
-    tr("current_course_not_found") ++ (currentCourseId ++ " in StudentCourse__Header"),
+    I18n.t("shared.current_course_not_found") ++ (currentCourseId ++ " in StudentCourse__Header"),
     courses,
   )
   let otherCourses = Js.Array.filter(c => CourseInfo.id(c) != currentCourseId, courses)

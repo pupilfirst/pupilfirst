@@ -90,7 +90,6 @@ ar:
       sign_in: تسجيل الدخول
       sign_out: تسجيل الخروج
     AppRouter__Nav:
-      current_course_not_found: "تعذر العثور على الدورة التدريبية الحالية بالمعرف "
       calendar: Calendar
       close_sidebar: إغلاق
       curriculum: المنهاج
@@ -251,8 +250,7 @@ ar:
       saving: Saving
       update_author: Update Author
     CourseAuthors__Root:
-      author_not_found: "تعذر العثور على مؤلف بالمعرف "
-      in_the_list: " في قائمة المؤلفين المعروفين للدورة التدريبية مع ID "
+      author_not_found: تعذر العثور على مؤلف بالمعرف %{authorId} في قائمة المؤلفين المعروفين للدورة التدريبية بالمعرف %{courseId}
       window_confirm_post: from the list of authors?
       window_confirm_pre: Are you sure you want to remove
     CourseCertificates__CreateDrawer:
@@ -511,6 +509,8 @@ ar:
           active: Active
           archived: Archived
           ended: Ended
+    CourseResourcesFilter:
+      filter_resources: تصفية الموارد
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -623,6 +623,9 @@ ar:
       next_question: Next Question
       question: Question
       submit_quiz: Submit Quiz
+    CoursesCurriculum__QuizQuestion:
+      last_question_not_found: "لا يمكن العثور على السؤال الأخير في الفهرس "
+      question_not_found: "تعذر العثور على سؤال في الفهرس "
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching
@@ -776,7 +779,7 @@ ar:
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
       level_acronym: L
-      note_help: "Would you like to write a note about this "
+      note_help: "هل ترغب في كتابة ملاحظة حول %{noteAbout} هذا؟"
       note_placeholder: Did you notice something while reviewing this submission?
       remove_assignment: Remove assignment
       report_description: Test Report
@@ -819,7 +822,6 @@ ar:
       remove_reviewer_assign_to_me: Do you want to remove %{current_coach_name} & assign yourself to review?
       start_review: Start Review
     CoursesReview__Root:
-      current_course_not_found: "تعذر العثور على الدورة التدريبية الحالية بالمعرف "
       assigned_to: Assigned To
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
@@ -949,8 +951,8 @@ ar:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
-      hide_archived: إخفاء الأهداف المؤرشفة
-      show_archived: إظهار الأهداف المؤرشفة
+      hide_archived: إخفاء المؤرشف
+      show_archived: إظهار المؤرشف
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
@@ -1221,6 +1223,8 @@ ar:
       mode_label_split: View editor and preview in split view
       mode_label_split_exit: Close split view
       strikethrough_insert: strikethrough
+    MultiselectDropdown:
+      suggestions: "اقتراحات:"
     Notifications__EntryCard:
       mark_read: Mark as Read
     Notifications__List:
@@ -1555,7 +1559,6 @@ ar:
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentCourse__Header:
-      current_course_not_found: "تعذر العثور على الدورة التدريبية الحالية بالمعرف "
       calendar: Calendar
       curriculum: Curriculum
       leaderboard: Leaderboard
@@ -2256,6 +2259,7 @@ ar:
       soft_limit_number: لقد وصلت إلى الحد الأدنى لعدد الطلاب في هذه الدورة
       unique_emails: يجب أن تكون عناوين البريد الإلكتروني فريدة
       invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
+      thousand_student: يمكنك فقط ضم 1000 طالب في المرة الواحدة
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2637,6 +2641,7 @@ ar:
     cohorts: المجموعات
     community: المجتمع
     completed: مكتمل
+    current_course_not_found: "تعذر العثور على الدورة التدريبية الحالية بالمعرف "
     dashboard: اللوحة الرئيسية
     delete: حذف
     deleting: جار الحذف
@@ -2647,11 +2652,10 @@ ar:
     empty: فارغ
     fail: رسوب
     file_invalid: يرجى اختيار ملف حجمه أقل من 5 ميغابايت
+    filter: تصفية
     image_file_invalid: يُرجى تحديد صورة (PNG ، JPEG ، GIF) بحجم أقل من 5 ميغابايت وأقل من 4096 بكسل من حيث العرض أو الارتفاع.
     invalid_authenticity_token_error: يبدو أنك قمت بالخروج من المنصة، يرجى تحديث الصفحة والمتابعة
     is: is
-    last_question_not_found: "لا يمكن العثور على السؤال الأخير في الفهرس "
-    question_not_found: "تعذر العثور على سؤال في الفهرس "
     level: المستوى
     level_label:
       long_with_name: "المستوى %{number}: %{name}"
@@ -2707,13 +2711,13 @@ ar:
     settings: الإعدادات
     sign_out: خروج
     students: الطلاب
+    sort_by: ترتيب حسب
     tag: علامة
     tags: علامات
     target: هدف
     team: فريق
     team_name: اسم الفريق
     teams: الفرق
-    thousand_student: يمكنك فقط ضم 1000 طالب في المرة الواحدة
     update: تحديث
     updating: جار التحديث
     uploading: جار الرفع

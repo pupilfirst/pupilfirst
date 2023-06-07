@@ -17,7 +17,7 @@ let renderLinks = (courses, selectedPage) => {
   | Page.SelectedCourse(courseId, coursePage) =>
     let currentCourse = ArrayUtils.unsafeFind(
       course => Course.id(course) == courseId,
-      t("current_course_not_found") ++ courseId,
+      I18n.t("shared.current_course_not_found") ++ courseId,
       courses,
     )
 

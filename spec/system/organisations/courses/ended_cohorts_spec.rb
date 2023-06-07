@@ -95,7 +95,7 @@ feature "Organisation show" do
         href: ongoing_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
-      # Checking inactive cohorts.
+      # Checking ended cohorts.
       within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).not_to have_link(
           cohort_1.name,
@@ -134,7 +134,7 @@ feature "Organisation show" do
       expect(page).to have_text("Ended")
       expect(page).to have_content("0")
 
-      # Checking inactive cohorts.
+      # Checking ended cohorts.
       expect(page).to have_text("No Ended Cohorts for this course.")
     end
 
@@ -167,7 +167,7 @@ feature "Organisation show" do
       expect(page).to have_current_path("/organisations/#{organisation_1.id}")
     end
 
-    scenario "user can not see the inactive cohorts page of an org, where he is not an admin" do
+    scenario "user can not see the ended cohorts page of an org, where he is not an admin" do
       sign_in_user(
         org_admin_user,
         referrer:
@@ -270,7 +270,7 @@ feature "Organisation show" do
       expect(page).to have_text("Ended")
       expect(page).to have_content("0")
 
-      # Checking inactive cohorts.
+      # Checking ended cohorts.
       expect(page).to have_text("No Ended Cohorts for this course.")
     end
 
@@ -313,7 +313,7 @@ feature "Organisation show" do
       expect(page).not_to have_http_status(:not_found)
     end
 
-    scenario "user can visit ongoing cohorts page from inactive cohorts page" do
+    scenario "user can visit ongoing cohorts page from ended cohorts page" do
       sign_in_user(
         school_admin_user,
         referrer:

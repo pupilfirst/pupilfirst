@@ -25,10 +25,10 @@ module Organisations
     end
 
     def find_cohorts(status)
-      cohorts = status == :ongoing ? @cohorts.active : @cohorts.ended
+      cohorts = status == :ongoing ? @cohorts.ongoing : @cohorts.ended
       paged_cohorts = cohorts.page(params["#{status}_cohort_page"]).per(10)
       if paged_cohorts.count.zero?
-        paged_cohorts.page(paged_cohorts.total_pages)
+        paged_cohorts.page(paged_cohorts.total_pages).per(10)
       else
         paged_cohorts
       end

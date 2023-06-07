@@ -22,10 +22,10 @@ feature "Organisation show" do
 
   let(:course) { create :course }
   let(:cohort) { create :cohort, course: course }
-  let(:cohort_inactive) { create :cohort, course: course }
+  let(:cohort_ended) { create :cohort, course: course }
   let!(:team_1) { create :team_with_students, cohort: cohort }
   let!(:team_2) { create :team_with_students, cohort: cohort }
-  let!(:team_3) { create :team_with_students, cohort: cohort_inactive }
+  let!(:team_3) { create :team_with_students, cohort: cohort_ended }
 
   before do
     # Set up org relationships
@@ -41,7 +41,7 @@ feature "Organisation show" do
   end
 
   context "when the user is an organisation admin" do
-    scenario "user can access org overview of active cohort", js: true do
+    scenario "user can access org overview of ongoing cohort", js: true do
       sign_in_user org_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
@@ -55,10 +55,10 @@ feature "Organisation show" do
       )
     end
 
-    scenario "user can access org overview of inactive cohort" do
+    scenario "user can access org overview of ended cohort" do
       sign_in_user org_admin_user,
                    referrer:
-                     organisation_cohort_path(organisation, cohort_inactive)
+                     organisation_cohort_path(organisation, cohort_ended)
 
       expect(page).to have_text("Total Students\n2")
     end
@@ -85,17 +85,17 @@ feature "Organisation show" do
   end
 
   context "when the user is a school admin" do
-    scenario "user can access org overview of active cohort" do
+    scenario "user can access org overview of a ongoing cohort" do
       sign_in_user school_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text("Total Students\n4")
     end
 
-    scenario "user can access org overview of inactive cohort" do
+    scenario "user can access org overview of ended cohort" do
       sign_in_user school_admin_user,
                    referrer:
-                     organisation_cohort_path(organisation, cohort_inactive)
+                     organisation_cohort_path(organisation, cohort_ended)
 
       expect(page).to have_text("Total Students\n2")
     end

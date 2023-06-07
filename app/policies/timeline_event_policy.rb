@@ -22,6 +22,6 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if organisation.blank?
 
-    user.organisations.exists?(id: record.user.organisation_id)
+    user.organisations.exists?(id: organisation.id)
   end
 end

@@ -29,26 +29,44 @@
             <div class="mb-2">
               <h3 class="text-lg font-semibold" ><%= course_with_cohorts[:course].name %></h3>
               <p class="text-sm text-gray-600">
-                <%= t('.students_enrolled_prefix_html', count: course_with_cohorts[:total_students]) %>
-                <%= t('.students_enrolled_suffix_html', count: course_with_cohorts[:cohorts].count) %>
+                <% if course_with_cohorts[:cohorts].present? %>
+                  <%= t('.ongoing_prefix_html', count: course_with_cohorts[:active_students]) %>
+                  <%= t('.ongoing_suffix_html', count: course_with_cohorts[:cohorts].count) %>
+                <% end %>
               </p>
             </div>
-            <%= link_to ongoing_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-              <span><%= t('.view_all_cohorts') %></span>
-              <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-1.5" aria-hidden="true" style="margin-right: 6px;"></i>
+            <% if course_with_cohorts[:ended_cohorts_ids].present? %>
+              <%= link_to course_with_cohorts[:cohorts].empty? ? ended_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id) : ongoing_cohorts_organisation_course_path(@organisation, course_with_cohorts[:course].id), class: "group border border-primary-400 sm:border-transparent rounded-lg p-2 text-sm font-medium text-primary-500 hover:text-primary-800 hover:bg-primary-50 sm:hover:border-primary-400 whitespace-nowrap" do %>
+                <span><%= t('.view_all_cohorts') %></span>
+                <span class="bg-gray-300 text-gray-900 group-hover:bg-primary-500 group-hover:text-white text-xs leading-none rounded-md px-1.5 py-1 ms-1.5">
+                  <%= course_with_cohorts[:ended_cohorts_ids].count + course_with_cohorts[:cohorts].count %>
+                </span>
+              <% end %>
             <% end %>
           </div>
-          <div class="mt-4">
-            <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-              <% course_with_cohorts[:cohorts].each do |cohort| %>
-                <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-                  <span class="inline-block font-medium"><%= cohort.name %></span>
-                  <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+          <% if course_with_cohorts[:cohorts].present? %>
+            <div class="mt-4">
+              <p class="text-black text-sm font-semibold"><%= t('.ongoing_cohorts_subheading')  %></p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                <% course_with_cohorts[:cohorts].each do |cohort| %>
+                  <%= link_to organisation_cohort_path(@organisation, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+                    <div>
+                      <span class="font-medium"><%= cohort.name %></span>
+                      <% if cohort.ends_at.present? %>
+                        <div>
+                          <span class="text-sm text-gray-500 font-medium" ><%= t(".end_date") %> </span>
+                          <span class="font-semibold text-sm"><%= cohort.ends_at.strftime("%B %d, %Y") %></span>
+                        </div>
+                      <% end %>
+                    </div>
+                    <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
             </div>
-          </div>
+          <% else %>
+            <p class="text-center text-sm italic font-medium bg-gray-100 p-4 mt-4 sm:mt-2"><%= t('.no_ongoing_cohorts') %></p>
+          <% end %>
         </div>
       <% end %>
     </div>

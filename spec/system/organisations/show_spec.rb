@@ -82,7 +82,7 @@ feature "Organisation show" do
         "#{course_2.name}\n2 students enrolled in 1 ongoing cohort."
       )
 
-      # There should be links to three active cohorts...
+      # There should be links to three ongoing cohorts...
       expect(page).to have_link(
         cohort_1.name,
         href: organisation_cohort_path(organisation_1, cohort_1)
@@ -98,7 +98,7 @@ feature "Organisation show" do
         href: organisation_cohort_path(organisation_1, cohort_4)
       )
 
-      # ...but not to the inactive cohort.
+      # ...but not to the ended cohort.
       expect(page).not_to have_link(cohort_3.name)
 
       # There should be a link to view all cohorts of course 1 .
@@ -121,7 +121,7 @@ feature "Organisation show" do
                      course_1
                    )
 
-      # The user should be taken to the active cohorts page.
+      # The user should be taken to the ongoing cohorts page.
       expect(page).to have_current_path(
         ongoing_cohorts_organisation_course_path(organisation_1, course_1)
       )
@@ -145,7 +145,7 @@ feature "Organisation show" do
                      course_2
                    )
 
-      # The user should be taken to the inactive cohorts page.
+      # The user should be taken to the ended cohorts page.
       expect(page).to have_current_path(
         ended_cohorts_organisation_course_path(organisation_1, course_2)
       )
@@ -180,8 +180,8 @@ feature "Organisation show" do
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
 
-      # There should be a link to view all cohorts of course 1.
-      expect(page).to have_link(
+      # There should not be view all cohorts link for course with only ongoing cohorts
+      expect(page).not_to have_link(
         "View All Cohorts",
         href: ongoing_cohorts_organisation_course_path(organisation_2, course_1)
       )
@@ -203,7 +203,7 @@ feature "Organisation show" do
                      course_1
                    )
 
-      # The user should be taken to the active cohorts page.
+      # The user should be taken to the ongoing cohorts page.
       expect(page).to have_current_path(
         ongoing_cohorts_organisation_course_path(organisation_1, course_1)
       )
@@ -227,7 +227,7 @@ feature "Organisation show" do
                      course_1
                    )
 
-      # The user should be taken to the inactive cohorts page.
+      # The user should be taken to the ended cohorts page.
       expect(page).to have_current_path(
         ended_cohorts_organisation_course_path(organisation_2, course_1)
       )

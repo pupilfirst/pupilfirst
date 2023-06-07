@@ -7,11 +7,11 @@ class SubmissionDetailsResolver < ApplicationQuery
       submission: submission,
       target_id: target.id,
       target_title: target.title,
-      students: students,
+      students: students_data,
       level_number: level.number,
       level_id: level.id,
       team_name: team_name,
-      submission_report: submission.submission_report,
+      submission_reports: submission.submission_reports,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,
@@ -48,7 +48,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   def submissions_from_same_set_of_students
     submissions
       .includes(:startup_feedback)
-      .order('timeline_events.created_at DESC')
+      .order("timeline_events.created_at DESC")
       .select do |s|
         s.timeline_event_owners.pluck(:student_id).sort == student_ids
       end
@@ -94,10 +94,11 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def students
-    submission
-      .students
-      .joins(:user)
-      .map { |student| { id: student.id, name: student.name } }
+    @students ||= submission.students.includes(:user)
+  end
+
+  def students_data
+    students.map { |student| { id: student.id, name: student.name } }
   end
 
   def authorized?

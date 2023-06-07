@@ -151,7 +151,11 @@ let loadStatus = (status, send, ()) => {
 }
 
 let computeInitialState = () => {
-  status: webPushEndpoint->Belt.Option.mapWithDefault(UnSubscribed, _u => Subscribed),
+  status: switch webPushEndpoint {
+  | None => UnSubscribed
+  | Some("") => UnSubscribed
+  | Some(_otherValue) => Subscribed
+  },
   saving: false,
 }
 

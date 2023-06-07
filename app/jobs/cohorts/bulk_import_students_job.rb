@@ -1,6 +1,6 @@
 module Cohorts
   class BulkImportStudentsJob < ApplicationJob
-    require 'csv'
+    require "csv"
 
     queue_as :low_priority
 
@@ -9,19 +9,19 @@ module Cohorts
         ::Cohorts::OnboardService.new(
           cohort,
           csv_rows,
-          notify_students: notify_students
+          notify_students: notify_students,
         ).execute
 
       report_params = {
         students_added: student_ids.count,
-        students_requested: csv_rows.count
+        students_requested: csv_rows.count,
       }
 
       SchoolAdminMailer.students_bulk_import_complete(
         user,
         cohort.course,
         report_params,
-        report_attachment: report_attachment(csv_rows, student_ids)
+        report_attachment(csv_rows, student_ids),
       ).deliver_later
     end
 
@@ -38,7 +38,7 @@ module Cohorts
             .pluck(:email)
             .map(&:downcase)
 
-      headers = ['Sl. No', 'Email']
+      headers = ["Sl. No", "Email"]
 
       csv_data =
         CSV.generate(headers: true) do |csv|
@@ -48,7 +48,7 @@ module Cohorts
           end
         end
 
-      { mime_type: 'text/csv', content: csv_data }
+      { mime_type: "text/csv", content: csv_data }
     end
   end
 end

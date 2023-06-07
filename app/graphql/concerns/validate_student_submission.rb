@@ -18,8 +18,8 @@ module ValidateStudentSubmission
         target_status.in?(
           [
             Targets::StatusService::STATUS_PENDING,
-            Targets::StatusService::STATUS_FAILED
-          ]
+            Targets::StatusService::STATUS_FAILED,
+          ],
         )
       submitted_but_resubmittable =
         target.resubmittable? &&
@@ -30,8 +30,8 @@ module ValidateStudentSubmission
       end
 
       I18n.t(
-        'mutations.create_submission.blocked_submission_status_error',
-        target_status: target_status
+        "mutations.create_submission.blocked_submission_status_error",
+        target_status: target_status,
       )
     end
   end
@@ -43,19 +43,18 @@ module ValidateStudentSubmission
       target
         .checklist
         .each_with_object([]) do |c, result|
-          next if c['optional'] == true
+          next if c["optional"] == true
 
-          item = checklist.select { |i| i['title'] == c['title'] }
+          item = checklist.select { |i| i["title"] == c["title"] }
 
-          if item.present? && item.count == 1 && item.first['result'].present?
+          if item.present? && item.count == 1 && item.first["result"].present?
             next
           end
 
-          result <<
-            I18n.t(
-              'mutations.create_submission.missing_answer_error',
-              title: c['title']
-            )
+          result << I18n.t(
+            "mutations.create_submission.missing_answer_error",
+            title: c["title"],
+          )
         end
     end
   end
@@ -65,17 +64,17 @@ module ValidateStudentSubmission
       checklist = value[:checklist]
 
       if checklist.respond_to?(:all?) &&
-           checklist.all? do |item|
-             item['title'].is_a?(String) &&
-               item['kind'].in?(Target.valid_checklist_kind_types) &&
-               item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER &&
-               item['result'].present? &&
-               valid_result(item['kind'], item['result'], value[:file_ids])
-           end
+           checklist.all? { |item|
+             item["title"].is_a?(String) &&
+               item["kind"].in?(Target.valid_checklist_kind_types) &&
+               item["status"] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER &&
+               item["result"].present? &&
+               valid_result(item["kind"], item["result"], value[:file_ids])
+           }
         return
       end
 
-      I18n.t('mutations.create_submission.invalid_submission_checklist')
+      I18n.t("mutations.create_submission.invalid_submission_checklist")
     end
 
     def valid_result(kind, result, file_ids)
@@ -107,36 +106,34 @@ module ValidateStudentSubmission
 
       @file_items =
         value[:checklist].filter do |item|
-          (item['kind'] == 'files' || item['kind'] == 'audio')
+          (item["kind"] == "files" || item["kind"] == "audio")
         end
 
       combine(
         maximum_three_attachments_per_item,
         valid_file_ids_in_checklist,
-        all_files_are_new
+        all_files_are_new,
       )
     end
 
     def maximum_three_attachments_per_item
       return if @file_ids.blank?
 
-      if @file_items.select { |item| item['result'].split.flatten.length > 3 }
+      if @file_items
+           .select { |item| item["result"].split.flatten.length > 3 }
            .empty?
         return
       end
 
-      I18n.t('mutations.create_submission.item_file_limit_error')
+      I18n.t("mutations.create_submission.item_file_limit_error")
     end
 
     def valid_file_ids_in_checklist
       return if @file_ids.blank?
 
-      if @file_items.map { |item| item['result'] }.flatten.sort ==
-           @file_ids.sort
-        return
-      end
+      return if @file_items.pluck("result").flatten.sort == @file_ids.sort
 
-      I18n.t('mutations.create_submission.invalid_files_attached')
+      I18n.t("mutations.create_submission.invalid_files_attached")
     end
 
     def all_files_are_new
@@ -144,7 +141,7 @@ module ValidateStudentSubmission
 
       return if @files.where.not(timeline_event_id: nil).blank?
 
-      I18n.t('mutations.create_submission.linked_file_exists_error')
+      I18n.t("mutations.create_submission.linked_file_exists_error")
     end
   end
 

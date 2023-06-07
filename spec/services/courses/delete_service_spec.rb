@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Courses::DeleteService do
   include SubmissionsHelper
@@ -11,10 +11,10 @@ describe Courses::DeleteService do
 
   # Course 1 - will be deleted.
   let(:course_1) do
-    create :course, :with_default_cohort, name: 'Course to delete'
+    create :course, :with_default_cohort, name: "Course to delete"
   end
   let(:cohort_1) { create :cohort, course: course_1 }
-  let(:level_c1) { create :level, :one, course: course_1, name: 'C1L1' }
+  let(:level_c1) { create :level, :one, course: course_1, name: "C1L1" }
   let!(:team_c1) { create :team_with_students, cohort: cohort_1 }
   let!(:student_c1) { create :student, cohort: cohort_1, level: level_c1 }
   let!(:applicant_c1) { create :applicant, course: course_1 }
@@ -82,10 +82,10 @@ describe Courses::DeleteService do
 
   # Course 2 - should be left untouched.
   let(:course_2) do
-    create :course, :with_default_cohort, name: 'Course to preserve'
+    create :course, :with_default_cohort, name: "Course to preserve"
   end
   let(:cohort_2) { create :cohort, course: course_2 }
-  let(:level_c2) { create :level, :one, course: course_2, name: 'C2L1' }
+  let(:level_c2) { create :level, :one, course: course_2, name: "C2L1" }
   let!(:team_c2) { create :team_with_students, cohort: cohort_2 }
   let!(:student_c2) { create :student, cohort: cohort_2, level: level_c2 }
   let!(:applicant_c2) { create :applicant, course: course_2 }
@@ -153,15 +153,15 @@ describe Courses::DeleteService do
 
   before do
     # Tag the course exports.
-    course_export_c1.tag_list.add('export tag c1')
+    course_export_c1.tag_list.add("export tag c1")
     course_export_c1.save!
-    course_export_c2.tag_list.add('export tag c2')
+    course_export_c2.tag_list.add("export tag c2")
     course_export_c2.save!
 
     # Tag the Students.
-    student_c1.tag_list.add('student tag c1')
+    student_c1.tag_list.add("student tag c1")
     student_c1.save!
-    student_c2.tag_list.add('student tag c2')
+    student_c2.tag_list.add("student tag c2")
     student_c2.save!
   end
 
@@ -198,16 +198,16 @@ describe Courses::DeleteService do
       [Proc.new { TimelineEventOwner.count }, 2, 1],
       [Proc.new { TimelineEventFile.count }, 2, 1],
       [Proc.new { StartupFeedback.count }, 2, 1],
-      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2]
+      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2],
     ]
   end
 
-  describe '#execute' do
-    it 'deletes all data related to the course and the course itself' do
+  describe "#execute" do
+    it "deletes all data related to the course and the course itself" do
       expect { subject.execute }.to(
-        change { expectations.map { |e| e[0].call } }
-          .from(expectations.map { |e| e[1] })
-          .to(expectations.map { |e| e[2] })
+        change { expectations.map { |e| e[0].call } }.from(
+          expectations.pluck(1),
+        ).to(expectations.pluck(2)),
       )
 
       expect { course_2.reload }.not_to raise_error

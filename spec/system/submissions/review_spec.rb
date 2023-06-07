@@ -23,7 +23,7 @@ feature "Submission review overlay", js: true do
       { "grade" => 1, "label" => "Bad" },
       { "grade" => 2, "label" => "Good" },
       { "grade" => 3, "label" => "Great" },
-      { "grade" => 4, "label" => "Wow" }
+      { "grade" => 4, "label" => "Wow" },
     ]
   end
   let(:evaluation_criterion_1) do
@@ -55,11 +55,11 @@ feature "Submission review overlay", js: true do
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [
       evaluation_criterion_1,
-      evaluation_criterion_2
+      evaluation_criterion_2,
     ]
     target_2.evaluation_criteria << [
       evaluation_criterion_1,
-      evaluation_criterion_2
+      evaluation_criterion_2,
     ]
   end
 
@@ -70,7 +70,7 @@ feature "Submission review overlay", js: true do
         :with_owners,
         owners: [student],
         latest: true,
-        target: target
+        target: target,
       )
     end
     let!(:submission_pending_2) do
@@ -81,7 +81,7 @@ feature "Submission review overlay", js: true do
         latest: true,
         target: target_2,
         reviewer_assigned_at: 1.day.ago,
-        reviewer: team_coach
+        reviewer: team_coach,
       )
     end
     let!(:submission_file_attachment) do
@@ -92,7 +92,7 @@ feature "Submission review overlay", js: true do
       create(
         :timeline_event_file,
         timeline_event: submission_pending,
-        file_path: "files/audio_file_sample.mp3"
+        file_path: "files/audio_file_sample.mp3",
       )
     end
 
@@ -105,7 +105,7 @@ feature "Submission review overlay", js: true do
         expect(page).to have_content("Submitted by #{student.name}")
         expect(page).to have_link(
           student.name,
-          href: "/students/#{student.id}/report"
+          href: "/students/#{student.id}/report",
         )
         expect(page).to have_link(target.title, href: "/targets/#{target.id}")
         expect(page).to have_content(target.title)
@@ -164,11 +164,11 @@ feature "Submission review overlay", js: true do
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) do
         expect(page).to have_selector(
           ".course-review-editor__grade-pill",
-          count: 4
+          count: 4,
         )
         find("button[title='Bad']").click
       end
@@ -178,11 +178,11 @@ feature "Submission review overlay", js: true do
         expect(page).to have_text("Reviewing")
       end
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) do
         expect(page).to have_selector(
           ".course-review-editor__grade-pill",
-          count: 3
+          count: 3,
         )
         find("button[title='Bad']").click
       end
@@ -193,7 +193,7 @@ feature "Submission review overlay", js: true do
       end
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) { find("button[title='Good']").click }
 
       # the status should be Rejected
@@ -223,7 +223,7 @@ feature "Submission review overlay", js: true do
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
       expect(submission.timeline_event_grades.pluck(:grade)).to contain_exactly(
         1,
-        2
+        2,
       )
 
       # the submission must be removed from the pending list
@@ -238,7 +238,7 @@ feature "Submission review overlay", js: true do
         course,
         :submission_graded,
         coach.user,
-        submission
+        submission,
       )
     end
 
@@ -383,7 +383,7 @@ feature "Submission review overlay", js: true do
       click_button "Add Additional Feedback"
       expect(page).to have_field("checklist_2_result_1_text_area", with: "")
       find(
-        "div[data-checklist-item='2']"
+        "div[data-checklist-item='2']",
       ).fill_in "checklist_2_result_1_text_area",
                 with: "Additional Feedback for empty checklist result item 2"
       checkbox_21.set(false)
@@ -397,7 +397,7 @@ feature "Submission review overlay", js: true do
       click_button "Add Additional Feedback"
       expect(page).to have_field("checklist_2_result_0_text_area", with: "")
       find(
-        "div[data-checklist-item='2']"
+        "div[data-checklist-item='2']",
       ).fill_in "checklist_2_result_0_text_area",
                 with: "Additional Feedback for empty checklist result item"
 
@@ -411,7 +411,7 @@ feature "Submission review overlay", js: true do
         expect(page).to have_content(c1_result_1_feedback)
         expect(page).to have_content(c2_result_0_feedback)
         expect(page).to have_content(
-          "Additional Feedback for empty checklist result item"
+          "Additional Feedback for empty checklist result item",
         )
       end
 
@@ -542,16 +542,16 @@ feature "Submission review overlay", js: true do
         expect(page).to_not have_button("Move Up checklist item")
         find("button[title='Move Down checklist item']")
         expect(
-          find("input", id: "checklist_0_title").value
+          find("input", id: "checklist_0_title").value,
         ).to eq checklist_title_2
         within("div[data-result-item='0']") do
           expect(
-            find("input", id: "result_00_title").value
+            find("input", id: "result_00_title").value,
           ).to eq c2_result_0_title
         end
         within("div[data-result-item='1']") do
           expect(
-            find("input", id: "result_01_title").value
+            find("input", id: "result_01_title").value,
           ).to eq c2_result_1_title
         end
       end
@@ -566,16 +566,16 @@ feature "Submission review overlay", js: true do
         find("button[title='Move Up checklist item']")
         find("button[title='Move Down checklist item']")
         expect(
-          find("input", id: "checklist_1_title").value
+          find("input", id: "checklist_1_title").value,
         ).to eq checklist_title_3
         within("div[data-result-item='0']") do
           expect(
-            find("input", id: "result_10_title").value
+            find("input", id: "result_10_title").value,
           ).to eq c3_result_0_title
         end
         within("div[data-result-item='1']") do
           expect(
-            find("input", id: "result_11_title").value
+            find("input", id: "result_11_title").value,
           ).to eq c3_result_1_title
         end
       end
@@ -586,14 +586,14 @@ feature "Submission review overlay", js: true do
           expect(page).to_not have_button("Move Up checklist result")
           find("button[title='Move Down checklist result']").click
           expect(
-            find("input", id: "result_10_title").value
+            find("input", id: "result_10_title").value,
           ).to eq c3_result_1_title
         end
         within("div[data-result-item='1']") do
           expect(page).to_not have_button("Move Down checklist result")
           find("button[title='Move Up checklist result']").click
           expect(
-            find("input", id: "result_11_title").value
+            find("input", id: "result_11_title").value,
           ).to eq c3_result_1_title
         end
       end
@@ -669,37 +669,37 @@ feature "Submission review overlay", js: true do
         "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
         "title" => question_1,
         "result" => answer_1,
-        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
       }
       submission_checklist_link = {
         "kind" => Target::CHECKLIST_KIND_LINK,
         "title" => question_2,
         "result" => answer_2,
-        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
       }
       submission_checklist_choice = {
         "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
         "title" => question_3,
         "result" => [answer_3],
-        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
       }
       submission_checklist_short_text = {
         "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
         "title" => question_4,
         "result" => answer_4,
-        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
       }
       submission_checklist_files = {
         "kind" => Target::CHECKLIST_KIND_FILES,
         "title" => question_5,
         "result" => answer_5,
-        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
       }
       submission_checklist_audio = {
         "kind" => Target::CHECKLIST_KIND_AUDIO,
         "title" => question_6,
         "result" => answer_6,
-        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
       }
       submission_checklist = [
         submission_checklist_long_text,
@@ -707,7 +707,7 @@ feature "Submission review overlay", js: true do
         submission_checklist_choice,
         submission_checklist_short_text,
         submission_checklist_files,
-        submission_checklist_audio
+        submission_checklist_audio,
       ]
       submission_pending.update!(checklist: submission_checklist)
 
@@ -716,14 +716,14 @@ feature "Submission review overlay", js: true do
       click_button "Start Review"
       dismiss_notification
       within(
-        "div[aria-label='#{submission_pending.checklist.first["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.first["title"]}']",
       ) do
         expect(page).to have_content(question_1)
         expect(page).to have_content(answer_1)
       end
 
       within(
-        "div[aria-label='#{submission_pending.checklist.second["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.second["title"]}']",
       ) do
         expect(page).to have_content(question_2)
         expect(page).to have_content(answer_2)
@@ -732,7 +732,7 @@ feature "Submission review overlay", js: true do
       end
 
       within(
-        "div[aria-label='#{submission_pending.checklist.third["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.third["title"]}']",
       ) do
         expect(page).to have_content(question_3)
         expect(page).to have_content(answer_3)
@@ -749,7 +749,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_content("Grade Card")
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) { find("button[title='Good']").click }
 
       # status should be reviewing as the target is not graded completely
@@ -757,7 +757,7 @@ feature "Submission review overlay", js: true do
         expect(page).to have_text("Reviewing")
       end
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) { find("button[title='Good']").click }
 
       # the status should be Rejected
@@ -772,7 +772,7 @@ feature "Submission review overlay", js: true do
       dismiss_notification
 
       within(
-        "div[aria-label='#{submission_pending.checklist.second["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.second["title"]}']",
       ) { expect(page).to have_content("Incorrect") }
 
       new_checklist = [
@@ -781,13 +781,13 @@ feature "Submission review overlay", js: true do
           "kind" => Target::CHECKLIST_KIND_LINK,
           "title" => question_2,
           "result" => answer_2,
-          "status" => TimelineEvent::CHECKLIST_STATUS_FAILED
+          "status" => TimelineEvent::CHECKLIST_STATUS_FAILED,
         },
         {
           "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
           "title" => question_3,
           "result" => [answer_3],
-          "status" => TimelineEvent::CHECKLIST_STATUS_FAILED
+          "status" => TimelineEvent::CHECKLIST_STATUS_FAILED,
         },
         submission_checklist_short_text,
         submission_checklist_files,
@@ -795,8 +795,8 @@ feature "Submission review overlay", js: true do
           "kind" => Target::CHECKLIST_KIND_AUDIO,
           "title" => question_6,
           "result" => answer_6,
-          "status" => TimelineEvent::CHECKLIST_STATUS_FAILED
-        }
+          "status" => TimelineEvent::CHECKLIST_STATUS_FAILED,
+        },
       ]
 
       expect(submission_pending.reload.checklist).to eq(new_checklist)
@@ -805,11 +805,11 @@ feature "Submission review overlay", js: true do
       visit review_timeline_event_path(submission_pending)
 
       within(
-        "div[aria-label='#{submission_pending.checklist.first["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.first["title"]}']",
       ) { expect(page).to have_content(answer_1) }
 
       within(
-        "div[aria-label='#{submission_pending.checklist.second["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.second["title"]}']",
       ) do
         expect(page).to have_content(question_2)
         expect(page).to have_content(answer_2)
@@ -817,7 +817,7 @@ feature "Submission review overlay", js: true do
       end
 
       within(
-        "div[aria-label='#{submission_pending.checklist.third["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.third["title"]}']",
       ) do
         expect(page).to have_content(question_3)
         expect(page).to have_content(answer_3)
@@ -825,7 +825,7 @@ feature "Submission review overlay", js: true do
       end
 
       within(
-        "div[aria-label='#{submission_pending.checklist.last["title"]}']"
+        "div[aria-label='#{submission_pending.checklist.last["title"]}']",
       ) { expect(page).to have_content("Incorrect") }
 
       accept_confirm { click_button("Undo Grading") }
@@ -844,7 +844,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_content("Grade Card")
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) { find("button[title='Good']").click }
 
       # status should be reviewing as the target is not graded completely
@@ -852,7 +852,7 @@ feature "Submission review overlay", js: true do
         expect(page).to have_text("Reviewing")
       end
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) { find("button[title='Good']").click }
 
       # the status should be completed
@@ -897,7 +897,7 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text(
-        "This submission is from a student whose access to the course has ended, or has dropped out."
+        "This submission is from a student whose access to the course has ended, or has dropped out.",
       )
     end
 
@@ -908,7 +908,7 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       expect(page).to have_text(
-        "This submission is from a student whose access to the course has ended, or has dropped out."
+        "This submission is from a student whose access to the course has ended, or has dropped out.",
       )
     end
 
@@ -929,7 +929,7 @@ feature "Submission review overlay", js: true do
                      referrer: review_timeline_event_path(submission_pending)
 
         expect(page).to have_text(
-          "This submission is linked to one or more students whose access to the course has ended, or have dropped out."
+          "This submission is linked to one or more students whose access to the course has ended, or have dropped out.",
         )
       end
     end
@@ -945,11 +945,11 @@ feature "Submission review overlay", js: true do
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) { find("button[title='Good']").click }
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
@@ -977,11 +977,11 @@ feature "Submission review overlay", js: true do
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) { find("button[title='Good']").click }
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
@@ -994,7 +994,7 @@ feature "Submission review overlay", js: true do
       expect(new_notes.count).to eq(2)
       expect(new_notes.pluck(:student_id)).to contain_exactly(
         student.id,
-        another_student.id
+        another_student.id,
       )
     end
 
@@ -1010,12 +1010,12 @@ feature "Submission review overlay", js: true do
       submission_pending.update(
         passed_at: Time.zone.now,
         evaluated_at: Time.zone.now,
-        evaluator: coach
+        evaluator: coach,
       )
       grade_submission(
         submission_pending,
         SubmissionsHelper::GRADE_PASS,
-        target
+        target,
       )
 
       # Open the overlay.
@@ -1043,7 +1043,7 @@ feature "Submission review overlay", js: true do
       submission_pending.update(
         passed_at: nil,
         evaluated_at: nil,
-        evaluator: nil
+        evaluator: nil,
       )
 
       find("a[data-submission-id='#{submission_pending.id}']").click
@@ -1074,7 +1074,7 @@ feature "Submission review overlay", js: true do
         latest: true,
         created_at: 5.days.ago,
         owners: [inactive_student_1, inactive_student_2],
-        target: target
+        target: target,
       )
     end
 
@@ -1085,7 +1085,7 @@ feature "Submission review overlay", js: true do
         latest: true,
         created_at: 1.hour.ago,
         owners: [inactive_student_1, inactive_student_2],
-        target: target
+        target: target,
       )
     end
 
@@ -1099,7 +1099,7 @@ feature "Submission review overlay", js: true do
         evaluator_id: coach.id,
         created_at: 5.days.ago,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     before do
@@ -1107,7 +1107,7 @@ feature "Submission review overlay", js: true do
         :timeline_event_grade,
         timeline_event: reviewed_submission_from_inactive_students,
         evaluation_criterion: evaluation_criterion_1,
-        grade: 4
+        grade: 4,
       )
 
       create(:faculty_cohort_enrollment, faculty: coach, cohort: ended_cohort)
@@ -1121,7 +1121,7 @@ feature "Submission review overlay", js: true do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       pending_submission_one_from_inactive_students
+                       pending_submission_one_from_inactive_students,
                      )
       expect(page).not_to have_text("You can review the submission until")
       expect(page).to have_button("Create Review Checklist", disabled: true)
@@ -1133,7 +1133,7 @@ feature "Submission review overlay", js: true do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       pending_submission_two_from_inactive_students
+                       pending_submission_two_from_inactive_students,
                      )
 
       click_button "Start Review"
@@ -1153,7 +1153,7 @@ feature "Submission review overlay", js: true do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       reviewed_submission_from_inactive_students
+                       reviewed_submission_from_inactive_students,
                      )
 
       expect(page).to have_button("Undo Grading", disabled: true)
@@ -1171,7 +1171,7 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     let!(:timeline_event_grade) do
@@ -1179,7 +1179,7 @@ feature "Submission review overlay", js: true do
         :timeline_event_grade,
         timeline_event: submission_reviewed,
         evaluation_criterion: evaluation_criterion_1,
-        grade: 4
+        grade: 4,
       )
     end
 
@@ -1195,7 +1195,7 @@ feature "Submission review overlay", js: true do
         team.students.each do |student|
           expect(page).to have_link(
             student.name,
-            href: "/students/#{student.id}/report"
+            href: "/students/#{student.id}/report",
           )
         end
 
@@ -1214,11 +1214,11 @@ feature "Submission review overlay", js: true do
       expect(page).to have_button("Undo Grading")
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) do
         expect(page).to have_text(evaluation_criterion_1.name)
         expect(page).to have_text(
-          "#{timeline_event_grade.grade}/#{evaluation_criterion_1.max_grade}"
+          "#{timeline_event_grade.grade}/#{evaluation_criterion_1.max_grade}",
         )
       end
 
@@ -1302,7 +1302,7 @@ feature "Submission review overlay", js: true do
           :with_owners,
           owners: team.students,
           target: target,
-          created_at: 3.days.ago
+          created_at: 3.days.ago,
         )
       end
 
@@ -1313,11 +1313,11 @@ feature "Submission review overlay", js: true do
         click_button "Start Review"
         dismiss_notification
         within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+          "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
         ) { find("button[title='Good']").click }
 
         within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
         ) { find("button[title='Bad']").click }
 
         click_button "Save grades"
@@ -1343,7 +1343,7 @@ feature "Submission review overlay", js: true do
         click_button "Next"
 
         expect(page).to have_current_path(
-          "#{review_timeline_event_path(submission_reviewed_old)}?sortCriterion=SubmittedAt"
+          "#{review_timeline_event_path(submission_reviewed_old)}?sortCriterion=SubmittedAt",
         )
       end
     end
@@ -1360,21 +1360,21 @@ feature "Submission review overlay", js: true do
         target: target_1,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     let!(:timeline_event_grade_1) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
     let!(:timeline_event_grade_2) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed,
-        evaluation_criterion: evaluation_criterion_2
+        evaluation_criterion: evaluation_criterion_2,
       )
     end
     let!(:submission_pending) do
@@ -1383,7 +1383,7 @@ feature "Submission review overlay", js: true do
         :with_owners,
         latest: true,
         owners: [student],
-        target: target_1
+        target: target_1,
       )
     end
 
@@ -1395,20 +1395,20 @@ feature "Submission review overlay", js: true do
 
       # Evaluation criteria at the point of grading are shown for reviewed submissions
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) do
         expect(page).to have_text(evaluation_criterion_1.name)
         expect(page).to have_text(
-          "#{timeline_event_grade_1.grade}/#{evaluation_criterion_1.max_grade}"
+          "#{timeline_event_grade_1.grade}/#{evaluation_criterion_1.max_grade}",
         )
       end
 
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) do
         expect(page).to have_text(evaluation_criterion_2.name)
         expect(page).to have_text(
-          "#{timeline_event_grade_2.grade}/#{evaluation_criterion_2.max_grade}"
+          "#{timeline_event_grade_2.grade}/#{evaluation_criterion_2.max_grade}",
         )
       end
 
@@ -1423,7 +1423,7 @@ feature "Submission review overlay", js: true do
 
       # grades the pending submission
       within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']",
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
@@ -1444,21 +1444,21 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     let!(:feedback) do
       create(
         :startup_feedback,
         faculty_id: coach.id,
-        timeline_event: submission_reviewed
+        timeline_event: submission_reviewed,
       )
     end
     let!(:timeline_event_grade) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
 
@@ -1532,7 +1532,7 @@ feature "Submission review overlay", js: true do
       within("div[data-title='feedback-section']") do
         expect(page).to have_text(coach.name)
         expect(page).to have_content(
-          submission_reviewed.startup_feedback.first.feedback
+          submission_reviewed.startup_feedback.first.feedback,
         )
       end
     end
@@ -1546,7 +1546,7 @@ feature "Submission review overlay", js: true do
         latest: true,
         owners: [student],
         target: auto_verify_target,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
 
@@ -1574,7 +1574,7 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     let!(:submission_reviewed_2) do
@@ -1586,7 +1586,7 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     let!(:submission_reviewed_3) do
@@ -1598,7 +1598,7 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
     let!(:submission_reviewed_4) do
@@ -1610,7 +1610,7 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
       )
     end
 
@@ -1618,28 +1618,28 @@ feature "Submission review overlay", js: true do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed_1,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
     let!(:timeline_event_grade_2) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed_2,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
     let!(:timeline_event_grade_3) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed_3,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
     let!(:timeline_event_grade_4) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed_4,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
 
@@ -1654,10 +1654,10 @@ feature "Submission review overlay", js: true do
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
       expect(page).not_to have_text(
-        submission_reviewed_2.checklist.first["title"]
+        submission_reviewed_2.checklist.first["title"],
       )
       expect(page).not_to have_text(
-        submission_reviewed_3.checklist.first["title"]
+        submission_reviewed_3.checklist.first["title"],
       )
 
       # submission 2 and 3
@@ -1666,13 +1666,13 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text(team_1.students.last.name)
       expect(page).to have_text(team_2.students.first.name)
       expect(page).to have_link(
-        href: "/submissions/#{submission_reviewed_3.id}/review"
+        href: "/submissions/#{submission_reviewed_3.id}/review",
       )
       expect(page).to have_link(
-        href: "/submissions/#{submission_reviewed_2.id}/review"
+        href: "/submissions/#{submission_reviewed_2.id}/review",
       )
       expect(page).not_to have_link(
-        href: "/submissions/#{submission_reviewed_1.id}/review"
+        href: "/submissions/#{submission_reviewed_1.id}/review",
       )
     end
   end
@@ -1692,7 +1692,7 @@ feature "Submission review overlay", js: true do
         :with_owners,
         latest: true,
         owners: [student],
-        target: individual_target
+        target: individual_target,
       )
     end
     let!(:submission_team_target) do
@@ -1775,21 +1775,21 @@ feature "Submission review overlay", js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 2.days.ago,
-        passed_at: 2.days.ago
+        passed_at: 2.days.ago,
       )
     end
     let!(:timeline_event_grade_1) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed,
-        evaluation_criterion: evaluation_criterion_1
+        evaluation_criterion: evaluation_criterion_1,
       )
     end
     let!(:timeline_event_grade_2) do
       create(
         :timeline_event_grade,
         timeline_event: submission_reviewed,
-        evaluation_criterion: evaluation_criterion_2
+        evaluation_criterion: evaluation_criterion_2,
       )
     end
     let!(:submission_archived) do
@@ -1799,7 +1799,7 @@ feature "Submission review overlay", js: true do
         latest: false,
         owners: [student],
         target: target,
-        archived_at: 1.day.ago
+        archived_at: 1.day.ago,
       )
     end
     let!(:submission_pending) do
@@ -1808,7 +1808,7 @@ feature "Submission review overlay", js: true do
         :with_owners,
         latest: true,
         owners: [student],
-        target: target
+        target: target,
       )
     end
 
@@ -1826,7 +1826,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_selector(".submission-info__tab", count: 3)
 
       expect(page).not_to have_link(
-        href: "/submissions/#{submission_archived.id}/review"
+        href: "/submissions/#{submission_archived.id}/review",
       )
 
       within("a[title='Submission #1']") do
@@ -1853,10 +1853,14 @@ feature "Submission review overlay", js: true do
         :with_owners,
         owners: [student],
         latest: true,
-        target: target
+        target: target,
       )
     end
-    let!(:submission_report) do
+    let!(:submission_report_1) do
+      create :submission_report, :queued, submission: submission_with_report
+    end
+
+    let!(:submission_report_2) do
       create :submission_report, :queued, submission: submission_with_report
     end
 
@@ -1867,57 +1871,57 @@ feature "Submission review overlay", js: true do
     scenario "indicates the status of the automated test in submission review page" do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_with_report)
-      expect(page).to have_text("Automated tests are queued")
-      expect(page).to_not have_button("Show Test Report")
+      expect(page).to have_text("Actions are queued")
+      expect(page).to have_text(submission_report_1.reporter)
+      expect(page).to have_text(submission_report_2.reporter)
+      expect(page).to_not have_button("Show Report")
 
-      submission_report.update!(
+      submission_report_1.update!(
         status: "in_progress",
-        started_at: 2.minutes.ago
+        started_at: 2.minutes.ago,
       )
       refresh
-      expect(page).to have_text("Automated tests are in progress")
+      expect(page).to have_text("Actions are in progress")
       expect(page).to have_text("Started 2 minutes ago")
 
-      submission_report.update!(
-        status: "completed",
-        conclusion: "success",
+      submission_report_1.update!(
+        status: "success",
         started_at: 2.minutes.ago,
         completed_at: Time.zone.now,
-        test_report: "Foo"
+        report: "Foo",
       )
       refresh
-      expect(page).to have_text("All automated tests succeeded")
+      expect(page).to have_text("All actions succeeded")
       expect(page).to_not have_text("Foo")
-      click_button "Show Test Report"
+      click_button "Show Report"
       expect(page).to have_text("Foo")
 
-      submission_report.update!(
-        status: "completed",
-        conclusion: "failure",
+      submission_report_1.update!(
+        status: "failure",
         started_at: 2.minutes.ago,
         completed_at: Time.zone.now,
-        test_report: "Bar"
+        report: "Bar",
       )
       refresh
-      expect(page).to have_text("Some automated tests failed")
-      click_button "Show Test Report"
+      expect(page).to have_text("Some actions failed")
+      click_button "Show Report"
       expect(page).to have_text("Bar")
     end
 
     scenario "status of the report is checked every 30 seconds without page reload if current status is not completed" do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_with_report)
-      expect(page).to have_text("Automated tests are queued")
-      submission_report.update!(
-        status: "completed",
-        conclusion: "success",
-        test_report: "A new report description",
+      expect(page).to have_text("Actions are queued")
+      submission_report_2.update!(
+        status: "success",
+        report: "A new report description",
+        heading: "All automated tests succeeded",
         started_at: 2.minutes.ago,
-        completed_at: Time.zone.now
+        completed_at: Time.zone.now,
       )
       sleep 2
       expect(page).to have_text("All automated tests succeeded")
-      click_button "Show Test Report"
+      click_button "Show Report"
       expect(page).to have_text("A new report description")
     end
   end

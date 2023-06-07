@@ -22,8 +22,6 @@ module TimelineEvents
       }.merge(evaluation)
     end
 
-    private
-
     def students
       @submission.students.map do |student|
         { id: student.id, name: student.name }

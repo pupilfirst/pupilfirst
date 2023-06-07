@@ -204,3 +204,18 @@ When a target is first created, you're assumed to be working on its first versio
     </p>
   </div>
 </details>
+
+## GitHub Actions
+
+You can use GitHub Actions to automate testing and reviewing student submissions for a target. When you configure the Github Actions for a target, Pupilfirst LMS will automatically create a repository for the student and add the Github Actions workflow along with the student's submission.
+
+In the "Edit Target Action" page, you can add a GitHub Action workflow that suits your needs. This workflow will be added to the student's repository automatically upon submission.
+A new branch will be created for each submission, allowing for isolated testing and review. The actions history can be accessed through the submission review interface where you can also re-run actions.
+
+We have also created a few actions wrapping our API's that you directly use on your workflow file to automate the testing and reviewing process. These actions are:
+
+1. [Check Repo Action](https://github.com/pupilfirst/check-repo-action): Use this action when a student's submission includes a URL to a GitHub repository. It clones the repository and checks for the presence of required files or folders, ensuring that the submission is complete.
+2. [Report Action](https://github.com/pupilfirst/report-action): This action reports the test running status back to the LMS, enabling easy tracking of student progress and performance.
+3. [Grade Action](https://github.com/pupilfirst/grade-action): This action grades student submissions based on predefined criteria or test outcomes, offering a standardized and automated evaluation process.
+
+You can also find a workflows that we are currently using for our courses at [Test Scripts Repo](https://github.com/pupilfirst/vta-test-scripts)

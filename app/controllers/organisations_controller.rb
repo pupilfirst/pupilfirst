@@ -1,7 +1,7 @@
 class OrganisationsController < ApplicationController
   before_action :authenticate_user!
 
-  layout 'student'
+  layout "student"
 
   # GET /organisations
   def index
@@ -25,26 +25,39 @@ class OrganisationsController < ApplicationController
   private
 
   def prepare_courses
-    cohorts = @organisation.cohorts.includes(:course).active.uniq
+    cohorts = @organisation.cohorts.includes(:course).uniq
 
     courses =
       cohorts.each_with_object({}) do |cohort, courses|
-        courses[cohort.course.id] ||= { course: cohort.course, cohorts: [] }
-        courses[cohort.course.id][:cohorts] << cohort
+        courses[cohort.course.id] ||= {
+          course: cohort.course,
+          cohorts: [],
+          ended_cohorts_ids: []
+        }
+
+        if cohort.ended?
+          courses[cohort.course.id][:ended_cohorts_ids] << cohort.id
+        else
+          courses[cohort.course.id][:cohorts] << cohort
+        end
       end
 
-    courses.values.map do |course|
-      cohort_ids = course[:cohorts].map(&:id)
+    courses =
+      courses.values.map do |course|
+        cohort_ids = course[:cohorts].map(&:id)
 
-      course[:total_students] =
-        @organisation
+        course[:active_students] = @organisation
           .users
           .joins(:students)
           .where(students: { cohort_id: cohort_ids })
           .distinct
           .count
 
-      course
+        course
+      end
+
+    courses.sort_by do |course_data|
+      course_data[:cohorts].all?(&:ended?) ? 1 : 0
     end
   end
 

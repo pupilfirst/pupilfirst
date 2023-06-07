@@ -24,9 +24,9 @@ class ApplicationController < ActionController::Base
     raise exception unless Rails.env.production?
 
     # Force format to HTML, because we don't have error pages for other format requests.
-    request.format = 'html'
+    request.format = "html"
 
-    raise ActionController::UnknownFormat, 'Not Acceptable'
+    raise ActionController::UnknownFormat, "Not Acceptable"
   end
 
   # Pundit authorization error should cause a 404.
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::InvalidAuthenticityToken do
-    flash[:error] = I18n.t('shared.invalid_authenticity_token_error')
+    flash.now[:error] = I18n.t("shared.invalid_authenticity_token_error")
   end
 
   # Redirect all requests from unknown domains to service homepage.
@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
   end
 
   def raise_not_found
-    raise ActionController::RoutingError, 'Not Found'
+    raise ActionController::RoutingError, "Not Found"
   end
 
   def after_sign_in_path_for(resource_or_scope)
@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_host
-    return 'test.host' if Rails.env.test?
+    return "test.host" if Rails.env.test?
 
     # If there is a port in the request URL, then keep it in the string returned here.
     if request.original_url.match?(/^https?:\/\/.*:\d{1,5}/)
@@ -161,7 +161,7 @@ class ApplicationController < ActionController::Base
       current_student: current_student,
       current_school: current_school,
       current_coach: current_coach,
-      current_school_admin: current_school_admin
+      current_school_admin: current_school_admin,
     )
   end
 
@@ -170,11 +170,11 @@ class ApplicationController < ActionController::Base
   def api_token
     @api_token ||=
       begin
-        header = request.headers['Authorization']&.strip
+        header = request.headers["Authorization"]&.strip
 
         # Authorization headers are of format "Authorization: <type> <credentials>".
         # We only care about the supplied credentials.
-        header.split(' ')[-1] if header.present?
+        header.split(" ")[-1] if header.present?
       end
   end
 
@@ -215,7 +215,7 @@ class ApplicationController < ActionController::Base
   def storable_location?
     non_html_response =
       destroy_user_session_path ||
-        (is_a?(::TargetsController) && params[:action] == 'details_v2')
+        (is_a?(::TargetsController) && params[:action] == "details_v2")
 
     public_page =
       _process_action_callbacks.none? { |p| p.filter == :authenticate_user! }
@@ -246,8 +246,8 @@ class ApplicationController < ActionController::Base
     Scarf::InitialAvatar
       .new(
         name,
-        font_family: ['Source Sans Pro', 'sans-serif'],
-        background_shape: background_shape
+        font_family: ["Source Sans Pro", "sans-serif"],
+        background_shape: background_shape,
       )
       .svg
       .html_safe
@@ -257,12 +257,13 @@ class ApplicationController < ActionController::Base
     return false if current_domain.blank?
 
     return false if current_domain.primary? || current_school.domains.one?
-    !Schools::Configuration.new(current_school)
-      .disable_primary_domain_redirection?
+    !Schools::Configuration.new(
+      current_school,
+    ).disable_primary_domain_redirection?
   end
 
   def redirect_to_primary_domain
-    observable_redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
+    observable_redirect_to "#{request.ssl? ? "https" : "http"}://#{current_school.domains.primary.fqdn}#{request.path}"
   end
 
   before_action :set_last_seen_at,

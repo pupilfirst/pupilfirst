@@ -1,7 +1,6 @@
 <% presenter = Users::DiscordAccountRequiredPresenter.new(self) %>
 <% content_for(:head) do %>
   <title><%= t(".page_title") %></title>
-  <%= vite_javascript_tag 'tailwind', nonce: true %>
 <% end %>
 <% content_for(:container) do %>
   <div class="flex flex-col items-stretch min-h-screen">

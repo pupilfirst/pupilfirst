@@ -14,8 +14,8 @@
 
 class TimelineEvent < ApplicationRecord
   belongs_to :target
-  belongs_to :evaluator, class_name: 'Faculty', optional: true
-  belongs_to :reviewer, class_name: 'Faculty', optional: true
+  belongs_to :evaluator, class_name: "Faculty", optional: true
+  belongs_to :reviewer, class_name: "Faculty", optional: true
 
   has_many :target_evaluation_criteria, through: :target
   has_many :evaluation_criteria, through: :target_evaluation_criteria
@@ -25,10 +25,10 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_owners, dependent: :destroy
   has_many :students, through: :timeline_event_owners
   has_one :course, through: :target
-  has_one :submission_report,
-          foreign_key: 'submission_id',
-          inverse_of: :submission,
-          dependent: :destroy
+  has_many :submission_reports,
+           foreign_key: "submission_id",
+           inverse_of: :submission,
+           dependent: :destroy
 
   delegate :student_event?, to: :target
   delegate :title, to: :target
@@ -49,9 +49,9 @@ class TimelineEvent < ApplicationRecord
           )
         }
 
-  CHECKLIST_STATUS_NO_ANSWER = 'noAnswer'
-  CHECKLIST_STATUS_PASSED = 'passed'
-  CHECKLIST_STATUS_FAILED = 'failed'
+  CHECKLIST_STATUS_NO_ANSWER = "noAnswer"
+  CHECKLIST_STATUS_PASSED = "passed"
+  CHECKLIST_STATUS_FAILED = "failed"
 
   def self.valid_checklist_status
     [
@@ -72,7 +72,7 @@ class TimelineEvent < ApplicationRecord
   def overall_grade_from_score
     return if score.blank?
 
-    { 1 => 'good', 2 => 'great', 3 => 'wow' }[score.floor]
+    { 1 => "good", 2 => "great", 3 => "wow" }[score.floor]
   end
 
   def student
@@ -105,5 +105,10 @@ class TimelineEvent < ApplicationRecord
 
   def live?
     !archived?
+  end
+
+  def actions_url
+    repo = founders.first.github_repository
+    "https://github.com/#{repo}/actions" if repo
   end
 end

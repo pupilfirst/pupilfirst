@@ -39,7 +39,7 @@ let coachesTab = (count, tab) => {
         tab
         ? "border-b-2 border-primary-500 text-primary-500"
         : ""}`}>
-    <span> {label->str} </span>
+    <span className="px-2"> {label->str} </span>
     {ReactUtils.nullUnless(
       <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
         {string_of_int(count)->str}
@@ -55,7 +55,7 @@ let make = (~coaches, ~authenticityToken) => {
 
   let closeFormCB = () => send(UpdateFormVisible(None))
 
-  <div role="main" className="flex min-h-full bg-gray-50 pb-18">
+  <div role="main" className="flex min-h-full bg-gray-50 pb-20">
     {switch state.formVisible {
     | None => React.null
     | CoachEditor(coach) => <SA_Coaches_CoachEditor coach closeFormCB authenticityToken />

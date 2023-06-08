@@ -180,7 +180,7 @@ feature "Organisation show" do
       expect(page).to have_current_path("/organisations/#{organisation_1.id}")
     end
 
-    scenario "user can not see the ongoing cohorts page of an org, where he is not an admin" do
+    scenario "user can not see the ongoing cohorts page of an orgnisation, where he is not an admin" do
       sign_in_user(
         org_admin_user,
         referrer:

@@ -19,6 +19,9 @@ class Faculty < ApplicationRecord
   has_many :faculty_founder_enrollments, dependent: :destroy
   has_many :founders, through: :faculty_founder_enrollments
 
+  scope :exited, -> { where(exited: true) }
+  scope :active, -> { where(exited: false) }
+
   CATEGORY_TEAM = "team"
   CATEGORY_VISITING_COACHES = "visiting_coaches"
   CATEGORY_DEVELOPER_COACHES = "developer_coaches"

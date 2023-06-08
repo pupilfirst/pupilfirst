@@ -1,14 +1,23 @@
 module Schools
   module FacultyModule
     class SchoolIndexPresenter < ApplicationPresenter
-      def initialize(view_context, school)
+      def initialize(view_context, school, status)
         super(view_context)
 
         @school = school
+        @status = status
       end
 
       def faculty
-        current_school.faculty.includes(user: { avatar_attachment: :blob })
+        @faculty ||=
+          if @status == "exited"
+            current_school.faculty.exited
+          else
+            current_school.faculty.active
+          end.includes(user: { avatar_attachment: :blob })
+            .order(created_at: :desc)
+            .page(params[:page])
+            .per(10)
       end
 
       def props

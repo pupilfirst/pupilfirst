@@ -18,8 +18,6 @@ let connectLink: t => option<string>
 
 let exited: t => bool
 
-let updateList: (list<t>, t) => list<t>
-
 let affiliation: t => option<string>
 
 let imageFileName: t => option<string>

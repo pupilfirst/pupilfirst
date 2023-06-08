@@ -2595,6 +2595,7 @@ ar:
         title: المشرفون
       school_index:
         title: المشرفون
+        coach: مشرفين
     show:
       coaches: المشرفون
       courses: الدورات

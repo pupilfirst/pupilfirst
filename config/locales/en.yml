@@ -2643,6 +2643,7 @@ en:
         title: Coaches
       school_index:
         title: Coaches
+        coache: Coach
     show:
       coaches: Coaches
       courses: Courses

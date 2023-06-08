@@ -91,7 +91,7 @@ module Courses
     end
 
     def inactive_students_count
-      @inactive_students_count ||= founders.count - students.count
+      @inactive_students_count ||= active_students.count - students.count
     end
 
     def previous_page?
@@ -116,7 +116,7 @@ module Courses
 
     def course_entries(from, to)
       LeaderboardEntry
-        .where(student: founders, period_from: from, period_to: to)
+        .where(student: active_students, period_from: from, period_to: to)
         .includes(student: [:level, user: { avatar_attachment: :blob }])
     end
 
@@ -202,8 +202,8 @@ module Courses
       @lts ||= LeaderboardTimeService.new(on)
     end
 
-    def founders
-      @founders ||=
+    def active_students
+      @active_students ||=
         @course.students.active.where(excluded_from_leaderboard: false)
     end
 

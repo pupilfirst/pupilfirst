@@ -1245,33 +1245,43 @@ ta:
         other: அனைத்து %{count} %{plural_name}ஐக் காட்டுகிறது
       partially_loaded_text: '%{total} %{plural_name}இல் %{loaded} காட்டுகிறது'
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: புதிய பயிற்சியாளரைச் சேர்க்கவும்
       affiliation: இணைப்பு
       affiliation_placeholder: Acme Inc., Acme பல்கலைக்கழகம் போன்றவை.
+      archived: Archived
       coach_add: பயிற்சியாளரைச் சேர்க்கவும்
       coach_created: பயிற்சியாளர் வெற்றிகரமாக உருவாக்கப்பட்டது
       coach_email: பயிற்சியாளர் மின்னஞ்சல் முகவரி
-      coach_left_q: பயிற்சியாளர் பள்ளியை விட்டு வெளியேறிவிட்டாரா?
       coach_name: பயிற்சியாளர் பெயர்
       coach_profile_warn: பயிற்சியாளர் சுயவிவரம் பொதுவில் இல்லாததால், இது எங்கும் காட்டப்படாது
       coach_public_q: பயிற்சியாளர் சுயவிவரம் பொதுவில் இருக்க வேண்டுமா?
+      coach_status: Coach Status
       coach_title: பயிற்சியாளர் தலைப்பு/நிபுணத்துவம்
       coach_title_error: குறைந்தது இரண்டு எழுத்துகள் இருக்க வேண்டும்
       coach_update: பயிற்சியாளரைப் புதுப்பிக்கவும்
       coach_updated: பயிற்சியாளர் புதுப்பிக்கப்பட்டது
+      coach_visibility: Coach Visibility
       connect_link: இணைப்பை இணைக்கவும்
       connect_link_error: இது சரியான URL போல் இல்லை
       connect_link_placeholder: பயிற்சியாளருக்கான மாணவர் இணைப்பு கோரிக்கை இணைப்பு
       email: மின்னஞ்சல்
       email_input_error: சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்
+      exited: Exited
       input_group_error: குறைந்தது இரண்டு எழுத்துக்கள் இருக்க வேண்டும்
       name: பெயர்
       replace_avatar: அவதாரத்தை மாற்றவும்
       title: தலைப்பு
       upload_avatar: அவதாரத்தைப் பதிவேற்றவும்
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: புதிய பயிற்சியாளரைச் சேர்க்கவும்
       avatar_of: "அவதாரம் "
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: அனைத்து மாணவர்கள்
       inactive_students: செயலற்ற மாணவர்கள்
@@ -1989,6 +1999,17 @@ ta:
   help:
     show:
       title: உதவி
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
   home:
     agreement:
       privacy_policy: தனியுரிமைக் கொள்கை

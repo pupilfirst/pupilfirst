@@ -2185,7 +2185,7 @@ en:
         part_time: Part-Time
     target:
       role:
-        founder: All Founders
+        students: All Students
         team: Team
   mutations:
     conclude_submission_report:

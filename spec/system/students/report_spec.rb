@@ -83,7 +83,7 @@ feature "Course students report", js: true do
   let!(:submission_target_l1_2) do
     create(
       :timeline_event,
-      founders: [student],
+      students: [student],
       target: target_l1,
       evaluator_id: course_coach.id,
       evaluated_at: 3.days.ago,

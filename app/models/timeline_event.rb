@@ -108,7 +108,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def actions_url
-    repo = founders.first.github_repository
+    repo = students.first.github_repository
     "https://github.com/#{repo}/actions" if repo
   end
 end

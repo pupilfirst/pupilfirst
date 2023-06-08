@@ -23,7 +23,7 @@ Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationaliza
 | `CONTROLLER.ACTION.*`       |             Request-based responses.              |
 | `MODULE.CLASS.*`            |           Strings used by library code.           |
 
-- `CONTROLLER` is always the plural version. For example: `FoundersController#edit` is keyed as `students.edit.*`
+- `CONTROLLER` is always the plural version. For example: `StudentsController#edit` is keyed as `students.edit.*`
 - Always order keys alphabetically. Use [the YAML Sort Visual Studio Code extension](#yaml-sort), to manage this.
 - Third-party library translations follow their own format, and any customization of those should be [documented
   _here_ in this file](#third-party-library-translations).

@@ -1245,33 +1245,43 @@ ml:
         other: എല്ലാം %{count} %{plural_name}കാണിക്കുന്നു
       partially_loaded_text: '%{total} %{plural_name}ൽ %{loaded} കാണിക്കുന്നു'
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: പുതിയ കോച്ചിനെ ചേർക്കുക
       affiliation: ബന്ധം
       affiliation_placeholder: Acme Inc., Acme യൂണിവേഴ്സിറ്റി മുതലായവ.
+      archived: Archived
       coach_add: കോച്ച് ചേർക്കുക
       coach_created: കോച്ച് വിജയകരമായി സൃഷ്ടിച്ചു
       coach_email: കോച്ച് ഇമെയിൽ വിലാസം
-      coach_left_q: കോച്ച് സ്കൂൾ വിട്ടോ?
       coach_name: കോച്ചിന്റെ പേര്
       coach_profile_warn: കോച്ച് പ്രൊഫൈൽ പൊതുവായതല്ലാത്തതിനാൽ, ഇത് എവിടെയും കാണിക്കില്ല
       coach_public_q: കോച്ച് പ്രൊഫൈൽ പൊതുവായതായിരിക്കണമോ?
+      coach_status: Coach Status
       coach_title: പരിശീലകന്റെ പേര് / വൈദഗ്ദ്ധ്യം
       coach_title_error: കുറഞ്ഞത് രണ്ട് പ്രതീകങ്ങളെങ്കിലും ഉണ്ടായിരിക്കണം
       coach_update: കോച്ച് അപ്ഡേറ്റ് ചെയ്യുക
       coach_updated: കോച്ച് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു
+      coach_visibility: Coach Visibility
       connect_link: ലിങ്ക് ബന്ധിപ്പിക്കുക
       connect_link_error: ഇതൊരു സാധുവായ URL പോലെ തോന്നുന്നില്ല
       connect_link_placeholder: കോച്ചിനായുള്ള വിദ്യാർത്ഥി കണക്റ്റ് അഭ്യർത്ഥന ലിങ്ക്
       email: ഇമെയിൽ
       email_input_error: സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക
+      exited: Exited
       input_group_error: കുറഞ്ഞത് രണ്ട് പ്രതീകങ്ങളെങ്കിലും ഉണ്ടായിരിക്കണം
       name: പേര്
       replace_avatar: അവതാർ മാറ്റിസ്ഥാപിക്കുക
       title: തലക്കെട്ട്
       upload_avatar: ഒരു അവതാർ അപ്‌ലോഡ് ചെയ്യുക
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: പുതിയ കോച്ചിനെ ചേർക്കുക
       avatar_of: "അവതാർ "
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: എല്ലാ വിദ്യാർത്ഥികളും
       inactive_students: നിഷ്ക്രിയ വിദ്യാർത്ഥികൾ
@@ -1989,6 +1999,17 @@ ml:
   help:
     show:
       title: സഹായം
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
   home:
     agreement:
       privacy_policy: സ്വകാര്യതാനയം

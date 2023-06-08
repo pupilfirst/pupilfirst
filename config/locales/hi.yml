@@ -1245,33 +1245,43 @@ hi:
         other: सभी दिखा रहा है %{count} %{plural_name}
       partially_loaded_text: '%{total} %{plural_name}. में से %{loaded} दिखा रहा है'
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: नया कोच जोड़ें
       affiliation: संबंधन
       affiliation_placeholder: एक्मे इंक।, एक्मे विश्वविद्यालय, आदि।
+      archived: Archived
       coach_add: कोच जोड़ें
       coach_created: कोच सफलतापूर्वक बनाया गया
       coach_email: कोच ईमेल पता
-      coach_left_q: क्या कोच ने स्कूल छोड़ दिया है?
       coach_name: कोच का नाम
       coach_profile_warn: चूंकि कोच प्रोफ़ाइल सार्वजनिक नहीं है, इसलिए इसे कहीं भी नहीं दिखाया जाएगा
       coach_public_q: क्या कोच प्रोफ़ाइल सार्वजनिक होनी चाहिए?
+      coach_status: Coach Status
       coach_title: कोच शीर्षक / विशेषज्ञता
       coach_title_error: कम से कम दो अक्षर होने चाहिए
       coach_update: अपडेट कोच
       coach_updated: कोच सफलतापूर्वक अपडेट किया गया
+      coach_visibility: Coach Visibility
       connect_link: कनेक्ट लिंक
       connect_link_error: यह एक मान्य URL की तरह नहीं दिखता
       connect_link_placeholder: कोच के लिए स्टूडेंट कनेक्ट रिक्वेस्ट लिंक
       email: ईमेल
       email_input_error: कृपया एक वैध ई - मेल एड्रेस डालें
+      exited: Exited
       input_group_error: कम से कम दो अक्षर होने चाहिए
       name: नाम
       replace_avatar: अवतार बदलें
       title: शीर्षक
       upload_avatar: अवतार अपलोड करें
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: नया कोच जोड़ें
       avatar_of: "का अवतार "
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: सभी विद्यार्थी
       inactive_students: निष्क्रिय छात्र
@@ -1989,6 +1999,17 @@ hi:
   help:
     show:
       title: मदद करना
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
   home:
     agreement:
       privacy_policy: गोपनीयता नीति

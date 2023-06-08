@@ -35,11 +35,11 @@ let coachesTab = (count, tab) => {
     role="tab"
     key={label}
     href={currentPath}
-    className={`flex gap-1.5 px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${currentTab() ==
+    className={`flex gap-3 px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${currentTab() ==
         tab
         ? "border-b-2 border-primary-500 text-primary-500"
         : ""}`}>
-    <span className="px-2"> {label->str} </span>
+    <span> {label->str} </span>
     {ReactUtils.nullUnless(
       <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
         {string_of_int(count)->str}

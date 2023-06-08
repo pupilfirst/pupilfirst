@@ -7,7 +7,9 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:course) { create :course }
   let(:cohort_live) { create :cohort, course: course }
+  let(:cohort_2_live) { create :cohort, course: course }
   let(:cohort_ended) { create :cohort, course: course, ends_at: 1.day.ago }
+
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
 
@@ -18,6 +20,7 @@ describe CourseExports::PrepareStudentsExportService do
   let(:user_2) { create :user, email: "b@example.com" }
   let(:user_3) { create :user, email: "c@example.com" }
   let(:user_4) { create :user, email: "d@example.com" }
+  let(:user_5) { create :user, email: "e@example.com" }
 
   let(:student_1) do
     create :student,
@@ -45,6 +48,10 @@ describe CourseExports::PrepareStudentsExportService do
            dropped_out_at: 1.day.ago,
            tag_list: ["tag 3"],
            user: user_4
+  end
+
+  let!(:student_5) do
+    create :student, level: level_1, cohort: cohort_2_live, user: user_5
   end
 
   let(:target_group_l1_non_milestone) do
@@ -101,7 +108,7 @@ describe CourseExports::PrepareStudentsExportService do
            :students,
            course: course,
            user: school_admin.user,
-           cohorts: [cohort_live]
+           cohorts: [cohort_live, cohort_2_live]
   end
 
   let!(:student_1_reviewed_submission) do
@@ -110,6 +117,10 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:student_2_reviewed_submission) do
     fail_target target_l1_evaluated, student_2
+  end
+
+  let!(:student_5_reviewed_submission) do
+    fail_target target_l1_evaluated, student_5
   end
 
   before do
@@ -121,6 +132,9 @@ describe CourseExports::PrepareStudentsExportService do
 
     # Second student is still on L1.
     submission = submit_target target_l1_quiz, student_2
+    submission.update!(quiz_score: "1/2")
+
+    submission = submit_target target_l1_quiz, student_5
     submission.update!(quiz_score: "1/2")
 
     # Student has an archived submission - data should not be present in the export
@@ -181,7 +195,7 @@ describe CourseExports::PrepareStudentsExportService do
             "Graded"
           ],
           %w[Milestone? No Yes Yes Yes],
-          ["Students with submissions", 1, 2, 2, 1],
+          ["Students with submissions", 1, 3, 3, 1],
           ["Submissions pending review", 0, 0, 0, 1],
           [
             "Criterion A (2,3) - Average",
@@ -272,6 +286,31 @@ describe CourseExports::PrepareStudentsExportService do
               .grade
               .to_f
               .to_s
+          ],
+          [
+            student_5.user_id,
+            report_link_formula(student_5),
+            student_5.email,
+            student_5.name,
+            student_5.level.number,
+            student_5.title,
+            student_5.affiliation,
+            student_5.cohort.name,
+            "",
+            last_seen_at(student_5),
+            student_5.completed_at&.iso8601 || "",
+            student_5_reviewed_submission
+              .timeline_event_grades
+              .find_by(evaluation_criterion: evaluation_criterion_1)
+              .grade
+              .to_f
+              .to_s,
+            student_5_reviewed_submission
+              .timeline_event_grades
+              .find_by(evaluation_criterion: evaluation_criterion_2)
+              .grade
+              .to_f
+              .to_s
           ]
         ]
       },
@@ -301,6 +340,15 @@ describe CourseExports::PrepareStudentsExportService do
             "1/2",
             {
               "value" => submission_grading(student_2_reviewed_submission),
+              "style" => "failing-grade"
+            }
+          ],
+          [
+            student_5.email,
+            nil,
+            "1/2",
+            {
+              "value" => submission_grading(student_5_reviewed_submission),
               "style" => "failing-grade"
             }
           ]

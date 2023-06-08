@@ -7,6 +7,7 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:course) { create :course }
   let!(:cohort_live) { create :cohort, course: course }
+  let!(:cohort_2_live) { create :cohort, course: course }
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
 
@@ -29,6 +30,9 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:team_2) { create :team_with_students, cohort: cohort_live }
   let!(:team_3) { create :team, cohort: cohort_live }
+
+  let!(:team_4) { create :team_with_students, cohort: cohort_2_live }
+  let!(:student_l2_4) { team_4.founders.first }
 
   let(:user_t3) { create :user }
 
@@ -100,7 +104,7 @@ describe CourseExports::PrepareTeamsExportService do
     create :course_export,
            :teams,
            course: course,
-           cohorts: [cohort_live],
+           cohorts: [cohort_live, cohort_2_live],
            user: school_admin.user
   end
 
@@ -114,6 +118,10 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:team_2_reviewed_submission) do
     fail_target target_l1_evaluated, student_2
+  end
+
+  let!(:team_4_reviewed_submission) do
+    fail_target target_l1_evaluated, student_l2_4
   end
 
   before do
@@ -152,6 +160,9 @@ describe CourseExports::PrepareTeamsExportService do
 
     # Third student (alone in team) has only completed one target.
     submit_target target_l1_mark_as_complete, student_3
+
+    submission = submit_target target_l1_quiz, student_l2_4
+    submission.update!(quiz_score: "1/2")
   end
 
   def sorted_student_names(team)
@@ -204,7 +215,7 @@ describe CourseExports::PrepareTeamsExportService do
             "Graded"
           ],
           %w[Milestone? No Yes Yes Yes],
-          ["Teams with submissions", 2, 2, 2, 1],
+          ["Teams with submissions", 2, 3, 3, 1],
           ["Teams pending review", 0, 0, 0, 1]
         ]
       },
@@ -229,6 +240,12 @@ describe CourseExports::PrepareTeamsExportService do
             team_3.name,
             team_3.cohort.name,
             sorted_student_names(team_3)
+          ],
+          [
+            team_4.id,
+            team_4.name,
+            team_4.cohort.name,
+            sorted_student_names(team_4)
           ]
         ]
       },
@@ -266,7 +283,18 @@ describe CourseExports::PrepareTeamsExportService do
             },
             nil
           ],
-          [team_3.id, team_3.name, "✓", nil, nil, nil]
+          [team_3.id, team_3.name, "✓", nil, nil, nil],
+          [
+            team_4.id,
+            team_4.name,
+            nil,
+            "1/2",
+            {
+              "value" => submission_grading(team_4_reviewed_submission),
+              "style" => "failing-grade"
+            },
+            nil
+          ]
         ]
       }
     ]

@@ -1943,13 +1943,20 @@ en:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
-    students:
-      students_enrolled_prefix_html:
-        one: <span class="font-semibold text-black">1</span> student enrolled
-        other: <span class="font-semibold text-black">%{count}</span> students enrolled
-      students_enrolled_suffix_html:
-        one: in <span class="font-semibold text-black">1</span> active cohort
-        other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+    cohorts:
+      student:
+        never_signed_in: Has never signed in
+        time_ago: Last seen %{time_ago} ago
+      students:
+        students_enrolled_prefix_html:
+          one: <span class="font-semibold text-black">1</span> student enrolled
+          other: <span class="font-semibold text-black">%{count}</span> students enrolled
+        students_enrolled_suffix_html:
+          one: in <span class="font-semibold text-black">1</span> active cohort
+          other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+        distribution_heading: Level-wise student distribution
+        nothing_to_show: There are no students matching the selected filters.
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     leaderboard:
       active_students: Active Students
       change: Change

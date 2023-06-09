@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="flex-1">
-    <% if content_for(:inner_wrapper) %>
+    <% if content_for?(:inner_wrapper) %>
       <%= content_for(:inner_wrapper) %>
     <% else %>
       <%= yield %>

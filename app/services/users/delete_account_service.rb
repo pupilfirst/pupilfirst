@@ -73,7 +73,9 @@ module Users
         metadata: {
           email: @user.email,
           account_deletion_notification_sent_at:
-            @user.account_deletion_notification_sent_at&.iso8601
+            @user.account_deletion_notification_sent_at&.iso8601,
+          cohort_ids: @user.founders.map(&:cohort_id).uniq,
+          organisation_id: @user.organisation&.id
         }
       )
     end

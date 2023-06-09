@@ -10,7 +10,7 @@
         <%= @course.name %>
       </h1>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <% ['ongoing', 'ended'].each do |status| %>
+        <% ['active', 'ended'].each do |status| %>
           <% is_current_page = status == page_name %>
           <%= link_to send("#{status}_cohorts_organisation_course_path", @organisation, @course), class: "flex items-center #{'p-2 border-b-2 border-primary-500 text-primary-500 font-medium' if is_current_page} #{'font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' unless is_current_page}" do %>
             <span class="hidden sm:inline"><%= t("organisations.courses.#{status}_cohorts_label") %></span>

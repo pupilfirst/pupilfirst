@@ -2,12 +2,12 @@ module Organisations
   class CoursesController < ApplicationController
     before_action :authenticate_user!
     before_action :find_organisation_and_course,
-                  only: %i[ongoing_cohorts ended_cohorts]
+                  only: %i[active_cohorts ended_cohorts]
 
     layout "student"
 
-    def ongoing_cohorts
-      @ongoing_cohorts = find_cohorts(:ongoing)
+    def active_cohorts
+      @active_cohorts = find_cohorts(:active)
     end
 
     def ended_cohorts
@@ -25,7 +25,7 @@ module Organisations
     end
 
     def find_cohorts(status)
-      cohorts = status == :ongoing ? @cohorts.ongoing : @cohorts.ended
+      cohorts = status == :active ? @cohorts.active : @cohorts.ended
       paged_cohorts = cohorts.page(params["#{status}_cohort_page"]).per(10)
       if paged_cohorts.count.zero?
         paged_cohorts.page(paged_cohorts.total_pages).per(10)

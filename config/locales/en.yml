@@ -2364,7 +2364,7 @@ en:
       profile_saved_notification: Profile updated successfully!
   organisations:
     courses:
-      ongoing_cohorts_label: Ongoing Cohorts
+      active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
       ended_cohorts_label: Ended Cohorts
@@ -2374,17 +2374,17 @@ en:
       heading: Organisations
     show:
       active_students_label: Active Students
-      ongoing_cohorts_subheading: Ongoing Cohorts
+      active_cohorts_subheading: Active Cohorts
       end_date: "End Date:"
-      no_ongoing_cohorts: There are no ongoing cohorts for this course.
+      no_active_cohorts: There are no active cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
-      ongoing_prefix_html:
+      active_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled in
         other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      ongoing_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> ongoing cohort.
-        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+      active_suffix_html:
+        one:  <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
     students:

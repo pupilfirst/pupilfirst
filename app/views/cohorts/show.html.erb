@@ -2,7 +2,7 @@
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-6 pb-0">
       <div class="mt-4 overflow-x-auto">
-        <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, ongoing_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
+        <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
       </div>
       <h1 class="text-xl md:text-3xl font-bold mt-4">
         <%= @cohort.name %>

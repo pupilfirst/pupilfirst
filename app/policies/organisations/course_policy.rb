@@ -1,6 +1,6 @@
 module Organisations
   class CoursePolicy < ApplicationPolicy
-    def ongoing_cohorts?
+    def active_cohorts?
       return true if user.school_admin.present?
 
       organisation_ids = user.organisations.pluck(:id)
@@ -13,6 +13,6 @@ module Organisations
         .exists?(users: { organisation_id: organisation_ids })
     end
 
-    alias ended_cohorts? ongoing_cohorts?
+    alias ended_cohorts? active_cohorts?
   end
 end

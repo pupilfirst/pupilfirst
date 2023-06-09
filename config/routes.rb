@@ -184,7 +184,7 @@ Rails.application.routes.draw do
 
     resources :courses,  module: 'organisations', only: [] do
       member do
-        get 'ongoing_cohorts'
+        get 'active_cohorts'
         get 'ended_cohorts'
       end
     end

@@ -11,14 +11,14 @@ class CoursesController < ApplicationController
   # GET /courses/:id/curriculum
   def curriculum
     @presenter = Courses::CurriculumPresenter.new(view_context, @course)
-    render layout: "student_course"
+    render layout: "student_course_v2"
   end
 
   # GET /courses/:id/leaderboard?weeks_before=
   def leaderboard
     @course = authorize(find_course)
     @on = params[:on]
-    render layout: "student_course"
+    render layout: "student_course_v2"
   end
 
   # GET /courses/:id/apply
@@ -80,14 +80,14 @@ class CoursesController < ApplicationController
   # GET /courses/:id/report
   def report
     @course = authorize(find_course)
-    render layout: "student_course"
+    render layout: "student_course_v2"
   end
 
   # GET /courses/:id/calendar
   def calendar
     @course = authorize(find_course)
     @presenter = Courses::CalendarsPresenter.new(view_context, @course, params)
-    render layout: "student_course"
+    render layout: "student_course_v2"
   end
 
   def calendar_month_data

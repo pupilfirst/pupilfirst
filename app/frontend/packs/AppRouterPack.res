@@ -9,15 +9,11 @@ let decodeProps = json => {
   )
 }
 
-Psj.matchPaths(
-  ["courses/:id/review", "submissions/:id/review", "courses/:id/students", "students/:id/report"],
-  () => {
-    let (courses, currentUser, school) =
-      DomUtils.parseJSONTag(~id="app-router-data", ())->decodeProps
+Psj.matchPaths(["courses/:id/review", "submissions/:id/review"], () => {
+  let (courses, currentUser, school) = DomUtils.parseJSONTag(~id="app-router-data", ())->decodeProps
 
-    switch ReactDOM.querySelector("#app-router") {
-    | Some(root) => ReactDOM.render(<AppRouter school courses currentUser />, root)
-    | None => ()
-    }
-  },
-)
+  switch ReactDOM.querySelector("#app-router") {
+  | Some(root) => ReactDOM.render(<AppRouter school courses currentUser />, root)
+  | None => ()
+  }
+})

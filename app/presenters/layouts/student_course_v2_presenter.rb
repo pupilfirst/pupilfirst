@@ -100,11 +100,17 @@ module Layouts
       return if course.nil?
 
       url =
-        case view.request.path
-        when view.review_course_path(@course)
+        case view.request.path.split("/")[3]
+        when "review"
           view.review_course_path(course)
-        when view.students_course_path(@course)
+        when "students", "cohorts"
           view.students_course_path(course)
+        when "calendar"
+          view.calendar_course_path(course)
+        when "curriculum"
+          view.curriculum_course_path(course)
+        else
+          view.curriculum_course_path(course)
         end
 
       { name: course.name, url: url }

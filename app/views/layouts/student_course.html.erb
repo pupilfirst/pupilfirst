@@ -1,5 +1,5 @@
 <% presenter = ::Layouts::StudentCoursePresenter.new(self, @course) %>
-<% content_for(:wrapper) do %>
+<% content_for(:wrapper_1) do %>
   <div id="course-header-root" data-json-props="<%= presenter.props_to_json %>"></div>
   <%= content_for(:inner_wrapper) %>
 <% end %>

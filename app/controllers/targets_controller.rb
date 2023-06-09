@@ -9,7 +9,7 @@ class TargetsController < ApplicationController
   # GET /targets/:id/(:slug)
   def show
     @presenter = Targets::ShowPresenter.new(view_context, @target)
-    render 'courses/curriculum', layout: 'student_course'
+    render "courses/curriculum", layout: "student_course_v2"
   end
 
   # GET /targets/:id/details

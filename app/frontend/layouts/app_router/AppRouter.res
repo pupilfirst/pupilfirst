@@ -1,4 +1,5 @@
 exception UnknownPathEncountered(list<string>)
+%%raw(`import "./components/AppRouter__Nav.css"`)
 
 open AppRouter__Types
 
@@ -39,11 +40,9 @@ let make = (~school, ~courses, ~currentUser) => {
     )
     raise(UnknownPathEncountered(url.path))
   }
-  <div className="md:h-screen md:flex bg-gray-50 overflow-hidden">
-    {ReactUtils.nullUnless(
-      <AppRouter__Nav school courses selectedPage currentUser />,
-      Page.showSideNav(selectedPage),
-    )}
-    {component}
-  </div>
+  // {ReactUtils.nullUnless(
+  //   <AppRouter__Nav school courses selectedPage currentUser />,
+  //   Page.showSideNav(selectedPage),
+  // )}
+  <div className="md:h-screen md:flex bg-gray-50 overflow-hidden"> {component} </div>
 }

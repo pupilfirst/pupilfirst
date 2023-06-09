@@ -136,7 +136,6 @@ describe CourseExports::PrepareStudentsExportService do
 
     submission = submit_target target_l1_quiz, student_5
     submission.update!(quiz_score: "1/2")
-
     # Student has an archived submission - data should not be present in the export
     create :timeline_event,
            :with_owners,
@@ -203,7 +202,7 @@ describe CourseExports::PrepareStudentsExportService do
             nil,
             (
               evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum /
-                2.0
+                3.0
             ).round(2).to_s,
             nil
           ],
@@ -213,7 +212,7 @@ describe CourseExports::PrepareStudentsExportService do
             nil,
             (
               evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum /
-                2.0
+                3.0
             ).round(2).to_s,
             nil
           ]

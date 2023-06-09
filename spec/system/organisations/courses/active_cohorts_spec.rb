@@ -62,11 +62,11 @@ feature "Organisation show" do
   end
 
   context "when the user is an organisation admin" do
-    scenario "user can see all the ongoing cohorts" do
+    scenario "user can see all the active cohorts" do
       sign_in_user(
         org_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link("My Org", href: "/organisations")
@@ -77,9 +77,9 @@ feature "Organisation show" do
 
       expect(page).to have_text("#{course_1.name}")
 
-      expect(page).to have_content("Ongoing Cohorts")
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Ongoing")
+      expect(page).to have_text("Active")
       expect(page).to have_content("2")
 
       expect(page).to have_content("Ended Cohorts")
@@ -93,7 +93,7 @@ feature "Organisation show" do
         href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
-      # Checking ongoing cohorts.
+      # Checking active cohorts.
       within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_1.name,
@@ -122,7 +122,7 @@ feature "Organisation show" do
       )
 
       # Visit the course 2 page.
-      visit ongoing_cohorts_organisation_course_path(organisation_1, course_2)
+      visit active_cohorts_organisation_course_path(organisation_1, course_2)
 
       expect(page).to have_link("My Org", href: "/organisations")
       expect(page).to have_link(
@@ -132,9 +132,9 @@ feature "Organisation show" do
 
       expect(page).to have_text("#{course_2.name}")
 
-      expect(page).to have_content("Ongoing Cohorts")
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Ongoing")
+      expect(page).to have_text("Active")
       expect(page).to have_content("1")
 
       expect(page).to have_content("Ended Cohorts")
@@ -142,7 +142,7 @@ feature "Organisation show" do
       expect(page).to have_text("Ended")
       expect(page).to have_content("0")
 
-      # Checking ongoing cohorts.
+      # Checking active cohorts.
       within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_4.name,
@@ -155,11 +155,11 @@ feature "Organisation show" do
       sign_in_user(
         org_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+        active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link(
@@ -169,10 +169,10 @@ feature "Organisation show" do
       click_link organisation_1.name
       expect(page).to have_current_path(organisation_path(organisation_1))
 
-      visit ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+      visit active_cohorts_organisation_course_path(organisation_1, course_1)
 
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+        active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link("My Org", href: "/organisations")
@@ -180,25 +180,25 @@ feature "Organisation show" do
       expect(page).to have_current_path("/organisations/#{organisation_1.id}")
     end
 
-    scenario "user can not see the ongoing cohorts page of an orgnisation, where he is not an admin" do
+    scenario "user can not see the active cohorts page of an orgnisation, where he is not an admin" do
       sign_in_user(
         org_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_2, course_1)
+          active_cohorts_organisation_course_path(organisation_2, course_1)
       )
 
       expect(page).to have_http_status(:not_found)
     end
 
-    scenario "user can visit ended cohorts page from ongoing cohorts page" do
+    scenario "user can visit ended cohorts page from active cohorts page" do
       sign_in_user(
         org_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+        active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link(
@@ -213,11 +213,11 @@ feature "Organisation show" do
   end
 
   context "when the user is an school admin" do
-    scenario "user can see all the Ongoing cohorts" do
+    scenario "user can see all the Active cohorts" do
       sign_in_user(
         school_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link("My Org", href: "/organisations")
@@ -229,9 +229,9 @@ feature "Organisation show" do
       expect(page).to have_text("#{course_1.name}")
 
       # This is visbile only on devices with screen width greater than 640px.
-      expect(page).to have_content("Ongoing Cohorts")
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Ongoing")
+      expect(page).to have_text("Active")
       expect(page).to have_content("2")
 
       # This is visbile only on devices with screen width greater than 640px.
@@ -246,7 +246,7 @@ feature "Organisation show" do
         href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
-      # Checking ongoing cohorts.
+      # Checking active cohorts.
       within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_1.name,
@@ -275,7 +275,7 @@ feature "Organisation show" do
       )
 
       # Visit the course 2 page.
-      visit ongoing_cohorts_organisation_course_path(organisation_1, course_2)
+      visit active_cohorts_organisation_course_path(organisation_1, course_2)
 
       expect(page).to have_link("My Org", href: "/organisations")
       expect(page).to have_link(
@@ -285,9 +285,9 @@ feature "Organisation show" do
 
       expect(page).to have_text("#{course_2.name}")
 
-      expect(page).to have_content("Ongoing Cohorts")
+      expect(page).to have_content("Active Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Ongoing")
+      expect(page).to have_text("Active")
       expect(page).to have_content("1")
 
       expect(page).to have_content("Ended Cohorts")
@@ -295,7 +295,7 @@ feature "Organisation show" do
       expect(page).to have_text("Ended")
       expect(page).to have_content("0")
 
-      # Checking ongoing cohorts.
+      # Checking active cohorts.
       within("div[class='border border-gray-200 bg-gray-50 rounded-lg p-5']") do
         expect(page).to have_link(
           cohort_4.name,
@@ -308,11 +308,11 @@ feature "Organisation show" do
       sign_in_user(
         school_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+        active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link(
@@ -322,10 +322,10 @@ feature "Organisation show" do
       click_link organisation_1.name
       expect(page).to have_current_path(organisation_path(organisation_1))
 
-      visit ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+      visit active_cohorts_organisation_course_path(organisation_1, course_1)
 
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+        active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link("My Org", href: "/organisations")
@@ -333,25 +333,25 @@ feature "Organisation show" do
       expect(page).to have_current_path("/organisations")
     end
 
-    scenario "user can see the ongoing cohorts page of all the organisations" do
+    scenario "user can see the active cohorts page of all the organisations" do
       sign_in_user(
         school_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_2, course_1)
+          active_cohorts_organisation_course_path(organisation_2, course_1)
       )
 
       expect(page).not_to have_http_status(:not_found)
     end
 
-    scenario "user can visit ended cohorts page from ongoing cohorts page" do
+    scenario "user can visit ended cohorts page from active cohorts page" do
       sign_in_user(
         school_admin_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+        active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_link(
@@ -370,7 +370,7 @@ feature "Organisation show" do
       sign_in_user(
         regular_user,
         referrer:
-          ongoing_cohorts_organisation_course_path(organisation_1, course_1)
+          active_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       expect(page).to have_http_status(:not_found)

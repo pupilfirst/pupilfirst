@@ -32,7 +32,7 @@ class StartupMailer < SchoolMailer
     timeline_event_grades.map { |te_grade|
       criteria_name = te_grade.evaluation_criterion.name
       grade = te_grade.grade
-      grade_icon = grade >= te_grade.evaluation_criterion.pass_grade ? '✅' : '❌'
+      grade_icon = '✅'
       grade_label =
         te_grade
           .evaluation_criterion

@@ -11,22 +11,28 @@
   <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission") : t("mailers.startup.feedback_as_email.body.recent_updates") %>
   <% if @grading_details.present? %>
     <p>
-    <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
+      <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
     </p>
     <ul style="list-style: none; margin: 0px; padding-left: 8px;">
       <% @grading_details.each do |grade_details| %>
-      <li style="padding-bottom: 8px;">
-        <%= grade_details %>
-      </li>
+        <li style="padding-bottom: 8px;">
+          <%= grade_details %>
+        </li>
       <% end %>
     </ul>
     <p style="margin: 0px; padding-top: 16px">
       <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header", coach_name: coach_name, update_for: update_for) %>
     </p>
   <% else %>
-    <p style="margin: 0px;">
-      <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
-    </p>
+    <% if true %>
+      <p style="margin: 0px;">
+        <%= t("mailers.startup.feedback_as_email.body.rejected_feedback", coach_name: coach_name, update_for: update_for) %>
+      </p>
+    <% else %>
+      <p style="margin: 0px;">
+        <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
+      </p>
+    <% end %>
   <% end %>
   <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
     <blockquote style="border-inline-start: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">

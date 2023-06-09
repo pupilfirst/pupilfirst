@@ -779,6 +779,7 @@ en:
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      reject_submission: Reject Submission
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -805,6 +806,8 @@ en:
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
+      undo_rejection: Undo Rejection
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
       write_a_note: Write a Note
     CoursesReview__ReviewerManager:
       assigned_at: Assigned %{date}
@@ -2113,6 +2116,7 @@ en:
           main_html: Here is some feedback from %{coach_name} on your %{update_for}
           recent_submission: recent submission
           recent_updates: recent updates
+          rejected_feedback: Your %{update_for} was rejected by %{coach_name}. Here is some feedback for the rejection
           view_html: You can view %{link_to}, including any files attached to the feedback.
         subject: New feedback from %{startup_feedback} on your submission
     student:

@@ -4,7 +4,7 @@ module Mutations
     include DevelopersNotifications
     include ValidateSubmissionGradable
 
-    argument :grades, [Types::GradeInputType], required: true
+    argument :grades, [Types::GradeInputType], required: false
     argument :feedback,
              String,
              required: false,
@@ -174,12 +174,14 @@ module Mutations
 
     def grade
       TimelineEvent.transaction do
-        evaluation_criteria.each do |criterion|
-          TimelineEventGrade.create!(
-            timeline_event: submission,
-            evaluation_criterion: criterion,
-            grade: grade_hash[criterion.id.to_s]
-          )
+        if !@params[:grades].empty?
+          evaluation_criteria.each do |criterion|
+            TimelineEventGrade.create!(
+              timeline_event: submission,
+              evaluation_criterion: criterion,
+              grade: grade_hash[criterion.id.to_s]
+            )
+          end
         end
 
         submission.update!(
@@ -224,15 +226,8 @@ module Mutations
         end
     end
 
-    def pass_grades
-      @pass_grades ||=
-        grade_hash.keys.index_with do |ec_id|
-          evaluation_criteria.find(ec_id).pass_grade
-        end
-    end
-
     def failed?
-      grade_hash.any? { |ec_id, grade| grade < pass_grades[ec_id] }
+      @params[:grades] == []
     end
 
     def allow_token_auth?

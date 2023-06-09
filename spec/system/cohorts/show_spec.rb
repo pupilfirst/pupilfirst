@@ -41,7 +41,7 @@ feature "Organisation show" do
   end
 
   context "when the user is an organisation admin" do
-    scenario "user can access org overview of ongoing cohort", js: true do
+    scenario "user can access org overview of active cohort", js: true do
       sign_in_user org_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
@@ -75,17 +75,17 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         "#{course.name}",
-        href: ongoing_cohorts_organisation_course_path(organisation, course)
+        href: active_cohorts_organisation_course_path(organisation, course)
       )
       click_link course.name
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation, course)
+        active_cohorts_organisation_course_path(organisation, course)
       )
     end
   end
 
   context "when the user is a school admin" do
-    scenario "user can access org overview of a ongoing cohort" do
+    scenario "user can access org overview of a active cohort" do
       sign_in_user school_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
@@ -112,11 +112,11 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         "#{course.name}",
-        href: ongoing_cohorts_organisation_course_path(organisation, course)
+        href: active_cohorts_organisation_course_path(organisation, course)
       )
       click_link course.name
       expect(page).to have_current_path(
-        ongoing_cohorts_organisation_course_path(organisation, course)
+        active_cohorts_organisation_course_path(organisation, course)
       )
     end
   end

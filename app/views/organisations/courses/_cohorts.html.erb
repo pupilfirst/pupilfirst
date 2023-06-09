@@ -16,7 +16,7 @@
             <span class="hidden sm:inline"><%= t("organisations.courses.#{status}_cohorts_label") %></span>
             <span class="inline sm:hidden"><%= t("organisations.courses.#{status}_cohorts_label").split.first %></span>
             <span class="<%= is_current_page ? 'bg-primary-500 text-white' : 'bg-gray-300 text-gray-900' %> text-xs leading-none rounded-md px-1.5 py-1 ms-1.5">
-              <%= t("organisations.courses.#{status}_cohorts_count", count: @cohorts.send(status).length) %>
+              <%= @cohorts.send(status).length %>
             </span>
           <% end %>
         <% end %>

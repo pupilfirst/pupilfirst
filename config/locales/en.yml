@@ -2364,11 +2364,9 @@ en:
       profile_saved_notification: Profile updated successfully!
   organisations:
     courses:
-      ongoing_cohorts_count: "%{count}"
       ongoing_cohorts_label: Ongoing Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      ended_cohorts_count: "%{count}"
       ended_cohorts_label: Ended Cohorts
       end_date: "End Date:"
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.

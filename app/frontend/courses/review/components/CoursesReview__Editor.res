@@ -1346,7 +1346,7 @@ let make = (
                 </div>
               </div>
               <div
-                className="flex justify-end bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ms-8">
+                className="flex gap-4 overflow-x-auto bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ms-8">
                 <button
                   disabled={!reviewButtonDisabled(status)}
                   className="btn btn-danger btn-large w-full border border-red-600"

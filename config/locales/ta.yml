@@ -2380,28 +2380,27 @@ ta:
       profile_saved_notification: சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
   organisations:
     courses:
-      active_cohorts_count: "%{count}"
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      inactive_cohorts_count: "%{count}"
-      inactive_cohorts_label: Inactive Cohorts
+      ended_cohorts_label: Ended Cohorts
+      end_date: "End Date:"
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: நிறுவனங்கள்
     show:
       active_students_label: செயலில் மாணவர்கள்
-      ongoing_cohorts_subheading: Ongoing Cohorts
+      active_cohorts_subheading: Active Cohorts
       end_date: "End Date:"
-      no_ongoing_cohorts: There are no ongoing cohorts for this course.
+      no_active_cohorts: There are no active cohorts for this course.
       organisation_label: அமைப்பு
       students_enrolled_heading: மாணவர்கள் சேர்ந்தனர்
-      ongoing_prefix_html:
+      active_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled in
         other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      ongoing_suffix_html:
-        one: <span class="font-semibold text-black">1</span> ongoing cohort.
-        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: மொத்த மாணவர்கள்
       view_all_cohorts: View All Cohorts
     students:

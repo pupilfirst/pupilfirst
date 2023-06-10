@@ -279,8 +279,8 @@ let undoGrading = (submissionId, send) => {
   |> ignore
 }
 
-let passed = overlaySubmission => {
-  OverlaySubmission.passedAt(overlaySubmission) == None ? false : true
+let passed = grades => {
+  grades == [] ? false : true
 }
 
 let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)
@@ -293,7 +293,6 @@ let gradeSubmissionQuery = (
   submissionId,
   state,
   send,
-  evaluationCriteria,
   overlaySubmission,
   currentUser,
   updateSubmissionCB,
@@ -327,7 +326,7 @@ let gradeSubmissionQuery = (
       ? {
           updateSubmissionCB(
             OverlaySubmission.update(
-              passed(overlaySubmission) ? Some(Js.Date.make()) : None,
+              passed(state.grades) ? Some(Js.Date.make()) : None,
               Some(User.name(currentUser)),
               Js.Array.concat(
                 Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
@@ -787,7 +786,6 @@ let gradeSubmission = (
   submissionId,
   state,
   send,
-  evaluationCriteria,
   updateSubmissionCB,
   status,
   currentUser,
@@ -801,7 +799,6 @@ let gradeSubmission = (
       submissionId,
       state,
       send,
-      evaluationCriteria,
       overlaySubmission,
       currentUser,
       updateSubmissionCB,
@@ -812,7 +809,6 @@ let gradeSubmission = (
       submissionId,
       state,
       send,
-      evaluationCriteria,
       overlaySubmission,
       currentUser,
       updateSubmissionCB,
@@ -849,7 +845,7 @@ let computeStatus = (
     } else if Array.length(selectedGrades) != Array.length(currentGradingCriteria) {
       Grading
     } else {
-      Graded(passed(overlaySubmission))
+      Graded(passed(selectedGrades))
     }
   }
 }
@@ -1358,7 +1354,6 @@ let make = (
                     OverlaySubmission.id(overlaySubmission),
                     state,
                     send,
-                    evaluationCriteria,
                     updateSubmissionCB,
                     status,
                     currentUser,
@@ -1373,7 +1368,6 @@ let make = (
                     OverlaySubmission.id(overlaySubmission),
                     state,
                     send,
-                    evaluationCriteria,
                     updateSubmissionCB,
                     status,
                     currentUser,

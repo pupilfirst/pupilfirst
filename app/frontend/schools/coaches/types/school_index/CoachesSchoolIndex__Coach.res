@@ -70,12 +70,3 @@ let make = (
   imageFileName: imageFileName,
   affiliation: affiliation,
 }
-
-let updateList = (coaches, coach) => {
-  let oldList = coaches |> List.filter(t => t.id !== coach.id)
-  oldList
-  |> List.rev
-  |> List.append(list{coach})
-  |> List.rev
-  |> List.sort((x, y) => int_of_string(x.id) - int_of_string(y.id))
-}

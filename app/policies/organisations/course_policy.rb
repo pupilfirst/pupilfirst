@@ -13,6 +13,6 @@ module Organisations
         .exists?(users: { organisation_id: organisation_ids })
     end
 
-    alias inactive_cohorts? active_cohorts?
+    alias ended_cohorts? active_cohorts?
   end
 end

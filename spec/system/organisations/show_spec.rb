@@ -75,11 +75,11 @@ feature "Organisation show" do
       expect(page).to have_text("Active Students\n6")
 
       expect(page).to have_text(
-        "#{course_1.name}\n4 students enrolled in 2 active cohorts"
+        "#{course_1.name}\n4 students enrolled in 2 active cohorts."
       )
 
       expect(page).to have_text(
-        "#{course_2.name}\n2 students enrolled in 1 active cohort"
+        "#{course_2.name}\n2 students enrolled in 1 active cohort."
       )
 
       # There should be links to three active cohorts...
@@ -98,7 +98,7 @@ feature "Organisation show" do
         href: organisation_cohort_path(organisation_1, cohort_4)
       )
 
-      # ...but not to the inactive cohort.
+      # ...but not to the ended cohort.
       expect(page).not_to have_link(cohort_3.name)
 
       # There should be a link to view all cohorts of course 1 .
@@ -111,10 +111,9 @@ feature "Organisation show" do
     scenario "check for view all cohorts links" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
-      # There should be two view all cohorts links.
-      expect(all("a", text: "View All Cohorts").count).to eq(2)
+      # There should be only one View All Cohorts link.
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
 
-      # Click on the first link.
       click_link "View All Cohorts",
                  href:
                    active_cohorts_organisation_course_path(
@@ -125,6 +124,30 @@ feature "Organisation show" do
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(
         active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
+    end
+
+    scenario "check for view all cohorts link when a course has only ended cohorts" do
+      sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
+
+      # There should be two view all cohorts links.
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
+
+      # update ends_at of cohort 4 to be in the past
+      cohort_4.update!(ends_at: 1.day.ago)
+
+      visit organisation_path(organisation_1)
+
+      click_link "View All Cohorts",
+                 href:
+                   ended_cohorts_organisation_course_path(
+                     organisation_1,
+                     course_2
+                   )
+
+      # The user should be taken to the ended cohorts page.
+      expect(page).to have_current_path(
+        ended_cohorts_organisation_course_path(organisation_1, course_2)
       )
     end
   end
@@ -157,8 +180,8 @@ feature "Organisation show" do
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
 
-      # There should be a link to view all cohorts of course 1.
-      expect(page).to have_link(
+      # There should not be view all cohorts link for course with only active cohorts
+      expect(page).not_to have_link(
         "View All Cohorts",
         href: active_cohorts_organisation_course_path(organisation_2, course_1)
       )
@@ -171,9 +194,8 @@ feature "Organisation show" do
       )
 
       # There should be two view all cohorts links.
-      expect(all("a", text: "View All Cohorts").count).to eq(2)
+      expect(all("a", text: "View All Cohorts").count).to eq(1)
 
-      # Click on the first link.
       click_link "View All Cohorts",
                  href:
                    active_cohorts_organisation_course_path(
@@ -184,6 +206,30 @@ feature "Organisation show" do
       # The user should be taken to the active cohorts page.
       expect(page).to have_current_path(
         active_cohorts_organisation_course_path(organisation_1, course_1)
+      )
+    end
+
+    scenario "check for view all cohorts link when a course has only ended cohorts" do
+      sign_in_user(
+        school_admin_user,
+        referrer: organisation_path(organisation_2)
+      )
+
+      # update ends_at of cohort 1 to be in the past
+      cohort_1.update!(ends_at: 2.days.ago)
+
+      visit organisation_path(organisation_2)
+
+      click_link "View All Cohorts",
+                 href:
+                   ended_cohorts_organisation_course_path(
+                     organisation_2,
+                     course_1
+                   )
+
+      # The user should be taken to the ended cohorts page.
+      expect(page).to have_current_path(
+        ended_cohorts_organisation_course_path(organisation_2, course_1)
       )
     end
   end

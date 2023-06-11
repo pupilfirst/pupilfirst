@@ -248,7 +248,6 @@ let averageGradeCharts = (
       evaluationCriteria,
       "CoursesStudents__StudentOverlay",
     )
-    let averageGrade = grade |> StudentDetails.gradeValue
     <div
       ariaLabel={"average-grade-for-criterion-" ++
       (criterion |> CoursesStudents__EvaluationCriterion.id)}
@@ -257,18 +256,10 @@ let averageGradeCharts = (
       <div className="student-overlay__pie-chart-container">
         <div className="flex px-5 pt-4 text-center items-center">
           <svg
-            className={"student-overlay__pie-chart " ++ (
-              averageGrade < 0.0
-                ? "student-overlay__pie-chart--fail"
-                : "student-overlay__pie-chart--pass"
-            )}
+            className="student-overlay__pie-chart student-overlay__pie-chart--pass"
             viewBox="0 0 32 32">
             <circle
-              className={"student-overlay__pie-chart-circle " ++ (
-                averageGrade < 0.0
-                  ? "student-overlay__pie-chart-circle--fail"
-                  : "student-overlay__pie-chart-circle--pass"
-              )}
+              className="student-overlay__pie-chart-circle student-overlay__pie-chart-circle--pass"
               strokeDasharray={StudentDetails.gradeAsPercentage(grade, criterion) ++ ", 100"}
               r="16"
               cx="16"

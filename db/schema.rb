@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_10_125223) do
+ActiveRecord::Schema.define(version: 2023_06_11_131427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -292,7 +292,6 @@ ActiveRecord::Schema.define(version: 2023_06_10_125223) do
     t.string "name"
     t.bigint "course_id"
     t.integer "max_grade"
-    t.integer "pass_grade"
     t.jsonb "grade_labels"
     t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end

@@ -1179,7 +1179,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/evaluation_criteria
         label: Grade and Labels
       important: Important
-      important_details: The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
+      important_details: The value of maximum grade cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
       label_grade_placeholder: Label for grade
       max_grade: Maximum grade is
       name_error: Enter a valid name

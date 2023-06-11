@@ -8,20 +8,18 @@ let ts = I18n.ts
 type state = {
   name: string,
   maxGrade: int,
-  passGrade: int,
   gradesAndLabels: array<GradeLabel.t>,
   saving: bool,
   dirty: bool,
 }
 
 module CreateEvaluationCriterionQuery = %graphql(`
-   mutation CreateEvaluationCriterionMutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
-     createEvaluationCriterion(courseId: $courseId, name: $name, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
+   mutation CreateEvaluationCriterionMutation($name: String!, $courseId: ID!, $maxGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
+     createEvaluationCriterion(courseId: $courseId, name: $name, maxGrade: $maxGrade, gradesAndLabels: $gradesAndLabels ) {
        evaluationCriterion {
         id
         name
         maxGrade
-        passGrade
         gradeLabels {
           grade
           label
@@ -38,7 +36,6 @@ module UpdateEvaluationCriterionQuery = %graphql(`
         id
         name
         maxGrade
-        passGrade
         gradeLabels {
           grade
           label
@@ -64,14 +61,7 @@ let gradeBarBulletClasses = (selected, passed, empty) => {
   }
 }
 
-let updateMaxGrade = (value, state, setState) =>
-  if value < state.passGrade {
-    setState(state => {...state, passGrade: value, maxGrade: value})
-  } else {
-    setState(state => {...state, maxGrade: value})
-  }
-
-let updatePassGrade = (value, setState) => setState(state => {...state, passGrade: value})
+let updateMaxGrade = (value, state, setState) => setState(state => {...state, maxGrade: value})
 
 let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
   let updatedGradeAndLabel = GradeLabel.update(value, gradeAndLabel)
@@ -133,7 +123,6 @@ let createEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, course
   let variables = CreateEvaluationCriterionQuery.makeVariables(
     ~name=state.name,
     ~maxGrade=state.maxGrade,
-    ~passGrade=state.passGrade,
     ~courseId,
     ~gradesAndLabels,
     (),
@@ -160,14 +149,6 @@ let saveDisabled = state => {
   !state.dirty || (state.saving || !hasValidName)
 }
 
-let labelClasses = (grade, passGrade) => {
-  let failGradeClasses = "bg-red-300 text-red-700 border-red-500"
-  let passGradeClasses = "bg-green-300 text-green-700 border-green-500"
-  "w-12 p-3 text-center  me-3 rounded-lg border  leading-tight " ++ (
-    grade < passGrade ? failGradeClasses : passGradeClasses
-  )
-}
-
 let labels = (state, setState) =>
   state.gradesAndLabels
   |> Js.Array.filter(gnl => gnl |> GradeLabel.grade <= state.maxGrade)
@@ -175,7 +156,9 @@ let labels = (state, setState) =>
     let grade = gradeAndLabel |> GradeLabel.grade
 
     <div key={grade |> string_of_int} className="flex flex-wrap mt-2">
-      <div className={labelClasses(grade, state.passGrade)}> {grade |> string_of_int |> str} </div>
+      <div className="bg-green-300 text-green-700 border-green-500">
+        {grade |> string_of_int |> str}
+      </div>
       <div className="flex-1">
         <input
           id={"grade-label-for-" ++ (grade |> string_of_int)}
@@ -205,7 +188,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
     | None => {
         name: "",
         maxGrade: 5,
-        passGrade: 2,
         gradesAndLabels: possibleGradeValues |> List.map(i => GradeLabel.empty(i)) |> Array.of_list,
         saving: false,
         dirty: false,
@@ -213,7 +195,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
     | Some(ec) => {
         name: ec |> EvaluationCriterion.name,
         maxGrade: ec |> EvaluationCriterion.maxGrade,
-        passGrade: ec |> EvaluationCriterion.passGrade,
         gradesAndLabels: ec |> EvaluationCriterion.gradesAndLabels,
         saving: false,
         dirty: false,
@@ -293,40 +274,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   |> React.array}
                 </select>
               }}
-              <span
-                className="inline-block tracking-wide text-sm font-semibold mx-2"
-                htmlFor="pass_grades">
-                {t("passing_grade") |> str}
-              </span>
-              {switch evaluationCriterion {
-              | Some(_) =>
-                <span
-                  className="cursor-not-allowed inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue px-3 py-2 leading-tight rounded-none">
-                  {state.passGrade |> string_of_int |> str}
-                </span>
-              | None =>
-                <select
-                  onChange={event =>
-                    updatePassGrade(
-                      ReactEvent.Form.target(event)["value"] |> int_of_string,
-                      setState,
-                    )}
-                  id="pass_grade"
-                  value={state.passGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-blue-500 px-3 py-2 rounded-none leading-tight focus:outline-none focus:border-focusColor-500">
-                  {possibleGradeValues
-                  |> List.filter(g => g <= state.maxGrade)
-                  |> List.map(possibleGradeValue =>
-                    <option
-                      key={possibleGradeValue |> string_of_int}
-                      value={possibleGradeValue |> string_of_int}>
-                      {possibleGradeValue |> string_of_int |> str}
-                    </option>
-                  )
-                  |> Array.of_list
-                  |> React.array}
-                </select>
-              }}
             </div>
             <div className="flex justify-between">
               <div className="flex items-center">
@@ -336,16 +283,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                 <HelpIcon className="ms-2" link={t("grade_labels.help_url")}>
                   {t("grade_labels.help") |> str}
                 </HelpIcon>
-              </div>
-              <div className="flex">
-                <div className="flex justify-center items-center ms-4">
-                  <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed" />
-                  <span className="ms-2 text-xs"> {ts("fail") |> str} </span>
-                </div>
-                <div className="flex justify-center items-center ms-4">
-                  <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed" />
-                  <span className="ms-2 text-xs"> {ts("pass") |> str} </span>
-                </div>
               </div>
             </div>
             <div ariaLabel="label-editor"> {labels(state, setState) |> React.array} </div>

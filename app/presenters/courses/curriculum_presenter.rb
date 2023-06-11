@@ -66,7 +66,6 @@ module Courses
           'id',
           'name',
           'max_grade',
-          'pass_grade',
           'grade_labels'
         )
       end

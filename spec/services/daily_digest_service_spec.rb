@@ -344,7 +344,7 @@ describe DailyDigestService do
       end
       let(:grade_labels_for_1) do
         [
-          { 'grade' => 1, 'label' => 'Bad' },
+          { 'grade' => 1, 'label' => 'Okay' },
           { 'grade' => 2, 'label' => 'Good' },
           { 'grade' => 3, 'label' => 'Great' },
           { 'grade' => 4, 'label' => 'Wow' }
@@ -354,7 +354,6 @@ describe DailyDigestService do
         create :evaluation_criterion,
                course: course_1,
                max_grade: 4,
-               pass_grade: 2,
                grade_labels: grade_labels_for_1
       end
 
@@ -378,7 +377,7 @@ describe DailyDigestService do
       end
       let(:grade_labels_for_2) do
         [
-          { 'grade' => 1, 'label' => 'Bad' },
+          { 'grade' => 1, 'label' => 'Okay' },
           { 'grade' => 2, 'label' => 'Good' },
           { 'grade' => 3, 'label' => 'Great' },
           { 'grade' => 4, 'label' => 'Wow' }
@@ -388,7 +387,6 @@ describe DailyDigestService do
         create :evaluation_criterion,
                course: course_2,
                max_grade: 4,
-               pass_grade: 2,
                grade_labels: grade_labels_for_2
       end
 
@@ -520,7 +518,6 @@ describe DailyDigestService do
         create :evaluation_criterion,
                course: course_1,
                max_grade: 4,
-               pass_grade: 2,
                grade_labels: grade_labels_for_1
       end
 

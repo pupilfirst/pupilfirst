@@ -25,7 +25,6 @@ module Schools
             id: ec.id,
             name: ec.name,
             max_grade: ec.max_grade,
-            pass_grade: ec.pass_grade,
             grade_labels: ec.grade_labels
           }
         end

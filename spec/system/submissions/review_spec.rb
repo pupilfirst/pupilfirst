@@ -30,7 +30,6 @@ feature "Submission review overlay", js: true do
     create :evaluation_criterion,
            course: course,
            max_grade: 4,
-           pass_grade: 2,
            grade_labels: grade_labels_for_1
   end
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }

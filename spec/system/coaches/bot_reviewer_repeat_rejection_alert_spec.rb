@@ -27,7 +27,6 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
     create :evaluation_criterion,
            course: course,
            max_grade: 2,
-           pass_grade: 2,
            grade_labels: grade_labels
   end
 

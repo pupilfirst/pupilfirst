@@ -111,7 +111,6 @@ let averageGradeCharts = (
   averageGrades
   |> Array.map(grade => {
     let criterion = StudentOverview.evaluationCriterionForGrade(grade, evaluationCriteria)
-    let passGrade = criterion |> CoursesReport__EvaluationCriterion.passGrade |> float_of_int
     let averageGrade = grade |> StudentOverview.gradeValue
     <div
       ariaLabel={"average-grade-for-criterion-" ++
@@ -122,14 +121,14 @@ let averageGradeCharts = (
         <div className="flex px-5 pt-4 text-center items-center">
           <svg
             className={"courses-report-overview__pie-chart " ++ (
-              averageGrade < passGrade
+              averageGrade < 0.0
                 ? "courses-report-overview__pie-chart--fail"
                 : "courses-report-overview__pie-chart--pass"
             )}
             viewBox="0 0 32 32">
             <circle
               className={"courses-report-overview__pie-chart-circle " ++ (
-                averageGrade < passGrade
+                averageGrade < 0.0
                   ? "courses-report-overview__pie-chart-circle--fail"
                   : "courses-report-overview__pie-chart-circle--pass"
               )}

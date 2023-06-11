@@ -19,7 +19,6 @@ feature 'Submission Builder', js: true do
     create :evaluation_criterion,
            course: course,
            max_grade: 4,
-           pass_grade: 2,
            grade_labels: grade_labels_for_1
   end
   let!(:level_1) { create :level, :one, course: course }

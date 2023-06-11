@@ -67,7 +67,7 @@ module StudentReportOverviewQuery = %graphql(`
     query StudentReportOverviewQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         evaluationCriteria {
-          id, name, maxGrade, passGrade
+          id, name, maxGrade
         },
         student {
           level {

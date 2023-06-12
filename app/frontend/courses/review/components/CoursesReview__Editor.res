@@ -1423,14 +1423,14 @@ let make = (
                 {submissionReviewStatus(status, overlaySubmission)}
               </div>
               <div className="w-full p-4 md:p-6">
-                <div className="flex items-center justify-between">
-                  <h5 className="font-medium text-sm flex items-center">
-                    <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ms-2 md:ms-3 tracking-wide"> {t("grade_card")->str} </span>
-                  </h5>
-                  <div>
-                    {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
-                    | (Some(_), Graded(_)) =>
+                {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
+                | (Some(_), Graded(_)) =>
+                  <div className="flex items-center justify-between">
+                    <h5 className="font-medium text-sm flex items-center">
+                      <Icon className="if i-tachometer-light text-gray-800 text-base" />
+                      <span className="ms-2 md:ms-3 tracking-wide"> {t("grade_card")->str} </span>
+                    </h5>
+                    <div>
                       <div>
                         <button
                           onClick={_ =>
@@ -1443,7 +1443,11 @@ let make = (
                           <span className="ms-2"> {t("undo_grading")->str} </span>
                         </button>
                       </div>
-                    | (Some(_), Ungraded) =>
+                    </div>
+                  </div>
+                | (Some(_), Ungraded) =>
+                  <div className="flex items-center justify-center">
+                    <div>
                       <div>
                         <button
                           onClick={_ =>
@@ -1456,12 +1460,12 @@ let make = (
                           <span className="ms-2"> {t("undo_rejection")->str} </span>
                         </button>
                       </div>
-                    | (None, Graded(_))
-                    | (_, Grading)
-                    | (_, Ungraded) => React.null
-                    }}
+                    </div>
                   </div>
-                </div>
+                | (None, Graded(_))
+                | (_, Grading)
+                | (_, Ungraded) => React.null
+                }}
                 <div className="flex md:flex-row flex-col md:ms-8 bg-gray-50 mt-2">
                   <div className="w-full">
                     {showGrades(grades, evaluationCriteria, submissionDetails, state)}

@@ -1837,6 +1837,7 @@ en:
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
       avatar_uploaded_notification: Avatar uploaded successfully.
       cancel: Cancel
+      cancel_new_email: Cancel
       change_password: Change your current password
       change_photo: Change photo
       community_digest: Community Digest
@@ -1854,6 +1855,7 @@ en:
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
       email_label: Email
+      new_email_label: New Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
       initiate_deletion: Initiate Deletion

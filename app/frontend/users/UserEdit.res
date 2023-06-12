@@ -12,6 +12,7 @@ type state = {
   about: string,
   locale: string,
   email: string,
+  newEmail: string,
   disableEmailInput: bool,
   avatarUrl: option<string>,
   currentPassword: string,
@@ -32,6 +33,7 @@ type action =
   | UpdatePreferredName(string)
   | UpdateAbout(string)
   | UpdateEmail(string)
+  | UpdateNewEmail(string)
   | SetDisableUpdateEmail(bool)
   | UpdateLocale(string)
   | UpdateCurrentPassword(string)
@@ -48,6 +50,12 @@ type action =
   | StartDeletingAccount
   | FinishAccountDeletion
   | UpdateEmailAndDisableInput(string)
+  | CancelNewEmailRequest(string)
+
+let newValue = switch Dom.Storage2.getItem(Dom.Storage2.localStorage, "newEmail") {
+| Some(value) => value
+| None => ""
+}
 
 let reducer = (state, action) =>
   switch action {
@@ -55,6 +63,7 @@ let reducer = (state, action) =>
   | UpdatePreferredName(preferredName) => {...state, preferredName: preferredName, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
   | UpdateEmail(email) => {...state, email: email, dirty: true}
+  | UpdateNewEmail(newValue) => {...state, newEmail: newValue, dirty: true}
   | SetDisableUpdateEmail(disableEmailInput) => {
       ...state,
       disableEmailInput: disableEmailInput,
@@ -111,6 +120,13 @@ let reducer = (state, action) =>
       dirty: true,
       disableEmailInput: true,
     }
+  | CancelNewEmailRequest(email) => {
+      ...state,
+      email: email,
+      newEmail: "",
+      dirty: true,
+      disableEmailInput: true,
+    }
   }
 
 module UpdateUserQuery = %graphql(`
@@ -153,14 +169,16 @@ let uploadAvatar = (send, formData) => {
 
 let updateEmail = (send, email, newEmail) => {
   send(SetDisableUpdateEmail(false))
-
+  send(UpdateNewEmail(newEmail))
   SendEmailUpdateTokenQuery.fetch({newEmail: newEmail})
   |> Js.Promise.then_(_ => {
     send(SetDisableUpdateEmail(true))
+    Dom.Storage2.setItem(Dom.Storage2.localStorage, "newEmail", newEmail)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
     send(UpdateEmailAndDisableInput(email))
+    send(CancelNewEmailRequest(email))
     Js.Promise.resolve()
   })
   |> ignore
@@ -320,6 +338,7 @@ let make = (
     about: about,
     locale: locale,
     email: email,
+    newEmail: newValue,
     disableEmailInput: true,
     avatarUrl: avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
@@ -336,6 +355,11 @@ let make = (
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
+
+  let cancelNewEmailRequest = () => {
+    Dom.Storage2.removeItem(Dom.Storage2.localStorage, "newEmail")
+    send(CancelNewEmailRequest(email))
+  }
 
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {confirmDeletionWindow(state, send)}
@@ -474,6 +498,36 @@ let make = (
                     </div>}
               </div>
             </div>
+            {state.newEmail == email
+              ? ""->str
+              : state.newEmail !== ""
+              ? <div className="mt-6">
+                <label
+                  name="user_new_email"
+                  className="block text-sm font-semibold"
+                  htmlFor="user_new_email">
+                  {t("new_email_label")->str}
+                </label>
+                <div className="mt-2 flex items-stretch gap-2">
+                  <input
+                    name="user_new_email"
+                    id="user-update__new-email-input"
+                    type_="email"
+                    ariaLabel="User New Email"
+                    disabled=true
+                    value=state.newEmail
+                    className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    placeholder="New Email"
+                  />
+                  {state.disableEmailInput
+                    ? <button className="btn btn-secondary" onClick={_ => cancelNewEmailRequest()}>
+                        {t("cancel_new_email")->str}
+                      </button>
+                    : <button />}
+                </div>
+              </div>
+              : ""->str}
+            <div />
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">

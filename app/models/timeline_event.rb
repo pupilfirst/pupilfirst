@@ -66,7 +66,7 @@ class TimelineEvent < ApplicationRecord
   attr_accessor :files
 
   def reviewed?
-    timeline_event_grades.present?
+    evaluated_at.present? or passed_at.present?
   end
 
   def overall_grade_from_score

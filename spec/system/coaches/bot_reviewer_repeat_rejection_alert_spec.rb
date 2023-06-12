@@ -18,7 +18,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
   let(:grade_labels) do
     [
-      { 'grade' => 1, 'label' => 'Reject' },
+      { 'grade' => 1, 'label' => 'Okay' },
       { 'grade' => 2, 'label' => 'Accept' }
     ]
   end
@@ -74,11 +74,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
       dismiss_notification
 
-      within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
-      ) { find("button[title='Reject']").click }
-
-      click_button 'Save grades'
+      click_button 'Reject Submission'
 
       expect(page).to have_text('The submission has been marked as reviewed')
 
@@ -100,11 +96,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
       dismiss_notification
 
-      within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
-      ) { find("button[title='Reject']").click }
-
-      click_button 'Save grades'
+      click_button 'Reject Submission'
 
       expect(page).to have_text('The submission has been marked as reviewed')
 
@@ -133,11 +125,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
       dismiss_notification
 
-      within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
-      ) { find("button[title='Reject']").click }
-
-      click_button 'Save grades'
+      click_button 'Reject Submission'
 
       expect(page).to have_text('The submission has been marked as reviewed')
 

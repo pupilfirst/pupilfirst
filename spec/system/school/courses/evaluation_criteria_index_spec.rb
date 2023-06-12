@@ -47,7 +47,7 @@ feature 'Evaluation criteria index spec', js: true do
       expect(page).to have_selector('input', count: 4)
     end
 
-    fill_in 'grade-label-for-1', with: 'Bad'
+    fill_in 'grade-label-for-1', with: 'Okay'
     fill_in 'grade-label-for-2', with: 'Good'
     fill_in 'grade-label-for-3', with: 'Great'
     fill_in 'grade-label-for-4', with: 'Wow'
@@ -62,7 +62,7 @@ feature 'Evaluation criteria index spec', js: true do
 
     expect(evaluation_criterion.name).to eq(new_ec_name)
     expect(evaluation_criterion.max_grade).to eq(4)
-    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq('Bad')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq('Okay')
     expect(label_for_grade(evaluation_criterion.grade_labels, 2)).to eq('Good')
     expect(label_for_grade(evaluation_criterion.grade_labels, 3)).to eq('Great')
     expect(label_for_grade(evaluation_criterion.grade_labels, 4)).to eq('Wow')

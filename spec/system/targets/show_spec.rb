@@ -9,7 +9,7 @@ feature 'Target Overlay', js: true do
   let(:course) { create :course }
   let(:grade_labels_for_1) do
     [
-      { 'grade' => 1, 'label' => 'Bad' },
+      { 'grade' => 1, 'label' => 'Okay' },
       { 'grade' => 2, 'label' => 'Good' },
       { 'grade' => 3, 'label' => 'Great' },
       { 'grade' => 4, 'label' => 'Wow' }
@@ -588,7 +588,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content(submission_1.checklist.first['result'])
 
         expect(page).to have_content("#{criterion_1.name}: Good")
-        expect(page).to have_content("#{criterion_2.name}: Bad")
+        expect(page).to have_content("#{criterion_2.name}: Okay")
 
         expect(page).to have_content(coach_1.name)
         expect(page).to have_content(coach_1.title)

@@ -230,12 +230,11 @@ feature 'Automatic issuance of certificates', js: true do
           # No issued certificates, yet.
           expect(IssuedCertificate.count).to eq(0)
 
-          # Switch to the review interface and set a fail grade for it.
+          # Switch to the review interface and reject submission for it.
           visit review_timeline_event_path(target_l2_2.timeline_events.last)
           click_button 'Start Review'
           dismiss_notification
-          find("button[title='Bad']").click
-          click_button 'Save grades'
+          click_button 'Reject Submission'
 
           expect(page).to have_text(
             'The submission has been marked as reviewed'
@@ -244,8 +243,8 @@ feature 'Automatic issuance of certificates', js: true do
           # No issued certificates, still.
           expect(IssuedCertificate.count).to eq(0)
 
-          # Undo the grading and set a pass grade.
-          accept_confirm { click_button('Undo Grading') }
+          # Undo the rejection and set a pass grade.
+          accept_confirm { click_button('Undo Rejection') }
           click_button 'Start Review'
           dismiss_notification
           find("button[title='Good']").click

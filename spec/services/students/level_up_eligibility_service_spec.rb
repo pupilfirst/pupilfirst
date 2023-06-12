@@ -193,7 +193,7 @@ describe Students::LevelUpEligibilityService do
           before do
             submit_target team_target,
                           student,
-                          grade: SubmissionsHelper::GRADE_FAIL
+                          submission_evaluation: SubmissionsHelper::SUBMISSION_FAIL
           end
 
           it "returns 'PreviousLevelIncomplete'" do
@@ -237,7 +237,7 @@ describe Students::LevelUpEligibilityService do
                 .each do |other_student|
                   submit_target individual_target,
                                 other_student,
-                                grade: SubmissionsHelper::GRADE_FAIL
+                                submission_evaluation: SubmissionsHelper::SUBMISSION_FAIL
                 end
             end
 

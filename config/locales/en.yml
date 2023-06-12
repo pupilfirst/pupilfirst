@@ -2599,7 +2599,7 @@ en:
       demo_content_service:
         criterion_one: Correctness of implementation
         criterion_two: Quality of submission
-        grade_1: Bad
+        grade_1: Okay
         grade_2: Good
         grade_3: Great
         level_1: Level 1

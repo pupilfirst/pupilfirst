@@ -118,7 +118,7 @@ feature 'Student levelling up', js: true do
         let(:target) { target_l2 }
 
         before do
-          submit_target target_l1, student, grade: SubmissionsHelper::GRADE_FAIL
+          submit_target target_l1, student, submission_evaluation: SubmissionsHelper::SUBMISSION_FAIL
         end
 
         include_examples 'student is limited to current level'

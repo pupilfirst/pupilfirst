@@ -508,7 +508,7 @@ describe DailyDigestService do
       end
       let(:grade_labels_for_1) do
         [
-          { 'grade' => 1, 'label' => 'Bad' },
+          { 'grade' => 1, 'label' => 'Okay' },
           { 'grade' => 2, 'label' => 'Good' },
           { 'grade' => 3, 'label' => 'Great' },
           { 'grade' => 4, 'label' => 'Wow' }

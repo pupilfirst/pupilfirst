@@ -20,7 +20,7 @@ feature "Submission review overlay", js: true do
   end
   let(:grade_labels_for_1) do
     [
-      { "grade" => 1, "label" => "Bad" },
+      { "grade" => 1, "label" => "Okay" },
       { "grade" => 2, "label" => "Good" },
       { "grade" => 3, "label" => "Great" },
       { "grade" => 4, "label" => "Wow" },
@@ -169,7 +169,7 @@ feature "Submission review overlay", js: true do
           ".course-review-editor__grade-pill",
           count: 4,
         )
-        find("button[title='Bad']").click
+        find("button[title='Okay']").click
       end
 
       # status should be reviewing as the target is not graded completely
@@ -183,21 +183,21 @@ feature "Submission review overlay", js: true do
           ".course-review-editor__grade-pill",
           count: 3,
         )
-        find("button[title='Bad']").click
+        find("button[title='Okay']").click
       end
 
-      # the status should be Rejected
+      # the status should be Completed
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Rejected")
+        expect(page).to have_text("Completed")
       end
 
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
       ) { find("button[title='Good']").click }
 
-      # the status should be Rejected
+      # the status should still be Completed
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Rejected")
+        expect(page).to have_text("Completed")
       end
 
       click_button "Save grades & send feedback"
@@ -216,7 +216,7 @@ feature "Submission review overlay", js: true do
       expect(submission.reviewer).to eq(nil)
       expect(submission.reviewer_assigned_at).to eq(nil)
       expect(submission.evaluator_id).to eq(coach.id)
-      expect(submission.passed_at).to eq(nil)
+      expect(submission.passed_at).not_to eq(nil)
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
@@ -1013,7 +1013,7 @@ feature "Submission review overlay", js: true do
       )
       grade_submission(
         submission_pending,
-        SubmissionsHelper::GRADE_PASS,
+        SubmissionsHelper::SUBMISSION_PASS,
         target,
       )
 
@@ -1317,7 +1317,7 @@ feature "Submission review overlay", js: true do
 
         within(
           "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
-        ) { find("button[title='Bad']").click }
+        ) { find("button[title='Okay']").click }
 
         click_button "Save grades"
 

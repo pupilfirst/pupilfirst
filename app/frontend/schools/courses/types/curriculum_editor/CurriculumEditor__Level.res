@@ -23,10 +23,10 @@ let decode = json => {
   }
 }
 
-let selectLevel = (levels, level_name) =>
+let selectLevel = (levels, level_id) =>
   levels |> ArrayUtils.unsafeFind(
-    q => q.name == level_name,
-    "Unable to find level with name: " ++ (level_name ++ "in CurriculumEditor"),
+    q => q.id == level_id,
+    `Unable to find level with specified level id, ID=${level_id}, in CurriculumEditor`,
   )
 
 let create = (id, name, number, unlockAt) => {
@@ -49,4 +49,4 @@ let unsafeFind = (levels, componentName, levelId) =>
     "Unable to find level with id: " ++ (levelId ++ (" in CurriculumEditor__" ++ componentName)),
   )
 
-let levelNumberWithName = t => LevelLabel.format(~name=t.name, (t.number |> string_of_int))
+let levelNumberWithName = t => LevelLabel.format(~name=t.name, t.number->string_of_int)

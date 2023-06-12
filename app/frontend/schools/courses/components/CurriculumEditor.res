@@ -235,23 +235,23 @@ let make = (
             <div className="inline-block relative w-auto md:w-64">
               <select
                 onChange={event => {
-                  let level_name = ReactEvent.Form.target(event)["value"]
-                  send(SelectLevel(Level.selectLevel(state.levels, level_name)))
+                  let level_id = ReactEvent.Form.target(event)["value"]
+                  send(SelectLevel(Level.selectLevel(state.levels, level_id)))
                 }}
-                value={currentLevel |> Level.name}
+                value={currentLevel->Level.id}
                 ariaLabel="Select level"
                 className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 {state.levels
-                |> Level.sort
-                |> Array.map(level =>
-                  <option key={Level.id(level)} value={level |> Level.name}>
+                ->Level.sort
+                ->Js.Array2.map(level =>
+                  <option key={level->Level.id} value={level->Level.id}>
                     {LevelLabel.format(
-                      ~name=level |> Level.name,
-                      level |> Level.number |> string_of_int,
-                    ) |> str}
+                      ~name=level->Level.name,
+                      level->Level.number->string_of_int,
+                    )->str}
                   </option>
                 )
-                |> React.array}
+                ->React.array}
               </select>
               <div
                 className="pointer-events-none absolute inset-y-0 end-0 flex items-center px-3 text-gray-800">

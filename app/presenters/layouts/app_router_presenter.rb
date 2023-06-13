@@ -8,23 +8,7 @@ module Layouts
     private
 
     def props
-      {
-        courses: course_details_array,
-        current_user: user_details,
-        school: school_details
-      }
-    end
-
-    # private
-
-    def school_details
-      {
-        name: school_name,
-        logo_url: logo_url,
-        icon_url: icon_url,
-        cover_image_url: cover_image_url,
-        links: nav_links
-      }
+      { courses: course_details_array, current_user: user_details }
     end
 
     def user_details
@@ -38,8 +22,9 @@ module Layouts
         is_author: author?
       }
       if current_user.avatar.attached?
-        user[:avatar_url] =
-          view.rails_public_blob_url(current_user.avatar_variant(:thumb))
+        user[:avatar_url] = view.rails_public_blob_url(
+          current_user.avatar_variant(:thumb)
+        )
       end
 
       user[:coach_id] = current_coach.id if current_coach.present?
@@ -89,9 +74,9 @@ module Layouts
 
     def courses_with_author_access
       if current_user.course_authors.present?
-        Course
-          .joins(:course_authors)
-          .where(course_authors: current_user.course_authors)
+        Course.joins(:course_authors).where(
+          course_authors: current_user.course_authors
+        )
       else
         Course.none
       end
@@ -164,97 +149,9 @@ module Layouts
       current_user.notifications.unread.any?
     end
 
-    def nav_links
-      @nav_links ||=
-        begin
-          # ...and the custom links.
-          custom_links =
-            SchoolLink
-              .where(school: current_school, kind: SchoolLink::KIND_HEADER)
-              .order(:sort_index)
-              .map do |school_link|
-                { title: school_link.title, url: school_link.url }
-              end
-
-          # Both, with the user-based links at the front.
-          admin_link + dashboard_link + coaches_link + custom_links
-        end
-    end
-
-    def admin_link
-      if current_school.present? && view.policy(current_school).show?
-        [
-          {
-            title: I18n.t('presenters.layouts.app_router.admin_link.title'),
-            url: view.school_path
-          }
-        ]
-      elsif current_user.present? && course_authors.any?
-        [
-          {
-            title: I18n.t('presenters.layouts.app_router.admin_link.title'),
-            url: view.curriculum_school_course_path(course_authors.first.course)
-          }
-        ]
-      else
-        []
-      end
-    end
-
-    def dashboard_link
-      if current_user.present?
-        [
-          {
-            title: I18n.t('presenters.layouts.app_router.dashboard_link.title'),
-            url: '/dashboard'
-          }
-        ]
-      else
-        []
-      end
-    end
-
     def course_authors
       @course_authors ||=
         current_user.course_authors.where(course: current_school.courses)
-    end
-
-    def coaches_link
-      if current_school.users.joins(:faculty).exists?(faculty: { public: true })
-        [
-          {
-            title: I18n.t('presenters.layouts.app_router.coaches_link.title'),
-            url: '/coaches'
-          }
-        ]
-      else
-        []
-      end
-    end
-
-    def school_name
-      @school_name ||=
-        current_school.present? ? current_school.name : 'Pupilfirst'
-    end
-
-    def logo_url
-      if current_school.logo_on_light_bg.attached?
-        view.rails_public_blob_url(current_school.logo_variant(:high))
-      end
-    end
-
-    def cover_image_url
-      if current_school.cover_image.attached?
-        view.rails_public_blob_url(current_school.cover_image)
-      end
-    end
-
-    def icon_url
-      if current_school.icon.attached?
-        view.rails_public_blob_url(current_school.icon_variant('thumb'))
-      else
-        '/favicon.png'
-      end
     end
   end
 end

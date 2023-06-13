@@ -1,0 +1,55 @@
+.app-router-nav__course-cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.approuter-nav__sidebar {
+  position: relative;
+  width: 18rem;
+}
+
+.app-router-navbar__secondary-nav {
+  @apply w-56;
+}
+
+.app-router-navbar__primary-nav-link {
+  @apply flex text-gray-800 text-sm font-medium items-center;
+  position: relative;
+}
+
+.app-router-navbar__primary-nav-link:hover {
+  @apply text-primary-500 bg-gray-50;
+}
+
+.app-router-navbar__primary-nav-link--active {
+  @apply bg-primary-100 text-primary-500 rounded font-semibold;
+}
+
+.app-router-navbar__primary-nav-link--active::before {
+  content: "";
+  width: 3px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  @apply start-0;
+  transform: translateY(-50%);
+  background-color: var(--color-primary-500);
+  border-radius: 2px;
+  animation: scale 0.3s ease-out;
+}
+
+.app-router-navbar__primary-nav-link--active:hover {
+  @apply bg-gray-200 text-primary-500;
+}
+
+@keyframes scale {
+  from {
+    transform: scale(0.5);
+    top: 60%;
+  }
+  to {
+    transform: scale(1);
+    top: 30%;
+  }
+}

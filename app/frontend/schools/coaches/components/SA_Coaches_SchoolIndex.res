@@ -35,11 +35,10 @@ let coachesTab = tab => {
     role="tab"
     key={label}
     href={currentPath}
-    className={`flex px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${currentTab() ==
-        tab
+    className={`px-5 py-2 p-2 font-medium hover:text-primary-500 ${currentTab() == tab
         ? "border-b-2 border-primary-500 text-primary-500"
         : ""}`}>
-    <span> {label->str} </span>
+    {label->str}
   </a>
 }
 

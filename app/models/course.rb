@@ -65,11 +65,7 @@ class Course < ApplicationRecord
   ].freeze
 
   validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
-  validates :progression_limit,
-            numericality: {
-              greater_than: 0,
-              allow_nil: true
-            }
+  validates :progression_limit, inclusion: 0..3
 
   def short_name
     name[0..2].upcase.strip

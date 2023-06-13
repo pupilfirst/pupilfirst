@@ -25,9 +25,10 @@ class UndoSubmissionMutator < ApplicationQuery
 
         next if timeline_event.blank?
 
-        TimelineEventOwner
-          .where(founder: owner, timeline_event: timeline_event)
-          .update(latest: true)
+        TimelineEventOwner.where(
+          founder: owner,
+          timeline_event: timeline_event
+        ).update(latest: true)
       end
     end
   end
@@ -37,7 +38,7 @@ class UndoSubmissionMutator < ApplicationQuery
   def must_have_pending_submission
     return if timeline_event.pending_review?
 
-    errors.add(:base, 'NoPendingSubmission')
+    errors.add(:base, "NoPendingSubmission")
   end
 
   def timeline_event
@@ -67,7 +68,11 @@ class UndoSubmissionMutator < ApplicationQuery
   # Founders linked to a timeline event can delete it and submission should be live.
   def authorized?
     target.present? && founder.present? &&
-      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED &&
-      timeline_event.live?
+      !target.status(founder).in?(
+        [
+          Targets::StatusService::STATUS_PASSED,
+          Targets::StatusService::STATUS_FAILED
+        ]
+      ) && timeline_event.live?
   end
 end

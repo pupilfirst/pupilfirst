@@ -10,13 +10,13 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higher level
+  STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # Target is of a higher level
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,
-    STATUS_LEVEL_LOCKED,
-    STATUS_PENDING_MILESTONE,
+    STATUS_SUBMISSION_LIMIT_LOCKED,
+    STATUS_PENDING_MILESTONE
   ].freeze
 
   has_many :timeline_events, dependent: :restrict_with_error
@@ -83,13 +83,13 @@ class Target < ApplicationRecord
       CHECKLIST_KIND_LONG_TEXT,
       CHECKLIST_KIND_MULTI_CHOICE,
       CHECKLIST_KIND_SHORT_TEXT,
-      CHECKLIST_KIND_AUDIO,
+      CHECKLIST_KIND_AUDIO
     ].freeze
   end
 
   validates :target_action_type,
             inclusion: {
-              in: valid_target_action_types,
+              in: valid_target_action_types
             },
             allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
@@ -97,7 +97,7 @@ class Target < ApplicationRecord
   validates :call_to_action, length: { maximum: 20 }
   validates :visibility,
             inclusion: {
-              in: valid_visibility_types,
+              in: valid_visibility_types
             },
             allow_nil: true
 
@@ -143,7 +143,7 @@ class Target < ApplicationRecord
 
       errors.add(
         :base,
-        "Target and evaluation criterion must belong to same course",
+        "Target and evaluation criterion must belong to same course"
       )
     end
   end

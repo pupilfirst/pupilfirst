@@ -304,7 +304,7 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
       prerequisitesIncomplete(reason, target, targets, statusOfTargets, send)
     | CourseLocked
     | AccessLocked
-    | LevelLocked(_) =>
+    | SubmissionLimitReached(_) =>
       renderLockReason(reason)
     }
   | Pending

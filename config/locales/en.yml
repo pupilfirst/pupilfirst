@@ -385,17 +385,14 @@ en:
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
-          description_end: " without getting submissions reviewed."
-          description_start: Students can level up
+          description_end: "without getting submissions reviewed."
+          description_start: Students can submit
           once: once
           thrice: thrice
           title: Limited
           twice: twice
-        strict:
-          description: Students can level up only after getting submissions reviewed, and passing.
-          title: Strict
         unlimited:
-          description: Students can level up till the end of the course, without getting submissions reviewed.
+          description: Students can submit all targets, without getting submissions reviewed.
           title: Unlimited
       tabs:
         actions: Actions

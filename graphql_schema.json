@@ -1917,7 +1917,7 @@
               "deprecationReason": null
             },
             {
-              "name": "progressionBehavior",
+              "name": "progressionLimit",
               "description": null,
               "args": [
 
@@ -1926,24 +1926,10 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "ProgressionBehavior",
+                  "kind": "SCALAR",
+                  "name": "Int",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "progressionLimit",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -6014,28 +6000,16 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "progressionBehavior",
+                  "name": "progressionLimit",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "ENUM",
-                      "name": "ProgressionBehavior",
+                      "kind": "SCALAR",
+                      "name": "Int",
                       "ofType": null
                     }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "progressionLimit",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -9336,28 +9310,16 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "progressionBehavior",
+                  "name": "progressionLimit",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "ENUM",
-                      "name": "ProgressionBehavior",
+                      "kind": "SCALAR",
+                      "name": "Int",
                       "ofType": null
                     }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "progressionLimit",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -11149,35 +11111,6 @@
 
           ],
           "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "ENUM",
-          "name": "ProgressionBehavior",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
-            {
-              "name": "Limited",
-              "description": "Allow students to level up a limited number of times",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "Unlimited",
-              "description": "Allow students to level up without getting submissions reviewed",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "Strict",
-              "description": "Allow students to level up only after getting submissions reviewed",
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
           "possibleTypes": null
         },
         {

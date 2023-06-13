@@ -26,7 +26,7 @@ let decode = json => {
 let selectLevel = (levels, level_id) =>
   levels |> ArrayUtils.unsafeFind(
     q => q.id == level_id,
-    `Unable to find level with specified level id, ID=${level_id}, in CurriculumEditor`,
+    `Unable to find level with ID: ${level_id}, in CurriculumEditor`,
   )
 
 let create = (id, name, number, unlockAt) => {

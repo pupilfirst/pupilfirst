@@ -244,10 +244,10 @@ let make = (
                 {state.levels
                 ->Level.sort
                 ->Js.Array2.map(level =>
-                  <option key={level->Level.id} value={level->Level.id}>
+                  <option key={Level.id(level)} value={Level.id(level)}>
                     {LevelLabel.format(
-                      ~name=level->Level.name,
-                      level->Level.number->string_of_int,
+                      ~name=Level.name(level),
+                      Level.number(level)->string_of_int,
                     )->str}
                   </option>
                 )

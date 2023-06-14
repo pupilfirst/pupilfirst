@@ -32,7 +32,7 @@
         </div>
       <% end %>
       <% @submission.startup_feedback.includes(:faculty).each do |feedback |%>
-        <div class="bg-white border-t p-4 md:p-6 feedback_item">
+        <div class="bg-white border-t p-4 md:p-6">
           <div class="flex items-center">
             <div class="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
               <%= avatar(feedback.faculty.name, faculty: feedback.faculty, version: :thumb)%>

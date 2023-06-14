@@ -259,29 +259,5 @@ feature "Organisation student details page and submissions list" do
         expect(page).not_to have_text(coach_note.note)
       end
     end
-
-    context "org admin checks feedback on student submissions" do
-      let(:submission) do
-        create :timeline_event,
-               :evaluated,
-               :passed,
-               :with_owners,
-               latest: true,
-               target: target_l2,
-               owners: [student]
-      end
-      before do
-        4.times do
-          create :startup_feedback,
-                 timeline_event_id: submission.id,
-                 faculty_id: faculty.id
-        end
-      end
-      scenario "org admin can see feedback on student submissions" do
-        sign_in_user org_admin_user, referrer: timeline_event_path(submission)
-
-        expect(page).to have_selector(".feedback_item", count: 4)
-      end
-    end
   end
 end

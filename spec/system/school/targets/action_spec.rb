@@ -35,9 +35,30 @@ feature "Target Details Editor", js: true do
     click_button "Update Action"
 
     expect(page).to have_text("Action updated successfully")
-    dismiss_notification
 
     expect(target_1_l1.reload.action_config).to eq(action_config)
+  end
+
+  # admin updates action config for a target
+  scenario "admin updates github actions for a target" do
+    target_1_l1.update!(action_config: action_config)
+
+    sign_in_user school_admin.user,
+                 referrer: action_school_target_path(id: target_1_l1.id)
+
+    new_action_config = Faker::Lorem.sentence
+    fill_in "target_action_config", with: new_action_config
+    click_button "Update Action"
+
+    expect(page).to have_text("Action updated successfully")
+
+    expect(target_1_l1.reload.action_config).to eq(new_action_config)
+    expect(target_1_l1.text_versions.count).to eq(1)
+    text_version = target_1_l1.text_versions.last
+    expect(text_version.value).to eq(action_config)
+    expect(text_version.user).to eq(school_admin.user)
+    expect(text_version.edited_at).to be_within(10.seconds).of(Time.zone.now)
+    expect(text_version.reason).to eq("Action config was updated")
   end
 
   scenario "admin configures invalid yaml for a target" do
@@ -50,7 +71,6 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text(
       "Action could not be updated, please check the YAML syntax",
     )
-    dismiss_notification
 
     expect(target_1_l1.reload.action_config).to be_nil
   end

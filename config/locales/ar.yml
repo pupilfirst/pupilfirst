@@ -2346,11 +2346,11 @@ ar:
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
-        one: <span class="font-semibold text-black">1</span> student enrolled
-        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
       students_enrolled_suffix_html:
-        one: in <span class="font-semibold text-black">1</span> active cohort
-        other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+        one: <span class="font-semibold text-black">1</span> active cohort
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts
       total_students_label: Total Students
     students:
       show:

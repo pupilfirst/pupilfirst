@@ -28,6 +28,8 @@ Authorization: Bearer ACCESS_TOKEN
 
 Visit the `/graphiql` path to browse and interact with all GraphQL queries in the development environment.
 
+If you have enabled multi-tenancy on your local setup, please make sure that you visit `/graphiql` on the _primary_ domain of a school.
+
 ## Updating GraphQL schema
 
 If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an

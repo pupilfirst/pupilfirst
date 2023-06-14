@@ -93,7 +93,7 @@ To enable push notifications you will have to set mandatory environment variable
 You can generate the keys by running the following commands on a Rails console:
 
 ```ruby
-vapid_key = Webpush.generate_key
+vapid_key = WebPush.generate_key
 
 # VAPID_PUBLIC_KEY
 vapid_key.public_key

@@ -90,12 +90,12 @@ module Cohorts
       user = school.users.with_email(student.email).first
       user = school.users.create!(email: student.email) if user.blank?
 
-      user.regenerate_login_token
+      user.regenerate_login_token if @notify
 
       # If a user was already present, don't override values of name, title or affiliation.
       user.update!(
         name: user.name.presence || student.name,
-        title: user.title.presence || student.title.presence || 'Student',
+        title: user.title.presence || student.title.presence || "Student",
         affiliation: user.affiliation.presence || student.affiliation.presence
       )
 

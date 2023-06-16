@@ -493,6 +493,9 @@ hi:
       students_label: छात्र
       students_to_include_label: पाठ्यक्रम निर्यात में शामिल करने के लिए छात्रों का चयन करें
       teams_label: टीमों
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: अधिक पाठ्यक्रम लोड करें...
       courses_fully_loaded_text: सभी %{total_courses} पाठ्यक्रम दिखा रहा है
@@ -1875,6 +1878,7 @@ hi:
       update_locale: अपने स्थान से संबंधित सेटिंग अपडेट करें।
       upload_failed: अपलोड करने में विफल
       you_admin_warning: आप वर्तमान में इस विद्यालय के व्यवस्थापक हैं। खाता हटाने को सक्षम करने के लिए कृपया अपनी व्यवस्थापक पहुंच हटाएं।
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: पासवर्ड की पुष्टि कीजिये
       confirm_password_placeholder: अपना पासवर्ड दोबारा दर्ज करें
@@ -2289,6 +2293,7 @@ hi:
       course_not_found_error: दी गई आईडी के साथ कोर्स नहीं मिल सका
       success_notification: आपका निर्यात संसाधित किया जा रहा है। जैसे ही यह तैयार होगा हम आपको सूचित करेंगे।
       tag_not_found_error: दिए गए आईडी वाले टैग नहीं ढूंढ सके
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: आगे के चरणों के लिए अपना इनबॉक्स देखें!
       deletion_init_notification: खाता हटाने की पहल

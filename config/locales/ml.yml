@@ -493,6 +493,9 @@ ml:
       students_label: വിദ്യാർത്ഥികൾ
       students_to_include_label: കോഴ്‌സ് എക്‌സ്‌പോർട്ടിൽ ഉൾപ്പെടുത്താൻ വിദ്യാർത്ഥികളെ തിരഞ്ഞെടുക്കുക
       teams_label: ടീമുകൾ
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: കൂടുതൽ കോഴ്സുകൾ ലോഡ് ചെയ്യുക...
       courses_fully_loaded_text: എല്ലാ %{total_courses} കോഴ്സുകളും കാണിക്കുന്നു
@@ -1875,6 +1878,7 @@ ml:
       update_locale: നിങ്ങളുടെ ലൊക്കേലുമായി ബന്ധപ്പെട്ട ക്രമീകരണങ്ങൾ അപ്‌ഡേറ്റ് ചെയ്യുക.
       upload_failed: അപ്‌ലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു
       you_admin_warning: നിങ്ങൾ നിലവിൽ ഈ സ്കൂളിന്റെ അഡ്മിനാണ്. അക്കൗണ്ട് ഇല്ലാതാക്കൽ പ്രവർത്തനക്ഷമമാക്കാൻ നിങ്ങളുടെ അഡ്മിൻ ആക്സസ് ഇല്ലാതാക്കുക.
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: പാസ്വേഡ് സ്ഥിരീകരിക്കുക
       confirm_password_placeholder: ദയവായി നിങ്ങളുടെ പാസ്‌വേഡ് വീണ്ടും നൽകുക
@@ -2289,6 +2293,7 @@ ml:
       course_not_found_error: നൽകിയ ഐഡിയിൽ ഒരു കോഴ്സ് കണ്ടെത്താൻ കഴിഞ്ഞില്ല
       success_notification: നിങ്ങളുടെ കയറ്റുമതി പ്രോസസ്സ് ചെയ്യുകയാണ്. ഇത് തയ്യാറായാലുടൻ ഞങ്ങൾ നിങ്ങളെ അറിയിക്കും.
       tag_not_found_error: നൽകിയിരിക്കുന്ന ഐഡികളുള്ള ടാഗുകൾ കണ്ടെത്താനായില്ല
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: കൂടുതൽ നടപടികൾക്കായി നിങ്ങളുടെ ഇൻബോക്സ് പരിശോധിക്കുക!
       deletion_init_notification: അക്കൗണ്ട് ഇല്ലാതാക്കൽ ആരംഭിച്ചു

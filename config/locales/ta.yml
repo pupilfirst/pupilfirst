@@ -493,6 +493,9 @@ ta:
       students_label: மாணவர்கள்
       students_to_include_label: பாடநெறி ஏற்றுமதியில் சேர்க்க மாணவர்களைத் தேர்ந்தெடுக்கவும்
       teams_label: அணிகள்
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: மேலும் படிப்புகளை ஏற்றவும்...
       courses_fully_loaded_text: அனைத்து %{total_courses} படிப்புகளையும் காட்டுகிறது
@@ -1875,6 +1878,7 @@ ta:
       update_locale: உங்கள் மொழி தொடர்பான அமைப்புகளைப் புதுப்பிக்கவும்.
       upload_failed: பதிவேற்ற முடியவில்லை
       you_admin_warning: நீங்கள் தற்போது இந்தப் பள்ளியின் நிர்வாகியாக உள்ளீர்கள். கணக்கு நீக்குதலை இயக்க, உங்கள் நிர்வாகி அணுகலை நீக்கவும்.
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: கடவுச்சொல்லை உறுதிப்படுத்தவும்
       confirm_password_placeholder: தயவு செய்து தங்கள் கடவுச்சொல்லை மீண்டும் உள்ளீடுக
@@ -2289,6 +2293,7 @@ ta:
       course_not_found_error: கொடுக்கப்பட்ட ஐடியுடன் படிப்பைக் கண்டுபிடிக்க முடியவில்லை
       success_notification: உங்கள் ஏற்றுமதி செயலாக்கப்படுகிறது. அது தயாரானவுடன் உங்களுக்கு அறிவிப்போம்.
       tag_not_found_error: கொடுக்கப்பட்ட ஐடிகளுடன் குறிச்சொற்களைக் கண்டறிய முடியவில்லை
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: மேலும் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்!
       deletion_init_notification: கணக்கு நீக்குதல் தொடங்கப்பட்டது

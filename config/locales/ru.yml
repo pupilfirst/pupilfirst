@@ -503,6 +503,9 @@ ru:
       students_label: Студенты
       students_to_include_label: Выберите учащихся для включения в экспорт курса
       teams_label: Команды
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: Загрузить Больше Курсов...
       courses_fully_loaded_text: Показаны все %{total_courses} курсов
@@ -1899,6 +1902,7 @@ ru:
       update_locale: Обновите настройки, связанные с вашей локалью.
       upload_failed: Не удалось загрузить
       you_admin_warning: В настоящее время вы являетесь администратором этой школы. Удалите доступ администратора, чтобы разрешить удаление учетной записи.
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: Подтвердить Пароль
       confirm_password_placeholder: Пожалуйста, введите пароль еще раз
@@ -2317,6 +2321,7 @@ ru:
       course_not_found_error: Не удалось найти курс с указанным идентификатором
       success_notification: Ваш экспорт обрабатывается. Мы сообщим вам, как только он будет готов.
       tag_not_found_error: Не удалось найти теги с указанными идентификаторами
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Проверьте свой почтовый ящик для дальнейших шагов!
       deletion_init_notification: Удаление учетной записи начато

@@ -26,7 +26,7 @@ let reducer = (state, action) =>
   | UpdateFormVisible(formVisible) => {...state, formVisible: formVisible}
   }
 
-let coachesTab = (count, tab) => {
+let coachesTab = tab => {
   let (label, currentPath) = switch tab {
   | ActiveCoaches => (tr("active_coaches"), "coaches?status=active")
   | ExitedCoaches => (tr("exited_coaches"), "coaches?status=exited")
@@ -35,17 +35,10 @@ let coachesTab = (count, tab) => {
     role="tab"
     key={label}
     href={currentPath}
-    className={`flex gap-3 px-5 py-2 items-center p-2 font-medium hover:text-primary-500 ${currentTab() ==
-        tab
+    className={`px-5 py-2 p-2 font-medium hover:text-primary-500 ${currentTab() == tab
         ? "border-b-2 border-primary-500 text-primary-500"
         : ""}`}>
-    <span> {label->str} </span>
-    {ReactUtils.nullUnless(
-      <span className=`bg-primary-500 text-white text-xs rounded-md px-1.5 py-1`>
-        {string_of_int(count)->str}
-      </span>,
-      currentTab() == tab,
-    )}
+    {label->str}
   </a>
 }
 
@@ -78,9 +71,7 @@ let make = (~coaches, ~authenticityToken) => {
         </div>
         <div className="max-w-3xl mx-auto">
           <div className="px-12 flex justify-start" role="tablist">
-            {[ActiveCoaches, ExitedCoaches]
-            ->Js.Array2.map(coachesTab(Js.Array2.length(coaches)))
-            ->React.array}
+            {[ActiveCoaches, ExitedCoaches]->Js.Array2.map(coachesTab)->React.array}
           </div>
         </div>
       </div>

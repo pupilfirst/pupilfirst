@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.evaluation
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:12-bookworm
+    # ports:
+    #   - "5432:5432"
+    environment:
+      POSTGRES_USER: pupilfirst
+      POSTGRES_PASSWORD: pupilfirst
+      POSTGRES_DB: pupilfirst_evaluation
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U pupilfirst -d pupilfirst_evaluation"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5

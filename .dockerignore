@@ -1,4 +1,6 @@
 Dockerfile
+Dockerfile.evaluation
+docker-compose.yml
 .dockerignore
 
 # Ignore anything vendored locally.

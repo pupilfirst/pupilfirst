@@ -12,8 +12,6 @@ services:
         condition: service_healthy
   db:
     image: postgres:12-bookworm
-    # ports:
-    #   - "5432:5432"
     environment:
       POSTGRES_USER: pupilfirst
       POSTGRES_PASSWORD: pupilfirst

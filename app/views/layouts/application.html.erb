@@ -64,11 +64,11 @@
     <link rel="icon" href="/favicon.ico" />
   </head>
 
-  <body data-host="<%= current_host %>">
+  <body class="overflow-y-hidden" data-host="<%= current_host %>">
         <% if content_for?(:container) %>
           <%= yield :container %>
         <% else %>
-          <section class="min-h-full flex flex-col items-stretch">
+          <section class="">
             <%= yield :nav %>
             <main class="grow bg-white">
               <% if content_for?(:wrapper) %>

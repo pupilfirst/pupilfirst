@@ -115,7 +115,8 @@ let make = (~submissionId, ~currentUser) => {
 
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
-  <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
+  <div
+    className="flex-1 md:flex md:flex-col md:overflow-hidden fixed z-20 inset-0 overflow-y-auto bg-white">
     {switch state {
     | Loaded(submissionDetails) =>
       <CoursesReview__Editor

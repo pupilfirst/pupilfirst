@@ -696,8 +696,8 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
 
   <>
     <Helmet> <title> {str(pageTitle(courses, courseId))} </title> </Helmet>
-    <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
-      <div className="hidden md:block h-16" />
+    <div role="main" ariaLabel="Review" className="flex-1 flex flex-col pt-18">
+      // <div className="hidden md:block h-18" />
       <div className="course-review-root__submissions-list-container">
         <div className="bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">

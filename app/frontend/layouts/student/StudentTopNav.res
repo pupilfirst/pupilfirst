@@ -102,14 +102,14 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
   })
 
   <div className="border-b">
-    <div className="mx-auto px-4">
-      <nav className="flex justify-between items-center h-20">
+    <div className="mx-auto p-4">
+      <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
             {switch logoUrl {
             | Some(url) =>
               <img
-                className="h-9 md:h-12 object-contain flex text-sm items-center"
+                className="h-8 md:h-10 object-contain flex text-sm items-center"
                 src=url
                 alt={"Logo of " ++ schoolName}
               />

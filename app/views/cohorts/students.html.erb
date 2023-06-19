@@ -16,39 +16,6 @@
   </section>
   <section class="bg-white">
     <div class="max-w-5xl mx-auto p-6">
-      <div class="p-4 bg-gray-100 rounded-lg">
-        <h3 class="text-xs font-semibold"><%= t('.distribution_heading') %></h3>
-        <div data-re-component="StudentDistribution" data-re-json="<%= @presenter.distribution.to_json %>">
-          <div class="skeleton-body-container pt-4 w-full mx-auto">
-            <div class="skeleton-body-wrapper px-3 lg:px-0">
-              <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
-                <div class="flex">
-                  <div class="w-1/6">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-5/12">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-1/4">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-1/12">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-1/12">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="mt-6">
         <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
       </div>

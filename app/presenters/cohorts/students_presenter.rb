@@ -37,16 +37,6 @@ module Cohorts
       @filter ||= {
         id: "organisation-cohort-students-filter",
         filters: [
-          {
-            key: "level",
-            label: "Level",
-            filterType: "MultiSelect",
-            values:
-              @cohort.course.levels.map do |l|
-                "#{l.number};L#{l.number}: #{l.name}"
-              end,
-            color: "green"
-          },
           { key: "name", label: "Name", filterType: "Search", color: "red" },
           {
             key: "email",
@@ -89,6 +79,27 @@ module Cohorts
           paged = included.page(params[:page]).per(24)
           paged.count.zero? ? paged.page(paged.total_pages) : paged
         end
+    end
+
+    def milestone_completion_status
+      milestone_targets =
+        @cohort.course.targets.where(milestone: true).order(:milestone_number)
+
+      status = {}
+
+      milestone_targets.each do |target|
+        submissions =
+          TimelineEvent
+            .from_founders(@cohort.founders)
+            .where(target: target)
+            .passed
+        students_count = submissions.map(&:founders).flatten.uniq.count
+        status[target] = (
+          (students_count / total_students_count.to_f) * 100
+        ).round
+      end
+
+      status
     end
 
     private
@@ -138,6 +149,10 @@ module Cohorts
     def scope
       @scope ||=
         @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
+    end
+
+    def total_students_count
+      @total_students_count ||= scope.count
     end
   end
 end

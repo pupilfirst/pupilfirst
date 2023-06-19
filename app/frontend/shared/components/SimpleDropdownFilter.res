@@ -102,7 +102,7 @@ let computeInitialState = () => {
 let selectedFromQueryParams = (params, filters) => {
   filters
   ->Js.Array2.map(filter => {
-    let value = Webapi.Url.URLSearchParams.get(filter.key, params)
+    let value = Webapi.Url.URLSearchParams.get(params, filter.key)
 
     switch value {
     | Some(v) => [Selectable.make(filter.key, v, Some(filter.label), filter.color)]
@@ -123,18 +123,18 @@ let navigateTo = params => {
 }
 
 let onSelect = (params, send, selectable) => {
-  setParams(Selectable.key(selectable), Selectable.orginalValue(selectable), params)
+  params->setParams(Selectable.key(selectable), Selectable.orginalValue(selectable))
   send(ClearFilterString)
   navigateTo(params)
 }
 
 let onDeselect = (params, selectable) => {
-  Webapi.Url.URLSearchParams.delete(Selectable.key(selectable), params)
+  params->Webapi.Url.URLSearchParams.delete(Selectable.key(selectable))
   navigateTo(params)
 }
 
 let selectedSorter = (sorter: sorter, params) => {
-  let value = switch Webapi.Url.URLSearchParams.get(sorter.key, params) {
+  let value = switch Webapi.Url.URLSearchParams.get(params, sorter.key) {
   | Some(userSuppliedValue) =>
     sorter.options->Js.Array2.includes(userSuppliedValue) ? userSuppliedValue : sorter.default
   | None => sorter.default
@@ -155,7 +155,7 @@ let sortOptions = (sorter, params) => {
       title={"Order by" ++ " " ++ sort}
       className="w-full cursor-pointer  block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       onClick={_e => {
-        setParams(sorter.key, sort, params)
+        setParams(params, sorter.key, sort)
         navigateTo(params)
       }}>
       {sort->str}

@@ -117,10 +117,8 @@ let createSubscription = (send, event) => {
   |> ignore
 }
 
-let webPushEndpoint =
-  Webapi.Dom.document
-  |> Webapi.Dom.Document.documentElement
-  |> Webapi.Dom.Element.getAttribute("data-subscription-endpoint")
+let webPushEndpoint = Webapi.Dom.Document.documentElement(Webapi.Dom.document)
+  -> Webapi.Dom.Element.getAttribute("data-subscription-endpoint")
 
 let loadStatus = (status, send, ()) => {
   switch status {

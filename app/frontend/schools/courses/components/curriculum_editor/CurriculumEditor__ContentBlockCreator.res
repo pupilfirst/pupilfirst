@@ -92,7 +92,7 @@ let reducer = (state, action) =>
       Hidden
     }
 
-    {...state, ui: ui}
+    {...state, ui}
   | ToggleSaving => {...state, saving: !state.saving, error: None}
   | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
   | SetError(error) => {...state, error: Some(error)}
@@ -111,8 +111,8 @@ let reducer = (state, action) =>
   | ShowUploadVideoForm => {...state, ui: UploadVideo}
   | HideUploadVideoForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
-  | UpdateVideoTitle(videoTitle) => {...state, videoTitle: videoTitle}
-  | UpdateVideoDescription(videoDescription) => {...state, videoDescription: videoDescription}
+  | UpdateVideoTitle(videoTitle) => {...state, videoTitle}
+  | UpdateVideoDescription(videoDescription) => {...state, videoDescription}
   | UpdateUploadProgress(uploadProgress) => {
       ...state,
       uploadProgress: Some(uploadProgress),
@@ -203,7 +203,8 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     key=buttonText
     className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
     onClick={onBlockTypeSelect(target, aboveContentBlock, send, addContentBlockCB, blockType)}>
-    <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {str(buttonText)} </p>
+    <i className={faIcon ++ " text-2xl"} />
+    <p className="font-semibold"> {str(buttonText)} </p>
   </label>
 }
 

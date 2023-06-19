@@ -43,7 +43,7 @@ let reducer = (state, action) =>
       ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
   | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount, studentDistribution) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
@@ -54,7 +54,7 @@ let reducer = (state, action) =>
       ...state,
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
       reloadDistributionAt: None,
       studentDistribution: Belt.Option.getWithDefault(
         studentDistribution,
@@ -110,8 +110,8 @@ module StudentsQuery = %graphql(`
   `)
 
 let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
-  Webapi.Url.URLSearchParams.append("status", "active", params)
-  Webapi.Url.URLSearchParams.append("request_origin", "review_interface", params)
+  Webapi.Url.URLSearchParams.append(params, "status", "active")
+  Webapi.Url.URLSearchParams.append(params, "request_origin", "review_interface")
   let filterString = params->Webapi.Url.URLSearchParams.toString
 
   StudentsQuery.makeVariables(
@@ -139,14 +139,15 @@ let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
 
     let studentDistribution =
       response.studentDistribution->Belt.Option.map(p =>
-        p->Js.Array2.map(d =>
-          DistributionInLevel.make(
-            ~id=d.id,
-            ~number=d.number,
-            ~studentsInLevel=d.studentsInLevel,
-            ~unlocked=d.unlocked,
-            ~filterName=d.filterName,
-          )
+        p->Js.Array2.map(
+          d =>
+            DistributionInLevel.make(
+              ~id=d.id,
+              ~number=d.number,
+              ~studentsInLevel=d.studentsInLevel,
+              ~unlocked=d.unlocked,
+              ~filterName=d.filterName,
+            ),
         )
       )
     send(
@@ -245,7 +246,7 @@ let make = (~courseId) => {
               params studentDistribution={state.studentDistribution}
             />
           </div>,
-          Webapi.Url.URLSearchParams.has("level", params),
+          Webapi.Url.URLSearchParams.has(params, "level"),
         )}
         <div
           className="p-5 mt-6 bg-white rounded-md border border-gray-300 relative md:sticky md:top-16 z-10">

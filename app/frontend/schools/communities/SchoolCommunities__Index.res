@@ -99,7 +99,7 @@ let handleCloseCategoryManager = (send, state) =>
   categoryEditorDirty(state)
     ? if {
         open Webapi.Dom
-        window |> Window.confirm(tr("unsaved_window_confirm"))
+        window -> Window.confirm(tr("unsaved_window_confirm"))
       } {
         send(UpdateShowCategoryEditor(false))
       } else {

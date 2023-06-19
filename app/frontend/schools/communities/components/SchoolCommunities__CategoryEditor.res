@@ -78,7 +78,7 @@ let deleteCategory = (category, deleteCategoryCB, send, event) => {
   topicsCount > 0
     ? if {
         open Webapi.Dom
-        window |> Window.confirm(tr("topics_delete_confirm"))
+        window -> Window.confirm(tr("topics_delete_confirm"))
       } {
         makeDeleteCategoryQuery(categoryId, deleteCategoryCB, send)
       } else {

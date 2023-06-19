@@ -77,7 +77,7 @@ let decodeJsonAsStringArray = (. x) => {
 let reloadPage = selectedDate => {
   let search = Webapi.Dom.location->Webapi.Dom.Location.search
   let params = Webapi.Url.URLSearchParams.make(search)
-  Webapi.Url.URLSearchParams.set("date", selectedDate, params)
+  params->Webapi.Url.URLSearchParams.set("date", selectedDate)
   let currentPath = Webapi.Dom.location->Webapi.Dom.Location.pathname
   let searchString = Webapi.Url.URLSearchParams.toString(params)
   Webapi.Dom.window->Webapi.Dom.Window.setLocation(`${currentPath}?${searchString}`)

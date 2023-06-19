@@ -20,7 +20,7 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm(tr("window_confirm"))
+    window -> Window.confirm(tr("window_confirm"))
   } {
     setStatus(_ => Undoing)
 

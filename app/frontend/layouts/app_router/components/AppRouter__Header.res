@@ -131,10 +131,9 @@ let make = (~school, ~currentUser) => {
 
   React.useEffect(() => {
     let resizeCB = _ => toggleMenuHidden(_ => isMobile())
-    Webapi.Dom.EventTarget.addEventListener(
+    Webapi.Dom.Window.asEventTarget(Webapi.Dom.window)->Webapi.Dom.EventTarget.addEventListener(
       "resize",
-      resizeCB,
-      Webapi.Dom.Window.asEventTarget(Webapi.Dom.window),
+      resizeCB
     )
     None
   })

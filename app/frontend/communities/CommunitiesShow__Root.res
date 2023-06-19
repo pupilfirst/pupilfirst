@@ -539,30 +539,30 @@ let filterFromQueryParams = (search, target, topicCategories) => {
 
   open Webapi.Url.URLSearchParams
   {
-    search: get("search", params)->Belt.Option.map(searchString =>
-      switch get("searchBy", params) {
+    search: get(params, "search")->Belt.Option.map(searchString =>
+      switch get(params, "searchBy") {
       | None => SearchTitle(searchString)
       | Some("content") => SearchContent(searchString)
       | Some("title") => SearchTitle(searchString)
       | Some(_) => SearchTitle(searchString)
       }
     ),
-    topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>
+    topicCategory: get(params, "topicCategory")->Belt.Option.flatMap(cat =>
       Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
     ),
     target: target,
-    solution: switch get("solution", params) {
+    solution: switch get(params, "solution") {
     | Some(criterion) if criterion == "Solved" => #Solved
     | Some(criterion) if criterion == "Unsolved" => #Unsolved
     | _ => #Unselected
     },
-    sortCriterion: switch get("sortCriterion", params) {
+    sortCriterion: switch get(params, "sortCriterion") {
     | Some(criterion) if criterion == "LastActivityAt" => #LastActivityAt
     | Some(criterion) if criterion == "Views" => #Views
     | Some(criterion) if criterion == "CreatedAt" => #CreatedAt
     | _ => #CreatedAt
     },
-    sortDirection: switch get("sortDirection", params) {
+    sortDirection: switch get(params, "sortDirection") {
     | Some(direction) if direction == "Descending" => #Descending
     | Some(direction) if direction == "Ascending" => #Ascending
     | _ => #Descending

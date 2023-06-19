@@ -29,12 +29,12 @@ let stylingForLevelPills = percentageStudents => {
 let onLevelSelect = (value, params, href) => {
   switch params {
   | Some(p) =>
-    Webapi.Url.URLSearchParams.set("level", value, p)
+    p->Webapi.Url.URLSearchParams.set("level", value)
     RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(p))
   | None =>
     let search = Webapi.Dom.location->Webapi.Dom.Location.search
     let params = Webapi.Url.URLSearchParams.make(search)
-    Webapi.Url.URLSearchParams.set("level", value, params)
+    params->Webapi.Url.URLSearchParams.set("level", value)
     let currentPath = Webapi.Dom.location->Webapi.Dom.Location.pathname
     let searchString = Webapi.Url.URLSearchParams.toString(params)
     let path = Belt.Option.getWithDefault(href, currentPath)

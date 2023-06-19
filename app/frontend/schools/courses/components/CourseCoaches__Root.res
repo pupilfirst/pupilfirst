@@ -61,7 +61,7 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm(
+    window -> Window.confirm(
       t("remove_confirm_pre") ++
       " " ++
       ((coach |> CourseCoach.name) ++

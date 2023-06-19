@@ -52,10 +52,10 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
     let window = Webapi.Dom.window
 
     let removeEventListener = () =>
-      Webapi.Dom.Window.removeEventListener("click", curriedFunction, window)
+      window->Webapi.Dom.Window.removeEventListener("click", curriedFunction)
 
     if helpVisible {
-      Webapi.Dom.Window.addEventListener("click", curriedFunction, window)
+      window->Webapi.Dom.Window.addEventListener("click", curriedFunction)
       Some(removeEventListener)
     } else {
       removeEventListener()

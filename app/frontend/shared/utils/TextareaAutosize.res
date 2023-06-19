@@ -10,7 +10,7 @@ type autosize
 @send external autosizeUpdate: (autosize, Dom.element) => unit = "update"
 
 let perform = (f, id) =>
-  document |> Document.getElementById(id) |> OptionUtils.mapWithDefault(element => element |> f, ())
+   Document.getElementById(document, id) |> OptionUtils.mapWithDefault(element => element |> f, ())
 
 let create = id => id |> perform(autosizeFunction)
 let update = id => id |> perform(autosizeUpdate(autosizeModule))

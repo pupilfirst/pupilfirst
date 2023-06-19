@@ -5,15 +5,15 @@ exception RootAttributeMissing(string)
 open Webapi.Dom
 
 let parseJSONTag = (~id="react-root-data", ()) =>
-  switch document |> Document.getElementById(id) {
+  switch document -> Document.getElementById(id) {
   | Some(rootElement) => rootElement |> Element.innerHTML
   | None => raise(DataElementMissing(id))
   } |> Json.parseOrRaise
 
 let parseJSONAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
-  switch document |> Document.getElementById(id) {
+  switch document -> Document.getElementById(id) {
   | Some(rootElement) =>
-    switch rootElement |> Element.getAttribute(attribute) {
+    switch rootElement -> Element.getAttribute(attribute) {
     | Some(props) => props
     | None => raise(RootAttributeMissing(attribute))
     }
@@ -25,7 +25,7 @@ let redirect = path => path |> Webapi.Dom.Window.setLocation(window)
 let reload = () => location |> Location.reload
 
 let isDevelopment = () =>
-  switch document |> Document.documentElement |> Element.getAttribute("data-env") {
+  switch Document.documentElement(document) -> Element.getAttribute("data-env") {
   | Some(props) when props == "development" => true
   | Some(_)
   | None => false
@@ -35,10 +35,10 @@ let goBack = () => window |> Window.history |> History.back
 
 let getUrlParam = (~key) =>
   window
-  |> Window.location
-  |> Location.search
-  |> Webapi.Url.URLSearchParams.make
-  |> Webapi.Url.URLSearchParams.get(key)
+  -> Window.location
+  -> Location.search
+  -> Webapi.Url.URLSearchParams.make
+  -> Webapi.Url.URLSearchParams.get(key)
 
 let hasUrlParam = (~key) => getUrlParam(~key)->Belt.Option.isSome
 
@@ -70,7 +70,7 @@ module Element = {
   external unsafeToHtmlInputElement: t => Dom.htmlInputElement = "%identity"
 
   let clearFileInput = (~inputId, ~callBack=?, ()) => {
-    switch document |> Document.getElementById(inputId) {
+    switch document -> Document.getElementById(inputId) {
     | Some(e) => HtmlInputElement.setValue(unsafeToHtmlInputElement(e), "")
     | None => ()
     }

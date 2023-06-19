@@ -94,7 +94,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
 
   React.useEffect(() => {
     let resizeCB = _ => toggleMenuHidden(_ => isMobile())
-    Webapi.Dom.Window.asEventTarget(Webapi.Dom.window) |> Webapi.Dom.EventTarget.addEventListener(
+    Webapi.Dom.Window.asEventTarget(Webapi.Dom.window) -> Webapi.Dom.EventTarget.addEventListener(
       "resize",
       resizeCB,
     )

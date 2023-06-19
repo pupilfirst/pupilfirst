@@ -14,7 +14,11 @@
       "in-source": true
     }
   ],
-  "bs-dependencies": ["@rescript/react", "bs-webapi", "@pupilfirst/pf-icon"],
+  "bs-dependencies": [
+    "@rescript/react",
+    "rescript-webapi",
+    "@pupilfirst/pf-icon"
+  ],
   "suffix": ".bs.js",
   "warnings": {
     "error": "+8"

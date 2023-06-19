@@ -30,10 +30,10 @@ let make = (
   React.useEffect1(() => {
     let curriedFunction = onWindowClick(showDropdown, setShowDropdown)
 
-    let removeEventListener = () => Window.removeEventListener("click", curriedFunction, window)
+    let removeEventListener = () => window->Window.removeEventListener("click", curriedFunction)
 
     if showDropdown {
-      Window.addEventListener("click", curriedFunction, window)
+      window->Window.addEventListener("click", curriedFunction)
       Some(removeEventListener)
     } else {
       removeEventListener()

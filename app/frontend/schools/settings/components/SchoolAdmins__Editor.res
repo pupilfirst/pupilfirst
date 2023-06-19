@@ -26,7 +26,7 @@ let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm(
+    window -> Window.confirm(
       t("remove_confirm_pre") ++
       " " ++
       ((admin |> SchoolAdmin.name) ++

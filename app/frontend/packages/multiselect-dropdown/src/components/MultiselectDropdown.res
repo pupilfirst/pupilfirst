@@ -22,7 +22,7 @@ module DomUtils = {
   exception RootElementMissing(string)
   open Webapi.Dom
   let focus = id =>
-    (switch document |> Document.getElementById(id) {
+    (switch Document.getElementById(document, id) {
     | Some(el) => el
     | None => raise(RootElementMissing(id))
     } |> Element.asHtmlElement)->Belt.Option.map(HtmlElement.focus) |> ignore
@@ -222,10 +222,10 @@ module Make = (Selectable: Selectable) => {
       let curriedFunction = onWindowClick(showDropdown, setShowDropdown)
 
       let removeEventListener = () =>
-        Webapi.Dom.Window.removeEventListener("click", curriedFunction, Webapi.Dom.window)
+        Webapi.Dom.window->Webapi.Dom.Window.removeEventListener("click", curriedFunction)
 
       if showDropdown {
-        Webapi.Dom.Window.addEventListener("click", curriedFunction, Webapi.Dom.window)
+        Webapi.Dom.window->Webapi.Dom.Window.addEventListener("click", curriedFunction)
         Some(removeEventListener)
       } else {
         removeEventListener()

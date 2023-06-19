@@ -12,9 +12,7 @@ RUN apt-get update && apt-get install -y \
   cron \
   curl \
   gnupg \
-  imagemagick \
-  python3 \
-  python3-pip
+  imagemagick
 
 # Install gems.
 COPY Gemfile .
@@ -25,7 +23,6 @@ RUN bundle install -j4
 # We need NodeJS & Yarn for precompiling assets.
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
-RUN npm install -g yarn
 
 # Install JS dependencies using Yarn.
 COPY package.json .
@@ -64,5 +61,3 @@ ENTRYPOINT ["/tini", "--"]
 
 # Run under tini to ensure proper signal handling.
 CMD bin/evaluate
-
-CMD tail -f /dev/null

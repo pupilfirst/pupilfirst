@@ -36,9 +36,17 @@ module TimelineEvents
             end
         end
 
+      submission_event_type =
+        if @target.evaluation_criteria.blank?
+          TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
+          :submission_automatically_verified
+        else
+          :submission_created
+        end
+
       @notification_service.execute(
         @founder.course,
-        :submission_created,
+        submission_event_type,
         @founder.user,
         submission
       )

@@ -587,7 +587,7 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-50 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}

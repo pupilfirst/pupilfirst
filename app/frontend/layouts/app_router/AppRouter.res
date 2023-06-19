@@ -25,5 +25,5 @@ let make = (~courses, ~currentUser) => {
     )
     raise(UnknownPathEncountered(url.path))
   }
-  <div className="md:h-screen md:flex bg-gray-50 overflow-hidden"> {component} </div>
+  <div className="md:h-screen md:flex bg-gray-50"> {component} </div>
 }

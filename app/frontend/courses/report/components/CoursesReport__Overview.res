@@ -23,8 +23,8 @@ let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
 
 let coachInfo = coaches =>
   coaches |> ArrayUtils.isNotEmpty
-    ? <div className="mb-8">
-        <h6 className="font-semibold"> {t("personal_coaches") |> str} </h6>
+    ? <div className="mt-8">
+        <p className="text-sm font-semibold"> {t("personal_coaches") |> str} </p>
         {coaches
         |> Array.mapi((index, coach) =>
           userInfo(
@@ -177,7 +177,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
     )
     |> Level.number
 
-  <div className="mb-8">
+  <div className="mt-8">
     <div className="flex justify-between items-end">
       <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
       {courseCompleted
@@ -219,9 +219,11 @@ let make = (~overviewData, ~coaches) =>
     | OverviewData.Loaded(overview) =>
       <div className="flex flex-col">
         <div className="w-full">
-          <div className="mb-8">
-            <h6 className="font-semibold mb-4"> {"Milestone Targets Completion Status" |> str} </h6>
-            <div className="grid md:grid-cols-2 gap-2">
+          <div>
+            <p className="text-sm font-semibold mt-4">
+              {"Milestone Targets Completion Status" |> str}
+            </p>
+            <div className="grid md:grid-cols-2 gap-2 mt-4">
               {ArrayUtils.copyAndSort(
                 (a, b) =>
                   a->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber -
@@ -269,8 +271,8 @@ let make = (~overviewData, ~coaches) =>
               ->React.array}
             </div>
           </div>
-          <div className="mb-8">
-            <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
+          <div className="mt-8">
+            <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
             <div className="flex -mx-2 flex-wrap mt-2">
               {targetsCompletionStatus(overview)}
               {quizPerformanceChart(
@@ -280,7 +282,7 @@ let make = (~overviewData, ~coaches) =>
             </div>
           </div>
           {overview |> StudentOverview.averageGrades |> ArrayUtils.isNotEmpty
-            ? <div className="mb-8">
+            ? <div className="mt-8">
                 <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
                 <div className="flex -mx-2 flex-wrap">
                   {averageGradeCharts(

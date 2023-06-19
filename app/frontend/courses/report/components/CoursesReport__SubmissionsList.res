@@ -399,9 +399,9 @@ let make = (
     None
   }, (selectedLevel, selectedStatus, sortDirection))
   <div className="max-w-3xl mx-auto">
-    <div role="form" className="md:flex items-end w-full pb-4">
+    <div role="form" className="md:flex items-end w-full pb-4 mt-4">
       <div className="flex-1">
-        <label htmlFor="filter" className="block text-tiny font-semibold uppercase">
+        <label htmlFor="filter" className="block text-tiny font-semibold uppercase pb-1">
           {"Filter by:" |> str}
         </label>
         <Multiselect

@@ -45,7 +45,7 @@ let untabbedLevelSelector = (
 ) => {
   let selected =
     <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
-      <span className="grow text-center truncate w-0"> {selectedLevel |> levelName |> str} </span>
+      <span className="grow truncate w-0"> {selectedLevel |> levelName |> str} </span>
       <FaIcon classes="fas fa-caret-down ms-1" />
     </button>
 

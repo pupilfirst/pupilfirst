@@ -1,23 +1,25 @@
 <% presenter = ::Courses::StudentsPresenter.new(self, @course) %>
-<div class="justify-center max-w-3xl mx-auto border border-gray-200 bg-gray-50 rounded-lg p-5 my-4">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-    <div class="mb-2">
-      <h3 class="text-lg font-semibold" ><%= @course.name %></h3>
-      <p class="text-sm text-gray-600">
-        <%= t('.students_enrolled_prefix_html', count: presenter.active_students.count) %>
-        <%= t('.students_enrolled_suffix_html', count: presenter.active_cohorts.count) %>
-      </p>
+<div class="pb-5 pt-18 bg-gray-50 md:h-screen overflow-y-auto">
+  <div class="max-w-6xl mx-auto rounded-lg">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold" ><%= @course.name %></h3>
+        <p class="text-sm text-gray-600">
+          <%= t('.students_enrolled_prefix_html', count: presenter.active_students.count) %>
+          <%= t('.students_enrolled_suffix_html', count: presenter.active_cohorts.count) %>
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="mt-4">
-    <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-      <% @course.cohorts.each do |cohort| %>
-        <%= link_to course_cohort_path(@course, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-          <span class="inline-block font-medium"><%= cohort.name %></span>
-          <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+    <div class="mt-4">
+      <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+        <% @course.cohorts.each do |cohort| %>
+          <%= link_to course_cohort_path(@course, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+            <span class="inline-block font-medium"><%= cohort.name %></span>
+            <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>

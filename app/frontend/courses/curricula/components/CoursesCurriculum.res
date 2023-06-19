@@ -79,7 +79,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
-      className="curriculum__target-group max-w-3xl mx-auto bg-white rounded-lg shadow-md relative z-10 overflow-hidden ">
+      className="curriculum__target-group max-w-3xl md:max-w-4xl 2xl:max-w-5xl mx-auto bg-white rounded-lg shadow-md relative z-10 overflow-hidden ">
       <div className="p-3 md:p-6 pt-5 text-center">
         <div className="text-2xl font-bold leading-snug">
           {TargetGroup.name(targetGroup)->str}
@@ -148,8 +148,8 @@ let issuedCertificate = course =>
   switch Course.certificateSerialNumber(course) {
   | Some(csn) =>
     <div
-      className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
-      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
+      className="max-w-3xl md:max-w-4xl 2xl:max-w-5xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
+      <div className="font-semibold text-xl mx-auto mt-2 leading-tight">
         {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
@@ -387,7 +387,10 @@ let make = (
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
 
-  <div role="main" ariaLabel="Curriculum" className="bg-gray-50 pt-11 pb-8 -mt-7">
+  <div
+    role="main"
+    ariaLabel="Curriculum"
+    className="md:h-screen bg-gray-50 pt-18 pb-8 overflow-y-auto">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =

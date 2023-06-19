@@ -146,7 +146,7 @@ describe Users::DeleteAccountService do
         ).to eq(user.account_deletion_notification_sent_at.iso8601)
 
         expect(audit_record.metadata["cohort_ids"]).to eq(
-          [student.cohort.id, student_2.cohort.id]
+          [student.cohort_id, student_2.cohort_id]
         )
         expect(audit_record.metadata["organisation_id"]).to eq(organisation.id)
       end

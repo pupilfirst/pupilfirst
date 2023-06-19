@@ -39,7 +39,7 @@ RUN yarn install
 
 # Copy over remaining files and set up for precompilation.
 COPY . /app
-COPY evaluation.env .env
+COPY example.env .env
 COPY config/database.evaluation.yml config/database.yml
 
 # Export the locales.json file.

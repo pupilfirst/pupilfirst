@@ -8,6 +8,7 @@ services:
       - "3000:3000"
     environment:
       RAILS_ENV: development
+      SECRET_KEY_BASE: 1fe25dabb16153b60531917dce0f70e385be7e4f2581e62f10d91a94999de04225b3363b95bbc2b5967902d60be5dc85ae7661f13d325dcdc44dce4b7756c55e
     depends_on:
       db:
         condition: service_healthy

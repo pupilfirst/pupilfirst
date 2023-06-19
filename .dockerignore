@@ -69,9 +69,6 @@ yarn-*.log*
 # We still need the releases folder to let yarn work properly.
 !.yarn/releases
 
-# Example files
-example.env
-
 # Docs
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md

@@ -377,10 +377,9 @@ feature "Curriculum Editor", js: true do
 
   context "when multiple levels have same name" do
     before do
-      level_1.update!(name: "How to become a test engineer")
-      level_2.update!(name: "How to become a test engineer")
-      # To be sure that target groups doesn't have same name
-      target_group_1.update!(name: "consectetur adipiscing elit 22890")
+      level_name = Faker::Lorem.words(number: 6).join(" ")
+      level_1.update!(name: level_name)
+      level_2.update!(name: level_name)
     end
 
     scenario "author goes through levels" do

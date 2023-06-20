@@ -241,6 +241,61 @@ feature "Submission review overlay", js: true do
       )
     end
 
+    scenario "coach rejects a pending submission with a feedback" do
+      notification_service = prepare_developers_notification
+
+      sign_in_user coach.user, referrer: review_course_path(course)
+
+      expect(page).to have_content(target.title)
+      expect(page).to have_content(target_2.title)
+
+      find("a[data-submission-id='#{submission_pending.id}']").click
+      click_button "Start Review"
+      dismiss_notification
+      expect(submission_pending.reload.reviewer).to eq(coach)
+      expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
+      expect(page).to have_content("Grade Card")
+      feedback = Faker::Markdown.sandwich(sentences: 6)
+      add_markdown(feedback)
+
+      click_button "Reject Submission"
+
+      expect(page).to have_text("The submission has been marked as reviewed")
+
+      student = submission_pending.founders.first
+      open_email(student.user.email)
+      expect(current_email).to have_content("rejected")
+
+      dismiss_notification
+
+      expect(page).to have_button("Undo Rejection")
+
+      submission = submission_pending.reload
+      expect(submission.reviewer).to eq(nil)
+      expect(submission.reviewer_assigned_at).to eq(nil)
+      expect(submission.evaluator_id).to eq(coach.id)
+      expect(submission.passed_at).to eq(nil)
+      expect(submission.evaluated_at).not_to eq(nil)
+      expect(submission.startup_feedback.count).to eq(1)
+      expect(submission.startup_feedback.last.feedback).to eq(feedback)
+      expect(submission.timeline_event_grades.pluck(:grade)).to eq([])
+
+      # the submission must be removed from the pending list
+
+      find("button[aria-label='submissions-overlay-close']").click
+      click_link "Pending"
+      expect(page).to have_text(submission_pending_2.target.title)
+      expect(page).to_not have_text(submission.target.title)
+
+      expect_published(
+        notification_service,
+        course,
+        :submission_graded,
+        coach.user,
+        submission,
+      )
+    end
+
     scenario "coaches can view and edit the review checklist without assigning themselves" do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)

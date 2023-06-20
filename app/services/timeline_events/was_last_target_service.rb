@@ -5,27 +5,17 @@ module TimelineEvents
     end
 
     def was_last_target?
-      return false unless student.level == last_level
+      return false if milestone_targets.empty?
 
-      return false if final_milestone_targets.empty?
-
-      final_milestone_targets.all? do |target|
-        if target.team_target?
-          # Need to check for just one student.
-          status_passed?(target, student)
-        else
-          # Need to check for each student in team.
-          students.all? { |s| status_passed?(target, s) }
-        end
+      if student.team.present?
+        targets_passed?(milestone_targets.team, student) &&
+          students.all? { |s| targets_passed?(milestone_targets.student, s) }
+      else
+        targets_passed?(milestone_targets, student)
       end
     end
 
     private
-
-    def status_passed?(target, student)
-      Targets::StatusService.new(target, student).status_from_event ==
-        Targets::StatusService::STATUS_PASSED
-    end
 
     def student
       @student ||= @submission.founders.first
@@ -39,22 +29,23 @@ module TimelineEvents
       student.course
     end
 
-    def last_level
-      @last_level ||= course.levels.order(number: :desc).first
+    def milestone_targets
+      course.targets.milestones
     end
 
-    def final_milestone_targets
-      Target
-        .live
-        .joins(target_group: :level)
+    def targets_passed?(targets, student)
+      TimelineEvent
+        .includes(:timeline_event_owners)
         .where(
-          target_groups: {
-            milestone: true
-          },
-          levels: {
-            id: last_level.id
+          target: targets,
+          timeline_event_owners: {
+            founder_id: student.id
           }
         )
+        .where.not(passed_at: nil)
+        .pluck(:target_id)
+        .uniq
+        .count == targets.count
     end
   end
 end

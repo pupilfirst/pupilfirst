@@ -25,7 +25,7 @@ let gradePillClasses = (gradeReceived, pillGrade, callBack) => {
   let resultModifier = switch gradeReceived {
   | None => ""
   | Some(grade) if pillGrade > grade => ""
-  | Some(grade) => " grade-bar__grade-pill--completed"
+  | Some(_) => " grade-bar__grade-pill--completed"
   }
   let selectableModifier = switch callBack {
   | None => ""

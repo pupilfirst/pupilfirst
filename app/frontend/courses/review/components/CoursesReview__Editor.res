@@ -280,7 +280,7 @@ let undoGrading = (submissionId, send) => {
 }
 
 let passed = grades => {
-  grades == [] ? false : true
+  ArrayUtils.isNotEmpty(grades)
 }
 
 let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)

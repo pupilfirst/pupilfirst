@@ -17,14 +17,6 @@ let grade = t => t.grade
 
 let pending = evaluation => evaluation |> List.exists(grading => grading.grade == None)
 
-let isFail = grading =>
-  switch grading.grade {
-  | Some(_) => false
-  | None => true
-  }
-
-let anyFail = evaluation => evaluation |> List.exists(grading => false)
-
 let criterionId = t => t.criterionId
 
 let criterionName = t => t.criterionName

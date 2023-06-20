@@ -61,7 +61,7 @@ let gradeBarBulletClasses = (selected, passed, empty) => {
   }
 }
 
-let updateMaxGrade = (value, state, setState) => setState(state => {...state, maxGrade: value})
+let updateMaxGrade = (value, setState) => setState(state => {...state, maxGrade: value})
 
 let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
   let updatedGradeAndLabel = GradeLabel.update(value, gradeAndLabel)
@@ -255,7 +255,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onChange={event =>
                     updateMaxGrade(
                       ReactEvent.Form.target(event)["value"] |> int_of_string,
-                      state,
                       setState,
                     )}
                   id="max_grade"

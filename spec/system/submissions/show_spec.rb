@@ -60,7 +60,7 @@ feature "Submissions show" do
     ]
   end
 
-  let!(:submission) do
+  let(:submission) do
     create(:timeline_event, target: target, checklist: checklist)
   end
 
@@ -68,17 +68,23 @@ feature "Submissions show" do
   let(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.founders.first }
 
-  let(:faculty) { create :faculty, school: school }
+  let(:organisation) { create :organisation, school: school }
+  let(:organisation_admin) do
+    create :organisation_admin, organisation: organisation
+  end
+
+  let(:coach) { create :faculty, school: school }
+  let(:coach_2) { create :faculty, school: school }
 
   let!(:feedback_1) do
     create :startup_feedback,
            timeline_event_id: submission.id,
-           faculty_id: faculty.id
+           faculty_id: coach.id
   end
   let!(:feedback_2) do
     create :startup_feedback,
            timeline_event_id: submission.id,
-           faculty_id: faculty.id
+           faculty_id: coach_2.id
   end
 
   before do
@@ -90,10 +96,18 @@ feature "Submissions show" do
 
   context "submission is of an evaluated target" do
     before do
-      target.evaluation_criteria << [evaluation_criterion]
+      student.user.update!(organisation: organisation)
 
+      target.evaluation_criteria << [evaluation_criterion]
       submission.founders << student
       submission_2.founders << team.founders.last
+    end
+
+    scenario "org admin vsits show page with a submission" do
+      sign_in_user organisation_admin.user,
+                   referrer: timeline_event_path(submission)
+
+      expect(page).to have_text(submission.title)
     end
 
     scenario "student visits show page of submission he is linked to",
@@ -128,6 +142,11 @@ feature "Submissions show" do
 
       expect(page).to have_content(checklist_item_audio["title"])
       expect(page).to have_selector("audio")
+
+      expect(page).to have_text(feedback_1.feedback)
+      expect(page).to have_text(feedback_2.feedback)
+      expect(page).to have_text(coach.name)
+      expect(page).to have_text(coach_2.name)
     end
 
     scenario "student visits show page of submission he is not linked to",
@@ -135,13 +154,6 @@ feature "Submissions show" do
       sign_in_user student.user, referrer: timeline_event_path(submission_2)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
-
-    scenario "student checks feedback on their submission" do
-      sign_in_user student.user, referrer: timeline_event_path(submission)
-
-      expect(page).to have_text(feedback_1.feedback)
-      expect(page).to have_text(feedback_2.feedback)
     end
   end
 
@@ -152,33 +164,6 @@ feature "Submissions show" do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
-  end
-
-  context "when org admin visits submission show page" do
-    let(:organisation) { create :organisation, school: school }
-    let(:org_admin_user) do
-      create :user, school: school, organisation: organisation
-    end
-    let(:admin) do
-      create :organisation_admin,
-             user: org_admin_user,
-             organisation: organisation
-    end
-    let(:student_user) do
-      create :user, school: school, organisation: organisation
-    end
-
-    before do
-      student.update!(user: student_user)
-      submission.update!(founders: [student])
-      target.evaluation_criteria << [evaluation_criterion]
-    end
-
-    scenario "admin vsits show page with a submission" do
-      sign_in_user admin.user, referrer: timeline_event_path(submission)
-
-      expect(page).to have_text(submission.title)
     end
   end
 end

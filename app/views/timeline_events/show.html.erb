@@ -31,11 +31,15 @@
           <% end %>
         </div>
       <% end %>
-      <% @submission.startup_feedback.includes(:faculty).each do |feedback |%>
+      <% @submission.startup_feedback.includes(faculty: [user: [avatar_attachment: :blob]]).each do |feedback| %>
         <div class="bg-white border-t p-4 md:p-6">
           <div class="flex items-center">
             <div class="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
-              <%= avatar(feedback.faculty.name, faculty: feedback.faculty, version: :thumb)%>
+              <% if feedback.faculty.user.avatar.attached? %>
+                <%= image_tag feedback.faculty.user.avatar_url(variant: :thumb) %>
+              <% else %>
+                <%= image_tag feedback.faculty.user.initials_avatar %>
+              <% end %>
             </div>
             <div>
               <p class="text-xs leading-tight">Feedback from:</p>

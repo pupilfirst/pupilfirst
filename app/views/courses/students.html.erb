@@ -10,14 +10,14 @@
         </p>
       </div>
     </div>
-  </div>
-  <div class="mt-4">
-    <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-      <% presenter.active_cohorts.each do |cohort| %>
-        <%= link_to course_cohort_path(@course, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
-          <span class="inline-block font-medium"><%= cohort.name %></span>
-          <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+    <div class="mt-4">
+      <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+        <% presenter.active_cohorts.each do |cohort| %>
+          <%= link_to course_cohort_path(@course, cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+            <span class="inline-block font-medium"><%= cohort.name %></span>
+            <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+          <% end %>
         <% end %>
       </div>
     </div>

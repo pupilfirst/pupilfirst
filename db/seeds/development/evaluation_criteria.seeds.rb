@@ -4,19 +4,18 @@ after 'development:courses' do
   puts 'Seeding evaluation_criteria'
 
   quality_labels = [
-    { 'grade' => 2, 'label' => 'Needs Improvement' },
-    { 'grade' => 3, 'label' => 'Meets Expectations' },
-    { 'grade' => 4, 'label' => 'Exceeds Expectations' }
+    { 'grade' => 1, 'label' => 'Meets Expectations' },
+    { 'grade' => 2, 'label' => 'Exceeds Expectations' }
   ]
 
   acceptance_labels = [
-    { 'grade' => 2, 'label' => 'Accepted' }
+    { 'grade' => 1, 'label' => 'Accepted' }
   ]
 
   Course.all.each do |course|
     EvaluationCriterion.create!(
       name: 'Quality',
-      max_grade: 3,
+      max_grade: 2,
       grade_labels: quality_labels,
       course: course
     )

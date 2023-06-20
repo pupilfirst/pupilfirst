@@ -24,15 +24,9 @@
       <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header", coach_name: coach_name, update_for: update_for) %>
     </p>
   <% else %>
-    <% if true %>
-      <p style="margin: 0px;">
-        <%= t("mailers.startup.feedback_as_email.body.rejected_feedback", coach_name: coach_name, update_for: update_for) %>
-      </p>
-    <% else %>
-      <p style="margin: 0px;">
-        <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
-      </p>
-    <% end %>
+    <p style="margin: 0px;">
+      <%= t("mailers.startup.feedback_as_email.body.rejected_feedback", coach_name: coach_name, update_for: update_for) %>
+    </p>
   <% end %>
   <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
     <blockquote style="border-inline-start: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">

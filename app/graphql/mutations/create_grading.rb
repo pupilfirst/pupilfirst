@@ -174,7 +174,7 @@ module Mutations
 
     def grade
       TimelineEvent.transaction do
-        if !@params[:grades].empty?
+        if !failed?
           evaluation_criteria.each do |criterion|
             TimelineEventGrade.create!(
               timeline_event: submission,
@@ -227,7 +227,7 @@ module Mutations
     end
 
     def failed?
-      @params[:grades] == []
+      @params[:grades].empty?
     end
 
     def allow_token_auth?

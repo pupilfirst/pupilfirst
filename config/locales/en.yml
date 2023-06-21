@@ -491,6 +491,9 @@ en:
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -1879,6 +1882,7 @@ en:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -2316,6 +2320,7 @@ en:
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated

@@ -15,6 +15,7 @@ module Users
       end
 
       User.transaction do
+        create_audit_record
         delete_founder_data if @user.founders.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
@@ -24,8 +25,6 @@ module Users
           @user.email,
           @user.school
         ).deliver_later
-
-        create_audit_record
 
         @user.reload.destroy!
       end
@@ -71,7 +70,10 @@ module Users
         audit_type: AuditRecord.audit_types[:delete_account],
         school_id: @user.school_id,
         metadata: {
+          name: @user.name,
           email: @user.email,
+          cohort_ids: @user.founders.pluck(:cohort_id),
+          organisation_id: @user.organisation_id,
           account_deletion_notification_sent_at:
             @user.account_deletion_notification_sent_at&.iso8601
         }

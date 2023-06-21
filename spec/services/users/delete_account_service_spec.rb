@@ -4,8 +4,17 @@ describe Users::DeleteAccountService do
   subject { described_class.new(user) }
 
   # Setup the basics
-  let(:user) { create :user, account_deletion_notification_sent_at: 2.days.ago }
+  let(:organisation) { create :organisation }
+  let(:user) do
+    create :user,
+           account_deletion_notification_sent_at: 2.days.ago,
+           school: organisation.school,
+           organisation: organisation
+  end
+
   let!(:student) { create :student, user: user }
+  let!(:student_2) { create :student, user: user }
+
   let!(:team) { create :team_with_students }
 
   let!(:coach) { create :faculty, user: user }
@@ -130,10 +139,16 @@ describe Users::DeleteAccountService do
         expect(audit_record.audit_type).to eq(
           AuditRecord.audit_types[:delete_account]
         )
+        expect(audit_record.metadata["name"]).to eq(user.name)
         expect(audit_record.metadata["email"]).to eq(user.email)
         expect(
           audit_record.metadata["account_deletion_notification_sent_at"]
         ).to eq(user.account_deletion_notification_sent_at.iso8601)
+
+        expect(audit_record.metadata["cohort_ids"]).to eq(
+          [student.cohort_id, student_2.cohort_id]
+        )
+        expect(audit_record.metadata["organisation_id"]).to eq(organisation.id)
       end
     end
   end

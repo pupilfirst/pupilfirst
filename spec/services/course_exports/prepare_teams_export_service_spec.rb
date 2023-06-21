@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe CourseExports::PrepareTeamsExportService do
   include SubmissionsHelper
@@ -7,6 +7,7 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:course) { create :course }
   let!(:cohort_live) { create :cohort, course: course }
+  let!(:cohort_2_live) { create :cohort, course: course }
   let(:level_1) { create :level, :one, course: course }
   let(:level_2) { create :level, :two, course: course }
 
@@ -15,7 +16,7 @@ describe CourseExports::PrepareTeamsExportService do
     create :student,
            cohort: cohort_live,
            level: level_2,
-           tag_list: ['tag 1', 'tag 2'],
+           tag_list: ["tag 1", "tag 2"],
            team: team_1
   end
 
@@ -23,12 +24,15 @@ describe CourseExports::PrepareTeamsExportService do
     create :student,
            cohort: cohort_live,
            level: level_2,
-           tag_list: ['tag 1', 'tag 2'],
+           tag_list: ["tag 1", "tag 2"],
            team: team_1
   end
 
   let!(:team_2) { create :team_with_students, cohort: cohort_live }
   let!(:team_3) { create :team, cohort: cohort_live }
+
+  let!(:team_4) { create :team_with_students, cohort: cohort_2_live }
+  let!(:student_l2_4) { team_4.founders.first }
 
   let(:user_t3) { create :user }
 
@@ -53,10 +57,10 @@ describe CourseExports::PrepareTeamsExportService do
   end
 
   let!(:evaluation_criterion_1) do
-    create :evaluation_criterion, course: course, name: 'Criterion A'
+    create :evaluation_criterion, course: course, name: "Criterion A"
   end
   let!(:evaluation_criterion_2) do
-    create :evaluation_criterion, course: course, name: 'Criterion B'
+    create :evaluation_criterion, course: course, name: "Criterion B"
   end
 
   let!(:target_l1_evaluated) do
@@ -97,7 +101,11 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:school_admin) { create :school_admin, school: school }
   let(:course_export) do
-    create :course_export, :teams, course: course, user: school_admin.user
+    create :course_export,
+           :teams,
+           course: course,
+           cohorts: [cohort_live, cohort_2_live],
+           user: school_admin.user
   end
 
   let!(:team_1_reviewed_submission_1) do
@@ -110,6 +118,10 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:team_2_reviewed_submission) do
     fail_target target_l1_evaluated, student_2
+  end
+
+  let!(:team_4_reviewed_submission) do
+    fail_target target_l1_evaluated, student_l2_4
   end
 
   before do
@@ -139,86 +151,110 @@ describe CourseExports::PrepareTeamsExportService do
     submit_target target_l1_individual_mark_as_complete, student_1
     submit_target target_l1_mark_as_complete, student_1
     submission = submit_target target_l1_quiz, student_1
-    submission.update!(quiz_score: '2/2')
+    submission.update!(quiz_score: "2/2")
     submit_target target_l2_evaluated, student_1
 
     # Second student is still on L1.
     submission = submit_target target_l1_quiz, student_2
-    submission.update!(quiz_score: '1/2')
+    submission.update!(quiz_score: "1/2")
 
     # Third student (alone in team) has only completed one target.
     submit_target target_l1_mark_as_complete, student_3
+
+    submission = submit_target target_l1_quiz, student_l2_4
+    submission.update!(quiz_score: "1/2")
   end
 
   def sorted_student_names(team)
-    team.founders.joins(:user).pluck('users.name').sort.join(', ')
+    team.founders.joins(:user).pluck("users.name").sort.join(", ")
   end
 
   def submission_grading(submission)
     submission
       .timeline_event_grades
       .joins(:evaluation_criterion)
-      .order('evaluation_criteria.name')
+      .order("evaluation_criteria.name")
       .pluck(:grade)
-      .join(',')
+      .join(",")
   end
 
   def report_link_formula(student)
     {
-      'formula' =>
+      "formula" =>
         "oooc:=HYPERLINK(\"https://test.host/students/#{student.id}/report\"; \"#{student.id}\")"
     }
   end
 
-  let(:sorted_coach_names) { [coach_1.name, coach_2.name].sort.join(', ') }
+  let(:sorted_coach_names) { [coach_1.name, coach_2.name].sort.join(", ") }
 
   let(:expected_data) do
     [
       {
-        title: 'Targets',
+        title: "Targets",
         rows: [
           [
-            'ID',
+            "ID",
             "L1T#{target_l1_mark_as_complete.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
-          ['Level', 1, 1, 1, 2],
+          ["Level", 1, 1, 1, 2],
           [
-            'Name',
+            "Name",
             target_l1_mark_as_complete.title,
             target_l1_quiz.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
           [
-            'Completion Method',
-            'Mark as Complete',
-            'Take Quiz',
-            'Graded',
-            'Graded'
+            "Completion Method",
+            "Mark as Complete",
+            "Take Quiz",
+            "Graded",
+            "Graded"
           ],
           %w[Milestone? No Yes Yes Yes],
-          ['Teams with submissions', 2, 2, 2, 1],
-          ['Teams pending review', 0, 0, 0, 1]
+          ["Teams with submissions", 2, 3, 3, 1],
+          ["Teams pending review", 0, 0, 0, 1]
         ]
       },
       {
-        title: 'Teams',
+        title: "Teams",
         rows: [
-          ['ID', 'Team Name', 'Students'],
-          [team_1.id, team_1.name, sorted_student_names(team_1)],
-          [team_2.id, team_2.name, sorted_student_names(team_2)],
-          [team_3.id, team_3.name, sorted_student_names(team_3)]
+          ["ID", "Team Name", "Cohort", "Students"],
+          [
+            team_1.id,
+            team_1.name,
+            team_1.cohort.name,
+            sorted_student_names(team_1)
+          ],
+          [
+            team_2.id,
+            team_2.name,
+            team_2.cohort.name,
+            sorted_student_names(team_2)
+          ],
+          [
+            team_3.id,
+            team_3.name,
+            team_3.cohort.name,
+            sorted_student_names(team_3)
+          ],
+          [
+            team_4.id,
+            team_4.name,
+            team_4.cohort.name,
+            sorted_student_names(team_4)
+          ]
         ]
       },
       {
-        title: 'Submissions',
+        title: "Submissions",
         rows: [
           [
-            'Team ID',
-            'Team Name',
+            "Team ID",
+            "Team Name",
             "L1T#{target_l1_mark_as_complete.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
@@ -227,43 +263,52 @@ describe CourseExports::PrepareTeamsExportService do
           [
             team_1.id,
             team_1.name,
-            '✓',
-            '2/2',
+            "✓",
+            "2/2",
             {
-              'value' =>
+              "value" =>
                 "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)}",
-              'style' => 'passing-grade'
+              "style" => "passing-grade"
             },
-            { 'value' => 'RP', 'style' => 'pending-grade' }
+            { "value" => "RP", "style" => "pending-grade" }
           ],
           [
             team_2.id,
             team_2.name,
             nil,
-            '1/2',
+            "1/2",
             {
-              'value' => submission_grading(team_2_reviewed_submission),
-              'style' => 'failing-grade'
+              "value" => submission_grading(team_2_reviewed_submission),
+              "style" => "failing-grade"
             },
             nil
           ],
-          [team_3.id, team_3.name, '✓', nil, nil, nil]
+          [team_3.id, team_3.name, "✓", nil, nil, nil],
+          [
+            team_4.id,
+            team_4.name,
+            nil,
+            "1/2",
+            {
+              "value" => submission_grading(team_4_reviewed_submission),
+              "style" => "failing-grade"
+            },
+            nil
+          ]
         ]
       }
     ]
   end
 
-  describe '#execute' do
-    it 'exports data to an ODS file' do
+  describe "#execute" do
+    it "exports data to an ODS file" do
       expect { subject.execute }.to change {
-          course_export.reload.file.attached?
-        }
-        .from(false)
-        .to(true)
-      expect(course_export.file.filename.to_s).to end_with('.ods')
+        course_export.reload.file.attached?
+      }.from(false).to(true)
+      expect(course_export.file.filename.to_s).to end_with(".ods")
     end
 
-    it 'stores data in JSON format' do
+    it "stores data in JSON format" do
       subject.execute
 
       expect(JSON.parse(course_export.reload.json_data)).to be_an_object_like(
@@ -271,14 +316,14 @@ describe CourseExports::PrepareTeamsExportService do
       )
     end
 
-    context 'when course export data is restricted using options' do
+    context "when course export data is restricted using options" do
       let(:course_export) do
         create :course_export,
                :teams,
                course: course,
                user: school_admin.user,
                reviewed_only: true,
-               tag_list: ['tag 1']
+               tag_list: ["tag 1"]
       end
 
       before { submit_target target_l1_evaluated, student_1 }
@@ -286,34 +331,39 @@ describe CourseExports::PrepareTeamsExportService do
       let(:restricted_data) do
         [
           {
-            title: 'Targets',
+            title: "Targets",
             rows: [
               [
-                'ID',
+                "ID",
                 "L1T#{target_l1_evaluated.id}",
                 "L2T#{target_l2_evaluated.id}"
               ],
-              ['Level', 1, 2],
-              ['Name', target_l1_evaluated.title, target_l2_evaluated.title],
-              ['Completion Method', 'Graded', 'Graded'],
+              ["Level", 1, 2],
+              ["Name", target_l1_evaluated.title, target_l2_evaluated.title],
+              ["Completion Method", "Graded", "Graded"],
               %w[Milestone? Yes Yes],
-              ['Teams with submissions', 1, 1],
-              ['Teams pending review', 1, 1]
+              ["Teams with submissions", 1, 1],
+              ["Teams pending review", 1, 1]
             ]
           },
           {
-            title: 'Teams',
+            title: "Teams",
             rows: [
-              ['ID', 'Team Name', 'Students'],
-              [team_1.id, team_1.name, sorted_student_names(team_1)]
+              ["ID", "Team Name", "Cohort", "Students"],
+              [
+                team_1.id,
+                team_1.name,
+                team_1.cohort.name,
+                sorted_student_names(team_1)
+              ]
             ]
           },
           {
-            title: 'Submissions',
+            title: "Submissions",
             rows: [
               [
-                'Team ID',
-                'Team Name',
+                "Team ID",
+                "Team Name",
                 "L1T#{target_l1_evaluated.id}",
                 "L2T#{target_l2_evaluated.id}"
               ],
@@ -321,18 +371,18 @@ describe CourseExports::PrepareTeamsExportService do
                 team_1.id,
                 team_1.name,
                 {
-                  'value' =>
+                  "value" =>
                     "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)};RP",
-                  'style' => 'pending-grade'
+                  "style" => "pending-grade"
                 },
-                { 'value' => 'RP', 'style' => 'pending-grade' }
+                { "value" => "RP", "style" => "pending-grade" }
               ]
             ]
           }
         ]
       end
 
-      it 'restricts data in the export' do
+      it "restricts data in the export" do
         subject.execute
 
         expect(JSON.parse(course_export.reload.json_data)).to be_an_object_like(

@@ -18,7 +18,6 @@ type t = {
   targetsCompleted: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
-  completedLevelIds: array<string>,
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
   levels: array<Shared__Level.t>,
@@ -62,8 +61,6 @@ let quizzesAttempted = t => t.quizScores |> Array.length
 let evaluationCriteria = t => t.evaluationCriteria
 
 let averageGrades = t => t.averageGrades
-
-let completedLevelIds = t => t.completedLevelIds
 
 let gradeValue = averageGrade => averageGrade.grade
 
@@ -116,7 +113,6 @@ let make = (
   ~targetsCompleted,
   ~quizScores,
   ~averageGrades,
-  ~completedLevelIds,
   ~student,
   ~team,
   ~levels,
@@ -131,7 +127,6 @@ let make = (
   targetsCompleted: targetsCompleted,
   quizScores: quizScores,
   averageGrades: averageGrades,
-  completedLevelIds: completedLevelIds,
   student: student,
   team: team,
   levels: levels,

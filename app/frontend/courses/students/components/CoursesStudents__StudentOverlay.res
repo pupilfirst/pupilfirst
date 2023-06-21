@@ -65,7 +65,6 @@ module StudentDetailsQuery = %graphql(`
         }
         totalTargets
         targetsCompleted
-        completedLevelIds
         quizScores
         averageGrades {
           evaluationCriterionId
@@ -160,7 +159,6 @@ let getStudentDetails = (studentId, setState) => {
       ~targetsCompleted=response.studentDetails.targetsCompleted,
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
-      ~completedLevelIds=response.studentDetails.completedLevelIds,
       ~courseId=response.studentDetails.student.course.id,
       ~levels=response.studentDetails.student.course.levels->Js.Array2.map(Level.makeFromFragment),
       ~student=StudentInfo.make(

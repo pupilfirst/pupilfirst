@@ -60,8 +60,8 @@ class UndoSubmissionMutator < ApplicationQuery
     @founder ||=
       current_user
         .founders
-        .joins(:level)
-        .where(levels: { course_id: target.course })
+        .joins(:cohort)
+        .where(cohorts: { course_id: target.course })
         .first
   end
 

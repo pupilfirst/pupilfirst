@@ -8,8 +8,8 @@ module ValidateStudentSubmission
       student =
         context[:current_user]
           .founders
-          .joins(:level)
-          .where(levels: { course_id: course })
+          .joins(:cohort)
+          .where(cohorts: { course_id: course })
           .first
       target_status = Targets::StatusService.new(target, student).status
       submittable =
@@ -18,8 +18,8 @@ module ValidateStudentSubmission
         target_status.in?(
           [
             Targets::StatusService::STATUS_PENDING,
-            Targets::StatusService::STATUS_FAILED,
-          ],
+            Targets::StatusService::STATUS_FAILED
+          ]
         )
       submitted_but_resubmittable =
         target.resubmittable? &&
@@ -31,7 +31,7 @@ module ValidateStudentSubmission
 
       I18n.t(
         "mutations.create_submission.blocked_submission_status_error",
-        target_status: target_status,
+        target_status: target_status
       )
     end
   end
@@ -53,7 +53,7 @@ module ValidateStudentSubmission
 
           result << I18n.t(
             "mutations.create_submission.missing_answer_error",
-            title: c["title"],
+            title: c["title"]
           )
         end
     end
@@ -112,7 +112,7 @@ module ValidateStudentSubmission
       combine(
         maximum_three_attachments_per_item,
         valid_file_ids_in_checklist,
-        all_files_are_new,
+        all_files_are_new
       )
     end
 

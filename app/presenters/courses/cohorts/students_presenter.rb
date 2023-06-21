@@ -41,7 +41,7 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
         filter_1 = filter_students_by_name(scope)
         filter_2 = filter_students_by_email(filter_1)
         sorted = sort_students(filter_2)
-        included = sorted.includes(:user, :level)
+        included = sorted.includes(:user)
         paged = included.page(params[:page]).per(24)
         paged.count.zero? ? paged.page(paged.total_pages) : paged
       end

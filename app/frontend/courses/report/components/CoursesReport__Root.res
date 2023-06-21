@@ -72,7 +72,6 @@ module StudentReportOverviewQuery = %graphql(`
         totalTargets
         targetsCompleted
         targetsPendingReview
-        completedLevelIds
         quizScores
         averageGrades {
           evaluationCriterionId

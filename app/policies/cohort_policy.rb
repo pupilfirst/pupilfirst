@@ -1,15 +1,8 @@
 class CohortPolicy < ApplicationPolicy
   def show?
-    return true if user.school_admin.present?
+    return false if user.faculty.blank?
 
-    organisation_ids = user.organisations.pluck(:id)
-
-    return false if organisation_ids.blank?
-
-    record
-      .founders
-      .joins(:user)
-      .exists?(users: { organisation_id: organisation_ids })
+    user.faculty.courses.exists?(id: record.course_id)
   end
 
   alias students? show?

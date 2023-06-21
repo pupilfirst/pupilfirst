@@ -24,9 +24,10 @@ let initialState = {
   submissions: Unloaded,
 }
 
-let closeOverlay = courseId => {
+let closeOverlayLink = student => {
   let search = Webapi.Dom.window->Webapi.Dom.Window.location->Webapi.Dom.Location.search
-  RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students") ++ search)
+  let cohortId = StudentInfo.cohort(student)->Cohort.id
+  "/cohorts/" ++ (cohortId ++ "/students") ++ search
 }
 
 module UserDetailsFragment = UserDetails.Fragment
@@ -500,13 +501,13 @@ let make = (~studentId, ~userId) => {
           <div
             className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
             <div className="student-overlay__student-details relative pb-8">
-              <button
+              <a
                 ariaLabel={t("close_student_report")}
                 title={t("close_student_report")}
-                onClick={_ => closeOverlay(StudentDetails.courseId(studentDetails))}
+                href={closeOverlayLink(student)}
                 className="absolute z-50 start-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <Icon className="if i-times-regular text-xl lg:text-2xl" />
-              </button>
+              </a>
               <div
                 className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
                 {switch student->StudentInfo.user->UserDetails.avatarUrl {

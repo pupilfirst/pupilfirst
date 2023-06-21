@@ -54,7 +54,7 @@ module Layouts
     end
 
     def additional_links
-      [report, calendar, leaderboard, review_dashboard, students] - [nil]
+      [report, calendar, leaderboard, review_dashboard, cohorts] - [nil]
     end
 
     def review_dashboard
@@ -92,8 +92,8 @@ module Layouts
       current_coach.present? && @course.in?(current_coach.courses)
     end
 
-    def students
-      "students" if user_is_coach?
+    def cohorts
+      "cohorts" if user_is_coach?
     end
 
     def course_link(course)
@@ -103,12 +103,10 @@ module Layouts
         case view.request.path.split("/")[3]
         when "review"
           view.review_course_path(course)
-        when "students", "cohorts"
-          view.students_course_path(course)
+        when "cohorts"
+          view.cohorts_course_path(course)
         when "calendar"
           view.calendar_course_path(course)
-        when "curriculum"
-          view.curriculum_course_path(course)
         else
           view.curriculum_course_path(course)
         end
@@ -130,7 +128,7 @@ module Layouts
         "if i-journal-text-light if-fw"
       when "report"
         "if i-graph-up-light"
-      when "students"
+      when "cohorts"
         "if i-users-light"
       when "review"
         "if i-clipboard-check-light"

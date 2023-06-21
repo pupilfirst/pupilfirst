@@ -22,6 +22,7 @@ module StudentSubmissionsQuery = %graphql(`
         passedAt
         title
         evaluatedAt
+        milestoneNumber
        }
        pageInfo {
          hasNextPage
@@ -117,7 +118,10 @@ let showSubmission = (submissions, levels) =>
           <div className="w-full md:w-3/4">
             <div className="block text-sm md:pe-2">
               <span className="ms-1 font-semibold text-base">
-                {submission |> Submission.title |> str}
+                {(Belt.Option.mapWithDefault(Submission.milestoneNumber(submission), "", number =>
+                  "M" ++ string_of_int(number) ++ " - "
+                ) ++
+                submission->Submission.title)->str}
               </span>
             </div>
             <div className="mt-1 ms-px text-xs text-gray-900">

@@ -3,6 +3,6 @@ class FoundersController < ApplicationController
   def report
     student = authorize(Founder.find(params[:id]))
     @course = student.course
-    render html: '', layout: 'app_router'
+    render html: "", layout: "app_router"
   end
 end

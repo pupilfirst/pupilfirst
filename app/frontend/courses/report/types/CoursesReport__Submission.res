@@ -11,9 +11,19 @@ type t = {
   levelId: string,
   targetId: string,
   targetRole: targetRole,
+  milestoneNumber: option<int>,
 }
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~status, ~targetId, ~targetRole) => {
+let make = (
+  ~id,
+  ~title,
+  ~createdAt,
+  ~levelId,
+  ~status,
+  ~targetId,
+  ~targetRole,
+  ~milestoneNumber,
+) => {
   id: id,
   title: title,
   createdAt: createdAt,
@@ -21,6 +31,7 @@ let make = (~id, ~title, ~createdAt, ~levelId, ~status, ~targetId, ~targetRole) 
   levelId: levelId,
   targetId: targetId,
   targetRole: targetRole,
+  milestoneNumber: milestoneNumber,
 }
 
 let id = t => t.id
@@ -38,6 +49,8 @@ let targetId = t => t.targetId
 let targetRole = t => t.targetRole
 
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
+
+let milestoneNumber = t => t.milestoneNumber
 
 let makeFromJs = submissions => Js.Array.map(submission => {
     let createdAt = DateFns.decodeISO(submission["createdAt"])
@@ -59,5 +72,6 @@ let makeFromJs = submissions => Js.Array.map(submission => {
       ~targetId=submission["targetId"],
       ~targetRole,
       ~status,
+      ~milestoneNumber=submission["milestoneNumber"],
     )
   }, submissions)

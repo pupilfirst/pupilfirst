@@ -1,20 +1,21 @@
 module Courses
   class ReportPresenter < ApplicationPresenter
-    def initialize(view_context, course)
+    def initialize(view_context, course, student)
       @course = course
+      @student = student
       super(view_context)
     end
 
     def page_title
-      "#{I18n.t('presenters.courses.report.student_report')} | #{@course.name} | #{current_school.name}"
+      "#{I18n.t("presenters.courses.report.student_report")} | #{@course.name} | #{current_school.name}"
     end
 
     def props
       {
-        student_id: current_student.id,
+        student_id: @student.id,
         levels: levels,
         coaches: coaches,
-        team_student_ids: current_student.team_student_ids
+        team_student_ids: @student.team_student_ids
       }
     end
 
@@ -24,18 +25,13 @@ module Courses
       @course.levels.map do |level|
         level
           .attributes
-          .slice('id', 'name', 'number')
+          .slice("id", "name", "number")
           .merge(unlocked: level.unlocked?)
       end
     end
 
-    def current_student
-      @current_student ||=
-        @course.founders.not_dropped_out.find_by(user_id: current_user.id)
-    end
-
     def coaches
-      team_coaches = current_student.faculty
+      team_coaches = @student.faculty
 
       return [] if team_coaches.empty?
 

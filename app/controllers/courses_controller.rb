@@ -71,8 +71,8 @@ class CoursesController < ApplicationController
     render html: "", layout: "app_router"
   end
 
-  # GET /courses/:id/students
-  def students
+  # GET /courses/:id/cohorts
+  def cohorts
     @course = authorize(find_course)
     render layout: "student_course_v2"
   end
@@ -80,6 +80,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/report
   def report
     @course = authorize(find_course)
+    @presenter = Courses::ReportPresenter.new(view_context, @course, student)
     render layout: "student_course_v2"
   end
 
@@ -108,6 +109,11 @@ class CoursesController < ApplicationController
     authenticate_user! unless course.public_preview?
 
     @course = authorize(course)
+  end
+
+  def student
+    @student ||=
+      @course.founders.not_dropped_out.find_by(user_id: current_user.id)
   end
 
   def find_course

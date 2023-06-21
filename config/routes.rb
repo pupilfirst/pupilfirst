@@ -176,7 +176,7 @@ Rails.application.routes.draw do
   end
 
   resources :organisations, only: %i[show index] do
-    resources :cohorts, only: %i[show] do
+    resources :cohorts, module: 'organisations', only: %i[show] do
       member do
         get 'students'
       end
@@ -256,7 +256,7 @@ Rails.application.routes.draw do
   resources :courses, only: %i[show] do
     member do
       get 'review', action: 'review'
-      get 'students', action: 'students'
+      get 'cohorts', action: 'cohorts'
       get 'calendar', action: 'calendar'
       get 'calendar_month_data', action: 'calendar_month_data'
       get 'leaderboard', action: 'leaderboard'
@@ -266,11 +266,11 @@ Rails.application.routes.draw do
       post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
     end
+  end
 
-    resources :cohorts, only: %i[show], module: 'courses' do
-      member do
-        get 'students', action: 'students'
-      end
+  resources :cohorts, only: %i[show] do
+    member do
+      get 'students', action: 'students'
     end
   end
 

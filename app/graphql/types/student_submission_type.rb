@@ -9,6 +9,7 @@ module Types
     field :target_id, ID, null: false
     field :team_target, Boolean, null: false
     field :student_ids, [ID], null: false
+    field :milestone_number, Integer, null: true
 
     def level_id
       object.target.level.id
@@ -20,6 +21,10 @@ module Types
 
     def team_target
       object.target.team_target? ? true : false
+    end
+
+    def milestone_number
+      object.target.milestone_number
     end
   end
 end

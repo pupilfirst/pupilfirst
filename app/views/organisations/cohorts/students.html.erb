@@ -1,12 +1,15 @@
 <div class="pb-5 pt-18 bg-gray-50 md:h-screen overflow-y-auto">
-  <section>
+  <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-6 pb-0">
+      <div class="mt-4 overflow-x-auto">
+        <%= render 'shared/breadcrumbs', crumbs: [['My Org', '/organisations'], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]]  %>
+      </div>
       <h1 class="text-xl md:text-3xl font-bold mt-4">
         <%= @cohort.name %>
       </h1>
-      <p class="text-sm font-medium"><%= @course.name %></p>
+      <p class="text-sm font-medium"><%= @cohort.course.name %></p>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <%= link_to t('cohorts.shared.overview_link'), course_cohort_path(@course, @cohort), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
+        <%= link_to t('cohorts.shared.overview_link'), organisation_cohort_path(@organisation, @cohort), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('cohorts.shared.students_link') %></p>
       </div>
     </div>

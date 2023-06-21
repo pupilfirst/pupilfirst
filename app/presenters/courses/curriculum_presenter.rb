@@ -82,7 +82,7 @@ module Courses
     end
 
     def level_id_for_student
-      return levels.last.id if current_student&.timeline_events&.blank?
+      return levels.last.id if current_student&.timeline_events.blank?
 
       current_student.timeline_events.last.target.level.id
     end

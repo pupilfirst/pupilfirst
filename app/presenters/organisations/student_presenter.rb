@@ -17,19 +17,6 @@ module Organisations
       @student.cohort
     end
 
-    def level_progress_bar_props
-      {
-        levels:
-          course
-            .levels
-            .where("number > ?", 0)
-            .order(:number)
-            .map { |level| completed_level_ids.include?(level.id) },
-        currentLevelNumber: level.number,
-        courseCompleted: student.completed_at.present?
-      }
-    end
-
     def average_grades
       @average_grades ||=
         begin
@@ -127,14 +114,6 @@ module Organisations
 
     def course
       @course ||= student.course
-    end
-
-    def levels
-      @levels ||= course.levels.unlocked.where("number <= ?", level.number)
-    end
-
-    def level
-      @level ||= student.level
     end
 
     def team

@@ -2411,6 +2411,23 @@ en:
     update_user:
       profile_saved_notification: Profile updated successfully!
   organisations:
+    cohorts:
+      shared:
+        overview_link: Overview
+        students_link: Students
+      show:
+        distribution_heading: Level-wise student distribution
+        students_completed: Students Completed
+        total_students: Total Students
+        view_all: View All
+      student:
+        level_label: Level
+        never_signed_in: Has never signed in
+        time_ago: Last seen %{time_ago} ago
+      students:
+        distribution_heading: Level-wise student distribution
+        nothing_to_show: There are no students matching the selected filters.
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     courses:
       active_cohorts_label: Active Cohorts
       course_label: Course

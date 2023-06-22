@@ -203,7 +203,7 @@ let navigationLink = (direction, level, setState) => {
   <button
     ariaLabel
     onClick={_ => setState(state => {...state, selectedLevelId: Level.id(level)})}
-    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-primary-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText->str} </span>
     <span className="mx-2 inline md:hidden"> {shortText->str} </span>

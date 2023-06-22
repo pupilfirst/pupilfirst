@@ -1,8 +1,8 @@
 <% user = student.user %>
-<a href="<%= student_report_path(student) %>" data-test-class="student" class="block p-5 border border-gray-200 bg-white rounded-lg hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400">
+<a href="<%= student_report_path(student) %>" data-test-class="student" class="block p-4 md:p-4 border border-gray-200 bg-white rounded-lg hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400">
   <div class="flex justify-between items-center gap-4">
     <div>
-      <p class="font-semibold">
+      <p class="text-sm font-semibold">
         <%= user.name %>
       </p>
       <p class="text-sm text-gray-600">

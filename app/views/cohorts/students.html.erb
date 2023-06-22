@@ -1,22 +1,22 @@
 <div class="md:pt-18 pb-20 md:pb-5 bg-gray-50 md:h-screen overflow-y-auto">
   <section class="bg-gray-50 px-4 border-b border-gray-100">
-    <div class="max-w-5xl mx-auto p-6 pb-0">
-      <h1 class="text-xl md:text-3xl font-bold mt-4">
+    <div class="max-w-5xl mx-auto pt-4">
+      <h1 class="text-lg md:text-xl font-semibold md:mt-4">
         <%= @cohort.name %>
       </h1>
       <p class="text-sm font-medium"><%= @course.name %></p>
-      <div class="mt-6 flex gap-4 items-center text-sm">
+      <div class="mt-4 md:mt-6 flex gap-4 items-center text-sm">
         <%= link_to t('cohorts.shared.overview_link'), cohort_path(@cohort), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('cohorts.shared.students_link') %></p>
       </div>
     </div>
   </section>
-  <section class="bg-white">
-    <div class="max-w-5xl mx-auto p-6">
-      <div class="mt-6">
+  <section class="bg-white pt-4">
+    <div class="max-w-5xl mx-auto">
+      <div>
         <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
       </div>
-      <div class="grid grid-flow-row gap-4 grid-cols-1 md:grid-cols-2  auto-rows-max mt-4">
+      <div class="grid grid-flow-row gap-3 md:gap-4 grid-cols-1 md:grid-cols-2 auto-rows-max mt-4 px-4 md:px-0">
         <% @presenter.students.each do |student| %>
           <%= render 'student', student: student %>
         <% end %>

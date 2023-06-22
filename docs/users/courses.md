@@ -20,7 +20,7 @@ The form that pops up will ask you for a few details:
 
 **Course end date**: If set, your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
 
-**About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
+**About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the course's public page.
 
 **Progression Behavior**: This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/users/targets#milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
 

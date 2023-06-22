@@ -14,6 +14,8 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 
 **Export only students with the following tags**: You can limit the results to a select group of students (or teams) by picking one or more tags that's associated with them.
 
+**Export only the students in the following cohort(s)**: This option allows you to choose one or multiple cohorts from which you wish to export the data.
+
 **Which targets should the export include?**: This defaults to _All targets_, but you can change it to _Only targets with reviewed submissions_, which will restrict the exported data to targets with submissions that are reviewed and graded by coaches.
 
 Once you're happy with the options, click the _Create Export_ button.

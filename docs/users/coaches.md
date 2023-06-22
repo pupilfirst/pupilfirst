@@ -21,6 +21,8 @@ You can add new coaches using the _Add New Coach_ option, and edit them by click
 
 **Connect Link**: When a coach is publicly listed, this link will also be displayed on the `/coaches` page. This link can be used to allow students to connect with a coach outside of the platform, via tools such as _Calendly_.
 
+**Coach Status**: To distinguish coaches who are no longer working with the school, you can assign them the status of "exited." This allows you to segregate them from active coaches and indicate their concluded involvement.
+
 ## Assigning coaches to students
 
 Once a coach has been added to a school, they can immediately access all communities. However, to review submissions from students, they must be assigned to students in one of two ways:

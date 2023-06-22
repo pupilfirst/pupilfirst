@@ -19,11 +19,9 @@ feature "Course students report", js: true do
   # Create a team
   let!(:team) { create :team, cohort: cohort }
 
-  let!(:student) { create :student, level: level_3, cohort: cohort, team: team }
+  let!(:student) { create :student, cohort: cohort, team: team }
 
-  let!(:another_student) do
-    create :student, level: level_3, cohort: cohort, team: team
-  end
+  let!(:another_student) { create :student, cohort: cohort, team: team }
 
   # Create few targets for the student
   let(:target_group_l1) do
@@ -198,7 +196,7 @@ feature "Course students report", js: true do
   end
 
   scenario "coach opens the student report and checks performance" do
-    sign_in_user course_coach.user, referrer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: cohorts_course_path(course)
 
     click_link student.name
 

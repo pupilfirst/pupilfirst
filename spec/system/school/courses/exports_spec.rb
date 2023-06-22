@@ -11,18 +11,10 @@ feature "Course Exports", js: true do
   let(:team_1) { create :team, cohort: cohort }
   let(:team_2) { create :team, cohort: cohort }
   let(:student_1) do
-    create :student,
-           cohort: cohort,
-           level: level,
-           team: team_1,
-           tag_list: ["tag 1", "tag 2"]
+    create :student, cohort: cohort, team: team_1, tag_list: ["tag 1", "tag 2"]
   end
   let(:student_2) do
-    create :student,
-           cohort: cohort,
-           level: level,
-           team: team_2,
-           tag_list: ["tag 3"]
+    create :student, cohort: cohort, team: team_2, tag_list: ["tag 3"]
   end
   let(:school) { student_1.school }
   let(:course) { student_1.course }

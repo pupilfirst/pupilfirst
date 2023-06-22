@@ -8,7 +8,7 @@ module Applicants
 
     def create(tags)
       if @cohort.blank?
-        raise 'Default Cohort Assignment is required to onboard applicants'
+        raise "Default Cohort Assignment is required to onboard applicants"
       end
 
       Applicant.transaction do
@@ -38,12 +38,12 @@ module Applicants
         school
           .users
           .with_email(@applicant.email)
-          .first_or_create!(email: @applicant.email, title: 'Student')
+          .first_or_create!(email: @applicant.email, title: "Student")
       user.regenerate_login_token
       user.update!(name: @applicant.name)
 
       # Finally, create a student profile for the user.
-      founder = Founder.create!(user: user, level: first_level, cohort: @cohort)
+      founder = Founder.create!(user: user, cohort: @cohort)
       founder.tag_list.add(tags)
       founder.save!
       founder
@@ -51,10 +51,6 @@ module Applicants
 
     def school
       @school ||= @course.school
-    end
-
-    def first_level
-      @first_level ||= @course.levels.find_by(number: 1)
     end
   end
 end

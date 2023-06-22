@@ -16,18 +16,13 @@ feature "Course students list", js: true do
 
   # Create few students
   let!(:student_1) do
-    create :founder,
-           level: level_1,
-           tag_list: ["starts with z", "vegetable"],
-           cohort: cohort
+    create :founder, tag_list: ["starts with z", "vegetable"], cohort: cohort
   end # This will always be around the bottom of the list.
-  let!(:student_2) do
-    create :founder, level: level_2, tag_list: ["vegetable"], cohort: cohort
-  end # This will always be around the top.
-  let!(:student_3) { create :founder, level: level_2, cohort: cohort }
-  let!(:student_4) { create :founder, level: level_3, cohort: cohort }
-  let!(:student_5) { create :founder, level: level_3, cohort: cohort }
-  let!(:student_6) { create :founder, level: level_3, cohort: cohort }
+  let!(:student_2) { create :founder, tag_list: ["vegetable"], cohort: cohort } # This will always be around the top.
+  let!(:student_3) { create :founder, cohort: cohort }
+  let!(:student_4) { create :founder, cohort: cohort }
+  let!(:student_5) { create :founder, cohort: cohort }
+  let!(:student_6) { create :founder, cohort: cohort }
 
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
@@ -42,7 +37,7 @@ feature "Course students list", js: true do
       user = create :user, name: "C #{Faker::Lorem.word} #{rand(10)}"
 
       # These will be in the middle of the list.
-      create :student, cohort: cohort, level: level_3, user: user
+      create :student, cohort: cohort, user: user
     end
 
     create :faculty_founder_enrollment,
@@ -124,7 +119,7 @@ feature "Course students list", js: true do
     end
 
     expect(page).to have_text(
-      "Percentage: #{percentage_students_in_l2.round(1)}",
+      "Percentage: #{percentage_students_in_l2.round(1)}"
     )
     expect(page).to have_text("Students: #{students_in_l2}")
   end
@@ -136,7 +131,7 @@ feature "Course students list", js: true do
     click_button "Order by Name"
 
     expect(page).to have_text(
-      course.founders.joins(:user).order("users.name").first.name,
+      course.founders.joins(:user).order("users.name").first.name
     )
 
     # Filter by level
@@ -180,7 +175,7 @@ feature "Course students list", js: true do
 
     # Clear the level filter
     find(
-      "button[title='Remove selection: #{level_3.filter_display_name}']",
+      "button[title='Remove selection: #{level_3.filter_display_name}']"
     ).click
 
     expect(page).to have_text(student_2.name)
@@ -271,7 +266,7 @@ feature "Course students list", js: true do
         student_coach_2.name,
         student_coach_3.name,
         student_coach_4.name,
-        student_coach_5.name,
+        student_coach_5.name
       ]
 
       sign_in_user course_coach.user, referrer: students_course_path(course)

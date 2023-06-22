@@ -8,7 +8,7 @@ feature "Student's view of Course Curriculum", js: true do
   let(:course) { create :course }
   let(:cohort) { create :cohort, course: course }
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
-  let!(:student) { create :founder, level: level_4, cohort: cohort }
+  let!(:student) { create :founder, cohort: cohort }
   let(:faculty) { create :faculty }
 
   # Levels.
@@ -444,7 +444,7 @@ feature "Student's view of Course Curriculum", js: true do
         create :target, target_group: c2_target_group, role: Target::ROLE_TEAM
       end
       let!(:c2_student) do
-        create :founder, level: c2_level_1, user: student.user, cohort: cohort_2
+        create :founder, user: student.user, cohort: cohort_2
       end
 
       scenario "student switches to another course" do
@@ -466,9 +466,7 @@ feature "Student's view of Course Curriculum", js: true do
       let(:school_2) { create :school }
       let(:course_2) { create :course, school: school_2 }
       let(:c2_level_1) { create :level, :one, course: course_2 }
-      let!(:c2_student) do
-        create :founder, level: c2_level_1, user: student.user
-      end
+      let!(:c2_student) { create :founder, user: student.user }
 
       scenario "courses in other schools are not displayed" do
         # Sign into the first course.

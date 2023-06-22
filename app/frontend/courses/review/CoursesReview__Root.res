@@ -696,7 +696,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
 
   <>
     <Helmet> <title> {str(pageTitle(courses, courseId))} </title> </Helmet>
-    <div role="main" ariaLabel="Review" className="flex-1 flex flex-col md:pt-18">
+    <div role="main" ariaLabel="Review" className="flex-1 flex flex-col md:pt-18 pb-20 md:pb-4">
       // <div className="hidden md:block h-18" />
       <div className="course-review-root__submissions-list-container">
         <div className="bg-gray-50">
@@ -828,8 +828,6 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
           }}
         </div>
       </div>
-      // Footer spacer
-      <div className="md:hidden h-16" />
     </div>
   </>
 }

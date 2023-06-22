@@ -1,18 +1,18 @@
 <% presenter = ::Courses::StudentsPresenter.new(self, @course) %>
-<div class="pb-5 pt-18 bg-gray-50 md:h-screen overflow-y-auto">
+<div class="md:pt-18 pb-20 md:pb-5 px-4 bg-gray-50 md:h-screen overflow-y-auto">
   <div class="max-w-6xl mx-auto rounded-lg">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
       <div class="mt-4">
         <h3 class="text-lg font-semibold" ><%= @course.name %></h3>
-        <p class="text-sm text-gray-600">
+        <p class="text-sm text-gray-500">
           <%= t('.students_enrolled_prefix_html', count: presenter.active_students.count) %>
           <%= t('.students_enrolled_suffix_html', count: presenter.active_cohorts.count) %>
         </p>
       </div>
     </div>
     <div class="mt-4">
-      <p class="text-black text-sm font-semibold"><%= t('.cohorts_subheading') %></p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+      <p class="text-gray-800 text-sm font-medium"><%= t('.cohorts_subheading') %></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-1">
         <% presenter.active_cohorts.each do |cohort| %>
           <%= link_to cohort_path(cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
             <span class="inline-block font-medium"><%= cohort.name %></span>

@@ -390,7 +390,7 @@ let make = (
   <div
     role="main"
     ariaLabel="Curriculum"
-    className="md:h-screen bg-gray-50 md:pt-18 pb-8 overflow-y-auto">
+    className="md:h-screen bg-gray-50 md:pt-18 pb-20 md:pb-8 overflow-y-auto">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =

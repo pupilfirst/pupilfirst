@@ -1,11 +1,11 @@
-<div class="pb-5 pt-18 bg-gray-50 md:h-screen overflow-y-auto">
-  <section>
+<div class="md:pt-18 pb-20 md:pb-5bg-gray-50 md:h-screen overflow-y-auto">
+  <section class="bg-gray-50 px-4 border-b border-gray-100">
     <div class="max-w-5xl mx-auto p-6 pb-0">
-      <h1 class="text-xl md:text-3xl font-bold mt-4">
+      <h1 class="text-xl font-semibold mt-4">
         <%= @cohort.name %>
       </h1>
       <p class="text-sm font-medium"><%= @course.name %></p>
-      <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
+      <div class="mt-6 flex gap-4 items-center text-sm">
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= 'Overview' %></p>
         <%= link_to 'Students', students_cohort_path(@cohort), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
       </div>
@@ -13,15 +13,18 @@
   </section>
   <section class="bg-white">
     <div class="max-w-5xl mx-auto p-6">
-      <div class="p-4 bg-gray-100 rounded-lg mt-8">
+      <div class="p-4 bg-gray-50 rounded-lg mt-8">
         <h3 class="text-xs font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
-        <div class="p-8 mx-auto max-w-3xl">
-          <div class="space-y-4">
+        <div class="mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <% @presenter.milestone_completion_status.each do |target, percentage| %>
-              <div class="flex items-center space-x-2">
-                <p class="flex-shrink-0"><%= "Milestone #{target.milestone_number}"%></p>
-                <div class="bg-gray-200 rounded-md w-full overflow-hidden">
-                  <div class="<%= "w-#{percentage} text-xs text-center p-0.5 bg-green-500" %>"><%= "#{percentage}%"%></div>
+              <div class="">
+              <div class="flex justify-between">
+                <p class="text-sm"><%= "Milestone #{target.milestone_number}"%></p>
+                <p class="text-center text-xs font-medium px-1 py-0.5"><%= "#{percentage}%"%></p>
+                </div>
+                <div class="relative bg-gray-200 rounded-md overflow-hidden">
+                  <div class="<%= "w-[#{percentage}%] h-2 text-center bg-green-500" %>"></div>
                 </div>
               </div>
             <% end %>

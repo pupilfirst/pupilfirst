@@ -221,7 +221,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
                   }}
                 </div>
                 <div
-                  className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
+                  className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-10"
                   key={course->Course.id}>
                   <h4
                     className="user-dashboard-course__title text-white font-semibold leading-tight ps-6 pe-4 text-lg md:text-xl">

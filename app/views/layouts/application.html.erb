@@ -64,7 +64,7 @@
     <link rel="icon" href="/favicon.ico" />
   </head>
 
-  <body class="md:overflow-y-hidden" data-host="<%= current_host %>">
+  <body data-host="<%= current_host %>">
         <% if content_for?(:container) %>
           <%= yield :container %>
         <% else %>

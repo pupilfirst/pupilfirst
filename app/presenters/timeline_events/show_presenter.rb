@@ -11,27 +11,31 @@ module TimelineEvents
     end
 
     def markdown_prop(markdown)
-      { markdown: markdown, profile: 'permissive' }.to_json
+      { markdown: markdown, profile: "permissive" }.to_json
     end
 
     def render_markdown?(item)
-      %w[longText shortText link].include?(item['kind'])
+      %w[longText shortText].include?(item["kind"])
     end
 
     def files?(item)
-      item['kind'] == 'files'
+      item["kind"] == "files"
     end
 
     def audio?(item)
-      item['kind'] == 'audio'
+      item["kind"] == "audio"
+    end
+
+    def link?(item)
+      item["kind"] == "link"
     end
 
     def audio_file(item)
-      TimelineEventFile.find(item['result'])
+      TimelineEventFile.find(item["result"])
     end
 
     def files(item)
-      TimelineEventFile.where(id: item['result'])
+      TimelineEventFile.where(id: item["result"])
     end
   end
 end

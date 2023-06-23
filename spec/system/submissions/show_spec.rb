@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Submissions show' do
+feature "Submissions show" do
   include UserSpecHelper
   include ChecklistItemHelper
 
@@ -15,11 +15,11 @@ feature 'Submissions show' do
   let(:submission_file_1) { create :timeline_event_file }
 
   let(:submission_file_2) do
-    create :timeline_event_file, file_path: 'files/icon_pupilfirst.png'
+    create :timeline_event_file, file_path: "files/icon_pupilfirst.png"
   end
 
   let(:submission_audio_file) do
-    create :timeline_event_file, file_path: 'files/audio_file_sample.mp3'
+    create :timeline_event_file, file_path: "files/audio_file_sample.mp3"
   end
 
   let(:checklist_item_long_text) do
@@ -31,7 +31,7 @@ feature 'Submissions show' do
   end
 
   let(:checklist_item_link) do
-    checklist_item(Target::CHECKLIST_KIND_LINK, 'https://www.example.com')
+    checklist_item(Target::CHECKLIST_KIND_LINK, "https://www.example.com")
   end
 
   let(:checklist_item_files) do
@@ -46,7 +46,7 @@ feature 'Submissions show' do
   end
 
   let(:checklist_item_multi_choice) do
-    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, 'Yes')
+    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, "Yes")
   end
 
   let(:checklist) do
@@ -68,6 +68,25 @@ feature 'Submissions show' do
   let(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.founders.first }
 
+  let(:organisation) { create :organisation, school: school }
+  let(:organisation_admin) do
+    create :organisation_admin, organisation: organisation
+  end
+
+  let(:coach) { create :faculty, school: school }
+  let(:coach_2) { create :faculty, school: school }
+
+  let!(:feedback_1) do
+    create :startup_feedback,
+           timeline_event_id: submission.id,
+           faculty_id: coach.id
+  end
+  let!(:feedback_2) do
+    create :startup_feedback,
+           timeline_event_id: submission.id,
+           faculty_id: coach_2.id
+  end
+
   before do
     # Link submission files after they are created.
     submission_file_1.update!(timeline_event: submission)
@@ -75,49 +94,62 @@ feature 'Submissions show' do
     submission_audio_file.update!(timeline_event: submission)
   end
 
-  context 'submission is of an evaluated target' do
+  context "submission is of an evaluated target" do
     before do
-      target.evaluation_criteria << [evaluation_criterion]
+      student.user.update!(organisation: organisation)
 
+      target.evaluation_criteria << [evaluation_criterion]
       submission.founders << student
       submission_2.founders << team.founders.last
     end
 
-    scenario 'student visits show page of submission he is linked to',
+    scenario "org admin vsits show page with a submission" do
+      sign_in_user organisation_admin.user,
+                   referrer: timeline_event_path(submission)
+
+      expect(page).to have_text(submission.title)
+    end
+
+    scenario "student visits show page of submission he is linked to",
              js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
-      expect(page).to have_content(checklist_item_long_text['title'])
-      expect(page).to have_content(checklist_item_long_text['result'])
-      expect(page).to have_content(checklist_item_short_text['title'])
-      expect(page).to have_content(checklist_item_short_text['result'])
-      expect(page).to have_content(checklist_item_multi_choice['title'])
-      expect(page).to have_content('Yes')
-      expect(page).to have_content(checklist_item_link['title'])
+      expect(page).to have_content(checklist_item_long_text["title"])
+      expect(page).to have_content(checklist_item_long_text["result"])
+      expect(page).to have_content(checklist_item_short_text["title"])
+      expect(page).to have_content(checklist_item_short_text["result"])
+      expect(page).to have_content(checklist_item_multi_choice["title"])
+      expect(page).to have_content("Yes")
+      expect(page).to have_content(checklist_item_link["title"])
 
       expect(page).to have_link(
-        'https://www.example.com',
-        href: 'https://www.example.com'
+        "https://www.example.com",
+        href: "https://www.example.com"
       )
 
-      expect(page).to have_content(checklist_item_files['title'])
+      expect(page).to have_content(checklist_item_files["title"])
 
       expect(page).to have_link(
-        'pdf-sample.pdf',
+        "pdf-sample.pdf",
         href: download_timeline_event_file_path(submission_file_1)
       )
 
       expect(page).to have_link(
-        'icon_pupilfirst.png',
+        "icon_pupilfirst.png",
         href: download_timeline_event_file_path(submission_file_2)
       )
 
-      expect(page).to have_content(checklist_item_audio['title'])
-      expect(page).to have_selector('audio')
+      expect(page).to have_content(checklist_item_audio["title"])
+      expect(page).to have_selector("audio")
+
+      expect(page).to have_text(feedback_1.feedback)
+      expect(page).to have_text(feedback_2.feedback)
+      expect(page).to have_text(coach.name)
+      expect(page).to have_text(coach_2.name)
     end
 
-    scenario 'student visits show page of submission he is not linked to',
+    scenario "student visits show page of submission he is not linked to",
              js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_2)
 
@@ -125,10 +157,10 @@ feature 'Submissions show' do
     end
   end
 
-  context 'submission is of an auto-verified target' do
+  context "submission is of an auto-verified target" do
     before { submission.founders << student }
 
-    scenario 'student visits show page of submission', js: true do
+    scenario "student visits show page of submission", js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")

@@ -25,34 +25,24 @@ describe CourseExports::PrepareStudentsExportService do
   let(:student_1) do
     create :student,
            cohort: cohort_live,
-           level: level_2,
            tag_list: ["tag 1", "tag 2"],
            user: user_1
   end
-  let!(:student_2) do
-    create :student, cohort: cohort_live, level: level_1, user: user_2
-  end
+  let!(:student_2) { create :student, cohort: cohort_live, user: user_2 }
 
   let!(:student_3_access_ended) do
-    create :student,
-           cohort: cohort_ended,
-           user: user_3,
-           level: level_1,
-           tag_list: ["tag 2"]
+    create :student, cohort: cohort_ended, user: user_3, tag_list: ["tag 2"]
   end
 
   let!(:student_4_dropped_out) do
     create :student,
-           level: level_1,
            cohort: cohort_live,
            dropped_out_at: 1.day.ago,
            tag_list: ["tag 3"],
            user: user_4
   end
 
-  let!(:student_5) do
-    create :student, level: level_1, cohort: cohort_2_live, user: user_5
-  end
+  let!(:student_5) { create :student, cohort: cohort_2_live, user: user_5 }
 
   let(:target_group_l1_non_milestone) do
     create :target_group, level: level_1, sort_index: 0
@@ -226,7 +216,6 @@ describe CourseExports::PrepareStudentsExportService do
             "Student ID",
             "Email Address",
             "Name",
-            "Level",
             "Title",
             "Affiliation",
             "Cohort",
@@ -241,7 +230,6 @@ describe CourseExports::PrepareStudentsExportService do
             report_link_formula(student_1),
             student_1.email,
             student_1.name,
-            student_1.level.number,
             student_1.title,
             student_1.affiliation,
             student_1.cohort.name,
@@ -266,7 +254,6 @@ describe CourseExports::PrepareStudentsExportService do
             report_link_formula(student_2),
             student_2.email,
             student_2.name,
-            student_2.level.number,
             student_2.title,
             student_2.affiliation,
             student_1.cohort.name,
@@ -291,7 +278,6 @@ describe CourseExports::PrepareStudentsExportService do
             report_link_formula(student_5),
             student_5.email,
             student_5.name,
-            student_5.level.number,
             student_5.title,
             student_5.affiliation,
             student_5.cohort.name,
@@ -433,7 +419,6 @@ describe CourseExports::PrepareStudentsExportService do
                 "Student ID",
                 "Email Address",
                 "Name",
-                "Level",
                 "Title",
                 "Affiliation",
                 "Cohort",
@@ -448,7 +433,6 @@ describe CourseExports::PrepareStudentsExportService do
                 report_link_formula(student_1),
                 student_1.email,
                 student_1.name,
-                student_1.level.number,
                 student_1.title,
                 student_1.affiliation,
                 student_1.cohort.name,
@@ -473,7 +457,6 @@ describe CourseExports::PrepareStudentsExportService do
                 report_link_formula(student_3_access_ended),
                 student_3_access_ended.email,
                 student_3_access_ended.name,
-                student_3_access_ended.level.number,
                 student_3_access_ended.title,
                 student_3_access_ended.affiliation,
                 student_3_access_ended.cohort.name,
@@ -488,7 +471,6 @@ describe CourseExports::PrepareStudentsExportService do
                 report_link_formula(student_4_dropped_out),
                 student_4_dropped_out.email,
                 student_4_dropped_out.name,
-                student_4_dropped_out.level.number,
                 student_4_dropped_out.title,
                 student_4_dropped_out.affiliation,
                 student_4_dropped_out.cohort.name,

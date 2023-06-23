@@ -16,7 +16,7 @@ describe Courses::DeleteService do
   let(:cohort_1) { create :cohort, course: course_1 }
   let(:level_c1) { create :level, :one, course: course_1, name: "C1L1" }
   let!(:team_c1) { create :team_with_students, cohort: cohort_1 }
-  let!(:student_c1) { create :student, cohort: cohort_1, level: level_c1 }
+  let!(:student_c1) { create :student, cohort: cohort_1 }
   let!(:applicant_c1) { create :applicant, course: course_1 }
   let(:certificate_c1) { create :certificate, course: course_1 }
   let!(:issued_certificate_c1) do
@@ -87,7 +87,7 @@ describe Courses::DeleteService do
   let(:cohort_2) { create :cohort, course: course_2 }
   let(:level_c2) { create :level, :one, course: course_2, name: "C2L1" }
   let!(:team_c2) { create :team_with_students, cohort: cohort_2 }
-  let!(:student_c2) { create :student, cohort: cohort_2, level: level_c2 }
+  let!(:student_c2) { create :student, cohort: cohort_2 }
   let!(:applicant_c2) { create :applicant, course: course_2 }
   let(:certificate_c2) { create :certificate, course: course_2 }
   let!(:issued_certificate_c2) do
@@ -198,7 +198,7 @@ describe Courses::DeleteService do
       [Proc.new { TimelineEventOwner.count }, 2, 1],
       [Proc.new { TimelineEventFile.count }, 2, 1],
       [Proc.new { StartupFeedback.count }, 2, 1],
-      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2],
+      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2]
     ]
   end
 
@@ -206,8 +206,8 @@ describe Courses::DeleteService do
     it "deletes all data related to the course and the course itself" do
       expect { subject.execute }.to(
         change { expectations.map { |e| e[0].call } }.from(
-          expectations.pluck(1),
-        ).to(expectations.pluck(2)),
+          expectations.pluck(1)
+        ).to(expectations.pluck(2))
       )
 
       expect { course_2.reload }.not_to raise_error

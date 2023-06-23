@@ -15,7 +15,6 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:student_l2_1) do
     create :student,
            cohort: cohort_live,
-           level: level_2,
            tag_list: ["tag 1", "tag 2"],
            team: team_1
   end
@@ -23,7 +22,6 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:student_l2_2) do
     create :student,
            cohort: cohort_live,
-           level: level_2,
            tag_list: ["tag 1", "tag 2"],
            team: team_1
   end
@@ -39,11 +37,7 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:student_1) { team_1.founders.first }
   let!(:student_2) { team_2.founders.first }
   let!(:student_3) do
-    create :student,
-           cohort: cohort_live,
-           level: level_1,
-           team: team_3,
-           user: user_t3
+    create :student, cohort: cohort_live, team: team_3, user: user_t3
   end # A student who is alone in a team; should also be included.
 
   let(:target_group_l1_non_milestone) do

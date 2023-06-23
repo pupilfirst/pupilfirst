@@ -11,18 +11,14 @@ module Users
           Courses::CloneService.new(@course).clone(@course.name, @user.school)
         cohort =
           Cohort.create!(
-            name: 'Purple (Auto-generated)',
+            name: "Purple (Auto-generated)",
             description:
               "Auto generated cohort for active students in #{new_course.name}",
             course_id: new_course.id
           )
         new_course.update!(default_cohort_id: cohort.id)
         create_and_assign_coach(new_course, cohort)
-        Founder.create!(
-          user: @user,
-          cohort: cohort,
-          level: new_course.levels.find_by(number: 1)
-        )
+        Founder.create!(user: @user, cohort: cohort)
         create_community(new_course)
       end
     end
@@ -43,7 +39,7 @@ module Users
 
     def create_community(course)
       community =
-        @user.school.communities.create!(name: 'Demo', target_linkable: true)
+        @user.school.communities.create!(name: "Demo", target_linkable: true)
       CommunityCourseConnection.create!(course: course, community: community)
     end
   end

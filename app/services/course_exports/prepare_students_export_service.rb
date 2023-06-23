@@ -153,7 +153,6 @@ module CourseExports
             { formula: student_report_link(student) },
             user.email,
             user.name,
-            student.level.number,
             user.title,
             user.affiliation,
             student.cohort.name,
@@ -169,7 +168,6 @@ module CourseExports
           "Student ID",
           "Email Address",
           "Name",
-          "Level",
           "Title",
           "Affiliation",
           "Cohort",
@@ -219,9 +217,9 @@ module CourseExports
         begin
           scope =
             if @cohorts.present?
-              Founder.includes(:level, :user).where(cohort: @cohorts)
+              Founder.includes(:user).where(cohort: @cohorts)
             else
-              course.founders.includes(:level, :user)
+              course.founders.includes(:user)
             end
           # Exclude inactive students, unless requested.
           scope =

@@ -1,4 +1,4 @@
-<div class="md:pt-18 pb-20 md:pb-5bg-gray-50 md:h-screen overflow-y-auto">
+<div class="md:pt-18 pb-20 md:pb-5 bg-gray-50 md:h-screen overflow-y-auto">
   <section class="bg-gray-50 px-4 border-b border-gray-100">
     <div class="max-w-5xl mx-auto pt-4">
       <h1 class="text-lg md:text-xl font-semibold md:mt-4">
@@ -16,12 +16,15 @@
       <div class="p-4 bg-gray-50 rounded-lg">
         <h3 class="text-sm font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
         <div class="mt-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          <div class="grid grid-cols-1 gap-x-8 gap-y-6">
             <% @presenter.milestone_completion_status.each do |target, percentage| %>
               <div>
                 <div class="flex justify-between">
                   <p class="text-xs font-medium"><%= "Milestone #{target.milestone_number}"%></p>
-                  <p class="text-center text-xs font-medium"><%= "#{percentage}%"%></p>
+                  <div class="flex space-x-2">
+                    <p class="text-xs font-medium text-gray-500"><%= '23/64' %></p>
+                    <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{percentage}%"%></p>
+                  </div>
                 </div>
                 <div class="relative bg-gray-200 rounded-md overflow-hidden mt-0.5">
                   <div style="<%= "width: #{percentage}%" %>" class="h-2 text-center bg-green-500"></div>

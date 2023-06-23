@@ -219,11 +219,49 @@ let make = (~overviewData, ~coaches) =>
     | OverviewData.Loaded(overview) =>
       <div className="flex flex-col">
         <div className="w-full">
+          <div className="mt-8">
+            <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
+            <div className="flex -mx-2 flex-wrap mt-2">
+              {targetsCompletionStatus(overview)}
+              {quizPerformanceChart(
+                overview |> StudentOverview.averageQuizScore,
+                overview |> StudentOverview.quizzesAttempted,
+              )}
+            </div>
+          </div>
           <div>
-            <p className="text-sm font-semibold mt-4">
-              {"Milestone Targets Completion Status" |> str}
-            </p>
-            <div className="grid md:grid-cols-2 gap-2 mt-4">
+            <div className="flex justify-between mt-8">
+              <p className="text-sm font-semibold">
+                {"Milestone Targets Completion Status" |> str}
+              </p>
+              <div className="flex items-center space-x-4">
+                <p className="text-xs font-medium text-gray-500"> {"20/40" |> str} </p>
+                <div className="flex items-center space-x-1">
+                  <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
+                    {"20%" |> str}
+                  </p>
+                  <div>
+                    <svg
+                      viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
+                      <path
+                        className="courses-milestone-complete__doughnut-chart-bg "
+                        d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="courses-milestone-complete__doughnut-chart-stroke"
+                        strokeDasharray="20, 100"
+                        d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-2 mt-2">
               {ArrayUtils.copyAndSort(
                 (a, b) =>
                   a->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber -
@@ -269,16 +307,6 @@ let make = (~overviewData, ~coaches) =>
                 </a>
               })
               ->React.array}
-            </div>
-          </div>
-          <div className="mt-8">
-            <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
-            <div className="flex -mx-2 flex-wrap mt-2">
-              {targetsCompletionStatus(overview)}
-              {quizPerformanceChart(
-                overview |> StudentOverview.averageQuizScore,
-                overview |> StudentOverview.quizzesAttempted,
-              )}
             </div>
           </div>
           {overview |> StudentOverview.averageGrades |> ArrayUtils.isNotEmpty

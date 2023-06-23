@@ -95,6 +95,24 @@
   animation: progress 0.5s ease-out forwards;
 }
 
+.courses-milestone-complete__doughnut-chart {
+  display: block;
+  max-width: 100%;
+  height: 18px;
+}
+
+.courses-milestone-complete__doughnut-chart-bg {
+  fill: none;
+  stroke-width: 4;
+}
+
+.courses-milestone-complete__doughnut-chart-stroke {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: butt;
+  animation: progress 0.5s ease-out forwards;
+}
+
 @keyframes progress {
   0% {
     stroke-dasharray: 0 100;
@@ -105,6 +123,9 @@
   .courses-report-overview__doughnut-chart-bg {
   stroke: #d3bff3;
 }
+.courses-milestone-complete__doughnut-chart .courses-milestone-complete__doughnut-chart-bg {
+  stroke: #d1d5db;
+}
 
 .courses-report-overview__doughnut-chart.pink
   .courses-report-overview__doughnut-chart-bg {
@@ -114,6 +135,10 @@
 .courses-report-overview__doughnut-chart.purple
   .courses-report-overview__doughnut-chart-stroke {
   stroke: var(--color-primary-500);
+}
+
+.courses-milestone-complete__doughnut-chart .courses-milestone-complete__doughnut-chart-stroke {
+  stroke: #16a34a;
 }
 
 .courses-report-overview__doughnut-chart.pink

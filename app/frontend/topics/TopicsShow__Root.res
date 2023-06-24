@@ -337,7 +337,7 @@ let make = (
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
-  <div className="bg-gray-50">
+  <div className="bg-gray-50 md:pt-18">
     <div className="max-w-4xl w-full mt-5 ps-4 lg:ps-0 lg:mx-auto">
       {communityLink(community)}
     </div>

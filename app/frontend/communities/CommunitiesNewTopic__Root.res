@@ -255,7 +255,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   <DisablingCover disabled=state.saving>
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 md:pt-18">
       <div className="flex-1 flex flex-col">
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">

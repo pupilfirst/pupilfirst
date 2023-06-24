@@ -120,7 +120,7 @@
   }
 
   .btn-subtle {
-    @apply bg-gray-50 text-gray-800  !important;
+    @apply bg-gray-100 text-gray-800  !important;
   }
 
   .btn-subtle:hover {

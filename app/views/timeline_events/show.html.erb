@@ -80,3 +80,25 @@
     </div>
   <% end %>
 </div>
+<div class="flex flex-col justify-start max-w-2xl mx-auto my-10">
+  <h2 class="font-semibold"><i class="if i-journal-text-regular if-fw mx-2" ></i>Feedback(s)</h2>
+  <% unless @submission.startup_feedback.present? %>
+    <p class="pl-5">No feedbacks present.</p>
+  <% end %>
+  <% @submission.startup_feedback.includes(faculty: [user: [avatar_attachment: :blob]]).each do |feedback| %>
+    <div class="flex bg-gray-50 p-4 rounded-md mt-2">
+      <div class="shrink-0 w-8 h-8 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
+        <% if feedback.faculty.user.avatar.attached? %>
+          <%= image_tag feedback.faculty.user.avatar_url(variant: :thumb) %>
+        <% else %>
+          <%= image_tag feedback.faculty.user.initials_avatar %>
+        <% end %>
+      </div>
+      <div>
+        <h4 class="font-semibold text-base leading-tight block md:inline-flex self-end"><%= feedback.faculty.name %></h4>
+        <span class="font-light text-gray-500 text-xs block"><%= feedback.faculty.title %></span>
+        <div class="convert-markdown text-sm pt-2" data-json-props="<%= presenter.markdown_prop(feedback.feedback) %>"> <%= feedback.feedback%> </div>
+      </div>
+    </div>
+  <% end %>
+</div>

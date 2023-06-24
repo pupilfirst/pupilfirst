@@ -2,7 +2,6 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
-<%= t('.submitted_on', date: @submission.created_at.strftime('%b %d, %Y'))%>
 <div class="bg-gray-50">
   <div class="flex justify-start max-w-2xl mx-auto pt-10">
     <div class="flex items-center justify-between">

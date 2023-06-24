@@ -1,6 +1,6 @@
-<div class="pb-5 pt-18 bg-gray-50 md:h-screen overflow-y-auto">
+<div class="md:pt-18 bg-gray-50">
   <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6 pb-0">
+    <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
       <div class="mt-4 overflow-x-auto">
         <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
       </div>
@@ -15,7 +15,7 @@
     </div>
   </section>
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto p-6">
+    <div class="max-w-5xl mx-auto p-4 md:p-6">
       <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
@@ -32,22 +32,25 @@
           <% end %>
         </div>
       </div>
-      <div class="p-4 bg-gray-100 rounded-lg mt-8">
-        <h3 class="text-xs font-semibold"><%= t('.distribution_heading') %></h3>
-        <div class="max-w-5xl mx-auto p-6">
-          <div class="p-4 bg-gray-100 rounded-lg mt-8">
-            <h3 class="text-xs font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
-            <div class="p-8 mx-auto max-w-3xl">
-              <div class="space-y-4">
+      <div class="p-4 bg-gray-50 rounded-lg mt-8">
+        <div class="max-w-5xl mx-auto">
+          <h3 class="text-xs font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
+          <div class="mt-4">
+            <div class="grid gap-x-8 gap-y-6">
                 <% @presenter.milestone_completion_status.each do |target, percentage| %>
-                  <div class="flex items-center space-x-2">
-                    <p class="flex-shrink-0"><%= "Milestone #{target.milestone_number}"%></p>
-                    <div class="bg-gray-200 rounded-md w-full overflow-hidden">
-                      <div class="<%= "w-#{percentage} text-xs text-center p-0.5 bg-green-500" %>"><%= "#{percentage}%"%></div>
+                <div>
+                  <div class="flex justify-between">
+                    <p class="text-xs font-medium"><%= "Milestone #{target.milestone_number}"%></p>
+                    <div class="flex space-x-2">
+                      <p class="text-xs font-medium text-gray-500"><%= '23/64' %></p>
+                      <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{percentage}%"%></p>
                     </div>
                   </div>
+                  <div class="relative bg-gray-200 rounded-md overflow-hidden mt-0.5">
+                    <div style="<%= "width: #{percentage}%" %>" class="h-2 text-center bg-green-500"></div>
+                  </div>
+                </div>
                 <% end %>
-              </div>
             </div>
           </div>
         </div>

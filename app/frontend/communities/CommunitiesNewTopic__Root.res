@@ -306,7 +306,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   />
                 </div>
                 {ReactUtils.nullIf(
-                  <div className="w-1/4">
+                  <div className="md:w-1/4">
                     <label
                       className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                       htmlFor="topic_category">

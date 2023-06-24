@@ -338,7 +338,7 @@ let make = (
   })
 
   <div className="bg-gray-50 md:pt-18">
-    <div className="max-w-4xl w-full mt-5 ps-4 lg:ps-0 lg:mx-auto">
+    <div className="max-w-4xl w-full pt-5 ps-4 lg:ps-0 lg:mx-auto">
       {communityLink(community)}
     </div>
     <div className="flex-col items-center justify-between">

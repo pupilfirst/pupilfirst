@@ -1,6 +1,6 @@
-<div class="pb-5 pt-18 bg-gray-50 md:h-screen overflow-y-auto">
+<div class="md:pt-18 bg-gray-50">
   <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6 pb-0">
+    <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
       <div class="mt-4 overflow-x-auto">
         <%= render 'shared/breadcrumbs', crumbs: [['My Org', '/organisations'], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]]  %>
       </div>
@@ -15,7 +15,7 @@
     </div>
   </section>
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto p-6">
+    <div class="max-w-5xl mx-auto p-4 md:p-6">
       <div class="mt-6">
         <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
       </div>

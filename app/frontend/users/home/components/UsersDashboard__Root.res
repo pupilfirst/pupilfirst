@@ -329,7 +329,7 @@ let make = (
   ~issuedCertificates,
 ) => {
   let (view, setView) = React.useState(() => ShowCourses)
-  <div className="bg-gray-50">
+  <div className="bg-gray-50 h-full">
     <div className="bg-white">
       {headerSectiom(userName, preferredName, userTitle, avatarUrl, showUserEdit)}
       {navSection(view, setView, communities, issuedCertificates)}

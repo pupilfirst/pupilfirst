@@ -16,7 +16,7 @@
       <div class="p-4 bg-gray-50 rounded-lg">
         <h3 class="text-sm font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
         <div class="mt-4">
-          <div class="grid grid-cols-1 gap-x-8 gap-y-6">
+          <div class="grid gap-x-8 gap-y-6">
             <% @presenter.milestone_completion_status.each do |target, percentage| %>
               <div>
                 <div class="flex justify-between">

@@ -2736,10 +2736,14 @@ en:
     view: View
   timeline_events:
     show:
-      accepted_on: Reviewed and accepted on %{date}.
-      question_with_number: "Question #%{number}"
-      rejected_on: Reviewed and rejected on %{date}.
-      submitted_on: Submitted on %{date}.
+      submission_from: Submission from
+      submitted_on: Submitted on
+      reviewed_on: Reviewed on
+      status: Status
+      rejected: Rejected
+      accepted: Accepted
+      pending: Pending
+      feedbacks: Feedback(s)
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

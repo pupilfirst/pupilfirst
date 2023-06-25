@@ -19,12 +19,12 @@
     <div class="w-px bg-gray-200 rounded"></div>
     <div>
       <span class="text-xs text-gray-500"><%= t(".submitted_on") %></span>
-      <p class="text-sm font-semibold"> <%= @submission.created_at.strftime('%b %d, %Y')%></p>
+      <p class="text-sm font-semibold"> <%= @submission.created_at.strftime("%b %d, %Y")%></p>
     </div>
     <div class="w-px bg-gray-200 rounded"></div>
     <div>
       <span class="text-xs text-gray-500"><%= t(".reviewed_on") %></span>
-      <p class="text-sm font-semibold"><%= @submission.evaluated_at.present? ? @submission.evaluated_at.strftime('%b %d, %Y') : "N/A" %></p>
+      <p class="text-sm font-semibold"><%= @submission.evaluated_at.present? ? @submission.evaluated_at.strftime("%b %d, %Y") : "N/A" %></p>
     </div>
     <div class="w-px bg-gray-200 rounded"></div>
     <div>
@@ -56,17 +56,17 @@
         <% end %>
       </span>
       <div class="pl-2">
-        <div class="convert-markdown p-3 pt-2 text-sm font-semibold" data-json-props="<%= presenter.markdown_prop(item['title']) %>">
+        <div class="convert-markdown p-3 pt-2 text-sm font-semibold" data-json-props="<%= presenter.markdown_prop(item["title"]) %>">
           <%= item["title"] %>
         </div>
         <% if presenter.render_markdown?(item) %>
-          <div class="convert-markdown p-1 text-sm" data-json-props="<%= presenter.markdown_prop(item['result']) %>">
-            <%= item['result'] %>
+          <div class="convert-markdown p-1 text-sm" data-json-props="<%= presenter.markdown_prop(item["result"]) %>">
+            <%= item["result"] %>
           </div>
         <% elsif presenter.audio?(item) %>
-          <%= render 'audio', file: presenter.audio_file(item) %>
+          <%= render "audio", file: presenter.audio_file(item) %>
         <% elsif presenter.files?(item) %>
-          <%= render 'files', files: presenter.files(item) %>
+          <%= render "files", files: presenter.files(item) %>
         <% elsif presenter.link?(item) %>
           <a class="max-w-fc mt-1 me-3 flex border overflow-hidden rounded hover:shadow-md border-blue-400 bg-white text-blue-700 hover:border-blue-600 hover:text-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500" href="<%= item["result"] %>">
             <span class="rounded text-sm font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2">
@@ -79,7 +79,7 @@
             </span>
           </a>
         <%  else %>
-          <div class="p-3 text-sm"> - <%= item['result'].join(" | ") %></div>
+          <div class="p-3 text-sm"> - <%= item["reslult"].is_a?(Array) ? item["result"].join(" | ") : item["result"] %></div>
         <% end %>
       </div>
     </div>

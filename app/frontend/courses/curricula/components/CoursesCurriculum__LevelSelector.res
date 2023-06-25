@@ -18,6 +18,8 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
   orderedLevels |> Js.Array.map(level => {
     let levelNumber = level |> Level.number
 
+    Js.log(levelNumber)
+
     let icon = if preview {
       "fas fa-eye"
     } else if level |> Level.isUnlocked {
@@ -110,6 +112,8 @@ let make = (
   ~levelZero,
 ) => {
   let orderedLevels = levels |> Js.Array.filter(l => l |> Level.number != 0) |> Level.sort
+
+  Js.log(selectedLevel)
 
   <div className="bg-gray-50 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
     <div

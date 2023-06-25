@@ -24,8 +24,6 @@ feature "Organisation show" do
 
   let!(:students) do
     (1..30).map do |i|
-      level = i > 20 ? level_2 : level_1
-
       user =
         create :user,
                name: "Student #{i}",
@@ -34,7 +32,7 @@ feature "Organisation show" do
                last_seen_at: 1.week.ago,
                organisation: organisation
 
-      create :student, user: user, cohort: cohort, level: level
+      create :student, user: user, cohort: cohort
     end
   end
 
@@ -46,7 +44,7 @@ feature "Organisation show" do
              school: school,
              organisation: organisation_2
 
-    create :student, user: user, cohort: cohort, level: level_2
+    create :student, user: user, cohort: cohort
   end
 
   let!(:student_from_another_cohort) do
@@ -57,7 +55,7 @@ feature "Organisation show" do
              school: school,
              organisation: organisation
 
-    create :student, user: user, cohort: cohort_2, level: level_3
+    create :student, user: user, cohort: cohort_2
   end
 
   let!(:student_in_inactive_cohort) do
@@ -68,7 +66,7 @@ feature "Organisation show" do
              school: school,
              organisation: organisation
 
-    create :student, user: user, cohort: cohort_inactive, level: level_3
+    create :student, user: user, cohort: cohort_inactive
   end
 
   context "when the user is an organisation admin" do

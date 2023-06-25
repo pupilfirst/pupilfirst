@@ -286,6 +286,8 @@ let make = (
       "Could not find studentLevel with ID " ++ studentLevelId,
     )
 
+  Js.log(studentLevel)
+
   let targetLevelId = switch selectedTarget {
   | Some(target) =>
     let targetGroupId = target |> Target.targetGroupId

@@ -19,25 +19,25 @@ feature "Automatic issuance of certificates", js: true do
   let!(:team) { create :team, cohort: cohort }
 
   # Shortcut to a student we'll refer to frequently.
-  let!(:student_1) do
-    create :student, level: level_1, cohort: cohort, team: team
-  end
-  let!(:student_2) do
-    create :student, level: level_1, cohort: cohort, team: team
-  end
+  let!(:student_1) { create :student, cohort: cohort, team: team }
+  let!(:student_2) { create :student, cohort: cohort, team: team }
 
-  let(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
-  end
-  let(:target_group_l2) do
-    create :target_group, level: level_2, milestone: true
-  end
+  let(:target_group_l1) { create :target_group, level: level_1 }
+  let(:target_group_l2) { create :target_group, level: level_2 }
 
   let!(:target_l1) do
-    create :target, :with_markdown, :team, target_group: target_group_l1
+    create :target,
+           :with_markdown,
+           :team,
+           target_group: target_group_l1,
+           milestone: true
   end
   let!(:target_l2) do
-    create :target, :with_markdown, :team, target_group: target_group_l2
+    create :target,
+           :with_markdown,
+           :team,
+           target_group: target_group_l2,
+           milestone: true
   end
 
   before do
@@ -78,12 +78,8 @@ feature "Automatic issuance of certificates", js: true do
   end
 
   context "when the student is in the final level" do
-    let!(:student_1) do
-      create :student, level: level_2, cohort: cohort, team: team
-    end
-    let!(:student_2) do
-      create :student, level: level_2, cohort: cohort, team: team
-    end
+    let!(:student_1) { create :student, cohort: cohort, team: team }
+    let!(:student_2) { create :student, cohort: cohort, team: team }
 
     scenario "student receives certificate upon completion of sole milestone target" do
       sign_in_user student_1.user, referrer: target_path(target_l2)

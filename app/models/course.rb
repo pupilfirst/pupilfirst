@@ -35,7 +35,7 @@ class Course < ApplicationRecord
   has_many :webhook_deliveries, dependent: :destroy
   has_one :webhook_endpoint, dependent: :destroy
   has_many :applicants, dependent: :destroy
-  belongs_to :default_cohort, class_name: 'Cohort', optional: true
+  belongs_to :default_cohort, class_name: "Cohort", optional: true
 
   has_one_attached :thumbnail
   has_one_attached :cover
@@ -45,23 +45,22 @@ class Course < ApplicationRecord
   scope :archived, -> { where.not(archived_at: nil) }
   scope :access_active,
         -> {
-          joins(:cohorts)
-            .where('cohorts.ends_at > ? OR cohorts.ends_at IS NULL', Time.now)
-            .distinct
+          joins(:cohorts).where(
+            "cohorts.ends_at > ? OR cohorts.ends_at IS NULL",
+            Time.now
+          ).distinct
         }
   scope :ended, -> { live.where.not(id: access_active) }
   scope :active, -> { live.access_active }
 
   normalize_attribute :about, :processing_url
 
-  PROGRESSION_BEHAVIOR_LIMITED = -'Limited'
-  PROGRESSION_BEHAVIOR_UNLIMITED = -'Unlimited'
-  PROGRESSION_BEHAVIOR_STRICT = -'Strict'
+  PROGRESSION_BEHAVIOR_LIMITED = -"Limited"
+  PROGRESSION_BEHAVIOR_UNLIMITED = -"Unlimited"
 
   VALID_PROGRESSION_BEHAVIORS = [
     PROGRESSION_BEHAVIOR_LIMITED,
-    PROGRESSION_BEHAVIOR_UNLIMITED,
-    PROGRESSION_BEHAVIOR_STRICT
+    PROGRESSION_BEHAVIOR_UNLIMITED
   ].freeze
 
   validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
@@ -72,7 +71,7 @@ class Course < ApplicationRecord
   end
 
   def facebook_share_disabled?
-    name.include? 'Apple'
+    name.include? "Apple"
   end
 
   def ended?
@@ -93,15 +92,15 @@ class Course < ApplicationRecord
 
   # ToDo: remove this method
   def team_tags
-    teams.active.joins(:tags).distinct('tags.name').pluck('tags.name')
+    teams.active.joins(:tags).distinct("tags.name").pluck("tags.name")
   end
 
   def student_tags
-    founders.access_active.joins(:tags).distinct('tags.name').pluck('tags.name')
+    founders.access_active.joins(:tags).distinct("tags.name").pluck("tags.name")
   end
 
   def user_tags
-    users.joins(:tags).distinct('tags.name').pluck('tags.name')
+    users.joins(:tags).distinct("tags.name").pluck("tags.name")
   end
 
   def strict?

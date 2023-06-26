@@ -12,9 +12,9 @@ class Courses::StudentsPresenter < ApplicationPresenter
   def cohorts
     @cohorts ||=
       if @status == "active"
-        @course.cohorts.active
+        current_user.faculty.cohorts.where(course: @course).active
       else
-        @course.cohorts.ended
+        current_user.faculty.cohorts.where(course: @course).ended
       end
   end
 

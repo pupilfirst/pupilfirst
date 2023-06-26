@@ -1959,8 +1959,8 @@ en:
         one: <span class="font-semibold text-black">1</span> student enrolled
         other: <span class="font-semibold text-black">%{count}</span> students enrolled
       students_enrolled_suffix_html:
-        one: in <span class="font-semibold text-black">1</span> active cohort
-        other: in <span class="font-semibold text-black">%{count}</span> active cohorts
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
       cohorts_subheading: "%{status} Cohorts"
       student:
         never_signed_in: Has never signed in
@@ -1976,7 +1976,7 @@ en:
         nothing_to_show: There are no students matching the selected filters.
         pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
       end_date: "End Date:"
-      nothing_to_show: There are no %{status} cohorts for this course.
+      nothing_to_show: You are not part of any %{status} cohorts of this course.
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
     leaderboard:
       active_students: Active Students

@@ -7,7 +7,7 @@
           <h3 class="text-lg font-semibold" ><%= @course.name %></h3>
           <p class="text-sm text-gray-500">
             <%= t('.students_enrolled_prefix_html', count: presenter.students.count) %>
-            <%= t('.students_enrolled_suffix_html', count: presenter.cohorts.count) %>
+            <%= t('.students_enrolled_suffix_html', status: params[:status] || 'active', count: presenter.cohorts.count) %>
           </p>
         </div>
       </div>
@@ -49,7 +49,7 @@
         </div>
       <% end %>
       <% if cohorts.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show', status: params[:status] || 'Active' ) %></div>
+        <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show', status: params[:status] || 'active' ) %></div>
       <% end %>
     </div>
   </div>

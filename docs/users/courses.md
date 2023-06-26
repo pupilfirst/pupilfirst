@@ -8,17 +8,15 @@ Courses hold your content and can have any number of students enrolled, with coa
 
 ## Creating courses
 
-To create a new course, head to the Courses menu from the school administration interface's navigation bar, and click the _Add New Course_ button at the top of the page.
+To create a new course, head to the Courses menu from the school administration interface's navigation bar, and click the _Add New Course_ button on course creation card.
 
-![Courses page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1588240011/pupilfirst_documentation/courses/courses_index_onpuxi.png)
+![Courses page in school administration interface](../assets//courses/courses_index_20230626.png)
 
 The form that pops up will ask you for a few details:
 
 **Course name**: The name of the course, that will publicly displayed.
 
 **Course description**: This short description will be displayed on the course's public page.
-
-**Course end date**: If set, your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
 
 **About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the course's public page.
 
@@ -60,7 +58,7 @@ https://paymentgateway.com/process?name=${name}&email=${email}&course_id=${cours
 
 ## Editing courses
 
-To edit a course's details, simply click on the course in the Courses menu. The form for editing a course is identical to the one that you used to create it.
+To edit the details of a course, click on the _Edit Course Details_ button located on the card displaying the course name and other information. The form used for editing the course is identical to the one you used during its creation.
 
 To edit the _contents_ of a course, you'll want to use the [curriculum editor](/users/curriculum_editor), which is documented separately.
 
@@ -98,9 +96,13 @@ Because this image fits with the width of the page, it should be created followi
 
 Here's an example image that shows where you should place text in a cover image:
 
-[![Cover image composition](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)
+[![Cover image composition](../assets/courses/cover_composition_hztuof.png)](../assets/courses/cover_composition_hztuof.png)
 
 ## Course Actions
+
+### Clone Course
+
+This feature allows you to create a duplicate of a course, as the name suggests. It is extremely valuable when you want to build a new course using an existing course as a foundation.
 
 ### Archive Course
 

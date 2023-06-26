@@ -159,9 +159,7 @@ feature "Course students bulk importer", js: true do
       create :user, email: "bat@man.com", school: school, title: "New Title"
     end
 
-    let!(:founder) do
-      create :founder, level: level_1, user: user, cohort: cohort
-    end
+    let!(:founder) { create :founder, user: user, cohort: cohort }
 
     scenario "admin uploads csv with email of existing student" do
       sign_in_user school_admin.user,

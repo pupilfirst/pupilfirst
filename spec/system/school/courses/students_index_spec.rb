@@ -26,15 +26,9 @@ feature "School students index", js: true do
   end
 
   context "with some students" do
-    let!(:student_1) do
-      create :founder, cohort: live_cohort, level: level_1, tag_list: [tag_1]
-    end
-    let!(:student_2) do
-      create :founder, cohort: live_cohort, level: level_2, tag_list: [tag_2]
-    end
-    let!(:student_access_ended) do
-      create :founder, cohort: ended_cohort, level: level_2
-    end
+    let!(:student_1) { create :founder, cohort: live_cohort, tag_list: [tag_1] }
+    let!(:student_2) { create :founder, cohort: live_cohort, tag_list: [tag_2] }
+    let!(:student_access_ended) { create :founder, cohort: ended_cohort }
 
     let(:name_1) { Faker::Name.name }
     let(:email_1) { Faker::Internet.email(name: name_1) }
@@ -356,20 +350,12 @@ feature "School students index", js: true do
       let(:team) { create :team, cohort: live_cohort }
 
       let!(:student_1) do
-        create :student,
-               user: user_1,
-               cohort: live_cohort,
-               level: level_1,
-               team: team
+        create :student, user: user_1, cohort: live_cohort, team: team
       end
 
-      let!(:student_2) do
-        create :student, user: user_2, cohort: live_cohort, level: level_2
-      end
+      let!(:student_2) { create :student, user: user_2, cohort: live_cohort }
 
-      let!(:student_3) do
-        create :student, cohort: live_cohort, level: level_1, team: team
-      end
+      let!(:student_3) { create :student, cohort: live_cohort, team: team }
 
       let(:new_title) { Faker::Job.title }
 
@@ -540,13 +526,6 @@ feature "School students index", js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      # filter by level
-      fill_in "Filter Resources", with: "level"
-      click_button level_2.name
-      expect(page).to have_text(student_2.name)
-      expect(page).not_to have_text(student_1.name)
-      click_button "Remove selection: #{level_2.filter_display_name}"
-
       # filter by tag
       fill_in "Filter Resources", with: tag_1
       click_button "Pick Student Tag: Single Student"
@@ -575,9 +554,7 @@ feature "School students index", js: true do
   end
 
   context "when there are a large number of teams" do
-    let!(:students) do
-      create_list :founder, 30, level: level_1, cohort: live_cohort
-    end
+    let!(:students) { create_list :founder, 30, cohort: live_cohort }
 
     def safe_random_students
       @selected_student_ids ||= []
@@ -684,7 +661,7 @@ feature "School students index", js: true do
   end
 
   context "when a course has no certificates" do
-    let!(:student) { create :founder, level: level_1, cohort: live_cohort }
+    let!(:student) { create :founder, cohort: live_cohort }
     scenario "admin visits student editor to issue certificates" do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/actions"
@@ -696,12 +673,8 @@ feature "School students index", js: true do
   end
 
   context "when a course has certificates" do
-    let!(:student_without_certificate) do
-      create :founder, level: level_1, cohort: live_cohort
-    end
-    let(:student_with_certificate) do
-      create :founder, level: level_1, cohort: live_cohort
-    end
+    let!(:student_without_certificate) { create :founder, cohort: live_cohort }
+    let(:student_with_certificate) { create :founder, cohort: live_cohort }
 
     let!(:certificate_1) { create :certificate, course: course }
     let!(:certificate_2) { create :certificate, course: course }

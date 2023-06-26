@@ -62,9 +62,7 @@ feature "Organisation student details page and submissions list" do
            organisation: organisation
   end
 
-  let(:student) do
-    create :student, user: student_user, cohort: cohort, level: level_2
-  end
+  let(:student) { create :student, user: student_user, cohort: cohort }
 
   let!(:student_from_another_org) do
     user =
@@ -74,7 +72,7 @@ feature "Organisation student details page and submissions list" do
              school: school,
              organisation: organisation_2
 
-    create :student, user: user, cohort: cohort, level: level_2
+    create :student, user: user, cohort: cohort
   end
 
   let!(:student_in_inactive_cohort) do
@@ -85,7 +83,7 @@ feature "Organisation student details page and submissions list" do
              school: school,
              organisation: organisation
 
-    create :student, user: user, cohort: cohort_inactive, level: level_3
+    create :student, user: user, cohort: cohort_inactive
   end
 
   let!(:coach_note) do
@@ -183,12 +181,6 @@ feature "Organisation student details page and submissions list" do
       # Check name.
       expect(page).to have_text(student.name)
 
-      # Check level distribution bar.
-      expect(page).to have_selector(
-        ".level-progress-bar__student-level--current",
-        text: "2"
-      )
-
       # Check target completion stats.
       expect(page).to have_text(
         "Targets Overview\n50%\nTotal Targets Completed\n2/4 Targets"
@@ -241,7 +233,7 @@ feature "Organisation student details page and submissions list" do
 
     context "when the org admin is also a student" do
       let(:student_org_admin) do
-        create :student, user: org_admin_user, cohort: cohort, level: level_1
+        create :student, user: org_admin_user, cohort: cohort
       end
 
       let!(:coach_note) do

@@ -12,7 +12,7 @@ for a target for each of these criteria.
 
 To create a new evaluation criterion, visit the _Evaluation Criteria_ sub-menu within a course, and click the _Add new evaluation criterion_ button.
 
-![Evaluation criteria page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1579067385/pupilfirst_documentation/evaluation_criteria/evaluation_criteria_page_edhrjl.png)
+![Evaluation criteria page in school administration interface](../assets/evaluation_criteria/evaluation_criteria_page_edhrjl.png)
 
 **Name**: The name of the evaluation criterion, which will be displayed in the coach review interface and student grade card.
 
@@ -26,10 +26,10 @@ The values for maximum and passing grades cannot be modified once a criterion is
 
 An example of grade labels in a student grade card is as shown below:
 
-![Student grade card for a reviewed submission](https://res.cloudinary.com/sv-co/image/upload/v1579069067/pupilfirst_documentation/evaluation_criteria/student_grade_card_wjiiej.png)
+![Student grade card for a reviewed submission](../assets/evaluation_criteria/student_grade_card_wjiiej.png)
 
 The student submission here received a grade of 5 for evaluation criterion with name _Quality of Submission_ and the label for grade 5 is _Wow_.
 
 Here's how grading based on multiple criteria looks in the coach's review interface. The target here is graded on two criteria, each of which has it's own grading scale.
 
-![Coach review interface for target with multiple criterion](https://res.cloudinary.com/sv-co/image/upload/v1579080296/pupilfirst_documentation/evaluation_criteria/multiple_evaluation_criteria_coach_interface_y5pssn.png)
+![Coach review interface for target with multiple criterion](../assets/evaluation_criteria/multiple_evaluation_criteria_coach_interface_y5pssn.png)

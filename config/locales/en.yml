@@ -1961,7 +1961,7 @@ en:
       students_enrolled_suffix_html:
         one: in <span class="font-semibold text-black">1</span> active cohort
         other: in <span class="font-semibold text-black">%{count}</span> active cohorts
-      cohorts_subheading: Active Cohorts
+      cohorts_subheading: "%{status} Cohorts"
       student:
         never_signed_in: Has never signed in
         time_ago: Last seen %{time_ago} ago

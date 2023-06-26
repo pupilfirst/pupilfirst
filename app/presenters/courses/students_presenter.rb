@@ -1,14 +1,19 @@
 class Courses::StudentsPresenter < ApplicationPresenter
-  def initialize(view_context, course)
+  def initialize(view_context, course, status)
     @course = course
+    @status = status || "active"
     super(view_context)
   end
 
-  def active_students
-    Founder.where(cohort: active_cohorts)
+  def students
+    Founder.where(cohort: cohorts)
   end
 
-  def active_cohorts
-    @active_cohorts ||= @course.cohorts.active
+  def cohorts
+    if @status == "active"
+      @cohorts ||= @course.cohorts.active
+    else
+      @cohorts ||= @course.cohorts.ended
+    end
   end
 end

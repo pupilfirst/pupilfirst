@@ -82,7 +82,7 @@ let make = (
     let target =
       targets |> ArrayUtils.unsafeFind(
         t => t |> Target.id == targetId,
-        t("target_for_editor_not_found") ++ targetId,
+        "Could not find target for editor drawer with the ID " ++ targetId,
       )
 
     let pathPrefix =

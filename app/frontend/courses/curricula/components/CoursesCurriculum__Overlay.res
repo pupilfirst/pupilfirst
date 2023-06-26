@@ -285,7 +285,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
         let targetStatus =
           statusOfTargets |> ArrayUtils.unsafeFind(
             ts => ts |> TargetStatus.targetId == Target.id(target),
-            t("status_of_target_not_found") ++ Target.id(target),
+            "Could not find status of target with ID " ++ Target.id(target),
           )
 
         <Link

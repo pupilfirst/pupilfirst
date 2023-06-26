@@ -250,7 +250,6 @@ ar:
       saving: Saving
       update_author: Update Author
     CourseAuthors__Root:
-      author_not_found: تعذر العثور على مؤلف بالمعرف %{authorId} في قائمة المؤلفين المعروفين للدورة التدريبية بالمعرف %{courseId}
       window_confirm_post: from the list of authors?
       window_confirm_pre: Are you sure you want to remove
     CourseCertificates__CreateDrawer:
@@ -516,13 +515,6 @@ ar:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
         title: We've sent you a verification mail.
     CoursesCurriculum:
-      target_status_for_selected_target_not_found: "تعذر العثور على حالة الهدف للهدف المحدد بالمعرف "
-      selected_level_not_found: "تعذر العثور على المستوى المحدد بالمعرف "
-      current_level_not_found: "تعذر العثور على المستوى الحالي بالمعرف "
-      target_group_not_found: "تعذر العثور على المجموعة المستهدفة بالمعرف "
-      student_level_not_found: "تعذر العثور على مستوى الطالب بالمعرف "
-      selected_target_not_found: "تعذر العثور على الهدف المحدد بالمعرف "
-      target_status_not_found: "تعذر العثور على حالة الهدف للهدف المدرج بالمعرف "
       edit_level_button: Edit Level
       edit_target_button_title: Edit target %{title}
       empty_level_content_notice: There's no published content on this level.
@@ -597,7 +589,6 @@ ar:
       team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
       team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
-      status_of_target_not_found: "تعذر العثور على حالة الهدف بالمعرف "
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
@@ -623,9 +614,6 @@ ar:
       next_question: Next Question
       question: Question
       submit_quiz: Submit Quiz
-    CoursesCurriculum__QuizQuestion:
-      last_question_not_found: "لا يمكن العثور على السؤال الأخير في الفهرس "
-      question_not_found: "تعذر العثور على سؤال في الفهرس "
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching
@@ -660,10 +648,6 @@ ar:
       your_responses: Your Responses
       your_submissions: Your Submissions
     CoursesCurriculum__TargetStatus:
-      level_not_found: "تعذر العثور على المستوى بالمعرف "
-      create_target_cache: " لإنشاء ذاكرة التخزين المؤقتا للهدف"
-      target_group_not_found: "تعذر العثور على المجموعة المستهدفة بالمعرف "
-      student_level_not_found: "تعذر العثور على مستوى الطالب بالمعرف "
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
@@ -1118,7 +1102,6 @@ ar:
       update_target: Update Target
       visit_link: Visit a link to complete the target.
     CurriculumEditor__TargetDrawer:
-      target_for_editor_not_found: "تعذر العثور على الهدف لدرج المحرر ذي المعرف "
       content: Content
       details: Details
       unexpected_error: Unexpected error. Please reload the page.
@@ -2642,7 +2625,6 @@ ar:
     cohorts: المجموعات
     community: المجتمع
     completed: مكتمل
-    current_course_not_found: "تعذر العثور على الدورة التدريبية الحالية بالمعرف "
     dashboard: اللوحة الرئيسية
     delete: حذف
     deleting: جار الحذف

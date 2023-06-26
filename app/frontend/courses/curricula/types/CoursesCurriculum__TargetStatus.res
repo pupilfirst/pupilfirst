@@ -80,7 +80,7 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
       levels
       |> ArrayUtils.unsafeFind(
         l => l |> Level.id == Student.levelId(student),
-        tc("student_level_not_found") ++ Student.levelId(student),
+        "Could not student's level with ID " ++ Student.levelId(student),
       )
       |> Level.number
 
@@ -91,9 +91,9 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
       let targetGroup =
         targetGroups |> ArrayUtils.unsafeFind(
           tg => tg |> TargetGroup.id == Target.targetGroupId(target),
-          tc("target_group_not_found") ++
+          "Could not find target group with ID " ++
           (Target.targetGroupId(target) ++
-          tc("create_target_cache")),
+          " to create target cache"),
         )
 
       let milestone = targetGroup |> TargetGroup.milestone
@@ -102,9 +102,9 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
         levels
         |> ArrayUtils.unsafeFind(
           l => l |> Level.id == (targetGroup |> TargetGroup.levelId),
-          tc("level_not_found") ++
+          "Could not find level with ID " ++
           (Student.levelId(student) ++
-          tc("create_target_cache")),
+          " to create target cache"),
         )
         |> Level.number
 

@@ -2,47 +2,44 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
-<div class="bg-gray-50">
-  <div class="flex justify-start max-w-2xl mx-auto pt-10">
-    <div class="flex items-center justify-between">
-      <span class="bg-blue-100 rounded-full text-blue-500 h-10 w-10 flex items-center justify-center">
+<div class="bg-gray-50 pt-6">
+  <div class="max-w-2xl mx-auto sm:px-2">
+    <div class="flex items-center gap-3">
+      <div class="bg-blue-100 rounded-full text-blue-500 h-10 w-10 flex items-center justify-center">
         <i class="if i-journal-text-light if-fw text-xl"></i>
-      </span>
-      <span class="text-md font-semibold pl-4"><%= @submission.title %></span>
+      </div>
+      <p class="text-md font-semibold"><%= @submission.title %></p>
     </div>
-  </div>
-  <div class="max-w-2xl flex justify-start mx-auto py-5 gap-8">
-    <div class="">
-      <span class="text-xs text-gray-500"><%= t(".submission_from") %></span>
-      <p class="text-sm font-semibold"><%= @submission.founder.name %></p>
-    </div>
-    <div class="w-px bg-gray-200 rounded"></div>
-    <div>
-      <span class="text-xs text-gray-500"><%= t(".submitted_on") %></span>
-      <p class="text-sm font-semibold"> <%= @submission.created_at.strftime("%b %d, %Y")%></p>
-    </div>
-    <div class="w-px bg-gray-200 rounded"></div>
-    <div>
-      <span class="text-xs text-gray-500"><%= t(".reviewed_on") %></span>
-      <p class="text-sm font-semibold"><%= @submission.evaluated_at.present? ? @submission.evaluated_at.strftime("%b %d, %Y") : "N/A" %></p>
-    </div>
-    <div class="w-px bg-gray-200 rounded"></div>
-    <div>
-      <span class="text-xs text-gray-500"><%= t(".status") %></span>
-      <% if @submission.passed_at.present? %>
-        <p class="text-sm font-semibold text-green-500"><%= t(".accepted") %></p>
-      <% elsif  @submission.evaluated_at.present? %>
-        <p class="text-sm font-semibold text-red-500"><%= t(".rejected") %></p>
-      <% else %>
-        <p class="text-sm font-semibold text-blue-500"><%= t(".pending") %></p>
-      <% end %>
+    <div class="flex py-5 divide-x-2">
+      <div class="pr-4">
+        <p class="text-xs text-gray-500"><%= t(".submission_from") %></p>
+        <p class="text-sm font-semibold"><%= @submission.founder.name %></p>
+      </div>
+      <div class="px-4">
+        <p class="text-xs text-gray-500"><%= t(".submitted_on") %></p>
+        <p class="text-sm font-semibold"> <%= @submission.created_at.strftime("%b %d, %Y")%></p>
+      </div>
+      <div class="px-4">
+        <p class="text-xs text-gray-500"><%= t(".reviewed_on") %></p>
+        <p class="text-sm font-semibold"><%= @submission.evaluated_at.present? ? @submission.evaluated_at.strftime("%b %d, %Y") : t(".not_available") %></p>
+      </div>
+      <div class="px-4">
+        <p class="text-xs text-gray-500"><%= t(".status") %></p>
+        <% if @submission.passed_at.present? %>
+          <p class="text-sm font-semibold text-green-500"><%= t(".accepted") %></p>
+        <% elsif  @submission.evaluated_at.present? %>
+          <p class="text-sm font-semibold text-red-500"><%= t(".rejected") %></p>
+        <% else %>
+          <p class="text-sm font-semibold text-blue-500"><%= t(".pending") %></p>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
-<div class="flex flex-col justify-start max-w-2xl mx-auto my-10 bg-gray-50 p-2 rounded-md">
+<div class="flex flex-col max-w-2xl mx-auto mt-10 bg-gray-50 p-4 rounded-md border border-gray-200 sm:px-2">
   <% @submission.checklist.each_with_index do |item, index| %>
-    <div class="flex items-start">
-      <span class="mt-1">
+    <div class="flex items-start gap-x-2">
+      <div class="mt-2">
         <% if presenter.render_markdown?(item)%>
           <i class="if i-long-text-light if-fw" ></i>
         <% elsif presenter.link?(item) %>
@@ -54,9 +51,9 @@
         <% else %>
           <i class="if i-check-circle-alt-regular if-fw" ></i>
         <% end %>
-      </span>
-      <div class="pl-2">
-        <div class="convert-markdown p-3 pt-2 text-sm font-semibold" data-json-props="<%= presenter.markdown_prop(item["title"]) %>">
+      </div>
+      <div>
+        <div class="convert-markdown pt-2 text-sm font-semibold" data-json-props="<%= presenter.markdown_prop(item["title"]) %>">
           <%= item["title"] %>
         </div>
         <% if presenter.render_markdown?(item) %>
@@ -79,20 +76,20 @@
             </span>
           </a>
         <%  else %>
-          <div class="p-3 text-sm"> - <%= item["reslult"].is_a?(Array) ? item["result"].join(" | ") : item["result"] %></div>
+          <div class="p-3 text-sm"> - <%= item["result"].is_a?(Array) ? item["result"].join(" | ") : item["result"] %></div>
         <% end %>
       </div>
     </div>
   <% end %>
 </div>
-<div class="flex flex-col justify-start max-w-2xl mx-auto my-10">
-  <h2 class="font-semibold"><i class="if i-journal-text-regular if-fw mx-2" ></i><%= t(".feedbacks") %></h2>
+<div class="flex flex-col max-w-2xl mx-auto py-10 sm:px-2">
+  <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= t(".feedbacks") %></h2>
   <% unless @submission.startup_feedback.present? %>
-    <p class="pl-5">No feedbacks present.</p>
+    <p class="pt-2 text-red-500"><%= t(".no_feedbacks") %></p>
   <% end %>
   <% @submission.startup_feedback.includes(faculty: [user: [avatar_attachment: :blob]]).each do |feedback| %>
     <div class="flex bg-gray-50 p-4 rounded-md mt-2">
-      <div class="shrink-0 w-8 h-8 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
+      <div class="shrink-0 w-8 h-8 bg-gray-300 rounded-full overflow-hidden me-3 object-cover mt-1">
         <% if feedback.faculty.user.avatar.attached? %>
           <%= image_tag feedback.faculty.user.avatar_url(variant: :thumb) %>
         <% else %>
@@ -100,8 +97,8 @@
         <% end %>
       </div>
       <div>
-        <h4 class="font-semibold text-base leading-tight block md:inline-flex self-end"><%= feedback.faculty.name %></h4>
-        <span class="font-light text-gray-500 text-xs block"><%= feedback.faculty.title %></span>
+        <h3 class="font-semibold text-base leading-tight block md:inline-flex self-end"><%= feedback.faculty.name %></h3>
+        <p class="font-light text-gray-500 text-xs block"><%= feedback.faculty.title %></p>
         <div class="convert-markdown text-sm pt-2" data-json-props="<%= presenter.markdown_prop(feedback.feedback) %>"> <%= feedback.feedback%> </div>
       </div>
     </div>

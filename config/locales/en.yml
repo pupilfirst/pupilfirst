@@ -2647,7 +2647,7 @@ en:
         title: Coaches
       school_index:
         title: Coaches
-        coache: Coach
+        coach: Coach
     show:
       coaches: Coaches
       courses: Courses

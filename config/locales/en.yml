@@ -498,6 +498,9 @@ en:
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -1911,6 +1914,7 @@ en:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -2333,6 +2337,7 @@ en:
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
@@ -2424,28 +2429,27 @@ en:
       profile_saved_notification: Profile updated successfully!
   organisations:
     courses:
-      active_cohorts_count: "%{count}"
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      inactive_cohorts_count: "%{count}"
-      inactive_cohorts_label: Inactive Cohorts
+      ended_cohorts_label: Ended Cohorts
+      end_date: "End Date:"
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
       active_students_label: Active Students
-      ongoing_cohorts_subheading: Ongoing Cohorts
+      active_cohorts_subheading: Active Cohorts
       end_date: "End Date:"
-      no_ongoing_cohorts: There are no ongoing cohorts for this course.
+      no_active_cohorts: There are no active cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
-      ongoing_prefix_html:
+      active_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled in
         other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      ongoing_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> ongoing cohort.
-        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+      active_suffix_html:
+        one:  <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
     students:

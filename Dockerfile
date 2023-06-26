@@ -1,5 +1,5 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:3.2.2
+FROM ruby:3.2.2-bookworm
 WORKDIR /build
 
 # Begin by installing gems.
@@ -50,7 +50,7 @@ RUN yarn run re:build
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
-FROM ruby:3.2.2-slim-bullseye
+FROM ruby:3.2.2-slim-bookworm
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \
@@ -63,7 +63,7 @@ RUN apt-get update && apt-get install -y \
 
 # We'll also need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.
 RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
 
 # Now install the exact version of the client we need.
 RUN apt-get update && apt-get install -y postgresql-client-12 \

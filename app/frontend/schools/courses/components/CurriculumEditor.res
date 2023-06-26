@@ -32,7 +32,7 @@ let reducer = (state, action) =>
   | SelectLevel(selectedLevel) => {...state, selectedLevel: selectedLevel}
   | UpdateEditorAction(editorAction) => {...state, editorAction: editorAction}
   | UpdateLevels(level) =>
-    let newLevels = level |> Level.updateArray(state.levels)
+    let newLevels = level->Level.updateArray(state.levels)
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level}
   | UpdateTargetGroup(targetGroup) =>
     let newtargetGroups = targetGroup |> TargetGroup.updateArray(state.targetGroups)
@@ -46,33 +46,33 @@ let reducer = (state, action) =>
   }
 
 let showArchivedButton = (targetGroupsInLevel, targets) => {
-  let tgIds = targetGroupsInLevel |> Js.Array.map(TargetGroup.id)
+  let tgIds = targetGroupsInLevel->Js.Array2.map(TargetGroup.id)
 
   let numberOfArchivedTargetGroupsInLevel =
-    targetGroupsInLevel |> Js.Array.filter(TargetGroup.archived) |> Js.Array.length
+    targetGroupsInLevel->Js.Array2.filter(TargetGroup.archived)->Js.Array2.length
 
   let numberOfArchivedTargetsInLevel =
     targets
-    |> Js.Array.filter(target => tgIds |> Js.Array.includes(Target.targetGroupId(target)))
-    |> Js.Array.filter(target => Target.visibility(target) == Archived)
-    |> Js.Array.length
+    ->Js.Array2.filter(target => tgIds->Js.Array2.includes(Target.targetGroupId(target)))
+    ->Js.Array2.filter(target => Target.visibility(target) == Archived)
+    ->Js.Array2.length
 
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0
 }
 
 let updateTargetSortIndex = (state, send, sortedTargets) => {
-  let oldTargets = state.targets |> Js.Array.filter(t => !Js.Array.includes(t, sortedTargets))
+  let oldTargets = state.targets->Js.Array2.filter(t => !Js.Array2.includes(sortedTargets, t))
 
-  send(UpdateTargets(Js.Array.concat(oldTargets, Target.updateSortIndex(sortedTargets))))
+  send(UpdateTargets(Js.Array2.concat(oldTargets, Target.updateSortIndex(sortedTargets))))
 }
 
 let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
   let oldTargetGroups =
-    state.targetGroups |> Js.Array.filter(t => !Js.Array.includes(t, sortedTargetGroups))
+    state.targetGroups->Js.Array2.filter(t => !Js.Array2.includes(sortedTargetGroups, t))
 
   send(
     UpdateTargetGroups(
-      Js.Array.concat(TargetGroup.updateSortIndex(sortedTargetGroups), oldTargetGroups),
+      Js.Array2.concat(TargetGroup.updateSortIndex(sortedTargetGroups), oldTargetGroups),
     ),
   )
 }
@@ -99,7 +99,7 @@ let computeIntialState = ((levels, targetGroups, targets, path)) => {
     DomUtils.getUrlParam(~key="level")
     ->Belt.Option.flatMap(Belt.Int.fromString)
     ->Belt.Option.flatMap(levelNumber => {
-      Js.Array.find(level => Level.number(level) == levelNumber, levels)
+      Js.Array2.find(levels, level => Level.number(level) == levelNumber)
     })
     ->Belt.Option.getWithDefault(
       Js.Array2.reduce(
@@ -151,12 +151,12 @@ let make = (
 
   let targetGroupsInLevel =
     state.targetGroups
-    |> Js.Array.filter(targetGroup => TargetGroup.levelId(targetGroup) == currentLevelId)
-    |> TargetGroup.sort
+    ->Js.Array2.filter(targetGroup => TargetGroup.levelId(targetGroup) == currentLevelId)
+    ->TargetGroup.sort
 
   let targetGroupsToDisplay = state.showArchived
     ? targetGroupsInLevel
-    : targetGroupsInLevel |> Js.Array.filter(tg => !TargetGroup.archived(tg))
+    : targetGroupsInLevel->Js.Array2.filter(tg => !TargetGroup.archived(tg))
 
   let showTargetGroupEditorCB = targetGroup =>
     send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)))
@@ -168,11 +168,11 @@ let make = (
         "Unable to find target group with ID:" ++ Target.targetGroupId(target),
       )
 
-    let updatedTargetGroup = switch target |> Target.visibility {
+    let updatedTargetGroup = switch Target.visibility(target) {
     | Archived => targetGroup
     | Draft
     | Live =>
-      targetGroup |> TargetGroup.unarchive
+      TargetGroup.unarchive(targetGroup)
     }
 
     send(UpdateTarget(target))
@@ -180,13 +180,13 @@ let make = (
   }
 
   let updateTargetGroupsCB = targetGroup => {
-    targetGroup |> TargetGroup.archived
+    TargetGroup.archived(targetGroup)
       ? {
           let targetIdsInTargerGroup =
-            state.targets |> Target.targetIdsInTargetGroup(targetGroup |> TargetGroup.id)
+            state.targets |> Target.targetIdsInTargetGroup(TargetGroup.id(targetGroup))
           let newTargets =
-            state.targets |> Js.Array.map(target =>
-              targetIdsInTargerGroup |> Js.Array.includes(Target.id(target))
+            state.targets->Js.Array2.map(target =>
+              targetIdsInTargerGroup->Js.Array2.includes(Target.id(target))
                 ? Target.archive(target)
                 : target
             )
@@ -235,23 +235,23 @@ let make = (
             <div className="inline-block relative w-auto md:w-64">
               <select
                 onChange={event => {
-                  let level_name = ReactEvent.Form.target(event)["value"]
-                  send(SelectLevel(Level.selectLevel(state.levels, level_name)))
+                  let level_id = ReactEvent.Form.target(event)["value"]
+                  send(SelectLevel(Level.selectLevel(state.levels, level_id)))
                 }}
-                value={currentLevel |> Level.name}
+                value={Level.id(currentLevel)}
                 ariaLabel="Select level"
                 className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 {state.levels
-                |> Level.sort
-                |> Array.map(level =>
-                  <option key={Level.id(level)} value={level |> Level.name}>
+                ->Level.sort
+                ->Js.Array2.map(level =>
+                  <option key={Level.id(level)} value={Level.id(level)}>
                     {LevelLabel.format(
-                      ~name=level |> Level.name,
-                      level |> Level.number |> string_of_int,
-                    ) |> str}
+                      ~name=Level.name(level),
+                      Level.number(level)->string_of_int,
+                    )->str}
                   </option>
                 )
-                |> React.array}
+                ->React.array}
               </select>
               <div
                 className="pointer-events-none absolute inset-y-0 end-0 flex items-center px-3 text-gray-800">

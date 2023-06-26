@@ -2304,7 +2304,7 @@ en:
       soft_limit_number: You've hit the soft-limit for number of students in this course
       unique_emails: Email addresses must be unique
       invalid_strings: One or more of the entries have invalid strings
-      thousand_student: You can only onboard 1000 students at a time
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:

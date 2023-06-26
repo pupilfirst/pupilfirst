@@ -56,7 +56,7 @@ module Cohorts
     def soft_limit_student_count
       return if csv_rows.count <= 1000
 
-      errors.add(:base, I18n.t("mutations.create_students.thousand_student"))
+      errors.add(:base, I18n.t("mutations.create_students.thousand_students_limit"))
     end
 
     def valid_string?(string:, max_length:, optional: false)

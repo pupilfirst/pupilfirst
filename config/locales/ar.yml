@@ -2259,7 +2259,7 @@ ar:
       soft_limit_number: لقد وصلت إلى الحد الأدنى لعدد الطلاب في هذه الدورة
       unique_emails: يجب أن تكون عناوين البريد الإلكتروني فريدة
       invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
-      thousand_student: يمكنك فقط ضم 1000 طالب في المرة الواحدة
+      thousand_students_limit: يمكنك فقط ضم 1000 طالب في المرة الواحدة
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:

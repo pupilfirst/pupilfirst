@@ -45,5 +45,20 @@ module TimelineEvents
         @submission.founder.name
       end
     end
+
+    def icon_class_for(item)
+      case item["kind"]
+      when "longText", "shortText"
+        "if i-long-text-light if-fw"
+      when "link"
+        "if i-link-light if-fw"
+      when "files"
+        "if i-file-light if-fw"
+      when "audio"
+        "if i-file-music-light if-fw"
+      else
+        "if i-check-circle-alt-regular if-fw"
+      end
+    end
   end
 end

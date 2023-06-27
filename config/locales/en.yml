@@ -2743,8 +2743,9 @@ en:
       rejected: Rejected
       accepted: Accepted
       pending: Pending
-      feedbacks: Feedbacks
-      feedback: Feedback
+      feedback:
+        one: Feedback
+        other: Feedbacks
       no_feedbacks: There are no feedback on this submission.
   users:
     clear_discord_id:

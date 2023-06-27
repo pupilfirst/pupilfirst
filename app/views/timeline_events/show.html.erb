@@ -42,17 +42,7 @@
   <% @submission.checklist.each_with_index do |item| %>
     <div class="flex items-start gap-x-2">
       <div class="mt-2">
-        <% if presenter.render_markdown?(item)%>
-          <i class="if i-long-text-light if-fw" ></i>
-        <% elsif presenter.link?(item) %>
-          <i class="if i-link-light if-fw" ></i>
-        <% elsif presenter.audio?(item) %>
-          <i class="if i-file-music-light if-fw" ></i>
-        <% elsif presenter.files?(item)%>
-          <i class="if i-file-light if-fw" ></i>
-        <% else %>
-          <i class="if i-check-circle-alt-regular if-fw" ></i>
-        <% end %>
+        <i class="<%= presenter.icon_class_for(item) %>"></i>
       </div>
       <div>
         <div class="convert-markdown pt-2 text-sm font-semibold" data-json-props="<%= presenter.markdown_prop(item["title"]) %>">
@@ -83,7 +73,7 @@
   <% end %>
 </div>
 <div class="flex flex-col max-w-2xl mx-auto py-10 px-5">
-  <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= @submission.startup_feedback.count > 1 ? t(".feedbacks") : t(".feedback") %></h2>
+  <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= t(".feedback", count: @submission.startup_feedback.count) %></h2>
   <% unless @submission.startup_feedback.present? %>
     <p class="pt-2 text-gray-400"><%= t(".no_feedbacks") %></p>
   <% end %>

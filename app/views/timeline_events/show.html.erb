@@ -3,14 +3,14 @@
   <title><%= presenter.page_title %></title>
 <% end %>
 <div class="bg-gray-50 pt-6">
-  <div class="max-w-2xl mx-auto sm:px-2">
+  <div class="max-w-2xl mx-auto px-5">
     <div class="flex items-center gap-3">
       <div class="bg-blue-100 rounded-full text-blue-500 h-10 w-10 flex items-center justify-center">
         <i class="if i-journal-text-light if-fw text-xl"></i>
       </div>
       <p class="text-md font-semibold"><%= @submission.title %></p>
     </div>
-    <div class="flex py-5 divide-x-2">
+    <div class="flex flex-wrap gap-5 py-5 divide-x-2">
       <div class="pr-4">
         <p class="text-xs text-gray-500"><%= t(".submission_from") %></p>
         <p class="text-sm font-semibold"><%= @submission.founder.name %></p>
@@ -36,7 +36,7 @@
     </div>
   </div>
 </div>
-<div class="flex flex-col max-w-2xl mx-auto mt-10 bg-gray-50 p-4 rounded-md border border-gray-200 sm:px-2">
+<div class="flex flex-col max-w-2xl mx-auto mt-10 bg-gray-50 p-4 rounded-md border border-gray-200 px-5">
   <% @submission.checklist.each_with_index do |item, index| %>
     <div class="flex items-start gap-x-2">
       <div class="mt-2">
@@ -82,10 +82,10 @@
     </div>
   <% end %>
 </div>
-<div class="flex flex-col max-w-2xl mx-auto py-10 sm:px-2">
+<div class="flex flex-col max-w-2xl mx-auto py-10 px-5">
   <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= t(".feedbacks") %></h2>
   <% unless @submission.startup_feedback.present? %>
-    <p class="pt-2 text-red-500"><%= t(".no_feedbacks") %></p>
+    <p class="pt-2 text-gray-400"><%= t(".no_feedbacks") %></p>
   <% end %>
   <% @submission.startup_feedback.includes(faculty: [user: [avatar_attachment: :blob]]).each do |feedback| %>
     <div class="flex bg-gray-50 p-4 rounded-md mt-2">

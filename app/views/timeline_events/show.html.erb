@@ -13,16 +13,18 @@
     <div class="flex flex-wrap gap-5 py-5 divide-x-2">
       <div class="pr-4">
         <p class="text-xs text-gray-500"><%= t(".submission_from") %></p>
-        <p class="text-sm font-semibold"><%= @submission.founder.name %></p>
+        <p class="text-sm font-semibold"><%= presenter.submission_from %></p>
       </div>
       <div class="px-4">
         <p class="text-xs text-gray-500"><%= t(".submitted_on") %></p>
         <p class="text-sm font-semibold"> <%= @submission.created_at.strftime("%b %d, %Y")%></p>
       </div>
-      <div class="px-4">
-        <p class="text-xs text-gray-500"><%= t(".reviewed_on") %></p>
-        <p class="text-sm font-semibold"><%= @submission.evaluated_at.present? ? @submission.evaluated_at.strftime("%b %d, %Y") : t(".not_available") %></p>
-      </div>
+      <% if @submission.evaluated_at.present? %>
+        <div class="px-4">
+          <p class="text-xs text-gray-500"><%= t(".reviewed_on") %></p>
+          <p class="text-sm font-semibold"><%= @submission.evaluated_at.strftime("%b %d, %Y") %></p>
+        </div>
+      <% end %>
       <div class="px-4">
         <p class="text-xs text-gray-500"><%= t(".status") %></p>
         <% if @submission.passed_at.present? %>
@@ -37,7 +39,7 @@
   </div>
 </div>
 <div class="flex flex-col max-w-2xl mx-auto mt-10 bg-gray-50 p-4 rounded-md border border-gray-200 px-5">
-  <% @submission.checklist.each_with_index do |item, index| %>
+  <% @submission.checklist.each_with_index do |item| %>
     <div class="flex items-start gap-x-2">
       <div class="mt-2">
         <% if presenter.render_markdown?(item)%>
@@ -70,20 +72,18 @@
               <%= item["result"] %>
             </span>
             <span class="flex w-10 justify-center items-center p-2 bg-blue-700 text-white">
-              <span>
-                <i class="if i-external-link-light if-fw" ></i>
-              </span>
+              <i class="if i-external-link-light if-fw" ></i>
             </span>
           </a>
         <%  else %>
-          <div class="p-3 text-sm"> - <%= item["result"].is_a?(Array) ? item["result"].join(" | ") : item["result"] %></div>
+          <div class="p-3 text-sm"> - <%= item["result"].join(" | ")%></div>
         <% end %>
       </div>
     </div>
   <% end %>
 </div>
 <div class="flex flex-col max-w-2xl mx-auto py-10 px-5">
-  <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= t(".feedbacks") %></h2>
+  <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= @submission.startup_feedback.count > 1 ? t(".feedbacks") : t(".feedback") %></h2>
   <% unless @submission.startup_feedback.present? %>
     <p class="pt-2 text-gray-400"><%= t(".no_feedbacks") %></p>
   <% end %>

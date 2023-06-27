@@ -46,7 +46,7 @@ feature "Submissions show" do
   end
 
   let(:checklist_item_multi_choice) do
-    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, "Yes")
+    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, ["Yes"])
   end
 
   let(:checklist) do
@@ -101,6 +101,8 @@ feature "Submissions show" do
       target.evaluation_criteria << [evaluation_criterion]
       submission.founders << student
       submission_2.founders << team.founders.last
+      submission.update!(evaluator: coach)
+      submission.update!(evaluated_at: Time.now)
     end
 
     scenario "org admin vsits show page with a submission" do
@@ -115,6 +117,9 @@ feature "Submissions show" do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
+      expect(page).to have_content(team.name)
+      expect(page).to have_content(submission.created_at.strftime("%b %d, %Y"))
+      expect(page).to have_content("Rejected")
       expect(page).to have_content(checklist_item_long_text["title"])
       expect(page).to have_content(checklist_item_long_text["result"])
       expect(page).to have_content(checklist_item_short_text["title"])

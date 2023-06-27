@@ -2743,9 +2743,9 @@ en:
       rejected: Rejected
       accepted: Accepted
       pending: Pending
-      feedbacks: Feedback(s)
+      feedbacks: Feedbacks
+      feedback: Feedback
       no_feedbacks: There are no feedback on this submission.
-      not_available: N/A
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

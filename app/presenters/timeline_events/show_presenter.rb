@@ -37,5 +37,13 @@ module TimelineEvents
     def files(item)
       TimelineEventFile.where(id: item["result"])
     end
+
+    def submission_from
+      if @submission.founder.team.present?
+        @submission.founder.team.name
+      else
+        @submission.founder.name
+      end
+    end
   end
 end

@@ -186,19 +186,17 @@ feature "Courses Index", js: true do
       click_button "Update Course"
 
       expect(page).to have_text("Course updated successfully")
-      expect(course_1.progression_limit).to eq(0)
+      expect(course_1.reload.progression_limit).to eq(0)
 
       find("button[title='Edit #{course_1.name}']").click
 
-      click_button "Strict"
+      select "once", from: "progression-limit"
+
       click_button "Update Course"
 
       expect(page).to have_text("Course updated successfully")
 
-      expect(course_1.reload.progression_behavior).to eq(
-        Course::PROGRESSION_BEHAVIOR_STRICT
-      )
-      expect(course_1.progression_limit).to eq(nil)
+      expect(course_1.reload.progression_limit).to eq(1)
     end
 
     scenario "School admin edits images associated with the course" do

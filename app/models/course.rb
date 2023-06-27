@@ -63,7 +63,6 @@ class Course < ApplicationRecord
     PROGRESSION_BEHAVIOR_UNLIMITED
   ].freeze
 
-  validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
   validates :progression_limit, inclusion: 0..3
 
   def short_name

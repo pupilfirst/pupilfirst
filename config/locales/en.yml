@@ -1976,7 +1976,7 @@ en:
         nothing_to_show: There are no students matching the selected filters.
         pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
       end_date: "End Date:"
-      nothing_to_show: You are not part of any %{status} cohorts of this course.
+      nothing_to_show: There are no %{status} cohorts to show.
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
     leaderboard:
       active_students: Active Students

@@ -60,9 +60,11 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
           .where(target: target)
           .passed
       students_count = submissions.map(&:founders).flatten.uniq.count
-      status[target] = (
-        (students_count / total_students_count.to_f) * 100
-      ).round
+      percentage = ((students_count / total_students_count.to_f) * 100).round
+      status[target] = {
+        percentage: percentage,
+        students_count: students_count
+      }
     end
 
     status

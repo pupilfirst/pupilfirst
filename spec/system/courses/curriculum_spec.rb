@@ -269,13 +269,6 @@ feature "Student's view of Course Curriculum", js: true do
     # There should only be two target groups...
     expect(page).to have_selector(".curriculum__target-group", count: 2)
 
-    # ...and only one of thoese should be a milestone target group.
-    expect(page).to have_selector(
-      ".curriculum__target-group",
-      text: "MILESTONE TARGETS",
-      count: 1
-    )
-
     # Open the level selector dropdown.
     click_button "L4: #{level_4.name}"
 
@@ -306,10 +299,10 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_text(target_group_l5.name)
     expect(page).to have_text(target_group_l5.description)
 
-    # There should be two locked targets in L5 right now.
+    # There should be one locked target in L5 right now (target_with_prerequisites).
     expect(page).to have_selector(
       ".curriculum__target-status--locked",
-      count: 2
+      count: 1
     )
 
     # Non-reviewed targets that have prerequisites must be locked.

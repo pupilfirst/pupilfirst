@@ -126,24 +126,6 @@ let handleLockedLevel = level =>
     }}
   </div>
 
-let statusOfMilestoneTargets = (targetGroups, targets, level, statusOfTargets) => {
-  let targetGroupsInLevel =
-    targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == (level |> Level.id))
-  let milestoneTargetGroupIds =
-    targetGroupsInLevel
-    |> Js.Array.filter(tg => tg |> TargetGroup.milestone)
-    |> Js.Array.map(tg => tg |> TargetGroup.id)
-
-  let milestoneTargetIds =
-    targets
-    |> Js.Array.filter(t => milestoneTargetGroupIds |> Js.Array.includes(Target.targetGroupId(t)))
-    |> Js.Array.map(t => t |> Target.id)
-
-  statusOfTargets |> Js.Array.filter(ts =>
-    milestoneTargetIds |> Js.Array.includes(TargetStatus.targetId(ts))
-  )
-}
-
 let issuedCertificate = course =>
   switch Course.certificateSerialNumber(course) {
   | Some(csn) =>
@@ -160,15 +142,7 @@ let issuedCertificate = course =>
   | None => React.null
   }
 
-let computeNotice = (
-  studentLevel,
-  targetGroups,
-  targets,
-  statusOfTargets,
-  course,
-  student,
-  preview,
-) =>
+let computeNotice = (course, student, preview) =>
   if preview {
     Notice.Preview
   } else if Course.ended(course) {
@@ -332,15 +306,7 @@ let make = (
       },
       latestSubmissions: submissions,
       statusOfTargets: statusOfTargets,
-      notice: computeNotice(
-        studentLevel,
-        targetGroups,
-        targets,
-        statusOfTargets,
-        course,
-        student,
-        preview,
-      ),
+      notice: computeNotice(course, student, preview),
     }
   })
 
@@ -372,15 +338,7 @@ let make = (
       setState(state => {
         ...state,
         statusOfTargets: newStatusOfTargets,
-        notice: computeNotice(
-          studentLevel,
-          targetGroups,
-          targets,
-          newStatusOfTargets,
-          course,
-          student,
-          preview,
-        ),
+        notice: computeNotice(course, student, preview),
       })
     }
     None

@@ -67,10 +67,6 @@ feature "Courses Index", js: true do
     expect(course.public_signup).to eq(false)
     expect(course.public_preview).to eq(false)
 
-    expect(course.progression_behavior).to eq(
-      Course::PROGRESSION_BEHAVIOR_LIMITED
-    )
-
     expect(course.progression_limit).to eq(1)
     expect(course.highlights).to eq([])
     expect(course.processing_url).to eq(nil)
@@ -175,10 +171,6 @@ feature "Courses Index", js: true do
       expect(course_1.public_signup).to eq(true)
       expect(course_1.public_preview).to eq(true)
 
-      expect(course_1.progression_behavior).to eq(
-        Course::PROGRESSION_BEHAVIOR_LIMITED
-      )
-
       expect(course_1.progression_limit).to eq(3)
       expect(course_1.highlights).to eq(highlights.map(&:stringify_keys))
       expect(course_1.processing_url).to eq(processing_url)
@@ -194,10 +186,7 @@ feature "Courses Index", js: true do
       click_button "Update Course"
 
       expect(page).to have_text("Course updated successfully")
-      expect(course_1.reload.progression_behavior).to eq(
-        Course::PROGRESSION_BEHAVIOR_UNLIMITED
-      )
-      expect(course_1.progression_limit).to eq(nil)
+      expect(course_1.progression_limit).to eq(0)
 
       find("button[title='Edit #{course_1.name}']").click
 

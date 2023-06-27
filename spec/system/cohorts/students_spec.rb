@@ -70,26 +70,6 @@ feature "Organisation show" do
   end
 
   context "when the user is an organisation admin" do
-    scenario "user can view a distribution of all org students in this cohort",
-             js: true do
-      sign_in_user org_admin_user,
-                   referrer:
-                     students_organisation_cohort_path(organisation, cohort)
-
-      expect(page).to have_text("Level-wise student distribution")
-      expect(page).to have_text("L1\n20\nL2\n10\nL3\n0")
-
-      expect(page).to have_link(
-        "Overview",
-        href: organisation_cohort_path(organisation, cohort)
-      )
-
-      # Check whether the student distribution bar can be used to filter by level.
-      click_button "10"
-
-      expect(page).to have_selector('[data-test-class="student"]', count: 10)
-    end
-
     scenario "user can paginate through all students" do
       sign_in_user org_admin_user,
                    referrer:
@@ -104,18 +84,6 @@ feature "Organisation show" do
       expect(page).to have_selector('[data-test-class="student"]', count: 6)
       expect(page).not_to have_text(student_from_another_cohort.name)
       expect(page).not_to have_text(student_from_another_org.name)
-    end
-
-    scenario "user can filter by level", js: true do
-      sign_in_user org_admin_user,
-                   referrer:
-                     students_organisation_cohort_path(organisation, cohort)
-
-      fill_in "Filter", with: level_2.name
-      click_button "L2: #{level_2.name}"
-
-      expect(page).to have_text("Level: L2: #{level_2.name}")
-      expect(page).to have_selector('[data-test-class="student"]', count: 10)
     end
 
     scenario "user can filter by email", js: true do

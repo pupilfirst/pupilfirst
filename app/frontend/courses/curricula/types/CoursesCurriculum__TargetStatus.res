@@ -96,8 +96,6 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
           " to create target cache"),
         )
 
-      let milestone = targetGroup |> TargetGroup.milestone
-
       let levelNumber =
         levels
         |> ArrayUtils.unsafeFind(
@@ -124,9 +122,9 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
 
       {
         targetId: targetId,
-        targetReviewed: target |> Target.reviewed,
+        targetReviewed: target->Target.reviewed,
         levelNumber: levelNumber,
-        milestone: milestone,
+        milestone: target->Target.milestone,
         submissionStatus: submissionStatus,
         prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }

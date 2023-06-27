@@ -24,14 +24,16 @@ feature "Cohorts", js: true do
            target_group: target_group_l1,
            role: Target::ROLE_STUDENT,
            evaluation_criteria: [evaluation_criterion],
-           milestone: true
+           milestone: true,
+           milestone_number: 1
   end
   let!(:target_l2) do
     create :target,
            target_group: target_group_l2,
            role: Target::ROLE_STUDENT,
            evaluation_criteria: [evaluation_criterion],
-           milestone: true
+           milestone: true,
+           milestone_number: 2
   end
 
   let(:cohort_1) { create :cohort, course: course }
@@ -124,6 +126,72 @@ feature "Cohorts", js: true do
       expect(page).to have_text("Overview")
 
       expect(page).to have_text("Students")
+
+      expect(page).to have_text("Student Distribution by Milestone Completion")
+
+      expect(page).to have_text("M1: " + target_l1.title)
+      expect(page).to have_text("0/36")
+      expect(page).to have_text("M2: " + target_l2.title)
+      expect(page).to have_text("0/36")
+
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_1],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      visit cohort_path(cohort_1)
+
+      expect(page).to have_text("1/36")
+
+      visit students_cohort_path(cohort_1)
+      expect(page).to have_current_path(students_cohort_path(cohort_1))
+    end
+
+    scenario "visits the students tab inside a cohort" do
+      sign_in_user course_coach.user, referrer: cohorts_course_path(course)
+
+      visit students_cohort_path(cohort_1)
+
+      expect(page).to have_text(student_1.name)
+      expect(page).to have_text(student_2.name)
+
+      visit student_report_path(student_1)
+      expect(page).to have_current_path(student_report_path(student_1))
+
+      expect(page).to have_text(student_1.name)
+      expect(page).to have_text("Milestone Targets Completion Status")
+    end
+
+    scenario "filters stduents by email" do
+      sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
+
+      fill_in "Filter", with: student_1.email
+      click_button "Email: #{student_1.email}"
+
+      expect(page).to have_text(student_1.name)
+      expect(page).not_to have_text(student_2.name)
+
+      find("button[title='Remove selection: #{student_1.email}']").click
+      expect(page).to have_text(student_2.name)
+    end
+
+    scenario "filters stduents by name" do
+      sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
+
+      fill_in "Filter", with: student_1.name
+      click_button "Name: #{student_1.name}"
+
+      expect(page).to have_text(student_1.name)
+      expect(page).not_to have_text(student_2.name)
+
+      find("button[title='Remove selection: #{student_1.name}']").click
+      expect(page).to have_text(student_2.name)
     end
   end
 
@@ -132,6 +200,14 @@ feature "Cohorts", js: true do
       visit cohorts_course_path(course)
 
       expect(page).to have_text("Sign in to #{school.name}")
+    end
+  end
+
+  context "when the user is a student" do
+    scenario "user is not allowed to view the page" do
+      sign_in_user student_1.user, referrer: cohorts_course_path(course)
+
+      expect(page).to have_text("The page you were looking for doesn't exist!")
     end
   end
 end

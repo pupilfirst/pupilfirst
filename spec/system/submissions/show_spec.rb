@@ -10,6 +10,7 @@ feature "Submissions show" do
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_team, target_group: target_group }
+  let(:target_2) { create :target, :for_founders, target_group: target_group }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:submission_file_1) { create :timeline_event_file }
@@ -65,6 +66,8 @@ feature "Submissions show" do
   end
 
   let(:submission_2) { create(:timeline_event, target: target) }
+  let(:submission_3) { create(:timeline_event, target: target_2) }
+
   let(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.founders.first }
 
@@ -99,8 +102,10 @@ feature "Submissions show" do
       student.user.update!(organisation: organisation)
 
       target.evaluation_criteria << [evaluation_criterion]
+      target_2.evaluation_criteria << [evaluation_criterion]
       submission.founders << student
       submission_2.founders << team.founders.last
+      submission_3.founders << student
       submission.update!(evaluator: coach)
       submission.update!(evaluated_at: Time.now)
     end
@@ -152,6 +157,15 @@ feature "Submissions show" do
       expect(page).to have_text(feedback_2.feedback)
       expect(page).to have_text(coach.name)
       expect(page).to have_text(coach_2.name)
+    end
+
+    # This checks if submitter's name is rendered on the page correctly.
+    scenario "student from a team visits show page for target having student role",
+             js: true do
+      sign_in_user student.user, referrer: timeline_event_path(submission_3)
+
+      expect(page).to have_text(submission_3.title)
+      expect(page).to have_text(student.name)
     end
 
     scenario "student visits show page of submission he is not linked to",

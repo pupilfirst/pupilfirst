@@ -39,7 +39,7 @@ module TimelineEvents
     end
 
     def submission_from
-      if @submission.founder.team.present?
+      if @submission.founder.team.present? && @submission.team_submission?
         @submission.founder.team.name
       else
         @submission.founder.name

@@ -10,10 +10,17 @@ class Courses::StudentsPresenter < ApplicationPresenter
   end
 
   def cohorts
-    if @status == "active"
-      @cohorts ||= @course.cohorts.active
-    else
-      @cohorts ||= @course.cohorts.ended
-    end
+    @cohorts ||=
+      if @status == "active"
+        @course.cohorts.active
+      else
+        @course.cohorts.ended
+      end
+  end
+
+  def paged_cohorts
+    paged = cohorts.page(params[:page]).per(24)
+    paged = cohorts.page(paged.total_pages).per(24) if paged.out_of_range?
+    paged
   end
 end

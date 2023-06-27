@@ -15,25 +15,23 @@ feature "Cohorts", js: true do
   let!(:level_2) { create :level, :two, course: course }
   let!(:level_3) { create :level, :three, course: course }
 
-  let!(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
-  end
+  let!(:target_group_l1) { create :target_group, level: level_1 }
 
-  let!(:target_group_l2) do
-    create :target_group, level: level_2, milestone: true
-  end
+  let!(:target_group_l2) { create :target_group, level: level_2 }
 
   let!(:target_l1) do
     create :target,
            target_group: target_group_l1,
            role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion]
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true
   end
   let!(:target_l2) do
     create :target,
            target_group: target_group_l2,
            role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion]
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true
   end
 
   let(:cohort_1) { create :cohort, course: course }
@@ -123,7 +121,17 @@ feature "Cohorts", js: true do
 
       expect(page).to have_text(course.name)
 
-      expect(page).to have_text("overviews")
+      expect(page).to have_text("Overview")
+
+      expect(page).to have_text("Students")
+    end
+  end
+
+  context "when the user isn't signed in" do
+    scenario "user is required to sign in" do
+      visit cohorts_course_path(course)
+
+      expect(page).to have_text("Sign in to #{school.name}")
     end
   end
 end

@@ -67,7 +67,6 @@ feature "Cohorts", js: true do
     30.times do
       user = create :user, name: "C #{Faker::Lorem.word} #{rand(10)}"
 
-      # These will be in the middle of the list.
       create :student, cohort: cohort_1, user: user
     end
 
@@ -81,7 +80,6 @@ feature "Cohorts", js: true do
     3.times do
       user = create :user, name: "B #{Faker::Lorem.word} #{rand(10)}"
 
-      # These will be around the bottom of the list.
       create :student, cohort: cohort_3, user: user
     end
   end
@@ -192,6 +190,77 @@ feature "Cohorts", js: true do
 
       find("button[title='Remove selection: #{student_1.name}']").click
       expect(page).to have_text(student_2.name)
+    end
+
+    scenario "filters stduents by milestone" do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_1],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
+
+      fill_in "Filter", with: "M"
+      click_button "Milestone: M#{target_l1.milestone_number}: #{target_l1.title}"
+
+      expect(page).to have_text(student_1.name)
+      expect(page).not_to have_text(student_2.name)
+
+      find(
+        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+      ).click
+      expect(page).to have_text(student_2.name)
+    end
+
+    scenario "visits students tab by clicking on milestone pill" do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_1],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      sign_in_user course_coach.user, referrer: cohort_path(cohort_1)
+
+      find(
+        "a[href='#{students_cohort_path(cohort_1, milestone: "M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+      ).click
+
+      expect(page).to have_current_path(
+        students_cohort_path(
+          cohort_1,
+          milestone: "M#{target_l1.milestone_number}: #{target_l1.title}"
+        )
+      )
+
+      expect(page).to have_text(student_1.name)
+
+      visit cohort_path(cohort_1)
+
+      find(
+        "a[href='#{students_cohort_path(cohort_1, milestone: "M#{target_l2.milestone_number}: #{target_l2.title}")}']"
+      ).click
+
+      expect(page).to have_current_path(
+        students_cohort_path(
+          cohort_1,
+          milestone: "M#{target_l2.milestone_number}: #{target_l2.title}"
+        )
+      )
+
+      expect(page).to have_text(
+        "There are no students matching the selected filters."
+      )
     end
   end
 

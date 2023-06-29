@@ -913,7 +913,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
           </span>
         | None =>
           <div className="ms-2 md:ms-4 tracking-wide w-full">
-            <div> <span> {(t("note_help") ++ (noteAbout ++ "?"))->str} </span> help </div>
+            <div> <span> {(t("note_help", ~variables=[("noteAbout", noteAbout)]))->str} </span> help </div>
             <button
               className="btn btn-default mt-2"
               disabled={isSubmissionReviewAllowed(submissionDetails)}

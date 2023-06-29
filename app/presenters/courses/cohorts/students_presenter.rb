@@ -10,7 +10,19 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
       id: "course-cohort-students-filter",
       filters: [
         { key: "name", label: "Name", filterType: "Search", color: "red" },
-        { key: "email", label: "Email", filterType: "Search", color: "yellow" }
+        { key: "email", label: "Email", filterType: "Search", color: "yellow" },
+        {
+          key: "milestone",
+          label: "Milestone",
+          filterType: "MultiSelect",
+          values:
+            @course
+              .targets
+              .where(milestone: true)
+              .order(:milestone_number)
+              .map { |target| "M#{target.milestone_number}: #{target.title}" },
+          color: "blue"
+        }
       ],
       placeholder: "Search by name or email",
       hint: "...or start typing to search by student's name of email",
@@ -38,9 +50,10 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   def students
     @students ||=
       begin
-        filter_1 = filter_students_by_name(scope)
-        filter_2 = filter_students_by_email(filter_1)
-        sorted = sort_students(filter_2)
+        filter_1 = filter_students_by_milestone(scope)
+        filter_2 = filter_students_by_name(filter_1)
+        filter_3 = filter_students_by_email(filter_2)
+        sorted = sort_students(filter_3)
         included = sorted.includes(:user)
         paged = included.page(params[:page]).per(24)
         paged.count.zero? ? paged.page(paged.total_pages) : paged
@@ -90,6 +103,19 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
         "lower(users.email) ILIKE ?",
         "%#{params[:email].downcase}%"
       )
+    else
+      scope
+    end
+  end
+
+  def filter_students_by_milestone(scope)
+    if params[:milestone].present?
+      milestone_number = params[:milestone].split(":").first[1..-1]
+      scope
+        .joins(timeline_events: :target)
+        .where(targets: { milestone_number: milestone_number, milestone: true })
+        .where.not(timeline_events: { passed_at: nil })
+        .distinct
     else
       scope
     end

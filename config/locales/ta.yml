@@ -102,6 +102,8 @@ ta:
       review: விமர்சனம்
       sign_out: வெளியேறு
       students: மாணவர்கள்
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: நகலெடுக்கப்பட்டது!
       copy: கிளிப்போர்டுக்கு நகலெடுக்கவும்
@@ -512,6 +514,8 @@ ta:
           active: செயலில்
           archived: காப்பகப்படுத்தப்பட்டது
           ended: முடிந்தது
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். பதிவு செய்ய மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்து, தொடங்கவும்.
@@ -776,7 +780,8 @@ ta:
         view_action_button: View Github Action
       grade_card: தர அட்டை
       help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
-      note_help: "இதைப் பற்றி ஒரு குறிப்பு எழுத விரும்புகிறீர்களா "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: வேலையை அகற்று
@@ -940,6 +945,8 @@ ta:
       no_revied_submission: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்பு இல்லை
       submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: நிலை உருவாக்கவும்
       create_target_group: இலக்கு குழுவை உருவாக்கவும்
       edit_selected_level: தேர்ந்தெடுக்கப்பட்ட நிலையைத் திருத்தவும்
@@ -1348,6 +1355,8 @@ ta:
       close_community_editor: சமூக எடிட்டரை மூடு
       unsaved_window_confirm: சேமிக்கப்படாத மாற்றங்கள் உள்ளன! நீங்கள் நிச்சயமாக மூட விரும்புகிறீர்களா?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: உடன்படிக்கையின் உடல்
       agreement_placeholder: அடிக்குறிப்பு இணைப்பை மறைக்க, ஒப்பந்தப் பகுதியை காலியாக விடவும்.
       manage: நிர்வகிக்கவும்
@@ -1446,6 +1455,8 @@ ta:
       social: சமூக
       social_links_q: சமூக ஊடக இணைப்புகளைச் சேர்க்கவா?
       terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
@@ -2261,6 +2272,12 @@ ta:
     create_school_link:
       blank_title_error: ஒரு தலைப்பு தேவை
       success_notification: தனிப்பயன் இணைப்பு சேர்க்கப்பட்டது.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: மாணவர் வெற்றிகரமாக உருவாக்கப்பட்டது.
     create_submission:
@@ -2509,6 +2526,8 @@ ta:
     issue_certificate_mutator:
       certificate_error: குறிப்பிட்ட சான்றிதழைக் கண்டுபிடிக்க முடியவில்லை.
       issued_error: இந்த மாணவருக்கு இந்தப் படிப்புக்கான சான்றிதழ் ஏற்கனவே வழங்கப்பட்டுள்ளது.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: நிர்வாகிகள்
@@ -2601,6 +2620,7 @@ ta:
         title: பயிற்சியாளர்கள்
       school_index:
         title: பயிற்சியாளர்கள்
+        coach: Coach
     show:
       coaches: பயிற்சியாளர்கள்
       courses: படிப்புகள்
@@ -2657,6 +2677,7 @@ ta:
     empty: காலியாக
     fail: தோல்வி
     file_invalid: 5 MB க்கும் குறைவான அளவு கொண்ட கோப்பைத் தேர்ந்தெடுக்கவும்.
+    filter: Filter
     image_file_invalid: 5 MB க்கும் குறைவான அளவு மற்றும் 4096px க்கும் குறைவான அகலம் அல்லது அதிக அளவு கொண்ட படத்தை (PNG, JPEG, GIF) தேர்ந்தெடுக்கவும்.
     invalid_authenticity_token_error: தவறான அல்லது CSRF டோக்கன் விடுபட்டுள்ளது. அந்த செயலைச் செய்வதற்கு முன் இந்தப் பக்கத்தைப் புதுப்பிக்கவும்.
     is: இருக்கிறது
@@ -2715,6 +2736,7 @@ ta:
     settings: அமைப்புகள்
     sign_out: வெளியேறு
     students: மாணவர்கள்
+    sort_by: Sort by
     tag: குறிச்சொல்
     tags: குறிச்சொற்கள்
     target: இலக்கு

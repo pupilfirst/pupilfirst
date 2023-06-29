@@ -1224,8 +1224,6 @@ en:
       mode_label_split: View editor and preview in split view
       mode_label_split_exit: Close split view
       strikethrough_insert: strikethrough
-    MultiselectDropdown:
-      suggestions: "Suggestions:"
     Notifications__EntryCard:
       mark_read: Mark as Read
     Notifications__List:

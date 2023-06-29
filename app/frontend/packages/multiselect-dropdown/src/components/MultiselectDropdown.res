@@ -13,8 +13,6 @@ type searchItem = {
   text: string,
 }
 
-let tr = I18n.t(~scope="components.MultiselectDropdown")
-
 @module("../utils/fuzzySearch")
 external fuzzySearch: (string, array<searchItem>) => array<searchItem> = "default"
 
@@ -181,7 +179,7 @@ module Make = (Selectable: Selectable) => {
       role="listbox"
       className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-300 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
       <p className="text-gray-600 italic mx-4 text-xs border-b pb-1 mb-2">
-        {str(tr("suggestions"))}
+        {str("Suggestions:")}
       </p>
       children
     </div>

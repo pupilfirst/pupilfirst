@@ -26,9 +26,11 @@
                     <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{data[:percentage]}%"%></p>
                   </div>
                 </div>
-                <div class="relative bg-gray-200 rounded-md overflow-hidden mt-0.5">
-                  <div style="<%= "width: #{data[:percentage]}%" %>" class="h-2 text-center bg-green-500"></div>
-                </div>
+                <%= link_to students_cohort_path(milestone: "M#{target.milestone_number}: #{target.title}") do %>
+                  <div class="relative bg-gray-200 rounded-md overflow-hidden mt-0.5">
+                    <div style="<%= "width: #{data[:percentage]}%" %>" class="h-2 text-center bg-green-500"></div>
+                  </div>
+                <% end %>
               </div>
             <% end %>
           </div>

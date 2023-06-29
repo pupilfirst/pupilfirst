@@ -102,6 +102,8 @@ ru:
       review: Оценить
       sign_out: Выйти
       students: Студенты
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: Скопировано!
       copy: Скопировать в буфер обмена
@@ -522,6 +524,8 @@ ru:
           active: Активен
           archived: Архивирован
           ended: Окончен
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: Он должен добраться до вас меньше чем за минуту. Нажмите на ссылку в электронном письме, чтобы зарегистрироваться, и приступайте.
@@ -788,7 +792,8 @@ ru:
         view_action_button: View Github Action
       grade_card: Оценочная Карта
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
-      note_help: "Хотели бы вы написать об этом заметку "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Удалить задание
@@ -956,6 +961,8 @@ ru:
       no_revied_submission: Нет Рассмотренного Работ
       submitted_on: "Отправленный в "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: Создать Уровень
       create_target_group: Создать группу задач
       edit_selected_level: Редактировать выбранный уровень
@@ -1368,6 +1375,8 @@ ru:
       close_community_editor: Закрыть Редактор Сообщества
       unsaved_window_confirm: Есть несохраненные изменения! Вы уверены, что хотите закрыть?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: Основная Часть Соглашения
       agreement_placeholder: Оставьте основную часть документа пустым, чтобы скрыть ссылку в нижнем колонтитуле.
       manage: Управлять
@@ -1466,6 +1475,8 @@ ru:
       social: Соцсети
       social_links_q: Добавить ссылки на социальные сети?
       terms_and_conditions: Условия использования
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
@@ -2289,6 +2300,12 @@ ru:
     create_school_link:
       blank_title_error: Требуется заголовок
       success_notification: добавлена пользовательская ссылка.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: Студент успешно создан.
     create_submission:
@@ -2541,6 +2558,8 @@ ru:
     issue_certificate_mutator:
       certificate_error: Указанный сертификат не найден.
       issued_error: Этому студенту уже выдан сертификат о прохождении этого курса.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: Админы
@@ -2633,6 +2652,7 @@ ru:
         title: Наставники
       school_index:
         title: Наставники
+        coach: Coach
     show:
       coaches: Наставники
       courses: Курсы
@@ -2689,6 +2709,7 @@ ru:
     empty: Пусто
     fail: Провал
     file_invalid: Пожалуйста, выберите файл размером менее 5 МБ.
+    filter: Filter
     image_file_invalid: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.
     invalid_authenticity_token_error: Неверный или отсутствующий токен CSRF. Пожалуйста, обновите эту страницу, прежде чем пытаться выполнить это действие.
     is: это
@@ -2747,6 +2768,7 @@ ru:
     settings: Настройки
     sign_out: Выйти
     students: Студенты
+    sort_by: Sort by
     tag: Тег
     tags: Теги
     target: Задача

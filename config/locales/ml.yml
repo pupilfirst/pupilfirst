@@ -102,6 +102,8 @@ ml:
       review: അവലോകനം
       sign_out: സൈൻ ഔട്ട്
       students: വിദ്യാർത്ഥികൾ
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: പകർത്തി!
       copy: ക്ലിപ്പ്ബോർഡിലേയ്ക്ക് പകർത്തുക
@@ -512,6 +514,8 @@ ml:
           active: സജീവമാണ്
           archived: ആർക്കൈവ് ചെയ്തു
           ended: അവസാനിച്ചു
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: ഒരു മിനിറ്റിൽ താഴെ സമയത്തിനുള്ളിൽ ഇത് നിങ്ങളിലേക്ക് എത്തും. സൈൻ അപ്പ് ചെയ്യുന്നതിന് ഇമെയിലിലെ ലിങ്കിൽ ക്ലിക്ക് ചെയ്ത് ആരംഭിക്കുക.
@@ -776,7 +780,8 @@ ml:
         view_action_button: View Github Action
       grade_card: ഗ്രേഡ് കാർഡ്
       help_text: '%{note_about}ന്റെ പുരോഗതി ട്രാക്ക് ചെയ്യാൻ കുറിപ്പുകൾ ഉപയോഗിക്കാം. ഈ കുറിപ്പുകൾ ഒരു വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ടിൽ പരിശീലകർക്ക് മാത്രം കാണിക്കുന്നു. %{additional_help}'
-      note_help: "ഇതിനെക്കുറിച്ച് ഒരു കുറിപ്പ് എഴുതാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നു "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: ഈ സമർപ്പണം അവലോകനം ചെയ്യുമ്പോൾ നിങ്ങൾ എന്തെങ്കിലും ശ്രദ്ധിച്ചോ?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: അസൈൻമെന്റ് നീക്കം ചെയ്യുക
@@ -940,6 +945,8 @@ ml:
       no_revied_submission: അവലോകനം ചെയ്ത സമർപ്പണമില്ല
       submitted_on: "ന് സമർപ്പിച്ചു "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: ലെവൽ സൃഷ്ടിക്കുക
       create_target_group: ടാർഗെറ്റ് ഗ്രൂപ്പ് സൃഷ്ടിക്കുക
       edit_selected_level: തിരഞ്ഞെടുത്ത ലെവൽ എഡിറ്റ് ചെയ്യുക
@@ -1348,6 +1355,8 @@ ml:
       close_community_editor: കമ്മ്യൂണിറ്റി എഡിറ്റർ അടയ്ക്കുക
       unsaved_window_confirm: സംരക്ഷിക്കാത്ത മാറ്റങ്ങളുണ്ട്! അടയ്ക്കണമെന്ന് തീർച്ചയാണോ?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: കരാറിന്റെ ബോഡി
       agreement_placeholder: അടിക്കുറിപ്പ് ലിങ്ക് മറയ്ക്കാൻ കരാർ ബോഡി ശൂന്യമായി വിടുക.
       manage: കൈകാര്യം ചെയ്യുക
@@ -1446,6 +1455,8 @@ ml:
       social: സാമൂഹിക
       social_links_q: സോഷ്യൽ മീഡിയ ലിങ്കുകൾ ചേർക്കണോ?
       terms_and_conditions: നിബന്ധനകളും വ്യവസ്ഥകളും
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
@@ -2261,6 +2272,12 @@ ml:
     create_school_link:
       blank_title_error: ഒരു തലക്കെട്ട് ആവശ്യമാണ്
       success_notification: ഒരു ഇഷ്‌ടാനുസൃത ലിങ്ക് ചേർത്തു.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: വിദ്യാർത്ഥി വിജയകരമായി സൃഷ്ടിച്ചു.
     create_submission:
@@ -2509,6 +2526,8 @@ ml:
     issue_certificate_mutator:
       certificate_error: നിർദ്ദിഷ്ട സർട്ടിഫിക്കറ്റ് കണ്ടെത്താൻ കഴിഞ്ഞില്ല.
       issued_error: ഈ കോഴ്‌സിനായി ഈ വിദ്യാർത്ഥിക്ക് ഇതിനകം സർട്ടിഫിക്കറ്റ് നൽകിയിട്ടുണ്ട്.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: അഡ്മിൻസ്
@@ -2601,6 +2620,7 @@ ml:
         title: പരിശീലകർ
       school_index:
         title: പരിശീലകർ
+        coach: Coach
     show:
       coaches: പരിശീലകർ
       courses: കോഴ്സുകൾ
@@ -2657,6 +2677,7 @@ ml:
     empty: ശൂന്യം
     fail: പരാജയപ്പെടുക
     file_invalid: 5 MB-യിൽ താഴെ വലിപ്പമുള്ള ഒരു ഫയൽ തിരഞ്ഞെടുക്കുക.
+    filter: Filter
     image_file_invalid: ദയവായി 5 MB-യിൽ താഴെ വലിപ്പവും 4096px-ൽ താഴെ വീതിയോ ഉയർന്നതോ ആയ ഒരു ചിത്രം (PNG, JPEG, GIF) തിരഞ്ഞെടുക്കുക.
     invalid_authenticity_token_error: CSRF ടോക്കൺ അസാധുവാണ് അല്ലെങ്കിൽ വിട്ടുപോയിരിക്കുന്നു. ആ പ്രവർത്തനം നടത്താൻ ശ്രമിക്കുന്നതിന് മുമ്പ് ദയവായി ഈ പേജ് പുതുക്കുക.
     is: ആണ്
@@ -2715,6 +2736,7 @@ ml:
     settings: ക്രമീകരണങ്ങൾ
     sign_out: സൈൻ ഔട്ട്
     students: വിദ്യാർത്ഥികൾ
+    sort_by: Sort by
     tag: ടാഗ് ചെയ്യുക
     tags: ടാഗുകൾ
     target: ലക്ഷ്യം

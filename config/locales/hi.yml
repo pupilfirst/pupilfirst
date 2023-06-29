@@ -102,6 +102,8 @@ hi:
       review: समीक्षा
       sign_out: साइन आउट करें
       students: छात्र
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: कॉपी किया गया!
       copy: क्लिपबोर्ड पर कॉपी करें
@@ -512,6 +514,8 @@ hi:
           active: सक्रिय
           archived: संग्रहीत
           ended: समाप्त
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: यह एक मिनट से भी कम समय में आप तक पहुंच जाना चाहिए। साइन अप करने और आरंभ करने के लिए ईमेल में लिंक पर क्लिक करें।
@@ -776,7 +780,8 @@ hi:
         view_action_button: View Github Action
       grade_card: ग्रेड कार्ड
       help_text: नोट्स का उपयोग %{note_about}की प्रगति पर नज़र रखने के लिए किया जा सकता है। ये नोट केवल एक छात्र की रिपोर्ट में कोचों को दिखाए जाते हैं। %{additional_help}
-      note_help: "क्या आप इसके बारे में एक नोट लिखना चाहेंगे "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: असाइनमेंट हटाएं
@@ -940,6 +945,8 @@ hi:
       no_revied_submission: कोई समीक्षित सबमिशन नहीं
       submitted_on: "पर प्रस्तुत की "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: स्तर बनाएं
       create_target_group: लक्ष्य समूह बनाएं
       edit_selected_level: चयनित स्तर संपादित करें
@@ -1348,6 +1355,8 @@ hi:
       close_community_editor: समुदाय संपादक बंद करें
       unsaved_window_confirm: सहेजे नहीं गए परिवर्तन हैं! क्या आप वाकई बंद करना चाहते हैं?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: समझौते का निकाय
       agreement_placeholder: पाद लेख लिंक को छिपाने के लिए अनुबंध के मुख्य भाग को खाली छोड़ दें.
       manage: प्रबंधित करना
@@ -1446,6 +1455,8 @@ hi:
       social: सामाजिक
       social_links_q: सोशल मीडिया लिंक जोड़ें?
       terms_and_conditions: नियम एवं शर्तें
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
@@ -2261,6 +2272,12 @@ hi:
     create_school_link:
       blank_title_error: शीर्षक आवश्यक है
       success_notification: एक कस्टम लिंक जोड़ा गया है।
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: छात्र सफलतापूर्वक बनाया गया।
     create_submission:
@@ -2509,6 +2526,8 @@ hi:
     issue_certificate_mutator:
       certificate_error: निर्दिष्ट प्रमाणपत्र नहीं मिला।
       issued_error: इस छात्र को इस पाठ्यक्रम के लिए पहले ही प्रमाण पत्र जारी किया जा चुका है।
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: व्यवस्थापक
@@ -2601,6 +2620,7 @@ hi:
         title: डिब्बों
       school_index:
         title: डिब्बों
+        coach: Coach
     show:
       coaches: डिब्बों
       courses: पाठ्यक्रम
@@ -2657,6 +2677,7 @@ hi:
     empty: खाली
     fail: विफल
     file_invalid: कृपया 5 एमबी से कम आकार वाली फ़ाइल चुनें।
+    filter: Filter
     image_file_invalid: कृपया एक छवि (पीएनजी, जेपीईजी, जीआईएफ) का चयन करें जिसका आकार 5 एमबी से कम और 4096 पिक्सेल से कम चौड़ा या उच्च हो।
     invalid_authenticity_token_error: अमान्य या अनुपलब्ध CSRF टोकन। कृपया उस क्रिया को करने का प्रयास करने से पहले इस पृष्ठ को रीफ्रेश करें।
     is: है
@@ -2715,6 +2736,7 @@ hi:
     settings: समायोजन
     sign_out: साइन आउट करें
     students: छात्र
+    sort_by: Sort by
     tag: उपनाम
     tags: टैग
     target: लक्ष्य

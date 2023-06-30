@@ -31,6 +31,13 @@ module Cohorts
                   "M#{target.milestone_number}: #{target.title}"
                 end,
             color: "blue"
+          },
+          {
+            key: "course",
+            label: "Course",
+            filterType: "MultiSelect",
+            values: ["Completed", "Not Completed"],
+            color: "green"
           }
         ],
         placeholder: "Search by name or email",
@@ -62,7 +69,8 @@ module Cohorts
           filter_1 = filter_students_by_milestone(scope)
           filter_2 = filter_students_by_name(filter_1)
           filter_3 = filter_students_by_email(filter_2)
-          sorted = sort_students(filter_3)
+          filter_4 = filter_students_by_course_completion(filter_3)
+          sorted = sort_students(filter_4)
           included = sorted.includes(:user)
           paged = included.page(params[:page]).per(24)
           paged.count.zero? ? paged.page(paged.total_pages) : paged
@@ -126,6 +134,16 @@ module Cohorts
             }
           )
           .where.not(timeline_events: { passed_at: nil })
+      else
+        scope
+      end
+    end
+
+    def filter_students_by_course_completion(scope)
+      if params[:course] == "Completed"
+        scope.where.not(completed_at: nil)
+      elsif params[:course] == "Not Completed"
+        scope.where(completed_at: nil)
       else
         scope
       end

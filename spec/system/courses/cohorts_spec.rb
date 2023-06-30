@@ -262,6 +262,24 @@ feature "Cohorts", js: true do
         "There are no students matching the selected filters."
       )
     end
+
+    scenario "pagination is present when students are more than 24" do
+      sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
+
+      expect(page).to have_text(
+        "Now showing 1-24 of a total of 36 such students."
+      )
+    end
+
+    scenario "should show the remaining students in the next page" do
+      sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
+
+      click_link "2"
+
+      expect(page).to have_text(
+        "Now showing 25-36 of a total of 36 such students."
+      )
+    end
   end
 
   context "when the user isn't signed in" do

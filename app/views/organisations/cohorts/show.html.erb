@@ -27,7 +27,7 @@
         <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
           <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
-          <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+          <%= link_to students_organisation_cohort_path(@organisation, @cohort, course: "Completed"), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
             <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
           <% end %>
         </div>

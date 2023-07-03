@@ -25,6 +25,7 @@ module Cohorts
             values:
               @course
                 .targets
+                .live
                 .where(milestone: true)
                 .order(:milestone_number)
                 .map do |target|

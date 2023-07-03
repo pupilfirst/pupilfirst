@@ -18,6 +18,7 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
           values:
             @course
               .targets
+              .live
               .where(milestone: true)
               .order(:milestone_number)
               .map { |target| "M#{target.milestone_number}: #{target.title}" },

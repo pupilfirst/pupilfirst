@@ -13,7 +13,7 @@ Pupilfirst enables quick and efficient review of task submissions by students, a
 
 Coaches can be added from the coaches page which is linked on the main navigation bar of the school administration interface.
 
-![Coaches page in school administration interface](../assets/coaches/coaches_page_20230626.png)
+![Coaches page in school administration interface](../assets/coaches/coaches_page.png)
 
 You can add new coaches using the _Add New Coach_ option, and edit them by clicking on the name on this list. Coaches have a few additional properties unique to them:
 
@@ -31,7 +31,7 @@ Once a coach has been added to a school, they can immediately access all communi
 
 To assign a coach to a course, head to the _Coaches_ sub-menu inside a course:
 
-![Coaches assigned to a course](../assets/coaches/course_coaches_page_20230626.png)
+![Coaches assigned to a course](../assets/coaches/course_coaches_page.png)
 
 This assignment allows coaches to review submissions from _all_ students in a course. For courses with small numbers of students, this is probably sufficient configuration.
 

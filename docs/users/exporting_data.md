@@ -6,7 +6,7 @@ sidebar_label: Exporting Data
 
 Pupilfirst has a robust data export feature that'll let you pull data out of the Pupilfirst platform, and into a spreadsheet. This allows you to come up with your own analysis of the student data from a course.
 
-![Course exports interface](../assets/exporting_data/new_export_menu_20230626.png)
+![Course exports interface](../assets/exporting_data/new_export_menu.png)
 
 To prepare a new export, visit the _Exports_ sub-menu within a course, and click the _Create New Export_ button. You have a few options to choose when preparing an export:
 

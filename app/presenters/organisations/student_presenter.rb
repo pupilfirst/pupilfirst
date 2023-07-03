@@ -123,6 +123,13 @@ module Organisations
       status
     end
 
+    def filters_in_url
+      params
+        .slice(:name, :email, :milestone, :course)
+        .permit(:name, :email, :milestone, :course)
+        .compact
+    end
+
     private
 
     def current_course_targets

@@ -54,6 +54,13 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     }
   end
 
+  def filters_in_url
+    params
+      .slice(:name, :email, :milestone, :course)
+      .permit(:name, :email, :milestone, :course)
+      .compact
+  end
+
   def students
     @students ||=
       begin

@@ -21,7 +21,7 @@
           <%= render 'student', student: student %>
         <% end %>
       </div>
-      <div class="mt-6 flex items-center justify-center">
+      <div class="mt-6 flex items-center justify-center overflow-x-auto max-w-5xl pb-2 sm:pb-0">
         <%= paginate @presenter.students %>
       </div>
       <% if @presenter.students.total_pages > 1 %>

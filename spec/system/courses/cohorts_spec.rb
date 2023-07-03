@@ -13,7 +13,6 @@ feature "Cohorts", js: true do
 
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
-  let!(:level_3) { create :level, :three, course: course }
 
   let!(:target_group_l1) { create :target_group, level: level_1 }
 
@@ -215,6 +214,43 @@ feature "Cohorts", js: true do
       find(
         "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
       ).click
+      expect(page).to have_text(student_2.name)
+    end
+
+    scenario "filters students by course completion" do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_1],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_1],
+        target: target_l2,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      student_1.update!(completed_at: 3.days.ago)
+
+      sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
+
+      fill_in "Filter", with: "Completed"
+      click_button "Course: Completed"
+
+      expect(page).to have_text(student_1.name)
+      expect(page).not_to have_text(student_2.name)
+
+      find("button[title='Remove selection: Completed']").click
       expect(page).to have_text(student_2.name)
     end
 

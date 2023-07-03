@@ -15,6 +15,28 @@
   <section class="bg-white">
     <div class="max-w-5xl mx-auto p-6">
       <div class="w-full p-5 bg-gray-50 rounded-lg">
+        <h3 class="text-sm font-semibold"><%= 'Milestone Targets Completion Status' %></h3>
+        <div class="space-y-2">
+          <% @presenter.milestone_completion_status.each do |milestone_number, data| %>
+            <div class="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
+              <div class="flex items-center">
+                <div class="mr-2">
+                  <span class="text-xs font-medium px-1 py-0.5 <%= data[:completed] ? ' bg-green-100  rounded' : 'bg-orange-100 rounded' %>">
+                    <% if data[:completed] %>
+                      <i class="if i-check-circle-solid text-green-600"></i>
+                    <% else %>
+                      <i class="if i-dashed-circle-light text-orange-600" aria-hidden="true"></i>
+                    <% end %>
+                  </span>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold mr-2"><%= "M#{milestone_number}" %></p>
+                </div>
+              </div>
+              <div class="flex-1 text-sm"><%= data[:title].capitalize %></div>
+            </div>
+          <% end %>
+        </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5 mt-5">
         <div class="col-span-2 p-5 bg-gray-50 rounded-lg">

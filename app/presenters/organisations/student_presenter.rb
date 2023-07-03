@@ -106,6 +106,23 @@ module Organisations
       reviewed_submissions.except(:limit, :offset).failed.count
     end
 
+    def milestone_completion_status
+      milestone_targets =
+        course.targets.where(milestone: true).order(:milestone_number)
+
+      status = {}
+
+      milestone_targets.each do |target|
+        status[target.milestone_number] = {
+          title: target.title,
+          completed:
+            student.timeline_events.where(target_id: target.id).passed.any?
+        }
+      end
+
+      status
+    end
+
     private
 
     def current_course_targets

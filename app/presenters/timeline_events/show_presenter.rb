@@ -39,10 +39,13 @@ module TimelineEvents
     end
 
     def submission_from
-      if @submission.founder.team.present? && @submission.team_submission?
-        @submission.founder.team.name
-      else
-        @submission.founder.name
+      Founder.includes(:user).where(id: student_ids).pluck(:name).join(", ")
+    end
+
+    def team_name
+      if @submission.team_submission? && students_have_same_team &&
+           !student_ids.one?
+        Founder.find_by(id: student_ids.first).team.name
       end
     end
 
@@ -59,6 +62,16 @@ module TimelineEvents
       else
         "if i-check-circle-alt-regular if-fw"
       end
+    end
+
+    private
+
+    def student_ids
+      @student_ids ||= @submission.founders.pluck(:id).sort
+    end
+
+    def students_have_same_team
+      Founder.where(id: student_ids).distinct(:team_id).pluck(:team_id).one?
     end
   end
 end

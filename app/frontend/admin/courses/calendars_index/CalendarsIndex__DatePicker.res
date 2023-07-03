@@ -4,6 +4,8 @@ exception InvalidSource(string)
 exception WeekDayInvalid(string)
 let str = React.string
 
+let t = I18n.t(~scope="components.CalendarsIndex__DatePicker")
+
 let computeStatus = (day, daysWithStatus) => daysWithStatus |> Array.mem(day)
 
 let startOnDayClass = currentMonth => {
@@ -198,7 +200,7 @@ let make = (~selectedDate, ~source, ~selectedCalendarId=?, ~courseId) => {
           <button
             onClick={_ => reloadPage(Js.Date.make()->DateFns.format("yyyy-MM-dd"))}
             className="px-2 py-1 text-sm bg-gray-100 font-medium border rounded-md hover:text-primary-500 hover:bg-primary-100 focus:ring-2 focus:ring-focusColor-500 transition">
-            <span> {"Today"->str} </span>
+            <span> {t("today")->str} </span>
           </button>
         </div>
         <div className="courses-calendar__day-of-week">

@@ -274,7 +274,7 @@ let make = (
           </div>
           {showArchivedButton(targetGroupsInLevel, state.targets)
             ? <button className="btn btn-default" onClick={_ => send(ToggleShowArchived)}>
-                {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
+                {(state.showArchived ? t("hide_archived") : t("show_archived")) |> str}
               </button>
             : React.null}
         </div>

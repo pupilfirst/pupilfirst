@@ -4,7 +4,7 @@ title: Targets
 sidebar_label: Targets
 ---
 
-Targets hold the content for a course's curriculum, and is the main objects that students interact with as a part of your courses. The creation and editing of targets is done within [the curriculum editor](/users/curriculum_editor). This document has additional information about targets and their behavior.
+Targets hold the content for a course's curriculum, and are the main objects that students interact with as a part of your courses. The creation and editing of targets is done within [the curriculum editor](/users/curriculum_editor). This document has additional information about targets and their behavior.
 
 ## Milestone targets
 

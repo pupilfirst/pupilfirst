@@ -177,7 +177,7 @@ let make = (
 
   <div className="bg-gray-50 p-4 w-full flex flex-wrap gap-3 rounded-lg">
     <div className="flex-1">
-      <label htmlFor=id className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </label>
+      <label htmlFor=id className="text-xs uppercase font-medium pb-2"> {I18n.t("shared.filter")->str} </label>
       <Multiselect
         id
         unselected={unselected(state, filters)}
@@ -194,7 +194,7 @@ let make = (
     {switch sorter {
     | Some(sorter) =>
       <div>
-        <p className="text-xs uppercase font-medium pb-2"> {"Sort by"->str} </p>
+        <p className="text-xs uppercase font-medium pb-2"> {I18n.t("shared.sort_by")->str} </p>
         <Dropdown2
           selected={selectedSorter(sorter, params)}
           contents={sortOptions(sorter, params)}

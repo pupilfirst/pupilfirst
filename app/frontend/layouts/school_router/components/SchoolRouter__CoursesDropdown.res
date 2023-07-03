@@ -1,9 +1,11 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolRouter__CoursesDropdown")
+
 open SchoolRouter__Types
 
 let selected = currentCourse => {
-  let title = currentCourse->Belt.Option.mapWithDefault("Select Course", c => Course.name(c))
+  let title = currentCourse->Belt.Option.mapWithDefault(t("select_course"), c => Course.name(c))
   <button
     title={title}
     className="bg-gray-50 rounded text-sm w-full appearance-none flex items-center justify-between hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500 font-semibold relative px-2 py-2">

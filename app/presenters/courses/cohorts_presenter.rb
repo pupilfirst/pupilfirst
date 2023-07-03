@@ -1,4 +1,4 @@
-class Courses::StudentsPresenter < ApplicationPresenter
+class Courses::CohortsPresenter < ApplicationPresenter
   def initialize(view_context, course, status)
     @course = course
     @status = status || "active"

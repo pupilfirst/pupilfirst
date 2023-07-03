@@ -77,12 +77,11 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   end
 
   def milestone_completion_status
-    milestone_targets =
-      @course.targets.where(milestone: true).order(:milestone_number)
+    ordered_milestone_targets = milestone_targets.order(:milestone_number)
 
     status = {}
 
-    milestone_targets.each do |target|
+    ordered_milestone_targets.each do |target|
       submissions =
         TimelineEvent
           .from_founders(@cohort.founders)
@@ -97,6 +96,10 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     end
 
     status
+  end
+
+  def milestone_targets
+    @milestone_targets ||= @course.targets.where(milestone: true)
   end
 
   def total_students_count

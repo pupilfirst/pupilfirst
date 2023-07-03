@@ -165,7 +165,7 @@ feature "Cohorts", js: true do
       expect(page).to have_text("Milestone Targets Completion Status")
     end
 
-    scenario "filters stduents by email" do
+    scenario "filters the students by email" do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: student_1.email
@@ -178,7 +178,7 @@ feature "Cohorts", js: true do
       expect(page).to have_text(student_2.name)
     end
 
-    scenario "filters stduents by name" do
+    scenario "filters the students by name" do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: student_1.name
@@ -191,7 +191,7 @@ feature "Cohorts", js: true do
       expect(page).to have_text(student_2.name)
     end
 
-    scenario "filters students by milestone" do
+    scenario "filters the students by milestone" do
       create(
         :timeline_event,
         :with_owners,
@@ -217,7 +217,7 @@ feature "Cohorts", js: true do
       expect(page).to have_text(student_2.name)
     end
 
-    scenario "filters students by course completion" do
+    scenario "filters the students by course completion" do
       create(
         :timeline_event,
         :with_owners,
@@ -254,7 +254,7 @@ feature "Cohorts", js: true do
       expect(page).to have_text(student_2.name)
     end
 
-    scenario "visits students tab by clicking on milestone pill" do
+    scenario "visits the students tab by clicking on milestone pill" do
       create(
         :timeline_event,
         :with_owners,
@@ -299,7 +299,7 @@ feature "Cohorts", js: true do
       )
     end
 
-    scenario "pagination is present when students are more than 24" do
+    scenario "pagination is present when the students are more than 24" do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       expect(page).to have_text(

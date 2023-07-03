@@ -6,7 +6,7 @@ sidebar_label: Student Reports
 
 Coaches have access to a _Students_ tab that lists all active students in the course.
 
-![Coach's list of students](https://res.cloudinary.com/sv-co/image/upload/v1589827145/pupilfirst_documentation/student_reports/students_page_nwqxia.png)
+![Coach's list of students](../assets/student_reports/students_page_nwqxia.png)
 
 If you have more than a handful of students, keeping track of them - how far they've progressed in the course, how well they're doing, and what issues they've had during their time - can be daunting. Pupilfirst sets up a few simple interfaces to make these checks easier.
 
@@ -26,7 +26,7 @@ However, some levels may be more difficult or time-consuming than others, so you
 
 To get a detailed look at a student's progress, you can click on an entry to open up a report for that student.
 
-![A student's report](https://res.cloudinary.com/sv-co/image/upload/v1582530863/pupilfirst_documentation/student_reports/student_report_sv4bhj.png)
+![A student's report](../assets/student_reports/student_report_sv4bhj.png)
 
 The left sidebar shows all available details about the student. Top to bottom, these are:
 

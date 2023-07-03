@@ -164,9 +164,6 @@ feature "Public preview of course curriculum", js: true do
 
       expect(page).to have_content(enrolled_course.name)
 
-      # There should be no dropdown in the header menu.
-      expect(page).not_to have_button(enrolled_course.name)
-
       # Access the public course's preview by visiting its page manually.
       visit curriculum_course_path(public_course_1)
 

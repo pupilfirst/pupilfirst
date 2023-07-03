@@ -191,7 +191,7 @@ feature "Cohorts", js: true do
       expect(page).to have_text(student_2.name)
     end
 
-    scenario "filters stduents by milestone" do
+    scenario "filters students by milestone" do
       create(
         :timeline_event,
         :with_owners,

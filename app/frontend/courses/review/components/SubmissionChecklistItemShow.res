@@ -127,15 +127,17 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>
-    <div className="text-sm font-medium flex items-center justify-between ">
-      <div className="flex flex-1 items-start space-x-2">
-        <div className="flex items-start">
+    <div className="text-sm font-medium justify-between ">
+      <div className="flex items-start space-x-2">
+        <div className="flex items-start w-full gap-3">
           <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
-          <MarkdownBlock
-            profile=Markdown.Permissive
-            markdown={ChecklistItem.title(checklistItem)}
-            className="ms-3 pe-2 tracking-wide"
-          />
+          <div className="overflow-x-scroll">
+            <MarkdownBlock
+              profile=Markdown.Permissive
+              markdown={ChecklistItem.title(checklistItem)}
+              className="block tracking-wide"
+            />
+          </div>
         </div>
         {statusIcon(updateChecklistCB, status)}
       </div>

@@ -29,7 +29,7 @@ module Cohorts
                 .where(milestone: true)
                 .order(:milestone_number)
                 .map do |target|
-                  "M#{target.milestone_number}: #{target.title}"
+                  "#{target.id};M#{target.milestone_number}: #{target.title}"
                 end,
             color: "blue"
           },
@@ -132,15 +132,9 @@ module Cohorts
 
     def filter_students_by_milestone(scope)
       if params[:milestone].present?
-        milestone_number = params[:milestone].split(":").first[1..-1]
         scope
           .joins(timeline_events: :target)
-          .where(
-            targets: {
-              milestone_number: milestone_number,
-              milestone: true
-            }
-          )
+          .where(targets: { id: params[:milestone], milestone: true })
           .where.not(timeline_events: { passed_at: nil })
       else
         scope

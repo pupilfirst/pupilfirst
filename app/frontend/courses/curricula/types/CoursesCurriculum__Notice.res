@@ -3,9 +3,6 @@ type rec t =
   | CourseEnded
   | CourseComplete
   | AccessEnded
-  | LevelUp
-  | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) // For when the Strict progression behavior applies.
   | TeamMembersPending
   | Nothing
 and currentLevelNumber = int
@@ -25,9 +22,6 @@ let icon = t =>
   | CourseEnded => courseEndedImage
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
-  | LevelUp => levelUpImage
-  | LevelUpLimited(_)
-  | LevelUpBlocked(_)
   | TeamMembersPending => levelUpBlockedImage
   | Nothing => ""
   }

@@ -377,72 +377,68 @@ let make = (
     }}
     {issuedCertificate(course)}
     <CoursesCurriculum__NoticeManager notice=state.notice course />
-    {switch state.notice {
-    | LevelUp => React.null
-    | _anyOtherNotice =>
-      [
-        <div className="relative" key="curriculum-body">
-          <CoursesCurriculum__LevelSelector
-            levels
-            studentLevel
-            selectedLevel
-            preview
-            setSelectedLevelId={selectedLevelId =>
-              setState(state => {...state, selectedLevelId: selectedLevelId})}
-            showLevelZero=state.showLevelZero
-            setShowLevelZero={showLevelZero =>
-              setState(state => {...state, showLevelZero: showLevelZero})}
-            levelZero
-          />
-          {ReactUtils.nullUnless(
-            <div className="text-center mt-2 max-w-3xl mx-auto">
-              <a
-                className="btn btn-primary-ghost btn-small"
-                href={"/school/courses/" ++
-                Course.id(course) ++
-                "/curriculum?level=" ++
-                Level.number(currentLevel)->string_of_int}>
-                <i className="fas fa-pencil-alt" />
-                <span className="ms-2"> {t("edit_level_button")->str} </span>
-              </a>
-            </div>,
-            author,
-          )}
-          {currentLevel |> Level.isLocked && accessLockedLevels
-            ? <div
-                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
-                dangerouslySetInnerHTML={
-                  "__html": t(
-                    "level_locked_for_students_notice",
-                    ~variables=[("date", Level.unlockDateString(currentLevel))],
-                  ),
-                }
-              />
-            : React.null}
-          {Level.isUnlocked(currentLevel) || accessLockedLevels
-            ? targetGroupsInLevel == []
-                ? <div className="mx-auto py-10">
-                    <img className="max-w-xs md:max-w-sm mx-auto" src=levelEmptyImage />
-                    <p className="text-center font-semibold text-lg mt-4">
-                      {t("empty_level_content_notice") |> str}
-                    </p>
-                  </div>
-                : targetGroupsInLevel
-                  |> TargetGroup.sort
-                  |> Js.Array.map(targetGroup =>
-                    renderTargetGroup(
-                      targetGroup,
-                      targets,
-                      state.statusOfTargets,
-                      author,
-                      Course.id(course),
-                    )
+    {[
+      <div className="relative" key="curriculum-body">
+        <CoursesCurriculum__LevelSelector
+          levels
+          studentLevel
+          selectedLevel
+          preview
+          setSelectedLevelId={selectedLevelId =>
+            setState(state => {...state, selectedLevelId: selectedLevelId})}
+          showLevelZero=state.showLevelZero
+          setShowLevelZero={showLevelZero =>
+            setState(state => {...state, showLevelZero: showLevelZero})}
+          levelZero
+        />
+        {ReactUtils.nullUnless(
+          <div className="text-center mt-2 max-w-3xl mx-auto">
+            <a
+              className="btn btn-primary-ghost btn-small"
+              href={"/school/courses/" ++
+              Course.id(course) ++
+              "/curriculum?level=" ++
+              Level.number(currentLevel)->string_of_int}>
+              <i className="fas fa-pencil-alt" />
+              <span className="ms-2"> {t("edit_level_button")->str} </span>
+            </a>
+          </div>,
+          author,
+        )}
+        {currentLevel |> Level.isLocked && accessLockedLevels
+          ? <div
+              className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
+              dangerouslySetInnerHTML={
+                "__html": t(
+                  "level_locked_for_students_notice",
+                  ~variables=[("date", Level.unlockDateString(currentLevel))],
+                ),
+              }
+            />
+          : React.null}
+        {Level.isUnlocked(currentLevel) || accessLockedLevels
+          ? targetGroupsInLevel == []
+              ? <div className="mx-auto py-10">
+                  <img className="max-w-xs md:max-w-sm mx-auto" src=levelEmptyImage />
+                  <p className="text-center font-semibold text-lg mt-4">
+                    {t("empty_level_content_notice") |> str}
+                  </p>
+                </div>
+              : targetGroupsInLevel
+                |> TargetGroup.sort
+                |> Js.Array.map(targetGroup =>
+                  renderTargetGroup(
+                    targetGroup,
+                    targets,
+                    state.statusOfTargets,
+                    author,
+                    Course.id(course),
                   )
-                  |> React.array
-            : handleLockedLevel(currentLevel)}
-        </div>,
-        {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
-      ] |> React.array
-    }}
+                )
+                |> React.array
+          : handleLockedLevel(currentLevel)}
+      </div>,
+      {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
+    ] |> React.array}
   </div>
 }

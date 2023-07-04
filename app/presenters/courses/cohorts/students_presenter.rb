@@ -21,7 +21,9 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
               .live
               .where(milestone: true)
               .order(:milestone_number)
-              .map { |target| "M#{target.milestone_number}: #{target.title}" },
+              .map do |target|
+                "#{target.id};M#{target.milestone_number}: #{target.title}"
+              end,
           color: "blue"
         },
         {
@@ -129,10 +131,9 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
 
   def filter_students_by_milestone(scope)
     if params[:milestone].present?
-      milestone_number = params[:milestone].split(":").first[1..-1]
       scope
         .joins(timeline_events: :target)
-        .where(targets: { milestone_number: milestone_number, milestone: true })
+        .where(targets: { id: params[:milestone], milestone: true })
         .where.not(timeline_events: { passed_at: nil })
         .distinct
     else

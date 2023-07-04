@@ -59,7 +59,7 @@ let teamMembersPendingMessage = () =>
   )
 
 @react.component
-let make = (~notice, ~course) =>
+let make = (~notice) =>
   switch notice {
   | Notice.Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()

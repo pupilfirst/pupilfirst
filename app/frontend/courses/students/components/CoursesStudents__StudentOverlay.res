@@ -645,7 +645,6 @@ let make = (~studentId, ~userId) => {
               | Submissions =>
                 <CoursesStudents__SubmissionsList
                   studentId
-                  levels={studentDetails->StudentDetails.levels}
                   submissions=state.submissions
                   updateSubmissionsCB={updateSubmissions(setState)}
                 />

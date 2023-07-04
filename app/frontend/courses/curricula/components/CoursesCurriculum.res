@@ -376,12 +376,11 @@ let make = (
     | None => React.null
     }}
     {issuedCertificate(course)}
-    <CoursesCurriculum__NoticeManager notice=state.notice course />
+    <CoursesCurriculum__NoticeManager notice=state.notice />
     {[
       <div className="relative" key="curriculum-body">
         <CoursesCurriculum__LevelSelector
           levels
-          studentLevel
           selectedLevel
           preview
           setSelectedLevelId={selectedLevelId =>

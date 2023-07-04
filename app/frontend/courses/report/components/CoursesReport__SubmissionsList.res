@@ -289,7 +289,7 @@ let submissionCardClasses = submission =>
   | #PendingReview => "border-blue-500"
   }
 
-let showSubmission = (submissions, levels, teamStudentIds) =>
+let showSubmission = (submissions, teamStudentIds) =>
   <div>
     {submissions
     |> Array.map(submission => {
@@ -360,14 +360,14 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
     |> React.array}
   </div>
 
-let showSubmissions = (submissions, levels, teamStudentIds) =>
+let showSubmissions = (submissions, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
           {tr("no_submissions_to_show") |> str}
         </h5>
       </div>
-    : showSubmission(submissions, levels, teamStudentIds)
+    : showSubmission(submissions, teamStudentIds)
 
 @react.component
 let make = (
@@ -426,7 +426,7 @@ let make = (
       | Unloaded => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
       | PartiallyLoaded({submissions}, cursor) =>
         <div>
-          {showSubmissions(submissions, levels, teamStudentIds)}
+          {showSubmissions(submissions, teamStudentIds)}
           {switch state.loading {
           | Loaded =>
             <button
@@ -450,7 +450,7 @@ let make = (
           | Reloading => React.null
           }}
         </div>
-      | FullyLoaded({submissions}) => showSubmissions(submissions, levels, teamStudentIds)
+      | FullyLoaded({submissions}) => showSubmissions(submissions, teamStudentIds)
       }}
     </div>
     {switch submissions {

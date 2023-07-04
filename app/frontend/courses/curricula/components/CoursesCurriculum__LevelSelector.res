@@ -12,9 +12,7 @@ let levelZeroSelectorClasses = isSelected => {
 let levelName = level =>
   LevelLabel.format(~short=true, ~name=level |> Level.name, level |> Level.number |> string_of_int)
 
-let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview) => {
-  let studentLevelNumber = studentLevel |> Level.number
-
+let selectableLevels = (orderedLevels, setSelectedLevelId, preview) => {
   orderedLevels |> Js.Array.map(level => {
     let levelNumber = level |> Level.number
 
@@ -38,13 +36,7 @@ let selectableLevels = (orderedLevels, studentLevel, setSelectedLevelId, preview
   })
 }
 
-let untabbedLevelSelector = (
-  selectedLevel,
-  orderedLevels,
-  studentLevel,
-  setSelectedLevelId,
-  preview,
-) => {
+let untabbedLevelSelector = (selectedLevel, orderedLevels, setSelectedLevelId, preview) => {
   let selected =
     <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
       <span className="grow truncate w-0"> {selectedLevel |> levelName |> str} </span>
@@ -53,14 +45,13 @@ let untabbedLevelSelector = (
 
   <Dropdown
     selected
-    contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
+    contents={selectableLevels(orderedLevels, setSelectedLevelId, preview)}
     className="grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50"
   />
 }
 
 let tabbedLevelSelector = (
   orderedLevels,
-  studentLevel,
   selectedLevel,
   setSelectedLevelId,
   showLevelZero,
@@ -84,7 +75,7 @@ let tabbedLevelSelector = (
     : <Dropdown
         key="numbered-level-selector"
         selected={selected(false)}
-        contents={selectableLevels(orderedLevels, studentLevel, setSelectedLevelId, preview)}
+        contents={selectableLevels(orderedLevels, setSelectedLevelId, preview)}
         className="cursor-pointer grow rounded-s-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
       />
 
@@ -103,7 +94,6 @@ let tabbedLevelSelector = (
 @react.component
 let make = (
   ~levels,
-  ~studentLevel,
   ~selectedLevel,
   ~preview,
   ~setSelectedLevelId,
@@ -122,7 +112,6 @@ let make = (
       | Some(levelZero) =>
         tabbedLevelSelector(
           orderedLevels,
-          studentLevel,
           selectedLevel,
           setSelectedLevelId,
           showLevelZero,
@@ -130,14 +119,7 @@ let make = (
           levelZero,
           preview,
         )
-      | None =>
-        untabbedLevelSelector(
-          selectedLevel,
-          orderedLevels,
-          studentLevel,
-          setSelectedLevelId,
-          preview,
-        )
+      | None => untabbedLevelSelector(selectedLevel, orderedLevels, setSelectedLevelId, preview)
       }}
     </div>
   </div>

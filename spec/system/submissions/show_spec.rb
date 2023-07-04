@@ -70,6 +70,7 @@ feature "Submissions show" do
 
   let(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.founders.first }
+  let(:student_2) { team.founders.last }
 
   let(:organisation) { create :organisation, school: school }
   let(:organisation_admin) do
@@ -103,8 +104,8 @@ feature "Submissions show" do
 
       target.evaluation_criteria << [evaluation_criterion]
       target_2.evaluation_criteria << [evaluation_criterion]
-      submission.founders << student
-      submission_2.founders << team.founders.last
+      submission.founders << [student, student_2]
+      submission_2.founders << student_2
       submission_3.founders << student
       submission.update!(evaluator: coach)
       submission.update!(evaluated_at: Time.now)
@@ -122,6 +123,8 @@ feature "Submissions show" do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
+      expect(page).to have_content(student.name)
+      expect(page).to have_content(student_2.name)
       expect(page).to have_content(team.name)
       expect(page).to have_content(submission.created_at.strftime("%b %d, %Y"))
       expect(page).to have_content("Rejected")
@@ -159,13 +162,14 @@ feature "Submissions show" do
       expect(page).to have_text(coach_2.name)
     end
 
-    # This checks if submitter's name is rendered on the page correctly.
-    scenario "student from a team visits show page for target having student role",
-             js: true do
+    scenario "student visits show page with non-team submission", js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_3)
 
       expect(page).to have_text(submission_3.title)
       expect(page).to have_text(student.name)
+      expect(page).to have_text("Pending")
+      expect(page).not_to have_text(student_2.name)
+      expect(page).not_to have_text(team.name)
     end
 
     scenario "student visits show page of submission he is not linked to",

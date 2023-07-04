@@ -2743,6 +2743,7 @@ en:
       rejected: Rejected
       accepted: Accepted
       pending: Pending
+      team: Team
       feedback:
         one: Feedback
         other: Feedbacks

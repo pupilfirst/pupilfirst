@@ -10,22 +10,28 @@
       </div>
       <p class="text-md font-semibold"><%= @submission.title %></p>
     </div>
-    <div class="flex flex-wrap gap-5 py-5 divide-x-2">
-      <div class="pr-4">
+    <div class="flex flex-wrap gap-5 py-5">
+      <div class="pe-5 border-e border-gray-300">
         <p class="text-xs text-gray-500"><%= t(".submission_from") %></p>
         <p class="text-sm font-semibold"><%= presenter.submission_from %></p>
       </div>
-      <div class="px-4">
+      <% if presenter.team_name.present? %>
+        <div class="pe-5 border-e border-gray-300">
+          <p class="text-xs text-gray-500"><%= t(".team") %></p>
+          <p class="text-sm font-semibold"><%= presenter.team_name %></p>
+        </div>
+      <% end %>
+      <div class="pe-5 border-e border-gray-300">
         <p class="text-xs text-gray-500"><%= t(".submitted_on") %></p>
         <p class="text-sm font-semibold"> <%= @submission.created_at.strftime("%b %d, %Y")%></p>
       </div>
       <% if @submission.evaluated_at.present? %>
-        <div class="px-4">
+        <div class="pe-5 border-e border-gray-300">
           <p class="text-xs text-gray-500"><%= t(".reviewed_on") %></p>
           <p class="text-sm font-semibold"><%= @submission.evaluated_at.strftime("%b %d, %Y") %></p>
         </div>
       <% end %>
-      <div class="px-4">
+      <div>
         <p class="text-xs text-gray-500"><%= t(".status") %></p>
         <% if @submission.passed_at.present? %>
           <p class="text-sm font-semibold text-green-500"><%= t(".accepted") %></p>

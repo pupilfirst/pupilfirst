@@ -105,6 +105,10 @@ The _Details_ tab can be accessed by clicking on the tab once the editor is open
 
 This tab contains other basic details and configuration for the target, such as its name, whether it has prerequisites, its completion method, and its visibility to the student and other course authors.
 
+### Setting target as a milestone
+
+You can set a target as a milestone by select _Yes_ against the setting question. This will make the target a milestone target, which means that that the student can complete the course only after completing this target. If a course has multiple milestone targets, the student can complete the course only after completing all the milestone targets.
+
 ### Setting the method of completion
 
 To decide how a student can complete a target, this interface asks you a few questions:

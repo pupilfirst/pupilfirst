@@ -1068,6 +1068,7 @@ en:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: Do you have any completion instructions for the student?
+
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
@@ -1108,11 +1109,10 @@ en:
       target_group: Target Group
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
-      target_setting_milestone: Is this target a milestone?
-      target_role:
-        help: Should students in a team submit work on a target individually, or together?
-        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
-        label: How should teams tackle this target?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title

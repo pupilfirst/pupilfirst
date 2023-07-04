@@ -976,6 +976,30 @@ let make = (
                 </div>
               </div>
               {targetGroupEditor(state, targetGroups, levels, send)}
+              <div className="flex items-center mb-6">
+                <label
+                  className="block tracking-wide text-sm font-semibold me-1" htmlFor="milestone">
+                  <span className="me-2">
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
+                  </span>
+                  {t("target_setting_milestone.label")->str}
+                </label>
+                <HelpIcon link={t("target_setting_milestone.help_url")} className="me-6">
+                  {t("target_setting_milestone.help") |> str}
+                </HelpIcon>
+                <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
+                  <button
+                    onClick={updateMilestone(true, send)}
+                    className={booleanButtonClasses(state.milestone)}>
+                    {ts("_yes") |> str}
+                  </button>
+                  <button
+                    onClick={updateMilestone(false, send)}
+                    className={booleanButtonClasses(!state.milestone)}>
+                    {ts("_no") |> str}
+                  </button>
+                </div>
+              </div>
               {prerequisiteTargetEditor(send, eligiblePrerequisiteTargets(targets), state)}
               <div className="flex items-center mb-6">
                 <label
@@ -1054,27 +1078,6 @@ let make = (
                     <span className="text-sm">
                       {t("one_student_team") |> str} <br /> {t("need_submit") |> str}
                     </span>
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center mb-6">
-                <label
-                  className="block tracking-wide text-sm font-semibold me-6" htmlFor="milestone">
-                  <span className="me-2">
-                    <i className="fas fa-list rtl:rotate-180 text-base" />
-                  </span>
-                  {t("target_setting_milestone")->str}
-                </label>
-                <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
-                  <button
-                    onClick={updateMilestone(true, send)}
-                    className={booleanButtonClasses(state.milestone)}>
-                    {ts("_yes") |> str}
-                  </button>
-                  <button
-                    onClick={updateMilestone(false, send)}
-                    className={booleanButtonClasses(!state.milestone)}>
-                    {ts("_no") |> str}
                   </button>
                 </div>
               </div>

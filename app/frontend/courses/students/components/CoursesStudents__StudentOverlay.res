@@ -260,11 +260,11 @@ let milestoneTargetsCompletionStats = studentDetails => {
     ),
   )
 
-  let target =
-    completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int
-
   <div className="flex items-center space-x-4">
-    <p className="text-xs font-medium text-gray-500 flex whitespace-nowrap"> {target->str} </p>
+    <p className="text-xs font-medium text-gray-500 flex whitespace-nowrap">
+      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
+        ->str}
+    </p>
     <div className="flex items-center space-x-1">
       <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
         {milestoneTargetCompletionPercentage ++ "%" |> str}

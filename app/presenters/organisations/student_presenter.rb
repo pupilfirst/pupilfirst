@@ -107,7 +107,7 @@ module Organisations
     end
 
     def milestone_targets
-      @milestone_targets ||= course.targets.where(milestone: true)
+      @milestone_targets ||= course.targets.live.where(milestone: true)
     end
 
     def milestone_completion_status

@@ -101,7 +101,7 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   end
 
   def milestone_targets
-    @milestone_targets ||= @course.targets.where(milestone: true)
+    @milestone_targets ||= @course.targets.live.where(milestone: true)
   end
 
   def total_students_count

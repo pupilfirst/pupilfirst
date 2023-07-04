@@ -87,7 +87,12 @@ module Cohorts
 
     def milestone_completion_status
       milestone_targets =
-        @cohort.course.targets.where(milestone: true).order(:milestone_number)
+        @cohort
+          .course
+          .targets
+          .live
+          .where(milestone: true)
+          .order(:milestone_number)
 
       status = {}
 

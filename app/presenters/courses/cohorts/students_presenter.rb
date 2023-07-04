@@ -10,7 +10,29 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
       id: "course-cohort-students-filter",
       filters: [
         { key: "name", label: "Name", filterType: "Search", color: "red" },
-        { key: "email", label: "Email", filterType: "Search", color: "yellow" }
+        { key: "email", label: "Email", filterType: "Search", color: "yellow" },
+        {
+          key: "milestone",
+          label: "Milestone",
+          filterType: "MultiSelect",
+          values:
+            @course
+              .targets
+              .live
+              .where(milestone: true)
+              .order(:milestone_number)
+              .map do |target|
+                "#{target.id};M#{target.milestone_number}: #{target.title}"
+              end,
+          color: "blue"
+        },
+        {
+          key: "course",
+          label: "Course",
+          filterType: "MultiSelect",
+          values: ["Completed", "Not Completed"],
+          color: "green"
+        }
       ],
       placeholder: "Search by name or email",
       hint: "...or start typing to search by student's name of email",
@@ -35,12 +57,21 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     }
   end
 
+  def filters_in_url
+    params
+      .slice(:name, :email, :milestone, :course)
+      .permit(:name, :email, :milestone, :course)
+      .compact
+  end
+
   def students
     @students ||=
       begin
-        filter_1 = filter_students_by_name(scope)
-        filter_2 = filter_students_by_email(filter_1)
-        sorted = sort_students(filter_2)
+        filter_1 = filter_students_by_milestone(scope)
+        filter_2 = filter_students_by_name(filter_1)
+        filter_3 = filter_students_by_email(filter_2)
+        filter_4 = filter_students_by_course_completion(filter_3)
+        sorted = sort_students(filter_4)
         included = sorted.includes(:user)
         paged = included.page(params[:page]).per(24)
         paged.count.zero? ? paged.page(paged.total_pages) : paged
@@ -48,12 +79,11 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   end
 
   def milestone_completion_status
-    milestone_targets =
-      @course.targets.where(milestone: true).order(:milestone_number)
+    ordered_milestone_targets = milestone_targets.order(:milestone_number)
 
     status = {}
 
-    milestone_targets.each do |target|
+    ordered_milestone_targets.each do |target|
       submissions =
         TimelineEvent
           .from_founders(@cohort.founders)
@@ -68,6 +98,10 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     end
 
     status
+  end
+
+  def milestone_targets
+    @milestone_targets ||= @course.targets.where(milestone: true)
   end
 
   def total_students_count
@@ -90,6 +124,28 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
         "lower(users.email) ILIKE ?",
         "%#{params[:email].downcase}%"
       )
+    else
+      scope
+    end
+  end
+
+  def filter_students_by_milestone(scope)
+    if params[:milestone].present?
+      scope
+        .joins(timeline_events: :target)
+        .where(targets: { id: params[:milestone], milestone: true })
+        .where.not(timeline_events: { passed_at: nil })
+        .distinct
+    else
+      scope
+    end
+  end
+
+  def filter_students_by_course_completion(scope)
+    if params[:course] == "Completed"
+      scope.where.not(completed_at: nil)
+    elsif params[:course] == "Not Completed"
+      scope.where(completed_at: nil)
     else
       scope
     end

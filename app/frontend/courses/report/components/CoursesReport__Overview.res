@@ -37,6 +37,7 @@ let coachInfo = coaches =>
         |> React.array}
       </div>
     : React.null
+
 let doughnutChart = (color, percentage) =>
   <svg viewBox="0 0 36 36" className={"courses-report-overview__doughnut-chart " ++ color}>
     <path
@@ -52,6 +53,7 @@ let doughnutChart = (color, percentage) =>
       {percentage ++ "%" |> str}
     </text>
   </svg>
+
 let targetsCompletionStatus = overview => {
   let targetsCompleted = overview |> StudentOverview.targetsCompleted
   let totalTargets = overview |> StudentOverview.totalTargets

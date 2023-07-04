@@ -570,7 +570,7 @@ let make = (~studentId, ~userId) => {
               {inactiveWarning(student)}
             </div>
             <div className="mt-4">
-              <div className="justify-between justify-items-end mt-8 flex flex-col sm:flex-row">
+              <div className="justify-between mt-8 flex flex-col sm:flex-row">
                 <p className="text-sm font-semibold">
                   {"Milestone Targets Completion Status"->str}
                 </p>

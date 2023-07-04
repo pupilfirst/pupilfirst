@@ -1113,6 +1113,10 @@ en:
         help: Students will not be able to complete the course until they complete this target if set as milestone.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
         label: Is this target a milestone?
+      target_role:
+        help: Should students in a team submit work on a target individually, or together?
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: How should teams tackle this target?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title

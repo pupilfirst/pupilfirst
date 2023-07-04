@@ -13,19 +13,25 @@
     </div>
   </section>
   <section class="bg-white">
-    <div class="max-w-5xl mx-auto p-6">
+    <div class="max-w-5xl mx-auto p-5">
       <div class="w-full p-5 bg-gray-50 rounded-lg">
+        <% stats = @presenter.milestone_completion_stats %>
         <div class="flex justify-between">
-          <h3 class="text-sm font-semibold"><%= 'Milestone Targets Completion Status' %></h3>
-          <svg class="courses-milestone-complete__doughnut-chart "  viewBox="0 0 36 36">
-            <path class="courses-milestone-complete__doughnut-chart-bg "
-            d="M18 2.0845
-            a 15.9155 15.9155 0 0 1 0 31.831
-            a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-            <path class="courses-milestone-complete__doughnut-chart-stroke" d="M18 2.0845
-            a 15.9155 15.9155 0 0 1 0 31.831
-            a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="20, 100"></path>
-          </svg>
+          <p class="text-sm font-semibold"><%= 'Milestone Targets Completion Status' %></p>
+          <div class="flex items-center space-x-4">
+            <p class="text-xs font-medium text-gray-500 whitespace-nowrap">
+              <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestone_targets }" %>
+            </p>
+            <div class="flex space-x-1">
+              <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{stats[:percentage]}%" %></p>
+              <div>
+                <svg class="courses-milestone-complete__doughnut-chart"  viewBox="0 0 36 36">
+                  <path class="courses-milestone-complete__doughnut-chart-bg "d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                  <path class="courses-milestone-complete__doughnut-chart-stroke" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="<%= stats[:percentage] %>, 100"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="space-y-2">
           <% @presenter.milestone_completion_status.each do |milestone_number, data| %>

@@ -10,7 +10,7 @@ However, your students will always need instruction before they can effectively 
 
 The curriculum editor organizes content into _levels_, which contains many _groups_ of _targets_, each of which can hold the text and other rich media that you want your students to see.
 
-![Curriculum editor in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1579025594/pupilfirst_documentation/curriculum_editor/curriculum_editor_page_nx0fbq.png)
+![Curriculum editor in the school administration interface](../assets/curriculum_editor/curriculum_editor_page_nx0fbq.png)
 
 ## What are levels?
 
@@ -59,11 +59,11 @@ After creating a target, you can click on it in the curriculum to open the targe
 
 Clicking on a target will open the _Content_ tab by default, which allows you to edit the content of the target - this the _body_ of the material that you would like your student to read or watch.
 
-![Target editor, in preview mode](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_content_editor_feiqdh.png)
+![Target editor, in preview mode](../assets/curriculum_editor/target_content_editor_feiqdh.png)
 
 You'll notice that the content is made up of different types of _content blocks_. If you hover over the region between any of the existing blocks, you'll find an option to insert a new content block into that space. There will always be a content block picker visible at the bottom of the existing content.
 
-![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_editor_blocks_xnvkky.png)
+![Target editor content blocks](../assets/curriculum_editor/target_editor_blocks_xnvkky.png)
 
 ### Content block types
 
@@ -72,7 +72,7 @@ At the moment, we support four types of content blocks.
 **Markdown**<br/>
 The Markdown block allows you to write formatted text in the Markdown format. You can also embed files and images directly into the text using the file upload feature here, but you'll have no control over how they're displayed. Images will be centered, and displayed at actual size, whereas files will be inserted as links. Use the _Image_ and _File_ block types for greater control over these kinds of content.
 
-![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png)
+![Markdown Editor](../assets/curriculum_editor/markdown_editor_xecdd0.png)
 
 To see a live preview of the content you're creating in the editor, choose the split-screen option at the top-right of the editor, and it'll switch to a full-screen mode that shows the content you're writing on the left, with its preview on the right.
 
@@ -104,6 +104,10 @@ The audio block accepts an audio file and uses the default browser player to pla
 The _Details_ tab can be accessed by clicking on the tab once the editor is open, or by clicking the _details icon_ on each of the listed targets.
 
 This tab contains other basic details and configuration for the target, such as its name, whether it has prerequisites, its completion method, and its visibility to the student and other course authors.
+
+### Setting target as a milestone
+
+You can set a target as a milestone by select _Yes_ against the setting question. This will make the target a milestone target, which means that that the student can complete the course only after completing this target. If a course has multiple milestone targets, the student can complete the course only after completing all the milestone targets.
 
 ### Setting the method of completion
 
@@ -148,7 +152,7 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 
 Here's an example target consisting, of four steps to complete the target:
 
-![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png)
+![Adding a target checklist](../assets/curriculum_editor/target_checklist_editor_eguduz.png)
 
 Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when submitting a target. In the example above, step 2 of type _Attach a Link_ is optional.
 
@@ -163,13 +167,13 @@ Once all steps are defined, students can submit the target by executing the requ
 
 Here's an example of how a target's steps are shown in the student submission interface and in the coach review interface:
 
-![Target checklist lifecycle](https://res.cloudinary.com/sv-co/image/upload/v1583213540/pupilfirst_documentation/curriculum_editor/target_checklist_steps_flwajd.jpg)
+![Target checklist lifecycle](../assets/curriculum_editor/target_checklist_steps_flwajd.jpg)
 
 ### Preparing a quiz
 
 If you opted to let the student answer a quiz to complete the target, then you'll need to prepare one:
 
-![Preparing a quiz](https://res.cloudinary.com/sv-co/image/upload/v1574151702/pupilfirst_documentation/curriculum_editor/quiz_preparation_bihhl9.png)
+![Preparing a quiz](../assets/curriculum_editor/quiz_preparation_bihhl9.png)
 
 1. The quiz supports Markdown in both questions and answers.
 2. Every question must have at least two options.
@@ -189,7 +193,7 @@ The third tab of the target editor is called _Versions_. Just like the _Details_
 
 This tab shows you a preview of a target's content as it appears now to the student. But more importantly, it allows you to save the current state of the content as a version, browse previous versions to see how the target's content looked earlier, and restore an old version.
 
-![Browsing previous versions of a target's contents](https://res.cloudinary.com/sv-co/image/upload/v1581452180/pupilfirst_documentation/curriculum_editor/versions_qtt3j8.png)
+![Browsing previous versions of a target's contents](../assets/curriculum_editor/versions_qtt3j8.png)
 
 When a target is first created, you're assumed to be working on its first version. Once you've worked on the target's content for a while, and are happy with it's state, the _Versions_ tab will allow you to _save that version_. Saving a version will create a new version which will hold future changes.
 

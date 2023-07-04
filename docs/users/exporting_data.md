@@ -6,7 +6,7 @@ sidebar_label: Exporting Data
 
 Pupilfirst has a robust data export feature that'll let you pull data out of the Pupilfirst platform, and into a spreadsheet. This allows you to come up with your own analysis of the student data from a course.
 
-![Course exports interface](https://res.cloudinary.com/sv-co/image/upload/v1586175621/pupilfirst_documentation/exporting_data/new_export_menu_kzawyb.png)
+![Course exports interface](../assets/exporting_data/new_export_menu.png)
 
 To prepare a new export, visit the _Exports_ sub-menu within a course, and click the _Create New Export_ button. You have a few options to choose when preparing an export:
 
@@ -14,7 +14,11 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 
 **Export only students with the following tags**: You can limit the results to a select group of students (or teams) by picking one or more tags that's associated with them.
 
+**Export only the students in the following cohort(s)**: To further limit the results, you have the ability to specifically choose one or multiple cohorts, and export only the students associated with those selected cohorts.
+
 **Which targets should the export include?**: This defaults to _All targets_, but you can change it to _Only targets with reviewed submissions_, which will restrict the exported data to targets with submissions that are reviewed and graded by coaches.
+
+**Select the students to include in course export**: This option allows you to include either only active students in the course export or all students (including inactive students).
 
 Once you're happy with the options, click the _Create Export_ button.
 

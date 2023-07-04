@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CourseResourcesFilter")
+
 type resource = [#Cohort | #StudentTag | #UserTag | #Coach]
 
 type filterType =
@@ -220,7 +222,7 @@ let make = (
   ~courseId,
   ~filters: array<filter>,
   ~search,
-  ~placeholder="Filter Resources",
+  ~placeholder=t("filter_resources"),
   ~sorter=?,
   ~hint="...or start typing to filter by cohorts using their name",
 ) => {
@@ -234,7 +236,7 @@ let make = (
 
   <div className="flex flex-col sm:flex-row gap-3">
     <div className="flex-1">
-      <p className="text-xs uppercase font-medium pb-2"> {"Filter"->str} </p>
+      <p className="text-xs uppercase font-medium pb-2"> {I18n.t("shared.filter")->str} </p>
       <Multiselect
         id
         unselected={unselected(state, filters)}
@@ -252,7 +254,7 @@ let make = (
     {switch sorter {
     | Some(sorter) =>
       <div>
-        <p className="text-xs uppercase font-medium pb-2"> {"Sort by"->str} </p>
+        <p className="text-xs uppercase font-medium pb-2"> {I18n.t("shared.sort_by")->str} </p>
         <Dropdown2
           selected={selected(sorter, params)} contents={contents(sorter, params)} right=true
         />

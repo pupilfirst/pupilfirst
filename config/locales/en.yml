@@ -102,6 +102,8 @@ en:
       review: Review
       sign_out: Sign Out
       students: Students
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: Copied!
       copy: Copy to clipboard
@@ -510,6 +512,8 @@ en:
           active: Active
           archived: Archived
           ended: Ended
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -779,8 +783,8 @@ en:
         view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-
-      note_help: "Would you like to write a note about this "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
@@ -942,6 +946,8 @@ en:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
@@ -1062,6 +1068,7 @@ en:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: Do you have any completion instructions for the student?
+
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
@@ -1102,11 +1109,10 @@ en:
       target_group: Target Group
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
-      target_setting_milestone: Is this target a milestone?
-      target_role:
-        help: Should students in a team submit work on a target individually, or together?
-        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
-        label: How should teams tackle this target?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -1352,6 +1358,8 @@ en:
       close_community_editor: Close Community Editor
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: Body of Agreement
       agreement_placeholder: Leave the agreement body empty to hide the footer link.
       manage: Manage
@@ -1450,6 +1458,8 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
@@ -2291,6 +2301,12 @@ en:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2556,6 +2572,8 @@ en:
     issue_certificate_mutator:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: Admins
@@ -2648,6 +2666,7 @@ en:
         title: Coaches
       school_index:
         title: Coaches
+        coach: Coach
     show:
       coaches: Coaches
       courses: Courses
@@ -2704,6 +2723,7 @@ en:
     empty: Empty
     fail: Fail
     file_invalid: Please select a file with a size less than 5 MB.
+    filter: Filter
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     is: is
@@ -2762,6 +2782,7 @@ en:
     settings: Settings
     sign_out: Sign Out
     students: Students
+    sort_by: Sort by
     tag: Tag
     tags: Tags
     target: Target

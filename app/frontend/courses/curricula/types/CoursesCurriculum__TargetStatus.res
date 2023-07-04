@@ -75,15 +75,6 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
   } else if student |> Student.endsAt |> isPast {
     lockTargets(targets, AccessLocked)
   } else {
-    /* Cache level number of the student. */
-    let studentLevelNumber =
-      levels
-      |> ArrayUtils.unsafeFind(
-        l => l |> Level.id == Student.levelId(student),
-        "Could not student's level with ID " ++ Student.levelId(student),
-      )
-      |> Level.number
-
     /* Cache level number, milestone boolean, and submission status for all targets. */
     let targetCache = targets |> Js.Array.map(target => {
       let targetId = target |> Target.id

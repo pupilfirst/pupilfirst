@@ -236,9 +236,6 @@ let make = (~courseId) => {
             <p className="text-gray-600 text-sm font-medium">
               {"Student Distribution Milestone Completion"->str}
             </p>
-            <CoursesStudents__StudentDistribution
-              params studentDistribution={state.studentDistribution}
-            />
           </div>,
           Webapi.Url.URLSearchParams.has("level", params),
         )}

@@ -28,6 +28,7 @@ module Schools
     alias calendars? index?
     alias calendar_events? index?
     alias calendar_month_data? index?
+    alias assignments? index?
 
     def curriculum?
       return false if user.blank?

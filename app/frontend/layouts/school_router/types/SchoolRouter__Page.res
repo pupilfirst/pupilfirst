@@ -17,6 +17,7 @@ type coursePages =
   | Teams
   | Cohorts
   | Calendars
+  | Assignments
 
 type settingsPages =
   | Customization
@@ -57,6 +58,7 @@ let isSPA = t => {
     | Certificates
     | Calendars
     | Applicants => false
+    | Assignments => false
     }
 
   | Courses => true
@@ -80,6 +82,7 @@ let coursePath = (coursePage, courseId) => {
   | Teams => `/school/courses/${courseId}/teams?status=Active`
   | Cohorts => `/school/courses/${courseId}/cohorts?status=Active`
   | Calendars => `/school/courses/${courseId}/calendar_events`
+  | Assignments => `/school/courses/${courseId}/assignments`
   }
 }
 
@@ -127,6 +130,7 @@ let secondaryNavName = t =>
     | Teams => tr("nav.course.teams")
     | Cohorts => tr("nav.course.cohorts")
     | Calendars => tr("nav.course.calendar")
+    | Assignments => "Assignments"
     }
   | Courses
   | Communities

@@ -124,6 +124,7 @@ Rails.application.routes.draw do
         get 'evaluation_criteria'
         post 'attach_images'
         get 'calendar_month_data'
+        get 'assignments'
       end
 
       resources :calendar_events, only: %i[new create show edit], controller: 'calendar_events'

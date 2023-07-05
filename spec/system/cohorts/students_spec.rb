@@ -154,7 +154,7 @@ feature "Organisation show" do
       )
     end
 
-    scenario "user can filter by milestone", js: true do
+    scenario "user can filter by milestone completed", js: true do
       create(
         :timeline_event,
         :with_owners,
@@ -171,7 +171,7 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone Completed: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).to have_text(students[1].name)
       expect(page).not_to have_text(students[2].name)
@@ -180,6 +180,34 @@ feature "Organisation show" do
         "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(students[2].name)
+    end
+
+    scenario "user can filter by milestone pending", js: true do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [students[1]],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      sign_in_user org_admin_user,
+                   referrer:
+                     students_organisation_cohort_path(organisation, cohort)
+
+      fill_in "Filter", with: "M"
+      click_button "Milestone Pending: M#{target_l1.milestone_number}: #{target_l1.title}"
+
+      expect(page).not_to have_content("#{students[1].name}\n")
+      expect(page).to have_text(students[2].name)
+
+      find(
+        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+      ).click
+      expect(page).to have_text(students[1].name)
     end
 
     scenario "user can filter by course completion", js: true do

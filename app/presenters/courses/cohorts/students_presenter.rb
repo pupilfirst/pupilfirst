@@ -108,6 +108,12 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     @total_students_count ||= scope.count
   end
 
+  def course_completed_students
+    @course_completed_students ||= scope.where.not(completed_at: nil)
+  end
+
+  delegate :count, to: :course_completed_students, prefix: true
+
   private
 
   def filter_students_by_name(scope)
@@ -143,7 +149,7 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
 
   def filter_students_by_course_completion(scope)
     if params[:course] == "Completed"
-      scope.where.not(completed_at: nil)
+      course_completed_students
     elsif params[:course] == "Not Completed"
       scope.where(completed_at: nil)
     else

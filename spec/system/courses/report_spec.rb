@@ -180,11 +180,7 @@ feature "Students view performance report and submissions overview", js: true do
   scenario "student visits course report link" do
     sign_in_user student.user, referrer: report_course_path(course)
 
-    expect(page).to have_text("Level Progress")
-    expect(page).to have_selector(
-      ".courses-report-overview__student-level",
-      count: course.levels.where.not(number: 0).count
-    )
+    expect(page).to have_text("Milestone Targets Completion Status")
 
     # Targets Overview
     expect(page).to have_text("Targets Overview")

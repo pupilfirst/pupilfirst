@@ -37,6 +37,7 @@ let coachInfo = coaches =>
         |> React.array}
       </div>
     : React.null
+
 let doughnutChart = (color, percentage) =>
   <svg viewBox="0 0 36 36" className={"courses-report-overview__doughnut-chart " ++ color}>
     <path
@@ -52,6 +53,7 @@ let doughnutChart = (color, percentage) =>
       {percentage ++ "%" |> str}
     </text>
   </svg>
+
 let targetsCompletionStatus = overview => {
   let targetsCompleted = overview |> StudentOverview.targetsCompleted
   let totalTargets = overview |> StudentOverview.totalTargets
@@ -118,11 +120,11 @@ let milestoneTargetsCompletionStatus = overview => {
     ),
   )
 
-  let target =
-    completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int
-
   <div className="flex items-center space-x-4">
-    <p className="text-xs font-medium text-gray-500"> {target->str} </p>
+    <p className="text-xs font-medium text-gray-500">
+      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
+        ->str}
+    </p>
     <div className="flex items-center space-x-1">
       <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
         {milestoneTargetCompletionPercentage ++ "%" |> str}

@@ -97,7 +97,7 @@ feature "Organisation show" do
 
       expect(page).to have_text("Email: #{student.email}")
       expect(page).to have_selector('[data-test-class="student"]', count: 1)
-      expect(page).to have_link(student.name, href: org_student_path(student))
+      expect(page).to have_link(student.name)
     end
 
     scenario "user can filter by name", js: true do

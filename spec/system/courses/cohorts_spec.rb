@@ -206,7 +206,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone Completed: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)
@@ -269,13 +269,13 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: cohort_path(cohort_1)
 
       find(
-        "a[href='#{students_cohort_path(cohort_1, milestone: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_cohort_path(cohort_1, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_current_path(
         students_cohort_path(
           cohort_1,
-          milestone:
+          milestone_completed:
             "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}"
         )
       )
@@ -285,13 +285,13 @@ feature "Cohorts", js: true do
       visit cohort_path(cohort_1)
 
       find(
-        "a[href='#{students_cohort_path(cohort_1, milestone: "#{target_l2.id};M#{target_l2.milestone_number}: #{target_l2.title}")}']"
+        "a[href='#{students_cohort_path(cohort_1, milestone_completed: "#{target_l2.id};M#{target_l2.milestone_number}: #{target_l2.title}")}']"
       ).click
 
       expect(page).to have_current_path(
         students_cohort_path(
           cohort_1,
-          milestone:
+          milestone_completed:
             "#{target_l2.id};M#{target_l2.milestone_number}: #{target_l2.title}"
         )
       )

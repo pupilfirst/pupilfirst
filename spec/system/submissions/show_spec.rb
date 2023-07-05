@@ -162,7 +162,8 @@ feature "Submissions show" do
       expect(page).to have_text(coach_2.name)
     end
 
-    scenario "student visits show page with non-team submission", js: true do
+    scenario "student visits show page with a submission for target having student role",
+             js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_3)
 
       expect(page).to have_text(submission_3.title)

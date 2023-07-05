@@ -2747,7 +2747,7 @@ en:
       feedback:
         one: Feedback
         other: Feedbacks
-      no_feedbacks: There are no feedback on this submission.
+      no_feedbacks: No feedback received for this submission.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

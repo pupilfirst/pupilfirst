@@ -584,34 +584,39 @@ let make = (~studentId, ~userId) => {
                   StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
                 )
                 ->Js.Array2.map(data => {
-                  <div
-                    className="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
-                    <div className="mr-2">
-                      <span
-                        className={"text-xs font-medium " ++ {
-                          data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
-                            ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
-                            : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
-                        }}>
-                        {<Icon
-                          className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
-                            ? "if i-check-circle-solid text-green-600"
-                            : "if i-dashed-circle-light text-orange-600"}
-                        />}
-                      </span>
+                  <Spread
+                    props={
+                      "data-milestone-id": data->CoursesStudents__MilestoneTargetsCompletionStatus.id,
+                    }>
+                    <div
+                      className="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
+                      <div className="mr-2">
+                        <span
+                          className={"text-xs font-medium " ++ {
+                            data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                              ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
+                              : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
+                          }}>
+                          {<Icon
+                            className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                              ? "if i-check-circle-solid text-green-600"
+                              : "if i-dashed-circle-light text-orange-600"}
+                          />}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold mr-2">
+                          {("M" ++
+                          string_of_int(
+                            CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
+                          ))->str}
+                        </p>
+                      </div>
+                      <div className="flex-1 text-sm">
+                        {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold mr-2">
-                        {("M" ++
-                        string_of_int(
-                          CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
-                        ))->str}
-                      </p>
-                    </div>
-                    <div className="flex-1 text-sm">
-                      {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
-                    </div>
-                  </div>
+                  </Spread>
                 })
                 ->React.array}
               </div>

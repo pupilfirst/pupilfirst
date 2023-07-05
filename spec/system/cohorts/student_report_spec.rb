@@ -37,11 +37,19 @@ feature "Course students report", js: true do
   end
 
   let(:target_l1) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target,
+           :for_founders,
+           target_group: target_group_l1,
+           milestone: true,
+           milestone_number: 1
   end
 
   let(:target_l2) do
-    create :target, :for_founders, target_group: target_group_l2
+    create :target,
+           :for_founders,
+           target_group: target_group_l2,
+           milestone: true,
+           milestone_number: 2
   end
 
   let(:target_l3_1) do
@@ -198,22 +206,28 @@ feature "Course students report", js: true do
   scenario "coach opens the student report and checks performance" do
     sign_in_user course_coach.user, referrer: cohorts_course_path(course)
 
-    click_link student.name
+    click_link cohort.name
+
+    click_link "Students", href: students_cohort_path(cohort)
 
     expect(page).to have_text(student.name)
-    expect(page).to have_text("Level Progress")
 
-    expect(page).to have_selector(".student-overlay__student-level", count: 3)
+    click_link student.name
 
-    expect(page).to have_selector(
-      ".student-overlay__student-level--reached",
-      count: 3
-    )
+    # Only milestone targets should be shown for completion status
 
-    expect(page).to have_selector(
-      ".student-overlay__student-level--completed",
-      count: 1
-    )
+    expect(page).to have_text(target_l1.title)
+    expect(page).to have_text(target_l2.title)
+    expect(page).not_to have_text(target_l3_1.title)
+
+    # Check target completion status
+    within("div[data-milestone-id='#{target_l1.id}']") do
+      expect(page).to have_selector(".text-orange-700")
+    end
+
+    within("div[data-milestone-id='#{target_l2.id}']") do
+      expect(page).to have_selector(".text-green-600")
+    end
 
     # Targets Overview
     expect(page).to have_text("Targets Overview")

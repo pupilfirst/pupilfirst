@@ -47,7 +47,7 @@ feature "Organisation show" do
 
       expect(page).to have_text("Total Students\n4")
       expect(page).to have_text("Students Completed\n2")
-      expect(page).to have_text("Level-wise student distribution")
+      expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_link(
         "Students",

@@ -18,10 +18,10 @@ module Layouts
 
     def courses
       if current_user.blank?
-        current_school.courses.live.where(public_preview: true)
+        current_school.courses.live.where(public_preview: true).order(:name)
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live
+        current_school.courses.live.order(:name)
       else
         # Courses where user is an author...
         courses_as_course_author =
@@ -29,12 +29,14 @@ module Layouts
             Course
               .joins(:course_authors)
               .where(course_authors: current_user.course_authors)
+              .order(:name)
           else
             []
           end
 
         # ...plus courses where user is a coach...
-        courses_as_coach = current_coach.present? ? current_coach.courses : []
+        courses_as_coach =
+          current_coach.present? ? current_coach.courses.order(:name) : []
 
         # ...plus courses where user is a student...
         courses_as_student =
@@ -46,6 +48,7 @@ module Layouts
                 id: current_user.founders.select(:id)
               }
             )
+            .order(:name)
 
         # ...plus the current course if course has public preview.
         previewed_course = @course.public_preview? ? [@course] : []
@@ -62,20 +65,20 @@ module Layouts
     end
 
     def review_dashboard
-      'review' if user_is_coach?
+      "review" if user_is_coach?
     end
 
     def leaderboard
-      @course.enable_leaderboard ? 'leaderboard' : nil
+      @course.enable_leaderboard ? "leaderboard" : nil
     end
 
     def report
-      'report' if user_is_student?
+      "report" if user_is_student?
     end
 
     def calendar
       if current_school_admin.present? || user_is_student? || user_is_coach?
-        'calendar'
+        "calendar"
       end
     end
 
@@ -93,7 +96,7 @@ module Layouts
     end
 
     def students
-      'students' if user_is_coach?
+      "students" if user_is_coach?
     end
   end
 end

@@ -86,17 +86,11 @@ module Cohorts
     end
 
     def milestone_completion_status
-      milestone_targets =
-        @cohort
-          .course
-          .targets
-          .live
-          .where(milestone: true)
-          .order(:milestone_number)
+      ordered_milestone_targets = milestone_targets.order(:milestone_number)
 
       status = {}
 
-      milestone_targets.each do |target|
+      ordered_milestone_targets.each do |target|
         submissions =
           TimelineEvent.from_founders(scope).where(target: target).passed
         students_count = submissions.map(&:founders).flatten.uniq.count
@@ -112,6 +106,10 @@ module Cohorts
 
     def total_students_count
       @total_students_count ||= scope.count
+    end
+
+    def milestone_targets
+      @milestone_targets ||= @course.targets.live.where(milestone: true)
     end
 
     private

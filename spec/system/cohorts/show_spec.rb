@@ -8,6 +8,34 @@ feature "Organisation show" do
   let!(:organisation) { create :organisation, school: school }
   let(:school_admin_user) { create :user, school: school }
 
+  let!(:course) { create :course, school: school }
+
+  let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
+
+  let!(:level_1) { create :level, :one, course: course }
+  let!(:level_2) { create :level, :two, course: course }
+
+  let!(:target_group_l1) { create :target_group, level: level_1 }
+
+  let!(:target_group_l2) { create :target_group, level: level_2 }
+
+  let!(:target_l1) do
+    create :target,
+           target_group: target_group_l1,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 1
+  end
+  let!(:target_l2) do
+    create :target,
+           target_group: target_group_l2,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 2
+  end
+
   let!(:school_admin) do
     create :school_admin, school: school, user: school_admin_user
   end

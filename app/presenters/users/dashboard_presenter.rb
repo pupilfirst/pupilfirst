@@ -1,7 +1,7 @@
 module Users
   class DashboardPresenter < ApplicationPresenter
     def page_title
-      I18n.t('shared.dashboard') + " | #{current_school.name}"
+      I18n.t("shared.dashboard") + " | #{current_school.name}"
     end
 
     def props
@@ -17,8 +17,9 @@ module Users
       }
 
       if current_user.avatar.attached?
-        dashboard_props[:avatar_url] =
-          view.rails_public_blob_url(current_user.avatar_variant(:thumb))
+        dashboard_props[:avatar_url] = view.rails_public_blob_url(
+          current_user.avatar_variant(:thumb)
+        )
       end
 
       dashboard_props
@@ -34,7 +35,7 @@ module Users
         .map do |issued_certificate|
           issued_certificate
             .attributes
-            .slice('id', 'serial_number', 'created_at')
+            .slice("id", "serial_number", "created_at")
             .merge(course_name: issued_certificate.course.name)
         end
     end
@@ -46,21 +47,26 @@ module Users
             current_school
               .courses
               .joins(:cohorts)
-              .where('cohorts.ends_at > ? OR cohorts.ends_at IS NULL', Time.now)
+              .where("cohorts.ends_at > ? OR cohorts.ends_at IS NULL", Time.now)
               .or(
                 current_school.courses.live.where(
                   id: courses_with_student_profile.pluck(:course_id)
                 )
               )
               .distinct
+              .order(:name)
           else
-            current_school.courses.live.where(
-              id:
-                (
-                  courses_with_student_profile.pluck(:course_id) +
-                    courses_with_review_access + courses_with_author_access
-                ).uniq
-            )
+            current_school
+              .courses
+              .live
+              .where(
+                id:
+                  (
+                    courses_with_student_profile.pluck(:course_id) +
+                      courses_with_review_access + courses_with_author_access
+                  ).uniq
+              )
+              .order(:name)
           end.with_attached_thumbnail
         end
     end

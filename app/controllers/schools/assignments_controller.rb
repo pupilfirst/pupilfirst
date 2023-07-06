@@ -24,8 +24,8 @@ module Schools
     def swap(direction)
       index = @milestones.index(@target)
 
-      if (index < 1 && direction.present?) ||
-           (index >= @milestones.size - 1 && direction.nil?)
+      if (index < 1 && direction == "up") ||
+           (index >= @milestones.size - 1 && direction == "down")
         return
       end
 

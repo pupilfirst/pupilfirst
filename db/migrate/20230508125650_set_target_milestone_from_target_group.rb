@@ -1,4 +1,25 @@
 class SetTargetMilestoneFromTargetGroup < ActiveRecord::Migration[6.1]
+  class Course < ApplicationRecord
+    has_many :levels
+    has_many :target_groups, through: :levels
+    has_many :targets, through: :target_groups
+  end
+
+  class Level < ApplicationRecord
+    belongs_to :course
+    has_many :target_groups
+    has_many :targets, through: :target_groups
+  end
+
+  class TargetGroup < ApplicationRecord
+    belongs_to :level
+    has_many :targets
+  end
+
+  class Target < ApplicationRecord
+    belongs_to :target_group
+  end
+
   def up
     ActiveRecord::Base.transaction do
       Course

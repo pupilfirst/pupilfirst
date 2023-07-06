@@ -56,7 +56,6 @@ let imageWrapperClasses = coverImage =>
   | None => "pb-1/4 sm:1/5 md:pb-1/6 xl:pb-1/12"
   }
 
-// TODO: can sort here or can sort on backend
 let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLinks) => {
   let currentCourse = ArrayUtils.unsafeFind(
     c => CourseInfo.id(c) == currentCourseId,

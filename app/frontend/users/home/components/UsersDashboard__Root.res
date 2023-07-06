@@ -189,7 +189,6 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
   </div>
 }
 
-// Displays course information
 let coursesSection = (courses, communities, currentSchoolAdmin) =>
   <div className="w-full max-w-5xl mx-auto">
     {ReactUtils.nullUnless(
@@ -221,7 +220,6 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
                     />
                   }}
                 </div>
-                // changes here
                 <div
                   className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                   key={course->Course.id}>

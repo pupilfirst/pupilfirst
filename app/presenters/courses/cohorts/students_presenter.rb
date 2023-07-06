@@ -101,10 +101,7 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
 
     ordered_milestone_targets.each do |target|
       submissions =
-        TimelineEvent
-          .from_founders(@cohort.founders)
-          .where(target: target)
-          .passed
+        TimelineEvent.from_founders(scope).where(target: target).passed
       students_count = submissions.map(&:founders).flatten.uniq.count
       percentage = ((students_count / total_students_count.to_f) * 100).round
       status[target] = {

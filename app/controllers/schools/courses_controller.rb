@@ -173,6 +173,8 @@ module Schools
     def assignments
       @course =
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @presenter =
+        Schools::Courses::AssignmentsPresenter.new(view_context, @course)
     end
 
     private

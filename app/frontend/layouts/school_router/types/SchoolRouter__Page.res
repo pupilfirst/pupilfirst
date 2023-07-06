@@ -130,7 +130,7 @@ let secondaryNavName = t =>
     | Teams => tr("nav.course.teams")
     | Cohorts => tr("nav.course.cohorts")
     | Calendars => tr("nav.course.calendar")
-    | Assignments => "Assignments"
+    | Assignments => tr("nav.course.assignments")
     }
   | Courses
   | Communities

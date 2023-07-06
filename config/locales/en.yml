@@ -1474,6 +1474,7 @@ en:
           exports: Exports
           students: Students
           teams: Teams
+          assignments: Assignments
         main:
           coaches: Coaches
           communities: Communities
@@ -2624,6 +2625,8 @@ en:
     courses:
       applicants:
         title: Applicants
+      assignments:
+        title: Assignments
       authors:
         title: Authors
       calendar_events:

@@ -9,11 +9,9 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     @filter ||= {
       id: "course-cohort-students-filter",
       filters: [
-        { key: "name", label: "Name", filterType: "Search", color: "red" },
-        { key: "email", label: "Email", filterType: "Search", color: "yellow" },
         {
-          key: "milestone",
-          label: "Milestone",
+          key: "milestone_completed",
+          label: "Milestone Completed",
           filterType: "MultiSelect",
           values:
             @course
@@ -27,12 +25,29 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
           color: "blue"
         },
         {
+          key: "milestone_pending",
+          label: "Milestone Pending",
+          filterType: "MultiSelect",
+          values:
+            @course
+              .targets
+              .live
+              .where(milestone: true)
+              .order(:milestone_number)
+              .map do |target|
+                "#{target.id};M#{target.milestone_number}: #{target.title}"
+              end,
+          color: "orange"
+        },
+        {
           key: "course",
           label: "Course",
           filterType: "MultiSelect",
           values: ["Completed", "Not Completed"],
           color: "green"
-        }
+        },
+        { key: "name", label: "Name", filterType: "Search", color: "red" },
+        { key: "email", label: "Email", filterType: "Search", color: "yellow" }
       ],
       placeholder: "Search by name or email",
       hint: "...or start typing to search by student's name of email",
@@ -67,11 +82,12 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   def students
     @students ||=
       begin
-        filter_1 = filter_students_by_milestone(scope)
-        filter_2 = filter_students_by_name(filter_1)
-        filter_3 = filter_students_by_email(filter_2)
-        filter_4 = filter_students_by_course_completion(filter_3)
-        sorted = sort_students(filter_4)
+        filter_1 = filter_students_by_milestone_completed(scope)
+        filter_2 = filter_students_by_milestone_pending(filter_1)
+        filter_3 = filter_students_by_course_completion(filter_2)
+        filter_4 = filter_students_by_name(filter_3)
+        filter_5 = filter_students_by_email(filter_4)
+        sorted = sort_students(filter_5)
         included = sorted.includes(:user)
         paged = included.page(params[:page]).per(24)
         paged.count.zero? ? paged.page(paged.total_pages) : paged
@@ -108,6 +124,12 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     @total_students_count ||= scope.count
   end
 
+  def course_completed_students
+    @course_completed_students ||= scope.where.not(completed_at: nil)
+  end
+
+  delegate :count, to: :course_completed_students, prefix: true
+
   private
 
   def filter_students_by_name(scope)
@@ -129,13 +151,26 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     end
   end
 
-  def filter_students_by_milestone(scope)
-    if params[:milestone].present?
+  def milestone_completed_students(param)
+    scope
+      .joins(timeline_events: :target)
+      .where(targets: { id: param, milestone: true })
+      .where.not(timeline_events: { passed_at: nil })
+  end
+
+  def filter_students_by_milestone_completed(scope)
+    if params[:milestone_completed].present?
+      milestone_completed_students(params[:milestone_completed])
+    else
       scope
-        .joins(timeline_events: :target)
-        .where(targets: { id: params[:milestone], milestone: true })
-        .where.not(timeline_events: { passed_at: nil })
-        .distinct
+    end
+  end
+
+  def filter_students_by_milestone_pending(scope)
+    if params[:milestone_pending].present?
+      scope.where.not(
+        id: milestone_completed_students(params[:milestone_pending])
+      )
     else
       scope
     end
@@ -143,7 +178,7 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
 
   def filter_students_by_course_completion(scope)
     if params[:course] == "Completed"
-      scope.where.not(completed_at: nil)
+      course_completed_students
     elsif params[:course] == "Not Completed"
       scope.where(completed_at: nil)
     else

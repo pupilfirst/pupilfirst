@@ -8,7 +8,7 @@ The community feature offers a way for students, coaches, and school admins to i
 
 The community feature is modeled as a Q&A platform where users can post questions and get answers from community members. Anyone can answer, and up-voted answers will float to the top of the list of answers. There is no down-voting.
 
-![Showcase Community](https://res.cloudinary.com/sv-co/image/upload/v1574169439/pupilfirst_documentation/communities/community_showcase_800_b1kae0.png)
+![Showcase Community](../assets/communities/community_showcase_800_b1kae0.png)
 
 ## Access to communities
 
@@ -28,7 +28,7 @@ Coaches and school-admins can moderate communities since they have the ability t
 
 You can create many communities if you'd like, to categorize what's discussed in each, and can control which courses are linked to each. Communities can be managed from their page in the school administration interface, which can be accessed via the navigation bar:
 
-![Communities page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574232988/pupilfirst_documentation/communities/communities_page_cn1kig.png)
+![Communities page in school administration interface](../assets/communities/communities_page_cn1kig.png)
 
 When creating a new community, you need to give it a name. You can also edit a few other properties:
 

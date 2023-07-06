@@ -57,7 +57,7 @@ module Mutations
           return
         end
 
-        'One or more of the entries have invalid strings'
+        I18n.t("mutations.create_students.invalid_strings")
       end
 
       def emails_must_be_valid
@@ -69,7 +69,7 @@ module Mutations
 
         return unless invalid
 
-        'One or more of the entries have an invalid email address'
+        I18n.t("mutations.create_students.invalid_emails")
       end
 
       def soft_limit_student_count
@@ -78,7 +78,7 @@ module Mutations
           return
         end
 
-        "You've hit the soft-limit for number of students in this course"
+        I18n.t("mutations.create_students.soft_limit_number")
       end
 
       def students_must_have_unique_email
@@ -87,7 +87,7 @@ module Mutations
           return
         end
 
-        'Email addresses must be unique'
+        I18n.t("mutations.create_students.unique_emails")
       end
     end
 

@@ -3,7 +3,7 @@
 Text boxes that have the _Markdown_ logo at the bottom-right can be used to add
 rich formatting to what you write.
 
-![Markdown Editor Marker](https://res.cloudinary.com/sv-co/image/upload/v1574146590/pupilfirst_documentation/markdown_editor/md-editor-marker_icf5n8.png)
+![Markdown Editor Marker](../assets/markdown_editor/md-editor-marker_icf5n8.png)
 
 ## What is Markdown?
 

@@ -60,9 +60,9 @@
       </div>
     </section>
   <% else %>
-    <div class="max-w-5xl mx-auto text-center justify-center items-center">
-      <p class="text-center text-sm italic mt-4 pt-4" ><%= 'There are no students in this cohort.' if total_students_count == 0 %></p>
-      <p class="text-center text-sm italic mt-4 pt-4" ><%= 'There are no milestone targets.' if @presenter.milestone_targets.empty? %></p>
+    <div class="max-w-5xl mx-auto text-center justify-center items-center text-sm italic mt-4 pt-4">
+      <%= 'There are no students in this cohort.' if total_students_count == 0 %>
+      <%= 'There are no milestone targets.' if @presenter.milestone_targets.empty? %>
     </div>
-  <% end%>
+  <% end %>
 </div>

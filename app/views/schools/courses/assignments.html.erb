@@ -9,12 +9,14 @@
           <% unless @presenter.target_count <= 1 %>
             <div class="flex flex-col">
               <% unless index < 1 %>
-                <%= button_to "/", method: :patch, class: "h-full", form_class: "h-full px-2 hover:shadow-sm hover:border" do %>
+                <%= button_to "/school/courses/#{@course.id}/assignments/#{target.id}?direction=up",
+                 method: :patch, class: "h-full", form_class: "h-full px-2 hover:shadow-sm hover:border" do %>
                   <i class="if i-arrow-up-solid if-fw" ></i>
                 <% end %>
               <% end %>
               <% unless index == @presenter.target_count - 1 %>
-                <%= button_to "/", method: :patch, class: "h-full", form_class: "h-full px-2 hover:shadow-sm hover:border" do %>
+                <%= button_to "/school/courses/#{@course.id}/assignments/#{target.id}",
+                method: :patch, class: "h-full", form_class: "h-full px-2 hover:shadow-sm hover:border" do %>
                   <i class="if i-arrow-down-solid if-fw" ></i>
                 <% end %>
               <% end %>

@@ -7,13 +7,21 @@ module Schools
         super(view_context)
       end
 
-      def target_count
-        @target_count ||= milestone_targets.size
+      def last_index
+        @last_index ||= milestone_targets.size - 1
       end
 
       def milestone_targets
         @milestone_targets ||=
           @course.targets.order(milestone_number: :asc).milestones
+      end
+
+      def link(target_id, direction = "down")
+        "/school/courses/#{@course.id}/assignments/#{target_id}?direction=#{direction}"
+      end
+
+      def details_tab_link(target_id)
+        "/school/courses/#{@course.id}/targets/#{target_id}/details"
       end
     end
   end

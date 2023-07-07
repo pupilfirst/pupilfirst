@@ -678,9 +678,9 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
     t.string "visibility"
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
+    t.text "action_config"
     t.boolean "milestone", default: false
     t.integer "milestone_number"
-    t.text "action_config"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end

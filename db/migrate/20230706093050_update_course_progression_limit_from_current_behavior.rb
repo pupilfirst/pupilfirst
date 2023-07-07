@@ -1,6 +1,12 @@
-class UpdateCourseProgressionLimitfromCurrentBehavior < ActiveRecord::Migration[
+class UpdateCourseProgressionLimitFromCurrentBehavior < ActiveRecord::Migration[
   6.1
 ]
+  class Course < ApplicationRecord
+    PROGRESSION_BEHAVIOR_LIMITED = -"Limited"
+    PROGRESSION_BEHAVIOR_UNLIMITED = -"Unlimited"
+    PROGRESSION_BEHAVIOR_STRICT = -"Strict"
+  end
+
   def up
     Course.all.each do |course|
       if course.progression_behavior == Course::PROGRESSION_BEHAVIOR_UNLIMITED

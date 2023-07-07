@@ -55,14 +55,6 @@ class Course < ApplicationRecord
 
   normalize_attribute :about, :processing_url
 
-  PROGRESSION_BEHAVIOR_LIMITED = -"Limited"
-  PROGRESSION_BEHAVIOR_UNLIMITED = -"Unlimited"
-
-  VALID_PROGRESSION_BEHAVIORS = [
-    PROGRESSION_BEHAVIOR_LIMITED,
-    PROGRESSION_BEHAVIOR_UNLIMITED
-  ].freeze
-
   validates :progression_limit, inclusion: 0..3
 
   def short_name

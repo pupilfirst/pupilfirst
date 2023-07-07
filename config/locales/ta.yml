@@ -2751,10 +2751,18 @@ ta:
     view: காண்க
   timeline_events:
     show:
-      accepted_on: Reviewed and accepted on %{date}.
-      question_with_number: "Question #%{number}"
-      rejected_on: Reviewed and rejected on %{date}.
-      submitted_on: Submitted on %{date}.
+      submission_from: Submission from
+      submitted_on: Submitted on
+      reviewed_on: Reviewed on
+      status: Status
+      rejected: Rejected
+      accepted: Accepted
+      pending: Pending
+      team: Team
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
   users:
     clear_discord_id:
       success: டிஸ்கார்ட் வெற்றிகரமாக இணைக்கப்பட்டது.

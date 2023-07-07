@@ -2629,6 +2629,7 @@ en:
         title: Assignments
         milestone: Milestone
         list_title: Milestone Targets in %{course_name}
+        no_milestones: No milestone targets present in this course.
       authors:
         title: Authors
       calendar_events:

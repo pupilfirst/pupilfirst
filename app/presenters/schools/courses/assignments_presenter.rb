@@ -19,10 +19,6 @@ module Schools
       def link(target_id, direction = "down")
         "/school/courses/#{@course.id}/assignments/#{target_id}?direction=#{direction}"
       end
-
-      def details_tab_link(target_id)
-        "/school/courses/#{@course.id}/targets/#{target_id}/details"
-      end
     end
   end
 end

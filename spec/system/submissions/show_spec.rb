@@ -10,6 +10,7 @@ feature "Submissions show" do
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_team, target_group: target_group }
+  let(:target_2) { create :target, :for_founders, target_group: target_group }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:submission_file_1) { create :timeline_event_file }
@@ -46,7 +47,7 @@ feature "Submissions show" do
   end
 
   let(:checklist_item_multi_choice) do
-    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, "Yes")
+    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, ["Yes"])
   end
 
   let(:checklist) do
@@ -65,8 +66,11 @@ feature "Submissions show" do
   end
 
   let(:submission_2) { create(:timeline_event, target: target) }
+  let(:submission_3) { create(:timeline_event, target: target_2) }
+
   let(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.founders.first }
+  let(:student_2) { team.founders.last }
 
   let(:organisation) { create :organisation, school: school }
   let(:organisation_admin) do
@@ -99,8 +103,12 @@ feature "Submissions show" do
       student.user.update!(organisation: organisation)
 
       target.evaluation_criteria << [evaluation_criterion]
-      submission.founders << student
-      submission_2.founders << team.founders.last
+      target_2.evaluation_criteria << [evaluation_criterion]
+      submission.founders << [student, student_2]
+      submission_2.founders << student_2
+      submission_3.founders << student
+      submission.update!(evaluator: coach)
+      submission.update!(evaluated_at: Time.now)
     end
 
     scenario "org admin vsits show page with a submission" do
@@ -115,6 +123,11 @@ feature "Submissions show" do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
+      expect(page).to have_content(student.name)
+      expect(page).to have_content(student_2.name)
+      expect(page).to have_content(team.name)
+      expect(page).to have_content(submission.created_at.strftime("%b %d, %Y"))
+      expect(page).to have_content("Rejected")
       expect(page).to have_content(checklist_item_long_text["title"])
       expect(page).to have_content(checklist_item_long_text["result"])
       expect(page).to have_content(checklist_item_short_text["title"])
@@ -147,6 +160,17 @@ feature "Submissions show" do
       expect(page).to have_text(feedback_2.feedback)
       expect(page).to have_text(coach.name)
       expect(page).to have_text(coach_2.name)
+    end
+
+    scenario "student visits show page with a submission for target having student role",
+             js: true do
+      sign_in_user student.user, referrer: timeline_event_path(submission_3)
+
+      expect(page).to have_text(submission_3.title)
+      expect(page).to have_text(student.name)
+      expect(page).to have_text("Pending")
+      expect(page).not_to have_text(student_2.name)
+      expect(page).not_to have_text(team.name)
     end
 
     scenario "student visits show page of submission he is not linked to",

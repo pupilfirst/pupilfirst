@@ -12,18 +12,20 @@
           <% unless @presenter.last_index < 1 %>
             <div class="flex flex-col">
               <% unless index < 1 %>
-                <%= button_to @presenter.link(target.id, "up"), method: :patch, class: "h-full", form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
+                <%= button_to "#{update_milestone_school_course_assignment_path(@course, target)}?direction=up", method: :patch, class: "h-full",
+                form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
                   <i class="if i-arrow-up-solid if-fw" ></i>
                 <% end %>
               <% end %>
               <% unless index == @presenter.last_index %>
-                <%= button_to @presenter.link(target.id), method: :patch, class: "h-full", form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
+                <%= button_to "#{update_milestone_school_course_assignment_path(@course, target)}?direction=down", method: :patch, class: "h-full",
+                form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
                   <i class="if i-arrow-down-solid if-fw" ></i>
                 <% end %>
               <% end %>
             </div>
           <% end %>
-          <a href="<%= details_school_course_target_path(@course, target) %>" class="flex justify-between w-full items-center h-full py-5 px-4">
+          <a href="<%= details_school_course_target_path(@course, target)  %>" class="flex justify-between w-full items-center h-full py-5 px-4">
             <p class="text-sm"><%= target.title %></p>
             <div class="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
               <i class="if i-milestone-solid if-fw" ></i>

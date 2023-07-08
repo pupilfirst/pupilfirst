@@ -127,7 +127,11 @@ Rails.application.routes.draw do
         get 'assignments'
       end
 
-      resources :assignments, only: :update, controller: 'assignments'
+      resources :assignments, only: [] do
+        member do
+          patch :update_milestone
+        end
+      end
 
       resources :calendar_events, only: %i[new create show edit], controller: 'calendar_events'
 

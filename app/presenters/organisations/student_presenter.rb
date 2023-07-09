@@ -106,6 +106,54 @@ module Organisations
       reviewed_submissions.except(:limit, :offset).failed.count
     end
 
+    def milestone_targets
+      @milestone_targets ||= course.targets.live.where(milestone: true)
+    end
+
+    def milestone_completion_status
+      ordered_milestone_targets = milestone_targets.order(:milestone_number)
+
+      status = {}
+
+      ordered_milestone_targets.each do |target|
+        status[target.milestone_number] = {
+          title: target.title,
+          completed:
+            student.timeline_events.where(target_id: target.id).passed.any?
+        }
+      end
+
+      status
+    end
+
+    def filters_in_url
+      params
+        .slice(:name, :email, :milestone, :course)
+        .permit(:name, :email, :milestone, :course)
+        .compact
+    end
+
+    def milestone_completion_stats
+      stats = {}
+
+      status = milestone_completion_status
+
+      stats[:completed_milestones_count] = status.values.count do |target|
+        target[:completed]
+      end
+
+      stats[:percentage] = (
+        (stats[:completed_milestones_count] / total_milestone_targets.to_f) *
+          100
+      ).round
+
+      stats
+    end
+
+    def total_milestone_targets
+      milestone_targets.count
+    end
+
     private
 
     def current_course_targets

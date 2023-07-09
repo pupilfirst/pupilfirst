@@ -77,7 +77,6 @@ module ValidateCourseEditable
       about: @params[:about],
       featured: @params[:featured],
       progression_limit: @params[:progression_limit],
-      progression_behavior: Course::PROGRESSION_BEHAVIOR_LIMITED,
       highlights: @params[:highlights].presence || [],
       processing_url: @params[:processing_url],
       default_cohort_id: @params[:default_cohort_id]

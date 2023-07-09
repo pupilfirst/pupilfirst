@@ -44,10 +44,10 @@ describe CourseExports::PrepareTeamsExportService do
     create :target_group, level: level_1, sort_index: 0
   end
   let(:target_group_l1_milestone) do
-    create :target_group, level: level_1, milestone: true, sort_index: 1
+    create :target_group, level: level_1, sort_index: 1
   end
   let(:target_group_l2_milestone) do
-    create :target_group, level: level_2, milestone: true, sort_index: 0
+    create :target_group, level: level_2, sort_index: 0
   end
 
   let!(:evaluation_criterion_1) do
@@ -65,7 +65,9 @@ describe CourseExports::PrepareTeamsExportService do
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           sort_index: 1
+           sort_index: 1,
+           milestone: true,
+           milestone_number: 1
   end
   let!(:target_l1_individual_mark_as_complete) do
     create :target, :student, target_group: target_group_l1_non_milestone
@@ -78,13 +80,17 @@ describe CourseExports::PrepareTeamsExportService do
     create :target,
            :team,
            target_group: target_group_l1_milestone,
+           milestone: true,
+           milestone_number: 2,
            sort_index: 0
   end
   let!(:target_l2_evaluated) do
     create :target,
            :team,
            target_group: target_group_l2_milestone,
-           evaluation_criteria: [evaluation_criterion_1]
+           evaluation_criteria: [evaluation_criterion_1],
+           milestone: true,
+           milestone_number: 1
   end
 
   let(:school) { course.school }

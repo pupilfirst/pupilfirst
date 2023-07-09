@@ -49,11 +49,11 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let(:target_group_l1_milestone) do
-    create :target_group, level: level_1, milestone: true, sort_index: 1
+    create :target_group, level: level_1, sort_index: 1
   end
 
   let(:target_group_l2_milestone) do
-    create :target_group, level: level_2, milestone: true, sort_index: 0
+    create :target_group, level: level_2, sort_index: 0
   end
 
   let!(:evaluation_criterion_1) do
@@ -71,7 +71,9 @@ describe CourseExports::PrepareStudentsExportService do
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           sort_index: 1
+           sort_index: 1,
+           milestone: true,
+           milestone_number: 1
   end
 
   let!(:target_l1_mark_as_complete) do
@@ -81,13 +83,19 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:quiz) { create :quiz, target: target_l1_quiz }
 
   let!(:target_l1_quiz) do
-    create :target, target_group: target_group_l1_milestone, sort_index: 0
+    create :target,
+           target_group: target_group_l1_milestone,
+           sort_index: 0,
+           milestone: true,
+           milestone_number: 2
   end
 
   let!(:target_l2_evaluated) do
     create :target,
            target_group: target_group_l2_milestone,
-           evaluation_criteria: [evaluation_criterion_1]
+           evaluation_criteria: [evaluation_criterion_1],
+           milestone: true,
+           milestone_number: 1
   end
 
   let(:school) { course.school }

@@ -10,15 +10,10 @@ module Targets
         @target.title = target_params[:title]
         @target.target_action_type = Target::TYPE_TODO
         @target.link_to_complete = target_params[:link_to_complete]
-        @target.milestone = target_params[:milestone]
-
         @target.resubmittable = target_params[:checklist].present?
-
         @target.link_to_complete = target_params[:link_to_complete]
-
         @target.completion_instructions =
           target_params[:completion_instructions]
-
         @target.checklist = target_params[:checklist]
 
         if target_params[:target_group_id].to_i != @target.target_group_id
@@ -31,6 +26,8 @@ module Targets
 
         @target.prerequisite_target_ids =
           target_params[:prerequisite_target_ids]
+
+        handle_milestone(target_params[:milestone])
 
         @target.save!
 
@@ -70,6 +67,19 @@ module Targets
       end
 
       @target.target_group = new_target_group
+    end
+
+    def handle_milestone(milestone_param)
+      return if @target.milestone == milestone_param
+
+      @target.milestone = milestone_param
+
+      return unless milestone_param
+
+      current_maximum_milestone_number =
+        @target.course.targets.maximum(:milestone_number)
+
+      @target.milestone_number = current_maximum_milestone_number + 1
     end
 
     def recreate_quiz(quiz)

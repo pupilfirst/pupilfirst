@@ -14,9 +14,46 @@ feature "Organisation show" do
 
   let(:course) { create :course }
 
+  let!(:course_coach) { create :faculty, school: school }
+
+  let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
+
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
   let!(:level_3) { create :level, :three, course: course }
+
+  let!(:target_group_l1) { create :target_group, level: level_1 }
+
+  let!(:target_group_l2) { create :target_group, level: level_2 }
+
+  let!(:target_group_l3) { create :target_group, level: level_3 }
+
+  let!(:target_l1) do
+    create :target,
+           target_group: target_group_l1,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 1
+  end
+
+  let!(:target_l2) do
+    create :target,
+           target_group: target_group_l2,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 2
+  end
+
+  let!(:target_l3) do
+    create :target,
+           target_group: target_group_l3,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 3
+  end
 
   let(:cohort) { create :cohort, course: course }
   let(:cohort_2) { create :cohort, course: course }
@@ -97,7 +134,7 @@ feature "Organisation show" do
 
       expect(page).to have_text("Email: #{student.email}")
       expect(page).to have_selector('[data-test-class="student"]', count: 1)
-      expect(page).to have_link(student.name, href: org_student_path(student))
+      expect(page).to have_link(student.name)
     end
 
     scenario "user can filter by name", js: true do
@@ -115,6 +152,112 @@ feature "Organisation show" do
       expect(page).to have_text(
         "#{student.user.full_title} | Last seen 7 days ago"
       )
+    end
+
+    scenario "user can filter by milestone completed", js: true do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [students[1]],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      sign_in_user org_admin_user,
+                   referrer:
+                     students_organisation_cohort_path(organisation, cohort)
+
+      fill_in "Filter", with: "M"
+      click_button "Milestone Completed: M#{target_l1.milestone_number}: #{target_l1.title}"
+
+      expect(page).to have_text(students[1].name)
+      expect(page).not_to have_text(students[2].name)
+
+      find(
+        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+      ).click
+      expect(page).to have_text(students[2].name)
+    end
+
+    scenario "user can filter by milestone pending", js: true do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [students[1]],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      sign_in_user org_admin_user,
+                   referrer:
+                     students_organisation_cohort_path(organisation, cohort)
+
+      fill_in "Filter", with: "M"
+      click_button "Milestone Pending: M#{target_l1.milestone_number}: #{target_l1.title}"
+
+      expect(page).not_to have_content("#{students[1].name}\n")
+      expect(page).to have_text(students[2].name)
+
+      find(
+        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+      ).click
+      expect(page).to have_text(students[1].name)
+    end
+
+    scenario "user can filter by course completion", js: true do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [students[1]],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [students[1]],
+        target: target_l2,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [students[1]],
+        target: target_l3,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      students[1].update!(completed_at: 3.days.ago)
+
+      sign_in_user org_admin_user,
+                   referrer:
+                     students_organisation_cohort_path(organisation, cohort)
+
+      fill_in "Filter", with: "Completed"
+      click_button "Course: Completed"
+
+      expect(page).to have_text(students[1].name)
+      expect(page).not_to have_text(students[2].name)
+
+      find("button[title='Remove selection: Completed']").click
+      expect(page).to have_text(students[2].name)
     end
 
     scenario "user can sort results using different criteria", js: true do

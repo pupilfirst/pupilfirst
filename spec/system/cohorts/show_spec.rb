@@ -27,6 +27,31 @@ feature "Organisation show" do
   let!(:team_2) { create :team_with_students, cohort: cohort }
   let!(:team_3) { create :team_with_students, cohort: cohort_ended }
 
+  let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
+
+  let!(:level_1) { create :level, :one, course: course }
+  let!(:level_2) { create :level, :two, course: course }
+
+  let!(:target_group_l1) { create :target_group, level: level_1 }
+  let!(:target_group_l2) { create :target_group, level: level_2 }
+
+  let!(:target_l1) do
+    create :target,
+           target_group: target_group_l1,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 1
+  end
+  let!(:target_l2) do
+    create :target,
+           target_group: target_group_l2,
+           role: Target::ROLE_STUDENT,
+           evaluation_criteria: [evaluation_criterion],
+           milestone: true,
+           milestone_number: 2
+  end
+
   before do
     # Set up org relationships
     [team_1, team_2, team_3].each do |team|
@@ -47,7 +72,7 @@ feature "Organisation show" do
 
       expect(page).to have_text("Total Students\n4")
       expect(page).to have_text("Students Completed\n2")
-      expect(page).to have_text("Level-wise student distribution")
+      expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_link(
         "Students",

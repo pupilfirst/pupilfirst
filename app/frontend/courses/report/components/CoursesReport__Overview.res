@@ -37,6 +37,7 @@ let coachInfo = coaches =>
         |> React.array}
       </div>
     : React.null
+
 let doughnutChart = (color, percentage) =>
   <svg viewBox="0 0 36 36" className={"courses-report-overview__doughnut-chart " ++ color}>
     <path
@@ -52,6 +53,7 @@ let doughnutChart = (color, percentage) =>
       {percentage ++ "%" |> str}
     </text>
   </svg>
+
 let targetsCompletionStatus = overview => {
   let targetsCompleted = overview |> StudentOverview.targetsCompleted
   let totalTargets = overview |> StudentOverview.totalTargets
@@ -104,6 +106,50 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | None => React.null
   }
 
+let milestoneTargetsCompletionStatus = overview => {
+  let milestoneTargets = overview->StudentOverview.milestoneTargetsCompletionStatus
+
+  let totalMilestoneTargets = Js.Array2.length(milestoneTargets)
+
+  let completedMilestoneTargets =
+    milestoneTargets->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
+
+  let milestoneTargetCompletionPercentage = string_of_int(
+    int_of_float(
+      float_of_int(completedMilestoneTargets) /. float_of_int(totalMilestoneTargets) *. 100.0,
+    ),
+  )
+
+  <div className="flex items-center space-x-4">
+    <p className="text-xs font-medium text-gray-500">
+      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
+        ->str}
+    </p>
+    <div className="flex items-center space-x-1">
+      <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
+        {milestoneTargetCompletionPercentage ++ "%" |> str}
+      </p>
+      <div>
+        <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
+          <path
+            className="courses-milestone-complete__doughnut-chart-bg "
+            d="M18 2.0845
+        a 15.9155 15.9155 0 0 1 0 31.831
+        a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+          <path
+            className="courses-milestone-complete__doughnut-chart-stroke"
+            strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
+            d="M18 2.0845
+        a 15.9155 15.9155 0 0 1 0 31.831
+        a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+}
+
 let averageGradeCharts = (
   evaluationCriteria: array<CoursesReport__EvaluationCriterion.t>,
   averageGrades: array<StudentOverview.averageGrade>,
@@ -151,6 +197,7 @@ let averageGradeCharts = (
     </div>
   })
   |> React.array
+
 let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
   let reached =
     levelNumber <= currentLevelNumber ? "courses-report-overview__student-level--reached" : ""
@@ -234,32 +281,7 @@ let make = (~overviewData, ~coaches) =>
               <p className="text-sm font-semibold">
                 {"Milestone Targets Completion Status" |> str}
               </p>
-              <div className="flex items-center space-x-4">
-                <p className="text-xs font-medium text-gray-500"> {"20/40" |> str} </p>
-                <div className="flex items-center space-x-1">
-                  <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
-                    {"20%" |> str}
-                  </p>
-                  <div>
-                    <svg
-                      viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
-                      <path
-                        className="courses-milestone-complete__doughnut-chart-bg "
-                        d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                      <path
-                        className="courses-milestone-complete__doughnut-chart-stroke"
-                        strokeDasharray="20, 100"
-                        d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
+              {milestoneTargetsCompletionStatus(overview)}
             </div>
             <div className="grid gap-2 mt-2">
               {ArrayUtils.copyAndSort(

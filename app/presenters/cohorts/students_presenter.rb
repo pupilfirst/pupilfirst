@@ -3,6 +3,7 @@ module Cohorts
     def initialize(view_context, organisation, cohort)
       @organisation = organisation
       @cohort = cohort
+      @course = cohort.course
       super(view_context)
     end
 
@@ -10,6 +11,43 @@ module Cohorts
       @filter ||= {
         id: "organisation-cohort-students-filter",
         filters: [
+          {
+            key: "milestone_completed",
+            label: "Milestone Completed",
+            filterType: "MultiSelect",
+            values:
+              @course
+                .targets
+                .live
+                .where(milestone: true)
+                .order(:milestone_number)
+                .map do |target|
+                  "#{target.id};M#{target.milestone_number}: #{target.title}"
+                end,
+            color: "blue"
+          },
+          {
+            key: "milestone_pending",
+            label: "Milestone Pending",
+            filterType: "MultiSelect",
+            values:
+              @course
+                .targets
+                .live
+                .where(milestone: true)
+                .order(:milestone_number)
+                .map do |target|
+                  "#{target.id};M#{target.milestone_number}: #{target.title}"
+                end,
+            color: "orange"
+          },
+          {
+            key: "course",
+            label: "Course",
+            filterType: "MultiSelect",
+            values: ["Completed", "Not Completed"],
+            color: "green"
+          },
           { key: "name", label: "Name", filterType: "Search", color: "red" },
           {
             key: "email",
@@ -41,12 +79,22 @@ module Cohorts
       }
     end
 
+    def filters_in_url
+      params
+        .slice(:name, :email, :milestone, :course)
+        .permit(:name, :email, :milestone, :course)
+        .compact
+    end
+
     def students
       @students ||=
         begin
-          filter_1 = filter_students_by_name(scope)
-          filter_2 = filter_students_by_email(filter_1)
-          sorted = sort_students(filter_2)
+          filter_1 = filter_students_by_milestone_completed(scope)
+          filter_2 = filter_students_by_milestone_pending(filter_1)
+          filter_3 = filter_students_by_course_completion(filter_2)
+          filter_4 = filter_students_by_name(filter_3)
+          filter_5 = filter_students_by_email(filter_4)
+          sorted = sort_students(filter_5)
           included = sorted.includes(:user)
           paged = included.page(params[:page]).per(24)
           paged.count.zero? ? paged.page(paged.total_pages) : paged
@@ -54,24 +102,30 @@ module Cohorts
     end
 
     def milestone_completion_status
-      milestone_targets =
-        @cohort.course.targets.where(milestone: true).order(:milestone_number)
+      ordered_milestone_targets = milestone_targets.order(:milestone_number)
 
       status = {}
 
-      milestone_targets.each do |target|
+      ordered_milestone_targets.each do |target|
         submissions =
-          TimelineEvent
-            .from_founders(@cohort.founders)
-            .where(target: target)
-            .passed
+          TimelineEvent.from_founders(scope).where(target: target).passed
         students_count = submissions.map(&:founders).flatten.uniq.count
-        status[target] = (
-          (students_count / total_students_count.to_f) * 100
-        ).round
+        percentage = ((students_count / total_students_count.to_f) * 100).round
+        status[target] = {
+          percentage: percentage,
+          students_count: students_count
+        }
       end
 
       status
+    end
+
+    def total_students_count
+      @total_students_count ||= scope.count
+    end
+
+    def milestone_targets
+      @milestone_targets ||= @course.targets.live.where(milestone: true)
     end
 
     private
@@ -95,6 +149,41 @@ module Cohorts
       end
     end
 
+    def milestone_completed_students(param)
+      scope
+        .joins(timeline_events: :target)
+        .where(targets: { id: param, milestone: true })
+        .where.not(timeline_events: { passed_at: nil })
+    end
+
+    def filter_students_by_milestone_completed(scope)
+      if params[:milestone_completed].present?
+        milestone_completed_students(params[:milestone_completed])
+      else
+        scope
+      end
+    end
+
+    def filter_students_by_milestone_pending(scope)
+      if params[:milestone_pending].present?
+        scope.where.not(
+          id: milestone_completed_students(params[:milestone_pending])
+        )
+      else
+        scope
+      end
+    end
+
+    def filter_students_by_course_completion(scope)
+      if params[:course] == "Completed"
+        scope.where.not(completed_at: nil)
+      elsif params[:course] == "Not Completed"
+        scope.where(completed_at: nil)
+      else
+        scope
+      end
+    end
+
     def sort_students(scope)
       case params[:sort_by]
       when "Name"
@@ -113,10 +202,6 @@ module Cohorts
     def scope
       @scope ||=
         @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
-    end
-
-    def total_students_count
-      @total_students_count ||= scope.count
     end
   end
 end

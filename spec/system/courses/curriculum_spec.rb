@@ -289,7 +289,7 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  scenario "student browses a level she has not reached" do
+  scenario "student attempts target that have prerequisites" do
     sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Switch to Level 5.
@@ -327,7 +327,7 @@ feature "Student's view of Course Curriculum", js: true do
     # Completing the prerequisite should unlock the previously locked non-reviewed target.
     expect(page).to have_selector(
       ".curriculum__target-status--locked",
-      count: 1
+      count: 0
     )
 
     click_link l5_non_reviewed_target_with_prerequisite.title
@@ -336,15 +336,6 @@ feature "Student's view of Course Curriculum", js: true do
       "This target has prerequisites that are incomplete."
     )
     expect(page).to have_button "Mark As Complete"
-
-    click_button "Close"
-
-    # Reviewed targets, even those without prerequisites, must be locked.
-    click_link l5_reviewed_target.title
-
-    expect(page).to have_content(
-      "You're in Level 4. Complete all milestone targets in Level 4 first."
-    )
 
     click_button "Close"
   end
@@ -599,6 +590,152 @@ feature "Student's view of Course Curriculum", js: true do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_content("The course has ended")
+    end
+  end
+
+  context "when a course has milestone targets" do
+    let!(:milestone_l1) do
+      create :target,
+             target_group: target_group_l1,
+             role: Target::ROLE_TEAM,
+             evaluation_criteria: [evaluation_criterion],
+             milestone: true,
+             milestone_number: 1
+    end
+
+    let!(:milestone_l2) do
+      create :target,
+             target_group: target_group_l2,
+             role: Target::ROLE_TEAM,
+             evaluation_criteria: [evaluation_criterion],
+             milestone: true,
+             milestone_number: 2
+    end
+
+    let!(:milestone_l3) do
+      create :target,
+             target_group: target_group_l3,
+             role: Target::ROLE_TEAM,
+             evaluation_criteria: [evaluation_criterion],
+             milestone: true,
+             milestone_number: 3
+    end
+
+    scenario "student checks few milestone targets" do
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      click_button "L4: #{level_4.name}"
+      click_button "L1: #{level_1.name}"
+
+      expect(page).to have_content(milestone_l1.title)
+
+      within("a[data-target-id='#{milestone_l1.id}']") do
+        expect(page).to have_content("Milestone")
+      end
+
+      # No other target in the level should have milestone indication
+
+      within("a[data-target-id='#{completed_target_l1.id}']") do
+        expect(page).not_to have_content("Milestone")
+      end
+
+      click_button "L1: #{level_1.name}"
+      click_button "L3: #{level_3.name}"
+
+      within("a[data-target-id='#{milestone_l3.id}']") do
+        expect(page).to have_content("Milestone")
+      end
+
+      click_link milestone_l3.title
+
+      expect(page).to have_content(milestone_l3.title)
+      expect(page).to have_content("Milestone")
+    end
+  end
+
+  context "course has a progression limit setting" do
+    let(:course) { create :course, progression_limit: 2 }
+
+    # create another pending submission to test the progression limit as there is already one
+    let!(:target_1) do
+      create :target,
+             target_group: target_group_l1,
+             role: Target::ROLE_TEAM,
+             evaluation_criteria: [evaluation_criterion]
+    end
+
+    let!(:submission_pending_t1) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student],
+        target: target_1
+      )
+    end
+
+    # Create another reviewed target to test the progression limit message
+    let!(:target_2) do
+      create :target,
+             target_group: target_group_l1,
+             role: Target::ROLE_TEAM,
+             evaluation_criteria: [evaluation_criterion]
+    end
+
+    scenario "student sees the progression limit lock message when the pending submissions count has reached the limit" do
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      within("a[data-target-id='#{target_2.id}']") do
+        expect(page).to have_content("Locked")
+      end
+
+      click_link target_2.title
+
+      expect(page).to have_content(
+        "You have 2 pending submissions and cannot submit more until they are reviewed."
+      )
+
+      # Increase the progress limit to check if the lock is gone.
+      course.update!(progression_limit: 3)
+
+      visit curriculum_course_path(course)
+
+      within("a[data-target-id='#{target_2.id}']") do
+        expect(page).not_to have_content("Locked")
+      end
+
+      click_link target_2.title
+
+      expect(page).not_to have_content(
+        "You have 2 pending submissions and cannot submit more until they are reviewed."
+      )
+    end
+
+    context "when a reviewed target has another reviewed target as prerequisite" do
+      let!(:target_2) do
+        create :target,
+               target_group: target_group_l1,
+               role: Target::ROLE_TEAM,
+               evaluation_criteria: [evaluation_criterion],
+               prerequisite_targets: [target_1]
+      end
+
+      before { course.update!(progression_limit: 3) }
+
+      scenario "student attempts to submit the target" do
+        sign_in_user student.user, referrer: curriculum_course_path(course)
+
+        # The target should be locked as the prerquisite target is already submitted (need not be reviewed)
+        within("a[data-target-id='#{target_2.id}']") do
+          expect(page).to_not have_content("Locked")
+        end
+
+        click_link target_2.title
+
+        expect(page).not_to have_text(
+          "This target has prerequisites that are incomplete."
+        )
+      end
     end
   end
 end

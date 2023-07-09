@@ -246,6 +246,50 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | None => React.null
   }
 
+let milestoneTargetsCompletionStats = studentDetails => {
+  let milestoneTargets = studentDetails->StudentDetails.milestoneTargetsCompletionStatus
+
+  let totalMilestoneTargets = Js.Array2.length(milestoneTargets)
+
+  let completedMilestoneTargets =
+    milestoneTargets->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
+
+  let milestoneTargetCompletionPercentage = string_of_int(
+    int_of_float(
+      float_of_int(completedMilestoneTargets) /. float_of_int(totalMilestoneTargets) *. 100.0,
+    ),
+  )
+
+  <div className="flex items-center space-x-4">
+    <p className="text-xs font-medium text-gray-500 flex whitespace-nowrap">
+      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
+        ->str}
+    </p>
+    <div className="flex items-center space-x-1">
+      <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
+        {milestoneTargetCompletionPercentage ++ "%" |> str}
+      </p>
+      <div>
+        <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
+          <path
+            className="courses-milestone-complete__doughnut-chart-bg "
+            d="M18 2.0845
+            a 15.9155 15.9155 0 0 1 0 31.831
+            a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+          <path
+            className="courses-milestone-complete__doughnut-chart-stroke"
+            strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
+            d="M18 2.0845
+            a 15.9155 15.9155 0 0 1 0 31.831
+            a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+}
+
 let averageGradeCharts = (
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
   averageGrades: array<StudentDetails.averageGrade>,
@@ -526,7 +570,12 @@ let make = (~studentId, ~userId) => {
               {inactiveWarning(student)}
             </div>
             <div className="mt-4">
-              <h6 className="font-semibold"> {"Milestone Targets Completion Status"->str} </h6>
+              <div className="justify-between mt-8 flex flex-col sm:flex-row">
+                <p className="text-sm font-semibold">
+                  {"Milestone Targets Completion Status"->str}
+                </p>
+                {milestoneTargetsCompletionStats(studentDetails)}
+              </div>
               <div className="space-y-2">
                 {ArrayUtils.copyAndSort(
                   (a, b) =>
@@ -535,34 +584,39 @@ let make = (~studentId, ~userId) => {
                   StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
                 )
                 ->Js.Array2.map(data => {
-                  <div
-                    className="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
-                    <div className="mr-2">
-                      <span
-                        className={"text-xs font-medium " ++ {
-                          data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
-                            ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
-                            : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
-                        }}>
-                        {<Icon
-                          className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
-                            ? "if i-check-circle-solid text-green-600"
-                            : "if i-dashed-circle-light text-orange-600"}
-                        />}
-                      </span>
+                  <Spread
+                    props={
+                      "data-milestone-id": data->CoursesStudents__MilestoneTargetsCompletionStatus.id,
+                    }>
+                    <div
+                      className="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
+                      <div className="mr-2">
+                        <span
+                          className={"text-xs font-medium " ++ {
+                            data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                              ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
+                              : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
+                          }}>
+                          {<Icon
+                            className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                              ? "if i-check-circle-solid text-green-600"
+                              : "if i-dashed-circle-light text-orange-600"}
+                          />}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold mr-2">
+                          {("M" ++
+                          string_of_int(
+                            CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
+                          ))->str}
+                        </p>
+                      </div>
+                      <div className="flex-1 text-sm">
+                        {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold mr-2">
-                        {("M" ++
-                        string_of_int(
-                          CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
-                        ))->str}
-                      </p>
-                    </div>
-                    <div className="flex-1 text-sm">
-                      {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
-                    </div>
-                  </div>
+                  </Spread>
                 })
                 ->React.array}
               </div>

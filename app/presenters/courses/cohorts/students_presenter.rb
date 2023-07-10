@@ -98,14 +98,16 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   def milestone_completion_status
     submissions =
       TimelineEvent
-        .from_founders(@cohort.founders)
+        .from_founders(scope)
         .where(target: milestone_targets)
         .passed
         .joins(:founders)
         .group(:target_id)
         .select("target_id, COUNT(DISTINCT founders.id) AS students_count")
 
-    status = {}
+    status =
+      milestone_targets.index_with { { percentage: 0, students_count: 0 } }
+
     submissions.each do |submission|
       target = milestone_targets.find { |t| t.id == submission.target_id }
       percentage =

@@ -12,20 +12,20 @@
           <% unless @milestones.size < 1 %>
             <div class="flex flex-col">
               <% unless index < 1 %>
-                <%= button_to "#{update_milestone_number_school_assignment_path(target)}?direction=up", method: :patch, class: "h-full",
+                <%= button_to update_milestone_number_school_assignment_path(target, direction: :up, page: @page_no) , method: :patch, class: "h-full",
                 form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
                   <i class="if i-arrow-up-solid if-fw" ></i>
                 <% end %>
               <% end %>
               <% unless index == @milestones.size - 1 %>
-                <%= button_to "#{update_milestone_number_school_assignment_path(target)}?direction=down", method: :patch, class: "h-full",
+                <%= button_to update_milestone_number_school_assignment_path(target, direction: :down, page: @page_no), method: :patch, class: "h-full",
                 form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
                   <i class="if i-arrow-down-solid if-fw" ></i>
                 <% end %>
               <% end %>
             </div>
           <% end %>
-          <a href="<%= details_school_course_target_path(@course, target)  %>" class="flex justify-between w-full items-center h-full py-5 px-4">
+          <a href="<%= details_school_course_target_path(@course, target) %>" class="flex justify-between w-full items-center h-full py-5 px-4">
             <p class="text-sm"><%= target.title %></p>
             <div class="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
               <span><%= target.milestone_number %></span>
@@ -39,6 +39,12 @@
           <p class="py-6 text-sm text-gray-400 font-medium"><%= t(".no_milestones") %> </p>
         </div>
       <% end %>
+    </div>
+  </div>
+  <div class="bg-gray-50 border-t border-gray-300 p-5 fixed bottom-0 end-0 flex flex-col items-center" style="width: calc(100% - 19.5rem)">
+    <%= paginate @milestones %>
+    <div class="text-center text-sm mt-2">
+      <%= page_entries_info @milestones, entry_name: 'Milestone' %>
     </div>
   </div>
 </div>

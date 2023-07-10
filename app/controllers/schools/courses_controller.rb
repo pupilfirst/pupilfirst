@@ -173,7 +173,14 @@ module Schools
     def assignments
       @course =
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      @milestones = @course.targets.milestones.order(milestone_number: :asc)
+      @milestones =
+        @course
+          .targets
+          .milestones
+          .order(milestone_number: :asc)
+          .page(params[:page])
+          .per(5)
+      @page_no = params[:page].presence || 1
     end
 
     private

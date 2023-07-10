@@ -453,7 +453,6 @@ ta:
       courses_partially_loaded_text: '%{loaded_courses_count} இல் %{total_courses} பாடங்களைக் காட்டுகிறது'
       create_description: Let's create another course.
       edit_course_details: படிப்பு விவரங்களைத் திருத்தவும்
-      empty_courses: உங்களிடம் படிப்புகள் எதுவும் இல்லை!
       filter:
         input_hint: அல்லது பெயரால் தேட தட்டச்சு செய்யத் தொடங்குங்கள்...
         input_label: தேடு

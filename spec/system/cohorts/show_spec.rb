@@ -28,6 +28,7 @@ feature "Organisation show" do
   let!(:team_3) { create :team_with_students, cohort: cohort_ended }
 
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
+  let!(:course_coach) { create :faculty, school: school }
 
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
@@ -62,7 +63,31 @@ feature "Organisation show" do
     end
 
     # Mark one team of students as having completed the course.
-    team_2.founders.each { |f| f.update!(completed_at: 1.day.ago) }
+    team_2.founders.each do |f|
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [f],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 3.days.ago
+      )
+
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [f],
+        target: target_l2,
+        evaluator_id: course_coach.id,
+        evaluated_at: 1.day.ago,
+        passed_at: 1.day.ago
+      )
+
+      f.update!(completed_at: 1.day.ago)
+    end
   end
 
   context "when the user is an organisation admin" do
@@ -74,10 +99,30 @@ feature "Organisation show" do
       expect(page).to have_text("Students Completed\n2")
       expect(page).to have_text("Student Distribution by Milestone Completion")
 
+      expect(page).to have_text(
+        "M#{target_l1.milestone_number}: #{target_l1.title}"
+      )
+
+      expect(page).to have_text(
+        "M#{target_l2.milestone_number}: #{target_l2.title}"
+      )
+
       expect(page).to have_link(
         "Students",
         href: students_organisation_cohort_path(organisation, cohort)
       )
+    end
+
+    scenario "user can visit tab by clicking on the milestone pill" do
+      sign_in_user org_admin_user,
+                   referrer: organisation_cohort_path(organisation, cohort)
+
+      find(
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+      ).click
+
+      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).not_to have_text(team_1.founders.first.name)
     end
 
     scenario "user can access org overview of ended cohort" do
@@ -115,6 +160,33 @@ feature "Organisation show" do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       expect(page).to have_text("Total Students\n4")
+
+      expect(page).to have_text("Student Distribution by Milestone Completion")
+
+      expect(page).to have_text(
+        "M#{target_l1.milestone_number}: #{target_l1.title}"
+      )
+
+      expect(page).to have_text(
+        "M#{target_l2.milestone_number}: #{target_l2.title}"
+      )
+
+      expect(page).to have_link(
+        "Students",
+        href: students_organisation_cohort_path(organisation, cohort)
+      )
+    end
+
+    scenario "user can visit tab by clicking on the milestone pill" do
+      sign_in_user school_admin_user,
+                   referrer: organisation_cohort_path(organisation, cohort)
+
+      find(
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+      ).click
+
+      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).not_to have_text(team_1.founders.first.name)
     end
 
     scenario "user can access org overview of ended cohort" do

@@ -453,7 +453,6 @@ hi:
       courses_partially_loaded_text: '%{total_courses} में से %{loaded_courses_count} पाठ्यक्रम दिखा रहे हैं'
       create_description: Let's create another course.
       edit_course_details: पाठ्यक्रम विवरण संपादित करें
-      empty_courses: आपके पास कोई कोर्स नहीं है!
       filter:
         input_hint: या नाम से खोजने के लिए टाइप करना प्रारंभ करें...
         input_label: खोज

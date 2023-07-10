@@ -266,16 +266,6 @@ let make = (~overviewData, ~coaches) =>
     | OverviewData.Loaded(overview) =>
       <div className="flex flex-col">
         <div className="w-full">
-          <div className="mt-8">
-            <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
-            <div className="flex -mx-2 flex-wrap mt-2">
-              {targetsCompletionStatus(overview)}
-              {quizPerformanceChart(
-                overview |> StudentOverview.averageQuizScore,
-                overview |> StudentOverview.quizzesAttempted,
-              )}
-            </div>
-          </div>
           <div>
             <div className="flex justify-between mt-8">
               <p className="text-sm font-semibold">
@@ -329,6 +319,16 @@ let make = (~overviewData, ~coaches) =>
                 </a>
               })
               ->React.array}
+            </div>
+          </div>
+          <div className="mt-8">
+            <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
+            <div className="flex -mx-2 flex-wrap mt-2">
+              {targetsCompletionStatus(overview)}
+              {quizPerformanceChart(
+                overview |> StudentOverview.averageQuizScore,
+                overview |> StudentOverview.quizzesAttempted,
+              )}
             </div>
           </div>
           {overview |> StudentOverview.averageGrades |> ArrayUtils.isNotEmpty

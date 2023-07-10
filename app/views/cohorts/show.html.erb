@@ -38,18 +38,19 @@
           <h3 class="text-sm font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
           <div class="mt-4">
             <div class="grid gap-x-8 gap-y-6">
-              <% milestone_completion_status.each do |target, data| %>
+              <% @presenter.milestone_targets.each do |target| %>
+                  <% milestone_target_stats = milestone_completion_status[target.id] %>
                 <div>
                   <div class="flex justify-between">
                     <p class="text-xs font-medium"><%= "M#{target.milestone_number}: #{target.title}"%></p>
                     <div class="flex space-x-2">
-                      <p class="text-xs font-medium text-gray-500"><%= "#{data[:students_count]}/#{total_students_count}" %></p>
-                      <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{data[:percentage]}%"%></p>
+                      <p class="text-xs font-medium text-gray-500"><%= "#{milestone_target_stats[:students_count]}/#{total_students_count}" %></p>
+                      <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{milestone_target_stats[:percentage]}%"%></p>
                     </div>
                   </div>
                   <%= link_to students_cohort_path(milestone_completed: "#{target.id};M#{target.milestone_number}: #{target.title}") do %>
                     <div class="relative bg-gray-200 rounded-md overflow-hidden mt-0.5">
-                      <div style="<%= "width: #{data[:percentage]}%" %>" class="h-2 text-center bg-green-500"></div>
+                      <div style="<%= "width: #{milestone_target_stats[:percentage]}%" %>" class="h-2 text-center bg-green-500"></div>
                     </div>
                   <% end %>
                 </div>

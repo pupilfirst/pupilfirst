@@ -105,14 +105,13 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
         .group(:target_id)
         .select("target_id, COUNT(DISTINCT founders.id) AS students_count")
 
-    status =
-      milestone_targets.index_with { { percentage: 0, students_count: 0 } }
+    status = Hash.new({ percentage: 0, students_count: 0 })
 
     submissions.each do |submission|
       target = milestone_targets.find { |t| t.id == submission.target_id }
       percentage =
         ((submission.students_count / total_students_count.to_f) * 100).round
-      status[target] = {
+      status[target.id] = {
         percentage: percentage,
         students_count: submission.students_count
       }

@@ -453,7 +453,6 @@ ml:
       courses_partially_loaded_text: '%{loaded_courses_count} / %{total_courses} കോഴ്സുകൾ കാണിക്കുന്നു'
       create_description: Let's create another course.
       edit_course_details: കോഴ്‌സ് വിശദാംശങ്ങൾ എഡിറ്റ് ചെയ്യുക
-      empty_courses: നിങ്ങൾക്ക് കോഴ്സുകളൊന്നുമില്ല!
       filter:
         input_hint: അല്ലെങ്കിൽ പേര് ഉപയോഗിച്ച് തിരയാൻ ടൈപ്പ് ചെയ്യാൻ തുടങ്ങുക...
         input_label: തിരയുക

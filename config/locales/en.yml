@@ -454,7 +454,6 @@ en:
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
       create_description: Let's create another course.
       edit_course_details: Edit Course Details
-      empty_courses: You don't have any courses!
       filter:
         input_hint: Or start typing to search by name...
         input_label: Search

@@ -467,33 +467,25 @@ let showCourse = course => {
 
 let showCourses = (courses, state) => {
   <div className="w-full">
-    {ArrayUtils.isEmpty(courses)
-      ? <div
-          className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
-          <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
-          <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
-            {t("empty_courses")->str}
-          </h4>
-        </div>
-      : <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
-          <div
-            className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
-            <EmptyState
-              title={t("add_new_course")}
-              description={t("create_description")}
-              primaryAction={<button
-                className="btn btn-primary btn-lg"
-                onClick={_ => {
-                  RescriptReactRouter.push("/school/courses/new")
-                }}>
-                <PfIcon className="if i-plus-circle-regular if-fw" />
-                <span className="font-semibold ms-1"> {str(t("add_new_course"))} </span>
-              </button>}
-              image={<img src={addNewCourseSVG} />}
-            />
-          </div>
-          {Js.Array.map(course => showCourse(course), courses)->React.array}
-        </div>}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+      <div
+        className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
+        <EmptyState
+          title={t("add_new_course")}
+          description={t("create_description")}
+          primaryAction={<button
+            className="btn btn-primary btn-lg"
+            onClick={_ => {
+              RescriptReactRouter.push("/school/courses/new")
+            }}>
+            <PfIcon className="if i-plus-circle-regular if-fw" />
+            <span className="font-semibold ms-1"> {str(t("add_new_course"))} </span>
+          </button>}
+          image={<img src={addNewCourseSVG} />}
+        />
+      </div>
+      {courses->Js.Array2.map(showCourse)->React.array}
+    </div>
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>
 }

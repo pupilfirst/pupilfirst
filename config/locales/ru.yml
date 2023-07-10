@@ -463,7 +463,6 @@ ru:
       courses_partially_loaded_text: Показано %{loaded_courses_count} из %{total_courses} курсов
       create_description: Let's create another course.
       edit_course_details: Изменить сведения о курсе
-      empty_courses: У вас нет курсов!
       filter:
         input_hint: Или начните печатать для поиска по имени...
         input_label: Поиск

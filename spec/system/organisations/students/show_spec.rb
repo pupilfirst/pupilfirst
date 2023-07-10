@@ -33,8 +33,7 @@ feature "Organisation student details page and submissions list" do
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           milestone: true,
-           milestone_number: 1
+           milestone: true
   end
 
   let(:target_l1_2) do
@@ -44,16 +43,14 @@ feature "Organisation student details page and submissions list" do
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           milestone: true,
-           milestone_number: 2
+           milestone: true
   end
 
   let(:target_l2) do
     create :target,
            target_group: target_group_l1,
            evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 3
+           milestone: true
   end
 
   let!(:target_l3) do

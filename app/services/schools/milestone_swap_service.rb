@@ -1,6 +1,6 @@
 module Schools
   class MilestoneSwapService
-    def initialize(milestones, target, direction = "down")
+    def initialize(milestones, target, direction)
       @milestones = milestones
       @target = target
       @should_move_up = direction == "up"

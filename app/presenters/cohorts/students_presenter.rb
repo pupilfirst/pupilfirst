@@ -102,7 +102,8 @@ module Cohorts
     end
 
     def milestone_completion_status
-      status = {}
+      status =
+        milestone_targets.index_with { { percentage: 0, students_count: 0 } }
 
       TimelineEvent
         .from_founders(scope)

@@ -74,12 +74,14 @@ module Targets
 
       @target.milestone = milestone_param
 
-      return unless milestone_param
+      if milestone_param
+        current_maximum_milestone_number =
+          @target.course.targets.maximum(:milestone_number) || 0
 
-      current_maximum_milestone_number =
-        @target.course.targets.maximum(:milestone_number)
-
-      @target.milestone_number = current_maximum_milestone_number + 1
+        @target.milestone_number = current_maximum_milestone_number + 1
+      else
+        @target.milestone_number = nil
+      end
     end
 
     def recreate_quiz(quiz)

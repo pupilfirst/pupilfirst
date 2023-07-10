@@ -102,20 +102,26 @@ module Cohorts
     end
 
     def milestone_completion_status
-      ordered_milestone_targets = milestone_targets.order(:milestone_number)
-
       status = {}
 
-      ordered_milestone_targets.each do |target|
-        submissions =
-          TimelineEvent.from_founders(scope).where(target: target).passed
-        students_count = submissions.map(&:founders).flatten.uniq.count
-        percentage = ((students_count / total_students_count.to_f) * 100).round
-        status[target] = {
-          percentage: percentage,
-          students_count: students_count
-        }
-      end
+      TimelineEvent
+        .from_founders(scope)
+        .where(target: milestone_targets)
+        .passed
+        .group(:target_id)
+        .joins(:founders)
+        .select("target_id, COUNT(DISTINCT founders.id) AS students_count")
+        .each do |submission|
+          target = milestone_targets.find { |t| t.id == submission.target_id }
+          percentage =
+            (
+              (submission.students_count / total_students_count.to_f) * 100
+            ).round
+          status[target] = {
+            percentage: percentage,
+            students_count: submission.students_count
+          }
+        end
 
       status
     end
@@ -125,7 +131,8 @@ module Cohorts
     end
 
     def milestone_targets
-      @milestone_targets ||= @course.targets.live.where(milestone: true)
+      @milestone_targets ||=
+        @course.targets.live.where(milestone: true).order(:milestone_number)
     end
 
     private

@@ -1,4 +1,34 @@
 class SetTargetPrerequisiteBetweenLevels < ActiveRecord::Migration[6.1]
+  class Course < ApplicationRecord
+    has_many :levels
+    has_many :target_groups, through: :levels
+    has_many :targets, through: :target_groups
+  end
+
+  class Level < ApplicationRecord
+    belongs_to :course
+    has_many :target_groups
+    has_many :targets, through: :target_groups
+  end
+
+  class TargetGroup < ApplicationRecord
+    belongs_to :level
+    has_many :targets
+  end
+
+  class Target < ApplicationRecord
+    belongs_to :target_group
+    has_many :target_prerequisites, dependent: :destroy
+    has_many :prerequisite_targets, through: :target_prerequisites
+
+    VISIBILITY_LIVE = "live"
+  end
+
+  class TargetPrerequisite < ApplicationRecord
+    belongs_to :target
+    belongs_to :prerequisite_target, class_name: "Target"
+  end
+
   def up
     courses = Course.all.includes(:levels, :target_groups, :targets)
 

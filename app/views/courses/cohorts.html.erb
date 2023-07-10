@@ -1,5 +1,5 @@
 <% presenter = ::Courses::CohortsPresenter.new(self, @course, params[:status]) %>
-<div class="flex flex-col md:pt-18 bg-gray-50 md:h-screen overflow-y-auto">
+<div class="flex flex-col md:pt-18 pb-20 md:pb-4 md:h-screen overflow-y-auto">
   <section class="bg-gray-50 px-4 border-b border-gray-200">
     <div class="max-w-5xl mx-auto pt-4">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
@@ -23,7 +23,7 @@
   </section>
   <% cohorts = presenter.paged_cohorts %>
   <div class="bg-white flex-1">
-    <div class="max-w-5xl mx-auto rounded-lg py-4 md:py-8">
+    <div class="max-w-5xl mx-auto rounded-lg p-4 md:p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <% cohorts.each do |cohort| %>
           <%= link_to cohort_path(cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>

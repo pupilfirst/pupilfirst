@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_17_172431) do
+ActiveRecord::Schema.define(version: 2023_07_06_093050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(version: 2023_05_17_172431) do
     t.text "about"
     t.boolean "featured", default: true
     t.boolean "can_connect", default: true
-    t.string "progression_behavior", null: false
+    t.string "progression_behavior"
     t.integer "progression_limit"
     t.datetime "archived_at"
     t.boolean "public_preview", default: false
@@ -678,9 +678,9 @@ ActiveRecord::Schema.define(version: 2023_05_17_172431) do
     t.string "visibility"
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
+    t.text "action_config"
     t.boolean "milestone", default: false
     t.integer "milestone_number"
-    t.text "action_config"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end

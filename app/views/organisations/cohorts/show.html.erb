@@ -18,25 +18,25 @@
     total_students_count = @presenter.total_students_count
     milestone_completion_status = @presenter.milestone_completion_status if total_students_count > 0
   %>
-  <% if milestone_completion_status.present?  %>
-    <section class="bg-white">
-      <div class="max-w-5xl mx-auto p-4 md:p-6">
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
-            <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
-            <p class="text-3xl font-bold"><%= @presenter.counts[:total] %></p>
-            <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-              <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
-            <% end %>
-          </div>
-          <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
-            <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
-            <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
-            <%= link_to students_organisation_cohort_path(@organisation, @cohort, course: "Completed"), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-              <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
-            <% end %>
-          </div>
+  <section class="bg-white">
+    <div class="max-w-5xl mx-auto p-4 md:p-6">
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
+          <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
+          <p class="text-3xl font-bold"><%= @presenter.counts[:total] %></p>
+          <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+            <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
+          <% end %>
         </div>
+        <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
+          <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
+          <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
+          <%= link_to students_organisation_cohort_path(@organisation, @cohort, course: "Completed"), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+            <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
+          <% end %>
+        </div>
+      </div>
+      <% if milestone_completion_status.present?  %>
         <div class="p-4 bg-gray-50 rounded-lg mt-8">
           <div class="max-w-5xl mx-auto">
             <h3 class="text-xs font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>

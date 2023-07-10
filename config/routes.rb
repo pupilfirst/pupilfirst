@@ -112,6 +112,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :assignments, only: [] do
+      member do
+        patch :update_milestone_number
+      end
+    end
+
     resources :courses, only: [] do
       member do
         get 'applicants'
@@ -125,12 +131,6 @@ Rails.application.routes.draw do
         post 'attach_images'
         get 'calendar_month_data'
         get 'assignments'
-      end
-
-      resources :assignments, only: [] do
-        member do
-          patch :update_milestone
-        end
       end
 
       resources :calendar_events, only: %i[new create show edit], controller: 'calendar_events'

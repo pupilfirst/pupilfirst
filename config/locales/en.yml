@@ -2634,7 +2634,6 @@ en:
         title: Applicants
       assignments:
         title: Assignments
-        milestone: Milestone
         list_title: Milestone Targets in %{course_name}
         no_milestones: No milestone targets present in this course.
       authors:

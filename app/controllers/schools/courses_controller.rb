@@ -173,8 +173,7 @@ module Schools
     def assignments
       @course =
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      @presenter =
-        Schools::Courses::AssignmentsPresenter.new(view_context, @course)
+      @milestones = @course.targets.milestones.order(milestone_number: :asc)
     end
 
     private

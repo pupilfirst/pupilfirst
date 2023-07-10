@@ -1,8 +1,8 @@
 module Schools
   class AssignmentPolicy < ApplicationPolicy
-    def update_milestone?
-      (user&.school_admin.present? && user.school == current_school) ||
-        user.course_authors.where(course: record.course).present?
+    def update_milestone_number?
+      record.course.school == current_school &&
+        Schools::CoursePolicy.new(@pundit_user, record.course).curriculum?
     end
   end
 end

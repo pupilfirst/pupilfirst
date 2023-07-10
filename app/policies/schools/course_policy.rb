@@ -28,7 +28,6 @@ module Schools
     alias calendars? index?
     alias calendar_events? index?
     alias calendar_month_data? index?
-    alias assignments? index?
 
     def curriculum?
       return false if user.blank?
@@ -41,7 +40,7 @@ module Schools
     end
 
     alias evaluation_criteria? curriculum?
-
+    alias assignments? curriculum?
     class Scope < Scope
       def resolve
         current_school.courses

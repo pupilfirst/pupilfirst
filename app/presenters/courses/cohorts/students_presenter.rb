@@ -125,8 +125,6 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
     @course_completed_students ||= scope.where.not(completed_at: nil)
   end
 
-  delegate :count, to: :course_completed_students, prefix: true
-
   private
 
   def filter_students_by_name(scope)

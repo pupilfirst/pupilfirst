@@ -25,13 +25,13 @@
               <% end %>
             </div>
           <% end %>
-          <a href="<%= details_school_course_target_path(@course, target) %>" class="flex justify-between w-full items-center h-full py-5 px-4">
+          <%= link_to details_school_course_target_path(@course, target), class: "flex justify-between w-full items-center h-full py-5 px-4" do %>
             <p class="text-sm"><%= target.title %></p>
             <div class="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
               <span><%= target.milestone_number %></span>
               <i class="if i-milestone-solid if-fw" ></i>
             </div>
-          </a>
+          <% end %>
         </div>
       <% end %>
       <% if @milestones.size < 1 %>

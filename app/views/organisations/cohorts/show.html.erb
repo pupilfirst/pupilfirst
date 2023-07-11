@@ -36,7 +36,7 @@
           <% end %>
         </div>
       </div>
-      <% if milestone_completion_status.present?  %>
+      <% if (total_students_count > 0 or milestone_completion_status.present?) && (@presenter.milestone_targets.present?) %>
         <div class="p-4 bg-gray-50 rounded-lg mt-8">
           <div class="max-w-5xl mx-auto">
             <h3 class="text-xs font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>

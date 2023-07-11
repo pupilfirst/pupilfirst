@@ -254,14 +254,6 @@ let make = (
   let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
   let studentLevelId = student |> Student.levelId
 
-  let studentLevel =
-    levels |> ArrayUtils.unsafeFind(
-      l => l |> Level.id == studentLevelId,
-      "Could not find studentLevel with ID " ++ studentLevelId,
-    )
-
-  Js.log(studentLevel)
-
   let targetLevelId = switch selectedTarget {
   | Some(target) =>
     let targetGroupId = target |> Target.targetGroupId

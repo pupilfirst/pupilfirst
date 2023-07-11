@@ -1,11 +1,17 @@
 type t = {
   id: string,
   title: string,
-  milestoneNumber: int,
+  milestoneNumber: option<int>,
 }
 
 let id = t => t.id
-let title = t => t.title
+
+let title = t =>
+  switch (t.milestoneNumber) {
+  | None => t.title
+  | Some(milestoneNumber) => "M" ++ string_of_int(milestoneNumber) ++ " - " ++ t.title
+  }
+
 let milestoneNumber = t => t.milestoneNumber
 
 let make = (~id, ~title, ~milestoneNumber) => {

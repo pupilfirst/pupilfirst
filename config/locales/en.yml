@@ -657,6 +657,7 @@ en:
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
+      submission_limit_reached:  "You have %{pending_count} pending submissions and cannot submit more until they are reviewed."
       status:
         completed: Completed
         locked: Locked
@@ -900,7 +901,7 @@ en:
       coach_notes: Coach Notes
       filter_level: Filter by level, assigned coach, or search by name or email address, and more...
       has_notes: Has notes
-      level_distribution_label: Level-wise student distribution
+      student_distribution_milestone: Student Distribution by Milestone Completion
       me: Me
       name_email: Name or Email
       no_notes: Does not have notes

@@ -21,7 +21,7 @@ let make = (~id, ~title, ~completed, ~milestoneNumber) => {
 }
 
 let makeFromJs = data => {
-  data |> Js.Array.map(data =>
+  data->Js.Array2.map(data =>
     make(
       ~id=data["id"],
       ~title=data["title"],

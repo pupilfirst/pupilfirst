@@ -179,7 +179,7 @@ module Schools
           .milestones
           .order(milestone_number: :asc)
           .page(params[:page])
-          .per(5)
+          .per(20)
       @page_no = params[:page].presence || 1
     end
 

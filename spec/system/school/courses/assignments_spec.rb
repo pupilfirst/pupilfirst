@@ -6,6 +6,7 @@ feature "Assignments", js: true do
   let(:school) { create :school, :current }
   let(:school_admin) { create :school_admin, school: school }
   let(:course) { create :course, school: school }
+  let(:course_author) { create :course_author, course: course }
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1, sort_index: 1 }
 
@@ -65,6 +66,14 @@ feature "Assignments", js: true do
       ).click
 
       expect(page).to have_text(target_1.title)
+    end
+
+    scenario "course author visit assignments page" do
+      sign_in_user course_author.user,
+                   referrer: assignments_school_course_path(course)
+
+      expect(page).to have_text(target_1.title)
+      expect(page).to have_text(target_2.title)
     end
   end
 end

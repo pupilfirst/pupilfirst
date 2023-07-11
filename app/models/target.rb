@@ -149,6 +149,16 @@ class Target < ApplicationRecord
     end
   end
 
+  validate :milestone_should_have_a_number
+
+  def milestone_should_have_a_number
+    return unless milestone?
+
+    return if milestone_number.present?
+
+    errors.add(:milestone_number, "should be present for milestone targets")
+  end
+
   normalize_attribute :slideshow_embed,
                       :video_embed,
                       :youtube_video_id,

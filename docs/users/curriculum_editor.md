@@ -10,23 +10,15 @@ However, your students will always need instruction before they can effectively 
 
 The curriculum editor organizes content into _levels_, which contains many _groups_ of _targets_, each of which can hold the text and other rich media that you want your students to see.
 
-![Curriculum editor in the school administration interface](../assets/curriculum_editor/curriculum_editor_page_nx0fbq.png)
+![Curriculum editor in the school administration interface](../assets/curriculum_editor/curriculum_editor_page.png)
 
 ## What are levels?
 
-Levels are the top organizational unit within a course, and act as an indicator for the progress of a student.
+Levels are the top organizational unit within a course for organising content.
 
 1. Levels can hold many _groups_ of targets.
-2. All students begin in the first level - **Level 1**.
-3. Students can move up through levels, after they've submitted work on [milestone targets](/users/targets#milestone-targets). We call this [leveling up](/users/taking_courses#leveling-up), or to _level up_.
-4. Courses can have any number of levels, but you probably don't want to go overboard.
-
-<details>
-  <summary>The phrase <em>level up</em>, is borrowed from the world of gaming.</summary>
-  <div>
-  Roughly, it means <em>to progress to the next level</em> - an activity that is common in modern role-playing games where one's character advances to the next level of development.
-  </div>
-</details>
+2. All students begin the course content in the first level - **Level 1**.
+3. Courses can have any number of levels, but you probably don't want to go overboard.
 
 To create a new level, click the _Create Level_ button next to the level selector, and to edit a level's name, click the _edit icon_ next to the selected level. Levels have one additional property: a date to _Unlock level on_. If set, the _content_ of the level is hidden from students until that date. Coaches in a course, and all school admins will still have access to the content of locked levels.
 
@@ -44,8 +36,6 @@ In addition to editing the name of the level and its unlock date, you can switch
 ## What's a target group?
 
 Similar targets can be grouped together into target groups. This allow you to organize content into discrete chunks in a way that makes sense for what you're trying to teach. To create a target group, just click the _Create a target group_ button within a level.
-
-When creating and editing a target group, you can decide whether it's a _milestone_ target group or not. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/users/targets#milestone-targets).
 
 The editor for a target group also allows you to change the level it belongs to and to archive it. Archiving will have a target group along with its targets removed from the student curriculum.
 
@@ -107,7 +97,7 @@ This tab contains other basic details and configuration for the target, such as 
 
 ### Setting target as a milestone
 
-You can set a target as a milestone by select _Yes_ against the setting question. This will make the target a milestone target, which means that that the student can complete the course only after completing this target. If a course has multiple milestone targets, the student can complete the course only after completing all the milestone targets.
+You can set a target as a milestone by select _Yes_ against the setting question. This will make the target a milestone target, which means that that the student cannot complete the course without completing this target. If a course has multiple milestone targets, the student can complete the course only after completing all the milestone targets. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/users/targets#milestone-targets).
 
 ### Setting the method of completion
 

@@ -12,7 +12,7 @@
     </div>
   </section>
   <%
-    total_students_count = @presenter.total_students_count
+    total_students_count = @presenter.counts[:total]
     milestone_completion_status = @presenter.milestone_completion_status if total_students_count > 0
   %>
   <section class="bg-white p-4 flex-1">
@@ -27,7 +27,7 @@
         </div>
         <div class="p-4 md:p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
-          <p class="text-3xl font-bold"><%= @presenter.course_completed_students.count %></p>
+          <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
           <%= link_to students_cohort_path(@cohort, course: "Completed"), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
             <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
           <% end %>

@@ -1,75 +1,77 @@
 module Cohorts
   class StudentsPresenter < ApplicationPresenter
-    def initialize(view_context, organisation, cohort)
-      @organisation = organisation
+    def initialize(view_context, source, cohort)
+      @organisation = source if source.is_a?(Organisation)
+      @course = source.is_a?(Course) ? source : cohort.course
       @cohort = cohort
-      @course = cohort.course
       super(view_context)
     end
 
     def filter
-      @filter ||= {
-        id: "organisation-cohort-students-filter",
-        filters: [
+      @filter ||=
+        begin
+          milestone_targets_data =
+            milestone_targets.pluck(:id, :milestone_number, :title)
+
           {
-            key: "milestone_completed",
-            label: "Milestone Completed",
-            filterType: "MultiSelect",
-            values:
-              @course
-                .targets
-                .live
-                .where(milestone: true)
-                .order(:milestone_number)
-                .map do |target|
-                  "#{target.id};M#{target.milestone_number}: #{target.title}"
-                end,
-            color: "blue"
-          },
-          {
-            key: "milestone_pending",
-            label: "Milestone Pending",
-            filterType: "MultiSelect",
-            values:
-              @course
-                .targets
-                .live
-                .where(milestone: true)
-                .order(:milestone_number)
-                .map do |target|
-                  "#{target.id};M#{target.milestone_number}: #{target.title}"
-                end,
-            color: "orange"
-          },
-          {
-            key: "course",
-            label: "Course",
-            filterType: "MultiSelect",
-            values: ["Completed", "Not Completed"],
-            color: "green"
-          },
-          { key: "name", label: "Name", filterType: "Search", color: "red" },
-          {
-            key: "email",
-            label: "Email",
-            filterType: "Search",
-            color: "yellow"
+            id:
+              "#{@organisation ? "organisation" : "course"}-cohort-students-filter",
+            filters: [
+              {
+                key: "milestone_completed",
+                label: "Milestone Completed",
+                filterType: "MultiSelect",
+                values:
+                  milestone_targets_data.map do |id, number, title|
+                    "#{id};M#{number}: #{title}"
+                  end,
+                color: "blue"
+              },
+              {
+                key: "milestone_pending",
+                label: "Milestone Pending",
+                filterType: "MultiSelect",
+                values:
+                  milestone_targets_data.map do |id, number, title|
+                    "#{id};M#{number}: #{title}"
+                  end,
+                color: "orange"
+              },
+              {
+                key: "course",
+                label: "Course",
+                filterType: "MultiSelect",
+                values: ["Completed", "Not Completed"],
+                color: "green"
+              },
+              {
+                key: "name",
+                label: "Name",
+                filterType: "Search",
+                color: "red"
+              },
+              {
+                key: "email",
+                label: "Email",
+                filterType: "Search",
+                color: "yellow"
+              }
+            ],
+            placeholder: "Search by name or email",
+            hint: "...or start typing to search by student's name of email",
+            sorter: {
+              key: "sort_by",
+              default: "Recently Seen",
+              options: [
+                "Recently Seen",
+                "Name",
+                "First Created",
+                "Last Created",
+                "Earliest Seen"
+              ]
+            }
           }
-        ],
-        placeholder: "Search by name or email",
-        hint: "...or start typing to search by student's name of email",
-        sorter: {
-          key: "sort_by",
-          default: "Recently Seen",
-          options: [
-            "Recently Seen",
-            "Name",
-            "First Created",
-            "Last Created",
-            "Earliest Seen"
-          ]
-        }
-      }
+        end
     end
 
     def counts
@@ -114,9 +116,7 @@ module Cohorts
         .each do |submission|
           target = milestone_targets.find { |t| t.id == submission.target_id }
           percentage =
-            (
-              (submission.students_count / total_students_count.to_f) * 100
-            ).round
+            ((submission.students_count / counts[:total].to_f) * 100).round
           status[target.id] = {
             percentage: percentage,
             students_count: submission.students_count
@@ -124,10 +124,6 @@ module Cohorts
         end
 
       status
-    end
-
-    def total_students_count
-      @total_students_count ||= scope.count
     end
 
     def milestone_targets
@@ -207,8 +203,12 @@ module Cohorts
     end
 
     def scope
-      @scope ||=
-        @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
+      if @organisation.present?
+        @scope ||=
+          @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
+      else
+        @scope ||= @cohort.founders.not_dropped_out
+      end
     end
   end
 end

@@ -98,19 +98,20 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   def milestone_completion_status
     submissions =
       TimelineEvent
-        .from_founders(@cohort.founders)
+        .from_founders(scope)
         .where(target: milestone_targets)
         .passed
         .joins(:founders)
         .group(:target_id)
         .select("target_id, COUNT(DISTINCT founders.id) AS students_count")
 
-    status = {}
+    status = Hash.new({ percentage: 0, students_count: 0 })
+
     submissions.each do |submission|
       target = milestone_targets.find { |t| t.id == submission.target_id }
       percentage =
         ((submission.students_count / total_students_count.to_f) * 100).round
-      status[target] = {
+      status[target.id] = {
         percentage: percentage,
         students_count: submission.students_count
       }
@@ -131,8 +132,6 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   def course_completed_students
     @course_completed_students ||= scope.where.not(completed_at: nil)
   end
-
-  delegate :count, to: :course_completed_students, prefix: true
 
   private
 

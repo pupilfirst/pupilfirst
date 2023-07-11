@@ -102,7 +102,7 @@ module Cohorts
     end
 
     def milestone_completion_status
-      status = {}
+      status = Hash.new({ percentage: 0, students_count: 0 })
 
       TimelineEvent
         .from_founders(scope)
@@ -117,7 +117,7 @@ module Cohorts
             (
               (submission.students_count / total_students_count.to_f) * 100
             ).round
-          status[target] = {
+          status[target.id] = {
             percentage: percentage,
             students_count: submission.students_count
           }

@@ -11,13 +11,13 @@
         <div class="flex">
           <% unless @milestones.size < 1 %>
             <div class="flex flex-col">
-              <% unless index < 1 %>
+              <% if index > 0 || !@milestones.first_page? %>
                 <%= button_to update_milestone_number_school_assignment_path(target, direction: :up, page: @page_no) , method: :patch, class: "h-full",
                 form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
                   <i class="if i-arrow-up-solid if-fw" ></i>
                 <% end %>
               <% end %>
-              <% unless index == @milestones.size - 1 %>
+              <% if index < @milestones.size - 1  || !@milestones.last_page? %>
                 <%= button_to update_milestone_number_school_assignment_path(target, direction: :down, page: @page_no), method: :patch, class: "h-full",
                 form_class: "h-full px-2 border border-transparent hover:border-gray-300 text-gray-400 hover:text-gray-800 transition cursor-pointer" do %>
                   <i class="if i-arrow-down-solid if-fw" ></i>

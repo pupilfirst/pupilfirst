@@ -337,6 +337,12 @@ feature "Automatic issuance of certificates", js: true do
 
       expect(page).to have_text("Target has been marked as complete")
 
+      visit curriculum_course_path(course)
+
+      expect(page).to have_text(
+        "Congratulations! You have completed all milestone targets in the course."
+      )
+
       # Both students get certificate when the last student in team completes the target.
       expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
         student_1.user.id,

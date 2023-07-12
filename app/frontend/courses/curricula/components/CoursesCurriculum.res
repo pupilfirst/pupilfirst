@@ -143,14 +143,14 @@ let issuedCertificate = course =>
   }
 
 let computeNotice = (course, student, preview) =>
-  if Belt.Option.isSome(Student.completedAt(student)) {
-    Notice.CourseComplete
-  } else if preview {
-    Preview
+  if preview {
+    Notice.Preview
   } else if Course.ended(course) {
     CourseEnded
   } else if Student.accessEnded(student) {
     AccessEnded
+  } else if Belt.Option.isSome(Student.completedAt(student)) {
+    CourseComplete
   } else {
     Nothing
   }

@@ -16,7 +16,7 @@
     <% if submission.evaluated_at.present? %>
       <div class="flex md:flex-col items-center md:items-end text-xs gap-1 mt-2 md:mt-0">
         <div class="px-2 py-1 rounded-lg font-medium <%= submission.passed_at.present? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>"><%= submission.passed_at.present? ? t('.accepted') : t('.rejected') %></div>
-        <div class="italic text-right rtl:text-left truncate" title="<%= submission.evaluated_at.iso8601 %>"><%= t('.reviewed_time_ago', time_ago_in_words: time_ago_in_words(submission.evaluated_at)) %></div>
+        <div class="italic text-right rtl:text-left w-full whitespace-nowrap" title="<%= submission.evaluated_at.iso8601 %>"><%= t('.reviewed_time_ago', time_ago_in_words: time_ago_in_words(submission.evaluated_at)) %></div>
       </div>
     <% end %>
   </div>

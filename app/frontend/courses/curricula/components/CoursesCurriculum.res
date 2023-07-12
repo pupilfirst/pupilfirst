@@ -79,7 +79,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
-      className="curriculum__target-group max-w-3xl md:max-w-4xl 2xl:max-w-5xl mx-auto bg-white rounded-lg shadow-md relative z-10 overflow-hidden ">
+      className="curriculum__target-group max-w-3xl md:max-w-4xl 2xl:max-w-5xl mx-auto bg-white rounded-lg shadow-md relative overflow-hidden ">
       <div className="p-3 md:p-6 pt-5 text-center">
         <div className="text-2xl font-bold leading-snug">
           {TargetGroup.name(targetGroup)->str}
@@ -253,14 +253,6 @@ let make = (
 
   let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
   let studentLevelId = student |> Student.levelId
-
-  let studentLevel =
-    levels |> ArrayUtils.unsafeFind(
-      l => l |> Level.id == studentLevelId,
-      "Could not find studentLevel with ID " ++ studentLevelId,
-    )
-
-  Js.log(studentLevel)
 
   let targetLevelId = switch selectedTarget {
   | Some(target) =>

@@ -6,63 +6,64 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   end
 
   def filter
-    @filter ||= {
-      id: "course-cohort-students-filter",
-      filters: [
+    @filter ||=
+      begin
+        milestone_targets_data =
+          milestone_targets.pluck(:id, :milestone_number, :title)
+
         {
-          key: "milestone_completed",
-          label: "Milestone Completed",
-          filterType: "MultiSelect",
-          values:
-            @course
-              .targets
-              .live
-              .where(milestone: true)
-              .order(:milestone_number)
-              .map do |target|
-                "#{target.id};M#{target.milestone_number}: #{target.title}"
-              end,
-          color: "blue"
-        },
-        {
-          key: "milestone_pending",
-          label: "Milestone Pending",
-          filterType: "MultiSelect",
-          values:
-            @course
-              .targets
-              .live
-              .where(milestone: true)
-              .order(:milestone_number)
-              .map do |target|
-                "#{target.id};M#{target.milestone_number}: #{target.title}"
-              end,
-          color: "orange"
-        },
-        {
-          key: "course",
-          label: "Course",
-          filterType: "MultiSelect",
-          values: ["Completed", "Not Completed"],
-          color: "green"
-        },
-        { key: "name", label: "Name", filterType: "Search", color: "red" },
-        { key: "email", label: "Email", filterType: "Search", color: "yellow" }
-      ],
-      placeholder: "Search by name or email",
-      hint: "...or start typing to search by student's name of email",
-      sorter: {
-        key: "sort_by",
-        default: "Recently Seen",
-        options: [
-          "Recently Seen",
-          "Name",
-          "First Created",
-          "Last Created",
-          "Earliest Seen"
-        ]
-      }
-    }
+          id: "course-cohort-students-filter",
+          filters: [
+            {
+              key: "milestone_completed",
+              label: "Milestone Completed",
+              filterType: "MultiSelect",
+              values:
+                milestone_targets_data.map do |id, number, title|
+                  "#{id};M#{number}: #{title}"
+                end,
+              color: "blue"
+            },
+            {
+              key: "milestone_pending",
+              label: "Milestone Pending",
+              filterType: "MultiSelect",
+              values:
+                milestone_targets_data.map do |id, number, title|
+                  "#{id};M#{number}: #{title}"
+                end,
+              color: "orange"
+            },
+            {
+              key: "course",
+              label: "Course",
+              filterType: "MultiSelect",
+              values: ["Completed", "Not Completed"],
+              color: "green"
+            },
+            { key: "name", label: "Name", filterType: "Search", color: "red" },
+            {
+              key: "email",
+              label: "Email",
+              filterType: "Search",
+              color: "yellow"
+            }
+          ],
+          placeholder: "Search by name or email",
+          hint: "...or start typing to search by student's name of email",
+          sorter: {
+            key: "sort_by",
+            default: "Recently Seen",
+            options: [
+              "Recently Seen",
+              "Name",
+              "First Created",
+              "Last Created",
+              "Earliest Seen"
+            ]
+          }
+        }
+      end
   end
 
   def counts
@@ -95,21 +96,24 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   end
 
   def milestone_completion_status
-    ordered_milestone_targets = milestone_targets.order(:milestone_number)
+    submissions =
+      TimelineEvent
+        .from_founders(scope)
+        .where(target: milestone_targets)
+        .passed
+        .joins(:founders)
+        .group(:target_id)
+        .select("target_id, COUNT(DISTINCT founders.id) AS students_count")
 
-    status = {}
+    status = Hash.new({ percentage: 0, students_count: 0 })
 
-    ordered_milestone_targets.each do |target|
-      submissions =
-        TimelineEvent
-          .from_founders(@cohort.founders)
-          .where(target: target)
-          .passed
-      students_count = submissions.map(&:founders).flatten.uniq.count
-      percentage = ((students_count / total_students_count.to_f) * 100).round
-      status[target] = {
+    submissions.each do |submission|
+      target = milestone_targets.find { |t| t.id == submission.target_id }
+      percentage =
+        ((submission.students_count / total_students_count.to_f) * 100).round
+      status[target.id] = {
         percentage: percentage,
-        students_count: students_count
+        students_count: submission.students_count
       }
     end
 
@@ -117,7 +121,8 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   end
 
   def milestone_targets
-    @milestone_targets ||= @course.targets.live.where(milestone: true)
+    @milestone_targets ||=
+      @course.targets.live.where(milestone: true).order(:milestone_number)
   end
 
   def total_students_count
@@ -127,8 +132,6 @@ class Courses::Cohorts::StudentsPresenter < ApplicationPresenter
   def course_completed_students
     @course_completed_students ||= scope.where.not(completed_at: nil)
   end
-
-  delegate :count, to: :course_completed_students, prefix: true
 
   private
 

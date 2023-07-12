@@ -23,9 +23,7 @@ feature "Organisation show" do
   let!(:level_3) { create :level, :three, course: course }
 
   let!(:target_group_l1) { create :target_group, level: level_1 }
-
   let!(:target_group_l2) { create :target_group, level: level_2 }
-
   let!(:target_group_l3) { create :target_group, level: level_3 }
 
   let!(:target_l1) do
@@ -159,7 +157,7 @@ feature "Organisation show" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [students[1]],
+        owners: [students.first],
         target: target_l1,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
@@ -173,13 +171,13 @@ feature "Organisation show" do
       fill_in "Filter", with: "M"
       click_button "Milestone Completed: M#{target_l1.milestone_number}: #{target_l1.title}"
 
-      expect(page).to have_text(students[1].name)
-      expect(page).not_to have_text(students[2].name)
+      expect(page).to have_text(students.first.name)
+      expect(page).not_to have_text(students.second.name)
 
       find(
         "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
       ).click
-      expect(page).to have_text(students[2].name)
+      expect(page).to have_text(students.second.name)
     end
 
     scenario "user can filter by milestone pending", js: true do
@@ -187,7 +185,7 @@ feature "Organisation show" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [students[1]],
+        owners: [students.first],
         target: target_l1,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
@@ -201,13 +199,13 @@ feature "Organisation show" do
       fill_in "Filter", with: "M"
       click_button "Milestone Pending: M#{target_l1.milestone_number}: #{target_l1.title}"
 
-      expect(page).not_to have_content("#{students[1].name}\n")
-      expect(page).to have_text(students[2].name)
+      expect(page).not_to have_content("#{students.first.name}\n")
+      expect(page).to have_text(students.second.name)
 
       find(
         "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
       ).click
-      expect(page).to have_text(students[1].name)
+      expect(page).to have_text(students.first.name)
     end
 
     scenario "user can filter by course completion", js: true do
@@ -215,7 +213,7 @@ feature "Organisation show" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [students[1]],
+        owners: [students.first],
         target: target_l1,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
@@ -226,7 +224,7 @@ feature "Organisation show" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [students[1]],
+        owners: [students.first],
         target: target_l2,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
@@ -237,14 +235,14 @@ feature "Organisation show" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [students[1]],
+        owners: [students.first],
         target: target_l3,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
         passed_at: 3.days.ago
       )
 
-      students[1].update!(completed_at: 3.days.ago)
+      students.first.update!(completed_at: 3.days.ago)
 
       sign_in_user org_admin_user,
                    referrer:
@@ -253,11 +251,11 @@ feature "Organisation show" do
       fill_in "Filter", with: "Completed"
       click_button "Course: Completed"
 
-      expect(page).to have_text(students[1].name)
-      expect(page).not_to have_text(students[2].name)
+      expect(page).to have_text(students.first.name)
+      expect(page).not_to have_text(students.second.name)
 
       find("button[title='Remove selection: Completed']").click
-      expect(page).to have_text(students[2].name)
+      expect(page).to have_text(students.second.name)
     end
 
     scenario "user can sort results using different criteria", js: true do

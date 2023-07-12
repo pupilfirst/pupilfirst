@@ -234,7 +234,7 @@ let make = (~courseId) => {
         {ReactUtils.nullIf(
           <div className="p-5 bg-gray-100 rounded-lg mt-6">
             <p className="text-gray-600 text-sm font-medium">
-              {"Student Distribution Milestone Completion"->str}
+              {tr("student_distribution_milestone")->str}
             </p>
           </div>,
           Webapi.Url.URLSearchParams.has("level", params),

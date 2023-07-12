@@ -151,6 +151,7 @@ module SubmissionsQuery = %graphql(`
       targetInfo(targetId: $targetId, courseId: $courseId) {
         id
         title
+        milestoneNumber
       }
     }
   `)
@@ -168,6 +169,7 @@ module ReviewedTargetsInfoQuery = %graphql(`
       reviewedTargetsInfo(courseId: $courseId) {
         id
         title
+        milestoneNumber
       }
     }
   `)

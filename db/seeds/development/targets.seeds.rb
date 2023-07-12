@@ -1,7 +1,7 @@
-require_relative 'helper'
+require_relative "helper"
 
-after 'development:evaluation_criteria', 'development:target_groups' do
-  puts 'Seeding targets'
+after "development:evaluation_criteria", "development:target_groups" do
+  puts "Seeding targets"
 
   # Random targets and sessions for every level.
   TargetGroup.all.each do |target_group|
@@ -11,12 +11,12 @@ after 'development:evaluation_criteria', 'development:target_groups' do
         title: Faker::Lorem.sentence,
         role: Target.valid_roles.sample,
         resubmittable: true,
-        visibility: 'live',
+        visibility: "live",
         sort_index: 0,
         checklist: [
           {
             kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            title: 'Write something about your submission',
+            title: "Write something about your submission",
             optional: false
           }
         ]
@@ -30,8 +30,8 @@ after 'development:evaluation_criteria', 'development:target_groups' do
     target_group.targets.create!(
       title: Faker::Lorem.sentence,
       role: Target::ROLE_TEAM,
-      link_to_complete: 'https://www.example.com',
-      visibility: 'live',
+      link_to_complete: "https://www.example.com",
+      visibility: "live",
       sort_index: 1
     )
 
@@ -39,7 +39,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
     target_group.targets.create!(
       title: Faker::Lorem.sentence,
       role: Target::ROLE_TEAM,
-      visibility: 'live',
+      visibility: "live",
       sort_index: 2
     )
 
@@ -48,8 +48,10 @@ after 'development:evaluation_criteria', 'development:target_groups' do
       title: "Quiz: #{Faker::Lorem.sentence}",
       role: Target.valid_roles.sample,
       resubmittable: false,
-      visibility: 'live',
-      sort_index: 3
+      visibility: "live",
+      sort_index: 3,
+      milestone: true,
+      milestone_number: target_group.level.number + target_group.sort_index
     )
 
     # Create two other targets in archived and draft state.
@@ -57,7 +59,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
       title: Faker::Lorem.sentence,
       role: Target.valid_roles.sample,
       resubmittable: true,
-      visibility: 'archived',
+      visibility: "archived",
       safe_to_change_visibility: true,
       sort_index: 4
     )
@@ -66,7 +68,7 @@ after 'development:evaluation_criteria', 'development:target_groups' do
       title: Faker::Lorem.sentence,
       role: Target.valid_roles.sample,
       resubmittable: true,
-      visibility: 'draft',
+      visibility: "draft",
       safe_to_change_visibility: true,
       sort_index: 5
     )
@@ -76,34 +78,36 @@ after 'development:evaluation_criteria', 'development:target_groups' do
         title: Faker::Lorem.sentence,
         role: Target.valid_roles.sample,
         resubmittable: true,
-        visibility: 'live',
+        visibility: "live",
         sort_index: 6,
         checklist: [
           {
-            'kind': Target::CHECKLIST_KIND_MULTI_CHOICE,
-            'title': 'Do you play cricket?',
-            'optional': false,
-            'metadata': {
-              'choices': %w[Yes No],
-              'allowMultiple': false
+            kind: Target::CHECKLIST_KIND_MULTI_CHOICE,
+            title: "Do you play cricket?",
+            optional: false,
+            metadata: {
+              choices: %w[Yes No],
+              allowMultiple: false
             }
           },
           {
             kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            title: 'Describe your cricketing experience',
+            title: "Describe your cricketing experience",
             optional: false
           },
           {
-            'kind': Target::CHECKLIST_KIND_SHORT_TEXT,
-            'title': 'Are you morning person or night owl?',
-            'optional': false,
-            'metadata': {}
+            kind: Target::CHECKLIST_KIND_SHORT_TEXT,
+            title: "Are you morning person or night owl?",
+            optional: false,
+            metadata: {
+            }
           },
           {
-            'kind': Target::CHECKLIST_KIND_LINK,
-            'title': 'Please, fill your portifolio link',
-            'optional': true,
-            'metadata': {}
+            kind: Target::CHECKLIST_KIND_LINK,
+            title: "Please, fill your portifolio link",
+            optional: true,
+            metadata: {
+            }
           }
         ]
       )

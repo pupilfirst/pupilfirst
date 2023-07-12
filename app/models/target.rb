@@ -10,7 +10,7 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # Target is of a higher level
+  STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # There are more pending submissions than the submission limit for the course
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
@@ -147,6 +147,16 @@ class Target < ApplicationRecord
         "Target and evaluation criterion must belong to same course"
       )
     end
+  end
+
+  validate :milestone_should_have_a_number
+
+  def milestone_should_have_a_number
+    return unless milestone?
+
+    return if milestone_number.present?
+
+    errors.add(:milestone_number, "should be present for milestone targets")
   end
 
   normalize_attribute :slideshow_embed,

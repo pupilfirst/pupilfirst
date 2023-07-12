@@ -451,7 +451,6 @@ en:
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
       create_description: Let's create another course.
       edit_course_details: Edit Course Details
-      empty_courses: You don't have any courses!
       filter:
         input_hint: Or start typing to search by name...
         input_label: Search
@@ -658,6 +657,7 @@ en:
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
+      submission_limit_reached:  "You have %{pending_count} pending submissions and cannot submit more until they are reviewed."
       status:
         completed: Completed
         locked: Locked
@@ -901,7 +901,7 @@ en:
       coach_notes: Coach Notes
       filter_level: Filter by level, assigned coach, or search by name or email address, and more...
       has_notes: Has notes
-      level_distribution_label: Level-wise student distribution
+      student_distribution_milestone: Student Distribution by Milestone Completion
       me: Me
       name_email: Name or Email
       no_notes: Does not have notes
@@ -2806,10 +2806,18 @@ en:
     view: View
   timeline_events:
     show:
-      accepted_on: Reviewed and accepted on %{date}.
-      question_with_number: "Question #%{number}"
-      rejected_on: Reviewed and rejected on %{date}.
-      submitted_on: Submitted on %{date}.
+      submission_from: Submission from
+      submitted_on: Submitted on
+      reviewed_on: Reviewed on
+      status: Status
+      rejected: Rejected
+      accepted: Accepted
+      pending: Pending
+      team: Team
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

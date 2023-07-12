@@ -121,7 +121,7 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
       }
     })
 
-    let submittedSubmissionsCount =
+    let submissionsPendingReviewCount =
       targetCache
       |> Js.Array.filter(ct => ct.submissionStatus == SubmissionPendingReview)
       |> Js.Array.length
@@ -136,9 +136,9 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
         if (
           ct.targetReviewed &&
           Course.progressionLimit(course) != 0 &&
-          submittedSubmissionsCount >= Course.progressionLimit(course)
+          submissionsPendingReviewCount >= Course.progressionLimit(course)
         ) {
-          Locked(SubmissionLimitReached(string_of_int(submittedSubmissionsCount)))
+          Locked(SubmissionLimitReached(string_of_int(submissionsPendingReviewCount)))
         } else if !(ct.prerequisiteTargetIds |> allTargetsAttempted(targetCache)) {
           Locked(PrerequisitesIncomplete)
         } else {
@@ -165,8 +165,7 @@ let lockReasonToString = lockReason =>
   | CourseLocked => tc("course_locked")
   | AccessLocked => tc("access_locked")
   | SubmissionLimitReached(pendingCount) =>
-    "You have " ++
-    pendingCount ++ " pending submissions and cannot submit more until they are reviewed."
+    tc(~variables=[("pending_count", pendingCount)], "submission_limit_reached")
   | PrerequisitesIncomplete => tc("prerequisites_incomplete")
   }
 

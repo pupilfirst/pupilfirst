@@ -2635,7 +2635,8 @@ en:
       assignments:
         title: Assignments
         list_title: Arrange milestone assignments in
-        no_milestones: No milestone targets present in this course.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        milestone_msg: Order of milestone assignments determines the sequence in which the course should be completed.
       authors:
         title: Authors
       calendar_events:

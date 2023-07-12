@@ -6,7 +6,7 @@ sidebar_label: Reviewing Submissions
 
 When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
 
-![Submissions for review](../assets/reviewing_submissions/index_lgssar.png)
+![Submissions for review](../assets/reviewing_submissions/index.png)
 
 If you're directly assigned to some students, then the page will load with the filter set to show only submissions from those assigned students.
 
@@ -16,7 +16,7 @@ This page has three tabs: _All_, _Pending_ and _Reviewed_, with submissions that
 
 Clicking on a submission opens up the submission for review.
 
-![Submission details](../assets/reviewing_submissions/show_xgnrox.png)
+![Submission details](../assets/reviewing_submissions/show.png)
 
 ## Submission Details
 

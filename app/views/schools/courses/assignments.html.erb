@@ -21,11 +21,11 @@
             <% unless @milestones.size < 1 %>
               <div class="flex flex-col target-group__target-reorder relative h-full border-e border-transparent text-gray-600 justify-between items-center">
                 <%= button_to update_milestone_number_school_assignment_path(target, direction: :up, page: @page_no) , method: :patch, title:"Move up", class: "h-full",
-                form_class: "target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index > 0 || !@milestones.first_page?}" do %>
+                form_class: " flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index > 0 || !@milestones.first_page?}" do %>
                   <i class="if i-arrow-up-solid if-fw" ></i>
                 <% end %>
                 <%= button_to update_milestone_number_school_assignment_path(target, direction: :down, page: @page_no), method: :patch, title:"Move down",  class: "h-full",
-                form_class: "target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index < @milestones.size - 1 || !@milestones.last_page?}" do %>
+                form_class: "flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index < @milestones.size - 1 || !@milestones.last_page?}" do %>
                   <i  class="if i-arrow-down-solid if-fw" ></i>
                 <% end %>
               </div>

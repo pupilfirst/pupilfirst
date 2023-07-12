@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe Schools::MilestoneSortService do
-  subject { described_class.new(target_1, "down") }
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let(:level_1) { create :level, :one, course: course }
@@ -22,13 +21,32 @@ describe Schools::MilestoneSortService do
   end
 
   describe "#execute" do
-    it "swaps milestone numbers of two targets based on the target and direction passed" do
-      expect { subject.execute }.to change {
+    it "swaps specified target down" do
+      expect { described_class.new(target_1, "down").execute }.to change {
         target_1.reload.milestone_number
       }.from(1).to(2)
-      .and change {
-       target_2.reload.milestone_number 
-      }.from(4).to(1)
+      .and change { target_2.reload.milestone_number }.from(4).to(1)
+    end
+
+    it "swaps specified target up" do
+      expect { described_class.new(target_2, "up").execute }.to change {
+        target_1.reload.milestone_number
+      }.from(1).to(2)
+      .and change { target_2.reload.milestone_number }.from(4).to(1)
+    end
+
+    it "does not swap target up" do
+      expect { described_class.new(target_1, "up").execute }.not_to change {
+        target_1.reload.milestone_number
+      }.from(1)
+      expect(target_2.reload.milestone_number).to eq(4)
+    end
+
+    it "does not swap target down" do
+      expect { described_class.new(target_2, "down").execute }.not_to change {
+        target_2.reload.milestone_number
+      }.from(4)
+      expect(target_1.reload.milestone_number).to eq(1)
     end
   end
 end

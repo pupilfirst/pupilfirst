@@ -6,21 +6,25 @@ module Schools
     end
 
     def execute
-      index = milestones.index(target)
+      milestone_ids = milestones.pluck(:id)
 
-      if (index < 1 && should_move_up) ||
-           (index >= milestones.size - 1 && !should_move_up)
-        return
-      end
+      index = milestone_ids.index(target.id.to_i)
+      index_2 = index + (should_move_up ? -1 : 1)
 
-      target_2 = milestones[should_move_up ? index - 1 : index + 1]
+      return if (index_2 < 0 || index_2 > milestones.size - 1)
+
+      milestone_ids[index], milestone_ids[index_2] =
+        milestone_ids[index_2],
+        milestone_ids[index]
 
       Target.transaction do
-        number = target.milestone_number
-        target.update!(milestone_number: target_2.milestone_number)
-        target_2.update!(milestone_number: number)
+        milestones.each do |milestone|
+          new_index = milestone_ids.index(milestone.id.to_i) + 1
+          unless milestone.milestone_number == new_index
+            milestone.update!(milestone_number: new_index)
+          end
+        end
       end
-      reassign_milestone_numbers
     end
 
     private
@@ -32,19 +36,6 @@ module Schools
 
     def should_move_up
       @direction == "up"
-    end
-
-    def reassign_milestone_numbers
-      target
-        .course
-        .targets
-        .milestones
-        .order(milestone_number: :asc)
-        .each_with_index do |milestone, index|
-          unless milestone.milestone_number == index + 1
-            milestone.update!(milestone_number: index + 1)
-          end
-        end
     end
 
     attr_reader :target

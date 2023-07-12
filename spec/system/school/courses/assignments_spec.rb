@@ -16,7 +16,7 @@ feature "Assignments", js: true do
                    referrer: assignments_school_course_path(course)
 
       expect(page).to have_content(
-        "No milestone targets present in this course."
+        "No milestones found in this course. Create milestones by visiting curriculum page."
       )
     end
   end
@@ -44,14 +44,22 @@ feature "Assignments", js: true do
       expect(page).to have_text(target_1.title)
       expect(page).to have_text(target_2.title)
 
-      # Test down button.
-      find_all("button[type='submit']").first.click
+      # Move second target up.
+      find('button[title="Move up"]').click
+
+      within("div .target-group__target-container:last-child") do
+        expect(page).to have_text(target_1.title)
+      end
 
       expect(target_1.reload.milestone_number).to eq(2)
       expect(target_2.reload.milestone_number).to eq(1)
 
-      # Test up button.
-      find_all("button[type='submit']").last.click
+      # Move first target down.
+      find('button[title="Move down"]').click
+
+      within("div .target-group__target-container:last-child") do
+        expect(page).to have_text(target_2.title)
+      end
 
       expect(target_1.reload.milestone_number).to eq(1)
       expect(target_2.reload.milestone_number).to eq(2)

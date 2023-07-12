@@ -7,7 +7,7 @@
     <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
       <% if @organisation %>
         <div class="mt-4 overflow-x-auto">
-          <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
+          <%= render 'shared/breadcrumbs', crumbs: [[t('.my_org'), "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
         </div>
       <% end %>
       <h1 class="text-xl md:text-3xl font-bold mt-4">
@@ -15,8 +15,8 @@
       </h1>
       <p class="text-sm font-medium"><%= @cohort.course.name %></p>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('cohorts.shared.overview_link') %></p>
-        <%= link_to t('cohorts.shared.students_link'), send(students_path, *args), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('.overview_link') %></p>
+        <%= link_to t('.students_link'), send(students_path, *args), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
       </div>
     </div>
   </section>
@@ -45,7 +45,7 @@
       <% if (total_students_count > 0 or milestone_completion_status.present?) && (@presenter.milestone_targets.present?) %>
         <div class="p-4 bg-gray-50 rounded-lg mt-8">
           <div class="max-w-5xl mx-auto">
-            <h3 class="text-xs font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
+            <h3 class="text-xs font-semibold"><%= t('.student_distribution_milestone') %></h3>
             <div class="mt-4">
               <div class="grid gap-x-8 gap-y-6">
                 <% @presenter.milestone_targets.each do |target| %>
@@ -73,8 +73,8 @@
     </section>
   <% else %>
     <div class="max-w-5xl mx-auto text-center justify-center items-center text-sm italic mt-4 pt-4">
-      <%= 'There are no students in this cohort.' if total_students_count == 0 %>
-      <%= 'There are no milestone targets.' if @presenter.milestone_targets.empty? %>
+      <%= t('.no_students') if total_students_count == 0 %>
+      <%= t('.no_milestone_targets') if @presenter.milestone_targets.empty? %>
     </div>
   <% end %>
 </div>

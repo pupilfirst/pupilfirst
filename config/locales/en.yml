@@ -2714,6 +2714,16 @@ en:
     caption_image: A caption for the image
     close: Close
     coaches: Coaches
+    cohort_overview:
+      my_org: My Org
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      students_completed: Students Completed
+      student_distribution_milestone: Student Distribution by Milestone Completion
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
     cohorts: Cohorts
     community: Community
     completed: Completed

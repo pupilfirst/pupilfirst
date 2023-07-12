@@ -173,6 +173,12 @@ class Target < ApplicationRecord
     end
   end
 
+  def title_with_milestone
+    return title unless milestone?
+
+    "M#{milestone_number} - #{title}"
+  end
+
   def founder_role?
     ActiveSupport::Deprecation.warn("Use `individual_target?` instead")
     role == Target::ROLE_STUDENT

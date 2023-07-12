@@ -156,7 +156,7 @@ class Target < ApplicationRecord
 
     return if milestone_number.present?
 
-    errors.add(:milestone_number, "should be present for milestone targets")
+    errors.add(:milestone_number, "must be present for milestone targets")
   end
 
   normalize_attribute :slideshow_embed,

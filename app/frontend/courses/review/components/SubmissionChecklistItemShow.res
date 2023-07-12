@@ -127,11 +127,11 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>
-    <div className="text-sm font-medium justify-between ">
+    <div className="text-sm font-medium">
       <div className="flex items-start space-x-2">
         <div className="flex items-start w-full gap-3">
           <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
-          <div className="overflow-x-scroll">
+          <div className="overflow-x-auto">
             <MarkdownBlock
               profile=Markdown.Permissive
               markdown={ChecklistItem.title(checklistItem)}

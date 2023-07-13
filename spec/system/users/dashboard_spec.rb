@@ -232,10 +232,7 @@ feature "User Dashboard", js: true do
       "Review Submissions",
       href: review_course_path(course_1)
     )
-    expect(page).to have_link(
-      "My Students",
-      href: cohorts_course_path(course_1)
-    )
+    expect(page).to have_link("My Cohorts", href: cohorts_course_path(course_1))
 
     expect(page).not_to have_text(course_2.name)
     expect(page).not_to have_text(course_3.name)
@@ -263,10 +260,7 @@ feature "User Dashboard", js: true do
       "Review Submissions",
       href: review_course_path(course_2)
     )
-    expect(page).to have_link(
-      "My Students",
-      href: cohorts_course_path(course_2)
-    )
+    expect(page).to have_link("My Cohorts", href: cohorts_course_path(course_2))
 
     expect(page).not_to have_text(course_1.name)
     expect(page).not_to have_text(course_3.name)

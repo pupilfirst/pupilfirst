@@ -70,15 +70,16 @@ class CoursesController < ApplicationController
     @course = authorize(find_course)
     render html: "", layout: "app_router"
   rescue Pundit::NotAuthorizedError
-    redirect_to curriculum_course_path(params[:id]) if current_coach.present?
+    handle_coach_routing_error
   end
 
   # GET /courses/:id/cohorts
   def cohorts
-    @course = authorize(find_course)
+    @course = find_course
+    authorize(@course)
     render layout: "student_course_v2"
   rescue Pundit::NotAuthorizedError
-    redirect_to curriculum_course_path(params[:id]) if current_coach.present?
+    handle_routing_error
   end
 
   # GET /courses/:id/report
@@ -129,6 +130,15 @@ class CoursesController < ApplicationController
 
     if params[:tag].in?(current_school.founder_tag_list)
       session[:applicant_tag] = params[:tag]
+    end
+  end
+
+  # This method is to handle when a coach visits a course whey they are not a coach from a courses/cohorts where they are coach
+  def handle_coach_routing_error
+    if current_coach.present?
+      redirect_to curriculum_course_path(params[:id])
+    else
+      raise_not_found
     end
   end
 end

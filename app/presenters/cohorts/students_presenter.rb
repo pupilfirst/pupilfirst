@@ -1,8 +1,8 @@
 module Cohorts
   class StudentsPresenter < ApplicationPresenter
-    def initialize(view_context, source, cohort)
-      @organisation = source if source.is_a?(Organisation)
-      @course = source.is_a?(Course) ? source : cohort.course
+    def initialize(view_context, cohort, organisation: nil)
+      @organisation = organisation
+      @course = cohort.course
       @cohort = cohort
       super(view_context)
     end

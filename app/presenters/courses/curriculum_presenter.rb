@@ -77,7 +77,8 @@ module Courses
       {
         name: current_student.name,
         level_id: level_id_for_student,
-        ends_at: current_student.cohort.ends_at
+        ends_at: current_student.cohort.ends_at,
+        completed_at: current_student.completed_at
       }
     end
 

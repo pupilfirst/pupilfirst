@@ -16,7 +16,8 @@ describe TimelineEvents::WasLastTargetService do
            :with_evaluation_criterion,
            role: Target::ROLE_STUDENT,
            target_group: target_group,
-           milestone: true
+           milestone: true,
+           milestone_number: 1
   end
 
   let(:target_2) do
@@ -24,7 +25,8 @@ describe TimelineEvents::WasLastTargetService do
            :with_evaluation_criterion,
            role: Target::ROLE_TEAM,
            target_group: target_group,
-           milestone: true
+           milestone: true,
+           milestone_number: 2
   end
 
   let(:target_3) do

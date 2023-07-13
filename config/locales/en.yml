@@ -567,27 +567,13 @@ en:
       smth_went_wrong: Something went wrong!
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
-    CoursesCurriculum__LevelUpButton:
-      button_text_level_up: Level Up
-      button_text_saving: Saving
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
-      course_complete_title: Congratulations! You have completed all milestone targets in the final level.
+      course_complete_title: Congratulations! You have completed all milestone targets in the course.
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
-      level_up_blocked:
-        body_middle_pending_review: "are still pending review by a coach. "
-        body_middle_rejected: "have been rejected. "
-        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
-        body_suffix: You need a passing grade on all milestone targets to level up.
-        title_pending_review: Pending Review
-        title_rejected: Level Up Blocked
-      level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
-      level_up_limited_description: You're at Level %{currentLevel}, but have targets in Level %{minimumRequiredLevel} that have been rejected, or are still pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up.
-      level_up_limited_title: Level Up Blocked
-      level_up_title: Ready to Level Up!
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
       team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.

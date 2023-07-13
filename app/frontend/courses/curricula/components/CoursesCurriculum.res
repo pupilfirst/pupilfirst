@@ -149,6 +149,8 @@ let computeNotice = (course, student, preview) =>
     CourseEnded
   } else if Student.accessEnded(student) {
     AccessEnded
+  } else if Belt.Option.isSome(Student.completedAt(student)) {
+    CourseComplete
   } else {
     Nothing
   }

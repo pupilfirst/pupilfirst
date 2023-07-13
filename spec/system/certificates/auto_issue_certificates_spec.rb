@@ -30,14 +30,16 @@ feature "Automatic issuance of certificates", js: true do
            :with_markdown,
            :team,
            target_group: target_group_l1,
-           milestone: true
+           milestone: true,
+           milestone_number: 1
   end
   let!(:target_l2) do
     create :target,
            :with_markdown,
            :team,
            target_group: target_group_l2,
-           milestone: true
+           milestone: true,
+           milestone_number: 2
   end
 
   before do
@@ -119,7 +121,8 @@ feature "Automatic issuance of certificates", js: true do
                :team,
                target_group: target_group_l2,
                title: "foo",
-               milestone: true
+               milestone: true,
+               milestone_number: 3
       end
 
       scenario "student completed final milestone target" do
@@ -150,7 +153,8 @@ feature "Automatic issuance of certificates", js: true do
                :team,
                target_group: target_group_l2,
                link_to_complete: "https://www.example.com",
-               milestone: true
+               milestone: true,
+               milestone_number: 3
       end
 
       scenario "student completed second and final milestone target" do
@@ -177,7 +181,8 @@ feature "Automatic issuance of certificates", js: true do
                :with_markdown,
                :team,
                target_group: target_group_l2,
-               milestone: true
+               milestone: true,
+               milestone_number: 3
       end
       let!(:quiz) do
         create :quiz, :with_question_and_answers, target: target_l2_2
@@ -213,7 +218,8 @@ feature "Automatic issuance of certificates", js: true do
                :with_default_checklist,
                :team,
                target_group: target_group_l2,
-               milestone: true
+               milestone: true,
+               milestone_number: 3
       end
 
       scenario "student completed second and final milestone target" do
@@ -247,7 +253,8 @@ feature "Automatic issuance of certificates", js: true do
                :team,
                target_group: target_group_l2,
                evaluation_criteria: [evaluation_criterion],
-               milestone: true
+               milestone: true,
+               milestone_number: 3
       end
       let(:coach) { create :faculty, user: student_1.user }
 
@@ -308,7 +315,8 @@ feature "Automatic issuance of certificates", js: true do
              :with_markdown,
              :student,
              target_group: target_group_l2,
-             milestone: true
+             milestone: true,
+             milestone_number: 2
     end
 
     scenario "each student completes the last target" do
@@ -328,6 +336,12 @@ feature "Automatic issuance of certificates", js: true do
       click_button "Mark As Complete"
 
       expect(page).to have_text("Target has been marked as complete")
+
+      visit curriculum_course_path(course)
+
+      expect(page).to have_text(
+        "Congratulations! You have completed all milestone targets in the course."
+      )
 
       # Both students get certificate when the last student in team completes the target.
       expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
@@ -392,7 +406,8 @@ feature "Automatic issuance of certificates", js: true do
              :team,
              target_group: target_group_l2,
              evaluation_criteria: [evaluation_criterion],
-             milestone: true
+             milestone: true,
+             milestone_number: 2
     end
     let(:coach) { create :faculty }
 

@@ -1,37 +1,35 @@
 ---
-id: student_reports
-title: Student Reports
-sidebar_label: Student Reports
+id: cohort_reports
+title: Cohort Reports
+sidebar_label: Cohort Reports
 ---
 
-Coaches have access to a _Students_ tab that lists all active students in the course.
+Coaches have access to a _Cohorts_ tab that lists all active and inactive cohorts in the course that the coach has access to.
 
-![Coach's list of students](../assets/student_reports/students_page_nwqxia.png)
+![Coach's list of students](../assets/cohort_reports/cohorts_page.png)
 
 If you have more than a handful of students, keeping track of them - how far they've progressed in the course, how well they're doing, and what issues they've had during their time - can be daunting. Pupilfirst sets up a few simple interfaces to make these checks easier.
 
-At the top of the page is the student distribution bar, which shows a split of how students in the course are currently spread within the course's levels.
+Coaches can track the progress of the student cohort wise by visiting the link to a particular cohort in the page above.
 
-Below that is the filter input, followed by the students list. Coaches can search for a student by their name, or their team's name, and filter by the course level.
+![A cohort's report](../assets/cohort_reports/cohorts_show.png)
 
-In addition to this, if [coaches are directly assigned to students](/users/coaches#assigning-coaches-to-students-and-teams), then additional filters are available on the page to display students assigned to specific coaches. Choosing to filter by a coach will also update the student distribution bar, showing counts that apply to the selected coach.
+The _Overview_ tab shows the overall course progress statistics for the cohort. This includes the total students, the number of students who have completed the course, and the student wise distribution of milestones completed.
 
-### Use levels as a rough indicator of progress
+![A cohort's students page](../assets/cohort_reports/cohorts_students.png)
 
-Given that courses are intended to contain many _levels_ of content, with students moving up through the levels as they complete targets, it's safe to use the level number as a rough indicator for the progress of a student.
-
-However, some levels may be more difficult or time-consuming than others, so you'll need to account for the different _weightage_, depending on the nature and content of your course.
+The _Students_ tab shows the list of students in the cohort, and you can filter this list by the student's name, email, milestone completion status, milestone pending status and course completion status.
 
 ## Detailed report
 
 To get a detailed look at a student's progress, you can click on an entry to open up a report for that student.
 
-![A student's report](../assets/student_reports/student_report_sv4bhj.png)
+![A student's report](../assets/cohort_reports/cohorts_student_report.png)
 
 The left sidebar shows all available details about the student. Top to bottom, these are:
 
 1. Personal details, supplied by the student.
-2. Their progress in the course's levels. A **green** bar indicates that the student has passed all milestone targets in that level.
+2. Their status of milestones in the course.
 3. The total targets they've completed, and their average score in your quizzes.
 4. The average grades that they received for reviewed submissions, grouped by each of the evaluation criteria that you've set up.
 5. Their team members, if any.

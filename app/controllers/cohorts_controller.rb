@@ -6,7 +6,7 @@ class CohortsController < ApplicationController
   def show
     @cohort = authorize current_school.cohorts.find(params[:id])
     @course = @cohort.course
-    @presenter = Cohorts::StudentsPresenter.new(view_context, @course, @cohort)
+    @presenter = Cohorts::StudentsPresenter.new(view_context, @cohort)
   end
 
   # GET /cohorts/:id/students

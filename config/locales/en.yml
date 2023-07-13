@@ -2715,7 +2715,6 @@ en:
     close: Close
     coaches: Coaches
     cohort_overview:
-      my_org: My Org
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.
       overview_link: Overview
@@ -2755,6 +2754,7 @@ en:
     load_more: Load More...
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    my_org: My Org
     name: Name
     name_email: Name or Email
     no_email_found: Could not find user with this email. Please check the email that you entered.
@@ -2798,6 +2798,9 @@ en:
     search: Search
     settings: Settings
     sign_out: Sign Out
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: Students
     sort_by: Sort by
     tag: Tag

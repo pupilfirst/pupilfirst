@@ -7,7 +7,7 @@
     <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
       <% if @organisation %>
         <div class="mt-4 overflow-x-auto">
-          <%= render 'shared/breadcrumbs', crumbs: [[t('.my_org'), "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
+          <%= render 'shared/breadcrumbs', crumbs: [[t('shared.my_org'), "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
         </div>
       <% end %>
       <h1 class="text-xl md:text-3xl font-bold mt-4">

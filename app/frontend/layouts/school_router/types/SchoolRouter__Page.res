@@ -57,7 +57,7 @@ let isSPA = t => {
     | Authors
     | Certificates
     | Calendars
-    | Applicants => false
+    | Applicants
     | Assignments => false
     }
 

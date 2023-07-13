@@ -96,6 +96,7 @@ let make = (~school, ~courses, ~currentUser) => {
         | list{"authors", _authorId} => (Authors, None)
         | list{"certificates"} => (Certificates, None)
         | list{"evaluation_criteria"} => (EvaluationCriteria, None)
+        | list{"assignments"} => (Assignments, None)
         | _ =>
           Rollbar.critical(
             "Unknown path encountered by school router: " ++

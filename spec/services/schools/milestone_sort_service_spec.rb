@@ -19,6 +19,13 @@ describe Schools::MilestoneSortService do
            milestone: true,
            milestone_number: 4
   end
+  let!(:archived_target) do
+    create :target,
+           :student,
+           target_group: target_group,
+           archived: true,
+           milestone_number: 3
+  end
 
   describe "#execute" do
     it "swaps specified target down" do
@@ -26,6 +33,7 @@ describe Schools::MilestoneSortService do
         target_1.reload.milestone_number
       }.from(1).to(2)
       .and change { target_2.reload.milestone_number }.from(4).to(1)
+      expect(archived_target.reload.milestone_number).to eq(3)
     end
 
     it "swaps specified target up" do
@@ -47,6 +55,15 @@ describe Schools::MilestoneSortService do
         target_2.reload.milestone_number
       }.from(4)
       expect(target_1.reload.milestone_number).to eq(1)
+    end
+
+    it "does not swap target, when target is not milestone" do
+      expect {
+        described_class.new(archived_target, "up").execute
+      }.not_to change { archived_target.reload.milestone_number }.from(3)
+
+      expect(target_1.reload.milestone_number).to eq(1)
+      expect(target_2.reload.milestone_number).to eq(4)
     end
   end
 end

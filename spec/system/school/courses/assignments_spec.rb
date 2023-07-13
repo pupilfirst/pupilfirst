@@ -76,12 +76,21 @@ feature "Assignments", js: true do
       expect(page).to have_text(target_1.title)
     end
 
-    scenario "course author visit assignments page" do
+    scenario "course author visit assignments page and changes order" do
       sign_in_user course_author.user,
                    referrer: assignments_school_course_path(course)
 
       expect(page).to have_text(target_1.title)
       expect(page).to have_text(target_2.title)
+
+      find('button[title="Move up"]').click
+
+      within("div .target-group__target-container:last-child") do
+        expect(page).to have_text(target_1.title)
+      end
+
+      expect(target_1.reload.milestone_number).to eq(2)
+      expect(target_2.reload.milestone_number).to eq(1)
     end
   end
 end

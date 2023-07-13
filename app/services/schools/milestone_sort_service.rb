@@ -6,6 +6,8 @@ module Schools
     end
 
     def execute
+      return unless target.milestone
+
       milestone_ids = milestones.pluck(:id)
 
       index = milestone_ids.index(target.id.to_i)

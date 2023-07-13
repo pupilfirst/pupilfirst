@@ -11,30 +11,25 @@ module Cohorts
       @filter ||=
         begin
           milestone_targets_data =
-            milestone_targets.pluck(:id, :milestone_number, :title)
+            milestone_targets
+              .pluck(:id, :milestone_number, :title)
+              .map { |id, number, title| "#{id};M#{number}: #{title}" }
 
           {
-            id:
-              "#{@organisation ? "organisation" : "course"}-cohort-students-filter",
+            id: "cohort-students-filter",
             filters: [
               {
                 key: "milestone_completed",
                 label: "Milestone Completed",
                 filterType: "MultiSelect",
-                values:
-                  milestone_targets_data.map do |id, number, title|
-                    "#{id};M#{number}: #{title}"
-                  end,
+                values: milestone_targets_data,
                 color: "blue"
               },
               {
                 key: "milestone_pending",
                 label: "Milestone Pending",
                 filterType: "MultiSelect",
-                values:
-                  milestone_targets_data.map do |id, number, title|
-                    "#{id};M#{number}: #{title}"
-                  end,
+                values: milestone_targets_data,
                 color: "orange"
               },
               {

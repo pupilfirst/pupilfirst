@@ -6,6 +6,7 @@ module.exports = {
       "students",
       "coaches",
       "curriculum_editor",
+      "assignments",
       "targets",
       "evaluation_criteria",
       "communities",

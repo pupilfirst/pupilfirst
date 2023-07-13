@@ -78,8 +78,14 @@ module Cohorts
 
     def filters_in_url
       params
-        .slice(:name, :email, :milestone, :course)
-        .permit(:name, :email, :milestone, :course)
+        .slice(:name, :email, :milestone_completed, :milestone_pending, :course)
+        .permit(
+          :name,
+          :email,
+          :milestone_completed,
+          :milestone_pending,
+          :course
+        )
         .compact
     end
 

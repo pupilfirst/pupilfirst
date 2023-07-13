@@ -69,12 +69,16 @@ class CoursesController < ApplicationController
   def review
     @course = authorize(find_course)
     render html: "", layout: "app_router"
+  rescue Pundit::NotAuthorizedError
+    redirect_to curriculum_course_path(params[:id]) if current_coach.present?
   end
 
   # GET /courses/:id/cohorts
   def cohorts
     @course = authorize(find_course)
     render layout: "student_course_v2"
+  rescue Pundit::NotAuthorizedError
+    redirect_to curriculum_course_path(params[:id]) if current_coach.present?
   end
 
   # GET /courses/:id/report

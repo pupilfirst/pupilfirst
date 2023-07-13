@@ -54,7 +54,7 @@ module Users
                 )
               )
               .distinct
-              .order(:name)
+
           else
             current_school
               .courses
@@ -66,8 +66,9 @@ module Users
                       courses_with_review_access + courses_with_author_access
                   ).uniq
               )
-              .order(:name)
+
           end.with_attached_thumbnail
+          .order(:name)
         end
     end
 

@@ -8,6 +8,7 @@ class CoursesResolver < ApplicationQuery
     else
       applicable_courses
     end
+    .order(:name)
   end
 
   def allow_token_auth?

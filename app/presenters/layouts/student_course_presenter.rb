@@ -18,10 +18,10 @@ module Layouts
 
     def courses
       if current_user.blank?
-        current_school.courses.live.where(public_preview: true).order(:name)
+        current_school.courses.live.where(public_preview: true)
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live.order(:name)
+        current_school.courses.live
       else
         # Courses where user is an author...
         courses_as_course_author =
@@ -29,14 +29,15 @@ module Layouts
             Course
               .joins(:course_authors)
               .where(course_authors: current_user.course_authors)
-              .order(:name)
+
           else
             []
           end
 
+
         # ...plus courses where user is a coach...
         courses_as_coach =
-          current_coach.present? ? current_coach.courses.order(:name) : []
+          current_coach.present? ? current_coach.courses : []
 
         # ...plus courses where user is a student...
         courses_as_student =
@@ -48,7 +49,7 @@ module Layouts
                 id: current_user.founders.select(:id)
               }
             )
-            .order(:name)
+
 
         # ...plus the current course if course has public preview.
         previewed_course = @course.public_preview? ? [@course] : []
@@ -57,7 +58,7 @@ module Layouts
           courses_as_course_author + courses_as_coach + courses_as_student +
             previewed_course
         ).uniq
-      end.as_json(only: %i[name id ends_at])
+      end.order(:name).as_json(only: %i[name id ends_at])
     end
 
     def additional_links

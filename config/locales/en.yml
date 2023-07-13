@@ -2724,6 +2724,9 @@ en:
       students_link: Students
       total_students: Total Students
       view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: Cohorts
     community: Community
     completed: Completed

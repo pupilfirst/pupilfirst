@@ -15,8 +15,8 @@
       </h1>
       <p class="text-sm font-medium"><%= @cohort.course.name %></p>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <%= link_to t('cohorts.shared.overview_link'), send(overview_path, args), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
-        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('cohorts.shared.students_link') %></p>
+        <%= link_to t('shared.cohort_overview.overview_link'), send(overview_path, args), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('shared.cohort_overview.students_link') %></p>
       </div>
     </div>
   </section>
@@ -35,11 +35,11 @@
       </div>
       <% if @presenter.students.total_pages > 1 %>
         <div class="text-center text-sm italic mt-4">
-          <%= t('.pagination_notice', page_start: kaminari_page_start(@presenter.students), page_end: kaminari_page_end(@presenter.students), count: @presenter.students.total_count) %>
+          <%= t('shared.cohort_students.pagination_notice', page_start: kaminari_page_start(@presenter.students), page_end: kaminari_page_end(@presenter.students), count: @presenter.students.total_count) %>
         </div>
       <% end %>
       <% if @presenter.students.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show') %></div>
+        <div class="text-center text-sm italic mt-4"><%= t('shared.cohort_students.nothing_to_show') %></div>
       <% end %>
     </div>
   </section>

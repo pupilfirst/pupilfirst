@@ -99,12 +99,23 @@ module Layouts
     def course_link(course)
       return if course.nil?
 
+      has_access =
+        current_coach.present? && current_coach.courses.exists?(course.id)
+
       url =
         case view.request.path.split("/")[3]
         when "review"
-          view.review_course_path(course)
+          if has_access
+            view.review_course_path(course)
+          else
+            view.curriculum_course_path(course)
+          end
         when "cohorts"
-          view.cohorts_course_path(course)
+          if has_access
+            view.cohorts_course_path(course)
+          else
+            view.curriculum_course_path(course)
+          end
         when "calendar"
           view.calendar_course_path(course)
         else

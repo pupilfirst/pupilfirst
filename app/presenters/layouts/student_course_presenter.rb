@@ -52,7 +52,7 @@ module Layouts
           courses_as_course_author + courses_as_coach + courses_as_student +
             previewed_course
         ).uniq
-      end.order(:name).as_json(only: %i[name id ends_at])
+      end.as_json(only: %i[name id ends_at]).sort_by { |course| course["name"] }
     end
 
     def additional_links

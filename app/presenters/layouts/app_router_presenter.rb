@@ -49,10 +49,10 @@ module Layouts
 
     def courses
       if current_user.blank?
-        current_school.courses.live.where(public_preview: true)
+        current_school.courses.live.where(public_preview: true).order(:name)
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live
+        current_school.courses.live.order(:name)
       else
         # current course if course has public preview.
         previewed_course = @course&.public_preview? ? [@course] : []
@@ -60,8 +60,8 @@ module Layouts
         (
           courses_with_author_access + courses_with_review_access +
             courses_with_student_profile + previewed_course
-        ).uniq
-      end.order(:name)
+        ).uniq.sort_by { |course| course.name }
+      end
     end
 
     def courses_with_student_profile

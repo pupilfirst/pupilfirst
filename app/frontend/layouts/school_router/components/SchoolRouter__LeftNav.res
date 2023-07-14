@@ -176,12 +176,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                           <span className="inline-block"> {str(Course.name(course))} </span>
                         </a>
                       </li>,
-                    Js.Array.filter(
-                      course => !Course.ended(course),
-                      courses,
-                    ) |> ArrayUtils.copyAndSort((c1, c2) =>
-                      String.compare(c1 |> Course.name, c2 |> Course.name)
-                    ),
+                    Js.Array.filter(course => !Course.ended(course), courses),
                   )->React.array}
                 </ul>,
                 Page.shrunk(selectedPage),

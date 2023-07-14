@@ -54,21 +54,15 @@ module Users
                 )
               )
               .distinct
-
           else
-            current_school
-              .courses
-              .live
-              .where(
-                id:
-                  (
-                    courses_with_student_profile.pluck(:course_id) +
-                      courses_with_review_access + courses_with_author_access
-                  ).uniq
-              )
-
-          end.with_attached_thumbnail
-          .order(:name)
+            current_school.courses.live.where(
+              id:
+                (
+                  courses_with_student_profile.pluck(:course_id) +
+                    courses_with_review_access + courses_with_author_access
+                ).uniq
+            )
+          end.with_attached_thumbnail.order(:name)
         end
     end
 

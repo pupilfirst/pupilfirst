@@ -38,8 +38,9 @@ module Layouts
         is_author: author?
       }
       if current_user.avatar.attached?
-        user[:avatar_url] =
-          view.rails_public_blob_url(current_user.avatar_variant(:thumb))
+        user[:avatar_url] = view.rails_public_blob_url(
+          current_user.avatar_variant(:thumb)
+        )
       end
 
       user[:coach_id] = current_coach.id if current_coach.present?
@@ -60,7 +61,7 @@ module Layouts
           courses_with_author_access + courses_with_review_access +
             courses_with_student_profile + previewed_course
         ).uniq
-      end
+      end.order(:name)
     end
 
     def courses_with_student_profile
@@ -89,9 +90,9 @@ module Layouts
 
     def courses_with_author_access
       if current_user.course_authors.present?
-        Course
-          .joins(:course_authors)
-          .where(course_authors: current_user.course_authors)
+        Course.joins(:course_authors).where(
+          course_authors: current_user.course_authors
+        )
       else
         Course.none
       end
@@ -185,14 +186,14 @@ module Layouts
       if current_school.present? && view.policy(current_school).show?
         [
           {
-            title: I18n.t('presenters.layouts.app_router.admin_link.title'),
+            title: I18n.t("presenters.layouts.app_router.admin_link.title"),
             url: view.school_path
           }
         ]
       elsif current_user.present? && course_authors.any?
         [
           {
-            title: I18n.t('presenters.layouts.app_router.admin_link.title'),
+            title: I18n.t("presenters.layouts.app_router.admin_link.title"),
             url: view.curriculum_school_course_path(course_authors.first.course)
           }
         ]
@@ -205,8 +206,8 @@ module Layouts
       if current_user.present?
         [
           {
-            title: I18n.t('presenters.layouts.app_router.dashboard_link.title'),
-            url: '/dashboard'
+            title: I18n.t("presenters.layouts.app_router.dashboard_link.title"),
+            url: "/dashboard"
           }
         ]
       else
@@ -223,8 +224,8 @@ module Layouts
       if current_school.users.joins(:faculty).exists?(faculty: { public: true })
         [
           {
-            title: I18n.t('presenters.layouts.app_router.coaches_link.title'),
-            url: '/coaches'
+            title: I18n.t("presenters.layouts.app_router.coaches_link.title"),
+            url: "/coaches"
           }
         ]
       else
@@ -234,7 +235,7 @@ module Layouts
 
     def school_name
       @school_name ||=
-        current_school.present? ? current_school.name : 'Pupilfirst'
+        current_school.present? ? current_school.name : "Pupilfirst"
     end
 
     def logo_url
@@ -251,9 +252,9 @@ module Layouts
 
     def icon_url
       if current_school.icon.attached?
-        view.rails_public_blob_url(current_school.icon_variant('thumb'))
+        view.rails_public_blob_url(current_school.icon_variant("thumb"))
       else
-        '/favicon.png'
+        "/favicon.png"
       end
     end
   end

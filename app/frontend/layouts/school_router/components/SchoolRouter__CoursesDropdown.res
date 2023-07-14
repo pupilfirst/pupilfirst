@@ -33,7 +33,7 @@ let contents = (courses, currentCourse) =>
         currentCourse->Belt.Option.mapWithDefault(true, c => Course.id(course) != Course.id(c)) &&
           !Course.ended(course),
       courses,
-    ) |> ArrayUtils.copyAndSort((c1, c2) => String.compare(c1 |> Course.name, c2 |> Course.name)),
+    ),
   )
 
 @react.component

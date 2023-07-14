@@ -26,30 +26,24 @@ module Layouts
         # Courses where user is an author...
         courses_as_course_author =
           if current_user.course_authors.present?
-            Course
-              .joins(:course_authors)
-              .where(course_authors: current_user.course_authors)
-
+            Course.joins(:course_authors).where(
+              course_authors: current_user.course_authors
+            )
           else
             []
           end
 
-
         # ...plus courses where user is a coach...
-        courses_as_coach =
-          current_coach.present? ? current_coach.courses : []
+        courses_as_coach = current_coach.present? ? current_coach.courses : []
 
         # ...plus courses where user is a student...
         courses_as_student =
-          Course
-            .joins(:founders)
-            .where(
-              school: current_school,
-              founders: {
-                id: current_user.founders.select(:id)
-              }
-            )
-
+          Course.joins(:founders).where(
+            school: current_school,
+            founders: {
+              id: current_user.founders.select(:id)
+            }
+          )
 
         # ...plus the current course if course has public preview.
         previewed_course = @course.public_preview? ? [@course] : []

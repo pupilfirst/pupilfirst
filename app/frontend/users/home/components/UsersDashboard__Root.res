@@ -55,7 +55,8 @@ let navSection = (view, setView, communities, issuedCertificates) =>
         ariaSelected={view == ShowCourses}
         className={navButtonClasses(view == ShowCourses)}
         onClick={_ => setView(_ => ShowCourses)}>
-        <i className="fas fa-book text-xs md:text-sm me-2" /> <span> {t("my_courses")->str} </span>
+        <i className="fas fa-book text-xs md:text-sm me-2" />
+        <span> {t("my_courses")->str} </span>
       </button>
       {ReactUtils.nullUnless(
         <button
@@ -94,7 +95,9 @@ let ctaButton = (title, href) =>
   <a
     href
     className="w-full bg-primary-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-primary-100 focus:outline-none focus:bg-primary-100">
-    <span> <i className="fas fa-book" /> <span className="ms-2"> {title->str} </span> </span>
+    <span>
+      <i className="fas fa-book" /> <span className="ms-2"> {title->str} </span>
+    </span>
     <i className="fas fa-arrow-right rtl:rotate-180" />
   </a>
 

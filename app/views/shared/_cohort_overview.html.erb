@@ -1,7 +1,3 @@
-<%
-  students_path = @organisation ? :students_organisation_cohort_path : :students_cohort_path
-  args = @organisation ? [@organisation, @cohort] : [@cohort]
-%>
 <div class="md:pt-18 bg-gray-50">
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
@@ -16,7 +12,7 @@
       <p class="text-sm font-medium"><%= @cohort.course.name %></p>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('.overview_link') %></p>
-        <%= link_to t('.students_link'), send(students_path, *args), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
+        <%= link_to t('.students_link'), students_path, class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
       </div>
     </div>
   </section>
@@ -30,14 +26,14 @@
         <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
           <p class="text-3xl font-bold"><%= total_students_count %></p>
-          <%= link_to send(students_path, *args), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+          <%= link_to students_path, class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
             <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
           <% end %>
         </div>
         <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
           <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
           <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
-          <%= link_to send(students_path, *args, course: "Completed"), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+          <%= link_to students_completed_path, class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
             <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
           <% end %>
         </div>
@@ -58,7 +54,7 @@
                         <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{milestone_target_stats[:percentage]}%" %></p>
                       </div>
                     </div>
-                    <%= link_to send(students_path, milestone_completed: "#{target.id};M#{target.milestone_number}: #{target.title}") do %>
+                    <%= link_to @organisation ? students_organisation_cohort_path(@organisation, @cohort, milestone_completed: "#{target.id};M#{target.milestone_number}: #{target.title}") : students_cohort_path(milestone_completed: "#{target.id};M#{target.milestone_number}: #{target.title}") do %>
                       <div class="relative bg-gray-200 rounded-md overflow-hidden mt-0.5">
                         <div style="<%= "width: #{milestone_target_stats[:percentage]}%" %>" class="h-2 text-center bg-green-500"></div>
                       </div>

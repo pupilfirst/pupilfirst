@@ -1,7 +1,3 @@
-<%
-  overview_path = @organisation ? :organisation_cohort_path : :cohort_path
-  args = @organisation ? [@organisation, @cohort] : [@cohort]
-%>
 <div class="md:pt-18 bg-gray-50">
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
@@ -15,7 +11,7 @@
       </h1>
       <p class="text-sm font-medium"><%= @cohort.course.name %></p>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <%= link_to t('shared.cohort_overview.overview_link'), send(overview_path, args), class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
+        <%= link_to t('shared.cohort_overview.overview_link'), overview_path, class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
         <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('shared.cohort_overview.students_link') %></p>
       </div>
     </div>

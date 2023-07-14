@@ -96,26 +96,32 @@ module Layouts
       "cohorts" if user_is_coach?
     end
 
+    def request_path
+      @request_path ||= view.request.path.split("/")[3]
+    end
+
+    def course_links_hash(courses)
+      courses.map { |course| course_link(course) }
+    end
+
+    def course_links
+      case request_path
+      when "review", "cohorts"
+        course_links_hash(current_coach.courses.order(:name).uniq)
+      else
+        course_links_hash(courses)
+      end
+    end
+
     def course_link(course)
       return if course.nil?
 
-      has_access =
-        current_coach.present? && current_coach.courses.exists?(course.id)
-
       url =
-        case view.request.path.split("/")[3]
+        case request_path
         when "review"
-          if has_access
-            view.review_course_path(course)
-          else
-            view.curriculum_course_path(course)
-          end
+          view.review_course_path(course)
         when "cohorts"
-          if has_access
-            view.cohorts_course_path(course)
-          else
-            view.curriculum_course_path(course)
-          end
+          view.cohorts_course_path(course)
         when "calendar"
           view.calendar_course_path(course)
         else
@@ -127,7 +133,7 @@ module Layouts
 
     def course_link_props
       {
-        links: courses.map { |course| course_link(course) },
+        links: course_links - [course_link(@course)],
         selectedLink: course_link(@course),
         placeholder: "Select a course"
       }

@@ -133,7 +133,7 @@ module Layouts
 
     def course_link_props
       {
-        links: course_links | [course_link(@course)],
+        links: ((course_links - [course_link(@course)]).presence || [course_link(@course)]),
         selectedLink: course_link(@course),
         placeholder: "Select a course"
       }

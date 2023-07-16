@@ -122,8 +122,8 @@ module CreateFeedbackMutation = %graphql(`
   `)
 
 module NextSubmissionQuery = %graphql(`
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
         nodes {
           id
         }
@@ -909,7 +909,9 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
           </span>
         | None =>
           <div className="ms-2 md:ms-4 tracking-wide w-full">
-            <div> <span> {(t("note_help", ~variables=[("noteAbout", noteAbout)]))->str} </span> help </div>
+            <div>
+              <span> {t("note_help", ~variables=[("noteAbout", noteAbout)])->str} </span> help
+            </div>
             <button
               className="btn btn-default mt-2"
               disabled={isSubmissionReviewAllowed(submissionDetails)}

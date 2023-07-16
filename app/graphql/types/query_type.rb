@@ -69,7 +69,6 @@ module Types
       argument :sort_criterion,
                Types::SubmissionSortCriterionType,
                required: true
-      argument :level_id, ID, required: false
       argument :personal_coach_id, ID, required: false
       argument :assigned_coach_id, ID, required: false
       argument :reviewing_coach_id, ID, required: false
@@ -102,7 +101,6 @@ module Types
                    Types::StudentSubmissionType.connection_type,
                    null: false do
       argument :student_id, ID, required: true
-      argument :level_id, ID, required: false
       argument :status, Types::SubmissionReviewStatusType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
     end

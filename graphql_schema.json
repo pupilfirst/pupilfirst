@@ -12603,18 +12603,6 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "levelId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "status",
                   "description": null,
                   "type": {
@@ -12828,18 +12816,6 @@
                       "name": "SubmissionSortCriterion",
                       "ofType": null
                     }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "levelId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,

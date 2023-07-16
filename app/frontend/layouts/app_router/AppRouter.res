@@ -16,7 +16,6 @@ let make = (~courses, ~currentUser) => {
     />
   | list{"submissions", submissionId, "review"} =>
     <CoursesReview__SubmissionsRoot submissionId currentUser={User.defaultUser(currentUser)} />
-  | list{"courses", courseId, "students"} => <CoursesStudents__Root courseId />
   | list{"students", studentId, "report"} =>
     <CoursesStudents__StudentOverlay studentId userId={User.id(User.defaultUser(currentUser))} />
   | _ =>

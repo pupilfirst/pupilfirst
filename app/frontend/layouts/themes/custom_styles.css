@@ -314,6 +314,12 @@
     border-left: 6px solid transparent;
   }
 
+  [dir="rtl"] .dropdown__list-right:before,
+  [dir="rtl"] .dropdown__list-right:after {
+    right: auto;
+    left: 9px;
+  }
+
   /* Checkbox */
   .input-checkbox {
     @apply appearance-none p-0;

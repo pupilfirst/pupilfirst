@@ -339,7 +339,7 @@
 }
 
 .toggle-button__button--active:not(:last-of-type) {
-  border-right-color: currentColor;
+  border-inline-end-color: currentColor;
 }
 
 .target-group__container > :not(:last-child):before {

@@ -1,4 +1,4 @@
-<div class="md:pt-18 bg-gray-50">
+<div class="md:pt-18 bg-gray-50 relative">
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
       <% if @organisation %>
@@ -53,20 +53,22 @@
           </div>
         <% end %>
       </div>
-      <div class="mt-4 md:col-span-4 grid grid-cols-1 gap-5 bg-gray-50 p-4 rounded-md order-1 md:order-2">
-        <div class="p-4 md:p-5 bg-white flex flex-col gap-2 shadow rounded-lg">
-          <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
-          <p class="text-3xl font-bold"><%= total_students_count %></p>
-          <%= link_to students_path, class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-            <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
-          <% end %>
-        </div>
-        <div class="p-4 md:p-5 bg-white flex flex-col gap-2 shadow rounded-lg">
-          <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
-          <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
-          <%= link_to students_completed_path, class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-            <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
-          <% end %>
+      <div class="mt-4 md:col-span-4 order-1 md:order-2">
+        <div class="grid grid-cols-1 gap-5 bg-gray-50 p-4 rounded-md">
+          <div class="p-4 md:p-5 bg-white flex flex-col gap-2 shadow rounded-lg">
+            <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
+            <p class="text-3xl font-bold"><%= total_students_count %></p>
+            <%= link_to students_path, class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+              <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
+            <% end %>
+          </div>
+          <div class="p-4 md:p-5 bg-white flex flex-col gap-2 shadow rounded-lg">
+            <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
+            <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
+            <%= link_to students_completed_path, class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
+              <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>

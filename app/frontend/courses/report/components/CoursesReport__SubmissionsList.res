@@ -19,10 +19,7 @@ type loading =
   | Reloading
   | LoadingMore
 
-type filter = {
-  selectedLevel: option<Level.t>,
-  selectedStatus: option<targetStatus>,
-}
+type filter = {selectedStatus: option<targetStatus>}
 
 type state = {
   loading: loading,
@@ -43,12 +40,11 @@ let statusString = targetStatus =>
   }
 
 module StudentSubmissionsQuery = %graphql(`
-   query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewStatus, $levelId: ID, $sortDirection: SortDirection!) {
-    studentSubmissions(studentId: $studentId, after: $after, first: 20 , status: $status, levelId: $levelId, sortDirection: $sortDirection) {
+   query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewStatus,  $sortDirection: SortDirection!) {
+    studentSubmissions(studentId: $studentId, after: $after, first: 20 , status: $status, sortDirection: $sortDirection) {
        nodes {
         id
         createdAt
-        levelId
         targetId
         passedAt
         title
@@ -66,32 +62,25 @@ module StudentSubmissionsQuery = %graphql(`
    `)
 
 module Selectable = {
-  type t =
-    | Level(Level.t)
-    | TargetStatus(targetStatus)
+  type t = TargetStatus(targetStatus)
 
   let label = t =>
     switch t {
-    | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
     | TargetStatus(_targetStatus) => Some(tr("status"))
     }
 
   let value = t =>
     switch t {
-    | Level(level) => level |> Level.name
     | TargetStatus(targetStatus) => statusString(targetStatus)
     }
 
   let searchString = t =>
     switch t {
-    | Level(level) =>
-      LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | TargetStatus(targetStatus) => "status " ++ statusString(targetStatus)
     }
 
   let color = t =>
     switch t {
-    | Level(_level) => "gray"
     | TargetStatus(status) =>
       switch status {
       | #PendingReview => "blue"
@@ -99,24 +88,12 @@ module Selectable = {
       | #Rejected => "red"
       }
     }
-  let level = level => Level(level)
   let targetStatus = targetStatus => TargetStatus(targetStatus)
 }
 
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
-let unselected = (levels, selectedLevel, selectedStatus) => {
-  let unselectedLevels =
-    levels
-    |> Js.Array.filter(level => Level.number(level) != 0)
-    |> Js.Array.filter(level =>
-      selectedLevel |> OptionUtils.mapWithDefault(
-        selectedLevel => level |> Level.id != (selectedLevel |> Level.id),
-        true,
-      )
-    )
-    |> Array.map(Selectable.level)
-
+let unselected = selectedStatus => {
   let unselectedStatus =
     [#PendingReview, #Rejected, #Completed]
     |> Js.Array.filter(status =>
@@ -124,37 +101,29 @@ let unselected = (levels, selectedLevel, selectedStatus) => {
     )
     |> Array.map(Selectable.targetStatus)
 
-  unselectedLevels |> Array.append(unselectedStatus)
+  unselectedStatus
 }
 
-let selected = (selectedLevel, selectedStatus) => {
-  let selectedLevel =
-    selectedLevel |> OptionUtils.mapWithDefault(
-      selectedLevel => [Selectable.level(selectedLevel)],
-      [],
-    )
-
+let selected = (selectedStatus) => {
   let selectedStatus =
     selectedStatus |> OptionUtils.mapWithDefault(
       selectedStatus => [Selectable.targetStatus(selectedStatus)],
       [],
     )
 
-  selectedLevel |> Array.append(selectedStatus)
+  selectedStatus
 }
 
-let onSelectFilter = (send, updateSelectedLevelCB, updateSelectedStatusCB, selectable) => {
+let onSelectFilter = (send, updateSelectedStatusCB, selectable) => {
   send(UpdateFilterString(""))
   switch selectable {
   | Selectable.TargetStatus(status) => updateSelectedStatusCB(Some(status))
-  | Level(level) => updateSelectedLevelCB(Some(level))
   }
 }
 
-let onDeselectFilter = (updateSelectedLevelCB, updateSelectedStatusCB, selectable) =>
+let onDeselectFilter = (updateSelectedStatusCB, selectable) =>
   switch selectable {
   | Selectable.TargetStatus(_status) => updateSelectedStatusCB(None)
-  | Level(_level) => updateSelectedLevelCB(None)
   }
 
 module Sortable = {
@@ -180,12 +149,10 @@ let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   </div>
 }
 
-let filterPlaceholder = (selectedLevel, selectedStatus) =>
-  switch (selectedLevel, selectedStatus) {
-  | (None, Some(_)) => tr("filter_by_level")
-  | (None, None) => tr("filter_by_level_or_status")
-  | (Some(_), Some(_)) => tr("filter_by_another_level")
-  | (Some(_), None) => tr("filter_by_another_level_or_status")
+let filterPlaceholder = selectedStatus =>
+  switch selectedStatus {
+  | None => tr("filter_by_status")
+  | Some(_) => tr("filter_by_another_status")
   }
 
 let reducer = (state, action) =>
@@ -202,14 +169,13 @@ let updateStudentSubmissions = (
   endCursor,
   hasNextPage,
   submissions,
-  selectedLevel,
   selectedStatus,
   sortDirection,
   nodes,
 ) => {
   let updatedSubmissions = Js.Array.concat(Submission.makeFromJs(nodes), submissions)
 
-  let filter = Submissions.makeFilter(selectedLevel, selectedStatus)
+  let filter = Submissions.makeFilter(selectedStatus)
 
   let submissionsData = Submissions.make(~submissions=updatedSubmissions, ~filter, ~sortDirection)
 
@@ -228,20 +194,17 @@ let getStudentSubmissions = (
   studentId,
   cursor,
   send,
-  level,
   status,
   sortDirection,
   submissions,
   updateSubmissionsCB,
 ) => {
-  let levelId = level->Belt.Option.flatMap(level => Some(Level.id(level)))
   let status = status->Belt.Option.flatMap(status => Some(status))
 
   StudentSubmissionsQuery.make({
     studentId: studentId,
     after: cursor,
     sortDirection: sortDirection,
-    levelId: levelId,
     status: status,
   })
   |> Js.Promise.then_(response => {
@@ -251,7 +214,6 @@ let getStudentSubmissions = (
       response["studentSubmissions"]["pageInfo"]["endCursor"],
       response["studentSubmissions"]["pageInfo"]["hasNextPage"],
       submissions,
-      level,
       status,
       sortDirection,
     )
@@ -372,27 +334,23 @@ let showSubmissions = (submissions, teamStudentIds) =>
 @react.component
 let make = (
   ~studentId,
-  ~levels,
   ~submissions,
   ~updateSubmissionsCB,
   ~teamStudentIds,
-  ~selectedLevel,
   ~selectedStatus,
   ~sortDirection,
-  ~updateSelectedLevelCB,
   ~updateSelectedStatusCB,
   ~updateSortDirectionCB,
 ) => {
   let (state, send) = React.useReducer(reducer, {filterString: "", loading: Loaded})
 
   React.useEffect3(() => {
-    if submissions |> Submissions.needsReloading(selectedLevel, selectedStatus, sortDirection) {
+    if submissions |> Submissions.needsReloading(selectedStatus, sortDirection) {
       send(BeginReloading)
       getStudentSubmissions(
         studentId,
         None,
         send,
-        selectedLevel,
         selectedStatus,
         sortDirection,
         [],
@@ -401,7 +359,7 @@ let make = (
     }
 
     None
-  }, (selectedLevel, selectedStatus, sortDirection))
+  }, (selected, selectedStatus, sortDirection))
   <div className="max-w-3xl mx-auto">
     <div role="form" className="md:flex items-end w-full pb-4 mt-4">
       <div className="flex-1">
@@ -410,13 +368,13 @@ let make = (
         </label>
         <Multiselect
           id="filter"
-          unselected={unselected(levels, selectedLevel, selectedStatus)}
-          selected={selected(selectedLevel, selectedStatus)}
-          onSelect={onSelectFilter(send, updateSelectedLevelCB, updateSelectedStatusCB)}
-          onDeselect={onDeselectFilter(updateSelectedLevelCB, updateSelectedStatusCB)}
+          unselected={unselected(selectedStatus)}
+          selected={selected(selectedStatus)}
+          onSelect={onSelectFilter(send, updateSelectedStatusCB)}
+          onDeselect={onDeselectFilter(updateSelectedStatusCB)}
           value=state.filterString
           onChange={filterString => send(UpdateFilterString(filterString))}
-          placeholder={filterPlaceholder(selectedLevel, selectedStatus)}
+          placeholder={filterPlaceholder(selectedStatus)}
         />
       </div>
       {submissionsSorter(sortDirection, updateSortDirectionCB)}
@@ -437,7 +395,6 @@ let make = (
                   studentId,
                   Some(cursor),
                   send,
-                  selectedLevel,
                   selectedStatus,
                   sortDirection,
                   submissions,

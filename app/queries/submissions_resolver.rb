@@ -9,13 +9,21 @@ class SubmissionsResolver < ApplicationQuery
   property :reviewing_coach_id
   property :target_id
   property :search
-  property :exclude_submission_id
+  property :current_submission_id
   property :include_inactive
 
   def submissions
-    applicable_submissions.distinct.order(
-      "#{sort_criterion_string} #{sort_direction_string}"
-    )
+    scope =
+      applicable_submissions.distinct.order(
+        "#{sort_criterion_string} #{sort_direction_string}"
+      )
+    if current_submission_id.present?
+      current_submission = scope.find(current_submission_id)
+      index = scope.index(current_submission)
+      (index >= 0 && index < scope.size - 1) ? [scope[index + 1]] : []
+    else
+      scope
+    end
   end
 
   def authorized?
@@ -30,10 +38,10 @@ class SubmissionsResolver < ApplicationQuery
 
   def sort_direction_string
     case sort_direction
-    when 'Ascending'
-      'ASC'
-    when 'Descending'
-      'DESC'
+    when "Ascending"
+      "ASC"
+    when "Descending"
+      "DESC"
     else
       raise "#{sort_direction} is not a valid sort direction"
     end
@@ -41,10 +49,10 @@ class SubmissionsResolver < ApplicationQuery
 
   def sort_criterion_string
     case sort_criterion
-    when 'SubmittedAt'
-      'created_at'
-    when 'EvaluatedAt'
-      'evaluated_at'
+    when "SubmittedAt"
+      "created_at"
+    when "EvaluatedAt"
+      "evaluated_at"
     else
       raise "#{sort_criterion} is not a valid sort criterion"
     end
@@ -76,9 +84,11 @@ class SubmissionsResolver < ApplicationQuery
     # Filter by personal coach
     stage_4 =
       if course.faculty.exists?(id: personal_coach_id)
-        stage_3
-          .joins(founders: :faculty_founder_enrollments)
-          .where(faculty_founder_enrollments: { faculty_id: personal_coach_id })
+        stage_3.joins(founders: :faculty_founder_enrollments).where(
+          faculty_founder_enrollments: {
+            faculty_id: personal_coach_id
+          }
+        )
       else
         stage_3
       end
@@ -99,23 +109,16 @@ class SubmissionsResolver < ApplicationQuery
         stage_5
       end
 
-    final_list =
-      if exclude_submission_id.present?
-        stage_6.where.not(id: exclude_submission_id)
-      else
-        stage_6
-      end
-
-    final_list.from_founders(students)
+    stage_6.from_founders(students)
   end
 
   def filter_by_status(submissions)
     return submissions if status.blank?
 
     case status
-    when 'Pending'
+    when "Pending"
       submissions.pending_review
-    when 'Reviewed'
+    when "Reviewed"
       submissions.evaluated_by_faculty
     else
       raise "Unexpected status '#{status}' encountered when resolving submissions"
@@ -132,9 +135,9 @@ class SubmissionsResolver < ApplicationQuery
         if search.present?
           students_with_users = scope.joins(:user)
 
-          students_with_users
-            .where('users.name ILIKE ?', "%#{search}%")
-            .or(students_with_users.where('users.email ILIKE ?', "%#{search}%"))
+          students_with_users.where("users.name ILIKE ?", "%#{search}%").or(
+            students_with_users.where("users.email ILIKE ?", "%#{search}%")
+          )
         else
           scope
         end

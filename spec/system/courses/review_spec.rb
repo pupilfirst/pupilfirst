@@ -672,6 +672,34 @@ feature "Coach's review interface" do
         expect(page).not_to have_text student_l3.name
       end
     end
+
+    scenario "coach cylces through submissions using next button", js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      click_link "Pending"
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l3_t3.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find("#submissions a:nth-child(3)")).to have_content(
+        submission_l1_t1.title
+      )
+
+      find("#submissions a:nth-child(1)").click
+      expect(page).to have_text(submission_l3_t3.title)
+
+      click_button "Next"
+      expect(page).to have_text(submission_l2_t2.title)
+
+      click_button "Next"
+      expect(page).to have_text(submission_l1_t1.title)
+
+      click_button "Next"
+      expect(page).to have_text("There are no other similar submissions.")
+    end
   end
 
   context "when there are over 25 submissions" do

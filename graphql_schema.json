@@ -13037,7 +13037,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "excludeSubmissionId",
+                  "name": "currentSubmissionId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

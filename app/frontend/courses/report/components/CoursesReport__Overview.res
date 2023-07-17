@@ -120,7 +120,7 @@ let milestoneTargetsCompletionStatus = overview => {
     ),
   )
 
-  <div className="flex items-center space-x-4">
+  <div className="flex items-center space-x-4 flex-shrink-0">
     <p className="text-xs font-medium text-gray-500">
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}

@@ -864,27 +864,6 @@ en:
       new_note: Add a New Note
       no_notes: No notes here!
       save_note: Save Note
-    CoursesStudents__Root:
-      assigned_me: "Assigned to: Me"
-      assigned_to: Assigned to
-      coach_notes: Coach Notes
-      filter_level: Filter by level, assigned coach, or search by name or email address, and more...
-      has_notes: Has notes
-      student_distribution_milestone: Student Distribution by Milestone Completion
-      me: Me
-      name_email: Name or Email
-      no_notes: Does not have notes
-      not_found: "Could not find level selected from distribution bar, with ID "
-      restore_filer_none: Now showing all students in this course.
-      search_assigned_me: " assigned to me"
-      search_assigned_to: "assigned to "
-      search_no_notes: does not have notes has notes coach notes
-      search_tag: "tag "
-      showing_assigned: "Now showing students assigned to "
-      tagged_with: Tagged with
-    CoursesStudents__StudentDistribution:
-      level_wise: Students level-wise distribution
-      students_level: Students in level
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       average_grades: Average Grades

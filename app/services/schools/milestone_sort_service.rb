@@ -8,10 +8,10 @@ module Schools
     def execute
       return unless target.milestone
 
-      milestone_ids = milestones.pluck(:id)
+      milestone_ids = milestones.map(&:id)
 
       index = milestone_ids.index(target.id.to_i)
-      index_2 = index + (should_move_up ? -1 : 1)
+      index_2 = index + (move_up? ? -1 : 1)
 
       return if (index_2 < 0 || index_2 > milestones.size - 1)
 
@@ -33,10 +33,10 @@ module Schools
 
     def milestones
       @milestones ||=
-        target.course.targets.milestones.order(milestone_number: :asc)
+        target.course.targets.milestones.order(milestone_number: :asc).to_a
     end
 
-    def should_move_up
+    def move_up?
       @direction == "up"
     end
 

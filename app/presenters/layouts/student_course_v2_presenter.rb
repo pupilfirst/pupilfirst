@@ -31,9 +31,6 @@ module Layouts
             []
           end
 
-        # ...plus courses where user is a coach...
-        courses_as_coach = current_coach.present? ? current_coach.courses : []
-
         # ...plus courses where user is a student...
         courses_as_student =
           Course.joins(:founders).where(
@@ -51,6 +48,10 @@ module Layouts
             previewed_course
         ).uniq
       end
+    end
+
+    def courses_as_coach
+      @courses_as_coach ||= current_coach.present? ? current_coach.courses : []
     end
 
     def additional_links
@@ -99,12 +100,22 @@ module Layouts
     def course_link(course)
       return if course.nil?
 
+      default_path = view.curriculum_course_path(course)
+
       url =
         case view.request.path.split("/")[3]
         when "review"
-          view.review_course_path(course)
+          if courses_as_coach.include?(course)
+            view.review_course_path(course)
+          else
+            default_path
+          end
         when "cohorts"
-          view.cohorts_course_path(course)
+          if courses_as_coach.include?(course)
+            view.cohorts_course_path(course)
+          else
+            default_path
+          end
         when "calendar"
           view.calendar_course_path(course)
         else

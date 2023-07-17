@@ -182,7 +182,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
       Course.review(course) && cta != #ReviewSubmissions,
     )}
     {ReactUtils.nullUnless(
-      courseLink(studentLink(courseId, "cohorts"), t("cta.my_students"), "fas fa-user-friends"),
+      courseLink(studentLink(courseId, "cohorts"), t("cta.my_cohorts"), "fas fa-user-friends"),
       Course.review(course),
     )}
     {communityLinks(Course.linkedCommunities(course), communities)}

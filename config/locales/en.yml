@@ -31,23 +31,6 @@ en:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  cohorts:
-    shared:
-      overview_link: Overview
-      students_link: Students
-    show:
-      distribution_heading: Level-wise student distribution
-      students_completed: Students Completed
-      total_students: Total Students
-      view_all: View All
-    student:
-      level_label: Level
-      never_signed_in: Has never signed in
-      time_ago: Last seen %{time_ago} ago
-    students:
-      distribution_heading: Level-wise student distribution
-      nothing_to_show: There are no students matching the selected filters.
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
       community_title: "%{name} Community"
@@ -1906,7 +1889,7 @@ en:
         dropped_out: Dropped out
         edit_curriculum: Edit Curriculum
         leaderboard: Leaderboard
-        my_students: My Students
+        my_cohorts: My Cohorts
         review_submissions: Review Submissions
         view_certificate: View Certificate
         view_course: View Course
@@ -1963,19 +1946,6 @@ en:
         one: in <span class="font-semibold text-black">1</span> %{status} cohort
         other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
       cohorts_subheading: "%{status} Cohorts"
-      student:
-        never_signed_in: Has never signed in
-        time_ago: Last seen %{time_ago} ago
-      students:
-        students_enrolled_prefix_html:
-          one: <span class="font-semibold text-black">1</span> student enrolled
-          other: <span class="font-semibold text-black">%{count}</span> students enrolled
-        students_enrolled_suffix_html:
-          one: in <span class="font-semibold text-black">1</span> active cohort
-          other: in <span class="font-semibold text-black">%{count}</span> active cohorts
-        distribution_heading: Level-wise student distribution
-        nothing_to_show: There are no students matching the selected filters.
-        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
       end_date: "End Date:"
       nothing_to_show: There are no %{status} cohorts to show.
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
@@ -2421,23 +2391,6 @@ en:
     update_user:
       profile_saved_notification: Profile updated successfully!
   organisations:
-    cohorts:
-      shared:
-        overview_link: Overview
-        students_link: Students
-      show:
-        distribution_heading: Level-wise student distribution
-        students_completed: Students Completed
-        total_students: Total Students
-        view_all: View All
-      student:
-        level_label: Level
-        never_signed_in: Has never signed in
-        time_ago: Last seen %{time_ago} ago
-      students:
-        distribution_heading: Level-wise student distribution
-        nothing_to_show: There are no students matching the selected filters.
-        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     courses:
       active_cohorts_label: Active Cohorts
       course_label: Course
@@ -2706,6 +2659,18 @@ en:
     caption_image: A caption for the image
     close: Close
     coaches: Coaches
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      students_completed: Students Completed
+      student_distribution_milestone: Student Distribution by Milestone Completion
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: Cohorts
     community: Community
     completed: Completed
@@ -2734,6 +2699,7 @@ en:
     load_more: Load More...
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    my_org: My Org
     name: Name
     name_email: Name or Email
     no_email_found: Could not find user with this email. Please check the email that you entered.
@@ -2777,6 +2743,9 @@ en:
     search: Search
     settings: Settings
     sign_out: Sign Out
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: Students
     sort_by: Sort by
     tag: Tag

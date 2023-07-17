@@ -10,7 +10,11 @@ class Organisations::CohortsController < ApplicationController
                 policy_class: Organisations::CohortPolicy
 
     @presenter =
-      Cohorts::StudentsPresenter.new(view_context, @organisation, @cohort)
+      Cohorts::StudentsPresenter.new(
+        view_context,
+        @cohort,
+        organisation: @organisation
+      )
   end
 
   # GET /organisations/:organisation_id/cohorts/:id/students

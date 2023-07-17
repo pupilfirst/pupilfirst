@@ -260,7 +260,7 @@ let milestoneTargetsCompletionStats = studentDetails => {
     ),
   )
 
-  <div className="flex items-center space-x-4">
+  <div className="flex items-center space-x-4 flex-shrink-0">
     <p className="text-xs font-medium text-gray-500 flex whitespace-nowrap">
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
@@ -570,7 +570,7 @@ let make = (~studentId, ~userId) => {
               {inactiveWarning(student)}
             </div>
             <div className="mt-4">
-              <div className="justify-between mt-8 flex flex-col sm:flex-row">
+              <div className="justify-between mt-8 flex space-x-2">
                 <p className="text-sm font-semibold">
                   {"Milestone Targets Completion Status"->str}
                 </p>

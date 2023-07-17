@@ -16,6 +16,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2023.3
+
+This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.
+
 ### 2023.1
 
 This version merges the `conclusion` with `status` in the `submission_reports` table. This change is not backwards compatible. If you are using the GraphQL API, you will need to ensure that `submissionReports` query is called with the `status` argument instead of `conclusion`.
@@ -35,7 +39,7 @@ Founder
     # If a student has no submission, skip.
     if latest_submission.present? &&
          TimelineEvents::WasLastTargetService.new(
-           latest_submission,
+           latest_submission
          ).was_last_target?
       # If the students has a submission, and it was the last target, set `completed_at`
       student.update!(completed_at: latest_submission.created_at)

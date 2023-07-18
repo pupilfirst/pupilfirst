@@ -50,7 +50,7 @@ module Types
                 submission
                   .students
                   .map { |student| student.user.name }
-                  .join(', ')
+                  .join(", ")
               )
             end
         end
@@ -76,7 +76,7 @@ module Types
     end
 
     def resolve_team_name(submission)
-      if submission.timeline_event_owners.count > 1 &&
+      if submission.timeline_event_owners.size > 1 &&
            submission.team_submission? && students_have_same_team?(submission)
         submission.students.first.team.name
       end
@@ -87,7 +87,7 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(:timeline_event_owners, :target, students: %i[team])
+            .includes(:timeline_event_owners, students: %i[team])
             .where(id: submission_ids)
             .each do |submission|
               loader.call(submission.id, resolve_team_name(submission))

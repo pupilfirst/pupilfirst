@@ -25,7 +25,7 @@ This version merges the `conclusion` with `status` in the `submission_reports` t
 This version adds a `completed_at` attribute to students. This attribute will be used to determine if a student has completed a course. After upgrading, you should run the following script via the Rails console to set the `completed_at` attribute for all eligible students:
 
 ```rb
-Student
+Founder
   .all
   .each_with_object(nil) do |student, _x|
     # Get the latest submission for each student.
@@ -35,7 +35,7 @@ Student
     # If a student has no submission, skip.
     if latest_submission.present? &&
          TimelineEvents::WasLastTargetService.new(
-           latest_submission,
+           latest_submission
          ).was_last_target?
       # If the students has a submission, and it was the last target, set `completed_at`
       student.update!(completed_at: latest_submission.created_at)

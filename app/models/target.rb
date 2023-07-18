@@ -16,7 +16,7 @@ class Target < ApplicationRecord
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,
     STATUS_LEVEL_LOCKED,
-    STATUS_PENDING_MILESTONE,
+    STATUS_PENDING_MILESTONE
   ].freeze
 
   has_many :timeline_events, dependent: :restrict_with_error
@@ -82,13 +82,13 @@ class Target < ApplicationRecord
       CHECKLIST_KIND_LONG_TEXT,
       CHECKLIST_KIND_MULTI_CHOICE,
       CHECKLIST_KIND_SHORT_TEXT,
-      CHECKLIST_KIND_AUDIO,
+      CHECKLIST_KIND_AUDIO
     ].freeze
   end
 
   validates :target_action_type,
             inclusion: {
-              in: valid_target_action_types,
+              in: valid_target_action_types
             },
             allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
@@ -96,7 +96,7 @@ class Target < ApplicationRecord
   validates :call_to_action, length: { maximum: 20 }
   validates :visibility,
             inclusion: {
-              in: valid_visibility_types,
+              in: valid_visibility_types
             },
             allow_nil: true
 
@@ -142,7 +142,7 @@ class Target < ApplicationRecord
 
       errors.add(
         :base,
-        "Target and evaluation criterion must belong to same course",
+        "Target and evaluation criterion must belong to same course"
       )
     end
   end
@@ -159,11 +159,6 @@ class Target < ApplicationRecord
     else
       title
     end
-  end
-
-  def student_role?
-    ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
-    role == Target::ROLE_STUDENT
   end
 
   def status(student)
@@ -185,11 +180,6 @@ class Target < ApplicationRecord
 
   def target?
     session_at.blank?
-  end
-
-  def student_event?
-    ActiveSupport::Deprecation.warn('Use `individual_target?` instead')
-    role == ROLE_STUDENT
   end
 
   def quiz?

@@ -30,7 +30,6 @@ class TimelineEvent < ApplicationRecord
            inverse_of: :submission,
            dependent: :destroy
 
-  delegate :student_event?, to: :target
   delegate :title, to: :target
 
   scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }

@@ -12,6 +12,7 @@ module.exports = {
     ],
     Deployment: [
       "before_deploying",
+      "evaluation",
       "heroku",
       "digitalocean",
       "configuration",

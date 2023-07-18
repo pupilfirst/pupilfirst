@@ -22,7 +22,7 @@ module Types
     def method_missing(name, *args)
       if resolved_fields.include?(name)
         resolver =
-          (name.to_s + '_resolver').camelcase.constantize.new(
+          (name.to_s + "_resolver").camelcase.constantize.new(
             context,
             args[0] || {}
           )

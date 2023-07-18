@@ -102,6 +102,8 @@ en:
       review: Review
       sign_out: Sign Out
       students: Students
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: Copied!
       copy: Copy to clipboard
@@ -452,7 +454,6 @@ en:
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
       create_description: Let's create another course.
       edit_course_details: Edit Course Details
-      empty_courses: You don't have any courses!
       filter:
         input_hint: Or start typing to search by name...
         input_label: Search
@@ -494,6 +495,9 @@ en:
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
+      export_cohorts_label: Export only the students in the following cohort(s)
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -510,6 +514,8 @@ en:
           active: Active
           archived: Archived
           ended: Ended
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -775,8 +781,8 @@ en:
         view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-
-      note_help: "Would you like to write a note about this "
+      hide_test_report_button: Hide Test Report
+      note_help: "Would you like to write a note about this %{noteAbout} ?"
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
@@ -941,6 +947,8 @@ en:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
+      hide_archived: Hide Archived
+      show_archived: Show Archived
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
@@ -1250,33 +1258,43 @@ en:
         zero: No %{plural_name} to show
       partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: Add New Coach
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
+      archived: Archived
       coach_add: Add Coach
       coach_created: Coach created successfully
       coach_email: Coach email address
-      coach_left_q: Has the coach left the school?
       coach_name: Coach Name
       coach_profile_warn: Since the coach profile isn't public, this won't be shown anywhere
       coach_public_q: Should the coach profile be public?
+      coach_status: Coach Status
       coach_title: Coach Title/Expertise
       coach_title_error: Must have at least two characters
       coach_update: Update Coach
       coach_updated: Coach updated successfully
+      coach_visibility: Coach Visibility
       connect_link: Connect Link
       connect_link_error: This doesn't look like a valid URL
       connect_link_placeholder: Student connect request link for the coach
       email: Email
       email_input_error: Please enter a valid email address
+      exited: Exited
       input_group_error: Must have at least two characters
       name: Name
       replace_avatar: Replace avatar
       title: Title
       upload_avatar: Upload an avatar
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students
@@ -1340,6 +1358,8 @@ en:
       close_community_editor: Close Community Editor
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
     SchoolCustomize__AgreementsEditor:
+      updating: Updating...
+      update: "Update "
       agreement_body: Body of Agreement
       agreement_placeholder: Leave the agreement body empty to hide the footer link.
       manage: Manage
@@ -1438,6 +1458,8 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
@@ -1870,6 +1892,7 @@ en:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1994,6 +2017,19 @@ en:
   help:
     show:
       title: Help
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+        zero: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
+          zero: No %{entry_name} found
   home:
     agreement:
       privacy_policy: Privacy Policy
@@ -2241,6 +2277,12 @@ en:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      unique_emails: Email addresses must be unique
+      invalid_strings: One or more of the entries have invalid strings
+      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_submission:
@@ -2273,6 +2315,7 @@ en:
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
@@ -2364,28 +2407,27 @@ en:
       profile_saved_notification: Profile updated successfully!
   organisations:
     courses:
-      active_cohorts_count: "%{count}"
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      inactive_cohorts_count: "%{count}"
-      inactive_cohorts_label: Inactive Cohorts
+      ended_cohorts_label: Ended Cohorts
+      end_date: "End Date:"
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
       active_students_label: Active Students
-      ongoing_cohorts_subheading: Ongoing Cohorts
+      active_cohorts_subheading: Active Cohorts
       end_date: "End Date:"
-      no_ongoing_cohorts: There are no ongoing cohorts for this course.
+      no_active_cohorts: There are no active cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
-      ongoing_prefix_html:
+      active_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled in
         other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      ongoing_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> ongoing cohort.
-        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+      active_suffix_html:
+        one:  <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
     students:
@@ -2489,6 +2531,8 @@ en:
     issue_certificate_mutator:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
   schools:
     admins:
       title: Admins
@@ -2581,6 +2625,7 @@ en:
         title: Coaches
       school_index:
         title: Coaches
+        coach: Coach
     show:
       coaches: Coaches
       courses: Courses
@@ -2637,6 +2682,7 @@ en:
     empty: Empty
     fail: Fail
     file_invalid: Please select a file with a size less than 5 MB.
+    filter: Filter
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     is: is
@@ -2695,6 +2741,7 @@ en:
     settings: Settings
     sign_out: Sign Out
     students: Students
+    sort_by: Sort by
     tag: Tag
     tags: Tags
     target: Target
@@ -2709,10 +2756,18 @@ en:
     view: View
   timeline_events:
     show:
-      accepted_on: Reviewed and accepted on %{date}.
-      question_with_number: "Question #%{number}"
-      rejected_on: Reviewed and rejected on %{date}.
-      submitted_on: Submitted on %{date}.
+      submission_from: Submission from
+      submitted_on: Submitted on
+      reviewed_on: Reviewed on
+      status: Status
+      rejected: Rejected
+      accepted: Accepted
+      pending: Pending
+      team: Team
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

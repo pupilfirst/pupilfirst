@@ -19,29 +19,27 @@ module Schools
       private
 
       def course_coaches
-        @course.faculty
+        @course
+          .faculty
           .includes(user: { avatar_attachment: :blob })
           .map do |coach|
-          {
-            id: coach.id,
-            name: coach.user.name,
-            email: coach.user.email,
-            title: coach.user.title,
-            avatar_url: coach.user.avatar_url(variant: :thumb)
-          }
-        end
+            {
+              id: coach.id,
+              name: coach.user.name,
+              email: coach.user.email,
+              title: coach.user.title,
+              avatar_url: coach.user.avatar_url(variant: :thumb)
+            }
+          end
       end
 
       def school_coaches
-        @course.school.faculty
-          .where.not(exited: true)
+        @course
+          .school
+          .faculty
+          .active
           .includes(:user)
-          .map do |coach|
-          {
-            id: coach.id,
-            name: coach.user.name
-          }
-        end
+          .map { |coach| { id: coach.id, name: coach.user.name } }
       end
     end
   end

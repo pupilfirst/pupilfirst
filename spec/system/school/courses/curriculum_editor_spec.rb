@@ -374,4 +374,24 @@ feature "Curriculum Editor", js: true do
       end
     end
   end
+
+  context "when multiple levels have same name" do
+    before do
+      level_name = Faker::Lorem.words(number: 6).join(" ")
+      level_1.update!(name: level_name)
+      level_2.update!(name: level_name)
+    end
+
+    scenario "author goes through levels" do
+      sign_in_user course_author.user,
+                   referrer: curriculum_school_course_path(course)
+
+      expect(page).to have_text(target_group_2.name)
+
+      find("option[value=\"#{level_2.id}\"]").click
+      find("option[value=\"#{level_1.id}\"]").click
+
+      expect(page).to have_text(target_group_1.name)
+    end
+  end
 end

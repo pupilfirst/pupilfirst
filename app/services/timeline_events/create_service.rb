@@ -36,6 +36,10 @@ module TimelineEvents
             end
         end
 
+      if @target.evaluation_criteria.blank?
+        TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
+      end
+
       @notification_service.execute(
         @student.course,
         :submission_created,

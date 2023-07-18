@@ -21,7 +21,7 @@ class TimelineEventPolicy < ApplicationPolicy
     organisation = record.students.first.user.organisation
 
     return false if organisation.blank?
-
-    user.organisations.exists?(id: record.user.organisation_id)
+    # Check if the user is an admin of the organisation.
+    user.organisations.exists?(id: organisation.id)
   end
 end

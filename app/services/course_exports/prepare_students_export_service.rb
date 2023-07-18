@@ -4,9 +4,9 @@ module CourseExports
 
     def execute
       tables = [
-        { title: 'Targets', rows: target_rows },
-        { title: 'Students', rows: student_rows },
-        { title: 'Submissions', rows: submission_rows }
+        { title: "Targets", rows: target_rows },
+        { title: "Students", rows: student_rows },
+        { title: "Submissions", rows: submission_rows }
       ]
 
       finalize(tables)
@@ -17,7 +17,7 @@ module CourseExports
     def target_rows
       values =
         targets.map do |target|
-          milestone = target.target_group.milestone ? 'Yes' : 'No'
+          milestone = target.target_group.milestone ? "Yes" : "No"
 
           [
             target_id(target),
@@ -33,13 +33,13 @@ module CourseExports
       (
         [
           [
-            'ID',
-            'Level',
-            'Name',
-            'Completion Method',
-            'Milestone?',
-            'Students with submissions',
-            'Submissions pending review'
+            "ID",
+            "Level",
+            "Name",
+            "Completion Method",
+            "Milestone?",
+            "Students with submissions",
+            "Submissions pending review"
           ] + evaluation_criteria_names
         ] + values
       ).transpose
@@ -50,7 +50,7 @@ module CourseExports
         EvaluationCriterion
           .where(id: evaluation_criteria_ids)
           .order(:name)
-          .map { |ec| ec.display_name + ' - Average' }
+          .map { |ec| ec.display_name + " - Average" }
     end
 
     def evaluation_criteria_ids
@@ -85,8 +85,9 @@ module CourseExports
               .average(:grade)
               &.round(2)
 
-          grades[evaluation_criteria_ids.index(evaluation_criterion_id)] =
-            average_grade
+          grades[
+            evaluation_criteria_ids.index(evaluation_criterion_id)
+          ] = average_grade
         end
     end
 
@@ -113,8 +114,8 @@ module CourseExports
         .live
         .joins(:students)
         .where(students: { id: students.pluck(:id) })
-        .distinct('students.id')
-        .count('students.id')
+        .distinct("students.id")
+        .count("students.id")
     end
 
     def submissions_pending_review(target)
@@ -124,7 +125,7 @@ module CourseExports
         .pending_review
         .joins(:students)
         .where(students: { id: students.pluck(:id) })
-        .distinct('timeline_events.id')
+        .distinct("timeline_events.id")
         .count
     end
 
@@ -155,24 +156,26 @@ module CourseExports
             student.level.number,
             user.title,
             user.affiliation,
-            student.tags.order(:name).pluck(:name).join(', '),
+            student.cohort.name,
+            student.tags.order(:name).pluck(:name).join(", "),
             last_seen_at(user),
-            student.completed_at&.iso8601 || ''
+            student.completed_at&.iso8601 || ""
           ] + average_grades_for_student(student)
         end
 
       [
         [
-          'User ID',
-          'Student ID',
-          'Email Address',
-          'Name',
-          'Level',
-          'Title',
-          'Affiliation',
-          'Tags',
-          'Last Seen At',
-          'Course Completed At'
+          "User ID",
+          "Student ID",
+          "Email Address",
+          "Name",
+          "Level",
+          "Title",
+          "Affiliation",
+          "Cohort",
+          "Tags",
+          "Last Seen At",
+          "Course Completed At"
         ] + evaluation_criteria_names
       ] + rows
     end
@@ -180,7 +183,7 @@ module CourseExports
     def submission_rows
       # Lay out the top row of target IDs.
       header =
-        ['Student Email / Target ID'] +
+        ["Student Email / Target ID"] +
           targets.map { |target| target_id(target) }
 
       target_ids = targets.pluck(:id)
@@ -214,19 +217,23 @@ module CourseExports
     def students
       @students ||=
         begin
-          scope = course.students.includes(:level, :user)
-
+          scope =
+            if @cohorts.present?
+              Student.includes(:level, :user).where(cohort: @cohorts)
+            else
+              course.students.includes(:level, :user)
+            end
           # Exclude inactive students, unless requested.
           scope =
             @course_export.include_inactive_students? ? scope : scope.active
 
           # Filter by tag, if applicable.
           tags.present? ? scope.tagged_with(tags, any: true) : scope
-        end.order('users.email')
+        end.order("users.email")
     end
 
     def last_seen_at(user)
-      user.last_seen_at&.iso8601 || user.last_sign_in_at&.iso8601 || ''
+      user.last_seen_at&.iso8601 || user.last_sign_in_at&.iso8601 || ""
     end
   end
 end

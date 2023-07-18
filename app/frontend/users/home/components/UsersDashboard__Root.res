@@ -211,7 +211,7 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
           className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
           <div
             key={course->Course.id}
-            className="flex overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
+            className="overflow-hidden shadow bg-white rounded-lg flex flex-col justify-between h-full">
             <div>
               <div className="relative">
                 <div className="relative pb-1/2 bg-gray-800">

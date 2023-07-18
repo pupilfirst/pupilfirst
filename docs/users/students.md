@@ -6,7 +6,7 @@ sidebar_label: Students
 
 Courses can contain any number of students. To see the students in a course, first select the course from the main admin navigation bar, or click the _View_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
 
-![Students page within a course in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1614237376/pupilfirst_documentation/students/students_page_qucndn.png)
+![Students page within a course in the school administration interface](../assets/students/students_page_qucndn.png)
 
 ## Adding new students
 

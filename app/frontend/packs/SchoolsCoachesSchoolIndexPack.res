@@ -1,14 +1,14 @@
 open CoachesSchoolIndex__Types
 
 type props = {
-  coaches: list<Coach.t>,
+  coaches: array<Coach.t>,
   authenticityToken: string,
 }
 
 let decodeProps = json => {
   open Json.Decode
   {
-    coaches: json |> field("coaches", list(Coach.decode)),
+    coaches: json |> field("coaches", array(Coach.decode)),
     authenticityToken: json |> field("authenticityToken", string),
   }
 }

@@ -8,7 +8,7 @@ You'll often want to issue certificates to students when they complete a course.
 
 These certificates can also include a QR code, which links to a public page on your school's website. Students can use this link to share their certificate and allow viewers of the certificate to verify its source.
 
-![Screenshot of certificates index page](https://res.cloudinary.com/sv-co/image/upload/v1597244776/pupilfirst_documentation/certificates/certificates_index_xqskf0.png)
+![Screenshot of certificates index page](../assets/certificates/certificates_index_xqskf0.png)
 
 The list of available certificates in a course can be edited from the _Certificates_ sub-menu once a course is selected.
 
@@ -16,7 +16,7 @@ The list of available certificates in a course can be edited from the _Certifica
 
 To add a new certificate, use the _Create New Certificate_ option from the _Certificates_ page.
 
-![Screenshot of certificate creation form](https://res.cloudinary.com/sv-co/image/upload/v1597417562/pupilfirst_documentation/certificates/create_certificate_zs1k38.png)
+![Screenshot of certificate creation form](../assets/certificates/create_certificate_zs1k38.png)
 
 When creating a new certificate, you can give it a name (option), and then upload a _base image_. This base image must be optimized to work with Pupilfirst, and has a few requirements:
 
@@ -35,7 +35,7 @@ Once a base image has been uploaded, you can edit the certificate to set it up t
 
 To edit a certificate, click the edit icon on any of the certificates listed on the _index_.
 
-![Screenshot of the certificate editor](https://res.cloudinary.com/sv-co/image/upload/v1597417562/pupilfirst_documentation/certificates/edit_certificate_pe7yz9.png)
+![Screenshot of the certificate editor](../assets/certificates/edit_certificate_pe7yz9.png)
 
 Besides editing the name of the certificate, this interface allows you to designate a certificate to be automatically issued, and to update where and how dynamic elements are placed when it's issued.
 

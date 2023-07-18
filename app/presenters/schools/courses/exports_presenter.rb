@@ -11,8 +11,21 @@ module Schools
         {
           tags: tag_details,
           course: course_details,
-          exports: course_export_details
+          exports: course_export_details,
+          cohorts: cohort_details
         }
+      end
+
+      def course_exports
+        @course_exports ||=
+          @course
+            .course_exports
+            .order(created_at: :DESC)
+            .includes(:cohorts)
+            .includes(:tags)
+            .with_attached_file
+            .page(params[:page])
+            .per(10)
       end
 
       private
@@ -42,20 +55,14 @@ module Schools
             export_type: export.export_type,
             tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only,
-            includeInactiveStudents: export.include_inactive_students
+            includeInactiveStudents: export.include_inactive_students,
+            cohort_ids: export.course_exports_cohorts.pluck(:cohort_id)
           }
         end
       end
 
-      def course_exports
-        @course_exports ||=
-          @course
-            .course_exports
-            .order(created_at: :DESC)
-            .includes(:tags)
-            .with_attached_file
-            .limit(50)
-            .load
+      def cohort_details
+        @course.cohorts.as_json
       end
     end
   end

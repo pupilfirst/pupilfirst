@@ -32,7 +32,7 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:team_3) { create :team, cohort: cohort_live }
 
   let!(:team_4) { create :team_with_students, cohort: cohort_2_live }
-  let!(:student_l2_4) { team_4.founders.first }
+  let!(:student_l2_4) { team_4.students.first }
 
   let(:user_t3) { create :user }
 

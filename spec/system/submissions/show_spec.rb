@@ -10,7 +10,7 @@ feature "Submissions show" do
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_team, target_group: target_group }
-  let(:target_2) { create :target, :for_founders, target_group: target_group }
+  let(:target_2) { create :target, :for_students, target_group: target_group }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:submission_file_1) { create :timeline_event_file }

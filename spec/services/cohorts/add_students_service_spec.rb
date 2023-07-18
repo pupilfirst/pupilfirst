@@ -234,7 +234,7 @@ describe Cohorts::AddStudentsService do
         students_data = [student_1_data, student_2_data]
 
         expect { subject.add(students_data) }.to change {
-          cohort.founders.count
+          cohort.students.count
         }.by(2)
 
         student_1_token_digest =
@@ -251,7 +251,7 @@ describe Cohorts::AddStudentsService do
         students_data = [student_1_data, student_2_data]
 
         expect { subject.add(students_data) }.to change {
-          cohort.founders.count
+          cohort.students.count
         }.by(2)
 
         student_1_token_digest =

@@ -41,6 +41,10 @@ class RenameTableFoundersToStudents < ActiveRecord::Migration[6.1]
               %i[student_id period_from period_to],
               unique: true,
               name: :index_leaderboard_on_student_id_and_period_from_and_to
+
+    ActsAsTaggableOn::Tagging.where(context: "founder_tags").update_all(
+      context: "student_tags"
+    )
   end
 
   def down

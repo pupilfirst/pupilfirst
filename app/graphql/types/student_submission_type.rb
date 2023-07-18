@@ -5,7 +5,6 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :evaluated_at, GraphQL::Types::ISO8601DateTime, null: true
     field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :level_id, ID, null: false
     field :target_id, ID, null: false
     field :team_target, Boolean, null: false
     field :student_ids, [ID], null: false

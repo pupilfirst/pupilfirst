@@ -12,7 +12,6 @@ type targetStatus = [#PendingReview | #Rejected | #Completed]
 type sortDirection = [#Ascending | #Descending]
 
 type submissionsFilter = {
-  selectedLevel: option<Level.t>,
   selectedStatus: option<targetStatus>,
 }
 
@@ -29,7 +28,6 @@ type action =
   | SelectSubmissionsTab
   | SaveOverviewData(OverviewData.t)
   | SaveSubmissions(Submissions.t)
-  | UpdateLevelFilter(option<Level.t>)
   | UpdateStatusFilter(option<targetStatus>)
   | UpdateSortDirection(sortDirection)
 
@@ -46,17 +44,9 @@ let reducer = (state, action) =>
   | SelectSubmissionsTab => {...state, selectedTab: #Submissions}
   | SaveOverviewData(overviewData) => {...state, overviewData: overviewData}
   | SaveSubmissions(submissionsData) => {...state, submissionsData: submissionsData}
-  | UpdateLevelFilter(level) => {
-      ...state,
-      submissionsFilter: {
-        ...state.submissionsFilter,
-        selectedLevel: level,
-      },
-    }
   | UpdateStatusFilter(status) => {
       ...state,
       submissionsFilter: {
-        ...state.submissionsFilter,
         selectedStatus: status,
       },
     }
@@ -106,7 +96,7 @@ let getOverviewData = (studentId, send, ()) => {
 let updateSubmissions = (send, submissions) => send(SaveSubmissions(submissions))
 
 @react.component
-let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
+let make = (~studentId, ~coaches, ~teamStudentIds) => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -114,7 +104,6 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
       overviewData: Unloaded,
       submissionsData: Unloaded,
       submissionsFilter: {
-        selectedLevel: None,
         selectedStatus: None,
       },
       sortDirection: #Descending,
@@ -159,13 +148,10 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
         <CoursesReport__SubmissionsList
           studentId
           teamStudentIds
-          levels
           submissions=state.submissionsData
           updateSubmissionsCB={updateSubmissions(send)}
-          selectedLevel=state.submissionsFilter.selectedLevel
           selectedStatus=state.submissionsFilter.selectedStatus
           sortDirection=state.sortDirection
-          updateSelectedLevelCB={level => send(UpdateLevelFilter(level))}
           updateSelectedStatusCB={status => send(UpdateStatusFilter(status))}
           updateSortDirectionCB={direction => send(UpdateSortDirection(direction))}
         />

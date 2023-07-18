@@ -46,7 +46,7 @@
               </div>
             </div>
           </div>
-          <% else %>
+        <% else %>
           <div class="max-w-5xl mx-auto text-center justify-center items-center text-sm italic mt-4 pt-4">
             <%= t('.no_students') if total_students_count == 0 %>
             <%= t('.no_milestone_targets') if @presenter.milestone_targets.empty? %>

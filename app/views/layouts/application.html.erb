@@ -70,16 +70,16 @@
         <% else %>
           <section class="h-full">
             <%= yield :nav %>
-            <div class="flex flex-col h-full">
-            <main class="flex-1 bg-white">
-              <% if content_for?(:wrapper) %>
-                <%= yield :wrapper %>
-              <% else %>
-                <%= yield %>
-              <% end %>
-            </main>
-            <%= yield :tail %>
-            <%= yield :footer %>
+            <div class="flex flex-col flex-1">
+              <main class="flex-1 bg-white">
+                <% if content_for?(:wrapper) %>
+                  <%= yield :wrapper %>
+                <% else %>
+                  <%= yield %>
+                <% end %>
+              </main>
+              <%= yield :tail %>
+              <%= yield :footer %>
             </div>
           </section>
         <% end %>

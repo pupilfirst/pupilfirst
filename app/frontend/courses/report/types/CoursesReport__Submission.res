@@ -8,7 +8,6 @@ type t = {
   title: string,
   createdAt: Js.Date.t,
   status: [#PendingReview | #Rejected | #Completed],
-  levelId: string,
   targetId: string,
   targetRole: targetRole,
   milestoneNumber: option<int>,
@@ -18,7 +17,6 @@ let make = (
   ~id,
   ~title,
   ~createdAt,
-  ~levelId,
   ~status,
   ~targetId,
   ~targetRole,
@@ -28,15 +26,12 @@ let make = (
   title: title,
   createdAt: createdAt,
   status: status,
-  levelId: levelId,
   targetId: targetId,
   targetRole: targetRole,
   milestoneNumber: milestoneNumber,
 }
 
 let id = t => t.id
-
-let levelId = t => t.levelId
 
 let title = t => t.title
 
@@ -68,7 +63,6 @@ let makeFromJs = submissions => Js.Array.map(submission => {
       ~id=submission["id"],
       ~title=submission["title"],
       ~createdAt,
-      ~levelId=submission["levelId"],
       ~targetId=submission["targetId"],
       ~targetRole,
       ~status,

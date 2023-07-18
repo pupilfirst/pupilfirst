@@ -669,10 +669,8 @@ en:
       milestone_pending: "Pending"
     CoursesReport__SubmissionsList:
       completed: Completed
-      filter_by_another_level: Filter by another level
-      filter_by_another_level_or_status: Filter by another level, or by status
-      filter_by_level: Filter by level
-      filter_by_level_or_status: Filter by level, or by status
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
       load_more: Load More...
       no_submissions_to_show: "No submissions to show "
       pending_review: Pending Review

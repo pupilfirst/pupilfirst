@@ -18,7 +18,6 @@ module StudentSubmissionsQuery = %graphql(`
        nodes {
          id
         createdAt
-        levelId
         passedAt
         title
         evaluatedAt

@@ -68,7 +68,7 @@
         <% if content_for?(:container) %>
           <%= yield :container %>
         <% else %>
-          <section class="h-full">
+          <section class="flex flex-col justify-between h-full">
             <%= yield :nav %>
             <div class="flex flex-col flex-1">
               <main class="flex-1 bg-white">

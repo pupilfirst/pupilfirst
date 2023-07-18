@@ -1,11 +1,14 @@
 class ApplicationPolicy
-  attr_reader :user, :record, :current_student, :current_school, :current_coach, :current_school_admin
+  attr_reader :user,
+              :record,
+              :current_school,
+              :current_coach,
+              :current_school_admin
 
   def initialize(pundit_user, record)
     @pundit_user = pundit_user
     @user = pundit_user.current_user
     @record = record
-    @current_student = pundit_user.current_student
     @current_school = pundit_user.current_school
     @current_coach = pundit_user.current_coach
     @current_school_admin = pundit_user.current_school_admin
@@ -44,12 +47,15 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope, :current_student, :current_school, :current_coach, :current_school_admin
+    attr_reader :user,
+                :scope,
+                :current_school,
+                :current_coach,
+                :current_school_admin
 
     def initialize(user, scope)
       @user = user.current_user
       @scope = scope
-      @current_student = user.current_student
       @current_school = user.current_school
       @current_coach = user.current_coach
       @current_school_admin = user.current_school_admin

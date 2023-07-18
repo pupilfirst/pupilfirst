@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   helper_method :avatar
   helper_method :current_host
   helper_method :current_school
-  helper_method :current_student
   helper_method :current_coach
   helper_method :current_school_admin
 
@@ -89,29 +88,6 @@ class ApplicationController < ActionController::Base
     @current_coach ||= current_user&.faculty
   end
 
-  def current_student
-    @current_student ||=
-      begin
-        if current_user.present?
-          student_id = read_cookie(:student_id)
-
-          # Students in current school for the user
-          students = current_user.students
-
-          # Try to select student from value stored in cookie.
-          student =
-            if student_id.present?
-              students.not_dropped_out.find_by(id: student_id)
-            else
-              nil
-            end
-
-          # Return selected student, if any, or return the first student (if any).
-          student.presence || students.not_dropped_out.first
-        end
-      end
-  end
-
   def current_school_admin
     @current_school_admin ||=
       begin
@@ -158,10 +134,9 @@ class ApplicationController < ActionController::Base
   def pundit_user
     OpenStruct.new(
       current_user: current_user,
-      current_student: current_student,
       current_school: current_school,
       current_coach: current_coach,
-      current_school_admin: current_school_admin,
+      current_school_admin: current_school_admin
     )
   end
 
@@ -203,15 +178,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_url if service.signed_out?
   end
 
-  def authenticate_student!
-    # User must be logged in.
-    authenticate_user!
-
-    return if current_student.present? && !current_student.dropped_out_at?
-
-    redirect_to root_path
-  end
-
   def storable_location?
     non_html_response =
       destroy_user_session_path ||
@@ -247,7 +213,7 @@ class ApplicationController < ActionController::Base
       .new(
         name,
         font_family: ["Source Sans Pro", "sans-serif"],
-        background_shape: background_shape,
+        background_shape: background_shape
       )
       .svg
       .html_safe
@@ -258,7 +224,7 @@ class ApplicationController < ActionController::Base
 
     return false if current_domain.primary? || current_school.domains.one?
     !Schools::Configuration.new(
-      current_school,
+      current_school
     ).disable_primary_domain_redirection?
   end
 

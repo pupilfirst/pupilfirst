@@ -7,7 +7,7 @@ class FacultyPolicy < ApplicationPolicy
     # Cannot connect if connect link is blank.
     return false if record.connect_link.blank?
 
-    if current_student.present?
+    if user.students.present?
       connectable_courses_of_user =
         Course
           .joins(cohorts: :students)

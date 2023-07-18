@@ -19,15 +19,9 @@ class RenameTableFoundersToStudents < ActiveRecord::Migration[6.1]
     add_reference :faculty_student_enrollments, :student, foreign_key: true
 
     # Step 3: Copy founder_id to student_id
-    TimelineEventOwner.find_each do |teo|
-      teo.update(student_id: teo.founder_id)
-    end
-
-    LeaderboardEntry.find_each { |le| le.update(student_id: le.founder_id) }
-
-    FacultyStudentEnrollment.find_each do |fse|
-      fse.update(student_id: fse.founder_id)
-    end
+    TimelineEventOwner.update_all("student_id = founder_id")
+    LeaderboardEntry.update_all("student_id = founder_id")
+    FacultyStudentEnrollment.update_all("student_id = founder_id")
 
     # Step 4: Remove references
     remove_reference :timeline_event_owners, :founder

@@ -226,17 +226,6 @@ feature "Students view performance report and submissions overview", js: true do
     expect(page).to have_link(target_l1.title, href: "/targets/#{target_l1.id}")
     expect(page).to_not have_content(target_4.title)
 
-    # Filter submissions by level
-    fill_in "filter", with: "level"
-    click_button "Level 2: #{level_2.name}"
-
-    expect(page).not_to have_text(target_l1.title)
-    expect(page).to have_link(target_l2.title, href: "/targets/#{target_l2.id}")
-
-    # Clear the level filter
-    find("button[title='Remove selection: #{level_2.name}']").click
-
-    # Filter submissions by target status
     fill_in "filter", with: "status"
     click_button "Status: Pending Review"
 

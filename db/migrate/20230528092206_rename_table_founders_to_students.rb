@@ -39,6 +39,9 @@ class RenameTableFoundersToStudents < ActiveRecord::Migration[6.1]
     ActsAsTaggableOn::Tagging.where(context: "founder_tags").update_all(
       context: "student_tags"
     )
+    ActsAsTaggableOn::Tagging.where(taggable_type: "Founder").update_all(
+      taggable_type: "Student"
+    )
   end
 
   def down

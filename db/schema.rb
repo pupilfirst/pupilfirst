@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_17_172431) do
+ActiveRecord::Schema.define(version: 2023_05_28_092206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -364,25 +364,6 @@ ActiveRecord::Schema.define(version: 2023_05_17_172431) do
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
-  create_table "students", id: :serial, force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "auth_token"
-    t.string "roles"
-    t.integer "user_id"
-    t.boolean "excluded_from_leaderboard", default: false
-    t.datetime "dropped_out_at"
-    t.bigint "cohort_id"
-    t.bigint "level_id"
-    t.bigint "team_id"
-    t.datetime "completed_at"
-    t.string "github_repository"
-    t.index ["cohort_id"], name: "index_founders_on_cohort_id"
-    t.index ["level_id"], name: "index_founders_on_level_id"
-    t.index ["team_id"], name: "index_founders_on_team_id"
-    t.index ["user_id"], name: "index_founders_on_user_id"
-  end
-
   create_table "issued_certificates", force: :cascade do |t|
     t.bigint "certificate_id", null: false
     t.bigint "user_id"
@@ -574,6 +555,25 @@ ActiveRecord::Schema.define(version: 2023_05_17_172431) do
     t.integer "timeline_event_id"
     t.index ["faculty_id"], name: "index_startup_feedback_on_faculty_id"
     t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id"
+  end
+
+  create_table "students", id: :serial, force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "auth_token"
+    t.string "roles"
+    t.integer "user_id"
+    t.boolean "excluded_from_leaderboard", default: false
+    t.datetime "dropped_out_at"
+    t.bigint "cohort_id"
+    t.bigint "level_id"
+    t.bigint "team_id"
+    t.datetime "completed_at"
+    t.string "github_repository"
+    t.index ["cohort_id"], name: "index_students_on_cohort_id"
+    t.index ["level_id"], name: "index_students_on_level_id"
+    t.index ["team_id"], name: "index_students_on_team_id"
+    t.index ["user_id"], name: "index_students_on_user_id"
   end
 
   create_table "submission_reports", force: :cascade do |t|

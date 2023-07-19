@@ -17,7 +17,7 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   def evaluation_criterion_must_be_present
     return if evaluation_criterion.present?
 
-    errors.add(:base, "Could not find evaluation criterion with ID #{id}")
+    errors.add(:base, I18n.t("queries.evaluation_criterion_not_found", id: id))
   end
 
   def update_evaluation_criterion

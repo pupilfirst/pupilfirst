@@ -13,7 +13,7 @@ New students can enter a course in one of two ways:
 
 When the public signup option is enabled on a course, the course's public page gains an _Apply_ button.
 
-![Course with public signup enabled](https://res.cloudinary.com/sv-co/image/upload/v1583227669/pupilfirst_documentation/signing_up/course_with_public_signup_dopsox.png)
+![Course with public signup enabled](../assets/signing_up/course_with_public_signup_dopsox.png)
 
 Students can read about the course before enrolling to it by supplying their name and email address. Their email address
 will be confirmed before they're added to the course, and they'll

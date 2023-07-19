@@ -6,7 +6,7 @@ sidebar_label: Taking Courses
 
 All students begin a course in its first level and progress through levels by completing targets. Specifically, they need to complete (or submit) all [milestone targets](/users/targets#milestone-targets) before they're allowed to _level up_.
 
-![A student in level 1](https://res.cloudinary.com/sv-co/image/upload/v1574413997/pupilfirst_documentation/taking_courses/student_curriculum_l1_vsiipg.png)
+![A student in level 1](../assets/taking_courses/student_curriculum_l1_vsiipg.png)
 
 ## Structure of a course
 
@@ -18,7 +18,7 @@ Levels can contain targets that are optional, and targets can depend upon each-o
 
 Students progress in a course by completing targets, and leveling up. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
 
-![Student preparing a submission](https://res.cloudinary.com/sv-co/image/upload/v1583214044/pupilfirst_documentation/taking_courses/create_submission_bz7wly.png)
+![Student preparing a submission](../assets/taking_courses/create_submission_bz7wly.png)
 
 Reviewed targets are very likely to be the most valuable target completion method for a student. This is because it's possible for expert coaches to make a qualitative review of a student's submission and give targeted feedback that will help them the most.
 
@@ -48,7 +48,7 @@ Because the issues that students face are often similar, having a history of dou
 
 Students are considered to have finished a course when they've passed all _milestone_ targets in it.
 
-![A completed course](https://res.cloudinary.com/sv-co/image/upload/v1574423330/pupilfirst_documentation/taking_courses/course_complete_vtvncc.png)
+![A completed course](../assets/taking_courses/course_complete_vtvncc.png)
 
 On courses with difficult subject matter, we've found it appropriate to end courses with capstone milestone targets that require students to exercise a wide range of skills they've learned during the course.
 

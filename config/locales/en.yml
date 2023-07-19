@@ -774,7 +774,7 @@ en:
       get_next_submission:
         notice:
           done: Done!
-          done_description: There are no other similar submissions.
+          done_description: There are currently no pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action

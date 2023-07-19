@@ -75,7 +75,6 @@ module Types
       argument :reviewing_coach_id, ID, required: false
       argument :target_id, ID, required: false
       argument :search, String, required: false
-      argument :current_submission_id, ID, required: false
       argument :include_inactive, Boolean, required: false
     end
 

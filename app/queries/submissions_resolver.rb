@@ -9,21 +9,12 @@ class SubmissionsResolver < ApplicationQuery
   property :reviewing_coach_id
   property :target_id
   property :search
-  property :current_submission_id
   property :include_inactive
 
   def submissions
-    scope =
-      applicable_submissions.distinct.order(
-        "#{sort_criterion_string} #{sort_direction_string}"
-      )
-    if current_submission_id.present?
-      current_submission = scope.find(current_submission_id)
-      index = scope.index(current_submission)
-      (index >= 0 && index < scope.size - 1) ? [scope[index + 1]] : []
-    else
-      scope
-    end
+    applicable_submissions.distinct.order(
+      "#{sort_criterion_string} #{sort_direction_string}"
+    )
   end
 
   def authorized?

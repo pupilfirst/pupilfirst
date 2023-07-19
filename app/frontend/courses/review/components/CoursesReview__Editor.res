@@ -54,6 +54,7 @@ type action =
   | FinishGrading(array<Grade.t>)
   | SetNextSubmissionDataLoading
   | SetNextSubmissionDataEmpty
+  | SetNextSubmissionDataUnloaded
   | UnassignReviewer
   | ChangeReportVisibility
 
@@ -94,6 +95,7 @@ let reducer = (state, action) =>
     }
   | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
   | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
+  | SetNextSubmissionDataUnloaded => {...state, nextSubmission: DataUnloaded}
   | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
   }
 
@@ -122,8 +124,8 @@ module CreateFeedbackMutation = %graphql(`
   `)
 
 module NextSubmissionQuery = %graphql(`
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID, $currentSubmissionId: ID) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, currentSubmissionId: $currentSubmissionId) {
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId) {
         nodes {
           id
         }
@@ -180,7 +182,7 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
   send(SetNextSubmissionDataLoading)
   let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
-    ~status=?Filter.tab(filter),
+    ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
     ~sortDirection=Filter.defaultDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
@@ -188,7 +190,6 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~assignedCoachId=?Filter.assignedCoachId(filter),
     ~targetId=?Filter.targetId(filter),
     ~search=?Filter.nameOrEmail(filter),
-    ~currentSubmissionId=?Some(submissionId),
     (),
   )
   NextSubmissionQuery.make(variables)
@@ -349,6 +350,7 @@ let gradeSubmissionQuery = (
             ),
           )
           send(FinishGrading(state.grades))
+          send(SetNextSubmissionDataUnloaded)
         }
       : send(FinishSaving)
 
@@ -1160,7 +1162,7 @@ let make = (
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
       additonalFeedbackEditorVisible: false,
       feedbackGenerated: false,
-      nextSubmission: DataUnloaded,
+      nextSubmission: DataEmpty,
       reloadSubmissionReport: false,
     },
   )

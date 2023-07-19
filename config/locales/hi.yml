@@ -1,8 +1,4 @@
 hi:
-  school:
-    targets:
-      update_action:
-        error_message: Action could not be updated, please check the YAML syntax
   applicants:
     enroll:
       errors:
@@ -479,6 +475,7 @@ hi:
       create_button_text: निर्यात बनाएं
       download_course_export: पाठ्यक्रम निर्यात डाउनलोड करें
       export: निर्यात करना
+      export_cohorts_label: Export only the students in the following cohort(s)
       export_tags_label: केवल निम्नलिखित टैग वाले छात्रों को निर्यात करें
       export_targets_label: निर्यात में कौन से लक्ष्य शामिल होने चाहिए?
       export_type_label: कृपया उस प्रकार के निर्यात का चयन करें जिसकी आपको आवश्यकता है
@@ -489,14 +486,15 @@ hi:
       requested: का अनुरोध किया
       reviewed_only_tag: केवल समीक्षित प्रस्तुतियाँ
       reviewed_only_targets_label: केवल समीक्षा किए गए सबमिशन वाले लक्ष्य
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
       search_tag_placeholder: एक टैग खोजें
       search_tags_empty: कोई टैग नहीं चुना गया
       students_label: छात्र
       students_to_include_label: पाठ्यक्रम निर्यात में शामिल करने के लिए छात्रों का चयन करें
       teams_label: टीमों
-      search_cohort_placeholder: Search for a cohort
-      search_cohorts_empty: No cohorts selected
-      export_cohorts_label: Export only the students in the following cohort(s)
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CourseSelect:
       button_load_more: अधिक पाठ्यक्रम लोड करें...
       courses_fully_loaded_text: सभी %{total_courses} पाठ्यक्रम दिखा रहा है
@@ -513,8 +511,6 @@ hi:
           active: सक्रिय
           archived: संग्रहीत
           ended: समाप्त
-    CourseResourcesFilter:
-      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: यह एक मिनट से भी कम समय में आप तक पहुंच जाना चाहिए। साइन अप करने और आरंभ करने के लिए ईमेल में लिंक पर क्लिक करें।
@@ -744,16 +740,6 @@ hi:
       generate_feedback_button: प्रतिक्रिया उत्पन्न करें
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: चेकलिस्ट की समीक्षा करें
-    CoursesReview__SubmissionReportShow:
-      hide_report_button: Hide Report
-      report_status_string:
-        error: Actions could not complete due to errors
-        failure: Some actions failed
-        success: All actions succeeded
-        in_progress: Actions are in progress
-        queued: Actions are queued
-      show_report_button: Show Report
-      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: एक और प्रतिक्रिया जोड़ें
       add_feedback: प्रतिक्रिया जोड़ें
@@ -780,7 +766,7 @@ hi:
       grade_card: ग्रेड कार्ड
       help_text: नोट्स का उपयोग %{note_about}की प्रगति पर नज़र रखने के लिए किया जा सकता है। ये नोट केवल एक छात्र की रिपोर्ट में कोचों को दिखाए जाते हैं। %{additional_help}
       hide_test_report_button: Hide Test Report
-      note_help: "Would you like to write a note about this %{noteAbout} ?"
+      note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: असाइनमेंट हटाएं
@@ -881,6 +867,16 @@ hi:
       pending_review: लंबित समीक्षा
       rejected: अस्वीकृत
       submission_hash: जमा करना
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        in_progress: Actions are in progress
+        queued: Actions are queued
+        success: All actions succeeded
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesStudents__CoachNoteShow:
       coach_on: "पर"
       delete_note: "नोट हटाएं "
@@ -944,11 +940,11 @@ hi:
       no_revied_submission: कोई समीक्षित सबमिशन नहीं
       submitted_on: "पर प्रस्तुत की "
     CurriculumEditor:
-      hide_archived: Hide Archived
-      show_archived: Show Archived
       create_level: स्तर बनाएं
       create_target_group: लक्ष्य समूह बनाएं
       edit_selected_level: चयनित स्तर संपादित करें
+      hide_archived: Hide Archived
+      show_archived: Show Archived
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: कृपया 10 एमबी से कम आकार वाली फ़ाइल चुनें।
       button_labels:
@@ -1354,14 +1350,14 @@ hi:
       close_community_editor: समुदाय संपादक बंद करें
       unsaved_window_confirm: सहेजे नहीं गए परिवर्तन हैं! क्या आप वाकई बंद करना चाहते हैं?
     SchoolCustomize__AgreementsEditor:
-      updating: Updating...
-      update: "Update "
       agreement_body: समझौते का निकाय
       agreement_placeholder: पाद लेख लिंक को छिपाने के लिए अनुबंध के मुख्य भाग को खाली छोड़ दें.
       manage: प्रबंधित करना
       privacy_policy: गोपनीयता नीति
       terms_and_conditions: नियम एवं शर्तें
+      update: "Update "
       updated_notification: अद्यतन किया गया है।
+      updating: Updating...
     SchoolCustomize__ContactsEditor:
       address_placeholder: पाद लेख अनुभाग को छिपाने के लिए पता खाली छोड़ दें।
       contact_address: संपर्क पता
@@ -1864,6 +1860,7 @@ hi:
       email_label: ईमेल
       email_placeholder: अपना ईमेल टाइप करें
       email_sent_notification: कृपया अपना नया ईमेल जांचें। हमने आपका ईमेल पता अपडेट करने के निर्देश भेज दिए हैं।
+      incorrect_email_for_deletion: Incorrect email
       initiate_deletion: हटाना आरंभ करें
       language: भाषा
       localization: स्थानीयकरण
@@ -1888,7 +1885,6 @@ hi:
       update_locale: अपने स्थान से संबंधित सेटिंग अपडेट करें।
       upload_failed: अपलोड करने में विफल
       you_admin_warning: आप वर्तमान में इस विद्यालय के व्यवस्थापक हैं। खाता हटाने को सक्षम करने के लिए कृपया अपनी व्यवस्थापक पहुंच हटाएं।
-      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: पासवर्ड की पुष्टि कीजिये
       confirm_password_placeholder: अपना पासवर्ड दोबारा दर्ज करें
@@ -2208,6 +2204,10 @@ hi:
           link_to: यहां क्लिक करें
           main_html: <p> हमें आपका %{school_name} पासवर्ड रीसेट करने का अनुरोध प्राप्त हुआ है।  </p> <p> कृपया %{link_to} अपना पासवर्ड बदलने के लिए।  </p>
         subject: खाता पुनर्प्राप्ति
+  maintenance:
+    title: Maintenance Mode
+    heading: We'll be back soon!
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
   models:
     faculty:
       commitment:
@@ -2218,8 +2218,6 @@ hi:
         founder: सभी संस्थापक
         team: टीम
   mutations:
-    conclude_submission_report:
-      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: नोट सफलतापूर्वक हटा दिया गया
     archive_course:
@@ -2236,6 +2234,8 @@ hi:
       success_notification: कोर्स की कॉपी मांगी गई है। यह जल्द ही यहाँ दिखाई देगा!
     clone_level:
       success_notification: लेवल कॉपी मांगी गई है। यह जल्द ही लक्ष्य पाठ्यक्रम में दिखाई देगा!
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     create_coach_note:
       note_added_notification: नोट सफलतापूर्वक जोड़ा गया
     create_cohort:
@@ -2271,14 +2271,14 @@ hi:
     create_school_link:
       blank_title_error: शीर्षक आवश्यक है
       success_notification: एक कस्टम लिंक जोड़ा गया है।
-    create_students:
-      invalid_emails: One or more of the entries have an invalid email address
-      soft_limit_number: You've hit the soft-limit for number of students in this course
-      unique_emails: Email addresses must be unique
-      invalid_strings: One or more of the entries have invalid strings
-      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: छात्र सफलतापूर्वक बनाया गया।
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      invalid_strings: One or more of the entries have invalid strings
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      thousand_students_limit: You can only onboard 1000 students at a time
+      unique_emails: Email addresses must be unique
     create_submission:
       blocked_submission_status_error: इस लक्ष्य की स्थिति %{target_status}है, इसलिए आप एक नया सबमिशन नहीं जोड़ सकते; कृपया पृष्ठ को फिर से लोड करें
       form_success_notification: Your response has been saved.
@@ -2306,10 +2306,10 @@ hi:
     dropout_student:
       student_updated_notification: छात्र सफलतापूर्वक अपडेट किया गया
     export_course_report:
+      cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: दी गई आईडी के साथ कोर्स नहीं मिल सका
       success_notification: आपका निर्यात संसाधित किया जा रहा है। जैसे ही यह तैयार होगा हम आपको सूचित करेंगे।
       tag_not_found_error: दिए गए आईडी वाले टैग नहीं ढूंढ सके
-      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: आगे के चरणों के लिए अपना इनबॉक्स देखें!
       deletion_init_notification: खाता हटाने की पहल
@@ -2404,24 +2404,24 @@ hi:
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      ended_cohorts_label: Ended Cohorts
       end_date: "End Date:"
+      ended_cohorts_label: Ended Cohorts
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: संगठनों
     show:
-      active_students_label: सक्रिय छात्र
       active_cohorts_subheading: Active Cohorts
+      active_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      active_students_label: सक्रिय छात्र
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       end_date: "End Date:"
       no_active_cohorts: There are no active cohorts for this course.
       organisation_label: संगठन
       students_enrolled_heading: में नामांकित छात्र
-      active_prefix_html:
-        one: <span class="font-semibold text-black">1</span> student enrolled in
-        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      active_suffix_html:
-        one: <span class="font-semibold text-black">1</span> active cohort.
-        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: कुल छात्र
       view_all_cohorts: View All Cohorts
     students:
@@ -2526,7 +2526,11 @@ hi:
       certificate_error: निर्दिष्ट प्रमाणपत्र नहीं मिला।
       issued_error: इस छात्र को इस पाठ्यक्रम के लिए पहले ही प्रमाण पत्र जारी किया जा चुका है।
     update_evaluation_criterion_mutator:
-      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
+      evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
   schools:
     admins:
       title: व्यवस्थापक
@@ -2618,8 +2622,8 @@ hi:
       course_index:
         title: डिब्बों
       school_index:
-        title: डिब्बों
         coach: Coach
+        title: डिब्बों
     show:
       coaches: डिब्बों
       courses: पाठ्यक्रम
@@ -2734,8 +2738,8 @@ hi:
     search: खोज
     settings: समायोजन
     sign_out: साइन आउट करें
-    students: छात्र
     sort_by: Sort by
+    students: छात्र
     tag: उपनाम
     tags: टैग
     target: लक्ष्य
@@ -2750,18 +2754,18 @@ hi:
     view: राय
   timeline_events:
     show:
-      submission_from: Submission from
-      submitted_on: Submitted on
-      reviewed_on: Reviewed on
-      status: Status
-      rejected: Rejected
       accepted: Accepted
-      pending: Pending
-      team: Team
       feedback:
         one: Feedback
         other: Feedbacks
       no_feedbacks: No feedback received for this submission.
+      pending: Pending
+      rejected: Rejected
+      reviewed_on: Reviewed on
+      status: Status
+      submission_from: Submission from
+      submitted_on: Submitted on
+      team: Team
   users:
     clear_discord_id:
       success: डिस्कॉर्ड सफलतापूर्वक अनलिंक किया गया.

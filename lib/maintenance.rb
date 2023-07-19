@@ -10,7 +10,7 @@ class Maintenance
         { "Content-Type" => "text/html" },
         [
           ERB.new(
-            File.read(Rails.root.join("public", "maintenance.html.erb"))
+            Rails.public_path.join("maintenance.html.erb").read
           ).result
         ]
       ]

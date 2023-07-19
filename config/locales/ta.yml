@@ -1,8 +1,4 @@
 ta:
-  school:
-    targets:
-      update_action:
-        error_message: Action could not be updated, please check the YAML syntax
   applicants:
     enroll:
       errors:
@@ -479,6 +475,7 @@ ta:
       create_button_text: ஏற்றுமதியை உருவாக்கவும்
       download_course_export: பதிவிறக்க பாடநெறி ஏற்றுமதி
       export: ஏற்றுமதி
+      export_cohorts_label: Export only the students in the following cohort(s)
       export_tags_label: பின்வரும் குறிச்சொற்களுடன் மாணவர்களை மட்டும் ஏற்றுமதி செய்யவும்
       export_targets_label: ஏற்றுமதியில் என்ன இலக்குகள் இருக்க வேண்டும்?
       export_type_label: உங்களுக்கு தேவையான ஏற்றுமதி வகையைத் தேர்ந்தெடுக்கவும்
@@ -489,14 +486,15 @@ ta:
       requested: கோரப்பட்டது
       reviewed_only_tag: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகள் மட்டுமே
       reviewed_only_targets_label: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகளைக் கொண்ட இலக்குகள் மட்டுமே
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
       search_tag_placeholder: குறிச்சொல்லைத் தேடவும்
       search_tags_empty: குறிச்சொற்கள் எதுவும் தேர்ந்தெடுக்கப்படவில்லை
       students_label: மாணவர்கள்
       students_to_include_label: பாடநெறி ஏற்றுமதியில் சேர்க்க மாணவர்களைத் தேர்ந்தெடுக்கவும்
       teams_label: அணிகள்
-      search_cohort_placeholder: Search for a cohort
-      search_cohorts_empty: No cohorts selected
-      export_cohorts_label: Export only the students in the following cohort(s)
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CourseSelect:
       button_load_more: மேலும் படிப்புகளை ஏற்றவும்...
       courses_fully_loaded_text: அனைத்து %{total_courses} படிப்புகளையும் காட்டுகிறது
@@ -513,8 +511,6 @@ ta:
           active: செயலில்
           archived: காப்பகப்படுத்தப்பட்டது
           ended: முடிந்தது
-    CourseResourcesFilter:
-      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். பதிவு செய்ய மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்து, தொடங்கவும்.
@@ -744,16 +740,6 @@ ta:
       generate_feedback_button: கருத்தை உருவாக்கவும்
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: சரிபார்ப்பு பட்டியலை மதிப்பாய்வு செய்யவும்
-    CoursesReview__SubmissionReportShow:
-      hide_report_button: Hide Report
-      report_status_string:
-        error: Actions could not complete due to errors
-        failure: Some actions failed
-        success: All actions succeeded
-        in_progress: Actions are in progress
-        queued: Actions are queued
-      show_report_button: Show Report
-      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: மற்றொரு கருத்தைச் சேர்க்கவும்
       add_feedback: கருத்தைச் சேர்க்கவும்
@@ -780,7 +766,7 @@ ta:
       grade_card: தர அட்டை
       help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
       hide_test_report_button: Hide Test Report
-      note_help: "Would you like to write a note about this %{noteAbout} ?"
+      note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: வேலையை அகற்று
@@ -881,6 +867,16 @@ ta:
       pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
       rejected: நிராகரிக்கப்பட்டது
       submission_hash: சமர்ப்பணம்
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        in_progress: Actions are in progress
+        queued: Actions are queued
+        success: All actions succeeded
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesStudents__CoachNoteShow:
       coach_on: "அன்று"
       delete_note: "குறிப்பை நீக்கு "
@@ -944,11 +940,11 @@ ta:
       no_revied_submission: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்பு இல்லை
       submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
     CurriculumEditor:
-      hide_archived: Hide Archived
-      show_archived: Show Archived
       create_level: நிலை உருவாக்கவும்
       create_target_group: இலக்கு குழுவை உருவாக்கவும்
       edit_selected_level: தேர்ந்தெடுக்கப்பட்ட நிலையைத் திருத்தவும்
+      hide_archived: Hide Archived
+      show_archived: Show Archived
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: 10 MB க்கும் குறைவான அளவு கொண்ட கோப்பைத் தேர்ந்தெடுக்கவும்.
       button_labels:
@@ -1354,14 +1350,14 @@ ta:
       close_community_editor: சமூக எடிட்டரை மூடு
       unsaved_window_confirm: சேமிக்கப்படாத மாற்றங்கள் உள்ளன! நீங்கள் நிச்சயமாக மூட விரும்புகிறீர்களா?
     SchoolCustomize__AgreementsEditor:
-      updating: Updating...
-      update: "Update "
       agreement_body: உடன்படிக்கையின் உடல்
       agreement_placeholder: அடிக்குறிப்பு இணைப்பை மறைக்க, ஒப்பந்தப் பகுதியை காலியாக விடவும்.
       manage: நிர்வகிக்கவும்
       privacy_policy: தனியுரிமைக் கொள்கை
       terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
+      update: "Update "
       updated_notification: மாற்றப்பட்டுள்ளது.
+      updating: Updating...
     SchoolCustomize__ContactsEditor:
       address_placeholder: அடிக்குறிப்பு பகுதியை மறைக்க முகவரியை காலியாக விடவும்.
       contact_address: தொடர்பு முகவரி
@@ -1864,6 +1860,7 @@ ta:
       email_label: மின்னஞ்சல்
       email_placeholder: உங்கள் மின்னஞ்சலை தட்டச்சு செய்யவும்
       email_sent_notification: உங்கள் புதிய மின்னஞ்சலைச் சரிபார்க்கவும். உங்கள் மின்னஞ்சல் முகவரியைப் புதுப்பிப்பதற்கான வழிமுறைகளை அனுப்பியுள்ளோம்.
+      incorrect_email_for_deletion: Incorrect email
       initiate_deletion: நீக்குதலைத் தொடங்கவும்
       language: மொழி
       localization: உள்ளூர்மயமாக்கல்
@@ -1888,7 +1885,6 @@ ta:
       update_locale: உங்கள் மொழி தொடர்பான அமைப்புகளைப் புதுப்பிக்கவும்.
       upload_failed: பதிவேற்ற முடியவில்லை
       you_admin_warning: நீங்கள் தற்போது இந்தப் பள்ளியின் நிர்வாகியாக உள்ளீர்கள். கணக்கு நீக்குதலை இயக்க, உங்கள் நிர்வாகி அணுகலை நீக்கவும்.
-      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: கடவுச்சொல்லை உறுதிப்படுத்தவும்
       confirm_password_placeholder: தயவு செய்து தங்கள் கடவுச்சொல்லை மீண்டும் உள்ளீடுக
@@ -2208,6 +2204,10 @@ ta:
           link_to: இங்கே கிளிக் செய்யவும்
           main_html: <p> உங்கள் %{school_name} கடவுச்சொல்லை மீட்டமைப்பதற்கான கோரிக்கையைப் பெற்றுள்ளோம்.  </p> <p> தயவுசெய்து %{link_to} உங்கள் கடவுச்சொல்லை மாற்றவும்.  </p>
         subject: கணக்கு மீட்பு
+  maintenance:
+    title: Maintenance Mode
+    heading: We'll be back soon!
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
   models:
     faculty:
       commitment:
@@ -2218,8 +2218,6 @@ ta:
         founder: அனைத்து நிறுவனர்கள்
         team: குழு
   mutations:
-    conclude_submission_report:
-      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: குறிப்பு வெற்றிகரமாக அகற்றப்பட்டது
     archive_course:
@@ -2236,6 +2234,8 @@ ta:
       success_notification: பாட நகல் கோரப்பட்டது. அது விரைவில் இங்கே தோன்றும்!
     clone_level:
       success_notification: நிலை நகல் கோரப்பட்டது. இது விரைவில் இலக்கு போக்கில் தோன்றும்!
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     create_coach_note:
       note_added_notification: குறிப்பு வெற்றிகரமாக சேர்க்கப்பட்டது
     create_cohort:
@@ -2271,14 +2271,14 @@ ta:
     create_school_link:
       blank_title_error: ஒரு தலைப்பு தேவை
       success_notification: தனிப்பயன் இணைப்பு சேர்க்கப்பட்டது.
-    create_students:
-      invalid_emails: One or more of the entries have an invalid email address
-      soft_limit_number: You've hit the soft-limit for number of students in this course
-      unique_emails: Email addresses must be unique
-      invalid_strings: One or more of the entries have invalid strings
-      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: மாணவர் வெற்றிகரமாக உருவாக்கப்பட்டது.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      invalid_strings: One or more of the entries have invalid strings
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      thousand_students_limit: You can only onboard 1000 students at a time
+      unique_emails: Email addresses must be unique
     create_submission:
       blocked_submission_status_error: இந்த இலக்கின் நிலை %{target_status}ஆகும், எனவே நீங்கள் ஒரு புதிய சமர்ப்பிப்பைச் சேர்க்க முடியாது; பக்கத்தை மீண்டும் ஏற்றவும்
       form_success_notification: Your response has been saved.
@@ -2306,10 +2306,10 @@ ta:
     dropout_student:
       student_updated_notification: மாணவர் வெற்றிகரமாக புதுப்பிக்கப்பட்டார்
     export_course_report:
+      cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: கொடுக்கப்பட்ட ஐடியுடன் படிப்பைக் கண்டுபிடிக்க முடியவில்லை
       success_notification: உங்கள் ஏற்றுமதி செயலாக்கப்படுகிறது. அது தயாரானவுடன் உங்களுக்கு அறிவிப்போம்.
       tag_not_found_error: கொடுக்கப்பட்ட ஐடிகளுடன் குறிச்சொற்களைக் கண்டறிய முடியவில்லை
-      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: மேலும் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்!
       deletion_init_notification: கணக்கு நீக்குதல் தொடங்கப்பட்டது
@@ -2404,24 +2404,24 @@ ta:
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      ended_cohorts_label: Ended Cohorts
       end_date: "End Date:"
+      ended_cohorts_label: Ended Cohorts
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: நிறுவனங்கள்
     show:
-      active_students_label: செயலில் மாணவர்கள்
       active_cohorts_subheading: Active Cohorts
+      active_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      active_students_label: செயலில் மாணவர்கள்
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       end_date: "End Date:"
       no_active_cohorts: There are no active cohorts for this course.
       organisation_label: அமைப்பு
       students_enrolled_heading: மாணவர்கள் சேர்ந்தனர்
-      active_prefix_html:
-        one: <span class="font-semibold text-black">1</span> student enrolled in
-        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      active_suffix_html:
-        one: <span class="font-semibold text-black">1</span> active cohort.
-        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: மொத்த மாணவர்கள்
       view_all_cohorts: View All Cohorts
     students:
@@ -2526,7 +2526,11 @@ ta:
       certificate_error: குறிப்பிட்ட சான்றிதழைக் கண்டுபிடிக்க முடியவில்லை.
       issued_error: இந்த மாணவருக்கு இந்தப் படிப்புக்கான சான்றிதழ் ஏற்கனவே வழங்கப்பட்டுள்ளது.
     update_evaluation_criterion_mutator:
-      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
+      evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
   schools:
     admins:
       title: நிர்வாகிகள்
@@ -2618,8 +2622,8 @@ ta:
       course_index:
         title: பயிற்சியாளர்கள்
       school_index:
-        title: பயிற்சியாளர்கள்
         coach: Coach
+        title: பயிற்சியாளர்கள்
     show:
       coaches: பயிற்சியாளர்கள்
       courses: படிப்புகள்
@@ -2734,8 +2738,8 @@ ta:
     search: தேடு
     settings: அமைப்புகள்
     sign_out: வெளியேறு
-    students: மாணவர்கள்
     sort_by: Sort by
+    students: மாணவர்கள்
     tag: குறிச்சொல்
     tags: குறிச்சொற்கள்
     target: இலக்கு
@@ -2750,18 +2754,18 @@ ta:
     view: காண்க
   timeline_events:
     show:
-      submission_from: Submission from
-      submitted_on: Submitted on
-      reviewed_on: Reviewed on
-      status: Status
-      rejected: Rejected
       accepted: Accepted
-      pending: Pending
-      team: Team
       feedback:
         one: Feedback
         other: Feedbacks
       no_feedbacks: No feedback received for this submission.
+      pending: Pending
+      rejected: Rejected
+      reviewed_on: Reviewed on
+      status: Status
+      submission_from: Submission from
+      submitted_on: Submitted on
+      team: Team
   users:
     clear_discord_id:
       success: டிஸ்கார்ட் வெற்றிகரமாக இணைக்கப்பட்டது.

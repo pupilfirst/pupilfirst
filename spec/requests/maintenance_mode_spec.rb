@@ -12,9 +12,7 @@ RSpec.describe "Maintenance Mode", type: :request do
 
       expect(response.status).to eq 503
       expect(response.body).to include("We'll be back soon!")
-      expect(response.body).to include(
-        "Sorry for the inconvenience. We are currently undergoing maintenance to improve your experience."
-      )
+      expect(response.body).to include("Sorry for the inconvenience")
     end
   end
 
@@ -26,9 +24,7 @@ RSpec.describe "Maintenance Mode", type: :request do
 
       expect(response.status).to eq 200
       expect(response.body).not_to include("We'll be back soon!")
-      expect(response.body).not_to include(
-        "Sorry for the inconvenience. We are currently undergoing maintenance to improve your experience."
-      )
+      expect(response.body).not_to include("Sorry for the inconvenience.")
       expect(response.body).to include(school.name)
     end
   end

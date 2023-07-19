@@ -2213,7 +2213,7 @@ en:
   maintenance:
     title: Maintenance Mode
     heading: We'll be back soon!
-    message: Sorry for the inconvenience but we're performing some maintenance at the moment.
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
   models:
     faculty:
       commitment:

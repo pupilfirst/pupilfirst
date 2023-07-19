@@ -454,7 +454,6 @@ en:
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
       create_description: Let's create another course.
       edit_course_details: Edit Course Details
-      empty_courses: You don't have any courses!
       filter:
         input_hint: Or start typing to search by name...
         input_label: Search
@@ -2757,10 +2756,18 @@ en:
     view: View
   timeline_events:
     show:
-      accepted_on: Reviewed and accepted on %{date}.
-      question_with_number: "Question #%{number}"
-      rejected_on: Reviewed and rejected on %{date}.
-      submitted_on: Submitted on %{date}.
+      submission_from: Submission from
+      submitted_on: Submitted on
+      reviewed_on: Reviewed on
+      status: Status
+      rejected: Rejected
+      accepted: Accepted
+      pending: Pending
+      team: Team
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

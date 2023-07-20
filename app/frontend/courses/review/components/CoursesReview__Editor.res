@@ -518,6 +518,18 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
     </div>
   </div>
 
+let nextSubmissionButton = (nextSubmission, send, submissionDetails, filter, submissionId) =>
+  <div>
+    {reviewNextButton(
+      nextSubmission,
+      send,
+      SubmissionDetails.courseId(submissionDetails),
+      filter,
+      submissionId,
+      "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 hover:bg-primary-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
+    )}
+  </div>
+
 let updateGrading = (grade, state, send) => {
   let newGrades = Js.Array.concat(
     [grade],
@@ -1288,7 +1300,7 @@ let make = (
               <div className="text-sm"> {showSubmissionStatus(status)} </div>
             </div>
           </div>
-          <div className="p-4 md:p-6">
+          <div className="p-4 md:p-6 md:pb-20">
             <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
           {submissionReports
@@ -1497,7 +1509,7 @@ let make = (
                 </div>,
                 state.additonalFeedbackEditorVisible,
               )}
-              <div className="p-4 md:p-6">
+              <div className="p-4 md:p-6 pb-18 md:pb-20">
                 <h5 className="font-medium text-sm flex items-center">
                   <PfIcon
                     className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
@@ -1525,6 +1537,15 @@ let make = (
               </div>
             </div>
           }}
+          <div className="fixed bottom-0 inset-x-0 z-10">
+            {nextSubmissionButton(
+              state.nextSubmission,
+              send,
+              submissionDetails,
+              filter,
+              submissionId,
+            )}
+          </div>
         </div>
       </DisablingCover>,
     ]->React.array

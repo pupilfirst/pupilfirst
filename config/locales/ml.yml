@@ -2215,7 +2215,7 @@ ml:
         part_time: ഭാഗിക സമയം
     target:
       role:
-        founder: എല്ലാ സ്ഥാപകരും
+        students: All Students
         team: ടീം
   mutations:
     archive_coach_note:

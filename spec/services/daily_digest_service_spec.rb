@@ -316,7 +316,7 @@ describe DailyDigestService do
       end
 
       context "when a user has a bounced email address" do
-        let(:student_bounced) { create :founder, team: team_2 }
+        let(:student_bounced) { create :student, team: team_2 }
         let!(:user_bounced) { student_bounced.user }
 
         before do

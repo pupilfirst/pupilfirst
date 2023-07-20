@@ -2215,7 +2215,7 @@ ta:
         part_time: பகுதி நேரம்
     target:
       role:
-        founder: அனைத்து நிறுவனர்கள்
+        students: All Students
         team: குழு
   mutations:
     archive_coach_note:

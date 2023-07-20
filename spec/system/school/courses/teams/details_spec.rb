@@ -13,7 +13,7 @@ feature 'Team Details', js: true do
   let!(:live_cohort) { create :cohort, course: course, ends_at: 1.day.from_now }
   let!(:level) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student_1) { create :founder, cohort: live_cohort, level: level }
+  let!(:student_1) { create :student, cohort: live_cohort, level: level }
   let!(:team_1) { create :team_with_students, cohort: live_cohort }
 
   let(:name) { Faker::Lorem.words(number: 2).join(' ') }
@@ -31,31 +31,31 @@ feature 'Team Details', js: true do
     dismiss_notification
 
     expect(team_1.reload.name).to eq(name)
-    expect(team_1.founders.count).to eq(3)
+    expect(team_1.students.count).to eq(3)
     expect(student_1.reload.team).to eq(team_1)
 
     click_button "Remove #{student_1.name}"
     click_button 'Update Team'
     dismiss_notification
 
-    expect(team_1.reload.founders.count).to eq(2)
+    expect(team_1.reload.students.count).to eq(2)
     expect(student_1.reload.team).to eq(nil)
   end
 
   scenario 'School admin tries to disbands a team' do
-    founders = team_1.founders
+    students = team_1.students
     sign_in_user school_admin.user, referrer: teams_details_path(team_1)
 
     expect(page.find_field('Team name').value).to eq(team_1.name)
     expect(page).to have_button(live_cohort.name, disabled: true)
-    click_button "Remove #{founders.first.name}"
+    click_button "Remove #{students.first.name}"
 
-    # Atleast two founders should be present in a team.
+    # Atleast two students should be present in a team.
     expect(page).to have_button('Update Team', disabled: true)
 
-    click_button "Remove #{founders.last.name}"
+    click_button "Remove #{students.last.name}"
 
-    # Atleast two founders should be present in a team.
+    # Atleast two students should be present in a team.
     expect(page).to have_button('Update Team', disabled: true)
   end
 

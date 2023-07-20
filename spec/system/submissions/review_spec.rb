@@ -13,10 +13,10 @@ feature "Submission review overlay", js: true do
   let(:cohort) { course.cohorts.first }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
-  let(:target) { create :target, :for_founders, target_group: target_group }
-  let(:target_2) { create :target, :for_founders, target_group: target_group }
+  let(:target) { create :target, :for_students, target_group: target_group }
+  let(:target_2) { create :target, :for_students, target_group: target_group }
   let(:auto_verify_target) do
-    create :target, :for_founders, target_group: target_group
+    create :target, :for_students, target_group: target_group
   end
   let(:grade_labels_for_1) do
     [
@@ -47,10 +47,10 @@ feature "Submission review overlay", js: true do
 
   before do
     create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: team_coach,
-           founder: student
+           student: student
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target.evaluation_criteria << [
@@ -205,7 +205,7 @@ feature "Submission review overlay", js: true do
 
       expect(page).to have_text("The submission has been marked as reviewed")
 
-      student = submission_pending.founders.first
+      student = submission_pending.students.first
       open_email(student.user.email)
       expect(current_email).to have_content("grades")
 
@@ -922,7 +922,7 @@ feature "Submission review overlay", js: true do
                dropped_out_at: 1.day.ago
       end
 
-      before { submission_pending.founders << another_student }
+      before { submission_pending.students << another_student }
 
       scenario "coach is warned when one student in the submission is inactive" do
         sign_in_user coach.user,
@@ -963,9 +963,9 @@ feature "Submission review overlay", js: true do
       expect(new_notes.first.student_id).to eq(student.id)
     end
 
-    scenario "coach leaves a note for a team submission" do
-      another_student = team.founders.where.not(id: student).first
-      submission_pending.founders << another_student
+    scenario 'coach leaves a note for a team submission' do
+      another_student = team.students.where.not(id: student).first
+      submission_pending.students << another_student
       note = Faker::Lorem.sentence
 
       sign_in_user team_coach.user,
@@ -1167,7 +1167,7 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team.founders,
+        owners: team.students,
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1192,7 +1192,7 @@ feature "Submission review overlay", js: true do
         expect(page).to have_content("Submitted by")
 
         # Each name should be linked to the report page.
-        team.founders.each do |student|
+        team.students.each do |student|
           expect(page).to have_link(
             student.name,
             href: "/students/#{student.id}/report",
@@ -1300,7 +1300,7 @@ feature "Submission review overlay", js: true do
         create(
           :timeline_event,
           :with_owners,
-          owners: team.founders,
+          owners: team.students,
           target: target,
           created_at: 3.days.ago,
         )
@@ -1349,8 +1349,8 @@ feature "Submission review overlay", js: true do
     end
   end
 
-  context "when evaluation criteria changed for a target with graded submissions" do
-    let(:target_1) { create :target, :for_founders, target_group: target_group }
+  context 'when evaluation criteria changed for a target with graded submissions' do
+    let(:target_1) { create :target, :for_students, target_group: target_group }
     let!(:submission_reviewed) do
       create(
         :timeline_event,
@@ -1570,7 +1570,7 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team_2.founders.first] + team_1.founders,
+        owners: [team_2.students.first] + team_1.students,
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1582,7 +1582,7 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_1.founders + team_2.founders,
+        owners: team_1.students + team_2.students,
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1594,7 +1594,7 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_1.founders + team_2.founders,
+        owners: team_1.students + team_2.students,
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1606,7 +1606,7 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_1.founders,
+        owners: team_1.students,
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1648,9 +1648,9 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_reviewed_1)
 
       # submission 1
-      expect(page).to have_text(submission_reviewed_1.checklist.first["title"])
-      expect(page).to have_text(team_1.founders.last.name)
-      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to have_text(submission_reviewed_1.checklist.first['title'])
+      expect(page).to have_text(team_1.students.last.name)
+      expect(page).to have_text(team_2.students.first.name)
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
       expect(page).not_to have_text(
@@ -1663,8 +1663,8 @@ feature "Submission review overlay", js: true do
       # submission 2 and 3
       visit review_timeline_event_path(submission_reviewed_3)
 
-      expect(page).to have_text(team_1.founders.last.name)
-      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to have_text(team_1.students.last.name)
+      expect(page).to have_text(team_2.students.first.name)
       expect(page).to have_link(
         href: "/submissions/#{submission_reviewed_3.id}/review",
       )
@@ -1679,12 +1679,12 @@ feature "Submission review overlay", js: true do
 
   context "when there are team targets and individual target submissions to review" do
     let(:individual_target) do
-      create :target, :for_founders, target_group: target_group
+      create :target, :for_students, target_group: target_group
     end
     let(:team_target) { create :target, :for_team, target_group: target_group }
     let(:team_1) { create :team_with_students, cohort: cohort }
     let(:team_2) { create :team_with_students, cohort: cohort }
-    let(:student) { team_1.founders.first }
+    let(:student) { team_1.students.first }
 
     let!(:submission_individual_target) do
       create(
@@ -1700,8 +1700,8 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_2.founders,
-        target: team_target,
+        owners: team_2.students,
+        target: team_target
       )
     end
     let!(:submission_team_target_2) do
@@ -1709,8 +1709,8 @@ feature "Submission review overlay", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [student, team_2.founders.first],
-        target: team_target,
+        owners: [student, team_2.students.first],
+        target: team_target
       )
     end
 
@@ -1726,8 +1726,8 @@ feature "Submission review overlay", js: true do
 
       expect(page).to have_title("Submission #1 | L1 | #{team_2.name}")
 
-      expect(page).to have_text(team_2.founders.first.name)
-      expect(page).to have_text(team_2.founders.last.name)
+      expect(page).to have_text(team_2.students.first.name)
+      expect(page).to have_text(team_2.students.last.name)
       expect(page).to have_text(team_2.name)
     end
 
@@ -1747,10 +1747,10 @@ feature "Submission review overlay", js: true do
                    referrer:
                      review_timeline_event_path(submission_team_target_2)
       expect(page).to have_title(
-        "Submission #1 | L1 | #{student.name}, #{team_2.founders.first.name}",
+        "Submission #1 | L1 | #{student.name}, #{team_2.students.first.name}"
       )
       expect(page).to have_text(student.name)
-      expect(page).to have_text(team_2.founders.first.name)
+      expect(page).to have_text(team_2.students.first.name)
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
     end

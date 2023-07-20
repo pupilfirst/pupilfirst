@@ -37,17 +37,17 @@ feature 'School Overview', js: true do
            :passed,
            evaluator_id: c1_coach.id,
            evaluated_at: 1.day.ago,
-           founders: c1_team_1.founders,
+           students: c1_team_1.students,
            target: c1_target_1
   end
   let!(:c1_timeline_event_2) do
-    create :timeline_event, founders: c1_team_1.founders, target: c1_target_2
+    create :timeline_event, students: c1_team_1.students, target: c1_target_2
   end
   let!(:c1_timeline_event_3) do
-    create :timeline_event, founders: c1_team_2.founders, target: c1_target_1
+    create :timeline_event, students: c1_team_2.students, target: c1_target_1
   end
   let!(:c1_timeline_event_4) do
-    create :timeline_event, founders: c1_team_3.founders, target: c1_target_1
+    create :timeline_event, students: c1_team_3.students, target: c1_target_1
   end
 
   # Setup a course 2
@@ -77,17 +77,17 @@ feature 'School Overview', js: true do
   let!(:c2_team_2) { create :team_with_students, cohort: cohort_2 }
   let!(:c2_team_3) { create :team_with_students, cohort: cohort_2 }
   let!(:c2_faculty_student_enrollment) do
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: c2_coach_2,
-           founder: c2_team_1.founders.first
+           student: c2_team_1.students.first
   end
   let!(:c2_timeline_event_1) do
     create :timeline_event,
            :passed,
            evaluator_id: c2_coach_1.id,
            evaluated_at: 1.day.ago,
-           founders: c2_team_1.founders,
+           students: c2_team_1.students,
            target: c2_target_1
   end
   let!(:c2_timeline_event_2) do
@@ -95,7 +95,7 @@ feature 'School Overview', js: true do
            :passed,
            evaluator_id: c2_coach_1.id,
            evaluated_at: 1.day.ago,
-           founders: c2_team_1.founders,
+           students: c2_team_1.students,
            target: c2_target_2
   end
   let!(:c2_timeline_event_3) do
@@ -103,7 +103,7 @@ feature 'School Overview', js: true do
            :passed,
            evaluator_id: c2_coach_1.id,
            evaluated_at: 1.day.ago,
-           founders: c2_team_2.founders,
+           students: c2_team_2.students,
            target: c2_target_1
   end
   let!(:c2_timeline_event_4) do
@@ -111,7 +111,7 @@ feature 'School Overview', js: true do
            :passed,
            evaluator_id: c2_coach_1.id,
            evaluated_at: 1.day.ago,
-           founders: c2_team_3.founders,
+           students: c2_team_3.students,
            target: c2_target_1
   end
 

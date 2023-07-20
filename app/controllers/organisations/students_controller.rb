@@ -5,13 +5,13 @@ module Organisations
 
     # GET /org/students/:id
     def show
-      student = authorize Founder.find(params[:id])
+      student = authorize Student.find(params[:id])
       @presenter = StudentPresenter.new(view_context, student)
     end
 
     # GET /org/students/:id/submissions
     def submissions
-      student = authorize Founder.find(params[:id])
+      student = authorize Student.find(params[:id])
       @presenter = StudentPresenter.new(view_context, student)
       raise_not_found if @presenter.reviewed_submissions.empty?
     end

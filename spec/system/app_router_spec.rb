@@ -3,7 +3,7 @@ feature 'App navigation', js: true do
   include UserSpecHelper
 
   let(:course) { create :course, :with_cohort }
-  let(:student) { create :founder, cohort: course.cohorts.first }
+  let(:student) { create :student, cohort: course.cohorts.first }
   let(:coach) { create :faculty, school: student.school, user: student.user }
 
   let!(:custom_link_1) do

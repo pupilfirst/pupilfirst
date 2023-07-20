@@ -21,7 +21,7 @@ module Mutations
 
     def destroy_team
       Team.transaction do
-        team.founders.each { |student| student.update!(team: nil) }
+        team.students.each { |student| student.update!(team: nil) }
         team.reload.destroy!
       end
     end

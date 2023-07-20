@@ -23,7 +23,7 @@ feature 'Submission Builder', js: true do
            grade_labels: grade_labels_for_1
   end
   let!(:level_1) { create :level, :one, course: course }
-  let!(:student) { create :founder, cohort: cohort, level: level_1 }
+  let!(:student) { create :student, cohort: cohort, level: level_1 }
   let!(:target_group_l1) do
     create :target_group, level: level_1, milestone: true
   end

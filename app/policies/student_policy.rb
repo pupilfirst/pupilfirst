@@ -1,4 +1,4 @@
-class FounderPolicy < ApplicationPolicy
+class StudentPolicy < ApplicationPolicy
   def report?
     return false if user.blank?
 

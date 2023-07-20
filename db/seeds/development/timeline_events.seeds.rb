@@ -1,9 +1,9 @@
-after 'development:founders', 'development:targets', 'development:faculty' do
+after 'development:students', 'development:targets', 'development:faculty' do
   puts 'Seeding timeline events'
 
   school = School.find_by(name: 'Test School')
   user = school.users.find_by(email: 'student1@example.com')
-  student = user.founders.first
+  student = user.students.first
   course = student.course
   cohort = course.cohorts.active.first
 
@@ -48,7 +48,7 @@ after 'development:founders', 'development:targets', 'development:faculty' do
         # Assign the owner for the submission.
         reviewed_submission.timeline_event_owners.create!(
           latest: target.level.id != final_level.id && submission_number == 1,
-          founder: student
+          student: student
         )
 
         # Assign the grades for the review.
@@ -92,7 +92,7 @@ after 'development:founders', 'development:targets', 'development:faculty' do
 
       pending_review.timeline_event_owners.create!(
         latest: true,
-        founder: student
+        student: student
       )
 
       archived =
@@ -102,7 +102,7 @@ after 'development:founders', 'development:targets', 'development:faculty' do
           archived_at: 10.hours.ago
         )
 
-      archived.timeline_event_owners.create!(latest: false, founder: student)
+      archived.timeline_event_owners.create!(latest: false, student: student)
     end
 
   form_submission_checklist = [
@@ -143,7 +143,7 @@ after 'development:founders', 'development:targets', 'development:faculty' do
       target_id: 7
     )
 
-  form_submission.timeline_event_owners.create!(latest: true, founder: student)
+  form_submission.timeline_event_owners.create!(latest: true, student: student)
 
   form_submission.update!(passed_at: 2.hours.ago)
 

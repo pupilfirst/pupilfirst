@@ -16,8 +16,8 @@ class Faculty < ApplicationRecord
   has_many :courses, through: :cohorts
 
   # Students whose submissions this faculty can review.
-  has_many :faculty_founder_enrollments, dependent: :destroy
-  has_many :founders, through: :faculty_founder_enrollments
+  has_many :faculty_student_enrollments, dependent: :destroy
+  has_many :students, through: :faculty_student_enrollments
 
   scope :exited, -> { where(exited: true) }
   scope :active, -> { where(exited: false) }

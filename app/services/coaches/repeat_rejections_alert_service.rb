@@ -32,7 +32,7 @@ module Coaches
     def current_submission_rejection_count
       @current_submission_rejection_count ||=
         @submission
-          .founders
+          .students
           .first
           .timeline_events
           .where(target_id: @submission.target)

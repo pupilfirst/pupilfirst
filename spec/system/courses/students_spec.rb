@@ -16,18 +16,18 @@ feature "Course students list", js: true do
 
   # Create few students
   let!(:student_1) do
-    create :founder,
+    create :student,
            level: level_1,
            tag_list: ["starts with z", "vegetable"],
            cohort: cohort
   end # This will always be around the bottom of the list.
   let!(:student_2) do
-    create :founder, level: level_2, tag_list: ["vegetable"], cohort: cohort
+    create :student, level: level_2, tag_list: ['vegetable'], cohort: cohort
   end # This will always be around the top.
-  let!(:student_3) { create :founder, level: level_2, cohort: cohort }
-  let!(:student_4) { create :founder, level: level_3, cohort: cohort }
-  let!(:student_5) { create :founder, level: level_3, cohort: cohort }
-  let!(:student_6) { create :founder, level: level_3, cohort: cohort }
+  let!(:student_3) { create :student, level: level_2, cohort: cohort }
+  let!(:student_4) { create :student, level: level_3, cohort: cohort }
+  let!(:student_5) { create :student, level: level_3, cohort: cohort }
+  let!(:student_6) { create :student, level: level_3, cohort: cohort }
 
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
@@ -45,10 +45,10 @@ feature "Course students list", js: true do
       create :student, cohort: cohort, level: level_3, user: user
     end
 
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: student_coach,
-           founder: student_6
+           student: student_6
   end
 
   scenario "coach checks the complete list of students" do
@@ -58,7 +58,7 @@ feature "Course students list", js: true do
     click_button "Order by Name"
 
     students_sorted_by_name =
-      course.founders.joins(:user).order("users.name").to_a
+      course.students.joins(:user).order('users.name').to_a
 
     # Check if the first ten teams are listed
     expect(page).to have_text(students_sorted_by_name[0].name)
@@ -115,7 +115,7 @@ feature "Course students list", js: true do
     end
 
     # Hover over a level to get percentage data
-    students_in_course = course.founders.count
+    students_in_course = course.students.count
     students_in_l2 = 2
     percentage_students_in_l2 = students_in_l2 / students_in_course.to_f * 100
 
@@ -136,7 +136,7 @@ feature "Course students list", js: true do
     click_button "Order by Name"
 
     expect(page).to have_text(
-      course.founders.joins(:user).order("users.name").first.name,
+      course.students.joins(:user).order('users.name').first.name
     )
 
     # Filter by level
@@ -202,10 +202,10 @@ feature "Course students list", js: true do
     let(:another_student_coach) { create :faculty, school: school }
 
     before do
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: another_student_coach,
-             founder: student_2
+             student: student_2
     end
 
     scenario "one team coach can use the filter to see another coach's students" do
@@ -247,22 +247,22 @@ feature "Course students list", js: true do
     let(:student_coach_5) { create :faculty, school: school }
 
     before do
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: student_coach_2,
-             founder: student_6
-      create :faculty_founder_enrollment,
+             student: student_6
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: student_coach_3,
-             founder: student_6
-      create :faculty_founder_enrollment,
+             student: student_6
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: student_coach_4,
-             founder: student_6
-      create :faculty_founder_enrollment,
+             student: student_6
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: student_coach_5,
-             founder: student_6
+             student: student_6
     end
 
     scenario "course coach checks names of coaches hidden from main list" do
@@ -295,7 +295,7 @@ feature "Course students list", js: true do
     let!(:level_4) { create :level, :four, course: course }
     let!(:level_5) { create :level, :five, course: course }
 
-    before { level_1.founders.each { |s| s.update!(level_id: level_2.id) } }
+    before { level_1.students.each { |s| s.update!(level_id: level_2.id) } }
 
     scenario "level shows completed icon instead of number of students" do
       sign_in_user course_coach.user, referrer: students_course_path(course)
@@ -372,7 +372,7 @@ feature "Course students list", js: true do
 
     student_in_first_page =
       course
-        .founders
+        .students
         .where.not(id: student_2.id)
         .joins(:user)
         .order("users.name")
@@ -435,7 +435,7 @@ feature "Course students list", js: true do
     click_button "Order by Last Created"
     click_button "Order by Name"
 
-    students_sorted_by_name = course.founders.joins(:user).order("users.name")
+    students_sorted_by_name = course.students.joins(:user).order('users.name')
     student_to_search = students_sorted_by_name[5]
     another_student = students_sorted_by_name.first
 

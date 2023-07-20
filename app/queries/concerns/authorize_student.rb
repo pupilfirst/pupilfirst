@@ -7,7 +7,7 @@ module AuthorizeStudent
     # Has access to school
     return false unless course&.school == current_school && student.present?
 
-    # Founder has access to the course
+    # Student has access to the course
     return false unless !student.cohort.ended?
 
     # Level must be accessible.
@@ -28,7 +28,7 @@ module AuthorizeStudent
   def student
     @student ||=
       current_user
-        .founders
+        .students
         .joins(:level)
         .where(levels: { course_id: course })
         .first
@@ -43,7 +43,7 @@ module AuthorizeStudent
   end
 
   def students
-    target.team_target? && student.team ? student.team.founders : [student]
+    target.team_target? && student.team ? student.team.students : [student]
   end
 
   def ensure_submittability

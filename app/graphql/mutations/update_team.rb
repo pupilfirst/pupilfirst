@@ -44,14 +44,14 @@ module Mutations
       end
 
       def students_should_belong_to_the_same_cohort
-        old_team_member_ids = @team.founders.pluck(:id).map(&:to_s)
+        old_team_member_ids = @team.students.pluck(:id).map(&:to_s)
         new_temp_student_ids = @value[:student_ids] - old_team_member_ids
 
         return if new_temp_student_ids.empty?
 
         if @team
              .cohort
-             .founders
+             .students
              .where(id: new_temp_student_ids, team_id: nil)
              .count == new_temp_student_ids.count
           return
@@ -71,11 +71,11 @@ module Mutations
 
         # Remove old team members
         team
-          .founders
+          .students
           .where.not(id: @params[:student_ids])
           .each { |student| student.update!(team_id: nil) }
 
-        old_team = team.founders.pluck(:id)
+        old_team = team.students.pluck(:id)
 
         students.map do |student|
           next if old_team.include?(student.id)
@@ -87,7 +87,7 @@ module Mutations
     end
 
     def students
-      @students ||= cohort.founders.where(id: @params[:student_ids])
+      @students ||= cohort.students.where(id: @params[:student_ids])
     end
 
     def cohort

@@ -14,12 +14,12 @@ module Applicants
       Applicant.transaction do
         student = create_new_student(tags)
 
-        # Make sure the tag is in the school's list of founder tags.
+        # Make sure the tag is in the school's list of student tags.
         # This is useful for retrieval in the school admin interface.
-        tags_to_add = tags.select { |tag| !tag.in?(school.founder_tag_list) }
+        tags_to_add = tags.select { |tag| !tag.in?(school.student_tag_list) }
 
         unless tags.empty?
-          school.founder_tag_list.add(tags_to_add)
+          school.student_tag_list.add(tags_to_add)
           school.save!
         end
 
@@ -43,10 +43,10 @@ module Applicants
       user.update!(name: @applicant.name)
 
       # Finally, create a student profile for the user.
-      founder = Founder.create!(user: user, level: first_level, cohort: @cohort)
-      founder.tag_list.add(tags)
-      founder.save!
-      founder
+      student = Student.create!(user: user, level: first_level, cohort: @cohort)
+      student.tag_list.add(tags)
+      student.save!
+      student
     end
 
     def school

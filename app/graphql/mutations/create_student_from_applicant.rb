@@ -23,7 +23,7 @@ module Mutations
     end
 
     def convert_applicant
-      Founder.transaction do
+      Student.transaction do
         student =
           Applicants::CreateStudentService.new(applicant).create(@params[:tags])
 

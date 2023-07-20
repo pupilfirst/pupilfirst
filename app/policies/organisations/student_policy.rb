@@ -1,5 +1,5 @@
 module Organisations
-  class FounderPolicy < ApplicationPolicy
+  class StudentPolicy < ApplicationPolicy
     def show?
       return false if record.school != current_school
 

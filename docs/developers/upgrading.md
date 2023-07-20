@@ -18,6 +18,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2023.2
+
+This version renames `founder` to `student` across the codebase. This change is not backwards compatible.
+
 ### 2023.1
 
 This version merges the `conclusion` with `status` in the `submission_reports` table. This change is not backwards compatible. If you are using the GraphQL API, you will need to ensure that `submissionReports` query is called with the `status` argument instead of `conclusion`.

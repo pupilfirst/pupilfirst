@@ -1,19 +1,19 @@
-# TODO: Replace all usage of FounderSpecHelper with new SubmissionsHelper.
+# TODO: Replace all usage of StudentSpecHelper with new SubmissionsHelper.
 #
 # IMPORTANT: Use SubmissionsHelper instead of this module.
 #
-# Some helpers to deal with founders in specs.
-module FounderSpecHelper
-  # This 'completes' a target for a founder - both team and founder role targets.
+# Some helpers to deal with students in specs.
+module StudentSpecHelper
+  # This 'completes' a target for a student - both team and student role targets.
   def complete_target(
-    founder,
+    student,
     target,
     passed_at: Time.zone.now,
     grade: nil,
     latest: true
   )
     submit_target(
-      founder,
+      student,
       target,
       passed: true,
       passed_at: passed_at,
@@ -23,17 +23,17 @@ module FounderSpecHelper
   end
 
   def submit_target(
-    founder,
+    student,
     target,
     passed: false,
     passed_at: Time.zone.now,
     grade: nil,
     latest: true
   )
-    team = founder.team
+    team = student.team
 
     if target.individual_target?
-      (team&.founders || [founder]).each do |student|
+      (team&.students || [student]).each do |student|
         create_timeline_event(
           student,
           target,
@@ -45,7 +45,7 @@ module FounderSpecHelper
       end
     else
       create_timeline_event(
-        founder,
+        student,
         target,
         passed: passed,
         passed_at: passed_at,
@@ -55,16 +55,16 @@ module FounderSpecHelper
     end
   end
 
-  # This creates a timeline event for a target, attributed to supplied founder.
+  # This creates a timeline event for a target, attributed to supplied student.
   def create_timeline_event(
-    founder,
+    student,
     target,
     passed: false,
     passed_at: nil,
     grade: nil,
     latest: true
   )
-    options = timeline_event_options(founder, passed, passed_at, target, latest)
+    options = timeline_event_options(student, passed, passed_at, target, latest)
 
     FactoryBot
       .create(:timeline_event, :with_owners, **options)
@@ -87,7 +87,7 @@ module FounderSpecHelper
 
   private
 
-  def timeline_event_options(founder, passed, passed_at, target, latest)
+  def timeline_event_options(student, passed, passed_at, target, latest)
     passed_at =
       if passed_at.present?
         passed_at
@@ -95,6 +95,6 @@ module FounderSpecHelper
         passed ? Time.zone.now : nil
       end
 
-    { owners: [founder], target: target, passed_at: passed_at, latest: latest }
+    { owners: [student], target: target, passed_at: passed_at, latest: latest }
   end
 end

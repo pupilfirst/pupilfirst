@@ -26,10 +26,10 @@ describe DailyDigestService do
       let(:team_2) { create :team, cohort: cohort_2 }
 
       let(:t1_student) do
-        create :founder, team: team_1, cohort: cohort_1, level: level_1
+        create :student, team: team_1, cohort: cohort_1, level: level_1
       end
       let(:t2_student) do
-        create :founder, team: team_2, cohort: cohort_2, level: level_2
+        create :student, team: team_2, cohort: cohort_2, level: level_2
       end
 
       let!(:community_1) do
@@ -262,7 +262,7 @@ describe DailyDigestService do
         let(:ended_cohort) { create :cohort, ends_at: 1.day.ago }
         let(:team_access_ended) { create :team, cohort: ended_cohort }
         let(:student_access_ended) do
-          create :founder, team: team_access_ended, cohort: cohort_1
+          create :student, team: team_access_ended, cohort: cohort_1
         end
         let!(:user_access_ended) { student_access_ended.user }
         let(:community_1) do
@@ -282,7 +282,7 @@ describe DailyDigestService do
       context "when there is a dropped out student" do
         let(:team_dropped_out) { create :team, cohort: cohort_1 }
         let(:student_dropped_out) do
-          create :founder,
+          create :student,
                  team: team_dropped_out,
                  dropped_out_at: 1.day.ago,
                  cohort: cohort_1
@@ -303,7 +303,7 @@ describe DailyDigestService do
       end
 
       context "when a student has opted-out of the daily digest" do
-        let(:student_opt_out) { create :founder, team: team_2 }
+        let(:student_opt_out) { create :student, team: team_2 }
         let!(:user_opt_out) { student_opt_out.user }
 
         before { user_opt_out.update!(preferences: { daily_digest: false }) }
@@ -340,7 +340,7 @@ describe DailyDigestService do
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
       let!(:target_1) do
-        create :target, :for_founders, target_group: target_group_1
+        create :target, :for_students, target_group: target_group_1
       end
       let(:grade_labels_for_1) do
         [
@@ -364,7 +364,7 @@ describe DailyDigestService do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: team_1.founders,
+          owners: team_1.students,
           target: target_1
         )
       end
@@ -374,7 +374,7 @@ describe DailyDigestService do
       let(:level_2) { create :level, :one, course: course_2 }
       let(:target_group_2) { create :target_group, level: level_2 }
       let!(:target_2) do
-        create :target, :for_founders, target_group: target_group_2
+        create :target, :for_students, target_group: target_group_2
       end
       let(:grade_labels_for_2) do
         [
@@ -398,7 +398,7 @@ describe DailyDigestService do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: team_2.founders,
+          owners: team_2.students,
           target: target_2
         )
       end
@@ -407,7 +407,7 @@ describe DailyDigestService do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: team_2.founders,
+          owners: team_2.students,
           target: target_2
         )
       end
@@ -421,7 +421,7 @@ describe DailyDigestService do
       let(:community_1) do
         create :community, school: school, courses: [course_1]
       end
-      let(:t1_user) { team_1.founders.first.user }
+      let(:t1_user) { team_1.students.first.user }
 
       let(:course_3) { create :course, school: school }
       let(:cohort_3) { create :cohort, course: course_3 }
@@ -430,7 +430,7 @@ describe DailyDigestService do
       let(:community_2) do
         create :community, school: school, courses: [course_3]
       end
-      let(:t3_user) { team_3.founders.first.user }
+      let(:t3_user) { team_3.students.first.user }
       let(:coach_2) { create :faculty, school: school }
 
       before do
@@ -438,9 +438,9 @@ describe DailyDigestService do
         create :faculty_cohort_enrollment, faculty: coach, cohort: cohort_2
         create :faculty_cohort_enrollment, faculty: team_coach, cohort: cohort_1
         create :faculty_cohort_enrollment, faculty: team_coach, cohort: cohort_2
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                faculty: team_coach,
-               founder: team_2.founders.first
+               student: team_2.students.first
         create :faculty_cohort_enrollment, faculty: coach_2, cohort: cohort_3
         create :topic,
                :with_first_post,
@@ -522,7 +522,7 @@ describe DailyDigestService do
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
       let!(:target_1) do
-        create :target, :for_founders, target_group: target_group_1
+        create :target, :for_students, target_group: target_group_1
       end
       let(:grade_labels_for_1) do
         [

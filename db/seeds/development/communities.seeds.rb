@@ -1,4 +1,4 @@
-after 'development:schools', 'development:founders', 'development:faculty', 'development:courses' do
+after 'development:schools', 'development:students', 'development:faculty', 'development:courses' do
   puts 'Seeding communities'
 
   school = School.first

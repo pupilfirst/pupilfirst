@@ -12,7 +12,7 @@ module QueryAuthorizeCommunityUser
 
     # User should have access to the community
     current_user
-      .founders
+      .students
       .includes(:course)
       .where(courses: { id: community.courses })
       .any?

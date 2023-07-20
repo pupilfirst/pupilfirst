@@ -2215,7 +2215,7 @@ hi:
         part_time: पार्ट टाईम
     target:
       role:
-        founder: सभी संस्थापक
+        students: All Students
         team: टीम
   mutations:
     archive_coach_note:

@@ -40,7 +40,7 @@ class SetTargetPrerequisiteBetweenLevels < ActiveRecord::Migration[6.1]
         .each do |level|
           level_number = level.number
 
-          next if level_number == 1
+          next if level_number.in?([0, 1])
 
           previous_level = course.levels.find_by(number: level_number - 1)
 

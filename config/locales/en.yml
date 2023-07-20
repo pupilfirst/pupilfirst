@@ -2177,7 +2177,9 @@ en:
           control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
-          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in some courses that you are a coach in:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "Older, popular topics that have seen new activity:"
           replies: replies
           views: views

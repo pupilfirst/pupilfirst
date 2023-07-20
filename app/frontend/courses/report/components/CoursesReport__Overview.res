@@ -284,7 +284,6 @@ let make = (~overviewData, ~coaches) =>
               ->Js.Array2.map(data => {
                 <a
                   href={"/targets/" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
-                  target="_blank"
                   className="flex col-span-1 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="flex items-center">
                     <p className="text-sm font-semibold mr-2">

@@ -654,6 +654,7 @@ en:
       level_progress: Level Progress
       milestone_completed: Completed
       milestone_pending: Pending
+      milestone_status_help: This is the list of milestone targets that you need to complete to finish this course. Use this view to track your progress and to spot targets that you might have missed.
       milestone_status_title: Completion status of milestone targets
       personal_coaches: Personal Coaches
       quizzes_attempted:

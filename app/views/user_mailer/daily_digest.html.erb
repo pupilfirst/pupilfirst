@@ -4,18 +4,15 @@
   def article(count)
     count > 1 ? t("shared.are") : t("shared.is")
   end %>
-
 <% content_for :salutation do %>
   <%= t("shared.salutation_name", name: recipient_name) %>
 <% end %>
-
 <% content_for :body do %>
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-      <%= t("mailers.user.daily_digest.body.main_html", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count) %>
+      <%= t("mailers.user.daily_digest.body.main_html", count: pending_submissions_count) %>
     </p>
-
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
       <% @updates[:coach].each do |stats| %>
         <li style="padding: 2px 0px;">
@@ -29,12 +26,10 @@
       <% end %>
     </ul>
   <% end %>
-
   <% if @updates[:community_new].present? %>
     <p style="margin-top: 15px;">
       <%= t("mailers.user.daily_digest.body.latest_topics") %>
     </p>
-
     <% @updates[:community_new].each do |topic| %>
       <div>
         <%= link_to topic[:title], topic_url(topic[:id]) %>
@@ -49,12 +44,10 @@
       </div>
     <% end %>
   <% end %>
-
   <% if @updates[:community_reactivated].present? %>
     <p style="margin-top: 15px;">
       <%= t("mailers.user.daily_digest.body.older") %>
     </p>
-
     <% @updates[:community_reactivated].each do |topic| %>
       <div>
         <%= link_to topic[:title], topic_url(topic[:id]) %>
@@ -70,12 +63,10 @@
       </div>
     <% end %>
   <% end %>
-
   <p style="font-size: 75%; margin-top: 15px;">
     <%= t("mailers.user.daily_digest.body.control_emails_html", link_to: link_to(t("mailers.user.daily_digest.body.link_to"), edit_user_url)) %>
   </p>
 <% end %>
-
 <% content_for(:signature) do %>
   <div></div>
 <% end %>

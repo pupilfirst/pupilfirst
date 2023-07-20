@@ -68,10 +68,10 @@ module Courses
 
       applicable_cohorts = []
 
-      if current_user.founders.present?
+      if current_user.students.present?
         applicable_cohorts <<
           current_user
-            .founders
+            .students
             .joins(:cohort)
             .where(cohorts: { course_id: @course })
             .pluck(:cohort_id)

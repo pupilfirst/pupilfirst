@@ -1,6 +1,6 @@
 class CoachNote < ApplicationRecord
   belongs_to :author, class_name: 'User', optional: true
-  belongs_to :student, class_name: 'Founder'
+  belongs_to :student
 
   validates :note, presence: true
 

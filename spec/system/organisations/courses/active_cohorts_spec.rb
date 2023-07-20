@@ -50,13 +50,13 @@ feature "Organisation show" do
     # Set up org relationships
     [team_c1_o1, team_c2_o1, team_c3_o1, team_c4_o1].each do |team|
       team
-        .founders
+        .students
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation_1) }
     end
 
     team_c1_o2
-      .founders
+      .students
       .includes(:user)
       .each { |f| f.user.update!(organisation: organisation_2) }
   end

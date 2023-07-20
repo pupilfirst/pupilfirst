@@ -11,7 +11,7 @@ module Cohorts
 
       Cohort.transaction do
         @cohort.teams.update_all(cohort_id: other_cohort.id) # rubocop:disable Rails/SkipsModelValidations
-        @cohort.founders.update_all(cohort_id: other_cohort.id) # rubocop:disable Rails/SkipsModelValidations
+        @cohort.students.update_all(cohort_id: other_cohort.id) # rubocop:disable Rails/SkipsModelValidations
 
         coaches_in_other_cohort = other_cohort.faculty.pluck(:id)
         @cohort.faculty_cohort_enrollments.each do |enrollment|

@@ -10,8 +10,8 @@ module Github
         return
       end
 
-      if @submission.founders.first.github_repository.blank?
-        Github::SetupRepositoryService.new(@submission.founders.first).execute
+      if @submission.students.first.github_repository.blank?
+        Github::SetupRepositoryService.new(@submission.students.first).execute
         @submission
           .submission_reports
           .find_or_create_by!(
@@ -21,7 +21,7 @@ module Github
       end
 
       branch = create_branch(re_run)
-      repo_name = @submission.founders.first.github_repository
+      repo_name = @submission.students.first.github_repository
 
       # Add the workflow file
       github_client.update_contents(
@@ -54,7 +54,7 @@ module Github
 
       branch_name = "#{branch_name}-#{Time.now.to_i}" if re_run
 
-      repo_name = @submission.founders.first.github_repository
+      repo_name = @submission.students.first.github_repository
 
       # Get the sha of the last commit on the main branch
       latest_sha = get_main_branch_sha(repo_name)
@@ -75,7 +75,7 @@ module Github
         # Create the main branch and get the Sha of the last commit
         last_commit =
           Github::SetupRepositoryService.new(
-            @submission.founders.first,
+            @submission.students.first,
           ).add_workflow_starter(repo_name)
         last_commit.content.sha
       end

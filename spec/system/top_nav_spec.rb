@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Top navigation bar', js: true do
   include UserSpecHelper
 
-  let(:student) { create :founder }
+  let(:student) { create :student }
 
   let!(:custom_link_1) do
     create :school_link, :header, school: student.school, sort_index: 1

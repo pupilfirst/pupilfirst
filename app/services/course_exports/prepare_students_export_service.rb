@@ -74,7 +74,7 @@ module CourseExports
               .where(
                 timeline_event_owners: {
                   latest: true,
-                  founder_id: students.pluck(:id)
+                  student_id: students.pluck(:id)
                 },
                 timeline_events: {
                   target_id: target.id
@@ -98,7 +98,7 @@ module CourseExports
           .where(
             timeline_event_owners: {
               latest: true,
-              founder_id: student.id
+              student_id: student.id
             },
             evaluation_criterion_id: evaluation_criterion_id
           )
@@ -112,10 +112,10 @@ module CourseExports
       target
         .timeline_events
         .live
-        .joins(:founders)
-        .where(founders: { id: students.pluck(:id) })
-        .distinct("founders.id")
-        .count("founders.id")
+        .joins(:students)
+        .where(students: { id: students.pluck(:id) })
+        .distinct("students.id")
+        .count("students.id")
     end
 
     def submissions_pending_review(target)
@@ -123,8 +123,8 @@ module CourseExports
         .timeline_events
         .live
         .pending_review
-        .joins(:founders)
-        .where(founders: { id: students.pluck(:id) })
+        .joins(:students)
+        .where(students: { id: students.pluck(:id) })
         .distinct("timeline_events.id")
         .count
     end
@@ -200,8 +200,8 @@ module CourseExports
       TimelineEvent
         .live
         .includes(:timeline_event_grades)
-        .joins(:founders)
-        .where(founders: { id: student.id })
+        .joins(:students)
+        .where(students: { id: student.id })
         .order(:created_at)
         .distinct
         .each_with_object([]) do |submission, grading|
@@ -219,9 +219,9 @@ module CourseExports
         begin
           scope =
             if @cohorts.present?
-              Founder.includes(:level, :user).where(cohort: @cohorts)
+              Student.includes(:level, :user).where(cohort: @cohorts)
             else
-              course.founders.includes(:level, :user)
+              course.students.includes(:level, :user)
             end
           # Exclude inactive students, unless requested.
           scope =

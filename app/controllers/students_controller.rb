@@ -1,7 +1,7 @@
-class FoundersController < ApplicationController
+class StudentsController < ApplicationController
   # GET /students/:id/report
   def report
-    student = authorize(Founder.find(params[:id]))
+    student = authorize(Student.find(params[:id]))
     @course = student.course
     render html: '', layout: 'app_router'
   end

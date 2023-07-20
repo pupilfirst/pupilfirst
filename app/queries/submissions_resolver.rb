@@ -77,8 +77,8 @@ class SubmissionsResolver < ApplicationQuery
     stage_4 =
       if course.faculty.exists?(id: personal_coach_id)
         stage_3
-          .joins(founders: :faculty_founder_enrollments)
-          .where(faculty_founder_enrollments: { faculty_id: personal_coach_id })
+          .joins(students: :faculty_student_enrollments)
+          .where(faculty_student_enrollments: { faculty_id: personal_coach_id })
       else
         stage_3
       end
@@ -106,7 +106,7 @@ class SubmissionsResolver < ApplicationQuery
         stage_6
       end
 
-    final_list.from_founders(students)
+    final_list.from_students(students)
   end
 
   def filter_by_status(submissions)
@@ -125,7 +125,7 @@ class SubmissionsResolver < ApplicationQuery
   def students
     @students ||=
       begin
-        scope = course.founders.where(cohort_id: coach.cohorts)
+        scope = course.students.where(cohort_id: coach.cohorts)
 
         scope = include_inactive ? scope : scope.active
 

@@ -6,18 +6,18 @@ feature 'Course leaderboard' do
   let(:ended_cohort) do
     create :cohort, course: cohort.course, ends_at: 1.day.ago
   end
-  let(:student) { create :founder, cohort: cohort }
+  let(:student) { create :student, cohort: cohort }
   let(:other_student_1) do
-    create :founder, level: student.level, cohort: cohort
+    create :student, level: student.level, cohort: cohort
   end
   let(:other_student_2) do
-    create :founder, level: student.level, cohort: cohort
+    create :student, level: student.level, cohort: cohort
   end
   let(:inactive_student) do
-    create :founder, level: student.level, cohort: ended_cohort
+    create :student, level: student.level, cohort: ended_cohort
   end
   let!(:excluded_student) do
-    create :founder,
+    create :student,
            level: student.level,
            cohort: cohort,
            excluded_from_leaderboard: true
@@ -31,31 +31,31 @@ feature 'Course leaderboard' do
     create :leaderboard_entry,
            period_from: lts.week_start,
            period_to: lts.week_end,
-           founder: student,
+           student: student,
            score: 10
 
     create :leaderboard_entry,
            period_from: lts.week_start,
            period_to: lts.week_end,
-           founder: other_student_1,
+           student: other_student_1,
            score: rand(1..9)
 
     create :leaderboard_entry,
            period_from: lts.last_week_start,
            period_to: lts.last_week_end,
-           founder: other_student_1,
+           student: other_student_1,
            score: 10
 
     create :leaderboard_entry,
            period_from: lts.last_week_start,
            period_to: lts.last_week_end,
-           founder: other_student_2,
+           student: other_student_2,
            score: 7
 
     create :leaderboard_entry,
            period_from: lts.last_week_start,
            period_to: lts.last_week_end,
-           founder: student,
+           student: student,
            score: 4
   end
 
@@ -86,8 +86,8 @@ feature 'Course leaderboard' do
     expect(page).to have_content('You are at the top of the leaderboard')
 
     # The current leaderboard should only include the current student, and members of one other team.
-    ([student] + [other_student_1]).each do |leaderboard_founder|
-      expect(page).to have_content(leaderboard_founder.name)
+    ([student] + [other_student_1]).each do |leaderboard_student|
+      expect(page).to have_content(leaderboard_student.name)
     end
 
     expect(page).not_to have_content(other_student_2.name)
@@ -111,8 +111,8 @@ feature 'Course leaderboard' do
           )
 
     ([student] + [other_student_1] + [other_student_2])
-      .each do |leaderboard_founder|
-      expect(page).to have_content(leaderboard_founder.name)
+      .each do |leaderboard_student|
+      expect(page).to have_content(leaderboard_student.name)
     end
   end
 end

@@ -31,7 +31,7 @@ module Schools
       private
 
       def tag_details
-        @course.school.founder_tags.as_json(only: %i[id name])
+        @course.school.student_tags.as_json(only: %i[id name])
       end
 
       def course_details

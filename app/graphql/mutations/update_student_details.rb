@@ -29,7 +29,7 @@ module Mutations
       def validate(_object, context, value)
         @cohort =
           context[:current_school].cohorts.find_by(id: value[:cohort_id])
-        @student = context[:current_school].founders.find_by(id: value[:id])
+        @student = context[:current_school].students.find_by(id: value[:id])
         @coaches = @student.course.faculty.where(id: value[:coach_ids])
         @value = value
 
@@ -88,7 +88,7 @@ module Mutations
           student.user
         ).execute
       end
-      Founder.transaction do
+      Student.transaction do
         student.user.update!(
           name: @params[:name],
           title: @params[:title],
@@ -104,13 +104,13 @@ module Mutations
 
         student.save!
 
-        resource_school.founder_tag_list << @params[:taggings]
+        resource_school.student_tag_list << @params[:taggings]
         resource_school.save!
 
         if @params[:coach_ids].present?
-          ::Founders::AssignReviewerService.new(student).assign(
-            @params[:coach_ids]
-          )
+          ::Students::AssignReviewerService
+            .new(student)
+            .assign(@params[:coach_ids])
         end
       end
     end
@@ -128,7 +128,7 @@ module Mutations
     end
 
     def student
-      @student ||= Founder.find_by(id: @params[:id])
+      @student ||= Student.find_by(id: @params[:id])
     end
   end
 end

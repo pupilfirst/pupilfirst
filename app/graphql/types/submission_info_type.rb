@@ -42,19 +42,19 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(founders: %i[user])
+            .includes(students: %i[user])
             .where(id: submission_ids)
             .each do |submission|
               loader.call(
                 submission.id,
                 submission
-                  .founders
-                  .map { |founder| founder.user.name }
-                  .join(', ')
+                  .students
+                  .map { |student| student.user.name }
+                  .join(", ")
               )
             end
         end
-      # object.founders.map { |founder| founder.user.name }.join(', ')
+      # object.students.map { |student| student.user.name }.join(', ')
     end
 
     def feedback_sent
@@ -72,13 +72,13 @@ module Types
     end
 
     def students_have_same_team?(submission)
-      submission.founders.distinct(:team_id).pluck(:team_id).count == 1
+      submission.students.distinct(:team_id).pluck(:team_id).count == 1
     end
 
     def resolve_team_name(submission)
-      if submission.timeline_event_owners.count > 1 &&
+      if submission.timeline_event_owners.size > 1 &&
            submission.team_submission? && students_have_same_team?(submission)
-        submission.founders.first.team.name
+        submission.students.first.team.name
       end
     end
 
@@ -87,7 +87,7 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(:timeline_event_owners, :target, founders: %i[team])
+            .includes(:timeline_event_owners, students: %i[team])
             .where(id: submission_ids)
             .each do |submission|
               loader.call(submission.id, resolve_team_name(submission))

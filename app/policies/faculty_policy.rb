@@ -7,11 +7,11 @@ class FacultyPolicy < ApplicationPolicy
     # Cannot connect if connect link is blank.
     return false if record.connect_link.blank?
 
-    if current_founder.present?
+    if user&.students.present?
       connectable_courses_of_user =
         Course
-          .joins(cohorts: :founders)
-          .where(founders: { id: user.founders })
+          .joins(cohorts: :students)
+          .where(students: { id: user.students })
           .where(can_connect: true)
 
       # Coach must be assigned to one of the connectable courses of the user

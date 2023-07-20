@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-after 'development:founders' do
+after 'development:students' do
   puts 'Seeding Applicants'
 
   Course.all.each do |course|

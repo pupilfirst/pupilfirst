@@ -137,7 +137,7 @@ module Cohorts
 
     def scope
       @scope ||=
-        @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
+        @organisation.students.not_dropped_out.where(cohort_id: @cohort.id)
     end
   end
 end

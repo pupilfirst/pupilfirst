@@ -240,7 +240,7 @@ module Mutations
     end
 
     def update_coach_note
-      submission.founders.each do |student|
+      submission.students.each do |student|
         CoachNote.create!(
           note: @params[:note],
           author_id: current_user.id,

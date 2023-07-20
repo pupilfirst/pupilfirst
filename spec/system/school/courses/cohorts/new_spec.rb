@@ -14,7 +14,7 @@ feature 'Cohorts New', js: true do
   let!(:live_cohort) { create :cohort, course: course }
   let!(:level) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student) { create :founder, cohort: live_cohort, level: level }
+  let!(:student) { create :student, cohort: live_cohort, level: level }
   let(:name) { Faker::Lorem.words(number: 2).join(' ') }
   let(:description) { Faker::Lorem.sentences.join(' ') }
 

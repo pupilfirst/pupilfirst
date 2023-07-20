@@ -31,7 +31,7 @@ module Types
     end
 
     def user_names
-      object.founders.map { |founder| founder.user.name }.join(', ')
+      object.students.map { |student| student.user.name }.join(', ')
     end
 
     def feedback_sent
@@ -74,13 +74,13 @@ module Types
     end
 
     def students_have_same_team
-      object.founders.distinct(:team_id).pluck(:team_id).one?
+      object.students.distinct(:team_id).pluck(:team_id).one?
     end
 
     def team_name
       if object.team_submission? && students_have_same_team &&
            object.timeline_event_owners.count > 1
-        object.founders.first.team.name
+        object.students.first.team.name
       end
     end
   end

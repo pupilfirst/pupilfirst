@@ -16,7 +16,7 @@ class CommunityPolicy < ApplicationPolicy
       end
 
       course_ids =
-        user.founders.not_dropped_out.joins(:course).select(:course_id)
+        user.students.not_dropped_out.joins(:course).select(:course_id)
       scope
         .where(school: current_school)
         .joins(:courses)

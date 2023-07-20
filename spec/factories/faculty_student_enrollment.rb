@@ -1,12 +1,12 @@
 FactoryBot.define do
-  factory :faculty_founder_enrollment do
+  factory :faculty_student_enrollment do
     faculty
-    founder
+    student
   end
 
   trait :with_cohort_enrollment do
     after(:create) do |enrollment|
-      cohort = enrollment.founder.cohort
+      cohort = enrollment.student.cohort
       coach = enrollment.faculty
 
       if FacultyCohortEnrollment.where(faculty: coach, cohort: cohort).blank?

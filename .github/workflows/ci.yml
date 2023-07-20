@@ -162,7 +162,7 @@ jobs:
     steps:
       - name: Deploy to DigitalOcean
         uses: digitalocean/app_action@main
-        if: "${{ env.DIGITALOCEAN_ACCESS_TOKEN != '' }}"
+        if: "${{ env.DIGITALOCEAN_ACCESS_TOKEN != '' && vars.ENABLE_AUTO_DEPLOY == 'true' }}"
         with:
           app_name: pupilfirst
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}

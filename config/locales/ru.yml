@@ -2243,7 +2243,7 @@ ru:
         part_time: Неполный рабочий день
     target:
       role:
-        founder: Все учредители
+        students: All Students
         team: Команда
   mutations:
     archive_coach_note:

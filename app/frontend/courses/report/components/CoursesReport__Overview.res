@@ -268,9 +268,7 @@ let make = (~overviewData, ~coaches) =>
         <div className="w-full">
           <div>
             <div className="flex justify-between mt-8">
-              <p className="text-sm font-semibold">
-                {"Milestone Targets Completion Status" |> str}
-              </p>
+              <p className="text-sm font-semibold"> {t("milestone_status_title")->str} </p>
               {milestoneTargetsCompletionStatus(overview)}
             </div>
             <div className="grid gap-2 mt-2">

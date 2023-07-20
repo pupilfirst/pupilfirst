@@ -651,6 +651,7 @@ en:
       button_overview_text: Overview
       button_submissions_text: Submissions
     CoursesReport__Overview:
+      milestone_status_title: Completion status of milestone targets
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!

@@ -2550,8 +2550,8 @@ en:
       applicants:
         title: Applicants
       assignments:
-        list_title: Arrange milestone assignments in
-        milestone_msg: Order of milestone assignments determines the sequence in which the course should be completed.
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:

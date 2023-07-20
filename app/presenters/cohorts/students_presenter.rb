@@ -7,6 +7,10 @@ module Cohorts
       super(view_context)
     end
 
+    def t(key)
+      I18n.t("presenters.cohorts.students.#{key}")
+    end
+
     def filter
       @filter ||=
         begin
@@ -20,40 +24,40 @@ module Cohorts
             filters: [
               {
                 key: "milestone_completed",
-                label: "Milestone Completed",
+                label: t("milestone_completed"),
                 filterType: "MultiSelect",
                 values: milestone_targets_data,
                 color: "blue"
               },
               {
                 key: "milestone_pending",
-                label: "Milestone Pending",
+                label: t("milestone_pending"),
                 filterType: "MultiSelect",
                 values: milestone_targets_data,
                 color: "orange"
               },
               {
                 key: "course",
-                label: "Course",
+                label: t("course_completion"),
                 filterType: "MultiSelect",
-                values: ["Completed", "Not Completed"],
+                values: %w[Completed Incomplete],
                 color: "green"
               },
               {
                 key: "name",
-                label: "Name",
+                label: t("search_by_name"),
                 filterType: "Search",
                 color: "red"
               },
               {
                 key: "email",
-                label: "Email",
+                label: t("search_by_email"),
                 filterType: "Search",
                 color: "yellow"
               }
             ],
-            placeholder: "Search by name or email",
-            hint: "...or start typing to search by student's name of email",
+            placeholder: t("filter_placeholder"),
+            hint: t("filter_hint"),
             sorter: {
               key: "sort_by",
               default: "Recently Seen",
@@ -181,7 +185,7 @@ module Cohorts
     def filter_students_by_course_completion(scope)
       if params[:course] == "Completed"
         scope.where.not(completed_at: nil)
-      elsif params[:course] == "Not Completed"
+      elsif params[:course] == "Incomplete"
         scope.where(completed_at: nil)
       else
         scope

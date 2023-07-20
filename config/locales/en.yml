@@ -2421,6 +2421,15 @@ en:
   presenters:
     apply:
       page_title: Enroll in %{course_name}
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_pending: Milestone pending
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:

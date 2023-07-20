@@ -1,9 +1,7 @@
-<% school_name = @user.school.name
+<%
+  school_name = @user.school.name
   recipient_name = @user.name
-
-  def article(count)
-    count > 1 ? t("shared.are") : t("shared.is")
-  end %>
+%>
 <% content_for :salutation do %>
   <%= t("shared.salutation_name", name: recipient_name) %>
 <% end %>

@@ -674,7 +674,7 @@ feature "School students index", js: true do
 
   context "when a course has certificates" do
     let!(:student_without_certificate) { create :student, cohort: live_cohort }
-    let(:student_with_certificate) { create :student, ohort: live_cohort }
+    let(:student_with_certificate) { create :student, cohort: live_cohort }
 
     let!(:certificate_1) { create :certificate, course: course }
     let!(:certificate_2) { create :certificate, course: course }

@@ -4,7 +4,7 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def daily_digest
-    user = Founder.last.user
+    user = Student.last.user
 
     updates = {
       community_new: new_topics,

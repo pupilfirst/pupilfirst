@@ -14,7 +14,7 @@ module ValidateSubmissionGradable
       submission_review_allowed =
         (days_since_submission < submission_review_allowed_days)
 
-      if (submission.founders.active.empty? && !submission_review_allowed)
+      if (submission.students.active.empty? && !submission_review_allowed)
         return(
           I18n.t('validate_submission_gradable.owners_should_be_active.error')
         )

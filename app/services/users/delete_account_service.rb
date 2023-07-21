@@ -16,7 +16,7 @@ module Users
 
       User.transaction do
         create_audit_record
-        delete_founder_data if @user.founders.present?
+        delete_student_data if @user.students.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
         name = @user.preferred_name.presence || @user.name
@@ -32,11 +32,11 @@ module Users
 
     private
 
-    def delete_founder_data
+    def delete_student_data
       # Clear links with all submissions, and delete submissions owned just by this user.
       TimelineEventOwner
         .includes(:timeline_event)
-        .where(founder: @user.founders)
+        .where(student: @user.students)
         .find_each do |submission_ownership|
           submission = submission_ownership.timeline_event
           only_one_owner = submission.timeline_event_owners.one?
@@ -47,13 +47,13 @@ module Users
       # Cache teams with only the current user as member
       team_ids =
         Team
-          .joins(:founders)
+          .joins(:students)
           .group(:id)
-          .having("count(founders.id) = 1")
-          .where(id: @user.founders.distinct(:team_id).select(:team_id))
+          .having("count(students.id) = 1")
+          .where(id: @user.students.distinct(:team_id).select(:team_id))
           .pluck(:id)
 
-      @user.founders.each(&:destroy!)
+      @user.students.each(&:destroy!)
       Team.where(id: team_ids).each(&:destroy!)
     end
 
@@ -72,7 +72,7 @@ module Users
         metadata: {
           name: @user.name,
           email: @user.email,
-          cohort_ids: @user.founders.pluck(:cohort_id),
+          cohort_ids: @user.students.pluck(:cohort_id),
           organisation_id: @user.organisation_id,
           account_deletion_notification_sent_at:
             @user.account_deletion_notification_sent_at&.iso8601

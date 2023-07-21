@@ -72,7 +72,7 @@ module Types
         .for(object.id)
         .batch do |student_ids, loader|
           tags =
-            Founder
+            Student
               .joins(taggings: :tag)
               .where(id: student_ids)
               .distinct('tags.name')
@@ -90,11 +90,11 @@ module Types
       BatchLoader::GraphQL
         .for(object.id)
         .batch(default_value: []) do |student_ids, loader|
-          FacultyFounderEnrollment
+          FacultyStudentEnrollment
             .joins(:faculty)
-            .where(founder_id: student_ids)
+            .where(student_id: student_ids)
             .each do |enrollment|
-              loader.call(enrollment.founder_id) do |memo|
+              loader.call(enrollment.student_id) do |memo|
                 memo |= [enrollment.faculty].compact # rubocop:disable Lint/UselessAssignment
               end
             end

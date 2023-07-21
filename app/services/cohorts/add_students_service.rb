@@ -26,10 +26,10 @@ module Cohorts
 
           notify_students(students)
 
-          # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
+          # Add the tags to the school's list of student tags. This is useful for retrieval in the school admin interface.
           new_student_tags =
             new_students.map { |student| student.tags || [] }.flatten.uniq
-          school.founder_tag_list << new_student_tags
+          school.student_tag_list << new_student_tags
           school.save!
 
           students
@@ -100,7 +100,7 @@ module Cohorts
       team = find_or_create_team(student)
 
       # Finally, create a student profile for the user.
-      Founder.create!(
+      Student.create!(
         user: user,
         team: team,
         tag_list: student.tags,
@@ -113,7 +113,7 @@ module Cohorts
       requested_emails = students.map(&:email).map(&:downcase)
       enrolled_student_emails =
         course
-          .founders
+          .students
           .joins(:user)
           .where(users: { email: requested_emails })
           .pluck(:email)

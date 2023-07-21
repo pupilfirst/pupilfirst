@@ -133,7 +133,7 @@ module Students
     def target_eligible?(target, eligibility)
       if target.individual_target?
         completed_students =
-          (team ? team.founders : [@student]).select do |student|
+          (team ? team.students : [@student]).select do |student|
             target.status(student).in?(eligibility)
           end
 
@@ -141,7 +141,7 @@ module Students
           # Mark that some teammates haven't yet completed target if applicable.
           @team_members_pending ||=
             if team.present?
-              completed_students.count != team.founders.count
+              completed_students.count != team.students.count
             else
               false
             end

@@ -15,7 +15,7 @@ module ValidateCourseExport
     def validate(_object, _context, value)
       course = Course.find_by(id: value[:course_id])
       current_school = course&.school
-      tags = current_school.founder_tags.where(id: value[:tag_ids])
+      tags = current_school.student_tags.where(id: value[:tag_ids])
       return if value[:tag_ids].count == tags.count
       I18n.t("mutations.export_course_report.tag_not_found_error")
     end

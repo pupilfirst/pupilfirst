@@ -4,7 +4,7 @@ feature 'SA Communities Editor', js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  # Setup a course with a single founder target, ...
+  # Setup a course with a single student target, ...
   let!(:school) { create :school, :current }
   let!(:course_1) { create :course, school: school }
   let!(:course_2) { create :course, school: school }

@@ -70,7 +70,7 @@ module Users
       @courses_with_student_profile ||=
         begin
           current_user
-            .founders
+            .students
             .includes(:cohort)
             .map do |student|
               {
@@ -112,9 +112,9 @@ module Users
             active_courses =
               Course
                 .live
-                .joins(cohorts: [founders: :user])
+                .joins(cohorts: [students: :user])
                 .where(users: { id: current_user })
-                .where(founders: { dropped_out_at: nil })
+                .where(students: { dropped_out_at: nil })
             communities_in_school
               .joins(:courses)
               .where(courses: { id: active_courses })

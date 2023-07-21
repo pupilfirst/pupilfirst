@@ -9,8 +9,8 @@ feature "School students index", js: true do
   let(:tag_2) { "Another Tag" }
   let(:tags) { [tag_1, tag_2] }
 
-  # Setup a course with a single founder target, ...
-  let(:school) { create :school, :current, founder_tag_list: tags }
+  # Setup a course with a single student target, ...
+  let(:school) { create :school, :current,student_tag_list: tags }
   let!(:domain) { create :domain, :primary, school: school }
   let!(:course) { create :course, school: school }
   let!(:live_cohort) { create :cohort, course: course }
@@ -27,13 +27,13 @@ feature "School students index", js: true do
 
   context "with some students" do
     let!(:student_1) do
-      create :founder, cohort: live_cohort, level: level_1, tag_list: [tag_1]
+      create :student, cohort: live_cohort, level: level_1, tag_list: [tag_1]
     end
     let!(:student_2) do
-      create :founder, cohort: live_cohort, level: level_2, tag_list: [tag_2]
+      create :student, cohort: live_cohort, level: level_2, tag_list: [tag_2]
     end
     let!(:student_access_ended) do
-      create :founder, cohort: ended_cohort, level: level_2
+      create :student, cohort: ended_cohort, level: level_2
     end
 
     let(:name_1) { Faker::Name.name }
@@ -144,13 +144,13 @@ feature "School students index", js: true do
       expect(page).to have_text(name_2)
 
       student_1_user = User.find_by(email: email_1)
-      student_1 = student_1_user.founders.first
+      student_1 = student_1_user.students.first
       student_2_user = User.find_by(email: email_2)
-      student_2 = student_2_user.founders.first
+      student_2 = student_2_user.students.first
       student_3_user = User.find_by(email: email_3)
-      student_3 = student_3_user.founders.first
+      student_3 = student_3_user.students.first
       student_4_user = User.find_by(email: email_4)
-      student_4 = student_4_user.founders.first
+      student_4 = student_4_user.students.first
 
       expect(student_1_user.name).to eq(name_1)
       expect(student_2_user.name).to eq(name_2)
@@ -267,7 +267,7 @@ feature "School students index", js: true do
 
           expect(page).to have_text("All students were created successfully")
           dismiss_notification
-        end.to change { Founder.count }.by(1)
+        end.to change { Student.count }.by(1)
 
         expect(page).to have_text(coach_user.reload.name)
 
@@ -325,7 +325,7 @@ feature "School students index", js: true do
             "1 of 2 students were added. Remaining students are already a part of the course"
           )
           dismiss_notification
-        end.to change { Founder.count }.by(1)
+        end.to change { Student.count }.by(1)
 
         expect(page).to have_text(name_3)
 
@@ -443,14 +443,14 @@ feature "School students index", js: true do
 
     scenario "school admin marks students as dropped out" do
       # Enroll the coach as a personal coach for all students.
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: course_coach,
-             founder: student_1
-      create :faculty_founder_enrollment,
+             student: student_1
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: course_coach,
-             founder: student_2
+             student: student_2
 
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
@@ -462,7 +462,7 @@ feature "School students index", js: true do
       end
 
       expect(page).to have_text(student_1.user.name)
-      expect(course_coach.founders.count).to eq(2)
+      expect(course_coach.students.count).to eq(2)
 
       click_link "Actions"
       click_button "Dropout Student"
@@ -478,7 +478,7 @@ feature "School students index", js: true do
       expect(student_1.faculty.count).to eq(0)
 
       # The student should also be removed from coaches list.
-      expect(course_coach.founders.count).to eq(1)
+      expect(course_coach.students.count).to eq(1)
     end
 
     scenario "school admin re-activates a dropped out student" do
@@ -576,13 +576,13 @@ feature "School students index", js: true do
 
   context "when there are a large number of teams" do
     let!(:students) do
-      create_list :founder, 30, level: level_1, cohort: live_cohort
+      create_list :student, 30, level: level_1, cohort: live_cohort
     end
 
     def safe_random_students
       @selected_student_ids ||= []
       student =
-        Founder.all.where.not(id: @selected_student_ids).order("random()").first
+        Student.all.where.not(id: @selected_student_ids).order('random()').first
       @selected_student_ids << student.id
       student
     end
@@ -683,9 +683,9 @@ feature "School students index", js: true do
     end
   end
 
-  context "when a course has no certificates" do
-    let!(:student) { create :founder, level: level_1, cohort: live_cohort }
-    scenario "admin visits student editor to issue certificates" do
+  context 'when a course has no certificates' do
+    let!(:student) { create :student, level: level_1, cohort: live_cohort }
+    scenario 'admin visits student editor to issue certificates' do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/actions"
 
@@ -697,10 +697,10 @@ feature "School students index", js: true do
 
   context "when a course has certificates" do
     let!(:student_without_certificate) do
-      create :founder, level: level_1, cohort: live_cohort
+      create :student, level: level_1, cohort: live_cohort
     end
     let(:student_with_certificate) do
-      create :founder, level: level_1, cohort: live_cohort
+      create :student, level: level_1, cohort: live_cohort
     end
 
     let!(:certificate_1) { create :certificate, course: course }

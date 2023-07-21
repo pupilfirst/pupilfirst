@@ -20,7 +20,7 @@ module FacultyModule
       return [] if current_user.blank?
 
       current_user
-        .founders
+        .students
         .includes(cohort: :course)
         .map { |student| student.cohort.course.id }
     end

@@ -24,12 +24,12 @@ describe Applicants::CreateStudentService do
       # The user should be in the same school
       expect(user.school).to eq(school)
 
-      student = Founder.joins(:user).where(user: { name: applicant.name }).first
+      student = Student.joins(:user).where(user: { name: applicant.name }).first
       expect(student.name).to eq(applicant.name)
 
       expect(student.level).to eq(level_one)
 
-      # Founder should have tag "Public Signup"
+      # Student should have tag "Public Signup"
       expect(student.tag_list.sort).to eq(tags.sort)
 
       # Applicant should be destroyed

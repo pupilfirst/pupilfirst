@@ -4,12 +4,12 @@ module Courses
       attr_reader :score, :rank
       attr_accessor :delta
 
-      def initialize(founder, score, rank, current_user)
+      def initialize(student, score, rank, current_user)
         @score = score
         @rank = rank
         @current_user = current_user
 
-        super(founder)
+        super(student)
       end
 
       def level_number
@@ -91,7 +91,7 @@ module Courses
     end
 
     def inactive_students_count
-      @inactive_students_count ||= founders.count - students.count
+      @inactive_students_count ||= active_students.count - students.count
     end
 
     def previous_page?
@@ -116,8 +116,8 @@ module Courses
 
     def course_entries(from, to)
       LeaderboardEntry
-        .where(founder: founders, period_from: from, period_to: to)
-        .includes(founder: [:level, user: { avatar_attachment: :blob }])
+        .where(student: active_students, period_from: from, period_to: to)
+        .includes(student: [:level, user: { avatar_attachment: :blob }])
     end
 
     def rank_change_icon(delta)
@@ -202,9 +202,9 @@ module Courses
       @lts ||= LeaderboardTimeService.new(on)
     end
 
-    def founders
-      @founders ||=
-        @course.founders.active.where(excluded_from_leaderboard: false)
+    def active_students
+      @active_students ||=
+        @course.students.active.where(excluded_from_leaderboard: false)
     end
 
     def current_leaderboard
@@ -226,8 +226,8 @@ module Courses
         .with_index(1) do |(entry, students), index|
           rank = entry.score < last_score ? index : last_rank
 
-          students[entry.founder.id] =
-            Student.new(entry.founder, entry.score, rank, current_user)
+          students[entry.student.id] =
+            Student.new(entry.student, entry.score, rank, current_user)
 
           last_rank = rank
           last_score = entry.score

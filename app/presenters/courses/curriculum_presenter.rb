@@ -170,7 +170,7 @@ module Courses
         .includes(:target)
         .map do |submission|
           if submission.target.individual_target? ||
-               submission.founder_ids.sort == current_student.team_student_ids
+               submission.student_ids.sort == current_student.team_student_ids
             submission.attributes.slice(
               'target_id',
               'passed_at',
@@ -183,10 +183,10 @@ module Courses
     def faculty
       @faculty ||=
         begin
-          scope = Faculty.left_joins(:founders, :courses)
+          scope = Faculty.left_joins(:students, :courses)
 
           scope
-            .where(founders: { id: current_student })
+            .where(students: { id: current_student })
             .or(scope.where(courses: { id: @course }))
             .distinct
             .select(:id, :user_id)
@@ -197,7 +197,7 @@ module Courses
     def team_members_user_ids
       @team_members_user_ids ||=
         if current_student.team.present?
-          current_student.team.founders.pluck(:user_id)
+          current_student.team.students.pluck(:user_id)
         else
           [current_student.user_id]
         end
@@ -219,7 +219,7 @@ module Courses
     def current_student
       @current_student ||=
         if current_user.present?
-          @course.founders.not_dropped_out.find_by(user_id: current_user.id)
+          @course.students.not_dropped_out.find_by(user_id: current_user.id)
         else
           nil
         end

@@ -27,7 +27,7 @@ class LevelUpMutator < ApplicationQuery
   def student
     @student ||=
       current_user
-        .founders
+        .students
         .joins(:level)
         .find_by(levels: { course_id: course_id })
   end

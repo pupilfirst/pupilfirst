@@ -26,7 +26,7 @@ module Students
     private
 
     def students
-      @students ||= @student.team.present? ? @student.team.founders : [@student]
+      @students ||= @student.team.present? ? @student.team.students : [@student]
     end
   end
 end

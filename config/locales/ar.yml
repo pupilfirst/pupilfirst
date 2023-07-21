@@ -2183,7 +2183,7 @@ ar:
         part_time: دوام جزئى
     target:
       role:
-        founder: كل المؤسسين
+        students: كل الطلاب
         team: الفريق
   mutations:
     archive_coach_note:

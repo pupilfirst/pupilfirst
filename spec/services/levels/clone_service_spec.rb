@@ -51,15 +51,15 @@ describe Levels::CloneService do
   end
 
   let(:target_l2_1) do
-    create :target, :with_content, :for_founders, target_group: target_group_l2
+    create :target, :with_content, :for_students, target_group: target_group_l2
   end
 
   let!(:target_l2_2) do
-    create :target, :with_content, :for_founders, target_group: target_group_l2
+    create :target, :with_content, :for_students, target_group: target_group_l2
   end
 
-  let(:student_l1) { create :founder, level: level_one, cohort: cohort }
-  let(:student_l2) { create :founder, level: level_two, cohort: cohort }
+  let(:student_l1) { create :student, level: level_one, cohort: cohort }
+  let(:student_l2) { create :student, level: level_two, cohort: cohort }
   let(:ec_1) { create :evaluation_criterion, course: course }
   let(:ec_2) { create :evaluation_criterion, course: course }
 
@@ -129,7 +129,7 @@ describe Levels::CloneService do
     it 'creates a clone of the level into another course' do
       original_group_names = level_one.target_groups.pluck(:name)
       original_targets = level_one.targets.pluck(:title, :description)
-      original_student_count = Founder.count
+      original_student_count = Student.count
       original_submission_count = TimelineEvent.count
 
       original_quiz_questions =
@@ -226,8 +226,8 @@ describe Levels::CloneService do
         }
       ).to match_array(original_content_blocks)
 
-      # There should be no cloning of founders, or timeline events.
-      expect(Founder.count).to eq(original_student_count)
+      # There should be no cloning of students, or timeline events.
+      expect(Student.count).to eq(original_student_count)
       expect(TimelineEvent.count).to eq(original_submission_count)
     end
 
@@ -244,7 +244,7 @@ describe Levels::CloneService do
       original_level_names = course.levels.pluck(:name)
       original_group_names = level_one.target_groups.pluck(:name)
       original_targets = level_one.targets.pluck(:title, :description)
-      original_student_count = Founder.count
+      original_student_count = Student.count
       original_submission_count = TimelineEvent.count
 
       original_quiz_questions =
@@ -339,8 +339,8 @@ describe Levels::CloneService do
         }
       ).to match_array(original_content_blocks)
 
-      # There should be no cloning of founders, or timeline events.
-      expect(Founder.count).to eq(original_student_count)
+      # There should be no cloning of students, or timeline events.
+      expect(Student.count).to eq(original_student_count)
       expect(TimelineEvent.count).to eq(original_submission_count)
 
       # level should be added to the course

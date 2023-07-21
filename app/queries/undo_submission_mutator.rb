@@ -5,7 +5,7 @@ class UndoSubmissionMutator < ApplicationQuery
 
   def undo_submission
     TimelineEvent.transaction do
-      owners = timeline_event.founders.load
+      owners = timeline_event.students.load
 
       # Remove the submission
       timeline_event.update!(archived_at: Time.zone.now)
@@ -26,7 +26,7 @@ class UndoSubmissionMutator < ApplicationQuery
         next if timeline_event.blank?
 
         TimelineEventOwner
-          .where(founder: owner, timeline_event: timeline_event)
+          .where(student: owner, timeline_event: timeline_event)
           .update(latest: true)
       end
     end
@@ -45,8 +45,8 @@ class UndoSubmissionMutator < ApplicationQuery
       target
         .timeline_events
         .live
-        .joins(:founders)
-        .where(founders: { id: founder })
+        .joins(:students)
+        .where(students: { id: student })
         .order(created_at: :DESC)
         .first
   end
@@ -55,19 +55,19 @@ class UndoSubmissionMutator < ApplicationQuery
     @target ||= Target.find_by(id: target_id)
   end
 
-  def founder
-    @founder ||=
+  def student
+    @student ||=
       current_user
-        .founders
+        .students
         .joins(:level)
         .where(levels: { course_id: target.course })
         .first
   end
 
-  # Founders linked to a timeline event can delete it and submission should be live.
+  # Students linked to a timeline event can delete it and submission should be live.
   def authorized?
-    target.present? && founder.present? &&
-      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED &&
+    target.present? && student.present? &&
+      target.status(student) == Targets::StatusService::STATUS_SUBMITTED &&
       timeline_event.live?
   end
 end

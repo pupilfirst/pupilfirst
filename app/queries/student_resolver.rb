@@ -4,7 +4,7 @@ class StudentResolver < ApplicationQuery
   property :student_id
 
   def student
-    @student ||= current_school.founders.find_by(id: student_id)
+    @student ||= current_school.students.find_by(id: student_id)
   end
 
   def resource_school

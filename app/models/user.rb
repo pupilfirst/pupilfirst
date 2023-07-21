@@ -10,12 +10,12 @@ class User < ApplicationRecord
   belongs_to :organisation, optional: true
   has_many :organisation_admins, dependent: :restrict_with_error
   has_many :organisations, through: :organisation_admins
-  has_many :founders, dependent: :restrict_with_error
-  has_many :teams, through: :founders
-  has_many :cohorts, through: :founders
+  has_many :students, dependent: :restrict_with_error
+  has_many :teams, through: :students
+  has_many :cohorts, through: :students
   has_many :course_authors, dependent: :restrict_with_error
-  has_many :communities, through: :founders
-  has_many :courses, through: :founders
+  has_many :communities, through: :students
+  has_many :courses, through: :students
   has_one :faculty, dependent: :restrict_with_error
   has_one :school_admin, dependent: :restrict_with_error
   has_many :markdown_attachments, dependent: :nullify

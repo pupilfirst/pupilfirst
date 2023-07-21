@@ -7,7 +7,7 @@ class CohortPolicy < ApplicationPolicy
     return false if organisation_ids.blank?
 
     record
-      .founders
+      .students
       .joins(:user)
       .exists?(users: { organisation_id: organisation_ids })
   end

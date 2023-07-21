@@ -18,7 +18,7 @@ module Users
           )
         new_course.update!(default_cohort_id: cohort.id)
         create_and_assign_coach(new_course, cohort)
-        Founder.create!(
+        Student.create!(
           user: @user,
           cohort: cohort,
           level: new_course.levels.find_by(number: 1)

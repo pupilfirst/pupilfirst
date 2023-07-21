@@ -2221,7 +2221,7 @@ en:
         part_time: Part-Time
     target:
       role:
-        founder: All Founders
+        students: All Students
         team: Team
   mutations:
     archive_coach_note:

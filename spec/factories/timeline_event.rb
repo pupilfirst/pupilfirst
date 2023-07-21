@@ -14,13 +14,13 @@ FactoryBot.define do
 
     trait :with_owners do
       transient do
-        owners { Founder.none }
+        owners { Student.none }
         latest { false }
       end
 
       after(:create) do |submission, evaluator|
         evaluator.owners.each do |owner|
-          create(:timeline_event_owner, latest: evaluator.latest, founder: owner, timeline_event: submission)
+          create(:timeline_event_owner, latest: evaluator.latest, student: owner, timeline_event: submission)
         end
       end
     end

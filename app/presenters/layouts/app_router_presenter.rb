@@ -67,11 +67,11 @@ module Layouts
     def courses_with_student_profile
       @courses_with_student_profile ||=
         Course
-          .joins(:founders)
+          .joins(:students)
           .where(
             school: current_school,
-            founders: {
-              id: current_user.founders.select(:id)
+            students: {
+              id: current_user.students.select(:id)
             }
           )
           .to_a

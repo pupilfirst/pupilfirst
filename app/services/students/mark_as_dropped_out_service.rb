@@ -1,4 +1,4 @@
-module Founders
+module Students
   class MarkAsDroppedOutService
     # @param student [Student] mark as dropped out
     def initialize(student, current_user)
@@ -7,15 +7,15 @@ module Founders
     end
 
     def execute
-      Founder.transaction do
+      Student.transaction do
         # Remove all coach enrollments.
-        FacultyFounderEnrollment.where(founder: @student).destroy_all
+        FacultyStudentEnrollment.where(student: @student).destroy_all
 
         team = @student.team
 
         @student.update!(team_id: nil, dropped_out_at: Time.zone.now)
 
-        team.destroy! if team && team.founders.blank?
+        team.destroy! if team && team.students.blank?
       end
       create_audit_record(@student)
     end

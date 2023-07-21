@@ -25,8 +25,8 @@ module QueryAuthorizeStudent
     @student ||=
       current_user
         .students
-        .joins(:level)
-        .where(levels: { course_id: course })
+        .joins(:cohort)
+        .where(cohorts: { course_id: course })
         .first
   end
 

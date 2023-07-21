@@ -180,7 +180,7 @@ feature "Students view performance report and submissions overview", js: true do
   scenario "student visits course report link" do
     sign_in_user student.user, referrer: report_course_path(course)
 
-    expect(page).to have_text("Milestone Targets Completion Status")
+    expect(page).to have_text("Completion status of milestone targets")
 
     # Targets Overview
     expect(page).to have_text("Targets Overview")

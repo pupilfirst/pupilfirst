@@ -178,7 +178,7 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   |> ignore
 }
 
-let getNextSubmission = (send, courseId, filter, submissionId) => {
+let getNextSubmission = (send, courseId, filter) => {
   send(SetNextSubmissionDataLoading)
   let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
@@ -402,10 +402,10 @@ let closeOverlay = (state, courseId, filter) => {
     : RescriptReactRouter.push(path)
 }
 
-let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, className) => {
+let reviewNextButton = (nextSubmission, send, courseId, filter, className) => {
   ReactUtils.nullIf(
     <button
-      onClick={_ => getNextSubmission(send, courseId, filter, submissionId)}
+      onClick={_ => getNextSubmission(send, courseId, filter)}
       disabled={nextSubmission == DataLoading}
       className>
       {ReactUtils.nullUnless(
@@ -419,7 +419,7 @@ let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, cl
   )
 }
 
-let headerSection = (state, nextSubmission, send, submissionDetails, filter, submissionId) =>
+let headerSection = (state, submissionDetails, filter) =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-50 border-b border-gray-300 flex justify-center">
@@ -446,14 +446,6 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               className="flex md:hidden items-center shrink-0"
               coaches={SubmissionDetails.coaches(submissionDetails)}
             />
-            {reviewNextButton(
-              nextSubmission,
-              send,
-              SubmissionDetails.courseId(submissionDetails),
-              filter,
-              submissionId,
-              "flex shrink-0 items-center md:hidden border-s text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
-            )}
           </div>
         </div>
         <div className="px-4 py-3 flex flex-col justify-center">
@@ -506,28 +498,8 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           className="flex w-full md:w-auto items-center shrink-0"
           coaches={SubmissionDetails.coaches(submissionDetails)}
         />
-        {reviewNextButton(
-          nextSubmission,
-          send,
-          SubmissionDetails.courseId(submissionDetails),
-          filter,
-          submissionId,
-          "flex items-center border-s text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
-        )}
       </div>
     </div>
-  </div>
-
-let nextSubmissionButton = (nextSubmission, send, submissionDetails, filter, submissionId) =>
-  <div>
-    {reviewNextButton(
-      nextSubmission,
-      send,
-      SubmissionDetails.courseId(submissionDetails),
-      filter,
-      submissionId,
-      "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 hover:bg-primary-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
-    )}
   </div>
 
 let updateGrading = (grade, state, send) => {
@@ -1250,7 +1222,7 @@ let make = (
       <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
       <div key="submission-header">
         <div> {inactiveWarning(submissionDetails)} </div>
-        {headerSection(state, state.nextSubmission, send, submissionDetails, filter, submissionId)}
+        {headerSection(state, submissionDetails, filter)}
         {ReactUtils.nullIf(
           <div className="flex gap-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
             {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
@@ -1538,13 +1510,15 @@ let make = (
             </div>
           }}
           <div className="fixed bottom-0 inset-x-0 z-10">
-            {nextSubmissionButton(
-              state.nextSubmission,
-              send,
-              submissionDetails,
-              filter,
-              submissionId,
-            )}
+            <div>
+              {reviewNextButton(
+                state.nextSubmission,
+                send,
+                SubmissionDetails.courseId(submissionDetails),
+                filter,
+                "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 hover:bg-primary-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
+              )}
+            </div>
           </div>
         </div>
       </DisablingCover>,

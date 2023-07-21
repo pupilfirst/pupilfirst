@@ -75,8 +75,8 @@ class SubmissionsResolver < ApplicationQuery
     # Filter by personal coach
     stage_4 =
       if course.faculty.exists?(id: personal_coach_id)
-        stage_3.joins(founders: :faculty_founder_enrollments).where(
-          faculty_founder_enrollments: {
+        stage_3.joins(students: :faculty_student_enrollments).where(
+          faculty_student_enrollments: {
             faculty_id: personal_coach_id
           }
         )
@@ -100,7 +100,7 @@ class SubmissionsResolver < ApplicationQuery
         stage_5
       end
 
-    stage_6.from_founders(students)
+    stage_6.from_students(students)
   end
 
   def filter_by_status(submissions)

@@ -3,7 +3,7 @@ class Level < ApplicationRecord
   validates :name, presence: true
 
   has_many :target_groups, dependent: :restrict_with_error
-  has_many :founders, dependent: :restrict_with_error
+  has_many :students, dependent: :restrict_with_error
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :targets
 

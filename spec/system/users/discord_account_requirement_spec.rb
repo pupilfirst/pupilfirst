@@ -4,7 +4,7 @@ feature "Discord account requirement", js: true do
   include UserSpecHelper
   include ConfigHelper
 
-  let(:student) { create :founder }
+  let(:student) { create :student }
   let(:user) { student.user }
   let(:course) { student.course }
 

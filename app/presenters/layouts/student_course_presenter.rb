@@ -26,9 +26,9 @@ module Layouts
         # Courses where user is an author...
         courses_as_course_author =
           if current_user.course_authors.present?
-            Course
-              .joins(:course_authors)
-              .where(course_authors: current_user.course_authors)
+            Course.joins(:course_authors).where(
+              course_authors: current_user.course_authors
+            )
           else
             []
           end
@@ -38,14 +38,12 @@ module Layouts
 
         # ...plus courses where user is a student...
         courses_as_student =
-          Course
-            .joins(:founders)
-            .where(
-              school: current_school,
-              founders: {
-                id: current_user.founders.select(:id)
-              }
-            )
+          Course.joins(:students).where(
+            school: current_school,
+            students: {
+              id: current_user.students.select(:id)
+            }
+          )
 
         # ...plus the current course if course has public preview.
         previewed_course = @course.public_preview? ? [@course] : []
@@ -54,7 +52,7 @@ module Layouts
           courses_as_course_author + courses_as_coach + courses_as_student +
             previewed_course
         ).uniq
-      end.as_json(only: %i[name id ends_at])
+      end.as_json(only: %i[name id ends_at]).sort_by { |course| course["name"] }
     end
 
     def additional_links
@@ -62,27 +60,27 @@ module Layouts
     end
 
     def review_dashboard
-      'review' if user_is_coach?
+      "review" if user_is_coach?
     end
 
     def leaderboard
-      @course.enable_leaderboard ? 'leaderboard' : nil
+      @course.enable_leaderboard ? "leaderboard" : nil
     end
 
     def report
-      'report' if user_is_student?
+      "report" if user_is_student?
     end
 
     def calendar
       if current_school_admin.present? || user_is_student? || user_is_coach?
-        'calendar'
+        "calendar"
       end
     end
 
     def user_is_student?
       current_user.present? &&
         current_user
-          .founders
+          .students
           .not_dropped_out
           .joins(:cohort)
           .exists?(cohorts: { course_id: @course.id })
@@ -93,7 +91,7 @@ module Layouts
     end
 
     def students
-      'students' if user_is_coach?
+      "students" if user_is_coach?
     end
   end
 end

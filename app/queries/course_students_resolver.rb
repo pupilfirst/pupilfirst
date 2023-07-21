@@ -11,7 +11,7 @@ class CourseStudentsResolver < ApplicationQuery
   private
 
   def students
-    scope = course.founders
+    scope = course.students
 
     scope =
       if current_school_admin.present? &&
@@ -39,9 +39,9 @@ class CourseStudentsResolver < ApplicationQuery
     scope = scope.where(cohort_id: cohort.id) if cohort.present?
     scope =
       scope
-        .joins(:faculty_founder_enrollments)
+        .joins(:faculty_student_enrollments)
         .where(
-          { faculty_founder_enrollments: { faculty_id: personal_coach.id } }
+          { faculty_student_enrollments: { faculty_id: personal_coach.id } }
         ) if personal_coach.present?
     scope = scope.where(team_id: nil) if filter[:not_teamed_up].present?
     scope = scope.where('users.name ILIKE ?', "%#{filter[:name]}%") if filter[
@@ -68,7 +68,7 @@ class CourseStudentsResolver < ApplicationQuery
     if filter[:sort_by].present?
       scope.includes(:user).order("#{sort_by_string}")
     else
-      scope.order('founders.created_at DESC')
+      scope.order('students.created_at DESC')
     end
   end
 
@@ -110,13 +110,13 @@ class CourseStudentsResolver < ApplicationQuery
     when 'Name'
       'users.name ASC'
     when 'First Created'
-      'founders.created_at ASC'
+      'students.created_at ASC'
     when 'Last Created'
-      'founders.created_at DESC'
+      'students.created_at DESC'
     when 'First Updated'
-      'founders.updated_at ASC'
+      'students.updated_at ASC'
     when 'Last Updated'
-      'founders.updated_at DESC'
+      'students.updated_at DESC'
     else
       raise "#{filter[:sort_by]} is not a valid sort criterion"
     end

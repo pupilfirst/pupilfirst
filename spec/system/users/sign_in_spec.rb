@@ -89,7 +89,7 @@ feature 'User signing in by supplying email address', js: true do
         fill_in 'New Password', with: password
         fill_in 'Confirm Password', with: password
         click_button 'Update Password'
-        expect(page).to have_content(user.founders.first.course.name)
+        expect(page).to have_content(user.students.first.course.name)
         expect(user.reload.reset_password_token).to eq(nil)
 
         # Let's try signing in.
@@ -113,7 +113,7 @@ feature 'User signing in by supplying email address', js: true do
         fill_in 'Email Address', with: user.email
         fill_in 'Password', with: password + "\n"
 
-        expect(page).to have_content(user.founders.first.course.name)
+        expect(page).to have_content(user.students.first.course.name)
       end
 
       scenario 'does not allow to change password without a valid token' do

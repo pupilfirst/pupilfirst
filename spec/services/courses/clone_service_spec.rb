@@ -41,11 +41,11 @@ describe Courses::CloneService do
   end
 
   let(:target_l2_1) do
-    create :target, :with_content, :for_founders, target_group: target_group_l2
+    create :target, :with_content, :for_students, target_group: target_group_l2
   end
 
   let!(:target_l2_2) do
-    create :target, :with_content, :for_founders, target_group: target_group_l2
+    create :target, :with_content, :for_students, target_group: target_group_l2
   end
 
   let!(:team) { create :team_with_students, cohort: cohort }
@@ -124,7 +124,7 @@ describe Courses::CloneService do
       original_group_names = TargetGroup.all.pluck(:name)
       original_targets = Target.all.pluck(:title, :description)
       original_team_count = Team.count
-      original_founder_count = Founder.count
+      original_student_count = Student.count
       original_submission_count = TimelineEvent.count
       original_quiz_questions = QuizQuestion.all.pluck(:question, :description)
       original_answer_options = AnswerOption.all.pluck(:value, :hint)
@@ -209,9 +209,9 @@ describe Courses::CloneService do
         }
       ).to match_array(original_content_blocks)
 
-      # There should be no cloning of team, founders, or timeline events.
+      # There should be no cloning of team, students, or timeline events.
       expect(Team.count).to eq(original_team_count)
-      expect(Founder.count).to eq(original_founder_count)
+      expect(Student.count).to eq(original_student_count)
       expect(TimelineEvent.count).to eq(original_submission_count)
 
       expect(new_course.cover).to be_attached

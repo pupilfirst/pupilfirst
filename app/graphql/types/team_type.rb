@@ -10,9 +10,9 @@ module Types
         .for(object.id)
         .batch do |team_ids, loader|
           Team
-            .includes(:founders)
+            .includes(:students)
             .where(id: team_ids)
-            .each { |team| loader.call(team.id, team.founders) }
+            .each { |team| loader.call(team.id, team.students) }
         end
     end
 

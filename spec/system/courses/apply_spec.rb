@@ -18,7 +18,7 @@ feature 'Apply for public courses', js: true do
   let(:email) { Faker::Internet.email(name: name) }
   let(:name_2) { Faker::Name.name }
   let(:email_2) { Faker::Internet.email(name: name_2) }
-  let(:student) { create :founder, level: level_one, cohort: cohort }
+  let(:student) { create :student, level: level_one, cohort: cohort }
   let(:token) { Faker::Crypto.md5 }
   let(:saved_tag) { Faker::Lorem.word }
   let(:bounced_email) { Faker::Internet.email }
@@ -26,7 +26,7 @@ feature 'Apply for public courses', js: true do
 
   before do
     public_course.update!(default_cohort: cohort)
-    school.founder_tag_list.add(saved_tag)
+    school.student_tag_list.add(saved_tag)
     school.save!
   end
 
@@ -72,7 +72,7 @@ feature 'Apply for public courses', js: true do
     expect(page).to have_content(applicant.name)
     expect(page).to have_content(public_course.name)
 
-    student = User.with_email(applicant.email).first.founders.first
+    student = User.with_email(applicant.email).first.students.first
 
     expect(student.tag_list).to include(saved_tag)
     expect(student.tag_list).not_to include('Public Signup')
@@ -152,7 +152,7 @@ feature 'Apply for public courses', js: true do
     visit enroll_applicants_path(applicant.original_login_token)
 
     expect(page).to have_content("Welcome to #{school.name}!")
-    expect(Founder.last.tag_list).to include('Public Signup')
+    expect(Student.last.tag_list).to include('Public Signup')
   end
 
   scenario 'applicant signing up with an unknown tag is given the default tag' do
@@ -172,7 +172,7 @@ feature 'Apply for public courses', js: true do
 
     expect(page).to have_content("Welcome to #{school.name}!")
 
-    student = Founder.last
+    student = Student.last
 
     expect(student.tag_list).to include('Public Signup')
     expect(student.tag_list).not_to include('An unknown tag')
@@ -196,7 +196,7 @@ feature 'Apply for public courses', js: true do
     applicant.regenerate_login_token
     visit enroll_applicants_path(applicant.original_login_token)
 
-    expect(Founder.last.tag_list).to include(saved_tag)
+    expect(Student.last.tag_list).to include(saved_tag)
   end
 
   scenario 'user visits a public course in other school' do

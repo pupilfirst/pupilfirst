@@ -29,7 +29,7 @@ module Types
 
     def students(params)
       object
-        .founders
+        .students
         .includes(:cohort)
         .where(cohort_id: Course.find(params[:course_id]).cohorts)
     end

@@ -59,7 +59,7 @@ module Schools
 
       def clear_faculty_enrollments
         FacultyCohortEnrollment.where(faculty: faculty).destroy_all
-        FacultyFounderEnrollment.where(faculty: faculty).destroy_all
+        FacultyStudentEnrollment.where(faculty: faculty).destroy_all
       end
     end
   end

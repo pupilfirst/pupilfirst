@@ -317,7 +317,7 @@ feature 'Student levelling up', js: true do
       expect(page).not_to have_button('Level Up')
 
       team
-        .founders
+        .students
         .where.not(id: student.id)
         .each { |other_student| submit_target target_l1, other_student }
 
@@ -338,7 +338,7 @@ feature 'Student levelling up', js: true do
         complete_target target_l1, student
 
         # Teammates has completed milestone target only in current level.
-        team.founders.each { |student| complete_target target_l2, student }
+        team.students.each { |student| complete_target target_l2, student }
       end
 
       scenario 'student is blocked from leveling up until teammate submits work on target in previous level' do
@@ -375,7 +375,7 @@ feature 'Student levelling up', js: true do
 
         # Submitting the targets should not result in any change.
         team
-          .founders
+          .students
           .where.not(id: student.id)
           .each { |other_student| submit_target target_l1, other_student }
 
@@ -385,7 +385,7 @@ feature 'Student levelling up', js: true do
 
         # Completing the targets should result in allowing the team to level up.
         team
-          .founders
+          .students
           .where.not(id: student.id)
           .each do |other_student|
             other_student
@@ -420,7 +420,7 @@ feature 'Student levelling up', js: true do
 
         # Submitting the targets should result in allowing the team to level up.
         team
-          .founders
+          .students
           .where.not(id: student.id)
           .each { |other_student| submit_target target_l1, other_student }
 
@@ -464,10 +464,10 @@ feature 'Student levelling up', js: true do
       let(:coach) { create :faculty, user: student.user }
 
       before do
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                :with_cohort_enrollment,
                faculty: coach,
-               founder: student
+               student: student
       end
 
       scenario 'coach levels up to locked level' do

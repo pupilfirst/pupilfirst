@@ -157,7 +157,7 @@ feature 'Public preview of course curriculum', js: true do
     let(:enrolled_course) { create :course, :with_cohort }
     let(:l_1) { create :level, :one, course: enrolled_course }
     let(:student) do
-      create :founder, level: l_1, cohort: enrolled_course.cohorts.first
+      create :student, level: l_1, cohort: enrolled_course.cohorts.first
     end
 
     scenario 'student in one course accesses preview of another course' do

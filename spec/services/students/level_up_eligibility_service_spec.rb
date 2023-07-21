@@ -32,7 +32,7 @@ describe Students::LevelUpEligibilityService do
     create :student, level: level_1, cohort: cohort_1, team: team
   end
 
-  let(:students) { team.founders }
+  let(:students) { team.students }
 
   let!(:milestone_targets) do
     create :target_group, level: level_1, milestone: true
@@ -78,7 +78,7 @@ describe Students::LevelUpEligibilityService do
 
       context 'when there is a target that must be submitted individually by all students' do
         let!(:individual_target) do
-          create :target, :for_founders, target_group: milestone_targets
+          create :target, :for_students, target_group: milestone_targets
         end
 
         before do
@@ -204,7 +204,7 @@ describe Students::LevelUpEligibilityService do
         context 'when there is a target in L1 that must be submitted individually by all students' do
           let!(:individual_target) do
             create :target,
-                   :for_founders,
+                   :for_students,
                    target_group: milestone_targets,
                    evaluation_criteria: [evaluation_criterion]
           end
@@ -217,7 +217,7 @@ describe Students::LevelUpEligibilityService do
           context 'when student has team-mates with a pending review in level 1' do
             before do
               team
-                .founders
+                .students
                 .where.not(id: student)
                 .each do |other_student|
                   submit_target individual_target, other_student
@@ -232,7 +232,7 @@ describe Students::LevelUpEligibilityService do
           context 'when student has a team-mate with a failed submission in level 1' do
             before do
               team
-                .founders
+                .students
                 .where.not(id: student)
                 .each do |other_student|
                   submit_target individual_target,
@@ -249,7 +249,7 @@ describe Students::LevelUpEligibilityService do
           context "when student's team-mates have completed the target in level 1" do
             before do
               team
-                .founders
+                .students
                 .where.not(id: student)
                 .each do |other_student|
                   complete_target individual_target, other_student

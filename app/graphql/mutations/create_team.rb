@@ -46,7 +46,7 @@ module Mutations
 
       def students_should_belong_to_the_same_cohort
         if @cohort
-             .founders
+             .students
              .where(id: @value[:student_ids], team_id: nil)
              .count == @value[:student_ids].count
           return
@@ -71,7 +71,7 @@ module Mutations
     end
 
     def students
-      @students ||= cohort.founders.where(id: @params[:student_ids])
+      @students ||= cohort.students.where(id: @params[:student_ids])
     end
 
     def cohort

@@ -9,19 +9,19 @@ module Cohorts
         ::Cohorts::OnboardService.new(
           cohort,
           csv_rows,
-          notify_students: notify_students,
+          notify_students: notify_students
         ).execute
 
       report_params = {
         students_added: student_ids.count,
-        students_requested: csv_rows.count,
+        students_requested: csv_rows.count
       }
 
       SchoolAdminMailer.students_bulk_import_complete(
         user,
         cohort.course,
         report_params,
-        report_attachment(csv_rows, student_ids),
+        report_attachment(csv_rows, student_ids)
       ).deliver_later
     end
 
@@ -32,7 +32,7 @@ module Cohorts
 
       applicable_emails =
         csv_rows.map { |row| row["email"].downcase } -
-          Founder
+          Student
             .where(id: student_ids)
             .joins(:user)
             .pluck(:email)

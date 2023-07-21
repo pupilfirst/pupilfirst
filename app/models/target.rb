@@ -178,11 +178,6 @@ class Target < ApplicationRecord
     "M#{milestone_number} - #{title}"
   end
 
-  def founder_role?
-    ActiveSupport::Deprecation.warn("Use `individual_target?` instead")
-    role == Target::ROLE_STUDENT
-  end
-
   def status(student)
     @status ||= {}
     @status[student.id] ||= Targets::StatusService.new(self, student).status

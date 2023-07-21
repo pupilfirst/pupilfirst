@@ -7,9 +7,9 @@ module ValidateStudentSubmission
       course = target.course
       student =
         context[:current_user]
-          .founders
-          .joins(:cohort)
-          .where(cohorts: { course_id: course })
+          .students
+          .joins(:level)
+          .where(levels: { course_id: course })
           .first
       target_status = Targets::StatusService.new(target, student).status
       submittable =

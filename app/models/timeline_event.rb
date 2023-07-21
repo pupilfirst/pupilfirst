@@ -23,14 +23,13 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_files, dependent: :destroy
   has_many :timeline_event_grades, dependent: :destroy
   has_many :timeline_event_owners, dependent: :destroy
-  has_many :founders, through: :timeline_event_owners
+  has_many :students, through: :timeline_event_owners
   has_one :course, through: :target
   has_many :submission_reports,
            foreign_key: "submission_id",
            inverse_of: :submission,
            dependent: :destroy
 
-  delegate :founder_event?, to: :target
   delegate :title, to: :target
 
   scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
@@ -40,11 +39,11 @@ class TimelineEvent < ApplicationRecord
   scope :failed, -> { where(passed_at: nil).where.not(evaluated_at: nil) }
   scope :pending_review, -> { live.not_auto_verified.where(evaluated_at: nil) }
   scope :evaluated_by_faculty, -> { where.not(evaluated_at: nil) }
-  scope :from_founders,
-        ->(founders) {
+  scope :from_students,
+        ->(students) {
           joins(:timeline_event_owners).where(
             timeline_event_owners: {
-              founder: founders
+              student: students
             }
           )
         }
@@ -75,8 +74,8 @@ class TimelineEvent < ApplicationRecord
     { 1 => "good", 2 => "great", 3 => "wow" }[score.floor]
   end
 
-  def founder
-    founders.first
+  def student
+    students.first
   end
 
   def passed?
@@ -108,7 +107,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def actions_url
-    repo = founders.first.github_repository
+    repo = students.first.github_repository
     "https://github.com/#{repo}/actions" if repo
   end
 end

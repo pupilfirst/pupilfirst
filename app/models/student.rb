@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Founder < ApplicationRecord
+class Student < ApplicationRecord
   acts_as_taggable
 
   belongs_to :user
@@ -9,7 +9,6 @@ class Founder < ApplicationRecord
   has_one :course, through: :cohort
   has_many :communities, through: :course
   has_many :coach_notes,
-           foreign_key: "student_id",
            class_name: "CoachNote",
            dependent: :destroy,
            inverse_of: :student
@@ -17,8 +16,8 @@ class Founder < ApplicationRecord
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
   has_many :leaderboard_entries, dependent: :destroy
-  has_many :faculty_founder_enrollments, dependent: :destroy
-  has_many :faculty, through: :faculty_founder_enrollments
+  has_many :faculty_student_enrollments, dependent: :destroy
+  has_many :faculty, through: :faculty_student_enrollments
   belongs_to :team, optional: true
 
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }
@@ -67,6 +66,6 @@ class Founder < ApplicationRecord
   end
 
   def team_student_ids
-    @team_student_ids ||= team.present? ? team.founders.pluck(:id).sort : [id]
+    @team_student_ids ||= team.present? ? team.students.pluck(:id).sort : [id]
   end
 end

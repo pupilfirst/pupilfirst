@@ -57,13 +57,13 @@ feature "Organisation show" do
     # Set up org relationships
     [team_1, team_2, team_3].each do |team|
       team
-        .founders
+        .students
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation) }
     end
 
     # Mark one team of students as having completed the course.
-    team_2.founders.each do |f|
+    team_2.students.each do |f|
       create(
         :timeline_event,
         :with_owners,

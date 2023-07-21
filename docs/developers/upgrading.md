@@ -8,6 +8,8 @@ sidebar_label: Upgrading
 
 When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html) and run them after deployment. If your deployment target is DigitalOcean, and if you've follwed our guide, then the worker process should run migrations automatically when it starts up.
 
+You can enable maintenance mode to prevent users from accessing the LMS while migrations are running. To do this, set the `ENABLE_MAINTENANCE_MODE` environment variable to `true` before deploying the new version. Once the deployment is complete, set the variable back to `false`.
+
 ## Breaking changes
 
 These are a list of changes that should be accounted for when upgrading an existing installation of Pupilfirst. If you
@@ -19,6 +21,10 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 ### 2023.3
 
 This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.
+
+### 2023.2
+
+This version renames `founder` to `student` across the codebase. This change is not backwards compatible.
 
 ### 2023.1
 

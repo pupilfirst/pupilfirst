@@ -167,7 +167,7 @@ Rails.application.routes.draw do
       post 'update_coach_enrollments'
     end
 
-    resources :founders, as: 'students', path: 'students', except: %i[index] do
+    resources :students, as: 'students', path: 'students', except: %i[index] do
       collection do
         post 'team_up'
       end
@@ -234,8 +234,8 @@ Rails.application.routes.draw do
     get '/', action: 'index', as: 'coaches_index'
   end
 
-  # Founder show
-  scope 'students', controller: 'founders' do
+  # Student show
+  scope 'students', controller: 'students' do
     get '/:id/report', action: 'report', as: 'student_report'
   end
 

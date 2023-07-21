@@ -26,7 +26,7 @@ module Students
       rescue ActiveRecord::RecordNotUnique
         collisions += 1
         retry if collisions <= 5
-        raise 'Number of certificate serial number collisions exceeded 5'
+        raise "Number of certificate serial number collisions exceeded 5"
       end
 
       IssuedCertificateMailer.issued(issued_certificate).deliver_later

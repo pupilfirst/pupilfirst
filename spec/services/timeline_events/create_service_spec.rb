@@ -37,7 +37,7 @@ describe TimelineEvents::CreateService do
       last_submission = TimelineEvent.last
 
       expect(last_submission.target).to eq(target)
-      expect(last_submission.founders.pluck(:id)).to eq([student.id])
+      expect(last_submission.students.pluck(:id)).to eq([student.id])
       expect(last_submission.checklist).to eq(checklist)
       expect(last_submission.timeline_event_owners.pluck(:latest).uniq).to eq(
         [true]
@@ -63,7 +63,7 @@ describe TimelineEvents::CreateService do
 
     context "when target is a team target and student is in a team" do
       let(:team) { create :team_with_students }
-      let(:student) { team.founders.first }
+      let(:student) { team.students.first }
       let(:target) do
         create :target, role: Target::ROLE_TEAM, target_group: target_group
       end
@@ -73,16 +73,16 @@ describe TimelineEvents::CreateService do
 
         last_submission = TimelineEvent.last
 
-        expect(last_submission.founders.count).to eq(2)
-        expect(last_submission.founders.pluck(:id)).to match_array(
-          student.team.founders.pluck(:id)
+        expect(last_submission.students.count).to eq(2)
+        expect(last_submission.students.pluck(:id)).to match_array(
+          student.team.students.pluck(:id)
         )
       end
     end
 
     context "when previous submissions exist" do
       let(:another_team) { create :team_with_students }
-      let(:another_student) { another_team.founders.first }
+      let(:another_student) { another_team.students.first }
       let!(:first_submission) do
         create :timeline_event,
                :with_owners,
@@ -121,7 +121,7 @@ describe TimelineEvents::CreateService do
           another_submission
             .reload
             .timeline_event_owners
-            .where(founder: student)
+            .where(student: student)
             .first
             .latest
         ).to eq(false)
@@ -129,7 +129,7 @@ describe TimelineEvents::CreateService do
           another_submission
             .reload
             .timeline_event_owners
-            .where(founder: another_student)
+            .where(student: another_student)
             .first
             .latest
         ).to eq(true)
@@ -161,7 +161,7 @@ describe TimelineEvents::CreateService do
         expect(
           last_submission
             .timeline_event_owners
-            .where(founder: student)
+            .where(student: student)
             .first
             .latest
         ).to eq(true)
@@ -169,7 +169,7 @@ describe TimelineEvents::CreateService do
           student_first_submission
             .reload
             .timeline_event_owners
-            .where(founder: student)
+            .where(student: student)
             .first
             .latest
         ).to eq(false)
@@ -177,7 +177,7 @@ describe TimelineEvents::CreateService do
           another_student_submission
             .reload
             .timeline_event_owners
-            .where(founder: another_student)
+            .where(student: another_student)
             .first
             .latest
         ).to eq(true)

@@ -9,13 +9,13 @@ class CoursePolicy < ApplicationPolicy
 
     return true if user.faculty.present? && review?
 
-    founder = user.founders.joins(:course).where(courses: { id: record }).first
+    student = user.students.joins(:course).where(courses: { id: record }).first
 
     # User must have a student profile in the course
-    return false if founder.blank?
+    return false if student.blank?
 
     # Dropped out students cannot access course dashboard.
-    !founder.dropped_out_at?
+    !student.dropped_out_at?
   end
 
   def leaderboard?
@@ -29,12 +29,12 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def report?
-    founder = user.founders.joins(:course).where(courses: { id: record }).first
+    student = user.students.joins(:course).where(courses: { id: record }).first
 
-    return false if founder.blank?
+    return false if student.blank?
 
     # Dropped out students cannot access report
-    !founder.dropped_out_at?
+    !student.dropped_out_at?
   end
 
   def show?

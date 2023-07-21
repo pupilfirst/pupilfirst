@@ -38,7 +38,7 @@ feature "Course students report", js: true do
 
   let(:target_l1) do
     create :target,
-           :for_founders,
+           :for_students,
            target_group: target_group_l1,
            milestone: true,
            milestone_number: 1
@@ -46,26 +46,26 @@ feature "Course students report", js: true do
 
   let(:target_l2) do
     create :target,
-           :for_founders,
+           :for_students,
            target_group: target_group_l2,
            milestone: true,
            milestone_number: 2
   end
 
   let(:target_l3_1) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
 
   let!(:target_l3_2) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
 
   let(:quiz_target_1) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
 
   let(:quiz_target_2) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
 
   # Create evaluation criteria for targets
@@ -89,7 +89,7 @@ feature "Course students report", js: true do
   let!(:submission_target_l1_2) do
     create(
       :timeline_event,
-      founders: [student],
+      students: [student],
       target: target_l1,
       evaluator_id: course_coach.id,
       evaluated_at: 3.days.ago,
@@ -157,11 +157,10 @@ feature "Course students report", js: true do
 
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
-
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: team_coach,
-           founder: student
+           student: student
 
     target_l1.evaluation_criteria << evaluation_criterion_1
 
@@ -421,7 +420,7 @@ feature "Course students report", js: true do
     end
 
     scenario "coach is indicated if there are no notes" do
-      another_student = team.founders.last
+      another_student = team.students.last
       sign_in_user team_coach.user,
                    referrer: student_report_path(another_student)
       expect(page).to have_text("No notes here!")
@@ -438,10 +437,10 @@ feature "Course students report", js: true do
     let(:team_coach_2) { create :faculty, school: school }
 
     before do
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: team_coach_2,
-             founder: student
+             student: student
     end
 
     scenario "coach checks list of directly assigned team coaches" do
@@ -456,7 +455,7 @@ feature "Course students report", js: true do
     sign_in_user course_coach.user, referrer: student_report_path(student)
 
     team
-      .founders
+      .students
       .where.not(id: student)
       .each do |teammate|
         expect(page).to have_link(

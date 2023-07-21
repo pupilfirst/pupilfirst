@@ -6,7 +6,7 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if user.faculty.blank?
 
-    user.faculty.cohorts.exists?(id: record.founders.first.cohort_id)
+    user.faculty.cohorts.exists?(id: record.students.first.cohort_id)
   end
 
   def show?
@@ -14,11 +14,11 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if record.evaluation_criteria.blank?
 
-    return true if record.founders.exists?(user: user)
+    return true if record.students.exists?(user: user)
 
     return true if current_school_admin.present?
 
-    organisation = record.founders.first.user.organisation
+    organisation = record.students.first.user.organisation
 
     return false if organisation.blank?
     # Check if the user is an admin of the organisation.

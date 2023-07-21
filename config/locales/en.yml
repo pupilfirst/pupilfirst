@@ -2173,6 +2173,10 @@ en:
           link_to: click here
           main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
         subject: account recovery
+  maintenance:
+    title: Maintenance Mode
+    heading: We'll be back soon!
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
   models:
     faculty:
       commitment:
@@ -2180,7 +2184,7 @@ en:
         part_time: Part-Time
     target:
       role:
-        founder: All Founders
+        students: All Students
         team: Team
   mutations:
     archive_coach_note:

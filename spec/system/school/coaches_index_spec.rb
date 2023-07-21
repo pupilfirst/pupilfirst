@@ -4,7 +4,7 @@ feature "Coaches Index", js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  # Setup a course with a single founder target, ...
+  # Setup a course with a single student target, ...
   let!(:school) { create :school, :current }
   let!(:school_1) { create :school }
   let!(:coach_1) { create :faculty, school: school }

@@ -15,7 +15,7 @@ describe TimelineEventFilePolicy do
     let(:target_group) { create :target_group, level: level_1 }
     let(:target) { create :target, target_group: target_group }
     let(:timeline_event) do
-      create :timeline_event, target: target, founders: team.founders
+      create :timeline_event, target: target, students: team.students
     end
     let(:timeline_event_file) do
       create :timeline_event_file, timeline_event: timeline_event
@@ -27,10 +27,10 @@ describe TimelineEventFilePolicy do
              cohort: team.cohort
     end
     let!(:student_enrollment) do
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: student_faculty,
-             founder: team.founders.first
+             student: team.students.first
     end
 
     context "when the current user is a course coach for the linked course" do
@@ -61,7 +61,7 @@ describe TimelineEventFilePolicy do
 
     context "when the current user is one of the founders linked to the timeline event" do
       let(:pundit_user) do
-        OpenStruct.new(current_user: team.founders.first.user)
+        OpenStruct.new(current_user: team.students.first.user)
       end
 
       it "grants access" do
@@ -71,7 +71,7 @@ describe TimelineEventFilePolicy do
 
     context "for any other user" do
       let(:pundit_user) do
-        OpenStruct.new(current_user: another_team.founders.first.user)
+        OpenStruct.new(current_user: another_team.students.first.user)
       end
 
       it "denies access" do

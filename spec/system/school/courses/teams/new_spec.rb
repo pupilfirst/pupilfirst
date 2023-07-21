@@ -14,9 +14,9 @@ feature "Teams New", js: true do
   let!(:level) { create :level, :one, course: course }
   let!(:level_two) { create :level, :two, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student_1) { create :founder, cohort: live_cohort }
-  let!(:student_2) { create :founder, cohort: live_cohort }
-  let!(:student_3) { create :founder, cohort: live_cohort }
+  let!(:student_1) { create :student, cohort: live_cohort }
+  let!(:student_2) { create :student, cohort: live_cohort }
+  let!(:student_3) { create :student, cohort: live_cohort }
   let!(:team_1) { create :team_with_students, cohort: live_cohort }
   let(:name) { Faker::Lorem.words(number: 2).join(" ") }
 
@@ -32,8 +32,8 @@ feature "Teams New", js: true do
 
     expect(page).to have_text("No students selected")
 
-    expect(page).not_to have_text(team_1.founders.first.name)
-    expect(page).not_to have_text(team_1.founders.last.name)
+    expect(page).not_to have_text(team_1.students.first.name)
+    expect(page).not_to have_text(team_1.students.last.name)
 
     click_button student_1.name
     click_button student_2.name
@@ -52,10 +52,10 @@ feature "Teams New", js: true do
     team = Team.last
 
     expect(team.name).to eq(name)
-    expect(team.founders.count).to eq(3)
+    expect(team.students.count).to eq(3)
   end
 
-  scenario "School admin creates a team with one founder" do
+  scenario "School admin creates a team with one student" do
     sign_in_user school_admin.user, referrer: teams_new_path(course)
     expect(page).to have_text("Create new team")
 

@@ -1,6 +1,6 @@
 class StudentMailerPreview < ActionMailer::Preview
   def enrollment
-    student = Founder.last
+    student = Student.last
     StudentMailer.enrollment(student)
   end
 end

@@ -44,10 +44,10 @@ feature "Course students bulk importer", js: true do
 
     expect(page).to have_text("Import initiated successfully!")
 
-    expect(course.reload.founders.count).to eq(2)
+    expect(course.reload.students.count).to eq(2)
 
-    student_1 = User.find_by(email: "super@man.com").founders.first
-    student_2 = User.find_by(email: "bat@man.com").founders.first
+    student_1 = User.find_by(email: "super@man.com").students.first
+    student_2 = User.find_by(email: "bat@man.com").students.first
 
     expect(student_1.name).to eq("Super Man")
     expect(student_2.name).to eq("Bat Man")
@@ -104,7 +104,7 @@ feature "Course students bulk importer", js: true do
     click_button "Import Students"
 
     expect(page).to have_text("Import initiated successfully!")
-    expect(course.reload.founders.count).to eq(2)
+    expect(course.reload.students.count).to eq(2)
 
     # Check student notification
     open_email("super@man.com")
@@ -159,7 +159,7 @@ feature "Course students bulk importer", js: true do
       create :user, email: "bat@man.com", school: school, title: "New Title"
     end
 
-    let!(:founder) { create :founder, user: user, cohort: cohort }
+    let!(:student) { create :student, user: user, cohort: cohort }
 
     scenario "admin uploads csv with email of existing student" do
       sign_in_user school_admin.user,
@@ -174,9 +174,9 @@ feature "Course students bulk importer", js: true do
 
       expect(page).to have_text("Import initiated successfully!")
 
-      expect(course.reload.founders.count).to eq(2)
+      expect(course.reload.students.count).to eq(2)
 
-      student = User.find_by(email: "bat@man.com").founders.first
+      student = User.find_by(email: "bat@man.com").students.first
       expect(student.title).to eq("New Title")
 
       # Admin is informed in the email about duplication

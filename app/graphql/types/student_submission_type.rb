@@ -15,7 +15,7 @@ module Types
     end
 
     def student_ids
-      object.founder_ids.sort
+      object.student_ids.sort
     end
 
     def team_target

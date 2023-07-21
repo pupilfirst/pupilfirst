@@ -17,8 +17,8 @@ feature "Students view performance report and submissions overview", js: true do
   # Create a team
   let!(:team) { create :team, cohort: cohort }
 
-  let!(:student) { create :founder, team: team, cohort: cohort }
-  let!(:another_student) { create :founder, team: team, cohort: cohort }
+  let!(:student) { create :student, team: team, cohort: cohort }
+  let!(:another_student) { create :student, team: team, cohort: cohort }
 
   # Create few targets for the student
   let(:target_group_l1) do
@@ -32,22 +32,22 @@ feature "Students view performance report and submissions overview", js: true do
   end
 
   let(:target_l1) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
   let(:target_l2) do
-    create :target, :for_founders, target_group: target_group_l2
+    create :target, :for_students, target_group: target_group_l2
   end
   let(:target_l3) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
   let!(:target_4) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
   let(:quiz_target_1) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
   let(:quiz_target_2) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
 
   # Create evaluation criteria for targets
@@ -70,7 +70,7 @@ feature "Students view performance report and submissions overview", js: true do
   let!(:submission_target_l1_2) do
     create(
       :timeline_event,
-      founders: [student],
+      students: [student],
       target: target_l2,
       evaluator_id: course_coach.id,
       evaluated_at: 3.days.ago,
@@ -92,7 +92,7 @@ feature "Students view performance report and submissions overview", js: true do
   let!(:submission_target_l3) do
     create(
       :timeline_event,
-      founders: [student],
+      students: [student],
       target: target_l3,
       evaluator_id: course_coach.id,
       evaluated_at: 1.day.ago,
@@ -139,10 +139,10 @@ feature "Students view performance report and submissions overview", js: true do
 
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: team_coach,
-           founder: student
+           student: student
 
     target_l1.evaluation_criteria << evaluation_criterion_1
     target_l2.evaluation_criteria << [
@@ -283,7 +283,7 @@ feature "Students view performance report and submissions overview", js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team.founders,
+        owners: team.students,
         target: target_l1,
         evaluator_id: course_coach.id,
         evaluated_at: 2.days.ago,
@@ -328,7 +328,7 @@ feature "Students view performance report and submissions overview", js: true do
     let!(:level_0) { create :level, :zero, course: course }
     let!(:target_group_l0) { create :target_group, level: level_0 }
     let!(:target_l0) do
-      create :target, :for_founders, target_group: target_group_l0
+      create :target, :for_students, target_group: target_group_l0
     end
 
     scenario "checks status of total targets completed in report" do
@@ -346,12 +346,12 @@ feature "Students view performance report and submissions overview", js: true do
 
   context "course has archived targets" do
     let!(:target_4) do
-      create :target, :for_founders, :archived, target_group: target_group_l3
+      create :target, :for_students, :archived, target_group: target_group_l3
     end
 
     # Archive target with verified submission for the student
     let(:target_l3) do
-      create :target, :for_founders, :archived, target_group: target_group_l3
+      create :target, :for_students, :archived, target_group: target_group_l3
     end
 
     scenario "checks status of total targets completed in report" do

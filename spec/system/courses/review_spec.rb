@@ -13,17 +13,17 @@ feature "Coach's review interface" do
   let(:target_group_l2) { create :target_group, level: level_2 }
   let(:target_group_l3) { create :target_group, level: level_3 }
   let(:target_l1) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
   let(:target_l2) do
-    create :target, :for_founders, target_group: target_group_l2
+    create :target, :for_students, target_group: target_group_l2
   end
   let(:target_l3) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
   let(:team_target) { create :target, :for_team, target_group: target_group_l2 }
   let(:auto_verify_target) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
   let(:student_l1) { create :student, cohort: cohort }
@@ -40,10 +40,10 @@ feature "Coach's review interface" do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
 
     # ...and another as a directly-assigned "team" coach.
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: team_coach,
-           founder: student_l3
+           student: student_l3
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target_l1.evaluation_criteria << evaluation_criterion
@@ -86,7 +86,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_l3.founders,
+        owners: team_l3.students,
         target: team_target,
         evaluator_id: course_coach.id,
         evaluated_at: 1.day.ago,
@@ -99,7 +99,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_l3.founders,
+        owners: team_l3.students,
         target: auto_verify_target,
         passed_at: 1.day.ago
       )
@@ -390,7 +390,7 @@ feature "Coach's review interface" do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: inactive_team.founders,
+          owners: inactive_team.students,
           target: team_target
         )
 
@@ -417,7 +417,7 @@ feature "Coach's review interface" do
 
     context "when random filters are applied" do
       let(:random_level) { create :level, :one }
-      let(:random_target) { create :target, :for_founders }
+      let(:random_target) { create :target, :for_students }
 
       scenario "coach visits review dashboard", js: true do
         sign_in_user course_coach.user,
@@ -567,10 +567,10 @@ feature "Coach's review interface" do
       let(:team_coach_2) { create :faculty, school: school }
 
       before do
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                :with_cohort_enrollment,
                faculty: team_coach_2,
-               founder: student_l2
+               student: student_l2
       end
 
       scenario "one team coach uses filter to see submissions personal coach another coach",

@@ -13,8 +13,8 @@ class DailyDigestService
 
     students =
       User
-        .joins(founders: :communities)
-        .merge(Founder.active)
+        .joins(students: :communities)
+        .merge(Student.active)
         .distinct
         .select(:id)
     coaches = User.joins(:faculty).select(:id)
@@ -162,7 +162,7 @@ class DailyDigestService
           []
         else
           students =
-            Founder.joins([:faculty, cohort: :course]).where(
+            Student.joins([:faculty, cohort: :course]).where(
               faculty: {
                 id: coach
               },
@@ -175,7 +175,7 @@ class DailyDigestService
             course_name: course.name,
             pending_submissions: pending_submissions_in_course,
             pending_submissions_for_coach:
-              pending_submissions.from_founders(students).count,
+              pending_submissions.from_students(students).count,
             is_team_coach: students.any?
           }
         end

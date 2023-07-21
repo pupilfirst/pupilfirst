@@ -10,7 +10,7 @@ feature "Submissions show" do
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let(:target) { create :target, :for_team, target_group: target_group }
-  let(:target_2) { create :target, :for_founders, target_group: target_group }
+  let(:target_2) { create :target, :for_students, target_group: target_group }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:submission_file_1) { create :timeline_event_file }
@@ -69,8 +69,8 @@ feature "Submissions show" do
   let(:submission_3) { create(:timeline_event, target: target_2) }
 
   let(:team) { create :team_with_students, cohort: cohort }
-  let(:student) { team.founders.first }
-  let(:student_2) { team.founders.last }
+  let(:student) { team.students.first }
+  let(:student_2) { team.students.last }
 
   let(:organisation) { create :organisation, school: school }
   let(:organisation_admin) do
@@ -104,9 +104,9 @@ feature "Submissions show" do
 
       target.evaluation_criteria << [evaluation_criterion]
       target_2.evaluation_criteria << [evaluation_criterion]
-      submission.founders << [student, student_2]
-      submission_2.founders << student_2
-      submission_3.founders << student
+      submission.students << [student, student_2]
+      submission_2.students << student_2
+      submission_3.students << student
       submission.update!(evaluator: coach)
       submission.update!(evaluated_at: Time.now)
     end
@@ -182,7 +182,7 @@ feature "Submissions show" do
   end
 
   context "submission is of an auto-verified target" do
-    before { submission.founders << student }
+    before { submission.students << student }
 
     scenario "student visits show page of submission", js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)

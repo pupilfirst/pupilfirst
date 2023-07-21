@@ -1750,6 +1750,10 @@ ru:
     user_session:
       log_in: Войти в
       recovery: восставновление аккаунта
+  maintenance:
+      title: Maintenance Mode
+      heading: Мы скоро вернемся!
+      message: Приносим извинения за неудобства. В настоящее время мы проводим <strong>технические работы</strong>, чтобы улучшить ваш опыт.
   models:
     faculty:
       commitment:

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Founders::MarkAsDroppedOutService do
+describe Students::MarkAsDroppedOutService do
   subject { described_class.new(student, user) }
 
   let(:user) { create :user }
@@ -9,12 +9,11 @@ describe Founders::MarkAsDroppedOutService do
     context "when the student is in a team of more than one"
     let(:cohort) { create :cohort }
     let(:original_team) { create :team_with_students, cohort: cohort }
-    let(:student) { original_team.founders.first }
+    let(:student) { original_team.students.first }
 
-    it "removes the team link and mark the founder as exited" do
-      expect { subject.execute }.to change {
-        student.reload.dropped_out_at
-      }.from(nil)
+    it 'removes the team link and mark the student as exited' do
+      expect { subject.execute }.to change { student.reload.dropped_out_at }
+        .from(nil)
       expect(student.team).to eq(nil)
 
       # Check audit records
@@ -31,14 +30,14 @@ describe Founders::MarkAsDroppedOutService do
   context "when the student is alone in a team" do
     let(:cohort) { create :cohort }
     let(:team) { create :team, cohort: cohort }
-    let(:student) { create :founder, team: team, cohort: cohort }
+    let(:student) { create :student, team: team, cohort: cohort }
     let(:coach) { create :faculty, school: cohort.school }
 
     before do
-      create :faculty_founder_enrollment,
+      create :faculty_student_enrollment,
              :with_cohort_enrollment,
              faculty: coach,
-             founder: student
+             student: student
     end
 
     it "marks the student as exited and removes all direct coach enrollments to the team" do

@@ -19,13 +19,13 @@ RSpec.describe Github::AddSubmissionService, type: :service do
   let(:cohort) { create(:cohort, course: course) }
   let!(:student) do
     create(
-      :founder,
+      :student,
       cohort: cohort,
       github_repository: "organization_id/test_repo",
     )
   end
   let!(:submission) do
-    create(:timeline_event, target: target, founders: [student])
+    create(:timeline_event, target: target, students: [student])
   end
   let(:service) { described_class.new(submission) }
   let(:octokit_client) { instance_double(Octokit::Client) }

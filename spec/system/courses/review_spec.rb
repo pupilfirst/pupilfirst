@@ -673,10 +673,10 @@ feature "Coach's review interface" do
       end
     end
 
-    scenario "coach cylces through submissions using next button", js: true do
-      sign_in_user course_coach.user, referrer: review_course_path(course)
-
-      click_link "Pending"
+    scenario "coach cylces through pending submissions using next button",
+             js: true do
+      sign_in_user course_coach.user,
+                   referrer: review_course_path(course, tab: "Pending")
 
       expect(find("#submissions a:nth-child(1)")).to have_content(
         submission_l3_t3.title
@@ -688,17 +688,30 @@ feature "Coach's review interface" do
         submission_l1_t1.title
       )
 
+      # binding.pry
       find("#submissions a:nth-child(1)").click
       expect(page).to have_text(submission_l3_t3.title)
-
+      expect(page).to_not have_button("Next")
+      click_button "Start Review"
+      click_button "2" # Select grade.
+      click_button "Save grades"
+      expect(page).to have_button("Next")
       click_button "Next"
+
       expect(page).to have_text(submission_l2_t2.title)
-
+      click_button "Start Review"
+      click_button "2" # Select grade.
+      click_button "Save grades"
+      expect(page).to have_button("Next")
       click_button "Next"
+
       expect(page).to have_text(submission_l1_t1.title)
-
+      # Need not to have 'Start Review' button here, as coach is assigned to it.
+      click_button "2" # Select grade.
+      click_button "Save grades"
+      expect(page).to have_button("Next")
       click_button "Next"
-      expect(page).to have_text("There are no other similar submissions.")
+      expect(page).to have_text("There are no similar pending submissions.")
     end
   end
 

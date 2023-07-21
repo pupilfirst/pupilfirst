@@ -1082,35 +1082,58 @@ feature "Submission review overlay", js: true do
         reviewer: team_coach
       )
     end
+    let!(:submission_pending_5) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [student],
+        latest: true,
+        target: target_2,
+        reviewer_assigned_at: 1.day.ago,
+        reviewer: team_coach,
+        created_at: 2.days.ago
+      )
+    end
     scenario "coach grades and cylces through pending submissions using next button",
              js: true do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_pending_3)
 
-      expect(page).to have_text(submission_pending_3.title)
       expect(page).to_not have_button("Next")
 
+      expect(page).to have_text(submission_pending_3.title)
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) { find("button[title='Good']").click }
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
-
       click_button "Save grades"
+
+      expect(page).to have_button("Next")
+      click_button "Next"
+
+      expect(page).to have_text(submission_pending_5.title)
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+      ) { find("button[title='Good']").click }
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+      ) { find("button[title='Good']").click }
+      click_button "Save grades"
+
       expect(page).to have_button("Next")
       click_button "Next"
 
       expect(page).to have_text(submission_pending_4.title)
-
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) { find("button[title='Good']").click }
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
-
       click_button "Save grades"
+
       expect(page).to have_button("Next")
       click_button "Next"
 

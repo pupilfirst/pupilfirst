@@ -32,7 +32,7 @@ class SetTargetPrerequisiteBetweenLevels < ActiveRecord::Migration[6.1]
   def up
     courses = Course.all.includes(:levels, :target_groups, :targets)
 
-    #  Assign lower level targets in a milestone as a prerequisit to next level milestone targets
+    #  Assign lower level targets in a milestone as a prerequisite to next level milestone targets
     courses.each do |course|
       course
         .levels
@@ -40,7 +40,7 @@ class SetTargetPrerequisiteBetweenLevels < ActiveRecord::Migration[6.1]
         .each do |level|
           level_number = level.number
 
-          next if level_number == 1
+          next if level_number.in?([0, 1])
 
           previous_level = course.levels.find_by(number: level_number - 1)
 

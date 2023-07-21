@@ -9,9 +9,9 @@
         <h1 class="font-semibold text-2xl text-gray-600"><%= @course.name %></h1>
         <p class="text-sm text-gray-600 mt-1"><%= t(".milestone_msg")%></p>
       </div>
-      <div class="p-3 bg-yellow-100  rounded border border-yellow-200 relative">
+      <div class="px-3 md:px-4 py-2 bg-yellow-100 rounded-md border border-yellow-200 flex items-center flex-shrink-0 font-medium text-yellow-800">
         <i class="if i-milestone-solid if-fw text-2xl text-yellow-900" ></i>
-        <i class="if i-hash-solid if-fw text-xl text-yellow-600 absolute -bottom-2 right-1" ></i>
+        <span class="pointer-events-none">#</span>
       </div>
     </div>
     <div class="pb-10">
@@ -20,12 +20,12 @@
           <div class="flex items-center target-group__target-container overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
             <% unless @milestones.size < 1 %>
               <div class="flex flex-col target-group__target-reorder relative h-full border-e border-transparent text-gray-600 justify-between items-center">
-                <%= button_to update_milestone_number_school_assignment_path(target, direction: :up, page: @page_no) , method: :patch, title:"Move up", class: "h-full",
-                form_class: " flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index > 0 || !@milestones.first_page?}" do %>
+                <%= button_to update_milestone_number_school_assignment_path(target, direction: :up, page: @page_no),
+                method: :patch, title:"Move up", class: "h-full", form_class: "flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index > 0 || !@milestones.first_page?}" do %>
                   <i class="if i-arrow-up-solid if-fw" ></i>
                 <% end %>
-                <%= button_to update_milestone_number_school_assignment_path(target, direction: :down, page: @page_no), method: :patch, title:"Move down",  class: "h-full",
-                form_class: "flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index < @milestones.size - 1 || !@milestones.last_page?}" do %>
+                <%= button_to update_milestone_number_school_assignment_path(target, direction: :down, page: @page_no),
+                method: :patch, title:"Move down",  class: "h-full", form_class: "flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index < @milestones.size - 1 || !@milestones.last_page?}" do %>
                   <i  class="if i-arrow-down-solid if-fw" ></i>
                 <% end %>
               </div>
@@ -52,3 +52,5 @@
         <%= page_entries_info @milestones, entry_name: 'Milestone' %>
       </div>
     </div>
+  </div>
+</div>

@@ -1,8 +1,4 @@
 en:
-  school:
-    targets:
-      update_action:
-        error_message: Action could not be updated, please check the YAML syntax
   applicants:
     enroll:
       errors:
@@ -370,7 +366,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
-          description_end: "without getting submissions reviewed."
+          description_end: without getting submissions reviewed.
           description_start: Students can submit
           once: once
           thrice: thrice
@@ -460,6 +456,7 @@ en:
       create_button_text: Create Export
       download_course_export: Download Course Export
       export: Export
+      export_cohorts_label: Export only the students in the following cohort(s)
       export_tags_label: Export only students with the following tags
       export_targets_label: Which targets should the export include?
       export_type_label: Please select the kind of export you need
@@ -470,14 +467,15 @@ en:
       requested: Requested
       reviewed_only_tag: Reviewed Submissions Only
       reviewed_only_targets_label: Only targets with reviewed submissions
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
       search_tag_placeholder: Search for a tag
       search_tags_empty: No tags selected
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
-      search_cohort_placeholder: Search for a cohort
-      search_cohorts_empty: No cohorts selected
-      export_cohorts_label: Export only the students in the following cohort(s)
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -494,8 +492,6 @@ en:
           active: Active
           archived: Archived
           ended: Ended
-    CourseResourcesFilter:
-      filter_resources: Filter Resources
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -510,6 +506,7 @@ en:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
+      milestone_target_label: Milestone
       milestone_targets: Milestone targets
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
@@ -517,7 +514,6 @@ en:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
-      milestone_target_label: Milestone
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
@@ -578,12 +574,12 @@ en:
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
+      milestone_target_label: Milestone
       next_target_button: Next Target
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
-      milestone_target_label: Milestone
     CoursesCurriculum__Quiz:
       next_question: Next Question
       question: Question
@@ -626,13 +622,13 @@ en:
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
-      submission_limit_reached:  "You have %{pending_count} pending submissions and cannot submit more until they are reviewed."
       status:
         completed: Completed
         locked: Locked
         pending: Pending
         pending_review: Pending Review
         rejected: Rejected
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.
       notification_error_head: Unexpected Error
@@ -656,6 +652,10 @@ en:
       course_completed: Course Completed!
       incomplete_targets: "Incomplete: %{targetsCount}"
       level_progress: Level Progress
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: This is the list of milestone targets that you need to complete to finish this course. Use this view to track your progress and to spot targets that you might have missed.
+      milestone_status_title: Completion status of milestone targets
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -665,8 +665,6 @@ en:
       targets_completed: "Completed: %{targetsCount}"
       targets_overview: Targets Overview
       targets_pending_review: "Pending Review: %{targetsCount}"
-      milestone_completed: "Completed"
-      milestone_pending: "Pending"
     CoursesReport__SubmissionsList:
       completed: Completed
       filter_by_another_status: Filter by another status
@@ -715,16 +713,6 @@ en:
       generate_feedback_button: Generate Feedback
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: Review Checklist
-    CoursesReview__SubmissionReportShow:
-      hide_report_button: Hide Report
-      report_status_string:
-        error: Actions could not complete due to errors
-        failure: Some actions failed
-        success: All actions succeeded
-        in_progress: Actions are in progress
-        queued: Actions are queued
-      show_report_button: Show Report
-      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
@@ -751,7 +739,7 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
-      note_help: "Would you like to write a note about this %{noteAbout} ?"
+      note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
       remove_assignment: Remove assignment
@@ -849,6 +837,16 @@ en:
       pending_review: Pending Review
       rejected: Rejected
       submission_hash: Submission
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        in_progress: Actions are in progress
+        queued: Actions are queued
+        success: All actions succeeded
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesStudents__CoachNoteShow:
       coach_on: "on"
       delete_note: "Delete note "
@@ -892,11 +890,11 @@ en:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
-      hide_archived: Hide Archived
-      show_archived: Show Archived
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
+      hide_archived: Hide Archived
+      show_archived: Show Archived
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: Please select a file with a size less than 10 MB.
       button_labels:
@@ -1014,7 +1012,6 @@ en:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: Do you have any completion instructions for the student?
-
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
@@ -1055,14 +1052,14 @@ en:
       target_group: Target Group
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
-      target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
-        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
-        label: Is this target a milestone?
       target_role:
         help: Should students in a team submit work on a target individually, or together?
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: How should teams tackle this target?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -1108,10 +1105,10 @@ en:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
+      milestone_target_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
-      milestone_target_label: Milestone
     CurriculumEditor__TargetVersionSelector:
       edit: Edit
       preview: Preview
@@ -1308,14 +1305,14 @@ en:
       close_community_editor: Close Community Editor
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
     SchoolCustomize__AgreementsEditor:
-      updating: Updating...
-      update: "Update "
       agreement_body: Body of Agreement
       agreement_placeholder: Leave the agreement body empty to hide the footer link.
       manage: Manage
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
+      update: "Update "
       updated_notification: has been updated.
+      updating: Updating...
     SchoolCustomize__ContactsEditor:
       address_placeholder: Leave the address empty to hide the footer section.
       contact_address: Contact Address
@@ -1414,6 +1411,7 @@ en:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1424,7 +1422,6 @@ en:
           exports: Exports
           students: Students
           teams: Teams
-          assignments: Assignments
         main:
           coaches: Coaches
           communities: Communities
@@ -1819,6 +1816,7 @@ en:
       email_label: Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
       localization: Localization
@@ -1843,7 +1841,6 @@ en:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
-      incorrect_email_for_deletion: Incorrect email
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1916,16 +1913,16 @@ en:
       today: Today
       upcoming_events: Upcoming events in %{month}
     cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
       students_enrolled_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled
         other: <span class="font-semibold text-black">%{count}</span> students enrolled
       students_enrolled_suffix_html:
         one: in <span class="font-semibold text-black">1</span> %{status} cohort
         other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
-      cohorts_subheading: "%{status} Cohorts"
-      end_date: "End Date:"
-      nothing_to_show: There are no %{status} cohorts to show.
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
     leaderboard:
       active_students: Active Students
       change: Change
@@ -2186,8 +2183,6 @@ en:
         founder: All Founders
         team: Team
   mutations:
-    conclude_submission_report:
-      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: Note removed successfully
     archive_course:
@@ -2204,6 +2199,8 @@ en:
       success_notification: Course copy requested. It will appear here soon!
     clone_level:
       success_notification: Level copy requested. It will apppear in target course soon!
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     create_coach_note:
       note_added_notification: Note added successfully
     create_cohort:
@@ -2239,14 +2236,14 @@ en:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
-    create_students:
-      invalid_emails: One or more of the entries have an invalid email address
-      soft_limit_number: You've hit the soft-limit for number of students in this course
-      unique_emails: Email addresses must be unique
-      invalid_strings: One or more of the entries have invalid strings
-      thousand_students_limit: You can only onboard 1000 students at a time
     create_student_from_applicant:
       success_notification: Student created successfully.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      invalid_strings: One or more of the entries have invalid strings
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      thousand_students_limit: You can only onboard 1000 students at a time
+      unique_emails: Email addresses must be unique
     create_submission:
       blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
       form_success_notification: Your response has been saved.
@@ -2274,10 +2271,10 @@ en:
     dropout_student:
       student_updated_notification: Student updated successfully
     export_course_report:
+      cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
-      cohorts_not_found_error: Could not find cohorts with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
@@ -2372,24 +2369,24 @@ en:
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      ended_cohorts_label: Ended Cohorts
       end_date: "End Date:"
+      ended_cohorts_label: Ended Cohorts
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
-      active_students_label: Active Students
       active_cohorts_subheading: Active Cohorts
+      active_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      active_students_label: Active Students
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       end_date: "End Date:"
       no_active_cohorts: There are no active cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
-      active_prefix_html:
-        one: <span class="font-semibold text-black">1</span> student enrolled in
-        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      active_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> active cohort.
-        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
     students:
@@ -2424,6 +2421,15 @@ en:
   presenters:
     apply:
       page_title: Enroll in %{course_name}
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_pending: Milestone pending
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2494,7 +2500,11 @@ en:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
     update_evaluation_criterion_mutator:
-      evaluation_criterion_not_found: "Could not find evaluation criterion with ID %{id}"
+      evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
   schools:
     admins:
       title: Admins
@@ -2549,10 +2559,10 @@ en:
       applicants:
         title: Applicants
       assignments:
-        title: Assignments
-        list_title: Arrange milestone assignments in
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
-        milestone_msg: Order of milestone assignments determines the sequence in which the course should be completed.
+        title: Assignments
       authors:
         title: Authors
       calendar_events:
@@ -2591,8 +2601,8 @@ en:
       course_index:
         title: Coaches
       school_index:
-        title: Coaches
         coach: Coach
+        title: Coaches
     show:
       coaches: Coaches
       courses: Courses
@@ -2640,8 +2650,8 @@ en:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.
       overview_link: Overview
-      students_completed: Students Completed
       student_distribution_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
       students_link: Students
       total_students: Total Students
       view_all: View All
@@ -2720,11 +2730,11 @@ en:
     search: Search
     settings: Settings
     sign_out: Sign Out
+    sort_by: Sort by
     student:
       never_signed_in: Has never signed in
       time_ago: Last seen %{time_ago} ago
     students: Students
-    sort_by: Sort by
     tag: Tag
     tags: Tags
     target: Target
@@ -2739,18 +2749,18 @@ en:
     view: View
   timeline_events:
     show:
-      submission_from: Submission from
-      submitted_on: Submitted on
-      reviewed_on: Reviewed on
-      status: Status
-      rejected: Rejected
       accepted: Accepted
-      pending: Pending
-      team: Team
       feedback:
         one: Feedback
         other: Feedbacks
       no_feedbacks: No feedback received for this submission.
+      pending: Pending
+      rejected: Rejected
+      reviewed_on: Reviewed on
+      status: Status
+      submission_from: Submission from
+      submitted_on: Submitted on
+      team: Team
   users:
     clear_discord_id:
       success: Discord unlinked successfully.

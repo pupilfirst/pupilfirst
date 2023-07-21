@@ -183,8 +183,8 @@ let getNextSubmission = (send, courseId, filter) => {
   let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
-    ~sortDirection=Filter.defaultDirection(filter),
-    ~sortCriterion=Filter.sortCriterion(filter),
+    ~sortDirection=Filter.defaultDirection({...filter, sortDirection: Some(#Ascending)}),
+    ~sortCriterion=Filter.sortCriterion({...filter, sortCriterion: #SubmittedAt}),
     ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
     ~assignedCoachId=?Filter.assignedCoachId(filter),

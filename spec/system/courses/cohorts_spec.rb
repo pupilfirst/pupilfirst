@@ -42,15 +42,15 @@ feature "Cohorts", js: true do
 
   # Create few students
   let!(:student_1) do
-    create :founder, tag_list: ["starts with z", "vegetable"], cohort: cohort_1
+    create :student, tag_list: ["starts with z", "vegetable"], cohort: cohort_1
   end # This will always be around the bottom of the list.
   let!(:student_2) do
-    create :founder, tag_list: ["vegetable"], cohort: cohort_1
+    create :student, tag_list: ["vegetable"], cohort: cohort_1
   end # This will always be around the top.
-  let!(:student_3) { create :founder, cohort: cohort_1 }
-  let!(:student_4) { create :founder, cohort: cohort_1 }
-  let!(:student_5) { create :founder, cohort: cohort_1 }
-  let!(:student_6) { create :founder, cohort: cohort_1 }
+  let!(:student_3) { create :student, cohort: cohort_1 }
+  let!(:student_4) { create :student, cohort: cohort_1 }
+  let!(:student_5) { create :student, cohort: cohort_1 }
+  let!(:student_6) { create :student, cohort: cohort_1 }
 
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort_1

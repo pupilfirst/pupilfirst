@@ -9,7 +9,7 @@ describe TimelineEvents::WasLastTargetService do
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
   let!(:team) { create :team_with_students, cohort: cohort }
-  let(:student) { team.founders.first }
+  let(:student) { team.students.first }
 
   let(:target) do
     create :target,
@@ -43,7 +43,7 @@ describe TimelineEvents::WasLastTargetService do
   end
 
   describe "#was_last_target?" do
-    before { team.founders.each { |f| complete_target(target, f) } }
+    before { team.students.each { |f| complete_target(target, f) } }
     let(:submission_1) { complete_target(target_2, student) }
 
     it "returns true as all milestone submissions are passed" do

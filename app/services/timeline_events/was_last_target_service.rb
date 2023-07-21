@@ -39,7 +39,7 @@ module TimelineEvents
         .where(
           target: targets,
           timeline_event_owners: {
-            founder_id: student.id
+            student_id: student.id
           }
         )
         .where.not(passed_at: nil)

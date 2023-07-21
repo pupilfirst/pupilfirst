@@ -59,7 +59,7 @@ describe TimelineEventFilePolicy do
       end
     end
 
-    context "when the current user is one of the founders linked to the timeline event" do
+    context "when the current user is one of the students linked to the timeline event" do
       let(:pundit_user) do
         OpenStruct.new(current_user: team.students.first.user)
       end

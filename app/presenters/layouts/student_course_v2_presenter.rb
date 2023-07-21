@@ -33,10 +33,10 @@ module Layouts
 
         # ...plus courses where user is a student...
         courses_as_student =
-          Course.joins(:founders).where(
+          Course.joins(:students).where(
             school: current_school,
-            founders: {
-              id: current_user.founders.select(:id)
+            students: {
+              id: current_user.students.select(:id)
             }
           )
 
@@ -83,7 +83,7 @@ module Layouts
     def user_is_student?
       current_user.present? &&
         current_user
-          .founders
+          .students
           .not_dropped_out
           .joins(:cohort)
           .exists?(cohorts: { course_id: @course.id })

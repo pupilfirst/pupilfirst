@@ -482,7 +482,7 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("(2 from students assigned to you)")
+        expect(b).to include("(2 from the students assigned to you)")
         expect(b).not_to include("(none from students assigned to you)")
       end
 

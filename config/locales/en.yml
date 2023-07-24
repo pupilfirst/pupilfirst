@@ -2174,7 +2174,7 @@ en:
           asked: asked %{days_ago} days ago.
           assigned:
             one: (1 from a student assigned to you)
-            other: (%{count} from students assigned to you)
+            other: (%{count} from the students assigned to you)
           assigned_none: (none from students assigned to you)
           control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"

@@ -463,9 +463,9 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("There are 3")
-        expect(b).to include("new submissions to review")
-        expect(b).to include("in the courses")
+        expect(b).to include(
+          "There are 3 new submissions to review in the courses you're coaching"
+        )
 
         # The email should include community updates, but only
         # from the courses where the coach is enrolled.
@@ -498,20 +498,21 @@ describe DailyDigestService do
         expect(b).to include(community_2.name)
       end
 
-      it "check the pending submissions sentence when there is only one submission" do
-        submission_pending_2.destroy
-        submission_pending_3.destroy
+      context "when there is only one submission pending review" do
+        before do
+          submission_pending_2.destroy!
+          submission_pending_3.destroy!
+        end
 
-        subject.execute
+        it "mentions that there is only one submission to review" do
+          subject.execute
+          open_email(coach.user.email)
+          b = sanitize_html(current_email.body)
 
-        open_email(coach.user.email)
-
-        b = sanitize_html(current_email.body)
-
-        expect(b).to include(course_1.name)
-        expect(b).to include("There is 1")
-        expect(b).to include("new submission to review")
-        expect(b).to include("in a course")
+          expect(b).to include(
+            "There is 1 new submission to review in a course you're coaching"
+          )
+        end
       end
     end
 

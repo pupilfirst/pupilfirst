@@ -473,7 +473,7 @@ describe DailyDigestService do
         expect(b).not_to include(community_2.name)
       end
 
-      it "sends team coaches the number submissions of those assigned to them for review" do
+      it "sends team coaches the number submissions from students assigned to them" do
         subject.execute
 
         open_email(team_coach.user.email)
@@ -482,8 +482,8 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("(2 assigned to you)")
-        expect(b).not_to include("(none of which are assigned to you)")
+        expect(b).to include("(2 from students assigned to you)")
+        expect(b).not_to include("(none from students assigned to you)")
       end
 
       it "only sends community updates where coach is enrolled to a linked course" do

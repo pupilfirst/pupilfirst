@@ -48,7 +48,7 @@ gem "redis", "~> 5.0" # Redis client for use as cache store for rack-attack
 gem "rack-attack", "~> 6.6" # A rack middleware for throttling and blocking abusive requests
 gem "web-push", "~> 3.0" # Web Push library for Ruby (RFC8030).
 gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates database interactions into no-ops.
-gem "discordrb", "~> 3.4" # A Ruby wrapper for the Discord API.
+gem "discordrb", "~> 3.5" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
 gem 'octokit', '~> 6.1.1' # A Ruby toolkit for the GitHub API.
@@ -91,7 +91,7 @@ end
 group :test do
   gem "rspec-retry", "~> 0.6" # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
   gem "factory_bot_rails", "~> 6.2" # A library for setting up Ruby objects as test data.
-  gem "capybara", "~> 3.35" # For RSpec feature tests.
+  gem "capybara", "~> 3.39" # For RSpec feature tests.
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
   gem "webdrivers", "~> 5.2" # Keep your Selenium WebDrivers updated automatically.
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!

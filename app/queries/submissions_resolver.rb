@@ -19,9 +19,9 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if coach.blank?
+    return false if coach.blank? && current_school_admin.blank?
 
-    coach.courses.exists?(id: course)
+    current_school_admin.present? || coach.courses.exists?(id: course)
   end
 
   def coach
@@ -30,10 +30,10 @@ class SubmissionsResolver < ApplicationQuery
 
   def sort_direction_string
     case sort_direction
-    when 'Ascending'
-      'ASC'
-    when 'Descending'
-      'DESC'
+    when "Ascending"
+      "ASC"
+    when "Descending"
+      "DESC"
     else
       raise "#{sort_direction} is not a valid sort direction"
     end
@@ -41,10 +41,10 @@ class SubmissionsResolver < ApplicationQuery
 
   def sort_criterion_string
     case sort_criterion
-    when 'SubmittedAt'
-      'created_at'
-    when 'EvaluatedAt'
-      'evaluated_at'
+    when "SubmittedAt"
+      "created_at"
+    when "EvaluatedAt"
+      "evaluated_at"
     else
       raise "#{sort_criterion} is not a valid sort criterion"
     end
@@ -76,9 +76,11 @@ class SubmissionsResolver < ApplicationQuery
     # Filter by personal coach
     stage_4 =
       if course.faculty.exists?(id: personal_coach_id)
-        stage_3
-          .joins(students: :faculty_student_enrollments)
-          .where(faculty_student_enrollments: { faculty_id: personal_coach_id })
+        stage_3.joins(students: :faculty_student_enrollments).where(
+          faculty_student_enrollments: {
+            faculty_id: personal_coach_id
+          }
+        )
       else
         stage_3
       end
@@ -113,9 +115,9 @@ class SubmissionsResolver < ApplicationQuery
     return submissions if status.blank?
 
     case status
-    when 'Pending'
+    when "Pending"
       submissions.pending_review
-    when 'Reviewed'
+    when "Reviewed"
       submissions.evaluated_by_faculty
     else
       raise "Unexpected status '#{status}' encountered when resolving submissions"
@@ -125,16 +127,21 @@ class SubmissionsResolver < ApplicationQuery
   def students
     @students ||=
       begin
-        scope = course.students.where(cohort_id: coach.cohorts)
+        scope =
+          if current_school_admin.present?
+            course.students
+          else
+            course.students.where(cohort_id: coach.cohorts)
+          end
 
         scope = include_inactive ? scope : scope.active
 
         if search.present?
           students_with_users = scope.joins(:user)
 
-          students_with_users
-            .where('users.name ILIKE ?', "%#{search}%")
-            .or(students_with_users.where('users.email ILIKE ?', "%#{search}%"))
+          students_with_users.where("users.name ILIKE ?", "%#{search}%").or(
+            students_with_users.where("users.email ILIKE ?", "%#{search}%")
+          )
         else
           scope
         end

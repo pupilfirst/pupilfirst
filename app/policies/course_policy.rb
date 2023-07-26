@@ -24,8 +24,11 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    record.present? && reviewable_courses.present? &&
-      reviewable_courses.exists?(id: record)
+    (current_school_admin.present?) ||
+      (
+        record.present? && reviewable_courses.present? &&
+          reviewable_courses.exists?(id: record)
+      )
   end
 
   def report?

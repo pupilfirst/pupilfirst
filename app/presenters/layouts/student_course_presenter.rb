@@ -60,7 +60,7 @@ module Layouts
     end
 
     def review_dashboard
-      "review" if user_is_coach?
+      "review" if user_is_coach? || current_school_admin.present?
     end
 
     def leaderboard
@@ -91,7 +91,7 @@ module Layouts
     end
 
     def students
-      "students" if user_is_coach?
+      "students" if user_is_coach? || current_school_admin.present?
     end
   end
 end

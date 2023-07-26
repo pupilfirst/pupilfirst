@@ -80,7 +80,13 @@ module Layouts
     def courses_with_review_access
       @courses_with_review_access ||=
         begin
-          current_coach.present? ? current_coach.courses : Course.none
+          if current_school_admin.present?
+            current_school.courses
+          elsif current_coach.present?
+            current_coach.courses
+          else
+            Course.none
+          end
         end
     end
 

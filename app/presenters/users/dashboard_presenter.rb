@@ -85,7 +85,9 @@ module Users
     def courses_with_review_access
       @courses_with_review_access ||=
         begin
-          if current_user.faculty.present?
+          if current_school_admin.present?
+            current_school.courses.pluck(:id)
+          elsif current_user.faculty.present?
             current_user.faculty.courses.pluck(:id)
           else
             []

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :timeline_event_owner do
     timeline_event
-    founder
+    student
     trait :latest do
       latest { true }
     end

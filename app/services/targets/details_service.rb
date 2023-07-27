@@ -2,14 +2,14 @@ module Targets
   class DetailsService
     include RoutesResolvable
 
-    def initialize(target, founder, public_preview:)
+    def initialize(target, student, public_preview:)
       @target = target
-      @founder = founder
+      @student = student
       @public_preview = public_preview
     end
 
     def details
-      if @founder.present?
+      if @student.present?
         {
           pending_user_ids: pending_user_ids,
           submissions: details_for_submissions,
@@ -94,14 +94,14 @@ module Targets
     end
 
     def pending_user_ids
-      if @founder.team
-        @founder
+      if @student.team
+        @student
           .team
-          .founders
-          .where.not(id: @founder)
-          .select do |founder|
+          .students
+          .where.not(id: @student)
+          .select do |student|
             team_member_submissions =
-              founder.timeline_events.live.where(target: @target)
+              student.timeline_events.live.where(target: @target)
             team_member_submissions.failed.count ==
               team_member_submissions.count
           end
@@ -128,14 +128,14 @@ module Targets
         @target
           .timeline_events
           .live
-          .joins(:founders)
-          .where(founders: { id: @founder })
+          .joins(:students)
+          .where(students: { id: @student })
 
       if @target.individual_target?
         scope.load
       else
         scope.select do |submission|
-          submission.founder_ids.sort == @founder.team_student_ids
+          submission.student_ids.sort == @student.team_student_ids
         end
       end
     end

@@ -17,8 +17,8 @@ class Course < ApplicationRecord
   has_many :levels, dependent: :restrict_with_error
   has_many :cohorts, dependent: :restrict_with_error
   has_many :teams, through: :cohorts
-  has_many :founders, through: :cohorts
-  has_many :users, through: :founders
+  has_many :students, through: :cohorts
+  has_many :users, through: :students
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :targets
@@ -87,7 +87,7 @@ class Course < ApplicationRecord
   end
 
   def student_tags
-    founders.access_active.joins(:tags).distinct("tags.name").pluck("tags.name")
+    students.access_active.joins(:tags).distinct("tags.name").pluck("tags.name")
   end
 
   def user_tags

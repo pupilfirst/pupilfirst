@@ -42,15 +42,15 @@ feature "Cohorts", js: true do
 
   # Create few students
   let!(:student_1) do
-    create :founder, tag_list: ["starts with z", "vegetable"], cohort: cohort_1
+    create :student, tag_list: ["starts with z", "vegetable"], cohort: cohort_1
   end # This will always be around the bottom of the list.
   let!(:student_2) do
-    create :founder, tag_list: ["vegetable"], cohort: cohort_1
+    create :student, tag_list: ["vegetable"], cohort: cohort_1
   end # This will always be around the top.
-  let!(:student_3) { create :founder, cohort: cohort_1 }
-  let!(:student_4) { create :founder, cohort: cohort_1 }
-  let!(:student_5) { create :founder, cohort: cohort_1 }
-  let!(:student_6) { create :founder, cohort: cohort_1 }
+  let!(:student_3) { create :student, cohort: cohort_1 }
+  let!(:student_4) { create :student, cohort: cohort_1 }
+  let!(:student_5) { create :student, cohort: cohort_1 }
+  let!(:student_6) { create :student, cohort: cohort_1 }
 
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort_1
@@ -169,7 +169,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: student_1.email
-      click_button "Email: #{student_1.email}"
+      click_button "Search by email address: #{student_1.email}"
 
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)
@@ -182,7 +182,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: student_1.name
-      click_button "Name: #{student_1.name}"
+      click_button "Search by name: #{student_1.name}"
 
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)
@@ -206,7 +206,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone Completed: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone completed: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)
@@ -232,7 +232,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone Pending: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone pending: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).not_to have_text(student_1.name)
       expect(page).to have_text(student_2.name)
@@ -271,7 +271,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "Completed"
-      click_button "Course: Completed"
+      click_button "Course completion: Completed"
 
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)

@@ -57,13 +57,13 @@ feature "Organisation show" do
     # Set up org relationships
     [team_1, team_2, team_3].each do |team|
       team
-        .founders
+        .students
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation) }
     end
 
     # Mark one team of students as having completed the course.
-    team_2.founders.each do |f|
+    team_2.students.each do |f|
       create(
         :timeline_event,
         :with_owners,
@@ -121,8 +121,8 @@ feature "Organisation show" do
         "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
       ).click
 
-      expect(page).to have_text(team_2.founders.first.name)
-      expect(page).not_to have_text(team_1.founders.first.name)
+      expect(page).to have_text(team_2.students.first.name)
+      expect(page).not_to have_text(team_1.students.first.name)
     end
 
     scenario "user can access org overview of ended cohort" do
@@ -185,8 +185,8 @@ feature "Organisation show" do
         "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
       ).click
 
-      expect(page).to have_text(team_2.founders.first.name)
-      expect(page).not_to have_text(team_1.founders.first.name)
+      expect(page).to have_text(team_2.students.first.name)
+      expect(page).not_to have_text(team_1.students.first.name)
     end
 
     scenario "user can access org overview of ended cohort" do

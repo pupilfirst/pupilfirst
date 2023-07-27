@@ -15,7 +15,7 @@ feature "Cohorts Details", js: true do
   let!(:ended_cohort) { create :cohort, course: course, ends_at: 1.day.ago }
   let!(:level) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student) { create :founder, cohort: live_cohort }
+  let!(:student) { create :student, cohort: live_cohort }
 
   let(:name) { Faker::Lorem.words(number: 2).join(" ") }
   let(:description) { Faker::Lorem.sentences.join(" ") }

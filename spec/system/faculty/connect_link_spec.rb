@@ -6,7 +6,7 @@ feature 'Connect to featured coaches', js: true do
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let(:cohort) { create :cohort, course: course }
-  let(:student) { create :founder, cohort: cohort }
+  let(:student) { create :student, cohort: cohort }
   let(:school_admin) { create :school_admin, school: school }
 
   let(:coach) do
@@ -121,7 +121,7 @@ feature 'Connect to featured coaches', js: true do
     # Enroll student to another course in the same school with no connect feature
     let(:course_2) { create :course, school: school, can_connect: false }
     let(:cohort_2) { create :cohort, course: course_2 }
-    let!(:student_2) { create :founder, cohort: cohort_2, user: student.user }
+    let!(:student_2) { create :student, cohort: cohort_2, user: student.user }
     let(:coach_2) do
       create :faculty,
              school: school,

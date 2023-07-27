@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Manual User Sign Out', js: true do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:student) { create :founder }
+  let(:student) { create :student }
   let(:user) { student.user }
 
   scenario 'active user session is interrupted by the setting of the flag' do

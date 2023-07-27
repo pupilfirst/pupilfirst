@@ -112,12 +112,12 @@ module Cohorts
       status = Hash.new({ percentage: 0, students_count: 0 })
 
       TimelineEvent
-        .from_founders(scope)
+        .from_students(scope)
         .where(target: milestone_targets)
         .passed
         .group(:target_id)
-        .joins(:founders)
-        .select("target_id, COUNT(DISTINCT founders.id) AS students_count")
+        .joins(:students)
+        .select("target_id, COUNT(DISTINCT students.id) AS students_count")
         .each do |submission|
           target = milestone_targets.find { |t| t.id == submission.target_id }
           percentage =
@@ -210,9 +210,9 @@ module Cohorts
     def scope
       if @organisation.present?
         @scope ||=
-          @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
+          @organisation.students.not_dropped_out.where(cohort_id: @cohort.id)
       else
-        @scope ||= @cohort.founders.not_dropped_out
+        @scope ||= @cohort.students.not_dropped_out
       end
     end
   end

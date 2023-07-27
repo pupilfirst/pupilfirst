@@ -8,7 +8,7 @@ module StartupFeedbackModule
     end
 
     def send
-      log "Queuing feedback email to students with ids: #{@startup_feedback.timeline_event.founders.pluck(:id).join(', ')}"
+      log "Queuing feedback email to students with ids: #{@startup_feedback.timeline_event.students.pluck(:id).join(', ')}"
 
       StartupMailer.feedback_as_email(@startup_feedback, @include_grades).deliver_later
 

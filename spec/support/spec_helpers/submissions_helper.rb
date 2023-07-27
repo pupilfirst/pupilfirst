@@ -77,7 +77,7 @@ module SubmissionsHelper
 
   def submission_options(target, student, grade, evaluator, latest)
     students =
-      (target.team_target? && student.team) ? student.team.founders : [student]
+      (target.team_target? && student.team) ? student.team.students : [student]
 
     passed_at, evaluated_at =
       if target.evaluation_criteria.present?

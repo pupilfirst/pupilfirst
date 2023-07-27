@@ -33,7 +33,7 @@ after 'schools' do
   # Add some student tags to each school.
   School.all.each do |school|
     tags = (1..10).map { Faker::Lorem.words(number: 2).join(' ') }
-    school.founder_tag_list = tags
+    school.student_tag_list = tags
     school.save!
   end
 end

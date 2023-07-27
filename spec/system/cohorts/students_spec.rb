@@ -128,9 +128,9 @@ feature "Organisation show" do
 
       student = students[15]
       fill_in "Filter", with: student.email
-      click_button "Email: #{student.email}"
+      click_button "Search by email address: #{student.email}"
 
-      expect(page).to have_text("Email: #{student.email}")
+      expect(page).to have_text("Search by email address: #{student.email}")
       expect(page).to have_selector('[data-test-class="student"]', count: 1)
       expect(page).to have_link(student.name)
     end
@@ -142,9 +142,9 @@ feature "Organisation show" do
 
       student = students[15]
       fill_in "Filter", with: student.name
-      click_button "Name: #{student.name}"
+      click_button "Search by name: #{student.name}"
 
-      expect(page).to have_text("Name: #{student.name}")
+      expect(page).to have_text("Search by name: #{student.name}")
       expect(page).to have_selector('[data-test-class="student"]', count: 1)
 
       expect(page).to have_text(
@@ -169,7 +169,7 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone Completed: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone completed: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).to have_text(students.first.name)
       expect(page).not_to have_text(students.second.name)
@@ -197,7 +197,7 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone Pending: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone pending: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).not_to have_content("#{students.first.name}\n")
       expect(page).to have_text(students.second.name)
@@ -249,7 +249,7 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "Completed"
-      click_button "Course: Completed"
+      click_button "Course completion: Completed"
 
       expect(page).to have_text(students.first.name)
       expect(page).not_to have_text(students.second.name)

@@ -113,7 +113,7 @@ class CoursesController < ApplicationController
 
   def student
     @student ||=
-      @course.founders.not_dropped_out.find_by(user_id: current_user.id)
+      @course.students.not_dropped_out.find_by(user_id: current_user.id)
   end
 
   def find_course
@@ -123,7 +123,7 @@ class CoursesController < ApplicationController
   def save_tag
     return if params[:tag].blank?
 
-    if params[:tag].in?(current_school.founder_tag_list)
+    if params[:tag].in?(current_school.student_tag_list)
       session[:applicant_tag] = params[:tag]
     end
   end

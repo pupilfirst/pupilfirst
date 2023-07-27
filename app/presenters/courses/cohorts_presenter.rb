@@ -6,7 +6,7 @@ class Courses::CohortsPresenter < ApplicationPresenter
   end
 
   def students
-    Founder.where(cohort: cohorts)
+    Student.where(cohort: cohorts)
   end
 
   def cohorts

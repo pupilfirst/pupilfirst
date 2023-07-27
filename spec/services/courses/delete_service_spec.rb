@@ -30,11 +30,11 @@ describe Courses::DeleteService do
   let!(:faculty_cohort_enrollment_c1) do
     create :faculty_cohort_enrollment, cohort: cohort_1, faculty: common_coach
   end
-  let!(:faculty_founder_enrollment_c1) do
-    create :faculty_founder_enrollment,
+  let!(:faculty_student_enrollment_c1) do
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: coach_c1,
-           founder: student_c1
+           student: student_c1
   end
   let!(:coach_note_c1) do
     create :coach_note, author: coach_c1.user, student: student_c1
@@ -101,11 +101,11 @@ describe Courses::DeleteService do
   let!(:faculty_cohort_enrollment_c2) do
     create :faculty_cohort_enrollment, cohort: cohort_2, faculty: common_coach
   end
-  let!(:faculty_founder_enrollment_c2) do
-    create :faculty_founder_enrollment,
+  let!(:faculty_student_enrollment_c2) do
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: coach_c2,
-           founder: student_c2
+           student: student_c2
   end
   let!(:coach_note_c2) do
     create :coach_note, author: coach_c2.user, student: student_c2
@@ -172,7 +172,7 @@ describe Courses::DeleteService do
       [Proc.new { Cohort.count }, 4, 2],
       [Proc.new { Level.count }, 2, 1],
       [Proc.new { Team.count }, 2, 1],
-      [Proc.new { Founder.count }, 6, 3],
+      [Proc.new { Student.count }, 6, 3],
       [Proc.new { Applicant.count }, 2, 1],
       [Proc.new { Certificate.count }, 2, 1],
       [Proc.new { IssuedCertificate.count }, 2, 1],
@@ -180,7 +180,7 @@ describe Courses::DeleteService do
       [Proc.new { CourseAuthor.count }, 2, 1],
       [Proc.new { CourseExport.count }, 2, 1],
       [Proc.new { FacultyCohortEnrollment.count }, 4, 2],
-      [Proc.new { FacultyFounderEnrollment.count }, 2, 1],
+      [Proc.new { FacultyStudentEnrollment.count }, 2, 1],
       [Proc.new { CoachNote.count }, 2, 1],
       [Proc.new { EvaluationCriterion.count }, 2, 1],
       [Proc.new { TimelineEventGrade.count }, 2, 1],
@@ -221,7 +221,7 @@ describe Courses::DeleteService do
       expect { course_author_c2.reload }.not_to raise_error
       expect { course_export_c2.reload }.not_to raise_error
       expect { faculty_cohort_enrollment_c2.reload }.not_to raise_error
-      expect { faculty_founder_enrollment_c2.reload }.not_to raise_error
+      expect { faculty_student_enrollment_c2.reload }.not_to raise_error
       expect { coach_note_c2.reload }.not_to raise_error
       expect { evaluation_criterion_c2.reload }.not_to raise_error
       expect { target_reviewed_c2.reload }.not_to raise_error

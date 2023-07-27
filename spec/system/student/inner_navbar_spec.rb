@@ -5,7 +5,7 @@ feature "Student Inner Navbar", js: true do
 
   let(:course) { create :course, :with_cohort }
   let!(:c1_l1) { create :level, :one, course: course }
-  let(:student) { create :founder, cohort: course.cohorts.first }
+  let(:student) { create :student, cohort: course.cohorts.first }
 
   let(:coach) { create :faculty, user: student.user }
   let(:coached_course) { create :course, :with_cohort }

@@ -52,7 +52,7 @@ module CourseExports
             team.id,
             team.name,
             team.cohort.name,
-            team.founders.map(&:name).sort.join(", ")
+            team.students.map(&:name).sort.join(", ")
           ]
         end
 
@@ -78,11 +78,11 @@ module CourseExports
         .order(:created_at)
         .distinct
         .each_with_object(Array.new(team_ids.length)) do |submission, grading|
-          team = submission.founders.first.team
+          team = submission.students.first.team
 
           next if team.blank?
 
-          next unless submission.founder_ids.sort == team.founder_ids.sort
+          next unless submission.student_ids.sort == team.student_ids.sort
 
           grade_index = team_ids.index(team.id)
 
@@ -101,12 +101,12 @@ module CourseExports
       target
         .timeline_events
         .live
-        .joins(:founders)
-        .where(founders: { id: student_ids })
+        .joins(:students)
+        .where(students: { id: student_ids })
     end
 
     def teams_with_submissions(target)
-      submissions(target).distinct("founders.team_id").count("founders.team_id")
+      submissions(target).distinct("students.team_id").count("students.team_id")
     end
 
     def teams_pending_review(target)
@@ -114,10 +114,10 @@ module CourseExports
         .timeline_events
         .live
         .pending_review
-        .joins(:founders)
-        .where(founders: { id: student_ids })
-        .distinct("founders.team_id")
-        .count("founders.team_id")
+        .joins(:students)
+        .where(students: { id: student_ids })
+        .distinct("students.team_id")
+        .count("students.team_id")
     end
 
     def teams
@@ -126,7 +126,7 @@ module CourseExports
         begin
           scope =
             Team
-              .includes(founders: [faculty: :user])
+              .includes(students: [faculty: :user])
               .joins(:cohort)
               .where(cohort: { course_id: course.id })
               .active
@@ -136,9 +136,9 @@ module CourseExports
           scope = (@cohorts.present? ? scope.where(cohort: @cohorts) : scope)
 
           applicable_student_ids =
-            course.founders.tagged_with(tags, any: true).pluck(:id)
+            course.students.tagged_with(tags, any: true).pluck(:id)
           if tags.present?
-            scope.where(founders: { id: applicable_student_ids })
+            scope.where(students: { id: applicable_student_ids })
           else
             scope
           end
@@ -148,9 +148,9 @@ module CourseExports
     def student_ids
       @student_ids ||=
         if @cohorts.present?
-          Founder.where(team_id: teams.pluck(:id), cohort: @cohorts)
+          Student.where(team_id: teams.pluck(:id), cohort: @cohorts)
         else
-          Founder.where(team_id: teams.pluck(:id))
+          Student.where(team_id: teams.pluck(:id))
         end
     end
   end

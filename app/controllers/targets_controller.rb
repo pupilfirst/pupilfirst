@@ -16,7 +16,7 @@ class TargetsController < ApplicationController
   def details_v2
     student =
       current_user
-        .founders
+        .students
         .joins(:course)
         .where(courses: { id: @course.id })
         .first if current_user.present?

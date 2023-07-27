@@ -18,7 +18,7 @@ class SimilarTopicsResolver < ApplicationQuery
   def authorized?
     return false if community.blank?
 
-    courses_as_student = current_user.founders.not_dropped_out.joins(:course).select(:course_id)
+    courses_as_student = current_user.students.not_dropped_out.joins(:course).select(:course_id)
     return true if community.courses.exists?(id: courses_as_student)
 
     # Coaches and school admins have access to all communities..

@@ -4,12 +4,12 @@ module Courses
       attr_reader :score, :rank
       attr_accessor :delta
 
-      def initialize(founder, score, rank, current_user)
+      def initialize(student, score, rank, current_user)
         @score = score
         @rank = rank
         @current_user = current_user
 
-        super(founder)
+        super(student)
       end
 
       def level_number
@@ -31,18 +31,18 @@ module Courses
     def school_name
       @school_name ||=
         begin
-          raise 'current_school cannot be missing here' if current_school.blank?
+          raise "current_school cannot be missing here" if current_school.blank?
 
           current_school.name
         end
     end
 
     def start_date
-      lts.week_start.strftime('%B %-d')
+      lts.week_start.strftime("%B %-d")
     end
 
     def end_date
-      lts.week_end.strftime('%B %-d')
+      lts.week_end.strftime("%B %-d")
     end
 
     def toppers
@@ -52,16 +52,16 @@ module Courses
     def heading
       if current_user_is_topper?
         return(
-          I18n.t('presenters.courses.leaderboard.heading.top_leaderboard_html')
+          I18n.t("presenters.courses.leaderboard.heading.top_leaderboard_html")
         )
       end
 
       multiple_mid_text =
-        I18n.t('presenters.courses.leaderboard.heading.multiple_mid_text')
+        I18n.t("presenters.courses.leaderboard.heading.multiple_mid_text")
 
       h =
         if toppers.count == 1
-          "<span class='font-bold'>#{toppers.first.name}</span> #{I18n.t('presenters.courses.leaderboard.heading.top_week')} "
+          "<span class='font-bold'>#{toppers.first.name}</span> #{I18n.t("presenters.courses.leaderboard.heading.top_week")} "
         elsif toppers.count < 4
           names = toppers.map { |s| "<span class='font-bold'>#{s.name}</span>" }
           "#{names.to_sentence} #{multiple_mid_text}"
@@ -69,7 +69,7 @@ module Courses
           others_count = toppers.count - 2
           names =
             toppers[0..1].map { |s| "<span class='font-bold'>#{s.name}</span>" }
-          "#{names.join(', ')} #{I18n.t('shared.and')} <span class='font-bold'>#{others_count} #{I18n.t('presenters.courses.leaderboard.heading.others')}</span> #{multiple_mid_text}"
+          "#{names.join(", ")} #{I18n.t("shared.and")} <span class='font-bold'>#{others_count} #{I18n.t("presenters.courses.leaderboard.heading.others")}</span> #{multiple_mid_text}"
         end
 
       (h + "<span class='font-bold'>#{top_score}</span>.").html_safe
@@ -91,7 +91,7 @@ module Courses
     end
 
     def inactive_students_count
-      @inactive_students_count ||= founders.count - students.count
+      @inactive_students_count ||= active_students.count - students.count
     end
 
     def previous_page?
@@ -103,62 +103,64 @@ module Courses
     end
 
     def previous_page_link
-      "?on=#{(on - 1.week).strftime('%Y%m%d')}"
+      "?on=#{(on - 1.week).strftime("%Y%m%d")}"
     end
 
     def next_page_link
       if difference_in_days < 8
         view.leaderboard_course_path
       else
-        "?on=#{(on + 1.week).strftime('%Y%m%d')}"
+        "?on=#{(on + 1.week).strftime("%Y%m%d")}"
       end
     end
 
     def course_entries(from, to)
-      LeaderboardEntry
-        .where(founder: founders, period_from: from, period_to: to)
-        .includes(founder: [user: { avatar_attachment: :blob }])
+      LeaderboardEntry.where(
+        student: active_students,
+        period_from: from,
+        period_to: to
+      ).includes(student: [user: { avatar_attachment: :blob }])
     end
 
     def rank_change_icon(delta)
       if delta >= 10
         view.image_tag(
-          'courses/leaderboard/rank-change-up-double.svg',
+          "courses/leaderboard/rank-change-up-double.svg",
           alt:
             I18n.t(
-              'presenters.courses.leaderboard.rank_change_icon.rank_change_double_alt'
+              "presenters.courses.leaderboard.rank_change_icon.rank_change_double_alt"
             )
         )
       elsif delta.positive?
         view.image_tag(
-          'courses/leaderboard/rank-change-up.svg',
+          "courses/leaderboard/rank-change-up.svg",
           alt:
             I18n.t(
-              'presenters.courses.leaderboard.rank_change_icon.rank_up_alt'
+              "presenters.courses.leaderboard.rank_change_icon.rank_up_alt"
             )
         )
       elsif delta.zero?
         view.image_tag(
-          'courses/leaderboard/rank-no-change.svg',
+          "courses/leaderboard/rank-no-change.svg",
           alt:
             I18n.t(
-              'presenters.courses.leaderboard.rank_change_icon.rank_no_change_alt'
+              "presenters.courses.leaderboard.rank_change_icon.rank_no_change_alt"
             )
         )
       elsif delta > -10
         view.image_tag(
-          'courses/leaderboard/rank-change-down.svg',
+          "courses/leaderboard/rank-change-down.svg",
           alt:
             I18n.t(
-              'presenters.courses.leaderboard.rank_change_icon.rank_down_alt'
+              "presenters.courses.leaderboard.rank_change_icon.rank_down_alt"
             )
         )
       else
         view.image_tag(
-          'courses/leaderboard/rank-change-down-double.svg',
+          "courses/leaderboard/rank-change-down-double.svg",
           alt:
             I18n.t(
-              'presenters.courses.leaderboard.rank_change_icon.rank_down_double_alt'
+              "presenters.courses.leaderboard.rank_change_icon.rank_down_double_alt"
             )
         )
       end
@@ -202,9 +204,9 @@ module Courses
       @lts ||= LeaderboardTimeService.new(on)
     end
 
-    def founders
-      @founders ||=
-        @course.founders.active.where(excluded_from_leaderboard: false)
+    def active_students
+      @active_students ||=
+        @course.students.active.where(excluded_from_leaderboard: false)
     end
 
     def current_leaderboard
@@ -226,8 +228,12 @@ module Courses
         .with_index(1) do |(entry, students), index|
           rank = entry.score < last_score ? index : last_rank
 
-          students[entry.founder.id] =
-            Student.new(entry.founder, entry.score, rank, current_user)
+          students[entry.student.id] = Student.new(
+            entry.student,
+            entry.score,
+            rank,
+            current_user
+          )
 
           last_rank = rank
           last_score = entry.score

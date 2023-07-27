@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Users::ConfirmationService do
   subject { described_class }
 
-  let(:founder) { create :founder }
-  let(:user) { founder.user }
+  let(:student) { create :student }
+  let(:user) { student.user }
 
   context 'when user is signing in for the first time' do
     it 'sets confirmed_at for user' do

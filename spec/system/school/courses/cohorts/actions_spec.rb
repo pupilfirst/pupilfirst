@@ -14,8 +14,8 @@ feature "Cohorts Actions", js: true do
   let!(:ended_cohort) { create :cohort, course: course, ends_at: 1.day.ago }
   let!(:level) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
-  let!(:student) { create :founder, cohort: live_cohort }
-  let!(:student_ended) { create :founder, cohort: ended_cohort }
+  let!(:student) { create :student, cohort: live_cohort }
+  let!(:student_ended) { create :student, cohort: ended_cohort }
   let!(:team_ended) { create :team_with_students, cohort: ended_cohort }
 
   scenario "School admin merges ended cohort into live cohort" do

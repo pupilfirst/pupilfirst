@@ -62,7 +62,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def student
-    @student ||= Founder.includes(:user).find_by(id: student_id)
+    @student ||= Student.includes(:user).find_by(id: student_id)
   end
 
   def team
@@ -79,10 +79,10 @@ class StudentDetailsResolver < ApplicationQuery
 
   def submissions_for_grades
     latest_submissions
-      .includes(:founders, :target)
+      .includes(:students, :target)
       .select do |submission|
         submission.target.individual_target? ||
-          (submission.founder_ids.sort == student.team_student_ids)
+          (submission.student_ids.sort == student.team_student_ids)
       end
   end
 

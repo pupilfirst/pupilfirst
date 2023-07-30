@@ -102,7 +102,7 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     current_user.faculty.cohorts.exists?(
       id: submission.students.first.cohort_id
-    )
+    ) || current_school_admin.present?
   end
 
   def inactive_students

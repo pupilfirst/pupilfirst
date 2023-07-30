@@ -5,25 +5,25 @@ module Mutations
         submission = TimelineEvent.find_by(id: value[:submission_id])
 
         unless submission&.evaluated_at?
-          return I18n.t('mutations.undo_grading.must_be_graded')
+          return I18n.t("mutations.undo_grading.must_be_graded")
         end
       end
     end
 
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
     validates MustBeGraded => {}
 
-    description 'Delete grading for the submission.'
+    description "Delete grading for the submission."
 
     field :success, Boolean, null: false
 
     def resolve(_params)
       notify(
         :success,
-        I18n.t('mutations.undo_grading.success_notification.title'),
-        I18n.t('mutations.undo_grading.success_notification.description')
+        I18n.t("mutations.undo_grading.success_notification.title"),
+        I18n.t("mutations.undo_grading.success_notification.description")
       )
 
       { success: undo_grading }
@@ -46,7 +46,7 @@ module Mutations
 
     def checklist
       submission.checklist.map do |c|
-        c['status'] = TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        c["status"] = TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
         c
       end
     end

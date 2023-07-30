@@ -18,9 +18,9 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if coach.blank?
+    return false if coach.blank? && current_school_admin.blank?
 
-    coach.courses.exists?(id: course)
+    coach.courses.exists?(id: course) || current_school_admin.present?
   end
 
   def coach
@@ -120,7 +120,12 @@ class SubmissionsResolver < ApplicationQuery
   def students
     @students ||=
       begin
-        scope = course.students.where(cohort_id: coach.cohorts)
+        scope =
+          if current_school_admin.present?
+            course.students
+          else
+            course.students.where(cohort_id: coach.cohorts)
+          end
 
         scope = include_inactive ? scope : scope.active
 

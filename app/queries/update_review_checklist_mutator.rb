@@ -1,5 +1,5 @@
 class UpdateReviewChecklistMutator < ApplicationQuery
-  include AuthorizeCoach
+  include AuthorizeViewSubmissions
 
   property :target_id, validates: { presence: true }
   property :review_checklist
@@ -17,17 +17,17 @@ class UpdateReviewChecklistMutator < ApplicationQuery
 
   def review_checklist_shape
     if review_checklist.respond_to?(:all?) &&
-         review_checklist.all? do |item|
-           valid_title?(item['title']) && item['result'].respond_to?(:all?) &&
-             item['result'].all? do |result|
-               valid_title?(result['title']) &&
-                 (result['feedback'].nil? || result['feedback'].is_a?(String))
+         review_checklist.all? { |item|
+           valid_title?(item["title"]) && item["result"].respond_to?(:all?) &&
+             item["result"].all? do |result|
+               valid_title?(result["title"]) &&
+                 (result["feedback"].nil? || result["feedback"].is_a?(String))
              end
-         end
+         }
       return
     end
 
-    errors.add(:base, 'Invalid review checklist')
+    errors.add(:base, "Invalid review checklist")
   end
 
   def valid_title?(title)

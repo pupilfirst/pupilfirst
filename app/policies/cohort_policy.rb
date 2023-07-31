@@ -4,4 +4,6 @@ class CohortPolicy < ApplicationPolicy
 
     user.faculty.cohorts.exists?(id: record.id)
   end
+
+  alias students? show?
 end

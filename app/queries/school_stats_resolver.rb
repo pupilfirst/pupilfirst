@@ -1,7 +1,7 @@
 class SchoolStatsResolver < ApplicationQuery
   def school_stats
     {
-      students_count: current_school.founders.count,
+      students_count: current_school.students.count,
       coaches_count: current_school.faculty.count
     }
   end

@@ -4,7 +4,7 @@ describe Courses::CompletionWebhookDataService do
   subject { described_class.new(course, student) }
   let(:course) { create :course, :with_cohort }
   let(:level) { create :level, course: course }
-  let(:student) { create :founder, level: level, cohort: course.cohorts.first }
+  let(:student) { create :student, level: level, cohort: course.cohorts.first }
 
   describe '#data' do
     it 'returns data appropriate for sending via webhook' do

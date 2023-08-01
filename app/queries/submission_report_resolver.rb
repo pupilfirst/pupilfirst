@@ -11,7 +11,7 @@ class SubmissionReportResolver < ApplicationQuery
     return false if current_user.faculty.blank?
 
     current_user.faculty.cohorts.exists?(
-      id: submission_report.submission.founders.first.cohort
+      id: submission_report.submission.students.first.cohort
     )
   end
 end

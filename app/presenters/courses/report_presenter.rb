@@ -31,7 +31,7 @@ module Courses
 
     def current_student
       @current_student ||=
-        @course.founders.not_dropped_out.find_by(user_id: current_user.id)
+        @course.students.not_dropped_out.find_by(user_id: current_user.id)
     end
 
     def coaches

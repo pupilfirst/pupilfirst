@@ -68,7 +68,7 @@ module Courses
     def delete_submissions
       timeline_event_owners =
         TimelineEventOwner
-          .joins(founder: :course)
+          .joins(student: :course)
           .where(courses: { id: @course.id })
       submission_ids =
         timeline_event_owners
@@ -76,7 +76,7 @@ module Courses
           .pluck(:timeline_event_id)
 
       TimelineEventFile
-        .joins(timeline_event: { founders: :course })
+        .joins(timeline_event: { students: :course })
         .where(courses: { id: @course.id })
         .delete_all
       timeline_event_owners.delete_all
@@ -122,22 +122,22 @@ module Courses
 
     def delete_cohorts
       cohort_ids = @course.cohorts.select(:id)
-      founder_ids = Founder.where(cohort_id: cohort_ids).select(:id)
+      student_ids = Student.where(cohort_id: cohort_ids).select(:id)
 
       # clean up submissions
       delete_submissions
 
       # clean up enrollments and coach notes
       FacultyCohortEnrollment.where(cohort_id: cohort_ids).delete_all
-      FacultyFounderEnrollment.where(founder_id: founder_ids).delete_all
-      CoachNote.joins(:student).where(student: { id: founder_ids }).delete_all
+      FacultyStudentEnrollment.where(student_id: student_ids).delete_all
+      CoachNote.joins(:student).where(student: { id: student_ids }).delete_all
 
       ActsAsTaggableOn::Tagging.where(
-        taggable_type: 'Founder',
-        taggable_id: founder_ids
+        taggable_type: 'Student',
+        taggable_id: student_ids
       ).delete_all
 
-      Founder.where(id: founder_ids).delete_all
+      Student.where(id: student_ids).delete_all
       Team.where(cohort_id: cohort_ids).delete_all
 
       @course.update!(default_cohort_id: nil)

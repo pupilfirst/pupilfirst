@@ -9,7 +9,7 @@ module Levels
 
       Level.transaction do
         # Link students and target groups to supplied level.
-        @level.founders.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
+        @level.students.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
         @level.target_groups.update_all(level_id: other_level.id) # rubocop:disable Rails/SkipsModelValidations
 
         # Remove the level.

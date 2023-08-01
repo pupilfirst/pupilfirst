@@ -25,7 +25,7 @@ feature "Target Details Editor", js: true do
   let!(:target_group_1) { create :target_group, level: level_1 }
   let!(:target_1_l1) { create :target, target_group: target_group_1 }
   let(:action_config) { Faker::Lorem.sentence }
-  let!(:student) { create :founder }
+  let!(:student) { create :student }
 
   scenario "admin configures github actions for a target" do
     sign_in_user school_admin.user,

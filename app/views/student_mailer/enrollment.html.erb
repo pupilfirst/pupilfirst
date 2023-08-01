@@ -1,5 +1,5 @@
 <%
-  team_members = @student.team&.founders
+  team_members = @student.team&.students
   sign_in_link = user_token_url(token: @user.original_login_token)
 %>
 

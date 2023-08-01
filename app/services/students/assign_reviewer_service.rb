@@ -1,4 +1,4 @@
-module Founders
+module Students
   class AssignReviewerService
     def initialize(student)
       @student = student
@@ -11,11 +11,11 @@ module Founders
         raise "All coaches must be assigned to the student's course"
       end
 
-      FacultyFounderEnrollment.transaction do
-        FacultyFounderEnrollment.where(founder: @student).destroy_all
+      FacultyStudentEnrollment.transaction do
+        FacultyStudentEnrollment.where(student: @student).destroy_all
 
         coaches_to_assign.each do |coach|
-          FacultyFounderEnrollment.create!(faculty: coach, founder: @student)
+          FacultyStudentEnrollment.create!(faculty: coach, student: @student)
         end
       end
     end

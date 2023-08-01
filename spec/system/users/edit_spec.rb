@@ -4,7 +4,7 @@ feature "User Edit", js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  let(:student) { create :founder }
+  let(:student) { create :student }
   let(:user) { student.user }
   let(:student_name) { Faker::Name.name }
   let(:preferred_name) { Faker::Name.name }

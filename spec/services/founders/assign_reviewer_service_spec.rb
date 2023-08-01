@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Founders::AssignReviewerService do
+describe Students::AssignReviewerService do
   subject { described_class.new(student) }
 
   let(:cohort) { create :cohort }
@@ -12,13 +12,13 @@ describe Founders::AssignReviewerService do
   describe '#assign' do
     it 'links coach to the student' do
       expect { subject.assign([coach.id]) }.to(
-        change { FacultyFounderEnrollment.count }.from(0).to(1)
+        change { FacultyStudentEnrollment.count }.from(0).to(1)
       )
 
-      student_enrollment = FacultyFounderEnrollment.first
+      student_enrollment = FacultyStudentEnrollment.first
 
       expect(student_enrollment.faculty).to eq(coach)
-      expect(student_enrollment.founder).to eq(student)
+      expect(student_enrollment.student).to eq(student)
     end
 
     context "if a coach isn't assigned to the course" do
@@ -43,12 +43,12 @@ describe Founders::AssignReviewerService do
 
     context 'if the enrollment already exists' do
       before do
-        create :faculty_founder_enrollment, faculty: coach, founder: student
+        create :faculty_student_enrollment, faculty: coach, student: student
       end
 
       it 'does nothing' do
         expect { subject.assign([coach.id]) }.not_to(
-          change { FacultyFounderEnrollment.count }
+          change { FacultyStudentEnrollment.count }
         )
       end
     end

@@ -28,11 +28,11 @@ module TimelineEvents
     end
 
     def student
-      @student ||= @submission.founders.first
+      @student ||= @submission.students.first
     end
 
     def students
-      @students ||= student.team.present? ? student.team.founders : [student]
+      @students ||= student.team.present? ? student.team.students : [student]
     end
 
     def course

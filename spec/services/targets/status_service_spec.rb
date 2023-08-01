@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Targets::StatusService do
-  subject { described_class.new(founder_target_1, student_1) }
+  subject { described_class.new(student_target_1, student_1) }
 
   let(:course) { create :course }
   let(:cohort) { create :cohort, course: course }
@@ -15,7 +15,7 @@ describe Targets::StatusService do
     create :student, level: level_2, cohort: cohort, team: team
   end
   let(:target_group) { create :target_group, level: level_2 }
-  let(:founder_target_1) do
+  let(:student_target_1) do
     create :target, target_group: target_group, role: Target::ROLE_STUDENT
   end
 
@@ -57,7 +57,7 @@ describe Targets::StatusService do
           end
 
           before do
-            founder_target_1.evaluation_criteria << evaluation_criterion
+            student_target_1.evaluation_criteria << evaluation_criterion
           end
 
           it 'returns :level_locked' do
@@ -76,14 +76,14 @@ describe Targets::StatusService do
         let(:team_target_1) do
           create :target, target_group: target_group, role: Target::ROLE_TEAM
         end
-        let(:founder_target_2) do
+        let(:student_target_2) do
           create :target, target_group: target_group, role: Target::ROLE_STUDENT
         end
 
         before do
-          founder_target_1.prerequisite_targets << [
+          student_target_1.prerequisite_targets << [
             team_target_1,
-            founder_target_2
+            student_target_2
           ]
         end
 
@@ -109,7 +109,7 @@ describe Targets::StatusService do
                    :with_owners,
                    latest: true,
                    owners: [student_1],
-                   target: founder_target_2,
+                   target: student_target_2,
                    passed_at: 1.day.ago
           end
 
@@ -133,7 +133,7 @@ describe Targets::StatusService do
                    :with_owners,
                    latest: true,
                    owners: [student_1],
-                   target: founder_target_2,
+                   target: student_target_2,
                    passed_at: 1.day.ago
           end
 
@@ -150,7 +150,7 @@ describe Targets::StatusService do
                :with_owners,
                latest: true,
                owners: [student_1],
-               target: founder_target_1
+               target: student_target_1
       end
 
       context 'when the submission is not evaluated yet' do
@@ -165,7 +165,7 @@ describe Targets::StatusService do
                  :with_owners,
                  latest: true,
                  owners: [student_1],
-                 target: founder_target_1,
+                 target: student_target_1,
                  passed_at: 1.day.ago
         end
 
@@ -182,7 +182,7 @@ describe Targets::StatusService do
                  :evaluated,
                  latest: true,
                  owners: [student_1],
-                 target: founder_target_1
+                 target: student_target_1
         end
 
         it 'returns :failed' do

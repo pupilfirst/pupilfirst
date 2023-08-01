@@ -28,7 +28,7 @@ module Courses
     def user_is_student?
       return false if current_user.blank?
 
-      current_user.founders.joins(:course).exists?(courses: { id: @course.id })
+      current_user.students.joins(:course).exists?(courses: { id: @course.id })
     end
   end
 end

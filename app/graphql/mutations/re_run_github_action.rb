@@ -21,7 +21,7 @@ module Mutations
       def validate(_object, _context, value)
         submission = TimelineEvent.find_by(id: value[:submission_id])
 
-        if submission.founders.first.github_repository.blank?
+        if submission.students.first.github_repository.blank?
           return I18n.t("mutations.re_run_github_action.validation_error.student_has_no_github_account")
         end
       end

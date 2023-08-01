@@ -3,7 +3,7 @@ class School < ApplicationRecord
   has_many :organisations, dependent: :destroy
   has_many :courses, dependent: :restrict_with_error
   has_many :cohorts, through: :courses
-  has_many :founders, through: :users
+  has_many :students, through: :users
   has_many :teams, through: :courses
   has_many :faculty, through: :users
   has_many :school_admins, dependent: :destroy
@@ -14,13 +14,13 @@ class School < ApplicationRecord
   has_many :levels, through: :courses
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
-  has_many :timeline_events, through: :founders
+  has_many :timeline_events, through: :students
   has_many :markdown_attachments, dependent: :destroy
   has_many :audit_records, dependent: :destroy
   has_many :calendars, through: :courses
   has_many :calendar_events, through: :calendars
 
-  acts_as_taggable_on :founder_tags
+  acts_as_taggable_on :student_tags
   acts_as_taggable_on :user_tags
 
   normalize_attribute :about

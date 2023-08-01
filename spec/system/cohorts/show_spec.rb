@@ -31,13 +31,13 @@ feature "Organisation show" do
     # Set up org relationships
     [team_1, team_2, team_3].each do |team|
       team
-        .founders
+        .students
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation) }
     end
 
     # Mark one team of students as having completed the course.
-    team_2.founders.each { |f| f.update!(completed_at: 1.day.ago) }
+    team_2.students.each { |f| f.update!(completed_at: 1.day.ago) }
   end
 
   context "when the user is an organisation admin" do

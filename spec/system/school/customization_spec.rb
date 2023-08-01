@@ -4,7 +4,7 @@ feature 'School Customization', js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  # Setup a course with a single founder target, ...
+  # Setup a course with a single student target, ...
   let!(:school) { create :school, :current }
   let!(:school_admin) { create :school_admin, school: school }
 

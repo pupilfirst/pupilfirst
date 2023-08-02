@@ -132,11 +132,15 @@ This section will guide you through the process of setting up AWS CloudFront to 
 
 During the setup, follow the configuration as shown below.
 
+![Screenshot of CloudFront origin settings](../assets/developers/cloudfront_origin.png)
+
 **Note**: On your first setup, ensure to select **Yes, update the policy**.
 
 #### Step 3: Configuring Behaviours
 
 For the most part, you can retain the default settings. However, the section below requires your attention. Refer to the screenshot below for more clarity:
+
+![Screenshot of CloudFront origin settings](../assets/developers/cloudfront_behaviour.png)
 
 #### Step 4: Creating Key Group and Public Key
 
@@ -166,7 +170,7 @@ You can obtain the `cloudfront_host_from_aws` from the distribution you created.
 
 To set `CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED`, follow the steps below:
 
-1. Copy the contents of the `private_key.pem` file you obtained while creating the keys.
+1. Copy the contents of the `private_key.pem` file you obtained while creating the keys in Step 4.
 2. Open the Rails console and encode the contents using `Base64.urlsafe_encode64(test)`.
 3. Set the obtained value as the environment variable.
 

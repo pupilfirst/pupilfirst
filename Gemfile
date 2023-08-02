@@ -93,7 +93,7 @@ group :test do
   gem "factory_bot_rails", "~> 6.2" # A library for setting up Ruby objects as test data.
   gem "capybara", "~> 3.35" # For RSpec feature tests.
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
-  gem "webdrivers", "~> 5.2" # Keep your Selenium WebDrivers updated automatically.
+  gem 'selenium-webdriver', '~> 4.11' # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
   gem "rspec-eventually", "~> 0.2.2" # Rspec helper to match eventually
   gem "diffy", "~> 3.4" # Easy Diffing in Ruby. https://github.com/samg/diffy

@@ -118,7 +118,35 @@ PORT=3000
 
 ## Optional
 
-### Cloudfront
+### Setting up AWS CloudFront as a CDN for Private AWS Bucket
+
+This section will guide you through the process of setting up AWS CloudFront to serve assets from a private AWS bucket.
+
+#### Step 1: Creating a CloudFront Distribution
+
+1. Navigate to the **AWS Console** and select the **CloudFront** service.
+2. Click on **Create Distribution**.
+3. Select your desired AWS bucket from the list as the **Origin**.
+
+#### Step 2: Configuring Origin Access
+
+During the setup, follow the configuration as shown below.
+
+**Note**: On your first setup, ensure to select **Yes, update the policy**.
+
+#### Step 3: Configuring Behaviours
+
+For the most part, you can retain the default settings. However, the section below requires your attention. Refer to the screenshot below for more clarity:
+
+#### Step 4: Creating Key Group and Public Key
+
+Click on **Create key group** to generate a new group. To this group, you need to add a new public key. This key will be used to generate signed URLs to your resources in the bucket.
+
+For detailed instructions on creating public keys and key groups, refer to the [AWS documentation on creating CloudFront key pairs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html#private-content-creating-cloudfront-key-pairs).
+
+#### Step 5: Setting Environment Variables in your LMS application
+
+You need to set the following environment variables:
 
 ```bash
 # Bas64 encoded private key used for generating the cloudfront public key
@@ -134,15 +162,18 @@ CLOUDFRONT_KEY_PAIR_ID=cloudfront_key_pair_id_from_aws
 CLOUDFRONT_EXPIRY=expiry_in_seconds
 ```
 
-To enable delivery of user-uploaded files through a CDN, you will have to set Cloudfront environment variables.
+You can obtain the `cloudfront_host_from_aws` from the distribution you created. The `cloudfront_key_pair_id_from_aws` can be found in the key group window. It will contain the key pair id of the public key you added in the previous step.
 
-1. [Create a Cloudfront public key](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html) to generate signed URLs with canned policy.
-2. [Create a cloudfront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) for accessing the private AWS S3 contents with signed URLs.
-3. Set up the required environment variables.
+To set `CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED`, follow the steps below:
+
+1. Copy the contents of the `private_key.pem` file you obtained while creating the keys.
+2. Open the Rails console and encode the contents using `Base64.urlsafe_encode64(test)`.
+3. Set the obtained value as the environment variable.
 
 ### Sign in with OAuth
 
 ```
+
 GOOGLE_OAUTH2_CLIENT_ID
 GOOGLE_OAUTH2_CLIENT_SECRET
 FACEBOOK_KEY
@@ -152,6 +183,7 @@ GITHUB_SECRET
 DISCORD_KEY
 DISCORD_SECRET
 SSO_DOMAIN
+
 ```
 
 > **Warning:** These instructions, for signing in with OAuth, are _rough_. This feature will need to be made configurable before its documentation can be expanded / re-written.
@@ -163,8 +195,10 @@ SSO_DOMAIN
 ### Rollbar
 
 ```
+
 ROLLBAR_CLIENT_TOKEN
 ROLLBAR_SERVER_TOKEN
+
 ```
 
 [Rollbar](https://rollbar.com) can be used to monitor both server-side and client-side errors. Because of this, two separate tokens are required:
@@ -177,7 +211,9 @@ You can find both of these tokens by going to your project's **Settings** > **Pr
 ### Performance and error monitoring with New Relic
 
 ```
+
 NEW_RELIC_LICENSE_KEY
+
 ```
 
 To enable performance and error monitoring with [New Relic](https://newrelic.com/), sign up for a New Relic account and configure its credentials using the `NEW_RELIC_LICENSE_KEY` key.
@@ -185,9 +221,11 @@ To enable performance and error monitoring with [New Relic](https://newrelic.com
 ### API rate limiting
 
 ```
+
 GRAPH_API_RATE_LIMIT
 GRAPH_API_RATE_PERIOD
 REDIS_URL
+
 ```
 
 At minimum, to enable rate limiting on the API, you need to set the `REDIS_URL` to a Redis connection string. The `_LIMIT` and `_PERIOD` keys default to 300 requests per 60 seconds.
@@ -195,8 +233,10 @@ At minimum, to enable rate limiting on the API, you need to set the `REDIS_URL` 
 ### Direct Upload to Vimeo
 
 ```
+
 VIMEO_ACCESS_TOKEN
 VIMEO_ACCOUNT_TYPE
+
 ```
 
 To enable direct uploads to a Vimeo account from the curriculum editor, add the `VIMEO_ACCESS_TOKEN` and `VIMEO_ACCOUNT_TYPE` (`basic`, `plus`, `pro`, `business`, `premium`) environment variables.
@@ -216,11 +256,15 @@ Make sure that the access token has the following scopes enabled:
 If you're using the API to review and reject submissions, it's possible that students may repeatedly submit values that get rejected by automation. To be notified of such events, so that you can manually intervene, set the following two environment variables to notify all _human_ coaches in a course about a bot repeatedly rejecting submissions.
 
 ```
+
 # Comma-separated IDs of bot coaches (`faculty` table) members used to review submissions.
+
 BOT_EVALUATOR_IDS=1,2,3
 
 # Every n-th rejected submission by a bot will trigger an email to all non-bot coaches in a course.
+
 BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD=4
+
 ```
 
 To deactivate this feature, simply avoid setting the `BOT_EVALUATOR_IDS` environment variable, or set `BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD` to zero.

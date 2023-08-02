@@ -80,7 +80,7 @@ You can also revise the template over time, as your understanding of student's i
 
 ## Leaving Notes
 
-You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/student_reports#keep-notes-on-students), and can be viewed only by you and other coaches.
+You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/reviewing_submissions#leaving-notes), and can be viewed only by you and other coaches.
 
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 

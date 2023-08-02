@@ -176,7 +176,7 @@ module Schools
       @milestones =
         @course
           .targets
-          .milestones
+          .milestone
           .order(milestone_number: :asc)
           .page(params[:page])
           .per(20)

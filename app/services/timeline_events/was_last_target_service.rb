@@ -30,7 +30,7 @@ module TimelineEvents
     end
 
     def milestone_targets
-      course.targets.milestones
+      course.targets.milestone
     end
 
     def targets_passed?(targets, student)

@@ -42,7 +42,7 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :milestones, -> { live.where(milestone: true) }
+  scope :milestone, -> { live.where(milestone: true) }
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"

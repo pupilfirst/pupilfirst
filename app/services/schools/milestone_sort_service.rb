@@ -33,7 +33,7 @@ module Schools
 
     def milestones
       @milestones ||=
-        target.course.targets.milestones.order(milestone_number: :asc).to_a
+        target.course.targets.milestone.order(milestone_number: :asc).to_a
     end
 
     def move_up?

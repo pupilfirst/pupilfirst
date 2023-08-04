@@ -1,6 +1,4 @@
 class UpdateReviewChecklistMutator < ApplicationQuery
-  include AuthorizeViewSubmissions
-
   property :target_id, validates: { presence: true }
   property :review_checklist
 
@@ -40,5 +38,13 @@ class UpdateReviewChecklistMutator < ApplicationQuery
 
   def course
     @course ||= target&.course
+  end
+
+  def authorized?
+    return false if current_user&.faculty.blank?
+
+    return false if course&.school != current_school
+
+    current_user.faculty.courses.exists?(id: course)
   end
 end

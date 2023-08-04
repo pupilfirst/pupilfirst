@@ -98,11 +98,12 @@ class SubmissionDetailsResolver < ApplicationQuery
   def authorized?
     return false if submission.blank?
 
-    return false if current_user.faculty.blank?
+    return false if current_user.faculty.blank? && current_school_admin.blank?
 
-    current_user.faculty.cohorts.exists?(
-      id: submission.students.first.cohort_id
-    ) || current_school_admin.present?
+    current_school_admin.present? ||
+      current_user.faculty.cohorts.exists?(
+        id: submission.students.first.cohort_id
+      )
   end
 
   def inactive_students

@@ -20,7 +20,7 @@ class SubmissionsResolver < ApplicationQuery
   def authorized?
     return false if coach.blank? && current_school_admin.blank?
 
-    coach.courses.exists?(id: course) || current_school_admin.present?
+    current_school_admin.present? || coach.courses.exists?(id: course)
   end
 
   def coach

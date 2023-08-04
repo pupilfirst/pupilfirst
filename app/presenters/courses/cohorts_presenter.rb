@@ -10,17 +10,25 @@ class Courses::CohortsPresenter < ApplicationPresenter
   end
 
   def cohorts
+    validate_status
+
     @cohorts ||=
-      if @status == "active"
-        current_user.faculty.cohorts.where(course: @course).active
+      if current_school_admin.present?
+        @course.cohorts
       else
-        current_user.faculty.cohorts.where(course: @course).ended
-      end
+        current_user.faculty.cohorts.where(course: @course)
+      end.public_send(@status)
   end
 
   def paged_cohorts
     paged = cohorts.page(params[:page]).per(24)
     paged = cohorts.page(paged.total_pages).per(24) if paged.out_of_range?
     paged
+  end
+
+  def validate_status
+    return if %w[active ended].include?(@status)
+
+    raise ArgumentError, "Invalid status #{@status}"
   end
 end

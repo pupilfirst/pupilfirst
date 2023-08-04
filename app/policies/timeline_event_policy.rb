@@ -4,10 +4,10 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if record.evaluation_criteria.blank?
 
-    return false if user.faculty.blank?
+    return false if user.faculty.blank? && current_school_admin.blank?
 
-    user.faculty.cohorts.exists?(id: record.students.first.cohort_id) ||
-      current_school_admin.present?
+    current_school_admin.present? ||
+      user.faculty.cohorts.exists?(id: record.students.first.cohort_id)
   end
 
   def show?

@@ -6,7 +6,6 @@ module QueryAuthorizeReviewSubmissions
 
     return false if course&.school != current_school
 
-    current_school_admin.present? ||
-      current_user.faculty.cohorts.exists?(id: submission.students.first.cohort)
+    current_user.faculty.cohorts.exists?(id: submission.students.first.cohort)
   end
 end

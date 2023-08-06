@@ -719,10 +719,442 @@ feature "Coach's review interface" do
     expect(page).not_to have_content(course.name)
   end
 
-  scenario "school admin tries to access the review dashboard" do
-    sign_in_user school_admin.user, referrer: review_course_path(course)
+  context "when user is an admin" do
+    # Create a couple of passed submissions for the team 3.
+    let!(:submission_l1_t3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_l3],
+        target: target_l1,
+        evaluator_id: team_coach.id,
+        evaluated_at: 4.days.ago,
+        passed_at: 1.day.ago
+      )
+    end
+    let!(:submission_l2_t3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_l3],
+        target: target_l2,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: nil,
+        created_at: 1.day.ago
+      )
+    end
+    let!(:team_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: team_l3.students,
+        target: team_target,
+        evaluator_id: course_coach.id,
+        evaluated_at: 1.day.ago,
+        passed_at: nil,
+        created_at: 2.days.ago
+      )
+    end
+    let!(:auto_verified_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: team_l3.students,
+        target: auto_verify_target,
+        passed_at: 1.day.ago
+      )
+    end
 
-    expect(page).to have_text("The page you were looking for doesn't exist!")
-    expect(page).not_to have_content(course.name)
+    # And one passed submission for team 2.
+    let!(:submission_l1_t2) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_l2],
+        target: target_l1,
+        evaluator_id: team_coach.id,
+        evaluated_at: 3.days.ago,
+        passed_at: 3.days.ago,
+        created_at: 4.days.ago
+      )
+    end
+
+    # Create a couple of pending submissions for the teams.
+    let!(:submission_l1_t1) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        target: target_l1,
+        reviewer: course_coach,
+        reviewer_assigned_at: 1.day.ago,
+        owners: [student_l1]
+      )
+    end
+    let!(:submission_l2_t2) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        target: target_l2,
+        owners: [student_l2],
+        created_at: 1.day.ago
+      )
+    end
+    let!(:submission_l3_t3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        target: target_l3,
+        owners: [student_l3],
+        created_at: 2.days.ago
+      )
+    end
+
+    let!(:feedback) do
+      create(
+        :startup_feedback,
+        faculty_id: course_coach.id,
+        timeline_event: submission_l2_t3
+      )
+    end
+
+    scenario "visits the review dashboard", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      expect(page).to have_title("Review | #{course.name}")
+
+      # Ensure coach is on the review dashboard.
+      # Pending and Reviewed targets must be visible
+      within("a[data-submission-id='#{submission_l1_t1.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text(student_l1.user.name)
+      end
+
+      within("a[data-submission-id='#{submission_l1_t3.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text("Submitted by #{student_l3.user.name}")
+        expect(page).to have_text("Completed")
+      end
+
+      click_link "Pending"
+      expect(page).to have_content("Showing all 3 submissions")
+
+      # All pending submissions should be listed (excluding the auto-verified one)
+      expect(page).not_to have_text(auto_verify_target.title)
+
+      within("a[data-submission-id='#{submission_l1_t1.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text(student_l1.user.name)
+      end
+
+      within("a[data-submission-id='#{submission_l2_t2.id}']") do
+        expect(page).to have_text(target_l2.title)
+        expect(page).to have_text(student_l2.user.name)
+      end
+
+      within("a[data-submission-id='#{submission_l3_t3.id}']") do
+        expect(page).to have_text(target_l3.title)
+        expect(page).to have_text(student_l3.user.name)
+      end
+
+      # The 'reviewed' tab should show reviewed submissions
+      click_link "Reviewed"
+
+      within("a[data-submission-id='#{submission_l1_t3.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text("Submitted by #{student_l3.user.name}")
+        expect(page).to have_text("Completed")
+      end
+
+      within("a[data-submission-id='#{submission_l2_t3.id}']") do
+        expect(page).to have_text(target_l2.title)
+        expect(page).to have_text("Submitted by #{student_l3.user.name}")
+        expect(page).to have_text("Rejected")
+        expect(page).to have_text("Feedback Sent")
+      end
+
+      expect(page).to have_text(team_target.title).once
+
+      within("a[data-submission-id='#{team_submission.id}']") do
+        expect(page).to have_text("Submitted by team #{team_l3.name}")
+      end
+    end
+
+    scenario "uses the target filter", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      expect(page).to have_content("Showing all 7 submissions")
+
+      # filter pending submissions
+      fill_in "filter", with: "target:"
+
+      click_button team_target.title
+
+      within("div[id='submissions']") do
+        expect(page).to have_text(team_target.title)
+      end
+
+      expect(page).not_to have_text(target_l1.title)
+      expect(page).not_to have_text(target_l2.title)
+      expect(page).not_to have_text(target_l3.title)
+    end
+
+    scenario "uses the search filter", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      expect(page).to have_content("Showing all 7 submissions")
+
+      # Search by email
+      fill_in "filter", with: "pupilfirst@example.com"
+      click_button "Pick Name or Email: pupilfirst@example.com"
+
+      within("div[id='submissions']") do
+        expect(page).to have_text(student_l3.name)
+      end
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).to have_text(target_l3.title)
+      expect(page).to have_text(team_target.title)
+
+      expect(page).to have_content("Showing all 4 submissions")
+
+      # Search by name
+      fill_in "filter", with: "Pupilfirst Test User"
+      click_button "Pick Name or Email: Pupilfirst Test User"
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).not_to have_text(target_l3.title)
+      expect(page).not_to have_text(team_target.title)
+
+      expect(page).to have_content("Showing all 2 submissions")
+    end
+
+    scenario "uses the assigned to filter", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      click_link "Pending"
+
+      fill_in "filter", with: "assigned to:"
+      expect(page).not_to have_button("me")
+    end
+
+    scenario "uses the reviewed by filter", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      fill_in "filter", with: "reviewed by:"
+      expect(page).not_to have_button("me")
+    end
+
+    context "when the course has inactive students" do
+      let(:inactive_cohort) do
+        create :cohort, course: course, ends_at: 1.day.ago
+      end
+
+      let!(:inactive_team) do
+        create :team_with_students, cohort: inactive_cohort
+      end
+
+      before do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: inactive_team.students,
+          target: team_target
+        )
+
+        create(
+          :faculty_cohort_enrollment,
+          faculty: course_coach,
+          cohort: inactive_cohort
+        )
+      end
+
+      scenario "can access inactive submission", js: true do
+        sign_in_user school_admin.user, referrer: review_course_path(course)
+
+        expect(page).to have_content("Showing all 7 submissions")
+
+        # Search by email
+        fill_in "filter", with: "Inactive Students"
+        click_button "Pick Include: Inactive Students"
+
+        expect(page).to have_content("Showing all 8 submissions")
+        expect(page).to have_content(inactive_team.name)
+      end
+    end
+
+    scenario "changes the sort order of submissions", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      # Verify initial sort order
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l1_t1.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l1_t3.title
+      )
+      expect(find("#submissions a:nth-child(3)")).to have_content(
+        submission_l2_t3.title
+      )
+      expect(find("#submissions a:nth-child(4)")).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find("#submissions a:nth-child(5)")).to have_content(
+        submission_l3_t3.title
+      )
+
+      # Switch to pending tab
+      click_link "Pending"
+
+      within("div[aria-label='Change submissions sorting']") do
+        expect(page).to have_content("Submitted At")
+      end
+
+      # Check current ordering of pending items
+      expect(find("#submissions a:nth-child(3)")).to have_content(
+        submission_l1_t1.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l3_t3.title
+      )
+
+      # Switch to all tabs to verify default ordering
+      click_link "All"
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l1_t1.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l1_t3.title
+      )
+      expect(find("#submissions a:nth-child(3)")).to have_content(
+        submission_l2_t3.title
+      )
+      expect(find("#submissions a:nth-child(4)")).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find("#submissions a:nth-child(5)")).to have_content(
+        submission_l3_t3.title
+      )
+
+      # Switch back to Pending tab
+      click_link "Pending"
+
+      # Swap the ordering of pending items
+      click_button("toggle-sort-order")
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l1_t1.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find("#submissions a:nth-child(3)")).to have_content(
+        submission_l3_t3.title
+      )
+
+      # Switch to reviewed tab and check sorting
+      click_link "Reviewed"
+      click_button "Reviewed At"
+      click_button "Submitted At"
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l1_t3.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l2_t3.title
+      )
+
+      click_button("toggle-sort-order")
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l1_t2.title
+      )
+
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        team_submission.title
+      )
+
+      # Change sorting criterion in reviewed tab
+      click_button "Submitted At"
+      click_button "Reviewed At"
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        submission_l1_t3.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l1_t2.title
+      )
+
+      click_button("toggle-sort-order")
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(
+        team_submission.title
+      )
+      expect(find("#submissions a:nth-child(2)")).to have_content(
+        submission_l2_t3.title
+      )
+    end
+
+    scenario "can access submissions from review dashboard", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      within("a[data-submission-id='#{submission_l3_t3.id}']") do
+        expect(page).to have_text(target_l3.title)
+      end
+
+      click_link submission_l3_t3.title
+
+      # submissions overlay should be visible
+      expect(page).to have_text("Submission #1")
+    end
+
+    context "when there are multiple team coaches" do
+      let(:team_coach_2) { create :faculty, school: school }
+
+      before do
+        create :faculty_student_enrollment,
+               :with_cohort_enrollment,
+               faculty: team_coach_2,
+               student: student_l2
+      end
+
+      scenario "uses filter to see submissions personal coach another coach",
+               js: true do
+        sign_in_user school_admin.user, referrer: review_course_path(course)
+
+        click_link "Pending"
+
+        fill_in "filter", with: "personal coach:"
+        click_button "Personal Coach: #{team_coach_2.name}"
+        expect(page).to have_content("1")
+
+        # ...but the submission has changed.
+        expect(page).not_to have_text(target_l3.title)
+        expect(page).to have_text(target_l2.title)
+
+        # Similarly, the reviewed page will list a submission from the team personal coach team coach 2, but not the current coach.
+        click_link "Reviewed"
+
+        expect(page).to have_text student_l2.name
+        expect(page).not_to have_text student_l3.name
+      end
+    end
   end
 end

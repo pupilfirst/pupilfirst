@@ -4,6 +4,7 @@ class StudentPolicy < ApplicationPolicy
 
     # Coaches who review submissions from this student can view their profile.
     faculty = user.faculty
-    faculty.present? && faculty.cohorts.exists?(id: record.cohort)
+    current_school_admin.present? ||
+      (faculty.present? && faculty.cohorts.exists?(id: record.cohort))
   end
 end

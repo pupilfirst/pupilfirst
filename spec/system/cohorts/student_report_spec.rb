@@ -15,6 +15,7 @@ feature "Course students report", js: true do
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
   let(:coach_without_access) { create :faculty, school: school }
+  let(:school_admin) { create :school_admin }
 
   # Create a team
   let!(:team) { create :team, cohort: cohort }
@@ -484,5 +485,108 @@ feature "Course students report", js: true do
     expect(page).to have_text(
       "This student's access to the course ended on #{time.strftime("%b %-d, %Y")}."
     )
+  end
+
+  context "when user is a school admin" do
+    scenario "can access a student report" do
+      sign_in_user school_admin.user, referrer: student_report_path(student)
+      expect(page).to have_text(student.name)
+
+      # Only milestone targets should be shown for completion status
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).not_to have_text(target_l3_1.title)
+
+      # Check target completion status
+      within("div[data-milestone-id='#{target_l1.id}']") do
+        expect(page).to have_selector(".text-orange-700")
+      end
+
+      within("div[data-milestone-id='#{target_l2.id}']") do
+        expect(page).to have_selector(".text-green-600")
+      end
+
+      # Targets Overview
+      expect(page).to have_text("Targets Overview")
+
+      within("div[aria-label='target-completion-status']") do
+        expect(page).to have_content("Total Targets Completed")
+        expect(page).to have_content("66%")
+        expect(page).to have_content("4/6 Targets")
+      end
+
+      within("div[aria-label='quiz-performance-chart']") do
+        expect(page).to have_content("Average Quiz Score")
+        expect(page).to have_content("46%")
+        expect(page).to have_content("2 Quizzes Attempted")
+      end
+
+      # Average Grades
+      expect(page).to have_text("Average Grades")
+
+      within(
+        "div[aria-label='average-grade-for-criterion-#{evaluation_criterion_1.id}']"
+      ) do
+        expect(page).to have_content(evaluation_criterion_1.name)
+        expect(page).to have_content("2.5/3")
+      end
+
+      within(
+        "div[aria-label='average-grade-for-criterion-#{evaluation_criterion_2.id}']"
+      ) do
+        expect(page).to have_content(evaluation_criterion_2.name)
+        expect(page).to have_content("2/3")
+      end
+
+      # Check submissions of student
+      find("li", text: "Submissions").click
+
+      expect(page).to have_content(target_l1.title)
+      expect(page).to_not have_content(target_l3_2.title)
+
+      within(
+        "div[aria-label='student-submission-card-#{submission_target_l1_1.id}']"
+      ) { expect(page).to have_content("Rejected") }
+
+      within(
+        "div[aria-label='student-submission-card-#{submission_target_l1_2.id}']"
+      ) { expect(page).to have_content("Completed") }
+
+      within("div[aria-label='student-submissions']") do
+        expect(page).to have_link(
+          href: "/submissions/#{submission_target_l1_1.id}/review"
+        )
+        expect(page).to have_link(
+          href: "/submissions/#{submission_target_l3_1.id}/review"
+        )
+      end
+    end
+
+    scenario "tries to add a note to a student" do
+      sign_in_user school_admin.user, referrer: student_report_path(student)
+
+      find("li", text: "Notes").click
+
+      expect(page).to have_text("Add a New Note")
+      note = Faker::Markdown.sandwich(sentences: 2)
+
+      add_markdown(note)
+      click_button "Save Note"
+
+      expect(page).to have_text(
+        "Error 500\nOur team has been notified of this error. Please reload the page and try again.\nRefresh Page"
+      )
+    end
+  end
+
+  context "when a user is a student" do
+    let(:student_2) { create :student }
+
+    scenario "tries to access another student's report" do
+      sign_in_user student.user, referrer: student_report_path(student_2)
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
+    end
   end
 end

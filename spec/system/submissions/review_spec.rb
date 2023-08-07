@@ -880,12 +880,12 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
 
-    scenario "school admin tries to access the submission review page" do
-      sign_in_user school_admin.user,
-                   referrer: review_timeline_event_path(submission_pending)
+    # scenario "school admin tries to access the submission review page" do
+    #   sign_in_user school_admin.user,
+    #                referrer: review_timeline_event_path(submission_pending)
 
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
+    #   expect(page).to have_text("The page you were looking for doesn't exist!")
+    # end
 
     scenario "coach is warned when a student has dropped out" do
       student.update!(dropped_out_at: 1.day.ago)

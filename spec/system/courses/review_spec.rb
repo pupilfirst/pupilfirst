@@ -831,7 +831,7 @@ feature "Coach's review interface" do
 
       expect(page).to have_title("Review | #{course.name}")
 
-      # Ensure coach is on the review dashboard.
+      # Ensure admin is on the review dashboard.
       # Pending and Reviewed targets must be visible
       within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
@@ -891,7 +891,7 @@ feature "Coach's review interface" do
     scenario "uses the target filter", js: true do
       sign_in_user school_admin.user, referrer: review_course_path(course)
 
-      # Ensure coach is on the review dashboard.
+      # Ensure admin is on the review dashboard.
       expect(page).to have_content("Showing all 7 submissions")
 
       # filter pending submissions
@@ -911,7 +911,7 @@ feature "Coach's review interface" do
     scenario "uses the search filter", js: true do
       sign_in_user school_admin.user, referrer: review_course_path(course)
 
-      # Ensure coach is on the review dashboard.
+      # Ensure admin is on the review dashboard.
       expect(page).to have_content("Showing all 7 submissions")
 
       # Search by email
@@ -948,6 +948,30 @@ feature "Coach's review interface" do
 
       fill_in "filter", with: "assigned to:"
       expect(page).not_to have_button("me")
+
+      expect(page).to have_button(course_coach.name)
+      expect(page).to have_button(team_coach.name)
+
+      click_button "Pick Assigned To: #{course_coach.name}"
+
+      expect(page).to have_content("1")
+
+      within("a[data-submission-id='#{submission_l1_t1.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text(course_coach.user.name)
+      end
+
+      expect(page).not_to have_text(target_l3.title)
+      expect(page).not_to have_text(target_l2.title)
+      expect(page).to have_content("There's only one submission")
+
+      find("button[title='Remove selection: #{course_coach.name}']").click
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).to have_text(target_l3.title)
+
+      expect(page).to have_content("Showing all 3 submissions")
     end
 
     scenario "uses the reviewed by filter", js: true do
@@ -955,6 +979,31 @@ feature "Coach's review interface" do
 
       fill_in "filter", with: "reviewed by:"
       expect(page).not_to have_button("me")
+
+      expect(page).to have_button(course_coach.name)
+      expect(page).to have_button(team_coach.name)
+
+      click_button "Pick Reviewed By: #{course_coach.name}"
+
+      expect(page).to have_content("Showing all 2 submissions")
+      expect(page).to have_content("Status: Reviewed")
+      expect(page).not_to have_text(target_l1.title)
+
+      find("button[title='Remove selection: #{course_coach.name}']").click
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_content("Showing all 4 submissions")
+    end
+
+    scenario "uses the personal coach filter", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      click_link "Pending"
+      fill_in "filter", with: "personal coach:"
+      click_button "Pick Personal Coach: #{team_coach.name}"
+
+      expect(page).to have_content("1")
+      expect(page).to have_text(target_l3.title)
+      expect(page).not_to have_text(target_l2.title)
     end
 
     context "when the course has inactive students" do
@@ -1123,38 +1172,6 @@ feature "Coach's review interface" do
 
       # submissions overlay should be visible
       expect(page).to have_text("Submission #1")
-    end
-
-    context "when there are multiple team coaches" do
-      let(:team_coach_2) { create :faculty, school: school }
-
-      before do
-        create :faculty_student_enrollment,
-               :with_cohort_enrollment,
-               faculty: team_coach_2,
-               student: student_l2
-      end
-
-      scenario "uses filter to see submissions personal coach another coach",
-               js: true do
-        sign_in_user school_admin.user, referrer: review_course_path(course)
-
-        click_link "Pending"
-
-        fill_in "filter", with: "personal coach:"
-        click_button "Personal Coach: #{team_coach_2.name}"
-        expect(page).to have_content("1")
-
-        # ...but the submission has changed.
-        expect(page).not_to have_text(target_l3.title)
-        expect(page).to have_text(target_l2.title)
-
-        # Similarly, the reviewed page will list a submission from the team personal coach team coach 2, but not the current coach.
-        click_link "Reviewed"
-
-        expect(page).to have_text student_l2.name
-        expect(page).not_to have_text student_l3.name
-      end
     end
   end
 end

@@ -880,12 +880,71 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
 
-    # scenario "school admin tries to access the submission review page" do
-    #   sign_in_user school_admin.user,
-    #                referrer: review_timeline_event_path(submission_pending)
+    scenario "school admin tries to access the submission review page" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_pending)
 
-    #   expect(page).to have_text("The page you were looking for doesn't exist!")
-    # end
+      # Admin can access the page, but cannot review the submission.
+
+      expect(page).to have_text("Submission #1")
+
+      within("div[aria-label='submissions-overlay-header']") do
+        expect(page).to have_content("Submitted by #{student.name}")
+        expect(page).to have_link(
+          student.name,
+          href: "/students/#{student.id}/report"
+        )
+        expect(page).to have_link(target.title, href: "/targets/#{target.id}")
+        expect(page).to have_content(target.title)
+        expect(page).to have_text "Assigned Coaches"
+
+        # Hovering over the avatar should reveal the name of the assigned coach.
+        page.find("svg", text: "JD").hover
+        expect(page).to have_text("John Doe")
+      end
+
+      click_button "Start Review"
+
+      expect(page).to have_text("Authorization failed")
+
+      visit review_timeline_event_path(submission_pending)
+
+      expect(page).to have_text("Start Review")
+    end
+
+    scenario "school admin tries view and edit the review checklist of a submission" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_pending)
+
+      # Admin can see the review checklist, but cannot save the review checklist.
+
+      expect(target.review_checklist).to eq([])
+
+      expect(page).to have_content("Create Review Checklist")
+      click_button "Create Review Checklist"
+
+      expect(page).to have_content("Save Checklist")
+      click_button "Save Checklist"
+
+      expect(page).to have_content(
+        "Our team has been notified of this error. Please reload the page and try again."
+      )
+
+      click_button "Refresh Page"
+
+      expect(page).to have_content("Create Review Checklist")
+    end
+
+    scenario "school admin tries to take over a assigned submission" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_pending_2)
+
+      expect(page).to have_text(team_coach.name)
+      expect(page).not_to have_text("Start Review")
+      click_button "Yes, Assign Me"
+
+      expect(page).to have_text("Authorization failed")
+    end
 
     scenario "coach is warned when a student has dropped out" do
       student.update!(dropped_out_at: 1.day.ago)
@@ -1252,6 +1311,67 @@ feature "Submission review overlay", js: true do
       submission = submission_reviewed.reload
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
+    end
+
+    scenario "school admin tries to add feedback" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_reviewed)
+
+      # School admin should not be able to add feedback.
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+        expect(page).to have_text("Evaluated By")
+        expect(page).to have_text(coach.name)
+      end
+
+      expect(page).to have_button("Undo Grading")
+
+      expect(page).to have_button("Add feedback")
+
+      click_button "Add feedback"
+
+      expect(page).not_to have_button("Add feedback")
+      expect(page).to have_button("Share Feedback", disabled: true)
+
+      feedback = Faker::Markdown.sandwich(sentences: 6)
+      add_markdown(feedback)
+      click_button "Share Feedback"
+
+      expect(page).to have_text("Authorization failed")
+
+      accept_confirm { visit review_timeline_event_path(submission_reviewed) }
+
+      expect(page).to have_button("Add feedback")
+    end
+
+    scenario "school admin tries to undo grading" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_reviewed)
+
+      # School admin can access the page, but cannot undo grading.
+
+      expect(page).not_to have_button("Undo Grading")
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+        expect(page).to have_text("Evaluated By")
+        expect(page).to have_text(coach.name)
+      end
+
+      accept_confirm { click_button "Undo Grading" }
+
+      expect(page).to have_text("Authorization failed")
+
+      visit review_timeline_event_path(submission_reviewed)
+
+      expect(page).not_to have_button("Undo Grading")
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+        expect(page).to have_text("Evaluated By")
+        expect(page).to have_text(coach.name)
+      end
     end
 
     scenario "coach can undo grading" do

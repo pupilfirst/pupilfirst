@@ -153,6 +153,17 @@ feature "Coach's review interface" do
       )
     end
 
+    # create an archived submission
+    let!(:archived_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        target: target_l1,
+        owners: [student_l1],
+        archived_at: 1.day.ago
+      )
+    end
+
     let!(:feedback) do
       create(
         :startup_feedback,
@@ -178,6 +189,11 @@ feature "Coach's review interface" do
         expect(page).to have_text("Submitted by #{student_l3.user.name}")
         expect(page).to have_text("Completed")
       end
+
+      # Archived submissions should not be visible
+      expect(page).not_to have_selector(
+        "a[data-submission-id='#{archived_submission.id}']"
+      )
 
       click_link "Pending"
       expect(page).to have_content("Showing all 3 submissions")

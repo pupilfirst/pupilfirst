@@ -54,7 +54,7 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def applicable_submissions
-    stage_1 = course.timeline_events.not_auto_verified
+    stage_1 = course.timeline_events.not_auto_verified.live
 
     # Filter by target
     stage_2 =

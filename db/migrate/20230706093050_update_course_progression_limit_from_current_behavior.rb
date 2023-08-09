@@ -13,7 +13,7 @@ class UpdateCourseProgressionLimitFromCurrentBehavior < ActiveRecord::Migration[
         course.update!(progression_limit: 0)
       elsif course.progression_behavior == Course::PROGRESSION_BEHAVIOR_LIMITED
         progression_limit = course.progression_limit + 1
-        course.update!(progression_limit: [progression_limit, 3].min)
+        course.update!(progression_limit: progression_limit)
       elsif course.progression_behavior == Course::PROGRESSION_BEHAVIOR_STRICT
         course.update!(progression_limit: 1)
       end

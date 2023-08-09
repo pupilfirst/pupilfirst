@@ -370,6 +370,7 @@ en:
           description_start: Students can submit
           once: once
           thrice: thrice
+          four_times: four times
           title: Limited
           twice: twice
         unlimited:

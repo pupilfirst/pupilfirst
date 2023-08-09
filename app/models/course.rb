@@ -55,7 +55,7 @@ class Course < ApplicationRecord
 
   normalize_attribute :about, :processing_url
 
-  validates :progression_limit, inclusion: 0..3
+  validates :progression_limit, inclusion: 0..4
 
   def short_name
     name[0..2].upcase.strip
@@ -92,10 +92,6 @@ class Course < ApplicationRecord
 
   def user_tags
     users.joins(:tags).distinct("tags.name").pluck("tags.name")
-  end
-
-  def strict?
-    progression_behavior == PROGRESSION_BEHAVIOR_STRICT
   end
 
   def archived?

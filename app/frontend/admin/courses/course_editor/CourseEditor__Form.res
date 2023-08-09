@@ -497,7 +497,8 @@ let handleSelectProgressionLimit = (send, event) => {
   switch target["value"] {
   | "1"
   | "2"
-  | "3" =>
+  | "3"
+  | "4" =>
     send(UpdateProgressionBehavior(Limited(int_of_string(target["value"]))))
   | otherValue => Rollbar.error("Unexpected progression limit was selected: " ++ otherValue)
   }
@@ -595,6 +596,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
               <option value="1"> {t("progression_behavior.limited.once")->str} </option>
               <option value="2"> {t("progression_behavior.limited.twice")->str} </option>
               <option value="3"> {t("progression_behavior.limited.thrice")->str} </option>
+              <option value="4"> {t("progression_behavior.limited.four_times")->str} </option>
             </select>
             <div> {t("progression_behavior.limited.description_end")->str} </div>
           </div>

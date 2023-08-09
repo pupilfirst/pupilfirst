@@ -164,12 +164,12 @@ let updateDescription = (send, description) => {
   send(UpdateDescription(description, hasError))
 }
 
-let saveDisabled = state =>
+let saveDisabled = (state, isNewCourse) =>
   state.hasDateError ||
   (state.hasDescriptionError ||
   (state.description == "" ||
   (state.hasNameError || (state.name == "" || (!state.dirty || state.saving))))) ||
-  state.defaultCohort->Belt.Option.isNone ||
+  state.defaultCohort->Belt.Option.isNone && !isNewCourse ||
   UrlUtils.isInvalid(true, state.processingUrl) ||
   Course.Highlight.isInValidArray(state.highlights)
 
@@ -638,7 +638,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {switch course {
         | Some(course) =>
           <button
-            disabled={saveDisabled(state)}
+            disabled={saveDisabled(state, false)}
             onClick={_ => updateCourse(state, send, updateCourseCB, course)}
             className="w-full btn btn-large btn-primary mt-3">
             {t("update_course")->str}
@@ -646,7 +646,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
 
         | None =>
           <button
-            disabled={saveDisabled(state)}
+            disabled={saveDisabled(state, true)}
             onClick={_ => createCourse(state, send, reloadCoursesCB)}
             className="w-full btn btn-large btn-primary mt-3">
             {t("create_course")->str}

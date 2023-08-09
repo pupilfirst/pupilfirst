@@ -50,6 +50,16 @@ module ValidateTargetEditable
     end
   end
 
+  class TargetNotPrerequisiteToItself < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      prerequisite_targets = value[:prerequisite_targets]
+
+      return unless prerequisite_targets.include?(value[:id])
+
+      I18n.t("mutations.update_target.prerequisities_self_error")
+    end
+  end
+
   class OnlyOneMethodOfCompletion < GraphQL::Schema::Validator
     def validate(_object, _context, value)
       completion_criteria = [
@@ -143,6 +153,7 @@ module ValidateTargetEditable
     validates OnlyOneMethodOfCompletion => {}
     validates ChecklistHasValidData => {}
     validates ChecklistHasValidLength => {}
+    validates TargetNotPrerequisiteToItself => {}
   end
 
   def target_params

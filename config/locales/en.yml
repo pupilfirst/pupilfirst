@@ -2360,6 +2360,7 @@ en:
       multiple_method_of_completion: More than one method of completion
       prerequisities_archived_error: Cannot have archived prerequisites
       prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: Target updated successfully!
       target_group_not_present_error: Target group does not exist
       target_missing_error: Target does not exist

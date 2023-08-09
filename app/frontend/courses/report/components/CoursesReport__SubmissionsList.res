@@ -104,7 +104,7 @@ let unselected = selectedStatus => {
   unselectedStatus
 }
 
-let selected = (selectedStatus) => {
+let selected = selectedStatus => {
   let selectedStatus =
     selectedStatus |> OptionUtils.mapWithDefault(
       selectedStatus => [Selectable.targetStatus(selectedStatus)],
@@ -266,7 +266,7 @@ let showSubmission = (submissions, teamStudentIds) =>
 
       <div className="" key={submission |> Submission.id}>
         <a
-          className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
+          className="block relative z-8 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
           ariaLabel={"Student submission " ++ (submission |> Submission.id)}
           href=submissionHref>
           <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>

@@ -1,5 +1,5 @@
 module Layouts
-  class StudentCourseV2Presenter < ::ApplicationPresenter
+  class CourseNavPresenter < ::ApplicationPresenter
     def initialize(view_context, course)
       @course = course
       super(view_context)

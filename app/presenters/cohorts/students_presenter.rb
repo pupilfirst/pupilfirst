@@ -30,8 +30,8 @@ module Cohorts
                 color: "blue"
               },
               {
-                key: "milestone_pending",
-                label: t("milestone_pending"),
+                key: "milestone_incomplete",
+                label: t("milestone_incomplete"),
                 filterType: "MultiSelect",
                 values: milestone_targets_data,
                 color: "orange"
@@ -82,12 +82,18 @@ module Cohorts
 
     def filters_in_url
       params
-        .slice(:name, :email, :milestone_completed, :milestone_pending, :course)
+        .slice(
+          :name,
+          :email,
+          :milestone_completed,
+          :milestone_incomplete,
+          :course
+        )
         .permit(
           :name,
           :email,
           :milestone_completed,
-          :milestone_pending,
+          :milestone_incomplete,
           :course
         )
         .compact
@@ -97,7 +103,7 @@ module Cohorts
       @students ||=
         begin
           filter_1 = filter_students_by_milestone_completed(scope)
-          filter_2 = filter_students_by_milestone_pending(filter_1)
+          filter_2 = filter_students_by_milestone_incomplete(filter_1)
           filter_3 = filter_students_by_course_completion(filter_2)
           filter_4 = filter_students_by_name(filter_3)
           filter_5 = filter_students_by_email(filter_4)
@@ -172,10 +178,10 @@ module Cohorts
       end
     end
 
-    def filter_students_by_milestone_pending(scope)
-      if params[:milestone_pending].present?
+    def filter_students_by_milestone_incomplete(scope)
+      if params[:milestone_incomplete].present?
         scope.where.not(
-          id: milestone_completed_students(params[:milestone_pending])
+          id: milestone_completed_students(params[:milestone_incomplete])
         )
       else
         scope

@@ -232,7 +232,7 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone pending: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone incomplete: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).not_to have_text(student_1.name)
       expect(page).to have_text(student_2.name)

@@ -197,7 +197,7 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone pending: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone incomplete: M#{target_l1.milestone_number}: #{target_l1.title}"
 
       expect(page).not_to have_content("#{students.first.name}\n")
       expect(page).to have_text(students.second.name)

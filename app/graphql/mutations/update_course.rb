@@ -4,11 +4,18 @@ module Mutations
       def validate(_object, _context, value)
         course = Course.find_by(id: value[:id])
 
-        return I18n.t("mutations.update_course.unable_to_find_course", value: value[:id]) if course.blank?
+        if course.blank?
+          return(
+            I18n.t(
+              "mutations.update_course.unable_to_find_course",
+              value: value[:id]
+            )
+          )
+        end
       end
     end
 
-    class DefaultCohortMustExisit < GraphQL::Schema::Validator
+    class DefaultCohortMustExist < GraphQL::Schema::Validator
       def validate(_object, _context, value)
         course = Course.find_by(id: value[:id])
 
@@ -18,7 +25,10 @@ module Mutations
 
         if cohort.blank?
           return(
-            I18n.t("mutations.update_course.select_valid_cohort", value: value[:default_cohort_id])
+            I18n.t(
+              "mutations.update_course.select_valid_cohort",
+              value: value[:default_cohort_id]
+            )
           )
         end
       end
@@ -30,17 +40,17 @@ module Mutations
     argument :default_cohort_id, ID, required: true
 
     validates CourseMustBePresent => {}
-    validates DefaultCohortMustExisit => {}
+    validates DefaultCohortMustExist => {}
 
-    description 'Update a course.'
+    description "Update a course."
 
     field :course, Types::CourseType, null: true
 
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.update_course.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.update_course.success_notification")
       )
 
       { course: update_course }

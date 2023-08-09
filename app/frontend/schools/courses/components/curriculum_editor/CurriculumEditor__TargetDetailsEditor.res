@@ -883,7 +883,14 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
     | Some(sortIndex) =>
       send(ResetEditor)
       updateTargetCB(
-        Target.create(~id, ~targetGroupId, ~title=state.title, ~sortIndex, ~visibility),
+        Target.create(
+          ~id,
+          ~targetGroupId,
+          ~title=state.title,
+          ~sortIndex,
+          ~visibility,
+          ~milestone=state.milestone,
+        ),
       )
     | None => send(UpdateSaving)
     }

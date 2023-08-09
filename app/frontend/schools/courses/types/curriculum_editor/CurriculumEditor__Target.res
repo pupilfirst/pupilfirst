@@ -50,13 +50,13 @@ let updateArray = (targets, target) => {
   targets |> Js.Array.filter(t => t.id != target.id) |> Js.Array.concat([target])
 }
 
-let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility) => {
+let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility, ~milestone) => {
   id: id,
   targetGroupId: targetGroupId,
   title: title,
   sortIndex: sortIndex,
   visibility: visibility,
-  milestone: false,
+  milestone: milestone,
 }
 
 let sort = targets => targets |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
@@ -83,8 +83,9 @@ let updateSortIndex = sortedTargets =>
       ~title=t.title,
       ~sortIndex,
       ~visibility=t.visibility,
+      ~milestone=t.milestone,
     )
   )
 
 let template = (id, targetGroupId, title) =>
-  create(~id, ~targetGroupId, ~title, ~sortIndex=999, ~visibility=Draft)
+  create(~id, ~targetGroupId, ~title, ~sortIndex=999, ~visibility=Draft, ~milestone=false)

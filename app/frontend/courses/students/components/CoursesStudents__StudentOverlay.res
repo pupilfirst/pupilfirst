@@ -569,6 +569,32 @@ let make = (~studentId, ~userId) => {
               {ids(student)}
               {inactiveWarning(student)}
             </div>
+            <div className="mt-8">
+              <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
+              <div className="flex -mx-2 flex-wrap mt-2">
+                {targetsCompletionStatus(
+                  studentDetails |> StudentDetails.targetsCompleted,
+                  studentDetails |> StudentDetails.totalTargets,
+                )}
+                {quizPerformanceChart(
+                  studentDetails |> StudentDetails.averageQuizScore,
+                  studentDetails |> StudentDetails.quizzesAttempted,
+                )}
+              </div>
+            </div>
+            {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
+              ? <div className="mt-8">
+                  <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
+                  <div className="flex -mx-2 flex-wrap">
+                    {averageGradeCharts(
+                      studentDetails |> StudentDetails.evaluationCriteria,
+                      studentDetails |> StudentDetails.averageGrades,
+                    )}
+                  </div>
+                </div>
+              : React.null}
+            {coachInfo(studentDetails)}
+            {otherTeamMembers(setState, studentId, studentDetails)}
             <div className="mt-4">
               <div className="justify-between mt-8 flex space-x-2">
                 <p className="text-sm font-semibold">
@@ -621,32 +647,6 @@ let make = (~studentId, ~userId) => {
                 ->React.array}
               </div>
             </div>
-            <div className="mt-8">
-              <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
-              <div className="flex -mx-2 flex-wrap mt-2">
-                {targetsCompletionStatus(
-                  studentDetails |> StudentDetails.targetsCompleted,
-                  studentDetails |> StudentDetails.totalTargets,
-                )}
-                {quizPerformanceChart(
-                  studentDetails |> StudentDetails.averageQuizScore,
-                  studentDetails |> StudentDetails.quizzesAttempted,
-                )}
-              </div>
-            </div>
-            {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
-              ? <div className="mt-8">
-                  <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
-                  <div className="flex -mx-2 flex-wrap">
-                    {averageGradeCharts(
-                      studentDetails |> StudentDetails.evaluationCriteria,
-                      studentDetails |> StudentDetails.averageGrades,
-                    )}
-                  </div>
-                </div>
-              : React.null}
-            {coachInfo(studentDetails)}
-            {otherTeamMembers(setState, studentId, studentDetails)}
           </div>
           <div
             className="w-full relative md:w-3/5 bg-gray-50 md:border-s pb-6 2xl:pb-12 md:overflow-y-auto">

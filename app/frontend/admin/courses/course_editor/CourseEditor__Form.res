@@ -169,6 +169,7 @@ let saveDisabled = state =>
   (state.hasDescriptionError ||
   (state.description == "" ||
   (state.hasNameError || (state.name == "" || (!state.dirty || state.saving))))) ||
+  state.defaultCohort->Belt.Option.isNone ||
   UrlUtils.isInvalid(true, state.processingUrl) ||
   Course.Highlight.isInValidArray(state.highlights)
 

@@ -11,9 +11,7 @@ type targetStatus = [#PendingReview | #Rejected | #Completed]
 
 type sortDirection = [#Ascending | #Descending]
 
-type submissionsFilter = {
-  selectedStatus: option<targetStatus>,
-}
+type submissionsFilter = {selectedStatus: option<targetStatus>}
 
 type state = {
   selectedTab: selectedTab,
@@ -116,7 +114,7 @@ let make = (~studentId, ~coaches, ~teamStudentIds) => {
     role="main"
     ariaLabel="Report"
     className="md:pt-18 pb-20 md:pb-5 px-4 bg-gray-50 md:h-screen overflow-y-auto">
-    <div className="bg-gray-50 sticky top-0">
+    <div className="bg-gray-50 sticky top-0 z-10">
       <div className="max-w-3xl mx-auto">
         <div className="flex pt-3 md:border-b border-gray-300">
           <div

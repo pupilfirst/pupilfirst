@@ -1108,6 +1108,7 @@ feature "Submission review overlay", js: true do
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
+
       click_button "Save grades"
 
       expect(page).to have_button("Next")
@@ -1133,9 +1134,6 @@ feature "Submission review overlay", js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
       click_button "Save grades"
-
-      expect(page).to have_button("Next")
-      click_button "Next"
 
       expect(page).to have_text("There are no similar pending submissions.")
     end

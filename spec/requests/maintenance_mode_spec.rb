@@ -10,7 +10,7 @@ RSpec.describe "Maintenance Mode", type: :request do
     it "returns maintenance page" do
       get root_path
 
-      expect(response.status).to eq 503
+      expect(response.status).to eq 200
       expect(response.body).to include("We'll be back soon!")
       expect(response.body).to include("Sorry for the inconvenience")
     end

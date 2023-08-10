@@ -2166,12 +2166,15 @@ hi:
       daily_digest:
         body:
           asked: '%{days_ago} दिन पहले पूछा।'
-          assigned: (%{stats} आपको सौंपा गया)
-          assigned_none: (इनमें से कोई भी आपको असाइन नहीं किया गया है)
+          assigned:
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           control_emails_html: आप इन ईमेल को %{link_to}से नियंत्रित कर सकते हैं।
           latest_topics: "आपके समुदायों पर पोस्ट किए गए नवीनतम विषय:"
           link_to: आपका प्रोफ़ाइल पृष्ठ संपादित करें
-          main_html: "कुछ पाठ्यक्रमों में समीक्षा करने के लिए %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> नई प्रस्तुतियाँ हैं जिनमें आप एक कोच हैं:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "पुराने, लोकप्रिय विषय जिन्होंने नई गतिविधि देखी है:"
           replies: जवाब
           views: विचारों

@@ -2166,12 +2166,15 @@ ta:
       daily_digest:
         body:
           asked: '%{days_ago} நாட்களுக்கு முன்பு கேட்டார்.'
-          assigned: (%{stats} உங்களுக்கு ஒதுக்கப்பட்டுள்ளது)
-          assigned_none: (இதில் எதுவுமே உங்களுக்கு ஒதுக்கப்படவில்லை)
+          assigned:
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           control_emails_html: இந்த மின்னஞ்சல்களை %{link_to}இலிருந்து நீங்கள் கட்டுப்படுத்தலாம்.
           latest_topics: "உங்கள் சமூகங்களில் இடுகையிடப்பட்ட சமீபத்திய தலைப்புகள்:"
           link_to: உங்கள் சுயவிவர திருத்தப் பக்கம்
-          main_html: "நீங்கள் பயிற்சியாளராக உள்ள சில படிப்புகளில் மதிப்பாய்வு செய்ய %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> புதிய சமர்ப்பிப்புகள் உள்ளன:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "புதிய செயல்பாட்டைக் கண்ட பழைய, பிரபலமான தலைப்புகள்:"
           replies: பதில்கள்
           views: காட்சிகள்

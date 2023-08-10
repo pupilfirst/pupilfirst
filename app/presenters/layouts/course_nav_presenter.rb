@@ -16,10 +16,14 @@ module Layouts
 
     def courses
       if current_user.blank?
-        current_school.courses.live.where(public_preview: true)
+        current_school
+          .courses
+          .live
+          .where(public_preview: true)
+          .order("LOWER(name)")
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live
+        current_school.courses.live.order("LOWER(name)")
       else
         # Courses where user is an author...
         courses_as_course_author =
@@ -46,7 +50,7 @@ module Layouts
         (
           courses_as_course_author + courses_as_coach + courses_as_student +
             previewed_course
-        ).uniq
+        ).uniq.sort_by { |course| course.name.downcase }
       end
     end
 

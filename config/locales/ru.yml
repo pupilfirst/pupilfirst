@@ -2194,12 +2194,19 @@ ru:
       daily_digest:
         body:
           asked: спросил %{days_ago} дней назад.
-          assigned: (%{stats} назначено вам)
-          assigned_none: (ни одна из которых не назначена Вам)
+          assigned:
+            one: (1 from a student assigned to you)
+            few: (%{count} from students assigned to you)
+            many: (%{count} from students assigned to you)
+            other: (%{count} from students assigned to you)
           control_emails_html: Вы можете контролировать эти письма от %{link_to}.
           latest_topics: "Последние темы, опубликованные в ваших сообществах:"
           link_to: страница редактирования вашего профиля
-          main_html: "Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых сообщений, чтобы просмотреть некоторые курсы, которые вы наставники:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            few: "There are %{count} new submissions to review in the courses you're coaching:"
+            many: "There are %{count} new submissions to review in the courses you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "Старые, популярные темы, которые видели новую активность:"
           replies: ответов
           views: просмотры

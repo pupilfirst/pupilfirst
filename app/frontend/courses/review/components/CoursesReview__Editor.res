@@ -16,7 +16,7 @@ type editor =
   | ChecklistEditor
   | ReviewedSubmissionEditor(array<Grade.t>)
 
-type nextSubmission = DataUnloaded | DataLoading | DataEmpty
+type nextSubmission = DataUnloaded | DataLoading | DataEmpty | ReadyToLoad
 
 type state = {
   grades: array<Grade.t>,
@@ -30,6 +30,7 @@ type state = {
   feedbackGenerated: bool,
   nextSubmission: nextSubmission,
   reloadSubmissionReport: bool,
+  nextSubmissionId: option<string>,
 }
 
 type statusColors =
@@ -52,11 +53,10 @@ type action =
   | FeedbackAfterSave
   | UpdateEditor(editor)
   | FinishGrading(array<Grade.t>)
-  | SetNextSubmissionDataLoading
-  | SetNextSubmissionDataEmpty
-  | SetNextSubmissionDataUnloaded
   | UnassignReviewer
   | ChangeReportVisibility
+  | SetNextSubmission(nextSubmission)
+  | SetNextSubmissionId(string)
 
 let reducer = (state, action) =>
   switch action {
@@ -93,10 +93,9 @@ let reducer = (state, action) =>
       additonalFeedbackEditorVisible: false,
       newFeedback: "",
     }
-  | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
-  | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
-  | SetNextSubmissionDataUnloaded => {...state, nextSubmission: DataUnloaded}
+  | SetNextSubmission(nextSubmission) => {...state, nextSubmission: nextSubmission}
   | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
+  | SetNextSubmissionId(nextSubmissionId) => {...state, nextSubmissionId: Some(nextSubmissionId)}
   }
 
 module CreateGradingMutation = %graphql(`
@@ -178,8 +177,8 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   |> ignore
 }
 
-let getNextSubmission = (send, courseId, filter) => {
-  send(SetNextSubmissionDataLoading)
+let getNextSubmission = (send, courseId, filter, onSucess) => {
+  send(SetNextSubmission(DataLoading))
   let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
@@ -195,18 +194,13 @@ let getNextSubmission = (send, courseId, filter) => {
   NextSubmissionQuery.make(variables)
   |> Js.Promise.then_(response => {
     if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
-      send(SetNextSubmissionDataEmpty)
+      send(SetNextSubmission(DataEmpty))
       Notification.notice(
         t("get_next_submission.notice.done"),
         t("get_next_submission.notice.done_description"),
       )
     } else {
-      RescriptReactRouter.push(
-        "/submissions/" ++
-        response["submissions"]["nodes"][0]["id"] ++
-        "/review?" ++
-        Filter.toQueryString(filter),
-      )
+      onSucess(response["submissions"]["nodes"][0]["id"])
     }
     Js.Promise.resolve()
   })
@@ -331,7 +325,7 @@ let gradeSubmissionQuery = (
     (),
   )
 
-  CreateGradingMutation.fetch(variables)
+  CreateGradingMutation.fetch(~notify=false, variables)
   |> Js.Promise.then_((response: CreateGradingMutation.t) => {
     response.createGrading.success
       ? {
@@ -350,7 +344,7 @@ let gradeSubmissionQuery = (
             ),
           )
           send(FinishGrading(state.grades))
-          send(SetNextSubmissionDataUnloaded)
+          send(SetNextSubmission(ReadyToLoad))
         }
       : send(FinishSaving)
 
@@ -402,14 +396,21 @@ let closeOverlay = (state, courseId, filter) => {
     : RescriptReactRouter.push(path)
 }
 
-let reviewNextButton = (nextSubmission, send, courseId, filter, className) => {
+let reviewNextButton = (nextSubmission, filter, nextSubmissionId, className) => {
   ReactUtils.nullIf(
     <button
-      onClick={_ => getNextSubmission(send, courseId, filter)}
+      onClick={_ =>
+        switch nextSubmissionId {
+        | Some(nextSubmissionId) =>
+          RescriptReactRouter.push(
+            "/submissions/" ++ nextSubmissionId ++ "/review?" ++ Filter.toQueryString(filter),
+          )
+        | None => ()
+        }}
       disabled={nextSubmission == DataLoading}
       className>
       {ReactUtils.nullUnless(
-        <i className="fas fa-spinner fa-pulse me-2" />,
+        <FaIcon classes="fas fa-spinner fa-pulse me-2" />,
         nextSubmission == DataLoading,
       )}
       <p className="pe-2"> {str(t("review_next"))} </p>
@@ -1148,6 +1149,7 @@ let make = (
       feedbackGenerated: false,
       nextSubmission: DataEmpty,
       reloadSubmissionReport: false,
+      nextSubmissionId: None,
     },
   )
 
@@ -1216,6 +1218,21 @@ let make = (
 
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
+
+  React.useEffect1(() => {
+    if state.nextSubmission == ReadyToLoad {
+      getNextSubmission(
+        send,
+        SubmissionDetails.courseId(submissionDetails),
+        filter,
+        nextSubmssionId => {
+          send(SetNextSubmissionId(nextSubmssionId))
+          send(SetNextSubmission(DataUnloaded))
+        },
+      )
+    }
+    None
+  }, [state.nextSubmission])
 
   {
     [
@@ -1513,9 +1530,8 @@ let make = (
             <div>
               {reviewNextButton(
                 state.nextSubmission,
-                send,
-                SubmissionDetails.courseId(submissionDetails),
                 filter,
+                state.nextSubmissionId,
                 "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 hover:bg-primary-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
               )}
             </div>

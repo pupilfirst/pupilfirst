@@ -278,7 +278,7 @@ let make = (~overviewData, ~coaches) =>
           </div>
           {overview |> StudentOverview.averageGrades |> ArrayUtils.isNotEmpty
             ? <div className="mt-8">
-                <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
+                <h6 className="text-sm font-semibold"> {t("average_grades") |> str} </h6>
                 <div className="flex -mx-2 flex-wrap">
                   {averageGradeCharts(
                     overview |> StudentOverview.evaluationCriteria,
@@ -318,7 +318,7 @@ let make = (~overviewData, ~coaches) =>
                       ))->str}
                     </p>
                     <div
-                      className="flex-1 text-sm truncate max-w-[20ch] sm:max-w-[30ch] md:max-w-[28ch]">
+                      className="flex-1 text-sm truncate max-w-[24ch] sm:max-w-[40ch] md:max-w-[32ch] lg:max-w-[56ch] 2xl:max-w-[64ch]">
                       <p className="text-ellipsis overflow-hidden">
                         {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
                       </p>

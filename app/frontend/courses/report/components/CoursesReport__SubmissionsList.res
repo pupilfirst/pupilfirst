@@ -266,7 +266,7 @@ let showSubmission = (submissions, teamStudentIds) =>
 
       <div className="" key={submission |> Submission.id}>
         <a
-          className="block relative z-8 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
+          className="block relative rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
           ariaLabel={"Student submission " ++ (submission |> Submission.id)}
           href=submissionHref>
           <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>

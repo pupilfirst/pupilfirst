@@ -259,13 +259,13 @@ feature "Automatic issuance of certificates", js: true do
           # Switch to the review interface and set a fail grade for it.
           visit review_timeline_event_path(target_l2_2.timeline_events.last)
           click_button "Start Review"
-          dismiss_notification
+
           find("button[title='Bad']").click
           click_button "Save grades"
 
-          expect(page).to have_text(
-            "The submission has been marked as reviewed"
-          )
+          expect(
+            target_l2_2.timeline_events.last.reload.evaluated_at
+          ).to_not eq(nil)
 
           # No issued certificates, still.
           expect(IssuedCertificate.count).to eq(0)
@@ -273,12 +273,12 @@ feature "Automatic issuance of certificates", js: true do
           # Undo the grading and set a pass grade.
           accept_confirm { click_button("Undo Grading") }
           click_button "Start Review"
-          dismiss_notification
+
           find("button[title='Good']").click
           click_button "Save grades"
 
-          expect(page).to have_text(
-            "The submission has been marked as reviewed"
+          expect(target_l2_2.timeline_events.last.reload.passed_at).to_not eq(
+            nil
           )
 
           # Both students should now have a now certificate.
@@ -389,12 +389,11 @@ feature "Automatic issuance of certificates", js: true do
                      referrer: review_timeline_event_path(@resubmission)
 
         click_button "Start Review"
-        dismiss_notification
+
         find("button[title='Good']").click
         click_button "Save grades"
 
         # It doesn't issue duplicate certificates.
-        expect(page).to have_text("The submission has been marked as reviewed")
         expect(IssuedCertificate.count).to eq(2)
       end
     end

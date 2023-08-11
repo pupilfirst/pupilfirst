@@ -118,7 +118,7 @@ feature "Submission review overlay", js: true do
       end
 
       click_button "Start Review"
-      dismiss_notification
+
       expect(page).to have_content("Add Your Feedback")
       expect(page).to have_content("Grade Card")
       expect(page).to have_content(evaluation_criterion_1.name)
@@ -158,7 +158,9 @@ feature "Submission review overlay", js: true do
 
       find("a[data-submission-id='#{submission_pending.id}']").click
       click_button "Start Review"
-      dismiss_notification
+
+      sleep 0.5 # Wait for change to reflect in the DB.
+
       expect(submission_pending.reload.reviewer).to eq(coach)
       expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
       expect(page).to have_content("Grade Card")
@@ -204,13 +206,9 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades & send feedback"
 
-      expect(page).to have_text("The submission has been marked as reviewed")
-
       student = submission_pending.students.first
       open_email(student.user.email)
       expect(current_email).to have_content("grades")
-
-      dismiss_notification
 
       expect(page).to have_button("Undo Grading")
 
@@ -303,7 +301,7 @@ feature "Submission review overlay", js: true do
 
       expect(target.review_checklist).to eq([])
       click_button "Start Review"
-      dismiss_notification
+
       click_button "Create Review Checklist"
 
       within("div[data-checklist-item='0']") do
@@ -470,7 +468,7 @@ feature "Submission review overlay", js: true do
 
       expect(target.review_checklist).to eq([])
       click_button "Start Review"
-      dismiss_notification
+
       click_button "Create Review Checklist"
 
       within("div[data-checklist-item='0']") do
@@ -715,7 +713,7 @@ feature "Submission review overlay", js: true do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)
       click_button "Start Review"
-      dismiss_notification
+
       within(
         "div[aria-label='#{submission_pending.checklist.first["title"]}']"
       ) do
@@ -768,9 +766,7 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
-      expect(page).to have_text("The submission has been marked as reviewed")
-
-      dismiss_notification
+      expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
       within(
         "div[aria-label='#{submission_pending.checklist.second["title"]}']"
@@ -831,7 +827,7 @@ feature "Submission review overlay", js: true do
 
       accept_confirm { click_button("Undo Grading") }
       click_button "Start Review"
-      dismiss_notification
+
       expect(page).to have_text("Add Your Feedback")
       expect(submission_pending.reload.checklist).to eq(submission_checklist)
     end
@@ -841,7 +837,7 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       click_button "Start Review"
-      dismiss_notification
+
       expect(page).to have_content("Grade Card")
 
       within(
@@ -862,10 +858,6 @@ feature "Submission review overlay", js: true do
       end
 
       click_button "Save grades"
-
-      expect(page).to have_text("The submission has been marked as reviewed")
-
-      dismiss_notification
 
       expect(page).to have_button("Undo Grading")
 
@@ -941,7 +933,7 @@ feature "Submission review overlay", js: true do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_pending)
       click_button "Start Review"
-      dismiss_notification
+
       click_button "Write a Note"
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
@@ -955,9 +947,6 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
-      expect(page).to have_text("The submission has been marked as reviewed")
-
-      dismiss_notification
       new_notes = CoachNote.where(note: note)
 
       expect(new_notes.count).to eq(1)
@@ -973,7 +962,7 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       click_button "Start Review"
-      dismiss_notification
+
       click_button "Write a Note"
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
@@ -987,9 +976,6 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
-      expect(page).to have_text("The submission has been marked as reviewed")
-
-      dismiss_notification
       new_notes = CoachNote.where(note: note)
 
       expect(new_notes.count).to eq(2)
@@ -1218,7 +1204,7 @@ feature "Submission review overlay", js: true do
                      )
 
       click_button "Start Review"
-      dismiss_notification
+
       expect(page).to have_content("You can review the submission until")
       expect(page).to have_content("Add Your Feedback")
       add_markdown("Some feedback about the submission.")
@@ -1381,7 +1367,7 @@ feature "Submission review overlay", js: true do
                      referrer:
                        review_timeline_event_path(submission_reviewed_old)
         click_button "Start Review"
-        dismiss_notification
+
         within(
           "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
         ) { find("button[title='Good']").click }
@@ -1391,8 +1377,6 @@ feature "Submission review overlay", js: true do
         ) { find("button[title='Bad']").click }
 
         click_button "Save grades"
-
-        expect(page).to have_text("The submission has been marked as reviewed")
 
         click_link "Submission #1"
 
@@ -1474,7 +1458,6 @@ feature "Submission review overlay", js: true do
       click_link "Submission #2"
 
       click_button "Start Review"
-      dismiss_notification
 
       # New list of evaluation criteria are shown for pending submissions
       expect(page).to have_text(evaluation_criterion_1.name)
@@ -1486,10 +1469,6 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
-
-      expect(page).to have_text("The submission has been marked as reviewed")
-
-      dismiss_notification
     end
   end
 
@@ -1586,7 +1565,6 @@ feature "Submission review overlay", js: true do
       expect(submission_reviewed.startup_feedback.count).to eq(1)
 
       click_button "Start Review"
-      dismiss_notification
 
       within("div[data-title='feedback-section']") do
         expect(page).to have_text(coach.name)

@@ -809,7 +809,6 @@ en:
       reviewed_by: Reviewed By
       search:
         assigned_to: "assigned to:"
-        level: "level:"
         personal_coach: "personal coach:"
         reviewed_by: "reviewed by:"
         status: "status: "

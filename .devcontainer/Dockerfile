@@ -3,7 +3,6 @@ ARG VARIANT=2.7
 FROM mcr.microsoft.com/vscode/devcontainers/ruby:0-${VARIANT}
 
 # Install Rails
-RUN gem install rails webdrivers
 RUN gem install bundler -v '2.2.33'
 
 # Default value to allow debug server to serve content over GitHub Codespace's port forwarding service

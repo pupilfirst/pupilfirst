@@ -1,40 +1,33 @@
-<% school_name = @user.school.name
+<%
+  school_name = @user.school.name
   recipient_name = @user.name
-
-  def article(count)
-    count > 1 ? t("shared.are") : t("shared.is")
-  end %>
-
+%>
 <% content_for :salutation do %>
   <%= t("shared.salutation_name", name: recipient_name) %>
 <% end %>
-
 <% content_for :body do %>
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-      <%= t("mailers.user.daily_digest.body.main_html", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count) %>
+      <%= t("mailers.user.daily_digest.body.main_html", count: pending_submissions_count) %>
     </p>
-
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
       <% @updates[:coach].each do |stats| %>
         <li style="padding: 2px 0px;">
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: "color: #6025C0; border-radius: 8px; padding: 0px;" %>
           <span><strong><%= stats[:pending_submissions] %></strong>
             <% if stats[:is_team_coach] %>
-              <%= stats[:pending_submissions_for_coach] == 0 ? t("mailers.user.daily_digest.body.assigned_none") : t("mailers.user.daily_digest.body.assigned", stats: stats[:pending_submissions_for_coach]) %>
+              <%= t("mailers.user.daily_digest.body.assigned", count: stats[:pending_submissions_for_coach]) %>
             <% end %>
           </span>
         </li>
       <% end %>
     </ul>
   <% end %>
-
   <% if @updates[:community_new].present? %>
     <p style="margin-top: 15px;">
       <%= t("mailers.user.daily_digest.body.latest_topics") %>
     </p>
-
     <% @updates[:community_new].each do |topic| %>
       <div>
         <%= link_to topic[:title], topic_url(topic[:id]) %>
@@ -49,12 +42,10 @@
       </div>
     <% end %>
   <% end %>
-
   <% if @updates[:community_reactivated].present? %>
     <p style="margin-top: 15px;">
       <%= t("mailers.user.daily_digest.body.older") %>
     </p>
-
     <% @updates[:community_reactivated].each do |topic| %>
       <div>
         <%= link_to topic[:title], topic_url(topic[:id]) %>
@@ -70,12 +61,10 @@
       </div>
     <% end %>
   <% end %>
-
   <p style="font-size: 75%; margin-top: 15px;">
     <%= t("mailers.user.daily_digest.body.control_emails_html", link_to: link_to(t("mailers.user.daily_digest.body.link_to"), edit_user_url)) %>
   </p>
 <% end %>
-
 <% content_for(:signature) do %>
   <div></div>
 <% end %>

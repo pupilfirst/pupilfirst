@@ -403,7 +403,7 @@ let showCourse = course => {
           )}
           <p className="text-sm px-4 py-2 text-gray-600"> {str(Course.description(course))} </p>
         </div>
-        <div className="grid grid-cols-3 divide-x py-4 divide-gray-300 ">
+        <div className="grid grid-cols-3 py-4 divide-x rtl:divide-x-reverse divide-gray-300">
           <Spread props={"data-t": `${Course.name(course)} cohorts count`}>
             <div className="flex-1 px-4">
               <p className="text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>

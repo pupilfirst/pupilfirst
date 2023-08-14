@@ -14,7 +14,33 @@
   </section>
   <section class="bg-white">
     <div class="max-w-5xl mx-auto p-5">
-      <div class="w-full p-5 bg-gray-50 rounded-lg">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5">
+        <div class="col-span-2 p-5 bg-gray-50 rounded-lg">
+          <h2 class="font-semibold"><%= t('.targets_overview') %></h2>
+          <div aria-label="target-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
+            <%= render 'donut_chart', color: 'purple', percentage: @presenter.target_completion_percentage %>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_targets_completed') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.targets_completed', completed: @presenter.targets_completed, total: @presenter.total_targets) %></p>
+          </div>
+        </div>
+        <% if @presenter.average_grades.any? %>
+          <div class="col-span-4 flex flex-col p-5 bg-gray-50 rounded-lg mt-5 md:mt-0">
+            <h2 class="font-semibold"><%= t('.average_grades') %></h2>
+            <div class="flex flex-wrap gap-5 flex-1">
+              <% @presenter.average_grades.each do |average_grade| %>
+                <div class="flex flex-col flex-1 p-4 mt-4 border rounded-lg items-center justify-center bg-white">
+                  <div class="flex flex-col gap-4 items-center w-12">
+                    <%= render 'pie_chart', percentage: average_grade[:percentage]  %>
+                    <span class="text-xl font-semibold"><%= average_grade[:average_grade].to_s.sub(/\.?0+$/, '') %>/<%= average_grade[:max_grade] %></span>
+                  </div>
+                  <p class="text-sm font-medium text-gray-500 text-center"><%= average_grade[:name] %></p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="w-full p-5 bg-gray-50 rounded-lg mt-5">
         <% stats = @presenter.milestone_completion_stats %>
         <div class="flex justify-between">
           <p class="text-sm font-semibold"><%= 'Milestone Targets Completion Status' %></p>
@@ -54,32 +80,6 @@
             </div>
           <% end %>
         </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5 mt-5">
-        <div class="col-span-2 p-5 bg-gray-50 rounded-lg">
-          <h2 class="font-semibold"><%= t('.targets_overview') %></h2>
-          <div aria-label="target-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
-            <%= render 'donut_chart', color: 'purple', percentage: @presenter.target_completion_percentage %>
-            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_targets_completed') %></p>
-            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.targets_completed', completed: @presenter.targets_completed, total: @presenter.total_targets) %></p>
-          </div>
-        </div>
-        <% if @presenter.average_grades.any? %>
-          <div class="col-span-4 flex flex-col p-5 bg-gray-50 rounded-lg mt-5 md:mt-0">
-            <h2 class="font-semibold"><%= t('.average_grades') %></h2>
-            <div class="flex flex-wrap gap-5 flex-1">
-              <% @presenter.average_grades.each do |average_grade| %>
-                <div class="flex flex-col flex-1 p-4 mt-4 border rounded-lg items-center justify-center bg-white">
-                  <div class="flex flex-col gap-4 items-center w-12">
-                    <%= render 'pie_chart', percentage: average_grade[:percentage]  %>
-                    <span class="text-xl font-semibold"><%= average_grade[:average_grade].to_s.sub(/\.?0+$/, '') %>/<%= average_grade[:max_grade] %></span>
-                  </div>
-                  <p class="text-sm font-medium text-gray-500"><%= average_grade[:name] %></p>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
       </div>
       <% if @presenter.coach_notes.exists? %>
         <h2 class="text-base md:text-xl font-semibold mt-8"><%= t("shared.notes") %></h2>

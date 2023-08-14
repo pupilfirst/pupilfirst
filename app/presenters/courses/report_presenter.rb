@@ -13,22 +13,12 @@ module Courses
     def props
       {
         student_id: @student.id,
-        levels: levels,
         coaches: coaches,
         team_student_ids: @student.team_student_ids
       }
     end
 
     private
-
-    def levels
-      @course.levels.map do |level|
-        level
-          .attributes
-          .slice("id", "name", "number")
-          .merge(unlocked: level.unlocked?)
-      end
-    end
 
     def coaches
       team_coaches = @student.faculty

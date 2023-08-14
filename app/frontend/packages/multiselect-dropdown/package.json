@@ -34,16 +34,16 @@
   },
   "devDependencies": {
     "parcel": "^2.8.3",
-    "rescript": "9.1.4",
+    "rescript": "10.1.4",
     "tailwindcss": "^3.3.1"
   },
   "dependencies": {
     "@pupilfirst/pf-icon": "^2.0.0",
     "@rescript/react": "^0.10.3",
-    "bs-webapi": "^0.19.1",
     "fuse.js": "^6.6.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "rescript-webapi": "^0.8.0"
   },
   "scripts": {
     "dev": "parcel index.html",

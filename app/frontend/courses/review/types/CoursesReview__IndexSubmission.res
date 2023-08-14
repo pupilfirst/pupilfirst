@@ -15,7 +15,6 @@ type t = {
   userNames: string,
   status: option<status>,
   teamName: option<string>,
-  levelNumber: int,
   reviewer: option<reviewerInfo>,
   milestoneNumber: option<int>,
 }
@@ -23,7 +22,6 @@ type t = {
 let id = t => t.id
 let title = t => t.title
 let createdAt = t => t.createdAt
-let levelNumber = t => t.levelNumber
 let userNames = t => t.userNames
 let teamName = t => t.teamName
 let reviewer = t => t.reviewer
@@ -52,7 +50,6 @@ let make = (
   ~userNames,
   ~status,
   ~teamName,
-  ~levelNumber,
   ~reviewer,
   ~milestoneNumber,
 ) => {
@@ -62,7 +59,6 @@ let make = (
   userNames: userNames,
   status: status,
   teamName: teamName,
-  levelNumber: levelNumber,
   reviewer: reviewer,
   milestoneNumber: milestoneNumber,
 }
@@ -90,7 +86,6 @@ let makeFromJS = submission => {
     ~userNames=submission["userNames"],
     ~status,
     ~teamName=submission["teamName"],
-    ~levelNumber=submission["levelNumber"],
     ~reviewer=Belt.Option.map(submission["reviewer"], makeReviewerInfo),
     ~milestoneNumber=submission["milestoneNumber"],
   )

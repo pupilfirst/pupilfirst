@@ -375,6 +375,7 @@ let make = (
           value=state.filterString
           onChange={filterString => send(UpdateFilterString(filterString))}
           placeholder={filterPlaceholder(selectedStatus)}
+          defaultOptions={unselected(selectedStatus)}
         />
       </div>
       {submissionsSorter(sortDirection, updateSortDirectionCB)}

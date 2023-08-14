@@ -8,8 +8,6 @@ class SubmissionDetailsResolver < ApplicationQuery
       target_id: target.id,
       target_title: target.title,
       students: students_data,
-      level_number: level.number,
-      level_id: level.id,
       team_name: team_name,
       submission_reports: submission.submission_reports,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
@@ -17,7 +15,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       review_checklist: review_checklist,
       inactive_students: inactive_students,
       coaches: coaches,
-      course_id: level.course_id,
+      course_id: target.course.id,
       created_at: submission.created_at,
       preview: preview?,
       reviewer_details: reviewer_details,
@@ -87,10 +85,6 @@ class SubmissionDetailsResolver < ApplicationQuery
         .as_json(only: evaluation_criteria_fields)
 
     (target_criteria + submission_criteria).uniq
-  end
-
-  def level
-    @level ||= target.level
   end
 
   def students

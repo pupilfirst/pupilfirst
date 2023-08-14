@@ -1173,10 +1173,10 @@ let make = (
       }
     }
 
-    Window.addEventListener("beforeunload", handleBeforeUnload, window)
+    Window.addEventListener(window, "beforeunload", handleBeforeUnload)
 
     let removeEventListener = () => {
-      Window.removeEventListener("beforeunload", handleBeforeUnload, window)
+      Window.removeEventListener(window, "beforeunload", handleBeforeUnload)
     }
 
     Some(removeEventListener)

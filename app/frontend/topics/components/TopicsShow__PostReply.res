@@ -17,7 +17,7 @@ let avatar = user => {
 
 let navigateToPost = postId => {
   let elementId = "post-show-" ++ postId
-  let element = Webapi.Dom.document |> Webapi.Dom.Document.getElementById(elementId)
+  let element = Webapi.Dom.document -> Webapi.Dom.Document.getElementById(elementId)
   switch element {
   | Some(e) =>
     {

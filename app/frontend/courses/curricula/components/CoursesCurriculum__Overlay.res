@@ -117,7 +117,7 @@ let tabClasses = (selection, tab) =>
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
-    let element = Webapi.Dom.document |> Webapi.Dom.Document.getElementById("auto-verify-target")
+    let element = Webapi.Dom.document -> Webapi.Dom.Document.getElementById("auto-verify-target")
     switch element {
     | Some(e) =>
       Webapi.Dom.Element.scrollIntoView(e)
@@ -490,7 +490,7 @@ let performQuickNavigation = (send, _event) => {
   {
     open // Scroll to the top of the overlay before pushing the new URL.
     Webapi.Dom
-    switch document |> Document.getElementById("target-overlay") {
+    switch document -> Document.getElementById("target-overlay") {
     | Some(element) => Webapi.Dom.Element.setScrollTop(element, 0.0)
     | None => ()
     }
@@ -524,7 +524,7 @@ let navigationLink = (direction, url, send) => {
 let scrollOverlayToTop = _event => {
   let element = {
     open Webapi.Dom
-    document |> Document.getElementById("target-overlay")
+    document -> Document.getElementById("target-overlay")
   }
   element->Belt.Option.mapWithDefault((), element => element->Webapi.Dom.Element.setScrollTop(0.0))
 }

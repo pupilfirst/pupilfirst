@@ -436,6 +436,7 @@
 .target-group__header-container:hover .target-group__group-reorder-up {
   transform: translateY(0px);
   @apply text-gray-600;
+  text-align: right;
 }
 
 .target-group__header-container:hover .target-group__group-reorder-down {

@@ -14,7 +14,7 @@ PreCommit:
   Stylelint:
     enabled: true
     command: ["yarn", "run", "--silent", "stylelint"]
-    required_executable: "./node_modules/stylelint/bin/stylelint.js"
+    required_executable: "./node_modules/stylelint/bin/stylelint.mjs"
   TrailingWhitespace:
     enabled: true
     exclude:

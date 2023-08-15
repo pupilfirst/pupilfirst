@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_28_092206) do
+ActiveRecord::Schema.define(version: 2023_08_14_161826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -507,11 +507,8 @@ ActiveRecord::Schema.define(version: 2023_05_28_092206) do
 
   create_table "school_admins", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "school_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["school_id"], name: "index_school_admins_on_school_id"
-    t.index ["user_id", "school_id"], name: "index_school_admins_on_user_id_and_school_id", unique: true
     t.index ["user_id"], name: "index_school_admins_on_user_id"
   end
 
@@ -894,7 +891,6 @@ ActiveRecord::Schema.define(version: 2023_05_28_092206) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "school_admins", "schools"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"

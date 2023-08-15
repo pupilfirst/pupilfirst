@@ -244,7 +244,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
           className="flex flex-col md:flex-row items-start md:items-center font-medium leading-snug">
           {Target.milestone(target)
             ? <div
-                className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 px-1.5 md:px-2 py-1 rounded-md mr-2">
+                className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-300 px-1.5 md:px-2 py-1 rounded-md mr-2">
                 <Icon className="if i-milestone-solid text-sm" />
                 <span className="ms-1"> {t("milestone_target_label") |> str} </span>
               </div>

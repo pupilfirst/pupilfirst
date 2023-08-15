@@ -30,10 +30,10 @@ type action =
   | UpdateSortDirection(sortDirection)
 
 let buttonClasses = selected =>
-  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
+  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none  md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
-      : ""
+      : "md:border-transparent"
   )
 
 let reducer = (state, action) =>

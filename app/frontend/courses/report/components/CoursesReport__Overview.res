@@ -120,32 +120,29 @@ let milestoneTargetsCompletionStatus = overview => {
     ),
   )
 
-  <div className="flex items-center space-x-4 flex-shrink-0">
+  <div className="flex items-center gap-2 flex-shrink-0">
     <p className="text-xs font-medium text-gray-500">
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
+      <span className="px-2 text-gray-300"> {"|"->str} </span>
+      {milestoneTargetCompletionPercentage ++ "% completed" |> str}
     </p>
-    <div className="flex items-center space-x-1">
-      <p className="text-center text-xs font-medium rounded-sm px-1 bg-gray-200">
-        {milestoneTargetCompletionPercentage ++ "%" |> str}
-      </p>
-      <div>
-        <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
-          <path
-            className="courses-milestone-complete__doughnut-chart-bg "
-            d="M18 2.0845
+    <div>
+      <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
+        <path
+          className="courses-milestone-complete__doughnut-chart-bg "
+          d="M18 2.0845
         a 15.9155 15.9155 0 0 1 0 31.831
         a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-          <path
-            className="courses-milestone-complete__doughnut-chart-stroke"
-            strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
-            d="M18 2.0845
+        />
+        <path
+          className="courses-milestone-complete__doughnut-chart-stroke"
+          strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
+          d="M18 2.0845
         a 15.9155 15.9155 0 0 1 0 31.831
         a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-        </svg>
-      </div>
+        />
+      </svg>
     </div>
   </div>
 }
@@ -309,22 +306,20 @@ let make = (~overviewData, ~coaches) =>
               ->Js.Array2.map(data => {
                 <a
                   href={"/targets/" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
-                  className="flex col-span-1 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
-                  <div className="flex items-center">
-                    <p className="text-sm font-semibold mr-2">
+                  className="flex gap-2 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold">
                       {("M" ++
                       string_of_int(
                         CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
                       ))->str}
                     </p>
-                    <div
-                      className="flex-1 text-sm truncate max-w-[24ch] sm:max-w-[40ch] md:max-w-[32ch] lg:max-w-[56ch] 2xl:max-w-[64ch]">
-                      <p className="text-ellipsis overflow-hidden">
-                        {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
-                      </p>
-                    </div>
+                    <p
+                      className="max-w-[16ch] sm:max-w-[40ch] md:max-w-[32ch] lg:max-w-[56ch] 2xl:max-w-[64ch] truncate text-sm">
+                      {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
+                    </p>
                   </div>
-                  <div className="flex-shrink-0 me-2">
+                  <div className="flex-shrink-0">
                     <span
                       className={"text-xs font-medium " ++ {
                         data->CoursesReport__MilestoneTargetCompletionStatus.completed

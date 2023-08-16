@@ -13,7 +13,6 @@ module PagedStudents = Pagination.Make(Item)
 type state = {
   loading: LoadingV2.t,
   students: PagedStudents.t,
-  levels: array<Level.t>,
   totalEntriesCount: int,
 }
 
@@ -31,7 +30,6 @@ let reducer = (state, action) =>
     }
 
     {
-      ...state,
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
       totalEntriesCount: totalEntriesCount,
@@ -40,7 +38,6 @@ let reducer = (state, action) =>
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
   }
 
-module LevelFragment = Shared__Level.Fragment
 module CohortFragment = Cohort.Fragment
 module AdminUserFragment = Admin__User.Fragment
 
@@ -100,7 +97,6 @@ let getStudents = (send, courseId, cursor, params) => {
 let computeInitialState = () => {
   loading: LoadingV2.empty(),
   students: Unloaded,
-  levels: [],
   totalEntriesCount: 0,
 }
 

@@ -4,9 +4,6 @@ type rec t =
   | CourseComplete
   | AccessEnded
   | Nothing
-and currentLevelNumber = int
-and minimumRequiredLevelNumber = int
-and someSubmissionsRejected = bool
 
 @module("../images/course-ended.svg") external courseEndedImage: string = "default"
 @module("../images/course-complete.svg") external courseCompleteImage: string = "default"

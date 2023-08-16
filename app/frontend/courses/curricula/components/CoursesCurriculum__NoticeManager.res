@@ -50,14 +50,6 @@ let accessEndedMessage = () =>
     (),
   )
 
-let teamMembersPendingMessage = () =>
-  showNotice(
-    ~title=t("team_members_pending_title"),
-    ~description=t("team_members_pending_description"),
-    ~notice=Notice.TeamMembersPending,
-    (),
-  )
-
 @react.component
 let make = (~notice) =>
   switch notice {
@@ -65,6 +57,5 @@ let make = (~notice) =>
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompleteMessage()
   | AccessEnded => accessEndedMessage()
-  | TeamMembersPending => teamMembersPendingMessage()
   | Nothing => React.null
   }

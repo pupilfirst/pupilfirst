@@ -556,8 +556,6 @@ en:
       course_ended_title: Course Ended
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
-      team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
-      team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
       close_button: Close
       completion_tab_complete: Complete

@@ -5,9 +5,9 @@ let str = React.string
 let bubbleClasses = position => {
   let positionClass = switch position {
   | #Top => "tooltip__bubble--top"
-  | #Right => "tooltip__bubble--right"
+  | #End => "tooltip__bubble--end"
   | #Bottom => "tooltip__bubble--bottom"
-  | #Left => "tooltip__bubble--left"
+  | #Start => "tooltip__bubble--start"
   }
 
   "tooltip__bubble " ++ positionClass

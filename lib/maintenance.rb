@@ -6,7 +6,7 @@ class Maintenance
   def call(env)
     if Rails.application.secrets.maintenance_mode
       [
-        503,
+        200,
         { "Content-Type" => "text/html" },
         [
           ERB.new(

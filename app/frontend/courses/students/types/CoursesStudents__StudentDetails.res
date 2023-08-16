@@ -20,7 +20,6 @@ type t = {
   averageGrades: array<averageGrade>,
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
-  levels: array<Shared__Level.t>,
   milestoneTargetsCompletionStatus: array<CoursesStudents__MilestoneTargetsCompletionStatus.t>,
   courseId: string,
 }
@@ -34,8 +33,6 @@ let students = team => team.students
 let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
-
-let levels = t => t.levels
 
 let courseId = t => t.courseId
 
@@ -115,7 +112,6 @@ let make = (
   ~averageGrades,
   ~student,
   ~team,
-  ~levels,
   ~courseId,
   ~milestoneTargetsCompletionStatus,
 ) => {
@@ -129,7 +125,6 @@ let make = (
   averageGrades: averageGrades,
   student: student,
   team: team,
-  levels: levels,
   courseId: courseId,
   milestoneTargetsCompletionStatus: milestoneTargetsCompletionStatus,
 }

@@ -31,7 +31,6 @@ let closeOverlayLink = student => {
 }
 
 module UserDetailsFragment = UserDetails.Fragment
-module LevelFragment = Shared__Level.Fragment
 module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 module UserFragment = User.Fragment
@@ -58,9 +57,6 @@ module StudentDetailsQuery = %graphql(`
           droppedOutAt
           course {
             id
-            levels {
-              ...LevelFragment
-            }
           }
         }
         totalTargets
@@ -160,7 +156,6 @@ let getStudentDetails = (studentId, setState) => {
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
       ~courseId=response.studentDetails.student.course.id,
-      ~levels=response.studentDetails.student.course.levels->Js.Array2.map(Level.makeFromFragment),
       ~student=StudentInfo.make(
         ~id=s.id,
         ~taggings=s.taggings,
@@ -378,16 +373,6 @@ let showSocialLinks = socialLinks =>
 
 let setSelectedTab = (selectedTab, setState) =>
   setState(state => {...state, selectedTab: selectedTab})
-
-let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
-  let reached = levelNumber <= currentLevelNumber ? "student-overlay__student-level--reached" : ""
-
-  let current = levelNumber == currentLevelNumber ? " student-overlay__student-level--current" : ""
-
-  let completed = levelCompleted ? " student-overlay__student-level--completed" : ""
-
-  reached ++ (current ++ completed)
-}
 
 let addNote = (setState, studentDetails, onAddCoachNotesCB, note) => {
   onAddCoachNotesCB()

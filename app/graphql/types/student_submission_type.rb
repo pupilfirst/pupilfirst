@@ -10,10 +10,6 @@ module Types
     field :student_ids, [ID], null: false
     field :milestone_number, Integer, null: true
 
-    def level_id
-      object.target.level.id
-    end
-
     def student_ids
       object.student_ids.sort
     end

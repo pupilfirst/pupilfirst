@@ -104,7 +104,7 @@ You can set a target as a milestone by select _Yes_ against the setting question
 To decide how a student can complete a target, this interface asks you a few questions:
 
 **Are there any prerequisite targets?**<br/>
-You can select other targets from the same level as prerequisite targets. This will _lock_ the target until the student has completed the prerequisites.
+You can select other targets from the course as prerequisite targets. This will _lock_ the target until the student made a submission for reviewed prerequisite targets and completes the non reviewed prerequisite targets.
 
 **Will a coach review submissions on this target?**<br/>
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.
@@ -120,7 +120,7 @@ If you answered _No_ to whether a coach will review submissions for the target, 
 3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
 
 **How should teams tackle this target?**<br/>
-If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed milestone target, then all students in the team will need to pass for the team to [be eligible to level up](/users/taking_courses#leveling-up).
+If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed target, then all students in the team will need to pass the target individually.
 
 For those targets where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the target, the submission will be credited to all students in the team. If work on the target is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
 

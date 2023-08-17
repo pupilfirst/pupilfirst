@@ -113,11 +113,12 @@ If you would like a coach to review a submission from a student - pick _Yes_ her
 This list will appear only if you've chosen to have the target's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this target.
 
 **How do you want the student to complete the target?**<br/>
-If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of three ways by which a student can complete the target on their own:
+If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of four ways by which a student can complete the target on their own:
 
 1. Simply mark the target as completed: No additional steps.
 2. Visit a link to complete the target: You'll be asked for the link.
-3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
+3. Take a quiz to complete the target: You'll need to prepare a quiz - the process for this is detailed below.
+4. Submit a form to complete the target: You'll need to prepare a form with questions - the process for this is detailed below.
 
 **How should teams tackle this target?**<br/>
 If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed target, then all students in the team will need to pass the target individually.
@@ -137,7 +138,7 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 2. **Write Short Text:** Allows the student to write a single line of text.
 3. **Attach a Link:** Allows the student to attach a single URL.
 4. **Upload Files:** Allows the student to attach files to complete the step. Up to 3 files can be attached such a step (max 5 MB, each).
-5. **Choose from a list:** Student is shown a list of choices, from which they can pick one; you decide what the choices are.
+5. **Choose from a list:** Student is shown a list of choices, from which they can pick one; you decide what the choices are. This now supports multiple selections you can configure it by checking the _Allow multiple selections_ checkbox.
 6. **Record Audio:** Allows student to record an audio with a size limit of 5MB
 
 Here's an example target consisting, of four steps to complete the target:
@@ -150,7 +151,7 @@ You can also change the order of steps, remove a particular step, or even duplic
 
 Here are some other points to keep in mind:
 
-1. The maximum number of steps allowed in a target is 15.
+1. The maximum number of steps allowed in a target is 25.
 2. You are allowed to create an evaluated target without any steps. However, this would mean that a student can _submit_ work on a target without actually providing any information. This would still require the coach to review an empty submission. This option can be used for cases where the work in question is done _outside_ of the platform and is known to the coach.
 
 Once all steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students for each step.
@@ -168,6 +169,14 @@ If you opted to let the student answer a quiz to complete the target, then you'l
 1. The quiz supports Markdown in both questions and answers.
 2. Every question must have at least two options.
 3. You can have any number of questions.
+
+### Preparing a form
+
+If you opted to let the student submit a form to complete the target, then you'll need to prepare one:
+
+This form creation process is simillar to `Defining the steps to complete a target` process. You can add questions to the form and define the action type for each question. This form creation supports all the action types that are supported in `Defining the steps to complete a target` process.
+
+The form should have at least one question and the maximum number of questions allowed in a form is 25.
 
 ### Target visibility
 

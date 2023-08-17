@@ -299,19 +299,19 @@
 
   .dropdown__list-right:before {
     top: -7px;
-    right: 9px;
-    border-right: 7px solid transparent;
+    inset-inline-end: 9px;
+    border-inline-end: 7px solid transparent;
     border-bottom: 7px solid theme("colors.gray.300");
-    border-left: 7px solid transparent;
+    border-inline-start: 7px solid transparent;
     border-bottom-color: theme("colors.gray.300");
   }
 
   .dropdown__list-right:after {
     top: -6px;
-    right: 10px;
-    border-right: 6px solid transparent;
+    inset-block-end: 10px;
+    border-inline-end: 6px solid transparent;
     border-bottom: 6px solid theme("colors.white");
-    border-left: 6px solid transparent;
+    border-inline-start: 6px solid transparent;
   }
 
   /* Checkbox */

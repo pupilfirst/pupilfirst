@@ -78,9 +78,7 @@ let make = (~entry, ~markNotificationCB) => {
           </span>->ReactUtils.nullUnless(Entry.readAt(entry)->Belt.Option.isNone)}
         </div>
         {Entry.notifiableId(entry)->Belt.Option.isSome
-          ? <a
-              className="ms-4 outline-none"
-              href={"/notifications/" ++ Entry.id(entry)}>
+          ? <a className="ms-4 outline-none" href={"/notifications/" ++ Entry.id(entry)}>
               {str(Entry.message(entry))}
             </a>
           : <div className="ms-4"> {str(Entry.message(entry))} </div>}
@@ -94,7 +92,7 @@ let make = (~entry, ~markNotificationCB) => {
         <div
           className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 end-0 flex items-center ps-4 pe-4 md:pe-8 transition ease-in-out duration-150">
           {ReactUtils.nullIf(
-            <Tooltip tip={str(t("mark_read"))} position=#Left>
+            <Tooltip tip={str(t("mark_read"))} position=#Start>
               <button
                 disabled=saving
                 ariaLabel={t("mark_read")}

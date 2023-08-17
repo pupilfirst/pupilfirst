@@ -24,7 +24,7 @@ This version introduces a fundamental shift in our course structure, decoupling 
 
 ### 2023.2
 
-This version renames `founder` to `student` across the codebase. This change is not backwards compatible.
+This version renames the `founders` table to `students` and updates all related usages throughout the codebase. For most installations of Pupilfirst LMS, this should be a seamless upgrade. However, if you've made customizations or have used any internal APIs, you should check for any references to `founders` and update them to `students`.
 
 ### 2023.1
 

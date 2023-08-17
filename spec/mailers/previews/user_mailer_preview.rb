@@ -1,6 +1,6 @@
 class UserMailerPreview < ActionMailer::Preview
   def new_post
-    UserMailer.new_post(Post.order('RANDOM()').first, Faculty.last.user)
+    UserMailer.new_post(Post.order("RANDOM()").first, Faculty.last.user)
   end
 
   def daily_digest
@@ -21,9 +21,9 @@ class UserMailerPreview < ActionMailer::Preview
     host = school.domains.primary.fqdn
     delete_account_url =
       Rails.application.routes.url_helpers.delete_account_url(
-        token: 'DELETE_ACCOUNT_TOKEN',
+        token: "DELETE_ACCOUNT_TOKEN",
         host: host,
-        protocol: 'https'
+        protocol: "https"
       )
     UserMailer.delete_account_token(user, delete_account_url)
   end
@@ -38,7 +38,7 @@ class UserMailerPreview < ActionMailer::Preview
   def account_deletion_notification
     UserMailer.account_deletion_notification(
       User.last,
-      'https://test.school.com',
+      "https://test.school.com",
       24
     )
   end
@@ -78,18 +78,21 @@ class UserMailerPreview < ActionMailer::Preview
         author: Faker::Name.name,
         type: update_type,
         community_id: rand(10),
-        community_name: Faker::Lorem.words(number: 2).join(' ').titleize
+        community_name: Faker::Lorem.words(number: 2).join(" ").titleize
       }
     end
   end
 
   def updates_for_coach
     (1..3).map do |_id|
+      pending_submissions = rand(1..9)
+
       {
         course_id: rand(1..9),
         course_name: Faker::Name.name,
-        pending_submissions: rand(1..9),
-        pending_submissions_for_coach: rand(0..3)
+        is_team_coach: true,
+        pending_submissions: pending_submissions,
+        pending_submissions_for_coach: [rand(0..3), pending_submissions].min
       }
     end
   end

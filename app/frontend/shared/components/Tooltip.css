@@ -45,35 +45,35 @@
   transform: translateX(-50%);
 }
 
-.tooltip__bubble--left {
+.tooltip__bubble--start {
   top: 50%;
-  right: 100%;
-  padding-right: 9px;
+  inset-inline-end: 100%;
+  padding-inline-end: 9px;
   transform: translateY(-50%);
 }
 
-.tooltip__bubble--left::after {
-  border-left: 9px solid #453c52;
+.tooltip__bubble--start::after {
+  border-inline-start: 9px solid #453c52;
   border-top: 9px solid transparent;
   border-bottom: 9px solid transparent;
   top: 50%;
-  right: 0;
+  inset-inline-end: 0;
   transform: translateY(-50%);
 }
 
-.tooltip__bubble--right {
+.tooltip__bubble--end {
   top: 50%;
-  left: 100%;
-  padding-left: 9px;
+  inset-inline-start: 100%;
+  padding-inline-start: 9px;
   transform: translateY(-50%);
 }
 
-.tooltip__bubble--right::after {
-  border-right: 9px solid #453c52;
+.tooltip__bubble--end::after {
+  border-inline-end: 9px solid #453c52;
   border-top: 9px solid transparent;
   border-bottom: 9px solid transparent;
   top: 50%;
-  left: 0;
+  inset-inline-start: 0;
   transform: translateY(-50%);
 }
 
@@ -81,6 +81,6 @@
   width: 100%;
 }
 
-.tooltip__trigger:hover+.tooltip__bubble {
+.tooltip__trigger:hover + .tooltip__bubble {
   display: block;
 }

@@ -150,13 +150,6 @@ module Types
       argument :student_id, ID, required: true
     end
 
-    resolved_field :student_distribution,
-                   [Types::DistributionInLevelType],
-                   null: false do
-      argument :course_id, ID, required: true
-      argument :filter_string, String, required: false
-    end
-
     resolved_field :topics, Types::TopicType.connection_type, null: false do
       argument :community_id, ID, required: true
       argument :resolution, Types::TopicResolutionFilterType, required: true

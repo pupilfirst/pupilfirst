@@ -176,46 +176,6 @@ module Organisations
           .where(targets: { id: current_course_targets })
     end
 
-    def completed_level_ids
-      @completed_level_ids ||=
-        begin
-          required_targets_by_level =
-            Target
-              .live
-              .joins(:target_group)
-              .where(
-                target_groups: {
-                  milestone: true,
-                  level_id: levels.select(:id)
-                }
-              )
-              .distinct(:id)
-              .pluck(:id, "target_groups.level_id")
-              .each_with_object(
-                {}
-              ) do |(target_id, level_id), required_targets_by_level|
-                required_targets_by_level[level_id] ||= []
-                required_targets_by_level[level_id] << target_id
-              end
-
-          passed_target_ids =
-            TimelineEvent
-              .joins(:students)
-              .where(students: { id: student.id })
-              .where.not(passed_at: nil)
-              .distinct(:target_id)
-              .pluck(:target_id)
-
-          levels
-            .pluck(:id)
-            .select do |level_id|
-              (
-                (required_targets_by_level[level_id] || []) - passed_target_ids
-              ).empty?
-            end
-        end
-    end
-
     def submissions_for_grades
       latest_submissions
         .includes(:students, :target)

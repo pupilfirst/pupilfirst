@@ -1,6 +1,6 @@
 class CohortsController < ApplicationController
   before_action :authenticate_user!
-  layout "student_course_v2"
+  layout "student_course"
 
   # GET /cohorts/:id
   def show

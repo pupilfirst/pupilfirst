@@ -1082,7 +1082,7 @@ let pageTitle = (number, submissionDetails) => {
   t(
     ~variables=[
       ("submission_number", string_of_int(number)),
-      ("level_number", SubmissionDetails.levelNumber(submissionDetails)),
+      ("target_title", SubmissionDetails.targetTitle(submissionDetails)),
       ("name", studentOrTeamName),
     ],
     "page_title",

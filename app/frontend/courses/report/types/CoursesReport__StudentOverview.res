@@ -11,7 +11,6 @@ type t = {
   targetsCompleted: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
-  completedLevelIds: array<string>,
   milestoneTargetsCompletionStatus: array<CoursesReport__MilestoneTargetCompletionStatus.t>,
 }
 
@@ -28,8 +27,6 @@ let quizzesAttempted = t => t.quizScores->Array.length
 
 let quizScores = t => t.quizScores
 let averageGrades = t => t.averageGrades
-
-let completedLevelIds = t => t.completedLevelIds
 
 let makeAverageGrade = gradesData =>
   gradesData->Js.Array2.map(gradeData => {
@@ -83,7 +80,6 @@ let makeFromJs = (id, studentData) => {
   targetsCompleted: studentData["targetsCompleted"],
   quizScores: studentData["quizScores"],
   averageGrades: studentData["averageGrades"]->makeAverageGrade,
-  completedLevelIds: studentData["completedLevelIds"],
   targetsPendingReview: studentData["targetsPendingReview"],
   milestoneTargetsCompletionStatus: studentData["milestoneTargetsCompletionStatus"]->CoursesReport__MilestoneTargetCompletionStatus.makeFromJs,
 }

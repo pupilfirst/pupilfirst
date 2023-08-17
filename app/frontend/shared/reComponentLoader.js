@@ -2,7 +2,6 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 
 import { makeFromJson as Avatar } from "~/shared/Avatar.bs.js";
-import { makeFromJson as LevelProgressBar } from "~/shared/components/LevelProgressBar.bs.js";
 import { makeFromJson as SimpleDropdownFilter } from "~/shared/components/SimpleDropdownFilter.bs.js";
 import { makeFromJson as CalendarsIndex__DatePicker } from "~/admin/courses/calendars_index/CalendarsIndex__DatePicker.bs.js";
 import { makeFromJson as MarkdownBlock } from "~/shared/components/MarkdownBlock.bs.js";
@@ -15,8 +14,6 @@ const selectComponent = (name) => {
   switch (name) {
     case "Avatar":
       return Avatar;
-    case "LevelProgressBar":
-      return LevelProgressBar;
     case "SimpleDropdownFilter":
       return SimpleDropdownFilter;
     case "CalendarsIndex__DatePicker":

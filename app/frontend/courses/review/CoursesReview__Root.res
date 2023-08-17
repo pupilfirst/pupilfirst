@@ -19,7 +19,6 @@ type loading = Unloaded | Loading | Loaded
 type state = {
   loading: LoadingV2.t,
   submissions: PagedSubmission.t,
-  levels: array<Level.t>,
   coaches: array<Coach.t>,
   targets: array<TargetInfo.t>,
   filterInput: string,
@@ -39,7 +38,6 @@ type action =
       array<IndexSubmission.t>,
       int,
       option<TargetInfo.t>,
-      option<Level.t>,
       array<Coach.t>,
     )
   | LoadCoaches(array<Coach.t>)
@@ -66,7 +64,7 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
-  | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, coaches) =>
+  | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, coaches) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedSubmission.toArray(state.submissions), newTopics)
     | Reloading(_) => newTopics
@@ -80,9 +78,6 @@ let reducer = (state, action) =>
       targets: ArrayUtils.isEmpty(state.targets)
         ? Belt.Option.mapWithDefault(target, [], t => [t])
         : state.targets,
-      levels: ArrayUtils.isEmpty(state.levels)
-        ? Belt.Option.mapWithDefault(level, [], t => [t])
-        : state.levels,
       coaches: ArrayUtils.isEmpty(state.coaches) ? coaches : state.coaches,
     }
   | LoadCoaches(coaches) => {
@@ -128,7 +123,6 @@ module SubmissionsQuery = %graphql(`
           feedbackSent,
           createdAt,
           teamName,
-          levelNumber
           reviewer {
             name,
             assignedAt,
@@ -199,7 +193,6 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   |> Js.Promise.then_(response => {
     let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
     let coaches = Js.Array2.map(response["coaches"], Coach.makeFromJs)
-    let level = OptionUtils.map(Level.makeFromJs, response["level"])
     send(
       LoadSubmissions(
         response["submissions"]["pageInfo"]["endCursor"],
@@ -207,7 +200,6 @@ let getSubmissions = (send, courseId, cursor, filter) => {
         Js.Array.map(IndexSubmission.makeFromJS, response["submissions"]["nodes"]),
         response["submissions"]["totalCount"],
         target,
-        level,
         coaches,
       ),
     )
@@ -390,10 +382,7 @@ let unSelectedStatus = filter =>
 let nameOrEmailFilter = state => {
   let input = state.filterInput->String.trim
   let firstWord = Js.String2.split(input, " ")[0]
-  input == "" ||
-  firstWord == tc("search.level") ||
-  firstWord == tc("search.target") ||
-  firstWord == tc("search.assigned_to")
+  input == "" || firstWord == tc("search.target") || firstWord == tc("search.assigned_to")
     ? []
     : [Selectable.nameOrEmail(input)]
 }
@@ -654,7 +643,6 @@ let shortCutClasses = selected =>
 let computeInitialState = () => {
   loading: LoadingV2.empty(),
   submissions: Unloaded,
-  levels: [],
   coaches: [],
   targets: [],
   filterLoading: false,

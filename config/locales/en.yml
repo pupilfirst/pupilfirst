@@ -556,8 +556,6 @@ en:
       course_ended_title: Course Ended
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
-      team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
-      team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
       close_button: Close
       completion_tab_complete: Complete
@@ -742,7 +740,7 @@ en:
       hide_test_report_button: Hide Test Report
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -809,7 +807,6 @@ en:
       reviewed_by: Reviewed By
       search:
         assigned_to: "assigned to:"
-        level: "level:"
         personal_coach: "personal coach:"
         reviewed_by: "reviewed by:"
         status: "status: "
@@ -881,12 +878,6 @@ en:
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
-    CoursesStudents__StudentsList:
-      last_seen: Last seen %{time_string}
-      no_last_seen: This student has never signed in
-      no_students: No students to show
-      personal_coaches: Personal Coaches
-      team_coaches: Team Coaches
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
@@ -1146,9 +1137,6 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold

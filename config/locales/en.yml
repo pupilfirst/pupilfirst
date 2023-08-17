@@ -1143,9 +1143,6 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold

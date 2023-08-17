@@ -1,0 +1,2882 @@
+zh-cn:
+  school:
+    targets:
+      update_action:
+        error_message: 操作无法更新，请检查YAML语法。
+  applicants:
+    enroll:
+      errors:
+        email_should_not_have_bounced: 由于我们先前发送的电子邮件被退回，您提供的电子邮件地址无法使用。
+        ensure_time_between_requests: 刚刚发送了一封电子邮件，请稍等几分钟再尝试。
+        not_a_student: 您已经成功注册了 %{course_name} 课程。请尝试登录。
+      link_expired: 那个一次性链接已经过期或者无效。如果您已经完成注册，请登录。
+      welcome: 欢迎来到%{school_name}！
+    resolve_applicant_path:
+      welcome: 欢迎来到%{school_name}！
+  calendar_events:
+    create:
+      success: 事件已成功创建！
+    create_or_update_form:
+      calendar_error: 请从列表中选择一个日历。
+      color_error: 请为活动选择一个有效的颜色。
+      invalid_url: 请输入一个有效的活动URL。
+      start_time_error: 请为活动选择一个合适的时间。
+      title_error: 请为活动输入一个有效的标题。
+    delete:
+      success: 事件已成功删除！
+    update:
+      success: 事件更新成功！
+  calendars:
+    create:
+      success: 日历创建成功！
+    update:
+      success: 日历已成功更新！
+  cohorts:
+    shared:
+      overview_link: 概述
+      students_link: 学生们
+    show:
+      distribution_heading: 学生的分级分布
+      students_completed: 学生完成了。
+      total_students: 总学生数。
+      view_all: 查看全部
+    student:
+      level_label: 等级
+      never_signed_in: 从未登录过
+      time_ago: 最后一次出现在%{time_ago}之前。
+    students:
+      distribution_heading: Level-wise student distribution
+      nothing_to_show: 没有符合所选筛选条件的学生。
+      pagination_notice: 目前显示了总共 %{count} 名这样的学生中的第 %{page_start} - %{page_end} 名。
+  communities:
+    show:
+      community_title: "%{name}社区"
+      new_topic: 新话题
+      note: 你们学校的教师可以接触到所有社区。
+      welcome: 欢迎来到这里。
+  components:
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: 添加新的队列
+      cohort:
+        label: 队列名称
+        message: 请输入一个有效的群组名称。
+        placeholder: 第一批
+      cohort_description:
+        label: 队列描述
+        message: 请输入一个有效的队列描述。
+        placeholder: 某年的第一批次
+      cohort_ends_at:
+        help: 该队列将在此日期归档。
+        label: 队列结束日期
+      update_cohort: 更新队列
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: 所有学生被选中
+      no_students_found: 没有找到学生
+      no_students_selected: 没有学生被选中。
+    AdminCoursesShared__TeamEditor:
+      add_new_team: 添加新团队
+      select_cohort:
+        label: 选择一个队伍
+        placeholder: 选择一个队伍
+      team_name:
+        label: 团队名称
+        message: 请输入一个有效的团队名称。
+        placeholder: 第一批
+      update_team: 更新团队
+    Api:
+      error_notification_body: 我们的团队已经收到了这个错误通知。请重新加载页面并再次尝试。
+      error_notification_title: 发生了一个意外的错误。
+    AppRouter__Dropdown:
+      more: 更多
+      show_more_links: 展示更多链接
+    AppRouter__Header:
+      edit_profile: 编辑个人资料
+      sign_in: 登录
+      sign_out: 退出登录
+    AppRouter__Nav:
+      calendar: 日历
+      close_sidebar: 关闭侧边栏。
+      curriculum: 课程
+      leaderboard: 排行榜
+      report: 报告
+      review: 评论
+      sign_out: 退出登录
+      students: 学生们
+    CalendarsIndex__DatePicker:
+      today: 今天
+    ClickToCopy:
+      copied: 已拷贝
+      copy: 拷贝
+    CoachesIndex__Root:
+      button_about: 关于
+      button_connect: 连接
+      filter_input_label: 筛选按
+      filter_input_placeholder: 搜索姓名，或选择一门课程。
+      filter_label_name_like: 根据名字
+      filter_label_teaches_course: 教授课程
+      filter_result_empty: 您所选择的筛选条件没有匹配到任何教师。请更改筛选条件后再试一次。
+      filter_search_string_course: 教授课程 %{name}
+      heading: 教师们
+    CohortsActions__Root:
+      button_text: 合并和删除
+      edit: 编辑
+      merge_heading_html: 将<em>%{cohort_name}</em>合并到另一个群组中。
+      merge_help: 合并队列将把所选队列中的所有学生移动到目标队列中。这个操作可以用来删除不必要的队列。此操作无法撤销。
+      page_description: 团队的行动计划。
+      pick_a_cohort: 选择一个队伍
+    CohortsCreator__Root:
+      page_description: 为该课程创建一个新的学员群体。
+      page_title: 新增一批人员组合
+    CohortsDetails__Root:
+      page_description: 更新队列详情
+      page_title: 编辑 %{cohort_name}
+    CohortsIndex__Root:
+      active_cohorts: 活跃群体
+      add_new_cohort: 添加新的队列
+      all_cohorts: 所有队列
+      coaches: 教师们
+      cohort: 同伴群体
+      cohorts: 同伴、同事、队友、同学、同年级学生、同期人员、同辈人
+      cohorts_end_date: 队列结束日期
+      edit: 编辑
+      filter:
+        first_created: 首次创建
+        last_created: 最近创建的
+        last_ending: 最后的结束
+        name: 名字
+        search_by_name: 按姓名搜索
+      load_more: 加载更多
+      no_cohorts_found: 未找到任何群体。
+      students: Students
+    CommunitiesNewTopic__Root:
+      asked_on: 在“问到”上询问
+      back: 返回
+      be_descriptive: 如果你在提问，尽量详细描述问题，这样可以更容易让他人回答。你可以使用Markdown格式化文本。
+      body: 身体
+      clear: 清除
+      count_replies_label: 回复
+      create_topic: 创建话题
+      create_topic_discussion: 创建一个新的讨论话题
+      done: 完成
+      failed_fetch_similar: 我们无法从服务器获取相似的主题！我们的团队已经收到了这个错误的通知。
+      linked_target: "关联目标："
+      missing_info: 丢失信息
+      no_category_found: 找不到ID为xx的分类。
+      no_replies: 无回复
+      not_selected: 没有选择
+      one_reply: 一个回复
+      oops: 哎呀！
+      please_reload: 请在再次尝试发布之前刷新页面。
+      redirecting: 正在转向新话题...
+      select_category: 选择分类
+      similar_topics: 相似的主题
+      title: 标题
+      title_placeholder: 新话题的标题
+      topic_body_present: 主题标题和内容必须存在。
+    CommunitiesShow__Root:
+      all_categories_button: 所有类别
+      button_load_more: 加载更多...
+      empty_topics: 这里还没有讨论。
+      filter_input_label: "按条件筛选："
+      filter_input_placeholder_categories: 按类别、解决方案或在主题中搜索进行筛选。
+      filter_input_placeholder_default: 按主题搜索或按解决方案筛选
+      sort_criterion_input_label: 按输入标签排序
+      sort_criterion_last_activity: 按活动时间排序
+      sort_criterion_posted_at: 按发布时期排序。
+      sort_criterion_views: 按观点排序
+      topic_last_updated_text: 最后更新日期
+      topic_posted_by_text: 发布者
+      topic_stats_likes:
+        one: 一个赞。
+        other: "%{count}个赞"
+      topic_stats_replies:
+        one: 一个回复。
+        other: "%{count} 条回复"
+      topic_stats_views:
+        one: 一个浏览
+        other: "%{count} 浏览"
+      topics_fully_loaded_text: 显示所有的 %{total_topics} 个主题
+      topics_partially_loaded_text: 显示 %{loaded_topics_count} 个主题中的 %{total_topics} 个主题
+      unable_find_id: 无法找到ID为"的主题类别。
+    CourseApplicants__EditForm:
+      add_as_student_button: 我作为学生添加。
+      affiliation:
+        label: 所属关系/单位
+        placeholder: Acme公司，Acme大学，等等。
+      email:
+        label: 电子邮件
+        placeholder: 学生邮箱在这里。
+      name:
+        error: 不是有效的。
+        label: 姓名
+        placeholder: 学生姓名在这里。
+      notify_students:
+        label: 通知学生，并发送给他们一个链接以登录该学校。
+      page_title: 作为学生添加
+      tabs:
+        actions: 行动
+        details: 细节
+      tags:
+        label: 标签
+      title:
+        label: 标题
+        placeholder: 学生、教师、首席执行官等。
+    CourseApplicants__Root:
+      applicants_fully_loaded_text: 显示所有 %{total_applicants} 位申请者
+      applicants_page_title: 申请人们
+      applicants_partially_loaded_text: 展示 %{loaded_applicants_count} 名申请人中的 %{total_applicants} 名申请人
+      button_load_more: 加载更多申请者...
+      empty_applicants: 你没有任何申请者！
+      filter:
+        input_label: 搜索
+        input_placeholder: 按姓名筛选和搜索申请者。
+        label:
+          search: 按姓名或电子邮件搜索
+          tag: 标签
+      onboard_as_student: 加入为学生
+      show_actions: 展示行动
+      show_details: 展示详情：
+      sort_criterion:
+        created_at: 创建时间
+        name: 名称
+        updated_at: 更新时间
+      sorter:
+        label: 按照...排序
+    CourseAuthors__Form:
+      add_new_author: 添加新作者
+      create_author: 创造作者
+      email: 电子邮件
+      email_message: 请输入有效的电子邮件地址。
+      email_placeholder: 请将电子邮件添加在这里。
+      name: 名字
+      name_message: 请输入有效的姓名。
+      name_placeholder: 请在这里填写姓名。
+      saving: 储蓄
+      update_author: 更新作者
+    CourseAuthors__Root:
+      window_confirm_post: 从作者列表中选择？
+      window_confirm_pre: 你确定要移除吗？
+    CourseCertificates__CreateDrawer:
+      certificate_base_image:
+        help: 这个基础图片必须包含一个完整的行间距，以便插入学生的姓名。
+        help_url: https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate
+        label: 证书模板
+        placeholder: 选择一个证书的模板
+      create_action: 创建新证书
+      create_button_text: 创建证书
+      name_label: 姓名
+      name_placeholder: 用于标识此证书的名称。
+      success_notification: 你现在可以编辑这个证书。
+    CourseCertificates__EditDrawer:
+      active:
+        help: 虽然你可以拥有多个证书，但只能自动颁发一个；当学生完成一门课程时，该证书将被颁发。
+        help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
+        label: 学生是否应该自动获得这个证书？
+      cannot_be_auto_issued_warning: 请注意，本课程的最后一个级别没有任何里程碑目标。只有在最后一个级别至少有一个里程碑目标时，才会自动颁发该证书。
+      edit_action: 编辑证书
+      font_size_label: 字体大小
+      margin_label: 利润空间，利润率，边际
+      name_error: 姓名不能为空。
+      name_label: 姓名
+      name_offset_top_label: 名称 偏移量（从顶部）
+      name_placeholder: 这个证书的简称
+      qr_bottom_left_label: 左下角
+      qr_bottom_right_label: 右下角
+      qr_hidden_label: 隐藏的
+      qr_position_label: 二维码位置
+      qr_scale_label: 二维码的缩放比例
+      qr_top_left_label: 左上角
+      qr_top_right_label: 右上角
+      qr_visibility:
+        help: 这将包含一个链接，指向您学校的一个页面，任何人都可以访问该页面以验证颁发的证书。
+        help_url: https://docs.pupilfirst.com/users/certificates
+        label: 添加二维码？
+      update_issued_certificates_warning:
+        one: 这个证书已经发放过一次。这些变更也将被应用到已发放的证书上。
+        other: 这个证书已经发行了%{count}次。<br/>这些更改也将应用于这%{count}份已发行的证书。
+    CourseCertificates__Root:
+      auto_issue_tag: 自动发布
+      certificate: 证书
+      create_action: 创建新证书
+      delete_button_title: 删除证书 %{name}。
+      delete_confirm: 你确定要删除这个证书吗？
+      deleting: 正在删除
+      edit_button_title: 编辑证书 %{name}
+      heading: 证书
+      issued_count:
+        one: 只发行一次。
+        other: 发行了%{count}次
+        zero: 从未发布过。
+      no_certificates: 你还没有创建任何证书！
+    CourseCoaches__EnrollmentForm:
+      add_course: 添加课程导师
+      assign_coaches: 分配教师给这门课程。
+      notification_coach_enrollment: 教师注册已成功更新。
+      search_coaches_all: 您已选择了所有教师！
+      search_coaches_empty: 没有选中的教师。
+      search_coaches_placeholder: 搜索教师
+      search_cohorts_all: 您已选择了所有的队列！
+      search_cohorts_empty: 没有选择队友
+      search_cohorts_placeholder: 搜索队伍
+      select_coaches: 选择教师
+      select_cohorts: 选择队伍
+    CourseCoaches__InfoForm:
+      no_students_assigned: 这个教师没有被分配给任何学生。您可以在编辑学生详情时直接分配教师。
+      notification_coach_updated: 教师信息已成功更新。
+      pending_submissions: 待处理的提交
+      revied_submissions: 已审核提交内容。
+      search_cohorts_all: 你已选择了所有队伍！
+      search_cohorts_empty: 没有选择队友
+      search_cohorts_placeholder: 搜索队伍
+      select_cohorts: 分配给教师的同伴：
+      students_assigned: 被指派担任教师的学生们：
+      update_cohort_assignment: 更新队列分配
+    CourseCoaches__InfoFormTeam:
+      remove_post_confirm: 从指定的团队列表中？
+      remove_pre_confirm: 您确定要移除“
+    CourseCoaches__Root:
+      assign_coaches: 分配教师给课程
+      coaches_list: 课程教师名单
+      course_empty: 课程还没有指定教师！
+      enrollment_delete_error_head_notification: 教师注册信息无法删除。
+      enrollment_delete_error_notification_body: 请再次尝试
+      enrollment_delete_notificaion_success_body: 教师注册已成功删除。
+      remove_confirm_post: 从这门课程中学到了什么？
+      remove_confirm_pre: 你确定要删除吗？
+    CourseEditor__Form:
+      actions:
+        archive_course:
+          button_text: 存档课程
+          label: 你想要归档这门课程吗？
+        clone_course:
+          button_text: 克隆课程
+          label: 你想创建一个课程的副本吗？
+        unarchive_course:
+          button_text: Unarchive Course
+          label: 你想要取消存档这门课程吗？
+      alert:
+        archive_message: 你确定要归档这门课程吗？
+        clone_course_message: 你确定要复制这门课程吗？
+        unarchive_message: 你确定要取消存档该课程吗？
+      course_about:
+        label: 关于
+        placeholder: 增加关于课程的更多细节。
+      course_description:
+        error_message: 需要提供一个描述（2-150个字符）
+        label: 课程描述
+        placeholder: 这门课程的简短描述如下：
+      course_highlights:
+        label: 课程亮点
+      course_name:
+        error_message: 需要填写姓名（2-50个字符）
+        label: 课程名称
+        placeholder: 请输入课程名称。
+      create_course: 创建课程
+      enable_public_preview_label: 允许公众查看课程大纲吗？
+      enable_public_signup_label: 是否允许公众报名参加这门课程？
+      feature_course_in_homepage_label: 学校主页上的特色课程？
+      pick_a_cohort: 选择一个队列
+      pick_default_cohort: 选择默认的队列。
+      processing_url:
+        error: 处理URL无效。
+        help: 申请者提交申请后，您可以将其发送到一个处理链接。
+        help_url: https://docs.pupilfirst.com/users/courses#processing-url
+        label: 你是否希望在录取申请者之前处理他们的信息？
+      progression_behavior:
+        help: 只有在你的课程中设有里程碑目标，要求学生提交作品供教师审阅时，才适用此规定。
+        help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
+        label: 进步行为
+        limited:
+          description_end: 没有进行审核的情况下。
+          description_start: 学生可以升级。
+          once: 一旦
+          thrice: 三次
+          title: 有限的
+          twice: 两次
+        strict:
+          description: 学生只有在提交作业被审阅并通过后才能升级。
+          title: 严格的
+        unlimited:
+          description: 学生可以在课程结束前升级，而无需提交作业进行审核。
+          title: 无限的
+      tabs:
+        actions: 行动
+        details: 细节
+        images: 图片
+      title:
+        add_new_course: 添加新课程
+        edit_course_details: 编辑课程详情
+      update_course: 更新课程
+    CourseEditor__HighlightsEditor:
+      add_highlight: 课程亮点
+      delete_highlight: 删除高亮。
+      description:
+        placeholder: 亮点的描述
+      move_down: 下降
+      move_up: 提升/晋升
+      select: 选择
+      selected_button:
+        title: 选择图标
+      title:
+        placeholder: 精彩瞩目的标题
+    CourseEditor__ImagesForm:
+      button_text:
+        update_images: 更新图片
+        updating: 更新中
+      cover_image:
+        error_message: 必须是不超过2MB大小的JPEG / PNG格式的图片。
+        help: 该封面将展示在课程内所有学生页面的顶部，并作为某些课程邮件的标题。
+        help_url: http://这是链接到《Pupilfirst用户手册》中关于课程图片的部分。
+        label: 封面图片
+      empty_image_label: 请选择一个图片文件。
+      image_label:
+        end: 点击以替换当前图片。
+        start: 您已选择"
+      notification_success:
+        description: 图片已成功更新。
+        title: 标题
+      replace_image_label: 请选择一个文件来替换。
+      thumbnail:
+        error_message: 必须是大小不超过2 MB的JPEG/PNG格式的图片。
+        help: 缩略图将显示在主页上，以及在管理员课程列表中。
+        help_url: http://这是一个链接，指向"Pupilfirst"文档中的一个页面。
+        label: 缩略图
+    CourseEditor__Root:
+      add_new_course: 新增课程
+      button_load_more: 加载更多课程...
+      course_links:
+        download_reports: 下载报告
+        edit_curriculum: 编辑课程
+        manage_coaches: 管理教师
+        manage_students: 管理学生
+        view_as_student: 以学生的角度来看
+      courses_fully_loaded_text: 展示所有 %{total_courses} 门课程。
+      courses_partially_loaded_text: 展示 %{loaded_courses_count} 个课程中的 %{total_courses} 个课程
+      create_description: 让我们创建另一个课程。
+      edit_course_details: 编辑课程详情
+      filter:
+        input_hint: 或者开始键入姓名进行搜索...
+        input_label: 搜索
+        input_placeholder: 按课程名称进行筛选和搜索
+        label:
+          name: 按姓名搜索
+          status: 状态
+        status:
+          active: 活动的
+          archived: 已存档
+          ended: 已结束
+      notification_error_body: 我们的团队已收到有关此错误的通知。请尝试重新加载此页面。
+      notification_error_head: 发生了一个意外错误。
+      quick_links: 快速链接
+      view_public_page: 查看公共页面
+    CourseExport__Root:
+      active_students_label: 积极的学生
+      all_students_label: 所有学生
+      all_targets_label: 所有目标
+      close_export_form: 关闭导出表单
+      create_action: 创建新的导出
+      create_action_button: 导出课程数据
+      create_button_active_label: 建立一个出口...
+      create_button_text: 创建导出文件
+      download_course_export: 下载课程导出文件
+      export: 出口
+      export_tags_label: 只导出带有以下标签的学生。
+      export_targets_label: 出口应该包括哪些目标？
+      export_type_label: 请选择您需要的出口类型。
+      heading: 出口
+      include_inactive_students_tag: 包括停学学生
+      no_exports_notice: 你还没有出口任何东西！
+      prepared: 准备就绪
+      requested: 已请求
+      reviewed_only_tag: 仅查看已审核
+      reviewed_only_targets_label: 仅限已经审核过的提交目标。
+      search_tag_placeholder: 搜索标签
+      search_tags_empty: 查找空白的标签
+      students_label: 学生们
+      students_to_include_label: 选择要包括在课程导出中的学生。
+      teams_label: 团队
+      search_cohort_placeholder: 寻找一个同伴
+      search_cohorts_empty: 未选择任何同伴。
+      export_cohorts_label: 只导出以下队列中的学生。
+    CourseSelect:
+      button_load_more: 加载更多课程...
+      courses_fully_loaded_text: 展示所有的 %{total_courses} 门课程。
+      courses_partially_loaded_text: 展示 %{loaded_courses_count} 门课程中的 %{total_courses} 门课程
+      empty_courses: 你没有任何课程！
+      filter:
+        input_hint: 或者开始输入以按名称搜索...
+        input_label: 搜索
+        input_placeholder: 按照课程名称进行筛选和搜索
+        label:
+          name: 按姓名搜索
+          status: 状态
+        status:
+          active: 活动的
+          archived: 已归档
+          ended: 已结束
+    CourseResourcesFilter:
+      filter_resources: 筛选资源
+    CoursesApply__Root:
+      email_sent_message:
+        description: 不到一分钟的时间你就能收到。点击邮件中的链接进行注册并开始使用。
+        title: 我们已经向您发送了一封验证邮件。
+    CoursesCurriculum:
+      edit_level_button: 编辑等级
+      edit_target_button_title: 编辑目标 %{title}
+      empty_level_content_notice: 这个层级上没有已发布的内容。
+      issued_certificate_button: 查看证书
+      issued_certificate_heading: 恭喜！您已获得一张证书。
+      level_locked: 等级锁定
+      level_locked_explanation: 您可以在%{date}访问到内容。
+      level_locked_for_students_notice: 这个关卡对学生来说仍然是锁定状态，将在<strong>%{date}</strong>解锁。
+      level_locked_notice: 当前关卡已锁定！
+      milestone_targets: 里程碑目标
+      nav_aria_next_level: 进入下一个层次
+      nav_aria_previous_level: 返回上一级
+      nav_long_next_level: 下一个级别
+      nav_long_previous_level: 上一关
+      nav_short_next_level: 下一级
+      nav_short_previous_level: 之前的/以前的
+    CoursesCurriculum__AudioRecorder:
+      button_text_record_again: 重新录制
+      button_text_start_recording: 我开始录音了。
+      cannot_record: 你无法录制音频。
+      preview_mode: 预览模式。
+      recording_size_limit_warning: 录音文件的大小不应超过5MB，请重新录制。
+      recording_string: 录音
+    CoursesCurriculum__AutoVerify:
+      before_marking: 在标记为完成之前...
+      before_visiting: 在访问链接之前...
+      mark_complete: 标记为已完成
+      saving: 请稍后...
+      visit_complete: 点击链接完成。
+      visit_link: 访问链接
+    CoursesCurriculum__Discuss:
+      create: 创建一个主题
+      go_to: 去社区
+      no_discussion: 最近没有关于这个目标的讨论。
+      topics_post: 社区
+      topics_pre: 《Topics From》的主题来源
+      use_community: 利用社区来解决你的疑问，并帮助你的同行！
+    CoursesCurriculum__FileForm:
+      another_file: 请为上传选择另一个文件。
+      cannot_attach: 您无法附加文件。
+      choose_upload: 选择要上传的文件。
+      error: 错误
+      max_file_size: 文件的最大大小为5MB。
+      please_reload: 请刷新页面并重试。
+      preview_mode: 预览模式
+      smth_went_wrong: 出了点问题！
+    CoursesCurriculum__Learn:
+      edit_target_button: 编辑内容
+    CoursesCurriculum__LevelUpButton:
+      button_text_level_up: 升级
+      button_text_saving: 请稍后
+    CoursesCurriculum__NoticeManager:
+      access_ended_description: 你目前只能有限地访问该课程。你可以预览内容，但无法完成任何目标。
+      access_ended_title: 预览/有限访问
+      course_complete_description: 你已经完成了我们的课程。请随意完成可能遗漏的目标，并阅读附带的链接内容。
+      course_complete_title: 恭喜！你已经成功完成了最后一关的所有里程碑目标。
+      course_ended_description: 课程已结束，所有任务的提交功能已关闭！
+      course_ended_title: 课程结束了。
+      level_up_blocked:
+        body_middle_pending_review: 仍在等待教师的审核。
+        body_middle_rejected: 被拒绝了。
+        body_prefix: 你已经在第%{number}级别中提交了所有的里程碑目标，但有一个或多个提交...
+        body_suffix: 你需要在所有里程碑目标上获得及格分数才能升级。
+        title_pending_review: 待审查
+        title_rejected: 升级被阻止
+      level_up_description: 恭喜！您已成功完成了所有必须达到的里程碑目标，可以进入课程的下一个阶段了。请点击下方的“升级”按钮，继续在课程中前进。
+      level_up_limited_description: 你当前处于第 %{currentLevel} 级别，但在第 %{minimumRequiredLevel} 级别上有一些目标被拒绝或仍在等待教师的审核。要继续升级，你需要通过第 %{minimumRequiredLevel} 级别上的所有里程碑目标。
+      level_up_limited_title: 升级被阻止
+      level_up_title: 准备升级！
+      preview_mode_description: 您正在访问此课程的预览模式。
+      preview_mode_title: 预览模式
+      team_members_pending_description: 你已经完成了所有必要的里程碑目标，但你的一个或多个团队成员尚未完成。请要求他们登录并检查未完成的里程碑目标。
+      team_members_pending_title: 请与你的团队确认。
+    CoursesCurriculum__Overlay:
+      close_button: 关闭
+      completion_tab_complete: 部分完成
+      completion_tab_completed: 已完成
+      completion_tab_form_response: 表单回复
+      completion_tab_locked: 已锁定
+      completion_tab_mark_complete: 标记为已完成
+      completion_tab_quiz_result: 测验结果
+      completion_tab_submissions: 投稿与反馈
+      completion_tab_submit_form: 提交表格
+      completion_tab_take_quiz: 参加测验
+      completion_tab_visit_link: 点击链接以完成。
+      discuss_tab: 讨论
+      learn_cta_submit_form: 提交表格
+      learn_cta_submit_work: 提交作品进行审查。
+      learn_cta_take_quiz: 参加一个问答游戏
+      learn_tab: 学习。
+      next_target_button: 下一个目标
+      pending_team_members_notice: 你还有团队成员尚未完成这个目标：
+      preview_mode_text: 您目前正在查看本课程的预览。
+      previous_target_button: 以前的目标
+      scroll_to_top: 回到顶部
+    CoursesCurriculum__Quiz:
+      next_question: 下一个问题。
+      question: 问题
+      submit_quiz: 提交测验
+    CoursesCurriculum__SubmissionBuilder:
+      accessing_preview: 你正在访问预览模式。
+      attaching: 附加
+      compete_all: 请完成所有必填项。
+      complete: 完成
+      for_course: 对于这门课程
+      no_actions: 此目标无任何操作。点击提交以完成目标。
+      steps_submit: 提交此目标的步骤如下：
+      submit: 提交
+      submitting: 提交
+    CoursesCurriculum__SubmissionItem:
+      link_error: 这似乎不是一个有效的网址。
+      link_placeholder: 请提供以https://开头的完整URL。
+      remove: 删除
+      short_text_error: 答案需要少于250字
+      short_text_placeholder: 添加一段短文本
+      warning_length_limit: 请将您的回答保持在5000个字符以内。
+    CoursesCurriculum__SubmissionsAndFeedback:
+      add_another: 增加另一个
+      add_another_response: 增加另一个回复
+      add_another_submission: 再添加一份提交
+      cancel: 取消
+      completed: 已完成
+      form_response_number: 回应
+      grading: 评分
+      pending_review: 待审核
+      rejected: 已拒绝
+      submission_details: 有关您在“”上提交的详细信息。
+      submission_number: 提交编号
+      submitted_on: 提交于：
+      unknown_coach: 未知的教师
+      your_responses: 你的回答
+      your_submissions: 你的提交内容
+    CoursesCurriculum__TargetStatus:
+      access_locked: 你现在只有有限的课程访问权限。你可以预览内容，但不能完成任何目标。
+      course_locked: 这门课程已经结束了。
+      level_locked: 你当前处于第 %{current_level} 关卡。请先完成第 %{current_level} 关卡中的所有里程碑目标。
+      prerequisites_incomplete: 这个目标的前提条件不完整。
+      status:
+        completed: 已完成
+        locked: 已锁定
+        pending: 待定
+        pending_review: 待审核
+        rejected: 已拒绝
+    CoursesCurriculum__UndoButton:
+      notification_error_body: 出现了意外错误，我们的团队已经收到了通知。请重新加载页面后再试。
+      notification_error_head: 意外错误
+      notification_notice_body: 请重新加载页面，查看提交状态，然后再试一次。
+      notification_notice_head: 无法撤销提交。
+      undo: 撤销
+      undo_submission: 撤销提交
+      undo_submission_title: 删除这个提交。
+      undoing: 正在撤销
+      window_confirm: 你确定要删除这个提交吗？
+    CoursesCurriculum__UrlForm:
+      button_placeholder: 请提供以https://开头的完整URL。
+      button_text: 附件链接
+      url_validate_error: 看起来不像一个有效的URL。
+    CoursesReport:
+      button_overview_text: 概述
+      button_submissions_text: 投稿
+    CoursesReport__Overview:
+      average_grades: 平均成绩
+      average_quiz_score: 平均测验分数
+      course_completed: 课程完成了！
+      incomplete_targets: 未完成：%{targetsCount}个。
+      level_progress: 级别进度
+      personal_coaches: 个人教师
+      quizzes_attempted:
+        one: 1次测验已尝试。
+        other: "已尝试 %{count} 份测验"
+        zero: 未尝试任何测验。
+      schedule_coaching_session: 安排一次辅导会议。
+      targets_completed: "已完成: %{targetsCount}"
+      targets_overview: 目标概述
+      targets_pending_review: "待审核: %{targetsCount}个"
+    CoursesReport__SubmissionsList:
+      completed: 已完成
+      filter_by_another_level: 按另一个层级筛选
+      filter_by_another_level_or_status: 按另一个层级筛选，或按状态筛选。
+      filter_by_level: 按照等级筛选
+      filter_by_level_or_status: 按级别筛选，或按状态筛选。
+      load_more: 点击加载更多...
+      no_submissions_to_show: 暂无可展示的提交内容。
+      pending_review: 待审核
+      rejected: Rejected
+      sort_by: "排序方式："
+      status: 状态
+      submission_not_considered: 此提交不计入目标的完成情况。
+      submission_not_considered_help: 这是一个团队目标，而这份提交与你团队的某些成员没有关联。这可能是因为在你个人提交之后，目标发生了变化，需要进行团队提交，或者在创建团队提交后，你的团队成员发生了变动。
+      submitted_at: 提交于
+      submitted_on: 提交于%{date}。
+      view: 视图
+    CoursesReview__Checklist:
+      create_review_checklist: 创建一个评论清单
+      create_review_checklist_description: 通过创建一份清单来为您的审查做好准备。
+    CoursesReview__ChecklistEditor:
+      add_checklist_item: 添加检查项
+      add_result: 添加结果
+      cancel: 取消
+      checklist_item_description:
+        error_message: 检查的结果不能是空白的。
+        placeholder: 添加反馈（可选）
+      checklist_item_title:
+        move_down_button_title: 下移检查清单结果
+        move_up_button_title: 提升清单结果
+        placeholder: 为这次检查添加一个结果。
+        remove_button_title: 移除检查清单结果
+      checklist_title:
+        error_message: 检查清单项目不能为空。
+        move_down_button_title: 向下移动清单项
+        move_up_button_title: 前进清单项目
+        placeholder: 添加一个项目到清单中。
+        remove_button_title: 移除清单项目
+      create_review_checklist: 创建审核清单
+      disabled: 残疾人/身体有障碍者
+      edit_review_checklist: 编辑审核清单
+      save_checklist: 保存清单
+    CoursesReview__ChecklistShow:
+      add_additional_feedback: 添加更多反馈
+      back_to_review: 回顾回归
+      edit_checklist_button: 编辑清单
+      feedback_placeholder: 添加反馈（可选）
+      generate_feedback_button: 产生反馈
+      remove_additional_feedback: 移除额外的反馈信息
+      review_checklist: 审核清单
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: 隐藏报告
+      report_status_string:
+        error: 由于错误，操作无法完成。
+        failure: 一些行动失败了。
+        success: 所有行动都成功了。
+        in_progress: 正在进行行动。
+        queued: 操作已排队
+      show_report_button: 展示报告
+      test_report: 测试报告
+    CoursesReview__Editor:
+      add_another_feedback: 再添加一条反馈意见。
+      add_feedback: 添加反馈
+      add_your_feedback: 添加您的反馈
+      assigned_coaches: 指定教师
+      assigned_to: 指派给
+      close: 关闭
+      close_submission_warning: 您确定要关闭并且不保存提交内容吗？
+      create_review_checklist: 创建审核清单
+      deleted_coach: Deleted Coach
+      evaluated_at: 在 %{evaluated_at}
+      evaluated_by: 评估者
+      feedback: 反馈
+      feedback_generated_text: 来自审查清单的反馈。
+      feedback_placeholder: 完成评分后，此反馈将通过电子邮件发送给学生。
+      get_next_submission:
+        notice:
+          done: 完成
+          done_description: 没有其他类似的提交。
+      github_action:
+        description: 你想要重新运行这个提交的 Github action 吗？
+        re_run_action_button: 重新运行 Github Action
+        view_action_button: 查看Github Action
+      grade_card: 成绩单
+      help_text: 笔记可以用来跟踪关于%{note_about}的进展。这些笔记仅在学生的报告中向教师显示。%{additional_help}
+      hide_test_report_button: 隐藏测试报告
+      note_help: 你愿意写一篇关于这个 %{noteAbout} 的笔记吗？
+      note_placeholder: 在审核这个提交时，你注意到了什么吗？
+      page_title: 提交 #%{submission_number} | L%{level_number} | %{name}
+      remove_assignment: 取消任务
+      report_description: 测试报告
+      review: 评论
+      review_checklist: 评论清单
+      review_next: 评论下一个
+      save_grades: 保持成绩
+      save_grades_and_send_feedback: 保存成绩并发送反馈
+      share_feedback: 分享反馈
+      show_review_checklist: 演出回顾清单
+      status:
+        completed: 已完成
+        pending_review: 待审核
+        rejected: 已拒绝
+        reviewing: 复习、回顾
+      student: 学生
+      student_dropped_out_message_with_timestamp: 这份提交是来自一位已经结束了课程或者退课的学生。您可以在%{timestamp}之前查看这份提交。
+      student_dropped_out_message_without_timestamp: 这份提交来自一位已经结束了对该课程的访问或者已经退学的学生。
+      students_dropped_out_message_with_timestamp: 这个提交与一个或多个学生相关联，这些学生的课程访问已结束，或者已经退出。您可以在%{timestamp}之前查看这个提交。
+      students_dropped_out_message_without_timestamp: 这个提交与一个或多个学生相关联，这些学生已经失去了对该课程的访问权限，或者已经退出了该课程。
+      submission_number: "提交 #%{number}"
+      submitted_by: 提交者：
+      submitted_by_team: 提交者团队：
+      team: 团队
+      team_notice: 这份提交来自一个团队，因此在这里添加的备注将会被发布到团队中所有学生的报告中。
+      undo_grade_warning: 你确定要删除这些成绩吗？这将使提交状态变为“待审核”。
+      undo_grading: 撤销评分
+      write_a_note: 写一张便条
+    CoursesReview__ReviewerManager:
+      assigned_at: 分配于%{date}
+      change_reviewer_and_start_review: 改变审核人员并开始审核
+      remove_reviewer_assign_to_me: 你是否想要移除当前的教师 %{current_coach_name} 并将自己指派为审查者？
+      start_review: 开始审查
+    CoursesReview__Root:
+      assigned_to: 指派给
+      assigned_to_coach: 指派给：
+      assigned_to_me: 分配给我
+      button_load_more: 加载更多提交...
+      coach_filter_by:
+        assigned_to: 按照被指派给某人的提交进行筛选。
+        personal_coach: 按照被指派给学生的人进行筛选。
+        reviewed_by: 按照谁审核了提交内容进行筛选。
+      filter_by: "筛选方式："
+      filter_by_another_level: 按另一个层次筛选
+      filter_by_another_level_or_submissions_assigned: 按照另一个层级筛选，或者只显示分配给教师的提交作品。
+      filter_by_level: 按级别筛选
+      filter_by_level_or_submissions_assigned: 按照等级筛选，或只显示分配给教师的提交作品。
+      filter_by_target: 按目标筛选
+      filter_hint: ...or start typing to filter by student using their name or email address
+      filter_input:
+        assigned_to: 指派给：
+        level: 等级：
+        personal_coach: 个人教师：
+        reviewed_by: "审查人员："
+        target: 目标：
+      inactive_students: 不活跃的学生
+      include: 包含
+      level: 级别
+      me: 我
+      name_or_email: 姓名或电子邮件
+      now_showing_submissions_assigned_to: 现在展示分配给%{name}的提交。
+      now_showing_submissions_from_all_students: 现在展示来自该课程所有学生的提交作品。
+      pending: 等待中
+      personal_coach: 个人教师
+      review: 评论
+      reviewed: 已阅。
+      reviewed_at: 审查完成
+      reviewed_by: 经过审核
+      search:
+        assigned_to: 分配给：
+        level: 水平：
+        personal_coach: 个人教师：
+        reviewed_by: 评论人：
+        status: 状态：
+        target: 目标
+      sort_by: "排序方式："
+      status: 状态
+      submissions_fully_loaded_text:
+        one: 只有一个提交。
+        other: 显示所有的 %{count} 提交
+      submissions_partially_loaded_text: 显示 %{loaded_submissions_count} 条中的 %{total_submissions} 条提交
+      submitted_at: 提交于
+      target: 目标
+    CoursesReview__SubmissionCard:
+      assigned_to: 分配给
+      completed: 已完成
+      created_at: 在%{created_at}。
+      feedback_sent: 已发送反馈。
+      level: 水平
+      no_submissions_found: 未找到任何提交。
+      rejected: 已拒绝
+      submitted_by: 由...提交
+      submitted_by_team: 由团队“提交”
+    CoursesReview__SubmissionInfoCard:
+      completed: 已完成
+      deleted: 已删除
+      pending_review: 待审核
+      rejected: 已拒绝
+      submission_hash: 提交
+    CoursesStudents__CoachNoteShow:
+      coach_on: 在，就在那里。
+      delete_note: 删除笔记
+      deleted_coach: 已删除教师
+      sure_delete: 你确定要删除这条笔记吗？
+      unknown: 未知
+    CoursesStudents__CoachNotes:
+      all_notes: 所有笔记
+      has_archived_notes: This student has some archived notes.
+      help_text: 笔记可以用来记录学生的进步。这些笔记只向教师展示。
+      new_note: 添加一个新的笔记
+      no_notes: 这里没有任何笔记！
+      save_note: 保存笔记
+    CoursesStudents__Root:
+      assigned_me: 分配给：我
+      assigned_to: 指派给
+      coach_notes: 教师笔记
+      filter_level: 按照级别、分配的教师、姓名或电子邮件地址进行筛选，以及更多...
+      has_notes: 有笔记
+      level_distribution_label: 学生分布情况的等级划分
+      me: 我
+      name_email: 姓名或电子邮件
+      no_notes: 没有笔记
+      not_found: 无法从分布栏中找到所选的级别，其ID为"
+      restore_filer_none: 现在显示该课程中的所有学生。
+      search_assigned_me: 分配给我
+      search_assigned_to: 分配给
+      search_no_notes: 没有笔记 有笔记 教师笔记
+      search_tag: 标签
+      showing_assigned: 现在展示被分配给学生的内容。
+      tagged_with: 标记为
+    CoursesStudents__StudentDistribution:
+      level_wise: 学生按照等级分布
+      students_level: 学生等级
+    CoursesStudents__StudentOverlay:
+      access_ended_at: 这名学生对该课程的访问权限于%{date}结束。
+      average_grades: 平均成绩
+      average_quiz_score: 平均测验成绩
+      close_student_report: 学生报告结束。
+      course_completed: 课程完成了！
+      dropped_out_at: 这名学生在%{date}退课了。
+      level_progress: 等级进展
+      notes: 笔记
+      other_team_members: 其他团队成员
+      personal_coaches: 个人教师
+      quizzes_attempted:
+        one: 1 Quiz Attempted
+        other: "%{count}次尝试的测验"
+        zero: 未尝试任何测验
+      submissions: 投稿
+      targets: 目标
+      targets_overview: 目标概览
+      team_coaches: 团队教师
+      total_targets_completed: 总共完成的目标数量
+    CoursesStudents__StudentsList:
+      last_seen: 上次活动时间为 %{time_string}。
+      no_last_seen: 这位学生从未签到过。
+      no_students: 没有学生出示
+      personal_coaches: 个人教师
+      team_coaches: 团队教师
+    CoursesStudents__SubmissionsList:
+      no_revied_submission: 未审核的提交
+      submitted_on: 提交于
+    CurriculumEditor:
+      hide_archived: 隐藏已归档的内容
+      show_archived: 显示已归档
+      create_level: 创建等级
+      create_target_group: 创建目标群体
+      edit_selected_level: 编辑选定的关卡
+    CurriculumEditor__ContentBlockCreator:
+      audio_upload_size_limit_warning: 请选择一个大小小于10MB的文件。
+      button_labels:
+        embed: 嵌入
+        file: 文件
+        image: 形象
+        markdown: markdown
+        video: 视频
+      close_embed: 关闭嵌入表单
+      creating: 正在创建
+      description_video_placeholder: 视频描述
+      embed_url:
+        help: 我们支持多个第三方服务（请查看下面的链接）。只需复制并粘贴包含所需嵌入资源的页面的完整URL即可。
+        help_url: http://
+        label: 嵌入链接的URL
+        save_button: 保存
+      failed_create_error: 发生了一个意外的错误。请重新加载页面并重试。
+      failed_upload_error: 上传文件失败。请检查通知中的消息，并重试。
+      failed_url_error: 该URL似乎无效，请确保以“https://”开头，并且是被接受的网站之一。
+      file:
+        upload_size_warning: 请选择一个小于5MB的文件。
+      image:
+        invalid_image_warning: 请选择一张大小不超过5 MB，宽度或高度不超过4096像素的图片（PNG、JPEG、GIF格式均可）。
+      invalid_audio_file_error: 请选择一个有效的音频文件。
+      preparing_upload: 准备上传...
+      title_video_placeholder: 您的视频标题
+      toggle_content_block: 切换内容块表单
+      upload_success_notification: 文件上传成功。
+      video:
+        description_label: 描述
+        invalid_format_warning: 文件格式无效，请选择一个MP4、MOV、WMV或AVI文件。
+        select_file_button: 选择文件并上传
+        title_label: 标题
+        upload_limit_warning: 请选择一个文件大小不超过 %{maximumVideoSize} 的文件。
+        uploading: 正在上传中。
+    CurriculumEditor__ContentBlockEditor:
+      delete: 删除
+      delete_block_confirm: 你确定要删除这个区块吗？
+      deleting: 正在删除
+      editor_content_block: 内容块的编辑器
+      move_down: 下移
+      move_up: 提升
+      save_changes: 保存更改
+      undo_block_confirm: 你确定要撤销对此块的更改吗？
+      undo_changes: 撤销更改
+      uploading: 上传中
+    CurriculumEditor__ContentEditor:
+      last_updated: 最后更新时间
+      not_versioned: 未版本化
+      view_as_student: 作为学生而言，
+    CurriculumEditor__EmbedBlockResolver:
+      error_notification: 发生了意外错误，我们的团队已经收到了通知。请在再次尝试之前重新加载页面。
+      trying_embed: 尝试嵌入
+      unable_embed: 无法嵌入，将在1分钟后重试...
+      video_processed: 视频正在处理中，请在1分钟后重试...
+    CurriculumEditor__FileBlockEditor:
+      placeholder: 这个文件的标题
+      title: 标题
+    CurriculumEditor__ImageBlockEditor:
+      resize_panel_button_title:
+        auto: 自动宽度
+        four_fifths: 四分之四宽度
+        full: 全宽
+        three_fifths: 三分之五的宽度
+        two_fifths: 两分之一的宽度
+    CurriculumEditor__LevelEditor:
+      actions_error_title: 出错了...
+      clone_level_button: 复制级别
+      clone_level_confirm: 你确定要复制这个关卡吗？
+      clone_level_error_message: 在我们尝试复制该关卡时出现了问题，请在再次尝试之前重新加载此页面。
+      clone_level_hint: 选择要将此级别复制到的课程。此操作将把所有目标复制到选定的课程中。
+      clone_level_label: 复制进入
+      create_level: 创建新的关卡
+      create_success: 关卡创建成功
+      edit_level: 编辑等级 %{number}
+      level_name_invalid: 不是一个有效的名字。
+      level_name_label: 级别名称
+      level_name_placeholder: 请在此处填写级别名称。
+      merge_levels_button: 合并和删除
+      merge_levels_confirm: 你确定吗？这个操作无法撤销。
+      merge_levels_error_message: 在我们尝试合并和删除该级别时出现了问题。请在再次尝试之前重新加载此页面。
+      merge_levels_hint: 选择另一个级别将此级别合并。此操作将移动所有目标和学生的级别。
+      merge_levels_label: 删除和合并为
+      merge_levels_select: 选择一个不同的级别。
+      optional: （可选）
+      success: 成功
+      tabs:
+        actions: 行动
+        details: 细节
+      unlock_on_label: 解锁等级
+      update_level: 更新级别
+      update_success: 等级成功更新。
+    CurriculumEditor__TargetChecklistItemEditor:
+      add_choice: 添加一个选择
+      choices: 选择
+      choices_not_unique: 选择必须是独一无二的。
+      controls_checklist: 清单项目的控制方式
+      copy: 复制
+      delete: 删除
+      describe_question: 问题描述
+      editor_checklist: 清单项目的编辑者
+      limits_notice: 学生可以提交最多3个文件，每个文件限制为5 MB。
+      move_down: 下移
+      move_up: 提升
+      multi_choice: 允许多选
+      not_unique_question: 不是一个独特的问题；必须要求的问题必须是独一无二的。
+      not_valid_choice: 不是一个有效的选择。
+      optional: 随意的/可选的/自愿的
+      question_cannot_empty: 问题不能为空
+      remove_choice: 取消选择
+    CurriculumEditor__TargetDetailsEditor:
+      add_another_question: 添加另一个问题
+      choose_target_group: 选择一个目标群体
+      completion_instructions:
+        help: 使用此功能来提醒学生关于重要事项。这些指示将显示在学生完成目标的附近。
+        help_url: http://
+        label: 你对学生有任何完成指示吗？
+      could_not_find: 无法找到具有ID的选定评估标准。
+      describe_submission: 评估描述
+      empty_questions_warning: 目前没有学生需要提交问题。目标至少需要一个问题。
+      enter_valid_link: 请输入一个有效的链接。
+      enter_valid_title: 请输入一个有效的标题。
+      github_action:
+        button_text: 配置Github Actions。
+        help_description: 当学生提交作业时，你可以配置Github Actions自动评分此目标。
+        help_url: http://
+        title: GitHub Actions是一项由GitHub提供的持续集成和持续部署服务。
+      link_complete: 链接到完成的页面。
+      mark_as_complete: 已完成，将目标标记为已完成。
+      need_submit: 需要提交。
+      no_targets_selected: 没有选择目标
+      one_student_team: 一个团队只有一个学生。
+      optional_braces: （可选）
+      paste_link_complete: 粘贴链接已完成任务
+      prepare_quiz: 现在准备测验。
+      prepare_quiz_error: 所有问题必须填写完整，而且每个问题至少应有两个答案。
+      prerequisite_targets_label: 有任何先决目标吗？
+      search_criteria_all: 你已选择了所有评估标准！
+      search_criteria_empty: 未选择任何标准。
+      search_criteria_placeholder: 搜索评估标准
+      search_targets: 搜索目标
+      select_criterion_label: 从您的列表中选择评估标准。
+      select_criterion_warning: 至少要选择一个。
+      selected_all_targets: 您已选择所有目标。
+      submit_form: 提交表单以完成目标。
+      submit_individually: 所有学生必须单独提交。
+      take_quiz: 完成目标之前先进行一次测验。
+      target_checklist:
+        form_help: 这些是学生必须回答以完成目标的问题。
+        form_label: 你希望学生回答哪些问题？
+        form_limit_warning: 最大允许的问题数量为25个！
+        help: 这是学生在提交作品时必须完成的步骤。这些信息将被显示给教师进行审查。
+        help_url: http://
+        label: 学生应该采取哪些步骤来完成这个目标？
+      target_group: 目标群体
+      target_method_of_completion_label: 你希望学生如何完成这个目标？
+      target_reviewed_by_coach: 教师会审查这个目标的提交吗？
+      target_role:
+        help: 学生在团队中应该个别提交还是一起提交作业目标？
+        help_url: http://
+        label: 团队应该如何应对这个目标？
+      target_title_placeholder: 请提供需要翻译的具体内容，谢谢！
+      target_visibility: 目标可见性
+      title: 标题
+      update_target: 更新目标
+      visit_link: 请点击链接完成目标。
+    CurriculumEditor__TargetDrawer:
+      content: 内容
+      details: 细节
+      unexpected_error: 出现了意外错误，请重新加载页面。
+      unsaved_confirm: 您有未保存的更改。您确定要放弃它们吗？
+      versions: 版本
+    CurriculumEditor__TargetGroupEditor:
+      choose_level: 请选择一个级别。
+      create_group: 创建目标群体
+      description: 描述
+      description_placeholder: 目标群体描述类型
+      group_archived_q: 这个目标群体已经归档了吗？
+      group_details: 目标群体细节
+      milestone_q: 这是一个里程碑式的目标群体吗？
+      target_group_created_notification: 目标群体已成功创建。
+      target_group_updated_notificaion: 目标群体已成功更新。
+      title: 标题
+      title_name_error: 这不是一个有效的标题。
+      title_placeholder: 输入目标群体名称
+      update_group: 更新目标群体
+    CurriculumEditor__TargetGroupShow:
+      create: 创造
+      create_a_target: 制定一个目标
+      create_target: 创建目标
+      milestone_targets: 里程碑目标
+      move_down: 下降
+      move_up: 前进/上升
+    CurriculumEditor__TargetQuizAnswer:
+      answer_placeholder: 请输入回答
+      correct_answer: 正确答案
+      mark_correct: 标记为正确
+      remove_answer_option: 删除此答案选项。
+    CurriculumEditor__TargetQuizQuestion:
+      add_another_answer: 添加另一个答案选项
+      answer_placeholder: 请输入回答
+      question: 问题
+      remove_question: 移除测验问题
+    CurriculumEditor__TargetShow:
+      draft: 起草稿
+      edit: 编辑
+      edit_content: 编辑
+      move_down: 下移
+      move_up: 提升
+      of_target: 目标的定义是指在一定时间内所要达到的特定结果或成就。目标可以是个人、团队或组织的，它们通常是为了实现某种愿望、追求某种价值或满足某种需求而设定的。目标的设定需要具体、可衡量和可实现，以便能够有针对性地制定相应的计划和行动步骤。通过设定明确的目标，人们可以更加有效地管理自己的时间和资源，提高工作效率，实现个人或组织的长期发展和成功。
+    CurriculumEditor__TargetVersionSelector:
+      edit: 编辑
+      preview: 预览
+      restore_version: 恢复此版本。
+    CurriculumEditor__VersionsEditor:
+      help: 使用版本功能可以保存目标内容的当前状态，浏览之前存储的版本，并在需要时恢复它们。
+      help_url: http://
+      restore_version: 恢复此版本
+      save_version: 保存这个版本。
+      select_version: 选择版本
+    EditorDrawer:
+      close_editor: 关闭编辑器
+    EvaluationCriteria__Index:
+      add_new_criterion: 添加新的评估标准
+    EvaluationCriterionEditor__Form:
+      add_criterion: 添加评价标准
+      create_criterion: 制定标准
+      grade_labels:
+        help: 为每个年级分配标签，以在学生和教师的成绩单上反映出来。
+        help_url: https://docs.pupilfirst.com/users/evaluation_criteria
+        label: 等级和标签
+      important: 重要
+      important_details: 最高分和及格分数的值一旦设定，就无法修改。对每个等级的标签可以稍后进行编辑。
+      label_grade_placeholder: 等级标签
+      max_grade: 最高分是
+      name_error: 请输入有效的姓名。
+      name_placeholder: 评估标准名称
+      passing_grade: 并且及格分数是
+      update_criterion: 更新标准
+    HelpIcon:
+      read_more: 了解更多
+    Layout__UserControls:
+      edit_profile: 编辑个人资料
+      sign_in: 登录
+      sign_out: 退出登录
+      user_controls: 显示用户控件
+    LevelProgressBar:
+      course_completed: 课程完成了！
+      heading: 等级进度
+    MarkdownEditor:
+      attach_file_label: 点击此处附加文件。
+      bold_insert: 加粗
+      control_label_bold: 粗体字
+      control_label_italic: 斜体字
+      control_label_strikethrough: 删除线
+      emoji_picker: 表情符号
+      error_maximum_file_size: 文件大小不能超过5MB，请选择其他文件。
+      error_prefix: 附件上传失败！
+      error_unexpected: 发生了意外错误！请在再次尝试之前重新加载页面。
+      exit_full_screen_label: 退出全屏模式
+      file_upload_wait: 请等待文件上传完成...
+      help_aria_label: 需要帮助使用Markdown吗？
+      help_label: 需要帮助吗？
+      italic_insert: 斜体
+      mode_label_fullscreen: 全屏
+      mode_label_fullscreen_exit: 退出全屏
+      mode_label_preview: 预览
+      mode_label_preview_exit: 退出预览
+      mode_label_split: 分屏视图中显示编辑器和预览
+      mode_label_split_exit: 关闭分屏视图。
+      strikethrough_insert: 删除线
+    Notifications__EntryCard:
+      mark_read: 标记为已读
+    Notifications__List:
+      button_load_more: 加载更多通知...
+      empty_notifications: 你没有任何通知！
+      filter:
+        events:
+          post_created_text: 帖子已创建。
+          topic_created_text: 话题已创建
+        input_hint: 按标题名称或事件类型搜索
+        input_label: 搜索
+        input_placeholder: 按标题、事件、已读和未读进行搜索。
+        label:
+          event: 活动
+          status: 状态
+          title: 按标题搜索
+        status:
+          all: 所有的
+          new: 新的
+          read: 已读
+          unread: 未读
+      mark_all_as_read_button: 全部标记为已读
+      notifications: 通知
+      notifications_fully_loaded_text: 显示所有的 %{total_notifications} 条通知
+      notifications_partially_loaded_text: 显示 %{loaded_notifications_count} 条通知中的 %{total_notifications} 条通知
+    Notifications__Root:
+      close: 关闭
+      show_notifications: 显示通知
+    Pagination:
+      fully_loaded_text:
+        one: 只有一个 %{singular_name} 显示
+        other: 展示所有的 %{count} 个 %{plural_name}
+        zero: 没有要展示的%{plural_name}。
+      partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
+    SA_Coaches_CoachEditor:
+      active: 活跃的
+      add_coach: 新增教师
+      affiliation: 所属关系
+      affiliation_placeholder: Acme公司，Acme大学，等等。
+      archived: 存档的
+      coach_add: 添加教师
+      coach_created: 教师成功创建
+      coach_email: 教师的电子邮件地址
+      coach_name: 教师姓名
+      coach_profile_warn: 由于教师个人资料不公开，这将不会在任何地方显示。
+      coach_public_q: Should the coach profile be public?
+      coach_status: 教师状态
+      coach_title: 教师职称/专业领域
+      coach_title_error: 必须至少有两个角色。
+      coach_update: 更新教师
+      coach_updated: 教师已成功更新
+      coach_visibility: 教师的可见性
+      connect_link: 连接链接
+      connect_link_error: 这看起来不像一个有效的URL。
+      connect_link_placeholder: 教师的学生连接请求链接
+      email: 电子邮件
+      email_input_error: 请输入一个有效的电子邮件地址。
+      exited: 已退出
+      input_group_error: 必须至少有两个角色。
+      name: 名字
+      replace_avatar: 更换头像
+      title: 标题
+      upload_avatar: 上传一个头像
+    SA_Coaches_SchoolIndex:
+      active_coaches: 活跃的教师
+      add_new_coach: 新增教师
+      avatar_of: 化身，化身者
+      coaches: 教师们
+      exited_coaches: 激动的教师们
+      no_active_coaches: 你们学校没有积极主动的教师。
+      no_coaches: 没有找到教师
+      no_exited_coaches: 你们学校没有出色的教师。
+    SA_InactiveStudentsPanel:
+      all_students: 所有学生
+      inactive_students: 不活跃的学生
+      next: 下一个
+      prev: 上一个
+      reactivate_students: 激发学生的积极性
+      search_empty: 没有符合您搜索条件的非活跃学生。
+      search_placeholder: 按学生或团队名称或学生电子邮件搜索...
+      team: 团队
+    SchoolAdmin__EditorDrawer:
+      close_editor: 关闭编辑器
+    SchoolAdmins__Editor:
+      add_new_admin: 添加新的学校管理员
+      remove_confirm_post: 从管理员列表中选择？
+      remove_confirm_pre: 你确定要删除吗？
+    SchoolAdmins__Form:
+      add_new_admin: 添加新的学校管理员
+      admin_created_notification: 学校管理员创建成功。
+      admin_updated_notification: 学校管理员更新成功。
+      create_admin: 创建学校管理系统
+      email_error: 请输入有效的电子邮件地址。
+      email_placeholder: 请在这里添加电子邮件。
+      name_placeholder: 请在此处填写姓名。
+      update_admin: 更新学校管理系统
+    SchoolCommunities__CategoryEditor:
+      add_new_category: 添加新分类
+      delete_category: 删除分类
+      editor_category_alt: 类别编辑
+      save_category: 保存分类
+      topics:
+        one: 1个主题
+        other: "%{count}个话题"
+      topics_delete_confirm: 这个类别下有一些主题！您确定要删除这个类别吗？
+      update_category: 更新分类
+    SchoolCommunities__CategoryManager:
+      categories_in: 分类中的内容
+    SchoolCommunities__Editor:
+      add_categories: 添加分类
+      allowed_targets_q: 学生是否应该被允许在这个社区中讨论目标？
+      can_add_topic: 创建社区后，您可以添加主题分类！
+      community_editor: 社区编辑
+      community_editor_error: 这不是一个有效的名称。
+      community_editor_label: 你想给这个社区起什么名字？
+      community_editor_placeholder: 这个社区需要一个名字！
+      community_updated_notification: 社区更新成功。
+      create_community: 创建社区
+      edit_categories: 编辑分类
+      give_access: 给予学生们访问权限来自以下地方：
+      no_topic: 当前社区中没有任何主题分类！
+      note: 你们学校的教师可以进入所有社区。
+      notification_answer_cant_blank: 答案不能为空
+      notification_reload_post: 请在再次尝试发布之前刷新页面。
+      search_course: 搜索课程
+      search_course_all: 您已选择了所有可用课程。
+      search_course_empty: 未选择任何课程。
+      topic_categories: 主题分类
+      update_community: 更新社区
+    SchoolCommunities__Index:
+      add_new_community: 添加新社区
+      close_category_editor: 关闭分类编辑器
+      close_community_editor: 关闭社区编辑器。
+      unsaved_window_confirm: 您有未保存的更改！您确定要关闭吗？
+    SchoolCustomize__AgreementsEditor:
+      updating: 更新中
+      update: 更新
+      agreement_body: 协议正文
+      agreement_placeholder: 将协议正文留空以隐藏页脚链接。
+      manage: 管理
+      privacy_policy: 隐私政策
+      terms_and_conditions: 条款和条件
+      updated_notification: 已更新。
+    SchoolCustomize__ContactsEditor:
+      address_placeholder: 留空地址以隐藏页脚部分。
+      contact_address: 联系地址
+      contact_updated_notification: 联系方式已更新。
+      email_address: 电子邮件地址
+      email_address_error: 这不是一个有效的电子邮件地址。
+      email_address_placeholder: 留空电子邮件地址以隐藏页脚链接。
+      manage_contact: 管理联系方式
+      partial_success_notification: 部分成功！
+      update_address_notification: 我们只能更新地址。
+      update_contact: 更新联系方式
+      update_email_notification: 我们只能更新电子邮件地址。
+    SchoolCustomize__DetailsEditor:
+      about_label: 关于
+      details_placeholder: 请提供关于学校的更多细节。
+      max_characters: 最大字符
+      school_name: 学校名称
+      school_name_error: 名称长度应大于2个字符。
+      school_name_placeholder: 请在这里填写学校名称。
+      update_details: 更新详情
+    SchoolCustomize__ImageFileInput:
+      choose_customize: 请选择一张图片文件进行个性化定制。
+      image_error_message: 必须是大小不超过2 MB的JPEG / PNG格式图片。
+      pick_replace_pre: 请选择一个文件进行替换。
+      you_selected_post: 替换当前的图像。
+      you_selected_pre: 您已选择
+    SchoolCustomize__ImagesEditor:
+      cover_image: 封面图片
+      icon: 图标
+      logo_light_label: 浅色背景上的标志
+      manage_images: 管理图片
+      update_images: 更新图片
+      updated_notification: 图片已成功更新。
+    SchoolCustomize__LinkComponent:
+      cancel_editing: 取消编辑
+      move_down: 下移
+      move_up: 提升
+    SchoolCustomize__LinkEditor:
+      add_new_link: 添加新链接
+      adding_new_link: 添加新链接...
+      cant_empty_message: 不能为空。
+      done_notification_body: 已添加自定义链接。
+      error_body: 看起来你输入的URL不是有效的，请检查后再试一次。
+      error_head: 无效的网址
+      footer_link_title: 查看和编辑页脚链接
+      footer_sitemap: 页脚网站地图
+      full_url: 完整的URL
+      full_url_error: 这不是一个有效的URL。
+      full_url_placeholder: 完整的URL，以https://开头
+      header: 页眉
+      header_links: 当前的页眉链接
+      location_link: 链接的位置
+      manage_links: 管理自定义链接
+      no_custom_links: 这里没有自定义链接。要添加一些吗？
+      show_header_title: 查看和编辑页眉链接
+      sitemap_links: 当前站点地图链接
+      social: 社交
+      social_links: 当前的社交媒体链接
+      social_links_title: 查看和编辑社交媒体链接。
+      title: 标题
+      title_placeholder: 一个新链接的简短标题。
+    SchoolCustomize__MoreLinks:
+      more: 更多
+      show_more_links: 显示更多链接
+    SchoolCustomize__Root:
+      add_address_q: 添加一个地址？
+      add_contact_email_q: 添加一个联系邮箱？
+      add_more_details: 增加有关学校的更多细节。
+      change_cover: 更换封面
+      contact: 联系方式
+      customize_link_footer: 您可以自定义页脚中的链接。
+      customize_link_header: 您可以自定义页眉上的链接。
+      edit_contact_details: 编辑联系方式
+      edit_footer_links: 编辑页脚链接
+      edit_header_links: 编辑页眉链接
+      edit_icon: 编辑图标
+      edit_logo_dark: 编辑徽标（在暗色背景上）
+      edit_logo_light: 编辑标志（在浅色背景上）
+      edit_privacy: 编辑隐私政策
+      edit_school_details: 编辑学校详细信息。
+      edit_social_links: 编辑社交媒体链接
+      edit_terms: 编辑条款与条件
+      featured_courses: 精选课程
+      hello_welcome: 你好，欢迎来到
+      homepage: 主页
+      icon: 图标
+      privacy_policy: 隐私政策
+      reach_us_at: 请与我们联系。
+      sitemap: 网站地图
+      social: 社交
+      social_links_q: 添加社交媒体链接？
+      terms_and_conditions: 条款和条件
+    SchoolRouter__CoursesDropdown:
+      select_course: 选择课程
+    SchoolRouter__Page:
+      nav:
+        course:
+          applicants: 申请人
+          authors: 作者
+          calendar: 日历
+          certificates: 证书
+          coaches: 教师们
+          cohorts: 同伴、同僚、同侪、队友
+          curriculum: 课程
+          evaluation_criteria: 评估标准
+          exports: 出口
+          students: 学生们
+          teams: 团队
+        main:
+          coaches: 教师
+          communities: 社区
+          courses: 课程
+          overview: 概览
+          settings: 设置
+        settings:
+          admins: 管理员
+          customization: 个性化定制
+    School__SearchableTagList:
+      add_new_tag: 添加新标签
+      pick_tag: 选择标签
+      remove_tag: 移除标签
+      search_for_add: 搜索或添加新标签
+      select_tags: 选择标签
+    School__SelectBox:
+      no_items_select: 没有可选择的项目。
+      none_selected: 未选择
+      remove: 移除
+      select: 选择
+      select_from_list: 从以下列表中选择。
+      type_search: 搜索输入框
+    Sorter:
+      order_by: 按照...排序
+      toggle_sort: 切换排序顺序
+    StudentActions__Root:
+      active_label: 积极的
+      certificates_label: 课程证书
+      details_certificate: 发放证书的详细信息
+      dropout_student:
+        button: 辍学学生
+        help: 将学生标记为退学将会取消他们对课程的所有访问权限。
+        help_url: http://
+        label: 这个学生退学了吗？
+      edit: 编辑
+      empty_course_certificates_text: 该课程没有发放任何证书。
+      empty_issued_certificates_text: 这位学生尚未获得任何证书。
+      issue_certificate_button: 颁发证书
+      issued_by_label: 发布者：
+      issued_certificates_label: "颁发的证书："
+      issued_date_label: 发布日期：
+      manage_certificates: 管理学生证书
+      new_certificate_label: 发行新证书：
+      page_description: 学生的行动方案
+      re_activate_student:
+        button: 重新激活学生
+      revoke_certificate_button: 吊销证书
+      revoke_certificate_confirmation: 你确定吗？这个操作无法撤销。
+      revoked_by_label: 撤销者：
+      revoked_date_label: "撤销日期："
+      revoked_status_label: 撤销
+      select_certificate_input_label: 选择要颁发的证书。
+    StudentBulkImport__Root:
+      csv_data_errors:
+        invalid_affiliation: 所属关系必须少于250个字符。
+        invalid_email: 电子邮件必须有效且不能为空。
+        invalid_name: 名称栏不能为空，并且应该在250个字符以内。
+        invalid_tags: 每个学生最多允许5个标签，每个标签限制为50个字符。
+        invalid_team_name: 团队名称必须少于50个字符。
+        invalid_title: 标题必须少于250个字符。
+      csv_file_errors:
+        empty: 所选的CSV文件中没有有效的行。
+        exceeded_entries: 这个CSV文件中有1000多个条目。
+        invalid: 请选择一个有效的CSV文件，大小不超过5MB。
+        invalid_data: CSV文件中有几个单元格中的数据无效。请修复以下列出的错误，然后重试。
+        invalid_template: 所选的CSV文件没有有效的模板，请查看示例文件以获取所需的格式。
+      csv_file_input:
+        help: 这个文件将用于批量导入学生信息。请查看示例文件以了解所需的格式。
+        help_url: http://
+        label: CSV导入文件
+        placeholder: 选择要导入的CSV文件
+      csv_parse_error: 我们无法将所选文件解析为CSV格式：%{message}。
+      drawer_heading: 批量导入学生
+      error_summary_title: 这是表格中错误的总结：
+      example_csv_link:
+        text: 下载一个示例的 .csv 文件。
+        url: http://
+      import_button_text: 导入学生
+      more_errors_text: 还有更多的错误。请修正以下行中的错误，并重新上传：
+      notify_students_label: 通知学生，并发送给他们一个链接，让他们登录这个学校。
+      page_description: 请上传包含您要添加到课程中的学生的CSV文件。
+      page_title: 导入学生
+      pages:
+        csv_import: CSV文件导入
+        manual: 手册
+      pick_a_cohort: 选择一个队伍
+      select_a_cohort: 选择一个群体
+      success_notification: 导入成功！完成后，您将收到一封电子邮件通知。
+      valid_data_message: 数据验证成功！
+      valid_data_summary_text: 这是上传表格中学生数据的总结：
+    StudentCourse__Header:
+      calendar: 日历
+      curriculum: 课程
+      leaderboard: 排行榜
+      report: 报告
+      review: 评论
+      students: 学生们
+      unknown: 未知
+    StudentCreator__CreateForm:
+      added_full_description: 所有学生创建成功。
+      added_none_description: 你试图添加的所有学生已经是该课程的一部分了。
+      added_none_title: 一切都没有改变。
+      added_partial_description: 已添加了%{students_added}名学生中的%{students_requested}名学生。剩余的学生已经是该课程的一部分了。
+      added_partial_title: 部分添加
+      drawer_heading: 添加新学生
+      notify_students_label: 通知学生，并发送给他们一个链接，让他们登录这个学校。
+      pick_a_cohort: 选择一个同行群体
+      reload_add_students: 我们的团队已经收到了这个失败的通知。请在尝试再次添加学生之前重新加载这个页面。
+      save_list_button: 保存列表
+      select_a_cohort: 选择一个队伍
+      select_cohort: 选择群体
+      student_list: 学生名单
+      team_header_add_more_members: 增加更多的团队成员！
+      team_header_label: 团队%{team_name}
+      teams_to_add_empty: 这个列表是空的！请使用上面的表格添加一些学生。
+      teams_to_add_label: 这些新生将会被加入到这门课程中：
+    StudentCreator__Root:
+      page_description: 您可以将多名学生添加到一个列表中，并将他们加入课程。
+      page_title: 添加新学生
+      pages:
+        csv_import: CSV文件导入
+        manual: 说明书
+    StudentCreator__StudentInfoForm:
+      add_to_list: 添加到列表
+      affiliation:
+        label: 隶属关系
+        placeholder: 阿克米公司，阿克米大学等等。
+      email:
+        error:
+          invalid: 无效的电子邮件地址
+          not_unique: 学生的电子邮件地址不是唯一的。
+        label: 邮件
+        placeholder: 学生邮件在这里。
+      name:
+        label: 姓名
+        message: 无效。
+        placeholder: 学生姓名在这里。
+      tags:
+        label: 标签
+      team:
+        help: 学生们如果有相同的团队名称，将会被分在一起；这不会影响课程中已存在的团队。
+        label: 团队名称
+        placeholder: 复仇者联盟，神奇四侠等等。
+      title:
+        label: 标题
+        placeholder: 学生、教师、首席执行官等等。
+    StudentDetails__Root:
+      affiliation: 从属关系
+      affiliation_placeholder: Acme公司，Acme大学等。
+      edit: 编辑
+      name: 姓名
+      pages:
+        actions: 动作
+        details: 详情
+      personal_coaches: 个人教师
+      pick_a_cohort: 选择一个群体
+      search_coaches_all: 您已选择了所有可用的教师！
+      search_coaches_empty: 没有教师被选中。
+      search_coaches_placeholder: 搜索教师
+      select_a_cohort: 选择一个队伍
+      student_name_placeholder: 学生姓名在这里。
+      student_updated: 学生信息已成功更新。
+      student_updated_moved: 学生信息已更新，并移至不活跃学生名单。
+      tags_applied: 标签已应用。
+      tags_applied_team: 应用于团队的标签
+      tags_applied_user: 应用于用户的标签
+      team_coaches: 团队教师
+      team_name: 团队名称
+      team_name_error: 团队名称必须至少包含两个字符。
+      team_name_placeholder: 团队名称在这里
+      team_updated_moved: 团队已更新，并移至不活跃学生名单中。
+      title: 标题
+      title_error: 标题必须至少包含两个字符。
+      title_placeholder: 学生、教师、首席执行官等。
+      update_student: 更新学生信息
+    StudentTopNav:
+      sign_in: 登录
+      sign_out: 退出登录
+    StudentTopNav__DropDown:
+      more: 更多
+      show_links: 展示更多链接
+    StudentTopNav__UserControls:
+      edit_profile: 编辑个人资料
+      sign_in: 登录
+      sign_out: 退出登录
+      user_controls: 显示用户控件
+    StudentsEditor__Root:
+      button_add_new_students: 添加新学生
+      button_all_students: 所有学生
+      button_bulk_import: 批量导入
+      button_inactive_students: 非活跃学生
+      group_as_team: 团队合作
+      move_out_team: 退出团队
+      sort_criterion_label: "排序方式："
+      sort_criterion_last_created: 最新创建的
+      sort_criterion_last_updated: 最后更新时间
+      sort_criterion_name: 姓名
+      teams_updated_success: 团队已成功更新
+    StudentsEditor__Search:
+      filter_input_label: "筛选方式："
+      filter_input_placeholder: 输入姓名、标签或级别。
+    StudentsEditor__StudentInfoForm:
+      add_list: 添加列表
+      affiliation: 隶属关系
+      affiliation_placeholder: Acme公司，Acme大学等等。
+      email: 邮件
+      email_not_unique: 学生的电子邮件地址不是唯一的。
+      email_placeholder: 学生邮箱在这里。
+      invalid_email: 无效的电子邮件地址
+      name: 名字
+      name_placeholder: 学生姓名在这里。
+      tags: 标签
+      team_name: 团队名称
+      team_name_help: 具有相同团队名称的学生将被分组在一起；这不会影响课程中现有的团队。
+      team_name_placeholder: 复仇者联盟，神奇四侠等等。
+      title: 标题
+      title_placeholder: 学生，教师，首席执行官等。
+    StudentsEditor__TeamsList:
+      check_spelling: 请确保拼写无误。
+      clear_filter: 清除过滤器
+      empty_message: 这里没有学生。
+      level: 级别
+      load_more: 加载更多
+      no_results_found: 抱歉，未找到结果。
+      students_fully_loaded_text:
+        one: 只有一个学生。
+        other: 展示所有的 %{count} 名学生
+      students_partially_loaded_text: 展示 %{loaded_students_count} / %{total_students} 名学生
+      team: 团队
+      try_removing_filter: 尝试移除搜索过滤选项。
+    StudentsEditor__UpdateForm:
+      actions: 动作
+      details: 更多
+    StudentsIndex__Root:
+      add_new_students: 添加新学生
+      cohort: 队列
+      edit_details: 编辑 %{name} 的详细信息。
+      filter:
+        search_by_email: 搜索邮箱
+        search_by_name: 按姓名搜索
+        user_tag: 用户标签
+      level: 等级
+      load_more: 加载更多
+      pagination:
+        empty_message: 未找到学生。
+      sorter:
+        first_created: 首次创建
+        first_updated: 首次更新
+        last_created: 最后创建的
+        last_updated: 最后更新时间
+        name: 名字
+      student: 学生
+      students: 学生们
+      title: 学生们
+    SubmissionChecklistItemShow:
+      correct: 正确
+      incorrect: 错误
+      mark_correct: 标记为正确
+      mark_incorrect: 标记为错误
+    SubmissionChecklistShow:
+      target_marked_as_complete: 目标已标记为完成。
+    TargetChecklistItem:
+      action_string_attach_link: 添加一个网址
+      action_string_choose_from_list: 从列表中选择
+      action_string_record_audio: 录音
+      action_string_upload_files: 上传文件
+      action_string_write_long_text: 一篇文章
+      action_string_write_short_text: 一段摘要
+    TeamsActions__Root:
+      delete: 删除
+      delete_team: 解散团队
+      delete_team_info: 删除将会移除所有学生并删除团队。
+      edit: 编辑
+      pages:
+        actions: 行动
+        links: 链接
+      team_actions: 团队行动
+    TeamsCreator__Root:
+      title: 创建新团队
+    TeamsDetails__Root:
+      edit: 编辑
+      page_description: 编辑团队详情
+      pages:
+        actions: 动作
+        details: 更多
+    TeamsIndex__Root:
+      create_team: 创建团队
+      edit: 编辑
+      filter:
+        search_by_team_name: 按团队名称搜索
+      load_more: 加载更多
+      page_title: 团队
+      pagination:
+        empty_message: 未找到任何团队
+      sorter:
+        first_created: 首次创建
+        last_created: 最近创建的
+        name: 名字
+      team: 团队
+      teams: 团队
+    TopicsShow__LikeManager:
+      like: 点赞
+      like_button_tooltip: 点赞这条帖子
+      post: 岗位/职位
+      unlike: 与......不同
+    TopicsShow__PostEditor:
+      cancel: 取消
+      cant_blank: 不能为空
+      empty: 空的
+      post_reply: 发布你的回复
+      reason_edit: 编辑原因（可选）
+      reply_to: 回复给
+      type_reply: 输入回复
+      update_post: 更新帖子
+      update_reply: 更新回复
+      your_reply: 你的回复
+    TopicsShow__PostReply:
+      jump_reply: 跳转到回复
+      navigate_post: 导航到帖子
+    TopicsShow__PostShow:
+      add_reply_post: 回复帖子
+      add_reply_topic: 回复话题
+      delete_post_confirm_dialog: 你确定要删除这篇帖子吗？这个操作无法撤销。
+      delete_reply_string: 删除回复
+      delete_topic_confirm_dialog: 你确定要删除这个主题吗？此操作不可撤销。
+      delete_topic_string: 删除话题
+      deleted_user_name: 抱歉，我不太明白你的问题。你能提供更多的上下文吗？
+      edit_post_string: 编辑帖子
+      edit_reply_string: 编辑回复
+      go_to_solution_button: 前往解决方案
+      history_button_text: 历史
+      last_edited_by_label: 最后编辑者：
+      mark_as_solution_label: 标记为已解决
+      mark_solution: 标记解决方案
+      mark_solution_confirm: 你确定要将这篇帖子标记为解决方案吗？
+      marked_solution_icon: 标记为解决方案图标
+      new_reply_button: 新回复
+      options_post: 发布的选项
+      replies_post: 回复帖子：
+      show_replies: 显示帖子的回复
+      show_replies_button:
+        one: 一条回复
+        other: "%{count} 条回复"
+      solution: 解决方案
+      solution_icon_label: 解决方案
+      unmark_solution: 取消标记为解决方案
+      unmark_solution_confirm: 你确定要取消将这篇帖子标记为解决方案吗？
+    TopicsShow__Root:
+      edit_topic_button: 主题编辑
+      linked_target_label: "关联目标："
+      lock_topic_button: 锁定话题
+      lock_topic_confirm: 你确定要锁定这个话题吗？
+      locked_topic_notice: 该主题帖已被锁定，无法发表新回复。
+      select_category: 选择类别
+      select_no_category: 请选择不选择任何类别。
+      selected_category: 选择的类别
+      topic_category_label: 话题类别：
+      topic_details: 话题详情
+      topic_editor_cancel_button: 取消
+      topic_title: 话题标题
+      unlock_topic_button: 解锁话题
+      unlock_topic_confirm: 你确定要解锁这个话题吗？
+      update_topic_button: 更新话题
+      view_target_button: 查看目标
+    TopicsShow__SubscriptionManager:
+      subscribe: 订阅
+      unsubscribe: 取消订阅
+    UserEdit:
+      about: 关于
+      about_placeholder: 请输入关于的内容
+      account: 账户
+      account_delete_q: 你确定要删除你的账户吗？这将启动一个过程，从我们的服务器上永久移除你的数据。
+      already_iniated_deletion_warning: 你已经开始了账户删除的流程。请查看你的收件箱，了解进一步的账户删除步骤。
+      avatar_uploaded_notification: 头像上传成功。
+      cancel: 取消
+      change_password: 修改您当前的密码
+      change_photo: 更换照片
+      community_digest: 社区摘要
+      community_digest_emails: 社区摘要邮件包含来自您所在社区的新问题，以及过去一周中未解答的一些问题。
+      confirm_dialog_aria: 账户删除确认对话框
+      confirm_email: 请确认您的电子邮件。
+      confirm_password: 确认密码
+      confirm_password_error: 新密码和确认密码应该一致，并且至少包含8个字符。
+      confirm_password_placeholder: 确认新密码
+      current_password: 当前密码
+      delete_account: 删除账户
+      delete_your_account: 删除你的账号
+      deleting_account_warning: 删除您的用户账户将从该学校中删除所有您的数据。在社区中对帖子的回复以及对学生的反馈（如果用户具有教师资料）将不会被删除。如果您是该学校的管理员，则需要撤销管理员权限。
+      disable_email_radio: 禁用
+      displayed_publicly: 这些信息将公开展示，请小心分享内容。
+      edit_profile: 编辑个人资料
+      email_label: 电子邮件
+      email_placeholder: 请在此处输入您的电子邮件。
+      email_sent_notification: 请查看您的新电子邮件。我们已经发送了更新电子邮件地址的说明。
+      initiate_deletion: 发起删除
+      language: 语言
+      localization: 本地化
+      manage_account: 在这所学校管理您的账户。
+      name_error: 名字不能为空。
+      name_error_length: 名称长度应至少为2个字符。
+      name_placeholder: 请输入您的名字。
+      new_password: 新密码
+      new_password_placeholder: 请输入新密码
+      notifications: 通知
+      password_placeholder: 请输入当前密码。
+      photo: 照片
+      preferred_name_placeholder: 请输入您的首选名称。
+      save_changes: 保存更改
+      security: 安全
+      select_image_limit: 请选择一张大小小于5 MB的图片。
+      select_language: 请选择您希望用户界面显示的语言。
+      send_email_radio: 每天给我发送一封电子邮件。
+      set_password: 为您的账户设置密码
+      update_credentials: 请更新您在学校的登录凭据。
+      update_email_notifications: 更新电子邮件通知的设置。
+      update_locale: 更新与您所在地区相关的设置。
+      upload_failed: 上传失败
+      you_admin_warning: 您目前是这所学校的管理员。请删除您的管理员权限以便进行账户删除。
+      incorrect_email_for_deletion: 电子邮件地址错误
+    UserSessionResetPassword:
+      confirm_password: 确认密码
+      confirm_password_placeholder: 请重新输入您的密码。
+      confirm_your_password: 请确认您的密码。
+      enter_new_password: 请输入新密码。
+      new_password: 新密码
+      new_password_placeholder: 请设置一个强密码。
+      password_short: 密码太短了。
+      passwords_not_match: 密码不匹配。
+      set_new_password: 设置新密码
+      update_password: 更新密码
+      updating_password: 正在更新密码...
+    UsersDashboard__Root:
+      certificates: 证书
+      communities: 社区
+      course_locked_message: 你的课程学生档案已被锁定，无法进行更新。
+      cta:
+        access_ended: 预览/有限访问
+        course_ended: 课程结束了。
+        dropped_out: 辍学
+        edit_curriculum: 编辑课程
+        leaderboard: 排行榜
+        my_students: 我的学生们
+        review_submissions: 审查提交内容
+        view_certificate: 查看证书
+        view_course: 查看课程
+        view_curriculum: 查看课程表
+        visit_community: 参观社区。
+      edit_curricullum: 编辑课程
+      edit_profile: 编辑个人资料
+      empty_courses: 您目前没有任何正在进行的课程。
+      issued_on: 发布日期：
+      my_courses: 我的课程
+    UsersDeleteAccount:
+      cancel: 取消
+      click_button_below: 请点击下方按钮永久删除您在该学校的账户。
+      delete_account: 删除账户
+      deletion_progresss: 账户删除正在进行中。
+      head: 很遗憾看到您要离开。
+      please_wait: 请稍等...
+      queuing_deletion: 我们正在排队删除您的账户。
+      signed_out_notified: 您将被注销，并且在删除完成后将通过电子邮件通知您。
+    VerifyCertificate__Root:
+      cancel: 取消并退还
+      description: 这张证书是在%{issue_date}颁发给<strong class="whitespace-nowrap">%{name}</strong>，以表彰他（她）完成了<strong>%{course_name}</strong>课程。
+      heading: 恭喜你，%{name}！你真的值得这个奖励。
+      originally_issued_to: 这位学生的姓名在证书发放后进行了更新。该证书最初是发给<strong>%{name}</strong>的。
+      print_or_save: 打印，或保存为PDF文件。
+      serial_number: 序列号：%{serial}
+    WebPushSubscriptionManager:
+      notification_rejected: 抱歉，我无法完成你的请求。
+      notification_rejected_message: 如果你改变主意了，点击锁定图标，给予你的浏览器发送桌面通知的权限。
+      subscribe: 订阅
+      subscribed_on_another_device: 在此设备上订阅
+      unsubscribe: 取消订阅
+  courses:
+    apply:
+      apply_button: 申请
+      email_label: 电子邮件
+      email_placeholder: 请输入电子邮件地址
+      enroll: 报名参加
+      heading: 报名参加%{course_name}课程。
+      name_label: 姓名
+      name_placeholder: 约翰·多伊
+      privacy_policy: 隐私政策
+      terms_and_conditions: 条款与条件
+    calendar:
+      events: 活动
+      no_events_text: 所选日期没有安排任何活动。
+      today: 今天
+      upcoming_events: 在%{month}即将举行的活动
+    leaderboard:
+      active_students: 积极的学生
+      change: 变化
+      inactive_students: 非活跃学生
+      level: 级别
+      new_new: 新的
+      no_entries: 这个排行榜在这个时间段没有任何记录。
+      note_html: 这个排行榜展示了与之前排行榜相比最大幅度提升的学生。
+      page_title: 报名参加 %{course_name}。
+      rank: 排名
+      score: 得分
+      student: 学生
+    process_application:
+      errors: 提交时出现错误：%{form_errors}
+      sent_mail: 我们已经向您发送了一封验证邮件。它应该在不到一分钟内送达。请点击邮件中的链接进行注册并开始使用。
+    show:
+      apply_button: 申请
+      apply_now: 立即申请
+      continue_course: 继续课程
+      enroll: 报名参加
+      preview_course: 预览课程
+  errors:
+    internal_server_error:
+      details: 我们的服务器在处理您的请求时似乎遇到了问题。我们会自动跟踪这些错误，但如果问题持续存在，请随时联系我们。同时，请尝试重新加载页面。
+      title: 服务器错误
+      went_wrong: 很抱歉，但是出了点问题。
+    messages:
+      content_type_invalid: 内容类型无效
+      limit_out_of_range: 总数超出范围。
+    not_acceptable:
+      details: 看起来你的浏览器请求了一个我们服务器无法满足的格式的响应。我们会自动跟踪这些错误，但如果问题仍然存在，请随时与我们联系。同时，请尝试重新加载页面。
+      invalid_format: 您的浏览器请求了一个无效的格式。
+      title: 标题
+    not_found:
+      mistyped_moved: 您可能输入了错误的地址，或者该页面已经移动。
+      not_exist: 你所寻找的页面不存在！
+      title: 未找到
+      try_homepage: 试试返回我们的首页吧？
+    service_unavailable:
+      title: 连接超时
+      too_long: 这个页面加载时间太长了。
+      try_reloading: 请问您可以尝试重新加载此页面吗？
+    unprocessable_entity:
+      invalid_request: 您的浏览器发出了一个无效的请求。
+      title: 出错了
+      wasnt_valid: 您的浏览器发送的请求有一些问题。我们会自动跟踪这些错误，但如果问题持续存在，请随时与我们联系。同时，您可以尝试重新加载页面。
+  faculty:
+    index:
+      coaches_at: 教师们在
+      title: 教师
+  help:
+    show:
+      title: 帮助
+  helpers:
+    page_entries_info:
+      entry:
+        one: 入口
+        other: 条目
+        zero: 条目
+      more_pages:
+        display_entries: 总共显示了<b>%{total}</b>个中的<b>%{first}&nbsp;-&nbsp;%{last}</b>个%{entry_name}。
+      one_page:
+        display_entries:
+          one: 显示 <b>1</b> 个 %{entry_name}
+          other: 展示所有的<b>%{count}</b>个%{entry_name}
+          zero: 未找到 %{entry_name}
+  home:
+    agreement:
+      privacy_policy: 隐私政策
+      terms_and_conditions: 条款与条件
+    index:
+      access_ended: 审查课程内容
+      active: 继续课程
+      dropped_out: 辍学了。
+      featured_courses_heading: 精选课程
+      get_started: 开始吧
+      learn_more: 了解更多
+      welcome_prefix: 你好，欢迎来到
+    offline:
+      heading: 你已经离线了！
+      message_html: 似乎您的连接有问题，请检查您的网络状态。
+      title: 你已离线。
+  issued_certificates:
+    verify:
+      title: 证书
+  jobs:
+    courses:
+      clone_course:
+        new_name: "%{name} - 复件"
+    notifications:
+      create:
+        message:
+          post_created: "%{user_name} 在 %{community_name} 社区的一个帖子中回复了你"
+          topic_created: "%{user_name} 在 %{community_name} 社区创建了一个新主题"
+  layouts:
+    footer_bottom:
+      logo_alt: 校徽：%{school_name}
+      privacy_policy: 隐私政策
+      terms_conditions: 条款与条件
+    student_footer:
+      contact: 联系方式
+      reach_us: 联系我们：
+      sitemap: 网站地图
+      social: 社交
+      support: 联系支持
+  mailers:
+    applicant:
+      enrollment_verification:
+        body_html: 激活您的%{school_name}账户并加入%{course_name}课程，请验证您的电子邮件地址。点击此%{link_to}将验证您的电子邮件地址，并确认您希望在%{school_name}创建一个账户。
+        body_processing_url_html: 我们已收到您在%{school_name}申请%{course_name}课程的申请。<br/>请通过点击%{link_to}验证您的电子邮件地址。一旦您的电子邮件地址验证成功，您将看到完成申请所需的下一步操作。
+        link_text: 一次性链接
+        link_text_processing_url: 这个链接
+        subject: 请验证您的电子邮件地址。
+        subject_with_processing_url: 完成您的%{course_name}课程申请。
+    coach:
+      course_enrollment:
+        subject: 你已被添加为%{course_name}的教师。
+      repeat_rejections_alert:
+        body_html: 请考虑查看<a href="%{review_url}">学生的提交</a>，看看是否有一些建议可以帮助学生进步。
+        header: 一个机器人已经在《%{course_name}》课程中拒绝了学生的提交%{rejection_count}次。
+        subject: 学生的提交被多次拒绝（已拒绝 %{rejection_count} 次）。
+    course_author:
+      addition:
+        body:
+          added_author_html: 你已被添加为课程<strong>%{course_name}</strong>的作者，位于%{school_name}。这使你有能力使用学校管理界面来编辑课程内容，并以学生身份<em>预览</em>课程。
+          link_to: 这个链接
+          use_link_html: 使用 %{link_to} 登录 %{school_name} 并查看课程。
+        subject: 你已被添加为《%{course_name}》的作者。
+    course_enrollement:
+      added_coach_html: 你已被添加为课程<strong>%{course_name}</strong>在%{school_name}的教师。这使你有能力审查学生的提交作业，评分并给予他们反馈。
+    course_export:
+      prepared:
+        body:
+          footer: 这个导出文件已经以ODS（OpenDocument Spreadsheet）格式准备好了，你应该能够在所有流行的电子表格应用程序中打开它。
+          header_html: 您所请求的课程%{course_name}的导出文件已经准备好供下载了，导出文件创建时间为%{course_export_created_at}。请访问<a href="%{link}">课程导出页面</a>下载导出文件。
+          link_to: 链接
+        subject: 课程 %{course_export} 的导出已经准备好可以下载了。
+        subtitle: 课程 %{course_name} 的数据导出已准备好下载。
+        title: 出口当然准备好了。
+        title_button_text: 访问出口页面
+    issued_certificate:
+      issued:
+        body:
+          awarded_certificate_html: 你已获得完成《%{course_name}》课程的证书。
+          congratulations: 恭喜！
+          issued_on_html: 该证书于 %{issued_certificate} 发布，并可通过 %{link_to} 进行查看或打印。
+          link_to: 访问证书的公开链接。
+        subject: 你获得了一张证书！
+    layouts:
+      mail:
+        thanks: 谢谢。
+    link_fallback:
+      link_fallback: 如果您无法点击上面的链接，请将以下链接复制并粘贴到您浏览器的地址栏中：
+    school_admin:
+      email_updated_notification:
+        body:
+          previous_email_html: 之前的电子邮件地址是<strong>%{old_email}</strong>，新的电子邮件地址是<strong>%{new_email}</strong>。
+          user_html: 你们学校的<strong>%{name}</strong>已经更新了电子邮件地址。
+        subject: "%{name}更改了电子邮件地址。"
+      school_admin_added:
+        body:
+          admin_name_html: 新的管理员名字是<strong>%{new_school_admin_name}</strong>，注册的电子邮件地址是<a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>。
+          link_to: 链接
+          new_admin_html: 在%{school_name}中新增了一名管理员，该管理员是由 %{adding_user_name} 在 %{new_school_admin} 添加的。
+          not_recognized_html: 如果您不认识这个用户，您可以使用这个 %{link_to} 从学校管理界面中将其删除。
+        subject: New School Admin Added
+      students_bulk_import_complete:
+        body:
+          link_to: 在学校管理界面中查看这些新加入的学生。
+          report_attachments: 您尝试导入的一些学生已经在该课程中注册了。在导入过程中，这些学生被忽略了。附件中附有这些学生的电子邮件地址列表。
+          students_added_html: 学生添加： %{report_params}
+          students_requested_html: <b>学生们的要求：</b> %{report_params}
+          summary_import_html: 您对导入<strong>%{course_name}</strong>课程中的学生的请求已成功完成。以下是导入的简要总结：
+          view_html: 你可以%{link_to}。
+        subject: 学生的进口已完成。
+    startup:
+      feedback_as_email:
+        body:
+          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_feedback_header: 这是对你提交的反馈意见。
+          grading_header: 您的提交作品被%{coach_name}评为以下等级：
+          link_to: 全部反馈
+          main_html: 这是来自 %{coach_name} 关于你的 %{update_for} 的一些建议反馈。
+          recent_submission: 最近的提交
+          recent_updates: 最近的更新
+          view_html: 您可以查看%{link_to}，其中包括与反馈相关的任何附件。
+        subject: 您的提交收到了 %{startup_feedback} 的新反馈。
+    student:
+      enrollment:
+        body:
+          link_to: 登录%{school_name}并开始学习这门课程。
+          main_html: 你已经被注册为%{school_name}的课程<strong>%{course_name}</strong>的学生。
+          sign_html: 你现在可以%{link_to}了。
+          team: 你还与%{team_members}组成了一个团队；这意味着你们需要共同努力才能在这门课程中取得进步。
+        subject: 你已被添加为%{school_name}的学生。
+    user:
+      account_deletion_notification:
+        body:
+          link_to: 请登录学校系统。
+          main_html: 我们注意到您在%{school_name}的帐户已经超过%{inactivity_months}个月未使用。我们将在一个月后自动删除您的帐户。一旦您的帐户被删除，所有个人信息将被清除，您将无法再访问学校。如果您想保留您的帐户，请在%{one_month_from_now}之前%{link_to}。
+        subject: 您在%{school_name}的账户将在30天内被删除。
+      confirm_account_deletion:
+        body:
+          html: 你在%{school_name}的账户已成功删除。你的所有个人信息已被删除，你将无法再访问这个学校。
+        subject: 成功从%{school_name}删除账户。
+      confirm_email_update:
+        body:
+          html: 你在<strong>%{school_name}</strong>的电子邮件已成功更新。
+        subject: 您在%{school_name}学校的电子邮件已成功更新。
+      daily_digest:
+        body:
+          asked: 已回答
+          assigned: （%{stats}分配给你）
+          assigned_none: （其中没有分配给你的）
+          control_emails_html: 你可以从%{link_to}控制这些电子邮件。
+          latest_topics: "您社区最新发布的主题："
+          link_to: 个人资料编辑页面
+          main_html: 你在一些课程中担任教师，有 %{article_pending_submissions_count} 个新提交需要审核：
+          older: 老旧但受欢迎的话题，近期又出现了新的活跃度：
+          replies: 回复
+          views: 观点
+        subject: 每日摘要
+      delete_account_token:
+        body:
+          link_to: 链接
+          main_html: 我们收到了关于删除您在%{school_name}的账户的请求。请点击此链接%{link_to}确认删除账户。该链接只在30分钟内有效。
+          note_html: 这个操作是不可逆转的，将永久地取消你对学校的访问权限。
+        subject: 从%{school_name}删除账户
+      new_post:
+        body:
+          link_to: 在%{community_name}社区上查看回复。
+          main_html: 【%{author_name}】在%{community_name}社区回复了你的留言。你可以%{link_to}。
+        subject: 对你的帖子的新回复
+      update_email_token:
+        body:
+          link_to: 链接
+          main_html: 我们收到了一个关于更新您在%{school_name}的电子邮件的请求。请点击此链接%{link_to}来更新您的电子邮件。该链接仅在30分钟内有效。
+          note_html: 这个行动是不可逆的。
+        subject: 请更新你在%{school_name}学校的电子邮件地址。
+    user_session:
+      send_login_token:
+        body:
+          link_to: 点击这里。
+          main_html: 请点击链接登录您的%school_name账户。
+        subject: 登录账户
+      send_reset_password_token:
+        body:
+          link_to: 点击这里
+          main_html: 我们收到了重置你的%{school_name}密码的请求。请%{link_to}以更改你的密码。
+        subject: 账号恢复
+  models:
+    faculty:
+      commitment:
+        full_time: 全职
+        part_time: 兼职
+    target:
+      role:
+        founder: 所有创始人
+        team: 团队
+  mutations:
+    conclude_submission_report:
+      invalid_status: 该提交的状态无效。
+    archive_coach_note:
+      note_removed_notification: 已成功删除备注。
+    archive_course:
+      success_notification: 课程已成功归档。
+    archive_post:
+      post_archived_notification: 成功存档帖子。
+    assign_reviewer:
+      submission_already_assigned: 这个任务已经分配给一位教师了。
+      submission_graded_error: 你只能将自己分配到待处理的提交中。
+      success_notification: 这个任务已经分配给你了。
+    auto_verify_submission:
+      success_notification: 目标已标记为已完成。
+    clone_course:
+      success_notification: 课程复制请求已提交。它将很快出现在这里！
+    clone_level:
+      success_notification: 已请求复制级别的文本。它将很快出现在目标课程中！
+    create_coach_note:
+      note_added_notification: 添加备注成功。
+    create_cohort:
+      success_notification: 成功创建队列。
+    create_community:
+      community_created_notification: 社区成功创建
+    create_course:
+      auto_generated_cohort_description: 自动生成的%{course_name}课程中活跃学生的同学群
+      auto_generated_cohort_name: 紫色
+      success_notification: 课程创建成功！
+    create_course_author:
+      author_created_notification: 作者创作
+      new_author_added_notification: 这门课程中增加了一位新作者。
+    create_evaluation_criterion:
+      eval_crit_notification: 评估标准已成功创建！
+    create_feedback:
+      success_notification:
+        description: 您的反馈将通过电子邮件发送给学生。
+        title: 已发送反馈
+    create_grading:
+      evaluation_criteria_error: 无法在没有评估标准的情况下对提交物进行评分。
+      grade_recorded: 成绩记录完毕。
+      invalid_checklist_shape_error: 提交清单中的数据形状与发送给审查的数据形状不匹配。
+      invalid_checklist_values_error: 提交的清单项目的值与审核数据不匹配。
+      invalid_grading_error: 提供的评分数值无效：%{grades_data}
+      submission_graded_error: 提交已经评分完成。
+      submission_missing_error: 无法找到 ID 为 %{submission_id} 的提交。
+      success_notification: 该提交已被标记为已审阅。
+    create_post:
+      reply_added_notification: 回复成功添加
+    create_quiz_submission:
+      responses_saved_notification: 您的回答已保存。
+    create_school_link:
+      blank_title_error: 需要提供一个标题。
+      success_notification: 已添加自定义链接。
+    create_students:
+      invalid_emails: 其中一个或多个条目的电子邮件地址无效。
+      soft_limit_number: 您已经达到了该课程学生数量的软限制。
+      unique_emails: 电子邮件地址必须是唯一的。
+      invalid_strings: 其中一个或多个条目包含无效的字符串。
+      thousand_students_limit: 一次只能接纳1000名学生。
+    create_student_from_applicant:
+      success_notification: 学生创建成功。
+    create_submission:
+      blocked_submission_status_error: 该目标的状态为%{target_status}，因此您无法添加新的提交；请重新加载页面。
+      form_success_notification: 您的回复已保存。
+      invalid_files_attached: 一些附加的文件是无效的。
+      invalid_submission_checklist: 提交清单无效。
+      item_file_limit_error: 每个提交项目最多只能附加三个文件。
+      linked_file_exists_error: 一些文件附件已经与提交的内容关联起来。
+      missing_answer_error: 对不起，我无法提供问题“%{title}”的答案。
+      success_notification: 您的提交已进入审核队列。
+    create_target:
+      success_notification: 目标创建成功。
+    create_target_version:
+      new_version_notification: 已经创建了一个新版本。
+    create_team:
+      success_notification: 团队创建成功
+    create_topic_subscription:
+      success_notification: 您将会收到所有的更新通知。
+    delete_certificate:
+      success_notification: 证书已被删除。
+    delete_course_author:
+      author_deleted_details_notification: 作者已被移除出该课程。
+      author_deleted_notification: 作者已删除。
+    destroy_team:
+      success_notification: 团队删除成功。
+    dropout_student:
+      student_updated_notification: 学生信息已成功更新。
+    export_course_report:
+      course_not_found_error: 未找到对应ID的课程。
+      success_notification: 您的导出正在处理中。一旦准备好，我们将立即通知您。
+      tag_not_found_error: 找不到对应ID的标签。
+      cohorts_not_found_error: 找不到具有给定ID的同伴群体。
+    initiate_account_deletion:
+      check_inbox_notification: 请查看您的收件箱以获取后续步骤！
+      deletion_init_notification: 账户删除已启动。
+    issue_certificate:
+      success_notification: 证书成功颁发！
+    lock_topic:
+      success_notification: 该主题已被锁定，不再接受新回复。
+    mark_post_as_solution:
+      reply_marked_notification: 回复成功标记为解决方案。
+    merge_cohort:
+      success_notification: 同伴成功合并。
+    merge_levels:
+      merge_complete_notification: 合并完成！
+    quiz:
+      correct_answer: 正确答案
+      question: 问题
+      your_answer: 你的回答
+      your_correct_answer: 你的正确回答
+    re_activate_student:
+      success_notification: 学生已成功重新激活
+    re_run_github_action:
+      success_notification: 提交已排队，等待在Github上重新运行。
+      validation_error:
+        student_has_no_github_account: 学生没有Github账户。
+        target_does_not_have_github_action: Target没有配置Github action。
+    reassign_reviewer:
+      submission_graded_error: 你只能将自己分配给待处理的提交。
+      submission_not_assigned_to_coach: 这个任务已经分配给你了。
+      success_notification: 这个任务已经分配给你了。
+    revoke_issued_certificate:
+      success_notification: 证书已注销！
+    send_update_email_token:
+      success_notification: 我们已经向您发送了一个链接，用于验证您的新电子邮件！
+    unarchive_course:
+      success_notification: 课程已成功取消归档。
+    unassign_reviewer:
+      submission_assigned_to_another_coach: 该提交被分配给另一位教师。
+      submission_graded_error: 这个作业已经被评分了。
+      submission_not_assigned: 该提交尚未分配。
+      success_notification: 你不再负责这个提交。
+    undo_grading:
+      must_be_graded: 找不到具有给定ID的已评分提交。
+      success_notification:
+        description: 提交现在正在等待审核。
+        title: 成绩被删除
+    unlock_topic:
+      success_notification: This topic has been unlocked. Community members can now post replies again.
+    unmark_post_as_solution:
+      reply_unmarked_notification: 取消标记为解决方案！
+    update_certificate:
+      success_notification: 证书详情已更新。
+    update_cohort:
+      success_notification: 队列成功更新。
+    update_course:
+      select_valid_cohort: 请选择一个有效的队列；无法找到 ID 为 %{value} 的队列。
+      success_notification: 课程已成功更新！
+      unable_to_find_course: 找不到ID为%{value}的课程。
+    update_course_author:
+      author_name_updated_notification: 作者的名字已经更新。
+      author_updated_notification: 作者更新了。
+    update_evaluation_criterion:
+      eval_crit_updated_notification: 评估标准已成功更新！
+    update_post:
+      updated_success_notification: 更新成功。
+    update_review_checklist:
+      review_updated_notification: 审核清单已成功更新。
+    update_school:
+      details_updated_notification: 详细信息已成功更新！
+    update_school_link:
+      link_not_found_error: 找不到链接！
+      success_notification: 链接已成功更新！
+    update_student_details:
+      success_notification: 学生信息更新成功。
+    update_target:
+      checklist_items_exceeded_error: 清单不应该超过25项。
+      evaluation_criteria_course_error: 评估标准必须来自于与目标相同的课程。
+      invalid_checklist_error: 清单无效
+      multiple_method_of_completion: 不止一种完成方法
+      prerequisities_archived_error: 无法有已归档的先决条件。
+      prerequisities_in_same_level: 先决目标必须与目标处于同一层级。
+      success_notification: 目标已成功更新！
+      target_group_not_present_error: 目标群体不存在。
+      target_missing_error: 目标不存在。
+    update_team:
+      success_notification: 团队已成功更新。
+    update_topic:
+      topic_updated_notification: 主题更新成功！
+    update_user:
+      profile_saved_notification: 个人资料更新成功！
+  organisations:
+    courses:
+      active_cohorts_label: 活跃群体
+      course_label: 课程
+      empty: 这门课程没有%{cohort_status}。
+      ended_cohorts_label: 结束的队伍
+      end_date: "结束日期："
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+    index:
+      heading: 组织
+    show:
+      active_students_label: 积极的学生
+      active_cohorts_subheading: 活跃群体
+      end_date: "结束日期："
+      no_active_cohorts: 这门课程目前没有正在进行的学习小组。
+      organisation_label: 组织
+      students_enrolled_heading: 学生被分配到的小组
+      active_prefix_html:
+        one: 有一个学生报名了。
+        other: 有<span class="font-semibold text-black">%{count}</span>名学生报名参加。
+      active_suffix_html:
+        one: 1个活跃的群体。
+        other: 有<span class="font-semibold text-black">%{count}</span>个活跃的队列。
+      total_students_label: 全部学生
+      view_all_cohorts: 查看所有群体
+    students:
+      show:
+        average_grades: 平均成绩
+        reviewed_submissions:
+          button: 查看之前审核过的提交
+          heading: 审查了提交的内容
+        targets_completed: "%{completed}/%{total} 个目标"
+        targets_overview: 目标概述
+        total_targets_completed: 已完成的总目标数
+        waiting_for_review: 等待审核的提交稿件
+      submission:
+        accepted: 已接受
+        rejected: 已拒绝
+        reviewed_time_ago: 【%{time_ago_in_words}】前进行了审查。
+        submitted_time_ago: 提交于%{time_ago_in_words}之前
+      submissions:
+        accepted_submissions_label: 已接受的提交
+        pagination_notice: 现在展示的是共有%{count}个已审核的提交中的第%{page_start}-%{page_end}个。
+        rejected_submissions_label: 已拒绝的提交
+        student_name_label: 审查了提交的稿件。
+        total_reviewed_submissions: 总计
+  posts:
+    versions:
+      back_to_post: 回到帖子
+      created_by: 创作于
+      current_version: 当前版本
+      edit_history: 编辑历史
+      edited_by: 经过编辑
+      reason: 原因。
+  presenters:
+    apply:
+      page_title: 报名参加%{course_name}。
+    communities:
+      new_topic:
+        page_title:
+          community: 社区
+          new_topic: 新话题
+      show:
+        page_title:
+          community: 社区
+    courses:
+      leaderboard:
+        heading:
+          multiple_mid_text: 本周位列排行榜榜首，共享同分的得分。
+          others: 其他人
+          top_leaderboard_html: 你在排行榜的顶端。恭喜！
+          top_week: 本周，他以高分位居排行榜首。
+        rank_change_icon:
+          rank_down_alt: 排名下降
+          rank_down_double_alt: 排名下降一倍。
+          rank_no_change_alt: 排名不变。
+          rank_up_alt: 排名上升
+          rank_up_double_alt: 名次翻倍上升
+      report:
+        student_report: Student Report
+      review:
+        review_dashboard: 审查仪表板
+      students:
+        students_in_course: 课程中的学生
+    layouts:
+      app_router:
+        admin_link:
+          title: 管理员
+        coaches_link:
+          title: 教师们
+        dashboard_link:
+          title: 仪表盘
+      footer:
+        nav_links:
+          dashboard: 仪表板
+          home: 家
+      students_top_nav:
+        admin_link:
+          title: 管理员
+        coaches_link:
+          title: 教师们
+        dashboard_link:
+          title: 仪表盘
+        organisations_link:
+          title: 我所在的组织
+    posts:
+      versions:
+        page_title:
+          title: 版本 | 发布
+    users:
+      sessions_new:
+        button_text:
+          continue_as_developer: 继续作为开发者
+          continue_with_discord: 继续使用Discord
+          continue_with_email_link: 继续使用电子邮件进行沟通
+          continue_with_facebook: 继续使用Facebook登录
+          continue_with_github: 继续使用Github。
+          continue_with_google: 继续使用Google
+        page_title:
+          title: 登录
+  queries:
+    delete_certificate_mutator:
+      issued_error: 该证书已经颁发给一个或多个学生，无法删除。
+    issue_certificate_mutator:
+      certificate_error: 找不到指定的证书。
+      issued_error: 这名学生已经领取了这门课程的证书。
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: 无法找到 ID 为 %{id} 的评估准则。
+  schools:
+    admins:
+      title: 管理员
+    calendar_events:
+      edit:
+        page_title: 编辑事件
+      form:
+        add_event_button: 添加事件
+        add_event_heading: 添加新事件
+        add_link_section_subtitle: 请提供您活动的链接。例如，在Google Meet上或Zoom上。
+        add_link_section_title: 添加一个活动链接（可选）
+        calendar_label: 添加事件到
+        color_label: 颜色
+        description_label: 活动描述
+        edit_event_heading: 编辑 %{event_title}
+        link_title_label: 活动链接标题
+        link_title_placeholder: 谷歌会议
+        link_url_label: 活动链接URL
+        link_url_placeholder: https://meet.google.com/xxx-yyyy-zzz
+        start_time_label: 日期和时间
+        title_label: 活动标题
+        title_placeholder: 小组讨论
+        update_event_button: 更新事件
+      new:
+        page_title: 添加新事件
+      show:
+        confirm_delete: 您确定要删除这个事件吗？
+        date_and_time: 日期和时间
+        description_label: 描述
+        link_label: 活动链接
+        title: 日历事件详情
+    calendars:
+      edit:
+        page_title: 更新日历
+      form:
+        add_calendar_button: 添加日历
+        add_calendar_heading: 创建新日历
+        all_cohorts_selected: 所有可用的队列都已经被选定。
+        cohorts_label: 将日历与群体关联
+        cohorts_label_hint: 这将把日历与指定的群体链接起来。
+        edit_calendar_heading: 编辑 %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: 未选择任何队友
+        update_calendar_button: 更新日历
+      new:
+        page_title: 创建新的日历
+    communities:
+      index:
+        title: 社区
+    courses:
+      applicants:
+        title: 申请人
+      authors:
+        title: 作者们
+      calendar_events:
+        add_calendar_button: 添加日历
+        add_event_button: 添加一个事件
+        calendar: 日历
+        calendar_filter_label: 展示来自
+        calendars: 日历
+        empty_events: 所选日期没有安排任何活动。
+        events: 活动
+        no_calendars_message: 还没有日历。
+        no_calendars_sub_text: 日历可以帮助您安排未来活动的事件和提醒。
+        select_calendar_filter: 请选择一个日历。
+        title: 日历和事件
+        today: 今天
+        upcoming_events_in: 即将到来的活动
+      certificates:
+        title: 证书
+      curriculum:
+        title: 课程
+      evaluation_criteria:
+        title: 评估标准
+      exports:
+        title: 出口
+      inactive_students:
+        title: 学生们
+      index:
+        title: 课程
+      mark_teams_active:
+        teams_active: 团队已成功标记为活跃！
+      students:
+        title: 学生们
+    customize:
+      title: 个性化定制
+    faculty:
+      course_index:
+        title: 教师们
+      school_index:
+        title: 教师们
+        coach: 教师
+    show:
+      coaches: 教师们
+      courses: 课程
+      levels: 水平
+      no_submissions: 还没有学生提交作业！
+      overview: 概览
+      students: 学生们
+      submissions_reviewed: 稿件审查完毕
+      title: 概述
+  services:
+    courses:
+      demo_content_service:
+        criterion_one: 实现的正确性
+        criterion_two: 提交的质量
+        grade_1: 糟糕的
+        grade_2: 好的。
+        grade_3: 太棒了。
+        level_1: 级别一
+        target_group_description: 示范目标群体的描述
+        target_group_name: 示范目标群体
+        target_name: 演示目标
+    discord:
+      community_message_service:
+        post_topic_created: |-
+          **%{user_name}** 创建了一个新的讨论:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: 学生们必须处于相同的水平才能组成团队。
+  shared:
+    _no: 不
+    _yes: 是的。
+    admin: 管理员
+    all: 所有的
+    and: 与
+    archived: 已存档
+    are: are
+    avatar: 化身
+    back_link: 返回
+    cancel: 取消
+    caption_image: 这幅图片的标题是：
+    close: 关闭
+    coaches: 教师们
+    cohorts: 同伴、同事、队友、同学、同年级学生、同乡、同龄人、同辈人群、同一群体的人
+    community: 社区
+    completed: 已完成
+    dashboard: 仪表盘
+    delete: 删除
+    deleting: 删除
+    draft: 草稿
+    edit: 编辑
+    email: 电子邮件
+    email_exists_error: 此电子邮件已与另一个用户账户关联。
+    empty: 空的
+    fail: 失败
+    file_invalid: 请选择一个大小小于5MB的文件。
+    filter: 过滤器
+    image_file_invalid: 请选择一张文件大小小于5MB，并且宽度或高度小于4096像素的图片（PNG、JPEG或GIF格式）。
+    invalid_authenticity_token_error: CSRF令牌无效或缺失。在尝试执行该操作之前，请刷新此页面。
+    is: 是
+    level: 水平
+    level_label:
+      long_with_name: 第 %{number} 关：%{name}
+      long_without_name: 等级 %{number}
+      short_with_name: "L%{number}: %{name}"
+      short_without_name: L%{number}
+    levels: 层次
+    live: 直播
+    load_more: 加载更多...
+    loading: 正在加载...
+    login_token_expiration_warning_html: 此链接将在%{timestamp}之前失效。如果链接已过期，您可以从<a href="%{login_url}" %>登录页面</a>请求另一个一次性令牌。请注意，这是一个私密的链接，请勿分享。
+    name: 名字
+    name_email: 姓名或电子邮件
+    no_email_found: 无法找到使用该电子邮件的用户。请检查您输入的电子邮件。
+    none: 没有
+    note: 注意
+    notes: 注意
+    notifications:
+      done: 完成
+      done_dot: 完成
+      done_exclamation: 完成！
+      empty: 空的
+      error: 错误
+      notice: 通知
+      please_reload: 请重新加载页面并重试。
+      something_wrong: 出了点问题！
+      success: 成功
+      try_again: 再试一次
+      unexpected_error: 意外错误！
+    optional: 可选的
+    optional_braces: （可选的）
+    or: 或
+    pagination:
+      first: “«”
+      last: "»"
+      next: 下一页 »
+      previous: "上一页"
+      truncate: "..."
+    pass: 通过
+    percentage: 百分比
+    post: 发布
+    preferred_name: 首选姓名
+    processing: 处理中。
+    rejected: 已拒绝
+    replies: 回复
+    reply: 恢复
+    salutation: 你好，
+    salutation_name: 你好，%{name}，
+    save_changes: 保存更改。
+    saving: 正在保存...
+    school: 学校
+    search: 搜索
+    settings: 设置
+    sign_out: 退出登录
+    students: 学生们
+    sort_by: 按照...进行排序
+    tag: 标签
+    tags: 标签
+    target: 目标
+    team: 团队
+    team_name: 团队名称
+    teams: 团队
+    update: 更新
+    updating: 更新中
+    uploading: 上传中
+    version: 版本
+    versions: 版本
+    view: 视图
+  timeline_events:
+    show:
+      submission_from: 来自的提交
+      submitted_on: 提交于
+      reviewed_on: 评论于
+      status: 状态
+      rejected: 已拒绝
+      accepted: 已接受
+      pending: 待定
+      team: 团队
+      feedback:
+        one: 反馈
+        other: 反馈意见
+      no_feedbacks: 此提交未收到任何反馈。
+  users:
+    clear_discord_id:
+      success: 成功解除 Discord 的关联。
+    delete_account:
+      link_expired: 该链接已过期或无效。请再试一次。
+      title: 编辑用户
+    discord_account_required:
+      linked:
+        description: 您的Discord账号已与您的%{school_name}账号关联。您现在可以浏览课程并在我们的Discord服务器上发布信息。如果您需要帮助，请随时在服务器上提出。
+        footer_html: 愉快学习！
+        go_to_course_button: 开始课程
+        go_to_dashboard_button: 返回仪表盘
+        heading: 你已经准备好了！
+      page_title: 需要Discord账号
+      unlinked:
+        description: 您正在尝试访问的课程要求您将Discord帐户与%{school_name}连接起来。我们的Discord服务器是您与社区互动的地方！
+        heading: 让我们先绑定你的Discord账户。
+        link_discord_button: 链接 Discord
+        no_discord_account: 你还没有Discord账号吗？你可以一次性注册一个并将其与其它账号关联起来。
+        process:
+          prefix: 这个过程很简单：
+          step_1_description_html: 请点击下面的“连接到Discord”按钮。
+          step_1_label: 1
+          step_2_description_html: 授权<em>Pupilfirst LMS</em>访问您的Discord账户。
+          step_2_help_html: 如果您没有Discord账号，您可以注册一个，并使用本页面上的按钮一次性将其链接起来。我们将使用授权来：- 使您在Discord服务器上的昵称与您在这里的名字保持同步。- 为您的Discord账号分配额外的角色。
+          step_2_label: 2
+          step_3_description_html: 你将被重定向回到本页面，然后你可以开始学习这门课程。
+          step_3_label: 3
+    edit:
+      discord_connect: 加入我们的Discord社群。
+      discord_connected_account: 进入Discord社区。
+      discord_connected_message: 你在Discord服务器上的昵称将与你在这里的名字保持同步。你在Discord上被分配了额外的角色。
+      discord_connected_message_title: 你的%{school_name}账户现在与你的Discord账户关联起来了。
+      discord_description: 加入我们的Discord服务器可以让您立即与我们的团队、教师和同龄人联系上。
+      discord_how_it_works_html: <li>加入我们的Discord服务器（免费！）</li><li>将你的Discord账号与学校的账号关联起来。</li><li>在Discord上获得我们社区的访问权限！</li>
+      discord_how_it_works_title: 它是如何工作的？
+      discord_title: 加入我们的Discord服务器。
+      title: 编辑用户
+    omniauth_callbacks:
+      failure:
+        denied: 认证被拒绝。请再试一次。
+        denied_by: 认证被%{provider}拒绝了。请再试一次。
+      oauth_callback:
+        add_facebook: 请<a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">从您的授权应用程序列表中移除\'Pupilfirst\'</a>，然后再次尝试登录。
+        add_github: 请<a href="https://github.com/settings/profile" target="_blank" rel="noopener">在您的Github个人资料中添加一个公共电子邮件地址</a>，然后再尝试一次。
+        add_other: 请使用其他方式进行登录。
+        email_unregistered: 您的电子邮件地址：%{email} 未注册。
+        not_receive_email: 很抱歉，我们没有收到您的电子邮件地址来自%{provider_name}。
+        oauth_origin_missing:
+          details: 你的浏览器发送的请求有些问题，不太合法。我们会自动跟踪这些错误，但如果问题仍然存在，请随时与我们联系。同时，请尝试重新加载页面。
+          invalid_request: 您的浏览器发出了一个无效的请求。
+    sessions:
+      auth_callback:
+        discord_already_linked: 你的Discord账户已经与另一个账户绑定。请先解除与该账户的绑定。
+        discord_link_error: 我们无法链接您的Discord账户。请再试一次。
+        error: 登录凭证无效
+        invalid_session: 我们无法验证是否是您请求登录。请再次尝试登录。
+        success: 您的Discord账户已成功关联。您将很快获得我们Discord服务器的访问权限更新。
+      email_sent:
+        image_alt: 一封电子邮件飞入您的收件箱中
+        magic_link:
+          description: 不到一分钟的时间，它就会送到您手上。点击邮件中的链接，您就可以登录了。
+          heading: 我们已经给您发送了一个神奇的链接！
+          notice: 这个链接只能使用一次。
+          page_title: 神奇的链接即将送到！
+        reset_password_link:
+          description: 不到一分钟的时间，你应该会收到。点击邮件中的链接，然后会要求你设置一个新的密码。
+          heading: 我们已向您发送了重置密码的链接！
+          notice: 这个链接只能使用一次。
+          page_title: 请确认您的请求。
+      new:
+        already_signed: 您已经登录。
+        continue_with_email_link: 使用邮箱登陆
+        heading: 登录%{school_name}。
+        sign_in_options_separator: 或者
+      request_password_reset:
+        cancel_link: 使用Google、Facebook或Github进行登录
+        email_label: 邮件
+        email_placeholder: john@example.com
+        heading: 重置您的密码。
+        image_alt: 一个学生手持着一把带有重置符号的巨型钥匙。
+        page_title: 重置密码
+        submit_button: 请求重置密码。
+        subtitle: 请输入您的电子邮件以进行密码恢复。
+      reset_password:
+        link_used: 该一次性链接已被使用或已失效。请再次尝试重置您的密码。
+      sign_in_with_email:
+        already_signed: 您已经登录。
+        email: 继续通过电子邮件进行沟通。
+        email_address: 电子邮件地址
+        email_me: 请给我发送一封邮件，里面包含登录链接。
+        magic_link: 我们可以给您发送一封含有魔法链接的电子邮件，这样您就可以无需输入密码进行登录。
+        oauth: 使用谷歌、Facebook或Github登录
+        password: 密码
+        password_free: 无需密码登录
+        password_new: 重置您的密码
+        shared: 你是否在使用共享设备？
+        type_password: 请输入您的密码
+        with_password: 用密码登录。
+      sign_in_with_password_form:
+        check_credentials:
+          error: 提供的电子邮件地址和密码不匹配。请检查您的凭据并重试。
+      token:
+        link_expired: 该一次性链接已过期或无效。请尝试重新登录。
+    update_email:
+      frequent_request_error: 刚刚发送了一封电子邮件，请稍等几分钟后再尝试。
+      link_expired: 该链接已过期或无效。请重新尝试。
+  validate_submission_gradable:
+    owners_should_be_active:
+      error: 无法更新未激活的学生提交内容。
+    submission_should_be_live:
+      error: 这样的提交不存在，或者已经被归档。

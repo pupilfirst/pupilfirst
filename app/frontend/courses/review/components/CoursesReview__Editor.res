@@ -695,7 +695,7 @@ let gradeBadgeClasses = (statusColor, status, badge) =>
   (
     badge
       ? "px-2 py-2 space-x-2 flex justify-center border rounded items-center "
-      : "w-12 h-10 p-1 me-2 me-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
+      : "w-12 h-10 p-1 me-2 md:me-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
   ) ++
   badgeColorClasses(statusColor) ++
   switch status {

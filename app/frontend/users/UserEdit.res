@@ -1,3 +1,11 @@
+type zxcvbnFeedback = {suggestions: array<string>}
+type zxcvbnResponse = {
+  score: int,
+  feedback: zxcvbnFeedback,
+}
+
+@module("zxcvbn") external zxcvbn: (string, option<array<string>>) => zxcvbnResponse = "default"
+
 let str = React.string
 
 @val @scope(("window", "pupilfirst"))
@@ -25,6 +33,7 @@ type state = {
   avatarUploadError: option<string>,
   saving: bool,
   dirty: bool,
+  newPasswordAnalysis: option<(array<string>, int)>,
 }
 
 type action =
@@ -65,7 +74,15 @@ let reducer = (state, action) =>
       currentPassword: currentPassword,
       dirty: true,
     }
-  | UpdateNewPassword(newPassword) => {...state, newPassword: newPassword, dirty: true}
+  | UpdateNewPassword(newPassword) => {
+      let analysis = zxcvbn(state.newPassword, Some([state.name, state.email]))
+      {
+        ...state,
+        newPassword: newPassword,
+        dirty: true,
+        newPasswordAnalysis: Some(analysis.feedback.suggestions, analysis.score),
+      }
+    }
   | UpdateNewPassWordConfirm(confirmPassword) => {
       ...state,
       confirmPassword: confirmPassword,
@@ -338,6 +355,7 @@ let make = (
     deletingAccount: false,
     avatarUploadError: None,
     dirty: false,
+    newPasswordAnalysis: None,
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
@@ -520,6 +538,51 @@ let make = (
                 className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 placeholder={t("new_password_placeholder")}
               />
+              {switch state.newPasswordAnalysis {
+              | None => <div className="h-11" />
+              | Some(suggestions, score) =>
+                let strength = switch score {
+                | value if value <= 1 => "Weak"
+                | 2 => "Fair"
+                | 3 => "Medium"
+                | _ => "Strong"
+                }
+                <div className="h-11">
+                  <div className="flex justify-between items-center">
+                    <p className="text-xs text-gray-400 font-inter"> {"Password strength"->str} </p>
+                    <div className="flex items-center gap-1 py-2">
+                      <span
+                        className={`rounded-md h-2 bg-${score >= 0 ? "red-600" : "gray-400"} w-10`}
+                      />
+                      <span
+                        className={`rounded-md h-2 bg-${score > 1
+                            ? "orange-500"
+                            : "gray-400"} w-10`}
+                      />
+                      <span
+                        className={`rounded-md h-2 bg-${score > 2
+                            ? "yellow-500"
+                            : "gray-400"} w-10`}
+                      />
+                      <span
+                        className={`rounded-md h-2 bg-${score > 3 ? "green-500" : "gray-400"} w-10`}
+                      />
+                      <span className="text-sm font-inter text-gray-400 pl-2 w-15">
+                        {strength->str}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <ul className="text-yellow-900 text-xs font-inter">
+                      {suggestions
+                      ->Js.Array2.map(suggestion =>
+                        <li> <PfIcon className="if i-info-light if-fw" /> {suggestion->str} </li>
+                      )
+                      ->React.array}
+                    </ul>
+                  </div>
+                </div>
+              }}
             </div>
             <div className="mt-6">
               <label

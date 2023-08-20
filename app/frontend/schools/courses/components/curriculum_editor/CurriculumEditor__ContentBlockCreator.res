@@ -216,6 +216,7 @@ let embedUrlRegexes = [
   %re("/https:\\/\\/docs\\.google\\.com\\/document/"),
   %re("/https:\\/\\/docs\\.google\\.com\\/spreadsheets/"),
   %re("/https:\\/\\/docs\\.google\\.com\\/forms/"),
+  %re("/https:\\/\\/scribehow\\.com\\/embed/"),
 ]
 
 let validEmbedUrl = url => Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url))

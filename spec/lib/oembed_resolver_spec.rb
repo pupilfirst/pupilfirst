@@ -105,7 +105,7 @@ describe Oembed::Resolver do
         "<iframe src='https://docs.google.com/document/d/e/DOCS-CODE/pub?embedded=true' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
       end
 
-      it "returns embed code for Google Slides" do
+      it "returns embed code for Google Docs" do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
       end
     end
@@ -118,7 +118,7 @@ describe Oembed::Resolver do
         "<iframe src='https://docs.google.com/forms/d/e/FORMS-CODE/viewform?embedded=true' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
       end
 
-      it "returns embed code for Google Slides" do
+      it "returns embed code for Google Forms" do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
       end
     end
@@ -131,7 +131,7 @@ describe Oembed::Resolver do
         "<iframe src='https://docs.google.com/spreadsheets/d/e/SPREADSHEET-CODE/pubhtml?widget=true&headers=false' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
       end
 
-      it "returns embed code for Google Slides" do
+      it "returns embed code for Google Spreadsheets" do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
       end
     end

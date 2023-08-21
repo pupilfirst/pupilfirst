@@ -75,7 +75,14 @@ let reducer = (state, action) =>
       dirty: true,
     }
   | UpdateNewPassword(newPassword) => {
-      let analysis = zxcvbn(state.newPassword, Some([state.name, state.email]))
+      let formDictionary = Js.Array2.concat(
+        state.name->Js.String2.split(" "),
+        state.email->Js.String2.split("@"),
+      )
+      let analysis = zxcvbn(
+        newPassword,
+        Some([state.name, state.email]->Js.Array2.concat(formDictionary)),
+      )
       {
         ...state,
         newPassword: newPassword,
@@ -539,52 +546,48 @@ let make = (
                 placeholder={t("new_password_placeholder")}
               />
               {switch state.newPasswordAnalysis {
-              | None => <div className="h-11" />
+              | None => <div className="h-6" />
               | Some(suggestions, score) =>
-                let strength = switch score {
-                | value if value <= 1 => "Weak"
-                | 2 => "Fair"
-                | 3 => "Medium"
-                | _ => "Strong"
+                let (strength, color) = switch score {
+                | value if value <= 1 => ("Weak", "bg-red-600")
+                | 2 => ("Fair", "bg-orange-500")
+                | 3 => ("Medium", "bg-yellow-500")
+                | _ => ("Strong", "bg-green-500")
                 }
-                <div className="h-11">
+                <div className="h-6">
                   <div className="flex justify-between items-center">
                     <p className="text-xs text-gray-400 font-inter"> {"Password strength"->str} </p>
-                    <div className="flex items-center gap-1 py-2">
+                    <div className="flex items-center gap-1">
                       <span
-                        className={`rounded-md h-2 bg-${score >= 0 ? "red-600" : "gray-400"} w-10`}
+                        className={`rounded-md h-1 ${score >= 0 ? color : "bg-gray-500"} w-10`}
                       />
                       <span
-                        className={`rounded-md h-2 bg-${score > 1
-                            ? "orange-500"
-                            : "gray-400"} w-10`}
+                        className={`rounded-md h-1 ${score > 1 ? color : "bg-gray-500"} w-10`}
                       />
                       <span
-                        className={`rounded-md h-2 bg-${score > 2
-                            ? "yellow-500"
-                            : "gray-400"} w-10`}
+                        className={`rounded-md h-1 ${score > 2 ? color : "bg-gray-500"} w-10`}
                       />
                       <span
-                        className={`rounded-md h-2 bg-${score > 3 ? "green-500" : "gray-400"} w-10`}
+                        className={`rounded-md h-1 ${score > 3 ? color : "bg-gray-500"} w-10`}
                       />
-                      <span className="text-sm font-inter text-gray-400 pl-2 w-15">
+                      <span className="text-xs font-inter text-gray-400 pl-2 w-12 text-right">
                         {strength->str}
                       </span>
                     </div>
                   </div>
                   <div>
                     <ul className="text-yellow-900 text-xs font-inter">
-                      {suggestions
-                      ->Js.Array2.map(suggestion =>
-                        <li> <PfIcon className="if i-info-light if-fw" /> {suggestion->str} </li>
-                      )
-                      ->React.array}
+                      {Js.Array2.length(suggestions) > 0
+                        ? <li>
+                            <PfIcon className="if i-info-light if-fw" /> {suggestions[0]->str}
+                          </li>
+                        : React.null}
                     </ul>
                   </div>
                 </div>
               }}
             </div>
-            <div className="mt-6">
+            <div className="mt-2">
               <label
                 autoComplete="off"
                 htmlFor="confirm_password"
@@ -601,9 +604,11 @@ let make = (
                 className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 placeholder={t("confirm_password_placeholder")}
               />
-              <School__InputGroupError
-                message={t("confirm_password_error")} active={hasInvalidPassword(state)}
-              />
+              {state.confirmPassword->Js.String2.length > 0
+                ? <School__InputGroupError
+                    message={t("confirm_password_error")} active={hasInvalidPassword(state)}
+                  />
+                : React.null}
             </div>
           </div>
         </div>

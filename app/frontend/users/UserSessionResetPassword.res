@@ -1,3 +1,11 @@
+type zxcvbnFeedback = {suggestions: array<string>}
+type zxcvbnResponse = {
+  score: int,
+  feedback: zxcvbnFeedback,
+}
+
+@module("zxcvbn") external zxcvbn: (string, option<array<string>>) => zxcvbnResponse = "default"
+
 @module("./images/set-new-password-icon.svg")
 external resetPasswordIcon: string = "default"
 
@@ -63,6 +71,7 @@ let renderUpdatePassword = (
   setConfirmPassword,
   saving,
   setSaving,
+  newPasswordAnalysis,
 ) => {
   let inputClasses = "appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400"
   let labelClasses = "inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -79,6 +88,35 @@ let renderUpdatePassword = (
         onChange={event => setNewPassword(ReactEvent.Form.target(event)["value"])}
       />
     </div>
+    {switch newPasswordAnalysis {
+    | None => <div className="h-5 pt-1" />
+    | Some(suggestions, score) =>
+      let (strength, color) = switch score {
+      | value if value <= 1 => ("Weak", "bg-red-600")
+      | 2 => ("Fair", "bg-orange-500")
+      | 3 => ("Medium", "bg-yellow-500")
+      | _ => ("Strong", "bg-green-500")
+      }
+      <div className="h-5 pt-1">
+        <div className="flex justify-between items-center">
+          <p className="text-xs text-gray-400 font-inter"> {"Password strength"->str} </p>
+          <div className="flex items-center gap-1">
+            <span className={`rounded-md h-1 ${score >= 0 ? color : "bg-gray-500"} w-5`} />
+            <span className={`rounded-md h-1 ${score > 1 ? color : "bg-gray-500"} w-5`} />
+            <span className={`rounded-md h-1 ${score > 2 ? color : "bg-gray-500"} w-5`} />
+            <span className={`rounded-md h-1 ${score > 3 ? color : "bg-gray-500"} w-5`} />
+            <span className="text-xs text-gray-400 w-12 text-right"> {strength->str} </span>
+          </div>
+        </div>
+        <div>
+          <ul className="text-yellow-900 text-[10px]">
+            {Js.Array2.length(suggestions) > 0
+              ? <li> <PfIcon className="if i-info-light if-fw" /> {suggestions[0]->str} </li>
+              : React.null}
+          </ul>
+        </div>
+      </div>
+    }}
     <div className="mt-4">
       <label className={labelClasses ++ " mt-2"} htmlFor="confirm password">
         {t("confirm_password") |> str}
@@ -109,6 +147,8 @@ let renderUpdatePassword = (
 @react.component
 let make = (~token, ~authenticityToken) => {
   let (newPassword, setNewPassword) = React.useState(() => "")
+  let zxcvbnRes = zxcvbn(newPassword, None)
+  let newPasswordAnalysis = (zxcvbnRes.feedback.suggestions, zxcvbnRes.score)->Some
   let (confirmPassword, setConfirmPassword) = React.useState(() => "")
   let (saving, setSaving) = React.useState(() => false)
   <div className="bg-gray-50 sm:py-10">
@@ -126,6 +166,7 @@ let make = (~token, ~authenticityToken) => {
         setConfirmPassword,
         saving,
         setSaving,
+        newPasswordAnalysis,
       )}
     </div>
   </div>

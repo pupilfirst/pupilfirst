@@ -3,7 +3,7 @@ ruby "3.2.2"
 source "https://rubygems.org"
 
 # Ruby on Rails. http://rubyonrails.org
-gem "rails", "~> 6.1.7.3"
+gem "rails", "~> 6.1.7.4"
 
 gem "dotenv-rails", "~> 2.8", groups: %i[development test]
 
@@ -38,9 +38,9 @@ gem "reform", "~> 2.6" # Form objects decoupled from models. http://www.trailbla
 gem "reform-rails", "~> 0.2"
 gem "virtus", "~> 2.0" # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem "dry-validation", "~> 1.7" # There seems to be a dependency bug in reform's coercion code - it required dry-types.
-gem "postmark-rails", "~> 0.21" # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
+gem "postmark-rails", "~> 0.22" # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem "responders", "~> 3.0" # A set of Rails responders to dry up your application (respond_to / with)
-gem "rollbar", "~> 3.2" # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
+gem "rollbar", "~> 3.4" # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem "humanize", "~> 2.5" # Convert numbers to english words
 gem "scarf", "~> 0.2" # A Ruby library for generating initial avatars and identicons.
 gem "kaminari", "~> 1.2" # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
@@ -48,7 +48,7 @@ gem "redis", "~> 5.0" # Redis client for use as cache store for rack-attack
 gem "rack-attack", "~> 6.6" # A rack middleware for throttling and blocking abusive requests
 gem "web-push", "~> 3.0" # Web Push library for Ruby (RFC8030).
 gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates database interactions into no-ops.
-gem "discordrb", "~> 3.4" # A Ruby wrapper for the Discord API.
+gem "discordrb", "~> 3.5" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
 gem 'octokit', '~> 6.1.1' # A Ruby toolkit for the GitHub API.
@@ -60,13 +60,13 @@ gem "omniauth-github", github: "pupilfirst/omniauth-github", branch: "master" # 
 gem "omniauth-discord", "~> 1.0" # Discord OAuth2 Strategy for OmniAuth.
 
 gem "file_validators", "~> 3.0" # Adds file validators to ActiveModel.
-gem "pundit", "~> 2.1" # Minimal authorization through OO design and pure Ruby classes.
+gem "pundit", "~> 2.3" # Minimal authorization through OO design and pure Ruby classes.
 gem "rack-cors", "~> 2.0", require: "rack/cors" # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem "graphql", "~> 2.0" # Ruby implementation of GraphQL http://graphql-ruby.org
 gem "rodf", "~> 1.1" # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem "i18n-js", "~> 4.0" # Export Rails I18n translations for the frontend.
 gem "batch-loader", "~> 2.0" # Generic lazy batching mechanism to avoid N+1 DB queries.
-gem "recaptcha", "~> 5.8" # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
+gem "recaptcha", "~> 5.14" # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
 # Feature toggle
 gem "flipper", "~> 0.22"
@@ -91,7 +91,7 @@ end
 group :test do
   gem "rspec-retry", "~> 0.6" # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
   gem "factory_bot_rails", "~> 6.2" # A library for setting up Ruby objects as test data.
-  gem "capybara", "~> 3.35" # For RSpec feature tests.
+  gem "capybara", "~> 3.39" # For RSpec feature tests.
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
   gem 'selenium-webdriver', '~> 4.11' # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
@@ -105,15 +105,15 @@ group :development, :test do
   gem "coderay", "~> 1.1" # Pretty syntax highlighting on rspec failure snippets.
   gem "debug", "~> 1.8.0" # Debugging functionality for Ruby
   gem "webmock", "~> 3.14" # Mocking web requests.
-  gem "rubocop", "~> 1.51", require: false # Ruby Style Guide.
-  gem "rubocop-rails", "~> 2.19", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem "rubocop", "~> 1.54", require: false # Ruby Style Guide.
+  gem "rubocop-rails", "~> 2.20", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
   gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
 end
 
 group :production do
-  gem "newrelic_rpm", "~> 9.2" # Performance monitoring
+  gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
   gem "whenever", "~> 1.0", require: false

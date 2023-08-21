@@ -93,7 +93,7 @@ group :test do
   gem "factory_bot_rails", "~> 6.2" # A library for setting up Ruby objects as test data.
   gem "capybara", "~> 3.39" # For RSpec feature tests.
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
-  gem "webdrivers", "~> 5.2" # Keep your Selenium WebDrivers updated automatically.
+  gem 'selenium-webdriver', '~> 4.11' # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
   gem "rspec-eventually", "~> 0.2.2" # Rspec helper to match eventually
   gem "diffy", "~> 3.4" # Easy Diffing in Ruby. https://github.com/samg/diffy
@@ -103,7 +103,7 @@ group :development, :test do
   gem "faker", "~> 3.2" # A library for generating fake data such as names, addresses, and phone numbers.
   gem "rspec-rails", "~> 6.0" # RSpec for Rails 5+.
   gem "coderay", "~> 1.1" # Pretty syntax highlighting on rspec failure snippets.
-  gem "pry-rails", "~> 0.3.9" # Pry debugger.
+  gem "debug", "~> 1.8.0" # Debugging functionality for Ruby
   gem "webmock", "~> 3.14" # Mocking web requests.
   gem "rubocop", "~> 1.54", require: false # Ruby Style Guide.
   gem "rubocop-rails", "~> 2.20", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.

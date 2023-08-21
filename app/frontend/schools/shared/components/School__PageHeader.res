@@ -37,7 +37,7 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
         </div>
         <h1 className="text-2xl font-bold mt-4"> {str(title)} </h1>
         <p className="text-sm text-gray-600 mb-6"> {str(description)} </p>
-        <div className="flex font-semibold text-sm space-x-6">
+        <div className="flex font-semibold text-sm gap-6">
           {links
           ->Js.Array2.mapi((link, index) => {
             link.selected

@@ -92,10 +92,10 @@ let renderUpdatePassword = (
     | None => <div className="h-5 pt-1" />
     | Some(suggestions, score) =>
       let (strength, color) = switch score {
-      | value if value <= 1 => ("Weak", "bg-red-600")
-      | 2 => ("Fair", "bg-orange-500")
-      | 3 => ("Medium", "bg-yellow-500")
-      | _ => ("Strong", "bg-green-500")
+      | value if value <= 1 => (t("weak"), "bg-red-600")
+      | 2 => (t("fair"), "bg-orange-500")
+      | 3 => (t("medium"), "bg-yellow-500")
+      | _ => (t("strong"), "bg-green-500")
       }
       <div className="h-5 pt-1">
         <div className="flex justify-between items-center">

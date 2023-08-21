@@ -461,7 +461,7 @@ GEM
       protocol-http (~> 0.2)
       protocol-http1 (~> 0.2)
     public_suffix (5.0.1)
-    puma (5.6.5)
+    puma (5.6.7)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
@@ -753,7 +753,7 @@ DEPENDENCIES
   pg_search (~> 2.3)
   postmark-rails (~> 0.22)
   prettier_print
-  puma (~> 5.0)
+  puma (~> 5.6)
   pundit (~> 2.3)
   rack-attack (~> 6.6)
   rack-cors (~> 2.0)

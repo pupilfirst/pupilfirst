@@ -103,11 +103,18 @@ feature "User Edit", js: true do
     fill_in "Confirm password", with: "short"
 
     expect(page).to have_text(
+      "Add another word or two. Uncommon words are better."
+    )
+    expect(page).to have_text("Weak")
+
+    expect(page).to have_text(
       "New password and confirmation should match and must have atleast 8 characters"
     )
 
     fill_in "New password", with: "long_enough"
     fill_in "Confirm password", with: "but_not_the_same"
+
+    expect(page).to have_text("Fair")
 
     expect(page).to have_text(
       "New password and confirmation should match and must have atleast 8 characters"

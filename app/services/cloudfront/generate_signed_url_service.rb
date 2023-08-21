@@ -39,9 +39,7 @@ module Cloudfront
         end
 
       content_disposition =
-        if SAFE_INLINE_FORMATS.include?(
-             MIME::Types[blob.content_type].first&.content_type
-           )
+        if SAFE_INLINE_FORMATS.include?(blob.content_type)
           "inline"
         else
           "attachment"

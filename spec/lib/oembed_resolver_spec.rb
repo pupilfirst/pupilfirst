@@ -136,8 +136,19 @@ describe Oembed::Resolver do
       end
     end
 
-    context "when supplied a Scribehow URL" do
+    context "when supplied a Scribehow embed URL" do
       let(:pasted_link) { "https://scribehow.com/embed/SCRIBEHOW-CODE" }
+      let(:expected_embed_code) do
+        "<iframe src='https://scribehow.com/embed/SCRIBEHOW-CODE' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
+      end
+
+      it "returns embed code for Scribehow" do
+        expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
+      end
+    end
+
+    context "when supplied a Scribehow shared URL" do
+      let(:pasted_link) { "https://scribehow.com/shared/SCRIBEHOW-CODE" }
       let(:expected_embed_code) do
         "<iframe src='https://scribehow.com/embed/SCRIBEHOW-CODE' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
       end

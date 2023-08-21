@@ -1,8 +1,4 @@
 zh-cn:
-  school:
-    targets:
-      update_action:
-        error_message: 操作无法更新，请检查YAML语法。
   applicants:
     enroll:
       errors:
@@ -159,7 +155,7 @@ zh-cn:
       create_topic_discussion: 创建一个新的讨论话题
       done: 完成
       failed_fetch_similar: 我们无法从服务器获取相似的主题！我们的团队已经收到了这个错误的通知。
-      linked_target: "关联目标："
+      linked_target: 关联目标：
       missing_info: 丢失信息
       no_category_found: 找不到ID为xx的分类。
       no_replies: 无回复
@@ -177,7 +173,7 @@ zh-cn:
       all_categories_button: 所有类别
       button_load_more: 加载更多...
       empty_topics: 这里还没有讨论。
-      filter_input_label: "按条件筛选："
+      filter_input_label: 按条件筛选：
       filter_input_placeholder_categories: 按类别、解决方案或在主题中搜索进行筛选。
       filter_input_placeholder_default: 按主题搜索或按解决方案筛选
       sort_criterion_input_label: 按输入标签排序
@@ -480,6 +476,7 @@ zh-cn:
       create_button_text: 创建导出文件
       download_course_export: 下载课程导出文件
       export: 出口
+      export_cohorts_label: 只导出以下队列中的学生。
       export_tags_label: 只导出带有以下标签的学生。
       export_targets_label: 出口应该包括哪些目标？
       export_type_label: 请选择您需要的出口类型。
@@ -490,14 +487,15 @@ zh-cn:
       requested: 已请求
       reviewed_only_tag: 仅查看已审核
       reviewed_only_targets_label: 仅限已经审核过的提交目标。
+      search_cohort_placeholder: 寻找一个同伴
+      search_cohorts_empty: 未选择任何同伴。
       search_tag_placeholder: 搜索标签
       search_tags_empty: 查找空白的标签
       students_label: 学生们
       students_to_include_label: 选择要包括在课程导出中的学生。
       teams_label: 团队
-      search_cohort_placeholder: 寻找一个同伴
-      search_cohorts_empty: 未选择任何同伴。
-      export_cohorts_label: 只导出以下队列中的学生。
+    CourseResourcesFilter:
+      filter_resources: 筛选资源
     CourseSelect:
       button_load_more: 加载更多课程...
       courses_fully_loaded_text: 展示所有的 %{total_courses} 门课程。
@@ -514,8 +512,6 @@ zh-cn:
           active: 活动的
           archived: 已归档
           ended: 已结束
-    CourseResourcesFilter:
-      filter_resources: 筛选资源
     CoursesApply__Root:
       email_sent_message:
         description: 不到一分钟的时间你就能收到。点击邮件中的链接进行注册并开始使用。
@@ -690,7 +686,7 @@ zh-cn:
       personal_coaches: 个人教师
       quizzes_attempted:
         one: 1次测验已尝试。
-        other: "已尝试 %{count} 份测验"
+        other: 已尝试 %{count} 份测验
         zero: 未尝试任何测验。
       schedule_coaching_session: 安排一次辅导会议。
       targets_completed: "已完成: %{targetsCount}"
@@ -706,7 +702,7 @@ zh-cn:
       no_submissions_to_show: 暂无可展示的提交内容。
       pending_review: 待审核
       rejected: Rejected
-      sort_by: "排序方式："
+      sort_by: 排序方式：
       status: 状态
       submission_not_considered: 此提交不计入目标的完成情况。
       submission_not_considered_help: 这是一个团队目标，而这份提交与你团队的某些成员没有关联。这可能是因为在你个人提交之后，目标发生了变化，需要进行团队提交，或者在创建团队提交后，你的团队成员发生了变动。
@@ -746,16 +742,6 @@ zh-cn:
       generate_feedback_button: 产生反馈
       remove_additional_feedback: 移除额外的反馈信息
       review_checklist: 审核清单
-    CoursesReview__SubmissionReportShow:
-      hide_report_button: 隐藏报告
-      report_status_string:
-        error: 由于错误，操作无法完成。
-        failure: 一些行动失败了。
-        success: 所有行动都成功了。
-        in_progress: 正在进行行动。
-        queued: 操作已排队
-      show_report_button: 展示报告
-      test_report: 测试报告
     CoursesReview__Editor:
       add_another_feedback: 再添加一条反馈意见。
       add_feedback: 添加反馈
@@ -784,7 +770,7 @@ zh-cn:
       hide_test_report_button: 隐藏测试报告
       note_help: 你愿意写一篇关于这个 %{noteAbout} 的笔记吗？
       note_placeholder: 在审核这个提交时，你注意到了什么吗？
-      page_title: 提交 #%{submission_number} | L%{level_number} | %{name}
+      page_title: 提交
       remove_assignment: 取消任务
       report_description: 测试报告
       review: 评论
@@ -826,7 +812,7 @@ zh-cn:
         assigned_to: 按照被指派给某人的提交进行筛选。
         personal_coach: 按照被指派给学生的人进行筛选。
         reviewed_by: 按照谁审核了提交内容进行筛选。
-      filter_by: "筛选方式："
+      filter_by: 筛选方式：
       filter_by_another_level: 按另一个层次筛选
       filter_by_another_level_or_submissions_assigned: 按照另一个层级筛选，或者只显示分配给教师的提交作品。
       filter_by_level: 按级别筛选
@@ -837,7 +823,7 @@ zh-cn:
         assigned_to: 指派给：
         level: 等级：
         personal_coach: 个人教师：
-        reviewed_by: "审查人员："
+        reviewed_by: 审查人员：
         target: 目标：
       inactive_students: 不活跃的学生
       include: 包含
@@ -859,7 +845,7 @@ zh-cn:
         reviewed_by: 评论人：
         status: 状态：
         target: 目标
-      sort_by: "排序方式："
+      sort_by: 排序方式：
       status: 状态
       submissions_fully_loaded_text:
         one: 只有一个提交。
@@ -883,6 +869,16 @@ zh-cn:
       pending_review: 待审核
       rejected: 已拒绝
       submission_hash: 提交
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: 隐藏报告
+      report_status_string:
+        error: 由于错误，操作无法完成。
+        failure: 一些行动失败了。
+        in_progress: 正在进行行动。
+        queued: 操作已排队
+        success: 所有行动都成功了。
+      show_report_button: 展示报告
+      test_report: 测试报告
     CoursesStudents__CoachNoteShow:
       coach_on: 在，就在那里。
       delete_note: 删除笔记
@@ -947,11 +943,11 @@ zh-cn:
       no_revied_submission: 未审核的提交
       submitted_on: 提交于
     CurriculumEditor:
-      hide_archived: 隐藏已归档的内容
-      show_archived: 显示已归档
       create_level: 创建等级
       create_target_group: 创建目标群体
       edit_selected_level: 编辑选定的关卡
+      hide_archived: 隐藏已归档的内容
+      show_archived: 显示已归档
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: 请选择一个大小小于10MB的文件。
       button_labels:
@@ -1358,14 +1354,14 @@ zh-cn:
       close_community_editor: 关闭社区编辑器。
       unsaved_window_confirm: 您有未保存的更改！您确定要关闭吗？
     SchoolCustomize__AgreementsEditor:
-      updating: 更新中
-      update: 更新
       agreement_body: 协议正文
       agreement_placeholder: 将协议正文留空以隐藏页脚链接。
       manage: 管理
       privacy_policy: 隐私政策
       terms_and_conditions: 条款和条件
+      update: 更新
       updated_notification: 已更新。
+      updating: 更新中
     SchoolCustomize__ContactsEditor:
       address_placeholder: 留空地址以隐藏页脚部分。
       contact_address: 联系地址
@@ -1513,7 +1509,7 @@ zh-cn:
       empty_issued_certificates_text: 这位学生尚未获得任何证书。
       issue_certificate_button: 颁发证书
       issued_by_label: 发布者：
-      issued_certificates_label: "颁发的证书："
+      issued_certificates_label: 颁发的证书：
       issued_date_label: 发布日期：
       manage_certificates: 管理学生证书
       new_certificate_label: 发行新证书：
@@ -1523,7 +1519,7 @@ zh-cn:
       revoke_certificate_button: 吊销证书
       revoke_certificate_confirmation: 你确定吗？这个操作无法撤销。
       revoked_by_label: 撤销者：
-      revoked_date_label: "撤销日期："
+      revoked_date_label: 撤销日期：
       revoked_status_label: 撤销
       select_certificate_input_label: 选择要颁发的证书。
     StudentBulkImport__Root:
@@ -1667,13 +1663,13 @@ zh-cn:
       button_inactive_students: 非活跃学生
       group_as_team: 团队合作
       move_out_team: 退出团队
-      sort_criterion_label: "排序方式："
+      sort_criterion_label: 排序方式：
       sort_criterion_last_created: 最新创建的
       sort_criterion_last_updated: 最后更新时间
       sort_criterion_name: 姓名
       teams_updated_success: 团队已成功更新
     StudentsEditor__Search:
-      filter_input_label: "筛选方式："
+      filter_input_label: 筛选方式：
       filter_input_placeholder: 输入姓名、标签或级别。
     StudentsEditor__StudentInfoForm:
       add_list: 添加列表
@@ -1823,7 +1819,7 @@ zh-cn:
       unmark_solution_confirm: 你确定要取消将这篇帖子标记为解决方案吗？
     TopicsShow__Root:
       edit_topic_button: 主题编辑
-      linked_target_label: "关联目标："
+      linked_target_label: 关联目标：
       lock_topic_button: 锁定话题
       lock_topic_confirm: 你确定要锁定这个话题吗？
       locked_topic_notice: 该主题帖已被锁定，无法发表新回复。
@@ -1868,6 +1864,7 @@ zh-cn:
       email_label: 电子邮件
       email_placeholder: 请在此处输入您的电子邮件。
       email_sent_notification: 请查看您的新电子邮件。我们已经发送了更新电子邮件地址的说明。
+      incorrect_email_for_deletion: 电子邮件地址错误
       initiate_deletion: 发起删除
       language: 语言
       localization: 本地化
@@ -1892,7 +1889,6 @@ zh-cn:
       update_locale: 更新与您所在地区相关的设置。
       upload_failed: 上传失败
       you_admin_warning: 您目前是这所学校的管理员。请删除您的管理员权限以便进行账户删除。
-      incorrect_email_for_deletion: 电子邮件地址错误
     UserSessionResetPassword:
       confirm_password: 确认密码
       confirm_password_placeholder: 请重新输入您的密码。
@@ -2179,7 +2175,7 @@ zh-cn:
           assigned: （%{stats}分配给你）
           assigned_none: （其中没有分配给你的）
           control_emails_html: 你可以从%{link_to}控制这些电子邮件。
-          latest_topics: "您社区最新发布的主题："
+          latest_topics: 您社区最新发布的主题：
           link_to: 个人资料编辑页面
           main_html: 你在一些课程中担任教师，有 %{article_pending_submissions_count} 个新提交需要审核：
           older: 老旧但受欢迎的话题，近期又出现了新的活跃度：
@@ -2224,8 +2220,6 @@ zh-cn:
         founder: 所有创始人
         team: 团队
   mutations:
-    conclude_submission_report:
-      invalid_status: 该提交的状态无效。
     archive_coach_note:
       note_removed_notification: 已成功删除备注。
     archive_course:
@@ -2242,6 +2236,8 @@ zh-cn:
       success_notification: 课程复制请求已提交。它将很快出现在这里！
     clone_level:
       success_notification: 已请求复制级别的文本。它将很快出现在目标课程中！
+    conclude_submission_report:
+      invalid_status: 该提交的状态无效。
     create_coach_note:
       note_added_notification: 添加备注成功。
     create_cohort:
@@ -2277,14 +2273,14 @@ zh-cn:
     create_school_link:
       blank_title_error: 需要提供一个标题。
       success_notification: 已添加自定义链接。
-    create_students:
-      invalid_emails: 其中一个或多个条目的电子邮件地址无效。
-      soft_limit_number: 您已经达到了该课程学生数量的软限制。
-      unique_emails: 电子邮件地址必须是唯一的。
-      invalid_strings: 其中一个或多个条目包含无效的字符串。
-      thousand_students_limit: 一次只能接纳1000名学生。
     create_student_from_applicant:
       success_notification: 学生创建成功。
+    create_students:
+      invalid_emails: 其中一个或多个条目的电子邮件地址无效。
+      invalid_strings: 其中一个或多个条目包含无效的字符串。
+      soft_limit_number: 您已经达到了该课程学生数量的软限制。
+      thousand_students_limit: 一次只能接纳1000名学生。
+      unique_emails: 电子邮件地址必须是唯一的。
     create_submission:
       blocked_submission_status_error: 该目标的状态为%{target_status}，因此您无法添加新的提交；请重新加载页面。
       form_success_notification: 您的回复已保存。
@@ -2312,10 +2308,10 @@ zh-cn:
     dropout_student:
       student_updated_notification: 学生信息已成功更新。
     export_course_report:
+      cohorts_not_found_error: 找不到具有给定ID的同伴群体。
       course_not_found_error: 未找到对应ID的课程。
       success_notification: 您的导出正在处理中。一旦准备好，我们将立即通知您。
       tag_not_found_error: 找不到对应ID的标签。
-      cohorts_not_found_error: 找不到具有给定ID的同伴群体。
     initiate_account_deletion:
       check_inbox_notification: 请查看您的收件箱以获取后续步骤！
       deletion_init_notification: 账户删除已启动。
@@ -2410,24 +2406,24 @@ zh-cn:
       active_cohorts_label: 活跃群体
       course_label: 课程
       empty: 这门课程没有%{cohort_status}。
+      end_date: 结束日期：
       ended_cohorts_label: 结束的队伍
-      end_date: "结束日期："
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: 组织
     show:
-      active_students_label: 积极的学生
       active_cohorts_subheading: 活跃群体
-      end_date: "结束日期："
-      no_active_cohorts: 这门课程目前没有正在进行的学习小组。
-      organisation_label: 组织
-      students_enrolled_heading: 学生被分配到的小组
       active_prefix_html:
         one: 有一个学生报名了。
         other: 有<span class="font-semibold text-black">%{count}</span>名学生报名参加。
+      active_students_label: 积极的学生
       active_suffix_html:
         one: 1个活跃的群体。
         other: 有<span class="font-semibold text-black">%{count}</span>个活跃的队列。
+      end_date: 结束日期：
+      no_active_cohorts: 这门课程目前没有正在进行的学习小组。
+      organisation_label: 组织
+      students_enrolled_heading: 学生被分配到的小组
       total_students_label: 全部学生
       view_all_cohorts: 查看所有群体
     students:
@@ -2533,6 +2529,10 @@ zh-cn:
       issued_error: 这名学生已经领取了这门课程的证书。
     update_evaluation_criterion_mutator:
       evaluation_criterion_not_found: 无法找到 ID 为 %{id} 的评估准则。
+  school:
+    targets:
+      update_action:
+        error_message: 操作无法更新，请检查YAML语法。
   schools:
     admins:
       title: 管理员
@@ -2624,8 +2624,8 @@ zh-cn:
       course_index:
         title: 教师们
       school_index:
-        title: 教师们
         coach: 教师
+        title: 教师们
     show:
       coaches: 教师们
       courses: 课程
@@ -2720,10 +2720,10 @@ zh-cn:
     or: 或
     pagination:
       first: “«”
-      last: "»"
+      last: »
       next: 下一页 »
-      previous: "上一页"
-      truncate: "..."
+      previous: 上一页
+      truncate: ...
     pass: 通过
     percentage: 百分比
     post: 发布
@@ -2740,8 +2740,8 @@ zh-cn:
     search: 搜索
     settings: 设置
     sign_out: 退出登录
-    students: 学生们
     sort_by: 按照...进行排序
+    students: 学生们
     tag: 标签
     tags: 标签
     target: 目标
@@ -2756,18 +2756,18 @@ zh-cn:
     view: 视图
   timeline_events:
     show:
-      submission_from: 来自的提交
-      submitted_on: 提交于
-      reviewed_on: 评论于
-      status: 状态
-      rejected: 已拒绝
       accepted: 已接受
-      pending: 待定
-      team: 团队
       feedback:
         one: 反馈
         other: 反馈意见
       no_feedbacks: 此提交未收到任何反馈。
+      pending: 待定
+      rejected: 已拒绝
+      reviewed_on: 评论于
+      status: 状态
+      submission_from: 来自的提交
+      submitted_on: 提交于
+      team: 团队
   users:
     clear_discord_id:
       success: 成功解除 Discord 的关联。

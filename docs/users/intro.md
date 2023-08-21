@@ -27,4 +27,4 @@ This documentation is [a part of the open-source repository](https://github.com/
 
 ## Changelog
 
-You can find a log of changes to the platform at [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog).
+You can find a log of changes to the LMS on [our GitHub releases page](https://github.com/pupilfirst/pupilfirst/releases).

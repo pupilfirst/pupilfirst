@@ -368,9 +368,9 @@ en:
         limited:
           description_end: without getting submissions reviewed.
           description_start: Students can submit
+          four_times: four times
           once: once
           thrice: thrice
-          four_times: four times
           title: Limited
           twice: twice
         unlimited:
@@ -2007,6 +2007,13 @@ en:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2166,9 +2173,9 @@ en:
           main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
         subject: account recovery
   maintenance:
-    title: Maintenance Mode
     heading: We'll be back soon!
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:

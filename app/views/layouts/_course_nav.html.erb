@@ -45,7 +45,7 @@
           <% presenter.links.each do |link| %>
             <%= link_to send("#{link}_course_path", @course), class: "app-router-navbar__primary-nav-link py-3 px-2 mb-1 #{request.path == send("#{link}_course_path", @course) ? "app-router-navbar__primary-nav-link--active" : ""}", title: link.capitalize do %>
               <span> <i class="<%= presenter.icon(link) %>"></i> </span>
-              <div class="ps-3 "><%= link.capitalize %></div>
+              <div class="ps-3 "><%= t("layouts.course_nav.#{link}") %></div>
             <% end %>
           <% end %>
         </div>

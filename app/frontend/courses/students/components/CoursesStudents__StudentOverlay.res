@@ -260,7 +260,7 @@ let milestoneTargetsCompletionStats = studentDetails => {
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {milestoneTargetCompletionPercentage ++ "% completed" |> str}
+      {milestoneTargetCompletionPercentage ++ t("percentage_completed") |> str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -579,7 +579,7 @@ let make = (~studentId, ~userId) => {
             {otherTeamMembers(setState, studentId, studentDetails)}
             <div className="mt-4">
               <div className="justify-between mt-8 flex space-x-2">
-                <p className="text-sm font-semibold"> {"Milestone targets"->str} </p>
+                <p className="text-sm font-semibold"> {t("milestone_targets")->str} </p>
                 {milestoneTargetsCompletionStats(studentDetails)}
               </div>
               <div className="space-y-2">
@@ -612,7 +612,7 @@ let make = (~studentId, ~userId) => {
                       </div>
                       <div>
                         <p className="text-sm font-semibold">
-                          {("M" ++
+                          {(t("m") ++
                           string_of_int(
                             CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
                           ))->str}

@@ -650,11 +650,12 @@ en:
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
       incomplete_targets: "Incomplete: %{targetsCount}"
-      level_progress: Level Progress
+      m: M
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
       milestone_status_title: Milestone targets
+      percentage_completed: "% completed"
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -865,9 +866,11 @@ en:
       close_student_report: Close student report
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
-      level_progress: Level Progress
+      m: M
+      milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
+      percentage_completed: "% completed"
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted

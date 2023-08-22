@@ -251,7 +251,7 @@ en:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin

@@ -4427,17 +4427,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:^3.0.1":
+"entities@npm:^3.0.1, entities@npm:~3.0.1":
   version: 3.0.1
   resolution: "entities@npm:3.0.1"
   checksum: aaf7f12033f0939be91f5161593f853f2da55866db55ccbf72f45430b8977e2b79dbd58c53d0fdd2d00bd7d313b75b0968d09f038df88e308aa97e39f9456572
-  languageName: node
-  linkType: hard
-
-"entities@npm:~2.1.0":
-  version: 2.1.0
-  resolution: "entities@npm:2.1.0"
-  checksum: a10a877e489586a3f6a691fe49bf3fc4e58f06c8e80522f08214a5150ba457e7017b447d4913a3fa041bda06ee4c92517baa4d8d75373eaa79369e9639225ffd
   languageName: node
   linkType: hard
 
@@ -6357,12 +6350,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linkify-it@npm:^3.0.1":
-  version: 3.0.3
-  resolution: "linkify-it@npm:3.0.3"
+"linkify-it@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "linkify-it@npm:4.0.1"
   dependencies:
     uc.micro: ^1.0.1
-  checksum: 31367a4bb70c5bbc9703246236b504b0a8e049bcd4e0de4291fa50f0ebdebf235b5eb54db6493cb0b1319357c6eeafc4324c9f4aa34b0b943d9f2e11a1268fbc
+  checksum: 3e0a29921269c14eb7ac6f5db2da68d4854ea9acca6e9014a323f75f2dd39b197ffab57c1fbd6a906ceb021aad3ee6d7ba7d0181236dd9630ffc452b392f7f71
   languageName: node
   linkType: hard
 
@@ -6692,17 +6685,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-link-attributes@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "markdown-it-link-attributes@npm:3.0.0"
-  checksum: 4f84ea5a07eb94580a295882d6a236fd8c93e7f68d98bd763ad91ea2ff9c9c046998e3b87c8bf6a272810eaa9d126b611922f785b5d5bf5d575c7f94de938e85
+"markdown-it-link-attributes@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "markdown-it-link-attributes@npm:4.0.1"
+  checksum: e859b0a3653998b7acddaf5e37052a00e940150d76b0275322e133a14179979c3516692610df75553f3b2e5d4010e1e5138f10bc85efab4768b9293a5b39f0a6
   languageName: node
   linkType: hard
 
-"markdown-it-linkify-images@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "markdown-it-linkify-images@npm:2.0.0"
-  checksum: 1432f1f1985c53c4f019cf73751584fe17518e20433c1f947ae88aedba1c021c5e234f38e7e3d5fd05b75cda59bfd583c71edb2cb7346ae54948affe01a21647
+"markdown-it-linkify-images@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "markdown-it-linkify-images@npm:4.0.0"
+  dependencies:
+    markdown-it: ^13.0.1
+  checksum: b02166cd32fa11af272c68cffa86be7b7f873b6cb19891717f513f0d9f7ebde053b24cfd2d13b447c308c14ae48e15025e3d99b378fb115c1a2a97951bec4399
   languageName: node
   linkType: hard
 
@@ -6741,18 +6736,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:^12.3.2":
-  version: 12.3.2
-  resolution: "markdown-it@npm:12.3.2"
+"markdown-it@npm:^13.0.1":
+  version: 13.0.1
+  resolution: "markdown-it@npm:13.0.1"
   dependencies:
     argparse: ^2.0.1
-    entities: ~2.1.0
-    linkify-it: ^3.0.1
+    entities: ~3.0.1
+    linkify-it: ^4.0.1
     mdurl: ^1.0.1
     uc.micro: ^1.0.5
   bin:
     markdown-it: bin/markdown-it.js
-  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
+  checksum: faf5891d389dc433bcf21d3fbff2009beb044b42b117c92f4848899780ca1a2282a209e3ff4672db4afed726a7248304ec473e6e242a7d6498af7113d31974e7
   languageName: node
   linkType: hard
 
@@ -8910,21 +8905,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:>=2.3.0":
+"prettier@npm:>=2.3.0, prettier@npm:^2.8.7":
   version: 2.8.8
   resolution: "prettier@npm:2.8.8"
   bin:
     prettier: bin-prettier.js
   checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^2.8.7":
-  version: 2.8.7
-  resolution: "prettier@npm:2.8.7"
-  bin:
-    prettier: bin-prettier.js
-  checksum: fdc8f2616f099f5f0d685907f4449a70595a0fc1d081a88919604375989e0d5e9168d6121d8cc6861f21990b31665828e00472544d785d5940ea08a17660c3a6
   languageName: node
   linkType: hard
 
@@ -9095,10 +9081,10 @@ __metadata:
     fuse.js: ^6.6.2
     i18n-js: ^4.1.1
     lerna: ^6.6.1
-    markdown-it: ^12.3.2
+    markdown-it: ^13.0.1
     markdown-it-align: ^0.1.0
-    markdown-it-link-attributes: ^3.0.0
-    markdown-it-linkify-images: ^2.0.0
+    markdown-it-link-attributes: ^4.0.1
+    markdown-it-linkify-images: ^4.0.0
     markdown-it-multimd-table: ^4.2.0
     markdown-it-sub: ^1.0.0
     markdown-it-sup: ^1.0.0

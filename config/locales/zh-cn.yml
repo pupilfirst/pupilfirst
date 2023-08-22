@@ -2055,13 +2055,6 @@ zh-cn:
           post_created: "%{user_name} 在 %{community_name} 社区的一个帖子中回复了你"
           topic_created: "%{user_name} 在 %{community_name} 社区创建了一个新主题"
   layouts:
-    course_nav:
-      calendar: 日历
-      cohorts: 队列
-      curriculum: 课程表
-      leaderboard: 排行榜
-      report: 报告
-      review: 审查
     footer_bottom:
       logo_alt: 校徽：%{school_name}
       privacy_policy: 隐私政策

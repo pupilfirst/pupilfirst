@@ -21,13 +21,13 @@ describe Levels::CloneService do
   let(:target_group_l0) { create :target_group, level: level_zero }
 
   let(:target_group_l1_1) do
-    create :target_group, level: level_one, milestone: true
+    create :target_group, level: level_one
   end
 
   let(:target_group_l1_2) { create :target_group, level: level_one }
 
   let(:target_group_l2) do
-    create :target_group, level: level_two, milestone: true
+    create :target_group, level: level_two
   end
 
   let!(:target_tc_l1) do

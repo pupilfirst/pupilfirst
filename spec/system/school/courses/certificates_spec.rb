@@ -162,13 +162,13 @@ feature 'Certificates', js: true do
     # course with milestone target group
     let(:course_with_milestone_target) { create :course, school: school }
     let!(:level_c2) { create :level, :one, course: course_with_milestone_target }
-    let!(:target_group_c2) { create :target_group, level: level_c2, milestone: true }
+    let!(:target_group_c2) { create :target_group, level: level_c2 }
     let!(:certificate_c2) { create :certificate, :active, course: course_with_milestone_target }
 
     # course with only archived target milestone group
     let(:course_with_archived_milestone) { create :course, school: school }
     let!(:level_c3) { create :level, :one, course: course_with_archived_milestone }
-    let!(:target_group_c3) { create :target_group, level: level_c3, milestone: true, archived: true, safe_to_archive: true }
+    let!(:target_group_c3) { create :target_group, level: level_c3, archived: true, safe_to_archive: true }
     let!(:certificate_c3) { create :certificate, :active, course: course_with_archived_milestone }
 
     scenario 'user visits certificate editor for course without milestone targets in highest level' do

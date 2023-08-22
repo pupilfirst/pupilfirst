@@ -25,15 +25,15 @@ feature "Course students report", js: true do
 
   # Create few targets for the student
   let(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
+    create :target_group, level: level_1
   end
 
   let(:target_group_l2) do
-    create :target_group, level: level_2, milestone: true
+    create :target_group, level: level_2
   end
 
   let(:target_group_l3) do
-    create :target_group, level: level_3, milestone: true
+    create :target_group, level: level_3
   end
 
   let(:target_l1) do

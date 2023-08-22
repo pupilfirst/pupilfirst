@@ -1888,11 +1888,8 @@ en:
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
-      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
+      password_strength: "Password Strength"
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1905,10 +1902,7 @@ en:
       set_new_password: Set new password
       update_password: Update Password
       updating_password: Updating password...
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      password_strength: "Password Strength"
     UsersDashboard__Root:
       certificates: Certificates
       communities: Communities
@@ -1952,6 +1946,11 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: Apply

@@ -1,11 +1,3 @@
-type zxcvbnFeedback = {suggestions: array<string>}
-type zxcvbnResponse = {
-  score: int,
-  feedback: zxcvbnFeedback,
-}
-
-@module("zxcvbn") external zxcvbn: (string, option<array<string>>) => zxcvbnResponse = "default"
-
 let str = React.string
 
 @val @scope(("window", "pupilfirst"))
@@ -33,7 +25,8 @@ type state = {
   avatarUploadError: option<string>,
   saving: bool,
   dirty: bool,
-  newPasswordAnalysis: option<(array<string>, int)>,
+  newPasswordAnalysis: option<Zxcvbn.t>,
+  schoolName: string,
 }
 
 type action =
@@ -79,15 +72,19 @@ let reducer = (state, action) =>
         state.name->Js.String2.split(" "),
         state.email->Js.String2.split("@"),
       )
-      let analysis = zxcvbn(
-        newPassword,
-        Some([state.name, state.email]->Js.Array2.concat(formDictionary)),
-      )
+      let newPasswordAnalysis = if Js.String2.length(newPassword) > 0 {
+        Zxcvbn.make(
+          ~password=newPassword,
+          ~userInputs=[state.name, state.email, state.schoolName]->Js.Array2.concat(formDictionary),
+        )->Some
+      } else {
+        None
+      }
       {
         ...state,
         newPassword: newPassword,
         dirty: true,
-        newPasswordAnalysis: Some(analysis.feedback.suggestions, analysis.score),
+        newPasswordAnalysis: newPasswordAnalysis,
       }
     }
   | UpdateNewPassWordConfirm(confirmPassword) => {
@@ -342,6 +339,7 @@ let make = (
   ~isSchoolAdmin,
   ~hasValidDeleteAccountToken,
   ~email,
+  ~schoolName,
 ) => {
   let initialState = {
     name: name,
@@ -363,6 +361,7 @@ let make = (
     avatarUploadError: None,
     dirty: false,
     newPasswordAnalysis: None,
+    schoolName: schoolName,
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
@@ -547,39 +546,44 @@ let make = (
               />
               {switch state.newPasswordAnalysis {
               | None => <div className="h-6" />
-              | Some(suggestions, score) =>
-                let (strength, color) = switch score {
-                | value if value <= 1 => (t("weak"), "bg-red-600")
-                | 2 => (t("fair"), "bg-orange-500")
-                | 3 => (t("medium"), "bg-yellow-500")
-                | _ => (t("strong"), "bg-green-500")
-                }
+              | Some(zxcvbn) =>
                 <div className="h-6">
                   <div className="flex justify-between items-center">
-                    <p className="text-xs text-gray-400 font-inter"> {"Password strength"->str} </p>
+                    <p className="text-xs text-gray-400 font-inter">
+                      {t("password_strength")->str}
+                    </p>
                     <div className="flex items-center gap-1">
                       <span
-                        className={`rounded-md h-1 ${score >= 0 ? color : "bg-gray-500"} w-10`}
+                        className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) >= 0
+                            ? Zxcvbn.color(zxcvbn)
+                            : "gray"}-500 w-10`}
                       />
                       <span
-                        className={`rounded-md h-1 ${score > 1 ? color : "bg-gray-500"} w-10`}
+                        className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 1
+                            ? Zxcvbn.color(zxcvbn)
+                            : "gray"}-500 w-10`}
                       />
                       <span
-                        className={`rounded-md h-1 ${score > 2 ? color : "bg-gray-500"} w-10`}
+                        className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 2
+                            ? Zxcvbn.color(zxcvbn)
+                            : "gray"}-500 w-10`}
                       />
                       <span
-                        className={`rounded-md h-1 ${score > 3 ? color : "bg-gray-500"} w-10`}
+                        className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 3
+                            ? Zxcvbn.color(zxcvbn)
+                            : "gray"}-500 w-10`}
                       />
                       <span className="text-xs font-inter text-gray-400 pl-2 w-12 text-right">
-                        {strength->str}
+                        {zxcvbn->Zxcvbn.label->str}
                       </span>
                     </div>
                   </div>
                   <div>
                     <ul className="text-yellow-900 text-xs font-inter">
-                      {Js.Array2.length(suggestions) > 0
+                      {Js.Array2.length(zxcvbn->Zxcvbn.suggestions) > 0
                         ? <li>
-                            <PfIcon className="if i-info-light if-fw" /> {suggestions[0]->str}
+                            <PfIcon className="if i-info-light if-fw" />
+                            {Zxcvbn.suggestions(zxcvbn)[0]->str}
                           </li>
                         : React.null}
                     </ul>

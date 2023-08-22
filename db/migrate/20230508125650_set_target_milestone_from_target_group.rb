@@ -18,6 +18,8 @@ class SetTargetMilestoneFromTargetGroup < ActiveRecord::Migration[6.1]
 
   class Target < ApplicationRecord
     belongs_to :target_group
+
+    VISIBILITY_LIVE = "live"
   end
 
   def up
@@ -33,11 +35,12 @@ class SetTargetMilestoneFromTargetGroup < ActiveRecord::Migration[6.1]
             .each do |level|
               level
                 .target_groups
-                .where(milestone: true)
+                .where(milestone: true, archived: false)
                 .order(:sort_index)
                 .each do |target_group|
                   target_group
                     .targets
+                    .where(visibility: Target::VISIBILITY_LIVE)
                     .order(:sort_index)
                     .each do |target|
                       milestone_number += 1

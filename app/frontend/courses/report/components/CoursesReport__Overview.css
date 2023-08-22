@@ -93,8 +93,8 @@
 }
 
 .courses-report-overview__pie-chart {
-  width: 64px;
-  height: 64px;
+  width: 24px;
+  height: 24px;
   transform: rotate(-90deg);
   border-radius: 50%;
 }
@@ -108,7 +108,7 @@
 }
 
 .courses-report-overview__pie-chart .courses-report-overview__pie-chart-circle {
-  stroke-width: 6;
+  stroke-width: 32;
 }
 
 .courses-report-overview__pie-chart-circle--pass {

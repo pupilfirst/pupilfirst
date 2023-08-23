@@ -131,8 +131,6 @@ feature "Cohorts", js: true do
       expect(page).to have_text("M2: " + target_l2.title)
       expect(page).to have_text("0/36")
 
-      # TODO - Also add percentage checks?
-
       create(
         :timeline_event,
         :with_owners,
@@ -147,6 +145,7 @@ feature "Cohorts", js: true do
       visit cohort_path(cohort_1)
 
       expect(page).to have_text("1/36")
+      expect(page).to have_text("3%")
 
       visit students_cohort_path(cohort_1)
       expect(page).to have_current_path(students_cohort_path(cohort_1))

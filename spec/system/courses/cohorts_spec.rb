@@ -131,6 +131,8 @@ feature "Cohorts", js: true do
       expect(page).to have_text("M2: " + target_l2.title)
       expect(page).to have_text("0/36")
 
+      # TODO - Also add percentage checks?
+
       create(
         :timeline_event,
         :with_owners,
@@ -241,6 +243,7 @@ feature "Cohorts", js: true do
         "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(student_2.name)
+      expect(page).to have_text(student_1.name)
     end
 
     scenario "filters the students by course completion" do

@@ -43,13 +43,14 @@
       <div class="w-full p-5 bg-gray-50 rounded-lg mt-5">
         <% stats = @presenter.milestone_completion_stats %>
         <div class="flex justify-between">
-          <p class="text-sm font-semibold"><%= 'Milestone Targets Completion Status' %></p>
-          <div class="flex items-center space-x-4 flex-shrink-0">
+          <p class="text-sm font-semibold"><%= t(".milestone_targets") %></p>
+          <div class="flex items-center gap-2 flex-shrink-0">
             <p class="text-xs font-medium text-gray-500 whitespace-nowrap">
               <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestone_targets }" %>
+              <span class="px-2 text-gray-300"> <%= '|' %> </span>
+              <%= "#{stats[:percentage]}%" %> <%= t(".completed") %>
             </p>
-            <div class="flex space-x-1">
-              <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{stats[:percentage]}%" %></p>
+            <div class="flex items-center gap-2 flex-shrink-0">
               <div>
                 <svg class="courses-milestone-complete__doughnut-chart"  viewBox="0 0 36 36">
                   <path class="courses-milestone-complete__doughnut-chart-bg "d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>

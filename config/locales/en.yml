@@ -2399,6 +2399,8 @@ en:
     students:
       show:
         average_grades: Average Grades
+        completed: completed
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions

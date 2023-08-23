@@ -112,11 +112,11 @@
 }
 
 .courses-report-overview__pie-chart-circle--pass {
-  fill: theme("colors.green.50");
+  fill: theme("colors.green.200");
   stroke: theme("colors.green.500");
 }
 
 .courses-report-overview__pie-chart-circle--fail {
-  fill: theme("colors.orange.50");
+  fill: theme("colors.orange.200");
   stroke: theme("colors.orange.500");
 }

@@ -113,7 +113,10 @@ let renderUpdatePassword = (state, send) => {
       <div className="h-5 pt-1">
         <div className="flex justify-between items-center">
           <p className="text-xs text-gray-400 font-inter"> {t("password_strength")->str} </p>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 mt-1">
+            <span className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
+              {zxcvbn->Zxcvbn.label->str}
+            </span>
             <span
               className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) >= 0
                   ? Zxcvbn.color(zxcvbn)
@@ -134,9 +137,6 @@ let renderUpdatePassword = (state, send) => {
                   ? Zxcvbn.color(zxcvbn)
                   : "gray"}-500 w-5`}
             />
-            <span className="text-xs text-gray-400 w-12 text-right">
-              {zxcvbn->Zxcvbn.label->str}
-            </span>
           </div>
         </div>
         <div>

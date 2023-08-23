@@ -24,7 +24,7 @@
     <div class="grid md:grid-cols-12 gap-6 max-w-5xl p-4 md:p-6 mx-auto">
       <div class="md:col-span-8 mt-2 order-2 md:order-1">
         <% if (total_students_count > 0 or milestone_completion_status.present?) && (@presenter.milestone_targets.present?) %>
-          <h3 class="font-semibold"><%= 'Student Distribution by Milestone Completion' %></h3>
+          <h3 class="font-semibold"><%= t('.student_distribution_by_milestone') %></h3>
           <div class="mt-4">
             <div class="max-w-5xl mx-auto">
               <div class="grid gap-x-8 gap-y-6">

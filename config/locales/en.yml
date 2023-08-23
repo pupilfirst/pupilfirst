@@ -2435,6 +2435,7 @@ en:
         filter_placeholder: Click to see options
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "M%{number}: %{title}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2657,7 +2658,7 @@ en:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.
       overview_link: Overview
-      student_distribution_milestone: Student Distribution by Milestone Completion
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
       students_completed: Students Completed
       students_link: Students
       total_students: Total Students

@@ -3,6 +3,7 @@
 open CoursesStudents__Types
 let str = React.string
 let t = I18n.t(~scope="components.CoursesStudents__StudentOverlay")
+let ts = I18n.t(~scope="shared")
 
 type selectedTab =
   | Notes
@@ -260,7 +261,10 @@ let milestoneTargetsCompletionStats = studentDetails => {
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {milestoneTargetCompletionPercentage ++ t("percentage_completed") |> str}
+      {ts(
+        "percentage_completed",
+        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
+      )->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">

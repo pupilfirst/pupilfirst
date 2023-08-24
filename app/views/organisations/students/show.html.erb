@@ -48,7 +48,7 @@
             <p class="text-xs font-medium text-gray-500 whitespace-nowrap">
               <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestone_targets }" %>
               <span class="px-2 text-gray-300"> <%= '|' %> </span>
-              <%= "#{stats[:percentage]}%" %> <%= t(".completed") %>
+              <%= t("shared.percentage_completed", percentage: stats[:percentage]) %>
             </p>
             <div class="flex items-center gap-2 flex-shrink-0">
               <div>

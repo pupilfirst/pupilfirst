@@ -27,23 +27,6 @@ ru:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  cohorts:
-    shared:
-      overview_link: Обзор
-      students_link: Ученики
-    show:
-      distribution_heading: Распределение студентов по уровням
-      students_completed: Студенты завершили
-      total_students: Всего студентов
-      view_all: Посмотреть все
-    student:
-      level_label: Уровень
-      never_signed_in: Никогда не входил
-      time_ago: Последний раз видели %{time_ago} назад
-    students:
-      distribution_heading: Распределение студентов по уровням
-      nothing_to_show: Нет учащихся, соответствующих выбранным фильтрам.
-      pagination_notice: Сейчас показаны %{page_start}-%{page_end} из %{count} таких студентов.
   communities:
     show:
       community_title: "%{name} Community"
@@ -274,7 +257,7 @@ ru:
         help: Хотя вы можете иметь несколько сертификатов, автоматически можно выдавать только один сертификат. Он будет выдан, когда студент <em>завершит</em> курс.
         help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
         label: Должны ли студенты автоматически получать этот сертификат?
-      cannot_be_auto_issued_warning: Обратите внимание, что последний уровень этого курса не имеет каких-либо контрольных задач. Этот сертификат будет автоматически выдан только в том случае, если на последнем уровне есть хотя бы одна задача.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: Редактировать Сертификат
       font_size_label: Размер Шрифта
       margin_label: Отступ
@@ -392,17 +375,15 @@ ru:
         help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
         label: Успешность
         limited:
-          description_end: " без рассмотрения отправленных материалов.."
-          description_start: Уровень студентов может подняться
+          description_end: without getting submissions reviewed.
+          description_start: Students can submit
+          four_times: four times
           once: один раз
           thrice: три раза
           title: Лимитировано
           twice: два раза
-        strict:
-          description: Учащиеся могут повысить свой уровень только после проверки и сдачи работ.
-          title: Строго
         unlimited:
-          description: Студенты могут повышать свой уровень до конца курса без рассмотрения их работ.
+          description: Students can submit all targets, without getting submissions reviewed.
           title: Без Лимита
       tabs:
         actions: Действия
@@ -535,6 +516,7 @@ ru:
       level_locked_explanation: Вы можете получить доступ к контенту %{date}.
       level_locked_for_students_notice: Этот уровень по-прежнему заблокирован для учащихся и будет разблокирован <strong>%{date}</strong>.
       level_locked_notice: Уровень в настоящее время заблокирован!
+      milestone_target_label: Milestone
       milestone_targets: Контрольные задачи
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
@@ -574,31 +556,15 @@ ru:
       smth_went_wrong: Что-то пошло не так!
     CoursesCurriculum__Learn:
       edit_target_button: Редактировать Контент
-    CoursesCurriculum__LevelUpButton:
-      button_text_level_up: Уровень повышен
-      button_text_saving: Сохраняем
     CoursesCurriculum__NoticeManager:
       access_ended_description: Сейчас у вас ограниченный доступ к курсу. Вам разрешен предварительный просмотр содержимого, но вы не можете выполнить ни одну цель.
       access_ended_title: Предварительный просмотр/ограниченный доступ
       course_complete_description: Вы выполнили нашу курсовую работу. Не стесняйтесь выполнять задачи, которые вы могли упустить, и читайте по прикрепленным ссылкам.
-      course_complete_title: Поздравляю! Вы выполнили все контрольные задачи на последнем уровне.
+      course_complete_title: Congratulations! You have completed all milestone targets in the course.
       course_ended_description: Курс завершен, и отправка материалов отключена для всех задачах!
       course_ended_title: Курс Окончен
-      level_up_blocked:
-        body_middle_pending_review: "все еще ожидают рассмотрения ментором. "
-        body_middle_rejected: "были отклонены. "
-        body_prefix: "Вы отправили все контрольные задачи на уровне %{number}, но еще остались задачи"
-        body_suffix: Вам нужен проходной балл по всем контрольным показателям для повышения уровня.
-        title_pending_review: Ожидает оценки
-        title_rejected: Поднятие Уровня Блокирован
-      level_up_description: Поздравляем! Вы успешно выполнили все контрольные задачи, необходимые для перехода на следующий уровень курса. Нажмите кнопку «Поднять уровень» ниже, чтобы продолжить изучение курса.
-      level_up_limited_description: Вы на Уровне %{currentLevel}, но у вас остались задачи на уровне %{minimumRequiredLevel} которые были отклонены или все еще ожидают рассмотрения ментором. Вам нужно будет пройти все этапы на Уровне %{minimumRequiredLevel} чтобы продолжать повышать уровень.
-      level_up_limited_title: Повышение Уровня Заблокировано
-      level_up_title: Готовы к повышению!
       preview_mode_description: Вы входите в режим предварительного просмотра курса
       preview_mode_title: Режим предварительного просмотра
-      team_members_pending_description: Вы выполнили все необходимые контрольные задачи, но один или несколько товарищей по команде еще не закончили. Попросите их войти в систему и проверить, нет ли незавершенных контрольных показателей.
-      team_members_pending_title: Свяжитесь с вашей командой
     CoursesCurriculum__Overlay:
       close_button: Закрыть
       completion_tab_complete: Завершить
@@ -616,6 +582,7 @@ ru:
       learn_cta_submit_work: Отправить работу на рассмотрение
       learn_cta_take_quiz: Пройти Тест
       learn_tab: Учиться
+      milestone_target_label: Milestone
       next_target_button: След. Задача
       pending_team_members_notice: "У вас есть члены команды, которым еще предстоит выполнить эту задачу:"
       preview_mode_text: Вы сейчас в режиме предварительного просмотра.
@@ -669,6 +636,7 @@ ru:
         pending: В Ожидании
         pending_review: Ожидает оценки
         rejected: Отклонен
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: Произошла непредвиденная ошибка, и наша команда была уведомлена об этом. Пожалуйста, перезагрузите страницу перед повторной попыткой.
       notification_error_head: Непредвиденная ошибка
@@ -691,7 +659,10 @@ ru:
       average_quiz_score: Средний Балл за Тесты
       course_completed: Курс Пройден!
       incomplete_targets: "Не Завершены: %{targetsCount}"
-      level_progress: Прогресс Уровня
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: Персональные Менторы
       quizzes_attempted:
         one: 1 викторина попытки
@@ -704,10 +675,8 @@ ru:
       targets_pending_review: "Ожидают Оценки: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: Завершено
-      filter_by_another_level: Фильтровать по другому уровню
-      filter_by_another_level_or_status: Фильтровать по другому уровню или по статусу
-      filter_by_level: Фильтровать по уровню
-      filter_by_level_or_status: Фильтровать по уровню или статусу
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
       load_more: Загрузить Больше...
       no_submissions_to_show: "Нет представленных материалов для показа "
       pending_review: Ожидает оценки
@@ -780,7 +749,7 @@ ru:
       hide_test_report_button: Hide Test Report
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
       review: Проверить
@@ -823,21 +792,16 @@ ru:
         personal_coach: Фильтровать по тому, кто назначен студенту
         reviewed_by: Фильтровать по тем, кто просмотрел работу
       filter_by: "Фильтровать по:"
-      filter_by_another_level: Фильтр по другому уровню
-      filter_by_another_level_or_submissions_assigned: Фильтровать по другому уровню или показать только работы, назначенные ментору
-      filter_by_level: Фильтровать по уровню
-      filter_by_level_or_submissions_assigned: Фильтровать по уровню или показать только работы, назначенные ментору
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: Фильтровать по задачам
       filter_hint: ... или начните вводить текст, чтобы фильтровать учащегося по имени или адресу электронной почты
       filter_input:
         assigned_to: "Назначен: "
-        level: "Уровень: "
         personal_coach: "Личный Ментор: "
         reviewed_by: "Оценен от: "
         target: "Задача: "
       inactive_students: Неактивные Студенты
       include: Включать
-      level: Уровень
       me: Я
       name_or_email: Имя или Почта
       now_showing_submissions_assigned_to: Теперь отображаются материалы, назначенные %{name}.
@@ -850,7 +814,6 @@ ru:
       reviewed_by: Оценено
       search:
         assigned_to: "Назначен:"
-        level: "Уровень:"
         personal_coach: "личный ментор:"
         reviewed_by: "оценен:"
         status: "статус: "
@@ -870,7 +833,6 @@ ru:
       completed: Завершено
       created_at: в %{created_at}.
       feedback_sent: Отзыв Отправлен
-      level: "Уровень "
       no_submissions_found: Работы не найдены
       rejected: Отклонено
       submitted_by: "Отправлено от "
@@ -904,27 +866,6 @@ ru:
       new_note: Добавить Новую Заметку
       no_notes: Здесь нет заметок!
       save_note: Сохранить Заметку
-    CoursesStudents__Root:
-      assigned_me: "Назначено: Мне"
-      assigned_to: Назначен к
-      coach_notes: Заметки Ментора
-      filter_level: Фильтр по уровню, назначенному ментору или поиск по имени или почте и многое другое...
-      has_notes: Имеет заметки
-      level_distribution_label: Распределение студентов по уровням
-      me: меня
-      name_email: Имя или Почта
-      no_notes: Не имеет заметок
-      not_found: "Не удалось найти уровень, выбранный из панели рассылки, с ID "
-      restore_filer_none: Теперь показаны все студенты этого курса.
-      search_assigned_me: " назначенных мне"
-      search_assigned_to: "назначенных к "
-      search_no_notes: нет заметок есть заметки ментор заметки
-      search_tag: "тег "
-      showing_assigned: "Теперь показаны учащиеся, назначенные к "
-      tagged_with: С тегами
-    CoursesStudents__StudentDistribution:
-      level_wise: Распределение учащихся по уровням
-      students_level: Студенты на уровне
     CoursesStudents__StudentOverlay:
       access_ended_at: Доступ этого студента к курсу закончился %{date}.
       average_grades: Средние оценка
@@ -932,7 +873,7 @@ ru:
       close_student_report: Закрыть отчет студента
       course_completed: Курс Пройден!
       dropped_out_at: Этот студент выбыл из курса в %{date}.
-      level_progress: Прогресс Уровня
+      milestone_targets: Milestone Targets
       notes: Заметки
       other_team_members: Другие Члены Команды
       personal_coaches: Личные Менторы
@@ -946,12 +887,6 @@ ru:
       targets_overview: Обзор Задач
       team_coaches: Менторы Команд
       total_targets_completed: Всего задач выполнено
-    CoursesStudents__StudentsList:
-      last_seen: Последнее посещение %{time_string}
-      no_last_seen: Этот студент никогда не входил в систему
-      no_students: Нет учеников для показа
-      personal_coaches: Персональные тренеры
-      team_coaches: Тренеры команд
     CoursesStudents__SubmissionsList:
       no_revied_submission: Нет Рассмотренного Работ
       submitted_on: "Отправленный в "
@@ -1122,6 +1057,10 @@ ru:
         help: Должны ли студенты в команде сдавать работу по цели в индивидуальном порядке или вместе?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of completion'
         label: Как команды должны бороться с этой целью?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
+        label: Is this target a milestone?
       target_title_placeholder: Введите название задачи здесь
       target_visibility: Видимость Задачи
       title: Заголовок
@@ -1140,7 +1079,6 @@ ru:
       description_placeholder: Введите описание группы задач
       group_archived_q: Заархивирована ли эта группа задач?
       group_details: Детали Группы Задач
-      milestone_q: Является ли это важной группой задач?
       target_group_created_notification: Группа Задач успешно создана
       target_group_updated_notificaion: Группа Задач успешно обновлена
       title: Заголовок
@@ -1168,6 +1106,7 @@ ru:
       draft: Черновик
       edit: Редактировать
       edit_content: Редактировать контент задачи
+      milestone_target_label: Milestone
       move_down: Двинуть Вниз
       move_up: Двинуть Вверх
       of_target: задачи
@@ -1207,9 +1146,6 @@ ru:
       sign_in: Войти
       sign_out: Выход
       user_controls: Показать пользовательские элементы управления
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Нажмите здесь, чтобы прикрепить файл.
       bold_insert: жирный
@@ -1476,6 +1412,7 @@ ru:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1943,7 +1880,7 @@ ru:
         dropped_out: Выгнан
         edit_curriculum: Изменить Силлабус
         leaderboard: Таблица Лидеров
-        my_students: Мои студенты
+        my_cohorts: My Cohorts
         review_submissions: Оценить работы
         view_certificate: Посмотреть Сертификат
         view_course: Посмотреть Курс
@@ -1992,6 +1929,21 @@ ru:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        few: <span class="font-semibold text-black">%{count}</span> students enrolled
+        many: <span class="font-semibold text-black">%{count}</span> students enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        few: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
+        many: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: Активные Студенты
       change: Изменить
@@ -2089,6 +2041,13 @@ ru:
           post_created: "%{user_name} ответил на тему в сообществе %{community_name}"
           topic_created: "%{user_name} создал новую тему в сообществе %{community_name}"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2252,9 +2211,9 @@ ru:
           main_html: <p> Мы получили запрос на сброс пароля %{school_name} .  </p> <p> Пожалуйста, %{link_to} для изменения пароля.  </p>
         subject: password reset
   maintenance:
-    title: Maintenance Mode
     heading: We'll be back soon!
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2441,6 +2400,7 @@ ru:
       multiple_method_of_completion: Более одного метода завершения
       prerequisities_archived_error: Невозможно заархивировать предварительные требования
       prerequisities_in_same_level: Предварительные задачи должны быть того же уровня, что и задача.
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: Задача обновлена успешна!
       target_group_not_present_error: Группа задач не существуеш
       target_missing_error: Задачи не существует
@@ -2482,6 +2442,7 @@ ru:
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2511,6 +2472,16 @@ ru:
   presenters:
     apply:
       page_title: Зарегистрироваться в %{course_name}
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2639,6 +2610,11 @@ ru:
     courses:
       applicants:
         title: Кандидаты
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: Авторы
       calendar_events:
@@ -2722,6 +2698,18 @@ ru:
     caption_image: Подпись к изображению
     close: Закрыть
     coaches: Тренеры
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: Когорты
     community: Сообщество
     completed: Завершено
@@ -2750,6 +2738,8 @@ ru:
     load_more: Загрузить Больше...
     loading: Загрузка...
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
+    m: M
+    my_org: My Org
     name: Имя
     name_email: Имя или Почта
     none: Ничего
@@ -2778,6 +2768,7 @@ ru:
       truncate: "&hellip;"
     pass: Пройдено
     percentage: Процент
+    percentage_completed: "%{percentage}% completed"
     post: Пост
     preferred_name: Предпочитаемое имя
     processing: Обрабатывается
@@ -2793,6 +2784,9 @@ ru:
     settings: Настройки
     sign_out: Выйти
     sort_by: Sort by
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: Студенты
     tag: Тег
     tags: Теги

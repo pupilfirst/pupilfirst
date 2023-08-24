@@ -27,23 +27,6 @@ hi:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  cohorts:
-    shared:
-      overview_link: अवलोकन
-      students_link: छात्र
-    show:
-      distribution_heading: स्तरवार छात्र वितरण
-      students_completed: छात्र पूर्ण
-      total_students: कुल छात्र
-      view_all: सभी को देखें
-    student:
-      level_label: स्तर
-      never_signed_in: कभी साइन इन नहीं किया है
-      time_ago: अंतिम बार %{time_ago} पहले देखा गया
-    students:
-      distribution_heading: स्तरवार छात्र वितरण
-      nothing_to_show: चयनित फ़िल्टर से मेल खाने वाले कोई छात्र नहीं हैं।
-      pagination_notice: अब ऐसे %{page_start}%{page_end} विद्यार्थियों में से %{count} दिखा रहे हैं।
   communities:
     show:
       community_title: "%{name} Community"
@@ -268,7 +251,7 @@ hi:
         help: जबकि आपके पास एकाधिक प्रमाणपत्र हो सकते हैं, केवल एक ही स्वचालित रूप से जारी किया जा सकता है; यह तब जारी किया जाएगा जब कोई छात्र <em></em> कोर्स पूरा करता है।
         help_url: 'https://docs.pupilfirst.com/users/certificates#autoally-issuing-certificates'
         label: क्या छात्रों को स्वतः ही यह प्रमाणपत्र जारी कर दिया जाना चाहिए?
-      cannot_be_auto_issued_warning: कृपया ध्यान दें कि इस पाठ्यक्रम के अंतिम स्तर में कोई मील का पत्थर लक्ष्य नहीं है। यह प्रमाणपत्र केवल तभी जारी किया जाएगा जब अंतिम स्तर में कम से कम एक मील का पत्थर लक्ष्य हो।
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: प्रमाणपत्र संपादित करें
       font_size_label: फ़ॉन्ट आकार
       margin_label: अंतर
@@ -382,17 +365,15 @@ hi:
         help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
         label: प्रगति व्यवहार
         limited:
-          description_end: " सबमिशन की समीक्षा किए बिना।"
-          description_start: छात्र ऊपर ले जा सकते हैं
+          description_end: without getting submissions reviewed.
+          description_start: Students can submit
+          four_times: four times
           once: एक बार
           thrice: तीन बार
           title: सीमित
           twice: दो बार
-        strict:
-          description: सबमिशन की समीक्षा और पास होने के बाद ही छात्र लेवल अप कर सकते हैं।
-          title: कठोर
         unlimited:
-          description: सबमिशन की समीक्षा किए बिना छात्र पाठ्यक्रम के अंत तक स्तर बढ़ा सकते हैं।
+          description: Students can submit all targets, without getting submissions reviewed.
           title: असीमित
       tabs:
         actions: कार्रवाई
@@ -525,6 +506,7 @@ hi:
       level_locked_explanation: आप सामग्री को %{date}पर एक्सेस कर सकते हैं।
       level_locked_for_students_notice: यह स्तर अभी भी छात्रों के लिए बंद है और <strong>%{date}</strong>को अनलॉक किया जाएगा।
       level_locked_notice: स्तर वर्तमान में बंद है!
+      milestone_target_label: Milestone
       milestone_targets: मील का पत्थर लक्ष्य
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
@@ -564,31 +546,15 @@ hi:
       smth_went_wrong: कुछ गलत हो गया!
     CoursesCurriculum__Learn:
       edit_target_button: सामग्री संपादित करें
-    CoursesCurriculum__LevelUpButton:
-      button_text_level_up: ऊपर का स्तर
-      button_text_saving: सहेजा जा रहा है
     CoursesCurriculum__NoticeManager:
       access_ended_description: अब आपके पास पाठ्यक्रम तक सीमित पहुंच है। आपको सामग्री का पूर्वावलोकन करने की अनुमति है लेकिन कोई लक्ष्य पूरा नहीं कर सकते।
       access_ended_title: पूर्वावलोकन/सीमित पहुंच
       course_complete_description: आपने हमारा कोर्सवर्क पूरा कर लिया है। उन लक्ष्यों को पूरा करने के लिए स्वतंत्र महसूस करें जिन्हें आपने छोड़ दिया है, और संलग्न लिंक पर पढ़ें।
-      course_complete_title: बधाई हो! आपने अंतिम स्तर में सभी मील के पत्थर के लक्ष्य पूरे कर लिए हैं।
+      course_complete_title: Congratulations! You have completed all milestone targets in the course.
       course_ended_description: पाठ्यक्रम समाप्त हो गया है और सभी लक्ष्यों के लिए सबमिशन अक्षम कर दिए गए हैं!
       course_ended_title: कोर्स समाप्त
-      level_up_blocked:
-        body_middle_pending_review: "अभी भी एक कोच द्वारा समीक्षा लंबित हैं। "
-        body_middle_rejected: "खारिज कर दिया गया है। "
-        body_prefix: "आपने सभी माइलस्टोन लक्ष्य लेवल %{number}में सबमिट कर दिए हैं, लेकिन एक या अधिक सबमिशन "
-        body_suffix: स्तर बढ़ाने के लिए आपको सभी मील के पत्थर लक्ष्यों पर एक उत्तीर्ण ग्रेड की आवश्यकता है।
-        title_pending_review: लंबित समीक्षा
-        title_rejected: लेवल अप ब्लॉक किया गया
-      level_up_description: बधाई हो! आपने पाठ्यक्रम में अगले स्तर तक जाने के लिए आवश्यक सभी महत्वपूर्ण लक्ष्यों को सफलतापूर्वक पूरा कर लिया है। पाठ्यक्रम के माध्यम से प्रगति जारी रखने के लिए नीचे दिए गए "स्तर ऊपर" बटन पर क्लिक करें।
-      level_up_limited_description: आप स्तर %{currentLevel}पर हैं, लेकिन स्तर %{minimumRequiredLevel} में लक्ष्य हैं जिन्हें अस्वीकार कर दिया गया है, या अभी भी एक कोच द्वारा समीक्षा के लिए लंबित हैं। लेवल अप को जारी रखने के लिए आपको लेवल %{minimumRequiredLevel} के सभी महत्वपूर्ण लक्ष्यों को पास करना होगा।
-      level_up_limited_title: लेवल अप ब्लॉक किया गया
-      level_up_title: स्तर ऊपर करने के लिए तैयार!
       preview_mode_description: आप इस पाठ्यक्रम के लिए पूर्वावलोकन मोड का उपयोग कर रहे हैं
       preview_mode_title: पूर्वावलोकन मोड
-      team_members_pending_description: आपने सभी आवश्यक माइलस्टोन लक्ष्य पूरे कर लिए हैं, लेकिन आपकी टीम के एक या अधिक साथियों ने ऐसा नहीं किया है। कृपया उन्हें साइन इन करने और अपूर्ण माइलस्टोन लक्ष्यों की जांच करने के लिए कहें।
-      team_members_pending_title: अपनी टीम के साथ जांचें
     CoursesCurriculum__Overlay:
       close_button: बंद करना
       completion_tab_complete: पूरा
@@ -606,6 +572,7 @@ hi:
       learn_cta_submit_work: समीक्षा के लिए कार्य सबमिट करें
       learn_cta_take_quiz: कोई प्रश्नोत्तरी लें
       learn_tab: सीखना
+      milestone_target_label: Milestone
       next_target_button: अगला निशाना
       pending_team_members_notice: "आपके पास टीम के सदस्य हैं जिन्होंने अभी तक इस लक्ष्य को पूरा नहीं किया है:"
       preview_mode_text: आप वर्तमान में इस पाठ्यक्रम का पूर्वावलोकन देख रहे हैं।
@@ -659,6 +626,7 @@ hi:
         pending: लंबित
         pending_review: लंबित समीक्षा
         rejected: अस्वीकृत
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: 'एक अनपेक्षित त्रुटि हुई, और हमारी टीम को इस बारे में सूचित कर दिया गया है। कृपया पुन: प्रयास करने से पहले पृष्ठ को पुनः लोड करें।'
       notification_error_head: अप्रत्याशित त्रुटि
@@ -681,7 +649,10 @@ hi:
       average_quiz_score: औसत प्रश्नोत्तरी स्कोर
       course_completed: कोर्स पूरा हुआ!
       incomplete_targets: "अधूरा: %{targetsCount}"
-      level_progress: स्तर की प्रगति
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: व्यक्तिगत कोच
       quizzes_attempted:
         one: 1 प्रश्नोत्तरी का प्रयास किया गया
@@ -692,10 +663,8 @@ hi:
       targets_pending_review: "लंबित समीक्षा: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: पूरा हुआ
-      filter_by_another_level: दूसरे स्तर के अनुसार फ़िल्टर करें
-      filter_by_another_level_or_status: दूसरे स्तर, या स्थिति के आधार पर फ़िल्टर करें
-      filter_by_level: स्तर के अनुसार फ़िल्टर करें
-      filter_by_level_or_status: स्तर, या स्थिति के अनुसार फ़िल्टर करें
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
       load_more: और लोड करें...
       no_submissions_to_show: "दिखाने के लिए कोई सबमिशन नहीं "
       pending_review: लंबित समीक्षा
@@ -768,7 +737,7 @@ hi:
       hide_test_report_button: Hide Test Report
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: असाइनमेंट हटाएं
       report_description: जाँच रिपोर्ट
       review: समीक्षा
@@ -811,21 +780,16 @@ hi:
         personal_coach: छात्र को किसने असाइन किया है, इसके आधार पर फ़िल्टर करें
         reviewed_by: सबमिशन की समीक्षा करने वाले द्वारा फ़िल्टर करें
       filter_by: "के द्वारा छनित:"
-      filter_by_another_level: दूसरे स्तर के अनुसार फ़िल्टर करें
-      filter_by_another_level_or_submissions_assigned: दूसरे स्तर से फ़िल्टर करें, या केवल एक कोच को सौंपे गए सबमिशन दिखाएं
-      filter_by_level: स्तर के अनुसार फ़िल्टर करें
-      filter_by_level_or_submissions_assigned: स्तर के अनुसार फ़िल्टर करें, या केवल एक कोच को सौंपे गए सबमिशन दिखाएं
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: लक्ष्य के अनुसार फ़िल्टर करें
       filter_hint: ...या छात्र द्वारा उनके नाम या ईमेल पते का उपयोग करके फ़िल्टर करने के लिए टाइप करना प्रारंभ करें
       filter_input:
         assigned_to: "को सौंपना: "
-        level: "स्तर: "
         personal_coach: "व्यक्तिगत कोच: "
         reviewed_by: "द्वारा समीक्षित: "
         target: "लक्ष्य: "
       inactive_students: निष्क्रिय छात्र
       include: शामिल
-      level: स्तर
       me: मैं
       name_or_email: नाम या ईमेल
       now_showing_submissions_assigned_to: अब %{name}को सौंपे गए सबमिशन दिखा रहा है।
@@ -838,7 +802,6 @@ hi:
       reviewed_by: द्वारा समीक्षित
       search:
         assigned_to: "को सौंपना:"
-        level: "स्तर:"
         personal_coach: "व्यक्तिगत कोच:"
         reviewed_by: "द्वारा समीक्षित:"
         status: "दर्जा: "
@@ -856,7 +819,6 @@ hi:
       completed: पूरा हुआ
       created_at: '%{created_at}पर।'
       feedback_sent: फ़ीडबैक भेजा गया
-      level: "स्तर "
       no_submissions_found: कोई सबमिशन नहीं मिला
       rejected: अस्वीकृत
       submitted_by: "द्वारा प्रस्तुत "
@@ -890,27 +852,6 @@ hi:
       new_note: एक नया नोट जोड़ें
       no_notes: यहाँ कोई नोट नहीं है!
       save_note: नोट सहेजें
-    CoursesStudents__Root:
-      assigned_me: "को सौंपा गया: Me"
-      assigned_to: को सौंपना
-      coach_notes: कोच नोट्स
-      filter_level: स्तर, असाइन किए गए कोच द्वारा फ़िल्टर करें, या नाम या ईमेल पते से खोजें, और बहुत कुछ...
-      has_notes: नोट्स हैं
-      level_distribution_label: स्तरवार छात्र वितरण
-      me: मैं
-      name_email: नाम या ईमेल
-      no_notes: नोट नहीं है
-      not_found: "आईडी के साथ वितरण पट्टी से चयनित स्तर नहीं मिल सका "
-      restore_filer_none: अब इस कोर्स में सभी छात्रों को दिखा रहे हैं।
-      search_assigned_me: " मुझे सौंपा गया"
-      search_assigned_to: "को सौंपना "
-      search_no_notes: नोट्स नहीं हैं नोट्स कोच नोट्स हैं
-      search_tag: "उपनाम "
-      showing_assigned: "अब असाइन किए गए विद्यार्थियों को दिखा रहे हैं "
-      tagged_with: साथ टैग किया गया
-    CoursesStudents__StudentDistribution:
-      level_wise: छात्र स्तरवार वितरण
-      students_level: स्तर में छात्र
     CoursesStudents__StudentOverlay:
       access_ended_at: पाठ्यक्रम में इस छात्र की पहुंच %{date}पर समाप्त हो गई।
       average_grades: औसत श्रेणी
@@ -918,7 +859,7 @@ hi:
       close_student_report: छात्र रिपोर्ट बंद करें
       course_completed: कोर्स पूरा हुआ!
       dropped_out_at: यह छात्र %{date}पर पाठ्यक्रम से बाहर हो गया।
-      level_progress: स्तर की प्रगति
+      milestone_targets: Milestone Targets
       notes: टिप्पणियाँ
       other_team_members: टीम के अन्य सदस्य
       personal_coaches: व्यक्तिगत कोच
@@ -930,12 +871,6 @@ hi:
       targets_overview: लक्ष्य अवलोकन
       team_coaches: टीम के कोच
       total_targets_completed: कुल लक्ष्य पूरे किए गए
-    CoursesStudents__StudentsList:
-      last_seen: अंतिम बार देखा गया %{time_string}
-      no_last_seen: इस छात्र ने कभी साइन इन नहीं किया है
-      no_students: दिखाने के लिए कोई छात्र नहीं
-      personal_coaches: व्यक्तिगत कोच
-      team_coaches: टीम के कोच
     CoursesStudents__SubmissionsList:
       no_revied_submission: कोई समीक्षित सबमिशन नहीं
       submitted_on: "पर प्रस्तुत की "
@@ -1106,6 +1041,10 @@ hi:
         help: क्या एक टीम में छात्रों को व्यक्तिगत रूप से या एक साथ लक्ष्य पर काम जमा करना चाहिए?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
         label: टीमों को इस लक्ष्य से कैसे निपटना चाहिए?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
+        label: Is this target a milestone?
       target_title_placeholder: यहां लक्ष्य शीर्षक टाइप करें
       target_visibility: लक्ष्य दृश्यता
       title: शीर्षक
@@ -1124,7 +1063,6 @@ hi:
       description_placeholder: लक्ष्य समूह विवरण टाइप करें
       group_archived_q: क्या यह लक्ष्य समूह संग्रहीत है?
       group_details: लक्ष्य समूह विवरण
-      milestone_q: क्या यह एक मील का पत्थर लक्ष्य समूह है?
       target_group_created_notification: लक्ष्य समूह सफलतापूर्वक बनाया गया
       target_group_updated_notificaion: लक्ष्य समूह सफलतापूर्वक अपडेट किया गया
       title: शीर्षक
@@ -1152,6 +1090,7 @@ hi:
       draft: प्रारूप
       edit: संपादन करना
       edit_content: लक्ष्य की सामग्री संपादित करें
+      milestone_target_label: Milestone
       move_down: नीचे की ओर
       move_up: बढ़ाना
       of_target: लक्ष्य का
@@ -1191,9 +1130,6 @@ hi:
       sign_in: साइन इन करें
       sign_out: साइन आउट
       user_controls: उपयोगकर्ता नियंत्रण दिखाएं
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: फ़ाइल संलग्न करने के लिए यहां क्लिक करें।
       bold_insert: साहसिक
@@ -1456,6 +1392,7 @@ hi:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1919,7 +1856,7 @@ hi:
         dropped_out: छोड़ दिया या हार मान लिया
         edit_curriculum: पाठ्यचर्या संपादित करें
         leaderboard: लीडरबोर्ड
-        my_students: मेरे छात्र
+        my_cohorts: My Cohorts
         review_submissions: सबमिशन की समीक्षा करें
         view_certificate: प्रमाणपत्र देखें
         view_course: कोर्स देखें
@@ -1968,6 +1905,17 @@ hi:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: सक्रिय छात्र
       change: परिवर्तन
@@ -2061,6 +2009,13 @@ hi:
           post_created: "%{user_name} ने उस थ्रेड का जवाब दिया है जिसका आप %{community_name} समुदाय में हिस्सा हैं"
           topic_created: "%{user_name} ने %{community_name} समुदाय में एक नया विषय बनाया है"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2220,9 +2175,9 @@ hi:
           main_html: <p> हमें आपका %{school_name} पासवर्ड रीसेट करने का अनुरोध प्राप्त हुआ है।  </p> <p> कृपया %{link_to} अपना पासवर्ड बदलने के लिए।  </p>
         subject: password reset
   maintenance:
-    title: Maintenance Mode
     heading: We'll be back soon!
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2409,6 +2364,7 @@ hi:
       multiple_method_of_completion: पूरा करने की एक से अधिक विधि
       prerequisities_archived_error: पूर्वापेक्षाएँ संग्रहीत नहीं की जा सकतीं
       prerequisities_in_same_level: पूर्वापेक्षित लक्ष्य लक्ष्य के समान स्तर से होने चाहिए
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: लक्ष्य सफलतापूर्वक अपडेट किया गया!
       target_group_not_present_error: लक्ष्य समूह मौजूद नहीं है
       target_missing_error: लक्ष्य मौजूद नहीं है
@@ -2446,6 +2402,7 @@ hi:
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2475,6 +2432,16 @@ hi:
   presenters:
     apply:
       page_title: '%{course_name}. में नामांकन करें'
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2603,6 +2570,11 @@ hi:
     courses:
       applicants:
         title: आवेदक
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: लेखकों
       calendar_events:
@@ -2686,6 +2658,18 @@ hi:
     caption_image: छवि के लिए एक कैप्शन
     close: बंद करना
     coaches: डिब्बों
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: समानता रखने वाले लोग
     community: समुदाय
     completed: पूरा हुआ
@@ -2714,6 +2698,8 @@ hi:
     load_more: और लोड करें...
     loading: लोड हो रहा है...
     login_token_expiration_warning_html: यह लिंक %{timestamp}तक समाप्त हो जाएगा। यदि लिंक की समय सीमा समाप्त हो गई है, तो आप <a href="%{login_url}" %>साइन-इन पृष्ठ</a>से एक बार के टोकन का अनुरोध कर सकते हैं। कृपया ध्यान दें कि यह एक निजी यूआरएल है और इसे साझा नहीं किया जाना चाहिए।
+    m: M
+    my_org: My Org
     name: नाम
     name_email: नाम या ईमेल
     none: कोई भी नहीं
@@ -2742,6 +2728,7 @@ hi:
       truncate: "&hellip;"
     pass: रास्ता
     percentage: प्रतिशत
+    percentage_completed: "%{percentage}% completed"
     post: पद
     preferred_name: पसंदीदा नाम
     processing: प्रसंस्करण
@@ -2757,6 +2744,9 @@ hi:
     settings: समायोजन
     sign_out: साइन आउट करें
     sort_by: Sort by
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: छात्र
     tag: उपनाम
     tags: टैग

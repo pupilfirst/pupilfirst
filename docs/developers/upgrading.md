@@ -18,9 +18,13 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
-### 2023.3
+### 2023.4
 
 This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.
+
+### 2023.3
+
+This update addresses few security vulnerabilities in our platform of medium severity. It introduces enhanced security measures, including mandatory password confirmation for email changes, authentication for new password setting, and discreet user presence disclosure. It's vital for all users to upgrade to version 2023.3 to safeguard their accounts effectively.
 
 ### 2023.2
 

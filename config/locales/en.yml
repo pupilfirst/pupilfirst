@@ -1785,8 +1785,19 @@ en:
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
       avatar_uploaded_notification: Avatar uploaded successfully.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
       cancel: Cancel
       change_password: Change your current password
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Change photo
       community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
@@ -1796,6 +1807,7 @@ en:
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
       current_password: Current password
+      current_password_placeholder: Type current password
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
@@ -2119,7 +2131,7 @@ en:
         subject: Account deleted successfully from %{school_name}
       confirm_email_update:
         body:
-          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+          html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
@@ -2164,7 +2176,7 @@ en:
         body:
           link_to: click here
           main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
-        subject: account recovery
+        subject: password reset
   maintenance:
     title: Maintenance Mode
     heading: We'll be back soon!
@@ -2274,6 +2286,10 @@ en:
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2686,7 +2702,6 @@ en:
     my_org: My Org
     name: Name
     name_email: Name or Email
-    no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None
     note: "Note:"
     notes: Notes
@@ -2819,14 +2834,14 @@ en:
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:
-          description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: We've sent you a magic link!
-          notice: This link will work only once.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Magic link is on its way!
         reset_password_link:
-          description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: We've sent you a link to reset your password!
-          notice: This link will work only once.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Confirm your request
       new:
         already_signed: You are already signed in.
@@ -2865,6 +2880,7 @@ en:
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
+      invalid_password_error: The password you entered is incorrect. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: Cannot update inactive student submissions.

@@ -28,7 +28,6 @@
     <%= javascript_tag(nonce: true) do %>
       window.pupilfirst = {
       environment: "<%= Rails.env %>",
-      defaultLocale: "<%= I18n.default_locale %>",
       locale: "<%= I18n.locale %>",
       maxUploadFileSize: <%= Rails.application.secrets.max_upload_file_size %>,
       rollbar: {

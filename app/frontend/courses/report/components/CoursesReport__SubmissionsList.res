@@ -274,7 +274,7 @@ let showSubmission = (submissions, teamStudentIds) =>
               <div className="block text-sm md:pe-2">
                 <span className="ms-1 font-semibold text-base">
                   {(Belt.Option.mapWithDefault(Submission.milestoneNumber(submission), "", number =>
-                    "M" ++ string_of_int(number) ++ " - "
+                    ts("m") ++ string_of_int(number) ++ " - "
                   ) ++
                   submission->Submission.title)->str}
                 </span>

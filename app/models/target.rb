@@ -175,7 +175,7 @@ class Target < ApplicationRecord
   def title_with_milestone
     return title unless milestone?
 
-    "M#{milestone_number} - #{title}"
+    "#{I18n.t("shared.m")}#{milestone_number} - #{title}"
   end
 
   def status(student)

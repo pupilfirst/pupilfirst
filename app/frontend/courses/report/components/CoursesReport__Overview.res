@@ -3,6 +3,7 @@
 open CoursesReport__Types
 let str = React.string
 let t = I18n.t(~scope="components.CoursesReport__Overview")
+let ts = I18n.t(~scope="shared")
 
 let avatar = (avatarUrl, name) => {
   let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
@@ -125,7 +126,10 @@ let milestoneTargetsCompletionStatus = overview => {
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {milestoneTargetCompletionPercentage ++ "% completed" |> str}
+      {ts(
+        "percentage_completed",
+        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
+      )->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -248,7 +252,7 @@ let make = (~overviewData, ~coaches) =>
                   className="flex gap-2 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold">
-                      {("M" ++
+                      {(ts("m") ++
                       string_of_int(
                         CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
                       ))->str}

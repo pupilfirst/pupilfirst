@@ -2401,6 +2401,7 @@ en:
       show:
         average_grades: Average Grades
         completed: completed
+        m: M
         milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
@@ -2658,6 +2659,7 @@ en:
     close: Close
     coaches: Coaches
     cohort_overview:
+      m: M
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.
       overview_link: Overview

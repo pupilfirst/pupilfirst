@@ -27,23 +27,6 @@ ml:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  cohorts:
-    shared:
-      overview_link: അവലോകനം
-      students_link: വിദ്യാർത്ഥികൾ
-    show:
-      distribution_heading: ലെവൽ തിരിച്ചുള്ള വിദ്യാർത്ഥി വിതരണം
-      students_completed: വിദ്യാർത്ഥികൾ പൂർത്തിയാക്കി
-      total_students: മൊത്തം വിദ്യാർത്ഥികൾ
-      view_all: എല്ലാം കാണുക
-    student:
-      level_label: ലെവൽ
-      never_signed_in: ഒരിക്കലും സൈൻ ഇൻ ചെയ്തിട്ടില്ല
-      time_ago: അവസാനം കണ്ടത് %{time_ago} മുമ്പ്
-    students:
-      distribution_heading: ലെവൽ തിരിച്ചുള്ള വിദ്യാർത്ഥി വിതരണം
-      nothing_to_show: തിരഞ്ഞെടുത്ത ഫിൽട്ടറുകളുമായി പൊരുത്തപ്പെടുന്ന വിദ്യാർത്ഥികളൊന്നുമില്ല.
-      pagination_notice: ഇപ്പോൾ അത്തരം %{count} വിദ്യാർത്ഥികളിൽ %{page_start}-%{page_end} കാണിക്കുന്നു.
   communities:
     show:
       community_title: "%{name} Community"
@@ -268,7 +251,7 @@ ml:
         help: നിങ്ങൾക്ക് ഒന്നിലധികം സർട്ടിഫിക്കറ്റുകൾ ഉള്ളപ്പോൾ, ഒരെണ്ണം മാത്രമേ സ്വയമേവ ഇഷ്യൂ ചെയ്യാൻ കഴിയൂ; ഒരു വിദ്യാർത്ഥി <em></em> ഒരു കോഴ്സ് പൂർത്തിയാക്കുമ്പോൾ അത് ഇഷ്യൂ ചെയ്യും.
         help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
         label: വിദ്യാർത്ഥികൾക്ക് ഈ സർട്ടിഫിക്കറ്റ് സ്വയമേവ നൽകേണ്ടതുണ്ടോ?
-      cannot_be_auto_issued_warning: ഈ കോഴ്‌സിന്റെ അവസാന ലെവലിന് നാഴികക്കല്ല് ലക്ഷ്യങ്ങളൊന്നും ഇല്ലെന്നത് ശ്രദ്ധിക്കുക. അവസാന ലെവലിൽ ഒരു നാഴികക്കല്ല് ലക്ഷ്യമെങ്കിലും ഉണ്ടെങ്കിൽ മാത്രമേ ഈ സർട്ടിഫിക്കറ്റ് സ്വയമേവ ഇഷ്യൂ ചെയ്യപ്പെടുകയുള്ളൂ.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: സർട്ടിഫിക്കറ്റ് എഡിറ്റ് ചെയ്യുക
       font_size_label: അക്ഷര വലിപ്പം
       margin_label: മാർജിൻ
@@ -382,17 +365,15 @@ ml:
         help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
         label: പുരോഗതിയുടെ പെരുമാറ്റം
         limited:
-          description_end: " സമർപ്പിക്കലുകൾ അവലോകനം ചെയ്യാതെ."
-          description_start: വിദ്യാർത്ഥികൾക്ക് ലെവൽ അപ് ചെയ്യാം
+          description_end: without getting submissions reviewed.
+          description_start: Students can submit
+          four_times: four times
           once: ഒരിക്കല്
           thrice: മൂന്ന് തവണ
           title: ലിമിറ്റഡ്
           twice: രണ്ടുതവണ
-        strict:
-          description: സമർപ്പിക്കലുകൾ അവലോകനം ചെയ്‌ത് വിജയിച്ചതിന് ശേഷം മാത്രമേ വിദ്യാർത്ഥികൾക്ക് ലെവൽ അപ്പ് ചെയ്യാൻ കഴിയൂ.
-          title: കണിശമായ
         unlimited:
-          description: സമർപ്പണങ്ങൾ അവലോകനം ചെയ്യാതെ തന്നെ വിദ്യാർത്ഥികൾക്ക് കോഴ്‌സിന്റെ അവസാനം വരെ ലെവൽ അപ് ചെയ്യാൻ കഴിയും.
+          description: Students can submit all targets, without getting submissions reviewed.
           title: അൺലിമിറ്റഡ്
       tabs:
         actions: പ്രവർത്തനങ്ങൾ
@@ -525,6 +506,7 @@ ml:
       level_locked_explanation: നിങ്ങൾക്ക് %{date}-ൽ ഉള്ളടക്കം ആക്സസ് ചെയ്യാൻ കഴിയും.
       level_locked_for_students_notice: വിദ്യാർത്ഥികൾക്കായി ഈ ലെവൽ ഇപ്പോഴും ലോക്ക് ചെയ്തിരിക്കുന്നു, <strong>%{date}</strong>ന് അൺലോക്ക് ചെയ്യപ്പെടും.
       level_locked_notice: നില നിലവിൽ ലോക്ക് ചെയ്‌തിരിക്കുന്നു!
+      milestone_target_label: Milestone
       milestone_targets: നാഴികക്കല്ല് ലക്ഷ്യങ്ങൾ
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
@@ -564,31 +546,15 @@ ml:
       smth_went_wrong: എന്തോ കുഴപ്പം സംഭവിച്ചു!
     CoursesCurriculum__Learn:
       edit_target_button: ഉള്ളടക്കം എഡിറ്റ് ചെയ്യുക
-    CoursesCurriculum__LevelUpButton:
-      button_text_level_up: ലെവൽ അപ്പ്
-      button_text_saving: സംരക്ഷിക്കുന്നത്
     CoursesCurriculum__NoticeManager:
       access_ended_description: നിങ്ങൾക്ക് ഇപ്പോൾ കോഴ്‌സിലേക്ക് പരിമിതമായ ആക്‌സസ് മാത്രമേയുള്ളൂ. നിങ്ങൾക്ക് ഉള്ളടക്കം പ്രിവ്യൂ ചെയ്യാൻ അനുവാദമുണ്ട് എന്നാൽ ഒരു ലക്ഷ്യവും പൂർത്തിയാക്കാൻ കഴിയില്ല.
       access_ended_title: പ്രിവ്യൂ/ലിമിറ്റഡ് ആക്സസ്
       course_complete_description: നിങ്ങൾ ഞങ്ങളുടെ കോഴ്‌സ് വർക്ക് പൂർത്തിയാക്കി. നിങ്ങൾ ഉപേക്ഷിച്ചേക്കാവുന്ന ലക്ഷ്യങ്ങൾ പൂർത്തിയാക്കാൻ മടിക്കേണ്ടതില്ല, ഒപ്പം അറ്റാച്ചുചെയ്ത ലിങ്കുകളിൽ വായിക്കുക.
-      course_complete_title: അഭിനന്ദനങ്ങൾ! അവസാന ഘട്ടത്തിൽ നിങ്ങൾ എല്ലാ നാഴികക്കല്ല് ലക്ഷ്യങ്ങളും പൂർത്തിയാക്കി.
+      course_complete_title: Congratulations! You have completed all milestone targets in the course.
       course_ended_description: കോഴ്‌സ് അവസാനിച്ചു, എല്ലാ ലക്ഷ്യങ്ങൾക്കും സമർപ്പിക്കലുകൾ പ്രവർത്തനരഹിതമാക്കി!
       course_ended_title: കോഴ്സ് അവസാനിച്ചു
-      level_up_blocked:
-        body_middle_pending_review: "ഒരു കോച്ചിന്റെ അവലോകനം തീർപ്പാക്കിയിട്ടില്ല. "
-        body_middle_rejected: "നിരസിക്കപ്പെട്ടിരിക്കുന്നു. "
-        body_prefix: "നിങ്ങൾ ലെവൽ %{number}ൽ എല്ലാ നാഴികക്കല്ല് ലക്ഷ്യങ്ങളും സമർപ്പിച്ചു, എന്നാൽ ഒന്നോ അതിലധികമോ സമർപ്പിക്കലുകൾ "
-        body_suffix: ലെവൽ അപ്പ് ചെയ്യുന്നതിന് നിങ്ങൾക്ക് എല്ലാ നാഴികക്കല്ലുകൾക്കും ഒരു പാസിംഗ് ഗ്രേഡ് ആവശ്യമാണ്.
-        title_pending_review: അവശേഷിക്കുന്ന നിരൂപണം
-        title_rejected: ലെവൽ അപ്പ് തടഞ്ഞു
-      level_up_description: അഭിനന്ദനങ്ങൾ! കോഴ്‌സിന്റെ അടുത്ത ഘട്ടത്തിലേക്ക് നീങ്ങാൻ ആവശ്യമായ എല്ലാ നാഴികക്കല്ല് ലക്ഷ്യങ്ങളും നിങ്ങൾ വിജയകരമായി പൂർത്തിയാക്കി. കോഴ്സ് പുരോഗമിക്കുന്നത് തുടരാൻ താഴെയുള്ള "ലെവൽ അപ്പ്" ബട്ടണിൽ ക്ലിക്ക് ചെയ്യുക.
-      level_up_limited_description: നിങ്ങൾ ലെവൽ %{currentLevel}-ലാണ്, എന്നാൽ ലെവൽ %{minimumRequiredLevel} -ൽ ടാർഗെറ്റുകൾ നിരസിക്കപ്പെട്ടതോ അല്ലെങ്കിൽ പരിശീലകന്റെ അവലോകനം തീർച്ചപ്പെടുത്താത്തതോ ആയ ലക്ഷ്യങ്ങളുണ്ട്. ലെവലിംഗ് തുടരാൻ ലെവൽ %{minimumRequiredLevel} -ലെ എല്ലാ നാഴികക്കല്ല് ലക്ഷ്യങ്ങളും നിങ്ങൾ മറികടക്കേണ്ടതുണ്ട്.
-      level_up_limited_title: ലെവൽ അപ്പ് തടഞ്ഞു
-      level_up_title: ലെവൽ അപ്പ് ചെയ്യാൻ തയ്യാറാണ്!
       preview_mode_description: നിങ്ങൾ ഈ കോഴ്‌സിനായി പ്രിവ്യൂ മോഡിലേക്ക് പ്രവേശിക്കുകയാണ്
       preview_mode_title: പ്രിവ്യൂ മോഡ്
-      team_members_pending_description: ആവശ്യമായ എല്ലാ നാഴികക്കല്ല് ടാർഗെറ്റുകളും നിങ്ങൾ പൂർത്തിയാക്കി, എന്നാൽ ഒന്നോ അതിലധികമോ നിങ്ങളുടെ ടീം അംഗങ്ങൾ പൂർത്തിയാക്കിയിട്ടില്ല. ദയവായി അവരോട് സൈൻ ഇൻ ചെയ്യാനും അപൂർണ്ണമായ നാഴികക്കല്ല് ലക്ഷ്യങ്ങൾക്കായി പരിശോധിക്കാനും ആവശ്യപ്പെടുക.
-      team_members_pending_title: നിങ്ങളുടെ ടീമിനൊപ്പം പരിശോധിക്കുക
     CoursesCurriculum__Overlay:
       close_button: അടയ്ക്കുക
       completion_tab_complete: പൂർത്തിയാക്കുക
@@ -606,6 +572,7 @@ ml:
       learn_cta_submit_work: അവലോകനത്തിനായി ജോലി സമർപ്പിക്കുക
       learn_cta_take_quiz: ഒരു ക്വിസ് എടുക്കുക
       learn_tab: പഠിക്കുക
+      milestone_target_label: Milestone
       next_target_button: അടുത്ത ലക്ഷ്യം
       pending_team_members_notice: "ഈ ടാർഗെറ്റ് പൂർത്തിയാക്കാൻ ഇനിയും നിങ്ങൾക്ക് ടീം അംഗങ്ങളുണ്ട്:"
       preview_mode_text: നിങ്ങൾ നിലവിൽ ഈ കോഴ്സിന്റെ പ്രിവ്യൂ നോക്കുകയാണ്.
@@ -659,6 +626,7 @@ ml:
         pending: തീർപ്പാക്കാത്തത്
         pending_review: അവശേഷിക്കുന്ന നിരൂപണം
         rejected: നിരസിച്ചു
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: ഒരു അപ്രതീക്ഷിത പിശക് സംഭവിച്ചു, ഞങ്ങളുടെ ടീമിന് ഇതിനെക്കുറിച്ച് അറിയിപ്പ് ലഭിച്ചു. വീണ്ടും ശ്രമിക്കുന്നതിന് മുമ്പ് ദയവായി പേജ് റീലോഡ് ചെയ്യുക.
       notification_error_head: അപ്രതീക്ഷിത പിശക്
@@ -681,7 +649,10 @@ ml:
       average_quiz_score: ശരാശരി ക്വിസ് സ്കോർ
       course_completed: കോഴ്‌സ് പൂർത്തിയായി!
       incomplete_targets: "അപൂർണ്ണം: %{targetsCount}"
-      level_progress: ലെവൽ പുരോഗതി
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: വ്യക്തിഗത പരിശീലകർ
       quizzes_attempted:
         one: 1 ക്വിസ് പരീക്ഷിച്ചു
@@ -692,10 +663,8 @@ ml:
       targets_pending_review: "ശേഷിക്കുന്ന അവലോകനം: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: പൂർത്തിയാക്കി
-      filter_by_another_level: മറ്റൊരു ലെവൽ ഉപയോഗിച്ച് ഫിൽട്ടർ ചെയ്യുക
-      filter_by_another_level_or_status: മറ്റൊരു ലെവൽ അല്ലെങ്കിൽ സ്റ്റാറ്റസ് പ്രകാരം ഫിൽട്ടർ ചെയ്യുക
-      filter_by_level: ലെവൽ അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക
-      filter_by_level_or_status: ലെവൽ അല്ലെങ്കിൽ സ്റ്റാറ്റസ് അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
       load_more: കൂടുതൽ ലോഡ് ചെയ്യുക...
       no_submissions_to_show: "കാണിക്കാൻ സമർപ്പിക്കലുകളൊന്നുമില്ല "
       pending_review: അവശേഷിക്കുന്ന നിരൂപണം
@@ -768,7 +737,7 @@ ml:
       hide_test_report_button: Hide Test Report
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: ഈ സമർപ്പണം അവലോകനം ചെയ്യുമ്പോൾ നിങ്ങൾ എന്തെങ്കിലും ശ്രദ്ധിച്ചോ?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: അസൈൻമെന്റ് നീക്കം ചെയ്യുക
       report_description: പരിശോധനാ ഫലം
       review: അവലോകനം
@@ -811,21 +780,16 @@ ml:
         personal_coach: ഒരു വിദ്യാർത്ഥിക്ക് ആരാണ് അസൈൻ ചെയ്തിരിക്കുന്നത് എന്നതിനെ അടിസ്ഥാനമാക്കി ഫിൽട്ടർ ചെയ്യുക
         reviewed_by: ഒരു സമർപ്പണം ആരാണ് അവലോകനം ചെയ്തത് പ്രകാരം ഫിൽട്ടർ ചെയ്യുക
       filter_by: "ഇതനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക:"
-      filter_by_another_level: മറ്റൊരു ലെവൽ ഉപയോഗിച്ച് ഫിൽട്ടർ ചെയ്യുക
-      filter_by_another_level_or_submissions_assigned: മറ്റൊരു ലെവൽ അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക, അല്ലെങ്കിൽ ഒരു കോച്ചിന് നൽകിയിട്ടുള്ള സമർപ്പിക്കലുകൾ മാത്രം കാണിക്കുക
-      filter_by_level: ലെവൽ അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക
-      filter_by_level_or_submissions_assigned: ലെവൽ അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക, അല്ലെങ്കിൽ ഒരു കോച്ചിന് നിയുക്തമാക്കിയ സമർപ്പിക്കലുകൾ മാത്രം കാണിക്കുക
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: ലക്ഷ്യം അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക
       filter_hint: ...അല്ലെങ്കിൽ വിദ്യാർത്ഥിയുടെ പേരോ ഇമെയിൽ വിലാസമോ ഉപയോഗിച്ച് ഫിൽട്ടർ ചെയ്യാൻ ടൈപ്പ് ചെയ്യാൻ തുടങ്ങുക
       filter_input:
         assigned_to: "നിയോഗിച്ചിട്ടുള്ള: "
-        level: "നില: "
         personal_coach: "വ്യക്തിഗത കോച്ച്: "
         reviewed_by: "പുനരവലോകനം ചെയ്തത്: "
         target: "ലക്ഷ്യം: "
       inactive_students: നിഷ്ക്രിയ വിദ്യാർത്ഥികൾ
       include: ഉൾപ്പെടുന്നു
-      level: ലെവൽ
       me: എന്നെ
       name_or_email: പേര് അല്ലെങ്കിൽ ഇമെയിൽ
       now_showing_submissions_assigned_to: ഇപ്പോൾ %{name}ലേക്ക് അസൈൻ ചെയ്ത സമർപ്പിക്കലുകൾ കാണിക്കുന്നു.
@@ -838,7 +802,6 @@ ml:
       reviewed_by: പുനരവലോകനം ചെയ്തത്
       search:
         assigned_to: "നിയോഗിച്ചിട്ടുള്ള:"
-        level: "നില:"
         personal_coach: "വ്യക്തിഗത പരിശീലകൻ:"
         reviewed_by: "പുനരവലോകനം ചെയ്തത്:"
         status: "പദവി: "
@@ -856,7 +819,6 @@ ml:
       completed: പൂർത്തിയാക്കി
       created_at: '%{created_at}ന്.'
       feedback_sent: ഫീഡ്‌ബാക്ക് അയച്ചു
-      level: "ലെവൽ "
       no_submissions_found: സമർപ്പിക്കലുകളൊന്നും കണ്ടെത്തിയില്ല
       rejected: നിരസിച്ചു
       submitted_by: "സമർപ്പിച്ചത് "
@@ -890,27 +852,6 @@ ml:
       new_note: ഒരു പുതിയ കുറിപ്പ് ചേർക്കുക
       no_notes: ഇവിടെ കുറിപ്പുകളൊന്നുമില്ല!
       save_note: കുറിപ്പ് സംരക്ഷിക്കുക
-    CoursesStudents__Root:
-      assigned_me: "നിയോഗിക്കപ്പെട്ടത്: എനിക്ക്"
-      assigned_to: നിയോഗിച്ചിട്ടുള്ള
-      coach_notes: കോച്ച് കുറിപ്പുകൾ
-      filter_level: ലെവൽ അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക, അസൈൻ ചെയ്‌ത കോച്ച്, അല്ലെങ്കിൽ പേര് അല്ലെങ്കിൽ ഇമെയിൽ വിലാസം എന്നിവ പ്രകാരം തിരയുക, കൂടാതെ അതിലേറെയും...
-      has_notes: കുറിപ്പുകൾ ഉണ്ട്
-      level_distribution_label: ലെവൽ തിരിച്ചുള്ള വിദ്യാർത്ഥി വിതരണം
-      me: എന്നെ
-      name_email: പേര് അല്ലെങ്കിൽ ഇമെയിൽ
-      no_notes: നോട്ടുകൾ ഇല്ല
-      not_found: "ഡിസ്ട്രിബ്യൂഷൻ ബാറിൽ നിന്ന് തിരഞ്ഞെടുത്ത ലെവൽ ഐഡിയിൽ കണ്ടെത്താനായില്ല "
-      restore_filer_none: ഇപ്പോൾ ഈ കോഴ്സിലെ എല്ലാ വിദ്യാർത്ഥികളെയും കാണിക്കുന്നു.
-      search_assigned_me: " എന്നെ ഏൽപ്പിച്ചു"
-      search_assigned_to: "നിയോഗിച്ചിട്ടുള്ള "
-      search_no_notes: നോട്ടുകൾ ഇല്ല കോച്ച് നോട്ടുകൾ ഉണ്ട്
-      search_tag: "ടാഗ് "
-      showing_assigned: "ഇപ്പോൾ നിയുക്ത വിദ്യാർത്ഥികളെ കാണിക്കുന്നു "
-      tagged_with: ടാഗ് ചെയ്തു
-    CoursesStudents__StudentDistribution:
-      level_wise: വിദ്യാർത്ഥികളുടെ തലം തിരിച്ചുള്ള വിതരണം
-      students_level: തലത്തിലുള്ള വിദ്യാർത്ഥികൾ
     CoursesStudents__StudentOverlay:
       access_ended_at: ഈ വിദ്യാർത്ഥിയുടെ കോഴ്‌സിലേക്കുള്ള പ്രവേശനം %{date}-ന് അവസാനിച്ചു.
       average_grades: ശരാശരി ഗ്രേഡുകൾ
@@ -918,7 +859,7 @@ ml:
       close_student_report: വിദ്യാർത്ഥി റിപ്പോർട്ട് അടയ്ക്കുക
       course_completed: കോഴ്‌സ് പൂർത്തിയായി!
       dropped_out_at: ഈ വിദ്യാർത്ഥി %{date}-ന് കോഴ്‌സ് ഉപേക്ഷിച്ചു.
-      level_progress: ലെവൽ പുരോഗതി
+      milestone_targets: Milestone Targets
       notes: കുറിപ്പുകൾ
       other_team_members: മറ്റ് ടീം അംഗങ്ങൾ
       personal_coaches: വ്യക്തിഗത പരിശീലകർ
@@ -930,12 +871,6 @@ ml:
       targets_overview: ടാർഗെറ്റുകളുടെ അവലോകനം
       team_coaches: ടീം പരിശീലകർ
       total_targets_completed: ആകെ ലക്ഷ്യങ്ങൾ പൂർത്തിയായി
-    CoursesStudents__StudentsList:
-      last_seen: അവസാനം കണ്ടത് %{time_string}
-      no_last_seen: ഈ വിദ്യാർത്ഥി ഒരിക്കലും സൈൻ ഇൻ ചെയ്തിട്ടില്ല
-      no_students: കാണിക്കാൻ വിദ്യാർത്ഥികളില്ല
-      personal_coaches: വ്യക്തിഗത പരിശീലകർ
-      team_coaches: ടീം പരിശീലകർ
     CoursesStudents__SubmissionsList:
       no_revied_submission: അവലോകനം ചെയ്ത സമർപ്പണമില്ല
       submitted_on: "ന് സമർപ്പിച്ചു "
@@ -1106,6 +1041,10 @@ ml:
         help: ഒരു ടീമിലെ വിദ്യാർത്ഥികൾ ഒരു ടാർഗെറ്റിലെ ജോലി വ്യക്തിഗതമായോ ഒരുമിച്ച് സമർപ്പിക്കണോ?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
         label: ഈ ലക്ഷ്യം ടീമുകൾ എങ്ങനെ നേരിടണം?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
+        label: Is this target a milestone?
       target_title_placeholder: ഇവിടെ ടാർഗെറ്റ് ടൈറ്റിൽ ടൈപ്പ് ചെയ്യുക
       target_visibility: ടാർഗെറ്റ് ദൃശ്യപരത
       title: തലക്കെട്ട്
@@ -1124,7 +1063,6 @@ ml:
       description_placeholder: ടാർഗെറ്റ് ഗ്രൂപ്പ് വിവരണം ടൈപ്പ് ചെയ്യുക
       group_archived_q: ഈ ടാർഗെറ്റ് ഗ്രൂപ്പ് ആർക്കൈവ് ചെയ്‌തിട്ടുണ്ടോ?
       group_details: ടാർഗെറ്റ് ഗ്രൂപ്പ് വിശദാംശങ്ങൾ
-      milestone_q: ഇതൊരു നാഴികക്കല്ല് ടാർഗെറ്റ് ഗ്രൂപ്പാണോ?
       target_group_created_notification: ടാർഗെറ്റ് ഗ്രൂപ്പ് വിജയകരമായി സൃഷ്ടിച്ചു
       target_group_updated_notificaion: ടാർഗെറ്റ് ഗ്രൂപ്പ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു
       title: തലക്കെട്ട്
@@ -1152,6 +1090,7 @@ ml:
       draft: ഡ്രാഫ്റ്റ്
       edit: എഡിറ്റ് ചെയ്യുക
       edit_content: ലക്ഷ്യത്തിന്റെ ഉള്ളടക്കം എഡിറ്റ് ചെയ്യുക
+      milestone_target_label: Milestone
       move_down: താഴേക്ക് നീക്കുക
       move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
       of_target: ലക്ഷ്യത്തിന്റെ
@@ -1191,9 +1130,6 @@ ml:
       sign_in: സൈൻ ഇൻ
       sign_out: സൈൻ ഔട്ട്
       user_controls: ഉപയോക്തൃ നിയന്ത്രണങ്ങൾ കാണിക്കുക
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: ഒരു ഫയൽ അറ്റാച്ചുചെയ്യാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക.
       bold_insert: ധീരമായ
@@ -1456,6 +1392,7 @@ ml:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1919,7 +1856,7 @@ ml:
         dropped_out: കൊഴിഞ്ഞുപോയി
         edit_curriculum: പാഠ്യപദ്ധതി എഡിറ്റ് ചെയ്യുക
         leaderboard: ലീഡർബോർഡ്
-        my_students: എന്റെ വിദ്യാർത്ഥികൾ
+        my_cohorts: My Cohorts
         review_submissions: സമർപ്പണങ്ങൾ അവലോകനം ചെയ്യുക
         view_certificate: സർട്ടിഫിക്കറ്റ് കാണുക
         view_course: കോഴ്‌സ് കാണുക
@@ -1968,6 +1905,17 @@ ml:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: സജീവ വിദ്യാർത്ഥികൾ
       change: മാറ്റുക
@@ -2061,6 +2009,13 @@ ml:
           post_created: "നിങ്ങൾ %{community_name} കമ്മ്യൂണിറ്റിയുടെ ഭാഗമായ ഒരു ത്രെഡിനോട് %{user_name} പ്രതികരിച്ചു"
           topic_created: "%{user_name} %{community_name} കമ്മ്യൂണിറ്റിയിൽ ഒരു പുതിയ വിഷയം സൃഷ്ടിച്ചു"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2220,9 +2175,9 @@ ml:
           main_html: <p> നിങ്ങളുടെ %{school_name} പാസ്‌വേഡ് പുനഃസജ്ജമാക്കാൻ ഞങ്ങൾക്ക് ഒരു അഭ്യർത്ഥന ലഭിച്ചു.  </p> <p> നിങ്ങളുടെ പാസ്‌വേഡ് മാറ്റാൻ ദയവായി %{link_to} .  </p>
         subject: password reset
   maintenance:
-    title: Maintenance Mode
     heading: We'll be back soon!
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2409,6 +2364,7 @@ ml:
       multiple_method_of_completion: പൂർത്തീകരണത്തിന്റെ ഒന്നിലധികം രീതികൾ
       prerequisities_archived_error: ആർക്കൈവ് ചെയ്ത മുൻവ്യവസ്ഥകൾ ഉണ്ടാകരുത്
       prerequisities_in_same_level: മുൻ‌വ്യവസ്ഥാ ലക്ഷ്യങ്ങൾ ലക്ഷ്യത്തിന്റെ അതേ തലത്തിൽ നിന്നായിരിക്കണം
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: ലക്ഷ്യം അപ്‌ഡേറ്റ് ചെയ്‌തു!
       target_group_not_present_error: ടാർഗെറ്റ് ഗ്രൂപ്പ് നിലവിലില്ല
       target_missing_error: ലക്ഷ്യം നിലവിലില്ല
@@ -2446,6 +2402,7 @@ ml:
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2475,6 +2432,16 @@ ml:
   presenters:
     apply:
       page_title: '%{course_name}-ൽ എൻറോൾ ചെയ്യുക'
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2603,6 +2570,11 @@ ml:
     courses:
       applicants:
         title: അപേക്ഷകർ
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: രചയിതാക്കൾ
       calendar_events:
@@ -2686,6 +2658,18 @@ ml:
     caption_image: ചിത്രത്തിന് ഒരു അടിക്കുറിപ്പ്
     close: അടയ്ക്കുക
     coaches: പരിശീലകർ
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: കൂട്ടുകാർ
     community: സമൂഹം
     completed: പൂർത്തിയാക്കി
@@ -2714,6 +2698,8 @@ ml:
     load_more: കൂടുതൽ ലോഡ് ചെയ്യുക...
     loading: ലോഡിംഗ്...
     login_token_expiration_warning_html: ഈ ലിങ്ക് %{timestamp}-ന് കാലഹരണപ്പെടും. ലിങ്ക് കാലഹരണപ്പെട്ടെങ്കിൽ, സൈൻ-ഇൻ പേജ് <a href="%{login_url}" %>-ൽ നിന്ന് നിങ്ങൾക്ക് മറ്റൊരു ഒറ്റത്തവണ ടോക്കൺ</a>. ഇതൊരു സ്വകാര്യ URL ആണെന്നും പങ്കിടാൻ പാടില്ലെന്നും ദയവായി ശ്രദ്ധിക്കുക.
+    m: M
+    my_org: My Org
     name: പേര്
     name_email: പേര് അല്ലെങ്കിൽ ഇമെയിൽ
     none: ഒന്നുമില്ല
@@ -2742,6 +2728,7 @@ ml:
       truncate: "&hellip;"
     pass: കടന്നുപോകുക
     percentage: ശതമാനം
+    percentage_completed: "%{percentage}% completed"
     post: പോസ്റ്റ്
     preferred_name: ഇഷ്ടപ്പെട്ട പേര്
     processing: പ്രോസസ്സിംഗ്
@@ -2757,6 +2744,9 @@ ml:
     settings: ക്രമീകരണങ്ങൾ
     sign_out: സൈൻ ഔട്ട്
     sort_by: Sort by
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: വിദ്യാർത്ഥികൾ
     tag: ടാഗ് ചെയ്യുക
     tags: ടാഗുകൾ

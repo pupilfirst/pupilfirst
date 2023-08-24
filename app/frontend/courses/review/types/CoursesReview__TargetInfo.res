@@ -7,9 +7,10 @@ type t = {
 let id = t => t.id
 
 let title = t =>
-  switch (t.milestoneNumber) {
+  switch t.milestoneNumber {
   | None => t.title
-  | Some(milestoneNumber) => "M" ++ string_of_int(milestoneNumber) ++ " - " ++ t.title
+  | Some(milestoneNumber) =>
+    I18n.t("components.CoursesReview__Root.m") ++ string_of_int(milestoneNumber) ++ " - " ++ t.title
   }
 
 let milestoneNumber = t => t.milestoneNumber

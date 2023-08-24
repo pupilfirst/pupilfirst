@@ -59,7 +59,7 @@ let showSubmission = (submissions, filterString) =>
               {(Belt.Option.mapWithDefault(
                 IndexSubmission.milestoneNumber(submission),
                 "",
-                number => "M" ++ string_of_int(number) ++ " - ",
+                number => t("m") ++ string_of_int(number) ++ " - ",
               ) ++
               IndexSubmission.title(submission))->str}
             </span>

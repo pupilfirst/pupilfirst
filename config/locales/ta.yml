@@ -1840,8 +1840,19 @@ ta:
       account_delete_q: உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இது எங்கள் சேவையகங்களிலிருந்து உங்கள் தரவை நிரந்தரமாக அகற்றுவதற்கான செயல்முறையைத் தொடங்கும்.
       already_iniated_deletion_warning: நீங்கள் ஏற்கனவே கணக்கை நீக்கிவிட்டீர்கள். உங்கள் கணக்கை நீக்குவதற்கான கூடுதல் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்.
       avatar_uploaded_notification: அவதார் வெற்றிகரமாக பதிவேற்றப்பட்டது.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
       cancel: ரத்து செய்
       change_password: உங்கள் தற்போதைய கடவுச்சொல்லை மாற்றவும்
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: புகைப்படத்தை மாற்று
       community_digest: Community Digest
       community_digest_emails: Community digest மின்னஞ்சல்களில் உங்கள் சமூகங்களில் இருந்து புதிய கேள்விகள் மற்றும் கடந்த வாரத்தில் இருந்து பதிலளிக்கப்படாத கேள்விகள் உள்ளன.
@@ -1851,6 +1862,7 @@ ta:
       confirm_password_error: புதிய கடவுச்சொல் மற்றும் உறுதிப்படுத்தல் பொருந்த வேண்டும் மற்றும் குறைந்தது 8 எழுத்துக்கள் இருக்க வேண்டும்
       confirm_password_placeholder: புதிய கடவு சொல்லை உறுதி செய்
       current_password: தற்போதைய கடவுச்சொல்
+      current_password_placeholder: Type current password
       delete_account: கணக்கை நீக்குக
       delete_your_account: உங்கள் கணக்கை நீக்கவும்
       deleting_account_warning: உங்கள் பயனர் கணக்கை நீக்குவது இந்தப் பள்ளியிலிருந்து உங்கள் எல்லாத் தரவையும் நீக்கிவிடும். சமூகங்களில் உள்ள இடுகைகளுக்கான பதில்களும் மாணவர்களுக்கான கருத்துகளும் (பயனர் பயிற்சியாளர் சுயவிவரத்தை வைத்திருந்தால்) நீக்கப்படாது. இந்தப் பள்ளியில் நீங்கள் நிர்வாகியாக இருந்தால் நிர்வாக உரிமைகள் ரத்து செய்யப்பட வேண்டும்.
@@ -2161,7 +2173,7 @@ ta:
         subject: '%{school_name}இலிருந்து கணக்கு வெற்றிகரமாக நீக்கப்பட்டது'
       confirm_email_update:
         body:
-          html: <p> <strong>%{school_name}</strong> இல் உள்ள உங்கள் மின்னஞ்சல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது. </p>
+          html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: '%{school_name} பள்ளியில் உங்கள் மின்னஞ்சல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது'
       daily_digest:
         body:
@@ -2206,7 +2218,7 @@ ta:
         body:
           link_to: இங்கே கிளிக் செய்யவும்
           main_html: <p> உங்கள் %{school_name} கடவுச்சொல்லை மீட்டமைப்பதற்கான கோரிக்கையைப் பெற்றுள்ளோம்.  </p> <p> தயவுசெய்து %{link_to} உங்கள் கடவுச்சொல்லை மாற்றவும்.  </p>
-        subject: கணக்கு மீட்பு
+        subject: password reset
   maintenance:
     title: Maintenance Mode
     heading: We'll be back soon!
@@ -2316,6 +2328,10 @@ ta:
     initiate_account_deletion:
       check_inbox_notification: மேலும் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்!
       deletion_init_notification: கணக்கு நீக்குதல் தொடங்கப்பட்டது
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
     issue_certificate:
       success_notification: சான்றிதழ் வெற்றிகரமாக வழங்கப்பட்டது!
     lock_topic:
@@ -2700,7 +2716,6 @@ ta:
     login_token_expiration_warning_html: இந்த இணைப்பு %{timestamp}ஆல் காலாவதியாகும். இணைப்பு காலாவதியாகிவிட்டால், உள்நுழைவு பக்கம்</a>இல் <a href="%{login_url}" %>ல் இருந்து மற்றொரு ஒருமுறை டோக்கனைக் கோரலாம். இது ஒரு தனிப்பட்ட URL மற்றும் பகிரப்படக்கூடாது என்பதை நினைவில் கொள்ளவும்.
     name: பெயர்
     name_email: பெயர் அல்லது மின்னஞ்சல்
-    no_email_found: இந்த மின்னஞ்சலில் பயனரைக் கண்டறிய முடியவில்லை. நீங்கள் உள்ளிட்ட மின்னஞ்சலைச் சரிபார்க்கவும்.
     none: இல்லை
     note: "குறிப்பு:"
     notes: Notes
@@ -2830,14 +2845,14 @@ ta:
       email_sent:
         image_alt: உங்கள் இன்பாக்ஸில் ஒரு மின்னஞ்சல் பறக்கிறது
         magic_link:
-          description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்யவும், நீங்கள் உள்நுழைவீர்கள்.
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: நாங்கள் உங்களுக்கு ஒரு மேஜிக் இணைப்பை அனுப்பியுள்ளோம்!
-          notice: இந்த இணைப்பு ஒருமுறை மட்டுமே வேலை செய்யும்.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: மேஜிக் இணைப்பு வந்து கொண்டிருக்கிறது!
         reset_password_link:
-          description: ஒரு நிமிடத்திற்குள் அது உங்களை வந்தடையும். மின்னஞ்சலில் உள்ள இணைப்பைக் கிளிக் செய்யவும், புதிய கடவுச்சொல்லை அமைக்கும்படி கேட்கப்படுவீர்கள்.
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: உங்கள் கடவுச்சொல்லை மீட்டமைக்க ஒரு இணைப்பை அனுப்பியுள்ளோம்!
-          notice: இந்த இணைப்பு ஒருமுறை மட்டுமே வேலை செய்யும்.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: உங்கள் கோரிக்கையை உறுதிப்படுத்தவும்
       new:
         already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
@@ -2876,6 +2891,7 @@ ta:
     update_email:
       frequent_request_error: இரண்டு நிமிடங்களுக்கு முன் ஒரு மின்னஞ்சல் அனுப்பப்பட்டது. மீண்டும் முயற்சிக்கும் முன் சில நிமிடங்கள் காத்திருக்கவும்.
       link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
+      invalid_password_error: The password you entered is incorrect. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: செயலற்ற மாணவர் சமர்ப்பிப்புகளை புதுப்பிக்க முடியாது.

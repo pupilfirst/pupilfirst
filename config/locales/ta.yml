@@ -27,23 +27,6 @@ ta:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  cohorts:
-    shared:
-      overview_link: கண்ணோட்டம்
-      students_link: மாணவர்கள்
-    show:
-      distribution_heading: நிலை வாரியான மாணவர் விநியோகம்
-      students_completed: மாணவர்கள் முடித்தனர்
-      total_students: மொத்த மாணவர்கள்
-      view_all: அனைத்தையும் காட்டு
-    student:
-      level_label: நிலை
-      never_signed_in: இதுவரை உள்நுழையவில்லை
-      time_ago: கடைசியாகப் பார்த்தது %{time_ago} முன்பு
-    students:
-      distribution_heading: நிலை வாரியான மாணவர் விநியோகம்
-      nothing_to_show: தேர்ந்தெடுக்கப்பட்ட வடிப்பான்களுடன் பொருந்தக்கூடிய மாணவர்கள் யாரும் இல்லை.
-      pagination_notice: இப்போது %{page_start}-%{page_end} என மொத்தம் %{count} மாணவர்களைக் காட்டுகிறது.
   communities:
     show:
       community_title: "%{name} Community"
@@ -268,7 +251,7 @@ ta:
         help: உங்களிடம் பல சான்றிதழ்கள் இருக்கும் போது, ஒன்றை மட்டும் தானாக வழங்க முடியும்; ஒரு மாணவர் <em></em> படிப்பை முடிக்கும்போது அது வழங்கப்படும்.
         help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
         label: மாணவர்களுக்கு தானாகவே இந்தச் சான்றிதழ் வழங்கப்பட வேண்டுமா?
-      cannot_be_auto_issued_warning: இந்த பாடத்திட்டத்தின் கடைசி நிலை எந்த மைல்கல் இலக்குகளையும் கொண்டிருக்கவில்லை என்பதை நினைவில் கொள்ளவும். கடைசி நிலை குறைந்தபட்சம் ஒரு மைல்கல் இலக்கு இருந்தால் மட்டுமே இந்தச் சான்றிதழ் தானாகவே வழங்கப்படும்.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: சான்றிதழைத் திருத்தவும்
       font_size_label: எழுத்துரு அளவு
       margin_label: விளிம்பு
@@ -382,17 +365,15 @@ ta:
         help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
         label: முன்னேற்ற நடத்தை
         limited:
-          description_end: " சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யாமல்."
-          description_start: மாணவர்கள் சமன் செய்யலாம்
+          description_end: without getting submissions reviewed.
+          description_start: Students can submit
+          four_times: four times
           once: ஒருமுறை
           thrice: மூன்று முறை
           title: வரையறுக்கப்பட்டவை
           twice: இரண்டு முறை
-        strict:
-          description: சமர்ப்பிப்புகளை மதிப்பாய்வு செய்து தேர்ச்சி பெற்ற பின்னரே மாணவர்கள் சமன் செய்ய முடியும்.
-          title: கண்டிப்பான
         unlimited:
-          description: மாணவர்கள் சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யாமலேயே, பாடநெறி முடியும் வரை சமன் செய்யலாம்.
+          description: Students can submit all targets, without getting submissions reviewed.
           title: வரம்பற்ற
       tabs:
         actions: செயல்கள்
@@ -525,6 +506,7 @@ ta:
       level_locked_explanation: நீங்கள் %{date}இல் உள்ளடக்கத்தை அணுகலாம்.
       level_locked_for_students_notice: இந்த நிலை இன்னும் மாணவர்களுக்கு பூட்டப்பட்டுள்ளது மற்றும் <strong>%{date}</strong>இல் திறக்கப்படும்.
       level_locked_notice: நிலை தற்போது பூட்டப்பட்டுள்ளது!
+      milestone_target_label: Milestone
       milestone_targets: மைல்கல் இலக்குகள்
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
@@ -564,31 +546,15 @@ ta:
       smth_went_wrong: ஏதோ தவறு நடைபெற்றிருக்கிறது!
     CoursesCurriculum__Learn:
       edit_target_button: உள்ளடக்கத்தைத் திருத்தவும்
-    CoursesCurriculum__LevelUpButton:
-      button_text_level_up: லெவல் அப்
-      button_text_saving: சேமிப்பு
     CoursesCurriculum__NoticeManager:
       access_ended_description: நீங்கள் இப்போது பாடநெறிக்கு வரம்புக்குட்பட்ட அணுகல் மட்டுமே உள்ளது. நீங்கள் உள்ளடக்கத்தை முன்னோட்டமிட அனுமதிக்கப்படுகிறீர்கள், ஆனால் எந்த இலக்கையும் முடிக்க முடியாது.
       access_ended_title: முன்னோட்டம்/வரையறுக்கப்பட்ட அணுகல்
       course_complete_description: நீங்கள் எங்கள் பாடத்தை முடித்துவிட்டீர்கள். நீங்கள் விட்டுவிட்ட இலக்குகளை முடிக்க தயங்காதீர்கள் மற்றும் இணைக்கப்பட்ட இணைப்புகளில் படிக்கவும்.
-      course_complete_title: வாழ்த்துகள்! இறுதி நிலையில் அனைத்து மைல்கல் இலக்குகளையும் முடித்துவிட்டீர்கள்.
+      course_complete_title: Congratulations! You have completed all milestone targets in the course.
       course_ended_description: பாடநெறி முடிந்தது மற்றும் அனைத்து இலக்குகளுக்கும் சமர்ப்பிப்புகள் முடக்கப்பட்டுள்ளன!
       course_ended_title: படிப்பு முடிந்தது
-      level_up_blocked:
-        body_middle_pending_review: "பயிற்சியாளரின் மதிப்பாய்வு இன்னும் நிலுவையில் உள்ளது. "
-        body_middle_rejected: "நிராகரிக்கப்பட்டுள்ளன. "
-        body_prefix: "நிலை %{number}இல் அனைத்து மைல்கல் இலக்குகளையும் சமர்ப்பித்துள்ளீர்கள், ஆனால் ஒன்று அல்லது அதற்கு மேற்பட்ட சமர்ப்பிப்புகள் "
-        body_suffix: சமன் செய்ய அனைத்து மைல்கல் இலக்குகளிலும் தேர்ச்சி தர வேண்டும்.
-        title_pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
-        title_rejected: லெவல் அப் தடுக்கப்பட்டது
-      level_up_description: வாழ்த்துகள்! பாடத்திட்டத்தில் அடுத்த நிலைக்குச் செல்ல தேவையான அனைத்து மைல்கல் இலக்குகளையும் வெற்றிகரமாக முடித்துவிட்டீர்கள். பாடத்திட்டத்தில் தொடர்ந்து முன்னேற கீழே உள்ள "லெவல் அப்" பட்டனை கிளிக் செய்யவும்.
-      level_up_limited_description: நீங்கள் நிலை %{currentLevel}இல் உள்ளீர்கள், ஆனால் நிலை %{minimumRequiredLevel} இல் இலக்குகள் நிராகரிக்கப்பட்டுள்ளன அல்லது பயிற்சியாளரால் இன்னும் மதிப்பாய்வு நிலுவையில் உள்ளன. தொடர்ந்து சமன் செய்ய, நிலை %{minimumRequiredLevel} இல் உள்ள அனைத்து மைல்கல் இலக்குகளையும் நீங்கள் கடக்க வேண்டும்.
-      level_up_limited_title: லெவல் அப் தடுக்கப்பட்டது
-      level_up_title: நிலைக்குத் தயார்!
       preview_mode_description: இந்தப் பாடத்திட்டத்திற்கான முன்னோட்டப் பயன்முறையை அணுகுகிறீர்கள்
       preview_mode_title: முன்னோட்ட முறை
-      team_members_pending_description: தேவையான அனைத்து மைல்ஸ்டோன் இலக்குகளையும் நீங்கள் பூர்த்தி செய்துள்ளீர்கள், ஆனால் உங்கள் குழுத் தோழர்களில் ஒன்று அல்லது அதற்கு மேற்பட்டவர்கள் செய்யவில்லை. உள்நுழைந்து முழுமையடையாத மைல்கல் இலக்குகளை சரிபார்க்கும்படி அவர்களிடம் கேளுங்கள்.
-      team_members_pending_title: உங்கள் குழுவுடன் சரிபார்க்கவும்
     CoursesCurriculum__Overlay:
       close_button: நெருக்கமான
       completion_tab_complete: முழுமை
@@ -606,6 +572,7 @@ ta:
       learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
       learn_cta_take_quiz: வினாடி வினா எடுங்கள்
       learn_tab: அறிய
+      milestone_target_label: Milestone
       next_target_button: அடுத்த இலக்கு
       pending_team_members_notice: "இந்த இலக்கை இன்னும் முடிக்காத குழு உறுப்பினர்கள் உங்களிடம் உள்ளனர்:"
       preview_mode_text: நீங்கள் தற்போது இந்தப் பாடத்திட்டத்தின் முன்னோட்டத்தைப் பார்க்கிறீர்கள்.
@@ -659,6 +626,7 @@ ta:
         pending: நிலுவையில் உள்ளது
         pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
         rejected: நிராகரிக்கப்பட்டது
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: எதிர்பாராத பிழை ஏற்பட்டது, இது குறித்து எங்கள் குழுவிற்கு அறிவிக்கப்பட்டுள்ளது. மீண்டும் முயற்சிக்கும் முன் பக்கத்தை மீண்டும் ஏற்றவும்.
       notification_error_head: எதிர்பாராத பிழை
@@ -681,7 +649,10 @@ ta:
       average_quiz_score: சராசரி வினாடி வினா மதிப்பெண்
       course_completed: படிப்பு முடிந்தது!
       incomplete_targets: "முழுமையற்றது: %{targetsCount}"
-      level_progress: நிலை முன்னேற்றம்
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
       quizzes_attempted:
         one: 1 வினாடி வினா முயற்சி
@@ -692,10 +663,8 @@ ta:
       targets_pending_review: "நிலுவையில் உள்ள மதிப்பாய்வு: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: நிறைவு
-      filter_by_another_level: மற்றொரு நிலை மூலம் வடிகட்டவும்
-      filter_by_another_level_or_status: மற்றொரு நிலை அல்லது நிலை மூலம் வடிகட்டவும்
-      filter_by_level: நிலை மூலம் வடிகட்டவும்
-      filter_by_level_or_status: நிலை அல்லது நிலை மூலம் வடிகட்டவும்
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
       load_more: அதிகமாய் ஏற்று...
       no_submissions_to_show: "காட்ட சமர்ப்பிப்புகள் இல்லை "
       pending_review: மதிப்பாய்வு நிலுவையில் உள்ளது
@@ -768,7 +737,7 @@ ta:
       hide_test_report_button: Hide Test Report
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: வேலையை அகற்று
       report_description: சோதனை அறிக்கை
       review: விமர்சனம்
@@ -811,21 +780,16 @@ ta:
         personal_coach: ஒரு மாணவருக்கு யார் ஒதுக்கப்பட்டுள்ளது என்பதை வடிகட்டவும்
         reviewed_by: சமர்ப்பிப்பை மதிப்பாய்வு செய்தவர்களால் வடிகட்டவும்
       filter_by: "இதன்படி வடிகட்டவும்:"
-      filter_by_another_level: மற்றொரு நிலை மூலம் வடிகட்டவும்
-      filter_by_another_level_or_submissions_assigned: மற்றொரு நிலை மூலம் வடிகட்டவும் அல்லது பயிற்சியாளருக்கு ஒதுக்கப்பட்ட சமர்ப்பிப்புகளை மட்டும் காட்டவும்
-      filter_by_level: நிலை மூலம் வடிகட்டவும்
-      filter_by_level_or_submissions_assigned: நிலை வாரியாக வடிகட்டவும் அல்லது பயிற்சியாளருக்கு ஒதுக்கப்பட்ட சமர்ப்பிப்புகளை மட்டும் காட்டவும்
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: இலக்கின்படி வடிகட்டவும்
       filter_hint: ... அல்லது மாணவர் அவர்களின் பெயர் அல்லது மின்னஞ்சல் முகவரியைப் பயன்படுத்தி வடிகட்ட தட்டச்சு செய்யத் தொடங்குங்கள்
       filter_input:
         assigned_to: "ஒதுக்கப்படும்: "
-        level: "நிலை: "
         personal_coach: "தனிப்பட்ட பயிற்சியாளர்: "
         reviewed_by: "மதிப்பாய்வு செய்தவர்: "
         target: "இலக்கு: "
       inactive_students: செயலற்ற மாணவர்கள்
       include: சேர்க்கிறது
-      level: நிலை
       me: நான்
       name_or_email: பெயர் அல்லது மின்னஞ்சல்
       now_showing_submissions_assigned_to: இப்போது 0 க்கு ஒதுக்கப்பட்ட சமர்ப்பிப்புகளைக் %{name}.
@@ -838,7 +802,6 @@ ta:
       reviewed_by: மதிப்பாய்வு செய்தது
       search:
         assigned_to: "ஒதுக்கப்படும்:"
-        level: "நிலை:"
         personal_coach: "தனிப்பட்ட பயிற்சியாளர்:"
         reviewed_by: "மதிப்பாய்வு செய்தது:"
         status: "நிலை: "
@@ -856,7 +819,6 @@ ta:
       completed: நிறைவு
       created_at: '%{created_at}இல்.'
       feedback_sent: கருத்து அனுப்பப்பட்டது
-      level: "நிலை "
       no_submissions_found: சமர்ப்பிப்புகள் எதுவும் இல்லை
       rejected: நிராகரிக்கப்பட்டது
       submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
@@ -890,27 +852,6 @@ ta:
       new_note: புதிய குறிப்பைச் சேர்க்கவும்
       no_notes: இங்கே குறிப்புகள் இல்லை!
       save_note: குறிப்பைச் சேமிக்கவும்
-    CoursesStudents__Root:
-      assigned_me: "ஒதுக்கப்பட்டது: எனக்கு"
-      assigned_to: ஒதுக்கப்படும்
-      coach_notes: பயிற்சியாளர் குறிப்புகள்
-      filter_level: நிலை, ஒதுக்கப்பட்ட பயிற்சியாளர் அல்லது பெயர் அல்லது மின்னஞ்சல் முகவரி மூலம் தேடுதல் மற்றும் பல...
-      has_notes: குறிப்புகள் உள்ளன
-      level_distribution_label: நிலை வாரியான மாணவர் விநியோகம்
-      me: நான்
-      name_email: பெயர் அல்லது மின்னஞ்சல்
-      no_notes: குறிப்புகள் இல்லை
-      not_found: "ஐடியுடன், விநியோகப் பட்டியில் இருந்து தேர்ந்தெடுக்கப்பட்ட நிலையைக் கண்டறிய முடியவில்லை "
-      restore_filer_none: இப்போது இந்த பாடத்திட்டத்தில் உள்ள அனைத்து மாணவர்களையும் காட்டுகிறது.
-      search_assigned_me: " எனக்கு ஒதுக்கப்பட்டது"
-      search_assigned_to: "ஒதுக்கப்படும் "
-      search_no_notes: குறிப்புகள் இல்லை குறிப்புகள் பயிற்சி குறிப்புகள் உள்ளன
-      search_tag: "குறிச்சொல் "
-      showing_assigned: "இப்போது ஒதுக்கப்பட்ட மாணவர்களைக் காட்டுகிறது "
-      tagged_with: குறியிடப்பட்டது
-    CoursesStudents__StudentDistribution:
-      level_wise: மாணவர்கள் நிலை வாரியாக விநியோகம்
-      students_level: நிலை மாணவர்கள்
     CoursesStudents__StudentOverlay:
       access_ended_at: படிப்பிற்கான இந்த மாணவரின் அணுகல் %{date}அன்று முடிந்தது.
       average_grades: சராசரி தரங்கள்
@@ -918,7 +859,7 @@ ta:
       close_student_report: மாணவர் அறிக்கையை மூடவும்
       course_completed: படிப்பு முடிந்தது!
       dropped_out_at: இந்த மாணவர் %{date}இல் படிப்பை விட்டு வெளியேறினார்.
-      level_progress: நிலை முன்னேற்றம்
+      milestone_targets: Milestone Targets
       notes: குறிப்புகள்
       other_team_members: மற்ற குழு உறுப்பினர்கள்
       personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
@@ -930,12 +871,6 @@ ta:
       targets_overview: இலக்குகள் மேலோட்டம்
       team_coaches: குழு பயிற்சியாளர்கள்
       total_targets_completed: மொத்த இலக்குகள் நிறைவடைந்தன
-    CoursesStudents__StudentsList:
-      last_seen: கடைசியாகப் பார்த்தது %{time_string}
-      no_last_seen: இந்த மாணவர் இதுவரை உள்நுழைந்ததில்லை
-      no_students: காட்ட மாணவர்கள் இல்லை
-      personal_coaches: தனிப்பட்ட பயிற்சியாளர்கள்
-      team_coaches: குழு பயிற்சியாளர்கள்
     CoursesStudents__SubmissionsList:
       no_revied_submission: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்பு இல்லை
       submitted_on: "அன்று சமர்ப்பிக்கப்பட்டது "
@@ -1106,6 +1041,10 @@ ta:
         help: ஒரு குழுவில் உள்ள மாணவர்கள் தனித்தனியாகவோ அல்லது ஒன்றாகவோ இலக்கில் பணியைச் சமர்ப்பிக்க வேண்டுமா?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
         label: இந்த இலக்கை அணிகள் எவ்வாறு எதிர்கொள்ள வேண்டும்?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
+        label: Is this target a milestone?
       target_title_placeholder: இலக்கு தலைப்பை இங்கே தட்டச்சு செய்யவும்
       target_visibility: இலக்கு தெரிவுநிலை
       title: தலைப்பு
@@ -1124,7 +1063,6 @@ ta:
       description_placeholder: இலக்கு குழு விளக்கத்தை உள்ளிடவும்
       group_archived_q: இந்த இலக்கு குழு காப்பகப்படுத்தப்பட்டதா?
       group_details: இலக்கு குழு விவரங்கள்
-      milestone_q: இது ஒரு மைல்கல் இலக்கு குழுவா?
       target_group_created_notification: இலக்கு குழு வெற்றிகரமாக உருவாக்கப்பட்டது
       target_group_updated_notificaion: இலக்கு குழு வெற்றிகரமாக புதுப்பிக்கப்பட்டது
       title: தலைப்பு
@@ -1152,6 +1090,7 @@ ta:
       draft: வரைவு
       edit: தொகு
       edit_content: இலக்கின் உள்ளடக்கத்தைத் திருத்தவும்
+      milestone_target_label: Milestone
       move_down: கீழே இறங்கு
       move_up: மேலே நகர்த்து
       of_target: இலக்கு
@@ -1191,9 +1130,6 @@ ta:
       sign_in: உள்நுழையவும்
       sign_out: வெளியேறு
       user_controls: பயனர் கட்டுப்பாடுகளைக் காட்டு
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: கோப்பை இணைக்க இங்கே கிளிக் செய்யவும்.
       bold_insert: தைரியமான
@@ -1456,6 +1392,7 @@ ta:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1919,7 +1856,7 @@ ta:
         dropped_out: கைவிடப்பட்டது
         edit_curriculum: பாடத்திட்டத்தை திருத்தவும்
         leaderboard: லீடர்போர்டு
-        my_students: என் மாணவர்கள்
+        my_cohorts: My Cohorts
         review_submissions: சமர்ப்பிப்புகளை மதிப்பாய்வு செய்யவும்
         view_certificate: சான்றிதழைப் பார்க்கவும்
         view_course: பாடத்தைப் பார்க்கவும்
@@ -1968,6 +1905,17 @@ ta:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: செயலில் மாணவர்கள்
       change: மாற்றவும்
@@ -2061,6 +2009,13 @@ ta:
           post_created: "%{community_name} சமூகத்தில் நீங்கள் அங்கம் வகிக்கும் தொடரிழைக்கு %{user_name} பதிலளித்துள்ளார்"
           topic_created: "%{user_name} %{community_name} சமூகத்தில் புதிய தலைப்பை உருவாக்கியுள்ளது"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2220,9 +2175,9 @@ ta:
           main_html: <p> உங்கள் %{school_name} கடவுச்சொல்லை மீட்டமைப்பதற்கான கோரிக்கையைப் பெற்றுள்ளோம்.  </p> <p> தயவுசெய்து %{link_to} உங்கள் கடவுச்சொல்லை மாற்றவும்.  </p>
         subject: password reset
   maintenance:
-    title: Maintenance Mode
     heading: We'll be back soon!
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2409,6 +2364,7 @@ ta:
       multiple_method_of_completion: ஒன்றுக்கு மேற்பட்ட நிறைவு முறைகள்
       prerequisities_archived_error: காப்பகப்படுத்தப்பட்ட முன்நிபந்தனைகள் இருக்க முடியாது
       prerequisities_in_same_level: முன்தேவையான இலக்குகள் இலக்கின் அதே மட்டத்தில் இருக்க வேண்டும்
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: இலக்கு வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
       target_group_not_present_error: இலக்கு குழு இல்லை
       target_missing_error: இலக்கு இல்லை
@@ -2446,6 +2402,7 @@ ta:
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2475,6 +2432,16 @@ ta:
   presenters:
     apply:
       page_title: '%{course_name}இல் பதிவு செய்யவும்'
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2603,6 +2570,11 @@ ta:
     courses:
       applicants:
         title: விண்ணப்பதாரர்கள்
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: ஆசிரியர்கள்
       calendar_events:
@@ -2686,6 +2658,18 @@ ta:
     caption_image: படத்திற்கான தலைப்பு
     close: நெருக்கமான
     coaches: பயிற்சியாளர்கள்
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: கூட்டாளிகள்
     community: சமூக
     completed: நிறைவு
@@ -2714,6 +2698,8 @@ ta:
     load_more: அதிகமாய் ஏற்று...
     loading: ஏற்றுகிறது...
     login_token_expiration_warning_html: இந்த இணைப்பு %{timestamp}ஆல் காலாவதியாகும். இணைப்பு காலாவதியாகிவிட்டால், உள்நுழைவு பக்கம்</a>இல் <a href="%{login_url}" %>ல் இருந்து மற்றொரு ஒருமுறை டோக்கனைக் கோரலாம். இது ஒரு தனிப்பட்ட URL மற்றும் பகிரப்படக்கூடாது என்பதை நினைவில் கொள்ளவும்.
+    m: M
+    my_org: My Org
     name: பெயர்
     name_email: பெயர் அல்லது மின்னஞ்சல்
     none: இல்லை
@@ -2742,6 +2728,7 @@ ta:
       truncate: "&hellip;"
     pass: பாஸ்
     percentage: சதவிதம்
+    percentage_completed: "%{percentage}% completed"
     post: அஞ்சல்
     preferred_name: விருப்பமான பெயர்
     processing: செயலாக்கம்
@@ -2757,6 +2744,9 @@ ta:
     settings: அமைப்புகள்
     sign_out: வெளியேறு
     sort_by: Sort by
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: மாணவர்கள்
     tag: குறிச்சொல்
     tags: குறிச்சொற்கள்

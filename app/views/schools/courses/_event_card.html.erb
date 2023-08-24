@@ -1,6 +1,6 @@
 <div class="overflow-hidden rounded-lg">
   <a
-      href="<%=school_course_calendar_event_path(@course,event)%>"
+      href="<%=school_course_calendar_event_path(@course,event, calendar_id: params[:calendar_id])%>"
       class="<%="block p-4 bg-#{event.color}-50 hover:bg-#{event.color}-200 focus:bg-#{event.color}-100 transition focus:outline-none"%>"
       ariaLabel="eventName on eventDate at eventTime">
     <div class="flex justify-between">

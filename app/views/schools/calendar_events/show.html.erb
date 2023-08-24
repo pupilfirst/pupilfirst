@@ -5,7 +5,7 @@
   <section class="<%="bg-#{@event.color}-50"%>">
     <div class="max-w-4xl 2xl:max-w-5xl mx-auto p-6">
       <div class="mt-4">
-        <%= link_to school_course_calendar_events_path(@course, calendar_id: @event.calendar_id), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
+        <%= link_to school_course_calendar_events_path(@course, calendar_id: params[:calendar_id]), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
           <i class="if i-arrow-left-regular if-fw rtl:rotate-180" ></i>
           <%= t('shared.back_link') %>
         <% end %>
@@ -18,8 +18,8 @@
           <p class="text-sm font-medium text-gray-500"><%= @event.calendar.name %></p>
         </div>
         <div class="flex gap-3">
-          <a href="<%= edit_school_course_calendar_event_path(@course, @event, calendar_id: @event.calendar_id) %>" class="text-sm font-medium px-4 py-2 bg-white border border-gray-300 rounded-lg text-black hover:text-primary-500 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-edit-regular if-fw" aria-hidden="true"></i> <%= t("shared.edit") %></a>
-          <%= form_with(url: school_calendar_event_path(@event), method: "delete") do |form| %>
+          <a href="<%= edit_school_course_calendar_event_path(@course, @event, calendar_id: params[:calendar_id]) %>" class="text-sm font-medium px-4 py-2 bg-white border border-gray-300 rounded-lg text-black hover:text-primary-500 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-edit-regular if-fw" aria-hidden="true"></i> <%= t("shared.edit") %></a>
+          <%= form_with(url: school_calendar_event_path(@event, calendar_id: params[:calendar_id]), method: "delete") do |form| %>
             <button name="delete" type="submit" data-confirm="<%= t(".confirm_delete") %>" class="text-sm font-medium px-4 py-2 bg-red-500 border border-red-300 rounded-lg text-white hover:bg-red-600 hover:shadow-sm focus:ring-1 focus:ring-focusColor-500"><i class="if i-trash-regular if-fw" aria-hidden="true"></i> <%= t("shared.delete") %></button>
           <% end %>
         </div>
@@ -50,5 +50,5 @@
         <% end %>
       </div>
     </div>
-</section>
+  </section>
 </div>

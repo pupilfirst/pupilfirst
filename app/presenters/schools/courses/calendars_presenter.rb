@@ -5,8 +5,7 @@ module Schools
         @course = course
         @date = params[:date] ? Date.parse(params[:date]) : Time.current.to_date
         @selected_calendar =
-          @course.calendars&.find_by(id: params[:calendar_id]) ||
-            @course.calendars&.first
+          @course.calendars&.find_by(id: params[:calendar_id])
         super(view_context)
       end
 
@@ -16,10 +15,6 @@ module Schools
 
       def selected_date
         @date.strftime("%d-%B-%Y")
-      end
-
-      def selected_calendar
-        @selected_calendar
       end
 
       def events_scope

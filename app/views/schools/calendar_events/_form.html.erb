@@ -14,7 +14,10 @@
     </div>
   </section>
   <section class="bg-white" >
-    <%= form_with model: event, url: event.persisted? ? school_calendar_event_path(event) : school_course_calendar_events_path(course), class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6" do |f| %>
+    <%= form_with model: event,
+        url: event.persisted? ? school_calendar_event_path(event, calendar_id: params[:calendar_id])
+        : school_course_calendar_events_path(course, calendar_id: params[:calendar_id]),
+        class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6" do |f| %>
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-10">
           <label>
@@ -39,7 +42,7 @@
         <div class="col-span-6">
           <label>
             <span class="text-sm font-medium"><%=t(".calendar_label")%></span>
-            <%= f.select :calendar_id, options_from_collection_for_select(course.calendars, 'id', 'name', selected: params[:calendar_id]), { include_blank: false }, { class: "select mt-1 block w-full rounded-md bg-white border border-gray-300 py-3 px-4 pe-10 text-base focus:outline-none focus:ring-1 focus:ring-focusColor-500 sm:text-sm" } %>
+            <%= f.select :calendar_id, options_from_collection_for_select(course.calendars, 'id', 'name', selected: (params[:calendar_id] || @event.calendar_id)), { include_blank: false }, { class: "select mt-1 block w-full rounded-md bg-white border border-gray-300 py-3 px-4 pe-10 text-base focus:outline-none focus:ring-1 focus:ring-focusColor-500 sm:text-sm" } %>
           </label>
         </div>
       </div>

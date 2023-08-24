@@ -7,7 +7,7 @@
       <div class="flex items-end justify-between gap-2">
         <h1 class="text-xl font-semibold"> <%= t(".calendar") %>  </h1>
         <div>
-          <%= link_to new_school_course_calendar_event_path(@course, calendar_id: @presenter.selected_calendar&.id), class: "btn btn-primary block" do %>
+          <%= link_to new_school_course_calendar_event_path(@course, calendar_id: params[:calendar_id]), class: "btn btn-primary block" do %>
             <i class="if i-plus-regular if-fw" ></i>
             <%= t(".add_event_button") %>
           <% end %>
@@ -23,7 +23,7 @@
               <p class="text-lg font-semibold "><%= t(".calendars") %> </p>
               <a
                 class="block btn btn-default btn-small"
-                href="<%= new_school_course_calendar_path(@course, calendar_id: @presenter.selected_calendar&.id)%>">
+                href="<%= new_school_course_calendar_path(@course, calendar_id: params[:calendar_id])%>">
                 <i class="if i-plus-regular if-fw" ></i>
                 <span><%= t(".add_calendar_button") %> </span>
               </a>

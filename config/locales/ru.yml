@@ -1864,8 +1864,19 @@ ru:
       account_delete_q: Вы уверены, что хотите удалить свой аккаунт? Это запустит процесс окончательного удаления ваших данных с наших серверов.
       already_iniated_deletion_warning: Вы уже инициировали удаление учетной записи. Проверьте свой почтовый ящик, чтобы узнать о дальнейших действиях по удалению учетной записи.
       avatar_uploaded_notification: Аватар успешно загружен.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
       cancel: Отмена
       change_password: Изменить текущий пароль
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Изменить фото
       community_digest: Community Digest
       community_digest_emails: Дайджесты сообщества содержат новые вопросы от ваших сообществ, а также подборку оставшихся без ответа вопросов за прошедшую неделю.
@@ -1875,6 +1886,7 @@ ru:
       confirm_password_error: Новый пароль и подтверждение должны совпадать и содержать не менее 8 символов.
       confirm_password_placeholder: Подтвердите новый пароль
       current_password: Текущий пароль
+      current_password_placeholder: Type current password
       delete_account: Удалить аккаунт
       delete_your_account: Удалить учетную запись
       deleting_account_warning: Удаление вашей учетной записи пользователя приведет к удалению всех ваших данных из этой школы. Ответы на сообщения в сообществах и отзывы учеников (если у пользователя есть профиль тренера) не удаляются. Права администратора должны быть отозваны, если вы являетесь администратором в этой школе.
@@ -2189,7 +2201,7 @@ ru:
         subject: Учетная запись успешно удалена из %{school_name}
       confirm_email_update:
         body:
-          html: <p> Ваша электронная почта в <strong>%{school_name}</strong> успешно обновлена. </p>
+          html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Ваш адрес электронной почты в %{school_name} школе успешно обновлен
       daily_digest:
         body:
@@ -2238,7 +2250,7 @@ ru:
         body:
           link_to: нажмите здесь
           main_html: <p> Мы получили запрос на сброс пароля %{school_name} .  </p> <p> Пожалуйста, %{link_to} для изменения пароля.  </p>
-        subject: восстановление аккаунта
+        subject: password reset
   maintenance:
     title: Maintenance Mode
     heading: We'll be back soon!
@@ -2348,6 +2360,10 @@ ru:
     initiate_account_deletion:
       check_inbox_notification: Проверьте свой почтовый ящик для дальнейших шагов!
       deletion_init_notification: Удаление учетной записи начато
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
     issue_certificate:
       success_notification: Сертификат успешно выдан!
     lock_topic:
@@ -2736,7 +2752,6 @@ ru:
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
     name: Имя
     name_email: Имя или Почта
-    no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
     none: Ничего
     note: "Примечание:"
     notes: Notes
@@ -2868,14 +2883,14 @@ ru:
       email_sent:
         image_alt: Письмо в ваш почтовый ящик
         magic_link:
-          description: Вы должны связаться с ним менее чем за минуту. Нажмите на ссылку в письме, и вы будете авторизованы.
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: Мы отправили вам магическую ссылку!
-          notice: Эта ссылка будет работать только один раз.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Магическая ссылка уже в пути!
         reset_password_link:
-          description: Вы должны связаться с ним менее чем за минуту. Нажмите на ссылку в письме, и вам будет предложено установить новый пароль.
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: Мы отправили вам ссылку для сброса пароля!
-          notice: Эта ссылка будет работать только один раз.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Подтвердите ваш запрос
       new:
         already_signed: Вы уже вошли в систему.
@@ -2914,6 +2929,7 @@ ru:
     update_email:
       frequent_request_error: Письмо было отправлено менее двух минут назад. Пожалуйста, подождите несколько минут, прежде чем повторить попытку.
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
+      invalid_password_error: The password you entered is incorrect. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: Невозможно обновить неактивные работы учащихся.

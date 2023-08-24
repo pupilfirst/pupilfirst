@@ -34,11 +34,19 @@ feature "Students view performance report and submissions overview", js: true do
   let(:target_l1) do
     create :target, :for_students, target_group: target_group_l1
   end
-  let(:target_l2) do
-    create :target, :for_students, target_group: target_group_l2
+  let!(:milestone_target_l2) do
+    create :target,
+    :for_students,
+    target_group: target_group_l2,
+    milestone: true,
+    milestone_number: 1
   end
-  let(:target_l3) do
-    create :target, :for_students, target_group: target_group_l3
+  let!(:milestone_target_l3) do
+    create :target,
+    :for_students,
+    target_group: target_group_l3,
+    milestone: true,
+    milestone_number: 2
   end
   let!(:target_4) do
     create :target, :for_students, target_group: target_group_l3
@@ -71,41 +79,41 @@ feature "Students view performance report and submissions overview", js: true do
     create(
       :timeline_event,
       students: [student],
-      target: target_l2,
+      target: milestone_target_l2,
       evaluator_id: course_coach.id,
       evaluated_at: 3.days.ago,
       passed_at: nil
     )
   end
-  let!(:submission_target_l2) do
+  let!(:submission_milestone_target_l2) do
     create(
       :timeline_event,
       :with_owners,
       latest: true,
       owners: [student],
-      target: target_l2,
+      target: milestone_target_l2,
       evaluator_id: course_coach.id,
       evaluated_at: 1.day.ago,
       passed_at: 1.day.ago
     )
   end
-  let!(:submission_target_l3) do
+  let!(:submission_milestone_target_l3) do
     create(
       :timeline_event,
       students: [student],
-      target: target_l3,
+      target: milestone_target_l3,
       evaluator_id: course_coach.id,
       evaluated_at: 1.day.ago,
       passed_at: 1.day.ago
     )
   end
-  let!(:pending_submission_target_l3) do
+  let!(:pending_submission_milestone_target_l3) do
     create(
       :timeline_event,
       :with_owners,
       latest: true,
       owners: [student],
-      target: target_l3
+      target: milestone_target_l3
     )
   end
   let!(:submission_quiz_target_1) do
@@ -145,11 +153,11 @@ feature "Students view performance report and submissions overview", js: true do
            student: student
 
     target_l1.evaluation_criteria << evaluation_criterion_1
-    target_l2.evaluation_criteria << [
+    milestone_target_l2.evaluation_criteria << [
       evaluation_criterion_1,
       evaluation_criterion_2
     ]
-    target_l3.evaluation_criteria << evaluation_criterion_2
+    milestone_target_l3.evaluation_criteria << evaluation_criterion_2
     target_4.evaluation_criteria << evaluation_criterion_2
 
     submission_target_l1_2.timeline_event_grades.create!(
@@ -161,15 +169,15 @@ feature "Students view performance report and submissions overview", js: true do
       grade: 2
     )
 
-    submission_target_l2.timeline_event_grades.create!(
+    submission_milestone_target_l2.timeline_event_grades.create!(
       evaluation_criterion: evaluation_criterion_1,
       grade: 3
     )
-    submission_target_l2.timeline_event_grades.create!(
+    submission_milestone_target_l2.timeline_event_grades.create!(
       evaluation_criterion: evaluation_criterion_2,
       grade: 2
     )
-    submission_target_l3.timeline_event_grades.create!(
+    submission_milestone_target_l3.timeline_event_grades.create!(
       evaluation_criterion: evaluation_criterion_2,
       grade: 2
     )
@@ -179,8 +187,6 @@ feature "Students view performance report and submissions overview", js: true do
 
   scenario "student visits course report link" do
     sign_in_user student.user, referrer: report_course_path(course)
-
-    expect(page).to have_text("Milestone targets")
 
     # Targets Overview
     expect(page).to have_text("Targets Overview")
@@ -215,6 +221,23 @@ feature "Students view performance report and submissions overview", js: true do
       expect(page).to have_content("2/3")
     end
 
+    # Milestone target details
+    expect(page).to have_text("Milestone targets")
+    expect(page).to have_text("1 / 2")
+    expect(page).to have_text("50% completed")
+    # both milestone targets are present
+    expect(page).to have_content("#{milestone_target_l2.title}")
+    expect(page).to have_content("#{milestone_target_l3.title}")
+
+    # All milestone targets should have the right status written next to their titles.
+    within("a[href='/targets/#{milestone_target_l2.id}']") do
+      expect(page).to have_content("Completed")
+    end
+
+    within("a[href='/targets/#{milestone_target_l3.id}']") do
+      expect(page).to have_content("Pending")
+    end
+
     # Coaches assigned to student
     expect(page).to have_content("Personal Coaches")
     expect(page).to have_content(team_coach.name)
@@ -230,7 +253,7 @@ feature "Students view performance report and submissions overview", js: true do
     click_button "Status: Pending Review"
 
     expect(page).not_to have_text(target_l1.title)
-    expect(page).to have_link(target_l3.title, href: "/targets/#{target_l3.id}")
+    expect(page).to have_link(milestone_target_l3.title, href: "/targets/#{milestone_target_l3.id}")
   end
 
   scenario "student loads more submissions" do
@@ -350,7 +373,7 @@ feature "Students view performance report and submissions overview", js: true do
     end
 
     # Archive target with verified submission for the student
-    let(:target_l3) do
+    let(:milestone_target_l3) do
       create :target, :for_students, :archived, target_group: target_group_l3
     end
 

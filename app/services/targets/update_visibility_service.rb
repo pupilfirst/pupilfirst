@@ -9,8 +9,12 @@ module Targets
     def execute
       case @visibility
       when Target::VISIBILITY_ARCHIVED
-        remove_target_prerequisites
-      when Target::VISIBILITY_DRAFT, Target::VISIBILITY_LIVE
+        detach_from_prerequisites
+        clear_milestone_settings
+      when Target::VISIBILITY_DRAFT
+        remove_as_prerequisite
+        unarchive_target_group
+      when Target::VISIBILITY_LIVE
         unarchive_target_group
       else
         raise "Targets::UpdateVisibilityService received unknown visiblity value '#{@visibility}'"
@@ -21,16 +25,18 @@ module Targets
 
     private
 
-    def remove_target_prerequisites
+    def detach_from_prerequisites
       TargetPrerequisite.transaction do
-        target_prerequisites =
-          TargetPrerequisite.where(
-            'target_id = ? OR prerequisite_target_id = ?',
-            @target.id,
-            @target.id
-          )
-        target_prerequisites.destroy_all if target_prerequisites.exists?
+        Targets::DetachFromPrerequisitesService.new([@target]).execute
       end
+    end
+
+    def remove_as_prerequisite
+      TargetPrerequisite.where(prerequisite_target: @target).destroy_all
+    end
+
+    def clear_milestone_settings
+      @target.update!(milestone: false, milestone_number: nil)
     end
 
     def unarchive_target_group

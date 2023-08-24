@@ -86,7 +86,7 @@ feature "User signing in by supplying email address", js: true do
       let(:level) { create :level, :one, course: course }
       let(:cohort) { create :cohort, course: course }
 
-      before { create :student, user: user, cohort: cohort, level: level }
+      before { create :student, user: user, cohort: cohort }
 
       scenario "allow to change password with a valid token" do
         user.regenerate_reset_password_token

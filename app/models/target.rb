@@ -10,12 +10,12 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higher level
+  STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # There are more pending submissions than the submission limit for the course
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,
-    STATUS_LEVEL_LOCKED,
+    STATUS_SUBMISSION_LIMIT_LOCKED,
     STATUS_PENDING_MILESTONE
   ].freeze
 
@@ -42,6 +42,7 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
+  scope :milestone, -> { live.where(milestone: true) }
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"
@@ -147,6 +148,16 @@ class Target < ApplicationRecord
     end
   end
 
+  validate :milestone_should_have_a_number
+
+  def milestone_should_have_a_number
+    return unless milestone?
+
+    return if milestone_number.present?
+
+    errors.add(:milestone_number, "must be present for milestone targets")
+  end
+
   normalize_attribute :slideshow_embed,
                       :video_embed,
                       :youtube_video_id,
@@ -159,6 +170,12 @@ class Target < ApplicationRecord
     else
       title
     end
+  end
+
+  def title_with_milestone
+    return title unless milestone?
+
+    "#{I18n.t("shared.m")}#{milestone_number} - #{title}"
   end
 
   def status(student)

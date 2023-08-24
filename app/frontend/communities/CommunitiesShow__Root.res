@@ -522,7 +522,7 @@ module TopicsSorter = Sorter.Make(Sortable)
 
 let topicsSorter = filter =>
   <div ariaLabel="Change topics sorting" className="shrink-0">
-    <label className="block text-tiny font-semibold uppercase">
+    <label className="block text-tiny font-semibold uppercase pb-1">
       {t("sort_criterion_input_label")->str}
     </label>
     <TopicsSorter
@@ -613,9 +613,9 @@ let make = (~communityId, ~target, ~topicCategories) => {
             )}
             <div className="" />
           </div>
-          <div className="flex w-full items-start flex-wrap">
+          <div className="flex w-full items-start flex-wrap space-y-3 md:space-y-0">
             <div className="flex-1 pe-2">
-              <label className="block text-tiny font-semibold uppercase ps-px">
+              <label className="block text-tiny font-semibold uppercase pb-1 ps-px">
                 {t("filter_input_label")->str}
               </label>
               <Multiselect

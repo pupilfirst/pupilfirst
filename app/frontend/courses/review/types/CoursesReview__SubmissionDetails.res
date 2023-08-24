@@ -14,8 +14,6 @@ type t = {
   targetId: string,
   targetTitle: string,
   students: array<Student.t>,
-  levelNumber: string,
-  levelId: string,
   submissionReports: array<SubmissionReport.t>,
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
@@ -34,7 +32,6 @@ let submission = t => t.submission
 let allSubmissions = t => t.allSubmissions
 let targetId = t => t.targetId
 let targetTitle = t => t.targetTitle
-let levelNumber = t => t.levelNumber
 let students = t => t.students
 let evaluationCriteria = t => t.evaluationCriteria
 let reviewChecklist = t => t.reviewChecklist
@@ -56,9 +53,7 @@ let make = (
   ~targetId,
   ~targetTitle,
   ~students,
-  ~levelNumber,
   ~evaluationCriteria,
-  ~levelId,
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
   ~inactiveStudents,
@@ -77,9 +72,7 @@ let make = (
   targetId: targetId,
   targetTitle: targetTitle,
   students: students,
-  levelNumber: levelNumber,
   evaluationCriteria: evaluationCriteria,
-  levelId: levelId,
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
   inactiveStudents: inactiveStudents,
@@ -105,8 +98,6 @@ let decodeJs = details =>
     ~targetId=details["targetId"],
     ~targetTitle=details["targetTitle"],
     ~students=details["students"]->Js.Array2.map(Student.makeFromJs),
-    ~levelNumber=details["levelNumber"],
-    ~levelId=details["levelId"],
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
     ~inactiveStudents=details["inactiveStudents"],
     ~createdAt=DateFns.decodeISO(details["createdAt"]),

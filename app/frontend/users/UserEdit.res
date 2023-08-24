@@ -430,7 +430,7 @@ let make = (
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {confirmEmailChangeWindow(email, state, send)}
     {confirmDeletionWindow(state, send)}
-    <div className="bg-white shadow sm:rounded-lg">
+    <div className="bg-white max-w-5xl mx-auto shadow sm:rounded-lg mt-4">
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pe-4">
@@ -720,7 +720,7 @@ let make = (
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
+      <div className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
         <button
           disabled={saveDisabled(state)}
           onClick={updateUser(state, send)}
@@ -729,7 +729,7 @@ let make = (
         </button>
       </div>
     </div>
-    <div className="bg-white shadow sm:rounded-lg mt-10">
+    <div className="bg-white max-w-5xl mx-auto shadow sm:rounded-lg mt-10">
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pe-4">

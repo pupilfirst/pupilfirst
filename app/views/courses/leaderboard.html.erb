@@ -76,7 +76,6 @@
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".rank") %></th>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".change") %></th>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b "><%= t(".student") %></th>
-                <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".level") %></th>
                 <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b"><%= t(".score") %></th>
               </tr>
             </thead>
@@ -100,7 +99,6 @@
                     <span class="font-semibold inline-block leading-tight"><%= student.name %></span>
                     <span class="leaderboard__student-affiliation block text-xs text-gray-600 leading-tight"> <%= student.user.affiliation %></span>
                   </td>
-                  <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.level_number %></td>
                   <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.score %></td>
                 </tr>
               <% end %>

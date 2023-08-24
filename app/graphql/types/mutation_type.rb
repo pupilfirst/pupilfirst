@@ -27,7 +27,6 @@ class Types::MutationType < Types::BaseObject
   field :delete_content_block,
         mutation: Mutations::DeleteContentBlock,
         null: false
-  field :level_up, mutation: Mutations::LevelUp, null: false
   field :move_content_block, mutation: Mutations::MoveContentBlock, null: false
   field :create_school_admin,
         mutation: Mutations::CreateSchoolAdmin,

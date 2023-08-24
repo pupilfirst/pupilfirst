@@ -18,7 +18,7 @@ module Cohorts
             milestone_targets
               .pluck(:id, :milestone_number, :title)
               .map do |id, number, title|
-                "#{id};#{I18n.t("presenters.cohorts.students.milestone_status_filter_value", number: number, title: title)}"
+                "#{id};#{I18n.t("presenters.cohorts.students.milestone_status_filter_value", m: I18n.t("shared.m"), number: number, title: title)}"
               end
 
           {

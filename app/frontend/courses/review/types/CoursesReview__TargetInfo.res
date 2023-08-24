@@ -10,7 +10,7 @@ let title = t =>
   switch t.milestoneNumber {
   | None => t.title
   | Some(milestoneNumber) =>
-    I18n.t("components.CoursesReview__Root.m") ++ string_of_int(milestoneNumber) ++ " - " ++ t.title
+    I18n.t("shared.m") ++ string_of_int(milestoneNumber) ++ " - " ++ t.title
   }
 
 let milestoneNumber = t => t.milestoneNumber

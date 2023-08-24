@@ -616,7 +616,7 @@ let make = (~studentId, ~userId) => {
                       </div>
                       <div>
                         <p className="text-sm font-semibold">
-                          {(t("m") ++
+                          {(ts("m") ++
                           string_of_int(
                             CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
                           ))->str}

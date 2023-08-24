@@ -4,6 +4,7 @@ external reviewedEmptyImage: string = "default"
 external pendingEmptyImage: string = "default"
 
 let t = I18n.t(~scope="components.CoursesReview__SubmissionCard")
+let ts = I18n.t(~scope="shared")
 
 open CoursesReview__Types
 
@@ -59,7 +60,7 @@ let showSubmission = (submissions, filterString) =>
               {(Belt.Option.mapWithDefault(
                 IndexSubmission.milestoneNumber(submission),
                 "",
-                number => t("m") ++ string_of_int(number) ++ " - ",
+                number => ts("m") ++ string_of_int(number) ++ " - ",
               ) ++
               IndexSubmission.title(submission))->str}
             </span>

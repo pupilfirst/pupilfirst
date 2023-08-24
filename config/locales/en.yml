@@ -650,7 +650,6 @@ en:
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
       incomplete_targets: "Incomplete: %{targetsCount}"
-      m: M
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
@@ -669,7 +668,6 @@ en:
       filter_by_another_status: Filter by another status
       filter_by_status: Filter by status
       load_more: Load More...
-      m: "M"
       no_submissions_to_show: "No submissions to show "
       pending_review: Pending Review
       rejected: Rejected
@@ -794,7 +792,6 @@ en:
         target: "Target: "
       inactive_students: Inactive Students
       include: Include
-      m: M
       me: Me
       name_or_email: Name or Email
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
@@ -824,7 +821,6 @@ en:
       completed: Completed
       created_at: on %{created_at}.
       feedback_sent: Feedback Sent
-      m: "M"
       no_submissions_found: No submissions found
       rejected: Rejected
       submitted_by: "Submitted by "
@@ -865,7 +861,6 @@ en:
       close_student_report: Close student report
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
-      m: M
       milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
@@ -2183,7 +2178,6 @@ en:
         full_time: Full-Time
         part_time: Part-Time
     target:
-      m: M
       role:
         students: All Students
         team: Team
@@ -2398,7 +2392,6 @@ en:
     students:
       show:
         average_grades: Average Grades
-        m: M
         milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
@@ -2436,7 +2429,7 @@ en:
         filter_placeholder: Click to see options
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
-        milestone_status_filter_value: "M%{number}: %{title}"
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2656,7 +2649,6 @@ en:
     close: Close
     coaches: Coaches
     cohort_overview:
-      m: M
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.
       overview_link: Overview
@@ -2696,6 +2688,7 @@ en:
     load_more: Load More...
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    m: M
     my_org: My Org
     name: Name
     name_email: Name or Email

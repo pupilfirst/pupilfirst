@@ -252,7 +252,7 @@ let make = (~overviewData, ~coaches) =>
                   className="flex gap-2 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold">
-                      {(t("m") ++
+                      {(ts("m") ++
                       string_of_int(
                         CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
                       ))->str}

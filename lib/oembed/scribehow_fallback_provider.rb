@@ -9,7 +9,7 @@ module Oembed
     end
 
     def resource_url
-      @resource_url.gsub("/shared", "/embed")
+     @resource_url.gsub("scribehow.com/shared", "scribehow.com/embed")
     end
   end
 end

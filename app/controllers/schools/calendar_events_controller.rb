@@ -34,9 +34,9 @@ module Schools
       @form.validate
 
       if @form.valid?
-        @form.save
+        event = @form.save
         flash[:success] = I18n.t("calendar_events.create.success")
-        redirect_to school_course_calendar_events_path(@course)
+        redirect_to school_course_calendar_events_path(@course, calendar_id: event.calendar_id)
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
         @event = CalendarEvent.new
@@ -62,6 +62,7 @@ module Schools
         redirect_to school_course_calendar_event_path(
                       @event.calendar.course,
                       @event,
+                      calendar_id: @event.calendar_id,
                     )
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
@@ -75,7 +76,7 @@ module Schools
       @event.destroy
 
       flash[:success] = I18n.t("calendar_events.delete.success")
-      redirect_to school_course_calendar_events_path(@event.calendar.course)
+      redirect_to school_course_calendar_events_path(@event.calendar.course, calendar_id: @event.calendar_id)
     end
 
     private

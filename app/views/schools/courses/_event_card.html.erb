@@ -1,37 +1,36 @@
-  <div class="overflow-hidden rounded-lg">
-    <a
-      href=<%=school_course_calendar_event_path(@course,event)%>
+<div class="overflow-hidden rounded-lg">
+  <a
+      href="<%=school_course_calendar_event_path(@course,event)%>"
       class="<%="block p-4 bg-#{event.color}-50 hover:bg-#{event.color}-200 focus:bg-#{event.color}-100 transition focus:outline-none"%>"
       ariaLabel="eventName on eventDate at eventTime">
-      <div class="flex justify-between">
-        <div class="flex gap-3 items-start">
-          <div class="<%="w-2 h-2 mt-2 rounded-full " + "bg-#{event.color}-500"%>"></div>
-          <div>
-            <p class="font-semibold text-base"><%= event.title %></p>
-            <p class="font-medium text-sm">
-              <%= event.display_time %>
-            </p>
-          </div>
+    <div class="flex justify-between">
+      <div class="flex gap-3 items-start">
+        <div class="<%="w-2 h-2 mt-2 rounded-full " + "bg-#{event.color}-500"%>"></div>
+        <div>
+          <p class="font-semibold text-base"><%= event.title %></p>
+          <p class="font-medium text-sm">
+            <%= event.display_time %>
+          </p>
         </div>
-        <p class="text-black/50 text-xs"> <%= event.calendar.name %> </p>
       </div>
-    </a>
-
-    <% if event.link_url.present? %>
-      <div>
-        <a
-          href=<%= event.link_url %>
-          ariaLabel="Link to event"
+      <p class="text-black/50 text-xs"> <%= event.calendar.name %> </p>
+    </div>
+  </a>
+  <% if event.link_url.present? %>
+    <div>
+      <a
+          href="<%= event.link_url %>"
+          aria-label="Link to event"
           target="_blank"
           rel="noopener noreferrer"
           class="<%="ps-9 pe-5  py-4 block text-primary-500 font-medium text-sm transition-all border-t border-black/5 hover:underline focus:underline focus:outline-none " + "bg-#{event.color}-50 hover:bg-#{event.color}-100 focus:bg-#{event.color}-100"%>">
-          <div class="flex gap-2 items-center">
-            <i class="if i-external-link-regular if-fw rtl:-rotate-90"></i>
-            <p>
-               <%= event.link_title.present? ? event.link_title : event.link_url %>
-            </p>
-          </div>
-        </a>
-      </div>
-    <% end %>
-  </div>
+        <div class="flex gap-2 items-center">
+          <i class="if i-external-link-regular if-fw rtl:-rotate-90"></i>
+          <p>
+            <%= event.link_title.present? ? event.link_title : event.link_url %>
+          </p>
+        </div>
+      </a>
+    </div>
+  <% end %>
+</div>

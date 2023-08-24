@@ -43,7 +43,7 @@ module Users
       user =
         Users::AuthenticationService.new(
           current_school,
-          params[:token],
+          params[:token]
         ).authenticate
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
@@ -73,24 +73,14 @@ module Users
 
     # Post /users/update_password
     def update_password
-      if current_user.present?
-        redirect_to after_sign_in_path_for(current_user)
+      @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
+      if @form.validate(params[:session])
+        @form.save
+        @form.user.update!(account_deletion_notification_sent_at: nil)
+        sign_in @form.user
+        render json: { error: nil, path: after_sign_in_path_for(current_user) }
       else
-        @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
-        if @form.validate(params[:session])
-          @form.save
-          @form.user.update!(account_deletion_notification_sent_at: nil)
-          sign_in @form.user
-          render json: {
-                   error: nil,
-                   path: after_sign_in_path_for(current_user),
-                 }
-        else
-          render json: {
-                   error: @form.errors.full_messages.join(", "),
-                   path: nil,
-                 }
-        end
+        render json: { error: @form.errors.full_messages.join(", "), path: nil }
       end
     end
 
@@ -150,7 +140,7 @@ module Users
 
         data =
           crypt.decrypt(
-            Base64.urlsafe_decode64(params[:encrypted_token].presence || ""),
+            Base64.urlsafe_decode64(params[:encrypted_token].presence || "")
           )
         session_id = Base64.urlsafe_decode64(data[:session_id])
 
@@ -165,7 +155,7 @@ module Users
         if data[:login_token].blank? && current_user.present? &&
              data[:auth_hash]&.dig(:discord)&.dig(:uid).present?
           if current_school.users.exists?(
-               discord_user_id: data[:auth_hash][:discord][:uid],
+               discord_user_id: data[:auth_hash][:discord][:uid]
              )
             flash[:error] = t(".discord_already_linked")
             redirect_to edit_user_path
@@ -176,7 +166,7 @@ module Users
             Discord::AddMemberService.new(current_user).execute(
               data[:auth_hash][:discord][:uid],
               data[:auth_hash][:discord][:tag],
-              data[:auth_hash][:discord][:access_token],
+              data[:auth_hash][:discord][:access_token]
             )
 
           if onboard_user
@@ -192,7 +182,7 @@ module Users
         user =
           Users::AuthenticationService.new(
             current_school,
-            data[:login_token],
+            data[:login_token]
           ).authenticate
 
         if user.present?

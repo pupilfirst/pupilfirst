@@ -180,4 +180,7 @@ class Types::MutationType < Types::BaseObject
   field :re_run_github_action,
         mutation: Mutations::ReRunGithubAction,
         null: false
+  field :initiate_password_reset,
+        mutation: Mutations::InitiatePasswordReset,
+        null: false
 end

@@ -14,11 +14,11 @@ module Users
       property :referrer
       property :shared_device
 
-      validate :user_with_email_must_exist
-      validate :ensure_time_between_requests
       validate :email_should_not_have_bounced
 
       def save
+        return if user.blank? || duplicate_request?
+
         MailLoginTokenService.new(user, referrer, shared_device?).execute
       end
 
@@ -29,7 +29,7 @@ module Users
       end
 
       def shared_device?
-        shared_device == '1'
+        shared_device == "1"
       end
     end
   end

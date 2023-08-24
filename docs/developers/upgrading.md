@@ -18,6 +18,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2023.3
+
+This update addresses few security vulnerabilities in our platform of medium severity. It introduces enhanced security measures, including mandatory password confirmation for email changes, authentication for new password setting, and discreet user presence disclosure. It's vital for all users to upgrade to version 2023.3 to safeguard their accounts effectively.
+
 ### 2023.2
 
 This version renames the `founders` table to `students` and updates all related usages throughout the codebase. For most installations of Pupilfirst LMS, this should be a seamless upgrade. However, if you've made customizations or have used any internal APIs, you should check for any references to `founders` and update them to `students`.

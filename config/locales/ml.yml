@@ -1840,8 +1840,19 @@ ml:
       account_delete_q: നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ? ഇത് ഞങ്ങളുടെ സെർവറുകളിൽ നിന്ന് നിങ്ങളുടെ ഡാറ്റ ശാശ്വതമായി നീക്കം ചെയ്യുന്നതിനുള്ള പ്രക്രിയ ആരംഭിക്കും.
       already_iniated_deletion_warning: നിങ്ങൾ ഇതിനകം അക്കൗണ്ട് ഇല്ലാതാക്കൽ ആരംഭിച്ചിട്ടുണ്ട്. നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കുന്നതിനുള്ള തുടർ നടപടികൾക്കായി നിങ്ങളുടെ ഇൻബോക്സ് പരിശോധിക്കുക.
       avatar_uploaded_notification: അവതാർ അപ്‌ലോഡ് ചെയ്‌തു.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
       cancel: റദ്ദാക്കുക
       change_password: നിങ്ങളുടെ നിലവിലെ പാസ്‌വേഡ് മാറ്റുക
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: ചിത്രം മാറ്റുക
       community_digest: Community Digest
       community_digest_emails: കമ്മ്യൂണിറ്റി ഡൈജസ്റ്റ് ഇമെയിലുകളിൽ നിങ്ങളുടെ കമ്മ്യൂണിറ്റികളിൽ നിന്നുള്ള പുതിയ ചോദ്യങ്ങളും കഴിഞ്ഞ ആഴ്‌ചയിലെ ഉത്തരം ലഭിക്കാത്ത ചോദ്യങ്ങളും അടങ്ങിയിരിക്കുന്നു.
@@ -1851,6 +1862,7 @@ ml:
       confirm_password_error: പുതിയ പാസ്‌വേഡും സ്ഥിരീകരണവും പൊരുത്തപ്പെടണം കൂടാതെ കുറഞ്ഞത് 8 പ്രതീകങ്ങൾ ഉണ്ടായിരിക്കണം
       confirm_password_placeholder: പുതിയ പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക
       current_password: ഇപ്പോഴത്തെ പാസ്സ്വേർഡ്
+      current_password_placeholder: Type current password
       delete_account: അക്കൗണ്ട് ഇല്ലാതാക്കുക
       delete_your_account: നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കുക
       deleting_account_warning: നിങ്ങളുടെ ഉപയോക്തൃ അക്കൗണ്ട് ഇല്ലാതാക്കുന്നത് ഈ സ്കൂളിൽ നിന്ന് നിങ്ങളുടെ എല്ലാ ഡാറ്റയും നീക്കം ചെയ്യുന്നു. കമ്മ്യൂണിറ്റികളിലെ പോസ്റ്റുകൾക്കുള്ള മറുപടികളും വിദ്യാർത്ഥികൾക്കുള്ള ഫീഡ്‌ബാക്കും (ഉപയോക്താവിന് ഒരു കോച്ച് പ്രൊഫൈൽ ഉണ്ടെങ്കിൽ) ഇല്ലാതാക്കില്ല. നിങ്ങൾ ഈ സ്കൂളിൽ അഡ്മിൻ ആണെങ്കിൽ അഡ്മിൻ അവകാശങ്ങൾ റദ്ദാക്കേണ്ടതുണ്ട്.
@@ -2161,7 +2173,7 @@ ml:
         subject: അക്കൗണ്ട് %{school_name}-ൽ നിന്ന് വിജയകരമായി ഇല്ലാതാക്കി
       confirm_email_update:
         body:
-          html: <p> <strong>%{school_name}</strong> -ലെ നിങ്ങളുടെ ഇമെയിൽ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു. </p>
+          html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: '%{school_name} സ്കൂളിലെ നിങ്ങളുടെ ഇമെയിൽ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു'
       daily_digest:
         body:
@@ -2206,7 +2218,7 @@ ml:
         body:
           link_to: ഇവിടെ ക്ലിക്ക് ചെയ്യുക
           main_html: <p> നിങ്ങളുടെ %{school_name} പാസ്‌വേഡ് പുനഃസജ്ജമാക്കാൻ ഞങ്ങൾക്ക് ഒരു അഭ്യർത്ഥന ലഭിച്ചു.  </p> <p> നിങ്ങളുടെ പാസ്‌വേഡ് മാറ്റാൻ ദയവായി %{link_to} .  </p>
-        subject: അക്കൗണ്ട് വീണ്ടെടുക്കൽ
+        subject: password reset
   maintenance:
     title: Maintenance Mode
     heading: We'll be back soon!
@@ -2316,6 +2328,10 @@ ml:
     initiate_account_deletion:
       check_inbox_notification: കൂടുതൽ നടപടികൾക്കായി നിങ്ങളുടെ ഇൻബോക്സ് പരിശോധിക്കുക!
       deletion_init_notification: അക്കൗണ്ട് ഇല്ലാതാക്കൽ ആരംഭിച്ചു
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
     issue_certificate:
       success_notification: സർട്ടിഫിക്കറ്റ് വിതരണം ചെയ്തു!
     lock_topic:
@@ -2700,7 +2716,6 @@ ml:
     login_token_expiration_warning_html: ഈ ലിങ്ക് %{timestamp}-ന് കാലഹരണപ്പെടും. ലിങ്ക് കാലഹരണപ്പെട്ടെങ്കിൽ, സൈൻ-ഇൻ പേജ് <a href="%{login_url}" %>-ൽ നിന്ന് നിങ്ങൾക്ക് മറ്റൊരു ഒറ്റത്തവണ ടോക്കൺ</a>. ഇതൊരു സ്വകാര്യ URL ആണെന്നും പങ്കിടാൻ പാടില്ലെന്നും ദയവായി ശ്രദ്ധിക്കുക.
     name: പേര്
     name_email: പേര് അല്ലെങ്കിൽ ഇമെയിൽ
-    no_email_found: ഈ ഇമെയിൽ ഉപയോഗിച്ച് ഉപയോക്താവിനെ കണ്ടെത്താനായില്ല. നിങ്ങൾ നൽകിയ ഇമെയിൽ പരിശോധിക്കുക.
     none: ഒന്നുമില്ല
     note: "കുറിപ്പ്:"
     notes: Notes
@@ -2830,14 +2845,14 @@ ml:
       email_sent:
         image_alt: നിങ്ങളുടെ ഇൻബോക്സിലേക്ക് ഒരു ഇമെയിൽ പറക്കുന്നു
         magic_link:
-          description: ഒരു മിനിറ്റിൽ താഴെ സമയത്തിനുള്ളിൽ ഇത് നിങ്ങളിലേക്ക് എത്തും. ഇമെയിലിലെ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യുക, നിങ്ങൾ സൈൻ ഇൻ ചെയ്യപ്പെടും.
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: ഞങ്ങൾ നിങ്ങൾക്ക് ഒരു മാന്ത്രിക ലിങ്ക് അയച്ചു!
-          notice: ഈ ലിങ്ക് ഒരിക്കൽ മാത്രമേ പ്രവർത്തിക്കൂ.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: മാജിക് ലിങ്ക് അതിന്റെ വഴിയിലാണ്!
         reset_password_link:
-          description: ഒരു മിനിറ്റിൽ താഴെ സമയത്തിനുള്ളിൽ ഇത് നിങ്ങളിലേക്ക് എത്തും. ഇമെയിലിലെ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യുക, ഒരു പുതിയ പാസ്‌വേഡ് സജ്ജീകരിക്കാൻ നിങ്ങളോട് ആവശ്യപ്പെടും.
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: നിങ്ങളുടെ പാസ്‌വേഡ് പുനഃസജ്ജമാക്കാൻ ഞങ്ങൾ ഒരു ലിങ്ക് അയച്ചു!
-          notice: ഈ ലിങ്ക് ഒരിക്കൽ മാത്രമേ പ്രവർത്തിക്കൂ.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: നിങ്ങളുടെ അഭ്യർത്ഥന സ്ഥിരീകരിക്കുക
       new:
         already_signed: നിങ്ങൾ ഇതിനകം സൈൻ ഇൻ ചെയ്തിട്ടുണ്ട്.
@@ -2876,6 +2891,7 @@ ml:
     update_email:
       frequent_request_error: രണ്ട് മിനിറ്റിനുള്ളിൽ ഒരു ഇമെയിൽ അയച്ചു. വീണ്ടും ശ്രമിക്കുന്നതിന് മുമ്പ് കുറച്ച് മിനിറ്റ് കാത്തിരിക്കുക.
       link_expired: ആ ലിങ്ക് കാലഹരണപ്പെട്ടു അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.
+      invalid_password_error: The password you entered is incorrect. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: നിഷ്‌ക്രിയ വിദ്യാർത്ഥി സമർപ്പിക്കലുകൾ അപ്‌ഡേറ്റ് ചെയ്യാൻ കഴിയില്ല.

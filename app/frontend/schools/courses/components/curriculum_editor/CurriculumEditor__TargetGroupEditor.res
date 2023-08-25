@@ -6,7 +6,6 @@ type state = {
   levelId: option<string>,
   levelSearchInput: string,
   description: string,
-  milestone: bool,
   hasNameError: bool,
   dirty: bool,
   isArchived: bool,
@@ -19,7 +18,6 @@ let ts = I18n.t(~scope="shared")
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string)
-  | UpdateMilestone(bool)
   | UpdateIsArchived(bool)
   | SetLevel(string)
   | ClearLevel
@@ -35,7 +33,6 @@ let reducer = (state, action) =>
       dirty: true,
     }
   | UpdateDescription(description) => {...state, description: description, dirty: true}
-  | UpdateMilestone(milestone) => {...state, milestone: milestone, dirty: true}
   | UpdateIsArchived(isArchived) => {...state, isArchived: isArchived, dirty: true}
   | SetLevel(levelId) => {
       ...state,
@@ -64,13 +61,11 @@ let saveDisabled = state =>
 
 let setPayload = (state, levelId) => {
   let payload = Js.Dict.empty()
-  let milestone = state.milestone == true ? "true" : "false"
   Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
   Js.Dict.set(payload, "archived", state.isArchived |> Js.Json.boolean)
   Js.Dict.set(payload, "level_id", levelId |> Js.Json.string)
   Js.Dict.set(payload, "name", state.name |> Js.Json.string)
   Js.Dict.set(payload, "description", state.description |> Js.Json.string)
-  Js.Dict.set(payload, "milestone", milestone |> Js.Json.string)
   payload
 }
 
@@ -113,7 +108,7 @@ let levelEditor = (state, levels, send) =>
       onChange={searchString => send(UpdateLevelSearchInput(searchString))}
     />
     {state.levelId->Belt.Option.mapWithDefault(
-      <School__InputGroupError message=tr("choose_level") active=true />,
+      <School__InputGroupError message={tr("choose_level")} active=true />,
       _ => React.null,
     )}
   </div>
@@ -140,14 +135,15 @@ let handleResponseCB = (state, levelId, targetGroup, updateTargetGroupsCB, json)
     id,
     state.name,
     Some(state.description),
-    state.milestone,
     levelId,
     sortIndex,
     state.isArchived,
   )
   switch targetGroup {
-  | Some(_) => Notification.success(ts("notifications.success"), tr("target_group_updated_notificaion"))
-  | None => Notification.success(ts("notifications.success"), tr("target_group_created_notification"))
+  | Some(_) =>
+    Notification.success(ts("notifications.success"), tr("target_group_updated_notificaion"))
+  | None =>
+    Notification.success(ts("notifications.success"), tr("target_group_created_notification"))
   }
   updateTargetGroupsCB(newTargetGroup)
 }
@@ -195,7 +191,6 @@ let computeInitialState = (currentLevelId, targetGroup) =>
       },
       levelId: Some(targetGroup |> TargetGroup.levelId),
       levelSearchInput: "",
-      milestone: targetGroup |> TargetGroup.milestone,
       hasNameError: false,
       dirty: false,
       isArchived: targetGroup |> TargetGroup.archived,
@@ -206,7 +201,6 @@ let computeInitialState = (currentLevelId, targetGroup) =>
       description: "",
       levelId: Some(currentLevelId),
       levelSearchInput: "",
-      milestone: true,
       hasNameError: false,
       dirty: false,
       isArchived: false,
@@ -249,7 +243,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                   className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                   id="name"
                   type_="text"
-                  placeholder=tr("title_placeholder")
+                  placeholder={tr("title_placeholder")}
                   value=state.name
                   onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
                 />
@@ -269,39 +263,13 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                   textareaId="description"
                   onChange={markdown => send(UpdateDescription(markdown))}
                   value=state.description
-                  placeholder=tr("description_placeholder")
+                  placeholder={tr("description_placeholder")}
                   profile=Markdown.AreaOfText
                   maxLength=10000
                   fileUpload=false
                 />
               </div>
               {levelEditor(state, levels, send)}
-              <div className="mt-5">
-                <div className="flex items-center shrink-0">
-                  <label className="block tracking-wide text-xs font-semibold me-3">
-                    {tr("milestone_q") |> str}
-                  </label>
-                  <div
-                    className="milestone shrink-0 overflow-hidden">
-                    <button
-                      onClick={_event => {
-                        ReactEvent.Mouse.preventDefault(_event)
-                        send(UpdateMilestone(true))
-                      }}
-                      className={booleanButtonClasses(state.milestone == true)}>
-                      {ts("_yes") |> str}
-                    </button>
-                    <button
-                      onClick={_event => {
-                        ReactEvent.Mouse.preventDefault(_event)
-                        send(UpdateMilestone(false))
-                      }}
-                      className={booleanButtonClasses(state.milestone == false)}>
-                      {ts("_no") |> str}
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
             <div className="border-t bg-gray-50 mt-5">
               <div className="max-w-2xl p-6 mx-auto flex w-full justify-between items-center">

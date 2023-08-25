@@ -25,12 +25,8 @@ describe DailyDigestService do
       let(:level_2) { create :level, :one, course: course_2 }
       let(:team_2) { create :team, cohort: cohort_2 }
 
-      let(:t1_student) do
-        create :student, team: team_1, cohort: cohort_1, level: level_1
-      end
-      let(:t2_student) do
-        create :student, team: team_2, cohort: cohort_2, level: level_2
-      end
+      let(:t1_student) { create :student, team: team_1, cohort: cohort_1 }
+      let(:t2_student) { create :student, team: team_2, cohort: cohort_2 }
 
       let!(:community_1) do
         create :community,

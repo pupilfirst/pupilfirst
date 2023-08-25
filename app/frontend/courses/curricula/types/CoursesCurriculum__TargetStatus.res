@@ -18,7 +18,7 @@ module LatestSubmission = CoursesCurriculum__LatestSubmission
 type lockReason =
   | CourseLocked
   | AccessLocked
-  | LevelLocked(string)
+  | SubmissionLimitReached(string)
   | PrerequisitesIncomplete
 
 type status =
@@ -58,11 +58,11 @@ let makePending = targets =>
 let lockTargets = (targets, reason) =>
   targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Locked(reason)})
 
-let allTargetsComplete = (targetCache, targetIds) =>
+let allTargetsAttempted = (targetCache, targetIds) =>
   targetIds->Belt.Array.every(targetId => {
     Js.Array.find(ct => ct.targetId == targetId, targetCache)->Belt.Option.mapWithDefault(
       true,
-      target => target.submissionStatus == SubmissionCompleted,
+      target => target.submissionStatus != SubmissionMissing,
     )
   })
 
@@ -75,15 +75,6 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
   } else if student |> Student.endsAt |> isPast {
     lockTargets(targets, AccessLocked)
   } else {
-    /* Cache level number of the student. */
-    let studentLevelNumber =
-      levels
-      |> ArrayUtils.unsafeFind(
-        l => l |> Level.id == Student.levelId(student),
-        "Could not student's level with ID " ++ Student.levelId(student),
-      )
-      |> Level.number
-
     /* Cache level number, milestone boolean, and submission status for all targets. */
     let targetCache = targets |> Js.Array.map(target => {
       let targetId = target |> Target.id
@@ -95,8 +86,6 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
           (Target.targetGroupId(target) ++
           " to create target cache"),
         )
-
-      let milestone = targetGroup |> TargetGroup.milestone
 
       let levelNumber =
         levels
@@ -124,13 +113,18 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
 
       {
         targetId: targetId,
-        targetReviewed: target |> Target.reviewed,
+        targetReviewed: target->Target.reviewed,
         levelNumber: levelNumber,
-        milestone: milestone,
+        milestone: target->Target.milestone,
         submissionStatus: submissionStatus,
         prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }
     })
+
+    let submissionsPendingReviewCount =
+      targetCache
+      |> Js.Array.filter(ct => ct.submissionStatus == SubmissionPendingReview)
+      |> Js.Array.length
 
     /* Scan the targets cache again to form final list of target statuses. */
     targetCache |> Js.Array.map(ct => {
@@ -139,9 +133,13 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
       | SubmissionCompleted => Completed
       | SubmissionRejected => Rejected
       | SubmissionMissing =>
-        if ct.levelNumber > studentLevelNumber && ct.targetReviewed {
-          Locked(LevelLocked(string_of_int(studentLevelNumber)))
-        } else if !(ct.prerequisiteTargetIds |> allTargetsComplete(targetCache)) {
+        if (
+          ct.targetReviewed &&
+          Course.progressionLimit(course) != 0 &&
+          submissionsPendingReviewCount >= Course.progressionLimit(course)
+        ) {
+          Locked(SubmissionLimitReached(string_of_int(submissionsPendingReviewCount)))
+        } else if !(ct.prerequisiteTargetIds |> allTargetsAttempted(targetCache)) {
           Locked(PrerequisitesIncomplete)
         } else {
           Pending
@@ -166,7 +164,8 @@ let lockReasonToString = lockReason =>
   switch lockReason {
   | CourseLocked => tc("course_locked")
   | AccessLocked => tc("access_locked")
-  | LevelLocked(currentLevel) => tc(~variables=[("current_level", currentLevel)], "level_locked")
+  | SubmissionLimitReached(pendingCount) =>
+    tc(~variables=[("pending_count", pendingCount)], "submission_limit_reached")
   | PrerequisitesIncomplete => tc("prerequisites_incomplete")
   }
 

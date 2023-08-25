@@ -9,25 +9,12 @@ module ValidateTokenGeneration
 
   private
 
-  def user_with_email_must_exist
-    return if user.present? || email.blank?
-
-    errors.add(:base, I18n.t('shared.no_email_found'))
-  end
-
-  def ensure_time_between_requests
-    return if user.blank?
-
-    return if token_generated_at.blank?
+  def duplicate_request?
+    return false if token_generated_at.blank?
 
     time_since_last_mail = Time.zone.now - token_generated_at
 
-    return if time_since_last_mail > 2.minutes
-
-    errors.add(
-      :base,
-      'An email was sent less than two minutes ago. Please wait for a few minutes before trying again.'
-    )
+    time_since_last_mail < 2.minutes
   end
 
   def email_should_not_have_bounced
@@ -37,7 +24,7 @@ module ValidateTokenGeneration
 
     errors.add(
       :email,
-      'The email address you supplied cannot be used because an email we sent earlier bounced'
+      "The email address you supplied cannot be used because an email we sent earlier bounced"
     )
   end
 

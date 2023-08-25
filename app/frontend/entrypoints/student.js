@@ -18,7 +18,6 @@ import "~/psj/topics/show";
 import "~/psj/communities/new_topic";
 import "~/psj/courses/curriculum";
 import "~/psj/courses/report";
-import "~/psj/courses/student_course";
 import "~/psj/issued_certificates/verify";
 import "~/psj/faculty/index";
 import "~/psj/users/sessions/reset_password";

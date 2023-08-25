@@ -21,6 +21,7 @@ type t = {
   linkToComplete: option<string>,
   visibility: visibility,
   completionInstructions: option<string>,
+  milestone: bool,
 }
 
 let title = t => t.title
@@ -35,6 +36,8 @@ let quiz = t => t.quiz
 let prerequisiteTargets = t => t.prerequisiteTargets
 
 let evaluationCriteria = t => t.evaluationCriteria
+
+let milestone = t => t.milestone
 
 let visibilityFromJs = visibilityString =>
   switch visibilityString {
@@ -77,4 +80,5 @@ let makeFromJs = targetData => {
   completionInstructions: targetData["completionInstructions"],
   checklist: targetData["checklist"] |> Json.Decode.array(TargetChecklistItem.decode),
   visibility: visibilityFromJs(targetData["visibility"]),
+  milestone: targetData["milestone"],
 }

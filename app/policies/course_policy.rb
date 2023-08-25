@@ -46,7 +46,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   alias process_application? apply?
-  alias students? review?
+  alias cohorts? review?
   alias calendar? curriculum?
   alias calendar_month_data? curriculum?
 

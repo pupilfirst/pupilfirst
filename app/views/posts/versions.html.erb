@@ -2,19 +2,19 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
-<div class="bg-gray-50 px-3 py-4">
-  <div class="mb-2 container max-w-3xl mx-auto">
+<div class="bg-gray-50 px-3 md:pt-18">
+  <div class="py-4 container max-w-3xl mx-auto">
     <div class="border-b pb-3">
       <%= link_to topic_path(@post.topic, anchor: "post-show-#{@post.id}"), class: "btn btn-default" do %>
         <i class="fas fa-arrow-left"></i>
         <span class="ms-2"><%= t(".back_to_post") %></span>
       <% end %>
     </div>
-    <div class="mt-5 inline-block bg-gray-50 border rounded px-2 pb-1 ms-8 ms-19">
+    <div class="mt-5 inline-block bg-gray-50 rounded pb-1 md:ms-19">
       <span class="text-xs font-semibold text-gray-900"><%= t(".edit_history") %></span>
     </div>
     <div class="flex items-start mt-4">
-      <div class="w-1/12 font-bold text-lg md:text-4xl me-2 me-3 text-center text-gray-500"><%= presenter.version_number_for_post %></div>
+      <div class="w-1/12 font-bold text-lg md:text-4xl me-2 md:me-3 text-center text-gray-500"><%= presenter.version_number_for_post %></div>
       <div class="flex-1 overflow-hidden">
         <div class="relative bg-white border rounded p-5 pt-8 overflow-hidden">
           <span class="inline-block text-xs bg-green-500 text-white font-semibold rounded-b py-1 px-2 absolute top-0"><%= t(".current_version") %></span>

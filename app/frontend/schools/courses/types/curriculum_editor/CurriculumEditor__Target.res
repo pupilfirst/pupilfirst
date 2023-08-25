@@ -11,6 +11,7 @@ type t = {
   title: string,
   sortIndex: int,
   visibility: visibility,
+  milestone: bool,
 }
 
 let id = t => t.id
@@ -22,6 +23,8 @@ let targetGroupId = t => t.targetGroupId
 let sortIndex = t => t.sortIndex
 
 let visibility = t => t.visibility
+
+let milestone = t => t.milestone
 
 let decodeVisbility = visibilityString =>
   switch visibilityString {
@@ -39,6 +42,7 @@ let decode = json => {
     title: json |> field("title", string),
     sortIndex: json |> field("sortIndex", int),
     visibility: decodeVisbility(json |> field("visibility", string)),
+    milestone: json |> field("milestone", bool),
   }
 }
 
@@ -46,12 +50,13 @@ let updateArray = (targets, target) => {
   targets |> Js.Array.filter(t => t.id != target.id) |> Js.Array.concat([target])
 }
 
-let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility) => {
+let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility, ~milestone) => {
   id: id,
   targetGroupId: targetGroupId,
   title: title,
   sortIndex: sortIndex,
   visibility: visibility,
+  milestone: milestone,
 }
 
 let sort = targets => targets |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
@@ -78,8 +83,9 @@ let updateSortIndex = sortedTargets =>
       ~title=t.title,
       ~sortIndex,
       ~visibility=t.visibility,
+      ~milestone=t.milestone,
     )
   )
 
 let template = (id, targetGroupId, title) =>
-  create(~id, ~targetGroupId, ~title, ~sortIndex=999, ~visibility=Draft)
+  create(~id, ~targetGroupId, ~title, ~sortIndex=999, ~visibility=Draft, ~milestone=false)

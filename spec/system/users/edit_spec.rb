@@ -3,6 +3,7 @@ require "rails_helper"
 feature "User Edit", js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   let(:student) { create :student }
   let(:user) { student.user }
@@ -95,32 +96,21 @@ feature "User Edit", js: true do
   scenario "User sets a new password" do
     sign_in_user(user, referrer: edit_user_path)
 
-    expect(page).to have_text("Set password for your account")
+    expect(page).to have_text("Set up password")
     expect(user.encrypted_password).to be_blank
 
-    # Check a failure path.
-    fill_in "New password", with: "short"
-    fill_in "Confirm password", with: "short"
+    expect(page).to have_no_field("Current password")
+    expect(page).to have_no_field("New password")
 
-    expect(page).to have_text(
-      "New password and confirmation should match and must have atleast 8 characters"
+    click_button "Set password"
+
+    dismiss_notification
+
+    # Check email for password reset.
+    open_email(user.email)
+    expect(sanitize_html(current_email.body)).to include(
+      "https://test.host/users/reset_password?token="
     )
-
-    fill_in "New password", with: "long_enough"
-    fill_in "Confirm password", with: "but_not_the_same"
-
-    expect(page).to have_text(
-      "New password and confirmation should match and must have atleast 8 characters"
-    )
-
-    # Check basic success.
-    fill_in "New password", with: new_password
-    fill_in "Confirm password", with: new_password
-
-    click_button "Save Changes"
-
-    expect(page).to have_text("Profile updated successfully!")
-    expect(user.reload.valid_password?(new_password)).to eq(true)
   end
 
   scenario "user changes the language" do
@@ -170,6 +160,23 @@ feature "User Edit", js: true do
 
       expect(page).to have_text("Profile updated successfully!")
       expect(user.reload.valid_password?(new_password)).to eq(true)
+    end
+
+    scenario "user forgets her current password and changes using reset password" do
+      sign_in_user(user, referrer: edit_user_path)
+
+      expect(page).to have_text("Forgot your password?")
+
+      click_button "Reset password"
+
+      dismiss_notification
+
+      # Check email for password reset.
+
+      open_email(user.email)
+      expect(sanitize_html(current_email.body)).to include(
+        "https://test.host/users/reset_password?token="
+      )
     end
   end
 end

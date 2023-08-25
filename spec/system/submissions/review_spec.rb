@@ -967,7 +967,7 @@ feature "Submission review overlay", js: true do
 
       new_notes = CoachNote.where(note: note)
 
-      expect(new_notes.count).to eq(2)
+      expect(new_notes.reload.count).to eq(2)
       expect(new_notes.pluck(:student_id)).to contain_exactly(
         student.id,
         another_student.id

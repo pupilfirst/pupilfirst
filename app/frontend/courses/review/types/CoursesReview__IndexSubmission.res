@@ -15,19 +15,19 @@ type t = {
   userNames: string,
   status: option<status>,
   teamName: option<string>,
-  levelNumber: int,
   reviewer: option<reviewerInfo>,
+  milestoneNumber: option<int>,
 }
 
 let id = t => t.id
 let title = t => t.title
 let createdAt = t => t.createdAt
-let levelNumber = t => t.levelNumber
 let userNames = t => t.userNames
 let teamName = t => t.teamName
 let reviewer = t => t.reviewer
 let reviewerName = reviewer => reviewer.name
 let reviewerAssignedAt = reviewer => reviewer.assignedAt
+let milestoneNumber = t => t.milestoneNumber
 
 let failed = t =>
   switch t.status {
@@ -43,15 +43,24 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
 let timeDistance = t => t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())
 
-let make = (~id, ~title, ~createdAt, ~userNames, ~status, ~teamName, ~levelNumber, ~reviewer) => {
+let make = (
+  ~id,
+  ~title,
+  ~createdAt,
+  ~userNames,
+  ~status,
+  ~teamName,
+  ~reviewer,
+  ~milestoneNumber,
+) => {
   id: id,
   title: title,
   createdAt: createdAt,
   userNames: userNames,
   status: status,
   teamName: teamName,
-  levelNumber: levelNumber,
   reviewer: reviewer,
+  milestoneNumber: milestoneNumber,
 }
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt: passedAt, feedbackSent: feedbackSent}
@@ -77,8 +86,8 @@ let makeFromJS = submission => {
     ~userNames=submission["userNames"],
     ~status,
     ~teamName=submission["teamName"],
-    ~levelNumber=submission["levelNumber"],
     ~reviewer=Belt.Option.map(submission["reviewer"], makeReviewerInfo),
+    ~milestoneNumber=submission["milestoneNumber"],
   )
 }
 

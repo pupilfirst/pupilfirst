@@ -7,8 +7,10 @@ module Types
     field :total_targets, Integer, null: false
     field :quiz_scores, [String], null: false
     field :average_grades, [Types::EvaluationCriterionAverageType], null: false
-    field :completed_level_ids, [ID], null: false
     field :team, Types::TeamType, null: true
     field :student, Types::StudentType, null: false
+    field :milestone_targets_completion_status,
+          [Types::MilestoneTargetsCompletionStatusType],
+          null: false
   end
 end

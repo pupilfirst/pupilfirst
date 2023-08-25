@@ -21,9 +21,9 @@ let currentTab = () => {
   Js.String.includes("exited", RescriptReactRouter.useUrl().search) ? ExitedCoaches : ActiveCoaches
 }
 
-let reducer = (state, action) =>
+let reducer = (_state, action) =>
   switch action {
-  | UpdateFormVisible(formVisible) => {...state, formVisible: formVisible}
+  | UpdateFormVisible(formVisible) => {formVisible: formVisible}
   }
 
 let coachesTab = tab => {

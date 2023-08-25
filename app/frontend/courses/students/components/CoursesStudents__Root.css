@@ -1,9 +1,0 @@
-.course-students__student-search-input {
-  @apply w-full;
-}
-
-@screen md {
-  .course-students__student-search-input {
-    width: 17rem;
-  }
-}

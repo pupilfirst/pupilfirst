@@ -31,7 +31,7 @@ feature 'Target Overlay', js: true do
   let!(:student) { team.students.first }
   let!(:target_group_l0) { create :target_group, level: level_0 }
   let!(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
+    create :target_group, level: level_1
   end
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_l0) do

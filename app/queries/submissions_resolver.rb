@@ -3,7 +3,6 @@ class SubmissionsResolver < ApplicationQuery
   property :status
   property :sort_direction
   property :sort_criterion
-  property :level_id
   property :personal_coach_id
   property :assigned_coach_id
   property :reviewing_coach_id
@@ -54,13 +53,7 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def applicable_submissions
-    # Filter by level
-    stage_1 =
-      if course.levels.exists?(id: level_id)
-        course.levels.find_by(id: level_id).timeline_events.not_auto_verified
-      else
-        course.timeline_events.not_auto_verified
-      end.live
+    stage_1 = course.timeline_events.not_auto_verified.live
 
     # Filter by target
     stage_2 =

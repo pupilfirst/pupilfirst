@@ -10,15 +10,10 @@ module Targets
         @target.title = target_params[:title]
         @target.target_action_type = Target::TYPE_TODO
         @target.link_to_complete = target_params[:link_to_complete]
-
-        @target.resubmittable =
-          target_params[:checklist].present?
-
+        @target.resubmittable = target_params[:checklist].present?
         @target.link_to_complete = target_params[:link_to_complete]
-
         @target.completion_instructions =
           target_params[:completion_instructions]
-
         @target.checklist = target_params[:checklist]
 
         if target_params[:target_group_id].to_i != @target.target_group_id
@@ -31,6 +26,8 @@ module Targets
 
         @target.prerequisite_target_ids =
           target_params[:prerequisite_target_ids]
+
+        handle_milestone(target_params[:milestone])
 
         @target.save!
 
@@ -72,6 +69,21 @@ module Targets
       @target.target_group = new_target_group
     end
 
+    def handle_milestone(milestone_param)
+      return if @target.milestone == milestone_param
+
+      @target.milestone = milestone_param
+
+      if milestone_param
+        current_maximum_milestone_number =
+          @target.course.targets.maximum(:milestone_number) || 0
+
+        @target.milestone_number = current_maximum_milestone_number + 1
+      else
+        @target.milestone_number = nil
+      end
+    end
+
     def recreate_quiz(quiz)
       new_quiz = Quiz.create!(target_id: @target.id, title: @target.title)
       quiz.map do |quiz_question|
@@ -98,10 +110,9 @@ module Targets
     end
 
     def destroy_quiz
-      @target
-        .quiz
-        .quiz_questions
-        .each { |quiz_question| quiz_question.answer_options.delete_all }
+      @target.quiz.quiz_questions.each do |quiz_question|
+        quiz_question.answer_options.delete_all
+      end
 
       @target.quiz.quiz_questions.destroy_all
       @target.quiz.destroy

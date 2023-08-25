@@ -22,7 +22,7 @@ class DailyDigestService
     User
       .where(id: coaches)
       .or(User.where(id: students))
-      .where('preferences @> ?', { daily_digest: true }.to_json)
+      .where("preferences @> ?", { daily_digest: true }.to_json)
       .find_each do |user|
         next if user.email_bounced?
 
@@ -45,7 +45,7 @@ class DailyDigestService
   def cache_new_and_popular_topics
     Topic
       .live
-      .where('topics.created_at >= ?', recent_time)
+      .where("topics.created_at >= ?", recent_time)
       .includes(:community, :creator)
       .order(views: :DESC)
       .each { |topic| cache_topic_details(topic, :new) }
@@ -55,13 +55,13 @@ class DailyDigestService
     sorted_reactivated_topic_ids =
       Topic
         .live
-        .where('topics.created_at < ?', recent_time)
+        .where("topics.created_at < ?", recent_time)
         .joins(:posts)
         .merge(Post.live)
-        .where('posts.created_at > ?', recent_time)
-        .group('topics.id')
-        .order('count_posts_id DESC, views DESC')
-        .count('posts.id')
+        .where("posts.created_at > ?", recent_time)
+        .group("topics.id")
+        .order("count_posts_id DESC, views DESC")
+        .count("posts.id")
         .keys
 
     Topic
@@ -95,7 +95,7 @@ class DailyDigestService
       views: topic.views,
       replies: topic.live_replies.count,
       days_ago: days_ago,
-      author: topic.creator&.name || 'a user',
+      author: topic.creator&.name || "a user",
       type: update_type,
       community_id: topic.community.id,
       community_name: topic.community.name
@@ -153,7 +153,7 @@ class DailyDigestService
           course
             .timeline_events
             .live
-            .where('timeline_events.created_at > ?', 1.week.ago)
+            .where("timeline_events.created_at > ?", 1.week.ago)
             .pending_review
 
         pending_submissions_in_course = pending_submissions.count
@@ -162,9 +162,14 @@ class DailyDigestService
           []
         else
           students =
-            Student
-              .joins([:faculty, level: :course])
-              .where(faculty: { id: coach }, courses: { id: course })
+            Student.joins([:faculty, cohort: :course]).where(
+              faculty: {
+                id: coach
+              },
+              courses: {
+                id: course
+              }
+            )
           {
             course_id: course.id,
             course_name: course.name,

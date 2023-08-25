@@ -54,15 +54,21 @@ module Users
                 )
               )
               .distinct
+              .select("courses.*, LOWER(courses.name) AS lower_case_name")
+              .order("lower_case_name")
           else
-            current_school.courses.live.where(
-              id:
-                (
-                  courses_with_student_profile.pluck(:course_id) +
-                    courses_with_review_access + courses_with_author_access
-                ).uniq
-            )
-          end.with_attached_thumbnail.order(:name)
+            current_school
+              .courses
+              .live
+              .where(
+                id:
+                  (
+                    courses_with_student_profile.pluck(:course_id) +
+                      courses_with_review_access + courses_with_author_access
+                  ).uniq
+              )
+              .order("LOWER(name)")
+          end.with_attached_thumbnail
         end
     end
 

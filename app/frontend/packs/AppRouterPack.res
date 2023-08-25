@@ -2,22 +2,14 @@ open AppRouter__Types
 
 let decodeProps = json => {
   open Json.Decode
-  (
-    field("courses", array(Course.decode), json),
-    field("currentUser", optional(User.decode), json),
-    field("school", School.decode, json),
-  )
+  (field("courses", array(Course.decode), json), field("currentUser", optional(User.decode), json))
 }
 
-Psj.matchPaths(
-  ["courses/:id/review", "submissions/:id/review", "courses/:id/students", "students/:id/report"],
-  () => {
-    let (courses, currentUser, school) =
-      DomUtils.parseJSONTag(~id="app-router-data", ())->decodeProps
+Psj.matchPaths(["courses/:id/review", "submissions/:id/review", "students/:id/report"], () => {
+  let (courses, currentUser) = DomUtils.parseJSONTag(~id="app-router-data", ())->decodeProps
 
-    switch ReactDOM.querySelector("#app-router") {
-    | Some(root) => ReactDOM.render(<AppRouter school courses currentUser />, root)
-    | None => ()
-    }
-  },
-)
+  switch ReactDOM.querySelector("#app-router") {
+  | Some(root) => ReactDOM.render(<AppRouter courses currentUser />, root)
+  | None => ()
+  }
+})

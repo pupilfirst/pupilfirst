@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Applicants::CreateStudentService do
   subject { described_class.new(applicant) }
@@ -9,8 +9,8 @@ describe Applicants::CreateStudentService do
   let(:applicant) { create :applicant, course: course }
   let(:tags) { Faker::Lorem.words.uniq }
 
-  describe '#create' do
-    it 'create a student account for the applicant' do
+  describe "#create" do
+    it "create a student account for the applicant" do
       student = subject.create(tags)
       user = student.user
 
@@ -19,15 +19,13 @@ describe Applicants::CreateStudentService do
       expect(user.email).to eq(applicant.email)
 
       # It should set the title for new users to 'Student'.
-      expect(user.title).to eq('Student')
+      expect(user.title).to eq("Student")
 
       # The user should be in the same school
       expect(user.school).to eq(school)
 
       student = Student.joins(:user).where(user: { name: applicant.name }).first
       expect(student.name).to eq(applicant.name)
-
-      expect(student.level).to eq(level_one)
 
       # Student should have tag "Public Signup"
       expect(student.tag_list.sort).to eq(tags.sort)
@@ -36,7 +34,7 @@ describe Applicants::CreateStudentService do
       expect(Applicant.where(email: applicant.email).count).to eq(0)
     end
 
-    context 'when the user already exists' do
+    context "when the user already exists" do
       let(:existing_coach) { create :faculty }
       let(:existing_title) { Faker::Job.title }
       let(:applicant) do
@@ -45,7 +43,7 @@ describe Applicants::CreateStudentService do
 
       before { existing_coach.user.update(title: existing_title) }
 
-      it 'does not change the title of existing users' do
+      it "does not change the title of existing users" do
         student = subject.create(tags)
 
         expect(student.user.reload.title).to eq(existing_title)

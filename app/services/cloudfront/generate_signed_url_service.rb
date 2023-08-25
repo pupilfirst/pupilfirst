@@ -1,7 +1,18 @@
-require 'aws-sdk-cloudfront'
+require "aws-sdk-cloudfront"
 
 module Cloudfront
   class GenerateSignedUrlService
+    SAFE_INLINE_FORMATS = %w[
+      image/jpeg
+      image/png
+      image/gif
+      image/webp
+      image/tiff
+      image/bmp
+      image/x-icon
+      application/pdf
+    ].freeze
+
     def initialize(blob)
       @blob = blob
     end
@@ -28,16 +39,16 @@ module Cloudfront
         end
 
       content_disposition =
-        if MIME::Types[blob.content_type].first&.media_type == 'image'
-          'inline'
+        if SAFE_INLINE_FORMATS.include?(blob.content_type)
+          "inline"
         else
-          'attachment'
+          "attachment"
         end
 
       uri.query = {
-        'response-content-disposition':
+        "response-content-disposition":
           "#{content_disposition}; filename=\"#{blob.filename}\";",
-        'response-content-type': blob.content_type
+        "response-content-type": blob.content_type
       }.to_query
 
       signer.signed_url(

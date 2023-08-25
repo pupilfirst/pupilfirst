@@ -87,7 +87,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
       <h6 className="font-semibold mt-6"> {tr("all_notes") |> str} </h6>
       {coachNotes |> ArrayUtils.isEmpty
         ? <div
-            className="bg-gray-50 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
+            className="bg-gray-100 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
             <Icon className="if i-long-text-light text-gray-800 text-base" />
             <p className="text-xs font-semibold text-gray-600 mt-2">
               {(hasArchivedNotes ? tr("has_archived_notes") : tr("no_notes")) |> str}

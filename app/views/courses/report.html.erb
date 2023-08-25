@@ -1,10 +1,9 @@
-<% presenter = Courses::ReportPresenter.new(self, @course) %>
 <% content_for(:head) do %>
-  <title><%= presenter.page_title %></title>
+  <title><%= @presenter.page_title %></title>
 <% end %>
 <% content_for(:inner_wrapper) do %>
   <script id="course-student-report__props" type="application/json">
-    <%= presenter.props_to_json.html_safe %>
+    <%= @presenter.props_to_json.html_safe %>
   </script>
   <div id="react-root"></div>
 <% end %>

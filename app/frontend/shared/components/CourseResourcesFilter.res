@@ -2,7 +2,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CourseResourcesFilter")
 
-type resource = [#Level | #Cohort | #StudentTag | #UserTag | #Coach]
+type resource = [#Cohort | #StudentTag | #UserTag | #Coach]
 
 type filterType =
   | DataLoad(resource)

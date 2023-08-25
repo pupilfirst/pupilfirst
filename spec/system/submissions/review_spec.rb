@@ -36,10 +36,8 @@ feature "Submission review overlay", js: true do
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   let(:team) { create :team, cohort: cohort }
-  let(:student) { create :student, level: level, cohort: cohort, team: team }
-  let!(:another_student) do
-    create :student, level: level, cohort: cohort, team: team
-  end
+  let(:student) { create :student, cohort: cohort, team: team }
+  let!(:another_student) { create :student, cohort: cohort, team: team }
   let(:coach) { create :faculty, school: school }
   let(:team_coach_user) { create :user, name: "John Doe" }
   let(:team_coach) { create :faculty, school: school, user: team_coach_user }
@@ -84,7 +82,6 @@ feature "Submission review overlay", js: true do
         reviewer: team_coach
       )
     end
-
     let!(:submission_file_attachment) do
       create(:timeline_event_file, timeline_event: submission_pending)
     end
@@ -102,7 +99,6 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       within("div[aria-label='submissions-overlay-header']") do
-        expect(page).to have_content("Level 1")
         expect(page).to have_content("Submitted by #{student.name}")
         expect(page).to have_link(
           student.name,
@@ -118,7 +114,6 @@ feature "Submission review overlay", js: true do
       end
 
       click_button "Start Review"
-
       expect(page).to have_content("Add Your Feedback")
       expect(page).to have_content("Grade Card")
       expect(page).to have_content(evaluation_criterion_1.name)
@@ -158,9 +153,7 @@ feature "Submission review overlay", js: true do
 
       find("a[data-submission-id='#{submission_pending.id}']").click
       click_button "Start Review"
-
       sleep 0.5 # Wait for change to reflect in the DB.
-
       expect(submission_pending.reload.reviewer).to eq(coach)
       expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
       expect(page).to have_content("Grade Card")
@@ -468,7 +461,6 @@ feature "Submission review overlay", js: true do
 
       expect(target.review_checklist).to eq([])
       click_button "Start Review"
-
       click_button "Create Review Checklist"
 
       within("div[data-checklist-item='0']") do
@@ -713,7 +705,6 @@ feature "Submission review overlay", js: true do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)
       click_button "Start Review"
-
       within(
         "div[aria-label='#{submission_pending.checklist.first["title"]}']"
       ) do
@@ -837,7 +828,7 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       click_button "Start Review"
-
+      dismiss_notification
       expect(page).to have_content("Grade Card")
 
       within(
@@ -911,7 +902,6 @@ feature "Submission review overlay", js: true do
         create :student,
                team: another_team,
                cohort: cohort,
-               level: level,
                dropped_out_at: 1.day.ago
       end
 
@@ -1127,12 +1117,8 @@ feature "Submission review overlay", js: true do
 
   context "when the course has inactive students" do
     let(:ended_cohort) { create :cohort, ends_at: 1.day.ago }
-    let(:inactive_student_1) do
-      create :student, cohort: ended_cohort, level: level
-    end
-    let(:inactive_student_2) do
-      create :student, cohort: ended_cohort, level: level
-    end
+    let(:inactive_student_1) { create :student, cohort: ended_cohort }
+    let(:inactive_student_2) { create :student, cohort: ended_cohort }
 
     let!(:pending_submission_one_from_inactive_students) do
       create(
@@ -1255,7 +1241,6 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submissions-overlay-header']") do
-        expect(page).to have_content("Level 1")
         expect(page).to have_content("Submitted by")
 
         # Each name should be linked to the report page.
@@ -1761,7 +1746,9 @@ feature "Submission review overlay", js: true do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_team_target)
 
-      expect(page).to have_title("Submission #1 | L1 | #{team_2.name}")
+      expect(page).to have_title(
+        "Submission #1 | #{team_target.title} | #{team_2.name}"
+      )
 
       expect(page).to have_text(team_2.students.first.name)
       expect(page).to have_text(team_2.students.last.name)
@@ -1773,7 +1760,9 @@ feature "Submission review overlay", js: true do
                    referrer:
                      review_timeline_event_path(submission_individual_target)
 
-      expect(page).to have_title("Submission #1 | L1 | #{student.name}")
+      expect(page).to have_title(
+        "Submission #1 | #{individual_target.title} | #{student.name}"
+      )
 
       expect(page).to have_text(student.name)
       expect(page).to_not have_text(team_1.name)
@@ -1784,7 +1773,7 @@ feature "Submission review overlay", js: true do
                    referrer:
                      review_timeline_event_path(submission_team_target_2)
       expect(page).to have_title(
-        "Submission #1 | L1 | #{student.name}, #{team_2.students.first.name}"
+        "Submission #1 | #{team_target.title} | #{student.name}, #{team_2.students.first.name}"
       )
       expect(page).to have_text(student.name)
       expect(page).to have_text(team_2.students.first.name)
@@ -1796,7 +1785,9 @@ feature "Submission review overlay", js: true do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_team_target)
 
-      expect(page).to have_title("Submission #1 | L1 | #{team_2.name}")
+      expect(page).to have_title(
+        "Submission #1 | #{team_target.title} | #{team_2.name}"
+      )
 
       expect(page).to_not have_text("Automated tests are queued")
     end

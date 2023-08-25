@@ -123,8 +123,8 @@ module CreateFeedbackMutation = %graphql(`
   `)
 
 module NextSubmissionQuery = %graphql(`
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId) {
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!,  $personalCoachId: ID, $assignedCoachId: ID) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId) {
         nodes {
           id
         }
@@ -184,7 +184,6 @@ let getNextSubmission = (send, courseId, filter, onSucess) => {
     ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
     ~sortDirection=Filter.defaultDirection({...filter, sortDirection: Some(#Ascending)}),
     ~sortCriterion=Filter.sortCriterion({...filter, sortCriterion: #SubmittedAt}),
-    ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
     ~assignedCoachId=?Filter.assignedCoachId(filter),
     ~targetId=?Filter.targetId(filter),
@@ -451,13 +450,10 @@ let headerSection = (state, submissionDetails, filter) =>
         </div>
         <div className="px-4 py-3 flex flex-col justify-center">
           <div className="block text-sm md:pe-2">
-            <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-              {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
-            </span>
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ms-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+              className="font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
@@ -681,8 +677,8 @@ let badgeColorClasses = statusColor => {
 let gradeBadgeClasses = (statusColor, status, badge) =>
   (
     badge
-      ? "px-2 py-2 space-x-2 flex justify-center border rounded items-center "
-      : "w-12 h-10 p-1 me-2 me-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
+      ? "px-2 py-2 flex justify-center border rounded items-center "
+      : "w-12 h-10 p-1 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
   ) ++
   badgeColorClasses(statusColor) ++
   switch status {
@@ -778,7 +774,8 @@ let submissionStatusIcon = (status, overlaySubmission) => {
       | (_, Grading)
       | (_, Ungraded) => React.null
       }}
-      <div className="w-full md:w-26 flex flex-row md:flex-col md:items-center justify-center">
+      <div
+        className="w-full md:w-26 flex gap-1 flex-row md:flex-col md:items-center justify-center">
         <div className={gradeBadgeClasses(color, status, false)}>
           {switch status {
           | Graded(passed) =>
@@ -791,7 +788,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
           }}
         </div>
         <p
-          className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 ${badgeColorClasses(
+          className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold ${badgeColorClasses(
               color,
             )} ${textColor(color)}`}>
           {text->str}
@@ -1073,7 +1070,7 @@ let pageTitle = (number, submissionDetails) => {
   t(
     ~variables=[
       ("submission_number", string_of_int(number)),
-      ("level_number", SubmissionDetails.levelNumber(submissionDetails)),
+      ("target_title", SubmissionDetails.targetTitle(submissionDetails)),
       ("name", studentOrTeamName),
     ],
     "page_title",

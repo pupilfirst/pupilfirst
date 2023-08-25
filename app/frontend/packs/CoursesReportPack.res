@@ -4,19 +4,18 @@ let decodeProps = json => {
   open Json.Decode
   (
     json |> field("studentId", string),
-    json |> field("levels", array(Level.decode)),
     json |> field("coaches", array(Coach.decode)),
     json |> field("teamStudentIds", array(string)),
   )
 }
 
 Psj.match("courses#report", () => {
-  let (studentId, levels, coaches, teamStudentIds) =
+  let (studentId, coaches, teamStudentIds) =
     DomUtils.parseJSONTag(~id="course-student-report__props", ()) |> decodeProps
 
   switch ReactDOM.querySelector("#react-root") {
   | Some(root) =>
-    ReactDOM.render(<CoursesReport__Root studentId levels coaches teamStudentIds />, root)
+    ReactDOM.render(<CoursesReport__Root studentId coaches teamStudentIds />, root)
   | None => ()
   }
 })

@@ -42,6 +42,7 @@ type state = {
   checklist: array<ChecklistItem.t>,
   completionInstructions: string,
   targetDetails: option<TargetDetails.t>,
+  milestone: bool,
 }
 
 type action =
@@ -71,6 +72,7 @@ type action =
   | UpdateSaving
   | ClearTargetGroupId
   | ResetEditor
+  | UpdateMilestone(bool)
 
 module TargetDetailsQuery = %graphql(`
     query TargetDetailsQuery($targetId: ID!) {
@@ -94,6 +96,7 @@ module TargetDetailsQuery = %graphql(`
         linkToComplete
         role
         checklist
+        milestone
       }
   }
 `)
@@ -157,6 +160,7 @@ let reducer = (state, action) =>
       checklist: checklist,
       loading: false,
       targetDetails: Some(targetDetails),
+      milestone: targetDetails.milestone,
     }
   | UpdateTitle(title) => {...state, title: title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
@@ -257,6 +261,7 @@ let reducer = (state, action) =>
       prerequisiteTargets: [],
     }
   | ClearTargetGroupId => {...state, targetGroupId: None, dirty: true}
+  | UpdateMilestone(milestone) => {...state, milestone: milestone, dirty: true}
   }
 
 let updateTitle = (send, event) => {
@@ -264,27 +269,11 @@ let updateTitle = (send, event) => {
   send(UpdateTitle(title))
 }
 
-let eligiblePrerequisiteTargets = (targetId, targetGroupId, targets, targetGroups) =>
-  targetGroupId->Belt.Option.mapWithDefault([], targetGroupId => {
-    let targetGroup =
-      targetGroupId |> TargetGroup.unsafeFind(
-        targetGroups,
-        "TargetDetailsEditor.eligiblePrerequisiteTargets",
-      )
-
-    let levelId = targetGroup |> TargetGroup.levelId
-    let targetGroupsInSameLevel =
-      targetGroups
-      |> Js.Array.filter(tg => TargetGroup.levelId(tg) == levelId)
-      |> Js.Array.map(TargetGroup.id)
-
-    targets
-    |> Js.Array.filter(target => !Target.archived(target))
-    |> Js.Array.filter(target =>
-      targetGroupsInSameLevel |> Js.Array.includes(Target.targetGroupId(target))
-    )
-    |> Js.Array.filter(target => Target.id(target) != targetId)
-  })
+let eligiblePrerequisiteTargets = (targetId, targets) => {
+  targets
+  ->Js.Array2.filter(target => !Target.archived(target))
+  ->Js.Array2.filter(target => Target.id(target) != targetId)
+}
 
 let setPrerequisiteSearch = (send, value) => send(UpdatePrerequisiteSearchInput(value))
 
@@ -448,6 +437,11 @@ let updateCompletionInstructions = (send, event) =>
 let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateMethodOfCompletion(methodOfCompletion))
+}
+
+let updateMilestone = (milestone, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateMilestone(milestone))
 }
 
 let updateTargetRole = (role, send, event) => {
@@ -797,8 +791,8 @@ let isValidMethodOfCompletion = state =>
   }
 
 module UpdateTargetQuery = %graphql(`
-   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
-     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
+   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON!, $milestone: Boolean! ) {
+     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist, milestone: $milestone)    {
         sortIndex
        }
      }
@@ -881,6 +875,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
     ~linkToComplete,
     ~visibility=visibilityAsString,
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
+    ~milestone=state.milestone,
     (),
   )
 
@@ -890,7 +885,14 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
     | Some(sortIndex) =>
       send(ResetEditor)
       updateTargetCB(
-        Target.create(~id, ~targetGroupId, ~title=state.title, ~sortIndex, ~visibility),
+        Target.create(
+          ~id,
+          ~targetGroupId,
+          ~title=state.title,
+          ~sortIndex,
+          ~visibility,
+          ~milestone=state.milestone,
+        ),
       )
     | None => send(UpdateSaving)
     }
@@ -932,6 +934,7 @@ let make = (
       completionInstructions: "",
       targetGroupSearchInput: "",
       targetDetails: None,
+      milestone: false,
     },
   )
   let targetId = target |> Target.id
@@ -982,9 +985,33 @@ let make = (
                 </div>
               </div>
               {targetGroupEditor(state, targetGroups, levels, send)}
+              <div className="flex items-center mb-6">
+                <label
+                  className="block tracking-wide text-sm font-semibold me-1" htmlFor="milestone">
+                  <span className="me-2">
+                    <i className="fas fa-list rtl:rotate-180 text-base" />
+                  </span>
+                  {t("target_setting_milestone.label")->str}
+                </label>
+                <HelpIcon link={t("target_setting_milestone.help_url")} className="me-6">
+                  {t("target_setting_milestone.help") |> str}
+                </HelpIcon>
+                <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
+                  <button
+                    onClick={updateMilestone(true, send)}
+                    className={booleanButtonClasses(state.milestone)}>
+                    {ts("_yes") |> str}
+                  </button>
+                  <button
+                    onClick={updateMilestone(false, send)}
+                    className={booleanButtonClasses(!state.milestone)}>
+                    {ts("_no") |> str}
+                  </button>
+                </div>
+              </div>
               {prerequisiteTargetEditor(
                 send,
-                eligiblePrerequisiteTargets(targetId, state.targetGroupId, targets, targetGroups),
+                eligiblePrerequisiteTargets(targetId, targets),
                 state,
               )}
               <div className="flex items-center mb-6">
@@ -1081,8 +1108,9 @@ let make = (
                 </HelpIcon>
                 <div className="ms-6 mt-4">
                   <a
-                    href={`/school/targets/${Target.id(target)}/action`} className="btn btn-subtle">
-                    <i className="fas fa-external-link-alt text-xs mr-2" />
+                    href={`/school/targets/${Target.id(target)}/action`}
+                    className="btn btn-subtle flex max-w-min gap-3">
+                    <PfIcon className="if i-external-link-light if-fw" />
                     {t("github_action.button_text")->str}
                   </a>
                 </div>

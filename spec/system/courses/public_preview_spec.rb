@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Public preview of course curriculum', js: true do
+feature "Public preview of course curriculum", js: true do
   include MarkdownEditorHelper
   include UserSpecHelper
 
@@ -23,15 +23,15 @@ feature 'Public preview of course curriculum', js: true do
 
   # Target groups.
   let(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
+    create :target_group, level: level_1
   end
 
   let(:target_group_l2) do
-    create :target_group, level: level_2, milestone: true
+    create :target_group, level: level_2
   end
 
   let(:target_group_l3) do
-    create :target_group, level: locked_level_3, milestone: true
+    create :target_group, level: locked_level_3
   end
 
   # Individual targets of different types.
@@ -60,10 +60,10 @@ feature 'Public preview of course curriculum', js: true do
     create :quiz, :with_question_and_answers, target: target_l2
   end
 
-  scenario 'user can preview course curriculum' do
+  scenario "user can preview course curriculum" do
     visit curriculum_course_path(public_course_1)
 
-    expect(page).to have_text('Preview Mode')
+    expect(page).to have_text("Preview Mode")
 
     # Course name should be displayed.
     expect(page).to have_content(public_course_1.name)
@@ -94,19 +94,19 @@ feature 'Public preview of course curriculum', js: true do
     click_link target_l2.title
 
     expect(page).to have_content(
-      'You are currently looking at a preview of this course.'
+      "You are currently looking at a preview of this course."
     )
 
-    find('.course-overlay__body-tab-item', text: 'Take Quiz').click
+    find(".course-overlay__body-tab-item", text: "Take Quiz").click
 
     expect(page).to have_content(/Question #1/i)
 
-    find('.quiz-root__answer', match: :first).click
+    find(".quiz-root__answer", match: :first).click
 
-    expect(page).to have_button('Submit Quiz', disabled: true)
+    expect(page).to have_button("Submit Quiz", disabled: true)
 
     # Let's check out the submission option on L1.
-    click_button 'Close'
+    click_button "Close"
     click_button "L2: #{level_2.name}"
     click_button "L1: #{level_1.name}"
 
@@ -114,30 +114,30 @@ feature 'Public preview of course curriculum', js: true do
     click_link target_l1.title
 
     expect(page).to have_content(
-      'You are currently looking at a preview of this course.'
+      "You are currently looking at a preview of this course."
     )
 
-    find('.course-overlay__body-tab-item', text: 'Complete').click
+    find(".course-overlay__body-tab-item", text: "Complete").click
 
     # The submit button should be disabled.
-    expect(page).to have_button('Submit', disabled: true)
+    expect(page).to have_button("Submit", disabled: true)
 
     replace_markdown Faker::Lorem.sentence
 
     # The submit button should still be disabled.
-    expect(page).to have_button('Submit', disabled: true)
+    expect(page).to have_button("Submit", disabled: true)
 
     # Let's try to access a locked level.
-    click_button 'Close'
+    click_button "Close"
 
     click_button "L1: #{level_1.name}"
     click_button "L3: #{locked_level_3.name}"
 
-    expect(page).to have_text('The level is currently locked')
-    expect(page).to have_text('You can access the content on')
+    expect(page).to have_text("The level is currently locked")
+    expect(page).to have_text("You can access the content on")
   end
 
-  context 'when the course has level zero enabled' do
+  context "when the course has level zero enabled" do
     let(:level_0) { create :level, :zero, course: public_course_1 }
     let(:target_group_l0) { create :target_group, level: level_0 }
 
@@ -145,7 +145,7 @@ feature 'Public preview of course curriculum', js: true do
       create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
     end
 
-    scenario 'user can preview level zero' do
+    scenario "user can preview level zero" do
       visit curriculum_course_path(public_course_1)
 
       expect(page).to have_button(level_0.name)
@@ -153,21 +153,16 @@ feature 'Public preview of course curriculum', js: true do
     end
   end
 
-  context 'when the user is a student in another course' do
+  context "when the user is a student in another course" do
     let(:enrolled_course) { create :course, :with_cohort }
-    let(:l_1) { create :level, :one, course: enrolled_course }
-    let(:student) do
-      create :student, level: l_1, cohort: enrolled_course.cohorts.first
-    end
+    let!(:l_1) { create :level, :one, course: enrolled_course }
+    let(:student) { create :student, cohort: enrolled_course.cohorts.first }
 
-    scenario 'student in one course accesses preview of another course' do
+    scenario "student in one course accesses preview of another course" do
       sign_in_user student.user,
                    referrer: curriculum_course_path(enrolled_course)
 
       expect(page).to have_content(enrolled_course.name)
-
-      # There should be no dropdown in the header menu.
-      expect(page).not_to have_button(enrolled_course.name)
 
       # Access the public course's preview by visiting its page manually.
       visit curriculum_course_path(public_course_1)
@@ -180,13 +175,13 @@ feature 'Public preview of course curriculum', js: true do
         href: curriculum_course_path(enrolled_course)
       )
 
-      expect(page).to have_text('Preview Mode')
+      expect(page).to have_text("Preview Mode")
     end
   end
 
-  scenario 'private courses cannot be viewed by public' do
+  scenario "private courses cannot be viewed by public" do
     visit curriculum_course_path(private_course_3)
 
-    expect(page).to have_text('Please sign in to continue')
+    expect(page).to have_text("Please sign in to continue")
   end
 end

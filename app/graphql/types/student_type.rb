@@ -3,7 +3,6 @@ module Types
     field :id, ID, null: false
     field :taggings, [String], null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
-    field :level, Types::LevelType, null: false
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
     field :user, Types::UserType, null: false
     field :personal_coaches, [Types::UserProxyType], null: false
@@ -18,7 +17,7 @@ module Types
         .batch(default_value: []) do |user_ids, loader|
           IssuedCertificate
             .where(user_id: user_ids, certificate: object.course.certificates)
-            .order('created_at DESC')
+            .order("created_at DESC")
             .each do |issued_certificate|
               loader.call(issued_certificate.user_id) do |memo|
                 memo |= [issued_certificate]
@@ -49,16 +48,6 @@ module Types
         end
     end
 
-    def level
-      BatchLoader::GraphQL
-        .for(object.level_id)
-        .batch do |level_ids, loader|
-          Level
-            .where(id: level_ids)
-            .each { |level| loader.call(level.id, level) }
-        end
-    end
-
     def user
       BatchLoader::GraphQL
         .for(object.user_id)
@@ -75,8 +64,8 @@ module Types
             Student
               .joins(taggings: :tag)
               .where(id: student_ids)
-              .distinct('tags.name')
-              .select(:id, 'array_agg(tags.name)')
+              .distinct("tags.name")
+              .select(:id, "array_agg(tags.name)")
               .group(:id)
               .reduce({}) do |acc, user|
                 acc[user.id] = user.array_agg

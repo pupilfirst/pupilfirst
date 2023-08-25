@@ -828,7 +828,6 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       click_button "Start Review"
-      dismiss_notification
       expect(page).to have_content("Grade Card")
 
       within(

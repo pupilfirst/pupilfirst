@@ -6,11 +6,10 @@ class Student < ApplicationRecord
   belongs_to :user
   has_one :school, through: :user
   belongs_to :cohort
-  belongs_to :level
   has_one :course, through: :cohort
   has_many :communities, through: :course
   has_many :coach_notes,
-           class_name: 'CoachNote',
+           class_name: "CoachNote",
            dependent: :destroy,
            inverse_of: :student
 
@@ -51,7 +50,7 @@ class Student < ApplicationRecord
   end
 
   def name_and_email
-    name + ' (' + email + ')'
+    name + " (" + email + ")"
   end
 
   def to_s

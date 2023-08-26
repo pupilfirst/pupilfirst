@@ -6,7 +6,7 @@ feature "User Update Email", js: true do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:school) { create :school, :current }
-  let(:user_1) { create :user, school: school }
+  let(:user_1) { create :user, school: school, password: "password" }
   let(:user_2) { create :user, school: school }
   let(:admin_user) { create :user, school: school }
   let!(:school_admin) do
@@ -21,6 +21,9 @@ feature "User Update Email", js: true do
     click_button "Edit"
     fill_in "user_email", with: "testing@updateemail.com"
     click_button "Update"
+    fill_in "password", with: "password"
+    click_button "Update email"
+
     dismiss_notification
 
     expect(user_1.reload.new_email).to eq("testing@updateemail.com")
@@ -42,6 +45,10 @@ feature "User Update Email", js: true do
     click_button "Edit"
     fill_in "user_email", with: user_2.email
     click_button "Update"
+    fill_in "password", with: "password"
+
+    click_button "Update email"
+
     expect(page).to have_content(
       "This email is already associated with another user account."
     )
@@ -71,7 +78,20 @@ feature "User Update Email", js: true do
 
     body = current_email.body
     expect(body).to include(
-      "Your email in <strong>#{user_1.school.name}</strong> has been successfully updated."
+      "Your email address in <strong>#{user_1.school.name}</strong> has been successfully updated from <strong>#{old_email}</strong> to <strong>#{new_email}</strong>."
+    )
+
+    # The original email address associated with the user account should also be notified.
+
+    open_email(old_email)
+    subject = current_email.subject
+    expect(subject).to include(
+      "Your email in #{school.name} school updated successfully"
+    )
+
+    body = current_email.body
+    expect(body).to include(
+      "Your email address in <strong>#{user_1.school.name}</strong> has been successfully updated from <strong>#{old_email}</strong> to <strong>#{new_email}</strong>."
     )
 
     # Check admin notification email
@@ -113,5 +133,18 @@ feature "User Update Email", js: true do
 
       expect(page).to have_text("That link has expired or is invalid")
     end
+  end
+
+  scenario "user attempts to update email without having an account password",
+           js: true do
+    # clear the user's password
+    user_1.update!(encrypted_password: "")
+
+    sign_in_user(user_1, referrer: edit_user_path)
+    # expect disabled edit button with a notice
+    expect(page).to have_button("Edit", disabled: true)
+    expect(page).to have_text(
+      "You must set a password before you can edit your account email address."
+    )
   end
 end

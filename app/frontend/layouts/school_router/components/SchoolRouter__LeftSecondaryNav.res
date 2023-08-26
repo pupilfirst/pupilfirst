@@ -32,6 +32,7 @@ let secondaryNavOption = (selectedPage, selectedCourse, page) => {
 let secondaryNavLinks = (selectedPage, selectedCourse, currentUser) => {
   let navOptionsAdmin = [
     Page.Curriculum,
+    Assignments,
     Cohorts,
     Students,
     Applicants,

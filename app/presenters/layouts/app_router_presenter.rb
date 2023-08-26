@@ -15,8 +15,6 @@ module Layouts
       }
     end
 
-    # private
-
     def school_details
       {
         name: school_name,
@@ -49,10 +47,14 @@ module Layouts
 
     def courses
       if current_user.blank?
-        current_school.courses.live.where(public_preview: true).order(:name)
+        current_school
+          .courses
+          .live
+          .where(public_preview: true)
+          .order("LOWER(name)")
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live.order(:name)
+        current_school.courses.live.order("LOWER(name)")
       else
         # current course if course has public preview.
         previewed_course = @course&.public_preview? ? [@course] : []
@@ -60,7 +62,7 @@ module Layouts
         (
           courses_with_author_access + courses_with_review_access +
             courses_with_student_profile + previewed_course
-        ).uniq.sort_by { |course| course.name }
+        ).uniq.sort_by { |course| course.name.downcase }
       end
     end
 
@@ -165,6 +167,11 @@ module Layouts
       current_user.notifications.unread.any?
     end
 
+    def course_authors
+      @course_authors ||=
+        current_user.course_authors.where(course: current_school.courses)
+    end
+
     def nav_links
       @nav_links ||=
         begin
@@ -213,11 +220,6 @@ module Layouts
       else
         []
       end
-    end
-
-    def course_authors
-      @course_authors ||=
-        current_user.course_authors.where(course: current_school.courses)
     end
 
     def coaches_link

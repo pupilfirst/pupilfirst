@@ -17,7 +17,7 @@ module ValidateTargetEditable
     def target_group_exists
       return if @target_group.present?
 
-      I18n.t('mutations.update_target.target_group_not_present_error')
+      I18n.t("mutations.update_target.target_group_not_present_error")
     end
 
     def same_course_for_target_and_ec
@@ -26,27 +26,13 @@ module ValidateTargetEditable
         return
       end
 
-      I18n.t('mutations.update_target.evaluation_criteria_course_error')
+      I18n.t("mutations.update_target.evaluation_criteria_course_error")
     end
 
     def target_exists
       return if @target.present?
 
-      I18n.t('mutations.update_target.target_missing_error')
-    end
-  end
-
-  class PrerequisitesInSameLevel < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      level = Target.find_by(id: value[:id]).level
-      prerequisite_targets = value[:prerequisite_targets]
-
-      if level.targets.where(id: prerequisite_targets).count ==
-           prerequisite_targets.count
-        return
-      end
-
-      I18n.t('mutations.update_target.prerequisities_in_same_level')
+      I18n.t("mutations.update_target.target_missing_error")
     end
   end
 
@@ -58,9 +44,19 @@ module ValidateTargetEditable
           .where(id: prerequisite_targets)
           .where.not(visibility: Target::VISIBILITY_ARCHIVED)
 
-      return if prerequisite_targets.count == non_archived_targets.count
+      return if prerequisite_targets.uniq.count == non_archived_targets.count
 
-      I18n.t('mutations.update_target.prerequisities_archived_error')
+      I18n.t("mutations.update_target.prerequisities_archived_error")
+    end
+  end
+
+  class TargetNotPrerequisiteToItself < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      prerequisite_targets = value[:prerequisite_targets]
+
+      return unless prerequisite_targets.include?(value[:id])
+
+      I18n.t("mutations.update_target.prerequisities_self_error")
     end
   end
 
@@ -74,7 +70,7 @@ module ValidateTargetEditable
 
       return if completion_criteria.one? || completion_criteria.none?
 
-      I18n.t('mutations.update_target.multiple_method_of_completion')
+      I18n.t("mutations.update_target.multiple_method_of_completion")
     end
   end
 
@@ -90,7 +86,7 @@ module ValidateTargetEditable
         return
       end
 
-      I18n.t('mutations.update_target.invalid_checklist_error')
+      I18n.t("mutations.update_target.invalid_checklist_error")
     end
 
     def valid_string(string)
@@ -102,28 +98,28 @@ module ValidateTargetEditable
     end
 
     def valid_metadata(item)
-      if item['kind'] != Target::CHECKLIST_KIND_MULTI_CHOICE &&
-           item['metadata'] == {}
+      if item["kind"] != Target::CHECKLIST_KIND_MULTI_CHOICE &&
+           item["metadata"] == {}
         return true
       end
 
-      item['metadata']['choices'].length > 1 &&
-        item['metadata']['choices'].all? { |choice| valid_string(choice) } &&
-        item['metadata']['allowMultiple'] == !!item['metadata']['allowMultiple']
+      item["metadata"]["choices"].length > 1 &&
+        item["metadata"]["choices"].all? { |choice| valid_string(choice) } &&
+        item["metadata"]["allowMultiple"] == !!item["metadata"]["allowMultiple"]
     end
 
     def validate_checklist(checklist)
       checklist.respond_to?(:all?) &&
         checklist.all? do |item|
-          valid_string(item['title']) && valid_checklist_kind(item['kind']) &&
-            (item['optional'] == !!item['optional']) && valid_metadata(item)
+          valid_string(item["title"]) && valid_checklist_kind(item["kind"]) &&
+            (item["optional"] == !!item["optional"]) && valid_metadata(item)
         end
     end
 
     def required_items_have_unique_titles(checklist)
-      required_items = checklist.reject { |item| item['optional'] }
+      required_items = checklist.reject { |item| item["optional"] }
 
-      required_items.map { |item| item['title'].strip }.uniq.count ==
+      required_items.map { |item| item["title"].strip }.uniq.count ==
         required_items.count
     end
   end
@@ -134,7 +130,7 @@ module ValidateTargetEditable
 
       return if checklist.respond_to?(:all?) && checklist.length <= 25
 
-      I18n.t('mutations.update_target.checklist_items_exceeded_error')
+      I18n.t("mutations.update_target.checklist_items_exceeded_error")
     end
   end
 
@@ -150,13 +146,14 @@ module ValidateTargetEditable
     argument :link_to_complete, GraphQL::Types::String, required: false
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :visibility, GraphQL::Types::String, required: true
+    argument :milestone, GraphQL::Types::Boolean, required: true
 
     validates ValidateTargetAndEvaluationCriteria => {}
-    validates PrerequisitesInSameLevel => {}
     validates PrerequisitesNotArchived => {}
     validates OnlyOneMethodOfCompletion => {}
     validates ChecklistHasValidData => {}
     validates ChecklistHasValidLength => {}
+    validates TargetNotPrerequisiteToItself => {}
   end
 
   def target_params
@@ -170,7 +167,8 @@ module ValidateTargetEditable
       quiz: @params[:quiz],
       link_to_complete: @params[:link_to_complete],
       completion_instructions: @params[:completion_instructions],
-      checklist: @params[:checklist]
+      checklist: @params[:checklist],
+      milestone: @params[:milestone]
     }
   end
 end

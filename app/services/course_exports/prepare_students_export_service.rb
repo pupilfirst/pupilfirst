@@ -17,7 +17,7 @@ module CourseExports
     def target_rows
       values =
         targets.map do |target|
-          milestone = target.target_group.milestone ? "Yes" : "No"
+          milestone = target.milestone? ? "Yes" : "No"
 
           [
             target_id(target),
@@ -153,7 +153,6 @@ module CourseExports
             { formula: student_report_link(student) },
             user.email,
             user.name,
-            student.level.number,
             user.title,
             user.affiliation,
             student.cohort.name,
@@ -169,7 +168,6 @@ module CourseExports
           "Student ID",
           "Email Address",
           "Name",
-          "Level",
           "Title",
           "Affiliation",
           "Cohort",
@@ -219,9 +217,9 @@ module CourseExports
         begin
           scope =
             if @cohorts.present?
-              Student.includes(:level, :user).where(cohort: @cohorts)
+              Student.includes(:user).where(cohort: @cohorts)
             else
-              course.students.includes(:level, :user)
+              course.students.includes(:user)
             end
           # Exclude inactive students, unless requested.
           scope =

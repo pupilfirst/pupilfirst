@@ -1,6 +1,6 @@
 # `@pupilfirst/pf-icon`
 
-Collection of custom icons created by [pupilfirst lms](https://www.pupilfirst.com/)
+A collection of custom icons created by [Pupilfirst](https://www.pupilfirst.org)
 
 ## Demo
 

@@ -4,6 +4,7 @@ external reviewedEmptyImage: string = "default"
 external pendingEmptyImage: string = "default"
 
 let t = I18n.t(~scope="components.CoursesReview__SubmissionCard")
+let ts = I18n.t(~scope="shared")
 
 open CoursesReview__Types
 
@@ -55,11 +56,13 @@ let showSubmission = (submissions, filterString) =>
         className={submissionCardClasses(submission)}>
         <div className="w-full lg:w-8/12">
           <div className="block text-sm lg:pe-4">
-            <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-              {str(t("level") ++ string_of_int(IndexSubmission.levelNumber(submission)))}
-            </span>
-            <span className="ms-2 font-semibold text-sm md:text-base">
-              {IndexSubmission.title(submission)->str}
+            <span className="font-semibold text-sm md:text-base">
+              {(Belt.Option.mapWithDefault(
+                IndexSubmission.milestoneNumber(submission),
+                "",
+                number => ts("m") ++ string_of_int(number) ++ " - ",
+              ) ++
+              IndexSubmission.title(submission))->str}
             </span>
           </div>
           <div className="mt-1 ms-px text-xs text-gray-900">

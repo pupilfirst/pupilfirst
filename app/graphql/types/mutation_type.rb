@@ -27,7 +27,6 @@ class Types::MutationType < Types::BaseObject
   field :delete_content_block,
         mutation: Mutations::DeleteContentBlock,
         null: false
-  field :level_up, mutation: Mutations::LevelUp, null: false
   field :move_content_block, mutation: Mutations::MoveContentBlock, null: false
   field :create_school_admin,
         mutation: Mutations::CreateSchoolAdmin,
@@ -179,5 +178,8 @@ class Types::MutationType < Types::BaseObject
   field :destroy_team, mutation: Mutations::DestroyTeam, null: false
   field :re_run_github_action,
         mutation: Mutations::ReRunGithubAction,
+        null: false
+  field :initiate_password_reset,
+        mutation: Mutations::InitiatePasswordReset,
         null: false
 end

@@ -1,6 +1,5 @@
 class AutoVerifySubmissionMutator < ApplicationQuery
   include AuthorizeStudent
-  include LevelUpEligibilityComputable
   include DevelopersNotifications
 
   property :target_id, validates: { presence: { message: 'Blank Target Id' } }

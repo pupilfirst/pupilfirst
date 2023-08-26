@@ -15,7 +15,6 @@ let decodeProps = json => {
     field("evaluationCriteria", array(EvaluationCriterion.decode), json),
     field("preview", bool, json),
     field("accessLockedLevels", bool, json),
-    field("levelUpEligibility", LevelUpEligibility.decode, json),
   )
 }
 
@@ -33,7 +32,6 @@ Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], (
     evaluationCriteria,
     preview,
     accessLockedLevels,
-    levelUpEligibility,
   ) =
     DomUtils.parseJSONTag() |> decodeProps
 
@@ -53,7 +51,6 @@ Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], (
         evaluationCriteria
         preview
         accessLockedLevels
-        levelUpEligibility
       />,
       root,
     )

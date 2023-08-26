@@ -1,0 +1,21 @@
+<%
+  user = student.user
+  report_path = @organisation ? org_student_path(student, filters) : student_report_path(student, filters)
+%>
+<a href="<%= report_path %>" data-test-class="student" class="block p-5 border border-gray-200 bg-gray-50 rounded-lg hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400">
+  <div class="flex justify-between items-center gap-4">
+    <div>
+      <p class="font-semibold">
+        <%= user.name %>
+      </p>
+      <p class="text-sm text-gray-600">
+        <%= user.title %> <span class="px-1" aria-hidden="true">|</span>
+        <% if user.last_seen_at.present? %>
+          <span title="<%= user.last_seen_at.iso8601 %>"><%= t('.time_ago', time_ago: time_ago_in_words(user.last_seen_at)) %></span>
+        <% else %>
+          <%= t('.never_signed_in') %>
+        <% end %>
+      </p>
+    </div>
+  </div>
+</a>

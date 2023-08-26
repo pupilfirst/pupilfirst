@@ -17,7 +17,7 @@ module CourseExports
     def target_rows
       values =
         team_targets.map do |target|
-          milestone = target.target_group.milestone ? "Yes" : "No"
+          milestone = target.milestone? ? "Yes" : "No"
 
           [
             target_id(target),

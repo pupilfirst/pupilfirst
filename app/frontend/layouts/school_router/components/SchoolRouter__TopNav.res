@@ -69,7 +69,7 @@ let renderPrimaryPageLink = (courseId, primaryPage, secondaryPage) => {
 @react.component
 let make = (~courses, ~currentUser) => {
   <div className={"flex justify-between items-center p-4 bg-white border-b flex-1"}>
-    <div className="flex items-center space-x-2 text-sm font-semibold capitalize">
+    <div className="flex items-center space-x-2 text-sm font-semibold">
       <SchoolRouter__CoursesDropdown courses />
     </div>
     <div className="flex items-center ltr:space-x-4">

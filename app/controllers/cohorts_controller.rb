@@ -1,16 +1,14 @@
 class CohortsController < ApplicationController
   before_action :authenticate_user!
-  layout "student"
+  layout "student_course"
 
-  # GET /organisations/:organisation_id/cohorts/:id
+  # GET /cohorts/:id
   def show
-    @organisation = policy_scope(Organisation).find(params[:organisation_id])
     @cohort = authorize current_school.cohorts.find(params[:id])
-
-    @presenter =
-      Cohorts::StudentsPresenter.new(view_context, @organisation, @cohort)
+    @course = @cohort.course
+    @presenter = Cohorts::StudentsPresenter.new(view_context, @cohort)
   end
 
-  # GET /organisations/:organisation_id/cohorts/:id/students
+  # GET /cohorts/:id/students
   alias students show
 end

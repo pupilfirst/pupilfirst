@@ -10,21 +10,12 @@ describe Users::MergeAccountsService do
   # Create courses and student profiles
   let!(:course_1) { create :course, :with_cohort, school: school }
   let!(:course_2) { create :course, :with_cohort, school: school }
-  let!(:level_1_c1) { create :level, :one, course: course_1 }
-  let!(:level_1_c2) { create :level, :one, course: course_2 }
-  let!(:level_2_c2) { create :level, :one, course: course_2 }
 
   let!(:student_old_user_c1) do
-    create :student,
-           user: old_user,
-           cohort: course_1.cohorts.first,
-           level: level_1_c1
+    create :student, user: old_user, cohort: course_1.cohorts.first
   end
   let!(:student_old_user_c2) do
-    create :student,
-           user: old_user,
-           cohort: course_2.cohorts.first,
-           level: level_1_c2
+    create :student, user: old_user, cohort: course_2.cohorts.first
   end
 
   # Add coach profiles
@@ -35,9 +26,7 @@ describe Users::MergeAccountsService do
            faculty: coach_old_user
   end
 
-  let!(:student_in_c1) do
-    create :student, cohort: course_1.cohorts.first, level: level_1_c1
-  end
+  let!(:student_in_c1) { create :student, cohort: course_1.cohorts.first }
   let!(:student_enrollment) do
     create :faculty_student_enrollment,
            student: student_in_c1,
@@ -130,10 +119,7 @@ describe Users::MergeAccountsService do
 
     context "both users have student profiles in the same course" do
       let!(:student_new_user_c1) do
-        create :student,
-               user: new_user,
-               level: level_1_c1,
-               cohort: course_1.cohorts.first
+        create :student, user: new_user, cohort: course_1.cohorts.first
       end
       it "prompts to select the student profile to be used" do
         expect {

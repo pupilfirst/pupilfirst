@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Cohorts::UnassignReviewerService do
   subject { described_class.new(course) }
@@ -8,8 +8,8 @@ describe Cohorts::UnassignReviewerService do
   let(:faculty) { create :faculty }
   let(:another_faculty) { create :faculty }
 
-  describe '#unassign' do
-    context 'when the faculty is assigned to the course' do
+  describe "#unassign" do
+    context "when the faculty is assigned to the course" do
       before do
         create :faculty_cohort_enrollment, faculty: faculty, cohort: cohort
         create :faculty_cohort_enrollment,
@@ -17,7 +17,7 @@ describe Cohorts::UnassignReviewerService do
                cohort: cohort
       end
 
-      it 'removes the faculty enrollment from the course' do
+      it "removes the faculty enrollment from the course" do
         expect { subject.unassign(faculty) }.to(
           change { FacultyCohortEnrollment.count }.from(2).to(1)
         )
@@ -27,12 +27,12 @@ describe Cohorts::UnassignReviewerService do
       end
     end
 
-    context 'when the faculty is assigned to a few teams in the course' do
+    context "when the faculty is assigned to a few teams in the course" do
       let(:level_1) { create :level, :one, course: course }
       let(:level_2) { create :level, :two, course: course }
-      let(:student_l1) { create :student, level: level_1, cohort: cohort }
-      let(:student_l2_1) { create :student, level: level_2, cohort: cohort }
-      let(:student_l2_2) { create :student, level: level_2, cohort: cohort }
+      let(:student_l1) { create :student, cohort: cohort }
+      let(:student_l2_1) { create :student, cohort: cohort }
+      let(:student_l2_2) { create :student, cohort: cohort }
 
       before do
         create :faculty_student_enrollment,
@@ -49,7 +49,7 @@ describe Cohorts::UnassignReviewerService do
                student: student_l2_2
       end
 
-      it 'removes faculty enrollment from all teams in the course' do
+      it "removes faculty enrollment from all teams in the course" do
         expect { subject.unassign(faculty) }.to(
           change { FacultyStudentEnrollment.count }.from(3).to(1)
         )

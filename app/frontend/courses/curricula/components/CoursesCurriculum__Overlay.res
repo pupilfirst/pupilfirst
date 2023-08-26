@@ -166,7 +166,7 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
   </div>
 }
 
-let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
+let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch state.targetDetails {
   | Some(targetDetails) =>
     let newTargetDetails = targetDetails |> TargetDetails.addSubmission(submission)
@@ -177,15 +177,8 @@ let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEl
 
   switch submission |> Submission.status {
   | MarkedAsComplete =>
-    addSubmissionCB(
-      LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
-      levelUpEligibility,
-    )
-  | Pending =>
-    addSubmissionCB(
-      LatestSubmission.make(~pending=true, ~targetId=target |> Target.id),
-      levelUpEligibility,
-    )
+    addSubmissionCB(LatestSubmission.make(~pending=false, ~targetId=target |> Target.id))
+  | Pending => addSubmissionCB(LatestSubmission.make(~pending=true, ~targetId=target |> Target.id))
   | Completed =>
     raise(
       UnexpectedSubmissionStatus(
@@ -201,14 +194,7 @@ let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEl
   }
 }
 
-let addVerifiedSubmission = (
-  target,
-  state,
-  send,
-  addSubmissionCB,
-  submission,
-  levelUpEligibility,
-) => {
+let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch state.targetDetails {
   | Some(targetDetails) =>
     let newTargetDetails = targetDetails |> TargetDetails.addSubmission(submission)
@@ -216,10 +202,7 @@ let addVerifiedSubmission = (
   | None => ()
   }
 
-  addSubmissionCB(
-    LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
-    levelUpEligibility,
-  )
+  addSubmissionCB(LatestSubmission.make(~pending=false, ~targetId=target |> Target.id))
 }
 
 let targetStatusClass = (prefix, targetStatus) =>
@@ -237,7 +220,7 @@ let renderTargetStatus = targetStatus => {
 }
 
 let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 " ++
+  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-3 md:p-6 " ++
   targetStatusClass("course-overlay__header-title-card--", targetStatus)
 
 let renderLocked = text =>
@@ -257,9 +240,19 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:me-6 md:text-xl">
-          {target |> Target.title |> str}
-        </h1>
+        <div
+          className="flex flex-col md:flex-row items-start md:items-center font-medium leading-snug">
+          {Target.milestone(target)
+            ? <div
+                className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-300 px-1.5 md:px-2 py-1 rounded-md mr-2">
+                <Icon className="if i-milestone-solid text-sm" />
+                <span className="ms-1"> {t("milestone_target_label") |> str} </span>
+              </div>
+            : React.null}
+          <h1 className="text-base leading-snug md:me-6 md:text-xl">
+            {target |> Target.title |> str}
+          </h1>
+        </div>
         {renderTargetStatus(targetStatus)}
       </div>
     </div>
@@ -294,9 +287,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
           className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
-          <span className="font-semibold  leading-snug">
-            {target |> Target.title |> str}
-          </span>
+          <span className="font-semibold  leading-snug"> {target |> Target.title |> str} </span>
           {renderTargetStatus(targetStatus)}
         </Link>
       })
@@ -313,7 +304,7 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
       prerequisitesIncomplete(reason, target, targets, statusOfTargets, send)
     | CourseLocked
     | AccessLocked
-    | LevelLocked(_) =>
+    | SubmissionLimitReached(_) =>
       renderLockReason(reason)
     }
   | Pending
@@ -516,7 +507,9 @@ let navigationLink = (direction, url, send) => {
   }
 
   let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />)
+    icon->Belt.Option.mapWithDefault(React.null, icon =>
+      <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />
+    )
 
   <Link
     href=url
@@ -564,15 +557,9 @@ let quickNavigationLinks = (targetDetails, send) => {
   </div>
 }
 
-let updatePendingUserIdsWhenAddingSubmission = (
-  send,
-  target,
-  addSubmissionCB,
-  submission,
-  levelUpEligibility,
-) => {
+let updatePendingUserIdsWhenAddingSubmission = (send, target, addSubmissionCB, submission) => {
   send(AddSubmission(target |> Target.role))
-  addSubmissionCB(submission, levelUpEligibility)
+  addSubmissionCB(submission)
 }
 
 @react.component
@@ -600,7 +587,7 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-50 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}

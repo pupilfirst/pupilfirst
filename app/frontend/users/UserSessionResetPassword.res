@@ -10,7 +10,6 @@ type state = {
   token: string,
   name: string,
   email: string,
-  schoolName: string,
   newPassword: string,
   confirmPassword: string,
   saving: bool,
@@ -18,20 +17,20 @@ type state = {
 }
 
 type action =
-  | UpdateNewPassword(string)
+  | UpdateNewPassword(string, string)
   | UpdateConfirmPassword(string)
   | UpdateSaving(bool)
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateNewPassword(newPassword) => {
+  | UpdateNewPassword(newPassword, schoolName) => {
       let newPasswordAnalysis = if Js.String2.length(newPassword) > 0 {
         Zxcvbn.make(
           ~password=newPassword,
           ~userInputs=Js.Array2.concat(
             Js.String2.split(state.name, " "),
             Js.String2.split(state.email, "@"),
-          )->Js.Array2.concat([state.name, state.email, state.schoolName]),
+          )->Js.Array2.concat([state.name, state.email, schoolName]),
         )->Some
       } else {
         None
@@ -91,7 +90,7 @@ let submitButtonText = state =>
   | (_, _, _, _, true) => t("passwords_not_match")
   | _ => t("update_password")
   }
-let renderUpdatePassword = (state, send) => {
+let renderUpdatePassword = (state, send, schoolName) => {
   let inputClasses = "appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400"
   let labelClasses = "inline-block tracking-wide text-gray-900 text-xs font-semibold"
   <div className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
@@ -104,7 +103,8 @@ let renderUpdatePassword = (state, send) => {
         type_="password"
         maxLength=128
         placeholder={t("new_password_placeholder")}
-        onChange={event => send(UpdateNewPassword(ReactEvent.Form.target(event)["value"]))}
+        onChange={event =>
+          send(UpdateNewPassword(ReactEvent.Form.target(event)["value"], schoolName))}
       />
     </div>
     {switch state.newPasswordAnalysis {
@@ -141,7 +141,7 @@ let renderUpdatePassword = (state, send) => {
         </div>
         <div>
           <ul className="text-yellow-900 text-[10px]">
-            {Js.Array2.length(zxcvbn->Zxcvbn.suggestions) > 0
+            {zxcvbn->Zxcvbn.suggestions->ArrayUtils.isNotEmpty
               ? <li>
                   <PfIcon className="if i-info-light if-fw" /> {Zxcvbn.suggestions(zxcvbn)[0]->str}
                 </li>
@@ -181,7 +181,6 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
     token: token,
     name: name,
     email: email,
-    schoolName: schoolName,
     newPassword: "",
     confirmPassword: "",
     saving: false,
@@ -196,7 +195,7 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
       <div className="text-lg sm:text-2xl font-bold text-center mt-4">
         {t("set_new_password") |> str}
       </div>
-      {renderUpdatePassword(state, send)}
+      {renderUpdatePassword(state, send, schoolName)}
     </div>
   </div>
 }

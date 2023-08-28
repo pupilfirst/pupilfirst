@@ -2518,6 +2518,7 @@ en:
           continue_with_google: Continue with Google
         page_title:
           title: Sign In
+      reset_password: "Reset Password | %{title}"
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.

@@ -29,7 +29,6 @@ type state = {
   saving: bool,
   dirty: bool,
   newPasswordAnalysis: option<Zxcvbn.t>,
-  schoolName: string,
 }
 
 type action =
@@ -40,7 +39,7 @@ type action =
   | SetDisableUpdateEmail(bool)
   | UpdateLocale(string)
   | UpdateCurrentPassword(string)
-  | UpdateNewPassword(string)
+  | UpdateNewPassword(string, string)
   | UpdateNewPassWordConfirm(string)
   | UpdateEmailForDeletion(string)
   | UpdateDailyDigest(bool)
@@ -74,15 +73,15 @@ let reducer = (state, action) =>
       currentPassword: currentPassword,
       dirty: true,
     }
-  | UpdateNewPassword(newPassword) => {
+  | UpdateNewPassword(newPassword, schoolName) => {
       let formDictionary = Js.Array2.concat(
         state.name->Js.String2.split(" "),
         state.email->Js.String2.split("@"),
       )
-      let newPasswordAnalysis = if Js.String2.length(newPassword) > 0 {
+      let newPasswordAnalysis = if StringUtils.isPresent(newPassword) {
         Zxcvbn.make(
           ~password=newPassword,
-          ~userInputs=[state.name, state.email, state.schoolName]->Js.Array2.concat(formDictionary),
+          ~userInputs=[state.name, state.email, schoolName]->Js.Array2.concat(formDictionary),
         )->Some
       } else {
         None
@@ -444,7 +443,6 @@ let make = (
     avatarUploadError: None,
     dirty: false,
     newPasswordAnalysis: None,
-    schoolName: schoolName,
     passwordForEmailChange: "",
     initiatePasswordReset: false,
   }
@@ -633,7 +631,7 @@ let make = (
                       id="new_password"
                       value=state.newPassword
                       onChange={event =>
-                        send(UpdateNewPassword(ReactEvent.Form.target(event)["value"]))}
+                        send(UpdateNewPassword(ReactEvent.Form.target(event)["value"], schoolName))}
                       className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                       placeholder={t("new_password_placeholder")}
                     />
@@ -673,7 +671,7 @@ let make = (
                         </div>
                         <div>
                           <ul className="text-yellow-900 text-[10px]">
-                            {Js.Array2.length(zxcvbn->Zxcvbn.suggestions) > 0
+                            {zxcvbn->Zxcvbn.suggestions->ArrayUtils.isNotEmpty
                               ? <li>
                                   <PfIcon className="if i-info-light if-fw" />
                                   {Zxcvbn.suggestions(zxcvbn)[0]->str}
@@ -701,7 +699,7 @@ let make = (
                       className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                       placeholder={t("confirm_password_placeholder")}
                     />
-                    {state.confirmPassword->Js.String2.length > 0
+                    {state.confirmPassword->StringUtils.isPresent
                       ? <School__InputGroupError
                           message={t("confirm_password_error")} active={hasInvalidPassword(state)}
                         />

@@ -8,7 +8,7 @@ module Users
       end
 
       def page_title
-        "Reset Password | #{current_school.name}"
+        I18n.t("presenters.users.reset_password", title: current_school.name)
       end
 
       private

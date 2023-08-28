@@ -1333,6 +1333,7 @@ en:
       updated_notification: Images have been updated successfully.
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
+      cant_empty_message: can't be empty
       move_down: Move Down
       move_up: Move Up
     SchoolCustomize__LinkEditor:
@@ -2246,6 +2247,7 @@ en:
       responses_saved_notification: Your responses have been saved.
     create_school_link:
       blank_title_error: A title is required
+      invalid_title_length_error: Title must be between 1 and 24 characters in length.
       success_notification: A custom link has been added.
     create_student_from_applicant:
       success_notification: Student created successfully.
@@ -2359,6 +2361,8 @@ en:
     update_school:
       details_updated_notification: Details updated successfully!
     update_school_link:
+      blank_title_error: A title is required
+      invalid_title_length_error: Title must be between 1 and 24 characters in length.
       link_not_found_error: Unable to find link!
       success_notification: Link updated successfully!
     update_student_details:

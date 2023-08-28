@@ -127,18 +127,24 @@ module LinkEditor = {
       {switch kind {
       | HeaderLink
       | FooterLink => <>
-          <input
-            value=state.title
-            required=true
-            autoFocus=true
-            id={"link-title-" ++ id}
-            className=inputClasses
-            placeholder="A short title for a new link"
-            onChange={event => {
-              let value = ReactEvent.Form.target(event)["value"]
-              send(UpdateTitle(value))
-            }}
-          />
+          <div className="flex flex-col gap-1 flex-1">
+            <input
+              value=state.title
+              required=true
+              autoFocus=true
+              id={"link-title-" ++ id}
+              className=inputClasses
+              placeholder="A short title for a new link"
+              onChange={event => {
+                let value = ReactEvent.Form.target(event)["value"]
+                send(UpdateTitle(value))
+              }}
+              maxLength=24
+            />
+            <School__InputGroupError
+              active={!StringUtils.isPresent(state.title)} message={t("cant_empty_message")}
+            />
+          </div>
           <FaIcon classes="fas fa-link mx-2" />
         </>
       | SocialLink => React.null
@@ -180,6 +186,8 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, initialState(title, url))
 
+  let isTitleEmpty = !StringUtils.isPresent(state.title)
+
   <DisablingCover disabled=state.updating message="Updating...">
     <Spread props={"data-school-link-id": id}>
       <div
@@ -191,9 +199,7 @@ let make = (
                 {switch kind {
                 | HeaderLink
                 | FooterLink => <>
-                    <span className="inline-block me-2 font-semibold">
-                      {title->str}
-                    </span>
+                    <span className="inline-block me-2 font-semibold"> {title->str} </span>
                     <PfIcon className="if i-link-regular if-fw me-1" />
                     <code> {url->str} </code>
                   </>
@@ -219,9 +225,9 @@ let make = (
                 <button
                   ariaLabel={ts("update") ++ " " ++ url}
                   title={ts("update")}
-                  disabled={state.error}
+                  disabled={state.error || isTitleEmpty}
                   onClick={e =>
-                    if !state.error {
+                    if !state.error || isTitleEmpty {
                       handleLinkEdit(~send, ~id, ~updateLinkCB, ~title=state.title, ~url=state.url)
                     }}
                   className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">

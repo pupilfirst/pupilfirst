@@ -8,7 +8,7 @@ feature "Target Details Editor", js: true do
   # Setup a course with few targets target, ...
   let!(:school) { create :school, :current }
   let!(:course) { create :course, school: school }
-  let!(:school_admin) { create :school_admin, school: school }
+  let!(:school_admin) { create :school_admin }
   let!(:faculty) { create :faculty, school: school }
   let!(:course_author) do
     create :course_author, course: course, user: faculty.user

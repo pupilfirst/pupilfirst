@@ -12,7 +12,7 @@ feature "Team Details", js: true do
   let!(:course) { create :course, school: school }
   let!(:live_cohort) { create :cohort, course: course, ends_at: 1.day.from_now }
   let!(:level) { create :level, :one, course: course }
-  let!(:school_admin) { create :school_admin, school: school }
+  let!(:school_admin) { create :school_admin }
   let!(:student_1) { create :student, cohort: live_cohort }
   let!(:team_1) { create :team_with_students, cohort: live_cohort }
 

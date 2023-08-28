@@ -3,8 +3,8 @@ require "rails_helper"
 feature "Assignments", js: true do
   include UserSpecHelper
 
-  let(:school) { create :school, :current }
-  let(:school_admin) { create :school_admin, school: school }
+  let!(:school) { create :school, :current }
+  let(:school_admin) { create :school_admin }
   let(:course) { create :course, school: school }
   let(:course_author) { create :course_author, course: course }
   let(:level_1) { create :level, :one, course: course }

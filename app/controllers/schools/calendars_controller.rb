@@ -27,14 +27,11 @@ module Schools
         .pluck(:id)
 
       authorize(@course, policy_class: Schools::CalendarEventPolicy)
-      calendar = @course.calendars.create!(calendar_params)
+      @course.calendars.create!(calendar_params)
 
       flash[:success] = I18n.t("calendars.create.success")
 
-      redirect_to school_course_calendar_events_path(
-                    @course,
-                    calendar_id: calendar.id
-                  )
+      redirect_to school_course_calendar_events_path(@course)
     end
 
     # POST /school/calendars/:id

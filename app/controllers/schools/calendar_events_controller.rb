@@ -16,7 +16,6 @@ module Schools
       authorize(@event, policy_class: Schools::CalendarEventPolicy)
     end
 
-
     # GET /school/courses/:course_id/calendar_events/:id/edit
     def edit
       @course = current_school.courses.find(params[:course_id])
@@ -36,7 +35,10 @@ module Schools
       if @form.valid?
         @form.save
         flash[:success] = I18n.t("calendar_events.create.success")
-        redirect_to school_course_calendar_events_path(@course)
+        redirect_to school_course_calendar_events_path(
+                      @course,
+                      calendar_id: params[:calendar_id]
+                    )
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
         @event = CalendarEvent.new
@@ -44,14 +46,13 @@ module Schools
       end
     end
 
-
     def update
       @event = current_school.calendar_events.find(params[:id])
       authorize(@event, policy_class: Schools::CalendarEventPolicy)
 
       @form =
         CalendarEvents::CreateOrUpdateForm.new(
-          calendar_event_params(params).merge!(id: @event.id),
+          calendar_event_params(params).merge!(id: @event.id)
         )
 
       @form.validate
@@ -62,6 +63,7 @@ module Schools
         redirect_to school_course_calendar_event_path(
                       @event.calendar.course,
                       @event,
+                      calendar_id: params[:calendar_id]
                     )
       else
         flash.now[:error] = @form.errors.map { |e| e.full_message }
@@ -75,7 +77,10 @@ module Schools
       @event.destroy
 
       flash[:success] = I18n.t("calendar_events.delete.success")
-      redirect_to school_course_calendar_events_path(@event.calendar.course)
+      redirect_to school_course_calendar_events_path(
+                    @event.calendar.course,
+                    calendar_id: params[:calendar_id]
+                  )
     end
 
     private
@@ -88,7 +93,7 @@ module Schools
         :color,
         :start_time,
         :link_url,
-        :link_title,
+        :link_title
       )
     end
   end

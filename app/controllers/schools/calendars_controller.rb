@@ -16,6 +16,7 @@ module Schools
       authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
     end
 
+    # POST /school/courses/:course_id/calendars
     def create
       @course = current_school.courses.find(params[:course_id])
       calendar_params = params.require(:calendar).permit(:name, cohort_ids: [])
@@ -25,11 +26,11 @@ module Schools
         .where(id: calendar_params[:cohort_ids])
         .pluck(:id)
 
+      authorize(@course, policy_class: Schools::CalendarEventPolicy)
       @course.calendars.create!(calendar_params)
 
-      authorize(@calendar, policy_class: Schools::CalendarEventPolicy)
-
       flash[:success] = I18n.t("calendars.create.success")
+
       redirect_to school_course_calendar_events_path(@course)
     end
 

@@ -1,4 +1,7 @@
 <% presenter = ::Courses::CohortsPresenter.new(self, @course, params[:status]) %>
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+<% end %>
 <div class="flex flex-col md:pt-18 pb-20 md:pb-4 md:h-screen overflow-y-auto">
   <section class="bg-gray-50 px-4 border-b border-gray-200">
     <div class="max-w-5xl mx-auto pt-4">

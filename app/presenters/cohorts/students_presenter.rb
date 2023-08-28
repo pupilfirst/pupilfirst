@@ -145,7 +145,7 @@ module Cohorts
     end
 
     def page_title
-      "Cohorts | #{@course.name}"
+      "#{@cohort.name} | #{@course.name}"
     end
 
     private

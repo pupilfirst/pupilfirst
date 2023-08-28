@@ -1,6 +1,5 @@
 <% content_for(:head) do %>
   <%= vite_javascript_tag 'student', nonce: true, media: 'all' %>
-  <title><%= @page_title  %></title>
 <% end %>
 <% content_for(:nav) do %>
   <%= render 'layouts/student_top_nav' %>

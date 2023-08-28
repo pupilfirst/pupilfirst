@@ -144,6 +144,10 @@ module Cohorts
         @course.targets.live.where(milestone: true).order(:milestone_number)
     end
 
+    def page_title
+      "Cohorts | #{@course.name}"
+    end
+
     private
 
     def filter_students_by_name(scope)

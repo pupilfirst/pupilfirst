@@ -74,6 +74,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/cohorts
   def cohorts
     @course = authorize(find_course)
+    @page_title = "Cohorts | #{@course.name}"
     render layout: "student_course"
   end
 

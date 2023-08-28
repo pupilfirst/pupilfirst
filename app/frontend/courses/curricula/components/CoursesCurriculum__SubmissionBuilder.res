@@ -64,7 +64,6 @@ module CreateSubmissionQuery = %graphql(`
         id
         createdAt
       }
-      levelUpEligibility
     }
   }
   `)
@@ -108,10 +107,8 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
         ~status,
         ~checklist=submissionChecklist,
       )
-      let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(
-        response["createSubmission"]["levelUpEligibility"],
-      )
-      addSubmissionCB(newSubmission, levelUpEligibility)
+
+      addSubmissionCB(newSubmission)
     | None =>
       /* Enable the form again in case of a validation failure. */
       send(SetReady)

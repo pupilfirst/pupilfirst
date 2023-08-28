@@ -10,5 +10,6 @@ module Types
     field :link_to_complete, String, null: true
     field :visibility, String, null: false
     field :checklist, GraphQL::Types::JSON, null: false
+    field :milestone, Boolean, null: false
   end
 end

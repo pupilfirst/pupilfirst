@@ -61,7 +61,6 @@ module Highlight = {
 type progressionBehavior =
   | Limited(int)
   | Unlimited
-  | Strict
 
 type t = {
   id: string,
@@ -115,19 +114,11 @@ let coachesCount = t => t.coachesCount
 
 let defaultCohort = t => t.defaultCohort
 
-let progressionBehavior = t =>
-  switch t.progressionBehavior {
-  | Limited(_) => #Limited
-  | Unlimited => #Unlimited
-  | Strict => #Strict
-  }
-
-let progressionLimit = t =>
-  switch t.progressionBehavior {
-  | Limited(limit) => Some(limit)
-  | Unlimited
-  | Strict =>
-    None
+let progressionBehavior = t => t.progressionBehavior
+let progressionLimit = progressionBehavior =>
+  switch progressionBehavior {
+  | Limited(limit) => limit
+  | Unlimited => 0
   }
 
 let imageUrl = image => image |> Image.url
@@ -175,7 +166,6 @@ module Fragment = %graphql(`
       filename
     }
     featured
-    progressionBehavior
     progressionLimit
     archivedAt
     highlights{
@@ -200,14 +190,9 @@ module Fragment = %graphql(`
 let makeFromFragment = (course: Fragment.t) => {
   let archivedAt = Belt.Option.map(course.archivedAt, DateFns.decodeISO)
 
-  let progressionBehavior = switch course.progressionBehavior {
-  | #Limited => Limited(course.progressionLimit |> Belt.Option.getExn)
-  | #Unlimited => Unlimited
-  | #Strict => Strict
-  | #FutureAddedValue(string) => {
-      Rollbar.error("Unexpected progression Behavior encountered: " ++ string)
-      raise(UnexpectedProgressionBehavior(string))
-    }
+  let progressionBehavior = switch course.progressionLimit {
+  | 0 => Unlimited
+  | limit => Limited(limit)
   }
 
   {
@@ -235,7 +220,8 @@ let makeFromFragment = (course: Fragment.t) => {
         ~name=cohort.name,
         ~description=cohort.description,
         ~endsAt=cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
-        ~courseId=cohort.courseId)
+        ~courseId=cohort.courseId,
+      )
     ),
   }
 }

@@ -278,7 +278,7 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
 
   let coachesToShow = ArrayUtils.isEmpty(filteredCoaches) ? coaches : filteredCoaches
 
-  <div>
+  <div className="md:pt-18">
     selectedCoachOverlay
     <div className="max-w-5xl mx-auto px-4">
       <h1 className="text-4xl text-center mt-3"> {tr("heading")->str} </h1>

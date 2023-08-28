@@ -14,7 +14,6 @@ module CreateQuizSubmissionQuery = %graphql(`
         createdAt
         checklist
       }
-      levelUpEligibility
      }
    }
  `)
@@ -28,10 +27,6 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
       let checklist =
         submission["checklist"] |> Json.Decode.array(SubmissionChecklistItem.decode([]))
 
-      let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(
-        response["createQuizSubmission"]["levelUpEligibility"],
-      )
-
       addSubmissionCB(
         Submission.make(
           ~id=submission["id"],
@@ -39,7 +34,6 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
           ~status=Submission.MarkedAsComplete,
           ~checklist,
         ),
-        levelUpEligibility,
       )
     | None => setSaving(_ => false)
     }
@@ -48,17 +42,17 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
   |> ignore
 }
 let answerOptionClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer  "
+  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer transition "
   switch selectedAnswer {
   | Some(answer) if answer == answerOption =>
-    defaultClasses ++ "bg-primary-100 border-primary-500 text-primary-500 shadow-md quiz-root__answer-selected "
+    defaultClasses ++ "text-primary-500 shadow-md quiz-root__answer-selected "
   | Some(_otherAnswer) => defaultClasses
   | None => defaultClasses
   }
 }
 
 let iconClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "quiz-root__answer-option-icon far fa-check-circle text-lg "
+  let defaultClasses = "quiz-root__answer-option-icon mb-1 far fa-check-circle text-lg "
   switch selectedAnswer {
   | Some(answer) if answer == answerOption => defaultClasses ++ "text-primary-500"
   | Some(_otherAnswer) => defaultClasses ++ "text-gray-500"

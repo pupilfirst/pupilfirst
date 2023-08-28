@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Courses::CloneService do
   include SubmissionsHelper
@@ -14,15 +14,11 @@ describe Courses::CloneService do
   let(:level_two) { create :level, :two, course: course }
   let(:target_group_l0) { create :target_group, level: level_zero }
 
-  let(:target_group_l1_1) do
-    create :target_group, level: level_one, milestone: true
-  end
+  let(:target_group_l1_1) { create :target_group, level: level_one }
 
   let(:target_group_l1_2) { create :target_group, level: level_one }
 
-  let(:target_group_l2) do
-    create :target_group, level: level_two, milestone: true
-  end
+  let(:target_group_l2) { create :target_group, level: level_two }
 
   let!(:target_l0) do
     create :target, :with_content, :for_team, target_group: target_group_l0
@@ -49,12 +45,12 @@ describe Courses::CloneService do
   end
 
   let!(:team) { create :team_with_students, cohort: cohort }
-  let(:student_l1) { create :student, level: level_one, cohort: cohort }
-  let(:student_l2) { create :student, level: level_two, cohort: cohort }
+  let(:student_l1) { create :student, cohort: cohort }
+  let(:student_l2) { create :student, cohort: cohort }
 
   let(:ec_1) { create :evaluation_criterion, course: course }
   let(:ec_2) { create :evaluation_criterion, course: course }
-  let(:new_name) { Faker::Lorem.words(number: 2).join(' ') }
+  let(:new_name) { Faker::Lorem.words(number: 2).join(" ") }
 
   # Quiz target
   let!(:quiz_target) do
@@ -87,7 +83,7 @@ describe Courses::CloneService do
 
   def file_path(filename)
     File.absolute_path(
-      Rails.root.join('spec', 'support', 'uploads', 'files', filename)
+      Rails.root.join("spec", "support", "uploads", "files", filename)
     )
   end
 
@@ -108,18 +104,18 @@ describe Courses::CloneService do
 
     # attach images
     course.cover.attach(
-      io: File.open(file_path('logo_lipsum_on_light_bg.png')),
-      filename: 'logo_lipsum_on_light_bg.png'
+      io: File.open(file_path("logo_lipsum_on_light_bg.png")),
+      filename: "logo_lipsum_on_light_bg.png"
     )
 
     course.thumbnail.attach(
-      io: File.open(file_path('logo_lipsum_on_dark_bg.png')),
-      filename: 'logo_lipsum_on_dark_bg.png'
+      io: File.open(file_path("logo_lipsum_on_dark_bg.png")),
+      filename: "logo_lipsum_on_dark_bg.png"
     )
   end
 
-  describe '#clone' do
-    it 'create a clone of the course with the supplied name' do
+  describe "#clone" do
+    it "create a clone of the course with the supplied name" do
       original_levels = Level.all.order(:number).pluck(:number, :name)
       original_group_names = TargetGroup.all.pluck(:name)
       original_targets = Target.all.pluck(:title, :description)
@@ -201,12 +197,12 @@ describe Courses::CloneService do
       )
 
       expect(
-        new_course.targets.map { |t|
+        new_course.targets.map do |t|
           t
             .current_content_blocks
             .order(:sort_index)
             .map { |cb| cb.slice(:block_type, :content, :sort_index) }
-        }
+        end
       ).to match_array(original_content_blocks)
 
       # There should be no cloning of team, students, or timeline events.

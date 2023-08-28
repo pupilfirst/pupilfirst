@@ -77,7 +77,6 @@ let make = (
     reducer,
     {targetTitle: "", savingNewTarget: false, validTargetTitle: false},
   )
-  let milestone = targetGroup |> TargetGroup.milestone
   let targetGroupArchived = targetGroup |> TargetGroup.archived
 
   let targetsInGroup =
@@ -120,12 +119,6 @@ let make = (
         id="target_group"
         className={archivedClasses(targetGroup |> TargetGroup.archived)}
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
-        {milestone
-          ? <div
-              className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-              {t("milestone_targets") |> str}
-            </div>
-          : React.null}
         <div className="target-group__title pt-6 font-semibold text-lg">
           <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>

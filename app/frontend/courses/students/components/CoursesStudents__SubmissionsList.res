@@ -18,10 +18,10 @@ module StudentSubmissionsQuery = %graphql(`
        nodes {
          id
         createdAt
-        levelId
         passedAt
         title
         evaluatedAt
+        milestoneNumber
        }
        pageInfo {
          hasNextPage
@@ -101,7 +101,7 @@ let submissionCardClasses = submission =>
   | None => "border-orange-400"
   }
 
-let showSubmission = (submissions, levels) =>
+let showSubmission = submissions =>
   <div>
     {submissions
     |> Submission.sort
@@ -116,14 +116,11 @@ let showSubmission = (submissions, levels) =>
           className={submissionCardClasses(submission)}>
           <div className="w-full md:w-3/4">
             <div className="block text-sm md:pe-2">
-              <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                {submission
-                |> Submission.levelId
-                |> Level.unsafeLevelNumber(levels, "StudentSubmissionsList")
-                |> str}
-              </span>
-              <span className="ms-2 font-semibold text-base">
-                {submission |> Submission.title |> str}
+              <span className="ms-1 font-semibold text-base">
+                {(Belt.Option.mapWithDefault(Submission.milestoneNumber(submission), "", number =>
+                  ts("m") ++ string_of_int(number) ++ " - "
+                ) ++
+                submission->Submission.title)->str}
               </span>
             </div>
             <div className="mt-1 ms-px text-xs text-gray-900">
@@ -141,7 +138,7 @@ let showSubmission = (submissions, levels) =>
     |> React.array}
   </div>
 
-let showSubmissions = (submissions, levels) =>
+let showSubmissions = submissions =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
@@ -149,10 +146,10 @@ let showSubmissions = (submissions, levels) =>
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
       </div>
-    : showSubmission(submissions, levels)
+    : showSubmission(submissions)
 
 @react.component
-let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
+let make = (~studentId, ~submissions, ~updateSubmissionsCB) => {
   let (state, setState) = React.useState(() => {loading: false})
   React.useEffect1(() => {
     switch submissions {
@@ -168,7 +165,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
     | Unloaded => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
     | PartiallyLoaded(submissions, cursor) =>
       <div>
-        {showSubmissions(submissions, levels)}
+        {showSubmissions(submissions)}
         {state.loading
           ? SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
           : <button
@@ -184,7 +181,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
               {ts("load_more") |> str}
             </button>}
       </div>
-    | FullyLoaded(submissions) => showSubmissions(submissions, levels)
+    | FullyLoaded(submissions) => showSubmissions(submissions)
     }}
   </div>
 }

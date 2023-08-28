@@ -11,14 +11,14 @@ class CoursesController < ApplicationController
   # GET /courses/:id/curriculum
   def curriculum
     @presenter = Courses::CurriculumPresenter.new(view_context, @course)
-    render layout: 'student_course'
+    render layout: "student_course"
   end
 
   # GET /courses/:id/leaderboard?weeks_before=
   def leaderboard
     @course = authorize(find_course)
     @on = params[:on]
-    render layout: 'student_course'
+    render layout: "student_course"
   end
 
   # GET /courses/:id/apply
@@ -36,7 +36,7 @@ class CoursesController < ApplicationController
     form = Courses::EnrollmentForm.new(@course)
 
     recaptcha_success =
-      recaptcha_success?(@form, action: 'public_course_enrollment')
+      recaptcha_success?(@form, action: "public_course_enrollment")
 
     unless recaptcha_success
       redirect_to apply_course_path(params[:id], visible_recaptcha: 1)
@@ -46,12 +46,14 @@ class CoursesController < ApplicationController
     if form.validate(params)
       form.create_applicant(session)
 
-      flash[:success] = t('.sent_mail')
+      flash[:success] = t(".sent_mail")
 
       redirect_to root_path
     else
-      flash[:error] =
-        t('.errors', form_errors: form.errors.full_messages.join(', '))
+      flash[:error] = t(
+        ".errors",
+        form_errors: form.errors.full_messages.join(", ")
+      )
 
       redirect_to apply_course_path(params[:id], visible_recaptcha: 1)
     end
@@ -60,32 +62,33 @@ class CoursesController < ApplicationController
   # GET /courses/:id/(:slug)
   def show
     @course = authorize(find_course)
-    render layout: 'student'
+    render layout: "student"
   end
 
   # GET /courses/:id/review
   def review
     @course = authorize(find_course)
-    render html: '', layout: 'app_router'
+    render html: "", layout: "app_router"
   end
 
-  # GET /courses/:id/students
-  def students
+  # GET /courses/:id/cohorts
+  def cohorts
     @course = authorize(find_course)
-    render html: '', layout: 'app_router'
+    render layout: "student_course"
   end
 
   # GET /courses/:id/report
   def report
     @course = authorize(find_course)
-    render layout: 'student_course'
+    @presenter = Courses::ReportPresenter.new(view_context, @course, student)
+    render layout: "student_course"
   end
 
   # GET /courses/:id/calendar
   def calendar
     @course = authorize(find_course)
     @presenter = Courses::CalendarsPresenter.new(view_context, @course, params)
-    render layout: 'student_course'
+    render layout: "student_course"
   end
 
   def calendar_month_data
@@ -106,6 +109,11 @@ class CoursesController < ApplicationController
     authenticate_user! unless course.public_preview?
 
     @course = authorize(course)
+  end
+
+  def student
+    @student ||=
+      @course.students.not_dropped_out.find_by(user_id: current_user.id)
   end
 
   def find_course

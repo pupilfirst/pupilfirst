@@ -48,7 +48,7 @@ This makes a few changes across Pupilfirst:
 1. The list of [submissions to review](/users/reviewing_submissions) can now be filtered by selecting an _assigned coach_.
 2. When a coach with directly assigned students loads the page for the first time, the filter defaults to show them only submissions from their own students.
 3. When viewing the details of a submission, the directly assigned coaches are listed at the top.
-4. When browsing the coach's [students list](/users/student_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
+4. When browsing the [coach's view of student cohorts](/users/cohort_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
 
 <details>
   <summary>Having multiple coaches to handle reviewing of submissions can come in really handy at times.</summary>

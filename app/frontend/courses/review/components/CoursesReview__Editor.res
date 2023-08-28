@@ -122,8 +122,8 @@ module CreateFeedbackMutation = %graphql(`
   `)
 
 module NextSubmissionQuery = %graphql(`
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
         nodes {
           id
         }
@@ -183,7 +183,6 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.defaultDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
-    ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
     ~assignedCoachId=?Filter.assignedCoachId(filter),
     ~targetId=?Filter.targetId(filter),
@@ -456,13 +455,10 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
         </div>
         <div className="px-4 py-3 flex flex-col justify-center">
           <div className="block text-sm md:pe-2">
-            <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-              {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
-            </span>
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ms-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+              className="font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
@@ -913,7 +909,9 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
           </span>
         | None =>
           <div className="ms-2 md:ms-4 tracking-wide w-full">
-            <div> <span> {(t("note_help", ~variables=[("noteAbout", noteAbout)]))->str} </span> help </div>
+            <div>
+              <span> {t("note_help", ~variables=[("noteAbout", noteAbout)])->str} </span> help
+            </div>
             <button
               className="btn btn-default mt-2"
               disabled={isSubmissionReviewAllowed(submissionDetails)}
@@ -1084,7 +1082,7 @@ let pageTitle = (number, submissionDetails) => {
   t(
     ~variables=[
       ("submission_number", string_of_int(number)),
-      ("level_number", SubmissionDetails.levelNumber(submissionDetails)),
+      ("target_title", SubmissionDetails.targetTitle(submissionDetails)),
       ("name", studentOrTeamName),
     ],
     "page_title",

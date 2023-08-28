@@ -297,4 +297,4 @@ If your Nginx reverse-proxy has been set up correctly, then visit the school usi
 
 ### Set up schools and domains
 
-Make sure that the `domains` table is populated with FQDNs that you're going to use locally, and that they are all linked to the correct `schools` table entry. These will be verified on each request; verification failure will cause a redirect to `https://www.pupilfirst.com/?redirect_from=<UNVERIFIABLE_FQDN>`. So if this happens to you, check your `schools` and `domains` table entries.
+Make sure that the `domains` table is populated with FQDNs that you're going to use locally, and that they are all linked to the correct `schools` table entry. These will be verified on each request; verification failure will cause a redirect to `https://lms.pupilfirst.org/?redirect_from=<UNVERIFIABLE_FQDN>`. So if this happens to you, check your `schools` and `domains` table entries.

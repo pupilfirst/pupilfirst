@@ -6,11 +6,11 @@ module Types
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
     field :title, String, null: false
-    field :level_number, Int, null: false
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
     field :reviewer, Types::ReviewerDetailInfoType, null: true
+    field :milestone_number, Int, null: true
 
     def title
       BatchLoader::GraphQL
@@ -23,18 +23,15 @@ module Types
       # object.target.title
     end
 
-    def level_number
+    def milestone_number
       BatchLoader::GraphQL
         .for(object.target_id)
         .batch do |target_ids, loader|
           Target
-            .includes(target_group: :level)
             .where(id: target_ids)
-            .each do |target|
-              loader.call(target.id, target.target_group.level.number)
-            end
+            .each { |target| loader.call(target.id, target.milestone_number) }
         end
-      # object.target.target_group.level.number
+      # object.target.milestone_number
     end
 
     def user_names

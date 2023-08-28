@@ -14,13 +14,12 @@ type state = {
   latestSubmissions: array<LatestSubmission.t>,
   statusOfTargets: array<TargetStatus.t>,
   notice: Notice.t,
-  levelUpEligibility: LevelUpEligibility.t,
 }
 
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--" ++ (targetStatus |> TargetStatus.statusClassesSufix)
-  "curriculum__target-status px-3 py-px ms-4 h-6 " ++ statusClasses
+  "curriculum__target-status px-1 md:px-3 py-px ms-4 h-6 " ++ statusClasses
 }
 
 let rendertarget = (target, statusOfTargets, author, courseId) => {
@@ -37,18 +36,27 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     <Link
       props={"data-target-id": targetId}
       href={"/targets/" ++ targetId}
-      className="p-6 flex grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg"
+      className={"p-3 md:p-6 flex flex-1 items-start justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50 focus:rounded-lg"}
       ariaLabel={"Select Target: " ++
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="font-medium leading-snug"> {Target.title(target)->str} </span>
-      {ReactUtils.nullIf(
-        <span className={targetStatusClasses(targetStatus)}>
-          {TargetStatus.statusToString(targetStatus)->str}
-        </span>,
-        TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
-      )}
+      <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
+      <div className="flex">
+        {ReactUtils.nullIf(
+          <span className={targetStatusClasses(targetStatus)}>
+            {TargetStatus.statusToString(targetStatus)->str}
+          </span>,
+          TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
+        )}
+        {Target.milestone(target)
+          ? <div
+              className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
+              <Icon className="if i-milestone-solid text-sm" />
+              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
+            </div>
+          : React.null}
+      </div>
     </Link>
     {ReactUtils.nullUnless(
       <a
@@ -71,14 +79,8 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
-      className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
-      {targetGroup |> TargetGroup.milestone
-        ? <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-            {t("milestone_targets") |> str}
-          </div>
-        : React.null}
-      <div className="p-6 pt-5">
+      className="curriculum__target-group max-w-3xl md:max-w-4xl 2xl:max-w-5xl mx-auto bg-white rounded-lg shadow-md relative overflow-hidden ">
+      <div className="p-3 md:p-6 pt-5 text-center">
         <div className="text-2xl font-bold leading-snug">
           {TargetGroup.name(targetGroup)->str}
         </div>
@@ -96,19 +98,16 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
   </div>
 }
 
-let addSubmission = (setState, latestSubmission, levelUpEligibility) =>
+let addSubmission = (setState, latestSubmission) =>
   setState(state => {
     let withoutSubmissionForThisTarget =
       state.latestSubmissions |> Js.Array.filter(s =>
         s |> LatestSubmission.targetId != (latestSubmission |> LatestSubmission.targetId)
       )
 
-    let eligibility = Belt.Option.getWithDefault(levelUpEligibility, state.levelUpEligibility)
-
     {
       ...state,
       latestSubmissions: Js.Array.concat([latestSubmission], withoutSubmissionForThisTarget),
-      levelUpEligibility: eligibility,
     }
   })
 
@@ -127,30 +126,12 @@ let handleLockedLevel = level =>
     }}
   </div>
 
-let statusOfMilestoneTargets = (targetGroups, targets, level, statusOfTargets) => {
-  let targetGroupsInLevel =
-    targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == (level |> Level.id))
-  let milestoneTargetGroupIds =
-    targetGroupsInLevel
-    |> Js.Array.filter(tg => tg |> TargetGroup.milestone)
-    |> Js.Array.map(tg => tg |> TargetGroup.id)
-
-  let milestoneTargetIds =
-    targets
-    |> Js.Array.filter(t => milestoneTargetGroupIds |> Js.Array.includes(Target.targetGroupId(t)))
-    |> Js.Array.map(t => t |> Target.id)
-
-  statusOfTargets |> Js.Array.filter(ts =>
-    milestoneTargetIds |> Js.Array.includes(TargetStatus.targetId(ts))
-  )
-}
-
 let issuedCertificate = course =>
   switch Course.certificateSerialNumber(course) {
   | Some(csn) =>
     <div
-      className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
-      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
+      className="max-w-3xl md:max-w-4xl 2xl:max-w-5xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
+      <div className="font-semibold text-xl mx-auto mt-2 leading-tight">
         {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
@@ -161,80 +142,17 @@ let issuedCertificate = course =>
   | None => React.null
   }
 
-let computeLevelUp = (
-  levelUpEligibility,
-  course,
-  studentLevel,
-  targetGroups,
-  targets,
-  statusOfTargets,
-) => {
-  let progressionBehavior = course |> Course.progressionBehavior
-  let currentLevelNumber = studentLevel |> Level.number
-
-  let statusOfCurrentMilestoneTargets = statusOfMilestoneTargets(
-    targetGroups,
-    targets,
-    studentLevel,
-    statusOfTargets,
-  )
-
-  switch levelUpEligibility {
-  | LevelUpEligibility.Eligible => Notice.LevelUp
-  | AtMaxLevel =>
-    TargetStatus.allComplete(statusOfCurrentMilestoneTargets) ? CourseComplete : Nothing
-  | NoMilestonesInLevel => Nothing
-  | CurrentLevelIncomplete =>
-    switch progressionBehavior {
-    | #Strict =>
-      let currentLevelAttempted = TargetStatus.allAttempted(statusOfCurrentMilestoneTargets)
-
-      if currentLevelAttempted {
-        let hasRejectedSubmissions = TargetStatus.anyRejected(statusOfCurrentMilestoneTargets)
-        LevelUpBlocked(currentLevelNumber, hasRejectedSubmissions)
-      } else {
-        Nothing
-      }
-    | #Unlimited => Nothing
-    | #Limited(_progressionLimit) => Nothing
-    }
-  | PreviousLevelIncomplete =>
-    switch progressionBehavior {
-    | #Strict
-    | #Unlimited =>
-      Nothing
-    | #Limited(progressionLimit) =>
-      let minimumLevelNumber = currentLevelNumber - progressionLimit
-
-      if minimumLevelNumber >= 1 {
-        LevelUpLimited(currentLevelNumber, minimumLevelNumber)
-      } else {
-        Nothing
-      }
-    }
-  | TeamMembersPending => TeamMembersPending
-  | DateLocked => Nothing
-  }
-}
-
-let computeNotice = (
-  studentLevel,
-  targetGroups,
-  targets,
-  statusOfTargets,
-  course,
-  student,
-  preview,
-  levelUpEligibility,
-) =>
+let computeNotice = (course, student, preview) =>
   if preview {
     Notice.Preview
   } else if Course.ended(course) {
     CourseEnded
   } else if Student.accessEnded(student) {
     AccessEnded
+  } else if Belt.Option.isSome(Student.completedAt(student)) {
+    CourseComplete
   } else {
-    computeLevelUp(levelUpEligibility, course, studentLevel, targetGroups, targets, statusOfTargets)
+    Nothing
   }
 
 let navigationLink = (direction, level, setState) => {
@@ -261,7 +179,7 @@ let navigationLink = (direction, level, setState) => {
   <button
     ariaLabel
     onClick={_ => setState(state => {...state, selectedLevelId: Level.id(level)})}
-    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-primary-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText->str} </span>
     <span className="mx-2 inline md:hidden"> {shortText->str} </span>
@@ -311,7 +229,6 @@ let make = (
   ~evaluationCriteria,
   ~preview,
   ~accessLockedLevels,
-  ~levelUpEligibility,
 ) => {
   let url = RescriptReactRouter.useUrl()
 
@@ -338,12 +255,6 @@ let make = (
 
   let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
   let studentLevelId = student |> Student.levelId
-
-  let studentLevel =
-    levels |> ArrayUtils.unsafeFind(
-      l => l |> Level.id == studentLevelId,
-      "Could not find studentLevel with ID " ++ studentLevelId,
-    )
 
   let targetLevelId = switch selectedTarget {
   | Some(target) =>
@@ -389,17 +300,7 @@ let make = (
       },
       latestSubmissions: submissions,
       statusOfTargets: statusOfTargets,
-      notice: computeNotice(
-        studentLevel,
-        targetGroups,
-        targets,
-        statusOfTargets,
-        course,
-        student,
-        preview,
-        levelUpEligibility,
-      ),
-      levelUpEligibility: levelUpEligibility,
+      notice: computeNotice(course, student, preview),
     }
   })
 
@@ -431,16 +332,7 @@ let make = (
       setState(state => {
         ...state,
         statusOfTargets: newStatusOfTargets,
-        notice: computeNotice(
-          studentLevel,
-          targetGroups,
-          targets,
-          newStatusOfTargets,
-          course,
-          student,
-          preview,
-          state.levelUpEligibility,
-        ),
+        notice: computeNotice(course, student, preview),
       })
     }
     None
@@ -449,7 +341,10 @@ let make = (
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
 
-  <div role="main" ariaLabel="Curriculum" className="bg-gray-50 pt-11 pb-8 -mt-7">
+  <div
+    role="main"
+    ariaLabel="Curriculum"
+    className="md:h-screen bg-gray-50 md:pt-18 pb-20 md:pb-8 overflow-y-auto">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =
@@ -475,73 +370,68 @@ let make = (
     | None => React.null
     }}
     {issuedCertificate(course)}
-    <CoursesCurriculum__NoticeManager notice=state.notice course />
-    {switch state.notice {
-    | LevelUp => React.null
-    | _anyOtherNotice =>
-      [
-        <div className="relative" key="curriculum-body">
-          <CoursesCurriculum__LevelSelector
-            levels
-            studentLevel
-            selectedLevel
-            preview
-            setSelectedLevelId={selectedLevelId =>
-              setState(state => {...state, selectedLevelId: selectedLevelId})}
-            showLevelZero=state.showLevelZero
-            setShowLevelZero={showLevelZero =>
-              setState(state => {...state, showLevelZero: showLevelZero})}
-            levelZero
-          />
-          {ReactUtils.nullUnless(
-            <div className="text-center mt-2 max-w-3xl mx-auto">
-              <a
-                className="btn btn-primary-ghost btn-small"
-                href={"/school/courses/" ++
-                Course.id(course) ++
-                "/curriculum?level=" ++
-                Level.number(currentLevel)->string_of_int}>
-                <i className="fas fa-pencil-alt" />
-                <span className="ms-2"> {t("edit_level_button")->str} </span>
-              </a>
-            </div>,
-            author,
-          )}
-          {currentLevel |> Level.isLocked && accessLockedLevels
-            ? <div
-                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
-                dangerouslySetInnerHTML={
-                  "__html": t(
-                    "level_locked_for_students_notice",
-                    ~variables=[("date", Level.unlockDateString(currentLevel))],
-                  ),
-                }
-              />
-            : React.null}
-          {Level.isUnlocked(currentLevel) || accessLockedLevels
-            ? targetGroupsInLevel == []
-                ? <div className="mx-auto py-10">
-                    <img className="max-w-xs md:max-w-sm mx-auto" src=levelEmptyImage />
-                    <p className="text-center font-semibold text-lg mt-4">
-                      {t("empty_level_content_notice") |> str}
-                    </p>
-                  </div>
-                : targetGroupsInLevel
-                  |> TargetGroup.sort
-                  |> Js.Array.map(targetGroup =>
-                    renderTargetGroup(
-                      targetGroup,
-                      targets,
-                      state.statusOfTargets,
-                      author,
-                      Course.id(course),
-                    )
+    <CoursesCurriculum__NoticeManager notice=state.notice />
+    {[
+      <div className="relative" key="curriculum-body">
+        <CoursesCurriculum__LevelSelector
+          levels
+          selectedLevel
+          preview
+          setSelectedLevelId={selectedLevelId =>
+            setState(state => {...state, selectedLevelId: selectedLevelId})}
+          showLevelZero=state.showLevelZero
+          setShowLevelZero={showLevelZero =>
+            setState(state => {...state, showLevelZero: showLevelZero})}
+          levelZero
+        />
+        {ReactUtils.nullUnless(
+          <div className="text-center mt-2 max-w-3xl mx-auto">
+            <a
+              className="btn btn-primary-ghost btn-small"
+              href={"/school/courses/" ++
+              Course.id(course) ++
+              "/curriculum?level=" ++
+              Level.number(currentLevel)->string_of_int}>
+              <i className="fas fa-pencil-alt" />
+              <span className="ms-2"> {t("edit_level_button")->str} </span>
+            </a>
+          </div>,
+          author,
+        )}
+        {currentLevel |> Level.isLocked && accessLockedLevels
+          ? <div
+              className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
+              dangerouslySetInnerHTML={
+                "__html": t(
+                  "level_locked_for_students_notice",
+                  ~variables=[("date", Level.unlockDateString(currentLevel))],
+                ),
+              }
+            />
+          : React.null}
+        {Level.isUnlocked(currentLevel) || accessLockedLevels
+          ? targetGroupsInLevel == []
+              ? <div className="mx-auto py-10">
+                  <img className="max-w-xs md:max-w-sm mx-auto" src=levelEmptyImage />
+                  <p className="text-center font-semibold text-lg mt-4">
+                    {t("empty_level_content_notice") |> str}
+                  </p>
+                </div>
+              : targetGroupsInLevel
+                |> TargetGroup.sort
+                |> Js.Array.map(targetGroup =>
+                  renderTargetGroup(
+                    targetGroup,
+                    targets,
+                    state.statusOfTargets,
+                    author,
+                    Course.id(course),
                   )
-                  |> React.array
-            : handleLockedLevel(currentLevel)}
-        </div>,
-        {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
-      ] |> React.array
-    }}
+                )
+                |> React.array
+          : handleLockedLevel(currentLevel)}
+      </div>,
+      {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
+    ] |> React.array}
   </div>
 }

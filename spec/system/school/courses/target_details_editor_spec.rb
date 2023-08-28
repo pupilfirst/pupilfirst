@@ -264,7 +264,7 @@ feature "Target Details Editor", js: true do
       expect(page).to have_text(target_2_l2.title)
       expect(page).to have_text(draft_target.title)
       expect(page).not_to have_text(archived_target.title)
-      expect(page).not_to have_text(target_1_l1.title)
+      expect(page).to have_text(target_1_l1.title)
 
       find("button[title='Select #{target_2_l2.title}']").click
       find("button[title='Select #{draft_target.title}']").click

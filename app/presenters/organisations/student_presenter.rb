@@ -17,19 +17,6 @@ module Organisations
       @student.cohort
     end
 
-    def level_progress_bar_props
-      {
-        levels:
-          course
-            .levels
-            .where("number > ?", 0)
-            .order(:number)
-            .map { |level| completed_level_ids.include?(level.id) },
-        currentLevelNumber: level.number,
-        courseCompleted: student.completed_at.present?
-      }
-    end
-
     def average_grades
       @average_grades ||=
         begin
@@ -119,6 +106,54 @@ module Organisations
       reviewed_submissions.except(:limit, :offset).failed.count
     end
 
+    def milestone_targets
+      @milestone_targets ||= course.targets.live.where(milestone: true)
+    end
+
+    def milestone_completion_status
+      ordered_milestone_targets = milestone_targets.order(:milestone_number)
+
+      status = {}
+
+      ordered_milestone_targets.each do |target|
+        status[target.milestone_number] = {
+          title: target.title,
+          completed:
+            student.timeline_events.where(target_id: target.id).passed.any?
+        }
+      end
+
+      status
+    end
+
+    def filters_in_url
+      params
+        .slice(:name, :email, :milestone, :course)
+        .permit(:name, :email, :milestone, :course)
+        .compact
+    end
+
+    def milestone_completion_stats
+      stats = {}
+
+      status = milestone_completion_status
+
+      stats[:completed_milestones_count] = status.values.count do |target|
+        target[:completed]
+      end
+
+      stats[:percentage] = (
+        (stats[:completed_milestones_count] / total_milestone_targets.to_f) *
+          100
+      ).round
+
+      stats
+    end
+
+    def total_milestone_targets
+      milestone_targets.count
+    end
+
     private
 
     def current_course_targets
@@ -127,14 +162,6 @@ module Organisations
 
     def course
       @course ||= student.course
-    end
-
-    def levels
-      @levels ||= course.levels.unlocked.where("number <= ?", level.number)
-    end
-
-    def level
-      @level ||= student.level
     end
 
     def team
@@ -147,46 +174,6 @@ module Organisations
           .latest_submissions
           .joins(:target)
           .where(targets: { id: current_course_targets })
-    end
-
-    def completed_level_ids
-      @completed_level_ids ||=
-        begin
-          required_targets_by_level =
-            Target
-              .live
-              .joins(:target_group)
-              .where(
-                target_groups: {
-                  milestone: true,
-                  level_id: levels.select(:id)
-                }
-              )
-              .distinct(:id)
-              .pluck(:id, "target_groups.level_id")
-              .each_with_object(
-                {}
-              ) do |(target_id, level_id), required_targets_by_level|
-                required_targets_by_level[level_id] ||= []
-                required_targets_by_level[level_id] << target_id
-              end
-
-          passed_target_ids =
-            TimelineEvent
-              .joins(:students)
-              .where(students: { id: student.id })
-              .where.not(passed_at: nil)
-              .distinct(:target_id)
-              .pluck(:target_id)
-
-          levels
-            .pluck(:id)
-            .select do |level_id|
-              (
-                (required_targets_by_level[level_id] || []) - passed_target_ids
-              ).empty?
-            end
-        end
     end
 
     def submissions_for_grades

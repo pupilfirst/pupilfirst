@@ -4,4 +4,6 @@ class Quiz < ApplicationRecord
   has_many :answer_options, through: :quiz_questions
 
   validates :title, presence: true
+
+  validates_with RateLimitValidator, limit: 5, scope: :target_id
 end

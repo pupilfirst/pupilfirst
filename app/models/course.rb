@@ -56,6 +56,7 @@ class Course < ApplicationRecord
   normalize_attribute :about, :processing_url
 
   validates :progression_limit, inclusion: 0..4
+  validates_with RateLimitValidator, limit: 100, scope: :school_id
 
   def short_name
     name[0..2].upcase.strip

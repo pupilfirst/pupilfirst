@@ -3,6 +3,7 @@ class RateLimitValidator < ActiveModel::Validator
     limit = options[:limit]
     scope = options[:scope]
     time_frame = options[:time_frame]
+
     query = record.class.where(scope => record.send(scope))
     query = query.where("created_at >= ?", Time.now - time_frame) if time_frame
     count = query.count

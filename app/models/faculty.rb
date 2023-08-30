@@ -66,6 +66,8 @@ class Faculty < ApplicationRecord
             },
             allow_blank: true
 
+  validates_with RateLimitValidator, limit: 1000, scope: :school_id
+
   delegate :email, :name, :title, :affiliation, :about, :avatar, to: :user
 
   normalize_attribute :connect_link

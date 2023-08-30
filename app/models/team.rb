@@ -5,4 +5,8 @@ class Team < ApplicationRecord
   has_many :students, dependent: :restrict_with_error
   scope :active, -> { (where(cohort: Cohort.active)) }
   scope :inactive, -> { (where.not(cohort: Cohort.active)) }
+  validates_with RateLimitValidator,
+                 limit: 1000,
+                 scope: :cohort_id,
+                 time_frame: 1.day
 end

@@ -26,6 +26,11 @@ class Student < ApplicationRecord
   scope :active, -> { access_active.not_dropped_out }
   scope :ended, -> { (where(cohort: Cohort.ended)) }
 
+  validates_with RateLimitValidator,
+                 limit: 5000,
+                 scope: :student_id,
+                 time_frame: 1.hour
+
   delegate :email,
            :name,
            :title,

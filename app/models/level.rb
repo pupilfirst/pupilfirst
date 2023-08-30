@@ -11,6 +11,8 @@ class Level < ApplicationRecord
 
   belongs_to :course
 
+  validates_with RateLimitValidator, limit: 25, scope: :course_id
+
   normalize_attribute :unlock_at
 
   def display_name

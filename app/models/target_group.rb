@@ -11,11 +11,13 @@ class TargetGroup < ApplicationRecord
 
   validate :must_be_safe_to_archive
 
+  validates_with RateLimitValidator, limit: 25, scope: :level_id
+
   def must_be_safe_to_archive
     return unless archived_changed? && archived?
     return if safe_to_archive
 
-    errors.add(:archived, 'cannot be set unsafely')
+    errors.add(:archived, "cannot be set unsafely")
   end
 
   def display_name

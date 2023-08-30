@@ -907,7 +907,6 @@ ActiveRecord::Schema.define(version: 2023_08_30_115850) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "students", "cohorts"
-  add_foreign_key "students", "levels"
   add_foreign_key "students", "teams"
   add_foreign_key "students", "users"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"

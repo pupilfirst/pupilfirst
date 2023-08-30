@@ -144,6 +144,11 @@ module LinkEditor = {
             <School__InputGroupError
               active={!StringUtils.isPresent(state.title)} message={t("cant_empty_message")}
             />
+            <School__InputGroupError
+              active={state.title->String.length == 24}
+              message={t("reached_max_title_length")}
+              warn={true}
+            />
           </div>
           <FaIcon classes="fas fa-link mx-2" />
         </>
@@ -164,7 +169,7 @@ module LinkEditor = {
             send(UpdateUrl(value))
           }}
         />
-        <School__InputGroupError active={state.error} message="Invalid Url" />
+        <School__InputGroupError active={state.error} message={t("invalid_url")} />
       </div>
     </>
   }

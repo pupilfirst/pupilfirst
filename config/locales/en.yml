@@ -1333,9 +1333,11 @@ en:
       updated_notification: Images have been updated successfully.
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
-      cant_empty_message: can't be empty
+      cant_empty_message: Can't be empty
+      invalid_url: Invalid Url
       move_down: Move Down
       move_up: Move Up
+      reached_max_title_length: Reached maximum length of 24 characters
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...
@@ -1353,6 +1355,7 @@ en:
       location_link: Location of Link
       manage_links: Manage custom links
       no_custom_links: There are no custom links here. Add some?
+      reached_max_title_length: reached maximum length of 24 characters
       show_header_title: View and edit header links
       sitemap_links: Current Sitemap Links
       social: Social

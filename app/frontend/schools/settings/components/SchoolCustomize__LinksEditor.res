@@ -334,6 +334,11 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
               <School__InputGroupError
                 message={t("cant_empty_message")} active=state.titleInvalid
               />
+              <School__InputGroupError
+                active={state.title->String.length == 24}
+                message={t("reached_max_title_length")}
+                warn={true}
+              />
             </div>
           } else {
             React.null

@@ -19,7 +19,7 @@
               <% presenter.links.each do |link| %>
                 <%= link_to send("#{link}_course_path", @course), class: "flex space-y-1 flex-col flex-1 rounded-md items-center py-2 px-0.5 text-gray-800 font-semibold hover:text-primary-500 hover:bg-gray-50 #{request.path == send("#{link}_course_path", @course) ? "text-primary-500 bg-primary-50" : ""}", title: link.capitalize do %>
                   <span class="text-sm"> <i class="<%= presenter.icon(link) %>"></i> </span>
-                  <p class="text-xs"><%= link.capitalize %></p>
+                  <p class="text-xs"><%= t(".#{link}") %></p>
                 <% end %>
               <% end %>
             </div>
@@ -45,7 +45,7 @@
           <% presenter.links.each do |link| %>
             <%= link_to send("#{link}_course_path", @course), class: "app-router-navbar__primary-nav-link py-3 px-2 mb-1 #{request.path == send("#{link}_course_path", @course) ? "app-router-navbar__primary-nav-link--active" : ""}", title: link.capitalize do %>
               <span> <i class="<%= presenter.icon(link) %>"></i> </span>
-              <div class="ps-3 "><%= link.capitalize %></div>
+              <div class="ps-3 "><%= t(".#{link}") %></div>
             <% end %>
           <% end %>
         </div>

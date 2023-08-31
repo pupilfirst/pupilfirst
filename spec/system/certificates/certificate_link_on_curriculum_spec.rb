@@ -13,7 +13,7 @@ feature "Certificate link on curriculum", js: true do
   end
   let(:level_1) { create :level, :one, course: course }
   let!(:student) { create :student, cohort: course.cohorts.first, user: user }
-  let(:target_group) { create :target_group, level: level_1, milestone: true }
+  let(:target_group) { create :target_group, level: level_1 }
   let!(:target) do
     create :target, :with_markdown, :team, target_group: target_group
   end

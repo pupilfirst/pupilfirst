@@ -69,12 +69,16 @@ Rails.application.config.content_security_policy do |policy|
 
   def frame_sources
     [
-      'https://www.google.com', youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
+      'https://www.google.com', youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame], scribehow_csp[:frame]
     ]
   end
 
   def media_sources
     [*resource_csp[:media]]
+  end
+
+  def scribehow_csp
+    { frame: 'https://scribehow.com' }
   end
 
   policy.default_src :none

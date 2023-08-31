@@ -11,7 +11,7 @@ describe Users::InitializeSchoolService do
 
   let(:level_one) { create :level, :one, course: course }
   let(:target_group_l1_1) do
-    create :target_group, level: level_one, milestone: true
+    create :target_group, level: level_one
   end
   let!(:target_l1_1_1) do
     create :target, :with_content, :for_team, target_group: target_group_l1_1

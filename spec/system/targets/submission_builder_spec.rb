@@ -24,9 +24,7 @@ feature "Submission Builder", js: true do
   end
   let!(:level_1) { create :level, :one, course: course }
   let!(:student) { create :student, cohort: cohort }
-  let!(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
-  end
+  let!(:target_group_l1) { create :target_group, level: level_1 }
   let!(:target) do
     create :target,
            :with_content,

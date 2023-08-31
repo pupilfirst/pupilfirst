@@ -690,8 +690,8 @@ let badgeColorClasses = statusColor => {
 let gradeBadgeClasses = (statusColor, status, badge) =>
   (
     badge
-      ? "px-2 py-2 space-x-2 flex justify-center border rounded items-center "
-      : "w-12 h-10 p-1 me-2 me-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
+      ? "px-2 py-2 flex justify-center border rounded items-center "
+      : "w-12 h-10 p-1 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
   ) ++
   badgeColorClasses(statusColor) ++
   switch status {
@@ -787,7 +787,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
       | (_, Grading)
       | (_, Ungraded) => React.null
       }}
-      <div className="w-full md:w-26 flex flex-row md:flex-col md:items-center justify-center">
+      <div className="w-full md:w-26 flex gap-1 flex-row md:flex-col md:items-center justify-center">
         <div className={gradeBadgeClasses(color, status, false)}>
           {switch status {
           | Graded(passed) =>
@@ -800,7 +800,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
           }}
         </div>
         <p
-          className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 ${badgeColorClasses(
+          className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold ${badgeColorClasses(
               color,
             )} ${textColor(color)}`}>
           {text->str}
@@ -1082,7 +1082,7 @@ let pageTitle = (number, submissionDetails) => {
   t(
     ~variables=[
       ("submission_number", string_of_int(number)),
-      ("level_number", SubmissionDetails.levelNumber(submissionDetails)),
+      ("target_title", SubmissionDetails.targetTitle(submissionDetails)),
       ("name", studentOrTeamName),
     ],
     "page_title",

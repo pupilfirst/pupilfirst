@@ -22,25 +22,13 @@ feature "Student's view of Course Curriculum", js: true do
   end
 
   # Target group we're interested in. Create milestone
-  let!(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
-  end
-  let!(:target_group_l2) do
-    create :target_group, level: level_2, milestone: true
-  end
-  let!(:target_group_l3) do
-    create :target_group, level: level_3, milestone: true
-  end
-  let!(:target_group_l4_1) do
-    create :target_group, level: level_4, milestone: true
-  end
+  let!(:target_group_l1) { create :target_group, level: level_1 }
+  let!(:target_group_l2) { create :target_group, level: level_2 }
+  let!(:target_group_l3) { create :target_group, level: level_3 }
+  let!(:target_group_l4_1) { create :target_group, level: level_4 }
   let!(:target_group_l4_2) { create :target_group, level: level_4 }
-  let!(:target_group_l5) do
-    create :target_group, level: level_5, milestone: true
-  end
-  let!(:target_group_l6) do
-    create :target_group, level: locked_level_6, milestone: true
-  end
+  let!(:target_group_l5) { create :target_group, level: level_5 }
+  let!(:target_group_l6) { create :target_group, level: locked_level_6 }
 
   # Individual targets of different types.
   let!(:completed_target_l1) do
@@ -405,7 +393,6 @@ feature "Student's view of Course Curriculum", js: true do
       create :target_group,
              :archived,
              level: level_4,
-             milestone: true,
              description: Faker::Lorem.sentence
     end
 

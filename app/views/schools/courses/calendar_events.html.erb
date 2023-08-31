@@ -7,7 +7,7 @@
       <div class="flex items-end justify-between gap-2">
         <h1 class="text-xl font-semibold"> <%= t(".calendar") %>  </h1>
         <div>
-          <%= link_to new_school_course_calendar_event_path(@course), class: "btn btn-primary block" do %>
+          <%= link_to new_school_course_calendar_event_path(@course, calendar_id: params[:calendar_id]), class: "btn btn-primary block" do %>
             <i class="if i-plus-regular if-fw" ></i>
             <%= t(".add_event_button") %>
           <% end %>
@@ -23,7 +23,7 @@
               <p class="text-lg font-semibold "><%= t(".calendars") %> </p>
               <a
                 class="block btn btn-default btn-small"
-                href=<%= new_school_course_calendar_path(@course)%>>
+                href="<%= new_school_course_calendar_path(@course, calendar_id: params[:calendar_id])%>">
                 <i class="if i-plus-regular if-fw" ></i>
                 <span><%= t(".add_calendar_button") %> </span>
               </a>
@@ -33,7 +33,7 @@
                 <span class="flex items-center gap-2 font-medium">
                   <%= calendar.name %>
                 </span>
-                <a href=<%= edit_school_course_calendar_path(@course, calendar) %> class="bg-gray-50 p-2 rounded-md hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
+                <a href="<%= edit_school_course_calendar_path(@course, calendar) %>" class="bg-gray-50 p-2 rounded-md hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition">
                   <i class="if i-edit-regular if-fw text-base" ></i>
                 </a>
               </div>

@@ -145,6 +145,7 @@ feature "Cohorts", js: true do
       visit cohort_path(cohort_1)
 
       expect(page).to have_text("1/36")
+      expect(page).to have_text("3%")
 
       visit students_cohort_path(cohort_1)
       expect(page).to have_current_path(students_cohort_path(cohort_1))
@@ -162,7 +163,7 @@ feature "Cohorts", js: true do
       expect(page).to have_current_path(student_report_path(student_1))
 
       expect(page).to have_text(student_1.name)
-      expect(page).to have_text("Milestone targets")
+      expect(page).to have_text("Milestone Targets")
     end
 
     scenario "filters the students by email" do
@@ -241,6 +242,7 @@ feature "Cohorts", js: true do
         "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(student_2.name)
+      expect(page).to have_text(student_1.name)
     end
 
     scenario "filters the students by course completion" do

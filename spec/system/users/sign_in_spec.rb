@@ -30,14 +30,19 @@ feature "User signing in by supplying email address", js: true do
 
         expect(page).to have_content("We've sent you a magic link!")
 
+        # check email
+        open_email(user.email)
+        expect(current_email.subject).to eq("Log in to #{school.name}")
+
         click_link "Sign In"
         click_link "Continue with email"
         fill_in "Email Address", with: user.email
         click_button "Email me a link to sign in"
 
-        expect(page).to have_content(
-          "An email was sent less than two minutes ago. Please wait for a few minutes before trying again"
-        )
+        expect(page).to have_content("We've sent you a magic link!")
+
+        # Confirm no email is sent
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
       end
     end
 
@@ -67,8 +72,11 @@ feature "User signing in by supplying email address", js: true do
         click_button "Request password reset"
 
         expect(page).to have_content(
-          "An email was sent less than two minutes ago. Please wait for a few minutes before trying again"
+          "We've sent you a link to reset your password"
         )
+
+        # Confirm no email is sent
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
       end
     end
 
@@ -135,7 +143,7 @@ feature "User signing in by supplying email address", js: true do
       click_button "Email me a link to sign in"
 
       expect(page).to have_content(
-        "Could not find user with this email. Please check the email that you entered"
+        "If an account is associated with this email address, a one-time link will be sent"
       )
     end
 
@@ -148,7 +156,7 @@ feature "User signing in by supplying email address", js: true do
       click_button "Request password reset"
 
       expect(page).to have_content(
-        "Could not find user with this email. Please check the email that you entered"
+        "If your email address is associated with an account, you'll find instructions to set a new password in your inbox"
       )
     end
   end

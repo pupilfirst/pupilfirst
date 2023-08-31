@@ -459,9 +459,9 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("There are 3")
-        expect(b).to include("new submissions to review")
-        expect(b).to include("in some courses")
+        expect(b).to include(
+          "There are 3 new submissions to review in the courses you're coaching"
+        )
 
         # The email should include community updates, but only
         # from the courses where the coach is enrolled.
@@ -469,7 +469,7 @@ describe DailyDigestService do
         expect(b).not_to include(community_2.name)
       end
 
-      it "sends team coaches the number submissions of those assigned to them for review" do
+      it "sends team coaches the number submissions from students assigned to them" do
         subject.execute
 
         open_email(team_coach.user.email)
@@ -478,8 +478,8 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("(2 assigned to you)")
-        expect(b).not_to include("(none of which are assigned to you)")
+        expect(b).to include("(2 from students assigned to you)")
+        expect(b).not_to include("(0 from students assigned to you)")
       end
 
       it "only sends community updates where coach is enrolled to a linked course" do
@@ -492,6 +492,23 @@ describe DailyDigestService do
         expect(b).not_to include(course_1.name)
         expect(b).not_to include(community_1.name)
         expect(b).to include(community_2.name)
+      end
+
+      context "when there is only one submission pending review" do
+        before do
+          submission_pending_2.destroy!
+          submission_pending_3.destroy!
+        end
+
+        it "mentions that there is only one submission to review" do
+          subject.execute
+          open_email(coach.user.email)
+          b = sanitize_html(current_email.body)
+
+          expect(b).to include(
+            "There is 1 new submission to review in a course you're coaching"
+          )
+        end
       end
     end
 

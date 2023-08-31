@@ -3,6 +3,7 @@
 open CoursesStudents__Types
 let str = React.string
 let t = I18n.t(~scope="components.CoursesStudents__StudentOverlay")
+let ts = I18n.t(~scope="shared")
 
 type selectedTab =
   | Notes
@@ -31,7 +32,6 @@ let closeOverlayLink = student => {
 }
 
 module UserDetailsFragment = UserDetails.Fragment
-module LevelFragment = Shared__Level.Fragment
 module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 module UserFragment = User.Fragment
@@ -58,9 +58,6 @@ module StudentDetailsQuery = %graphql(`
           droppedOutAt
           course {
             id
-            levels {
-              ...LevelFragment
-            }
           }
         }
         totalTargets
@@ -160,7 +157,6 @@ let getStudentDetails = (studentId, setState) => {
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
       ~courseId=response.studentDetails.student.course.id,
-      ~levels=response.studentDetails.student.course.levels->Js.Array2.map(Level.makeFromFragment),
       ~student=StudentInfo.make(
         ~id=s.id,
         ~taggings=s.taggings,
@@ -265,7 +261,10 @@ let milestoneTargetsCompletionStats = studentDetails => {
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {milestoneTargetCompletionPercentage ++ "% completed" |> str}
+      {ts(
+        "percentage_completed",
+        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
+      )->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -375,16 +374,6 @@ let showSocialLinks = socialLinks =>
 
 let setSelectedTab = (selectedTab, setState) =>
   setState(state => {...state, selectedTab: selectedTab})
-
-let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
-  let reached = levelNumber <= currentLevelNumber ? "student-overlay__student-level--reached" : ""
-
-  let current = levelNumber == currentLevelNumber ? " student-overlay__student-level--current" : ""
-
-  let completed = levelCompleted ? " student-overlay__student-level--completed" : ""
-
-  reached ++ (current ++ completed)
-}
 
 let addNote = (setState, studentDetails, onAddCoachNotesCB, note) => {
   onAddCoachNotesCB()
@@ -594,7 +583,7 @@ let make = (~studentId, ~userId) => {
             {otherTeamMembers(setState, studentId, studentDetails)}
             <div className="mt-4">
               <div className="justify-between mt-8 flex space-x-2">
-                <p className="text-sm font-semibold"> {"Milestone targets"->str} </p>
+                <p className="text-sm font-semibold"> {t("milestone_targets")->str} </p>
                 {milestoneTargetsCompletionStats(studentDetails)}
               </div>
               <div className="space-y-2">
@@ -627,7 +616,7 @@ let make = (~studentId, ~userId) => {
                       </div>
                       <div>
                         <p className="text-sm font-semibold">
-                          {("M" ++
+                          {(ts("m") ++
                           string_of_int(
                             CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
                           ))->str}

@@ -1108,8 +1108,9 @@ let make = (
                 </HelpIcon>
                 <div className="ms-6 mt-4">
                   <a
-                    href={`/school/targets/${Target.id(target)}/action`} className="btn btn-subtle">
-                    <i className="fas fa-external-link-alt text-xs mr-2" />
+                    href={`/school/targets/${Target.id(target)}/action`}
+                    className="btn btn-subtle flex max-w-min gap-3">
+                    <PfIcon className="if i-external-link-light if-fw" />
                     {t("github_action.button_text")->str}
                   </a>
                 </div>

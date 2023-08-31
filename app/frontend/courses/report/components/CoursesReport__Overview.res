@@ -3,6 +3,7 @@
 open CoursesReport__Types
 let str = React.string
 let t = I18n.t(~scope="components.CoursesReport__Overview")
+let ts = I18n.t(~scope="shared")
 
 let avatar = (avatarUrl, name) => {
   let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
@@ -125,7 +126,10 @@ let milestoneTargetsCompletionStatus = overview => {
       {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
         ->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {milestoneTargetCompletionPercentage ++ "% completed" |> str}
+      {ts(
+        "percentage_completed",
+        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
+      )->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -195,67 +199,6 @@ let averageGradeCharts = (
   })
   |> React.array
 
-let studentLevelClasses = (levelNumber, levelCompleted, currentLevelNumber) => {
-  let reached =
-    levelNumber <= currentLevelNumber ? "courses-report-overview__student-level--reached" : ""
-
-  let current =
-    levelNumber == currentLevelNumber ? " courses-report-overview__student-level--current" : ""
-
-  let completed = levelCompleted ? " courses-report-overview__student-level--completed" : ""
-
-  reached ++ (current ++ completed)
-}
-
-let levelProgressBar = (levelId, levels, levelsCompleted) => {
-  let applicableLevels = levels |> Js.Array.filter(level => Level.number(level) != 0)
-
-  let courseCompleted =
-    applicableLevels |> Array.for_all(level => levelsCompleted |> Array.mem(level |> Level.id))
-
-  let currentLevelNumber =
-    applicableLevels
-    |> ArrayUtils.unsafeFind(
-      level => Level.id(level) == levelId,
-      "Unable to find level with id" ++ (levelId ++ "in CoursesReport__Overview"),
-    )
-    |> Level.number
-
-  <div className="mt-8">
-    <div className="flex justify-between items-end">
-      <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
-      {courseCompleted
-        ? <p className="text-green-600 font-semibold">
-            {`🎉` |> str} <span className="text-xs ms-px"> {t("course_completed") |> str} </span>
-          </p>
-        : React.null}
-    </div>
-    <div className="h-14 flex items-center shadow bg-white rounded-lg px-4 py-2 mt-1">
-      <ul
-        className={"courses-report-overview__student-level-progress flex w-full " ++ (
-          courseCompleted ? "courses-report-overview__student-level-progress--completed" : ""
-        )}>
-        {applicableLevels
-        |> Level.sort
-        |> Array.map(level => {
-          let levelNumber = level |> Level.number
-          let levelCompleted = levelsCompleted |> Array.mem(level |> Level.id)
-
-          <li
-            key={level |> Level.id}
-            className={"flex-1 courses-report-overview__student-level " ++
-            studentLevelClasses(levelNumber, levelCompleted, currentLevelNumber)}>
-            <span className="courses-report-overview__student-level-count">
-              {levelNumber |> string_of_int |> str}
-            </span>
-          </li>
-        })
-        |> React.array}
-      </ul>
-    </div>
-  </div>
-}
-
 @react.component
 let make = (~overviewData, ~coaches) =>
   <div className="max-w-3xl mx-auto">
@@ -309,7 +252,7 @@ let make = (~overviewData, ~coaches) =>
                   className="flex gap-2 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold">
-                      {("M" ++
+                      {(ts("m") ++
                       string_of_int(
                         CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
                       ))->str}

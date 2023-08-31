@@ -392,8 +392,41 @@ feature "Automatic issuance of certificates", js: true do
 
       expect(page).to have_text("Target has been marked as complete")
 
-      # At least one milestone is required in the final level for the issuance of certificates.
+      # At least one milestone is required for the issuance of certificates.
       expect(IssuedCertificate.count).to eq(0)
+    end
+  end
+
+  context "when there are no milestone target for level 2" do
+    let!(:target_l2) do
+      create :target,
+             :with_markdown,
+             :team,
+             target_group: target_group_l2,
+             milestone: false
+    end
+
+    scenario "students receive certificate whenver all milestone targets are completed" do
+      sign_in_user student_1.user, referrer: target_path(target_l1)
+
+      click_button "Mark As Complete"
+
+      expect(page).to have_text("Target has been marked as complete")
+
+      dismiss_notification
+      click_button "Close"
+
+      # Certificate is issued whenever all milestone targets are completed
+      expect(student_1.user.issued_certificates.count).to eq(1)
+
+      sign_in_user student_1.user, referrer: target_path(target_l2)
+
+      click_button "Mark As Complete"
+
+      expect(page).to have_text("Target has been marked as complete")
+
+      # Completing a non-milestone target in level 2 makes no difference
+      expect(student_1.user.issued_certificates.count).to eq(1)
     end
   end
 

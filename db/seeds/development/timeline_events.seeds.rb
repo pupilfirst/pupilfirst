@@ -22,7 +22,7 @@ after "development:students", "development:targets", "development:faculty" do
     {
       kind: "link",
       title: "A second question, to test multiple questions",
-      result: "https://www.pupilfirst.com",
+      result: "https://lms.pupilfirst.org",
       status: "noAnswer"
     }
   ]

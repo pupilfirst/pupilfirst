@@ -251,7 +251,7 @@ en:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin
@@ -368,6 +368,7 @@ en:
         limited:
           description_end: without getting submissions reviewed.
           description_start: Students can submit
+          four_times: four times
           once: once
           thrice: thrice
           four_times: four times
@@ -556,8 +557,6 @@ en:
       course_ended_title: Course Ended
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
-      team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
-      team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
       close_button: Close
       completion_tab_complete: Complete
@@ -652,7 +651,6 @@ en:
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
       incomplete_targets: "Incomplete: %{targetsCount}"
-      level_progress: Level Progress
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
@@ -742,7 +740,7 @@ en:
       hide_test_report_button: Hide Test Report
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -790,13 +788,11 @@ en:
       filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:
         assigned_to: "Assigned To: "
-        level: "Level: "
         personal_coach: "Personal Coach: "
         reviewed_by: "Reviewed By: "
         target: "Target: "
       inactive_students: Inactive Students
       include: Include
-      level: Level
       me: Me
       name_or_email: Name or Email
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
@@ -809,7 +805,6 @@ en:
       reviewed_by: Reviewed By
       search:
         assigned_to: "assigned to:"
-        level: "level:"
         personal_coach: "personal coach:"
         reviewed_by: "reviewed by:"
         status: "status: "
@@ -827,7 +822,6 @@ en:
       completed: Completed
       created_at: on %{created_at}.
       feedback_sent: Feedback Sent
-      level: "Level "
       no_submissions_found: No submissions found
       rejected: Rejected
       submitted_by: "Submitted by "
@@ -868,7 +862,7 @@ en:
       close_student_report: Close student report
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
-      level_progress: Level Progress
+      milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
@@ -881,12 +875,6 @@ en:
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
-    CoursesStudents__StudentsList:
-      last_seen: Last seen %{time_string}
-      no_last_seen: This student has never signed in
-      no_students: No students to show
-      personal_coaches: Personal Coaches
-      team_coaches: Team Coaches
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
@@ -1146,9 +1134,6 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -1797,8 +1782,19 @@ en:
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
       avatar_uploaded_notification: Avatar uploaded successfully.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
       cancel: Cancel
       change_password: Change your current password
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Change photo
       community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
@@ -1808,6 +1804,7 @@ en:
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
       current_password: Current password
+      current_password_placeholder: Type current password
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
@@ -2019,6 +2016,13 @@ en:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2131,17 +2135,20 @@ en:
         subject: Account deleted successfully from %{school_name}
       confirm_email_update:
         body:
-          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+          html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
-          assigned: (%{stats} assigned to you)
-          assigned_none: (none of which are assigned to you)
+          assigned:
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
-          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in some courses that you are a coach in:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "Older, popular topics that have seen new activity:"
           replies: replies
           views: views
@@ -2173,11 +2180,11 @@ en:
         body:
           link_to: click here
           main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
-        subject: account recovery
+        subject: password reset
   maintenance:
-    title: Maintenance Mode
     heading: We'll be back soon!
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2283,6 +2290,10 @@ en:
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2398,6 +2409,7 @@ en:
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2434,6 +2446,7 @@ en:
         filter_placeholder: Click to see options
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2656,7 +2669,7 @@ en:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.
       overview_link: Overview
-      student_distribution_milestone: Student Distribution by Milestone Completion
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
       students_completed: Students Completed
       students_link: Students
       total_students: Total Students
@@ -2692,10 +2705,10 @@ en:
     load_more: Load More...
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    m: M
     my_org: My Org
     name: Name
     name_email: Name or Email
-    no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None
     note: "Note:"
     notes: Notes
@@ -2722,6 +2735,7 @@ en:
       truncate: "&hellip;"
     pass: Pass
     percentage: Percentage
+    percentage_completed: "%{percentage}% completed"
     post: Post
     preferred_name: Preferred name
     processing: Processing
@@ -2828,14 +2842,14 @@ en:
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:
-          description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: We've sent you a magic link!
-          notice: This link will work only once.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Magic link is on its way!
         reset_password_link:
-          description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: We've sent you a link to reset your password!
-          notice: This link will work only once.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Confirm your request
       new:
         already_signed: You are already signed in.
@@ -2874,6 +2888,7 @@ en:
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
+      invalid_password_error: The password you entered is incorrect. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: Cannot update inactive student submissions.

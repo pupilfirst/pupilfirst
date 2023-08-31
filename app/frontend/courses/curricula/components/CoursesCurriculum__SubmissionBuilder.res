@@ -166,7 +166,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
           )
           |> React.array}
       <div className={buttonClasses(state.checklist)}>
-        <Tooltip tip={tooltipText(preview)} position=#Left disabled={!isButtonDisabled(state)}>
+        <Tooltip tip={tooltipText(preview)} position=#Start disabled={!isButtonDisabled(state)}>
           <button
             onClick={submit(state, send, target, targetDetails, addSubmissionCB)}
             disabled={isButtonDisabled(state) || preview}

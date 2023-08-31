@@ -14,15 +14,11 @@ describe Courses::CloneService do
   let(:level_two) { create :level, :two, course: course }
   let(:target_group_l0) { create :target_group, level: level_zero }
 
-  let(:target_group_l1_1) do
-    create :target_group, level: level_one, milestone: true
-  end
+  let(:target_group_l1_1) { create :target_group, level: level_one }
 
   let(:target_group_l1_2) { create :target_group, level: level_one }
 
-  let(:target_group_l2) do
-    create :target_group, level: level_two, milestone: true
-  end
+  let(:target_group_l2) { create :target_group, level: level_two }
 
   let!(:target_l0) do
     create :target, :with_content, :for_team, target_group: target_group_l0

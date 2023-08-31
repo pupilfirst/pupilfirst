@@ -41,7 +41,7 @@ let make = (~post, ~users) => {
           {user->Belt.Option.mapWithDefault("Unknown", user => User.name(user)) |> str}
         </span>
       </div>
-      <Tooltip tip position=#Left>
+      <Tooltip tip position=#Start>
         <div
           ariaLabel={t("navigate_post") ++ " " ++ Post.id(post)}
           onClick={_ => navigateToPost(post |> Post.id)}

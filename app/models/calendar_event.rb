@@ -6,7 +6,7 @@ class CalendarEvent < ApplicationRecord
   validate :ends_at_is_after_starts_at
   validates_with RateLimitValidator,
                  limit: 100,
-                 scope: :calender_id,
+                 scope: :calendar_id,
                  time_frame: 1.day
 
   def ends_at_is_after_starts_at

@@ -8,7 +8,7 @@ class CourseExport < ApplicationRecord
   has_one_attached :file
 
   validates_with RateLimitValidator,
-                 limit: 10,
+                 limit: 25,
                  scope: :course_id,
                  time_frame: 1.hour
 

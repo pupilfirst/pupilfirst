@@ -2516,7 +2516,6 @@ en:
           continue_with_google: Continue with Google
         page_title:
           title: Sign In
-      reset_password: "Reset Password | %{title}"
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -2873,6 +2872,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

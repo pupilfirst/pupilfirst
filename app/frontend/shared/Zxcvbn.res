@@ -25,12 +25,16 @@ let label = t => {
   }
 }
 
-let color = t => {
-  switch t.strength {
-  | Weak => "red"
-  | Fair => "orange"
-  | Medium => "yellow"
-  | Strong => "green"
+let colorClass = (t, score) => {
+  if t.score >= score {
+    switch t.strength {
+    | Weak => "bg-red-500"
+    | Fair => "bg-orange-500"
+    | Medium => "bg-yellow-500"
+    | Strong => "bg-green-500"
+    }
+  } else {
+    "bg-gray-500"
   }
 }
 
@@ -38,15 +42,24 @@ let suggestions = t => t.suggestions
 let score = t => t.score
 
 let make = (~userInputs=[], ~password) => {
-  let zxcvbnResponse = zxcvbn(password, userInputs)
-  let score = zxcvbnResponse.score
-  let suggestions = zxcvbnResponse.feedback.suggestions
-  let strength = switch score {
-  | 0 | 1 => Weak
-  | 2 => Fair
-  | 3 => Medium
-  | 4 => Strong
-  | unexpectedScore => raise(UnexpectedZxcvbnScore(unexpectedScore))
+  if password->Js.String2.length > 0 {
+    let formDictionary =
+      userInputs->Js.Array2.map(val =>
+        val->Js.String2.split(" ")->Js.Array2.concat(val->Js.String2.split("@"))
+      )
+    let zxcvbnResponse = zxcvbn(password, []->Js.Array2.concatMany(formDictionary))
+    let score = zxcvbnResponse.score
+    let suggestions = zxcvbnResponse.feedback.suggestions
+    let strength = switch score {
+    | 0 | 1 => Weak
+    | 2 => Fair
+    | 3 => Medium
+    | 4 => Strong
+    | unexpectedScore => raise(UnexpectedZxcvbnScore(unexpectedScore))
+    }
+
+    {score: score == 0 ? score + 1 : score, strength: strength, suggestions: suggestions}->Some
+  } else {
+    None
   }
-  {score: score, strength: strength, suggestions: suggestions}
 }

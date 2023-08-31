@@ -28,7 +28,6 @@ type state = {
   initiatePasswordReset: bool,
   saving: bool,
   dirty: bool,
-  newPasswordAnalysis: option<Zxcvbn.t>,
 }
 
 type action =
@@ -39,7 +38,7 @@ type action =
   | SetDisableUpdateEmail(bool)
   | UpdateLocale(string)
   | UpdateCurrentPassword(string)
-  | UpdateNewPassword(string, string)
+  | UpdateNewPassword(string)
   | UpdateNewPassWordConfirm(string)
   | UpdateEmailForDeletion(string)
   | UpdateDailyDigest(bool)
@@ -73,25 +72,10 @@ let reducer = (state, action) =>
       currentPassword: currentPassword,
       dirty: true,
     }
-  | UpdateNewPassword(newPassword, schoolName) => {
-      let formDictionary = Js.Array2.concat(
-        state.name->Js.String2.split(" "),
-        state.email->Js.String2.split("@"),
-      )
-      let newPasswordAnalysis = if StringUtils.isPresent(newPassword) {
-        Zxcvbn.make(
-          ~password=newPassword,
-          ~userInputs=[state.name, state.email, schoolName]->Js.Array2.concat(formDictionary),
-        )->Some
-      } else {
-        None
-      }
-      {
-        ...state,
-        newPassword: newPassword,
-        dirty: true,
-        newPasswordAnalysis: newPasswordAnalysis,
-      }
+  | UpdateNewPassword(newPassword) => {
+      ...state,
+      newPassword: newPassword,
+      dirty: true,
     }
   | UpdateNewPassWordConfirm(confirmPassword) => {
       ...state,
@@ -442,7 +426,6 @@ let make = (
     deletingAccount: false,
     avatarUploadError: None,
     dirty: false,
-    newPasswordAnalysis: None,
     passwordForEmailChange: "",
     initiatePasswordReset: false,
   }
@@ -631,11 +614,14 @@ let make = (
                       id="new_password"
                       value=state.newPassword
                       onChange={event =>
-                        send(UpdateNewPassword(ReactEvent.Form.target(event)["value"], schoolName))}
+                        send(UpdateNewPassword(ReactEvent.Form.target(event)["value"]))}
                       className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                       placeholder={t("new_password_placeholder")}
                     />
-                    {switch state.newPasswordAnalysis {
+                    {switch Zxcvbn.make(
+                      ~password=state.newPassword,
+                      ~userInputs=[state.name, state.email, schoolName],
+                    ) {
                     | None => <div className="h-6" />
                     | Some(zxcvbn) =>
                       <div className="h-6">
@@ -644,39 +630,32 @@ let make = (
                             {ts("password_strength")->str}
                           </p>
                           <div className="flex items-center gap-1 mt-1">
-                            <span className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
+                            <span
+                              key="0"
+                              className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
                               {zxcvbn->Zxcvbn.label->str}
                             </span>
-                            <span
-                              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) >= 0
-                                  ? Zxcvbn.color(zxcvbn)
-                                  : "gray"}-500 w-10`}
-                            />
-                            <span
-                              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 1
-                                  ? Zxcvbn.color(zxcvbn)
-                                  : "gray"}-500 w-10`}
-                            />
-                            <span
-                              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 2
-                                  ? Zxcvbn.color(zxcvbn)
-                                  : "gray"}-500 w-10`}
-                            />
-                            <span
-                              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 3
-                                  ? Zxcvbn.color(zxcvbn)
-                                  : "gray"}-500 w-10`}
-                            />
+                            {[1, 2, 3, 4]
+                            ->Js.Array2.map(score =>
+                              <span
+                                key={score->string_of_int}
+                                className={`rounded-md h-1 ${zxcvbn->Zxcvbn.colorClass(
+                                    score,
+                                  )} w-10`}
+                              />
+                            )
+                            ->React.array}
                           </div>
                         </div>
                         <div>
                           <ul className="text-yellow-900 text-[10px]">
-                            {zxcvbn->Zxcvbn.suggestions->ArrayUtils.isNotEmpty
-                              ? <li>
-                                  <PfIcon className="if i-info-light if-fw" />
-                                  {Zxcvbn.suggestions(zxcvbn)[0]->str}
-                                </li>
-                              : React.null}
+                            {ReactUtils.nullIf(
+                              <li>
+                                <PfIcon className="if i-info-light if-fw" />
+                                {Zxcvbn.suggestions(zxcvbn)->Js.Array2.unsafe_get(0)->str}
+                              </li>,
+                              zxcvbn->Zxcvbn.suggestions->ArrayUtils.isEmpty,
+                            )}
                           </ul>
                         </div>
                       </div>
@@ -699,11 +678,12 @@ let make = (
                       className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                       placeholder={t("confirm_password_placeholder")}
                     />
-                    {state.confirmPassword->StringUtils.isPresent
-                      ? <School__InputGroupError
-                          message={t("confirm_password_error")} active={hasInvalidPassword(state)}
-                        />
-                      : React.null}
+                    {ReactUtils.nullUnless(
+                      <School__InputGroupError
+                        message={t("confirm_password_error")} active={hasInvalidPassword(state)}
+                      />,
+                      state.confirmPassword->StringUtils.isPresent,
+                    )}
                   </div>
                 </div>
               : React.null}

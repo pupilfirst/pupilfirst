@@ -14,30 +14,16 @@ type state = {
   newPassword: string,
   confirmPassword: string,
   saving: bool,
-  newPasswordAnalysis: option<Zxcvbn.t>,
 }
 
 type action =
-  | UpdateNewPassword(string, string)
+  | UpdateNewPassword(string)
   | UpdateConfirmPassword(string)
   | UpdateSaving(bool)
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateNewPassword(newPassword, schoolName) => {
-      let newPasswordAnalysis = if Js.String2.length(newPassword) > 0 {
-        Zxcvbn.make(
-          ~password=newPassword,
-          ~userInputs=Js.Array2.concat(
-            Js.String2.split(state.name, " "),
-            Js.String2.split(state.email, "@"),
-          )->Js.Array2.concat([state.name, state.email, schoolName]),
-        )->Some
-      } else {
-        None
-      }
-      {...state, newPassword: newPassword, newPasswordAnalysis: newPasswordAnalysis}
-    }
+  | UpdateNewPassword(newPassword) => {...state, newPassword: newPassword}
   | UpdateConfirmPassword(confirmPassword) => {...state, confirmPassword: confirmPassword}
   | UpdateSaving(saving) => {...state, saving: saving}
   }
@@ -104,49 +90,41 @@ let renderUpdatePassword = (state, send, schoolName) => {
         type_="password"
         maxLength=128
         placeholder={t("new_password_placeholder")}
-        onChange={event =>
-          send(UpdateNewPassword(ReactEvent.Form.target(event)["value"], schoolName))}
+        onChange={event => send(UpdateNewPassword(ReactEvent.Form.target(event)["value"]))}
       />
     </div>
-    {switch state.newPasswordAnalysis {
+    {switch Zxcvbn.make(
+      ~password=state.newPassword,
+      ~userInputs=[state.name, state.email, schoolName],
+    ) {
     | None => <div className="h-5 pt-1" />
     | Some(zxcvbn) =>
       <div className="h-5 pt-1">
         <div className="flex justify-between items-center">
           <p className="text-xs text-gray-400 font-inter"> {ts("password_strength")->str} </p>
           <div className="flex items-center gap-1 mt-1">
-            <span className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
+            <span key="0" className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
               {zxcvbn->Zxcvbn.label->str}
             </span>
-            <span
-              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) >= 0
-                  ? Zxcvbn.color(zxcvbn)
-                  : "gray"}-500 w-5`}
-            />
-            <span
-              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 1
-                  ? Zxcvbn.color(zxcvbn)
-                  : "gray"}-500 w-5`}
-            />
-            <span
-              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 2
-                  ? Zxcvbn.color(zxcvbn)
-                  : "gray"}-500 w-5`}
-            />
-            <span
-              className={`rounded-md h-1 bg-${Zxcvbn.score(zxcvbn) > 3
-                  ? Zxcvbn.color(zxcvbn)
-                  : "gray"}-500 w-5`}
-            />
+            {[1, 2, 3, 4]
+            ->Js.Array2.map(score =>
+              <span
+                key={score->string_of_int}
+                className={`rounded-md h-1 ${zxcvbn->Zxcvbn.colorClass(score)} w-5`}
+              />
+            )
+            ->React.array}
           </div>
         </div>
         <div>
           <ul className="text-yellow-900 text-[10px]">
-            {zxcvbn->Zxcvbn.suggestions->ArrayUtils.isNotEmpty
-              ? <li>
-                  <PfIcon className="if i-info-light if-fw" /> {Zxcvbn.suggestions(zxcvbn)[0]->str}
-                </li>
-              : React.null}
+            {ReactUtils.nullIf(
+              <li>
+                <PfIcon className="if i-info-light if-fw" />
+                {Zxcvbn.suggestions(zxcvbn)->Js.Array2.unsafe_get(0)->str}
+              </li>,
+              zxcvbn->Zxcvbn.suggestions->ArrayUtils.isEmpty,
+            )}
           </ul>
         </div>
       </div>
@@ -185,7 +163,6 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
     newPassword: "",
     confirmPassword: "",
     saving: false,
-    newPasswordAnalysis: None,
   }
 
   let (state, send) = React.useReducer(reducer, initialState)

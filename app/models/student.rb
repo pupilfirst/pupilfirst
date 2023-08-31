@@ -28,7 +28,7 @@ class Student < ApplicationRecord
 
   validates_with RateLimitValidator,
                  limit: 5000,
-                 scope: :student_id,
+                 scope: :cohort_id,
                  time_frame: 1.hour
 
   delegate :email,

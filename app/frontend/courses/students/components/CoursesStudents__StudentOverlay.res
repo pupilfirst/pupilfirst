@@ -633,7 +633,7 @@ let make = (~studentId, ~userId) => {
             </div>
           </div>
           <div
-            className="w-full relative md:w-3/5 bg-gray-50 md:border-s pb-6 2xl:pb-12 md:overflow-y-auto">
+            className="w-full relative md:w-3/5 bg-gray-50 md:border-s pb-20 md:pb-10 overflow-y-auto">
             <div
               className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
               <ul

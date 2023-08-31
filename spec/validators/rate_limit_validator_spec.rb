@@ -13,10 +13,7 @@ RSpec.describe RateLimitValidator do
                             time_frame: 1.day
       end
 
-      after do
-        Post.clear_validators!
-        Post.validates_with RateLimitValidator, limit: 10, scope: :creator_id
-      end
+      after { Post.clear_validators! }
 
       it "does not add any error if the rate limit is not exceeded" do
         create_list(:post, 9, creator: creator)
@@ -39,13 +36,7 @@ RSpec.describe RateLimitValidator do
         Post.validates_with RateLimitValidator, limit: 10, scope: :creator_id
       end
 
-      after do
-        Post.clear_validators!
-        Post.validates_with RateLimitValidator,
-                            limit: 10,
-                            scope: :creator_id,
-                            time_frame: 1.day
-      end
+      after { Post.clear_validators! }
 
       it "does not add any error if the rate limit is not exceeded" do
         create_list(:post, 9, creator: creator)

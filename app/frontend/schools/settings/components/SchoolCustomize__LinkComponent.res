@@ -139,15 +139,11 @@ module LinkEditor = {
                 let value = ReactEvent.Form.target(event)["value"]
                 send(UpdateTitle(value))
               }}
-              maxLength=24
+              maxLength=30
             />
             <School__InputGroupError
-              active={!StringUtils.isPresent(state.title)} message={t("cant_empty_message")}
-            />
-            <School__InputGroupError
-              active={state.title->String.length == 24}
-              message={t("reached_max_title_length")}
-              warn={true}
+              active={!StringUtils.lengthBetween(~allowBlank=false, state.title, 1, 24)}
+              message={t("invalid_title")}
             />
           </div>
           <div className="pt-2"> <FaIcon classes="fas fa-link mx-2" /> </div>
@@ -191,7 +187,7 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, initialState(title, url))
 
-  let isTitleEmpty = !StringUtils.isPresent(state.title)
+  let invalidTitle = !StringUtils.lengthBetween(~allowBlank=false, state.title, 1, 24)
 
   <DisablingCover disabled=state.updating message="Updating...">
     <Spread props={"data-school-link-id": id}>
@@ -230,9 +226,9 @@ let make = (
                 <button
                   ariaLabel={ts("update") ++ " " ++ url}
                   title={ts("update")}
-                  disabled={state.error || (isTitleEmpty && kind != SocialLink)}
+                  disabled={state.error || (invalidTitle && kind != SocialLink)}
                   onClick={e =>
-                    if !state.error || isTitleEmpty {
+                    if !state.error || invalidTitle {
                       handleLinkEdit(~send, ~id, ~updateLinkCB, ~title=state.title, ~url=state.url)
                     }}
                   className="p-3 text-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">

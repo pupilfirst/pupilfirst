@@ -1333,25 +1333,25 @@ en:
       updated_notification: Images have been updated successfully.
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
-      cant_empty_message: Can't be empty
-      invalid_url: Invalid Url
+      invalid_title: Please enter a title between 1 and 24 characters in length
+      invalid_url: Please enter a valid URL
       move_down: Move Down
       move_up: Move Up
       reached_max_title_length: Reached maximum length of 24 characters
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...
-      cant_empty_message: can't be empty
       done_notification_body: a custom link has been added.
       error_body: It looks like the URL you've entered isn't valid. Please check, and try again.
       error_head: Invalid URL
       footer_link_title: View and edit footer links
       footer_sitemap: Footer Sitemap
       full_url: Full URL
-      full_url_error: is not a valid URL
+      full_url_error: Please enter a valid URL
       full_url_placeholder: Full URL, staring with https://
       header: Header
       header_links: Current Header Links
+      invalid_title: Please enter a title between 1 and 24 characters in length
       location_link: Location of Link
       manage_links: Manage custom links
       no_custom_links: There are no custom links here. Add some?

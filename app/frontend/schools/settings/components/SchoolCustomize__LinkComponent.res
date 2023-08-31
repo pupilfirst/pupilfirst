@@ -150,7 +150,7 @@ module LinkEditor = {
               warn={true}
             />
           </div>
-          <FaIcon classes="fas fa-link mx-2" />
+          <div className="pt-2"> <FaIcon classes="fas fa-link mx-2" /> </div>
         </>
       | SocialLink => React.null
       }}
@@ -197,16 +197,16 @@ let make = (
     <Spread props={"data-school-link-id": id}>
       <div
         className={"flex justify-between items-center gap-8 bg-gray-50 text-xs text-gray-900 border rounded mt-2"}>
-        <div className="flex items-center flex-1">
+        <div className="flex items-start flex-1 p-2">
           {state.editing
             ? <LinkEditor state id kind send />
             : <div className="ps-3 ">
                 {switch kind {
                 | HeaderLink
                 | FooterLink => <>
-                    <span className="inline-block me-2 font-semibold"> {title->str} </span>
+                    <span className="inline-block me-4 font-semibold"> {title->str} </span>
                     <PfIcon className="if i-link-regular if-fw me-1" />
-                    <code> {url->str} </code>
+                    <code className="bg-gray-200 px-1"> {url->str} </code>
                   </>
                 | SocialLink => <code> {url->str} </code>
                 }}
@@ -214,7 +214,7 @@ let make = (
         </div>
         <div>
           {state.editing
-            ? <div>
+            ? <div className="grid grid-cols-2">
                 <button
                   ariaLabel={t("cancel_editing") ++ " " ++ title}
                   title={t("cancel_editing")}
@@ -224,7 +224,7 @@ let make = (
                     send(UpdateUrl(url))
                     send(SetError(url |> UrlUtils.isInvalid(false)))
                   }}
-                  className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500 ">
+                  className="p-3 text-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500 ">
                   <PfIcon className="if i-times-solid if-fw text-base" />
                 </button>
                 <button
@@ -235,7 +235,7 @@ let make = (
                     if !state.error || isTitleEmpty {
                       handleLinkEdit(~send, ~id, ~updateLinkCB, ~title=state.title, ~url=state.url)
                     }}
-                  className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
+                  className="p-3 text-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                   <FaIcon classes={"fas fa-check"} />
                 </button>
               </div>

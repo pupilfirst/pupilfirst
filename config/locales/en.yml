@@ -1838,7 +1838,6 @@ en:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
-      password_strength: "Password Strength"
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1851,7 +1850,6 @@ en:
       set_new_password: Set new password
       update_password: Update Password
       updating_password: Updating password...
-      password_strength: "Password Strength"
     UsersDashboard__Root:
       certificates: Certificates
       communities: Communities
@@ -2774,6 +2772,7 @@ en:
     version: Version
     versions: Versions
     view: View
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted

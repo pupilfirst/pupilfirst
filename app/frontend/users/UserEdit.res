@@ -4,7 +4,7 @@ let str = React.string
 external maxUploadFileSize: int = "maxUploadFileSize"
 
 let t = I18n.t(~scope="components.UserEdit")
-let ts = I18n.ts
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -641,7 +641,7 @@ let make = (
                       <div className="h-6">
                         <div className="flex justify-between items-center">
                           <p className="text-xs text-gray-400 font-inter">
-                            {t("password_strength")->str}
+                            {ts("password_strength")->str}
                           </p>
                           <div className="flex items-center gap-1 mt-1">
                             <span className="text-xs text-gray-400 pe-2 text-right rtl:text-left">

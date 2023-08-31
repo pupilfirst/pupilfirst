@@ -4,6 +4,7 @@ external resetPasswordIcon: string = "default"
 let str = React.string
 
 let t = I18n.t(~scope="components.UserSessionResetPassword")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   authenticityToken: string,
@@ -112,7 +113,7 @@ let renderUpdatePassword = (state, send, schoolName) => {
     | Some(zxcvbn) =>
       <div className="h-5 pt-1">
         <div className="flex justify-between items-center">
-          <p className="text-xs text-gray-400 font-inter"> {t("password_strength")->str} </p>
+          <p className="text-xs text-gray-400 font-inter"> {ts("password_strength")->str} </p>
           <div className="flex items-center gap-1 mt-1">
             <span className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
               {zxcvbn->Zxcvbn.label->str}

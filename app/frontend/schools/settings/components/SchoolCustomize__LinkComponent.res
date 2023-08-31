@@ -230,7 +230,7 @@ let make = (
                 <button
                   ariaLabel={ts("update") ++ " " ++ url}
                   title={ts("update")}
-                  disabled={state.error || isTitleEmpty}
+                  disabled={state.error || (isTitleEmpty && kind != SocialLink)}
                   onClick={e =>
                     if !state.error || isTitleEmpty {
                       handleLinkEdit(~send, ~id, ~updateLinkCB, ~title=state.title, ~url=state.url)

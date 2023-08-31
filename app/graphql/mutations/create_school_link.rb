@@ -1,29 +1,7 @@
 module Mutations
   class CreateSchoolLink < ApplicationQuery
-    class TitleConditionallyRequired < GraphQL::Schema::Validator
-      def validate(_object, _context, value)
-        title = value[:title]
-        kind = value[:kind]
-        if title.blank? && kind != SchoolLink::KIND_SOCIAL
-          return I18n.t("mutations.create_school_link.blank_title_error")
-        end
-      end
-    end
-
-    class ValidTitleLength < GraphQL::Schema::Validator
-      def validate(_object, _context, value)
-        title = value[:title]
-        return unless title
-
-        if title.length < 1 || title.length > 24
-          return(
-            I18n.t("mutations.create_school_link.invalid_title_length_error")
-          )
-        end
-      end
-    end
-
     include QueryAuthorizeSchoolAdmin
+    include ValidateSchoolLinkTitle
 
     argument :kind, String, required: true
     argument :title, String, required: false
@@ -33,8 +11,7 @@ module Mutations
 
     field :school_link, Types::SchoolLink, null: true
 
-    validates TitleConditionallyRequired => {}
-    validates ValidTitleLength => {}
+    # validates ValidTitleLength => {}
 
     def resolve(_params)
       notify(

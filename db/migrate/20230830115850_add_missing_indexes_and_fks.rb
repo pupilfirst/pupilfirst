@@ -8,8 +8,5 @@ class AddMissingIndexesAndFks < ActiveRecord::Migration[6.1]
     add_foreign_key :markdown_attachments, :schools
     add_foreign_key :timeline_event_owners, :timeline_events
 
-    remove_foreign_key :students, :levels
-
-
   end
 end

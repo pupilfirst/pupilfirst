@@ -740,6 +740,7 @@ en:
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
+      reject_submission: Reject Submission
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review

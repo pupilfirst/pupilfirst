@@ -222,9 +222,9 @@ describe CourseExports::PrepareStudentsExportService do
             'Student ID',
             'Email Address',
             'Name',
-            'Level',
             'Title',
             'Affiliation',
+            'Cohort',
             'Tags',
             'Last Seen At',
             'Course Completed At',
@@ -268,6 +268,20 @@ describe CourseExports::PrepareStudentsExportService do
             student_2.completed_at&.iso8601 || '',
             nil,
             nil
+          ],
+          [
+            student_5.user_id,
+            report_link_formula(student_5),
+            student_5.email,
+            student_5.name,
+            student_5.title,
+            student_5.affiliation,
+            student_5.cohort.name,
+            "",
+            last_seen_at(student_5),
+            student_5.completed_at&.iso8601 || "",
+            nil,
+            nil
           ]
         ]
       },
@@ -295,6 +309,12 @@ describe CourseExports::PrepareStudentsExportService do
             student_2.email,
             nil,
             '1/2',
+            'x'
+          ],
+          [
+            student_5.email,
+            nil,
+            "1/2",
             'x'
           ]
         ]
@@ -379,9 +399,9 @@ describe CourseExports::PrepareStudentsExportService do
                 'Student ID',
                 'Email Address',
                 'Name',
-                'Level',
                 'Title',
                 'Affiliation',
+                'Cohort',
                 'Tags',
                 'Last Seen At',
                 'Course Completed At',

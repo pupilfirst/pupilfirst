@@ -242,10 +242,11 @@ let updateMarkdown = (markdown, t) =>
 
 let vimeoManageLink = t => {
   switch t.blockType {
-  | Embed(url, _, #VimeoUpload, _) => switch url->Js.String2.split("/")->Belt.Array.get(3) {
-    | Some(vidId) => Some(`https://vimeo.com/manage/videos/${vidId}`)
-    | None => None
-    }
+  | Embed(url, _, #VimeoUpload, _) =>
+    url
+    ->Js.String2.split("/")
+    ->Belt.Array.get(3)
+    ->Belt.Option.map(vidId => `https://vimeo.com/manage/videos/${vidId}`)
   | _ => None
   }
 }

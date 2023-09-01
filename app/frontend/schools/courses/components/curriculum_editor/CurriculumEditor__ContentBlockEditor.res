@@ -266,23 +266,21 @@ let make = (
   let (state, send) = React.useReducerWithMapState(reducer, contentBlock, computeInitialState)
 
   <DisablingCover disabled={state.saving != None} message=?state.saving>
-    <div className="bg-white border border-gray-100 rounded-xl">
+    <div className="bg-white border border-gray-200 rounded-xl">
       {switch ContentBlock.blockType(contentBlock) {
       | Embed(url, _, requestSource, _) =>
         let (icon, title) = switch requestSource {
-        | #User => (<PfIcon className="if i-link-regular if-fw" />, "Embedded URL")
-        | #VimeoUpload => (<img className="w-6 h-6" src=vimeoLogoSVG />, "Video")
+        | #User => (<PfIcon className="if i-link-regular if-fw" />, t("embedded_url"))
+        | #VimeoUpload => (<img className="" src=vimeoLogoSVG />, t("video"))
         }
-        <div className="flex py-2">
-          <div className="flex items-center px-2 min-w-fit">
-            <div
-              className="bg-primary-100 text-primary-500 text-semibold p-2 rounded-full flex items-center">
-              icon
-            </div>
+        <div className="flex py-2 gap-2 items-center px-2">
+          <div
+            className="bg-primary-100 text-primary-500 text-semibold rounded-full  items-center w-10 h-10 flex justify-center shrink-0">
+            icon
           </div>
-          <div className="px-2 w-full">
+          <div className="w-full">
             <div className="text-sm"> {title->str} </div>
-            <div className="flex">
+            <div className="flex items-center -mt-1">
               <a
                 className="text-xs max-w-xs text-gray-500 truncate"
                 href=url
@@ -290,20 +288,18 @@ let make = (
                 rel="noopener noreferrer">
                 {url->str}
               </a>
-              <ClickToCopy copy={url}>
-                <PfIcon className="if i-copy-regular if-fw pb-1" />
-              </ClickToCopy>
+              <ClickToCopy copy={url}> <PfIcon className="if i-copy-regular if-fw" /> </ClickToCopy>
             </div>
           </div>
           {switch contentBlock->ContentBlock.vimeoManageLink {
           | Some(link) =>
-            <div className="px-4 flex justify-end items-center min-w-fit">
-              <a
-                href={link}
-                className="bg-primary-100 text-primary-500 text-xs py-2 px-2 rounded-md">
-                {"Manage on Vemeo"->str}
-              </a>
-            </div>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={link}
+              className="bg-primary-100 text-primary-500 text-xs py-2 px-2 rounded-md block h-fit min-w-max">
+              {t("manage_on_vimeo")->str}
+            </a>
           | None => React.null
           }}
         </div>

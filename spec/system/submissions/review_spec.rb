@@ -259,7 +259,7 @@ feature "Submission review overlay", js: true do
 
       expect(page).to have_text("The submission has been marked as reviewed")
 
-      student = submission_pending.founders.first
+      student = submission_pending.students.first
       open_email(student.user.email)
       expect(current_email).to have_content("rejected")
 

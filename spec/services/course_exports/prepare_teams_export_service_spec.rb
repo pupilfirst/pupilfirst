@@ -286,10 +286,7 @@ describe CourseExports::PrepareTeamsExportService do
             team_4.name,
             nil,
             "1/2",
-            {
-              "value" => submission_grading(team_4_reviewed_submission),
-              "style" => "failing-grade"
-            },
+            'x',
             nil
           ]
         ]

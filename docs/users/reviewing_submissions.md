@@ -6,7 +6,7 @@ sidebar_label: Reviewing Submissions
 
 When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
 
-![Submissions for review](https://res.cloudinary.com/sv-co/image/upload/v1628594964/pupilfirst_documentation/reviewing_submissions/v2/index_lgssar.png)
+![Submissions for review](../assets/reviewing_submissions/index.png)
 
 If you're directly assigned to some students, then the page will load with the filter set to show only submissions from those assigned students.
 
@@ -16,7 +16,7 @@ This page has three tabs: _All_, _Pending_ and _Reviewed_, with submissions that
 
 Clicking on a submission opens up the submission for review.
 
-![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1628594964/pupilfirst_documentation/reviewing_submissions/v2/show_xgnrox.png)
+![Submission details](../assets/reviewing_submissions/show.png)
 
 ## Submission Details
 
@@ -33,7 +33,7 @@ When a submission is clicked, it opens up to display everything that the student
 
 Reviewing a submission involves going over the work that the student has submitted and deciding assigning it grades on each of its evaluation criteria.
 
-![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1628594965/pupilfirst_documentation/reviewing_submissions/v2/reviewing_viztph.png)
+![Reviewing a submission](../assets/reviewing_submissions/reviewing_viztph.png)
 
 There's quite a bit to unpack here, so we'll go over each element one by one, starting with the _Grade Card_.
 
@@ -72,7 +72,7 @@ Over the course of using Pupilfirst ourselves, we've learned that reviewing subm
 
 As the name suggests, this feature allows you to create a checklist for your review process. What's interesting here is that you can couple your checklist with feedback that is appropriate to the result of your check.
 
-![Review Checklist](https://res.cloudinary.com/sv-co/image/upload/v1628594965/pupilfirst_documentation/reviewing_submissions/v2/review-checklist_bbkrkg.png)
+![Review Checklist](../assets/reviewing_submissions/review-checklist_bbkrkg.png)
 
 Over the course of reviewing many student submissions, it's very likely that you'll see a pattern to the mistakes that students make, so it can be quite useful to store generic versions of feedback for the results from your checklist, and use that as a template to prepare feedback for a submission. Of course, you can always edit and personalize the feedback before you send it to your student.
 
@@ -80,7 +80,7 @@ You can also revise the template over time, as your understanding of student's i
 
 ## Leaving Notes
 
-You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/student_reports#keep-notes-on-students), and can be viewed only by you and other coaches.
+You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/reviewing_submissions#leaving-notes), and can be viewed only by you and other coaches.
 
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 

@@ -1,7 +1,6 @@
 class StudentMailerPreview < ActionMailer::Preview
   def enrollment
-    student = Founder.last
-    student.user.regenerate_login_token
+    student = Student.last
     StudentMailer.enrollment(student)
   end
 end

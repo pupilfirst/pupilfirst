@@ -20,7 +20,6 @@ module Courses
           users: users,
           evaluation_criteria: evaluation_criteria,
           preview: false,
-          level_up_eligibility: level_up_eligibility,
           **default_props
         }
       else
@@ -31,15 +30,9 @@ module Courses
           users: [],
           evaluation_criteria: [],
           preview: true,
-          level_up_eligibility:
-            ::Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
           **default_props
         }
       end
-    end
-
-    def level_up_eligibility
-      ::Students::LevelUpEligibilityService.new(current_student).eligibility
     end
 
     def default_props
@@ -73,7 +66,7 @@ module Courses
 
     def student_details_for_preview_mode
       {
-        name: current_user&.name || 'John Doe',
+        name: current_user&.name || "John Doe",
         level_id: levels.first.id,
         ends_at: nil
       }
@@ -82,17 +75,26 @@ module Courses
     def student_details
       {
         name: current_student.name,
-        level_id: current_student.level_id,
-        ends_at: current_student.cohort.ends_at
+        level_id: level_id_for_student,
+        ends_at: current_student.cohort.ends_at,
+        completed_at: current_student.completed_at
       }
+    end
+
+    def level_id_for_student
+      if current_student&.timeline_events.blank?
+        return levels.where.not(number: 0).last.id
+      end
+
+      current_student.timeline_events.last.target.level.id
     end
 
     def course_details
       details =
         @course.attributes.slice(
-          'id',
-          'progression_behavior',
-          'progression_limit'
+          "id",
+          "progression_behavior",
+          "progression_limit"
         )
 
       if current_user.present?
@@ -117,7 +119,7 @@ module Courses
 
     def levels_details
       levels.map do |level|
-        level.attributes.slice('id', 'name', 'number', 'unlock_at')
+        level.attributes.slice("id", "name", "number", "unlock_at")
       end
     end
 
@@ -130,18 +132,26 @@ module Courses
 
       scope.map do |target_group|
         target_group.attributes.slice(
-          'id',
-          'level_id',
-          'name',
-          'description',
-          'sort_index',
-          'milestone'
+          "id",
+          "level_id",
+          "name",
+          "description",
+          "sort_index",
+          "milestone"
         )
       end
     end
 
     def targets
-      attributes = %w[id role title target_group_id sort_index resubmittable]
+      attributes = %w[
+        id
+        role
+        title
+        target_group_id
+        sort_index
+        resubmittable
+        milestone
+      ]
 
       scope =
         @course
@@ -156,8 +166,9 @@ module Courses
         .select(*attributes)
         .map do |target|
           details = target.attributes.slice(*attributes)
-          details[:prerequisite_target_ids] =
-            target.target_prerequisites.pluck(:prerequisite_target_id)
+          details[:prerequisite_target_ids] = target.target_prerequisites.pluck(
+            :prerequisite_target_id
+          )
           details[:reviewed] = target.evaluation_criteria.present?
           details
         end
@@ -169,11 +180,11 @@ module Courses
         .includes(:target)
         .map do |submission|
           if submission.target.individual_target? ||
-               submission.founder_ids.sort == current_student.team_student_ids
+               submission.student_ids.sort == current_student.team_student_ids
             submission.attributes.slice(
-              'target_id',
-              'passed_at',
-              'evaluated_at'
+              "target_id",
+              "passed_at",
+              "evaluated_at"
             )
           end
         end - [nil]
@@ -182,10 +193,10 @@ module Courses
     def faculty
       @faculty ||=
         begin
-          scope = Faculty.left_joins(:founders, :courses)
+          scope = Faculty.left_joins(:students, :courses)
 
           scope
-            .where(founders: { id: current_student })
+            .where(students: { id: current_student })
             .or(scope.where(courses: { id: @course }))
             .distinct
             .select(:id, :user_id)
@@ -196,7 +207,7 @@ module Courses
     def team_members_user_ids
       @team_members_user_ids ||=
         if current_student.team.present?
-          current_student.team.founders.pluck(:user_id)
+          current_student.team.students.pluck(:user_id)
         else
           [current_student.user_id]
         end
@@ -209,8 +220,8 @@ module Courses
         .where(id: user_ids)
         .with_attached_avatar
         .map do |user|
-          details = user.attributes.slice('id', 'name', 'title')
-          details['avatar_url'] = user.avatar_url(variant: :thumb)
+          details = user.attributes.slice("id", "name", "title")
+          details["avatar_url"] = user.avatar_url(variant: :thumb)
           details
         end
     end
@@ -218,7 +229,7 @@ module Courses
     def current_student
       @current_student ||=
         if current_user.present?
-          @course.founders.not_dropped_out.find_by(user_id: current_user.id)
+          @course.students.not_dropped_out.find_by(user_id: current_user.id)
         else
           nil
         end
@@ -246,9 +257,9 @@ module Courses
           if access_locked_levels
             scope
           else
-            scope
-              .where(unlock_at: nil)
-              .or(@course.levels.where('unlock_at <= ?', Time.zone.now))
+            scope.where(unlock_at: nil).or(
+              @course.levels.where("unlock_at <= ?", Time.zone.now)
+            )
           end.pluck(:id)
         end
     end

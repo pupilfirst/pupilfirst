@@ -5,21 +5,21 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :evaluated_at, GraphQL::Types::ISO8601DateTime, null: true
     field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :level_id, ID, null: false
     field :target_id, ID, null: false
     field :team_target, Boolean, null: false
     field :student_ids, [ID], null: false
-
-    def level_id
-      object.target.level.id
-    end
+    field :milestone_number, Integer, null: true
 
     def student_ids
-      object.founder_ids.sort
+      object.student_ids.sort
     end
 
     def team_target
       object.target.team_target? ? true : false
+    end
+
+    def milestone_number
+      object.target.milestone_number
     end
   end
 end

@@ -3,15 +3,15 @@ class StartupMailer < SchoolMailer
   def feedback_as_email(startup_feedback, include_grades)
     @startup_feedback = startup_feedback
     @students =
-      @startup_feedback.timeline_event.founders.map(&:fullname).join(', ')
+      @startup_feedback.timeline_event.students.map(&:fullname).join(', ')
     @grading_details = grading_details(startup_feedback, include_grades)
 
     send_to =
       startup_feedback
         .timeline_event
-        .founders
+        .students
         .map { |e| "#{e.fullname} <#{e.email}>" }
-    @school = startup_feedback.timeline_event.founders.first.school
+    @school = startup_feedback.timeline_event.students.first.school
 
     subject =
       I18n.t(

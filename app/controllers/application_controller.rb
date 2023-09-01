@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   helper_method :avatar
   helper_method :current_host
   helper_method :current_school
-  helper_method :current_founder
   helper_method :current_coach
   helper_method :current_school_admin
 
@@ -45,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   # Redirect all requests from unknown domains to service homepage.
   rescue_from RequestFromUnknownDomain do
-    redirect_to "https://www.pupilfirst.com?redirect_from=#{current_host}"
+    redirect_to "https://lms.pupilfirst.org?redirect_from=#{current_host}"
   end
 
   def raise_not_found
@@ -87,29 +86,6 @@ class ApplicationController < ActionController::Base
 
   def current_coach
     @current_coach ||= current_user&.faculty
-  end
-
-  def current_founder
-    @current_founder ||=
-      begin
-        if current_user.present?
-          founder_id = read_cookie(:founder_id)
-
-          # Founders in current school for the user
-          founders = current_user.founders
-
-          # Try to select founder from value stored in cookie.
-          founder =
-            if founder_id.present?
-              founders.not_dropped_out.find_by(id: founder_id)
-            else
-              nil
-            end
-
-          # Return selected founder, if any, or return the first founder (if any).
-          founder.presence || founders.not_dropped_out.first
-        end
-      end
   end
 
   def current_school_admin
@@ -158,10 +134,9 @@ class ApplicationController < ActionController::Base
   def pundit_user
     OpenStruct.new(
       current_user: current_user,
-      current_founder: current_founder,
       current_school: current_school,
       current_coach: current_coach,
-      current_school_admin: current_school_admin,
+      current_school_admin: current_school_admin
     )
   end
 
@@ -203,15 +178,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_url if service.signed_out?
   end
 
-  def authenticate_founder!
-    # User must be logged in.
-    authenticate_user!
-
-    return if current_founder.present? && !current_founder.dropped_out_at?
-
-    redirect_to root_path
-  end
-
   def storable_location?
     non_html_response =
       destroy_user_session_path ||
@@ -230,7 +196,7 @@ class ApplicationController < ActionController::Base
 
   def avatar(
     name,
-    founder: nil,
+    student: nil,
     faculty: nil,
     version: :mid,
     background_shape: :circle
@@ -239,15 +205,15 @@ class ApplicationController < ActionController::Base
       return helpers.image_tag(faculty.image).html_safe
     end
 
-    if founder.present? && founder.avatar.attached?
-      return helpers.image_tag(founder.avatar_variant(version)).html_safe
+    if student.present? && student.avatar.attached?
+      return helpers.image_tag(student.avatar_variant(version)).html_safe
     end
 
     Scarf::InitialAvatar
       .new(
         name,
         font_family: ["Source Sans Pro", "sans-serif"],
-        background_shape: background_shape,
+        background_shape: background_shape
       )
       .svg
       .html_safe
@@ -258,7 +224,7 @@ class ApplicationController < ActionController::Base
 
     return false if current_domain.primary? || current_school.domains.one?
     !Schools::Configuration.new(
-      current_school,
+      current_school
     ).disable_primary_domain_redirection?
   end
 

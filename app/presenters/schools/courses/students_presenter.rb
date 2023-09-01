@@ -42,7 +42,7 @@ module Schools
       end
 
       def team_tags
-        @team_tags ||= current_school.founder_tag_list
+        @team_tags ||= current_school.student_tag_list
       end
 
       def user_tags

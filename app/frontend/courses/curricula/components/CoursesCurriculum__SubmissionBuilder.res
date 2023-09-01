@@ -64,7 +64,6 @@ module CreateSubmissionQuery = %graphql(`
         id
         createdAt
       }
-      levelUpEligibility
     }
   }
   `)
@@ -108,10 +107,8 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
         ~status,
         ~checklist=submissionChecklist,
       )
-      let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(
-        response["createSubmission"]["levelUpEligibility"],
-      )
-      addSubmissionCB(newSubmission, levelUpEligibility)
+
+      addSubmissionCB(newSubmission)
     | None =>
       /* Enable the form again in case of a validation failure. */
       send(SetReady)
@@ -169,7 +166,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
           )
           |> React.array}
       <div className={buttonClasses(state.checklist)}>
-        <Tooltip tip={tooltipText(preview)} position=#Left disabled={!isButtonDisabled(state)}>
+        <Tooltip tip={tooltipText(preview)} position=#Start disabled={!isButtonDisabled(state)}>
           <button
             onClick={submit(state, send, target, targetDetails, addSubmissionCB)}
             disabled={isButtonDisabled(state) || preview}

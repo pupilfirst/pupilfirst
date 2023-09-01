@@ -6,7 +6,7 @@ sidebar_label: Students
 
 Courses can contain any number of students. To see the students in a course, first select the course from the main admin navigation bar, or click the _View_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
 
-![Students page within a course in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1614237376/pupilfirst_documentation/students/students_page_qucndn.png)
+![Students page within a course in the school administration interface](../assets/students/students_page.png)
 
 ## Adding new students
 
@@ -55,15 +55,27 @@ Students whose access to a course has ended, or who were marked as dropped out w
 
 ## Teaming up students
 
+![Teams page within a course in the school administration interface](../assets/students/teams_index_page.png)
+
 Students don't have to go through a course alone. Pupilfirst allows you to create teams of students who progress through a course _together_.
 
 1. Teams have a _name_ that identifies the group.
-2. Students in a team level up together.
+2. Students in a team can go through the course together.
 3. Students can work on certain targets together.
 
-To group two or more students as a team, select them using the checkboxes next to their name, and click the _Group as Team_ option. This is only visible when all selected students are in the same level.
+### Adding students to a team
 
-When you first team up a group of students, the platform will give them a randomly generated name. To edit the team's name, you can click on any of the students to edit their details. There'll be a new _field_ in the form called _Team Name_, which you can edit to change their team's name. When students are displayed anywhere in the interface, they'll always be grouped together with their team.
+To group two or more students as a team, head to the _Teams_ sub-menu within a course, then click the _Create Team_` button at the top-right of the page. The form that opens up will allow you to add teams. It asks for the following details:
+
+**Team Name**: The name of the team. This is a required field.
+
+**Select a cohort**: Select the cohort from the dropdown list. After selection, you'll see the list of students who are part of the selected cohort.
+
+**Select students**: Select the students from the multi-select dropdown list. You will see students who are not part of any team in the list.
+
+![Teams creation page](../assets/students/team_creation_form.png)
+
+When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
 <details>
   <summary>How do I set it up so that students in a team submit work on a target together?</summary>
@@ -71,6 +83,14 @@ When you first team up a group of students, the platform will give them a random
     When editing the details of a target, you are asked the question <em><a href="/users/curriculum_editor#setting-the-method-of-completion">How should teams tackle this target?</a></em>
   </div>
 </details>
+
+### Editing a team
+
+To edit a team's details, click on the edit on the respective team from teams index page. You'll see all of the fields you entered in the creation form. You can add or remove students from the team.
+
+### Actions on a team
+
+In addition to editing a team's details, you can switch to the _Actions_ tab to delete a team. Deleting a team will not delete the students in the team. They will be moved out of the team and will be available in the list of students.
 
 ### Removing a student from a team
 

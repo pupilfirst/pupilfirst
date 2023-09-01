@@ -19,7 +19,7 @@ When you sign up for the hosted Pupilfirst service, you can take the course _"Ho
 
 Pupilfirst is an open-source project. You can find the [platform's codebase on Github](https://github.com/pupilfirst/pupilfirst). The project’s overall goal is to make modern tooling available in the field of education, and to do so in a manner that promotes effective techniques for improving student outcome.
 
-We also [track active work on the platform](https://github.com/pupilfirst/pupilfirst/projects/1) using the Github projects feature. The _In Progress_ list keeps track of what our team is working on at any given point of time, and the _Up Next_ list contains features and other issues that we're prioritizing for the near-future.
+We also [track active work on the platform](https://github.com/orgs/pupilfirst/projects/4) using the _GitHub Projects_ feature. The [project's Board view](https://github.com/orgs/pupilfirst/projects/4/views/2) has an _In Progress_ list that keeps track of what our team is working on at any given point of time. The project's remaining views organizes features and other issues based on their priority or status.
 
 ### Improving this documentation
 
@@ -27,4 +27,4 @@ This documentation is [a part of the open-source repository](https://github.com/
 
 ## Changelog
 
-You can find a log of changes to the platform at [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog).
+You can find a log of changes to the LMS on [our GitHub releases page](https://github.com/pupilfirst/pupilfirst/releases).

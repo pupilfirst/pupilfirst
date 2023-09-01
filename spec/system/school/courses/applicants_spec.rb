@@ -4,9 +4,9 @@ feature 'Applicant Index', js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  # Setup a course with a single founder target, ...
+  # Setup a course with a single student target, ...
   let!(:tags) { ['Pupilfirst'] }
-  let!(:school) { create :school, :current, founder_tag_list: tags }
+  let!(:school) { create :school, :current,student_tag_list: tags }
   let!(:course) { create :course, :with_default_cohort, school: school }
   let!(:level_1) { create :level, :one, course: course }
   let!(:school_admin) { create :school_admin, school: school }
@@ -94,7 +94,7 @@ feature 'Applicant Index', js: true do
     expect(page).to have_text('Student created successfully.')
     dismiss_notification
 
-    student = Founder.last
+    student = Student.last
     expect(student.name).to eq(applicant_1.name)
     expect(student.email).to eq(applicant_1.email)
     expect(student.title).to eq('Student')
@@ -119,7 +119,7 @@ feature 'Applicant Index', js: true do
     expect(page).to have_text('Student created successfully.')
     dismiss_notification
 
-    student = Founder.last
+    student = Student.last
     open_email(applicant_1.email)
     expect(student.name).to eq(applicant_1.name)
     expect(student.email).to eq(applicant_1.email)

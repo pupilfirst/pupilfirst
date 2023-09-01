@@ -27,10 +27,10 @@ feature 'Target Overlay', js: true do
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
   let!(:team) { create :team_with_students, cohort: cohort }
-  let!(:student) { team.founders.first }
+  let!(:student) { team.students.first }
   let!(:target_group_l0) { create :target_group, level: level_0 }
   let!(:target_group_l1) do
-    create :target_group, level: level_1, milestone: true
+    create :target_group, level: level_1
   end
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_l0) do
@@ -497,7 +497,7 @@ feature 'Target Overlay', js: true do
     let!(:submission_1) do
       create :timeline_event,
              target: target_l1,
-             founders: team.founders,
+             students: team.students,
              evaluator: coach_1,
              created_at: 5.days.ago,
              evaluated_at: 1.day.ago
@@ -507,7 +507,7 @@ feature 'Target Overlay', js: true do
              :with_owners,
              latest: true,
              target: target_l1,
-             owners: team.founders,
+             owners: team.students,
              evaluator: coach_3,
              passed_at: 2.days.ago,
              created_at: 3.days.ago,
@@ -518,7 +518,7 @@ feature 'Target Overlay', js: true do
              :with_owners,
              latest: false,
              target: target_l1,
-             owners: team.founders,
+             owners: team.students,
              created_at: 3.days.ago,
              archived_at: 1.day.ago
     end
@@ -538,7 +538,7 @@ feature 'Target Overlay', js: true do
     before do
       # Enroll one of the coaches to course, and another to the student. One should be left un-enrolled to test how that's handled.
       create(:faculty_cohort_enrollment, faculty: coach_1, cohort: cohort)
-      create(:faculty_founder_enrollment, faculty: coach_3, founder: student)
+      create(:faculty_student_enrollment, faculty: coach_3, student: student)
 
       # First submission should have failed on one criterion.
       create(
@@ -681,7 +681,7 @@ feature 'Target Overlay', js: true do
     scenario 'student is shown pending team members on individual targets' do
       sign_in_user student.user, referrer: target_path(target_l1)
 
-      other_students = team.founders.where.not(id: student)
+      other_students = team.students.where.not(id: student)
 
       # A safety check, in case factory is altered.
       expect(other_students.count).to be > 0
@@ -750,7 +750,7 @@ feature 'Target Overlay', js: true do
              :with_owners,
              latest: true,
              target: target_l1,
-             owners: team.founders
+             owners: team.students
 
       sign_in_user student.user, referrer: target_path(target_l1)
 
@@ -1095,10 +1095,10 @@ feature 'Target Overlay', js: true do
     let!(:team_1) { create :team_with_students, cohort: cohort }
     let!(:team_2) { create :team_with_students, cohort: cohort }
 
-    let(:student_a) { team_1.founders.first }
-    let(:student_b) { team_1.founders.last }
-    let(:student_c) { team_2.founders.first }
-    let(:student_d) { team_2.founders.last }
+    let(:student_a) { team_1.students.first }
+    let(:student_b) { team_1.students.last }
+    let(:student_c) { team_2.students.first }
+    let(:student_d) { team_2.students.last }
 
     # Create old submissions, linked to students who are no longer teamed up.
     let!(:submission_old_1) do
@@ -1120,18 +1120,18 @@ feature 'Target Overlay', js: true do
              :with_owners,
              latest: true,
              target: target_l1,
-             owners: team_1.founders
+             owners: team_1.students
     end
 
     before do
       # Mark ownership of old submissions as latest for C & D, since they don't have a later submission.
       submission_old_1
         .timeline_event_owners
-        .where(founder: student_c)
+        .where(student: student_c)
         .update(latest: true)
       submission_old_2
         .timeline_event_owners
-        .where(founder: student_d)
+        .where(student: student_d)
         .update(latest: true)
     end
 
@@ -1158,9 +1158,9 @@ feature 'Target Overlay', js: true do
     let!(:team_1) { create :team_with_students, cohort: cohort }
     let!(:team_2) { create :team_with_students, cohort: cohort }
 
-    let(:student_1) { team_1.founders.first }
-    let(:student_2) { team_2.founders.first }
-    let(:student_3) { team_2.founders.last }
+    let(:student_1) { team_1.students.first }
+    let(:student_2) { team_2.students.first }
+    let(:student_3) { team_2.students.last }
 
     # Create old submissions, linked to students who are no longer teamed up.
     let!(:submission_old_1) do
@@ -1168,14 +1168,14 @@ feature 'Target Overlay', js: true do
              :with_owners,
              latest: true,
              target: target_l1,
-             owners: team_1.founders
+             owners: team_1.students
     end
     let!(:submission_old_2) do
       create :timeline_event,
              :with_owners,
              latest: true,
              target: target_l1,
-             owners: team_2.founders
+             owners: team_2.students
     end
 
     before { student_2.update!(team: team_1) }

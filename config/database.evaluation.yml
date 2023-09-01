@@ -1,0 +1,7 @@
+development:
+  adapter: postgresql
+  host: db
+  username: pupilfirst
+  password: pupilfirst
+  database: pupilfirst_evaluation
+  reconnect: true

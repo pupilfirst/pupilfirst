@@ -13,17 +13,24 @@ class TargetDetailsResolver < ApplicationQuery
       link_to_complete: target.link_to_complete,
       visibility: target.visibility,
       checklist: target.checklist,
+      milestone: target.milestone?
     }
   end
 
   def authorized?
     return false if target&.course&.school != current_school
 
-    current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
+    current_school_admin.present? ||
+      current_user&.course_authors&.where(course: target.course).present?
   end
 
   def target
-    @target ||= Target.includes(quiz: { quiz_questions: %I[answer_options correct_answer] }).find_by(id: target_id)
+    @target ||=
+      Target.includes(
+        quiz: {
+          quiz_questions: %I[answer_options correct_answer]
+        }
+      ).find_by(id: target_id)
   end
 
   def quiz
@@ -32,7 +39,7 @@ class TargetDetailsResolver < ApplicationQuery
         {
           id: quiz_question.id,
           question: quiz_question.question,
-          answer_options: answer_options(quiz_question),
+          answer_options: answer_options(quiz_question)
         }
       end
     else
@@ -46,7 +53,7 @@ class TargetDetailsResolver < ApplicationQuery
         id: answer_option.id,
         answer: answer_option.value,
         hint: answer_option.hint,
-        correct_answer: correct_answer?(quiz_question, answer_option),
+        correct_answer: correct_answer?(quiz_question, answer_option)
       }
     end
   end

@@ -35,8 +35,8 @@ module Home
         begin
           if current_user.present?
             current_user
-              .founders
-              .includes(:cohort, :level)
+              .students
+              .includes(:cohort)
               .each_with_object({}) do |student, courses|
                 status =
                   if student.dropped_out_at?
@@ -47,7 +47,7 @@ module Home
                     :active
                   end
 
-                courses[student.level.course_id] = status
+                courses[student.cohort.course_id] = status
               end
           else
             {}

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Levels::MergeService do
   subject { described_class }
@@ -10,27 +10,19 @@ describe Levels::MergeService do
   let!(:level_2) { create :level, :two, course: course }
   let!(:level_3) { create :level, :three, course: course }
 
-  let!(:student_l1) { create :student, level: level_1, cohort: cohort }
-  let!(:student_l2) { create :student, level: level_2, cohort: cohort }
-  let!(:student_l3) { create :student, level: level_3, cohort: cohort }
-
   let!(:target_group_l1) { create :target_group, level: level_1 }
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_group_l3) { create :target_group, level: level_3 }
 
-  RSpec.shared_examples 'merges a level' do |level_number, merge_into_number|
+  RSpec.shared_examples "merges a level" do |level_number, merge_into_number|
     let(:level_to_delete) { Level.find_by(number: level_number) }
     let(:level_to_merge_into) { Level.find_by(number: merge_into_number) }
 
-    it 'links teams and target groups in level marked for deletion to another level' do
-      chosen_level_students = level_to_delete.founders.pluck(:id)
+    it "links teams and target groups in level marked for deletion to another level" do
       chosen_level_target_groups = level_to_delete.target_groups.pluck(:id)
 
       subject.new(level_to_delete).merge_into(level_to_merge_into)
 
-      expect(
-        level_to_merge_into.founders.where(id: chosen_level_students).count
-      ).to eq(chosen_level_students.count)
       expect(
         level_to_merge_into
           .target_groups
@@ -39,7 +31,7 @@ describe Levels::MergeService do
       ).to eq(chosen_level_target_groups.count)
     end
 
-    it 'removes entry for the chosen level' do
+    it "removes entry for the chosen level" do
       subject.new(level_to_delete).merge_into(level_to_merge_into)
 
       expect { level_to_delete.reload }.to raise_exception(
@@ -48,30 +40,29 @@ describe Levels::MergeService do
     end
   end
 
-  describe '#merge_into' do
-    context 'when level 3 is merged with level 2' do
-      include_examples 'merges a level', 3, 2
+  describe "#merge_into" do
+    context "when level 3 is merged with level 2" do
+      include_examples "merges a level", 3, 2
     end
 
-    context 'when level 2 is merged with level 1' do
-      include_examples 'merges a level', 2, 1
+    context "when level 2 is merged with level 1" do
+      include_examples "merges a level", 2, 1
 
-      it 'renumbers level 3 as level 2' do
+      it "renumbers level 3 as level 2" do
         subject.new(level_2).merge_into(level_1)
 
         # Number should have changed...
         expect(level_3.reload.number).to eq(2)
 
         # ...but links should be preserved.
-        expect(student_l3.reload.level).to eq(level_3)
         expect(target_group_l3.reload.level).to eq(level_3)
       end
     end
 
-    context 'when level 1 is merged with level 3' do
-      include_examples 'merges a level', 1, 3
+    context "when level 1 is merged with level 3" do
+      include_examples "merges a level", 1, 3
 
-      it 'renumbers level 2 as 1, and level 3 as 2' do
+      it "renumbers level 2 as 1, and level 3 as 2" do
         subject.new(level_1).merge_into(level_3)
 
         # Numbers should have changed.
@@ -79,15 +70,14 @@ describe Levels::MergeService do
         expect(level_3.reload.number).to eq(2)
 
         # Links should be preserved.
-        expect(student_l1.reload.level).to eq(level_3)
         expect(target_group_l1.reload.level).to eq(level_3)
       end
     end
 
-    context 'when level 0 is merged with level 1' do
-      include_examples 'merges a level', 0, 1
+    context "when level 0 is merged with level 1" do
+      include_examples "merges a level", 0, 1
 
-      it 'does not change any level numbers' do
+      it "does not change any level numbers" do
         subject.new(level_0).merge_into(level_1)
 
         # Numbers should not have changed.
@@ -97,10 +87,10 @@ describe Levels::MergeService do
       end
     end
 
-    it 'does not allow merging of any level into level 0' do
+    it "does not allow merging of any level into level 0" do
       expect { subject.new(level_1).merge_into(level_0) }.to raise_error(
         StandardError,
-        'Cannot merge into level zero'
+        "Cannot merge into level zero"
       )
 
       # Numbers should not have changed.

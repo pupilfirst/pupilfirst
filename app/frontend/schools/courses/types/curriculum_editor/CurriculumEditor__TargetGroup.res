@@ -2,7 +2,6 @@ type t = {
   id: string,
   name: string,
   description: option<string>,
-  milestone: bool,
   levelId: string,
   sortIndex: int,
   archived: bool,
@@ -13,8 +12,6 @@ let id = t => t.id
 let name = t => t.name
 
 let description = t => t.description
-
-let milestone = t => t.milestone
 
 let levelId = t => t.levelId
 
@@ -27,17 +24,15 @@ let decode = json => {
     name: json |> field("name", string),
     description: json |> field("description", nullable(string)) |> Js.Null.toOption,
     levelId: json |> field("levelId", string),
-    milestone: json |> field("milestone", bool),
     sortIndex: json |> field("sortIndex", int),
     archived: json |> field("archived", bool),
   }
 }
 
-let create = (id, name, description, milestone, levelId, sortIndex, archived) => {
+let create = (id, name, description, levelId, sortIndex, archived) => {
   id: id,
   name: name,
   description: description,
-  milestone: milestone,
   levelId: levelId,
   sortIndex: sortIndex,
   archived: archived,
@@ -60,5 +55,5 @@ let unsafeFind = (targetGroups, componentName, id) =>
 
 let updateSortIndex = sortedTargetGroups =>
   sortedTargetGroups |> Js.Array.mapi((t, sortIndex) =>
-    create(t.id, t.name, t.description, t.milestone, t.levelId, sortIndex, t.archived)
+    create(t.id, t.name, t.description, t.levelId, sortIndex, t.archived)
   )

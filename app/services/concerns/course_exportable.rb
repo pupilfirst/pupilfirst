@@ -3,6 +3,7 @@ module CourseExportable
 
   def initialize(course_export)
     @course_export = course_export
+    @cohorts = course_export.cohorts
 
     add_custom_styles
   end
@@ -17,7 +18,11 @@ module CourseExportable
     io = StringIO.new(spreadsheet.bytes)
 
     @course_export.json_data = tables.to_json
-    @course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
+    @course_export.file.attach(
+      io: io,
+      filename: filename,
+      content_type: "application/vnd.oasis.opendocument.spreadsheet"
+    )
     @course_export.save!
   end
 
@@ -26,16 +31,16 @@ module CourseExportable
   end
 
   def add_custom_styles
-    spreadsheet.office_style 'passing-grade', family: :cell do
-      property :cell, 'background-color' => '#9AE6B4'
+    spreadsheet.office_style "passing-grade", family: :cell do
+      property :cell, "background-color" => "#9AE6B4"
     end
 
-    spreadsheet.office_style 'failing-grade', family: :cell do
-      property :cell, 'background-color' => '#FEB2B2'
+    spreadsheet.office_style "failing-grade", family: :cell do
+      property :cell, "background-color" => "#FEB2B2"
     end
 
-    spreadsheet.office_style 'pending-grade', family: :cell do
-      property :cell, 'background-color' => '#FAF089'
+    spreadsheet.office_style "pending-grade", family: :cell do
+      property :cell, "background-color" => "#FAF089"
     end
   end
 
@@ -49,13 +54,14 @@ module CourseExportable
   end
 
   def assign_styled_grade(grade_index, grading, submission)
-    evaluation_grade = submission.timeline_event_grades.pluck(:grade).join(',')
+    evaluation_grade = submission.timeline_event_grades.pluck(:grade).join(",")
 
-    grade, style = case [submission.passed_at.present?, evaluation_grade.empty?]
+    grade, style =
+      case [submission.passed_at.present?, evaluation_grade.empty?]
       when [true, true]
-        [submission.quiz_score || '✓', '']
+        [submission.quiz_score || "✓", ""]
       when [true, false]
-        [evaluation_grade, 'passing-grade']
+        [evaluation_grade, "passing-grade"]
       when [false, true]
         if submission.evaluated_at.present?
           ['x', '']
@@ -70,33 +76,40 @@ module CourseExportable
   # If a grade has already been stored, separate it from the next one with a semi-colon in the same cell.
   def append_grade(grading, grade_index, grade, style)
     # Store the grade as a number if we're not dealing with a complex grade.
-    parsed_grade = begin
+    parsed_grade =
+      begin
         integer_grade = grade.to_i
         integer_grade.to_s == grade ? integer_grade : grade
       end
 
-    value = if grading[grade_index].present?
+    value =
+      if grading[grade_index].present?
         "#{grading[grade_index][:value]};#{parsed_grade}"
       else
         parsed_grade
       end
 
     grading[grade_index] = if style.present?
-        { value: value, style: style }
-      else
-        value
-      end
+      { value: value, style: style }
+    else
+      value
+    end
 
     grading
   end
 
   def targets(role: nil)
-    @targets ||= begin
-        scope = course.targets.live
-          .joins(:level)
-          .includes(:level, :evaluation_criteria, :quiz, :target_group)
+    @targets ||=
+      begin
+        scope =
+          course
+            .targets
+            .live
+            .joins(:level)
+            .includes(:level, :evaluation_criteria, :quiz, :target_group)
 
-        scope = case role
+        scope =
+          case role
           when Target::ROLE_STUDENT
             scope.student
           when Target::ROLE_TEAM
@@ -105,9 +118,18 @@ module CourseExportable
             scope
           end
 
-        scope = @course_export.reviewed_only ? scope.joins(:evaluation_criteria) : scope
+        scope =
+          (
+            if @course_export.reviewed_only
+              scope.joins(:evaluation_criteria)
+            else
+              scope
+            end
+          )
 
-        scope.order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+        scope.order(
+          "levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC"
+        ).load
       end
   end
 
@@ -117,13 +139,13 @@ module CourseExportable
 
   def target_type(target)
     if target.evaluation_criteria.present?
-      'Graded'
+      "Graded"
     elsif target.quiz.present?
-      'Take Quiz'
+      "Take Quiz"
     elsif target.link_to_complete.present?
-      'Visit Link'
+      "Visit Link"
     else
-      'Mark as Complete'
+      "Mark as Complete"
     end
   end
 

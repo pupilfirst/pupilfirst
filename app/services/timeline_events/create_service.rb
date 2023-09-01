@@ -2,11 +2,11 @@ module TimelineEvents
   class CreateService
     def initialize(
       params,
-      founder,
+      student,
       notification_service: Developers::NotificationService.new
     )
       @params = params
-      @founder = founder
+      @student = student
       @target = params[:target]
       @notification_service = notification_service
     end
@@ -25,7 +25,7 @@ module TimelineEvents
           TimelineEvent
             .create!(timeline_event_params)
             .tap do |s|
-              @founder.timeline_event_owners.create!(
+              @student.timeline_event_owners.create!(
                 timeline_event: s,
                 latest: true
               )
@@ -36,10 +36,14 @@ module TimelineEvents
             end
         end
 
+      if @target.evaluation_criteria.blank?
+        TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
+      end
+
       @notification_service.execute(
-        @founder.course,
+        @student.course,
         :submission_created,
-        @founder.user,
+        @student.user,
         submission
       )
 
@@ -68,29 +72,31 @@ module TimelineEvents
     end
 
     def update_latest_flag(timeline_event)
-      TimelineEventOwner.where(
-        timeline_event_id: old_events(timeline_event).live,
-        founder: owners
-      ).update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
+      TimelineEventOwner
+        .where(
+          timeline_event_id: old_events(timeline_event).live,
+          student: owners
+        )
+        .update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def owners
-      if (@target.team_target? && @founder.team)
-        @founder.team.founders
+      if (@target.team_target? && @student.team)
+        @student.team.students
       else
-        @founder
+        @student
       end
     end
 
     def team_members
-      @founder.team ? @founder.team.founders - [@founder] : []
+      @student.team ? @student.team.students - [@student] : []
     end
 
     def old_events(timeline_event)
       @target
         .timeline_events
         .joins(:timeline_event_owners)
-        .where(timeline_event_owners: { founder: owners })
+        .where(timeline_event_owners: { student: owners })
         .where.not(id: timeline_event)
     end
   end

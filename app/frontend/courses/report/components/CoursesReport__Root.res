@@ -11,10 +11,7 @@ type targetStatus = [#PendingReview | #Rejected | #Completed]
 
 type sortDirection = [#Ascending | #Descending]
 
-type submissionsFilter = {
-  selectedLevel: option<Level.t>,
-  selectedStatus: option<targetStatus>,
-}
+type submissionsFilter = {selectedStatus: option<targetStatus>}
 
 type state = {
   selectedTab: selectedTab,
@@ -29,15 +26,14 @@ type action =
   | SelectSubmissionsTab
   | SaveOverviewData(OverviewData.t)
   | SaveSubmissions(Submissions.t)
-  | UpdateLevelFilter(option<Level.t>)
   | UpdateStatusFilter(option<targetStatus>)
   | UpdateSortDirection(sortDirection)
 
 let buttonClasses = selected =>
-  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
+  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none  md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
-      : ""
+      : "md:border-transparent"
   )
 
 let reducer = (state, action) =>
@@ -46,17 +42,9 @@ let reducer = (state, action) =>
   | SelectSubmissionsTab => {...state, selectedTab: #Submissions}
   | SaveOverviewData(overviewData) => {...state, overviewData: overviewData}
   | SaveSubmissions(submissionsData) => {...state, submissionsData: submissionsData}
-  | UpdateLevelFilter(level) => {
-      ...state,
-      submissionsFilter: {
-        ...state.submissionsFilter,
-        selectedLevel: level,
-      },
-    }
   | UpdateStatusFilter(status) => {
       ...state,
       submissionsFilter: {
-        ...state.submissionsFilter,
         selectedStatus: status,
       },
     }
@@ -69,26 +57,27 @@ module StudentReportOverviewQuery = %graphql(`
         evaluationCriteria {
           id, name, maxGrade
         },
-        student {
-          level {
-            id
-          }
-        }
         totalTargets
         targetsCompleted
         targetsPendingReview
-        completedLevelIds
         quizScores
         averageGrades {
           evaluationCriterionId
           averageGrade
         }
+        milestoneTargetsCompletionStatus {
+          id
+          title
+          completed
+          milestoneNumber
+        }
       }
     }
   `)
 
-let saveOverviewData = (studentId, send, data) =>
+let saveOverviewData = (studentId, send, data) => {
   send(SaveOverviewData(Loaded(data |> StudentOverview.makeFromJs(studentId))))
+}
 
 let getOverviewData = (studentId, send, ()) => {
   StudentReportOverviewQuery.make({studentId: studentId})
@@ -105,7 +94,7 @@ let getOverviewData = (studentId, send, ()) => {
 let updateSubmissions = (send, submissions) => send(SaveSubmissions(submissions))
 
 @react.component
-let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
+let make = (~studentId, ~coaches, ~teamStudentIds) => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -113,7 +102,6 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
       overviewData: Unloaded,
       submissionsData: Unloaded,
       submissionsFilter: {
-        selectedLevel: None,
         selectedStatus: None,
       },
       sortDirection: #Descending,
@@ -125,10 +113,10 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
   <div
     role="main"
     ariaLabel="Report"
-    className="bg-gray-50 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
-    <div className="bg-gray-50 static">
+    className="md:pt-18 pb-20 md:pb-5 px-4 bg-gray-50 md:h-screen overflow-y-auto">
+    <div className="bg-gray-50 sticky top-0 z-10">
       <div className="max-w-3xl mx-auto">
-        <div className="flex pt-3 mb-4 md:border-b border-gray-300">
+        <div className="flex pt-3 md:border-b border-gray-300">
           <div
             role="tablist"
             ariaLabel="Status tabs"
@@ -153,18 +141,15 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
     </div>
     <div className="">
       {switch state.selectedTab {
-      | #Overview => <CoursesReport__Overview overviewData=state.overviewData levels coaches />
+      | #Overview => <CoursesReport__Overview overviewData=state.overviewData coaches />
       | #Submissions =>
         <CoursesReport__SubmissionsList
           studentId
           teamStudentIds
-          levels
           submissions=state.submissionsData
           updateSubmissionsCB={updateSubmissions(send)}
-          selectedLevel=state.submissionsFilter.selectedLevel
           selectedStatus=state.submissionsFilter.selectedStatus
           sortDirection=state.sortDirection
-          updateSelectedLevelCB={level => send(UpdateLevelFilter(level))}
           updateSelectedStatusCB={status => send(UpdateStatusFilter(status))}
           updateSortDirectionCB={direction => send(UpdateSortDirection(direction))}
         />

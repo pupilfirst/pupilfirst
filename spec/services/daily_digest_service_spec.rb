@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe DailyDigestService do
   include ActiveSupport::Testing::TimeHelpers
@@ -8,12 +8,12 @@ describe DailyDigestService do
 
   around(:each) do |example|
     # Time travel to the test time when running a spec.
-    travel_to(Time.zone.parse('2019-07-16T18:00:00+05:30')) { example.run }
+    travel_to(Time.zone.parse("2019-07-16T18:00:00+05:30")) { example.run }
   end
 
   let(:school) { create :school, :current }
 
-  describe '#execute' do
+  describe "#execute" do
     context 'when there are more than 5 new topics and 5 "re-activated" older topics' do
       let(:course_1) { create :course, school: school }
       let(:cohort_1) { create :cohort, course: course_1 }
@@ -25,22 +25,18 @@ describe DailyDigestService do
       let(:level_2) { create :level, :one, course: course_2 }
       let(:team_2) { create :team, cohort: cohort_2 }
 
-      let(:t1_student) do
-        create :founder, team: team_1, cohort: cohort_1, level: level_1
-      end
-      let(:t2_student) do
-        create :founder, team: team_2, cohort: cohort_2, level: level_2
-      end
+      let(:t1_student) { create :student, team: team_1, cohort: cohort_1 }
+      let(:t2_student) { create :student, team: team_2, cohort: cohort_2 }
 
       let!(:community_1) do
         create :community,
-               name: 'First Community',
+               name: "First Community",
                school: school,
                courses: [course_1, course_2]
       end
       let!(:community_2) do
         create :community,
-               name: 'Second Community',
+               name: "Second Community",
                school: school,
                courses: [course_2]
       end
@@ -203,14 +199,14 @@ describe DailyDigestService do
                created_at: 1.hour.ago
       end
 
-      it 'sends digest emails containing 5 most popular newly posted topics and older topics with new activity' do
+      it "sends digest emails containing 5 most popular newly posted topics and older topics with new activity" do
         subject.execute
         open_email(t1_user.email)
 
         subject_1 = current_email.subject
         expect(subject_1).to include(school.name)
-        expect(subject_1).to include('Daily Digest')
-        expect(subject_1).to include('Jul 16, 2019')
+        expect(subject_1).to include("Daily Digest")
+        expect(subject_1).to include("Jul 16, 2019")
 
         body_1 = sanitize_html(current_email.body)
 
@@ -258,11 +254,11 @@ describe DailyDigestService do
         expect(body_2).to include(topic_c2_reactivated_4.title)
       end
 
-      context 'when there is a student whose access has ended' do
+      context "when there is a student whose access has ended" do
         let(:ended_cohort) { create :cohort, ends_at: 1.day.ago }
         let(:team_access_ended) { create :team, cohort: ended_cohort }
         let(:student_access_ended) do
-          create :founder, team: team_access_ended, cohort: cohort_1
+          create :student, team: team_access_ended, cohort: cohort_1
         end
         let!(:user_access_ended) { student_access_ended.user }
         let(:community_1) do
@@ -272,17 +268,17 @@ describe DailyDigestService do
           create :community, school: school, courses: [team_access_ended.course]
         end
 
-        it 'does not send digest to student whose access has ended' do
+        it "does not send digest to student whose access has ended" do
           subject.execute
           open_email(user_access_ended.email)
           expect(current_email).to eq(nil)
         end
       end
 
-      context 'when there is a dropped out student' do
+      context "when there is a dropped out student" do
         let(:team_dropped_out) { create :team, cohort: cohort_1 }
         let(:student_dropped_out) do
-          create :founder,
+          create :student,
                  team: team_dropped_out,
                  dropped_out_at: 1.day.ago,
                  cohort: cohort_1
@@ -295,38 +291,38 @@ describe DailyDigestService do
           create :community, school: school, courses: [team_dropped_out.course]
         end
 
-        it 'does not send digest to dropped out student' do
+        it "does not send digest to dropped out student" do
           subject.execute
           open_email(user_dropped_out.email)
           expect(current_email).to eq(nil)
         end
       end
 
-      context 'when a student has opted-out of the daily digest' do
-        let(:student_opt_out) { create :founder, team: team_2 }
+      context "when a student has opted-out of the daily digest" do
+        let(:student_opt_out) { create :student, team: team_2 }
         let!(:user_opt_out) { student_opt_out.user }
 
         before { user_opt_out.update!(preferences: { daily_digest: false }) }
 
-        it 'does not send daily digest' do
+        it "does not send daily digest" do
           subject.execute
           open_email(user_opt_out.email)
           expect(current_email).to eq(nil)
         end
       end
 
-      context 'when a user has a bounced email address' do
-        let(:student_bounced) { create :founder, team: team_2 }
+      context "when a user has a bounced email address" do
+        let(:student_bounced) { create :student, team: team_2 }
         let!(:user_bounced) { student_bounced.user }
 
         before do
           BounceReport.create!(
             email: user_bounced.email,
-            bounce_type: 'HardBounce'
+            bounce_type: "HardBounce"
           )
         end
 
-        it 'does not send daily digest' do
+        it "does not send daily digest" do
           subject.execute
           open_email(user_bounced.email)
           expect(current_email).to eq(nil)
@@ -334,13 +330,13 @@ describe DailyDigestService do
       end
     end
 
-    context 'when the user is a coach' do
+    context "when the user is a coach" do
       let(:course_1) { create :course, school: school }
       let(:cohort_1) { create :cohort, course: course_1 }
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
       let!(:target_1) do
-        create :target, :for_founders, target_group: target_group_1
+        create :target, :for_students, target_group: target_group_1
       end
       let(:grade_labels_for_1) do
         [
@@ -363,7 +359,7 @@ describe DailyDigestService do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: team_1.founders,
+          owners: team_1.students,
           target: target_1
         )
       end
@@ -373,7 +369,7 @@ describe DailyDigestService do
       let(:level_2) { create :level, :one, course: course_2 }
       let(:target_group_2) { create :target_group, level: level_2 }
       let!(:target_2) do
-        create :target, :for_founders, target_group: target_group_2
+        create :target, :for_students, target_group: target_group_2
       end
       let(:grade_labels_for_2) do
         [
@@ -396,7 +392,7 @@ describe DailyDigestService do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: team_2.founders,
+          owners: team_2.students,
           target: target_2
         )
       end
@@ -405,7 +401,7 @@ describe DailyDigestService do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: team_2.founders,
+          owners: team_2.students,
           target: target_2
         )
       end
@@ -419,7 +415,7 @@ describe DailyDigestService do
       let(:community_1) do
         create :community, school: school, courses: [course_1]
       end
-      let(:t1_user) { team_1.founders.first.user }
+      let(:t1_user) { team_1.students.first.user }
 
       let(:course_3) { create :course, school: school }
       let(:cohort_3) { create :cohort, course: course_3 }
@@ -428,7 +424,7 @@ describe DailyDigestService do
       let(:community_2) do
         create :community, school: school, courses: [course_3]
       end
-      let(:t3_user) { team_3.founders.first.user }
+      let(:t3_user) { team_3.students.first.user }
       let(:coach_2) { create :faculty, school: school }
 
       before do
@@ -436,9 +432,9 @@ describe DailyDigestService do
         create :faculty_cohort_enrollment, faculty: coach, cohort: cohort_2
         create :faculty_cohort_enrollment, faculty: team_coach, cohort: cohort_1
         create :faculty_cohort_enrollment, faculty: team_coach, cohort: cohort_2
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                faculty: team_coach,
-               founder: team_2.founders.first
+               student: team_2.students.first
         create :faculty_cohort_enrollment, faculty: coach_2, cohort: cohort_3
         create :topic,
                :with_first_post,
@@ -453,7 +449,7 @@ describe DailyDigestService do
         target_2.evaluation_criteria << evaluation_criterion_2
       end
 
-      it 'sends coaches info about submissions to review and community updates' do
+      it "sends coaches info about submissions to review and community updates" do
         subject.execute
 
         open_email(coach.user.email)
@@ -461,9 +457,9 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include('There are 3')
-        expect(b).to include('new submissions to review')
-        expect(b).to include('in some courses')
+        expect(b).to include(
+          "There are 3 new submissions to review in the courses you're coaching"
+        )
 
         # The email should include community updates, but only
         # from the courses where the coach is enrolled.
@@ -471,7 +467,7 @@ describe DailyDigestService do
         expect(b).not_to include(community_2.name)
       end
 
-      it 'sends team coaches the number submissions of those assigned to them for review' do
+      it "sends team coaches the number submissions from students assigned to them" do
         subject.execute
 
         open_email(team_coach.user.email)
@@ -480,11 +476,11 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include('(2 assigned to you)')
-        expect(b).not_to include('(none of which are assigned to you)')
+        expect(b).to include("(2 from students assigned to you)")
+        expect(b).not_to include("(0 from students assigned to you)")
       end
 
-      it 'only sends community updates where coach is enrolled to a linked course' do
+      it "only sends community updates where coach is enrolled to a linked course" do
         subject.execute
 
         open_email(coach_2.user.email)
@@ -495,16 +491,33 @@ describe DailyDigestService do
         expect(b).not_to include(community_1.name)
         expect(b).to include(community_2.name)
       end
+
+      context "when there is only one submission pending review" do
+        before do
+          submission_pending_2.destroy!
+          submission_pending_3.destroy!
+        end
+
+        it "mentions that there is only one submission to review" do
+          subject.execute
+          open_email(coach.user.email)
+          b = sanitize_html(current_email.body)
+
+          expect(b).to include(
+            "There is 1 new submission to review in a course you're coaching"
+          )
+        end
+      end
     end
 
-    context 'when there are no updates' do
+    context "when there are no updates" do
       let(:school_2) { create :school }
       let(:course_1) { create :course, school: school_2 }
       let(:cohort_1) { create :cohort, course: course_1 }
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
       let!(:target_1) do
-        create :target, :for_founders, target_group: target_group_1
+        create :target, :for_students, target_group: target_group_1
       end
       let(:grade_labels_for_1) do
         [
@@ -530,7 +543,7 @@ describe DailyDigestService do
         create :faculty_cohort_enrollment, faculty: coach, cohort: cohort_1
       end
 
-      it 'should not trigger email' do
+      it "should not trigger email" do
         subject.execute
 
         open_email(coach.user.email)

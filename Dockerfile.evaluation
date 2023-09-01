@@ -1,0 +1,63 @@
+FROM ruby:3.2.2-bookworm
+WORKDIR /app
+
+# We'll need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+
+# Now install the exact version of the client we need, along with a few other packages.
+RUN apt-get update && apt-get install -y \
+  postgresql-client-12 \
+  ca-certificates \
+  cron \
+  curl \
+  gnupg \
+  imagemagick
+
+# Install gems.
+COPY Gemfile .
+COPY Gemfile.lock .
+RUN gem install bundler -v '2.4.13'
+RUN bundle install -j4
+
+# We need NodeJS & Yarn for precompiling assets.
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
+
+# Install JS dependencies using Yarn.
+COPY package.json .
+COPY yarn.lock .
+COPY .yarnrc.docker.yml .yarnrc.yml
+COPY .yarn/releases .yarn/releases
+RUN corepack enable
+
+# Ignore checksum until issue with react-csv-reader is resolved.
+ENV YARN_CHECKSUM_BEHAVIOR=ignore
+
+# Install NodeJS dependencies.
+RUN yarn install
+
+# Copy over remaining files and set up for precompilation.
+COPY . /app
+COPY example.env .env
+COPY config/database.evaluation.yml config/database.yml
+
+# Export the locales.json file.
+RUN bundle exec i18n export
+
+# Compile ReScript files to JS.
+RUN yarn run re:build
+
+# Run Vite's build step now so that app boots up quickly.
+RUN bundle exec bin/vite build
+
+RUN mkdir -p tmp/pids
+
+# Add Tini.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+# Run under tini to ensure proper signal handling.
+CMD bin/evaluate

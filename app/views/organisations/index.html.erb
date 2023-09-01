@@ -1,5 +1,5 @@
-<section class="max-w-5xl mx-auto p-5">
-  <h1 class="text-2xl font-bold mt-8"><%= t('.heading') %></h1>
+<section class="max-w-5xl mx-auto p-5 md:pt-18">
+  <h1 class="text-2xl font-bold md:mt-8"><%= t('.heading') %></h1>
   <div class="space-y-4 mt-6">
     <% @organisations.each do |organisation| %>
       <%= link_to organisation_path(organisation), class: "p-6 flex bg-white items-center border border-transparent rounded-lg shadow font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500" do %>

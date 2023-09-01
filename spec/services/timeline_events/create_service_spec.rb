@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe TimelineEvents::CreateService do
   subject { described_class.new(params, student) }
 
   let(:student) { create :student }
-  let(:level) { student.level }
+  let(:level) { create :level }
   let(:target_group) { create :target_group, level: level }
   let(:target) do
     create :target, role: Target::ROLE_STUDENT, target_group: target_group
@@ -14,38 +14,38 @@ describe TimelineEvents::CreateService do
   let(:checklist) do
     [
       {
-        'title' => 'File',
-        'result' => '',
-        'kind' => 'files',
-        'status' => 'noAnswer'
+        "title" => "File",
+        "result" => "",
+        "kind" => "files",
+        "status" => "noAnswer"
       },
       {
-        'title' => 'Description',
-        'result' => description,
-        'kind' => 'longText',
-        'status' => 'noAnswer'
+        "title" => "Description",
+        "result" => description,
+        "kind" => "longText",
+        "status" => "noAnswer"
       }
     ]
   end
 
   let(:params) { { target: target, checklist: checklist } }
 
-  describe '#execute' do
-    it 'creates a new submission with the given params as the latest submission' do
+  describe "#execute" do
+    it "creates a new submission with the given params as the latest submission" do
       expect { subject.execute }.to change { TimelineEvent.count }.by(1)
 
       last_submission = TimelineEvent.last
 
       expect(last_submission.target).to eq(target)
-      expect(last_submission.founders.pluck(:id)).to eq([student.id])
+      expect(last_submission.students.pluck(:id)).to eq([student.id])
       expect(last_submission.checklist).to eq(checklist)
       expect(last_submission.timeline_event_owners.pluck(:latest).uniq).to eq(
         [true]
       )
     end
 
-    it 'publishes submission_created event' do
-      notification_service = instance_double('Developers::NotificationService')
+    it "publishes submission_created event" do
+      notification_service = instance_double("Developers::NotificationService")
       expect(notification_service).to receive(:execute).with(
         student.course,
         :submission_created,
@@ -61,28 +61,28 @@ describe TimelineEvents::CreateService do
       subject.execute
     end
 
-    context 'when target is a team target and student is in a team' do
+    context "when target is a team target and student is in a team" do
       let(:team) { create :team_with_students }
-      let(:student) { team.founders.first }
+      let(:student) { team.students.first }
       let(:target) do
         create :target, role: Target::ROLE_TEAM, target_group: target_group
       end
 
-      it 'creates submission linked to all students in team' do
+      it "creates submission linked to all students in team" do
         subject.execute
 
         last_submission = TimelineEvent.last
 
-        expect(last_submission.founders.count).to eq(2)
-        expect(last_submission.founders.pluck(:id)).to match_array(
-          student.team.founders.pluck(:id)
+        expect(last_submission.students.count).to eq(2)
+        expect(last_submission.students.pluck(:id)).to match_array(
+          student.team.students.pluck(:id)
         )
       end
     end
 
-    context 'when previous submissions exist' do
+    context "when previous submissions exist" do
       let(:another_team) { create :team_with_students }
-      let(:another_student) { another_team.founders.first }
+      let(:another_student) { another_team.students.first }
       let!(:first_submission) do
         create :timeline_event,
                :with_owners,
@@ -105,7 +105,7 @@ describe TimelineEvents::CreateService do
                target: target
       end
 
-      it 'removes the latest flag from previous latest submission of same set of students' do
+      it "removes the latest flag from previous latest submission of same set of students" do
         expect { subject.execute }.to change { TimelineEvent.count }.by(1)
         expect(
           TimelineEvent.last.timeline_event_owners.pluck(:latest).uniq
@@ -121,7 +121,7 @@ describe TimelineEvents::CreateService do
           another_submission
             .reload
             .timeline_event_owners
-            .where(founder: student)
+            .where(student: student)
             .first
             .latest
         ).to eq(false)
@@ -129,14 +129,14 @@ describe TimelineEvents::CreateService do
           another_submission
             .reload
             .timeline_event_owners
-            .where(founder: another_student)
+            .where(student: another_student)
             .first
             .latest
         ).to eq(true)
       end
     end
 
-    context 'when target is an individual target with submissions from team members' do
+    context "when target is an individual target with submissions from team members" do
       let(:another_student) { create :student }
       let!(:student_first_submission) do
         create :timeline_event,
@@ -153,7 +153,7 @@ describe TimelineEvents::CreateService do
                target: target
       end
 
-      it 'updates the latest flag only for submission from the student, not his team members' do
+      it "updates the latest flag only for submission from the student, not his team members" do
         subject.execute
 
         last_submission = TimelineEvent.last
@@ -161,7 +161,7 @@ describe TimelineEvents::CreateService do
         expect(
           last_submission
             .timeline_event_owners
-            .where(founder: student)
+            .where(student: student)
             .first
             .latest
         ).to eq(true)
@@ -169,7 +169,7 @@ describe TimelineEvents::CreateService do
           student_first_submission
             .reload
             .timeline_event_owners
-            .where(founder: student)
+            .where(student: student)
             .first
             .latest
         ).to eq(false)
@@ -177,7 +177,7 @@ describe TimelineEvents::CreateService do
           another_student_submission
             .reload
             .timeline_event_owners
-            .where(founder: another_student)
+            .where(student: another_student)
             .first
             .latest
         ).to eq(true)

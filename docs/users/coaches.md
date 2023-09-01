@@ -13,13 +13,15 @@ Pupilfirst enables quick and efficient review of task submissions by students, a
 
 Coaches can be added from the coaches page which is linked on the main navigation bar of the school administration interface.
 
-![Coaches page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574236845/pupilfirst_documentation/coaches/coaches_page_xjrmba.png)
+![Coaches page in school administration interface](../assets/coaches/coaches_page.png)
 
 You can add new coaches using the _Add New Coach_ option, and edit them by clicking on the name on this list. Coaches have a few additional properties unique to them:
 
+**Connect Link**: When a coach is publicly listed, this link will also be displayed on the `/coaches` page. This link can be used to allow students to connect with a coach outside of the platform, via tools such as _Calendly_.
+
 **Should the coach profile be public?**: If this option is turned on for at least one coach, it will enable the public coaches index page at the `/coaches` path on your school. This page will list coaches that have been marked public using this setting.
 
-**Connect Link**: When a coach is publicly listed, this link will also be displayed on the `/coaches` page. This link can be used to allow students to connect with a coach outside of the platform, via tools such as _Calendly_.
+**Coach Status**: To distinguish coaches who are no longer working with the school, you can assign them the status of _exited_. Feedback and messages from these coaches are preserved, but they no longer have access to coach-specific features.
 
 ## Assigning coaches to students
 
@@ -29,7 +31,7 @@ Once a coach has been added to a school, they can immediately access all communi
 
 To assign a coach to a course, head to the _Coaches_ sub-menu inside a course:
 
-![Coaches assigned to a course](https://res.cloudinary.com/sv-co/image/upload/v1589824687/pupilfirst_documentation/coaches/course_coaches_page_jql0rz.png)
+![Coaches assigned to a course](../assets/coaches/course_coaches_page.png)
 
 This assignment allows coaches to review submissions from _all_ students in a course. For courses with small numbers of students, this is probably sufficient configuration.
 
@@ -41,12 +43,12 @@ Head to the list of students in a course, and select any student to edit their d
 
 This editable list of coaches allows you to directly assign coaches to a student or a team.
 
-The makes a few changes across Pupilfirst:
+This makes a few changes across Pupilfirst:
 
 1. The list of [submissions to review](/users/reviewing_submissions) can now be filtered by selecting an _assigned coach_.
 2. When a coach with directly assigned students loads the page for the first time, the filter defaults to show them only submissions from their own students.
 3. When viewing the details of a submission, the directly assigned coaches are listed at the top.
-4. When browsing the coach's [students list](/users/student_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
+4. When browsing the [coach's view of student cohorts](/users/cohort_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
 
 <details>
   <summary>Having multiple coaches to handle reviewing of submissions can come in really handy at times.</summary>

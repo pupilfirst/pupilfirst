@@ -1,0 +1,32 @@
+# Check if database schema has been loaded.
+check_schema_loaded() {
+    if bundle exec rails runner 'exit ActiveRecord::Base.connection.tables.empty?' ; then
+        echo "Database schema has not been loaded."
+        return 1
+    else
+        echo "Database schema has already been loaded."
+        return 0
+    fi
+}
+
+# Load schema and seed data if schema not loaded.
+setup_database() {
+    echo "Setting up database..."
+    bundle exec rake db:schema:load
+    bundle exec rake db:seed
+}
+
+# Start the rails server
+start_server() {
+    echo "Starting server..."
+    bundle exec rails server -e production -b 0.0.0.0
+}
+
+# Script execution starts here
+if check_schema_loaded ; then
+    echo "Database schema loaded, starting server..."
+else
+    setup_database
+fi
+
+start_server

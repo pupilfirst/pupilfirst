@@ -1,74 +1,78 @@
 module Cohorts
   class StudentsPresenter < ApplicationPresenter
-    def initialize(view_context, organisation, cohort)
+    def initialize(view_context, cohort, organisation: nil)
       @organisation = organisation
+      @course = cohort.course
       @cohort = cohort
       super(view_context)
     end
 
-    def distribution
-      @distribution ||=
-        begin
-          counts = scope.joins(:level).group("levels.number").count
-
-          dist =
-            @cohort
-              .course
-              .levels
-              .where.not(number: 0)
-              .map do |level|
-                {
-                  id: level.id.to_s,
-                  number: level.number,
-                  filterName: "#{level.number};L#{level.number}: #{level.name}",
-                  studentsInLevel: counts[level.number] || 0,
-                  unlocked: level.unlocked?
-                }
-              end
-
-          {
-            studentDistribution: dist,
-            href: view.students_organisation_cohort_path(@organisation, @cohort)
-          }
-        end
+    def t(key)
+      I18n.t("presenters.cohorts.students.#{key}")
     end
 
     def filter
-      @filter ||= {
-        id: "organisation-cohort-students-filter",
-        filters: [
+      @filter ||=
+        begin
+          milestone_targets_data =
+            milestone_targets
+              .pluck(:id, :milestone_number, :title)
+              .map do |id, number, title|
+                "#{id};#{I18n.t("presenters.cohorts.students.milestone_status_filter_value", m: I18n.t("shared.m"), number: number, title: title)}"
+              end
+
           {
-            key: "level",
-            label: "Level",
-            filterType: "MultiSelect",
-            values:
-              @cohort.course.levels.map do |l|
-                "#{l.number};L#{l.number}: #{l.name}"
-              end,
-            color: "green"
-          },
-          { key: "name", label: "Name", filterType: "Search", color: "red" },
-          {
-            key: "email",
-            label: "Email",
-            filterType: "Search",
-            color: "yellow"
+            id: "cohort-students-filter",
+            filters: [
+              {
+                key: "milestone_completed",
+                label: t("milestone_completed"),
+                filterType: "MultiSelect",
+                values: milestone_targets_data,
+                color: "blue"
+              },
+              {
+                key: "milestone_incomplete",
+                label: t("milestone_incomplete"),
+                filterType: "MultiSelect",
+                values: milestone_targets_data,
+                color: "orange"
+              },
+              {
+                key: "course",
+                label: t("course_completion"),
+                filterType: "MultiSelect",
+                values: %w[Completed Incomplete],
+                color: "green"
+              },
+              {
+                key: "name",
+                label: t("search_by_name"),
+                filterType: "Search",
+                color: "red"
+              },
+              {
+                key: "email",
+                label: t("search_by_email"),
+                filterType: "Search",
+                color: "yellow"
+              }
+            ],
+            placeholder: t("filter_placeholder"),
+            hint: t("filter_hint"),
+            sorter: {
+              key: "sort_by",
+              default: "Recently Seen",
+              options: [
+                "Recently Seen",
+                "Name",
+                "First Created",
+                "Last Created",
+                "Earliest Seen"
+              ]
+            }
           }
-        ],
-        placeholder: "Filter by level, or search by name or email",
-        hint: "...or start typing to search by student's name of email",
-        sorter: {
-          key: "sort_by",
-          default: "Recently Seen",
-          options: [
-            "Recently Seen",
-            "Name",
-            "First Created",
-            "Last Created",
-            "Earliest Seen"
-          ]
-        }
-      }
+        end
     end
 
     def counts
@@ -78,28 +82,69 @@ module Cohorts
       }
     end
 
+    def filters_in_url
+      params
+        .slice(
+          :name,
+          :email,
+          :milestone_completed,
+          :milestone_incomplete,
+          :course
+        )
+        .permit(
+          :name,
+          :email,
+          :milestone_completed,
+          :milestone_incomplete,
+          :course
+        )
+        .compact
+    end
+
     def students
       @students ||=
         begin
-          filter_1 = filter_students_by_level(scope)
-          filter_2 = filter_students_by_name(filter_1)
-          filter_3 = filter_students_by_email(filter_2)
-          sorted = sort_students(filter_3)
-          included = sorted.includes(:user, :level)
+          filter_1 = filter_students_by_milestone_completed(scope)
+          filter_2 = filter_students_by_milestone_incomplete(filter_1)
+          filter_3 = filter_students_by_course_completion(filter_2)
+          filter_4 = filter_students_by_name(filter_3)
+          filter_5 = filter_students_by_email(filter_4)
+          sorted = sort_students(filter_5)
+          included = sorted.includes(:user)
           paged = included.page(params[:page]).per(24)
           paged.count.zero? ? paged.page(paged.total_pages) : paged
         end
     end
 
-    private
+    def milestone_completion_status
+      status = Hash.new({ percentage: 0, students_count: 0 })
 
-    def filter_students_by_level(scope)
-      if params[:level].present?
-        scope.joins(:level).where(levels: { number: params[:level] })
-      else
-        scope
-      end
+      TimelineEvent
+        .from_students(scope)
+        .where(target: milestone_targets)
+        .passed
+        .group(:target_id)
+        .joins(:students)
+        .select("target_id, COUNT(DISTINCT students.id) AS students_count")
+        .each do |submission|
+          target = milestone_targets.find { |t| t.id == submission.target_id }
+          percentage =
+            ((submission.students_count / counts[:total].to_f) * 100).round
+          status[target.id] = {
+            percentage: percentage,
+            students_count: submission.students_count
+          }
+        end
+
+      status
     end
+
+    def milestone_targets
+      @milestone_targets ||=
+        @course.targets.live.where(milestone: true).order(:milestone_number)
+    end
+
+    private
 
     def filter_students_by_name(scope)
       if params[:name].present?
@@ -115,6 +160,41 @@ module Cohorts
           "lower(users.email) ILIKE ?",
           "%#{params[:email].downcase}%"
         )
+      else
+        scope
+      end
+    end
+
+    def milestone_completed_students(param)
+      scope
+        .joins(timeline_events: :target)
+        .where(targets: { id: param, milestone: true })
+        .where.not(timeline_events: { passed_at: nil })
+    end
+
+    def filter_students_by_milestone_completed(scope)
+      if params[:milestone_completed].present?
+        milestone_completed_students(params[:milestone_completed])
+      else
+        scope
+      end
+    end
+
+    def filter_students_by_milestone_incomplete(scope)
+      if params[:milestone_incomplete].present?
+        scope.where.not(
+          id: milestone_completed_students(params[:milestone_incomplete])
+        )
+      else
+        scope
+      end
+    end
+
+    def filter_students_by_course_completion(scope)
+      if params[:course] == "Completed"
+        scope.where.not(completed_at: nil)
+      elsif params[:course] == "Incomplete"
+        scope.where(completed_at: nil)
       else
         scope
       end
@@ -136,8 +216,12 @@ module Cohorts
     end
 
     def scope
-      @scope ||=
-        @organisation.founders.not_dropped_out.where(cohort_id: @cohort.id)
+      if @organisation.present?
+        @scope ||=
+          @organisation.students.not_dropped_out.where(cohort_id: @cohort.id)
+      else
+        @scope ||= @cohort.students.not_dropped_out
+      end
     end
   end
 end

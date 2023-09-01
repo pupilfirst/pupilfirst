@@ -11,7 +11,7 @@ describe Users::InitializeSchoolService do
 
   let(:level_one) { create :level, :one, course: course }
   let(:target_group_l1_1) do
-    create :target_group, level: level_one, milestone: true
+    create :target_group, level: level_one
   end
   let!(:target_l1_1_1) do
     create :target, :with_content, :for_team, target_group: target_group_l1_1
@@ -22,14 +22,14 @@ describe Users::InitializeSchoolService do
   describe '#execute' do
     it 'create initializes a school with a new course, coach, student and community' do
       # user should not have a student or coach profile
-      expect(user.founders).to eq([])
+      expect(user.students).to eq([])
       expect(user.faculty).to eq(nil)
       expect(new_school.courses.count).to eq(0)
 
       subject.execute
 
       # should create a student profile
-      expect(user.reload.founders.count).to eq(1)
+      expect(user.reload.students.count).to eq(1)
 
       # should create a coach profile
       expect(user.faculty.present?).to be(true)

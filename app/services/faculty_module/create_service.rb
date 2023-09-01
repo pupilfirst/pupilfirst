@@ -8,9 +8,10 @@ module FacultyModule
       school = @faculty_params[:school]
 
       user =
-        User
-          .where(email: @faculty_params[:email], school: school)
-          .first_or_create!(title: 'Coach')
+        User.where(
+          email: @faculty_params[:email],
+          school: school
+        ).first_or_create!(title: "Coach")
 
       return user.faculty if user.faculty.present?
 

@@ -4,7 +4,6 @@ type sortCriterion = [#EvaluatedAt | #SubmittedAt]
 
 type t = {
   nameOrEmail: option<string>,
-  levelId: option<string>,
   personalCoachId: option<string>,
   assignedCoachId: option<string>,
   reviewingCoachId: option<string>,
@@ -16,7 +15,6 @@ type t = {
 }
 
 let nameOrEmail = t => t.nameOrEmail
-let levelId = t => t.levelId
 let targetId = t => t.targetId
 let sortCriterion = t => t.sortCriterion
 let sortDirection = t => t.sortDirection
@@ -43,7 +41,6 @@ let makeFromQueryParams = search => {
   open Webapi.Url.URLSearchParams
   {
     nameOrEmail: get("search", params),
-    levelId: get("levelId", params),
     personalCoachId: get("personalCoachId", params),
     assignedCoachId: get("assignedCoachId", params),
     reviewingCoachId: get("reviewingCoachId", params),
@@ -79,7 +76,8 @@ let toQueryString = filter => {
   let filterDict = Js.Dict.fromArray([("sortCriterion", sortCriterion)])
 
   switch filter.sortDirection {
-  | Some(direction) => Js.Dict.set(
+  | Some(direction) =>
+    Js.Dict.set(
       filterDict,
       "sortDirection",
       switch direction {
@@ -91,7 +89,6 @@ let toQueryString = filter => {
   }
   Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))
   Belt.Option.forEach(filter.targetId, targetId => Js.Dict.set(filterDict, "targetId", targetId))
-  Belt.Option.forEach(filter.levelId, levelId => Js.Dict.set(filterDict, "levelId", levelId))
 
   Belt.Option.forEach(filter.personalCoachId, coachId =>
     Js.Dict.set(filterDict, "personalCoachId", coachId)

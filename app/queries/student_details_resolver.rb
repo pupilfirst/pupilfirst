@@ -7,39 +7,13 @@ class StudentDetailsResolver < ApplicationQuery
       targets_completed: targets_completed,
       targets_pending_review: targets_pending_review,
       total_targets: current_course_targets.count,
-      level_id: level.id,
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
       average_grades: average_grades,
-      completed_level_ids: completed_level_ids,
       team: team,
-      student: student
+      student: student,
+      milestone_targets_completion_status: milestone_targets_completion_status
     }
-  end
-
-  def completed_level_ids
-    required_targets_by_level =
-      Target
-        .live
-        .joins(:target_group)
-        .where(target_groups: { milestone: true, level_id: levels.select(:id) })
-        .distinct(:id)
-        .pluck(:id, "target_groups.level_id")
-        .each_with_object(
-          {}
-        ) do |(target_id, level_id), required_targets_by_level|
-          required_targets_by_level[level_id] ||= []
-          required_targets_by_level[level_id] << target_id
-        end
-
-    passed_target_ids =
-      student.latest_submissions.passed.distinct(:target_id).pluck(:target_id)
-
-    levels
-      .pluck(:id)
-      .select do |level_id|
-        ((required_targets_by_level[level_id] || []) - passed_target_ids).empty?
-      end
   end
 
   def average_grades
@@ -87,16 +61,8 @@ class StudentDetailsResolver < ApplicationQuery
       current_user.faculty.cohorts.exists?(id: student.cohort_id)
   end
 
-  def levels
-    @levels ||= course.levels.unlocked.where("number <= ?", level.number)
-  end
-
-  def level
-    @level ||= student.level
-  end
-
   def student
-    @student ||= Founder.includes(:user).find_by(id: student_id)
+    @student ||= Student.includes(:user).find_by(id: student_id)
   end
 
   def team
@@ -113,10 +79,10 @@ class StudentDetailsResolver < ApplicationQuery
 
   def submissions_for_grades
     latest_submissions
-      .includes(:founders, :target)
+      .includes(:students, :target)
       .select do |submission|
         submission.target.individual_target? ||
-          (submission.founder_ids.sort == student.team_student_ids)
+          (submission.student_ids.sort == student.team_student_ids)
       end
   end
 
@@ -130,5 +96,24 @@ class StudentDetailsResolver < ApplicationQuery
           max_grade: ec.max_grade,
         }
       end
+  end
+
+  def milestone_targets_completion_status
+    milestone_targets = course.targets.live.where(milestone: true)
+    passed_assignment_ids =
+      student
+        .latest_submissions
+        .where(target: milestone_targets)
+        .passed
+        .pluck(:target_id)
+
+    milestone_targets.map do |target|
+      {
+        id: target.id,
+        title: target.title,
+        completed: passed_assignment_ids.include?(target.id),
+        milestone_number: target.milestone_number
+      }
+    end
   end
 end

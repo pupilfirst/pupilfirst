@@ -26,10 +26,10 @@ module Cohorts
 
           notify_students(students)
 
-          # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
+          # Add the tags to the school's list of student tags. This is useful for retrieval in the school admin interface.
           new_student_tags =
             new_students.map { |student| student.tags || [] }.flatten.uniq
-          school.founder_tag_list << new_student_tags
+          school.student_tag_list << new_student_tags
           school.save!
 
           students
@@ -90,23 +90,20 @@ module Cohorts
       user = school.users.with_email(student.email).first
       user = school.users.create!(email: student.email) if user.blank?
 
-      user.regenerate_login_token
-
       # If a user was already present, don't override values of name, title or affiliation.
       user.update!(
         name: user.name.presence || student.name,
-        title: user.title.presence || student.title.presence || 'Student',
+        title: user.title.presence || student.title.presence || "Student",
         affiliation: user.affiliation.presence || student.affiliation.presence
       )
 
       team = find_or_create_team(student)
 
       # Finally, create a student profile for the user.
-      Founder.create!(
+      Student.create!(
         user: user,
         team: team,
         tag_list: student.tags,
-        level: first_level,
         cohort: @cohort
       )
     end
@@ -115,7 +112,7 @@ module Cohorts
       requested_emails = students.map(&:email).map(&:downcase)
       enrolled_student_emails =
         course
-          .founders
+          .students
           .joins(:user)
           .where(users: { email: requested_emails })
           .pluck(:email)
@@ -144,10 +141,6 @@ module Cohorts
 
     def course
       @course ||= @cohort.course
-    end
-
-    def first_level
-      @first_level ||= course.levels.find_by(number: 1)
     end
   end
 end

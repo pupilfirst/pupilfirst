@@ -3,7 +3,7 @@ module Mutations
     include QueryAuthorizeSchoolAdmin
     include ValidateCourseExport
 
-    description 'Request a course export.'
+    description "Request a course export."
 
     field :course_export, Types::CourseExportType, null: true
 
@@ -21,6 +21,9 @@ module Mutations
             tag_list: tag_list
           )
 
+        cohorts.map do |cohort|
+          CourseExportsCohort.create!(cohort: cohort, course_export: export)
+        end
         # Queue a job to prepare the report.
         CourseExports::PrepareJob.perform_later(export)
 
@@ -31,15 +34,19 @@ module Mutations
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.processing'),
-        I18n.t('mutations.export_course_report.success_notification')
+        I18n.t("shared.processing"),
+        I18n.t("mutations.export_course_report.success_notification")
       )
 
       { course_export: create_course_export }
     end
 
     def tags
-      @tags ||= current_school.founder_tags.where(id: @params[:tag_ids])
+      @tags ||= current_school.student_tags.where(id: @params[:tag_ids])
+    end
+
+    def cohorts
+      @cohorts ||= course.cohorts.where(id: @params[:cohort_ids])
     end
 
     def resource_school

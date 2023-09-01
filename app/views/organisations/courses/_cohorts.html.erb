@@ -1,7 +1,7 @@
 <% cohort_status = t("organisations.courses.#{page_name}_cohorts_label") %>
 <div>
   <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto pt-6 px-6">
+    <div class="max-w-5xl mx-auto px-4 pt-4 md:pt-18 md:px-6 pb-0">
       <div class="mt-4 flex overflow-x-auto">
         <%= render 'shared/breadcrumbs', crumbs: [['My Org', '/organisations'], [@organisation.name, organisation_path(@organisation)], [@course.name]] %>
       </div>
@@ -10,13 +10,13 @@
         <%= @course.name %>
       </h1>
       <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <% ['active', 'inactive'].each do |status| %>
+        <% ['active', 'ended'].each do |status| %>
           <% is_current_page = status == page_name %>
           <%= link_to send("#{status}_cohorts_organisation_course_path", @organisation, @course), class: "flex items-center #{'p-2 border-b-2 border-primary-500 text-primary-500 font-medium' if is_current_page} #{'font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' unless is_current_page}" do %>
             <span class="hidden sm:inline"><%= t("organisations.courses.#{status}_cohorts_label") %></span>
             <span class="inline sm:hidden"><%= t("organisations.courses.#{status}_cohorts_label").split.first %></span>
             <span class="<%= is_current_page ? 'bg-primary-500 text-white' : 'bg-gray-300 text-gray-900' %> text-xs leading-none rounded-md px-1.5 py-1 ms-1.5">
-              <%= t("organisations.courses.#{status}_cohorts_count", count: @cohorts.send(status).length) %>
+              <%= @cohorts.send(status).length %>
             </span>
           <% end %>
         <% end %>
@@ -25,12 +25,20 @@
   </section>
   <section class="bg-white">
     <% if cohorts.present? %>
-      <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
+      <div class="max-w-5xl mx-auto px-4 md:px-6 md:pb-6 pt-10">
         <div class="border border-gray-200 bg-gray-50 rounded-lg p-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
             <% cohorts.each do |cohort| %>
               <%= link_to organisation_cohort_path(@organisation, cohort), class: 'flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400' do %>
-                <span class="inline-block font-medium"><%= cohort.name %></span>
+                <div>
+                  <span class="font-medium"><%= cohort.name %></span>
+                  <% if cohort.ends_at.present? %>
+                    <div>
+                      <span class="text-sm text-gray-500 font-medium" ><%= t("organisations.courses.end_date") %> </span>
+                      <span class="font-semibold text-sm"><%= cohort.ends_at.strftime("%B %d, %Y") %></span>
+                    </div>
+                  <% end %>
+                </div>
                 <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
               <% end %>
             <% end %>

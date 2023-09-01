@@ -3,6 +3,7 @@ module Schools
     # GET /school/coaches
     def school_index
       @school = authorize(current_school, policy_class: Schools::FacultyPolicy)
+      @status = params[:status] || "active"
     end
 
     # POST /school/coaches
@@ -18,10 +19,11 @@ module Schools
                  error: nil
                }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        render json: { error: @form.errors.full_messages.join(", ") }
       end
     end
 
+    # PATCH /school/coaches/:id
     def update
       @form = Schools::Coaches::UpdateForm.new(faculty)
 
@@ -33,14 +35,17 @@ module Schools
                  error: nil
                }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        render json: { error: @form.errors.full_messages.join(", ") }
       end
     end
 
+    # GET /school/courses/:course_id/coaches
     def course_index
       @course =
-        policy_scope(Course, policy_scope_class: Schools::CoursePolicy::Scope)
-          .find(params[:course_id])
+        policy_scope(
+          Course,
+          policy_scope_class: Schools::CoursePolicy::Scope
+        ).find(params[:course_id])
       authorize(current_school, policy_class: Schools::FacultyPolicy)
     end
 

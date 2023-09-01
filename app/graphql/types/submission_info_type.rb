@@ -6,11 +6,11 @@ module Types
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
     field :title, String, null: false
-    field :level_number, Int, null: false
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
     field :reviewer, Types::ReviewerDetailInfoType, null: true
+    field :milestone_number, Int, null: true
 
     def title
       BatchLoader::GraphQL
@@ -23,18 +23,15 @@ module Types
       # object.target.title
     end
 
-    def level_number
+    def milestone_number
       BatchLoader::GraphQL
         .for(object.target_id)
         .batch do |target_ids, loader|
           Target
-            .includes(target_group: :level)
             .where(id: target_ids)
-            .each do |target|
-              loader.call(target.id, target.target_group.level.number)
-            end
+            .each { |target| loader.call(target.id, target.milestone_number) }
         end
-      # object.target.target_group.level.number
+      # object.target.milestone_number
     end
 
     def user_names
@@ -42,19 +39,19 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(founders: %i[user])
+            .includes(students: %i[user])
             .where(id: submission_ids)
             .each do |submission|
               loader.call(
                 submission.id,
                 submission
-                  .founders
-                  .map { |founder| founder.user.name }
-                  .join(', ')
+                  .students
+                  .map { |student| student.user.name }
+                  .join(", ")
               )
             end
         end
-      # object.founders.map { |founder| founder.user.name }.join(', ')
+      # object.students.map { |student| student.user.name }.join(', ')
     end
 
     def feedback_sent
@@ -72,13 +69,13 @@ module Types
     end
 
     def students_have_same_team?(submission)
-      submission.founders.distinct(:team_id).pluck(:team_id).count == 1
+      submission.students.distinct(:team_id).pluck(:team_id).count == 1
     end
 
     def resolve_team_name(submission)
-      if submission.timeline_event_owners.count > 1 &&
+      if submission.timeline_event_owners.size > 1 &&
            submission.team_submission? && students_have_same_team?(submission)
-        submission.founders.first.team.name
+        submission.students.first.team.name
       end
     end
 
@@ -87,7 +84,7 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(:timeline_event_owners, :target, founders: %i[team])
+            .includes(:timeline_event_owners, students: %i[team])
             .where(id: submission_ids)
             .each do |submission|
               loader.call(submission.id, resolve_team_name(submission))

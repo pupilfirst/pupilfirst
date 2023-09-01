@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_11_131427) do
+ActiveRecord::Schema.define(version: 2023_07_06_093050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -216,6 +216,13 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end
 
+  create_table "course_exports_cohorts", force: :cascade do |t|
+    t.bigint "cohort_id"
+    t.bigint "course_export_id"
+    t.index ["cohort_id"], name: "index_course_exports_cohorts_on_cohort_id"
+    t.index ["course_export_id"], name: "index_course_exports_cohorts_on_course_export_id"
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -227,7 +234,7 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
     t.text "about"
     t.boolean "featured", default: true
     t.boolean "can_connect", default: true
-    t.string "progression_behavior", null: false
+    t.string "progression_behavior"
     t.integer "progression_limit"
     t.datetime "archived_at"
     t.boolean "public_preview", default: false
@@ -323,13 +330,14 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
     t.index ["faculty_id"], name: "index_faculty_cohort_enrollments_on_faculty_id"
   end
 
-  create_table "faculty_founder_enrollments", force: :cascade do |t|
+  create_table "faculty_student_enrollments", force: :cascade do |t|
     t.bigint "faculty_id"
-    t.bigint "founder_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["faculty_id"], name: "index_faculty_founder_enrollments_on_faculty_id"
-    t.index ["founder_id", "faculty_id"], name: "index_faculty_founder_enrollments_on_founder_id_and_faculty_id", unique: true
+    t.bigint "student_id"
+    t.index ["faculty_id", "student_id"], name: "index_faculty_student_enrollments_on_faculty_id_and_student_id", unique: true
+    t.index ["faculty_id"], name: "index_faculty_student_enrollments_on_faculty_id"
+    t.index ["student_id"], name: "index_faculty_student_enrollments_on_student_id"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|
@@ -355,25 +363,6 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
-  create_table "founders", id: :serial, force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "auth_token"
-    t.string "roles"
-    t.integer "user_id"
-    t.boolean "excluded_from_leaderboard", default: false
-    t.datetime "dropped_out_at"
-    t.bigint "cohort_id"
-    t.bigint "level_id"
-    t.bigint "team_id"
-    t.datetime "completed_at"
-    t.string "github_repository"
-    t.index ["cohort_id"], name: "index_founders_on_cohort_id"
-    t.index ["level_id"], name: "index_founders_on_level_id"
-    t.index ["team_id"], name: "index_founders_on_team_id"
-    t.index ["user_id"], name: "index_founders_on_user_id"
-  end
-
   create_table "issued_certificates", force: :cascade do |t|
     t.bigint "certificate_id", null: false
     t.bigint "user_id"
@@ -392,14 +381,14 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
   end
 
   create_table "leaderboard_entries", force: :cascade do |t|
-    t.bigint "founder_id"
     t.datetime "period_from", null: false
     t.datetime "period_to", null: false
     t.integer "score", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["founder_id", "period_from", "period_to"], name: "index_leaderboard_entries_on_founder_id_and_period", unique: true
-    t.index ["founder_id"], name: "index_leaderboard_entries_on_founder_id"
+    t.bigint "student_id"
+    t.index ["student_id", "period_from", "period_to"], name: "index_leaderboard_on_student_id_and_period_from_and_to", unique: true
+    t.index ["student_id"], name: "index_leaderboard_entries_on_student_id"
   end
 
   create_table "levels", id: :serial, force: :cascade do |t|
@@ -567,6 +556,25 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
     t.index ["timeline_event_id"], name: "index_startup_feedback_on_timeline_event_id"
   end
 
+  create_table "students", id: :serial, force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "auth_token"
+    t.string "roles"
+    t.integer "user_id"
+    t.boolean "excluded_from_leaderboard", default: false
+    t.datetime "dropped_out_at"
+    t.bigint "cohort_id"
+    t.bigint "level_id"
+    t.bigint "team_id"
+    t.datetime "completed_at"
+    t.string "github_repository"
+    t.index ["cohort_id"], name: "index_students_on_cohort_id"
+    t.index ["level_id"], name: "index_students_on_level_id"
+    t.index ["team_id"], name: "index_students_on_team_id"
+    t.index ["user_id"], name: "index_students_on_user_id"
+  end
+
   create_table "submission_reports", force: :cascade do |t|
     t.string "status", default: "queued"
     t.string "conclusion"
@@ -671,6 +679,8 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
     t.text "action_config"
+    t.boolean "milestone", default: false
+    t.integer "milestone_number"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
@@ -715,11 +725,11 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
 
   create_table "timeline_event_owners", force: :cascade do |t|
     t.bigint "timeline_event_id"
-    t.bigint "founder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "latest", default: false
-    t.index ["founder_id"], name: "index_timeline_event_owners_on_founder_id"
+    t.bigint "student_id"
+    t.index ["student_id"], name: "index_timeline_event_owners_on_student_id"
     t.index ["timeline_event_id"], name: "index_timeline_event_owners_on_timeline_event_id"
   end
 
@@ -868,17 +878,13 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"
-  add_foreign_key "faculty_founder_enrollments", "faculty"
-  add_foreign_key "faculty_founder_enrollments", "founders"
-  add_foreign_key "founders", "cohorts"
-  add_foreign_key "founders", "levels"
-  add_foreign_key "founders", "teams"
-  add_foreign_key "founders", "users"
+  add_foreign_key "faculty_student_enrollments", "faculty"
+  add_foreign_key "faculty_student_enrollments", "students"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
   add_foreign_key "issued_certificates", "users", column: "issuer_id"
   add_foreign_key "issued_certificates", "users", column: "revoker_id"
-  add_foreign_key "leaderboard_entries", "founders"
+  add_foreign_key "leaderboard_entries", "students"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"
   add_foreign_key "organisation_admins", "organisations"
@@ -895,6 +901,10 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
   add_foreign_key "school_strings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
+  add_foreign_key "students", "cohorts"
+  add_foreign_key "students", "levels"
+  add_foreign_key "students", "teams"
+  add_foreign_key "students", "users"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
@@ -902,6 +912,7 @@ ActiveRecord::Schema.define(version: 2023_06_11_131427) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "teams", "cohorts"
   add_foreign_key "timeline_event_files", "timeline_events"
+  add_foreign_key "timeline_event_owners", "students"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"
   add_foreign_key "topic_categories", "communities"

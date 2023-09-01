@@ -2,10 +2,13 @@ class CourseExport < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :course
 
+  has_many :course_exports_cohorts, dependent: :destroy
+  has_many :cohorts, through: :course_exports_cohorts
+
   has_one_attached :file
 
-  EXPORT_TYPE_STUDENTS = -'Students'
-  EXPORT_TYPE_TEAMS = -'Teams'
+  EXPORT_TYPE_STUDENTS = -"Students"
+  EXPORT_TYPE_TEAMS = -"Teams"
 
   def self.valid_export_types
     [EXPORT_TYPE_STUDENTS, EXPORT_TYPE_TEAMS]

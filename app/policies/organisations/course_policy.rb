@@ -8,11 +8,11 @@ module Organisations
       return false if organisation_ids.blank?
 
       record
-        .founders
+        .students
         .joins(:user)
         .exists?(users: { organisation_id: organisation_ids })
     end
 
-    alias inactive_cohorts? active_cohorts?
+    alias ended_cohorts? active_cohorts?
   end
 end

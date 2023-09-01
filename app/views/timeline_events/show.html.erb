@@ -2,35 +2,103 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
-<div class="bg-gray-50 px-3 py-4">
-  <div class="mb-2 container max-w-3xl mx-auto">
-    <div class="bg-white shadow p-4 rounded">
-      <div class="bg-white mb-2 p-3 flex flex-col">
-        <h2 class="font-semibold text-lg"> <%= @submission.title %></h2>
-        <p class="text-gray-600 text-xs" title="<%= @submission.created_at.iso8601 %>"> <%= t('.submitted_on', date: @submission.created_at.strftime('%b %d, %Y'))%></p>
-        <% if @submission.evaluated_at.present? %>
-          <% translation_key = @submission.passed_at.present? ? 'accepted_on' : 'rejected_on' %>
-          <p class="text-gray-600 text-xs mt-1" title="<%= @submission.evaluated_at.iso8601 %>"> <%= t(".#{translation_key}", date: @submission.created_at.strftime('%b %d, %Y'))%></p>
-        <% end %>
+<div class="bg-gray-50 md:pt-18">
+  <div class="max-w-5xl mx-auto p-4">
+    <div class="flex items-center gap-3">
+      <div class="bg-blue-100 rounded-full text-blue-500 h-10 w-10 flex items-center justify-center">
+        <i class="if i-journal-text-light if-fw text-xl"></i>
       </div>
-      <% @submission.checklist.each_with_index do |item, index| %>
-        <div class="mb-3 bg-gray-50 rounded">
-          <div class="text-lg font-bold ps-3 pt-3"><%= t('.question_with_number', number: index + 1) %></div>
-          <div class="convert-markdown p-3 pt-1 text-sm" data-json-props="<%= presenter.markdown_prop(item['title']) %>">
-            <%= item['title'] %>
-          </div>
-          <hr class="mt-3"/>
-          <% if presenter.render_markdown?(item) %>
-            <div class="convert-markdown p-3 text-sm" data-json-props="<%= presenter.markdown_prop(item['result']) %>"><%= item['result'] %></div>
-          <% elsif presenter.audio?(item) %>
-            <%= render 'audio', file: presenter.audio_file(item) %>
-          <% elsif presenter.files?(item) %>
-            <%= render 'files', files: presenter.files(item) %>
-          <% else %>
-            <div class="p-3 text-sm"><%= item['result'] %></div>
-          <% end %>
+      <p class="text-md font-semibold"><%= @submission.title %></p>
+    </div>
+    <div class="flex flex-wrap gap-5 py-5">
+      <div class="pe-5 border-e border-gray-300">
+        <p class="text-xs text-gray-500"><%= t(".submission_from") %></p>
+        <p class="text-sm font-semibold"><%= presenter.submission_from %></p>
+      </div>
+      <% if presenter.team_name.present? %>
+        <div class="pe-5 border-e border-gray-300">
+          <p class="text-xs text-gray-500"><%= t(".team") %></p>
+          <p class="text-sm font-semibold"><%= presenter.team_name %></p>
         </div>
       <% end %>
+      <div class="pe-5 border-e border-gray-300">
+        <p class="text-xs text-gray-500"><%= t(".submitted_on") %></p>
+        <p class="text-sm font-semibold"> <%= @submission.created_at.strftime("%b %d, %Y")%></p>
+      </div>
+      <% if @submission.evaluated_at.present? %>
+        <div class="pe-5 border-e border-gray-300">
+          <p class="text-xs text-gray-500"><%= t(".reviewed_on") %></p>
+          <p class="text-sm font-semibold"><%= @submission.evaluated_at.strftime("%b %d, %Y") %></p>
+        </div>
+      <% end %>
+      <div>
+        <p class="text-xs text-gray-500"><%= t(".status") %></p>
+        <% if @submission.passed_at.present? %>
+          <p class="text-sm font-semibold text-green-500"><%= t(".accepted") %></p>
+        <% elsif  @submission.evaluated_at.present? %>
+          <p class="text-sm font-semibold text-red-500"><%= t(".rejected") %></p>
+        <% else %>
+          <p class="text-sm font-semibold text-blue-500"><%= t(".pending") %></p>
+        <% end %>
+      </div>
     </div>
+  </div>
+</div>
+<div class="max-w-5xl mx-auto px-4 mt-4 md:mt-6">
+  <div class="flex flex-col bg-gray-50 p-4 rounded-md border border-gray-200 px-5">
+    <% @submission.checklist.each do |item| %>
+      <div class="flex items-start gap-x-2">
+        <div class="mt-2">
+          <i class="<%= presenter.icon_class_for(item) %>"></i>
+        </div>
+        <div>
+          <div class="convert-markdown pt-2 text-sm font-semibold" data-json-props="<%= presenter.markdown_prop(item["title"]) %>">
+            <%= item["title"] %>
+          </div>
+          <% if presenter.render_markdown?(item) %>
+            <div class="convert-markdown p-1 text-sm" data-json-props="<%= presenter.markdown_prop(item["result"]) %>">
+              <%= item["result"] %>
+            </div>
+          <% elsif presenter.audio?(item) %>
+            <%= render "audio", file: presenter.audio_file(item) %>
+          <% elsif presenter.files?(item) %>
+            <%= render "files", files: presenter.files(item) %>
+          <% elsif presenter.link?(item) %>
+            <a class="max-w-fc mt-1 me-3 flex border overflow-hidden rounded hover:shadow-md border-blue-400 bg-white text-blue-700 hover:border-blue-600 hover:text-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500" href="<%= item["result"] %>">
+              <span class="rounded text-sm font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2">
+                <%= item["result"] %>
+              </span>
+              <span class="flex w-10 justify-center items-center p-2 bg-blue-700 text-white">
+                <i class="if i-external-link-light if-fw" ></i>
+              </span>
+            </a>
+          <%  else %>
+            <div class="p-3 text-sm"> <%= item["result"].join(" | ")%></div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="flex flex-col py-10">
+    <h2 class="font-semibold text-2x"><i class="if i-journal-text-regular if-fw mr-2" ></i><%= t(".feedback", count: @submission.startup_feedback.count) %></h2>
+    <% unless @submission.startup_feedback.present? %>
+      <p class="pt-2 text-gray-400"><%= t(".no_feedbacks") %></p>
+    <% end %>
+    <% @submission.startup_feedback.includes(faculty: [user: [avatar_attachment: :blob]]).each do |feedback| %>
+      <div class="flex bg-gray-50 p-4 rounded-md mt-2">
+        <div class="shrink-0 w-8 h-8 bg-gray-300 rounded-full overflow-hidden me-3 object-cover mt-1">
+          <% if feedback.faculty.user.avatar.attached? %>
+            <%= image_tag feedback.faculty.user.avatar_url(variant: :thumb) %>
+          <% else %>
+            <%= image_tag feedback.faculty.user.initials_avatar %>
+          <% end %>
+        </div>
+        <div>
+          <h3 class="font-semibold text-base leading-tight block md:inline-flex self-end"><%= feedback.faculty.name %></h3>
+          <p class="font-light text-gray-500 text-xs block"><%= feedback.faculty.title %></p>
+          <div class="convert-markdown text-sm pt-2" data-json-props="<%= presenter.markdown_prop(feedback.feedback) %>"> <%= feedback.feedback%> </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

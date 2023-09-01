@@ -16,7 +16,7 @@ describe Courses::DeleteService do
   let(:cohort_1) { create :cohort, course: course_1 }
   let(:level_c1) { create :level, :one, course: course_1, name: "C1L1" }
   let!(:team_c1) { create :team_with_students, cohort: cohort_1 }
-  let!(:student_c1) { create :student, cohort: cohort_1, level: level_c1 }
+  let!(:student_c1) { create :student, cohort: cohort_1 }
   let!(:applicant_c1) { create :applicant, course: course_1 }
   let(:certificate_c1) { create :certificate, course: course_1 }
   let!(:issued_certificate_c1) do
@@ -30,11 +30,11 @@ describe Courses::DeleteService do
   let!(:faculty_cohort_enrollment_c1) do
     create :faculty_cohort_enrollment, cohort: cohort_1, faculty: common_coach
   end
-  let!(:faculty_founder_enrollment_c1) do
-    create :faculty_founder_enrollment,
+  let!(:faculty_student_enrollment_c1) do
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: coach_c1,
-           founder: student_c1
+           student: student_c1
   end
   let!(:coach_note_c1) do
     create :coach_note, author: coach_c1.user, student: student_c1
@@ -87,7 +87,7 @@ describe Courses::DeleteService do
   let(:cohort_2) { create :cohort, course: course_2 }
   let(:level_c2) { create :level, :one, course: course_2, name: "C2L1" }
   let!(:team_c2) { create :team_with_students, cohort: cohort_2 }
-  let!(:student_c2) { create :student, cohort: cohort_2, level: level_c2 }
+  let!(:student_c2) { create :student, cohort: cohort_2 }
   let!(:applicant_c2) { create :applicant, course: course_2 }
   let(:certificate_c2) { create :certificate, course: course_2 }
   let!(:issued_certificate_c2) do
@@ -101,11 +101,11 @@ describe Courses::DeleteService do
   let!(:faculty_cohort_enrollment_c2) do
     create :faculty_cohort_enrollment, cohort: cohort_2, faculty: common_coach
   end
-  let!(:faculty_founder_enrollment_c2) do
-    create :faculty_founder_enrollment,
+  let!(:faculty_student_enrollment_c2) do
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: coach_c2,
-           founder: student_c2
+           student: student_c2
   end
   let!(:coach_note_c2) do
     create :coach_note, author: coach_c2.user, student: student_c2
@@ -172,7 +172,7 @@ describe Courses::DeleteService do
       [Proc.new { Cohort.count }, 4, 2],
       [Proc.new { Level.count }, 2, 1],
       [Proc.new { Team.count }, 2, 1],
-      [Proc.new { Founder.count }, 6, 3],
+      [Proc.new { Student.count }, 6, 3],
       [Proc.new { Applicant.count }, 2, 1],
       [Proc.new { Certificate.count }, 2, 1],
       [Proc.new { IssuedCertificate.count }, 2, 1],
@@ -180,7 +180,7 @@ describe Courses::DeleteService do
       [Proc.new { CourseAuthor.count }, 2, 1],
       [Proc.new { CourseExport.count }, 2, 1],
       [Proc.new { FacultyCohortEnrollment.count }, 4, 2],
-      [Proc.new { FacultyFounderEnrollment.count }, 2, 1],
+      [Proc.new { FacultyStudentEnrollment.count }, 2, 1],
       [Proc.new { CoachNote.count }, 2, 1],
       [Proc.new { EvaluationCriterion.count }, 2, 1],
       [Proc.new { TimelineEventGrade.count }, 2, 1],
@@ -198,7 +198,7 @@ describe Courses::DeleteService do
       [Proc.new { TimelineEventOwner.count }, 2, 1],
       [Proc.new { TimelineEventFile.count }, 2, 1],
       [Proc.new { StartupFeedback.count }, 2, 1],
-      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2],
+      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2]
     ]
   end
 
@@ -206,8 +206,8 @@ describe Courses::DeleteService do
     it "deletes all data related to the course and the course itself" do
       expect { subject.execute }.to(
         change { expectations.map { |e| e[0].call } }.from(
-          expectations.pluck(1),
-        ).to(expectations.pluck(2)),
+          expectations.pluck(1)
+        ).to(expectations.pluck(2))
       )
 
       expect { course_2.reload }.not_to raise_error
@@ -221,7 +221,7 @@ describe Courses::DeleteService do
       expect { course_author_c2.reload }.not_to raise_error
       expect { course_export_c2.reload }.not_to raise_error
       expect { faculty_cohort_enrollment_c2.reload }.not_to raise_error
-      expect { faculty_founder_enrollment_c2.reload }.not_to raise_error
+      expect { faculty_student_enrollment_c2.reload }.not_to raise_error
       expect { coach_note_c2.reload }.not_to raise_error
       expect { evaluation_criterion_c2.reload }.not_to raise_error
       expect { target_reviewed_c2.reload }.not_to raise_error

@@ -3,16 +3,15 @@ module Schools
     class CreateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :description
-      property :milestone, validates: { presence: true }
 
       def save
-        target_group = TargetGroup.create!(
-          level: model.level,
-          name: name,
-          description: description,
-          sort_index: sort_index,
-          milestone: milestone
-        )
+        target_group =
+          TargetGroup.create!(
+            level: model.level,
+            name: name,
+            description: description,
+            sort_index: sort_index
+          )
         target_group
       end
 

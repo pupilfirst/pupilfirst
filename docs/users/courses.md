@@ -8,9 +8,9 @@ Courses hold your content and can have any number of students enrolled, with coa
 
 ## Creating courses
 
-To create a new course, head to the Courses menu from the school administration interface's navigation bar, and click the _Add New Course_ button at the top of the page.
+To create a new course, head to the Courses menu from the school administration interface's navigation bar, and click the _Add New Course_ button on course creation card.
 
-![Courses page in school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1588240011/pupilfirst_documentation/courses/courses_index_onpuxi.png)
+![Courses page in school administration interface](../assets/courses/courses_index.png)
 
 The form that pops up will ask you for a few details:
 
@@ -18,11 +18,9 @@ The form that pops up will ask you for a few details:
 
 **Course description**: This short description will be displayed on the course's public page.
 
-**Course end date**: If set, your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
+**About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the course's public page.
 
-**About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
-
-**Progression Behavior**: This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/users/targets#milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
+**Progression Behavior**: This setting controls how students are allowed to progress in your course. This setting only applies if your course contains targets that require your students to submit work for review. There are two possible options, which are described in detail below.
 
 **Feature course in school homepage?**: If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
@@ -60,21 +58,19 @@ https://paymentgateway.com/process?name=${name}&email=${email}&course_id=${cours
 
 ## Editing courses
 
-To edit a course's details, simply click on the course in the Courses menu. The form for editing a course is identical to the one that you used to create it.
+To edit the details of a course, click on the _Edit Course Details_ button located on the card displaying the course name and other information. The form used for editing the course is identical to the one you used during its creation.
 
 To edit the _contents_ of a course, you'll want to use the [curriculum editor](/users/curriculum_editor), which is documented separately.
 
 ## Progression Behaviour
 
-The way students progress in a course can be configured in three ways:
+The way students progress in a course can be configured in two ways:
 
-1. **Limited (default):** This setting allows students to submit work on milestone targets and then level-up immediately without waiting for a coach to review their submissions. You can configure this setting to allow students to level up once, twice, or up to three times while waiting for their submissions to be reviewed.
+1. **Limited (default):** This setting allows students to submit work on reviewed targets until the submissions queued for review reach a certain limit. The limit can be configured using the dropdown in the Limited option. The allowed values are one, two, three and four.
 
-   This is the recommended setting, as it allows coaches a bit of time to go through submissions while also not blocking students from working on the content for the next level. When students hit the configured limit, they'll need to wait until they receive a passing grade in the earliest applicable level to proceed; this prevents students from levelling up indiscriminately.
+   This is the recommended setting as it allows coaches some time to go through submissions while also not blocking students from working on the content further in the course. When student submissions pending review hit the configured limit, they'll need to wait until they get reviewed before they can submit more work.
 
-2. **Unlimited**: This setting allows students to level-up all the way to the end of the course, without waiting for coaches to review their submissions.
-
-3. **Strict**: This setting prevents students from levelling-up without getting their submissions reviewed. Students will need to wait for a coach to review their submission, and get a passing grade to be able to submit work on reviewed targets in the next level.
+2. **Unlimited**: This setting allows students to submit all targets that are reviewed by a coach without waiting for a review. This is useful if you want to allow students to work on the course at their own pace without any restrictions. However, this setting is not recommended for courses that have a large number of students, as it can be difficult for coaches to keep up with the submissions.
 
 ## Course Images
 
@@ -98,9 +94,13 @@ Because this image fits with the width of the page, it should be created followi
 
 Here's an example image that shows where you should place text in a cover image:
 
-[![Cover image composition](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)
+[![Cover image composition](../assets/courses/cover_composition_hztuof.png)](../assets/courses/cover_composition_hztuof.png)
 
 ## Course Actions
+
+### Clone Course
+
+This feature allows you to create a duplicate of a course, as the name suggests. It is extremely valuable when you want to build a new course using an existing course as a foundation.
 
 ### Archive Course
 

@@ -112,6 +112,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :assignments, only: [] do
+      member do
+        patch :update_milestone_number
+      end
+    end
+
     resources :courses, only: [] do
       member do
         get 'applicants'
@@ -124,6 +130,7 @@ Rails.application.routes.draw do
         get 'evaluation_criteria'
         post 'attach_images'
         get 'calendar_month_data'
+        get 'assignments'
       end
 
       resources :calendar_events, only: %i[new create show edit], controller: 'calendar_events'
@@ -160,7 +167,7 @@ Rails.application.routes.draw do
       post 'update_coach_enrollments'
     end
 
-    resources :founders, as: 'students', path: 'students', except: %i[index] do
+    resources :students, as: 'students', path: 'students', except: %i[index] do
       collection do
         post 'team_up'
       end
@@ -176,7 +183,7 @@ Rails.application.routes.draw do
   end
 
   resources :organisations, only: %i[show index] do
-    resources :cohorts, only: %i[show] do
+    resources :cohorts, module: 'organisations', only: %i[show] do
       member do
         get 'students'
       end
@@ -185,7 +192,7 @@ Rails.application.routes.draw do
     resources :courses,  module: 'organisations', only: [] do
       member do
         get 'active_cohorts'
-        get 'inactive_cohorts'
+        get 'ended_cohorts'
       end
     end
   end
@@ -227,8 +234,8 @@ Rails.application.routes.draw do
     get '/', action: 'index', as: 'coaches_index'
   end
 
-  # Founder show
-  scope 'students', controller: 'founders' do
+  # Student show
+  scope 'students', controller: 'students' do
     get '/:id/report', action: 'report', as: 'student_report'
   end
 
@@ -256,7 +263,7 @@ Rails.application.routes.draw do
   resources :courses, only: %i[show] do
     member do
       get 'review', action: 'review'
-      get 'students', action: 'students'
+      get 'cohorts', action: 'cohorts'
       get 'calendar', action: 'calendar'
       get 'calendar_month_data', action: 'calendar_month_data'
       get 'leaderboard', action: 'leaderboard'
@@ -265,6 +272,12 @@ Rails.application.routes.draw do
       get 'apply', action: 'apply'
       post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
+    end
+  end
+
+  resources :cohorts, only: %i[show] do
+    member do
+      get 'students', action: 'students'
     end
   end
 

@@ -8,8 +8,6 @@ class SubmissionDetailsResolver < ApplicationQuery
       target_id: target.id,
       target_title: target.title,
       students: students_data,
-      level_number: level.number,
-      level_id: level.id,
       team_name: team_name,
       submission_reports: submission.submission_reports,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
@@ -17,7 +15,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       review_checklist: review_checklist,
       inactive_students: inactive_students,
       coaches: coaches,
-      course_id: level.course_id,
+      course_id: target.course.id,
       created_at: submission.created_at,
       preview: preview?,
       reviewer_details: reviewer_details,
@@ -39,8 +37,8 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def coaches
-    FacultyFounderEnrollment
-      .where(founder_id: student_ids)
+    FacultyStudentEnrollment
+      .where(student_id: student_ids)
       .includes(faculty: [user: [avatar_attachment: :blob]])
       .map { |c| c.faculty }
   end
@@ -50,7 +48,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       .includes(:startup_feedback)
       .order("timeline_events.created_at DESC")
       .select do |s|
-        s.timeline_event_owners.pluck(:founder_id).sort == student_ids
+        s.timeline_event_owners.pluck(:student_id).sort == student_ids
       end
   end
 
@@ -58,12 +56,12 @@ class SubmissionDetailsResolver < ApplicationQuery
     TimelineEvent
       .where(target_id: submission.target_id)
       .joins(:timeline_event_owners)
-      .where(timeline_event_owners: { founder_id: student_ids })
+      .where(timeline_event_owners: { student_id: student_ids })
       .distinct
   end
 
   def student_ids
-    @student_ids ||= submission.founders.pluck(:id).sort
+    @student_ids ||= submission.students.pluck(:id).sort
   end
 
   def target
@@ -89,12 +87,8 @@ class SubmissionDetailsResolver < ApplicationQuery
     (target_criteria + submission_criteria).uniq
   end
 
-  def level
-    @level ||= target.level
-  end
-
   def students
-    @students ||= submission.founders.includes(:user)
+    @students ||= submission.students.includes(:user)
   end
 
   def students_data
@@ -107,26 +101,26 @@ class SubmissionDetailsResolver < ApplicationQuery
     return false if current_user.faculty.blank?
 
     current_user.faculty.cohorts.exists?(
-      id: submission.founders.first.cohort_id
+      id: submission.students.first.cohort_id
     )
   end
 
   def inactive_students
-    submission.founders.count != submission.founders.active.count
+    submission.students.count != submission.students.active.count
   end
 
   def preview?
-    submission.founders.active.empty?
+    submission.students.active.empty?
   end
 
   def students_have_same_team
-    Founder.where(id: student_ids).distinct(:team_id).pluck(:team_id).one?
+    Student.where(id: student_ids).distinct(:team_id).pluck(:team_id).one?
   end
 
   def team_name
     if submission.team_submission? && students_have_same_team &&
          !student_ids.one?
-      Founder.find_by(id: student_ids.first).team.name
+      Student.find_by(id: student_ids.first).team.name
     end
   end
 end

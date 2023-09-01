@@ -13,28 +13,24 @@ feature "Coach's review interface" do
   let(:target_group_l2) { create :target_group, level: level_2 }
   let(:target_group_l3) { create :target_group, level: level_3 }
   let(:target_l1) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
   let(:target_l2) do
-    create :target, :for_founders, target_group: target_group_l2
+    create :target, :for_students, target_group: target_group_l2
   end
   let(:target_l3) do
-    create :target, :for_founders, target_group: target_group_l3
+    create :target, :for_students, target_group: target_group_l3
   end
   let(:team_target) { create :target, :for_team, target_group: target_group_l2 }
   let(:auto_verify_target) do
-    create :target, :for_founders, target_group: target_group_l1
+    create :target, :for_students, target_group: target_group_l1
   end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
-  let(:student_l1) { create :student, cohort: cohort, level: level_1 }
-  let(:student_l2) { create :student, cohort: cohort, level: level_2 }
+  let(:student_l1) { create :student, cohort: cohort }
+  let(:student_l2) { create :student, cohort: cohort }
   let(:team_l3) { create :team, cohort: cohort }
-  let!(:student_l3) do
-    create :student, cohort: cohort, level: level_3, team: team_l3
-  end
-  let!(:student_l3_2) do
-    create :student, cohort: cohort, level: level_3, team: team_l3
-  end
+  let!(:student_l3) { create :student, cohort: cohort, team: team_l3 }
+  let!(:student_l3_2) { create :student, cohort: cohort, team: team_l3 }
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
@@ -44,10 +40,10 @@ feature "Coach's review interface" do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
 
     # ...and another as a directly-assigned "team" coach.
-    create :faculty_founder_enrollment,
+    create :faculty_student_enrollment,
            :with_cohort_enrollment,
            faculty: team_coach,
-           founder: student_l3
+           student: student_l3
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
     target_l1.evaluation_criteria << evaluation_criterion
@@ -90,7 +86,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_l3.founders,
+        owners: team_l3.students,
         target: team_target,
         evaluator_id: course_coach.id,
         evaluated_at: 1.day.ago,
@@ -103,7 +99,7 @@ feature "Coach's review interface" do
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: team_l3.founders,
+        owners: team_l3.students,
         target: auto_verify_target,
         passed_at: 1.day.ago
       )
@@ -157,6 +153,17 @@ feature "Coach's review interface" do
       )
     end
 
+    # create an archived submission
+    let!(:archived_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        target: target_l1,
+        owners: [student_l1],
+        archived_at: 1.day.ago
+      )
+    end
+
     let!(:feedback) do
       create(
         :startup_feedback,
@@ -183,6 +190,11 @@ feature "Coach's review interface" do
         expect(page).to have_text("Completed")
       end
 
+      # Archived submissions should not be visible
+      expect(page).not_to have_selector(
+        "a[data-submission-id='#{archived_submission.id}']"
+      )
+
       click_link "Pending"
       expect(page).to have_content("Showing all 3 submissions")
 
@@ -191,19 +203,16 @@ feature "Coach's review interface" do
 
       within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
         expect(page).to have_text(student_l1.user.name)
       end
 
       within("a[data-submission-id='#{submission_l2_t2.id}']") do
         expect(page).to have_text(target_l2.title)
-        expect(page).to have_text("Level 2")
         expect(page).to have_text(student_l2.user.name)
       end
 
       within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
-        expect(page).to have_text("Level 3")
         expect(page).to have_text(student_l3.user.name)
       end
 
@@ -212,14 +221,12 @@ feature "Coach's review interface" do
 
       within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
         expect(page).to have_text("Submitted by #{student_l3.user.name}")
         expect(page).to have_text("Completed")
       end
 
       within("a[data-submission-id='#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
-        expect(page).to have_text("Level 2")
         expect(page).to have_text("Submitted by #{student_l3.user.name}")
         expect(page).to have_text("Rejected")
         expect(page).to have_text("Feedback Sent")
@@ -230,65 +237,6 @@ feature "Coach's review interface" do
       within("a[data-submission-id='#{team_submission.id}']") do
         expect(page).to have_text("Submitted by team #{team_l3.name}")
       end
-    end
-
-    scenario "course coach uses the level filter", js: true do
-      sign_in_user course_coach.user, referrer: review_course_path(course)
-
-      # Ensure coach is on the review dashboard.
-      expect(page).to have_content("Showing all 7 submissions")
-
-      # filter pending submissions
-      fill_in "filter", with: "level:"
-
-      # choose level 1 from the dropdown
-      click_button "1, #{level_1.name}"
-
-      # choose level 1 submissions should be displayed
-      expect(page).to have_text(target_l1.title)
-
-      # submissions from other levels should not be displayed
-      expect(page).not_to have_text(target_l2.title)
-      expect(page).not_to have_text(target_l3.title)
-
-      # switch level
-      fill_in "filter", with: "level"
-      click_button "2, #{level_2.name}"
-
-      # choose level 2 submissions should be displayed
-      expect(page).to have_text(target_l2.title)
-
-      # submissions from other levels should not be displayed
-      expect(page).not_to have_text(target_l1.title)
-      expect(page).not_to have_text(target_l3.title)
-
-      # filter should persist on review tab
-      click_link "Reviewed"
-
-      expect(page).to have_text(target_l2.title)
-      expect(page).not_to have_text(target_l1.title)
-
-      # level filter should work in reviewed tab
-      fill_in "filter", with: "level"
-      click_button "3, #{level_3.name}"
-
-      expect(page).to have_text("No submissions found")
-
-      fill_in "filter", with: "level"
-      click_button "1, #{level_1.name}"
-
-      expect(page).to have_text(target_l1.title)
-      expect(page).not_to have_text(target_l2.title)
-
-      # filter should persist on pending tab
-      click_link "Pending"
-
-      # choose level 1 submissions should be displayed
-      expect(page).to have_text(target_l1.title)
-
-      # submissions from other levels should not be displayed
-      expect(page).not_to have_text(target_l2.title)
-      expect(page).not_to have_text(target_l3.title)
     end
 
     scenario "course coach uses the target filter", js: true do
@@ -361,7 +309,6 @@ feature "Coach's review interface" do
 
       within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
-        expect(page).to have_text("Level 3")
         expect(page).to have_text(student_l3.user.name)
       end
 
@@ -377,13 +324,11 @@ feature "Coach's review interface" do
 
       within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
         expect(page).to have_text(student_l3.user.name)
       end
 
       within("a[data-submission-id='#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
-        expect(page).to have_text("Level 2")
         expect(page).to have_text(student_l3.user.name)
       end
 
@@ -416,7 +361,6 @@ feature "Coach's review interface" do
 
       within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
         expect(page).to have_text(course_coach.user.name)
       end
 
@@ -462,7 +406,7 @@ feature "Coach's review interface" do
           :timeline_event,
           :with_owners,
           latest: true,
-          owners: inactive_team.founders,
+          owners: inactive_team.students,
           target: team_target
         )
 
@@ -489,7 +433,7 @@ feature "Coach's review interface" do
 
     context "when random filters are applied" do
       let(:random_level) { create :level, :one }
-      let(:random_target) { create :target, :for_founders }
+      let(:random_target) { create :target, :for_students }
 
       scenario "coach visits review dashboard", js: true do
         sign_in_user course_coach.user,
@@ -639,10 +583,10 @@ feature "Coach's review interface" do
       let(:team_coach_2) { create :faculty, school: school }
 
       before do
-        create :faculty_founder_enrollment,
+        create :faculty_student_enrollment,
                :with_cohort_enrollment,
                faculty: team_coach_2,
-               founder: student_l2
+               student: student_l2
       end
 
       scenario "one team coach uses filter to see submissions personal coach another coach",

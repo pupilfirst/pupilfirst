@@ -16,17 +16,17 @@ let unlockAt = t => t.unlockAt
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    number: json |> field("number", int),
-    unlockAt: json |> optional(field("unlockAt", DateFns.decodeISO)),
+    id: field("id", string, json),
+    name: field("name", string, json),
+    number: field("number", int, json),
+    unlockAt: optional(field("unlockAt", DateFns.decodeISO), json),
   }
 }
 
-let selectLevel = (levels, level_name) =>
+let selectLevel = (levels, level_id) =>
   levels |> ArrayUtils.unsafeFind(
-    q => q.name == level_name,
-    "Unable to find level with name: " ++ (level_name ++ "in CurriculumEditor"),
+    q => q.id == level_id,
+    `Unable to find level with ID: ${level_id}, in CurriculumEditor`,
   )
 
 let create = (id, name, number, unlockAt) => {
@@ -36,9 +36,9 @@ let create = (id, name, number, unlockAt) => {
   unlockAt: unlockAt,
 }
 
-let updateArray = (levels, level) => {
-  let oldLevels = levels |> Js.Array.filter(l => l.id !== level.id)
-  oldLevels |> Array.append([level])
+let updateArray = (level, levels) => {
+  let oldLevels = levels->Js.Array2.filter(l => l.id !== level.id)
+  oldLevels->Js.Array2.concat([level])
 }
 
 let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
@@ -49,4 +49,4 @@ let unsafeFind = (levels, componentName, levelId) =>
     "Unable to find level with id: " ++ (levelId ++ (" in CurriculumEditor__" ++ componentName)),
   )
 
-let levelNumberWithName = t => LevelLabel.format(~name=t.name, (t.number |> string_of_int))
+let levelNumberWithName = t => LevelLabel.format(~name=t.name, string_of_int(t.number))

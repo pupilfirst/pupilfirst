@@ -1,8 +1,4 @@
 en:
-  school:
-    targets:
-      update_action:
-        error_message: Action could not be updated, please check the YAML syntax
   applicants:
     enroll:
       errors:
@@ -31,23 +27,6 @@ en:
       success: Calendar created successfully!
     update:
       success: Calendar updated successfully!
-  cohorts:
-    shared:
-      overview_link: Overview
-      students_link: Students
-    show:
-      distribution_heading: Level-wise student distribution
-      students_completed: Students Completed
-      total_students: Total Students
-      view_all: View All
-    student:
-      level_label: Level
-      never_signed_in: Has never signed in
-      time_ago: Last seen %{time_ago} ago
-    students:
-      distribution_heading: Level-wise student distribution
-      nothing_to_show: There are no students matching the selected filters.
-      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
   communities:
     show:
       community_title: "%{name} Community"
@@ -102,6 +81,8 @@ en:
       review: Review
       sign_out: Sign Out
       students: Students
+    CalendarsIndex__DatePicker:
+      today: Today
     ClickToCopy:
       copied: Copied!
       copy: Copy to clipboard
@@ -270,7 +251,7 @@ en:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin
@@ -385,17 +366,15 @@ en:
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
-          description_end: " without getting submissions reviewed."
-          description_start: Students can level up
+          description_end: without getting submissions reviewed.
+          description_start: Students can submit
+          four_times: four times
           once: once
           thrice: thrice
           title: Limited
           twice: twice
-        strict:
-          description: Students can level up only after getting submissions reviewed, and passing.
-          title: Strict
         unlimited:
-          description: Students can level up till the end of the course, without getting submissions reviewed.
+          description: Students can submit all targets, without getting submissions reviewed.
           title: Unlimited
       tabs:
         actions: Actions
@@ -452,7 +431,6 @@ en:
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
       create_description: Let's create another course.
       edit_course_details: Edit Course Details
-      empty_courses: You don't have any courses!
       filter:
         input_hint: Or start typing to search by name...
         input_label: Search
@@ -479,6 +457,7 @@ en:
       create_button_text: Create Export
       download_course_export: Download Course Export
       export: Export
+      export_cohorts_label: Export only the students in the following cohort(s)
       export_tags_label: Export only students with the following tags
       export_targets_label: Which targets should the export include?
       export_type_label: Please select the kind of export you need
@@ -489,11 +468,15 @@ en:
       requested: Requested
       reviewed_only_tag: Reviewed Submissions Only
       reviewed_only_targets_label: Only targets with reviewed submissions
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
       search_tag_placeholder: Search for a tag
       search_tags_empty: No tags selected
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -524,6 +507,7 @@ en:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
+      milestone_target_label: Milestone
       milestone_targets: Milestone targets
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
@@ -563,31 +547,15 @@ en:
       smth_went_wrong: Something went wrong!
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
-    CoursesCurriculum__LevelUpButton:
-      button_text_level_up: Level Up
-      button_text_saving: Saving
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
-      course_complete_title: Congratulations! You have completed all milestone targets in the final level.
+      course_complete_title: Congratulations! You have completed all milestone targets in the course.
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
-      level_up_blocked:
-        body_middle_pending_review: "are still pending review by a coach. "
-        body_middle_rejected: "have been rejected. "
-        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
-        body_suffix: You need a passing grade on all milestone targets to level up.
-        title_pending_review: Pending Review
-        title_rejected: Level Up Blocked
-      level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
-      level_up_limited_description: You're at Level %{currentLevel}, but have targets in Level %{minimumRequiredLevel} that have been rejected, or are still pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up.
-      level_up_limited_title: Level Up Blocked
-      level_up_title: Ready to Level Up!
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
-      team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
-      team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
       close_button: Close
       completion_tab_complete: Complete
@@ -605,6 +573,7 @@ en:
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
+      milestone_target_label: Milestone
       next_target_button: Next Target
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
@@ -658,6 +627,7 @@ en:
         pending: Pending
         pending_review: Pending Review
         rejected: Rejected
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.
       notification_error_head: Unexpected Error
@@ -680,7 +650,10 @@ en:
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
       incomplete_targets: "Incomplete: %{targetsCount}"
-      level_progress: Level Progress
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -692,10 +665,8 @@ en:
       targets_pending_review: "Pending Review: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: Completed
-      filter_by_another_level: Filter by another level
-      filter_by_another_level_or_status: Filter by another level, or by status
-      filter_by_level: Filter by level
-      filter_by_level_or_status: Filter by level, or by status
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
       load_more: Load More...
       no_submissions_to_show: "No submissions to show "
       pending_review: Pending Review
@@ -740,16 +711,6 @@ en:
       generate_feedback_button: Generate Feedback
       remove_additional_feedback: Remove Additional Feedback
       review_checklist: Review Checklist
-    CoursesReview__SubmissionReportShow:
-      hide_report_button: Hide Report
-      report_status_string:
-        error: Actions could not complete due to errors
-        failure: Some actions failed
-        success: All actions succeeded
-        in_progress: Actions are in progress
-        queued: Actions are queued
-      show_report_button: Show Report
-      test_report: Test Report
     CoursesReview__Editor:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
@@ -775,11 +736,10 @@ en:
         view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
-
-      note_help: "Would you like to write a note about this "
+      hide_test_report_button: Hide Test Report
+      note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
-      page_title: "Submission #%{submission_number} | L%{level_number} | %{name}"
-      reject_submission: Reject Submission
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -824,21 +784,16 @@ en:
         personal_coach: Filter by who's assigned to a student
         reviewed_by: Filter by who reviewed a submission
       filter_by: "Filter by:"
-      filter_by_another_level: Filter by another level
-      filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
-      filter_by_level: Filter by level
-      filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:
         assigned_to: "Assigned To: "
-        level: "Level: "
         personal_coach: "Personal Coach: "
         reviewed_by: "Reviewed By: "
         target: "Target: "
       inactive_students: Inactive Students
       include: Include
-      level: Level
       me: Me
       name_or_email: Name or Email
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
@@ -851,7 +806,6 @@ en:
       reviewed_by: Reviewed By
       search:
         assigned_to: "assigned to:"
-        level: "level:"
         personal_coach: "personal coach:"
         reviewed_by: "reviewed by:"
         status: "status: "
@@ -869,7 +823,6 @@ en:
       completed: Completed
       created_at: on %{created_at}.
       feedback_sent: Feedback Sent
-      level: "Level "
       no_submissions_found: No submissions found
       rejected: Rejected
       submitted_by: "Submitted by "
@@ -880,6 +833,16 @@ en:
       pending_review: Pending Review
       rejected: Rejected
       submission_hash: Submission
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        in_progress: Actions are in progress
+        queued: Actions are queued
+        success: All actions succeeded
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesStudents__CoachNoteShow:
       coach_on: "on"
       delete_note: "Delete note "
@@ -893,27 +856,6 @@ en:
       new_note: Add a New Note
       no_notes: No notes here!
       save_note: Save Note
-    CoursesStudents__Root:
-      assigned_me: "Assigned to: Me"
-      assigned_to: Assigned to
-      coach_notes: Coach Notes
-      filter_level: Filter by level, assigned coach, or search by name or email address, and more...
-      has_notes: Has notes
-      level_distribution_label: Level-wise student distribution
-      me: Me
-      name_email: Name or Email
-      no_notes: Does not have notes
-      not_found: "Could not find level selected from distribution bar, with ID "
-      restore_filer_none: Now showing all students in this course.
-      search_assigned_me: " assigned to me"
-      search_assigned_to: "assigned to "
-      search_no_notes: does not have notes has notes coach notes
-      search_tag: "tag "
-      showing_assigned: "Now showing students assigned to "
-      tagged_with: Tagged with
-    CoursesStudents__StudentDistribution:
-      level_wise: Students level-wise distribution
-      students_level: Students in level
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       average_grades: Average Grades
@@ -921,7 +863,7 @@ en:
       close_student_report: Close student report
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
-      level_progress: Level Progress
+      milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
@@ -934,12 +876,6 @@ en:
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
-    CoursesStudents__StudentsList:
-      last_seen: Last seen %{time_string}
-      no_last_seen: This student has never signed in
-      no_students: No students to show
-      personal_coaches: Personal Coaches
-      team_coaches: Team Coaches
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
@@ -947,6 +883,8 @@ en:
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
+      hide_archived: Hide Archived
+      show_archived: Show Archived
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: Please select a file with a size less than 10 MB.
       button_labels:
@@ -1108,6 +1046,10 @@ en:
         help: Should students in a team submit work on a target individually, or together?
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: How should teams tackle this target?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -1126,7 +1068,6 @@ en:
       description_placeholder: Type target group description
       group_archived_q: Is this target group archived?
       group_details: Target Group Details
-      milestone_q: Is this a milestone target group?
       target_group_created_notification: Target Group created successfully
       target_group_updated_notificaion: Target Group updated successfully
       title: Title
@@ -1154,6 +1095,7 @@ en:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
+      milestone_target_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
@@ -1193,9 +1135,6 @@ en:
       sign_in: Sign In
       sign_out: Sign Out
       user_controls: Show user controls
-    LevelProgressBar:
-      course_completed: Course Completed!
-      heading: Level Progress
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -1253,33 +1192,43 @@ en:
         zero: No %{plural_name} to show
       partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: Add New Coach
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
+      archived: Archived
       coach_add: Add Coach
       coach_created: Coach created successfully
       coach_email: Coach email address
-      coach_left_q: Has the coach left the school?
       coach_name: Coach Name
       coach_profile_warn: Since the coach profile isn't public, this won't be shown anywhere
       coach_public_q: Should the coach profile be public?
+      coach_status: Coach Status
       coach_title: Coach Title/Expertise
       coach_title_error: Must have at least two characters
       coach_update: Update Coach
       coach_updated: Coach updated successfully
+      coach_visibility: Coach Visibility
       connect_link: Connect Link
       connect_link_error: This doesn't look like a valid URL
       connect_link_placeholder: Student connect request link for the coach
       email: Email
       email_input_error: Please enter a valid email address
+      exited: Exited
       input_group_error: Must have at least two characters
       name: Name
       replace_avatar: Replace avatar
       title: Title
       upload_avatar: Upload an avatar
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students
@@ -1348,7 +1297,9 @@ en:
       manage: Manage
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
+      update: "Update "
       updated_notification: has been updated.
+      updating: Updating...
     SchoolCustomize__ContactsEditor:
       address_placeholder: Leave the address empty to hide the footer section.
       contact_address: Contact Address
@@ -1441,10 +1392,13 @@ en:
       social: Social
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
     SchoolRouter__Page:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1829,8 +1783,19 @@ en:
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
       avatar_uploaded_notification: Avatar uploaded successfully.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
       cancel: Cancel
       change_password: Change your current password
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Change photo
       community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
@@ -1840,6 +1805,7 @@ en:
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
       current_password: Current password
+      current_password_placeholder: Type current password
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
@@ -1849,6 +1815,7 @@ en:
       email_label: Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
       localization: Localization
@@ -1895,7 +1862,7 @@ en:
         dropped_out: Dropped out
         edit_curriculum: Edit Curriculum
         leaderboard: Leaderboard
-        my_students: My Students
+        my_cohorts: My Cohorts
         review_submissions: Review Submissions
         view_certificate: View Certificate
         view_course: View Course
@@ -1944,6 +1911,17 @@ en:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: Active Students
       change: Change
@@ -1997,6 +1975,19 @@ en:
   help:
     show:
       title: Help
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+        zero: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
+          zero: No %{entry_name} found
   home:
     agreement:
       privacy_policy: Privacy Policy
@@ -2026,6 +2017,13 @@ en:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
@@ -2138,17 +2136,20 @@ en:
         subject: Account deleted successfully from %{school_name}
       confirm_email_update:
         body:
-          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
+          html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
-          assigned: (%{stats} assigned to you)
-          assigned_none: (none of which are assigned to you)
+          assigned:
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
-          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in some courses that you are a coach in:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "Older, popular topics that have seen new activity:"
           replies: replies
           views: views
@@ -2180,7 +2181,11 @@ en:
         body:
           link_to: click here
           main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
-        subject: account recovery
+        subject: password reset
+  maintenance:
+    heading: We'll be back soon!
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2188,11 +2193,9 @@ en:
         part_time: Part-Time
     target:
       role:
-        founder: All Founders
+        students: All Students
         team: Team
   mutations:
-    conclude_submission_report:
-      invalid_status: The status for this submission is not valid.
     archive_coach_note:
       note_removed_notification: Note removed successfully
     archive_course:
@@ -2209,6 +2212,8 @@ en:
       success_notification: Course copy requested. It will appear here soon!
     clone_level:
       success_notification: Level copy requested. It will apppear in target course soon!
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     create_coach_note:
       note_added_notification: Note added successfully
     create_cohort:
@@ -2246,6 +2251,12 @@ en:
       success_notification: A custom link has been added.
     create_student_from_applicant:
       success_notification: Student created successfully.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      invalid_strings: One or more of the entries have invalid strings
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      thousand_students_limit: You can only onboard 1000 students at a time
+      unique_emails: Email addresses must be unique
     create_submission:
       blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
       form_success_notification: Your response has been saved.
@@ -2273,12 +2284,17 @@ en:
     dropout_student:
       student_updated_notification: Student updated successfully
     export_course_report:
+      cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2356,6 +2372,7 @@ en:
       multiple_method_of_completion: More than one method of completion
       prerequisities_archived_error: Cannot have archived prerequisites
       prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: Target updated successfully!
       target_group_not_present_error: Target group does not exist
       target_missing_error: Target does not exist
@@ -2367,33 +2384,33 @@ en:
       profile_saved_notification: Profile updated successfully!
   organisations:
     courses:
-      active_cohorts_count: "%{count}"
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      inactive_cohorts_count: "%{count}"
-      inactive_cohorts_label: Inactive Cohorts
+      end_date: "End Date:"
+      ended_cohorts_label: Ended Cohorts
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
-      active_students_label: Active Students
-      ongoing_cohorts_subheading: Ongoing Cohorts
-      end_date: "End Date:"
-      no_ongoing_cohorts: There are no ongoing cohorts for this course.
-      organisation_label: Organisation
-      students_enrolled_heading: Students enrolled in
-      ongoing_prefix_html:
+      active_cohorts_subheading: Active Cohorts
+      active_prefix_html:
         one: <span class="font-semibold text-black">1</span> student enrolled in
         other: <span class="font-semibold text-black">%{count}</span> students enrolled in
-      ongoing_suffix_html:
-        one:  <span class="font-semibold text-black">1</span> ongoing cohort.
-        other: <span class="font-semibold text-black">%{count}</span> ongoing cohorts.
+      active_students_label: Active Students
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
+      end_date: "End Date:"
+      no_active_cohorts: There are no active cohorts for this course.
+      organisation_label: Organisation
+      students_enrolled_heading: Students enrolled in
       total_students_label: Total Students
       view_all_cohorts: View All Cohorts
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2423,6 +2440,16 @@ en:
   presenters:
     apply:
       page_title: Enroll in %{course_name}
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2492,6 +2519,12 @@ en:
     issue_certificate_mutator:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
   schools:
     admins:
       title: Admins
@@ -2545,6 +2578,11 @@ en:
     courses:
       applicants:
         title: Applicants
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: Authors
       calendar_events:
@@ -2583,6 +2621,7 @@ en:
       course_index:
         title: Coaches
       school_index:
+        coach: Coach
         title: Coaches
     show:
       coaches: Coaches
@@ -2627,6 +2666,18 @@ en:
     caption_image: A caption for the image
     close: Close
     coaches: Coaches
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: Cohorts
     community: Community
     completed: Completed
@@ -2640,6 +2691,7 @@ en:
     empty: Empty
     fail: Fail
     file_invalid: Please select a file with a size less than 5 MB.
+    filter: Filter
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     is: is
@@ -2654,9 +2706,10 @@ en:
     load_more: Load More...
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    m: M
+    my_org: My Org
     name: Name
     name_email: Name or Email
-    no_email_found: Could not find user with this email. Please check the email that you entered.
     none: None
     note: "Note:"
     notes: Notes
@@ -2683,6 +2736,7 @@ en:
       truncate: "&hellip;"
     pass: Pass
     percentage: Percentage
+    percentage_completed: "%{percentage}% completed"
     post: Post
     preferred_name: Preferred name
     processing: Processing
@@ -2697,6 +2751,10 @@ en:
     search: Search
     settings: Settings
     sign_out: Sign Out
+    sort_by: Sort by
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: Students
     tag: Tag
     tags: Tags
@@ -2712,10 +2770,18 @@ en:
     view: View
   timeline_events:
     show:
-      accepted_on: Reviewed and accepted on %{date}.
-      question_with_number: "Question #%{number}"
-      rejected_on: Reviewed and rejected on %{date}.
-      submitted_on: Submitted on %{date}.
+      accepted: Accepted
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
+      pending: Pending
+      rejected: Rejected
+      reviewed_on: Reviewed on
+      status: Status
+      submission_from: Submission from
+      submitted_on: Submitted on
+      team: Team
   users:
     clear_discord_id:
       success: Discord unlinked successfully.
@@ -2777,14 +2843,14 @@ en:
       email_sent:
         image_alt: An email flying into to your inbox
         magic_link:
-          description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: We've sent you a magic link!
-          notice: This link will work only once.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Magic link is on its way!
         reset_password_link:
-          description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: We've sent you a link to reset your password!
-          notice: This link will work only once.
+          notice: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Confirm your request
       new:
         already_signed: You are already signed in.
@@ -2823,6 +2889,7 @@ en:
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
+      invalid_password_error: The password you entered is incorrect. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: Cannot update inactive student submissions.

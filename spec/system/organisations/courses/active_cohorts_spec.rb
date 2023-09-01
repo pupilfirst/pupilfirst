@@ -50,13 +50,13 @@ feature "Organisation show" do
     # Set up org relationships
     [team_c1_o1, team_c2_o1, team_c3_o1, team_c4_o1].each do |team|
       team
-        .founders
+        .students
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation_1) }
     end
 
     team_c1_o2
-      .founders
+      .students
       .includes(:user)
       .each { |f| f.user.update!(organisation: organisation_2) }
   end
@@ -82,16 +82,15 @@ feature "Organisation show" do
       expect(page).to have_text("Active")
       expect(page).to have_content("2")
 
-      expect(page).to have_content("Inactive Cohorts")
+      expect(page).to have_content("Ended Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Inactive")
+      expect(page).to have_text("Ended")
       expect(page).to have_content("1")
 
-      # checking for a link to inactive cohorts page.
+      # checking for a link to ended cohorts page.
       expect(page).to have_link(
-        "Inactive Cohorts",
-        href:
-          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+        "Ended Cohorts",
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       # Checking active cohorts.
@@ -138,9 +137,9 @@ feature "Organisation show" do
       expect(page).to have_text("Active")
       expect(page).to have_content("1")
 
-      expect(page).to have_content("Inactive Cohorts")
+      expect(page).to have_content("Ended Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Inactive")
+      expect(page).to have_text("Ended")
       expect(page).to have_content("0")
 
       # Checking active cohorts.
@@ -181,7 +180,7 @@ feature "Organisation show" do
       expect(page).to have_current_path("/organisations/#{organisation_1.id}")
     end
 
-    scenario "user can not see the active cohorts page of an org, where he is not an admin" do
+    scenario "user can not see the active cohorts page of an orgnisation, where he is not an admin" do
       sign_in_user(
         org_admin_user,
         referrer:
@@ -191,7 +190,7 @@ feature "Organisation show" do
       expect(page).to have_http_status(:not_found)
     end
 
-    scenario "user can visit inactive cohorts page from active cohorts page" do
+    scenario "user can visit ended cohorts page from active cohorts page" do
       sign_in_user(
         org_admin_user,
         referrer:
@@ -203,19 +202,18 @@ feature "Organisation show" do
       )
 
       expect(page).to have_link(
-        "Inactive Cohorts",
-        href:
-          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+        "Ended Cohorts",
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
-      click_link "Inactive Cohorts"
+      click_link "Ended Cohorts"
       expect(page).to have_current_path(
-        inactive_cohorts_organisation_course_path(organisation_1, course_1)
+        ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
     end
   end
 
   context "when the user is an school admin" do
-    scenario "user can see all the active cohorts" do
+    scenario "user can see all the Active cohorts" do
       sign_in_user(
         school_admin_user,
         referrer:
@@ -237,16 +235,15 @@ feature "Organisation show" do
       expect(page).to have_content("2")
 
       # This is visbile only on devices with screen width greater than 640px.
-      expect(page).to have_content("Inactive Cohorts")
+      expect(page).to have_content("Ended Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Inactive")
+      expect(page).to have_text("Ended")
       expect(page).to have_content("1")
 
-      # checking for a link to inactive cohorts page.
+      # checking for a link to ended cohorts page.
       expect(page).to have_link(
-        "Inactive Cohorts",
-        href:
-          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+        "Ended Cohorts",
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
 
       # Checking active cohorts.
@@ -293,9 +290,9 @@ feature "Organisation show" do
       expect(page).to have_text("Active")
       expect(page).to have_content("1")
 
-      expect(page).to have_content("Inactive Cohorts")
+      expect(page).to have_content("Ended Cohorts")
       # This is visbile only on devices with screen width less than 640px.
-      expect(page).to have_text("Inactive")
+      expect(page).to have_text("Ended")
       expect(page).to have_content("0")
 
       # Checking active cohorts.
@@ -346,7 +343,7 @@ feature "Organisation show" do
       expect(page).not_to have_http_status(:not_found)
     end
 
-    scenario "user can visit inactive cohorts page from active cohorts page" do
+    scenario "user can visit ended cohorts page from active cohorts page" do
       sign_in_user(
         school_admin_user,
         referrer:
@@ -358,19 +355,18 @@ feature "Organisation show" do
       )
 
       expect(page).to have_link(
-        "Inactive Cohorts",
-        href:
-          inactive_cohorts_organisation_course_path(organisation_1, course_1)
+        "Ended Cohorts",
+        href: ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
-      click_link "Inactive Cohorts"
+      click_link "Ended Cohorts"
       expect(page).to have_current_path(
-        inactive_cohorts_organisation_course_path(organisation_1, course_1)
+        ended_cohorts_organisation_course_path(organisation_1, course_1)
       )
     end
   end
 
   context "when the user is a non-admin" do
-    scenario "user can not see the inactive cohorts page" do
+    scenario "user can not see the ended cohorts page" do
       sign_in_user(
         regular_user,
         referrer:

@@ -10,13 +10,13 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higher level
+  STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # There are more pending submissions than the submission limit for the course
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,
-    STATUS_LEVEL_LOCKED,
-    STATUS_PENDING_MILESTONE,
+    STATUS_SUBMISSION_LIMIT_LOCKED,
+    STATUS_PENDING_MILESTONE
   ].freeze
 
   has_many :timeline_events, dependent: :restrict_with_error
@@ -38,11 +38,11 @@ class Target < ApplicationRecord
 
   scope :live, -> { where(visibility: VISIBILITY_LIVE) }
   scope :draft, -> { where(visibility: VISIBILITY_DRAFT) }
-  scope :founder, -> { where(role: ROLE_STUDENT) } # rubocop:disable Rails/DuplicateScope
-  scope :student, -> { where(role: ROLE_STUDENT) } # rubocop:disable Rails/DuplicateScope
-  scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
+  scope :student, -> { where(role: ROLE_STUDENT) }
+  scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
+  scope :milestone, -> { live.where(milestone: true) }
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"
@@ -83,13 +83,13 @@ class Target < ApplicationRecord
       CHECKLIST_KIND_LONG_TEXT,
       CHECKLIST_KIND_MULTI_CHOICE,
       CHECKLIST_KIND_SHORT_TEXT,
-      CHECKLIST_KIND_AUDIO,
+      CHECKLIST_KIND_AUDIO
     ].freeze
   end
 
   validates :target_action_type,
             inclusion: {
-              in: valid_target_action_types,
+              in: valid_target_action_types
             },
             allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
@@ -97,7 +97,7 @@ class Target < ApplicationRecord
   validates :call_to_action, length: { maximum: 20 }
   validates :visibility,
             inclusion: {
-              in: valid_visibility_types,
+              in: valid_visibility_types
             },
             allow_nil: true
 
@@ -143,9 +143,19 @@ class Target < ApplicationRecord
 
       errors.add(
         :base,
-        "Target and evaluation criterion must belong to same course",
+        "Target and evaluation criterion must belong to same course"
       )
     end
+  end
+
+  validate :milestone_should_have_a_number
+
+  def milestone_should_have_a_number
+    return unless milestone?
+
+    return if milestone_number.present?
+
+    errors.add(:milestone_number, "must be present for milestone targets")
   end
 
   normalize_attribute :slideshow_embed,
@@ -162,22 +172,23 @@ class Target < ApplicationRecord
     end
   end
 
-  def founder_role?
-    ActiveSupport::Deprecation.warn("Use `individual_target?` instead")
-    role == Target::ROLE_STUDENT
+  def title_with_milestone
+    return title unless milestone?
+
+    "#{I18n.t("shared.m")}#{milestone_number} - #{title}"
   end
 
-  def status(founder)
+  def status(student)
     @status ||= {}
-    @status[founder.id] ||= Targets::StatusService.new(self, founder).status
+    @status[student.id] ||= Targets::StatusService.new(self, student).status
   end
 
-  def pending?(founder)
-    status(founder) == STATUS_PENDING
+  def pending?(student)
+    status(student) == STATUS_PENDING
   end
 
-  def verified?(founder)
-    status(founder) == STATUS_COMPLETE
+  def verified?(student)
+    status(student) == STATUS_COMPLETE
   end
 
   def session?
@@ -186,11 +197,6 @@ class Target < ApplicationRecord
 
   def target?
     session_at.blank?
-  end
-
-  def founder_event?
-    ActiveSupport::Deprecation.warn("Use `individual_target?` instead")
-    role == ROLE_STUDENT
   end
 
   def quiz?

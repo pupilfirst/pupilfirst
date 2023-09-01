@@ -8,6 +8,8 @@ sidebar_label: Upgrading
 
 When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html) and run them after deployment. If your deployment target is DigitalOcean, and if you've follwed our guide, then the worker process should run migrations automatically when it starts up.
 
+You can enable maintenance mode to prevent users from accessing the LMS while migrations are running. To do this, set the `ENABLE_MAINTENANCE_MODE` environment variable to `true` before deploying the new version. Once the deployment is complete, set the variable back to `false`.
+
 ## Breaking changes
 
 These are a list of changes that should be accounted for when upgrading an existing installation of Pupilfirst. If you
@@ -15,6 +17,18 @@ encounter any problems while following these instructions, please [create a new 
 on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
+
+### 2023.4
+
+This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.
+
+### 2023.3
+
+This update addresses few security vulnerabilities in our platform of medium severity. It introduces enhanced security measures, including mandatory password confirmation for email changes, authentication for new password setting, and discreet user presence disclosure. It's vital for all users to upgrade to version 2023.3 to safeguard their accounts effectively.
+
+### 2023.2
+
+This version renames the `founders` table to `students` and updates all related usages throughout the codebase. For most installations of Pupilfirst LMS, this should be a seamless upgrade. However, if you've made customizations or have used any internal APIs, you should check for any references to `founders` and update them to `students`.
 
 ### 2023.1
 
@@ -35,7 +49,7 @@ Founder
     # If a student has no submission, skip.
     if latest_submission.present? &&
          TimelineEvents::WasLastTargetService.new(
-           latest_submission,
+           latest_submission
          ).was_last_target?
       # If the students has a submission, and it was the last target, set `completed_at`
       student.update!(completed_at: latest_submission.created_at)

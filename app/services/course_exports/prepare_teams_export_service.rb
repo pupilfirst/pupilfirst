@@ -4,9 +4,9 @@ module CourseExports
 
     def execute
       tables = [
-        { title: 'Targets', rows: target_rows },
-        { title: 'Teams', rows: team_rows },
-        { title: 'Submissions', rows: submission_rows }
+        { title: "Targets", rows: target_rows },
+        { title: "Teams", rows: team_rows },
+        { title: "Submissions", rows: submission_rows }
       ]
 
       finalize(tables)
@@ -17,7 +17,7 @@ module CourseExports
     def target_rows
       values =
         team_targets.map do |target|
-          milestone = target.target_group.milestone ? 'Yes' : 'No'
+          milestone = target.milestone? ? "Yes" : "No"
 
           [
             target_id(target),
@@ -33,13 +33,13 @@ module CourseExports
       (
         [
           [
-            'ID',
-            'Level',
-            'Name',
-            'Completion Method',
-            'Milestone?',
-            'Teams with submissions',
-            'Teams pending review'
+            "ID",
+            "Level",
+            "Name",
+            "Completion Method",
+            "Milestone?",
+            "Teams with submissions",
+            "Teams pending review"
           ]
         ] + values
       ).transpose
@@ -48,10 +48,15 @@ module CourseExports
     def team_rows
       rows =
         teams.map do |team|
-          [team.id, team.name, team.founders.map(&:name).sort.join(', ')]
+          [
+            team.id,
+            team.name,
+            team.cohort.name,
+            team.students.map(&:name).sort.join(", ")
+          ]
         end
 
-      [['ID', 'Team Name', 'Students']] + rows
+      [["ID", "Team Name", "Cohort", "Students"]] + rows
     end
 
     def submission_rows
@@ -63,8 +68,9 @@ module CourseExports
           [target_id(target)] + grading
         end
 
-      ([['Team ID'] + team_ids, ['Team Name'] + teams.pluck(:name)] + values)
-        .transpose
+      (
+        [["Team ID"] + team_ids, ["Team Name"] + teams.pluck(:name)] + values
+      ).transpose
     end
 
     def compute_grading_for_submissions(target, team_ids)
@@ -72,11 +78,11 @@ module CourseExports
         .order(:created_at)
         .distinct
         .each_with_object(Array.new(team_ids.length)) do |submission, grading|
-          team = submission.founders.first.team
+          team = submission.students.first.team
 
           next if team.blank?
 
-          next unless submission.founder_ids.sort == team.founder_ids.sort
+          next unless submission.student_ids.sort == team.student_ids.sort
 
           grade_index = team_ids.index(team.id)
 
@@ -95,12 +101,12 @@ module CourseExports
       target
         .timeline_events
         .live
-        .joins(:founders)
-        .where(founders: { id: student_ids })
+        .joins(:students)
+        .where(students: { id: student_ids })
     end
 
     def teams_with_submissions(target)
-      submissions(target).distinct('founders.team_id').count('founders.team_id')
+      submissions(target).distinct("students.team_id").count("students.team_id")
     end
 
     def teams_pending_review(target)
@@ -108,10 +114,10 @@ module CourseExports
         .timeline_events
         .live
         .pending_review
-        .joins(:founders)
-        .where(founders: { id: student_ids })
-        .distinct('founders.team_id')
-        .count('founders.team_id')
+        .joins(:students)
+        .where(students: { id: student_ids })
+        .distinct("students.team_id")
+        .count("students.team_id")
     end
 
     def teams
@@ -120,17 +126,19 @@ module CourseExports
         begin
           scope =
             Team
-              .includes(founders: [faculty: :user])
+              .includes(students: [faculty: :user])
               .joins(:cohort)
               .where(cohort: { course_id: course.id })
               .active
               .order(:id)
               .distinct
 
+          scope = (@cohorts.present? ? scope.where(cohort: @cohorts) : scope)
+
           applicable_student_ids =
-            course.founders.tagged_with(tags, any: true).pluck(:id)
+            course.students.tagged_with(tags, any: true).pluck(:id)
           if tags.present?
-            scope.where(founders: { id: applicable_student_ids })
+            scope.where(students: { id: applicable_student_ids })
           else
             scope
           end
@@ -138,7 +146,12 @@ module CourseExports
     end
 
     def student_ids
-      @student_ids ||= Founder.where(team_id: teams.pluck(:id))
+      @student_ids ||=
+        if @cohorts.present?
+          Student.where(team_id: teams.pluck(:id), cohort: @cohorts)
+        else
+          Student.where(team_id: teams.pluck(:id))
+        end
     end
   end
 end

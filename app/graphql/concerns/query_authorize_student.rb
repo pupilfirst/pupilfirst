@@ -7,7 +7,7 @@ module QueryAuthorizeStudent
     # Has access to school
     return false unless course&.school == current_school && student.present?
 
-    # Founder has access to the course
+    # Student has access to the course
     return false unless !student.cohort.ended?
 
     # Level must be accessible.
@@ -18,19 +18,15 @@ module QueryAuthorizeStudent
 
   # Students can complete a live target if they're non-reviewed, or if they've reached the target's level for reviewed targets.
   def target_can_be_completed?
-    target.live? &&
-      (
-        target.evaluation_criteria.empty? ||
-          target.level.number <= student.level.number
-      )
+    target.live? && (target.evaluation_criteria.empty? || true)
   end
 
   def student
     @student ||=
       current_user
-        .founders
-        .joins(:level)
-        .where(levels: { course_id: course })
+        .students
+        .joins(:cohort)
+        .where(cohorts: { course_id: course })
         .first
   end
 
@@ -44,7 +40,7 @@ module QueryAuthorizeStudent
 
   def students
     if target.team_target? && student.team.exists?
-      student.team.founders
+      student.team.students
     else
       [student]
     end

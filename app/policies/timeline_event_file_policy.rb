@@ -8,7 +8,7 @@ class TimelineEventFilePolicy < ApplicationPolicy
     # and will be deleted by DatabaseCleanupJob#cleanup_submission_files if still unlinked after 24 hours.
     return true if timeline_event.blank?
 
-    students = timeline_event.founders
+    students = timeline_event.students
 
     # Coaches can view submission files.
     return true if current_user_coaches?(timeline_event.target.course, students)
@@ -29,25 +29,25 @@ class TimelineEventFilePolicy < ApplicationPolicy
 
   def create?
     # User must be enrolled as a student.
-    return false if user.founders.empty?
+    return false if user.students.empty?
 
     # At least one of the student profiles must be non-exited AND non-ended (course AND access).
     user
-      .founders
+      .students
       .includes(:cohort)
-      .any? { |founder| !(founder.dropped_out_at? || founder.access_ended?) }
+      .any? { |student| !(student.dropped_out_at? || student.access_ended?) }
   end
 
   private
 
-  def current_user_coaches?(course, founders)
+  def current_user_coaches?(course, students)
     return false if current_coach.blank?
 
     # Current user is a coach if he has been linked as reviewer to entire course holding this TEF.
     return true if current_coach.courses.exists?(id: course)
 
-    # Current user is a coach if he has been linked as reviewer directly to any student that TE founders are currently
+    # Current user is a coach if he has been linked as reviewer directly to any student that TE students are currently
     # a part of.
-    current_coach.founders.exists?(id: founders)
+    current_coach.students.exists?(id: students)
   end
 end

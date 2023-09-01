@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Organisation student details page and submissions list' do
+feature "Organisation student details page and submissions list" do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
@@ -29,19 +29,31 @@ feature 'Organisation student details page and submissions list' do
   let(:target_l1_1) do
     create :target,
            target_group: target_group_l1,
-           evaluation_criteria: [evaluation_criterion_1, evaluation_criterion_2]
+           evaluation_criteria: [
+             evaluation_criterion_1,
+             evaluation_criterion_2
+           ],
+           milestone: true,
+           milestone_number: 1
   end
 
   let(:target_l1_2) do
     create :target,
            target_group: target_group_l1,
-           evaluation_criteria: [evaluation_criterion_1, evaluation_criterion_2]
+           evaluation_criteria: [
+             evaluation_criterion_1,
+             evaluation_criterion_2
+           ],
+           milestone: true,
+           milestone_number: 2
   end
 
   let(:target_l2) do
     create :target,
            target_group: target_group_l1,
-           evaluation_criteria: [evaluation_criterion_1]
+           evaluation_criteria: [evaluation_criterion_1],
+           milestone: true,
+           milestone_number: 2
   end
 
   let!(:target_l3) do
@@ -55,37 +67,35 @@ feature 'Organisation student details page and submissions list' do
 
   let(:student_user) do
     create :user,
-           name: 'Student in main cohort',
-           email: 'student_main@example.com',
+           name: "Student in main cohort",
+           email: "student_main@example.com",
            school: school,
            last_seen_at: 1.week.ago,
            organisation: organisation
   end
 
-  let(:student) do
-    create :student, user: student_user, cohort: cohort, level: level_2
-  end
+  let(:student) { create :student, user: student_user, cohort: cohort }
 
   let!(:student_from_another_org) do
     user =
       create :user,
-             name: 'Student From Another Org',
-             email: 'another_org_student@example.com',
+             name: "Student From Another Org",
+             email: "another_org_student@example.com",
              school: school,
              organisation: organisation_2
 
-    create :student, user: user, cohort: cohort, level: level_2
+    create :student, user: user, cohort: cohort
   end
 
   let!(:student_in_inactive_cohort) do
     user =
       create :user,
-             name: 'Student In Inactive Cohort',
-             email: 'inactive_cohort_student@example.com',
+             name: "Student In Inactive Cohort",
+             email: "inactive_cohort_student@example.com",
              school: school,
              organisation: organisation
 
-    create :student, user: user, cohort: cohort_inactive, level: level_3
+    create :student, user: user, cohort: cohort_inactive
   end
 
   let!(:coach_note) do
@@ -154,40 +164,34 @@ feature 'Organisation student details page and submissions list' do
   end
 
   context "when the user isn't signed in" do
-    scenario 'user is required to sign in' do
+    scenario "user is required to sign in" do
       visit org_student_path(student)
 
       expect(page).to have_text("Sign in to #{school.name}")
     end
   end
 
-  context 'when the user is a school admin' do
+  context "when the user is a school admin" do
     let(:school_admin_user) { create :user, school: school }
 
     let!(:school_admin) do
       create :school_admin, school: school, user: school_admin_user
     end
 
-    scenario 'admin visiting an org student page is shown details' do
+    scenario "admin visiting an org student page is shown details" do
       sign_in_user school_admin_user, referrer: org_student_path(student)
 
       expect(page).to have_text(student.name)
-      expect(page).to have_text 'Targets Overview'
+      expect(page).to have_text "Targets Overview"
     end
   end
 
-  context 'when the user is an org admin' do
-    scenario 'org admin can see all details of a student', js: true do
+  context "when the user is an org admin" do
+    scenario "org admin can see all details of a student", js: true do
       sign_in_user org_admin_user, referrer: org_student_path(student)
 
       # Check name.
       expect(page).to have_text(student.name)
-
-      # Check level distribution bar.
-      expect(page).to have_selector(
-        '.level-progress-bar__student-level--current',
-        text: '2'
-      )
 
       # Check target completion stats.
       expect(page).to have_text(
@@ -208,10 +212,10 @@ feature 'Organisation student details page and submissions list' do
       )
     end
 
-    scenario 'org admin can access a list of all previously reviewed submissions' do
+    scenario "org admin can access a list of all previously reviewed submissions" do
       sign_in_user org_admin_user, referrer: org_student_path(student)
 
-      click_link 'View previously reviewed submissions'
+      click_link "View previously reviewed submissions"
 
       expect(page).to have_text("Total\n12\nAccepted\n7\nRejected\n5")
 
@@ -219,29 +223,29 @@ feature 'Organisation student details page and submissions list' do
       expect(page).to have_link(target_l1_1.title, count: 9)
 
       # Try the second page.
-      click_link('2')
+      click_link("2")
 
       expect(page).to have_link(target_l1_1.title, count: 2)
     end
 
-    scenario 'org admin can access details of a student of inactive cohort' do
+    scenario "org admin can access details of a student of inactive cohort" do
       sign_in_user org_admin_user,
                    referrer: org_student_path(student_in_inactive_cohort)
 
       expect(page).to have_text(student_in_inactive_cohort.name)
-      expect(page).to have_text 'Targets Overview'
+      expect(page).to have_text "Targets Overview"
     end
 
-    scenario 'org admin cannot access details of a student in another org' do
+    scenario "org admin cannot access details of a student in another org" do
       sign_in_user org_admin_user,
                    referrer: org_student_path(student_from_another_org)
 
       expect(page.status_code).to eq(404)
     end
 
-    context 'when the org admin is also a student' do
+    context "when the org admin is also a student" do
       let(:student_org_admin) do
-        create :student, user: org_admin_user, cohort: cohort, level: level_1
+        create :student, user: org_admin_user, cohort: cohort
       end
 
       let!(:coach_note) do
@@ -250,12 +254,12 @@ feature 'Organisation student details page and submissions list' do
 
       before { org_admin_user.update!(organisation: organisation) }
 
-      scenario 'org admin cannot see private notes' do
+      scenario "org admin cannot see private notes" do
         sign_in_user org_admin_user,
                      referrer: org_student_path(student_org_admin)
 
         expect(page).to have_text(org_admin_user.name)
-        expect(page).not_to have_text('Notes')
+        expect(page).not_to have_text("Notes")
         expect(page).not_to have_text(coach_note.note)
       end
     end

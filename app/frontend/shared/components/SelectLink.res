@@ -38,6 +38,7 @@ let make = (~links, ~selectedLink=?, ~placeholder="Select") => {
   | [] => React.null
   | moreLinks =>
     <Dropdown2
+      className="w-full md:text-base"
       selected={showSelected(placeholder, selectedLink)}
       contents={contents(moreLinks)}
       right=true

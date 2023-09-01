@@ -50,13 +50,13 @@ feature "Organisation show" do
     # Set up org relationships
     [team_c1_o1, team_c2_o1, team_c3_o1, team_c4_o1].each do |team|
       team
-        .founders
+        .students
         .includes(:user)
         .each { |f| f.user.update!(organisation: organisation_1) }
     end
 
     team_c1_o2
-      .founders
+      .students
       .includes(:user)
       .each { |f| f.user.update!(organisation: organisation_2) }
   end
@@ -75,11 +75,11 @@ feature "Organisation show" do
       expect(page).to have_text("Active Students\n6")
 
       expect(page).to have_text(
-        "#{course_1.name}\n4 students enrolled in 2 ongoing cohorts."
+        "#{course_1.name}\n4 students enrolled in 2 active cohorts."
       )
 
       expect(page).to have_text(
-        "#{course_2.name}\n2 students enrolled in 1 ongoing cohort."
+        "#{course_2.name}\n2 students enrolled in 1 active cohort."
       )
 
       # There should be links to three active cohorts...
@@ -98,7 +98,7 @@ feature "Organisation show" do
         href: organisation_cohort_path(organisation_1, cohort_4)
       )
 
-      # ...but not to the inactive cohort.
+      # ...but not to the ended cohort.
       expect(page).not_to have_link(cohort_3.name)
 
       # There should be a link to view all cohorts of course 1 .
@@ -127,7 +127,7 @@ feature "Organisation show" do
       )
     end
 
-    scenario "check for view all cohorts link when a course has only inactive cohorts" do
+    scenario "check for view all cohorts link when a course has only ended cohorts" do
       sign_in_user(org_admin_user, referrer: organisation_path(organisation_1))
 
       # There should be two view all cohorts links.
@@ -140,14 +140,14 @@ feature "Organisation show" do
 
       click_link "View All Cohorts",
                  href:
-                   inactive_cohorts_organisation_course_path(
+                   ended_cohorts_organisation_course_path(
                      organisation_1,
                      course_2
                    )
 
-      # The user should be taken to the inactive cohorts page.
+      # The user should be taken to the ended cohorts page.
       expect(page).to have_current_path(
-        inactive_cohorts_organisation_course_path(organisation_1, course_2)
+        ended_cohorts_organisation_course_path(organisation_1, course_2)
       )
     end
   end
@@ -179,6 +179,12 @@ feature "Organisation show" do
 
       expect(page).to have_text("Total Students\n2")
       expect(page).to have_text("Active Students\n2")
+
+      # There should not be view all cohorts link for course with only active cohorts
+      expect(page).not_to have_link(
+        "View All Cohorts",
+        href: active_cohorts_organisation_course_path(organisation_2, course_1)
+      )
     end
 
     scenario "check for view all cohorts links" do
@@ -203,7 +209,7 @@ feature "Organisation show" do
       )
     end
 
-    scenario "check for view all cohorts link when a course has only inactive cohorts" do
+    scenario "check for view all cohorts link when a course has only ended cohorts" do
       sign_in_user(
         school_admin_user,
         referrer: organisation_path(organisation_2)
@@ -216,14 +222,14 @@ feature "Organisation show" do
 
       click_link "View All Cohorts",
                  href:
-                   inactive_cohorts_organisation_course_path(
+                   ended_cohorts_organisation_course_path(
                      organisation_2,
                      course_1
                    )
 
-      # The user should be taken to the inactive cohorts page.
+      # The user should be taken to the ended cohorts page.
       expect(page).to have_current_path(
-        inactive_cohorts_organisation_course_path(organisation_2, course_1)
+        ended_cohorts_organisation_course_path(organisation_2, course_1)
       )
     end
   end

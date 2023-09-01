@@ -47,7 +47,7 @@ let make = (~userInputs=[], ~password) => {
       userInputs->Js.Array2.map(val =>
         val->Js.String2.split(" ")->Js.Array2.concat(val->Js.String2.split("@"))
       )
-    let zxcvbnResponse = zxcvbn(password, []->Js.Array2.concatMany(formDictionary))
+    let zxcvbnResponse = zxcvbn(password, formDictionary->ArrayUtils.flattenV2)
     let score = zxcvbnResponse.score
     let suggestions = zxcvbnResponse.feedback.suggestions
     let strength = switch score {

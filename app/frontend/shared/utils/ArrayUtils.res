@@ -38,8 +38,11 @@ let distinct = t => t |> Array.to_list |> ListUtils.distinct |> Array.of_list
 let sort_uniq = (f, t) => t |> Array.to_list |> List.sort_uniq(f) |> Array.of_list
 
 let getOpt = (a, i) =>
-  try Some(a |> Array.get(i)) catch {
+  try {
+    Some(a->Array.get(i))
+  } catch {
   | Not_found => None
+  | Invalid_argument(_) => None
   }
 
 let swapUp = (i, t) =>

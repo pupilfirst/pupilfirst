@@ -118,13 +118,11 @@ let renderUpdatePassword = (state, send, schoolName) => {
         </div>
         <div>
           <ul className="text-yellow-900 text-[10px]">
-            {ReactUtils.nullIf(
-              <li>
-                <PfIcon className="if i-info-light if-fw" />
-                {Zxcvbn.suggestions(zxcvbn)->Js.Array2.unsafe_get(0)->str}
-              </li>,
-              zxcvbn->Zxcvbn.suggestions->ArrayUtils.isEmpty,
-            )}
+            {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
+            | Some(suggestion) =>
+              <li> <PfIcon className="if i-info-light if-fw" /> {suggestion->str} </li>
+            | None => React.null
+            }}
           </ul>
         </div>
       </div>

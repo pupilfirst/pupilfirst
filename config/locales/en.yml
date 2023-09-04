@@ -2449,6 +2449,7 @@ en:
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
         milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2460,6 +2461,8 @@ en:
         page_title:
           community: Community
     courses:
+      cohorts:
+        page_title: "Cohorts | %{course_name}"
       leaderboard:
         heading:
           multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "

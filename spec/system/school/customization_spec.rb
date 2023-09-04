@@ -332,7 +332,6 @@ feature "School Customization", js: true do
       expect(page).to have_text("Current Sitemap Links")
 
       within("div[data-school-link-id='#{school_footer_link_1.id}']") do
-        # update link
         find("button[title='Edit']").click
         fill_in "link-title-#{school_footer_link_1.id}", with: ""
       end
@@ -352,7 +351,6 @@ feature "School Customization", js: true do
       expect(page).to have_text("Current Sitemap Links")
 
       within("div[data-school-link-id='#{school_footer_link_1.id}']") do
-        # update link
         find("button[title='Edit']").click
         fill_in "link-title-#{school_footer_link_1.id}", with: "A" * 25
       end

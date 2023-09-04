@@ -11,8 +11,6 @@ module Mutations
 
     field :school_link, Types::SchoolLink, null: true
 
-    # validates ValidTitleLength => {}
-
     def resolve(_params)
       notify(
         :success,

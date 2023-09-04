@@ -1333,11 +1333,10 @@ en:
       updated_notification: Images have been updated successfully.
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
-      invalid_title: Please enter a title between 1 and 24 characters in length
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       invalid_url: Please enter a valid URL
       move_down: Move Down
       move_up: Move Up
-      reached_max_title_length: Reached maximum length of 24 characters
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...
@@ -1351,11 +1350,10 @@ en:
       full_url_placeholder: Full URL, staring with https://
       header: Header
       header_links: Current Header Links
-      invalid_title: Please enter a title between 1 and 24 characters in length
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: Location of Link
       manage_links: Manage custom links
       no_custom_links: There are no custom links here. Add some?
-      reached_max_title_length: reached maximum length of 24 characters
       show_header_title: View and edit header links
       sitemap_links: Current Sitemap Links
       social: Social
@@ -2892,7 +2890,7 @@ en:
       link_expired: That link has expired or is invalid. Please try again.
       invalid_password_error: The password you entered is incorrect. Please try again.
   validate_school_link_title:
-    title_length_error: Please provide a non empty title with no more than 24 characters.
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: Cannot update inactive student submissions.

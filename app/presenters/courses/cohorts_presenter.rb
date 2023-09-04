@@ -23,4 +23,8 @@ class Courses::CohortsPresenter < ApplicationPresenter
     paged = cohorts.page(paged.total_pages).per(24) if paged.out_of_range?
     paged
   end
+
+  def page_title
+    I18n.t("presenters.courses.cohorts.page_title", course_name: @course.name)
+  end
 end

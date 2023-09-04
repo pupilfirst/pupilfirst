@@ -2440,6 +2440,7 @@ hi:
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
         milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2451,6 +2452,8 @@ hi:
         page_title:
           community: समुदाय
     courses:
+      cohorts:
+        page_title: "Cohorts | %{course_name}"
       leaderboard:
         heading:
           multiple_mid_text: "का स्कोर साझा करते हुए इस सप्ताह लीडरबोर्ड में शीर्ष पर हैं "

@@ -432,7 +432,7 @@ let make = (
 
   let (state, send) = React.useReducer(reducer, initialState)
 
-  <div className="container mx-auto px-3 py-8 max-w-5xl">
+  <div className="container mx-auto px-3 pt-4 pb-8 max-w-5xl">
     {confirmEmailChangeWindow(email, state, send)}
     {confirmDeletionWindow(state, send)}
     <div className="bg-white max-w-5xl mx-auto shadow sm:rounded-lg mt-4">

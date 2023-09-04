@@ -80,6 +80,7 @@ Currently supported web services:
 - Slideshare
 - Vimeo
 - Google (Docs, Slides, Spreadsheets, Forms)
+- Scribehow
 
 If there's a specific website you'd like us to include, [please let us know](mailto:support@pupilfirst.com). We can include any well-known service that supports the Open Embed (oEmbed) standard, or if it supports being embedded using an `iframe` tag.
 

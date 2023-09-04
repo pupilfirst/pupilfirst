@@ -169,20 +169,24 @@ feature "Calendars", js: true do
         expect(page).to have_text(calendar_event_1.title)
         expect(page).to have_text(calendar_event_2.title)
 
-        # Edit event 1
+        # Edit event 2
         click_link(
-          href: school_course_calendar_event_path(course, calendar_event_1)
+          href: school_course_calendar_event_path(course, calendar_event_2)
         )
-        expect(page).to have_text(calendar_event_1.title)
-        expect(page).to have_text(calendar_event_1.description)
+        expect(page).to have_text(calendar_event_2.title)
+        expect(page).to have_text(calendar_event_2.description)
 
         click_link("Edit")
 
-        expect(page).to have_text("Edit #{calendar_event_1.title}")
+        expect(page).to have_text("Edit #{calendar_event_2.title}")
 
+        expect(page).to have_select(
+          "calendar_event[calendar_id]",
+          selected: calendar_3.name
+        )
         fill_in "calendar_event[title]", with: "Some other title"
         fill_in "calendar_event[description]", with: "Some other description"
-        select calendar_3.name, from: "calendar_event[calendar_id]"
+        select calendar_1.name, from: "calendar_event[calendar_id]"
         select "green", from: "calendar_event[color]"
         fill_in "calendar_event[link_title]", with: "Some other link"
         fill_in "calendar_event[link_url]", with: "https://www.example.com"
@@ -192,12 +196,12 @@ feature "Calendars", js: true do
         dismiss_notification
 
         expect(page).to have_text("Some other title")
-        expect(calendar_event_1.reload.title).to eq("Some other title")
-        expect(calendar_event_1.description).to eq("Some other description")
-        expect(calendar_event_1.calendar).to eq(calendar_3)
-        expect(calendar_event_1.color).to eq("green")
-        expect(calendar_event_1.link_title).to eq("Some other link")
-        expect(calendar_event_1.link_url).to eq("https://www.example.com")
+        expect(calendar_event_2.reload.title).to eq("Some other title")
+        expect(calendar_event_2.description).to eq("Some other description")
+        expect(calendar_event_2.calendar).to eq(calendar_1)
+        expect(calendar_event_2.color).to eq("green")
+        expect(calendar_event_2.link_title).to eq("Some other link")
+        expect(calendar_event_2.link_url).to eq("https://www.example.com")
       end
 
       scenario "school admin deletes an event" do

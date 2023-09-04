@@ -86,14 +86,11 @@ class SubmissionsResolver < ApplicationQuery
       end
 
     # Filter by evaluator coach
-    stage_6 =
       if course.faculty.exists?(id: reviewing_coach_id)
         stage_5.where(evaluator_id: reviewing_coach_id)
       else
         stage_5
-      end
-
-    stage_6.from_students(students)
+      end.from_students(students)
   end
 
   def filter_by_status(submissions)

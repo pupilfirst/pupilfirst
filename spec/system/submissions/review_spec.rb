@@ -153,10 +153,10 @@ feature "Submission review overlay", js: true do
 
       find("a[data-submission-id='#{submission_pending.id}']").click
       click_button "Start Review"
-      sleep 0.5 # Wait for change to reflect in the DB.
+
+      expect(page).to have_content("Grade Card")
       expect(submission_pending.reload.reviewer).to eq(coach)
       expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
-      expect(page).to have_content("Grade Card")
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
       within(
@@ -1086,8 +1086,8 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
-      expect(page).to have_button("Next")
-      click_button "Next"
+      expect(page).to have_link("Next")
+      click_link "Next"
 
       expect(page).to have_text(submission_pending_5.title)
       within(
@@ -1098,8 +1098,8 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
       click_button "Save grades"
 
-      expect(page).to have_button("Next")
-      click_button "Next"
+      expect(page).to have_link("Next")
+      click_link "Next"
 
       expect(page).to have_text(submission_pending_4.title)
       within(

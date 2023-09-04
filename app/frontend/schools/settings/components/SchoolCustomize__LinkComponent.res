@@ -139,7 +139,7 @@ module LinkEditor = {
                 let value = ReactEvent.Form.target(event)["value"]
                 send(UpdateTitle(value))
               }}
-              maxLength=30
+              maxLength=24
             />
             <School__InputGroupError
               active={!StringUtils.lengthBetween(~allowBlank=false, state.title, 1, 24)}

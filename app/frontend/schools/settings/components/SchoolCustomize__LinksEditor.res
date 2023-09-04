@@ -329,7 +329,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
                 placeholder={t("title_placeholder")}
                 onChange={handleTitleChange(send)}
                 value=state.title
-                maxLength=30
+                maxLength=24
               />
               <School__InputGroupError message={t("invalid_title")} active=state.titleInvalid />
             </div>

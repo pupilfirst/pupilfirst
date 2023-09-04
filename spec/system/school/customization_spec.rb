@@ -337,7 +337,7 @@ feature "School Customization", js: true do
       end
 
       expect(page).to have_content(
-        "Please enter a title between 1 and 24 characters in length"
+        "Please enter a non empty title with no more than 24 characters"
       )
       expect(page).to have_button("Update", disabled: true)
     end
@@ -355,10 +355,12 @@ feature "School Customization", js: true do
         fill_in "link-title-#{school_footer_link_1.id}", with: "A" * 25
       end
 
-      expect(page).to have_content(
-        "Please enter a title between 1 and 24 characters in length"
-      )
-      expect(page).to have_button("Update", disabled: true)
+      # The title field has a max length of 24 characters.
+      expect(
+        page.find("#link-title-#{school_footer_link_1.id}").value.length
+      ).to eq(24)
+
+      expect(page).to have_button("Update", disabled: false)
     end
   end
 
@@ -371,7 +373,7 @@ feature "School Customization", js: true do
     fill_in "Title", with: ""
     fill_in "Full URL", with: "http://example.com/empty_title"
     expect(page).to have_content(
-      "Please enter a title between 1 and 24 characters in length"
+      "Please enter a non empty title with no more than 24 characters"
     )
 
     expect(page).to have_button("Add a New Link", disabled: true)
@@ -385,10 +387,10 @@ feature "School Customization", js: true do
 
     fill_in "Title", with: "A" * 25
     fill_in "Full URL", with: "http://example.com/empty_title"
-    expect(page).to have_content(
-      "Please enter a title between 1 and 24 characters in length"
-    )
 
-    expect(page).to have_button("Add a New Link", disabled: true)
+    # The title field has a max length of 24 characters.
+    expect(page.find("#link-title").value.length).to eq(24)
+
+    expect(page).to have_button("Add a New Link", disabled: false)
   end
 end

@@ -2440,6 +2440,7 @@ ta:
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
         milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2451,6 +2452,8 @@ ta:
         page_title:
           community: சமூக
     courses:
+      cohorts:
+        page_title: "Cohorts | %{course_name}"
       leaderboard:
         heading:
           multiple_mid_text: "இந்த வாரம் லீடர்போர்டில் முதலிடத்தில் உள்ளன, ஸ்கோரைப் பகிர்ந்து கொள்கின்றன "

@@ -240,16 +240,6 @@ let updateMarkdown = (markdown, t) =>
   | Embed(_) => t
   }
 
-let vimeoManageLink = t => {
-  switch t.blockType {
-  | Embed(url, _, #VimeoUpload, _) =>
-    url
-    ->Js.String2.split("/")
-    ->Belt.Array.get(3)
-    ->Belt.Option.map(vidId => `https://vimeo.com/manage/videos/${vidId}`)
-  | _ => None
-  }
-}
 module Query = %graphql(`
     query ContentBlocksWithVersionsQuery($targetId: ID!, $targetVersionId: ID) {
       contentBlocks(targetId: $targetId, targetVersionId: $targetVersionId) {

@@ -4,9 +4,6 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockEditor")
 
-@module("./images/vimeo-logo.svg")
-external vimeoLogoSVG: string = "default"
-
 type state = {
   dirty: bool,
   saving: option<string>,
@@ -271,7 +268,7 @@ let make = (
       | Embed(url, _, requestSource, _) =>
         let (icon, title) = switch requestSource {
         | #User => (<PfIcon className="if i-link-regular if-fw" />, t("embedded_url"))
-        | #VimeoUpload => (<img className="" src=vimeoLogoSVG />, t("video"))
+        | #VimeoUpload => (<i className="fab fa-vimeo-v" />, t("video"))
         }
         <div className="flex py-2 gap-2 items-center px-2">
           <div
@@ -291,17 +288,6 @@ let make = (
               <ClickToCopy copy={url}> <PfIcon className="if i-copy-regular if-fw" /> </ClickToCopy>
             </div>
           </div>
-          {switch contentBlock->ContentBlock.vimeoManageLink {
-          | Some(link) =>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={link}
-              className="bg-primary-100 text-primary-500 text-xs py-2 px-2 rounded-md block h-fit min-w-max">
-              {t("manage_on_vimeo")->str}
-            </a>
-          | None => React.null
-          }}
         </div>
       | _ => React.null
       }}

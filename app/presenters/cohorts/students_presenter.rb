@@ -7,8 +7,8 @@ module Cohorts
       super(view_context)
     end
 
-    def t(key)
-      I18n.t("presenters.cohorts.students.#{key}")
+    def t(key, variables = {})
+      I18n.t("presenters.cohorts.students.#{key}", **variables)
     end
 
     def filter
@@ -145,7 +145,7 @@ module Cohorts
     end
 
     def page_title
-      "#{@cohort.name} | #{@course.name}"
+      t("page_title", cohort_name: @cohort.name, course_name: @course.name)
     end
 
     private

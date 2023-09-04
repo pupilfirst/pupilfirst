@@ -25,6 +25,6 @@ class Courses::CohortsPresenter < ApplicationPresenter
   end
 
   def page_title
-    I18n.t("shared.cohorts") + " | #{@course.name}"
+    I18n.t("presenters.courses.cohorts.page_title", course_name: @course.name)
   end
 end

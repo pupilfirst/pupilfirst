@@ -58,7 +58,7 @@ let make = (~userInputs=[], ~password) => {
     | unexpectedScore => raise(UnexpectedZxcvbnScore(unexpectedScore))
     }
 
-    {score: score == 0 ? score + 1 : score, strength: strength, suggestions: suggestions}->Some
+    {score: score == 0 ? 1 : score, strength: strength, suggestions: suggestions}->Some
   } else {
     None
   }

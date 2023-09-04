@@ -2480,6 +2480,7 @@ ru:
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
         milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2491,6 +2492,8 @@ ru:
         page_title:
           community: Сообщество
     courses:
+      cohorts:
+        page_title: "Cohorts | %{course_name}"
       leaderboard:
         heading:
           multiple_mid_text: "находятся в верхней части таблицы лидеров на этой неделе, указав баллы "

@@ -929,7 +929,6 @@ en:
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
-      manage_on_vimeo: Manage on Vimeo
       embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:

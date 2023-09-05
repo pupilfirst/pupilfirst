@@ -1833,7 +1833,7 @@ hi:
       update_email_notifications: ईमेल सूचनाओं के लिए सेटिंग अपडेट करें।
       update_locale: अपने स्थान से संबंधित सेटिंग अपडेट करें।
       upload_failed: अपलोड करने में विफल
-      you_admin_warning: आप वर्तमान में इस विद्यालय के व्यवस्थापक हैं। खाता हटाने को सक्षम करने के लिए कृपया अपनी व्यवस्थापक पहुंच हटाएं।
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: पासवर्ड की पुष्टि कीजिये
       confirm_password_placeholder: अपना पासवर्ड दोबारा दर्ज करें
@@ -1889,6 +1889,11 @@ hi:
       subscribe: सदस्यता लेने के
       subscribed_on_another_device: इस डिवाइस पर सदस्यता लें
       unsubscribe: सदस्यता रद्द
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: आवेदन करना
@@ -2763,6 +2768,7 @@ hi:
     version: संस्करण
     versions: संस्करणों
     view: राय
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2863,6 +2869,7 @@ hi:
         subtitle: पासवर्ड पुनर्प्राप्ति के लिए अपना ईमेल दर्ज करें।
       reset_password:
         link_used: वह वन-टाइम लिंक पहले ही उपयोग किया जा चुका है, या अमान्य है। कृपया अपना पासवर्ड फिर से रीसेट करने का प्रयास करें।
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: आप पहले ही साइन इन कर चुके हैं।
         email: ईमेल के साथ जारी रखें

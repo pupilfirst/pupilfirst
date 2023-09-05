@@ -727,7 +727,7 @@ ta:
       get_next_submission:
         notice:
           done: முடிந்தது!
-          done_description: இதே போன்ற சமர்ப்பிப்புகள் எதுவும் இல்லை.
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action

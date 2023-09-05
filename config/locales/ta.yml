@@ -1833,7 +1833,7 @@ ta:
       update_email_notifications: மின்னஞ்சல் அறிவிப்புகளுக்கான அமைப்புகளைப் புதுப்பிக்கவும்.
       update_locale: உங்கள் மொழி தொடர்பான அமைப்புகளைப் புதுப்பிக்கவும்.
       upload_failed: பதிவேற்ற முடியவில்லை
-      you_admin_warning: நீங்கள் தற்போது இந்தப் பள்ளியின் நிர்வாகியாக உள்ளீர்கள். கணக்கு நீக்குதலை இயக்க, உங்கள் நிர்வாகி அணுகலை நீக்கவும்.
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: கடவுச்சொல்லை உறுதிப்படுத்தவும்
       confirm_password_placeholder: தயவு செய்து தங்கள் கடவுச்சொல்லை மீண்டும் உள்ளீடுக
@@ -1889,6 +1889,11 @@ ta:
       subscribe: பதிவு
       subscribed_on_another_device: இந்தச் சாதனத்தில் குழுசேரவும்
       unsubscribe: குழுவிலகவும்
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: விண்ணப்பிக்கவும்
@@ -2763,6 +2768,7 @@ ta:
     version: பதிப்பு
     versions: பதிப்புகள்
     view: காண்க
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2863,6 +2869,7 @@ ta:
         subtitle: கடவுச்சொல் மீட்புக்கு உங்கள் மின்னஞ்சலை உள்ளிடவும்.
       reset_password:
         link_used: அந்த ஒரு முறை இணைப்பு ஏற்கனவே பயன்படுத்தப்பட்டது அல்லது தவறானது. உங்கள் கடவுச்சொல்லை மீண்டும் அமைக்க முயற்சிக்கவும்.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
         email: மின்னஞ்சலுடன் தொடரவும்

@@ -4,6 +4,4 @@ class Quiz < ApplicationRecord
   has_many :answer_options, through: :quiz_questions
 
   validates :title, presence: true
-
-  validates :target_id, uniqueness: true
 end

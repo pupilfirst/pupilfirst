@@ -1833,7 +1833,7 @@ ml:
       update_email_notifications: ഇമെയിൽ അറിയിപ്പുകൾക്കായുള്ള ക്രമീകരണങ്ങൾ അപ്‌ഡേറ്റ് ചെയ്യുക.
       update_locale: നിങ്ങളുടെ ലൊക്കേലുമായി ബന്ധപ്പെട്ട ക്രമീകരണങ്ങൾ അപ്‌ഡേറ്റ് ചെയ്യുക.
       upload_failed: അപ്‌ലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു
-      you_admin_warning: നിങ്ങൾ നിലവിൽ ഈ സ്കൂളിന്റെ അഡ്മിനാണ്. അക്കൗണ്ട് ഇല്ലാതാക്കൽ പ്രവർത്തനക്ഷമമാക്കാൻ നിങ്ങളുടെ അഡ്മിൻ ആക്സസ് ഇല്ലാതാക്കുക.
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: പാസ്വേഡ് സ്ഥിരീകരിക്കുക
       confirm_password_placeholder: ദയവായി നിങ്ങളുടെ പാസ്‌വേഡ് വീണ്ടും നൽകുക
@@ -1889,6 +1889,11 @@ ml:
       subscribe: സബ്സ്ക്രൈബ് ചെയ്യുക
       subscribed_on_another_device: ഈ ഉപകരണത്തിൽ സബ്സ്ക്രൈബ് ചെയ്യുക
       unsubscribe: അൺസബ്സ്ക്രൈബ് ചെയ്യുക
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: അപേക്ഷിക്കുക
@@ -2763,6 +2768,7 @@ ml:
     version: പതിപ്പ്
     versions: പതിപ്പുകൾ
     view: കാണുക
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2863,6 +2869,7 @@ ml:
         subtitle: പാസ്‌വേഡ് വീണ്ടെടുക്കലിനായി നിങ്ങളുടെ ഇമെയിൽ നൽകുക.
       reset_password:
         link_used: ആ ഒറ്റത്തവണ ലിങ്ക് ഇതിനകം ഉപയോഗിച്ചു, അല്ലെങ്കിൽ അസാധുവാണ്. നിങ്ങളുടെ പാസ്‌വേഡ് വീണ്ടും പുനഃസജ്ജമാക്കാൻ ശ്രമിക്കുക.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: നിങ്ങൾ ഇതിനകം സൈൻ ഇൻ ചെയ്തിട്ടുണ്ട്.
         email: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക

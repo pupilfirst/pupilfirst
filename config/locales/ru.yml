@@ -739,7 +739,7 @@ ru:
       get_next_submission:
         notice:
           done: Сделано!
-          done_description: Других подобных работ нет.
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action

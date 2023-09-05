@@ -1078,7 +1078,7 @@ feature "Submission review overlay", js: true do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_pending_3)
 
-      expect(page).to_not have_button("Next")
+      expect(page).to_not have_link("Next")
 
       expect(page).to have_text(submission_pending_3.title)
       within(
@@ -1090,7 +1090,6 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
-      expect(page).to have_link("Next")
       click_link "Next"
 
       expect(page).to have_text(submission_pending_5.title)
@@ -1102,7 +1101,6 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
       click_button "Save grades"
 
-      expect(page).to have_link("Next")
       click_link "Next"
 
       expect(page).to have_text(submission_pending_4.title)

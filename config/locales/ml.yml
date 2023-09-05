@@ -727,7 +727,7 @@ ml:
       get_next_submission:
         notice:
           done: ചെയ്തു!
-          done_description: സമാനമായ മറ്റ് സമർപ്പിക്കലുകളൊന്നുമില്ല.
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action

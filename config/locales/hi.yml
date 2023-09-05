@@ -727,7 +727,7 @@ hi:
       get_next_submission:
         notice:
           done: पूर्ण!
-          done_description: कोई अन्य समान प्रस्तुतियाँ नहीं हैं।
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action

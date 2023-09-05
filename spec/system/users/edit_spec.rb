@@ -134,7 +134,7 @@ feature "User Edit", js: true do
       user.save!
     end
 
-    scenario "user changes her password" do
+    scenario "user changes password" do
       sign_in_user(user, referrer: edit_user_path)
 
       expect(page).to have_text("Change your current password")
@@ -143,6 +143,11 @@ feature "User Edit", js: true do
       fill_in "Current password", with: "not the current password"
       fill_in "New password", with: "long_enough"
       fill_in "Confirm password", with: "long_enough"
+
+      expect(page).to have_text(
+        "Add another word or two. Uncommon words are better."
+      )
+      expect(page).to have_text("Fair")
 
       click_button "Save Changes"
 

@@ -295,6 +295,8 @@ feature "Submission review overlay", js: true do
       expect(target.review_checklist).to eq([])
       click_button "Start Review"
 
+      expect(page).to have_text("Add Your Feedback")
+
       click_button "Create Review Checklist"
 
       within("div[data-checklist-item='0']") do
@@ -461,6 +463,8 @@ feature "Submission review overlay", js: true do
 
       expect(target.review_checklist).to eq([])
       click_button "Start Review"
+
+      expect(page).to have_text("Add Your Feedback")
       click_button "Create Review Checklist"
 
       within("div[data-checklist-item='0']") do

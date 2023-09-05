@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'School Overview', js: true do
+feature "School Overview", js: true do
   include UserSpecHelper
 
   # Setup a course 1
   let!(:school) { create :school, :current }
-  let!(:school_admin) { create :school_admin, school: school }
+  let!(:school_admin) { create :school_admin }
 
   let!(:course_1) { create :course, school: school }
   let!(:cohort_1) { create :cohort, course: course_1 }
@@ -118,7 +118,7 @@ feature 'School Overview', js: true do
   let!(:course_ended) { create :course, :ended, school: school }
   let!(:course_archived) { create :course, :archived, school: school }
 
-  scenario 'school admin visit the school overview' do
+  scenario "school admin visit the school overview" do
     sign_in_user school_admin.user, referrer: school_path
     expect(page).to have_text(school.name)
 
@@ -166,8 +166,8 @@ feature 'School Overview', js: true do
     expect(page).not_to have_text(course_archived.name)
   end
 
-  scenario 'user who is not logged in gets redirected to sign in page' do
+  scenario "user who is not logged in gets redirected to sign in page" do
     visit school_path
-    expect(page).to have_text('Please sign in to continue.')
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

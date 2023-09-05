@@ -174,9 +174,7 @@ feature "Organisation student details page and submissions list" do
   context "when the user is a school admin" do
     let(:school_admin_user) { create :user, school: school }
 
-    let!(:school_admin) do
-      create :school_admin, school: school, user: school_admin_user
-    end
+    let!(:school_admin) { create :school_admin, user: school_admin_user }
 
     scenario "admin visiting an org student page is shown details" do
       sign_in_user school_admin_user, referrer: org_student_path(student)

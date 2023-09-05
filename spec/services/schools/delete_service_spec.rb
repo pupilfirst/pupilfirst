@@ -16,9 +16,7 @@ describe Schools::DeleteService do
     create :school_string, :privacy_policy, school: school_1
   end
   let!(:school_link_s1) { create :school_link, :header, school: school_1 }
-  let!(:school_admin_s1) do
-    create :school_admin, school: school_1, user: user_s1
-  end
+  let!(:school_admin_s1) { create :school_admin, user: user_s1 }
   let!(:course_s1) { create :course, school: school_1 }
   let!(:community_s1) { create :community, school: school_1 }
   let!(:markdown_attachment_s1) do
@@ -46,9 +44,7 @@ describe Schools::DeleteService do
     create :school_string, :privacy_policy, school: school_2
   end
   let!(:school_link_s2) { create :school_link, :header, school: school_2 }
-  let!(:school_admin_s2) do
-    create :school_admin, school: school_2, user: user_s2
-  end
+  let!(:school_admin_s2) { create :school_admin, user: user_s2 }
   let!(:course_s2) { create :course, school: school_2 }
   let!(:community_s2) { create :community, school: school_2 }
   let!(:markdown_attachment_s2) do
@@ -65,9 +61,9 @@ describe Schools::DeleteService do
 
   before do
     # Tag the schools.
-    school_1.student_tag_list.add('school 1 tag')
+    school_1.student_tag_list.add("school 1 tag")
     school_1.save!
-    school_2.student_tag_list.add('school 2 tag')
+    school_2.student_tag_list.add("school 2 tag")
     school_2.save!
   end
 
@@ -86,7 +82,7 @@ describe Schools::DeleteService do
       [Proc.new { Domain.count }, 3, 1],
       [Proc.new { AuditRecord.count }, 2, 1],
       [Proc.new { Calendar.count }, 2, 1],
-      [Proc.new { CalendarEvent.count }, 2, 1],
+      [Proc.new { CalendarEvent.count }, 2, 1]
     ]
   end
 
@@ -94,8 +90,8 @@ describe Schools::DeleteService do
     it "deletes all data related to the course and the course itself" do
       expect { subject.execute }.to(
         change { expectations.map { |e| e[0].call } }.from(
-          expectations.pluck(1),
-        ).to(expectations.pluck(2)),
+          expectations.pluck(1)
+        ).to(expectations.pluck(2))
       )
 
       expect { school_2.reload }.not_to raise_error

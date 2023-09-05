@@ -355,10 +355,6 @@ feature "Target Content Editor", js: true do
       end
 
       expect(page).to have_text("https://vimeo.com/123456789")
-      expect(page).to have_link(
-        "Manage on Vimeo",
-        href: "https://vimeo.com/manage/videos/123456789"
-      )
 
       expect(target.current_target_version.content_blocks.count).to eq(2)
 

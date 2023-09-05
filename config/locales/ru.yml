@@ -1857,7 +1857,7 @@ ru:
       update_email_notifications: Обновите настройки уведомлений по почте.
       update_locale: Обновите настройки, связанные с вашей локалью.
       upload_failed: Не удалось загрузить
-      you_admin_warning: В настоящее время вы являетесь администратором этой школы. Удалите доступ администратора, чтобы разрешить удаление учетной записи.
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: Подтвердить Пароль
       confirm_password_placeholder: Пожалуйста, введите пароль еще раз
@@ -1913,6 +1913,11 @@ ru:
       subscribe: Подписаться
       subscribed_on_another_device: Подписаться на этом Устройстве
       unsubscribe: Отписаться
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: Применить
@@ -2803,6 +2808,7 @@ ru:
     version: Версия
     versions: Версии
     view: Посмотреть
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2905,6 +2911,7 @@ ru:
         subtitle: Введите ваш email для восстановления пароля.
       reset_password:
         link_used: Эта одноразовая ссылка уже была использована или неверна. Пожалуйста, попробуйте сбросить пароль еще раз.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: Вы уже вошли в систему.
         email: Продолжить по электронной почте

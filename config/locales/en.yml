@@ -1837,7 +1837,7 @@ en:
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
-      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1893,6 +1893,11 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: Apply
@@ -2446,6 +2451,7 @@ en:
         milestone_completed: Milestone completed
         milestone_incomplete: Milestone incomplete
         milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
         search_by_email: Search by email address
         search_by_name: Search by name
     communities:
@@ -2457,6 +2463,8 @@ en:
         page_title:
           community: Community
     courses:
+      cohorts:
+        page_title: "Cohorts | %{course_name}"
       leaderboard:
         heading:
           multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
@@ -2766,6 +2774,7 @@ en:
     version: Version
     versions: Versions
     view: View
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2866,6 +2875,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

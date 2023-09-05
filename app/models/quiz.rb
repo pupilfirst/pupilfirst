@@ -5,5 +5,5 @@ class Quiz < ApplicationRecord
 
   validates :title, presence: true
 
-  validates_with RateLimitValidator, limit: 5, scope: :target_id
+  validates :target_id, uniqueness: true
 end

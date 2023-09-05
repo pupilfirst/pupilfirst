@@ -3,7 +3,7 @@ class PostLike < ApplicationRecord
   belongs_to :user, optional: true
 
   validates_with RateLimitValidator,
-                 limit: 100,
+                 limit: 250,
                  scope: :user_id,
                  time_frame: 1.hour
 end

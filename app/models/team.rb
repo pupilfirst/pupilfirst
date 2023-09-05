@@ -6,7 +6,7 @@ class Team < ApplicationRecord
   scope :active, -> { (where(cohort: Cohort.active)) }
   scope :inactive, -> { (where.not(cohort: Cohort.active)) }
   validates_with RateLimitValidator,
-                 limit: 1000,
+                 limit: 2500,
                  scope: :cohort_id,
-                 time_frame: 1.day
+                 time_frame: 1.hour
 end

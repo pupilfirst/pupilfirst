@@ -14,7 +14,7 @@ class Post < ApplicationRecord
   has_many :text_versions, as: :versionable, dependent: :restrict_with_error
 
   validates_with RateLimitValidator,
-                 limit: 25,
+                 limit: 250,
                  scope: :creator_id,
                  time_frame: 1.hour
 

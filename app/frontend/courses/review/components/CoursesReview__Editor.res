@@ -406,7 +406,8 @@ let reviewNextButton = (nextSubmission, filter) => {
       <p className="pe-2"> {str(t("review_next"))} </p>
       <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl rtl:rotate-180" />
     </Link>
-  | DataLoading => <button disabled={true} className />
+  | DataLoading =>
+    <button disabled={true} className> <FaIcon classes="fas fa-spinner fa-pulse me-2" /> </button>
   | DataEmpty
   | DataUnloaded => React.null
   }

@@ -684,6 +684,7 @@ ActiveRecord::Schema.define(version: 2023_09_05_052905) do
     t.integer "milestone_number"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
+    t.index ["target_group_id"], name: "index_targets_on_target_group_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -750,7 +751,9 @@ ActiveRecord::Schema.define(version: 2023_09_05_052905) do
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
     t.datetime "archived_at"
+    t.index ["evaluator_id"], name: "index_timeline_events_on_evaluator_id"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
+    t.index ["target_id"], name: "index_timeline_events_on_target_id"
   end
 
   create_table "topic_categories", force: :cascade do |t|
@@ -889,6 +892,7 @@ ActiveRecord::Schema.define(version: 2023_09_05_052905) do
   add_foreign_key "issued_certificates", "users", column: "revoker_id"
   add_foreign_key "leaderboard_entries", "students"
   add_foreign_key "levels", "courses"
+  add_foreign_key "markdown_attachments", "schools"
   add_foreign_key "markdown_attachments", "users"
   add_foreign_key "organisation_admins", "organisations"
   add_foreign_key "organisation_admins", "users"
@@ -917,8 +921,10 @@ ActiveRecord::Schema.define(version: 2023_09_05_052905) do
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_event_files", "users"
   add_foreign_key "timeline_event_owners", "students"
+  add_foreign_key "timeline_event_owners", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"
+  add_foreign_key "timeline_events", "targets"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"

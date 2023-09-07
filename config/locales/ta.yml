@@ -926,6 +926,8 @@ ta:
       undo_block_confirm: இந்தத் தொகுதியில் நீங்கள் செய்த மாற்றங்களை நிச்சயமாகச் செயல்தவிர்க்க விரும்புகிறீர்களா?
       undo_changes: மாற்றங்களை செயல்தவிர்
       uploading: புதுப்பிக்கிறது...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: கடைசியாக புதுப்பிக்கப்பட்டது
       not_versioned: பதிப்பு செய்யப்படவில்லை

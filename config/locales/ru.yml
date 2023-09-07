@@ -942,6 +942,8 @@ ru:
       undo_block_confirm: Вы уверены, что хотите отменить изменения в этом блоке?
       undo_changes: Отменить изменения
       uploading: Обновление...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Последнее Обновление
       not_versioned: Без Версии

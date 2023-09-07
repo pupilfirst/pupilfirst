@@ -12,4 +12,15 @@ class SchoolLink < ApplicationRecord
   validates_with RateLimitValidator, limit: 25, scope: :school_id
 
   normalize_attribute :title
+
+  validates :title,
+            presence: true,
+            length: {
+              maximum: 24
+            },
+            if: -> { header_or_footer? }
+
+  def header_or_footer?
+    [KIND_HEADER, KIND_FOOTER].include?(kind)
+  end
 end

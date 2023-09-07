@@ -14,6 +14,7 @@ class TimelineEventFilesController < ApplicationController
   # POST /timeline_event_files
   def create
     timeline_event_file = authorize(TimelineEventFile.new(file: params[:file]))
+    timeline_event_file.user = current_user
     timeline_event_file.save!
 
     render json: { id: timeline_event_file.id.to_s }

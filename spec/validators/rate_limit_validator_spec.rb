@@ -28,6 +28,14 @@ RSpec.describe RateLimitValidator do
         post.validate
         expect(post.errors[:base]).to include("Rate limit exceeded: 10")
       end
+
+      it "does not add an error if the rate limit is exceeded and the time frame is over" do
+        create_list(:post, 10, creator: creator, created_at: 1.day.ago)
+
+        create(:post, creator: creator, body: "New post")
+
+        expect(Post.last.body).to eq("New post")
+      end
     end
 
     context "without time_frame" do

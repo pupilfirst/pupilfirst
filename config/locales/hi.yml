@@ -1331,22 +1331,24 @@ hi:
       updated_notification: छवियों को सफलतापूर्वक अपडेट कर दिया गया है।
     SchoolCustomize__LinkComponent:
       cancel_editing: संपादन रद्द करें
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: नीचे की ओर
       move_up: बढ़ाना
     SchoolCustomize__LinkEditor:
       add_new_link: एक नया लिंक जोड़ें
       adding_new_link: नया लिंक जोड़ा जा रहा है...
-      cant_empty_message: खाली नहीं हो सकता
       done_notification_body: एक कस्टम लिंक जोड़ा गया है।
       error_body: ऐसा लगता है कि आपने जो URL डाला है वह मान्य नहीं है। कृपया जाँच करें और पुनः प्रयास करें।
       error_head: अवैध यूआरएल
       footer_link_title: पाद लेख लिंक देखें और संपादित करें
       footer_sitemap: पाद लेख साइटमैप
       full_url: पूरा यूआरएल
-      full_url_error: मान्य URL नहीं है
+      full_url_error: Please enter a valid URL
       full_url_placeholder: पूर्ण URL, https:// से अभिनीत
       header: हैडर
       header_links: वर्तमान हैडर लिंक
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: लिंक का स्थान
       manage_links: कस्टम लिंक प्रबंधित करें
       no_custom_links: यहां कोई कस्टम लिंक नहीं हैं। कुछ जोड़े?
@@ -2246,7 +2248,6 @@ hi:
     create_quiz_submission:
       responses_saved_notification: आपके प्रतिसाद सहेज लिए गए हैं.
     create_school_link:
-      blank_title_error: शीर्षक आवश्यक है
       success_notification: एक कस्टम लिंक जोड़ा गया है।
     create_student_from_applicant:
       success_notification: छात्र सफलतापूर्वक बनाया गया।
@@ -2894,6 +2895,8 @@ hi:
       frequent_request_error: 'दो मिनट से भी कम समय पहले एक ईमेल भेजा गया था। कृपया पुन: प्रयास करने से पहले कुछ मिनट प्रतीक्षा करें।'
       link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
       invalid_password_error: The password you entered is incorrect. Please try again.
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: निष्क्रिय छात्र सबमिशन अपडेट नहीं कर सकते।

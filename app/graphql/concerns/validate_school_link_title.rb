@@ -4,13 +4,7 @@ module ValidateSchoolLinkTitle
   class ValidTitleLength < GraphQL::Schema::Validator
     def validate(_object, _context, value)
       title = value[:title]&.strip
-      kind =
-        if value[:id].present?
-          link = SchoolLink.find_by(id: value[:id])
-          link&.kind
-        else
-          value[:kind]
-        end
+      kind = value[:kind].presence || SchoolLink.find_by(id: value[:id])&.kind
 
       if (kind.present?) && (kind != SchoolLink::KIND_SOCIAL) &&
            (title.length < 1 || title.length > 24)

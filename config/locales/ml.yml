@@ -1331,22 +1331,24 @@ ml:
       updated_notification: ചിത്രങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു.
     SchoolCustomize__LinkComponent:
       cancel_editing: എഡിറ്റിംഗ് റദ്ദാക്കുക
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: താഴേക്ക് നീക്കുക
       move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
     SchoolCustomize__LinkEditor:
       add_new_link: ഒരു പുതിയ ലിങ്ക് ചേർക്കുക
       adding_new_link: പുതിയ ലിങ്ക് ചേർക്കുന്നു...
-      cant_empty_message: ശൂന്യമായിരിക്കാൻ കഴിയില്ല
       done_notification_body: ഒരു ഇഷ്‌ടാനുസൃത ലിങ്ക് ചേർത്തു.
       error_body: നിങ്ങൾ നൽകിയ URL സാധുതയുള്ളതല്ലെന്ന് തോന്നുന്നു. ദയവായി പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.
       error_head: അസാധുവായ URL
       footer_link_title: അടിക്കുറിപ്പ് ലിങ്കുകൾ കാണുക, എഡിറ്റ് ചെയ്യുക
       footer_sitemap: അടിക്കുറിപ്പ് സൈറ്റ്മാപ്പ്
       full_url: പൂർണ്ണ URL
-      full_url_error: ഒരു സാധുവായ URL അല്ല
+      full_url_error: Please enter a valid URL
       full_url_placeholder: പൂർണ്ണ URL, https:// ഉപയോഗിച്ച് നോക്കുന്നു
       header: തലക്കെട്ട്
       header_links: നിലവിലെ തലക്കെട്ട് ലിങ്കുകൾ
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: ലിങ്കിന്റെ സ്ഥാനം
       manage_links: ഇഷ്ടാനുസൃത ലിങ്കുകൾ നിയന്ത്രിക്കുക
       no_custom_links: ഇവിടെ ഇഷ്‌ടാനുസൃത ലിങ്കുകളൊന്നുമില്ല. കുറച്ച് ചേർക്കണോ?
@@ -2246,7 +2248,6 @@ ml:
     create_quiz_submission:
       responses_saved_notification: നിങ്ങളുടെ പ്രതികരണങ്ങൾ സംരക്ഷിച്ചു.
     create_school_link:
-      blank_title_error: ഒരു തലക്കെട്ട് ആവശ്യമാണ്
       success_notification: ഒരു ഇഷ്‌ടാനുസൃത ലിങ്ക് ചേർത്തു.
     create_student_from_applicant:
       success_notification: വിദ്യാർത്ഥി വിജയകരമായി സൃഷ്ടിച്ചു.
@@ -2894,6 +2895,8 @@ ml:
       frequent_request_error: രണ്ട് മിനിറ്റിനുള്ളിൽ ഒരു ഇമെയിൽ അയച്ചു. വീണ്ടും ശ്രമിക്കുന്നതിന് മുമ്പ് കുറച്ച് മിനിറ്റ് കാത്തിരിക്കുക.
       link_expired: ആ ലിങ്ക് കാലഹരണപ്പെട്ടു അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.
       invalid_password_error: The password you entered is incorrect. Please try again.
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: നിഷ്‌ക്രിയ വിദ്യാർത്ഥി സമർപ്പിക്കലുകൾ അപ്‌ഡേറ്റ് ചെയ്യാൻ കഴിയില്ല.

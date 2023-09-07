@@ -9,8 +9,8 @@ module Users
         current_user_id: current_user.id,
         name: current_user.name,
         email: current_user.email,
-        preferred_name: current_user.preferred_name || '',
-        about: current_user.about || '',
+        preferred_name: current_user.preferred_name || "",
+        about: current_user.about || "",
         locale: current_user.locale,
         available_locales: Rails.application.secrets.locale[:available],
         has_current_password: current_user.encrypted_password.present?,
@@ -20,9 +20,10 @@ module Users
           else
             nil
           end,
-        daily_digest: current_user.preferences['daily_digest'],
+        daily_digest: current_user.preferences["daily_digest"],
         is_school_admin: current_user.school_admin.present?,
-        has_valid_delete_account_token: valid_delete_account_token
+        has_valid_delete_account_token: valid_delete_account_token,
+        school_name: current_school.name
       }
     end
 

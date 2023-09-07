@@ -729,7 +729,7 @@ en:
       get_next_submission:
         notice:
           done: Done!
-          done_description: There are no other similar submissions.
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -929,6 +929,8 @@ en:
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
       not_versioned: Not Versioned
@@ -1839,7 +1841,7 @@ en:
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
-      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1895,6 +1897,11 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: Apply
@@ -2770,6 +2777,7 @@ en:
     version: Version
     versions: Versions
     view: View
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2870,6 +2878,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_06_093050) do
+ActiveRecord::Schema.define(version: 2023_09_05_052905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -712,7 +712,9 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
+    t.bigint "user_id", null: false
     t.index ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id"
+    t.index ["user_id"], name: "index_timeline_event_files_on_user_id"
   end
 
   create_table "timeline_event_grades", force: :cascade do |t|
@@ -913,6 +915,7 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "teams", "cohorts"
   add_foreign_key "timeline_event_files", "timeline_events"
+  add_foreign_key "timeline_event_files", "users"
   add_foreign_key "timeline_event_owners", "students"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"

@@ -102,6 +102,7 @@ class Target < ApplicationRecord
             allow_nil: true
 
   validate :days_to_complete_or_session_at_should_be_present
+  validates_with RateLimitValidator, limit: 100, scope: :target_group_id
 
   def days_to_complete_or_session_at_should_be_present
     return if days_to_complete.blank? && session_at.blank?

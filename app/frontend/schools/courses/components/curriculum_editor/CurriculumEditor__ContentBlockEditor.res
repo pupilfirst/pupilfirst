@@ -263,55 +263,88 @@ let make = (
   let (state, send) = React.useReducerWithMapState(reducer, contentBlock, computeInitialState)
 
   <DisablingCover disabled={state.saving != None} message=?state.saving>
-    <div
-      className="flex items-start"
-      ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
-      <div className="grow self-stretch min-w-0">
-        {innerEditor(
-          contentBlock,
-          state.contentBlock,
-          setDirtyCB,
-          state,
-          send,
-          markdownCurriculumEditorMaxLength,
-        )}
-      </div>
+    <div className="bg-white border border-gray-200 rounded-xl">
+      {switch ContentBlock.blockType(contentBlock) {
+      | Embed(url, _, requestSource, _) =>
+        let (icon, title) = switch requestSource {
+        | #User => (<PfIcon className="if i-link-regular if-fw" />, t("embedded_url"))
+        | #VimeoUpload => (<i className="fab fa-vimeo-v" />, t("video"))
+        }
+        <div className="flex py-2 gap-2 items-center px-2">
+          <div
+            className="bg-primary-100 text-primary-500 text-semibold rounded-full  items-center w-10 h-10 flex justify-center shrink-0">
+            icon
+          </div>
+          <div className="w-full">
+            <div className="text-sm"> {title->str} </div>
+            <div className="flex items-center -mt-1">
+              <a
+                className="text-xs max-w-xs text-gray-500 truncate"
+                href=url
+                target="_blank"
+                rel="noopener noreferrer">
+                {url->str}
+              </a>
+              <ClickToCopy copy={url}> <PfIcon className="if i-copy-regular if-fw" /> </ClickToCopy>
+            </div>
+          </div>
+        </div>
+      | _ => React.null
+      }}
       <div
-        className="ps-2 shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -me-10 sticky top-0">
-        {controlIcon(
-          ~icon="fa-arrow-up",
-          ~title=t("move_up"),
-          ~color=#Grey,
-          ~handler=moveContentBlockUpCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Up)),
-        )}
-        {controlIcon(
-          ~icon="fa-arrow-down",
-          ~title=t("move_down"),
-          ~color=#Grey,
-          ~handler=moveContentBlockDownCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Down)),
-        )}
-        {controlIcon(
-          ~icon="fa-trash-alt",
-          ~title=t("delete"),
-          ~color=#Red,
-          ~handler=removeContentBlockCB |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
-        )}
-        {controlIcon(
-          ~icon="fa-undo-alt",
-          ~title=t("undo_changes"),
-          ~color=#Grey,
-          ~handler=updateContentBlockCB |> OptionUtils.map(_cb =>
-            onUndo(contentBlock, setDirtyCB, send)
-          ),
-        )}
-        {controlIcon(
-          ~icon="fa-check",
-          ~title=t("save_changes"),
-          ~color=#Green,
-          ~handler=updateContentBlockCB |> OptionUtils.map(cb =>
-            onSave(state.contentBlock, cb, setDirtyCB, send)
-          ),
-        )}
+        className="flex items-start"
+        ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
+        <div className="grow self-stretch min-w-0">
+          {innerEditor(
+            contentBlock,
+            state.contentBlock,
+            setDirtyCB,
+            state,
+            send,
+            markdownCurriculumEditorMaxLength,
+          )}
+        </div>
+        <div
+          className="ps-2 shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -me-10 sticky top-0">
+          {controlIcon(
+            ~icon="fa-arrow-up",
+            ~title=t("move_up"),
+            ~color=#Grey,
+            ~handler=moveContentBlockUpCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Up)),
+          )}
+          {controlIcon(
+            ~icon="fa-arrow-down",
+            ~title=t("move_down"),
+            ~color=#Grey,
+            ~handler=moveContentBlockDownCB |> OptionUtils.map(cb =>
+              onMove(contentBlock, cb, #Down)
+            ),
+          )}
+          {controlIcon(
+            ~icon="fa-trash-alt",
+            ~title=t("delete"),
+            ~color=#Red,
+            ~handler=removeContentBlockCB |> OptionUtils.map(cb =>
+              onDelete(contentBlock, cb, send)
+            ),
+          )}
+          {controlIcon(
+            ~icon="fa-undo-alt",
+            ~title=t("undo_changes"),
+            ~color=#Grey,
+            ~handler=updateContentBlockCB |> OptionUtils.map(_cb =>
+              onUndo(contentBlock, setDirtyCB, send)
+            ),
+          )}
+          {controlIcon(
+            ~icon="fa-check",
+            ~title=t("save_changes"),
+            ~color=#Green,
+            ~handler=updateContentBlockCB |> OptionUtils.map(cb =>
+              onSave(state.contentBlock, cb, setDirtyCB, send)
+            ),
+          )}
+        </div>
       </div>
     </div>
   </DisablingCover>

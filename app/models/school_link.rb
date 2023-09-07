@@ -9,6 +9,7 @@ class SchoolLink < ApplicationRecord
 
   validates :kind, inclusion: VALID_KINDS
   validates :url, presence: true
+  validates_with RateLimitValidator, limit: 25, scope: :school_id
 
   normalize_attribute :title
 

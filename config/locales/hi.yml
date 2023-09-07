@@ -926,6 +926,8 @@ hi:
       undo_block_confirm: क्या आप वाकई इस ब्लॉक में अपने परिवर्तन पूर्ववत करना चाहते हैं?
       undo_changes: परिवर्तन पूर्ववत करें
       uploading: अपडेट हो रहा है...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: आखरी अपडेट
       not_versioned: संस्करणित नहीं

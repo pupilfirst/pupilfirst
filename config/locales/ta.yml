@@ -1331,22 +1331,24 @@ ta:
       updated_notification: படங்கள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன.
     SchoolCustomize__LinkComponent:
       cancel_editing: திருத்துவதை ரத்துசெய்
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: கீழே இறங்கு
       move_up: மேலே நகர்த்து
     SchoolCustomize__LinkEditor:
       add_new_link: புதிய இணைப்பைச் சேர்க்கவும்
       adding_new_link: புதிய இணைப்பைச் சேர்க்கிறது...
-      cant_empty_message: காலியாக இருக்க முடியாது
       done_notification_body: தனிப்பயன் இணைப்பு சேர்க்கப்பட்டது.
       error_body: நீங்கள் உள்ளிட்ட URL தவறானது போல் தெரிகிறது. சரிபார்க்கவும், மீண்டும் முயற்சிக்கவும்.
       error_head: தவறான வலைதள முகவரி
       footer_link_title: அடிக்குறிப்பு இணைப்புகளைப் பார்த்து திருத்தவும்
       footer_sitemap: அடிக்குறிப்பு தளவரைபடம்
       full_url: முழு URL
-      full_url_error: சரியான URL அல்ல
+      full_url_error: Please enter a valid URL
       full_url_placeholder: முழு URL, https:// உடன் உற்று நோக்குகிறது
       header: தலைப்பு
       header_links: தற்போதைய தலைப்பு இணைப்புகள்
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: இணைப்பின் இடம்
       manage_links: தனிப்பயன் இணைப்புகளை நிர்வகிக்கவும்
       no_custom_links: இங்கே தனிப்பயன் இணைப்புகள் எதுவும் இல்லை. சிலவற்றைச் சேர்க்கவா?
@@ -2246,7 +2248,6 @@ ta:
     create_quiz_submission:
       responses_saved_notification: உங்கள் பதில்கள் சேமிக்கப்பட்டன.
     create_school_link:
-      blank_title_error: ஒரு தலைப்பு தேவை
       success_notification: தனிப்பயன் இணைப்பு சேர்க்கப்பட்டது.
     create_student_from_applicant:
       success_notification: மாணவர் வெற்றிகரமாக உருவாக்கப்பட்டது.
@@ -2894,6 +2895,8 @@ ta:
       frequent_request_error: இரண்டு நிமிடங்களுக்கு முன் ஒரு மின்னஞ்சல் அனுப்பப்பட்டது. மீண்டும் முயற்சிக்கும் முன் சில நிமிடங்கள் காத்திருக்கவும்.
       link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
       invalid_password_error: The password you entered is incorrect. Please try again.
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: செயலற்ற மாணவர் சமர்ப்பிப்புகளை புதுப்பிக்க முடியாது.

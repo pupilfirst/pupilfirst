@@ -1351,22 +1351,24 @@ ru:
       updated_notification: Изображения успешно обновлены.
     SchoolCustomize__LinkComponent:
       cancel_editing: Отменить редактирование
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: Вниз
       move_up: Переместить вверх
     SchoolCustomize__LinkEditor:
       add_new_link: Добавить Новую Ссылку
       adding_new_link: Добавление новой ссылки...
-      cant_empty_message: не может быть пустым
       done_notification_body: добавлена пользовательская ссылка.
       error_body: Похоже, что введенный вами URL-адрес недействителен. Пожалуйста проверьте и попробуйте снова.
       error_head: Неправильный URL-адрес
       footer_link_title: Показать ссылки в нижнем колонтитуле
       footer_sitemap: Карта сайта нижнего колонтитула
       full_url: Полный URL-адрес
-      full_url_error: не является действительным URL-адресом
+      full_url_error: Please enter a valid URL
       full_url_placeholder: Полный URL, начиная с https://
       header: Заголовок
       header_links: Текущие Ссылки Заголовка
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: Расположение ссылки
       manage_links: Управление пользовательскими ссылками
       no_custom_links: Здесь нет настраиваемых ссылок. Добавите немного?
@@ -2282,7 +2284,6 @@ ru:
     create_quiz_submission:
       responses_saved_notification: Ваши ответы сохранены.
     create_school_link:
-      blank_title_error: Требуется заголовок
       success_notification: добавлена пользовательская ссылка.
     create_student_from_applicant:
       success_notification: Студент успешно создан.
@@ -2936,6 +2937,8 @@ ru:
       frequent_request_error: Письмо было отправлено менее двух минут назад. Пожалуйста, подождите несколько минут, прежде чем повторить попытку.
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       invalid_password_error: The password you entered is incorrect. Please try again.
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: Невозможно обновить неактивные работы учащихся.

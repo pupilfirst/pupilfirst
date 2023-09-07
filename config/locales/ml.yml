@@ -926,6 +926,8 @@ ml:
       undo_block_confirm: ഈ ബ്ലോക്കിലെ നിങ്ങളുടെ മാറ്റങ്ങൾ പഴയപടിയാക്കണമെന്ന് തീർച്ചയാണോ?
       undo_changes: മാറ്റങ്ങൾ പഴയപടിയാക്കുക
       uploading: അപ്ഡേറ്റ് ചെയ്യുന്നു...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: അവസാനമായി പുതുക്കിയത്
       not_versioned: പതിപ്പ് അല്ല

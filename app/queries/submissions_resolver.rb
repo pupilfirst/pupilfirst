@@ -8,7 +8,6 @@ class SubmissionsResolver < ApplicationQuery
   property :reviewing_coach_id
   property :target_id
   property :search
-  property :exclude_submission_id
   property :include_inactive
 
   def submissions
@@ -87,21 +86,11 @@ class SubmissionsResolver < ApplicationQuery
       end
 
     # Filter by evaluator coach
-    stage_6 =
       if course.faculty.exists?(id: reviewing_coach_id)
         stage_5.where(evaluator_id: reviewing_coach_id)
       else
         stage_5
-      end
-
-    final_list =
-      if exclude_submission_id.present?
-        stage_6.where.not(id: exclude_submission_id)
-      else
-        stage_6
-      end
-
-    final_list.from_students(students)
+      end.from_students(students)
   end
 
   def filter_by_status(submissions)

@@ -729,7 +729,7 @@ en:
       get_next_submission:
         notice:
           done: Done!
-          done_description: There are no other similar submissions.
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -929,6 +929,8 @@ en:
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
       not_versioned: Not Versioned

@@ -8,7 +8,9 @@ feature "User Delete Account" do
 
   let(:user) { create :user }
   let(:admin_user) { create :user, school: user.school }
-  let!(:school_admin) { create :school_admin, user: admin_user }
+  let!(:school_admin) do
+    create :school_admin, user: admin_user, school: admin_user.school
+  end
 
   context "user is a not an admin" do
     scenario "user initiates account deletion", js: true do

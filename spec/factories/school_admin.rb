@@ -8,7 +8,7 @@ FactoryBot.define do
             if evaluator.school.present?
               FactoryBot.create(:user, school: evaluator.school)
             else
-              create :user
+              FactoryBot.create(:user)
             end
           )
       school_admin.user = user

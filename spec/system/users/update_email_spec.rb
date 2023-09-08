@@ -9,7 +9,9 @@ feature "User Update Email", js: true do
   let(:user_1) { create :user, school: school, password: "password" }
   let(:user_2) { create :user, school: school }
   let(:admin_user) { create :user, school: school }
-  let!(:school_admin) { create :school_admin, user: admin_user }
+  let!(:school_admin) do
+    create :school_admin, user: admin_user, school: admin_user.school
+  end
   let(:domain) { school.domains.where(primary: true).first }
 
   scenario "Send update email token when user update email" do

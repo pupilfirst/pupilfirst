@@ -14,7 +14,7 @@ feature "Course leaderboard" do
     create :student, cohort: cohort, excluded_from_leaderboard: true
   end
 
-  let(:school_admin) { create :school_admin }
+  let(:school_admin) { create :school_admin, school: student.school }
   let(:lts) { LeaderboardTimeService.new }
 
   before do

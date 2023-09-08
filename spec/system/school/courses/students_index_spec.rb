@@ -16,7 +16,7 @@ feature "School students index", js: true do
   let!(:live_cohort) { create :cohort, course: course }
   let!(:ended_cohort) { create :cohort, course: course, ends_at: 1.day.ago }
 
-  let!(:school_admin) { create :school_admin }
+  let!(:school_admin) { create :school_admin, school: school }
 
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }

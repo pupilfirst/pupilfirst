@@ -106,7 +106,7 @@ feature "User Dashboard", js: true do
 
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
-  let(:school_admin) { create :school_admin }
+  let(:school_admin) { create :school_admin, school: school }
   let(:course_author) { create :course_author, course: course_1 }
 
   before do

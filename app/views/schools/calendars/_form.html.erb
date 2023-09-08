@@ -2,7 +2,7 @@
   <section class="bg-gray-50">
     <div class="max-w-4xl 2xl:max-w-5xl mx-auto p-6">
       <div class="mt-4">
-        <%= link_to calendar_events_school_course_path(course), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
+        <%= link_to calendar_events_school_course_path(course, calendar_id: params[:calendar_id]), class: 'bg-gray-200 px-3 py-1.5 text-black rounded-2xl text-sm hover:bg-gray-300 focus:outline-none focus:bg-gray-100 focus:ring-1 focus:ring-focusColor-500 transition' do %>
           <i class="if i-arrow-left-regular if-fw rtl:rotate-180" ></i>
           <%= t('shared.back_link') %>
         <% end %>

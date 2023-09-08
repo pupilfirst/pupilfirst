@@ -9,12 +9,13 @@ module Mutations
     end
 
     include QueryAuthorizeSchoolAdmin
+    include ValidateSchoolLinkTitle
 
     argument :id, ID, required: true
     argument :title, String, required: false
     argument :url, String, required: false
 
-    description 'Update school header/footer/social links'
+    description "Update school header/footer/social links"
 
     field :success, Boolean, null: false
 
@@ -23,8 +24,8 @@ module Mutations
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.update_school_link.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.update_school_link.success_notification")
       )
 
       { success: update_school_link }

@@ -4,7 +4,7 @@ let str = React.string
 external maxUploadFileSize: int = "maxUploadFileSize"
 
 let t = I18n.t(~scope="components.UserEdit")
-let ts = I18n.ts
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -72,7 +72,11 @@ let reducer = (state, action) =>
       currentPassword: currentPassword,
       dirty: true,
     }
-  | UpdateNewPassword(newPassword) => {...state, newPassword: newPassword, dirty: true}
+  | UpdateNewPassword(newPassword) => {
+      ...state,
+      newPassword: newPassword,
+      dirty: true,
+    }
   | UpdateNewPassWordConfirm(confirmPassword) => {
       ...state,
       confirmPassword: confirmPassword,
@@ -400,6 +404,7 @@ let make = (
   ~isSchoolAdmin,
   ~hasValidDeleteAccountToken,
   ~email,
+  ~schoolName,
 ) => {
   let initialState = {
     name: name,
@@ -427,7 +432,7 @@ let make = (
 
   let (state, send) = React.useReducer(reducer, initialState)
 
-  <div className="container mx-auto px-3 py-8 max-w-5xl">
+  <div className="container mx-auto px-3 pt-4 pb-8 max-w-5xl">
     {confirmEmailChangeWindow(email, state, send)}
     {confirmDeletionWindow(state, send)}
     <div className="bg-white max-w-5xl mx-auto shadow sm:rounded-lg mt-4">
@@ -613,6 +618,48 @@ let make = (
                       className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                       placeholder={t("new_password_placeholder")}
                     />
+                    {switch Zxcvbn.make(
+                      ~password=state.newPassword,
+                      ~userInputs=[state.name, state.email, schoolName],
+                    ) {
+                    | None => <div className="h-6" />
+                    | Some(zxcvbn) =>
+                      <div className="h-6">
+                        <div className="flex justify-between items-center">
+                          <p className="text-xs text-gray-400 font-inter">
+                            {ts("password_strength")->str}
+                          </p>
+                          <div className="flex items-center gap-1 mt-1">
+                            <span
+                              key="0"
+                              className="text-xs text-gray-400 pe-2 text-right rtl:text-left">
+                              {zxcvbn->Zxcvbn.label->str}
+                            </span>
+                            {[1, 2, 3, 4]
+                            ->Js.Array2.map(score =>
+                              <span
+                                key={score->string_of_int}
+                                className={`rounded-md h-1 ${zxcvbn->Zxcvbn.colorClass(
+                                    score,
+                                  )} w-10`}
+                              />
+                            )
+                            ->React.array}
+                          </div>
+                        </div>
+                        <div>
+                          <ul className="text-yellow-900 text-[10px]">
+                            {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
+                            | Some(suggestion) =>
+                              <li>
+                                <PfIcon className="if i-info-light if-fw" /> {suggestion->str}
+                              </li>
+                            | None => React.null
+                            }}
+                          </ul>
+                        </div>
+                      </div>
+                    }}
                   </div>
                   <div className="mt-6">
                     <label
@@ -631,9 +678,12 @@ let make = (
                       className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                       placeholder={t("confirm_password_placeholder")}
                     />
-                    <School__InputGroupError
-                      message={t("confirm_password_error")} active={hasInvalidPassword(state)}
-                    />
+                    {ReactUtils.nullUnless(
+                      <School__InputGroupError
+                        message={t("confirm_password_error")} active={hasInvalidPassword(state)}
+                      />,
+                      state.confirmPassword->StringUtils.isPresent,
+                    )}
                   </div>
                 </div>
               : React.null}

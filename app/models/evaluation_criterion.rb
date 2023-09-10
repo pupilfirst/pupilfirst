@@ -16,6 +16,8 @@ class EvaluationCriterion < ApplicationRecord
               scope: %i[course_id max_grade],
             }
 
+  validates_with RateLimitValidator, limit: 100, scope: :course_id
+
   def display_name
     name + " #{max_grade}"
   end

@@ -7,8 +7,8 @@ module Cohorts
       super(view_context)
     end
 
-    def t(key)
-      I18n.t("presenters.cohorts.students.#{key}")
+    def t(key, variables = {})
+      I18n.t("presenters.cohorts.students.#{key}", **variables)
     end
 
     def filter
@@ -142,6 +142,10 @@ module Cohorts
     def milestone_targets
       @milestone_targets ||=
         @course.targets.live.where(milestone: true).order(:milestone_number)
+    end
+
+    def page_title
+      t("page_title", cohort_name: @cohort.name, course_name: @course.name)
     end
 
     private

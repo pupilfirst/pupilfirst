@@ -9,7 +9,7 @@ let handleToggle = (setLinksVisible, _) => setLinksVisible(linksVisible => !link
 let additionalLinks = (linksVisible, links) =>
   linksVisible
     ? <div
-        className="dropdown__list dropdown__list-right bg-white shadow-lg rounded mt-3 border absolute w-40 z-50">
+        className="dropdown__list dropdown__list-right bg-white shadow-lg rounded mt-3 border absolute max-w-min z-50">
         {links
         |> Js.Array.mapi((link, index) =>
           <div key={index |> string_of_int} className="">

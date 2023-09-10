@@ -18,7 +18,7 @@ type editor =
   | ChecklistEditor
   | ReviewedSubmissionEditor(array<Grade.t>)
 
-type nextSubmission = DataUnloaded | DataLoading | DataEmpty
+type nextSubmission = DataUnloaded | DataLoading | DataEmpty | DataLoaded(string)
 
 type state = {
   grades: array<Grade.t>,
@@ -56,10 +56,11 @@ type action =
   | FeedbackAfterSave
   | UpdateEditor(editor)
   | FinishGrading(array<Grade.t>)
-  | SetNextSubmissionDataLoading
-  | SetNextSubmissionDataEmpty
   | UnassignReviewer
   | ChangeReportVisibility
+  | SetNextSubmissionDataEmpty
+  | SetNextSubmissionDataLoading
+  | SetNextSubmissionDataLoaded(string)
 
 let reducer = (state, action) =>
   switch action {
@@ -97,8 +98,9 @@ let reducer = (state, action) =>
       additonalFeedbackEditorVisible: false,
       newFeedback: "",
     }
-  | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
   | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
+  | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
+  | SetNextSubmissionDataLoaded(id) => {...state, nextSubmission: DataLoaded(id)}
   | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
   }
 
@@ -127,8 +129,8 @@ module CreateFeedbackMutation = %graphql(`
   `)
 
 module NextSubmissionQuery = %graphql(`
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!,  $personalCoachId: ID, $assignedCoachId: ID) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId) {
         nodes {
           id
         }
@@ -194,35 +196,29 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   |> ignore
 }
 
-let getNextSubmission = (send, courseId, filter, submissionId) => {
+let getNextSubmission = (send, courseId, filter) => {
   send(SetNextSubmissionDataLoading)
-  let variables = NextSubmissionQuery.makeVariables(
+  NextSubmissionQuery.makeVariables(
     ~courseId,
-    ~status=?Filter.tab(filter),
-    ~sortDirection=Filter.defaultDirection(filter),
-    ~sortCriterion=Filter.sortCriterion(filter),
+    ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
+    ~sortDirection=Filter.defaultDirection({...filter, sortDirection: Some(#Ascending)}),
+    ~sortCriterion=Filter.sortCriterion({...filter, sortCriterion: #SubmittedAt}),
     ~personalCoachId=?Filter.personalCoachId(filter),
     ~assignedCoachId=?Filter.assignedCoachId(filter),
     ~targetId=?Filter.targetId(filter),
     ~search=?Filter.nameOrEmail(filter),
-    ~excludeSubmissionId=?Some(submissionId),
     (),
   )
-  NextSubmissionQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
+  |> NextSubmissionQuery.fetch
+  |> Js.Promise.then_((response: NextSubmissionQuery.t) => {
+    if ArrayUtils.isEmpty(response.submissions.nodes) {
       send(SetNextSubmissionDataEmpty)
       Notification.notice(
         t("get_next_submission.notice.done"),
         t("get_next_submission.notice.done_description"),
       )
     } else {
-      RescriptReactRouter.push(
-        "/submissions/" ++
-        response["submissions"]["nodes"][0]["id"] ++
-        "/review?" ++
-        Filter.toQueryString(filter),
-      )
+      send(SetNextSubmissionDataLoaded(response.submissions.nodes[0].id))
     }
     Js.Promise.resolve()
   })
@@ -313,6 +309,8 @@ let gradeSubmissionQuery = (
   overlaySubmission,
   currentUser,
   updateSubmissionCB,
+  courseId,
+  filter,
 ) => {
   send(BeginSaving)
   let feedback = trimToOption(state.newFeedback)
@@ -337,7 +335,7 @@ let gradeSubmissionQuery = (
     (),
   )
 
-  CreateGradingMutation.fetch(variables)
+  CreateGradingMutation.fetch(~notify=false, variables)
   |> Js.Promise.then_((response: CreateGradingMutation.t) => {
     response.createGrading.success
       ? {
@@ -356,6 +354,7 @@ let gradeSubmissionQuery = (
             ),
           )
           send(FinishGrading(state.grades))
+          getNextSubmission(send, courseId, filter)
         }
       : send(FinishSaving)
 
@@ -407,24 +406,22 @@ let closeOverlay = (state, courseId, filter) => {
     : RescriptReactRouter.push(path)
 }
 
-let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, className) => {
-  ReactUtils.nullIf(
-    <button
-      onClick={_ => getNextSubmission(send, courseId, filter, submissionId)}
-      disabled={nextSubmission == DataLoading}
-      className>
-      {ReactUtils.nullUnless(
-        <i className="fas fa-spinner fa-pulse me-2" />,
-        nextSubmission == DataLoading,
-      )}
+let reviewNextButton = (nextSubmission, filter) => {
+  let className = "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 hover:bg-primary-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset"
+  switch nextSubmission {
+  | DataLoaded(id) =>
+    <Link href={"/submissions/" ++ id ++ "/review?" ++ Filter.toQueryString(filter)} className>
       <p className="pe-2"> {str(t("review_next"))} </p>
       <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl rtl:rotate-180" />
-    </button>,
-    nextSubmission == DataEmpty,
-  )
+    </Link>
+  | DataLoading =>
+    <button disabled={true} className> <FaIcon classes="fas fa-spinner fa-pulse me-2" /> </button>
+  | DataEmpty
+  | DataUnloaded => React.null
+  }
 }
 
-let headerSection = (state, nextSubmission, send, submissionDetails, filter, submissionId) =>
+let headerSection = (state, submissionDetails, filter) =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-50 border-b border-gray-300 flex justify-center">
@@ -451,14 +448,6 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               className="flex md:hidden items-center shrink-0"
               coaches={SubmissionDetails.coaches(submissionDetails)}
             />
-            {reviewNextButton(
-              nextSubmission,
-              send,
-              SubmissionDetails.courseId(submissionDetails),
-              filter,
-              submissionId,
-              "flex shrink-0 items-center md:hidden border-s text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
-            )}
           </div>
         </div>
         <div className="px-4 py-3 flex flex-col justify-center">
@@ -508,14 +497,6 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           className="flex w-full md:w-auto items-center shrink-0"
           coaches={SubmissionDetails.coaches(submissionDetails)}
         />
-        {reviewNextButton(
-          nextSubmission,
-          send,
-          SubmissionDetails.courseId(submissionDetails),
-          filter,
-          submissionId,
-          "flex items-center border-s text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
-        )}
       </div>
     </div>
   </div>
@@ -799,6 +780,8 @@ let gradeSubmission = (
   currentUser,
   overlaySubmission,
   event,
+  courseId,
+  filter,
 ) => {
   ReactEvent.Mouse.preventDefault(event)
   switch status {
@@ -810,6 +793,8 @@ let gradeSubmission = (
       overlaySubmission,
       currentUser,
       updateSubmissionCB,
+      courseId,
+      filter,
     )
   | Grading
   | Unreviewed
@@ -1229,7 +1214,7 @@ let make = (
       <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
       <div key="submission-header">
         <div> {inactiveWarning(submissionDetails)} </div>
-        {headerSection(state, state.nextSubmission, send, submissionDetails, filter, submissionId)}
+        {headerSection(state, submissionDetails, filter)}
         {ReactUtils.nullIf(
           <div className="flex gap-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
             {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
@@ -1279,7 +1264,7 @@ let make = (
               <div className="text-sm"> {showSubmissionStatus(status, overlaySubmission)} </div>
             </div>
           </div>
-          <div className="p-4 md:p-6">
+          <div className="p-4 md:p-6 md:pb-20">
             <SubmissionChecklistShow checklist=state.checklist updateChecklistCB />
           </div>
           {submissionReports
@@ -1397,15 +1382,19 @@ let make = (
                 <button
                   disabled={reviewButtonDisabled(status)}
                   className="btn btn-success btn-large w-full border border-green-600"
-                  onClick={gradeSubmission(
-                    OverlaySubmission.id(overlaySubmission),
-                    state,
-                    send,
-                    updateSubmissionCB,
-                    status,
-                    currentUser,
-                    overlaySubmission,
-                  )}>
+                  onClick={event =>
+                    gradeSubmission(
+                      OverlaySubmission.id(overlaySubmission),
+                      state,
+                      send,
+                      updateSubmissionCB,
+                      status,
+                      currentUser,
+                      overlaySubmission,
+                      event,
+                      SubmissionDetails.courseId(submissionDetails),
+                      filter,
+                    )}>
                   {submitButtonText(state.isAcceptable, state.newFeedback, state.grades)->str}
                 </button>
               </div>
@@ -1531,7 +1520,7 @@ let make = (
                 </div>,
                 state.additonalFeedbackEditorVisible,
               )}
-              <div className="p-4 md:p-6">
+              <div className="p-4 md:p-6 pb-18 md:pb-20">
                 <h5 className="font-medium text-sm flex items-center">
                   <PfIcon
                     className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
@@ -1559,6 +1548,9 @@ let make = (
               </div>
             </div>
           }}
+          <div className="fixed bottom-0 inset-x-0 z-10">
+            <div> {reviewNextButton(state.nextSubmission, filter)} </div>
+          </div>
         </div>
       </DisablingCover>,
     ]->React.array

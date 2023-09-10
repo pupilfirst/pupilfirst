@@ -1,14 +1,16 @@
 %%raw(`import "./CoursesReview__Editor.css"`)
 
 let t = I18n.t(~scope="components.CoursesReview__Editor")
+let ts = I18n.ts
 
 open CoursesReview__Types
 let str = React.string
 
 type status =
-  | Graded(bool)
+  | Passed
   | Grading
-  | Ungraded
+  | Unreviewed
+  | Rejected
 
 type editor =
   | AssignReviewer
@@ -20,6 +22,7 @@ type nextSubmission = DataUnloaded | DataLoading | DataEmpty
 
 type state = {
   grades: array<Grade.t>,
+  isAcceptable: bool,
   newFeedback: string,
   saving: bool,
   showReport: bool,
@@ -44,6 +47,7 @@ type action =
   | UpdateFeedback(string)
   | GenerateFeeback(string, editor)
   | UpdateGrades(array<Grade.t>)
+  | UpdateIsAcceptable(bool)
   | UpdateChecklist(array<SubmissionChecklistItem.t>)
   | UpdateNote(string)
   | ShowGradesEditor
@@ -69,6 +73,7 @@ let reducer = (state, action) =>
       feedbackGenerated: true,
     }
   | UpdateGrades(grades) => {...state, grades: grades}
+  | UpdateIsAcceptable(isAcceptable) => {...state, isAcceptable: isAcceptable}
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
@@ -156,6 +161,19 @@ module SubmissionReportQuery = %graphql(`
       }
     }
   `)
+
+let booleanButtonClasses = bool => {
+  let classes = "toggle-button__button"
+  classes ++ (bool ? " toggle-button__button--active" : "")
+}
+
+let updateIsAcceptable = (isAcceptable, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateIsAcceptable(isAcceptable))
+  if !isAcceptable {
+    send(UpdateGrades([]))
+  }
+}
 
 let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   send(BeginSaving)
@@ -661,8 +679,9 @@ let gradeBadgeClasses = (statusColor, status, badge) =>
   badgeColorClasses(statusColor) ++
   switch status {
   | Grading => "course-review-editor__status-pulse"
-  | Graded(_)
-  | Ungraded => ""
+  | Passed
+  | Rejected => ""
+  | Unreviewed => ""
   }
 
 let textColor = statusColor => {
@@ -676,12 +695,10 @@ let textColor = statusColor => {
 
 let submissionReviewStatus = (status, overlaySubmission) => {
   let (text, color) = switch status {
-  | Graded(_) => (t("status.completed"), Green)
+  | Passed => (t("status.completed"), Green)
   | Grading => (t("status.reviewing"), Orange)
-  | Ungraded =>
-    OverlaySubmission.evaluatedAt(overlaySubmission) == None
-      ? (t("status.pending_review"), Gray)
-      : (t("status.rejected"), Red)
+  | Rejected => (t("status.rejected"), Red)
+  | Unreviewed => (t("status.pending_review"), Gray)
   }
   <div ariaLabel="submission-status" className="hidden md:flex gap-4 justify-end w-3/4">
     <div className="flex items-center">
@@ -703,12 +720,10 @@ let submissionReviewStatus = (status, overlaySubmission) => {
       <div className="flex justify-center ms-2 md:ms-4">
         <div className={gradeBadgeClasses(color, status, true)}>
           {switch status {
-          | Graded(_) => <Icon className="if i-badge-check-solid text-xl text-green-500" />
+          | Passed => <Icon className="if i-badge-check-solid text-xl text-green-500" />
           | Grading => <Icon className="if i-writing-pad-solid text-xl text-orange-300" />
-          | Ungraded =>
-            OverlaySubmission.evaluatedAt(overlaySubmission) == None
-              ? <Icon className="if i-eye-solid text-xl text-gray-400" />
-              : <FaIcon classes="fas fa-exclamation-triangle text-xl text-red-500" />
+          | Rejected => <FaIcon classes="fas fa-exclamation-triangle text-xl text-red-500" />
+          | Unreviewed => <Icon className="if i-eye-solid text-xl text-gray-400" />
           }}
           <p className={"text-xs font-semibold " ++ textColor(color)}> {text->str} </p>
         </div>
@@ -719,12 +734,10 @@ let submissionReviewStatus = (status, overlaySubmission) => {
 
 let submissionStatusIcon = (status, overlaySubmission) => {
   let (text, color) = switch status {
-  | Graded(_) => (t("status.completed"), Green)
+  | Passed => (t("status.completed"), Green)
   | Grading => (t("status.reviewing"), Orange)
-  | Ungraded =>
-    OverlaySubmission.evaluatedAt(overlaySubmission) == None
-      ? (t("status.pending_review"), Gray)
-      : (t("status.rejected"), Red)
+  | Rejected => (t("status.rejected"), Red)
+  | Unreviewed => (t("status.pending_review"), Gray)
   }
   <div
     ariaLabel="submission-status"
@@ -754,17 +767,16 @@ let submissionStatusIcon = (status, overlaySubmission) => {
         </div>
       | None => React.null
       }}
-      <div className="w-full md:w-26 flex gap-1 flex-row md:flex-col md:items-center justify-center">
+      <div
+        className="w-full md:w-26 flex gap-1 flex-row md:flex-col md:items-center justify-center">
         <div className={gradeBadgeClasses(color, status, false)}>
           {switch status {
-          | Graded(_) =>
-            <Icon className="if i-badge-check-solid text-xl md:text-5xl text-green-500" />
+          | Passed => <Icon className="if i-badge-check-solid text-xl md:text-5xl text-green-500" />
           | Grading =>
             <Icon className="if i-writing-pad-solid text-xl md:text-5xl text-orange-300" />
-          | Ungraded =>
-            OverlaySubmission.evaluatedAt(overlaySubmission) == None
-              ? <Icon className="if i-eye-solid text-xl md:text-4xl text-gray-400" />
-              : <FaIcon classes="fas fa-exclamation-triangle text-xl md:text-4xl text-red-500" />
+          | Rejected =>
+            <FaIcon classes="fas fa-exclamation-triangle text-xl md:text-4xl text-red-500" />
+          | Unreviewed => <Icon className="if i-eye-solid text-xl md:text-4xl text-gray-400" />
           }}
         </div>
         <p
@@ -790,7 +802,7 @@ let gradeSubmission = (
 ) => {
   ReactEvent.Mouse.preventDefault(event)
   switch status {
-  | Graded(_) =>
+  | Passed =>
     gradeSubmissionQuery(
       submissionId,
       state,
@@ -800,7 +812,8 @@ let gradeSubmission = (
       updateSubmissionCB,
     )
   | Grading
-  | Ungraded =>
+  | Unreviewed
+  | Rejected =>
     gradeSubmissionQuery(
       submissionId,
       state,
@@ -814,14 +827,16 @@ let gradeSubmission = (
 
 let reviewButtonDisabled = status =>
   switch status {
-  | Graded(_) => false
+  | Passed => false
   | Grading
-  | Ungraded => true
+  | Rejected => false
+  | Unreviewed => true
   }
 
 let computeStatus = (
   overlaySubmission,
   selectedGrades,
+  isAcceptable,
   evaluationCriteria,
   targetEvaluationCriteriaIds,
 ) => {
@@ -830,29 +845,37 @@ let computeStatus = (
       Array.mem(EvaluationCriterion.id(criterion), targetEvaluationCriteriaIds)
     )
   switch (
-    OverlaySubmission.passedAt(overlaySubmission),
+    OverlaySubmission.evaluatedAt(overlaySubmission),
     ArrayUtils.isNotEmpty(OverlaySubmission.grades(overlaySubmission)),
   ) {
-  | (Some(_), _) => Graded(true)
-  | (None, true) => Graded(false)
+  | (Some(_), true) => Passed
+  | (Some(_), false) => Rejected
   | (_, _) =>
-    if selectedGrades == [] {
-      Ungraded
-    } else if Array.length(selectedGrades) != Array.length(currentGradingCriteria) {
-      Grading
+    if isAcceptable {
+      if selectedGrades == [] {
+        Unreviewed
+      } else if Array.length(selectedGrades) != Array.length(currentGradingCriteria) {
+        Grading
+      } else {
+        Passed
+      }
     } else {
-      Graded(passed(selectedGrades))
+      Rejected
     }
   }
 }
 
-let submitButtonText = (feedback, grades) =>
-  switch (feedback != "", ArrayUtils.isNotEmpty(grades)) {
-  | (false, false)
-  | (false, true) =>
+let submitButtonText = (isAcceptable, feedback, grades) =>
+  switch (isAcceptable, feedback != "", ArrayUtils.isNotEmpty(grades)) {
+  | (false, false, false) => t("reject_submission")
+  | (false, true, false) => t("reject_submission_and_send_feedback")
+  | (false, true, true)
+  | (false, false, true)
+  | (true, false, true) =>
     t("save_grades")
-  | (true, false)
-  | (true, true) =>
+  | (true, false, false) => t("save_grades")
+  | (true, true, false)
+  | (true, true, true) =>
     t("save_grades_and_send_feedback")
   }
 
@@ -1021,12 +1044,10 @@ let showFeedback = feedback =>
 
 let showSubmissionStatus = (status, overlaySubmission) => {
   let (text, classes) = switch status {
-  | Graded(_) => (t("status.completed"), "bg-green-100 text-green-800")
+  | Passed => (t("status.completed"), "bg-green-100 text-green-800")
   | Grading => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
-  | Ungraded =>
-    OverlaySubmission.evaluatedAt(overlaySubmission) == None
-      ? (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
-      : (t("status.rejected"), "bg-red-100 text-red-700")
+  | Rejected => (t("status.rejected"), "bg-red-100 text-red-700")
+  | Unreviewed => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
   }
   <div className={"font-semibold px-2 py-px rounded " ++ classes}> <p> {text->str} </p> </div>
 }
@@ -1115,6 +1136,7 @@ let make = (
     reducer,
     {
       grades: [],
+      isAcceptable: true,
       newFeedback: "",
       saving: false,
       showReport: false,
@@ -1164,6 +1186,7 @@ let make = (
   let status = computeStatus(
     overlaySubmission,
     state.grades,
+    state.isAcceptable,
     evaluationCriteria,
     targetEvaluationCriteriaIds,
   )
@@ -1322,43 +1345,55 @@ let make = (
               {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
               <div className="w-full px-4 md:px-6 pt-8 space-y-8">
                 {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
-                <div>
-                  <h5 className="font-medium text-sm flex items-center">
-                    <Icon className="if i-tachometer-light text-gray-800 text-base" />
-                    <span className="ms-2 md:ms-3 tracking-wide"> {t("grade_card")->str} </span>
-                  </h5>
-                  <div className="flex md:flex-row flex-col md:ms-8 rounded-lg mt-2">
-                    <div className="w-full md:w-9/12">
-                      <div className="md:pe-8">
-                        {renderGradePills(
-                          evaluationCriteria,
-                          targetEvaluationCriteriaIds,
-                          submissionDetails,
-                          state,
-                          send,
-                        )}
-                      </div>
-                    </div>
-                    {submissionStatusIcon(status, overlaySubmission)}
+                <div className="flex items-center mb-6">
+                  <label
+                    className="block tracking-wide text-sm font-semibold me-1"
+                    htmlFor="is_acceptable">
+                    <span className="me-2">
+                      <i className="fas fa-list rtl:rotate-180 text-base" />
+                    </span>
+                    {t("submission_acceptable")->str}
+                  </label>
+                  <div id="is_acceptable" className="flex toggle-button__group shrink-0 rounded-lg">
+                    <button
+                      onClick={updateIsAcceptable(true, send)}
+                      className={booleanButtonClasses(state.isAcceptable)}>
+                      {ts("_yes") |> str}
+                    </button>
+                    <button
+                      onClick={updateIsAcceptable(false, send)}
+                      className={booleanButtonClasses(!state.isAcceptable)}>
+                      {ts("_no") |> str}
+                    </button>
                   </div>
                 </div>
+                {switch state.isAcceptable {
+                | true =>
+                  <div>
+                    <h5 className="font-medium text-sm flex items-center">
+                      <Icon className="if i-tachometer-light text-gray-800 text-base" />
+                      <span className="ms-2 md:ms-3 tracking-wide"> {t("grade_card")->str} </span>
+                    </h5>
+                    <div className="flex md:flex-row flex-col md:ms-8 rounded-lg mt-2">
+                      <div className="w-full md:w-9/12">
+                        <div className="md:pe-8">
+                          {renderGradePills(
+                            evaluationCriteria,
+                            targetEvaluationCriteriaIds,
+                            submissionDetails,
+                            state,
+                            send,
+                          )}
+                        </div>
+                      </div>
+                      {submissionStatusIcon(status, overlaySubmission)}
+                    </div>
+                  </div>
+                | false => React.null
+                }}
               </div>
               <div
                 className="flex gap-4 overflow-x-auto bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ms-8">
-                <button
-                  disabled={!reviewButtonDisabled(status)}
-                  className="btn btn-danger btn-large w-full border border-red-600"
-                  onClick={gradeSubmission(
-                    OverlaySubmission.id(overlaySubmission),
-                    state,
-                    send,
-                    updateSubmissionCB,
-                    status,
-                    currentUser,
-                    overlaySubmission,
-                  )}>
-                  {t("reject_submission")->str}
-                </button>
                 <button
                   disabled={reviewButtonDisabled(status)}
                   className="btn btn-success btn-large w-full border border-green-600"
@@ -1371,7 +1406,7 @@ let make = (
                     currentUser,
                     overlaySubmission,
                   )}>
-                  {submitButtonText(state.newFeedback, state.grades)->str}
+                  {submitButtonText(state.isAcceptable, state.newFeedback, state.grades)->str}
                 </button>
               </div>
               {ReactUtils.nullIf(
@@ -1422,7 +1457,7 @@ let make = (
               </div>
               <div className="w-full p-4 md:p-6">
                 {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
-                | (Some(_), Graded(_)) =>
+                | (Some(_), Passed) =>
                   <div className="flex items-center justify-between">
                     <h5 className="font-medium text-sm flex items-center">
                       <Icon className="if i-tachometer-light text-gray-800 text-base" />
@@ -1443,7 +1478,7 @@ let make = (
                       </div>
                     </div>
                   </div>
-                | (Some(_), Ungraded) =>
+                | (Some(_), Rejected) =>
                   <div className="flex items-center justify-center">
                     <div>
                       <div>
@@ -1460,9 +1495,10 @@ let make = (
                       </div>
                     </div>
                   </div>
-                | (None, Graded(_))
+                | (None, Passed)
+                | (None, Rejected)
                 | (_, Grading)
-                | (_, Ungraded) => React.null
+                | (_, Unreviewed) => React.null
                 }}
                 <div className="flex md:flex-row flex-col md:ms-8 bg-gray-50 mt-2">
                   <div className="w-full">

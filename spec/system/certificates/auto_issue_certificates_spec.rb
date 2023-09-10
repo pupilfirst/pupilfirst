@@ -283,6 +283,7 @@ feature "Automatic issuance of certificates", js: true do
         visit review_timeline_event_path(target_l2_2.timeline_events.last)
         click_button "Start Review"
         dismiss_notification
+        within("div#is_acceptable") { click_button "No" }
         click_button "Reject Submission"
 
         expect(page).to have_text("The submission has been marked as reviewed")

@@ -255,7 +255,8 @@ feature "Submission review overlay", js: true do
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
 
-      click_button "Reject Submission"
+      within("div#is_acceptable") { click_button "No" }
+      click_button "Reject submission & send feedback"
 
       expect(page).to have_text("The submission has been marked as reviewed")
 

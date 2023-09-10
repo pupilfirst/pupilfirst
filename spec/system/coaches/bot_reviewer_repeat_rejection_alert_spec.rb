@@ -74,6 +74,8 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
       dismiss_notification
 
+      within("div#is_acceptable") { click_button "No" }
+
       click_button 'Reject Submission'
 
       expect(page).to have_text('The submission has been marked as reviewed')
@@ -96,6 +98,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
       dismiss_notification
 
+      within("div#is_acceptable") { click_button "No" }
       click_button 'Reject Submission'
 
       expect(page).to have_text('The submission has been marked as reviewed')
@@ -125,6 +128,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
       dismiss_notification
 
+      within("div#is_acceptable") { click_button "No" }
       click_button 'Reject Submission'
 
       expect(page).to have_text('The submission has been marked as reviewed')

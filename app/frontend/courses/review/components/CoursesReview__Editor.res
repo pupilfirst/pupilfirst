@@ -1373,10 +1373,9 @@ let make = (
                           )}
                         </div>
                       </div>
-                      {submissionStatusIcon(status, overlaySubmission)}
                     </div>
                   </div>
-                | false => React.null
+                | false => <div> <p> {t("rejection_help_note")->str} </p> </div>
                 }}
               </div>
               <div

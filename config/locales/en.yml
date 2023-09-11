@@ -742,6 +742,7 @@ en:
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note: You have marked this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review

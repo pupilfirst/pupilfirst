@@ -26,6 +26,7 @@ feature "Coach's review interface" do
     create :target, :for_students, target_group: target_group_l1
   end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
+  let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
   let(:student_l1) { create :student, cohort: cohort }
   let(:student_l2) { create :student, cohort: cohort }
   let(:team_l3) { create :team, cohort: cohort }
@@ -49,6 +50,7 @@ feature "Coach's review interface" do
     target_l1.evaluation_criteria << evaluation_criterion
     target_l2.evaluation_criteria << evaluation_criterion
     target_l3.evaluation_criteria << evaluation_criterion
+    target_l3.evaluation_criteria << evaluation_criterion_2
     team_target.evaluation_criteria << evaluation_criterion
     student_l3.user.update!(email: "pupilfirst@example.com")
     student_l2.user.update!(name: "Pupilfirst Test User")
@@ -247,7 +249,10 @@ feature "Coach's review interface" do
 
       # filter pending submissions
       fill_in "filter", with: "target:"
-
+      # Check if there are not duplicate target names.
+      within(".multiselect-dropdown__search-dropdown") do
+        expect(page).to have_text(target_l3.title, count: 1)
+      end
       # choose level 1 from the dropdown
       click_button team_target.title
 

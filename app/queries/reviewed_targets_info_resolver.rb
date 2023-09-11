@@ -4,7 +4,7 @@ class ReviewedTargetsInfoResolver < ApplicationQuery
   property :course_id
 
   def reviewed_targets_info
-    course.targets.live.joins(:evaluation_criteria)
+    course.targets.live.joins(:evaluation_criteria).distinct
   end
 
   private

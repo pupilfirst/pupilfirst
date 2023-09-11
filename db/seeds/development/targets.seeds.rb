@@ -51,7 +51,8 @@ after "development:evaluation_criteria", "development:target_groups" do
       visibility: "live",
       sort_index: 3,
       milestone: true,
-      milestone_number: target_group.level.number + target_group.sort_index
+      milestone_number:
+        target_group.course.targets.maximum(:milestone_number).to_i + 1
     )
 
     # Create two other targets in archived and draft state.

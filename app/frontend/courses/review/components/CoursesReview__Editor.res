@@ -548,7 +548,7 @@ let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
 
 let gradePillClasses = (selectedGrade, currentGrade, send) => {
   let defaultClasses =
-    "course-review-editor__grade-pill border-gray-300 flex items-center justify-center py-1 px-2 text-sm flex-1 font-semibold transition " ++
+    "course-review-editor__grade-pill shadow-sm border-gray-300 flex items-center justify-center py-1 px-2 text-sm flex-1 font-semibold transition " ++
     switch send {
     | Some(_) =>
       "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ "hover:bg-green-500 hover:text-white "
@@ -654,7 +654,7 @@ let badgeColorClasses = statusColor => {
 let gradeBadgeClasses = (statusColor, status, badge) =>
   (
     badge
-      ? "px-2 py-2 flex justify-center border rounded items-center "
+      ? "px-2 py-2 flex justify-center border rounded items-center space-x-2 "
       : "w-12 h-10 p-1 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center "
   ) ++
   badgeColorClasses(statusColor) ++
@@ -883,21 +883,21 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
 
     let textareaId = "note-for-submission-" ++ OverlaySubmission.id(overlaySubmission)
 
-    <div className="text-sm">
-      <div className="font-medium text-sm flex">
-        <Icon className="if i-long-text-light text-gray-800 text-base" />
+    <div>
+      <div className="font-medium text-sm flex items-start md:items-center">
+        <Icon className="if i-long-text-light text-gray-800 text-base mt-1 md:mt-0.5" />
         {switch note {
         | Some(_) =>
           <span className="ms-2 md:ms-4 tracking-wide">
             <label htmlFor=textareaId> {t("write_a_note")->str} </label> help
           </span>
         | None =>
-          <div className="ms-2 md:ms-4 tracking-wide w-full">
+          <div className="ms-2 md:ms-4 tracking-wide w-full flex items-center">
             <div>
               <span> {t("note_help", ~variables=[("noteAbout", noteAbout)])->str} </span> help
             </div>
             <button
-              className="btn btn-default mt-2"
+              className="btn btn-default btn-small ms-4"
               disabled={isSubmissionReviewAllowed(submissionDetails)}
               onClick={_ => send(UpdateNote(""))}>
               <i className="far fa-edit" /> <span className="ps-2"> {t("write_a_note")->str} </span>
@@ -1336,14 +1336,16 @@ let make = (
               {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
               <div className="w-full px-4 md:px-6 pt-8 space-y-8">
                 {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
-                <div className="flex items-center mb-6">
+                <div className="flex items-start md:items-center">
                   <label
-                    className="block tracking-wide text-sm font-semibold me-1"
+                    className="tracking-wide text-sm font-semibold flex me-4"
                     htmlFor="is_acceptable">
-                    <span className="me-2">
-                      <i className="fas fa-list rtl:rotate-180 text-base" />
+                    <Icon
+                      className="if i-long-text-light text-gray-800 text-base mt-1 md:mt-0.5 if-w-14 rtlFlip if-h-16"
+                    />
+                    <span className="ms-2 md:ms-4 tracking-wide w-full">
+                      {t("submission_acceptable")->str}
                     </span>
-                    {t("submission_acceptable")->str}
                   </label>
                   <div id="is_acceptable" className="flex toggle-button__group shrink-0 rounded-lg">
                     <button
@@ -1366,8 +1368,8 @@ let make = (
                       <span className="ms-2 md:ms-3 tracking-wide"> {t("grade_card")->str} </span>
                     </h5>
                     <div className="flex md:flex-row flex-col md:ms-8 rounded-lg mt-2">
-                      <div className="w-full md:w-9/12">
-                        <div className="md:pe-8">
+                      <div className="w-full">
+                        <div className="space-y-6 max-w-2xl">
                           {renderGradePills(
                             evaluationCriteria,
                             targetEvaluationCriteriaIds,
@@ -1379,14 +1381,20 @@ let make = (
                       </div>
                     </div>
                   </div>
-                | false => <div> <p> {t("rejection_help_note")->str} </p> </div>
+                | false =>
+                  <div className="md:ps-8 text-sm w-full">
+                    <p className="bg-gray-100 rounded-lg p-4">
+                      <span className="font-semibold"> {t("rejection_help_note_title")->str} </span>
+                      {t("rejection_help_note")->str}
+                    </p>
+                  </div>
                 }}
               </div>
               <div
-                className="flex gap-4 overflow-x-auto bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ms-8">
+                className="flex gap-4 overflow-x-auto bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:mt-8">
                 <button
                   disabled={reviewButtonDisabled(status)}
-                  className="btn btn-success btn-large w-full border border-green-600"
+                  className="btn btn-primary btn-large w-full border border-green-600 md:ms-8"
                   onClick={event =>
                     gradeSubmission(
                       OverlaySubmission.id(overlaySubmission),
@@ -1473,20 +1481,33 @@ let make = (
                     </div>
                   </div>
                 | (Some(_), Rejected) =>
-                  <div className="flex items-center justify-center">
+                  <div
+                    className="flex flex-col md:flex-row md:items-center justify-between bg-red-50 rounded-lg p-4">
                     <div>
+                      <p className="text-sm font-semibold">
+                        {t("undo_rejection_notice_title")->str}
+                      </p>
                       <div>
-                        <button
-                          onClick={_ =>
-                            WindowUtils.confirm(t("undo_rejection_warning"), () =>
-                              OverlaySubmission.id(overlaySubmission)->undoGrading(send)
-                            )}
-                          disabled={isSubmissionReviewAllowed(submissionDetails)}
-                          className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
-                          <i className="fas fa-undo" />
-                          <span className="ms-2"> {t("undo_rejection")->str} </span>
-                        </button>
+                        <span className="text-sm">
+                          {switch OverlaySubmission.evaluatorName(overlaySubmission) {
+                          | Some(name) => name->str
+                          | None => <em> {t("deleted_coach")->str} </em>
+                          }}
+                        </span>
+                        <span className="text-sm"> {t("undo_rejection_notice")->str} </span>
                       </div>
+                    </div>
+                    <div>
+                      <button
+                        onClick={_ =>
+                          WindowUtils.confirm(t("undo_rejection_warning"), () =>
+                            OverlaySubmission.id(overlaySubmission)->undoGrading(send)
+                          )}
+                        disabled={isSubmissionReviewAllowed(submissionDetails)}
+                        className="btn btn-small mt-2 md:mt-0 bg-red-100 md:bg-red-50 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
+                        <i className="fas fa-undo" />
+                        <span className="ms-2"> {t("undo_rejection")->str} </span>
+                      </button>
                     </div>
                   </div>
                 | (None, Passed)

@@ -806,6 +806,8 @@ let gradeSubmission = (
       overlaySubmission,
       currentUser,
       updateSubmissionCB,
+      courseId,
+      filter,
     )
   }
 }
@@ -1027,7 +1029,7 @@ let showFeedback = feedback =>
       feedback,
     ))->React.array} </div>
 
-let showSubmissionStatus = (status, overlaySubmission) => {
+let showSubmissionStatus = status => {
   let (text, classes) = switch status {
   | Passed => (t("status.completed"), "bg-green-100 text-green-800")
   | Grading => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
@@ -1261,7 +1263,7 @@ let make = (
                   ->str}
                 </p>
               </div>
-              <div className="text-sm"> {showSubmissionStatus(status, overlaySubmission)} </div>
+              <div className="text-sm"> {showSubmissionStatus(status)} </div>
             </div>
           </div>
           <div className="p-4 md:p-6 md:pb-20">

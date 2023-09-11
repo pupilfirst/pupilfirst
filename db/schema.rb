@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_05_052905) do
+ActiveRecord::Schema.define(version: 2023_09_11_153650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -509,7 +509,7 @@ ActiveRecord::Schema.define(version: 2023_09_05_052905) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_school_admins_on_user_id"
+    t.index ["user_id"], name: "index_school_admins_on_user_id", unique: true
   end
 
   create_table "school_links", force: :cascade do |t|

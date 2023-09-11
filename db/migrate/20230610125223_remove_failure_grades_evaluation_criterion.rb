@@ -3,10 +3,13 @@ class RemoveFailureGradesEvaluationCriterion < ActiveRecord::Migration[6.1]
 
     # remove all grades below pass grade
     EvaluationCriterion.find_each do |ec|
-      new_max_grade = ec.max_grade - (ec.pass_grade - 1 )
+      grades_removed = (ec.pass_grade - 1 )
+      new_max_grade = ec.max_grade - grades_removed
       new_grade_labels = ec.grade_labels.reject {|grade_label| grade_label['grade'] < ec.pass_grade}
-      new_grade_labels.each {|grade_label| grade_label['grade'] -= (ec.pass_grade - 1)}
+      new_grade_labels.each {|grade_label| grade_label['grade'] -= grades_removed}
       ec.update!(max_grade: new_max_grade, pass_grade: 1, grade_labels: new_grade_labels)
+      # change all existing grades to match the new max grade
+      ec.timeline_event_grades.in_batches.update_all("grade = grade - #{grades_removed}")
     end
 
     # destroy all failed timeline event grades

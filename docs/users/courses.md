@@ -60,6 +60,10 @@ https://paymentgateway.com/process?name=${name}&email=${email}&course_id=${cours
 
 To edit the details of a course, click on the _Edit Course Details_ button located on the card displaying the course name and other information. The form used for editing the course is identical to the one you used during its creation.
 
+### Default Cohort
+
+A default cohort named _Purple (Auto-generated)_ is created automatically when a course is created. This cohort is automatically assigned to all the students that are added to the course. You can create additional cohorts on [cohorts page](/users/cohorts). You can change the default cohort for a course by selecting a cohort from the _Pick the default Cohort_ dropdown.
+
 To edit the _contents_ of a course, you'll want to use the [curriculum editor](/users/curriculum_editor), which is documented separately.
 
 ## Progression Behaviour
@@ -122,7 +126,7 @@ A course that is not ended or archived.
 
 ### Ended
 
-Courses that have passed the _course end date_. Such courses will be hidden form all the navigation menus in school administration interface. The links to school administration pages for the course can only be accessed from the courses page.
+Courses with no _active cohorts_ are conisdered as ended. Such courses will be hidden form all the navigation menus in school administration interface. The links to school administration pages for the course can only be accessed from the courses page.
 
 ### Archived
 

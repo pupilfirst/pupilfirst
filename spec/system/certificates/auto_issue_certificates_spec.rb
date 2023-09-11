@@ -282,7 +282,6 @@ feature "Automatic issuance of certificates", js: true do
         # Switch to the review interface and reject the submission
         visit review_timeline_event_path(target_l2_2.timeline_events.last)
         click_button "Start Review"
-        dismiss_notification
         within("div#is_acceptable") { click_button "No" }
         click_button "Reject Submission"
 

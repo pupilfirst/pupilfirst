@@ -76,8 +76,6 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       click_button 'Reject Submission'
 
-      expect(page).to have_text('The submission has been marked as reviewed')
-
       open_email(coach.email)
       expect(current_email).to be_blank
     end
@@ -124,8 +122,6 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       within("div#is_acceptable") { click_button "No" }
       click_button 'Reject Submission'
-
-      expect(page).to have_text('The submission has been marked as reviewed')
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
       open_email(coach.email)

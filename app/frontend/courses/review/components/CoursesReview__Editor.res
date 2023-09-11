@@ -1032,11 +1032,15 @@ let showFeedback = feedback =>
 let showSubmissionStatus = status => {
   let (text, classes) = switch status {
   | Passed => (t("status.completed"), "bg-green-100 text-green-800")
-  | Grading => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
   | Rejected => (t("status.rejected"), "bg-red-100 text-red-700")
-  | Unreviewed => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
+  | Unreviewed
+  | Grading => (t("status.pending_review"), "bg-yellow-100 text-yellow-800 ")
   }
-  <div className={"font-semibold px-2 py-px rounded " ++ classes}> <p> {text->str} </p> </div>
+  <div
+    ariaLabel="submission-leftpane-status"
+    className={"font-semibold px-2 py-px rounded " ++ classes}>
+    <p> {text->str} </p>
+  </div>
 }
 
 let updateReviewChecklist = (cb, send, checklist) => {

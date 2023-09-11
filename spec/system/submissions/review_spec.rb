@@ -168,9 +168,9 @@ feature "Submission review overlay", js: true do
         find("button[title='Okay']").click
       end
 
-      # status should be reviewing as the target is not graded completely
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Reviewing")
+      # status should be Pending Review as the target is not graded completely
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Pending Review")
       end
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
@@ -183,7 +183,7 @@ feature "Submission review overlay", js: true do
       end
 
       # the status should be Completed
-      within("div[aria-label='submission-status']") do
+      within("div[aria-label='submission-leftpane-status']") do
         expect(page).to have_text("Completed")
       end
 
@@ -192,11 +192,15 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
 
       # the status should still be Completed
-      within("div[aria-label='submission-status']") do
+      within("div[aria-label='submission-leftpane-status']") do
         expect(page).to have_text("Completed")
       end
 
       click_button "Save grades & send feedback"
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       student = submission_pending.students.first
       open_email(student.user.email)
@@ -243,23 +247,28 @@ feature "Submission review overlay", js: true do
 
       find("a[data-submission-id='#{submission_pending.id}']").click
       click_button "Start Review"
-      dismiss_notification
+
+      expect(page).to have_content("Grade Card")
       expect(submission_pending.reload.reviewer).to eq(coach)
       expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
-      expect(page).to have_content("Grade Card")
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
 
       within("div#is_acceptable") { click_button "No" }
+      # the status should be Rejected before clicking Reject button
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Rejected")
+      end
+
       click_button "Reject submission & send feedback"
 
-      expect(page).to have_text("The submission has been marked as reviewed")
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Rejected")
+      end
 
       student = submission_pending.students.first
       open_email(student.user.email)
       expect(current_email).to have_content("rejected")
-
-      dismiss_notification
 
       expect(page).to have_button("Undo Rejection")
 
@@ -801,20 +810,25 @@ feature "Submission review overlay", js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) { find("button[title='Good']").click }
 
-      # status should be reviewing as the target is not graded completely
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Reviewing")
+      # status should be Pending Review as the target is not graded completely
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Pending Review")
       end
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
 
-      # the status should be Rejected
-      within("div[aria-label='submission-status']") do
+      # the status should be completed
+      within("div[aria-label='submission-leftpane-status']") do
         expect(page).to have_text("Completed")
       end
 
       click_button "Save grades"
+
+      # the status should be completed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
@@ -893,20 +907,25 @@ feature "Submission review overlay", js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) { find("button[title='Good']").click }
 
-      # status should be reviewing as the target is not graded completely
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Reviewing")
+      # status should be pending review as the target is not graded completely
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Pending Review")
       end
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
 
       # the status should be completed
-      within("div[aria-label='submission-status']") do
+      within("div[aria-label='submission-leftpane-status']") do
         expect(page).to have_text("Completed")
       end
 
       click_button "Save grades"
+
+      # the status should be completed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       expect(page).to have_button("Undo Grading")
 

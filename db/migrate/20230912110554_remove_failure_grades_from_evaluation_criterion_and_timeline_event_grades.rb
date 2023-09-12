@@ -1,4 +1,4 @@
-class RemoveFailureGradesEvaluationCriterion < ActiveRecord::Migration[6.1]
+class RemoveFailureGradesFromEvaluationCriterionAndTimelineEventGrades < ActiveRecord::Migration[6.1]
   def up
 
     # remove all grades below pass grade

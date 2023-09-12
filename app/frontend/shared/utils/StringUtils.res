@@ -94,7 +94,7 @@ let toColor = t => {
 let lengthBetween = (~allowBlank=true, t, min, max) => {
   let tLen = t->String.trim->String.length
   if tLen > 0 {
-    min <= tLen || tLen >= max
+    min <= tLen && tLen <= max
   } else {
     allowBlank
   }

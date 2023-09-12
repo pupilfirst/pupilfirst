@@ -31,4 +31,8 @@ class Courses::CohortsPresenter < ApplicationPresenter
 
     raise ArgumentError, "Invalid status #{@status}"
   end
+
+  def page_title
+    I18n.t("presenters.courses.cohorts.page_title", course_name: @course.name)
+  end
 end

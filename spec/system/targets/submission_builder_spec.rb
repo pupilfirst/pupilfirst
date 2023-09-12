@@ -278,6 +278,7 @@ feature "Submission Builder", js: true do
       last_submission.timeline_event_files.map(&:id).map(&:to_s)
     checklist_item = last_submission.checklist.first
 
+    expect(last_submission.timeline_event_files.last.user).to eq(student.user)
     expect(checklist_item["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
     expect(checklist_item["title"]).to eq(question)
     expect(checklist_item["result"]).to match_array(last_submission_file_ids)

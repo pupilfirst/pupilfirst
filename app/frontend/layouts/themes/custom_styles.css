@@ -209,7 +209,7 @@
 
   button:disabled,
   .disabled {
-    @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
+    @apply cursor-not-allowed bg-gray-100 text-gray-300 shadow-none border-transparent;
     background-image: none;
   }
 
@@ -217,7 +217,7 @@
   .disabled:hover,
   button:disabled:focus,
   .disabled:focus {
-    @apply bg-gray-300 text-gray-500 border-transparent shadow-none;
+    @apply bg-gray-100 text-gray-300 border-transparent shadow-none;
     background-image: none;
   }
 

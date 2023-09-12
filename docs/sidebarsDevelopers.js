@@ -9,6 +9,7 @@ module.exports = {
       "internationalization",
       "lerna",
       "documentation",
+      "rate_limiting",
     ],
     Deployment: [
       "before_deploying",

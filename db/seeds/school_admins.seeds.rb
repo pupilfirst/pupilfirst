@@ -1,9 +1,9 @@
-after 'schools', 'users' do
-  puts 'Seeding school_admins (production, idempotent)'
+after "schools", "users" do
+  puts "Seeding school_admins (production, idempotent)"
 
-  user = User.find_by(email: 'admin@example.com')
+  school = School.first
 
-  School.all.each do |school|
-    SchoolAdmin.where(user: user, school: school).first_or_create!
-  end
+  user = school.users.with_email("admin@example.com").first
+
+  SchoolAdmin.where(user: user).first_or_create!
 end

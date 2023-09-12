@@ -33,7 +33,6 @@ These are the rate limits applied to the creation of all kinds of resources stor
 | Post                      | Creator       | Creators can post up to 250 times hourly.                 |
 | PostLike                  | User          | Users can like up to 250 posts hourly.                    |
 | QuizQuestion              | Quiz          | Each quiz can have up to 50 questions.                    |
-| SchoolAdmin               | School        | Each school can employ up to 100 admins.                  |
 | SchoolLink                | School        | Each school can create up to 25 links.                    |
 | StartupFeedback           | Submission    | Each submission can receive up to 25 feedbacks.           |
 | Student                   | Cohort        | Each cohort can admit up to 5,000 students hourly.        |

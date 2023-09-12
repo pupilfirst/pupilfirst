@@ -96,6 +96,8 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def authorized?
+    return false if target&.course&.school != current_school
+
     return false if submission.blank?
 
     return true if current_school_admin.present?

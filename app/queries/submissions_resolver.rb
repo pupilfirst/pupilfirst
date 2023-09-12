@@ -17,9 +17,11 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if coach.blank?
+    return false if course&.school != current_school
 
     return true if current_school_admin.present?
+
+    return false if coach.blank?
 
     coach.courses.exists?(id: course)
   end
@@ -88,11 +90,11 @@ class SubmissionsResolver < ApplicationQuery
       end
 
     # Filter by evaluator coach
-      if course.faculty.exists?(id: reviewing_coach_id)
-        stage_5.where(evaluator_id: reviewing_coach_id)
-      else
-        stage_5
-      end.from_students(students)
+    if course.faculty.exists?(id: reviewing_coach_id)
+      stage_5.where(evaluator_id: reviewing_coach_id)
+    else
+      stage_5
+    end.from_students(students)
   end
 
   def filter_by_status(submissions)

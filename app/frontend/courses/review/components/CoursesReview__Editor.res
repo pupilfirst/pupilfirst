@@ -1187,17 +1187,17 @@ let make = (
   | _ => None
   }
 
-  let pending = ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
-
-  let findEditor = (pending, overlaySubmission) => {
-    pending
-      ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
-          UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
-        ) ||
-        isSubmissionReviewAllowed(submissionDetails)
-          ? GradesEditor
-          : AssignReviewer
-      : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
+  let findEditor = (evaluatedAt, overlaySubmission) => {
+    switch evaluatedAt {
+    | None =>
+      Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
+        UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
+      ) ||
+      isSubmissionReviewAllowed(submissionDetails)
+        ? GradesEditor
+        : AssignReviewer
+    | Some(_) => ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
+    }
   }
 
   React.useEffect0(() => {
@@ -1430,11 +1430,27 @@ let make = (
               <CoursesReview__Checklist
                 reviewChecklist
                 updateFeedbackCB={feedback =>
-                  send(GenerateFeeback(feedback, findEditor(pending, overlaySubmission)))}
+                  send(
+                    GenerateFeeback(
+                      feedback,
+                      findEditor(
+                        OverlaySubmission.evaluatedAt(overlaySubmission),
+                        overlaySubmission,
+                      ),
+                    ),
+                  )}
                 feedback=state.newFeedback
                 updateReviewChecklistCB={updateReviewChecklist(updateReviewChecklistCB, send)}
                 targetId
-                cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
+                cancelCB={_ =>
+                  send(
+                    UpdateEditor(
+                      findEditor(
+                        OverlaySubmission.evaluatedAt(overlaySubmission),
+                        overlaySubmission,
+                      ),
+                    ),
+                  )}
                 overlaySubmission
                 submissionDetails
               />

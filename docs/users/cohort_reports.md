@@ -51,4 +51,4 @@ During your interactions with a student, or while reviewing their submissions, y
 
 Our memory is fallible, so it's wise to leave notes on the student's page which you and other coaches can refer to, later on for a a quick recap, and to help guide future interactions with the student.
 
-School admins can see all the notes but cannot add a note to a student's profile if they are not a coach for that student or the cohort to which the student belongs.
+School admins can view all the coach notes, but they cannot add a note to a student's profile unless they have been enrolled to that cohort as a coach.

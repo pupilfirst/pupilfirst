@@ -55,14 +55,11 @@ class StudentDetailsResolver < ApplicationQuery
 
     return false if current_user.blank?
 
-    return false if student.blank?
-
     return true if current_user.id == student.user_id
 
     return true if current_school_admin.present?
 
-    current_user.faculty.present? &&
-      current_user.faculty.cohorts.exists?(id: student.cohort_id)
+    current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
   end
 
   def student

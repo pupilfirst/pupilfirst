@@ -18,9 +18,11 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if coach.blank? && current_school_admin.blank?
+    return false if coach.blank?
 
-    current_school_admin.present? || coach.courses.exists?(id: course)
+    return true if current_school_admin.present?
+
+    coach.courses.exists?(id: course)
   end
 
   def coach

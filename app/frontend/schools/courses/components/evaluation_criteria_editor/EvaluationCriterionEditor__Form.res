@@ -156,9 +156,6 @@ let labels = (state, setState) =>
     let grade = gradeAndLabel |> GradeLabel.grade
 
     <div key={grade |> string_of_int} className="flex flex-wrap mt-2">
-      <div className="bg-green-300 text-green-700 border-green-500">
-        {grade |> string_of_int |> str}
-      </div>
       <div className="flex-1">
         <input
           id={"grade-label-for-" ++ (grade |> string_of_int)}

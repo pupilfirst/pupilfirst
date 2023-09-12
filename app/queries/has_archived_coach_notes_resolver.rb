@@ -8,10 +8,13 @@ class HasArchivedCoachNotesResolver < ApplicationQuery
   private
 
   def authorized?
+    return true if current_school_admin.present?
+
+    return false if student.blank?
+
     return false if current_user.blank?
 
-    current_school_admin.present? ||
-      current_user.faculty.cohorts.exists?(id: student&.cohort_id)
+    current_user.faculty.cohorts.exists?(id: student&.cohort_id)
   end
 
   def student

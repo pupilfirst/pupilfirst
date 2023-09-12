@@ -8,9 +8,9 @@ class HasArchivedCoachNotesResolver < ApplicationQuery
   private
 
   def authorized?
-    return true if current_school_admin.present?
+    return false if student&.school != current_school
 
-    return false if student.blank?
+    return true if current_school_admin.present?
 
     return false if current_user.blank?
 

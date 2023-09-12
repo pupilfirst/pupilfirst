@@ -6,7 +6,7 @@ sidebar_label: Reviewing Submissions
 
 When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
 
-School admins can see all the submissions but cannot review them without having a coach profile for that course/cohort.
+School admins can view all student submissions, but cannot grade them or give feedback unless they have been enrolled in that cohort as a coach.
 
 ![Submissions for review](../assets/reviewing_submissions/index.png)
 

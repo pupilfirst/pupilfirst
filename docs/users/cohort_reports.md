@@ -4,7 +4,7 @@ title: Cohort Reports
 sidebar_label: Cohort Reports
 ---
 
-Coaches have access to the _Cohorts_ tab that lists all active and inactive cohorts in the course that the coach has access to. School admins as well have access to the _cohorts_ tab and can see all the cohorts(active, ended) of the course.
+Coaches have access to the _Cohorts_ tab that lists all course cohorts that they have been enrolled in as a coach. School admins also have access to this tab, and they can view every cohort.
 
 ![Coach's list of students](../assets/cohort_reports/cohorts_page.png)
 

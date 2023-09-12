@@ -1,8 +1,12 @@
 class CohortPolicy < ApplicationPolicy
   def show?
-    return false if user.faculty.blank? && current_school_admin.blank?
+    return false if record.school != current_school
 
-    current_school_admin.present? || user.faculty.cohorts.exists?(id: record.id)
+    return true if current_school_admin.present?
+
+    return false if user.faculty.blank?
+
+    user.faculty.cohorts.exists?(id: record.id)
   end
 
   alias students? show?

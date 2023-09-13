@@ -25,17 +25,11 @@ feature "Course students report", js: true do
   let!(:another_student) { create :student, cohort: cohort, team: team }
 
   # Create few targets for the student
-  let(:target_group_l1) do
-    create :target_group, level: level_1
-  end
+  let(:target_group_l1) { create :target_group, level: level_1 }
 
-  let(:target_group_l2) do
-    create :target_group, level: level_2
-  end
+  let(:target_group_l2) { create :target_group, level: level_2 }
 
-  let(:target_group_l3) do
-    create :target_group, level: level_3
-  end
+  let(:target_group_l3) { create :target_group, level: level_3 }
 
   let(:target_l1) do
     create :target,
@@ -488,6 +482,12 @@ feature "Course students report", js: true do
   end
 
   context "when user is a school admin" do
+    let!(:school_2) { create :school }
+    let!(:course_2) { create :course, school: school_2 }
+    let!(:cohort_2) { create :cohort, course: course_2 }
+    let!(:user_2) { create :user, school: school_2 }
+    let!(:school_2_student) { create :student, user: user_2, cohort: cohort_2 }
+
     scenario "can access a student report" do
       sign_in_user school_admin.user, referrer: student_report_path(student)
       expect(page).to have_text(student.name)
@@ -497,84 +497,16 @@ feature "Course students report", js: true do
       expect(page).to have_text(target_l2.title)
       expect(page).not_to have_text(target_l3_1.title)
 
-      # Check target completion status
-      within("div[data-milestone-id='#{target_l1.id}']") do
-        expect(page).to have_selector(".text-orange-700")
-      end
-
-      within("div[data-milestone-id='#{target_l2.id}']") do
-        expect(page).to have_selector(".text-green-600")
-      end
-
-      # Targets Overview
-      expect(page).to have_text("Targets Overview")
-
-      within("div[aria-label='target-completion-status']") do
-        expect(page).to have_content("Total Targets Completed")
-        expect(page).to have_content("66%")
-        expect(page).to have_content("4/6 Targets")
-      end
-
-      within("div[aria-label='quiz-performance-chart']") do
-        expect(page).to have_content("Average Quiz Score")
-        expect(page).to have_content("46%")
-        expect(page).to have_content("2 Quizzes Attempted")
-      end
-
-      # Average Grades
-      expect(page).to have_text("Average Grades")
-
-      within(
-        "div[aria-label='average-grade-for-criterion-#{evaluation_criterion_1.id}']"
-      ) do
-        expect(page).to have_content(evaluation_criterion_1.name)
-        expect(page).to have_content("2.5/3")
-      end
-
-      within(
-        "div[aria-label='average-grade-for-criterion-#{evaluation_criterion_2.id}']"
-      ) do
-        expect(page).to have_content(evaluation_criterion_2.name)
-        expect(page).to have_content("2/3")
-      end
-
-      # Check submissions of student
-      find("li", text: "Submissions").click
-
-      expect(page).to have_content(target_l1.title)
-      expect(page).to_not have_content(target_l3_2.title)
-
-      within(
-        "div[aria-label='student-submission-card-#{submission_target_l1_1.id}']"
-      ) { expect(page).to have_content("Rejected") }
-
-      within(
-        "div[aria-label='student-submission-card-#{submission_target_l1_2.id}']"
-      ) { expect(page).to have_content("Completed") }
-
-      within("div[aria-label='student-submissions']") do
-        expect(page).to have_link(
-          href: "/submissions/#{submission_target_l1_1.id}/review"
-        )
-        expect(page).to have_link(
-          href: "/submissions/#{submission_target_l3_1.id}/review"
-        )
-      end
+      expect(page).not_to have_text("Add a New Note")
+      expect(page).not_to have_button("Save Note")
     end
 
-    scenario "tries to add a note to a student" do
-      sign_in_user school_admin.user, referrer: student_report_path(student)
+    scenario "admin cannot access the report of school 2" do
+      sign_in_user school_admin.user,
+                   referrer: student_report_path(school_2_student)
 
-      find("li", text: "Notes").click
-
-      expect(page).to have_text("Add a New Note")
-      note = Faker::Markdown.sandwich(sentences: 2)
-
-      add_markdown(note)
-      click_button "Save Note"
-
-      expect(page).to have_text(
-        "Error 500\nOur team has been notified of this error. Please reload the page and try again.\nRefresh Page"
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
       )
     end
   end

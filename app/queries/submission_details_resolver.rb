@@ -22,7 +22,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       submission_report_poll_time:
         Rails.application.secrets.submission_report_poll_time,
       inactive_submission_review_allowed_days:
-        Rails.application.secrets.inactive_submission_review_allowed_days
+        Rails.application.secrets.inactive_submission_review_allowed_days,
+      coach: coach?
     }
   end
 
@@ -124,5 +125,11 @@ class SubmissionDetailsResolver < ApplicationQuery
          !student_ids.one?
       Student.find_by(id: student_ids.first).team.name
     end
+  end
+
+  def coach?
+    current_user&.faculty&.cohorts&.exists?(
+      id: submission.students.first.cohort
+    ) || current_user&.faculty&.in?(coaches) || false
   end
 end

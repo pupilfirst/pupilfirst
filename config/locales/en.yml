@@ -715,6 +715,7 @@ en:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
       add_your_feedback: Add Your Feedback
+      admin_can_not_review_message: You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts.
       assigned_coaches: Assigned Coaches
       assigned_to: Assigned to
       close: close

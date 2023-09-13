@@ -149,6 +149,10 @@ module Types
       argument :student_id, ID, required: true
     end
 
+    resolved_field :is_coach, Boolean, null: false do
+      argument :student_id, ID, required: false
+    end
+
     resolved_field :topics, Types::TopicType.connection_type, null: false do
       argument :community_id, ID, required: true
       argument :resolution, Types::TopicResolutionFilterType, required: true

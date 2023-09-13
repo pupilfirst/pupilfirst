@@ -101,6 +101,7 @@ module StudentDetailsQuery = %graphql(`
         }
       }
       hasArchivedCoachNotes(studentId: $studentId)
+      isCoach(studentId: $studentId)
     }
   `)
 
@@ -150,6 +151,7 @@ let getStudentDetails = (studentId, setState) => {
     let studentDetails = StudentDetails.make(
       ~id=studentId,
       ~hasArchivedNotes=response.hasArchivedCoachNotes,
+      ~isCoach=response.isCoach,
       ~coachNotes,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
@@ -671,6 +673,7 @@ let make = (~studentId, ~userId) => {
                 <CoursesStudents__CoachNotes
                   studentId
                   hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
+                  isCoach={studentDetails |> StudentDetails.isCoach}
                   coachNotes={studentDetails |> StudentDetails.coachNotes}
                   addNoteCB={addNote(
                     setState,

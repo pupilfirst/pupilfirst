@@ -59,14 +59,14 @@ let make = (
   ~studentId,
   ~coachNotes,
   ~hasArchivedNotes,
-  ~isCoach,
+  ~preview,
   ~addNoteCB,
   ~removeNoteCB,
   ~userId,
 ) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false})
   <div className="mt-3 text-sm">
-    {isCoach
+    {!preview
       ? <div>
           <span className="flex">
             <label

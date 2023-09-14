@@ -12,8 +12,13 @@ class StudentDetailsResolver < ApplicationQuery
       average_grades: average_grades,
       team: team,
       student: student,
-      milestone_targets_completion_status: milestone_targets_completion_status
+      milestone_targets_completion_status: milestone_targets_completion_status,
+      preview: preview?
     }
+  end
+
+  def preview?
+    !current_user&.faculty&.cohorts&.exists?(id: student&.cohort_id) || false
   end
 
   def average_grades

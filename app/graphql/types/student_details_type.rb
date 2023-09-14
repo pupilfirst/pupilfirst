@@ -12,5 +12,6 @@ module Types
     field :milestone_targets_completion_status,
           [Types::MilestoneTargetsCompletionStatusType],
           null: false
+    field :preview, Boolean, null: false
   end
 end

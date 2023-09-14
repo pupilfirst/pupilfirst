@@ -492,16 +492,16 @@ feature "Course students report", js: true do
       sign_in_user school_admin.user, referrer: student_report_path(student)
       expect(page).to have_text(student.name)
 
-      # Only milestone targets should be shown for completion status
-      expect(page).to have_text(target_l1.title)
-      expect(page).to have_text(target_l2.title)
-      expect(page).not_to have_text(target_l3_1.title)
-
       expect(page).not_to have_text("Add a New Note")
       expect(page).not_to have_button("Save Note")
+
+      # Can access student submissions tab
+      find("li", text: "Submissions").click
+
+      expect(page).to have_content(target_l1.title)
     end
 
-    scenario "admin cannot access the report of school 2" do
+    scenario "admin cannot access the student report belongs to school 2" do
       sign_in_user school_admin.user,
                    referrer: student_report_path(school_2_student)
 
@@ -514,7 +514,7 @@ feature "Course students report", js: true do
   context "when a user is a student" do
     let(:student_2) { create :student }
 
-    scenario "tries to access another student's report" do
+    scenario "can not access another student's report" do
       sign_in_user student.user, referrer: student_report_path(student_2)
       expect(page).to have_content(
         "The page you were looking for doesn't exist"

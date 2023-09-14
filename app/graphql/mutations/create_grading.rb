@@ -23,7 +23,7 @@ module Mutations
                }
              }
 
-    description 'Create grading for submission'
+    description "Create grading for submission"
 
     field :success, Boolean, null: false
 
@@ -31,8 +31,8 @@ module Mutations
       grade
       notify(
         :success,
-        I18n.t('mutations.create_grading.grade_recorded'),
-        I18n.t('mutations.create_grading.success_notification')
+        I18n.t("mutations.create_grading.grade_recorded"),
+        I18n.t("mutations.create_grading.success_notification")
       )
       { success: true }
     end
@@ -45,75 +45,67 @@ module Mutations
         @checklist = value[:checklist]
         @evaluation_criteria = @submission.evaluation_criteria
         @grades = value[:grades]
+        grade_hash = compute_grade_hash
         combine(
-          submission_exists,
           submission_not_graded,
           valid_evaluation_criteria,
           right_shape_for_checklist,
           checklist_data_is_not_mutated,
-          valid_grading
-        )
-      end
-
-      def submission_exists
-        return if @submission.present?
-
-        I18n.t(
-          'mutations.create_grading.submission_missing_error',
-          submission_id: @submission_id
+          valid_grading(grade_hash)
         )
       end
 
       def submission_not_graded
         return unless @submission.reviewed?
 
-        I18n.t('mutations.create_grading.submission_graded_error')
+        I18n.t("mutations.create_grading.submission_graded_error")
       end
 
       def valid_evaluation_criteria
         return if @evaluation_criteria.present?
 
-        I18n.t(
-          'mutations.create_grading.evaluation_criteria_error',
-          submission_id: @submission_id
-        )
+        raise GraphQL::ExecutionError,
+              I18n.t(
+                "mutations.create_grading.evaluation_criteria_error",
+                submission_id: @submission_id
+              )
       end
 
       def right_shape_for_checklist
         if @checklist.respond_to?(:all?) &&
-             @checklist.all? do |item|
-               item['title'].is_a?(String) &&
-                 item['kind'].in?(Target.valid_checklist_kind_types) &&
-                 item['status'].in?(
+             @checklist.all? { |item|
+               item["title"].is_a?(String) &&
+                 item["kind"].in?(Target.valid_checklist_kind_types) &&
+                 item["status"].in?(
                    [
                      TimelineEvent::CHECKLIST_STATUS_FAILED,
                      TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
                    ]
                  ) &&
-                 (item['result'].is_a?(String) || item['result'].is_a?(Array))
-             end
+                 (item["result"].is_a?(String) || item["result"].is_a?(Array))
+             }
           return
         end
-
-        I18n.t('mutations.create_grading.invalid_checklist_shape_error')
+        raise GraphQL::ExecutionError,
+              I18n.t("mutations.create_grading.invalid_checklist_shape_error")
       end
 
       def checklist_data_is_not_mutated
         old_checklist =
           @submission.checklist.map do |c|
             [
-              c['title'],
-              c['kind'],
-              c['kind'] == 'files' ? c['result'].sort : c['result']
+              c["title"],
+              c["kind"],
+              c["kind"] == "files" ? c["result"].sort : c["result"]
             ]
           end
 
         new_checklist =
           @checklist.map do |c|
             [
-              c['title'],
-              c['kind'],
-              c['kind'] == 'files' ? c['result'].sort : c['result']
+              c["title"],
+              c["kind"],
+              c["kind"] == "files" ? c["result"].sort : c["result"]
             ]
           end
 
@@ -122,53 +114,50 @@ module Mutations
           return
         end
 
-        if (old_checklist - new_checklist).empty? &&
-             old_checklist.count == new_checklist.count
-          return
-        end
-
-        I18n.t('mutations.create_grading.invalid_checklist_values_error')
+        I18n.t("mutations.create_grading.invalid_checklist_values_error")
       end
 
-      def valid_grading
-        return unless valid_grading?
+      def valid_grading(grade_hash)
+        return if valid_grading?(grade_hash)
 
         I18n.t(
-          'mutations.create_grading.invalid_grading_error',
+          "mutations.create_grading.invalid_grading_error",
           grades_data: @grades.to_json
         )
       end
 
       private
 
-      def grade_hash
-        @grade_hash ||=
-          @grades.each_with_object({}) do |incoming_grade, grade_hash|
-            criteria_id = incoming_grade[:evaluation_criterion_id]
-            grade = incoming_grade[:grade]
-            grade_hash[criteria_id] = grade
-          end
+      def compute_grade_hash
+        @grades.each_with_object({}) do |incoming_grade, grade_hash|
+          criteria_id = incoming_grade[:evaluation_criterion_id].to_i
+          grade = incoming_grade[:grade]
+          grade_hash[criteria_id] = grade
+        end
       end
 
-      def valid_grading?
-        all_criteria_graded? && all_grades_valid?
+      def valid_grading?(grade_hash)
+        all_criteria_graded?(grade_hash) && all_grades_valid?(grade_hash)
       end
 
-      def all_criteria_graded?
+      def all_criteria_graded?(grade_hash)
         (@evaluation_criteria.pluck(:id) - grade_hash.keys).empty?
       end
 
-      def all_grades_valid?
-        grade_hash.all? { |ec_id, grade| grade.in?(1..max_grades[ec_id]) }
+      def all_grades_valid?(grade_hash)
+        grade_hash.all? do |ec_id, grade|
+          grade.in?(1..max_grades(grade_hash)[ec_id])
+        end
       end
 
-      def max_grades
-        @max_grades ||=
-          grade_hash.keys.index_with do |ec_id|
-            @evaluation_criteria.find(ec_id).max_grade
-          end
+      def max_grades(grade_hash)
+        grade_hash.keys.index_with do |ec_id|
+          @evaluation_criteria.find(ec_id).max_grade
+        end
       end
     end
+
+    validates ValidateReviewData => {}
 
     private
 
@@ -257,7 +246,10 @@ module Mutations
           timeline_event: submission
         )
 
-      StartupFeedbackModule::EmailService.new(startup_feedback, include_grades: true).send
+      StartupFeedbackModule::EmailService.new(
+        startup_feedback,
+        include_grades: true
+      ).send
     end
   end
 end

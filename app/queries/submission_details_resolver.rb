@@ -128,11 +128,12 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def admin_preview?
-    current_school_admin.present? &&
-      (
-        current_user.faculty&.cohorts&.exists?(
-          id: submission.students.first.cohort_id
-        ) || false
-      )
+    if current_user.faculty&.cohorts&.exists?(
+         id: submission.students.first.cohort_id
+       )
+      return false
+    else
+      return true
+    end
   end
 end

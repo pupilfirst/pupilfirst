@@ -224,10 +224,10 @@ let isSubmissionReviewAllowed = submissionDetails => {
     SubmissionDetails.preview(submissionDetails),
     submissionReviewAllowed,
   ) {
-  | (true, true, true) => true
-  | (true, true, false) => false
-  | (true, false, _) => true
-  | (false, _, _) => false
+  | (true, _, _) => false
+  | (_, true, true) => true
+  | (_, true, false) => false
+  | (false, false, _) => true
   }
 }
 
@@ -367,7 +367,7 @@ let gradeSubmissionQuery = (
 let inactiveWarning = submissionDetails =>
   if (
     SubmissionDetails.inactiveStudents(submissionDetails) &&
-    SubmissionDetails.adminPreview(submissionDetails)
+    !SubmissionDetails.adminPreview(submissionDetails)
   ) {
     let submissionDeadlineDate = DateFns.addDays(
       SubmissionDetails.createdAt(submissionDetails),
@@ -399,7 +399,7 @@ let inactiveWarning = submissionDetails =>
   }
 
 let adminPreviewMessage = submissionDetails =>
-  if SubmissionDetails.adminPreview(submissionDetails) == false {
+  if SubmissionDetails.adminPreview(submissionDetails) {
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
       <i className="fas fa-exclamation-triangle" />

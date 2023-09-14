@@ -220,7 +220,7 @@ let isSubmissionReviewAllowed = submissionDetails => {
   let submissionReviewAllowed = daysSinceSubmission < submissionReviewAllowedTime
 
   switch (
-    SubmissionDetails.coach(submissionDetails),
+    SubmissionDetails.adminPreview(submissionDetails),
     SubmissionDetails.preview(submissionDetails),
     submissionReviewAllowed,
   ) {
@@ -367,7 +367,7 @@ let gradeSubmissionQuery = (
 let inactiveWarning = submissionDetails =>
   if (
     SubmissionDetails.inactiveStudents(submissionDetails) &&
-    SubmissionDetails.coach(submissionDetails)
+    SubmissionDetails.adminPreview(submissionDetails)
   ) {
     let submissionDeadlineDate = DateFns.addDays(
       SubmissionDetails.createdAt(submissionDetails),
@@ -399,7 +399,7 @@ let inactiveWarning = submissionDetails =>
   }
 
 let adminPreviewMessage = submissionDetails =>
-  if SubmissionDetails.coach(submissionDetails) == false {
+  if SubmissionDetails.adminPreview(submissionDetails) == false {
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
       <i className="fas fa-exclamation-triangle" />

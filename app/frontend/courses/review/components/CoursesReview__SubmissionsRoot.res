@@ -59,7 +59,7 @@ module SubmissionDetailsQuery = %graphql(`
         teamName
         courseId
         preview
-        coach
+        adminPreview
         reviewerDetails{
           assignedAt
           user {

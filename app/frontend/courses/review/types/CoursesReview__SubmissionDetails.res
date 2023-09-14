@@ -26,7 +26,7 @@ type t = {
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
   inactiveSubmissionReviewAllowedDays: int,
-  coach: bool,
+  adminPreview: bool,
 }
 
 let submission = t => t.submission
@@ -47,7 +47,7 @@ let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
 let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
-let coach = t => t.coach
+let adminPreview = t => t.adminPreview
 
 let make = (
   ~submission,
@@ -68,7 +68,7 @@ let make = (
   ~reviewer,
   ~submissionReportPollTime,
   ~inactiveSubmissionReviewAllowedDays,
-  ~coach,
+  ~adminPreview,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -88,7 +88,7 @@ let make = (
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
   inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
-  coach: coach,
+  adminPreview: adminPreview,
 }
 
 let decodeJs = details =>
@@ -125,7 +125,7 @@ let decodeJs = details =>
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
     ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
-    ~coach=details["coach"],
+    ~adminPreview=details["adminPreview"],
   )
 
 let updateMetaSubmission = submission => {

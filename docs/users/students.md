@@ -12,6 +12,8 @@ Courses can contain any number of students. To see the students in a course, fir
 
 To add new students to a course, click the _Add New Students_ button at the top-right of the list. The form that opens up will allow you to add many students at once. It asks for the following details:
 
+**Select a cohort**: Select a cohort from the _Pick a Cohort_ dropdown list.
+
 **Name**: The name of the student.
 
 **Email**: The email address that the student will use to log into your school.
@@ -22,6 +24,10 @@ To add new students to a course, click the _Add New Students_ button at the top-
 
 The _title_ and _affiliation_ fields are used across the platform to better identify students.
 
+**Team Name**: If you're adding a student to a team, you can enter the team's name here. If you're not adding the student to a team, leave this field blank.
+
+Students with same team name will be grouped together; this will not affect existing teams in the course.
+
 **Tags**: Tags are keywords or strings to associate with the list of students that you're adding, and can be used to quickly filter the list of students in a course. You can start typing and pick from the suggested list of tags or create new ones.
 
 **Notify students**: Use this checkbox to enable or disable onboarding email notification for the newly added students.
@@ -29,29 +35,30 @@ The _title_ and _affiliation_ fields are used across the platform to better iden
 ### Add multiple students at once
 
 1. Fill in the details of the first student, and click the _Add to List_ button.
-2. This will add the first student to a list that is unsaved, and preserve the _Title_, _Affiliation_, and _Tags_, so that you can add more students to the list.
+2. This will add the first student to a list that is unsaved, and preserve the _cohort_, _Title_, _Affiliation_, and _Tags_, so that you can add more students to the list.
 3. Once you're okay with the list of students to be added, click the _Save List_ button. It'll add everyone you've listed as students in the course, together.
 
 ## Editing student details
 
-To edit a student's details, click on the student's name. You'll see all of the fields you entered in the creation form, and a few others:
+To edit a student's details, click on the student's name. You'll see all of the fields you entered in the creation form, and one additional field:
 
-**Team Name**: If the student is in a team (details below), then you'll be able to edit the team's name here.
-
-**Personal Coaches**: This list allows you to [directly assign coaches](/users/coaches#student-team-coaches) to a student (or team), which will allow those coaches to review submission from that student (or team).
-
-**Access Ends On**: If set, the course will be marked as _ended_ for the student (or team) on this date. Students will retain access to the course, and their own submissions, but they will not be able to complete new targets.
+**Personal Coaches**: This list allows you to [directly assign coaches](/users/coaches#student-team-coaches) to a student, which will allow those coaches to review submission from that student.
 
 ## Student actions
 
 In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
+
+**Course Certificates**<br/>
+This will list all the certificates that the student has earned in the course. You can view each certificate by clicking on the certificate ID. You can issue certificate from here and also revoke a certificate if needed.
 
 **Has this student dropped out?**<br/>
 If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their dashboard page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
 ## Inactive students
 
-Students whose access to a course has ended, or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, click the _Inactive Students_ button at the top-right of the students page. Inactive students can be reactivated by selecting one or more students or teams, and then choosing the _Reactivate Students_ option.
+Students whose access to a course has ended by being part of ended cohort or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, select the _ended_ and _dropped_ status filter from the _Multiselect Dropdown_ filter at the top of the students page.
+
+Inactive students can be reactivated by moving to a cohort that is not ended or reactivating a dropped out student from the _Actions_ tab.
 
 ## Teaming up students
 

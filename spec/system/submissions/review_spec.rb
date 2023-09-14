@@ -870,7 +870,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
 
-    scenario "school admin tries to access the submission review page" do
+    scenario "school admin can view the submission" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_pending)
 
@@ -878,62 +878,26 @@ feature "Submission review overlay", js: true do
 
       expect(page).to have_text("Submission #1")
 
-      within("div[aria-label='submissions-overlay-header']") do
-        expect(page).to have_content("Submitted by #{student.name}")
-        expect(page).to have_link(
-          student.name,
-          href: "/students/#{student.id}/report"
-        )
-        expect(page).to have_link(target.title, href: "/targets/#{target.id}")
-        expect(page).to have_content(target.title)
-        expect(page).to have_text "Assigned Coaches"
-
-        # Hovering over the avatar should reveal the name of the assigned coach.
-        page.find("svg", text: "JD").hover
-        expect(page).to have_text("John Doe")
-      end
-
-      click_button "Start Review"
-
-      expect(page).to have_text("Authorization failed")
-
-      visit review_timeline_event_path(submission_pending)
-
-      expect(page).to have_text("Start Review")
-    end
-
-    scenario "school admin tries view and edit the review checklist of a submission" do
-      sign_in_user school_admin.user,
-                   referrer: review_timeline_event_path(submission_pending)
-
-      # Admin can see the review checklist, but cannot save the review checklist.
-
-      expect(target.review_checklist).to eq([])
-
-      expect(page).to have_content("Create Review Checklist")
-      click_button "Create Review Checklist"
-
-      expect(page).to have_content("Save Checklist")
-      click_button "Save Checklist"
-
-      expect(page).to have_content(
-        "Our team has been notified of this error. Please reload the page and try again."
+      expect(page).to have_text(
+        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
       )
 
-      click_button "Refresh Page"
-
-      expect(page).to have_content("Create Review Checklist")
+      expect(page).to have_button("Save grades", disabled: true)
+      expect(page).to have_button("Create Review Checklist", disabled: true)
+      expect(page).to have_selector(
+        'textarea[aria-label="Markdown editor"]:disabled'
+      )
     end
 
-    scenario "school admin tries to take over a assigned submission" do
+    scenario "school admin can not take over a assigned submission" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_pending_2)
 
-      expect(page).to have_text(team_coach.name)
-      expect(page).not_to have_text("Start Review")
-      click_button "Yes, Assign Me"
+      expect(page).to have_text(
+        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+      )
 
-      expect(page).to have_text("Authorization failed")
+      expect(page).to have_button("Save grades", disabled: true)
     end
 
     scenario "coach is warned when a student has dropped out" do
@@ -1375,65 +1339,30 @@ feature "Submission review overlay", js: true do
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
     end
 
-    scenario "school admin tries to add feedback" do
+    scenario "school admin can not add feedback" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 
-      # School admin should not be able to add feedback.
+      expect(page).to have_text("Submission #1")
 
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Completed")
-        expect(page).to have_text("Evaluated By")
-        expect(page).to have_text(coach.name)
-      end
+      expect(page).to have_text(
+        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+      )
 
-      expect(page).to have_button("Undo Grading")
-
-      expect(page).to have_button("Add feedback")
-
-      click_button "Add feedback"
-
-      expect(page).not_to have_button("Add feedback")
-      expect(page).to have_button("Share Feedback", disabled: true)
-
-      feedback = Faker::Markdown.sandwich(sentences: 6)
-      add_markdown(feedback)
-      click_button "Share Feedback"
-
-      expect(page).to have_text("Authorization failed")
-
-      accept_confirm { visit review_timeline_event_path(submission_reviewed) }
-
-      expect(page).to have_button("Add feedback")
+      expect(page).to have_button("Add feedback", disabled: true)
     end
 
-    scenario "school admin tries to undo grading" do
+    scenario "school admin can not undo grading" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 
-      # School admin can access the page, but cannot undo grading.
+      expect(page).to have_text("Submission #1")
 
-      expect(page).not_to have_button("Undo Grading")
+      expect(page).to have_text(
+        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+      )
 
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Completed")
-        expect(page).to have_text("Evaluated By")
-        expect(page).to have_text(coach.name)
-      end
-
-      accept_confirm { click_button "Undo Grading" }
-
-      expect(page).to have_text("Authorization failed")
-
-      visit review_timeline_event_path(submission_reviewed)
-
-      expect(page).not_to have_button("Undo Grading")
-
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Completed")
-        expect(page).to have_text("Evaluated By")
-        expect(page).to have_text(coach.name)
-      end
+      expect(page).to have_button("Undo Grading", disabled: true)
     end
 
     scenario "coach can undo grading" do

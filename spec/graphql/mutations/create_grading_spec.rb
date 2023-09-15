@@ -160,6 +160,41 @@ describe Mutations::CreateGrading, type: :request do
     end
   end
 
+  context "When grading has invalid grades" do
+    let!(:evaluation_criteria_2) do
+      create :evaluation_criterion, course: course
+    end
+    before { target.evaluation_criteria << evaluation_criteria_2 }
+    it "should return invalid grading values error" do
+      post(
+        "/graphql",
+        params: {
+          query: query,
+          variables:
+            make_variables(
+              submission.id,
+              [
+                grades(evaluation_criteria_1.id, -1),
+                grades(evaluation_criteria_2.id, 10)
+              ],
+              submission.checklist,
+              "some feed back"
+            )
+        },
+        as: :json,
+        headers: @headers
+      )
+
+      response_data = JSON.parse(response.body)["errors"]
+      expect(response_data[0]["message"]).to eq(
+        'Grading values supplied are invalid: [{"evaluation_criterion_id":"' +
+          evaluation_criteria_1.id.to_s +
+          '","grade":-1},{"evaluation_criterion_id":"' +
+          evaluation_criteria_2.id.to_s + '","grade":10}]'
+      )
+    end
+  end
+
   context "When grading has invalid evaluation criteria" do
     it "should return invalid grading values error" do
       post(

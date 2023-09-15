@@ -100,8 +100,8 @@ describe Mutations::CreateGrading, type: :request do
         as: :json,
         headers: @headers
       )
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+
+      expect(error_message(response)).to eq(
         "Unable to find submission with ID: 0"
       )
     end
@@ -125,8 +125,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         "The values for checklist items in the submission does not match with review data"
       )
     end
@@ -153,8 +152,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         "The shape of data in the submission checklist does not match the one sent with the review"
       )
     end
@@ -185,8 +183,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         'Grading values supplied are invalid: [{"evaluation_criterion_id":"' +
           evaluation_criteria_1.id.to_s +
           '","grade":-1},{"evaluation_criterion_id":"' +
@@ -213,8 +210,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         "Grading values supplied are invalid: [{\"evaluation_criterion_id\":\"0\",\"grade\":2}]"
       )
     end
@@ -248,8 +244,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq("Submission already graded")
+      expect(error_message(response)).to eq("Submission already graded")
     end
   end
 
@@ -274,8 +269,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         "Cannot grade Submission #{submission_without_ec.id} without evaluation criteria"
       )
     end
@@ -300,8 +294,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         "Such a submission does not exist, or it has been archived."
       )
     end
@@ -330,8 +323,7 @@ describe Mutations::CreateGrading, type: :request do
         headers: @headers
       )
 
-      response_data = JSON.parse(response.body)["errors"]
-      expect(response_data[0]["message"]).to eq(
+      expect(error_message(response)).to eq(
         "Cannot update inactive student submissions."
       )
     end
@@ -359,6 +351,11 @@ describe Mutations::CreateGrading, type: :request do
       checklist: submission_checklist,
       feedback: submission_feedback.to_s
     }.as_json
+  end
+
+  def error_message(response)
+    response_data = JSON.parse(response.body)["errors"]
+    response_data[0]["message"]
   end
 
   def grades(ec_id, grade)

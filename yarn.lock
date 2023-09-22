@@ -2602,10 +2602,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rails/ujs@npm:^6.1.7":
-  version: 6.1.7
-  resolution: "@rails/ujs@npm:6.1.7"
-  checksum: a597bdaee400f73d4a2b3b2de13433399166273b56e0655da1a4d3cd9e2406224c6506bfc205565e64a02068003647aa51c767bbc5a31d1bdfdc32048a86c618
+"@rails/ujs@npm:^7.0.8":
+  version: 7.0.8
+  resolution: "@rails/ujs@npm:7.0.8"
+  checksum: 20e8e157e544849f28cd9dbd156354507701d9e4bb423d91fe10e6959d8d466f9d5f03cf6b4a69007cf9dd30d20d4a81c13a69d07b75898f1ed58ab1bc90dae3
   languageName: node
   linkType: hard
 
@@ -9061,7 +9061,7 @@ __metadata:
     "@jeff-tian/markdown-it-katex": ^2.1.0
     "@pnotify/mobile": ^5.2.0
     "@prettier/plugin-ruby": ^3.2.2
-    "@rails/ujs": ^6.1.7
+    "@rails/ujs": ^7.0.8
     "@reasonml-community/graphql-ppx": ^1.2.3
     "@rescript/react": ^0.10.3
     animate.css: 3.7.2

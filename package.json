@@ -18,7 +18,7 @@
     "@jeff-tian/markdown-it-katex": "^2.1.0",
     "@pnotify/mobile": "^5.2.0",
     "@prettier/plugin-ruby": "^3.2.2",
-    "@rails/ujs": "^6.1.7",
+    "@rails/ujs": "^7.0.8",
     "@reasonml-community/graphql-ppx": "^1.2.3",
     "@rescript/react": "^0.10.3",
     "animate.css": "3.7.2",

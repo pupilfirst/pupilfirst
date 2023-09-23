@@ -14,7 +14,7 @@ gem "image_processing", "~> 1.12" # Gem to support variants in ActiveStorage
 
 gem "vite_rails", "~> 3.0" # Use Vite in Rails and bring joy to your JavaScript experience.
 gem "sprockets-rails"
-gem "devise", "~> 4.7", ">= 4.7.1" # User auth library.
+gem "devise", "~> 4.9", ">= 4.9.2" # User auth library.
 gem "jbuilder", "~> 2.11" # Standard part of Rails, but unused, since we don't have an API.
 gem "pg", "~> 1.2" # PostgreSQL support.
 gem "pg_search", "~> 2.3" # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.

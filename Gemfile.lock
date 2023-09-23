@@ -717,7 +717,7 @@ DEPENDENCIES
   debug (~> 1.8.0)
   delayed-web (~> 0.4)
   delayed_job_active_record (~> 4.1)
-  devise (~> 4.7, >= 4.7.1)
+  devise (~> 4.9, >= 4.9.2)
   diffy (~> 3.4)
   discorb (~> 0.20.0)
   discordrb (~> 3.5)

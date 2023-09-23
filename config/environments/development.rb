@@ -38,7 +38,7 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  # config.active_storage.service = :local
+  config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -89,9 +89,6 @@ Rails.application.configure do
   Bullet.bullet_logger = true
   Bullet.rails_logger = true
   Bullet.skip_html_injection = true
-
-  # In development, let's have ActiveStorage store everything on local disk
-  config.active_storage.service = :local
 
   # In development, let's disable host-based blocking.
   config.hosts.clear

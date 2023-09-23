@@ -8,7 +8,7 @@ module Schools
       new_level = authorize(Level.new(course: course), policy_class: Schools::LevelPolicy)
 
       form = ::Schools::Levels::CreateForm.new(new_level)
-      if form.validate(params[:level])
+      if form.validate(params)
         level = form.save
         render json: { id: level.id.to_s, number: level.number, error: nil }
       else
@@ -19,7 +19,7 @@ module Schools
     # PATCH /school/levels/:id
     def update
       form = ::Schools::Levels::UpdateForm.new(level)
-      if form.validate(params[:level])
+      if form.validate(params)
         level = form.save
         render json: { id: level.id.to_s, number: level.number, error: nil }
       else

@@ -49,8 +49,8 @@ jobs:
       RECAPTCHA_V3_SECRET_KEY: ignored
       RECAPTCHA_V2_SITE_KEY: ignored
       RECAPTCHA_V2_SECRET_KEY: ignored
-      POSTMARK_HOOK_ID: ignored
-      POSTMARK_HOOK_SECRET: ignored
+      POSTMARK_HOOK_ID: ${{ secrets.POSTMARK_HOOK_ID }}
+      POSTMARK_HOOK_SECRET: ${{ secrets.POSTMARK_HOOK_ID }}
 
     steps:
       - uses: actions/checkout@v2

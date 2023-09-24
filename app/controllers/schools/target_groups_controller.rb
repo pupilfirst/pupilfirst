@@ -9,7 +9,7 @@ module Schools
           policy_class: Schools::TargetGroupPolicy
         )
       form = ::Schools::TargetGroups::CreateForm.new(target_group)
-      if form.validate(params[:target_group])
+      if form.validate(params)
         target_group = form.save
         render json: {
                  id: target_group.id.to_s,

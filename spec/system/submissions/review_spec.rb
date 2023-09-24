@@ -879,7 +879,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("Submission #1")
 
       expect(page).to have_text(
-        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
       )
 
       expect(page).to have_button("Save grades", disabled: true)
@@ -894,7 +894,7 @@ feature "Submission review overlay", js: true do
                    referrer: review_timeline_event_path(submission_pending_2)
 
       expect(page).to have_text(
-        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
       )
 
       expect(page).to have_button("Save grades", disabled: true)
@@ -1346,7 +1346,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("Submission #1")
 
       expect(page).to have_text(
-        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
       )
 
       expect(page).to have_button("Add feedback", disabled: true)
@@ -1359,7 +1359,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("Submission #1")
 
       expect(page).to have_text(
-        "You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts."
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
       )
 
       expect(page).to have_button("Undo Grading", disabled: true)

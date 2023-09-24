@@ -18,13 +18,11 @@ type t = {
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
-  inactiveStudents: bool,
   coaches: array<Coach.t>,
   teamName: option<string>,
   courseId: string,
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
-  inactiveSubmissionReviewAllowedDays: int,
   reviewable: bool,
   reviewDisallowedReason: option<string>,
 }
@@ -37,7 +35,6 @@ let students = t => t.students
 let evaluationCriteria = t => t.evaluationCriteria
 let reviewChecklist = t => t.reviewChecklist
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds
-let inactiveStudents = t => t.inactiveStudents
 let coaches = t => t.coaches
 let teamName = t => t.teamName
 let courseId = t => t.courseId
@@ -45,7 +42,6 @@ let createdAt = t => t.createdAt
 let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
-let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
 let reviewable = t => t.reviewable
 let reviewDisallowedReason = t => t.reviewDisallowedReason
 
@@ -58,7 +54,6 @@ let make = (
   ~evaluationCriteria,
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
-  ~inactiveStudents,
   ~submissionReports,
   ~coaches,
   ~teamName,
@@ -66,7 +61,6 @@ let make = (
   ~createdAt,
   ~reviewer,
   ~submissionReportPollTime,
-  ~inactiveSubmissionReviewAllowedDays,
   ~reviewable,
   ~reviewDisallowedReason,
 ) => {
@@ -78,7 +72,6 @@ let make = (
   evaluationCriteria: evaluationCriteria,
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
-  inactiveStudents: inactiveStudents,
   submissionReports: submissionReports,
   coaches: coaches,
   teamName: teamName,
@@ -86,7 +79,6 @@ let make = (
   createdAt: createdAt,
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
-  inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
   reviewable: reviewable,
   reviewDisallowedReason: reviewDisallowedReason,
 }
@@ -103,7 +95,6 @@ let decodeJs = details =>
     ~targetTitle=details["targetTitle"],
     ~students=details["students"]->Js.Array2.map(Student.makeFromJs),
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
-    ~inactiveStudents=details["inactiveStudents"],
     ~createdAt=DateFns.decodeISO(details["createdAt"]),
     ~evaluationCriteria=details["evaluationCriteria"]->Js.Array2.map(ec =>
       EvaluationCriterion.make(
@@ -123,7 +114,6 @@ let decodeJs = details =>
     ~courseId=details["courseId"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
-    ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
     ~reviewable=details["reviewable"],
     ~reviewDisallowedReason=details["reviewDisallowedReason"],
   )

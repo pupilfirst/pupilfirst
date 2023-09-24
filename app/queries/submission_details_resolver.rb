@@ -51,7 +51,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def review_disallowed_reason
-    if !active_submission? && cohort_assigned_to_coach?
+    if (!active_submission? || inactive_students) && cohort_assigned_to_coach?
       submission_can_be_reviewed_until =
         submission.created_at +
           Rails.application.secrets.inactive_submission_review_allowed_days.days

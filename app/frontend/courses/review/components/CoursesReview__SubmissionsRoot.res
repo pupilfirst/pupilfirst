@@ -58,8 +58,6 @@ module SubmissionDetailsQuery = %graphql(`
         }
         teamName
         courseId
-        preview
-        adminPreview
         reviewable
         reviewDisallowedReason
         reviewerDetails{

@@ -17,13 +17,11 @@ class SubmissionDetailsResolver < ApplicationQuery
       coaches: coaches,
       course_id: target.course.id,
       created_at: submission.created_at,
-      preview: preview?,
       reviewer_details: reviewer_details,
       submission_report_poll_time:
         Rails.application.secrets.submission_report_poll_time,
       inactive_submission_review_allowed_days:
         Rails.application.secrets.inactive_submission_review_allowed_days,
-      admin_preview: admin_preview?,
       reviewable: reviewable?,
       review_disallowed_reason: review_disallowed_reason
     }
@@ -172,10 +170,6 @@ class SubmissionDetailsResolver < ApplicationQuery
     submission.students.count != submission.students.active.count
   end
 
-  def preview?
-    submission.students.active.empty?
-  end
-
   def students_have_same_team
     Student.where(id: student_ids).distinct(:team_id).pluck(:team_id).one?
   end
@@ -184,16 +178,6 @@ class SubmissionDetailsResolver < ApplicationQuery
     if submission.team_submission? && students_have_same_team &&
          !student_ids.one?
       Student.find_by(id: student_ids.first).team.name
-    end
-  end
-
-  def admin_preview?
-    if current_user.faculty&.cohorts&.exists?(
-         id: submission.students.first.cohort_id
-       )
-      return false
-    else
-      return true
     end
   end
 end

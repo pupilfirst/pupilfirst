@@ -14,11 +14,9 @@ module Types
     field :inactive_students, Boolean, null: false
     field :coaches, [Types::UserProxyType], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :preview, Boolean, null: false
     field :reviewer_details, Types::ReviewerDetailType, null: true
     field :submission_report_poll_time, Integer, null: false
     field :inactive_submission_review_allowed_days, Integer, null: false
-    field :admin_preview, Boolean, null: false
     field :reviewable, Boolean, null: false
     field :review_disallowed_reason, String, null: true
   end

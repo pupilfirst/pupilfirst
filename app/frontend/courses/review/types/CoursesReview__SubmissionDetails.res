@@ -22,11 +22,9 @@ type t = {
   coaches: array<Coach.t>,
   teamName: option<string>,
   courseId: string,
-  preview: bool,
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
   inactiveSubmissionReviewAllowedDays: int,
-  adminPreview: bool,
   reviewable: bool,
   reviewDisallowedReason: option<string>,
 }
@@ -44,12 +42,10 @@ let coaches = t => t.coaches
 let teamName = t => t.teamName
 let courseId = t => t.courseId
 let createdAt = t => t.createdAt
-let preview = t => t.preview
 let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
 let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
-let adminPreview = t => t.adminPreview
 let reviewable = t => t.reviewable
 let reviewDisallowedReason = t => t.reviewDisallowedReason
 
@@ -68,11 +64,9 @@ let make = (
   ~teamName,
   ~courseId,
   ~createdAt,
-  ~preview,
   ~reviewer,
   ~submissionReportPollTime,
   ~inactiveSubmissionReviewAllowedDays,
-  ~adminPreview,
   ~reviewable,
   ~reviewDisallowedReason,
 ) => {
@@ -90,11 +84,9 @@ let make = (
   teamName: teamName,
   courseId: courseId,
   createdAt: createdAt,
-  preview: preview,
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
   inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
-  adminPreview: adminPreview,
   reviewable: reviewable,
   reviewDisallowedReason: reviewDisallowedReason,
 }
@@ -129,11 +121,9 @@ let decodeJs = details =>
     ~submissionReports=details["submissionReports"]->Js.Array2.map(SubmissionReport.makeFromJS),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
-    ~preview=details["preview"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
     ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
-    ~adminPreview=details["adminPreview"],
     ~reviewable=details["reviewable"],
     ~reviewDisallowedReason=details["reviewDisallowedReason"],
   )

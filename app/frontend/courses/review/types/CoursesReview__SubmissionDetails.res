@@ -27,6 +27,8 @@ type t = {
   submissionReportPollTime: int,
   inactiveSubmissionReviewAllowedDays: int,
   adminPreview: bool,
+  reviewable: bool,
+  reviewDisallowedReason: option<string>,
 }
 
 let submission = t => t.submission
@@ -48,6 +50,8 @@ let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
 let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
 let adminPreview = t => t.adminPreview
+let reviewable = t => t.reviewable
+let reviewDisallowedReason = t => t.reviewDisallowedReason
 
 let make = (
   ~submission,
@@ -69,6 +73,8 @@ let make = (
   ~submissionReportPollTime,
   ~inactiveSubmissionReviewAllowedDays,
   ~adminPreview,
+  ~reviewable,
+  ~reviewDisallowedReason,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -89,6 +95,8 @@ let make = (
   submissionReportPollTime: submissionReportPollTime,
   inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
   adminPreview: adminPreview,
+  reviewable: reviewable,
+  reviewDisallowedReason: reviewDisallowedReason,
 }
 
 let decodeJs = details =>
@@ -126,6 +134,8 @@ let decodeJs = details =>
     ~submissionReportPollTime=details["submissionReportPollTime"],
     ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
     ~adminPreview=details["adminPreview"],
+    ~reviewable=details["reviewable"],
+    ~reviewDisallowedReason=details["reviewDisallowedReason"],
   )
 
 let updateMetaSubmission = submission => {

@@ -19,5 +19,7 @@ module Types
     field :submission_report_poll_time, Integer, null: false
     field :inactive_submission_review_allowed_days, Integer, null: false
     field :admin_preview, Boolean, null: false
+    field :reviewable, Boolean, null: false
+    field :review_disallowed_reason, String, null: true
   end
 end

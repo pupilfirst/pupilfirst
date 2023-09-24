@@ -23,11 +23,66 @@ class SubmissionDetailsResolver < ApplicationQuery
         Rails.application.secrets.submission_report_poll_time,
       inactive_submission_review_allowed_days:
         Rails.application.secrets.inactive_submission_review_allowed_days,
-      admin_preview: admin_preview?
+      admin_preview: admin_preview?,
+      reviewable: reviewable?,
+      review_disallowed_reason: review_disallowed_reason
     }
   end
 
   delegate :review_checklist, to: :target
+
+  def active_submission?
+    return @active_submission if defined?(@active_submission)
+
+    @active_submission = submission.students.active.present?
+  end
+
+  def inactive_submission_review_allowed?
+    @inactive_submission_review_allowed ||=
+      unless active_submission?
+        days_since_submission = (Time.zone.now - submission.created_at) / 1.day
+        days_since_submission <
+          Rails.application.secrets.inactive_submission_review_allowed_days
+      end
+  end
+
+  def reviewable?
+    return false unless cohort_assigned_to_coach?
+
+    active_submission? || inactive_submission_review_allowed?
+  end
+
+  def review_disallowed_reason
+    if !active_submission? && cohort_assigned_to_coach?
+      submission_can_be_reviewed_until =
+        submission.created_at +
+          Rails.application.secrets.inactive_submission_review_allowed_days.days
+
+      key_suffix =
+        if inactive_submission_review_allowed?
+          "with_timestamp"
+        else
+          "without_timestamp"
+        end
+
+      return(
+        I18n.t(
+          "queries.submission_details_resolver.student_dropped_out_message_#{key_suffix}",
+          count: students.count,
+          timestamp:
+            submission_can_be_reviewed_until.strftime("%d %B, %Y, %H:%M %:z")
+        )
+      )
+    end
+
+    unless cohort_assigned_to_coach?
+      return(
+        I18n.t(
+          "queries.submission_details_resolver.admin_can_not_review_message"
+        )
+      )
+    end
+  end
 
   def submission
     @submission ||= TimelineEvent.find_by(id: submission_id)
@@ -103,9 +158,14 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     return true if current_school_admin.present?
 
-    current_user.faculty&.cohorts&.exists?(
-      id: submission.students.first.cohort_id
-    )
+    cohort_assigned_to_coach?
+  end
+
+  def cohort_assigned_to_coach?
+    @cohort_assigned_to_coach ||=
+      current_user.faculty&.cohorts&.exists?(
+        id: submission.students.first.cohort_id
+      ) || false
   end
 
   def inactive_students

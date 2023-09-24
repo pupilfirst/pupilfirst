@@ -208,27 +208,7 @@ let getNextSubmission = (send, courseId, filter) => {
 }
 
 let isSubmissionReviewAllowed = submissionDetails => {
-  let daysSinceSubmission = DateFns.differenceInDays(
-    Js.Date.make(),
-    SubmissionDetails.createdAt(submissionDetails),
-  )
-
-  let submissionReviewAllowedTime = SubmissionDetails.inactiveSubmissionReviewAllowedDays(
-    submissionDetails,
-  )
-
-  let submissionReviewAllowed = daysSinceSubmission < submissionReviewAllowedTime
-
-  switch (
-    SubmissionDetails.adminPreview(submissionDetails),
-    SubmissionDetails.preview(submissionDetails),
-    submissionReviewAllowed,
-  ) {
-  | (true, _, _) => false
-  | (_, true, true) => true
-  | (_, true, false) => false
-  | (false, false, _) => true
-  }
+  SubmissionDetails.reviewable(submissionDetails)
 }
 
 let makeFeedback = (user, feedback) => {
@@ -364,50 +344,16 @@ let gradeSubmissionQuery = (
   |> ignore
 }
 
-let inactiveWarning = submissionDetails =>
-  if (
-    SubmissionDetails.inactiveStudents(submissionDetails) &&
-    !SubmissionDetails.adminPreview(submissionDetails)
-  ) {
-    let submissionDeadlineDate = DateFns.addDays(
-      SubmissionDetails.createdAt(submissionDetails),
-      SubmissionDetails.inactiveSubmissionReviewAllowedDays(submissionDetails),
-    )
-
-    let warning = if Array.length(SubmissionDetails.students(submissionDetails)) > 1 {
-      !isSubmissionReviewAllowed(submissionDetails)
-        ? t("students_dropped_out_message_without_timestamp")
-        : t(
-            ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
-            "students_dropped_out_message_with_timestamp",
-          )
-    } else if !isSubmissionReviewAllowed(submissionDetails) {
-      t("student_dropped_out_message_without_timestamp")
-    } else {
-      t(
-        ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
-        "student_dropped_out_message_with_timestamp",
-      )
-    }
-
+let reviewDisallowedReason = submissionDetails => {
+  switch SubmissionDetails.reviewDisallowedReason(submissionDetails) {
+  | None => React.null
+  | Some(reason) =>
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
-      <i className="fas fa-exclamation-triangle" /> <span className="ms-2"> {warning->str} </span>
+      <i className="fas fa-exclamation-triangle" /> <span className="ms-2"> {reason->str} </span>
     </div>
-  } else {
-    React.null
   }
-
-let adminPreviewMessage = submissionDetails =>
-  if SubmissionDetails.adminPreview(submissionDetails) {
-    <div
-      className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
-      <i className="fas fa-exclamation-triangle" />
-      <span className="ms-2"> {t("admin_can_not_review_message")->str} </span>
-    </div>
-  } else {
-    React.null
-  }
+}
 
 let closeOverlay = (state, courseId, filter) => {
   let path = "/courses/" ++ courseId ++ "/review?" ++ Filter.toQueryString(filter)
@@ -1240,8 +1186,7 @@ let make = (
     [
       <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
       <div key="submission-header">
-        <div> {inactiveWarning(submissionDetails)} </div>
-        <div> {adminPreviewMessage(submissionDetails)} </div>
+        <div> {reviewDisallowedReason(submissionDetails)} </div>
         {headerSection(state, submissionDetails, filter)}
         {ReactUtils.nullIf(
           <div className="flex gap-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">

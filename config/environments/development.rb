@@ -18,7 +18,7 @@ Rails.application.configure do
   config.server_timing = true
 
   # Request timeout using Slowpoke.
-  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '300').to_i
+  config.slowpoke.timeout = ENV.fetch("SLOWPOKE_TIMEOUT", "300").to_i
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
@@ -73,7 +73,7 @@ Rails.application.configure do
   # config.i18n.raise_on_missing_translations = true
 
   config.after_initialize do
-    require 'i18n-js/listen'
+    require "i18n-js/listen"
 
     I18nJS.listen
   end

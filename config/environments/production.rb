@@ -13,10 +13,10 @@ Rails.application.configure do
   config.eager_load = true
 
   # Request timeout using Slowpoke.
-  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '15').to_i
+  config.slowpoke.timeout = ENV.fetch("SLOWPOKE_TIMEOUT", "15").to_i
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
@@ -36,9 +36,9 @@ Rails.application.configure do
   # config.assets.css_compressor = :sass
 
   # If we're serving static files, make sure that they can be cached.
-  if ENV['RAILS_SERVE_STATIC_FILES'].present?
+  if ENV["RAILS_SERVE_STATIC_FILES"].present?
     config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{1.year.to_i}"
+      "Cache-Control" => "public, max-age=#{1.year.to_i}"
     }
   end
 
@@ -46,7 +46,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.asset_host = (ENV['ASSET_HOST'] || 'https://assets.pupilfirst.com')
+  config.asset_host = (ENV["ASSET_HOST"] || "https://assets.pupilfirst.com")
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
@@ -68,17 +68,17 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   config.cache_store =
-    if ENV['MEMCACHEDCLOUD_SERVERS']
+    if ENV["MEMCACHEDCLOUD_SERVERS"]
       [
         :mem_cache_store,
-        ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
+        ENV["MEMCACHEDCLOUD_SERVERS"].split(","),
         {
-          username: ENV['MEMCACHEDCLOUD_USERNAME'],
-          password: ENV['MEMCACHEDCLOUD_PASSWORD']
+          username: ENV["MEMCACHEDCLOUD_USERNAME"],
+          password: ENV["MEMCACHEDCLOUD_PASSWORD"]
         }
       ]
     else
@@ -115,9 +115,9 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.
@@ -132,27 +132,27 @@ Rails.application.configure do
   # Postmark
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.postmark_settings = {
-    api_token: ENV['POSTMARK_API_TOKEN']
+    api_token: ENV["POSTMARK_API_TOKEN"]
   }
 
   # Add the rack-cors middleware to serve CORS header for static assets
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins '*'
-      resource '/vite/assets/*', methods: :get, headers: :any
+      origins "*"
+      resource "/vite/assets/*", methods: :get, headers: :any
     end
 
     allow do
-      origins '*'
-      resource '/vite/assets/**/*', methods: :get, headers: :any
+      origins "*"
+      resource "/vite/assets/**/*", methods: :get, headers: :any
     end
   end
 
-  Rack::Attack.enabled = ENV['REDIS_URL'].present?
+  Rack::Attack.enabled = ENV["REDIS_URL"].present?
 
   Rack::Attack.cache.store =
     ActiveSupport::Cache::RedisCacheStore.new(
-      namespace: 'lms-throttle',
-      url: ENV['REDIS_URL']
+      namespace: "lms-throttle",
+      url: ENV["REDIS_URL"]
     )
 end

@@ -24,12 +24,12 @@ Rails.application.configure do
   }
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = false
   # config.cache_store = :null_store
 
   # Request timeout using Slowpoke.
-  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '120').to_i
+  config.slowpoke.timeout = ENV.fetch("SLOWPOKE_TIMEOUT", "120").to_i
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = true
@@ -71,10 +71,10 @@ Rails.application.configure do
   test_adapter.perform_enqueued_jobs = true
   config.active_job.queue_adapter = test_adapter
 
-  config.after_initialize { I18nJS.call(config_file: 'config/i18n.yml') }
+  config.after_initialize { I18nJS.call(config_file: "config/i18n.yml") }
 end
 
-require 'flipper/adapters/pstore'
+require "flipper/adapters/pstore"
 Flipper.configure do |config|
-  config.adapter { Flipper::Adapters::PStore.new('flipper.pstore', true) }
+  config.adapter { Flipper::Adapters::PStore.new("flipper.pstore", true) }
 end

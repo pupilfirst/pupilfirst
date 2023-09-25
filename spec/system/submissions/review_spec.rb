@@ -889,7 +889,7 @@ feature "Submission review overlay", js: true do
       )
     end
 
-    scenario "school admin can not take over a assigned submission" do
+    scenario "school admin cannot take over a assigned submission" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_pending_2)
 
@@ -897,7 +897,7 @@ feature "Submission review overlay", js: true do
         "You cannot review this submission as you're not assigned to this cohort as a coach."
       )
 
-      expect(page).to have_button("Save grades", disabled: true)
+      expect(page).not_to have_button("Yes, Assign Me")
     end
 
     scenario "coach is warned when a student has dropped out" do
@@ -1339,7 +1339,7 @@ feature "Submission review overlay", js: true do
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
     end
 
-    scenario "school admin can not add feedback" do
+    scenario "school admin cannot add feedback" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 
@@ -1352,7 +1352,7 @@ feature "Submission review overlay", js: true do
       expect(page).to have_button("Add feedback", disabled: true)
     end
 
-    scenario "school admin can not undo grading" do
+    scenario "school admin cannot undo grading" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 

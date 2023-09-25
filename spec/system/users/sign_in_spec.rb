@@ -94,6 +94,14 @@ feature "User signing in by supplying email address", js: true do
         user.update!(reset_password_sent_at: Time.zone.now)
         visit reset_password_path(token: user.original_reset_password_token)
 
+        fill_in "New Password", with: "password123"
+        fill_in "Confirm Password", with: "password123"
+
+        expect(page).to have_text(
+          "Add another word or two. Uncommon words are better."
+        )
+        expect(page).to have_text("Weak")
+
         fill_in "New Password", with: password
         fill_in "Confirm Password", with: password
         click_button "Update Password"

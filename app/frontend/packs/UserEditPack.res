@@ -12,6 +12,7 @@ let decodeProps = json => {
     field("hasCurrentPassword", bool, json),
     field("isSchoolAdmin", bool, json),
     field("hasValidDeleteAccountToken", bool, json),
+    field("schoolName", string, json),
   )
 }
 
@@ -28,6 +29,7 @@ Psj.match("users#edit", () => {
     hasCurrentPassword,
     isSchoolAdmin,
     hasValidDeleteAccountToken,
+    schoolName,
   ) =
     DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
 
@@ -46,6 +48,7 @@ Psj.match("users#edit", () => {
         hasCurrentPassword
         isSchoolAdmin
         hasValidDeleteAccountToken
+        schoolName
       />,
       root,
     )

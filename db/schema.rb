@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_06_093050) do
+ActiveRecord::Schema.define(version: 2023_09_12_104319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -507,12 +507,9 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
 
   create_table "school_admins", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "school_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["school_id"], name: "index_school_admins_on_school_id"
-    t.index ["user_id", "school_id"], name: "index_school_admins_on_user_id_and_school_id", unique: true
-    t.index ["user_id"], name: "index_school_admins_on_user_id"
+    t.index ["user_id"], name: "index_school_admins_on_user_id", unique: true
   end
 
   create_table "school_links", force: :cascade do |t|
@@ -684,6 +681,7 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
     t.integer "milestone_number"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
+    t.index ["target_group_id"], name: "index_targets_on_target_group_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -712,7 +710,9 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
+    t.bigint "user_id", null: false
     t.index ["timeline_event_id"], name: "index_timeline_event_files_on_timeline_event_id"
+    t.index ["user_id"], name: "index_timeline_event_files_on_user_id"
   end
 
   create_table "timeline_event_grades", force: :cascade do |t|
@@ -748,7 +748,9 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
     t.datetime "archived_at"
+    t.index ["evaluator_id"], name: "index_timeline_events_on_evaluator_id"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
+    t.index ["target_id"], name: "index_timeline_events_on_target_id"
   end
 
   create_table "topic_categories", force: :cascade do |t|
@@ -887,6 +889,7 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
   add_foreign_key "issued_certificates", "users", column: "revoker_id"
   add_foreign_key "leaderboard_entries", "students"
   add_foreign_key "levels", "courses"
+  add_foreign_key "markdown_attachments", "schools"
   add_foreign_key "markdown_attachments", "users"
   add_foreign_key "organisation_admins", "organisations"
   add_foreign_key "organisation_admins", "users"
@@ -896,7 +899,6 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "targets"
-  add_foreign_key "school_admins", "schools"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
@@ -913,9 +915,12 @@ ActiveRecord::Schema.define(version: 2023_07_06_093050) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "teams", "cohorts"
   add_foreign_key "timeline_event_files", "timeline_events"
+  add_foreign_key "timeline_event_files", "users"
   add_foreign_key "timeline_event_owners", "students"
+  add_foreign_key "timeline_event_owners", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"
+  add_foreign_key "timeline_events", "targets"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"

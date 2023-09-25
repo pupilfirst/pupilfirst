@@ -62,8 +62,8 @@ module Users
 
     # GET /user/reset_password
     def reset_password
-      user = Users::ValidateResetTokenService.new(params[:token]).authenticate
-      if user.present?
+      @user = Users::ValidateResetTokenService.new(params[:token]).authenticate
+      if @user.present?
         @token = params[:token]
       else
         flash[:error] = t(".link_used")

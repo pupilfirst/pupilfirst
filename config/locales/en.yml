@@ -729,7 +729,7 @@ en:
       get_next_submission:
         notice:
           done: Done!
-          done_description: There are no other similar submissions.
+          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -929,6 +929,8 @@ en:
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
       not_versioned: Not Versioned
@@ -1333,22 +1335,24 @@ en:
       updated_notification: Images have been updated successfully.
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: Move Down
       move_up: Move Up
     SchoolCustomize__LinkEditor:
       add_new_link: Add a New Link
       adding_new_link: Adding new link...
-      cant_empty_message: can't be empty
       done_notification_body: a custom link has been added.
       error_body: It looks like the URL you've entered isn't valid. Please check, and try again.
       error_head: Invalid URL
       footer_link_title: View and edit footer links
       footer_sitemap: Footer Sitemap
       full_url: Full URL
-      full_url_error: is not a valid URL
+      full_url_error: Please enter a valid URL
       full_url_placeholder: Full URL, staring with https://
       header: Header
       header_links: Current Header Links
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: Location of Link
       manage_links: Manage custom links
       no_custom_links: There are no custom links here. Add some?
@@ -1837,7 +1841,7 @@ en:
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
-      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1893,6 +1897,11 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+    Zxcvbn:
+      weak: "Weak"
+      fair: "Fair"
+      medium: "Medium"
+      strong: "Strong"
   courses:
     apply:
       apply_button: Apply
@@ -2245,7 +2254,6 @@ en:
     create_quiz_submission:
       responses_saved_notification: Your responses have been saved.
     create_school_link:
-      blank_title_error: A title is required
       success_notification: A custom link has been added.
     create_student_from_applicant:
       success_notification: Student created successfully.
@@ -2769,6 +2777,7 @@ en:
     version: Version
     versions: Versions
     view: View
+    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2869,6 +2878,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+        page_title: "Reset Password | %{title}"
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email
@@ -2891,6 +2901,8 @@ en:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
       invalid_password_error: The password you entered is incorrect. Please try again.
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: Cannot update inactive student submissions.

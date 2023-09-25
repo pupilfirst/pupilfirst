@@ -4,7 +4,7 @@ title: Courses
 sidebar_label: Courses
 ---
 
-Courses hold your content and can have any number of students enrolled, with coaches to guide their path.
+Courses hold your content and can have any number of students enrolled through any number of cohorts, with coaches to guide their path.
 
 ## Creating courses
 

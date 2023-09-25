@@ -4,7 +4,7 @@ title: Students
 sidebar_label: Students
 ---
 
-Courses can contain any number of students. To see the students in a course, first select the course from the main admin navigation bar, or click the _Edit Curriculum_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
+Courses can contain any number of students and cohorts. To see the students in a course, first select the course from the main admin navigation bar, or click the _Edit Curriculum_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
 
 ![Students page within a course in the school administration interface](../assets/students/students_page.png)
 
@@ -42,7 +42,7 @@ Students with same team name will be grouped together; this will not affect exis
 
 To edit a student's details, click on the student's name. You'll see all of the fields you entered in the creation form, and one additional field:
 
-**Personal Coaches**: This list allows you to [directly assign coaches](/users/coaches#student-team-coaches) to a student, which will allow those coaches to review submission from that student.
+**Personal Coaches**: This list allows you to [directly assign coaches](/users/coaches#assigning-coaches-to-students) to a student, which will allow coaches to filter submissions to review by the students they've been assigned to.
 
 ## Student actions
 

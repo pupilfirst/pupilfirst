@@ -24,7 +24,7 @@ type t = {
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
   reviewable: bool,
-  reviewDisallowedReason: option<string>,
+  warning: option<string>,
 }
 
 let submission = t => t.submission
@@ -43,7 +43,7 @@ let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
 let reviewable = t => t.reviewable
-let reviewDisallowedReason = t => t.reviewDisallowedReason
+let warning = t => t.warning
 
 let make = (
   ~submission,
@@ -62,7 +62,7 @@ let make = (
   ~reviewer,
   ~submissionReportPollTime,
   ~reviewable,
-  ~reviewDisallowedReason,
+  ~warning,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -80,7 +80,7 @@ let make = (
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
   reviewable: reviewable,
-  reviewDisallowedReason: reviewDisallowedReason,
+  warning: warning,
 }
 
 let decodeJs = details =>
@@ -115,7 +115,7 @@ let decodeJs = details =>
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
     ~reviewable=details["reviewable"],
-    ~reviewDisallowedReason=details["reviewDisallowedReason"],
+    ~warning=details["warning"],
   )
 
 let updateMetaSubmission = submission => {

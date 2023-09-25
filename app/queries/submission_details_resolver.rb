@@ -23,7 +23,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       inactive_submission_review_allowed_days:
         Rails.application.secrets.inactive_submission_review_allowed_days,
       reviewable: reviewable?,
-      review_disallowed_reason: review_disallowed_reason
+      warning: warning
     }
   end
 
@@ -50,7 +50,7 @@ class SubmissionDetailsResolver < ApplicationQuery
     active_submission? || inactive_submission_review_allowed?
   end
 
-  def review_disallowed_reason
+  def warning
     if (!active_submission? || inactive_students) && cohort_assigned_to_coach?
       submission_can_be_reviewed_until =
         submission.created_at +

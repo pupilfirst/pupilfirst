@@ -344,8 +344,8 @@ let gradeSubmissionQuery = (
   |> ignore
 }
 
-let reviewDisallowedReason = submissionDetails => {
-  switch SubmissionDetails.reviewDisallowedReason(submissionDetails) {
+let warning = submissionDetails => {
+  switch SubmissionDetails.warning(submissionDetails) {
   | None => React.null
   | Some(reason) =>
     <div
@@ -1186,7 +1186,7 @@ let make = (
     [
       <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
       <div key="submission-header">
-        <div> {reviewDisallowedReason(submissionDetails)} </div>
+        <div> {warning(submissionDetails)} </div>
         {headerSection(state, submissionDetails, filter)}
         {ReactUtils.nullIf(
           <div className="flex gap-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">

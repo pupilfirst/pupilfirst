@@ -59,7 +59,7 @@ module SubmissionDetailsQuery = %graphql(`
         teamName
         courseId
         reviewable
-        reviewDisallowedReason
+        warning
         reviewerDetails{
           assignedAt
           user {

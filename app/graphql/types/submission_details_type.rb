@@ -16,6 +16,6 @@ module Types
     field :reviewer_details, Types::ReviewerDetailType, null: true
     field :submission_report_poll_time, Integer, null: false
     field :reviewable, Boolean, null: false
-    field :review_disallowed_reason, String, null: true
+    field :warning, String, null: true
   end
 end

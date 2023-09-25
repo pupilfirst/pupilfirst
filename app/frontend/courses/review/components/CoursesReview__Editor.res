@@ -347,10 +347,10 @@ let gradeSubmissionQuery = (
 let warning = submissionDetails => {
   switch SubmissionDetails.warning(submissionDetails) {
   | None => React.null
-  | Some(reason) =>
+  | Some(warning) =>
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
-      <i className="fas fa-exclamation-triangle" /> <span className="ms-2"> {reason->str} </span>
+      <i className="fas fa-exclamation-triangle" /> <span className="ms-2"> {warning->str} </span>
     </div>
   }
 }

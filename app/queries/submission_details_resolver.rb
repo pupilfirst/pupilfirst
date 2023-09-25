@@ -13,7 +13,6 @@ class SubmissionDetailsResolver < ApplicationQuery
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,
-      inactive_students: inactive_students,
       coaches: coaches,
       course_id: target.course.id,
       created_at: submission.created_at,

@@ -715,7 +715,6 @@ en:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
       add_your_feedback: Add Your Feedback
-      admin_can_not_review_message: You cannot review this submission as you are not a coach for this student or they are not part of your assigned cohorts.
       assigned_coaches: Assigned Coaches
       assigned_to: Assigned to
       close: close
@@ -756,10 +755,6 @@ en:
         rejected: Rejected
         reviewing: Reviewing
       student: student
-      student_dropped_out_message_with_timestamp: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
-      student_dropped_out_message_without_timestamp: This submission is from a student whose access to the course has ended, or has dropped out.
-      students_dropped_out_message_with_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.You can review the submission until %{timestamp}
-      students_dropped_out_message_without_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
       submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "

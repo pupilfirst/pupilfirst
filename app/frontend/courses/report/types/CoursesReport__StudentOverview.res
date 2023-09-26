@@ -5,6 +5,7 @@ type averageGrade = {
 
 type t = {
   id: string,
+  cohort: Cohort.t,
   evaluationCriteria: array<CoursesReport__EvaluationCriterion.t>,
   totalTargets: int,
   targetsPendingReview: int,
@@ -15,6 +16,9 @@ type t = {
 }
 
 let id = t => t.id
+
+let cohort = t => t.cohort
+
 let evaluationCriteria = t => t.evaluationCriteria
 
 let totalTargets = t => t.totalTargets->float_of_int
@@ -75,6 +79,7 @@ let averageQuizScore = t =>
 
 let makeFromJs = (id, studentData) => {
   id: id,
+  cohort: studentData["student"]["cohort"]->Cohort.makeFromFragment,
   evaluationCriteria: studentData["evaluationCriteria"]->CoursesReport__EvaluationCriterion.makeFromJs,
   totalTargets: studentData["totalTargets"],
   targetsCompleted: studentData["targetsCompleted"],

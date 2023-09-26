@@ -207,6 +207,15 @@ let make = (~overviewData, ~coaches) =>
       <div className="flex flex-col">
         <div className="w-full">
           <div className="mt-8">
+            <h6 className="text-sm font-semibold"> {ts("cohort")->str} </h6>
+            <div className="w-full lg:w-1/2 shadow rounded-lg p-4 items-center mt-2 bg-white">
+              <div className="ms-2 md:ms-3 flex">
+                <div> <PfIcon className="if i-users-light me-2 font-normal text-lg" /> </div>
+                <div className="text-sm font-semibold"> {Cohort.name(overview.cohort)->str} </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8">
             <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
             <div className="flex -mx-2 flex-wrap mt-2">
               {targetsCompletionStatus(overview)}

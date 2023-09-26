@@ -503,6 +503,12 @@ let ids = student => {
         {`#${StudentInfo.id(student)}`->str}
       </span>
     </ClickToCopy>
+    <div>
+      <span className="text-xs mr-1"> {ts("cohort")->str} </span>
+      <span className="font-semibold text-sm text-primary-500">
+        {Cohort.name(student.cohort)->str}
+      </span>
+    </div>
   </div>
 }
 

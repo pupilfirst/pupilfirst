@@ -15,7 +15,7 @@ gem "image_processing", "~> 1.12" # Gem to support variants in ActiveStorage
 gem "vite_rails", "~> 3.0" # Use Vite in Rails and bring joy to your JavaScript experience.
 gem "devise", "~> 4.7", ">= 4.7.1" # User auth library.
 gem "jbuilder", "~> 2.11" # Standard part of Rails, but unused, since we don't have an API.
-gem "pg", "~> 1.2" # PostgreSQL support.
+gem "pg", "~> 1.5.4" # PostgreSQL support.
 gem "pg_search", "~> 2.3" # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
 gem "activerecord-precounter", "~> 0.4" # N+1 count query optimizer for ActiveRecord.
 gem "turbolinks", "~> 5.2" # Quicker page navigation. https://github.com/turbolinks/turbolinks
@@ -62,16 +62,16 @@ gem "omniauth-discord", "~> 1.0" # Discord OAuth2 Strategy for OmniAuth.
 gem "file_validators", "~> 3.0" # Adds file validators to ActiveModel.
 gem "pundit", "~> 2.3" # Minimal authorization through OO design and pure Ruby classes.
 gem "rack-cors", "~> 2.0", require: "rack/cors" # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem "graphql", "~> 2.0" # Ruby implementation of GraphQL http://graphql-ruby.org
+gem "graphql", "~> 2.1.0" # Ruby implementation of GraphQL http://graphql-ruby.org
 gem "rodf", "~> 1.1" # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem "i18n-js", "~> 4.0" # Export Rails I18n translations for the frontend.
 gem "batch-loader", "~> 2.0" # Generic lazy batching mechanism to avoid N+1 DB queries.
 gem "recaptcha", "~> 5.14" # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
 # Feature toggle
-gem "flipper", "~> 0.22"
-gem "flipper-ui", "~> 0.22"
-gem "flipper-active_record", "~> 0.22"
+gem "flipper", "~> 1.0.0"
+gem "flipper-ui", "~> 1.0.0"
+gem "flipper-active_record", "~> 1.0.0"
 
 group :development do
   gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.

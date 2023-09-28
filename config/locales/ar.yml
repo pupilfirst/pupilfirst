@@ -2221,7 +2221,7 @@ ar:
         description: Your feedback will be e-mailed to the student.
         title: Feedback Sent
     create_grading:
-      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      evaluation_criteria_error: غير قادر على تقدير الإرسال دون معايير تقييم صالحة
       grade_recorded: Grades Recorded
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
@@ -2806,5 +2806,4 @@ ar:
   validate_submission_gradable:
     owners_should_be_active:
       error: لا يمكن تحديث إرسالية الطلاب غير النشطين
-    submission_should_be_live:
-      error: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة
+    submission_should_be_live: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة

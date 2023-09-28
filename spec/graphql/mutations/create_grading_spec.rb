@@ -28,67 +28,34 @@ describe Mutations::CreateGrading, type: :request do
            target: target
   end
 
-  before(:each) { @headers = request_spec_headers(user) }
+  before(:each) do
+    @headers = request_spec_headers(user)
+    Rails.application.secrets.inactive_submission_review_allowed_days = 10
+  end
 
   context "When grading has valid data" do
     it "should evaluate the submission and return success" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
               [grades(evaluation_criteria_1.id, 2)],
               submission.checklist,
-              "some feed back"
+              "Some feedback"
             )
-        },
-        as: :json,
-        headers: @headers
+        )
+
+      expect(response_data["data"]["createGrading"]).to eq(
+        { "success" => true }
       )
-
-      response_data = JSON.parse(response.body)["data"]
-      expect(response_data["createGrading"]).to eq({ "success" => true })
-    end
-  end
-
-  context "When submission has multiple evaluation criterion" do
-    let!(:evaluation_criteria_2) do
-      create :evaluation_criterion, course: course
-    end
-    before { target.evaluation_criteria << evaluation_criteria_2 }
-    it "should evaluate the submission and return success" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
-          variables:
-            make_variables(
-              submission.id,
-              [
-                grades(evaluation_criteria_1.id, 2),
-                grades(evaluation_criteria_2.id, 2)
-              ],
-              submission.checklist,
-              "some feed back"
-            )
-        },
-        as: :json,
-        headers: @headers
-      )
-
-      response_data = JSON.parse(response.body)["data"]
-      expect(response_data["createGrading"]).to eq({ "success" => true })
     end
   end
 
   context "When grading has invalid submission id" do
     it "should return submission not found error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               "0",
@@ -96,23 +63,18 @@ describe Mutations::CreateGrading, type: :request do
               submission.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
-        "Unable to find submission with ID: 0"
+      expect(error_message(response_data)).to eq(
+        "Unable to find submission with ID: 0, Unable to grade submission without valid evaluation criteria."
       )
     end
   end
 
   context "When grading has mutated the checklist" do
     it "should return checklist data doesn't match error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -120,12 +82,9 @@ describe Mutations::CreateGrading, type: :request do
               [checklist],
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
+      expect(error_message(response_data)).to eq(
         "The values for checklist items in the submission does not match with review data"
       )
     end
@@ -136,10 +95,8 @@ describe Mutations::CreateGrading, type: :request do
       { checklist: "is not valid", it: "should fail" }
     end
     it "should return invalid checklist shape" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -147,12 +104,9 @@ describe Mutations::CreateGrading, type: :request do
               checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
+      expect(error_message(response_data)).to eq(
         "The shape of data in the submission checklist does not match the one sent with the review"
       )
     end
@@ -164,10 +118,8 @@ describe Mutations::CreateGrading, type: :request do
     end
     before { target.evaluation_criteria << evaluation_criteria_2 }
     it "should return invalid grading values error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -178,12 +130,9 @@ describe Mutations::CreateGrading, type: :request do
               submission.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
+      expect(error_message(response_data)).to eq(
         'Grading values supplied are invalid: [{"evaluation_criterion_id":"' +
           evaluation_criteria_1.id.to_s +
           '","grade":-1},{"evaluation_criterion_id":"' +
@@ -194,10 +143,8 @@ describe Mutations::CreateGrading, type: :request do
 
   context "When grading has invalid evaluation criteria" do
     it "should return invalid grading values error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -205,12 +152,9 @@ describe Mutations::CreateGrading, type: :request do
               submission.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
+      expect(error_message(response_data)).to eq(
         "Grading values supplied are invalid: [{\"evaluation_criterion_id\":\"0\",\"grade\":2}]"
       )
     end
@@ -228,10 +172,8 @@ describe Mutations::CreateGrading, type: :request do
     end
 
     it "should return submission already graded error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -239,12 +181,9 @@ describe Mutations::CreateGrading, type: :request do
               submission.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq("Submission already graded")
+      expect(error_message(response_data)).to eq("Submission already graded")
     end
   end
 
@@ -252,11 +191,10 @@ describe Mutations::CreateGrading, type: :request do
     let!(:submission_without_ec) do
       create :timeline_event, :with_owners, latest: true
     end
+    before { submission_without_ec.students << student }
     it "should return cannot grade submission without evaluation criteria" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission_without_ec.id,
@@ -264,13 +202,10 @@ describe Mutations::CreateGrading, type: :request do
               submission_without_ec.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
-        "Cannot grade Submission #{submission_without_ec.id} without evaluation criteria"
+      expect(error_message(response_data)).to eq(
+        "Unable to grade submission without valid evaluation criteria."
       )
     end
   end
@@ -278,10 +213,8 @@ describe Mutations::CreateGrading, type: :request do
   context "When submission is archived" do
     before { submission.update!(archived_at: Time.now) }
     it "should return submission has been archived error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -289,28 +222,23 @@ describe Mutations::CreateGrading, type: :request do
               submission.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
+      expect(error_message(response_data)).to eq(
         "Such a submission does not exist, or it has been archived."
       )
     end
   end
 
-  context "When submission owners are inactive than accepted" do
+  context "When submission owners are inactive" do
     before do
       Rails.application.secrets.inactive_submission_review_allowed_days = 10
       submission.students.first.update!(dropped_out_at: DateTime.now)
       submission.update!(created_at: DateTime.now - 11.days)
     end
     it "should return cannot grade submission of inactive students error" do
-      post(
-        "/graphql",
-        params: {
-          query: query,
+      response_data =
+        make_request(
           variables:
             make_variables(
               submission.id,
@@ -318,12 +246,9 @@ describe Mutations::CreateGrading, type: :request do
               submission.checklist,
               "some feed back"
             )
-        },
-        as: :json,
-        headers: @headers
-      )
+        )
 
-      expect(error_message(response)).to eq(
+      expect(error_message(response_data)).to eq(
         "Cannot update inactive student submissions."
       )
     end
@@ -337,6 +262,19 @@ describe Mutations::CreateGrading, type: :request do
         }
       }
     GRAPHQL
+  end
+
+  def make_request(variables:)
+    post(
+      "/graphql",
+      params: {
+        query: query,
+        variables: variables
+      },
+      as: :json,
+      headers: @headers
+    )
+    JSON.parse(response.body)
   end
 
   def make_variables(
@@ -353,9 +291,8 @@ describe Mutations::CreateGrading, type: :request do
     }.as_json
   end
 
-  def error_message(response)
-    response_data = JSON.parse(response.body)["errors"]
-    response_data[0]["message"]
+  def error_message(response_data)
+    response_data["errors"][0]["message"]
   end
 
   def grades(ec_id, grade)

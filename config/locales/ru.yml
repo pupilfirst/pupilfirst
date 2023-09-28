@@ -1783,7 +1783,7 @@ ru:
         description: Ваш отзыв будет отправлен студенту по электронной почте.
         title: Отзыв Отправлен
     create_grading:
-      evaluation_criteria_error: Невозможно оценить отправку %{submission_id} без критериев оценки
+      evaluation_criteria_error: Невозможно оценить работу без действительных критериев оценки.
       grade_recorded: Оценки Записаны
       invalid_checklist_shape_error: Форма данных в списке отправки не соответствует форме, отправленной с оценкой.
       invalid_checklist_values_error: Значения элементов списка в отправке не совпадают с данными обзора.
@@ -2151,8 +2151,7 @@ ru:
   validate_submission_gradable:
     owners_should_be_active:
       error: Невозможно обновить неактивные работы учащихся.
-    submission_should_be_live:
-      error: Такой подачи не существует, или оно было заархивировано.
+    submission_should_be_live: Такой подачи не существует, или оно было заархивировано.
   views:
     admin:
       coaches: Менторов

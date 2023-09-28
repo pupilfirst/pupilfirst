@@ -39,39 +39,41 @@ module Mutations
 
     class ValidateReviewData < GraphQL::Schema::Validator
       include ValidatorCombinable
+
       def validate(_object, _context, value)
-        @submission_id = value[:submission_id]
+        @error = nil
         @submission = TimelineEvent.find_by(id: value[:submission_id])
         @checklist = value[:checklist]
-        @evaluation_criteria = @submission.evaluation_criteria
+        @evaluation_criteria = @submission&.evaluation_criteria
         @grades = value[:grades]
         grade_hash = compute_grade_hash
-        combine(
-          submission_not_graded,
-          valid_evaluation_criteria,
-          right_shape_for_checklist,
-          checklist_data_is_not_mutated,
-          valid_grading(grade_hash)
-        )
+
+        assignment_graded?(value[:submission_id]) &&
+          checklist_has_right_shape? && submission_graded? &&
+          checklist_data_mutated? && valid_grading?(grade_hash)
+
+        @error
       end
 
-      def submission_not_graded
-        return unless @submission.reviewed?
+      def submission_graded?
+        return true unless @submission.reviewed?
 
-        I18n.t("mutations.create_grading.submission_graded_error")
+        @error = I18n.t("mutations.create_grading.submission_graded_error")
+        false
       end
 
-      def valid_evaluation_criteria
-        return if @evaluation_criteria.present?
+      def assignment_graded?(submission_id)
+        return true if @evaluation_criteria.present?
 
-        raise GraphQL::ExecutionError,
-              I18n.t(
-                "mutations.create_grading.evaluation_criteria_error",
-                submission_id: @submission_id
-              )
+        @error =
+          I18n.t(
+            "mutations.create_grading.evaluation_criteria_error",
+            submission_id: submission_id
+          )
+        false
       end
 
-      def right_shape_for_checklist
+      def checklist_has_right_shape?
         if @checklist.respond_to?(:all?) &&
              @checklist.all? { |item|
                item["title"].is_a?(String) &&
@@ -84,13 +86,15 @@ module Mutations
                  ) &&
                  (item["result"].is_a?(String) || item["result"].is_a?(Array))
              }
-          return
+          return true
         end
-        raise GraphQL::ExecutionError,
-              I18n.t("mutations.create_grading.invalid_checklist_shape_error")
+
+        @error =
+          I18n.t("mutations.create_grading.invalid_checklist_shape_error")
+        false
       end
 
-      def checklist_data_is_not_mutated
+      def checklist_data_mutated?
         old_checklist =
           @submission.checklist.map do |c|
             [
@@ -111,19 +115,23 @@ module Mutations
 
         if (old_checklist - new_checklist).empty? &&
              old_checklist.count == new_checklist.count
-          return
+          return true
         end
 
-        I18n.t("mutations.create_grading.invalid_checklist_values_error")
+        @error =
+          I18n.t("mutations.create_grading.invalid_checklist_values_error")
+        false
       end
 
-      def valid_grading(grade_hash)
-        return if valid_grading?(grade_hash)
+      def valid_grading?(grade_hash)
+        return true if valid_grading(grade_hash)
 
-        I18n.t(
-          "mutations.create_grading.invalid_grading_error",
-          grades_data: @grades.to_json
-        )
+        @error =
+          I18n.t(
+            "mutations.create_grading.invalid_grading_error",
+            grades_data: @grades.to_json
+          )
+        false
       end
 
       private
@@ -136,7 +144,7 @@ module Mutations
         end
       end
 
-      def valid_grading?(grade_hash)
+      def valid_grading(grade_hash)
         all_criteria_graded?(grade_hash) && all_grades_valid?(grade_hash)
       end
 

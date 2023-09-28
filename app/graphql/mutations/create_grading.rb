@@ -174,7 +174,7 @@ module Mutations
 
     def grade
       TimelineEvent.transaction do
-        if !failed?
+        if passed?
           evaluation_criteria.each do |criterion|
             TimelineEventGrade.create!(
               timeline_event: submission,
@@ -185,7 +185,7 @@ module Mutations
         end
 
         submission.update!(
-          passed_at: (failed? ? nil : Time.zone.now),
+          passed_at: (passed? ? Time.zone.now : nil),
           evaluator: coach,
           evaluated_at: Time.zone.now,
           checklist: @params[:checklist],
@@ -226,8 +226,8 @@ module Mutations
         end
     end
 
-    def failed?
-      @params[:grades].empty?
+    def passed?
+      @params.key?("grades")
     end
 
     def allow_token_auth?

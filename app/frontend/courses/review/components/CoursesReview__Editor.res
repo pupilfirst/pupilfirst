@@ -297,6 +297,7 @@ let passed = grades => {
 }
 
 let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)
+let trimArraytoOption = arr => Js.Array.length(arr) == 0 ? None : Some(arr)
 
 let navigationDisabled = state => {
   Js.String2.trim(state.newFeedback) != "" || state.note != None || state.saving
@@ -316,21 +317,22 @@ let gradeSubmissionQuery = (
   let feedback = trimToOption(state.newFeedback)
   // let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
 
-  let grades = Js.Array.map(
-    g =>
-      CreateGradingMutation.makeInputObjectGradeInput(
-        ~evaluationCriterionId=Grade.evaluationCriterionId(g),
-        ~grade=Grade.value(g),
-        (),
-      ),
-    state.grades,
-  )
+  let grades =
+    Js.Array.map(
+      g =>
+        CreateGradingMutation.makeInputObjectGradeInput(
+          ~evaluationCriterionId=Grade.evaluationCriterionId(g),
+          ~grade=Grade.value(g),
+          (),
+        ),
+      state.grades,
+    )->trimArraytoOption
 
   let variables = CreateGradingMutation.makeVariables(
     ~submissionId,
     ~feedback?,
     ~note=?Belt.Option.flatMap(state.note, trimToOption),
-    ~grades,
+    ~grades?,
     ~checklist=SubmissionChecklistItem.encodeArray(state.checklist),
     (),
   )

@@ -2525,7 +2525,7 @@ en:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
     submission_details_resolver:
-      admin_can_not_review_message: You cannot review this submission as you're not assigned to this cohort as a coach.
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
       student_dropped_out_message_with_timestamp:
         one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
         other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.

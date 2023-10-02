@@ -3,7 +3,7 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def submission_details
     {
-      all_submissions: submissions_from_same_set_of_students,
+      all_submissions: submissions_of_owners_with_feedback,
       submission: submission,
       target_id: target.id,
       target_title: target.title,
@@ -11,50 +11,63 @@ class SubmissionDetailsResolver < ApplicationQuery
       team_name: team_name,
       submission_reports: submission.submission_reports,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
-      evaluation_criteria: evaluation_criteria,
+      evaluation_criteria: unique_criteria_from_target_and_submissions,
       review_checklist: review_checklist,
-      coaches: coaches,
+      coaches: personal_coaches_assigned_to_the_submission_owners,
       course_id: target.course.id,
       created_at: submission.created_at,
       reviewer_details: reviewer_details,
       submission_report_poll_time:
         Rails.application.secrets.submission_report_poll_time,
-      reviewable: reviewable?,
-      warning: warning
+      reviewable: can_the_submission_be_reviewed?,
+      warning: submission_review_warning
     }
   end
 
   delegate :review_checklist, to: :target
 
-  def active_submission?
-    return @active_submission if defined?(@active_submission)
-
-    @active_submission = submission.students.active.present?
+  def allowed_days_for_reviewing_an_inactive_submission
+    Rails.application.secrets.inactive_submission_review_allowed_days
   end
 
-  def inactive_submission_review_allowed?
-    @inactive_submission_review_allowed ||=
-      unless active_submission?
-        days_since_submission = (Time.zone.now - submission.created_at) / 1.day
-        days_since_submission <
-          Rails.application.secrets.inactive_submission_review_allowed_days
-      end
+  def submission_has_inactive_owners?
+    submission.students.count != submission.students.active.count
   end
 
-  def reviewable?
-    return false unless cohort_assigned_to_coach?
-
-    active_submission? || inactive_submission_review_allowed?
+  def submission_is_within_review_allowed_period?
+    days_elapsed_since_submission =
+      (Time.zone.now - submission.created_at) / 1.day
+    days_elapsed_since_submission <
+      allowed_days_for_reviewing_an_inactive_submission.days
   end
 
-  def warning
-    if (!active_submission? || inactive_students) && cohort_assigned_to_coach?
+  def can_the_submission_be_reviewed?
+    return false unless user_is_a_coach_assigned_to_cohort?
+
+    !submission_has_inactive_owners? ||
+      submission_is_within_review_allowed_period?
+  end
+
+  def submission_review_warning
+    unless user_is_a_coach_assigned_to_cohort?
+      # The only user who can see this warning is a school admin.
+      return(
+        I18n.t("queries.submission_details_resolver.only_coaches_can_review")
+      )
+    end
+
+    generate_warning_when_a_submission_has_inactive_owners
+  end
+
+  def generate_warning_when_a_submission_has_inactive_owners
+    # This message shown when submission has inactive owners.
+    if submission_has_inactive_owners?
       submission_can_be_reviewed_until =
         submission.created_at +
-          Rails.application.secrets.inactive_submission_review_allowed_days.days
+          allowed_days_for_reviewing_an_inactive_submission.days
 
       key_suffix =
-        if inactive_submission_review_allowed?
+        if submission_is_within_review_allowed_period?
           "with_timestamp"
         else
           "without_timestamp"
@@ -69,14 +82,6 @@ class SubmissionDetailsResolver < ApplicationQuery
         )
       )
     end
-
-    unless cohort_assigned_to_coach?
-      return(
-        I18n.t(
-          "queries.submission_details_resolver.admin_can_not_review_message"
-        )
-      )
-    end
   end
 
   def submission
@@ -87,15 +92,15 @@ class SubmissionDetailsResolver < ApplicationQuery
     return submission if submission.reviewer_id.present?
   end
 
-  def coaches
+  def personal_coaches_assigned_to_the_submission_owners
     FacultyStudentEnrollment
       .where(student_id: student_ids)
       .includes(faculty: [user: [avatar_attachment: :blob]])
       .map { |c| c.faculty }
   end
 
-  def submissions_from_same_set_of_students
-    submissions
+  def submissions_of_owners_with_feedback
+    unique_submissions_by_target_and_owners
       .includes(:startup_feedback)
       .order("timeline_events.created_at DESC")
       .select do |s|
@@ -103,7 +108,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       end
   end
 
-  def submissions
+  def unique_submissions_by_target_and_owners
     TimelineEvent
       .where(target_id: submission.target_id)
       .joins(:timeline_event_owners)
@@ -123,7 +128,7 @@ class SubmissionDetailsResolver < ApplicationQuery
     %w[name id max_grade pass_grade grade_labels]
   end
 
-  def evaluation_criteria
+  def unique_criteria_from_target_and_submissions
     # EvaluationCriterion of target OR EvaluationCriteria of submissions
     target_criteria =
       target.evaluation_criteria.as_json(only: evaluation_criteria_fields)
@@ -131,7 +136,7 @@ class SubmissionDetailsResolver < ApplicationQuery
     submission_criteria =
       EvaluationCriterion
         .joins(timeline_event_grades: :timeline_event)
-        .where(timeline_events: { id: submissions_from_same_set_of_students })
+        .where(timeline_events: { id: unique_submissions_by_target_and_owners })
         .distinct
         .as_json(only: evaluation_criteria_fields)
 
@@ -153,26 +158,22 @@ class SubmissionDetailsResolver < ApplicationQuery
 
     return true if current_school_admin.present?
 
-    cohort_assigned_to_coach?
+    user_is_a_coach_assigned_to_cohort?
   end
 
-  def cohort_assigned_to_coach?
-    @cohort_assigned_to_coach ||=
+  def user_is_a_coach_assigned_to_cohort?
+    @user_is_a_coach_assigned_to_cohort ||=
       current_user.faculty&.cohorts&.exists?(
         id: submission.students.first.cohort_id
       ) || false
   end
 
-  def inactive_students
-    submission.students.count != submission.students.active.count
-  end
-
-  def students_have_same_team
+  def submission_owners_are_from_same_team?
     Student.where(id: student_ids).distinct(:team_id).pluck(:team_id).one?
   end
 
   def team_name
-    if submission.team_submission? && students_have_same_team &&
+    if submission.team_submission? && submission_owners_are_from_same_team? &&
          !student_ids.one?
       Student.find_by(id: student_ids.first).team.name
     end

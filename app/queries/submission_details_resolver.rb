@@ -38,7 +38,7 @@ class SubmissionDetailsResolver < ApplicationQuery
     days_elapsed_since_submission =
       (Time.zone.now - submission.created_at) / 1.day
     days_elapsed_since_submission <
-      allowed_days_for_reviewing_an_inactive_submission.days
+      allowed_days_for_reviewing_an_inactive_submission
   end
 
   def can_the_submission_be_reviewed?

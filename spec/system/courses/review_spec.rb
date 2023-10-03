@@ -821,7 +821,7 @@ feature "Coach's review interface" do
       )
     end
 
-    scenario "can view all the submissions", js: true do
+    scenario "admin can view all submissions", js: true do
       sign_in_user school_admin.user, referrer: review_course_path(course)
 
       expect(page).to have_title("Review | #{course.name}")
@@ -854,7 +854,7 @@ feature "Coach's review interface" do
         )
       end
 
-      scenario "can access inactive submission", js: true do
+      scenario "admin can access inactive submissions", js: true do
         sign_in_user school_admin.user, referrer: review_course_path(course)
 
         expect(page).to have_content("Showing all 7 submissions")
@@ -867,7 +867,7 @@ feature "Coach's review interface" do
       end
     end
 
-    scenario "can access submissions from review dashboard", js: true do
+    scenario "admin can access the review page for a submission", js: true do
       sign_in_user school_admin.user, referrer: review_course_path(course)
 
       within("a[data-submission-id='#{submission_l3_t3.id}']") do

@@ -501,7 +501,7 @@ feature "Course students report", js: true do
       expect(page).to have_content(target_l1.title)
     end
 
-    scenario "admin cannot access the student report belongs to school 2" do
+    scenario "admin cannot access the report of a student belonging to another school" do
       sign_in_user school_admin.user,
                    referrer: student_report_path(school_2_student)
 
@@ -511,10 +511,10 @@ feature "Course students report", js: true do
     end
   end
 
-  context "when a user is a student" do
+  context "when the user is a student" do
     let(:student_2) { create :student }
 
-    scenario "can not access another student's report" do
+    scenario "student cannot access another student's report" do
       sign_in_user student.user, referrer: student_report_path(student_2)
       expect(page).to have_content(
         "The page you were looking for doesn't exist"

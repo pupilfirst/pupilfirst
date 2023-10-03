@@ -10,7 +10,7 @@ module Types
           TimelineEvent
             .includes(reviewer: :user)
             .where(id: submission_ids)
-            .each do |submission|
+            .find_each do |submission|
               loader.call(submission.id, submission.reviewer)
             end
         end

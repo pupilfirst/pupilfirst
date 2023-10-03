@@ -66,7 +66,7 @@ class DailyDigestService
 
     Topic
       .where(id: sorted_reactivated_topic_ids)
-      .each { |topic| cache_topic_details(topic, :reactivated) }
+      .find_each { |topic| cache_topic_details(topic, :reactivated) }
 
     sort_cached_reactivated_topics(sorted_reactivated_topic_ids)
   end

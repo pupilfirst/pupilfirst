@@ -33,7 +33,7 @@ module Types
         .batch do |cohort_ids, loader|
           Cohort
             .where(id: cohort_ids)
-            .each { |cohort| loader.call(cohort.id, cohort) }
+            .find_each { |cohort| loader.call(cohort.id, cohort) }
         end
     end
 
@@ -44,7 +44,7 @@ module Types
           Cohort
             .joins(:course)
             .where(id: cohort_ids)
-            .each { |cohort| loader.call(cohort.id, cohort.course) }
+            .find_each { |cohort| loader.call(cohort.id, cohort.course) }
         end
     end
 
@@ -52,7 +52,7 @@ module Types
       BatchLoader::GraphQL
         .for(object.user_id)
         .batch do |user_ids, loader|
-          User.where(id: user_ids).each { |user| loader.call(user.id, user) }
+          User.where(id: user_ids).find_each { |user| loader.call(user.id, user) }
         end
     end
 
@@ -82,7 +82,7 @@ module Types
           FacultyStudentEnrollment
             .joins(:faculty)
             .where(student_id: student_ids)
-            .each do |enrollment|
+            .find_each do |enrollment|
               loader.call(enrollment.student_id) do |memo|
                 memo |= [enrollment.faculty].compact # rubocop:disable Lint/UselessAssignment
               end

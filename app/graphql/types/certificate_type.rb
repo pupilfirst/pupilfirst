@@ -18,7 +18,7 @@ module Types
         .batch do |course_ids, loader|
           Course
             .where(id: course_ids)
-            .each { |course| loader.call(course.id, course) }
+            .find_each { |course| loader.call(course.id, course) }
         end
     end
   end

@@ -3,7 +3,7 @@ namespace :leaderboard_entries do
   task :create, %i[course_name] => [:environment] do
     lts = LeaderboardTimeService.new
 
-    Course.where(enable_leaderboard: true).each do |course|
+    Course.where(enable_leaderboard: true).find_each do |course|
       Courses::CreateLeaderboardEntriesService.new(course).execute(lts.week_start, lts.week_end)
     end
   end

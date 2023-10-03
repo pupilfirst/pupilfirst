@@ -22,7 +22,7 @@ module Types
           User
             .includes(avatar_attachment: :blob)
             .where(id: user_ids)
-            .each do |user|
+            .find_each do |user|
               if user.avatar.attached?
                 url =
                   Rails.application.routes.url_helpers.rails_public_blob_url(

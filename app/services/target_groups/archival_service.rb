@@ -11,7 +11,7 @@ module TargetGroups
           .targets
           .live
           .or(@target_group.targets.draft)
-          .each do |target|
+          .find_each do |target|
             Targets::UpdateVisibilityService.new(
               target,
               Target::VISIBILITY_ARCHIVED

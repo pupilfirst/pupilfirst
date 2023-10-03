@@ -18,7 +18,7 @@ module Types
           User
             .includes(avatar_attachment: :blob)
             .where(id: user_ids)
-            .each do |user|
+            .find_each do |user|
               if user.avatar.attached?
                 url =
                   Rails.application.routes.url_helpers.rails_public_blob_url(
@@ -36,7 +36,7 @@ module Types
         .batch do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.preferred_name) }
+            .find_each { |user| loader.call(user.id, user.preferred_name) }
         end
     end
 
@@ -46,7 +46,7 @@ module Types
         .batch do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.name) }
+            .find_each { |user| loader.call(user.id, user.name) }
         end
     end
 
@@ -56,7 +56,7 @@ module Types
         .batch do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.full_title) }
+            .find_each { |user| loader.call(user.id, user.full_title) }
         end
     end
   end

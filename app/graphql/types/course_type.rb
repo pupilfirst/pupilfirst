@@ -88,7 +88,9 @@ module Types
           Course
             .includes(:default_cohort)
             .where(id: course_ids)
-            .each { |course| loader.call(course.id, course.default_cohort) }
+            .find_each do |course|
+              loader.call(course.id, course.default_cohort)
+            end
         end
     end
 
@@ -98,7 +100,7 @@ module Types
         .batch(default_value: []) do |course_ids, loader|
           Certificate
             .where(course_id: course_ids)
-            .each do |certificate|
+            .find_each do |certificate|
               loader.call(certificate.course_id) do |memo|
                 memo |= [certificate].compact # rubocop:disable Lint/UselessAssignment
               end
@@ -112,7 +114,7 @@ module Types
         .batch(default_value: []) do |course_ids, loader|
           Cohort
             .where(course_id: course_ids)
-            .each do |cohort|
+            .find_each do |cohort|
               loader.call(cohort.course_id) do |memo|
                 memo |= [cohort].compact # rubocop:disable Lint/UselessAssignment
               end
@@ -126,7 +128,7 @@ module Types
         .batch(default_value: []) do |course_ids, loader|
           Level
             .where(course_id: course_ids)
-            .each do |level|
+            .find_each do |level|
               loader.call(level.course_id) do |memo|
                 memo |= [level].compact # rubocop:disable Lint/UselessAssignment
               end
@@ -141,7 +143,7 @@ module Types
           FacultyCohortEnrollment
             .includes(%i[cohort faculty])
             .where(cohort: { course_id: course_ids })
-            .each do |enrollment|
+            .find_each do |enrollment|
               loader.call(enrollment.cohort.course_id) do |memo|
                 memo |= [enrollment.faculty].compact # rubocop:disable Lint/UselessAssignment
               end
@@ -156,7 +158,7 @@ module Types
           Course
             .includes(thumbnail_attachment: :blob)
             .where(id: course_ids)
-            .each do |course|
+            .find_each do |course|
               if course.cover.attached?
                 loader.call(course.id, image_details(course.thumbnail))
               end
@@ -171,7 +173,7 @@ module Types
           Course
             .includes(cover_attachment: :blob)
             .where(id: course_ids)
-            .each do |course|
+            .find_each do |course|
               if course.cover.attached?
                 loader.call(course.id, image_details(course.cover))
               end

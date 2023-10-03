@@ -18,7 +18,7 @@ module Types
         .batch do |target_ids, loader|
           Target
             .where(id: target_ids)
-            .each { |target| loader.call(target.id, target.title) }
+            .find_each { |target| loader.call(target.id, target.title) }
         end
       # object.target.title
     end
@@ -29,7 +29,7 @@ module Types
         .batch do |target_ids, loader|
           Target
             .where(id: target_ids)
-            .each { |target| loader.call(target.id, target.milestone_number) }
+            .find_each { |target| loader.call(target.id, target.milestone_number) }
         end
       # object.target.milestone_number
     end
@@ -41,7 +41,7 @@ module Types
           TimelineEvent
             .includes(students: %i[user])
             .where(id: submission_ids)
-            .each do |submission|
+            .find_each do |submission|
               loader.call(
                 submission.id,
                 submission
@@ -61,7 +61,7 @@ module Types
           TimelineEvent
             .includes(:startup_feedback)
             .where(id: submission_ids)
-            .each do |submission|
+            .find_each do |submission|
               loader.call(submission.id, submission.startup_feedback.present?)
             end
         end
@@ -86,7 +86,7 @@ module Types
           TimelineEvent
             .includes(:timeline_event_owners, students: %i[team])
             .where(id: submission_ids)
-            .each do |submission|
+            .find_each do |submission|
               loader.call(submission.id, resolve_team_name(submission))
             end
         end

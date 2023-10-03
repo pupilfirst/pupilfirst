@@ -22,7 +22,7 @@ module Users
 
       User
         .where(id: users_to_notify_deletion)
-        .each do |user|
+        .find_each do |user|
           UserMailer.account_deletion_notification(
             user,
             login_url(user.school),
@@ -39,7 +39,7 @@ module Users
 
       User
         .where(id: users_to_delete)
-        .each { |user| Users::DeleteAccountJob.perform_later(user) }
+        .find_each { |user| Users::DeleteAccountJob.perform_later(user) }
     end
 
     def applicable_schools

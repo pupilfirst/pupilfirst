@@ -12,12 +12,12 @@ module Cohorts
         faculty
           .faculty_student_enrollments
           .where(student: students_in_cohorts)
-          .each(&:destroy!)
+          .find_each(&:destroy!)
 
         faculty
           .faculty_cohort_enrollments
           .where(cohort: @course.cohorts)
-          .each(&:destroy!)
+          .find_each(&:destroy!)
       end
     end
   end

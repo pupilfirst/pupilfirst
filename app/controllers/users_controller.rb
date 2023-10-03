@@ -92,7 +92,7 @@ class UsersController < ApplicationController
       current_school
         .school_admins
         .where.not(user_id: user.id)
-        .each do |admin|
+        .find_each do |admin|
           SchoolAdminMailer.email_updated_notification(
             admin,
             user,

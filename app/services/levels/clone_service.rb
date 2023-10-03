@@ -142,7 +142,7 @@ module Levels
         old_quiz
           .quiz_questions
           .includes(:answer_options)
-          .each do |old_quiz_question|
+          .find_each do |old_quiz_question|
             new_quiz_question =
               QuizQuestion.create!(
                 question: old_quiz_question.question,

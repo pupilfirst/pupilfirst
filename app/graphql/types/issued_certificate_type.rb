@@ -17,7 +17,7 @@ module Types
         .batch do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.name) }
+            .find_each { |user| loader.call(user.id, user.name) }
         end
     end
 
@@ -27,7 +27,7 @@ module Types
         .batch do |certificate_ids, loader|
           Certificate
             .where(id: certificate_ids)
-            .each { |certificate| loader.call(certificate.id, certificate) }
+            .find_each { |certificate| loader.call(certificate.id, certificate) }
         end
     end
 
@@ -37,7 +37,7 @@ module Types
         .batch do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.name) }
+            .find_each { |user| loader.call(user.id, user.name) }
         end
     end
 
@@ -47,7 +47,7 @@ module Types
         .batch(default_value: 'Auto-issued') do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.name) }
+            .find_each { |user| loader.call(user.id, user.name) }
         end
     end
   end

@@ -71,7 +71,7 @@ feature "Teams Index", js: true do
 
     def safe_random_teams
       @selected_teams_ids ||= []
-      team = Team.all.where.not(id: @selected_teams_ids).order("random()").first
+      team = Team.where.not(id: @selected_teams_ids).order("random()").first
       @selected_teams_ids << team.id
       team
     end

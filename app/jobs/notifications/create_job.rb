@@ -17,7 +17,7 @@ module Notifications
 
       users
         .where.not(id: actor.id)
-        .each do |recipient|
+        .find_each do |recipient|
           I18n.with_locale(recipient.locale) do
             notification =
               Notification.create!(

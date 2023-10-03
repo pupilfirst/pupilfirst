@@ -457,7 +457,7 @@ feature "Course students report", js: true do
     team
       .students
       .where.not(id: student)
-      .each do |teammate|
+      .find_each do |teammate|
         expect(page).to have_link(
           teammate.name,
           href: "/students/#{teammate.id}/report"

@@ -17,7 +17,7 @@ module Types
 
     def creator
       BatchLoader::GraphQL.for(object.id).batch do |topic_ids, loader|
-        Topic.includes(first_post: :creator).where(id: topic_ids).each do |topic|
+        Topic.includes(first_post: :creator).where(id: topic_ids).find_each do |topic|
           loader.call(topic.id, topic.first_post.creator)
         end
       end
@@ -27,7 +27,7 @@ module Types
 
     def solved
       BatchLoader::GraphQL.for(object.id).batch(default_value: false) do |topic_ids, loader|
-        Post.where(topic_id: topic_ids, solution: true).each do |post|
+        Post.where(topic_id: topic_ids, solution: true).find_each do |post|
           loader.call(post.topic_id, true)
         end
       end
@@ -50,7 +50,7 @@ module Types
 
     def participants
       BatchLoader::GraphQL.for(object.id).batch(default_value: []) do |topic_ids, loader|
-        Post.includes(:creator).where(topic_id: topic_ids).where('post_number < ?', 4).each do |post|
+        Post.includes(:creator).where(topic_id: topic_ids).where('post_number < ?', 4).find_each do |post|
           loader.call(post.topic_id) { |memo| memo |= [post.creator].compact } # rubocop:disable Lint/UselessAssignment
         end
       end

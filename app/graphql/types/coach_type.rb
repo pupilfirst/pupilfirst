@@ -23,7 +23,9 @@ module Types
       BatchLoader::GraphQL
         .for(object.user_id)
         .batch(default_value: []) do |user_ids, loader|
-          User.where(id: user_ids).each { |user| loader.call(user.id, user) }
+          User
+            .where(id: user_ids)
+            .find_each { |user| loader.call(user.id, user) }
         end
     end
 

@@ -54,7 +54,7 @@ module Users
           .pluck(:id)
 
       @user.students.each(&:destroy!)
-      Team.where(id: team_ids).each(&:destroy!)
+      Team.where(id: team_ids).find_each(&:destroy!)
     end
 
     def delete_coach_profile

@@ -17,7 +17,7 @@ module Types
           Cohort
             .joins(:course)
             .where(id: cohort_ids)
-            .each { |cohort| loader.call(cohort.id, cohort.course) }
+            .find_each { |cohort| loader.call(cohort.id, cohort.course) }
         end
     end
 

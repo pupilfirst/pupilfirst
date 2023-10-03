@@ -12,7 +12,7 @@ module Types
           Team
             .includes(:students)
             .where(id: team_ids)
-            .each { |team| loader.call(team.id, team.students) }
+            .find_each { |team| loader.call(team.id, team.students) }
         end
     end
 
@@ -22,7 +22,7 @@ module Types
         .batch(default_value: []) do |cohort_ids, loader|
           Cohort
             .where(id: cohort_ids)
-            .each { |cohort| loader.call(cohort.id, cohort) }
+            .find_each { |cohort| loader.call(cohort.id, cohort) }
         end
     end
   end

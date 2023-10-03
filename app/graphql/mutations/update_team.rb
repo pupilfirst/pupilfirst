@@ -13,15 +13,15 @@ module Mutations
              }
     argument :student_ids, [ID], required: true
 
-    description 'Update a new team'
+    description "Update a new team"
 
     field :team, Types::TeamType, null: true
 
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.update_team.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.update_team.success_notification")
       )
 
       { cohort: update_team }
@@ -40,7 +40,7 @@ module Mutations
       def size_grater_than_two
         return if @value[:student_ids].count >= 2
 
-        'The team should have at least two students'
+        "The team should have at least two students"
       end
 
       def students_should_belong_to_the_same_cohort
@@ -57,7 +57,7 @@ module Mutations
           return
         end
 
-        'Each student should belong to the same cohort and should not be in a team'
+        "Each student should belong to the same cohort and should not be in a team"
       end
     end
 
@@ -73,7 +73,7 @@ module Mutations
         team
           .students
           .where.not(id: @params[:student_ids])
-          .each { |student| student.update!(team_id: nil) }
+          .find_each { |student| student.update!(team_id: nil) }
 
         old_team = team.students.pluck(:id)
 

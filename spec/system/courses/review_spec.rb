@@ -780,7 +780,7 @@ feature "Coach's review interface" do
       )
     end
 
-    # Create a couple of pending submissions for the teams.
+    # Create pending submissions for teams
     let!(:submission_l1_t1) do
       create(
         :timeline_event,

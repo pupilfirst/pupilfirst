@@ -520,5 +520,13 @@ feature "Course students report", js: true do
         "The page you were looking for doesn't exist"
       )
     end
+
+    scenario "student cannot access their own report" do
+      sign_in_user student.user, referrer: student_report_path(student)
+
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
+    end
   end
 end

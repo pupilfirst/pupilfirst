@@ -1339,7 +1339,7 @@ feature "Submission review overlay", js: true do
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
     end
 
-    scenario "school admin cannot add feedback" do
+    scenario "school admin cannot add feedback or undo grading on a previously reviewed submission" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 
@@ -1350,18 +1350,6 @@ feature "Submission review overlay", js: true do
       )
 
       expect(page).to have_button("Add feedback", disabled: true)
-    end
-
-    scenario "school admin cannot undo grading" do
-      sign_in_user school_admin.user,
-                   referrer: review_timeline_event_path(submission_reviewed)
-
-      expect(page).to have_text("Submission #1")
-
-      expect(page).to have_text(
-        "You cannot review this submission as you're not assigned to this cohort as a coach."
-      )
-
       expect(page).to have_button("Undo Grading", disabled: true)
     end
 

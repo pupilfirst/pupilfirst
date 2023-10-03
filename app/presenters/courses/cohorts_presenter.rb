@@ -1,7 +1,7 @@
 class Courses::CohortsPresenter < ApplicationPresenter
   def initialize(view_context, course, status)
     @course = course
-    @status = status || "active"
+    @status = status == "ended" ? "ended" : "active"
     super(view_context)
   end
 
@@ -10,8 +10,6 @@ class Courses::CohortsPresenter < ApplicationPresenter
   end
 
   def cohorts
-    validate_status
-
     @cohorts ||=
       if current_school_admin.present?
         @course.cohorts
@@ -26,10 +24,8 @@ class Courses::CohortsPresenter < ApplicationPresenter
     paged
   end
 
-  def validate_status
-    return if %w[active ended].include?(@status)
-
-    raise ArgumentError, "Invalid status #{@status}"
+  def status
+    @status
   end
 
   def page_title

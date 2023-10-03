@@ -8,8 +8,6 @@ class CoachNotesResolver < ApplicationQuery
   def authorized?
     return false if student&.school != current_school
 
-    return false if current_user.blank?
-
     return true if current_school_admin.present?
 
     current_user.faculty.cohorts.exists?(id: student&.cohort_id)

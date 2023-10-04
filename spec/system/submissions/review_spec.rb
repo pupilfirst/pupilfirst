@@ -1112,7 +1112,9 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
       click_button "Save grades"
 
-      expect(page).to have_text("There are no similar pending submissions.")
+      expect(page).to have_text(
+        "This submission has been graded, and there are no more submissions awaiting review."
+      )
     end
   end
 

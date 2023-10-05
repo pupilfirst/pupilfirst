@@ -18,6 +18,7 @@ class School < ApplicationRecord
   has_many :audit_records, dependent: :destroy
   has_many :calendars, through: :courses
   has_many :calendar_events, through: :calendars
+  has_many :standings, dependent: :destroy
 
   acts_as_taggable_on :student_tags
   acts_as_taggable_on :user_tags

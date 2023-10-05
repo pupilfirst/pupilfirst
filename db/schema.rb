@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_12_104319) do
+ActiveRecord::Schema.define(version: 2023_10_05_185509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -540,6 +540,18 @@ ActiveRecord::Schema.define(version: 2023_09_12_104319) do
     t.jsonb "configuration", default: {}, null: false
   end
 
+  create_table "standings", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.text "description"
+    t.boolean "default"
+    t.bigint "school_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name", "school_id"], name: "index_standings_on_name_and_school_id", unique: true
+    t.index ["school_id"], name: "index_standings_on_school_id"
+  end
+
   create_table "startup_feedback", id: :serial, force: :cascade do |t|
     t.text "feedback"
     t.string "reference_url"
@@ -902,6 +914,7 @@ ActiveRecord::Schema.define(version: 2023_09_12_104319) do
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
+  add_foreign_key "standings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "students", "cohorts"

@@ -1,11 +1,14 @@
 FactoryBot.define do
   factory :timeline_event_file do
-    transient do
-      file_path { 'files/pdf-sample.pdf' }
-    end
+    transient { file_path { "files/pdf-sample.pdf" } }
 
-    sequence(:title) { |i| [Faker::Lorem.word, i].join ' ' }
-    file { Rack::Test::UploadedFile.new(Rails.root.join("spec/support/uploads/#{file_path}")) }
+    sequence(:title) { |i| [Faker::Lorem.word, i].join " " }
+    file do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join("spec/support/uploads/#{file_path}")
+      )
+    end
+    user
     timeline_event
   end
 end

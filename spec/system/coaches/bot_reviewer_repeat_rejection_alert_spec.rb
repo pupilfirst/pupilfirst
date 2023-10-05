@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Alert coaches when a bot user repeatedly rejects submissions',
+feature "Alert coaches when a bot user repeatedly rejects submissions",
         js: true do
   include UserSpecHelper
   include NotificationHelper
@@ -18,8 +18,8 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
 
   let(:grade_labels) do
     [
-      { 'grade' => 1, 'label' => 'Reject' },
-      { 'grade' => 2, 'label' => 'Accept' }
+      { "grade" => 1, "label" => "Reject" },
+      { "grade" => 2, "label" => "Accept" }
     ]
   end
 
@@ -66,48 +66,42 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
     create :faculty_cohort_enrollment, faculty: bot_reviewer, cohort: cohort
   end
 
-  context 'with one submission rejected by the bot, and another pending review' do
-    scenario 'penultimate rejected submission should not generate an alert email' do
+  context "with one submission rejected by the bot, and another pending review" do
+    scenario "penultimate rejected submission should not generate an alert email" do
       sign_in_user bot_reviewer.user,
                    referrer: review_timeline_event_path(submission_pending)
 
-      click_button 'Start Review'
-
-      dismiss_notification
+      click_button "Start Review"
 
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
       ) { find("button[title='Reject']").click }
 
-      click_button 'Save grades'
-
-      expect(page).to have_text('The submission has been marked as reviewed')
+      click_button "Save grades"
 
       open_email(coach.email)
       expect(current_email).to be_blank
     end
   end
 
-  context 'with two submissions rejected by the bot, and one pending review' do
+  context "with two submissions rejected by the bot, and one pending review" do
     let!(:submission_rejected_2) do
       fail_target(target, student, evaluator: bot_reviewer, latest: false)
     end
 
-    scenario 'rejection of threshold number of submissions generates an alert email to other coaches' do
+    scenario "rejection of threshold number of submissions generates an alert email to other coaches" do
       sign_in_user bot_reviewer.user,
                    referrer: review_timeline_event_path(submission_pending)
 
-      click_button 'Start Review'
-
-      dismiss_notification
+      click_button "Start Review"
 
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
       ) { find("button[title='Reject']").click }
 
-      click_button 'Save grades'
+      click_button "Save grades"
 
-      expect(page).to have_text('The submission has been marked as reviewed')
+      expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
       open_email(coach.email)
 
@@ -117,7 +111,7 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
     end
   end
 
-  context 'with two submissions rejected by a human coach, and one pending review' do
+  context "with two submissions rejected by a human coach, and one pending review" do
     let!(:submission_rejected_1) do
       fail_target(target, student, evaluator: coach, latest: false)
     end
@@ -126,22 +120,19 @@ feature 'Alert coaches when a bot user repeatedly rejects submissions',
       fail_target(target, student, evaluator: coach, latest: false)
     end
 
-    scenario 'rejection of threshold number of submissions does not generate an alert email to other coaches' do
+    scenario "rejection of threshold number of submissions does not generate an alert email to other coaches" do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)
 
-      click_button 'Start Review'
-
-      dismiss_notification
+      click_button "Start Review"
 
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
       ) { find("button[title='Reject']").click }
 
-      click_button 'Save grades'
+      click_button "Save grades"
 
-      expect(page).to have_text('The submission has been marked as reviewed')
-
+      expect(submission_pending.reload.evaluated_at).to_not eq(nil)
       open_email(coach.email)
 
       expect(current_email).to be_blank

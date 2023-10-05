@@ -7,6 +7,11 @@ class CourseExport < ApplicationRecord
 
   has_one_attached :file
 
+  validates_with RateLimitValidator,
+                 limit: 25,
+                 scope: :course_id,
+                 time_frame: 1.hour
+
   EXPORT_TYPE_STUDENTS = -"Students"
   EXPORT_TYPE_TEAMS = -"Teams"
 

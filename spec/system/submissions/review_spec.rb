@@ -1955,7 +1955,7 @@ feature "Submission review overlay", js: true do
     end
   end
 
-  context "When a milestone submission is ungraded after certificate is issued" do
+  context "When a milestone submission is ungraded after the course is marked complete for a student" do
     let(:target_3) do
       create :target,
              :for_students,

@@ -736,10 +736,6 @@ ru:
       feedback: Отзыв
       feedback_generated_text: Отзыв, полученный из списка оценки.
       feedback_placeholder: Данный отзыв будет отправлен учащимся по электронной почте, когда вы завершите оценку.
-      get_next_submission:
-        notice:
-          done: Сделано!
-          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -747,6 +743,7 @@ ru:
       grade_card: Оценочная Карта
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
       hide_test_report_button: Hide Test Report
+      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
@@ -776,6 +773,7 @@ ru:
       team_notice: " Это заявление от команды, поэтому добавленная здесь заметка будет опубликована в отчете всех студентов в команде."
       undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
       undo_grading: Отменить Оценивание
+      you_are_done: "You're done!"
       write_a_note: Написать Заметку
     CoursesReview__ReviewerManager:
       assigned_at: Назначен в %{date}

@@ -724,10 +724,6 @@ hi:
       feedback: प्रतिपुष्टि
       feedback_generated_text: समीक्षा चेकलिस्ट से उत्पन्न प्रतिक्रिया।
       feedback_placeholder: जब आप ग्रेडिंग समाप्त कर लेंगे तो यह फीडबैक छात्रों को ईमेल कर दिया जाएगा।
-      get_next_submission:
-        notice:
-          done: पूर्ण!
-          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -735,6 +731,7 @@ hi:
       grade_card: ग्रेड कार्ड
       help_text: नोट्स का उपयोग %{note_about}की प्रगति पर नज़र रखने के लिए किया जा सकता है। ये नोट केवल एक छात्र की रिपोर्ट में कोचों को दिखाए जाते हैं। %{additional_help}
       hide_test_report_button: Hide Test Report
+      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
@@ -764,6 +761,7 @@ hi:
       team_notice: " यह सबमिशन एक टीम की ओर से है, इसलिए यहां जोड़ा गया एक नोट टीम के सभी छात्रों की रिपोर्ट में पोस्ट किया जाएगा।"
       undo_grade_warning: क्या आप वाकई इन ग्रेड को हटाना चाहते हैं? यह सबमिशन को 'लंबित समीक्षा' स्थिति में लौटा देगा।
       undo_grading: ग्रेडिंग पूर्ववत करें
+      you_are_done: "You're done!"
       write_a_note: एक लेख लिखो
     CoursesReview__ReviewerManager:
       assigned_at: असाइन किया गया %{date}

@@ -724,10 +724,6 @@ ml:
       feedback: പ്രതികരണം
       feedback_generated_text: അവലോകന ചെക്ക്‌ലിസ്റ്റിൽ നിന്ന് ഫീഡ്‌ബാക്ക് സൃഷ്‌ടിച്ചു.
       feedback_placeholder: നിങ്ങൾ ഗ്രേഡിംഗ് പൂർത്തിയാക്കുമ്പോൾ ഈ ഫീഡ്‌ബാക്ക് വിദ്യാർത്ഥികൾക്ക് ഇമെയിൽ ചെയ്യും.
-      get_next_submission:
-        notice:
-          done: ചെയ്തു!
-          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -735,6 +731,7 @@ ml:
       grade_card: ഗ്രേഡ് കാർഡ്
       help_text: '%{note_about}ന്റെ പുരോഗതി ട്രാക്ക് ചെയ്യാൻ കുറിപ്പുകൾ ഉപയോഗിക്കാം. ഈ കുറിപ്പുകൾ ഒരു വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ടിൽ പരിശീലകർക്ക് മാത്രം കാണിക്കുന്നു. %{additional_help}'
       hide_test_report_button: Hide Test Report
+      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: ഈ സമർപ്പണം അവലോകനം ചെയ്യുമ്പോൾ നിങ്ങൾ എന്തെങ്കിലും ശ്രദ്ധിച്ചോ?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
@@ -764,6 +761,7 @@ ml:
       team_notice: " ഈ സമർപ്പിക്കൽ ഒരു ടീമിൽ നിന്നുള്ളതാണ്, അതിനാൽ ഇവിടെ ചേർത്ത ഒരു കുറിപ്പ് ടീമിലെ എല്ലാ വിദ്യാർത്ഥികളുടെയും റിപ്പോർട്ടിൽ പോസ്റ്റ് ചെയ്യും."
       undo_grade_warning: ഈ ഗ്രേഡുകൾ നീക്കം ചെയ്യണമെന്ന് തീർച്ചയാണോ? ഇത് സമർപ്പണത്തെ 'തീർച്ചപ്പെടുത്താത്ത അവലോകനം' നിലയിലേക്ക് തിരികെ കൊണ്ടുവരും.
       undo_grading: ഗ്രേഡിംഗ് പഴയപടിയാക്കുക
+      you_are_done: "You're done!"
       write_a_note: ഒരു കുറിപ്പ് എഴുതുക
     CoursesReview__ReviewerManager:
       assigned_at: '%{date}അസൈൻ ചെയ്‌തു'

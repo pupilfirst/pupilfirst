@@ -724,10 +724,6 @@ ta:
       feedback: பின்னூட்டம்
       feedback_generated_text: மதிப்பாய்வு சரிபார்ப்புப் பட்டியலில் இருந்து கருத்து உருவாக்கப்பட்டது.
       feedback_placeholder: நீங்கள் கிரேடிங் முடிந்ததும் இந்தக் கருத்து மாணவர்களுக்கு மின்னஞ்சலில் அனுப்பப்படும்.
-      get_next_submission:
-        notice:
-          done: முடிந்தது!
-          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -735,6 +731,7 @@ ta:
       grade_card: தர அட்டை
       help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
       hide_test_report_button: Hide Test Report
+      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
@@ -764,6 +761,7 @@ ta:
       team_notice: " இந்தச் சமர்ப்பிப்பு ஒரு குழுவிடமிருந்து வந்தது, எனவே இங்கு சேர்க்கப்பட்ட குறிப்பு, குழுவில் உள்ள அனைத்து மாணவர்களின் அறிக்கையிலும் இடுகையிடப்படும்."
       undo_grade_warning: இந்த கிரேடுகளை நிச்சயமாக அகற்ற விரும்புகிறீர்களா? இது சமர்ப்பிப்பை 'நிலுவையில் உள்ள மதிப்பாய்வு' நிலைக்குத் திருப்பும்.
       undo_grading: கிரேடிங்கை செயல்தவிர்
+      you_are_done: "You're done!"
       write_a_note: ஒரு குறிப்பு எழுதவும்
     CoursesReview__ReviewerManager:
       assigned_at: ஒதுக்கப்பட்டது %{date}

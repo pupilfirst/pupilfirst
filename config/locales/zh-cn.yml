@@ -757,10 +757,6 @@ zh-cn:
       feedback: 反馈
       feedback_generated_text: 来自审查清单的反馈。
       feedback_placeholder: 完成评分后，此反馈将通过电子邮件发送给学生。
-      get_next_submission:
-        notice:
-          done: 完成
-          done_description: 没有其他类似的提交。
       github_action:
         description: 你想要重新运行这个提交的 Github action 吗？
         re_run_action_button: 重新运行 Github Action

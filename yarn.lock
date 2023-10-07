@@ -664,6 +664,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emoji-mart/react@npm:^1.0.6":
+  version: 1.1.1
+  resolution: "@emoji-mart/react@npm:1.1.1"
+  peerDependencies:
+    emoji-mart: ^5.2
+    react: ^16.8 || ^17 || ^18
+  checksum: def4dddaa01ce88c396510d84d1878b881fe0f9c484a836a50e3db784a91ab98edf94816cff503b4d1cab7b00400a01c87e32d19dee2d950f64ef9243f79101e
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm64@npm:0.17.16":
   version: 0.17.16
   resolution: "@esbuild/android-arm64@npm:0.17.16"
@@ -9056,6 +9066,7 @@ __metadata:
     "@babel/core": ^7.19.0
     "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#esm"
     "@emoji-mart/data": ^1.0.6
+    "@emoji-mart/react": ^1.0.6
     "@fortawesome/fontawesome-free": ^5.15.4
     "@glennsl/bs-json": ^5.0.4
     "@jeff-tian/markdown-it-katex": ^2.1.0

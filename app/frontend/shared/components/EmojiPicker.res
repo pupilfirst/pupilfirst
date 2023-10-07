@@ -31,7 +31,7 @@ let make = (~className, ~title, ~onChange) => {
   let wrapperRef = React.useRef(Js.Nullable.null)
   let (isOpen, setIsOpen) = React.useState(_ => false)
 
-  React.useEffect1(() => {
+  React.useEffect0(() => {
     let handleClickOutside: Dom.mouseEvent => unit = event => {
       switch wrapperRef.current->Js.Nullable.toOption {
       | Some(wrapper) =>
@@ -63,7 +63,7 @@ let make = (~className, ~title, ~onChange) => {
         document |> Document.removeClickEventListener(handleClickOutside)
       },
     )
-  }, [onChange])
+  })
 
   <div className="sm:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
     <button

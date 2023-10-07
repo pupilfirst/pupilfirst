@@ -32,7 +32,7 @@ let make = (~className, ~title, ~onChange) => {
   let wrapperRef = React.useRef(Js.Nullable.null)
   let (isOpen, setIsOpen) = React.useState(_ => false)
 
-  React.useEffect0(() => {
+  React.useEffect1(() => {
     picker({
       title: title,
       ref: ref,
@@ -75,7 +75,7 @@ let make = (~className, ~title, ~onChange) => {
         document |> Document.removeClickEventListener(handleClickOutside)
       },
     )
-  })
+  }, [onChange])
 
   <div className="sm:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
     <button

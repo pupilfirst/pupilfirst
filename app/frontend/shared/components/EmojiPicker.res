@@ -7,16 +7,6 @@ type emojiEvent = {
   shortcodes: string,
 }
 
-type args = {
-  title: string,
-  ref: React.ref<Js.Nullable.t<Dom.element>>,
-  theme: string,
-  onEmojiSelect: emojiEvent => unit,
-  data: Js.Json.t,
-}
-
-@module("emoji-mart") @new external picker: args => unit = "Picker"
-
 @module("@emoji-mart/data") external data: Js.Json.t = "default"
 
 module Picker = {

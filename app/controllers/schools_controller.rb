@@ -1,6 +1,6 @@
 class SchoolsController < ApplicationController
   before_action :authenticate_user!
-  layout 'school'
+  layout "school"
 
   # Enforce authorization with Pundit in all school administration routes.
   after_action :verify_authorized
@@ -25,7 +25,7 @@ class SchoolsController < ApplicationController
 
       render json: image_details
     else
-      render json: { error: form.errors.full_messages.join(', ') }
+      render json: { error: form.errors.full_messages.join(", ") }
     end
   end
 
@@ -34,9 +34,14 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
+  # GET /school/coc
+  def coc
+    authorize current_school
+  end
+
   # GET /school/
   def school_router
     authorize current_school
-    render html: '', layout: 'school_router'
+    render html: "", layout: "school_router"
   end
 end

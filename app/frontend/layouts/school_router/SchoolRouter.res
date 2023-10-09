@@ -32,6 +32,7 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "customize"} => (Settings(Customization), None)
   | list{"school", "communities"} => (Communities, None)
   | list{"school", "admins"} => (Settings(Admins), None)
+  | list{"school", "coc"} => (Settings(CoC), None)
   | list{"school"}
   | list{"school", "courses"}
   | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root school />))

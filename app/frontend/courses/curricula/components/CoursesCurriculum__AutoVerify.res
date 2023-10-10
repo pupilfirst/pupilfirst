@@ -20,7 +20,7 @@ module AutoVerifySubmissionQuery = %graphql(`
 let redirect = link => {
   let window = Webapi.Dom.window
 
-  window |> Webapi.Dom.Window.open_(~url=link, ~name="_blank", ~features="") |> ignore
+  Webapi.Dom.Window.open_(window, ~url=link, ~name="_blank", ~features="", ())->ignore
 }
 
 let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
@@ -55,7 +55,10 @@ let createAutoVerifySubmission = (target, linkToComplete, setSaving, addSubmissi
 }
 
 let completeButtonText = (title, iconClasses) =>
-  <span> <FaIcon classes={iconClasses ++ " me-2"} /> {title |> str} </span>
+  <span>
+    <FaIcon classes={iconClasses ++ " me-2"} />
+    {title |> str}
+  </span>
 
 let previewLinkToComplete = link =>
   <a
@@ -63,11 +66,12 @@ let previewLinkToComplete = link =>
     target="_blank"
     className="block text-primary-500 w-full text-center bg-gray-50 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
     <span>
-      <FaIcon classes="fas fa-external-link-alt me-2 rtl:-rotate-90" /> {tr("visit_link") |> str}
+      <FaIcon classes="fas fa-external-link-alt me-2 rtl:-rotate-90" />
+      {tr("visit_link") |> str}
     </span>
   </a>
 
-let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, preview) =>
+let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, preview) => {
   /* Handle special case for preview mode with link to complete */
   switch (preview, linkToComplete) {
   | (true, Some(link)) => previewLinkToComplete(link)
@@ -83,6 +87,7 @@ let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, pr
       }}
     </button>
   }
+}
 
 let statusBar = (string, linkToComplete) => {
   let defaultClasses = "font-bold p-4 flex w-full items-center text-green-500 bg-green-100 justify-center"
@@ -96,7 +101,8 @@ let statusBar = (string, linkToComplete) => {
     </div>
   let visitLink = link =>
     <a className="ltr:text-right rtl:text-left w-full" href=link target="_blank">
-      <i className="fas fa-external-link-alt me-2 rtl:-rotate-90" /> {tr("visit_link") |> str}
+      <i className="fas fa-external-link-alt me-2 rtl:-rotate-90" />
+      {tr("visit_link") |> str}
     </a>
 
   <div className=defaultClasses>

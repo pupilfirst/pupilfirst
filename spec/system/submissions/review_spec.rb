@@ -1186,7 +1186,9 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
       click_button "Save grades"
 
-      expect(page).to have_text("There are no similar pending submissions.")
+      expect(page).to have_text(
+        "This submission has been graded, and there are no more submissions awaiting review."
+      )
     end
   end
 
@@ -2026,6 +2028,57 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("All automated tests succeeded")
       click_button "Show Report"
       expect(page).to have_text("A new report description")
+    end
+  end
+
+  context "When a milestone submission is ungraded after the course is marked complete for a student" do
+    let(:target_3) do
+      create :target,
+             :for_students,
+             target_group: target_group,
+             milestone_number: 1,
+             milestone: true
+    end
+
+    let!(:submission_3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: team.students,
+        target: target_3,
+        evaluator_id: team_coach.id,
+        evaluated_at: nil,
+        passed_at: nil
+      )
+    end
+
+    before { target_3.evaluation_criteria << [evaluation_criterion_1] }
+
+    scenario "coach grades and than ungrades milestone submission" do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_3)
+
+      click_button "Start Review"
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+      ) do
+        expect(page).to have_selector(
+          ".course-review-editor__grade-pill",
+          count: 4
+        )
+        find("button[title='Great']").click
+      end
+
+      click_button "Save grades"
+
+      expect(page).to have_button("Undo Grading")
+      expect(team.students.reload.pluck(:completed_at)).not_to eq([nil, nil])
+
+      accept_confirm { click_button("Undo Grading") }
+
+      expect(page).to have_button("Start Review")
+      expect(team.students.reload.pluck(:completed_at)).to eq([nil, nil])
     end
   end
 end

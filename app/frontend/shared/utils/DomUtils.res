@@ -5,15 +5,15 @@ exception RootAttributeMissing(string)
 open Webapi.Dom
 
 let parseJSONTag = (~id="react-root-data", ()) =>
-  switch document |> Document.getElementById(id) {
+  switch document->Document.getElementById(id) {
   | Some(rootElement) => rootElement |> Element.innerHTML
   | None => raise(DataElementMissing(id))
   } |> Json.parseOrRaise
 
 let parseJSONAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
-  switch document |> Document.getElementById(id) {
+  switch document->Document.getElementById(id) {
   | Some(rootElement) =>
-    switch rootElement |> Element.getAttribute(attribute) {
+    switch rootElement->Element.getAttribute(attribute) {
     | Some(props) => props
     | None => raise(RootAttributeMissing(attribute))
     }
@@ -25,8 +25,8 @@ let redirect = path => path |> Webapi.Dom.Window.setLocation(window)
 let reload = () => location |> Location.reload
 
 let isDevelopment = () =>
-  switch document |> Document.documentElement |> Element.getAttribute("data-env") {
-  | Some(props) when props == "development" => true
+  switch document->Document.documentElement->Element.getAttribute("data-env") {
+  | Some(props) if props == "development" => true
   | Some(_)
   | None => false
   }
@@ -35,18 +35,18 @@ let goBack = () => window |> Window.history |> History.back
 
 let getUrlParam = (~key) =>
   window
-  |> Window.location
-  |> Location.search
-  |> Webapi.Url.URLSearchParams.make
-  |> Webapi.Url.URLSearchParams.get(key)
+  ->Window.location
+  ->Location.search
+  ->Webapi.Url.URLSearchParams.make
+  ->Webapi.Url.URLSearchParams.get(key)
 
 let hasUrlParam = (~key) => getUrlParam(~key)->Belt.Option.isSome
 
 module FormData = {
   type t = Fetch.formData
 
-  @bs.new external create: Dom.element => t = "FormData"
-  @bs.send external append: (t, 'a) => unit = "append"
+  @new external create: Dom.element => t = "FormData"
+  @send external append: (t, 'a) => unit = "append"
 }
 
 module EventTarget = {
@@ -61,7 +61,7 @@ module EventTarget = {
 module Event = {
   type t = Dom.event
 
-  @bs.set external setReturnValue: (t, string) => unit = "returnValue"
+  @set external setReturnValue: (t, string) => unit = "returnValue"
 }
 
 module Element = {
@@ -70,7 +70,7 @@ module Element = {
   external unsafeToHtmlInputElement: t => Dom.htmlInputElement = "%identity"
 
   let clearFileInput = (~inputId, ~callBack=?, ()) => {
-    switch document |> Document.getElementById(inputId) {
+    switch document->Document.getElementById(inputId) {
     | Some(e) => HtmlInputElement.setValue(unsafeToHtmlInputElement(e), "")
     | None => ()
     }

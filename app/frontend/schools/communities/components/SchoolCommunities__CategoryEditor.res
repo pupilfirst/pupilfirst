@@ -21,9 +21,9 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateCategoryName(categoryName) => {...state, categoryName: categoryName}
+  | UpdateCategoryName(categoryName) => {...state, categoryName}
   | StartSaving => {...state, saving: true}
-  | FinishSaving(categoryName) => {...state, saving: false, categoryName: categoryName}
+  | FinishSaving(categoryName) => {...state, saving: false, categoryName}
   | FailSaving => {...state, saving: false}
   | StartDeleting => {...state, deleting: true}
   | FailDeleting => {...state, deleting: false}
@@ -78,7 +78,7 @@ let deleteCategory = (category, deleteCategoryCB, send, event) => {
   topicsCount > 0
     ? if {
         open Webapi.Dom
-        window |> Window.confirm(tr("topics_delete_confirm"))
+        window->Window.confirm(tr("topics_delete_confirm"))
       } {
         makeDeleteCategoryQuery(categoryId, deleteCategoryCB, send)
       } else {
@@ -126,7 +126,7 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
 
   send(StartSaving)
 
-  CreateCategoryQuery.fetch({communityId: communityId, name: trimmedName})
+  CreateCategoryQuery.fetch({communityId, name: trimmedName})
   |> Js.Promise.then_((response: CreateCategoryQuery.t) => {
     switch response.createTopicCategory.id {
     | Some(id) =>

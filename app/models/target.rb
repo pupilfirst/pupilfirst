@@ -20,6 +20,8 @@ class Target < ApplicationRecord
   ].freeze
 
   has_many :timeline_events, dependent: :restrict_with_error
+  has_many :assignments, dependent: :restrict_with_error
+  has_many :page_reads, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group

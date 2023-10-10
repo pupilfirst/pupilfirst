@@ -20,6 +20,8 @@ class Student < ApplicationRecord
   has_many :faculty, through: :faculty_student_enrollments
   belongs_to :team, optional: true
 
+  has_many :page_reads, dependent: :destroy
+
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }
   scope :dropped, -> { where.not(dropped_out_at: nil) }
   scope :access_active, -> { (where(cohort: Cohort.active)) }

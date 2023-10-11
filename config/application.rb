@@ -43,6 +43,9 @@ module Pupilfirst
     config.middleware.use BatchLoader::Middleware
 
     config.middleware.insert_before Rack::Runtime, Maintenance
+
+    # Disables the deprecated #to_s override in some Ruby core classes
+    config.active_support.disable_to_s_conversion = true
   end
 end
 

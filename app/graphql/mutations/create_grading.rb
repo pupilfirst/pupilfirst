@@ -227,7 +227,7 @@ module Mutations
     end
 
     def passed?
-      @params.key?("grades")
+      @params.key?(:grades)
     end
 
     def allow_token_auth?

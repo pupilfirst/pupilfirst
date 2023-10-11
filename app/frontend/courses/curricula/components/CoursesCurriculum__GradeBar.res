@@ -55,24 +55,23 @@ let handleClick = (gradeSelectCB, grading, newGrade) =>
 let gradeBarPill = (gradeLabel, grading, gradeSelectCB) => {
   let myGrade = gradeLabel |> GradeLabel.grade
   <div
-    key={myGrade |> string_of_int}
-    title={gradeLabel |> GradeLabel.label}
+    key={myGrade->string_of_int}
+    title={gradeLabel->GradeLabel.label}
     role="button"
     onClick={_event => handleClick(gradeSelectCB, grading, myGrade)}
-    className={gradePillClasses(grading |> Grading.grade, myGrade, gradeSelectCB)}>
+    className={gradePillClasses(grading->Grading.grade, myGrade, gradeSelectCB)}>
     {switch gradeSelectCB {
     | None => React.null
-    | Some(_CB) => myGrade |> string_of_int |> str
+    | Some(_CB) => myGrade->string_of_int->str
     }}
   </div>
 }
 
 let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
   <div className="grade-bar__track" role="group">
-    {gradeLabels
-    |> List.map(gradeLabel => gradeBarPill(gradeLabel, grading, gradeSelectCB))
-    |> Array.of_list
-    |> React.array}
+    {List.map(gradeLabel => gradeBarPill(gradeLabel, grading, gradeSelectCB), gradeLabels)
+    ->Array.of_list
+    ->React.array}
   </div>
 
 @react.component

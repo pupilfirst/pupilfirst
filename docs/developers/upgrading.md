@@ -18,6 +18,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2023.5
+
+This version removes the concept of a failure grade for submission reviews. You can either reject a submission or give a passing grade. The pass_grade field of evaluation_criterion table will be removed and so if you are using GraphQL API to create EvaluationCriterion, you need not pass pass_grade as a parameter. Also if you are using GraphQL API to reject or fail a submission you need to call the `createGrading` mutation without any `grades` parameter.
+
 ### 2023.4
 
 This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.

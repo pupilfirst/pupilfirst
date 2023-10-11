@@ -293,7 +293,7 @@ let passed = grades => {
 }
 
 let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)
-let trimArraytoOption = arr => Js.Array.length(arr) == 0 ? None : Some(arr)
+let trimArraytoOption = arr => ArrayUtils.isEmpty(arr) ? None : Some(arr)
 
 let navigationDisabled = state => {
   Js.String2.trim(state.newFeedback) != "" || state.note != None || state.saving

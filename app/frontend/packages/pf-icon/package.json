@@ -38,7 +38,7 @@
     "@rescript/react": "^0.10.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "rescript": "9.1.4"
+    "rescript": "10.1.4"
   },
   "scripts": {
     "dev": "parcel index.html",

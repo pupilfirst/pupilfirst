@@ -85,7 +85,7 @@ let drawName = issuedCertificate => {
 
   let canvasElement = {
     open Webapi
-    Dom.document |> Dom.Document.getElementById(canvasId)
+    Dom.document -> Dom.Document.getElementById(canvasId)
   }
 
   let ctx = Belt.Option.map(canvasElement, el => getContextWithAlpha(el, "2d", {"alpha": true}))
@@ -115,10 +115,10 @@ let drawName = issuedCertificate => {
   ctx
   |> OptionUtils.map(ctx =>
     Webapi.Canvas.Canvas2d.fillText(
+      ctx,
       IssuedCertificate.profileName(issuedCertificate)->DOMPurify.sanitize,
       ~x=1000.0,
       ~y=50.0,
-      ctx,
     )
   )
   |> ignore

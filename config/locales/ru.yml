@@ -593,10 +593,6 @@ ru:
       feedback: Отзыв
       feedback_generated_text: Отзыв, полученный из списка оценки.
       feedback_placeholder: Данный отзыв будет отправлен учащимся по электронной почте, когда вы завершите оценку.
-      get_next_submission:
-        notice:
-          done: Сделано!
-          done_description: Других подобных работ нет.
       grade_card: Оценочная Карта
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
       hide_test_report_button: Скрыть Отчет Тестов

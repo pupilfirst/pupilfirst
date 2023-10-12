@@ -755,10 +755,6 @@ ar:
       feedback: Feedback
       feedback_generated_text: Feedback generated from review checklist.
       feedback_placeholder: This feedback will be emailed to students when you finish grading.
-      get_next_submission:
-        notice:
-          done: Done!
-          done_description: There are no other similar submissions.
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report

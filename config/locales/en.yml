@@ -726,10 +726,6 @@ en:
       feedback: Feedback
       feedback_generated_text: Feedback generated from review checklist.
       feedback_placeholder: This feedback will be emailed to students when you finish grading.
-      get_next_submission:
-        notice:
-          done: Done!
-          done_description: There are no similar pending submissions.
       github_action:
         description: Do you want to re-run the Github action on this submission?
         re_run_action_button: Yes, Re-Run Github Action
@@ -737,6 +733,7 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
+      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
@@ -766,6 +763,7 @@ en:
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
+      you_are_done: "You're done!"
       write_a_note: Write a Note
     CoursesReview__ReviewerManager:
       assigned_at: Assigned %{date}

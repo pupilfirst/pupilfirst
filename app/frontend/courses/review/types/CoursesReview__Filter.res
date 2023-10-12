@@ -40,27 +40,27 @@ let makeFromQueryParams = search => {
 
   open Webapi.Url.URLSearchParams
   {
-    nameOrEmail: get("search", params),
-    personalCoachId: get("personalCoachId", params),
-    assignedCoachId: get("assignedCoachId", params),
-    reviewingCoachId: get("reviewingCoachId", params),
-    targetId: get("targetId", params),
-    tab: switch get("tab", params) {
+    nameOrEmail: get(params, "search"),
+    personalCoachId: get(params, "personalCoachId"),
+    assignedCoachId: get(params, "assignedCoachId"),
+    reviewingCoachId: get(params, "reviewingCoachId"),
+    targetId: get(params, "targetId"),
+    tab: switch get(params, "tab") {
     | Some(t) if t == "Pending" => Some(#Pending)
     | Some(t) if t == "Reviewed" => Some(#Reviewed)
     | _ => None
     },
-    sortCriterion: switch get("sortCriterion", params) {
+    sortCriterion: switch get(params, "sortCriterion") {
     | Some(criterion) if criterion == "EvaluatedAt" => #EvaluatedAt
     | Some(criterion) if criterion == "SubmittedAt" => #SubmittedAt
     | _ => #SubmittedAt
     },
-    sortDirection: switch get("sortDirection", params) {
+    sortDirection: switch get(params, "sortDirection") {
     | Some(direction) if direction == "Descending" => Some(#Descending)
     | Some(direction) if direction == "Ascending" => Some(#Ascending)
     | _ => None
     },
-    includeInactive: switch get("includeInactive", params) {
+    includeInactive: switch get(params, "includeInactive") {
     | Some(t) if t == "true" => true
     | _ => false
     },

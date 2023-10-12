@@ -68,9 +68,9 @@ let make = (
     let window = Webapi.Dom.window
 
     let removeEventListener = () =>
-      Webapi.Dom.Window.removeEventListener("beforeunload", beforeWindowUnload, window)
+      Webapi.Dom.Window.removeEventListener(window, "beforeunload", beforeWindowUnload)
     if dirty {
-      Webapi.Dom.Window.addEventListener("beforeunload", beforeWindowUnload, window)
+      Webapi.Dom.Window.addEventListener(window, "beforeunload", beforeWindowUnload)
     } else {
       removeEventListener()
     }

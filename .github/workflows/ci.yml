@@ -53,6 +53,10 @@ jobs:
       POSTMARK_HOOK_SECRET: hook_secret_for_test
 
     steps:
+      - name: Install Vips
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips
       - uses: actions/checkout@v2
       - name: Use Ruby 3.2
         uses: ruby/setup-ruby@v1

@@ -160,10 +160,14 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def user_is_a_coach_assigned_to_cohort?
-    @user_is_a_coach_assigned_to_cohort ||=
+    if instance_variable_defined?(:@user_is_a_coach_assigned_to_cohort)
+      return @user_is_a_coach_assigned_to_cohort
+    end
+
+    @user_is_a_coach_assigned_to_cohort =
       current_user.faculty&.cohorts&.exists?(
         id: submission.students.first.cohort_id
-      ) || false
+      )
   end
 
   def submission_owners_are_from_same_team?

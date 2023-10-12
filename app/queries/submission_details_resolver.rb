@@ -154,8 +154,6 @@ class SubmissionDetailsResolver < ApplicationQuery
   def authorized?
     return false if target&.course&.school != current_school
 
-    return false if submission.blank?
-
     return true if current_school_admin.present?
 
     user_is_a_coach_assigned_to_cohort?

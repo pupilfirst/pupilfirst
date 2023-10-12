@@ -207,8 +207,8 @@ let getNextSubmission = (send, courseId, filter) => {
   |> ignore
 }
 
-let isSubmissionReviewAllowed = submissionDetails => {
-  SubmissionDetails.reviewable(submissionDetails)
+let isReviewDisabled = submissionDetails => {
+  SubmissionDetails.reviewable(submissionDetails) == false
 }
 
 let makeFeedback = (user, feedback) => {
@@ -562,7 +562,7 @@ let showGradePill = (
             state,
             send,
           )}
-          disabled={!isSubmissionReviewAllowed(submissionDetails)}
+          disabled={isReviewDisabled(submissionDetails)}
           title={GradeLabel.label(gradeLabel)}
           className={gradePillClasses(gradeValue, gradeLabelGrade, passGrade, send)}>
           {switch send {
@@ -869,7 +869,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
             </div>
             <button
               className="btn btn-default mt-2"
-              disabled={!isSubmissionReviewAllowed(submissionDetails)}
+              disabled={isReviewDisabled(submissionDetails)}
               onClick={_ => send(UpdateNote(""))}>
               <i className="far fa-edit" /> <span className="ps-2"> {t("write_a_note")->str} </span>
             </button>
@@ -913,7 +913,7 @@ let feedbackGenerator = (
       </div>
       <div className="mt-2 md:ms-8">
         <button
-          disabled={!isSubmissionReviewAllowed(submissionDetails)}
+          disabled={isReviewDisabled(submissionDetails)}
           className="bg-primary-100 flex gap-3 items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
@@ -951,7 +951,7 @@ let feedbackGenerator = (
               value=state.newFeedback
               profile=Markdown.Permissive
               maxLength=10000
-              disabled={!isSubmissionReviewAllowed(submissionDetails)}
+              disabled={isReviewDisabled(submissionDetails)}
               placeholder={t("feedback_placeholder")}
             />
           </div>
@@ -1105,7 +1105,7 @@ let make = (
         ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
             UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
           ) ||
-          !isSubmissionReviewAllowed(submissionDetails)
+          isReviewDisabled(submissionDetails)
             ? GradesEditor
             : AssignReviewer
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
@@ -1161,7 +1161,7 @@ let make = (
       ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
           UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
         ) ||
-        !isSubmissionReviewAllowed(submissionDetails)
+        isReviewDisabled(submissionDetails)
           ? GradesEditor
           : AssignReviewer
       : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
@@ -1298,7 +1298,7 @@ let make = (
                     </div>
                   </div>
                 </div>,
-                !isSubmissionReviewAllowed(submissionDetails),
+                isReviewDisabled(submissionDetails),
               )}
               {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
               <div className="w-full px-4 md:px-6 pt-8 space-y-8">
@@ -1407,7 +1407,7 @@ let make = (
                             WindowUtils.confirm(t("undo_grade_warning"), () =>
                               OverlaySubmission.id(overlaySubmission)->undoGrading(send)
                             )}
-                          disabled={!isSubmissionReviewAllowed(submissionDetails)}
+                          disabled={isReviewDisabled(submissionDetails)}
                           className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                           <i className="fas fa-undo" />
                           <span className="ms-2"> {t("undo_grading")->str} </span>
@@ -1461,7 +1461,7 @@ let make = (
                   <div className="py-4 md:ms-8 text-center">
                     <button
                       onClick={_ => send(ShowAdditionalFeedbackEditor)}
-                      disabled={!isSubmissionReviewAllowed(submissionDetails)}
+                      disabled={isReviewDisabled(submissionDetails)}
                       className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                       <Icon className="if i-plus-regular" />
                       <p className="ps-2">

@@ -20,7 +20,7 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm(tr("window_confirm"))
+    window->Window.confirm(tr("window_confirm"))
   } {
     setStatus(_ => Undoing)
 
@@ -29,19 +29,13 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
       if response.undoSubmission.success {
         undoSubmissionCB()
       } else {
-        Notification.notice(
-          tr("notification_notice_head"),
-          tr("notification_notice_body"),
-        )
+        Notification.notice(tr("notification_notice_head"), tr("notification_notice_body"))
         setStatus(_ => Errored)
       }
       Js.Promise.resolve()
     })
     |> Js.Promise.catch(_ => {
-      Notification.error(
-        tr("notification_error_head"),
-        tr("notification_error_body"),
-      )
+      Notification.error(tr("notification_error_head"), tr("notification_error_body"))
       setStatus(_ => Errored)
       Js.Promise.resolve()
     })
@@ -53,7 +47,11 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
 
 let buttonContents = status =>
   switch status {
-  | Undoing => <span> <FaIcon classes="fas fa-spinner fa-spin me-2" /> {tr("undoing") |> str} </span>
+  | Undoing =>
+    <span>
+      <FaIcon classes="fas fa-spinner fa-spin me-2" />
+      {tr("undoing") |> str}
+    </span>
   | Pending =>
     <span>
       <FaIcon classes="fas fa-undo me-2" />
@@ -61,7 +59,10 @@ let buttonContents = status =>
       <span className="md:hidden"> {tr("undo") |> str} </span>
     </span>
   | Errored =>
-    <span> <FaIcon classes="fas fa-exclamation-triangle me-2" /> {"Error!" |> str} </span>
+    <span>
+      <FaIcon classes="fas fa-exclamation-triangle me-2" />
+      {"Error!" |> str}
+    </span>
   }
 
 let isDisabled = status =>
@@ -86,7 +87,7 @@ let buttonClasses = status => {
 let make = (~undoSubmissionCB, ~targetId) => {
   let (status, setStatus) = React.useState(() => Pending)
   <button
-    title=tr("undo_submission_title")
+    title={tr("undo_submission_title")}
     disabled={status |> isDisabled}
     className={buttonClasses(status)}
     onClick={handleClick(targetId, setStatus, undoSubmissionCB)}>

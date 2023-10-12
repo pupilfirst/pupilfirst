@@ -34,6 +34,12 @@ module Mutations
         # Clear existing grades
         TimelineEventGrade.where(timeline_event: submission).destroy_all
 
+        if submission.target.milestone?
+          submission.students.find_each do |student|
+            student.update!(completed_at: nil)
+          end
+        end
+
         # Clear evaluation info
         submission.update!(
           passed_at: nil,

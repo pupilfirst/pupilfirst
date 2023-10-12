@@ -195,10 +195,6 @@ let getNextSubmission = (send, courseId, filter) => {
   |> Js.Promise.then_((response: NextSubmissionQuery.t) => {
     if ArrayUtils.isEmpty(response.submissions.nodes) {
       send(SetNextSubmissionDataEmpty)
-      Notification.notice(
-        t("get_next_submission.notice.done"),
-        t("get_next_submission.notice.done_description"),
-      )
     } else {
       send(SetNextSubmissionDataLoaded(response.submissions.nodes[0].id))
     }
@@ -368,16 +364,25 @@ let closeOverlay = (state, courseId, filter) => {
 }
 
 let reviewNextButton = (nextSubmission, filter) => {
-  let className = "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 hover:bg-primary-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset"
+  let buttonStyle = "next-submission-button flex w-full items-center justify-center text-sm font-semibold bg-white border-t border-gray-200 px-5 py-4 focus:ring-2 focus:ring-focusColor-500 ring-inset"
   switch nextSubmission {
   | DataLoaded(id) =>
-    <Link href={"/submissions/" ++ id ++ "/review?" ++ Filter.toQueryString(filter)} className>
+    <Link
+      href={"/submissions/" ++ id ++ "/review?" ++ Filter.toQueryString(filter)}
+      className={`${buttonStyle} hover:bg-primary-50 hover:text-primary-500`}>
       <p className="pe-2"> {str(t("review_next"))} </p>
       <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl rtl:rotate-180" />
     </Link>
   | DataLoading =>
-    <button disabled={true} className> <FaIcon classes="fas fa-spinner fa-pulse me-2" /> </button>
-  | DataEmpty
+    <button disabled={true} className=buttonStyle>
+      <FaIcon classes="fas fa-spinner fa-pulse me-2" />
+    </button>
+  | DataEmpty =>
+    <div className=buttonStyle>
+      <Icon className="if i-check-circle-alt-light text-lg lg:text-2xl" />
+      <p className="ps-2 block md:hidden"> {str(t("you_are_done"))} </p>
+      <p className="ps-2 hidden md:block"> {str(t("no_more_pending_submissions"))} </p>
+    </div>
   | DataUnloaded => React.null
   }
 }
@@ -1128,10 +1133,10 @@ let make = (
       }
     }
 
-    Window.addEventListener("beforeunload", handleBeforeUnload, window)
+    Window.addEventListener(window, "beforeunload", handleBeforeUnload)
 
     let removeEventListener = () => {
-      Window.removeEventListener("beforeunload", handleBeforeUnload, window)
+      Window.removeEventListener(window, "beforeunload", handleBeforeUnload)
     }
 
     Some(removeEventListener)

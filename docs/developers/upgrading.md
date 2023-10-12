@@ -25,7 +25,7 @@ In this version, we've made a significant modification to the structure of the A
 - **Removed**: The keys `inactive_students`, `preview`, and `inactive_submission_review_allowed_days` have been removed from the response of `SubmissionDetailsResolver`.
 - **Added**: New keys `reviewable` and `warning` have been introduced.
 
-This update results in a breaking or backwards incompatible alteration to the API's behavior. Clients or systems that are dependent on the previous structure of the API response will need to adapt to these changes.
+Clients or systems that are dependent on the previous structure of the API response will need to adapt to these changes.
 
 ### 2023.4
 

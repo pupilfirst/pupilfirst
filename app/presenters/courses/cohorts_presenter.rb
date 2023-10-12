@@ -1,4 +1,6 @@
 class Courses::CohortsPresenter < ApplicationPresenter
+  attr_reader :status
+
   def initialize(view_context, course, status)
     @course = course
     @status = status == "ended" ? "ended" : "active"
@@ -22,10 +24,6 @@ class Courses::CohortsPresenter < ApplicationPresenter
     paged = cohorts.page(params[:page]).per(24)
     paged = cohorts.page(paged.total_pages).per(24) if paged.out_of_range?
     paged
-  end
-
-  def status
-    @status
   end
 
   def page_title

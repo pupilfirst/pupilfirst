@@ -13,7 +13,7 @@ type t = {
   id: string,
   coachNotes: array<CoursesStudents__CoachNote.t>,
   hasArchivedNotes: bool,
-  preview: bool,
+  canModifyCoachNotes: bool,
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
   totalTargets: int,
   targetsCompleted: int,
@@ -35,7 +35,7 @@ let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
 
-let preview = t => t.preview
+let canModifyCoachNotes = t => t.canModifyCoachNotes
 
 let courseId = t => t.courseId
 
@@ -108,7 +108,7 @@ let make = (
   ~id,
   ~coachNotes,
   ~hasArchivedNotes,
-  ~preview,
+  ~canModifyCoachNotes,
   ~evaluationCriteria,
   ~totalTargets,
   ~targetsCompleted,
@@ -122,7 +122,7 @@ let make = (
   id: id,
   coachNotes: coachNotes,
   hasArchivedNotes: hasArchivedNotes,
-  preview: preview,
+  canModifyCoachNotes: canModifyCoachNotes,
   evaluationCriteria: evaluationCriteria,
   totalTargets: totalTargets,
   targetsCompleted: targetsCompleted,

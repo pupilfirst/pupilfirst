@@ -13,12 +13,12 @@ class StudentDetailsResolver < ApplicationQuery
       team: team,
       student: student,
       milestone_targets_completion_status: milestone_targets_completion_status,
-      preview: preview?
+      can_modify_coach_notes: user_is_a_coach_for_the_student?
     }
   end
 
-  def preview?
-    !current_user&.faculty&.cohorts&.exists?(id: student&.cohort_id) || false
+  def user_is_a_coach_for_the_student?
+    current_user&.faculty&.cohorts&.exists?(id: student&.cohort_id) || false
   end
 
   def average_grades

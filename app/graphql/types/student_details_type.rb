@@ -12,6 +12,6 @@ module Types
     field :milestone_targets_completion_status,
           [Types::MilestoneTargetsCompletionStatusType],
           null: false
-    field :preview, Boolean, null: false
+    field :can_modify_coach_notes, Boolean, null: false
   end
 end

@@ -211,7 +211,9 @@ let make = (~overviewData, ~coaches) =>
             <div className="w-full lg:w-1/2 shadow rounded-lg p-4 items-center mt-2 bg-white">
               <div className="ms-2 md:ms-3 flex">
                 <div> <PfIcon className="if i-users-light me-2 font-normal text-lg" /> </div>
-                <div className="text-sm font-semibold"> {Cohort.name(overview.cohort)->str} </div>
+                <div className="text-sm font-semibold">
+                  {overview->StudentOverview.cohortName->str}
+                </div>
               </div>
             </div>
           </div>

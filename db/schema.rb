@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_06_123736) do
+ActiveRecord::Schema.define(version: 2023_10_13_120900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -494,7 +494,7 @@ ActiveRecord::Schema.define(version: 2023_10_06_123736) do
     t.bigint "target_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["target_id"], name: "index_quizzes_on_target_id"
+    t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true
   end
 
   create_table "resource_versions", force: :cascade do |t|

@@ -38,8 +38,8 @@ let distinct = l => {
 let swapDown = (e, l) => {
   let rec aux = (prev, l, e) =>
     switch l {
-    | list{head, next, ...tail} when head == e => \"@"(prev, list{next, head, ...tail})
-    | list{head, ...tail} => aux(\"@"(prev, list{head}), tail, e)
+    | list{head, next, ...tail} when head == e => Belt.List.concat(prev, list{next, head, ...tail})
+    | list{head, ...tail} => aux(Belt.List.concat(prev, list{head}), tail, e)
     | list{} => prev
     }
 

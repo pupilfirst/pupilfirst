@@ -1,5 +1,5 @@
-%%raw("import \"react-datepicker/dist/react-datepicker.css\"")
-%%raw("import \"./DatePicker.css\"")
+%%raw("import 'react-datepicker/dist/react-datepicker.css'")
+%%raw("import './DatePicker.css'")
 
 module JsComponent = {
   @module("react-datepicker") @react.component

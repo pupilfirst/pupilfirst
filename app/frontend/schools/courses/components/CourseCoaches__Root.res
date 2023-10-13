@@ -24,7 +24,7 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateFormVisible(formVisible) => {...state, formVisible: formVisible}
+  | UpdateFormVisible(formVisible) => {...state, formVisible}
   | AddCourseCoaches(courseCoaches) => {
       ...state,
       courseCoaches: state.courseCoaches |> Array.append(courseCoaches),
@@ -61,7 +61,7 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm(
+    window->Window.confirm(
       t("remove_confirm_pre") ++
       " " ++
       ((coach |> CourseCoach.name) ++
@@ -82,10 +82,7 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
 
 @react.component
 let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
-  let (state, send) = React.useReducer(
-    reducer,
-    {courseCoaches: courseCoaches, formVisible: None, saving: false},
-  )
+  let (state, send) = React.useReducer(reducer, {courseCoaches, formVisible: None, saving: false})
 
   let closeFormCB = () => send(UpdateFormVisible(None))
 

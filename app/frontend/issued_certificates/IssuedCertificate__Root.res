@@ -85,7 +85,7 @@ let drawName = issuedCertificate => {
 
   let canvasElement = {
     open Webapi
-    Dom.document -> Dom.Document.getElementById(canvasId)
+    Dom.document->Dom.Document.getElementById(canvasId)
   }
 
   let ctx = Belt.Option.map(canvasElement, el => getContextWithAlpha(el, "2d", {"alpha": true}))
@@ -119,6 +119,7 @@ let drawName = issuedCertificate => {
       IssuedCertificate.profileName(issuedCertificate)->DOMPurify.sanitize,
       ~x=1000.0,
       ~y=50.0,
+      (),
     )
   )
   |> ignore
@@ -137,7 +138,8 @@ let make = (~issuedCertificate, ~verifyImageUrl) => {
       className="absolute top-0 start-0 w-full h-full"
       style={certificateContainerStyle(issuedCertificate)}>
       <div className="relative w-full h-full">
-        {nameCanvas(issuedCertificate)} {qrCode(issuedCertificate, verifyImageUrl)}
+        {nameCanvas(issuedCertificate)}
+        {qrCode(issuedCertificate, verifyImageUrl)}
       </div>
     </div>
   </div>

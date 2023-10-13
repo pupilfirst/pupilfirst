@@ -49,11 +49,11 @@ After creating a target, you can click on it in the curriculum to open the targe
 
 Clicking on a target will open the _Content_ tab by default, which allows you to edit the content of the target - this the _body_ of the material that you would like your student to read or watch.
 
-![Target editor, in preview mode](../assets/curriculum_editor/target_content_editor_feiqdh.png)
+![Target editor, in preview mode](../assets/curriculum_editor/target_content_editor.png)
 
 You'll notice that the content is made up of different types of _content blocks_. If you hover over the region between any of the existing blocks, you'll find an option to insert a new content block into that space. There will always be a content block picker visible at the bottom of the existing content.
 
-![Target editor content blocks](../assets/curriculum_editor/target_editor_blocks_xnvkky.png)
+![Target editor content blocks](../assets/curriculum_editor/target_editor_blocks.png)
 
 ### Content block types
 
@@ -144,7 +144,7 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 
 Here's an example target consisting, of four steps to complete the target:
 
-![Adding a target checklist](../assets/curriculum_editor/target_checklist_editor_eguduz.png)
+![Adding a target checklist](../assets/curriculum_editor/target_checklist_editor.png)
 
 Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when submitting a target. In the example above, step 2 of type _Attach a Link_ is optional.
 

@@ -218,12 +218,12 @@ let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
   }
 
   open Webapi.Dom
-  switch document |> Document.getElementById(state.id) {
+  switch document -> Document.getElementById(state.id) {
   | Some(element) => Js.Global.setTimeout(() => {
       element
-      |> DomUtils.Element.unsafeToHtmlInputElement
-      |> HtmlInputElement.setSelectionRange(startPosition, endPosition)
-      Webapi.Dom.Document.getElementById(state.id, Webapi.Dom.document)
+      -> DomUtils.Element.unsafeToHtmlInputElement
+      -> HtmlInputElement.setSelectionRange(startPosition, endPosition)
+      Webapi.Dom.Document.getElementById(Webapi.Dom.document, state.id)
       ->Belt.Option.flatMap(Webapi.Dom.Element.asHtmlElement)
       ->Belt.Option.mapWithDefault((), Webapi.Dom.HtmlElement.focus)
     }, renderDelay) |> ignore
@@ -439,7 +439,7 @@ let previewClasses = mode =>
 let focusOnEditor = id => {
   open Webapi.Dom
 
-  Document.getElementById(id, document)
+  Document.getElementById(document, id)
   ->Belt.Option.flatMap(HtmlElement.ofElement)
   ->Belt.Option.mapWithDefault((), element => element->HtmlElement.focus)
 }
@@ -477,7 +477,7 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
 
 let submitForm = (formId, oldValue, state, send, onChange) => {
   open Webapi.Dom
-  Document.getElementById(formId, document)->Belt.Option.mapWithDefault((), element => {
+  Document.getElementById(document, formId)->Belt.Option.mapWithDefault((), element => {
     let formData = DomUtils.FormData.create(element)
 
     Api.sendFormData(
@@ -698,11 +698,11 @@ let make = (
       document |> Document.asEventTarget
     }
 
-    documentEventTarget |> Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler)
+    documentEventTarget -> Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler)
 
     Some(
       () =>
-        documentEventTarget |> Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
+        documentEventTarget -> Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
     )
   })
 
@@ -711,19 +711,19 @@ let make = (
     let curriedHandler = handleKeyboardControls(value, state, send, onChange)
     let textareaEventTarget = {
       open Webapi.Dom
-      Document.getElementById(state.id, document)->Belt.Option.map(Element.asEventTarget)
+      Document.getElementById(document, state.id)->Belt.Option.map(Element.asEventTarget)
     }
 
     textareaEventTarget->Belt.Option.mapWithDefault(
       (),
-      Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler),
+      x => Webapi.Dom.EventTarget.addKeyDownEventListener(x, curriedHandler),
     )
 
     Some(
       () =>
         textareaEventTarget->Belt.Option.mapWithDefault(
           (),
-          Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
+          x => Webapi.Dom.EventTarget.removeKeyDownEventListener(x, curriedHandler),
         ),
     )
   })
@@ -731,11 +731,11 @@ let make = (
   React.useEffect1(() => {
     let textarea = {
       open Webapi.Dom
-      document |> Document.getElementById(state.id)
+      document -> Document.getElementById(state.id)
     }
     let preview = {
       open Webapi.Dom
-      document |> Document.getElementById(state.id ++ "-preview")
+      document -> Document.getElementById(state.id ++ "-preview")
     }
 
     switch (textarea, preview) {
@@ -744,11 +744,11 @@ let make = (
 
       switch state.mode {
       | Fullscreen(#Split) =>
-        textarea |> Webapi.Dom.Element.addEventListener("scroll", scrollCallback)
+        textarea -> Webapi.Dom.Element.addEventListener("scroll", scrollCallback)
 
-        Some(() => textarea |> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback))
+        Some(() => textarea -> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback))
       | _anyOtherMode =>
-        textarea |> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback)
+        textarea -> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback)
         None
       }
     | (_, _) => None

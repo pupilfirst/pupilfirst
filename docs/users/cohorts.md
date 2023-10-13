@@ -6,11 +6,11 @@ sidebar_label: Cohorts
 
 Cohorts in Pupilfirst allow you to group students who are taking a course at the same time. This feature is designed to provide a more organized and streamlined approach to managing students, especially when running multiple instances of a course simultaneously.
 
-Courses can contain any number of cohorts. To see the cohorts in a course, first select the course from the main admin navigation bar, or click the _Edit Curriculum_ link if you're on the _Courses_ menu. Then pick the _Cohorts_ option from the course's sub-menu.
+Courses can contain any number of cohorts. To see the cohorts in a course, first select the course from the main admin navigation bar, then pick the _Cohorts_ option from the course's sub-menu.
 
 ![Cohorts page within a course in the school administration interface](../assets/cohorts/cohorts_page.png)
 
-The cohorts page lists all the cohorts in the course, along with the number of students in each cohort. You can also see the end date of each cohort, if it has been set. The number of cocahes assigned to each cohort is also displayed.
+The cohorts page lists all the cohorts in the course, along with the number of students in each cohort. You can also see the end date of each cohort if it has been set. The number of coaches assigned to each cohort is also displayed.
 
 ## Creating cohorts
 
@@ -20,7 +20,7 @@ To create a new cohort, click the _Add New Cohort_ button at the top-right of th
 
 **Cohort Description**: This short description about the cohort.
 
-**Cohort end date** (optional): If set, the course will be marked as _ended_ for the cohort on this date. Students will retain preview access to the course, and their own submissions, but they will not be able to complete new targets.
+**Cohort end date** (optional): In general, cohorts will always have an end date, we made it optional to allow unlimited access. If set, the course will be marked as _ended_ for the cohort on this date. Students will retain preview access to the course, and their own submissions, but they will not be able to complete new targets. We should recommend setting an end date if possible as a good practice.
 
 ## Editing cohorts
 

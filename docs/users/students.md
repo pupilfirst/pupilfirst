@@ -49,14 +49,14 @@ To edit a student's details, click on the student's name. You'll see all of the 
 In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
 
 **Course Certificates**<br/>
-This will list all the certificates that the student has earned in the course. You can view each certificate by clicking on the certificate ID. You can issue certificate from here and also revoke a certificate if needed.
+This will list all the certificates that the student has earned in the course. You can view each certificate by clicking on the certificate ID. You can issue a certificate from here and also revoke a certificate if needed.
 
 **Has this student dropped out?**<br/>
 If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their dashboard page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
 ## Inactive students
 
-Students whose access to a course has ended by being part of ended cohort or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, select the _ended_ and _dropped_ status filter from the _Multiselect Dropdown_ filter at the top of the students page.
+Students whose access to a course has ended by being part of ended cohort or who were marked as dropped out will be hidden from the main list of (active) students. To see these inactive students, select the _ended_ and _dropped_ status filter from the filter at the top of the students page.
 
 Inactive students can be reactivated by moving to a cohort that is not ended or reactivating a dropped out student from the _Actions_ tab.
 
@@ -93,7 +93,7 @@ When students are displayed anywhere in the interface, they'll always be grouped
 
 ### Editing a team
 
-To edit a team's details, click on the edit on the respective team from teams index page. You'll see all of the fields you entered in the creation form. You can add or remove students from the team.
+To edit a team's details, click on the edit on the respective team from the teams index page. You'll see all the fields you entered in the creation form. You can add or remove students from the team.
 
 ### Actions on a team
 
@@ -108,8 +108,8 @@ You can move individual students _out_ of a team by selecting just one and using
 To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. You can use the [template file](/files/student_import_sample.csv ":ignore") available in the form to list the students with required details. Refer to [add new students form](/users/students#adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
 
 1. Name and email are mandatory columns and should have valid data. Name can have a maximum of 250 characters.
-2. Title, affiliation and tags are optional similar to the the [add new students form](/users/students#adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
-3. Team name is optional and should be only used if you need to club students as a team. If more that one students are assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
+2. Title, affiliation and tags are optional similar to the [add new students form](/users/students#adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
+3. Team name is optional and should be only used if you need to club students as a team. If more that one student is assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
 4. A maximum of 1000 students are allowed to be imported at once using the bulk uploader.
 
 The errors in the sheet will appear in the form once you upload a CSV file, which will guide you to easily fix them. Once you have a totally error free sheet, use the _Import Students_ button to initiate the bulk onboarding process. On successful completion, you will receive an email confirming the same.

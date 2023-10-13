@@ -8,6 +8,8 @@ Pupilfirst allows you to collect applications for your courses, and review them 
 
 ## Enabling applications
 
+Applicant processing is an _optional_ step, the system will auto onboard the student if it not enabled.
+
 To enable applications for a course, The course should have [public signups enabled](/users/courses#creating-courses) and the [applicant processing](/users/courses#creating-courses) option should be enabled.
 
 ## Viewing the list of applicants

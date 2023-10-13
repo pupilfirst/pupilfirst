@@ -118,7 +118,7 @@ When unarchiving a course, all students attached to the course will continue to 
 
 ## States for a course
 
-A course will always be in one of the 3 states mentioned below. You can see the courses in each state changing the filter.
+A course will always be in one of the 3 states mentioned below. You can see the courses in each state, by changing the filter.
 
 ### Active
 
@@ -126,7 +126,7 @@ A course that is not ended or archived.
 
 ### Ended
 
-Courses with no _active cohorts_ are conisdered as ended. Such courses will be hidden form all the navigation menus in school administration interface. The links to school administration pages for the course can only be accessed from the courses page.
+Courses with no _active cohorts_ are considered as ended. Such courses will be hidden from all the navigation menus in the school administration interface. The links to school administration pages for the course can only be accessed from the courses page.
 
 ### Archived
 

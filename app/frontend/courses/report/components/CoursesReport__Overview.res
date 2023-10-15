@@ -208,12 +208,13 @@ let make = (~overviewData, ~coaches) =>
         <div className="w-full">
           <div className="mt-8">
             <h6 className="text-sm font-semibold"> {ts("cohort")->str} </h6>
-            <div className="w-full lg:w-1/2 shadow rounded-lg p-4 items-center mt-2 bg-white">
-              <div className="ms-2 md:ms-3 flex">
-                <div> <PfIcon className="if i-users-light me-2 font-normal text-lg" /> </div>
-                <div className="text-sm font-semibold">
-                  {overview->StudentOverview.cohortName->str}
-                </div>
+            <div
+              className="max-w-auto shadow rounded-lg p-4 items-center mt-2 bg-white flex shrink gap-2">
+              <div>
+                <PfIcon className="if i-users-light font-normal text-lg" />
+              </div>
+              <div className="text-sm font-semibold">
+                {overview->StudentOverview.cohortName->str}
               </div>
             </div>
           </div>

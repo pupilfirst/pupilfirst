@@ -502,10 +502,8 @@ let ids = student => {
     </ClickToCopy>
     <p>
       {ts("cohort")->str}
-      <em className="ms-1">
-        <span className="font-semibold text-sm text-primary-500">
-          {Cohort.name(student.cohort)->str}
-        </span>
+      <em className="ms-1 font-semibold text-sm text-primary-500">
+        {Cohort.name(student.cohort)->str}
       </em>
     </p>
   </div>

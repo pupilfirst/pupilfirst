@@ -545,6 +545,7 @@ ActiveRecord::Schema.define(version: 2023_10_05_185509) do
     t.string "color"
     t.text "description"
     t.boolean "default"
+    t.datetime "archived_at"
     t.bigint "school_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

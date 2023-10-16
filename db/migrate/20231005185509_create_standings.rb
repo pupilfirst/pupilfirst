@@ -5,6 +5,7 @@ class CreateStandings < ActiveRecord::Migration[6.1]
       t.string :color
       t.text :description
       t.boolean :default
+      t.datetime :archived_at
 
       t.references :school, null: false, foreign_key: true
 

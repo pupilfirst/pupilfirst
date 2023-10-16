@@ -1,2 +1,21 @@
-<div id="schoolrouter-innerpage-data">
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
+    <div class="bg-gradient-to-l to-primary-100 from-primary-200 shadow rounded-lg grid grid-cols-4 gap-4 items-center">
+      <div class="col-span-3 p-8">
+        <h1 class="text-4xl font-semibold text-gray-800 mb-4">Standings</h1>
+        <p class="text-gray-600 mb-4">Standing serves as a tool for the school to motivate students to adhere to the school's code of conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.</p>
+        <a href="#" class="text-blue-500 underline hover:text-blue-600">Learn more about standings.</a>
+      </div>
+      <div class="">
+        <%= image_tag 'school/standings/star_on_shield.svg', alt: 'Star on Shield', class: 'h-40 w-auto' %>
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+      <span class="text-gray-800 text-base font-semibold">Enable Standing for your school?</span>
+      <div class="flex items-center bg-white p-2 shadow rounded-lg cursor-pointer gap-3">
+        <%= button_to "Yes", method: :put, form_class: "text-white py-1 px-3 rounded mr-2 cursor-pointer"%>
+        <%= button_to "No", method: :put, form_class: "text-white py-1 px-3 rounded mr-2 focus:outline-none cursor-pointer"%>
+      </div>
+    </div>
+  </div>
 </div>

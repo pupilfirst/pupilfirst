@@ -213,8 +213,7 @@ let make = (~overviewData, ~coaches) =>
               <div>
                 <PfIcon className="if i-users-light font-normal text-lg" />
               </div>
-              // word-break is a custom css class
-              <p className="text-sm font-semibold word-break">
+              <p className="text-sm font-semibold break-all">
                 {overview->StudentOverview.cohortName->str}
               </p>
             </div>

@@ -60,7 +60,7 @@ Rails.application.routes.draw do
   resource :school, only: [] do
     get 'customize'
     get 'admins'
-    get 'coc'
+    get 'standings'
     post 'images'
   end
 

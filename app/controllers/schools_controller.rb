@@ -34,8 +34,8 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
-  # GET /school/coc
-  def coc
+  # GET /school/standings
+  def standings
     authorize current_school
   end
 

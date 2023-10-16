@@ -62,7 +62,7 @@ let make = (~selectedPage, ~selectedCourse, ~currentUser) =>
       <div className="p-4">
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
-        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(CoC))}
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Standings))}
       </div>
     </div>
   | SelectedCourse(_courseSelection) =>

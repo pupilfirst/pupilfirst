@@ -32,7 +32,7 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "customize"} => (Settings(Customization), None)
   | list{"school", "communities"} => (Communities, None)
   | list{"school", "admins"} => (Settings(Admins), None)
-  | list{"school", "coc"} => (Settings(CoC), None)
+  | list{"school", "standings"} => (Settings(Standings), None)
   | list{"school"}
   | list{"school", "courses"}
   | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root school />))
@@ -120,7 +120,7 @@ let make = (~school, ~courses, ~currentUser) => {
   <SchoolRouter__CourseContext.Provider
     value={(
       {
-        selectedCourse: selectedCourse,
+        selectedCourse,
         setCourseId: findAndSetSelectedCourse(setSelectedCourse, courses),
       }: SchoolRouter__CourseContext.t
     )}>

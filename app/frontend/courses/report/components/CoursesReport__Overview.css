@@ -120,3 +120,7 @@
   fill: theme("colors.orange.200");
   stroke: theme("colors.orange.500");
 }
+
+.word-break {
+  word-break: break-all;
+}

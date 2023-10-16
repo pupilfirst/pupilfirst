@@ -41,39 +41,33 @@ module Mutations
       include ValidatorCombinable
 
       def validate(_object, _context, value)
-        @error = nil
         @submission = TimelineEvent.find_by(id: value[:submission_id])
         @checklist = value[:checklist]
         @evaluation_criteria = @submission&.evaluation_criteria
         @grades = value[:grades]
         grade_hash = compute_grade_hash
 
-        assignment_graded?(value[:submission_id]) &&
-          checklist_has_right_shape? && submission_graded? &&
-          checklist_data_mutated? && valid_grading?(grade_hash)
-
-        @error
+        assignment_must_be_graded(value[:submission_id]) ||
+          checklist_must_have_right_shape || submission_must_not_be_graded ||
+          checklist_data_should_not_be_mutated ||
+          grading_should_be_valid(grade_hash)
       end
 
-      def submission_graded?
-        return true unless @submission.reviewed?
+      def submission_must_not_be_graded
+        return unless @submission.reviewed?
 
-        @error = I18n.t("mutations.create_grading.submission_graded_error")
-        false
+        I18n.t("mutations.create_grading.submission_graded_error")
       end
 
-      def assignment_graded?(submission_id)
-        return true if @evaluation_criteria.present?
-
-        @error =
-          I18n.t(
-            "mutations.create_grading.evaluation_criteria_error",
-            submission_id: submission_id
-          )
-        false
+      def assignment_must_be_graded(submission_id)
+        return if @evaluation_criteria.present?
+        I18n.t(
+          "mutations.create_grading.evaluation_criteria_error",
+          submission_id: submission_id
+        )
       end
 
-      def checklist_has_right_shape?
+      def checklist_must_have_right_shape
         if @checklist.respond_to?(:all?) &&
              @checklist.all? { |item|
                item["title"].is_a?(String) &&
@@ -86,15 +80,13 @@ module Mutations
                  ) &&
                  (item["result"].is_a?(String) || item["result"].is_a?(Array))
              }
-          return true
+          return
         end
 
-        @error =
-          I18n.t("mutations.create_grading.invalid_checklist_shape_error")
-        false
+        I18n.t("mutations.create_grading.invalid_checklist_shape_error")
       end
 
-      def checklist_data_mutated?
+      def checklist_data_should_not_be_mutated
         old_checklist =
           @submission.checklist.map do |c|
             [
@@ -115,23 +107,19 @@ module Mutations
 
         if (old_checklist - new_checklist).empty? &&
              old_checklist.count == new_checklist.count
-          return true
+          return
         end
 
-        @error =
-          I18n.t("mutations.create_grading.invalid_checklist_values_error")
-        false
+        I18n.t("mutations.create_grading.invalid_checklist_values_error")
       end
 
-      def valid_grading?(grade_hash)
-        return true if valid_grading(grade_hash)
+      def grading_should_be_valid(grade_hash)
+        return if valid_grading(grade_hash)
 
-        @error =
-          I18n.t(
-            "mutations.create_grading.invalid_grading_error",
-            grades_data: @grades.to_json
-          )
-        false
+        I18n.t(
+          "mutations.create_grading.invalid_grading_error",
+          grades_data: @grades.to_json
+        )
       end
 
       private

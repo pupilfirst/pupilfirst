@@ -3,27 +3,22 @@ module ValidateSubmissionGradable
 
   class SubmissionShouldBeGradable < GraphQL::Schema::Validator
     def validate(_object, _context, value)
-      @error = nil
       @submission = TimelineEvent.find_by(id: value[:submission_id])
 
-      submission_exists?(value[:submission_id]) && owners_active? &&
-        submission_live?
-      @error
+      submission_must_exist(value[:submission_id]) || owners_must_be_active ||
+        submission_must_be_live
     end
 
-    def submission_exists?(submission_id)
-      return true if @submission.present?
+    def submission_must_exist(submission_id)
+      return if @submission.present?
 
-      @error =
-        I18n.t(
-          "mutations.create_grading.submission_missing_error",
-          submission_id: submission_id
-        )
-
-      false
+      I18n.t(
+        "mutations.create_grading.submission_missing_error",
+        submission_id: submission_id
+      )
     end
 
-    def owners_active?
+    def owners_must_be_active
       # days since submission
       days_since_submission =
         (Time.zone.now - @submission.created_at) / (3600 * 24)
@@ -34,20 +29,13 @@ module ValidateSubmissionGradable
         (days_since_submission < submission_review_allowed_days)
 
       if !submission_review_allowed && @submission.students.active.empty?
-        @error =
-          I18n.t("validate_submission_gradable.owners_should_be_active.error")
-        return false
+        I18n.t("validate_submission_gradable.owners_should_be_active.error")
       end
-
-      true
     end
 
-    def submission_live?
-      return true unless @submission.archived?
-
-      @error = I18n.t("validate_submission_gradable.submission_should_be_live")
-
-      false
+    def submission_must_be_live
+      return unless @submission.archived?
+      I18n.t("validate_submission_gradable.submission_should_be_live")
     end
   end
 

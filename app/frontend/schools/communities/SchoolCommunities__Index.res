@@ -32,13 +32,13 @@ let reducer = (state, action) =>
   switch action {
   | UpdateShowCategoryEditor(showCategoryEditor) => {
       ...state,
-      showCategoryEditor: showCategoryEditor,
+      showCategoryEditor,
     }
-  | UpdateEditorAction(editorAction) => {...state, editorAction: editorAction}
-  | UpdateCommunities(communities) => {...state, communities: communities}
+  | UpdateEditorAction(editorAction) => {...state, editorAction}
+  | UpdateCommunities(communities) => {...state, communities}
   | SaveCommunityChanges(communities) => {
       ...state,
-      communities: communities,
+      communities,
       editorAction: Hidden,
     }
   | DeleteCategory(community, categoryId) =>
@@ -82,7 +82,7 @@ let reducer = (state, action) =>
     }
   | UpdateNewCategoryInputDirty(newCategoryInputDirty) => {
       ...state,
-      newCategoryInputDirty: newCategoryInputDirty,
+      newCategoryInputDirty,
     }
   }
 
@@ -99,7 +99,7 @@ let handleCloseCategoryManager = (send, state) =>
   categoryEditorDirty(state)
     ? if {
         open Webapi.Dom
-        window |> Window.confirm(tr("unsaved_window_confirm"))
+        window->Window.confirm(tr("unsaved_window_confirm"))
       } {
         send(UpdateShowCategoryEditor(false))
       } else {
@@ -113,7 +113,7 @@ let make = (~communities, ~courses) => {
     reducer,
     {
       editorAction: Hidden,
-      communities: communities,
+      communities,
       showCategoryEditor: false,
       dirtyTopicCategoryIds: Belt.Set.String.empty,
       newCategoryInputDirty: false,

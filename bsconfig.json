@@ -18,7 +18,7 @@
   "bs-dependencies": [
     "@glennsl/bs-json",
     "bs-fetch",
-    "bs-webapi",
+    "rescript-webapi",
     "@rescript/react",
     "@reasonml-community/graphql-ppx"
   ],

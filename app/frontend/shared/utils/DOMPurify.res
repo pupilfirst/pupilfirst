@@ -48,7 +48,9 @@ let sanitizedHTMLHook = (entryPoint, hookFunction) => {
           if (!(src.startsWith('https://www.youtube.com/embed/') ||
             src.startsWith('https://player.vimeo.com/video/'))
           ) {
-            return node.parentNode?.removeChild(node)
+            if (node.parentNode) {
+              return node.parentNode.removeChild(node)
+            }
           }
         }
       })

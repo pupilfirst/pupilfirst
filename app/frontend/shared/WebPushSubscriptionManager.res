@@ -119,8 +119,8 @@ let createSubscription = (send, event) => {
 
 let webPushEndpoint =
   Webapi.Dom.document
-  |> Webapi.Dom.Document.documentElement
-  |> Webapi.Dom.Element.getAttribute("data-subscription-endpoint")
+  ->Webapi.Dom.Document.documentElement
+  ->Webapi.Dom.Element.getAttribute("data-subscription-endpoint")
 
 let loadStatus = (status, send, ()) => {
   switch status {
@@ -164,7 +164,8 @@ let button = (saving, onClick, icon, text) =>
     onClick
     disabled=saving
     className="inline-flex items-center font-semibold px-2 py-1 md:py-1 bg-gray-50 hover:bg-gray-300 focus:bg-gray-300 border rounded text-xs shrink-0">
-    <FaIcon classes={"me-2 fa-fw fas fa-" ++ (saving ? "spinner fa-spin" : icon)} /> {str(text)}
+    <FaIcon classes={"me-2 fa-fw fas fa-" ++ (saving ? "spinner fa-spin" : icon)} />
+    {str(text)}
   </button>
 
 @react.component

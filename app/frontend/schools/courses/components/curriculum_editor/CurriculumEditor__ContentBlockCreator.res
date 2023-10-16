@@ -208,15 +208,15 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
 }
 
 let embedUrlRegexes = [
-  %re("/https:\\/\\/.*slideshare\\.net/"),
-  %re("/https:\\/\\/.*vimeo\\.com/"),
-  %re("/https:\\/\\/.*youtube\\.com/"),
-  %re("/https:\\/\\/.*youtu\\.be/"),
-  %re("/https:\\/\\/docs\\.google\\.com\\/presentation/"),
-  %re("/https:\\/\\/docs\\.google\\.com\\/document/"),
-  %re("/https:\\/\\/docs\\.google\\.com\\/spreadsheets/"),
-  %re("/https:\\/\\/docs\\.google\\.com\\/forms/"),
-  %re("/https:\\/\\/scribehow\\.com\\/(embed|shared)/"),
+  %re("/https:\/\/.*slideshare\.net/"),
+  %re("/https:\/\/.*vimeo\.com/"),
+  %re("/https:\/\/.*youtube\.com/"),
+  %re("/https:\/\/.*youtu\.be/"),
+  %re("/https:\/\/docs\.google\.com\/presentation/"),
+  %re("/https:\/\/docs\.google\.com\/document/"),
+  %re("/https:\/\/docs\.google\.com\/spreadsheets/"),
+  %re("/https:\/\/docs\.google\.com\/forms/"),
+  %re("/https:\/\/scribehow\.com\/(embed|shared)/"),
 ]
 
 let validEmbedUrl = url => Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url))

@@ -60,7 +60,8 @@ Rails.application.routes.draw do
   resource :school, only: [] do
     get 'customize'
     get 'admins'
-    get 'standings'
+    get 'standing'
+    patch 'standing', action: 'toggle_standing'
     post 'images'
   end
 

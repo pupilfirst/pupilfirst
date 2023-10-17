@@ -34,14 +34,47 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
-  # GET /school/standings
-  def standings
+  # GET /school/standing
+  def standing
     authorize current_school
+  end
+
+  def toggle_standing
+    authorize current_school
+
+    if current_school.configuration["enable_standing"].blank? &&
+         params[:enable_standing] == "true"
+      update_stading_configuration
+
+      Standing.create!(
+        name: "Neutral",
+        color: "#D3D3D3",
+        description: "This is the default standing for all students.",
+        school: current_school,
+        default: true
+      )
+    else
+      update_stading_configuration
+    end
+
+    redirect_to standing_school_path
   end
 
   # GET /school/
   def school_router
     authorize current_school
     render html: "", layout: "school_router"
+  end
+
+  private
+
+  def update_stading_configuration
+    current_school.update(
+      configuration:
+        current_school.configuration.merge(
+          "enable_standing" =>
+            ActiveRecord::Type::Boolean.new.cast(params[:enable_standing])
+        )
+    )
   end
 end

@@ -9,5 +9,5 @@ class Standing < ApplicationRecord
             }
   validates :color, presence: true
   validates :description, presence: true
-  validates_with RateLimitValidator, limit: 25, scope: :school_id
+  validates_with RateLimitValidator, limit: 15, scope: :school_id
 end

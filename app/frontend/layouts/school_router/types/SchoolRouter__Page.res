@@ -22,7 +22,7 @@ type coursePages =
 type settingsPages =
   | Customization
   | Admins
-  | Standings
+  | Standing
 
 type t =
   | SchoolCoaches
@@ -94,7 +94,7 @@ let path = (~courseId=?, t) => {
     switch settingsPages {
     | Customization => "/school/customize"
     | Admins => "/school/admins"
-    | Standings => "/school/standings"
+    | Standing => "/school/standing"
     }
   | Courses => "/school/courses"
   | SelectedCourse(coursePage) =>
@@ -118,7 +118,7 @@ let secondaryNavName = t =>
     switch settingsPages {
     | Customization => tr("nav.settings.customization")
     | Admins => tr("nav.settings.admins")
-    | Standings => tr("nav.settings.standings")
+    | Standing => tr("nav.settings.standing")
     }
   | SelectedCourse(coursePages) =>
     switch coursePages {

@@ -1418,7 +1418,7 @@ en:
         settings:
           admins: Admins
           customization: Customization
-          standings: Standings
+          standing: Standing
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag

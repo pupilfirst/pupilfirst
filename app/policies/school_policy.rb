@@ -9,5 +9,6 @@ class SchoolPolicy < ApplicationPolicy
   alias images? show?
   alias admins? show?
   alias school_router? show?
-  alias standings? show?
+  alias standing? show?
+  alias toggle_standing? show?
 end

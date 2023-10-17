@@ -21,32 +21,26 @@ feature "Students view performance report and submissions overview", js: true do
   let!(:another_student) { create :student, team: team, cohort: cohort }
 
   # Create few targets for the student
-  let(:target_group_l1) do
-    create :target_group, level: level_1
-  end
-  let(:target_group_l2) do
-    create :target_group, level: level_2
-  end
-  let(:target_group_l3) do
-    create :target_group, level: level_3
-  end
+  let(:target_group_l1) { create :target_group, level: level_1 }
+  let(:target_group_l2) { create :target_group, level: level_2 }
+  let(:target_group_l3) { create :target_group, level: level_3 }
 
   let(:target_l1) do
     create :target, :for_students, target_group: target_group_l1
   end
   let!(:milestone_target_l2) do
     create :target,
-    :for_students,
-    target_group: target_group_l2,
-    milestone: true,
-    milestone_number: 1
+           :for_students,
+           target_group: target_group_l2,
+           milestone: true,
+           milestone_number: 1
   end
   let!(:milestone_target_l3) do
     create :target,
-    :for_students,
-    target_group: target_group_l3,
-    milestone: true,
-    milestone_number: 2
+           :for_students,
+           target_group: target_group_l3,
+           milestone: true,
+           milestone_number: 2
   end
   let!(:target_4) do
     create :target, :for_students, target_group: target_group_l3
@@ -188,6 +182,9 @@ feature "Students view performance report and submissions overview", js: true do
   scenario "student visits course report link" do
     sign_in_user student.user, referrer: report_course_path(course)
 
+    expect(page).to have_text("Cohort")
+    expect(page).to have_text(cohort.name)
+
     # Targets Overview
     expect(page).to have_text("Targets Overview")
 
@@ -253,7 +250,10 @@ feature "Students view performance report and submissions overview", js: true do
     click_button "Status: Pending Review"
 
     expect(page).not_to have_text(target_l1.title)
-    expect(page).to have_link(milestone_target_l3.title, href: "/targets/#{milestone_target_l3.id}")
+    expect(page).to have_link(
+      milestone_target_l3.title,
+      href: "/targets/#{milestone_target_l3.id}"
+    )
   end
 
   scenario "student loads more submissions" do

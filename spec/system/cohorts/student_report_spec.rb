@@ -24,17 +24,11 @@ feature "Course students report", js: true do
   let!(:another_student) { create :student, cohort: cohort, team: team }
 
   # Create few targets for the student
-  let(:target_group_l1) do
-    create :target_group, level: level_1
-  end
+  let(:target_group_l1) { create :target_group, level: level_1 }
 
-  let(:target_group_l2) do
-    create :target_group, level: level_2
-  end
+  let(:target_group_l2) { create :target_group, level: level_2 }
 
-  let(:target_group_l3) do
-    create :target_group, level: level_3
-  end
+  let(:target_group_l3) { create :target_group, level: level_3 }
 
   let(:target_l1) do
     create :target,
@@ -212,6 +206,9 @@ feature "Course students report", js: true do
     expect(page).to have_text(student.name)
 
     click_link student.name
+
+    expect(page).to have_text("Cohort")
+    expect(page).to have_text(cohort.name)
 
     # Only milestone targets should be shown for completion status
 

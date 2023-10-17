@@ -20,7 +20,12 @@ class AddUniqueIndexToCourseExportsCohort < ActiveRecord::Migration[6.1]
 
     puts "Successfully resolved records duplicate issue!"
 
+    add_foreign_key :course_exports_cohorts, :course_exports
+    add_foreign_key :course_exports_cohorts, :cohorts
+
+    # Adding indices in both directions
     add_index :course_exports_cohorts, [:course_export_id, :cohort_id], unique: true
+    add_index :course_exports_cohorts, [:cohort_id, :course_export_id], unique: true
   end
 
   def down

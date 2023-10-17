@@ -208,6 +208,9 @@ feature "Course students report", js: true do
 
     click_link student.name
 
+    expect(page).to have_text("Cohort")
+    expect(page).to have_text(cohort.name)
+
     # Only milestone targets should be shown for completion status
 
     expect(page).to have_text(target_l1.title)

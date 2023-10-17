@@ -2677,6 +2677,7 @@ en:
     caption_image: A caption for the image
     close: Close
     coaches: Coaches
+    cohort: Cohort
     cohort_overview:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.

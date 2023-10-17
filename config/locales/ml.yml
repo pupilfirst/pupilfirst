@@ -2667,6 +2667,7 @@ ml:
     caption_image: ചിത്രത്തിന് ഒരു അടിക്കുറിപ്പ്
     close: അടയ്ക്കുക
     coaches: പരിശീലകർ
+    cohort: Cohort
     cohort_overview:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.

@@ -2667,6 +2667,7 @@ ta:
     caption_image: படத்திற்கான தலைப்பு
     close: நெருக்கமான
     coaches: பயிற்சியாளர்கள்
+    cohort: Cohort
     cohort_overview:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.

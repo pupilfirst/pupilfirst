@@ -2667,6 +2667,7 @@ hi:
     caption_image: छवि के लिए एक कैप्शन
     close: बंद करना
     coaches: डिब्बों
+    cohort: Cohort
     cohort_overview:
       no_milestone_targets: There are no milestone targets.
       no_students: There are no students in this cohort.

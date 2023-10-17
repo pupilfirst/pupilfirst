@@ -37,12 +37,13 @@ class SchoolsController < ApplicationController
   # GET /school/standing
   def standing
     authorize current_school
+    @presenter = Schools::StandingPresenter.new(view_context, current_school)
   end
 
   def toggle_standing
     authorize current_school
 
-    if current_school.configuration["enable_standing"].blank? &&
+    if current_school.configuration["enable_standing"].presence == nil &&
          params[:enable_standing] == "true"
       update_stading_configuration
 

@@ -9,5 +9,9 @@ module Schools
     def standing_enabled?
       @school.configuration["enable_standing"]
     end
+
+    def standings
+      @standings ||= @school.standings.order(:id)
+    end
   end
 end

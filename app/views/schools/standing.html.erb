@@ -37,5 +37,31 @@
         </div>
       </div>
     </div>
+    <div class="p-4 bg-white mt-8 flex justify-between">
+      <!-- Title and Button -->
+      <div class="flex flex-col">
+        <h1 class="text-base font-semibold">Edit/modify standings</h1>
+        <p class="text-gray-600 max-w-3xl">
+          You can edit the color, name, and description of a standing, or you can add a new standing.
+          Students can be promoted or demoted to any standing through the "Edit Student" tab.
+        </p>
+      </div>
+      <div class="flex justify-center items-center gap-2">
+        <%= button_to "Edit standings", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+      </div>
+    </div>
+    <div>
+      <% @presenter.standings.each do |standing|%>
+        <div class="flex items-center gap-3">
+          <i class="if i-shield-solid if-fw text-[<%= standing.color %>] text-5xl" ></i>
+          <span class="bg-gray-50 flex-grow p-3 max-w-md">
+            <%= standing.name %>
+          </span>
+          <% if standing.default %>
+            <span class="text-sm text-gray-600 italic">Default</span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

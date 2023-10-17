@@ -17,51 +17,53 @@
         <%= button_to "No", standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-r-md #{'border border-primary-500 bg-primary-100' unless @presenter.standing_enabled? }"%>
       </div>
     </div>
-    <div class="bg-white shadow rounded-lg p-4 mt-8 flex justify-between">
-      <div class="flex-col gap-2">
-        <div class="flex items-center justify-start gap-3">
-          <span class="text-base font-semibold">Add/Update your school's code of conduct</span>
-          <span class="bg-orange-100 text-orange-400 text-sm px-2 py-1 rounded-2xl border border-orange-300 font-medium">Required</span>
+    <% if @presenter.standing_enabled? %>
+      <div class="bg-white shadow rounded-lg p-4 mt-8 flex justify-between">
+        <div class="flex-col gap-2">
+          <div class="flex items-center justify-start gap-3">
+            <span class="text-base font-semibold">Add/Update your school's code of conduct</span>
+            <span class="bg-orange-100 text-orange-400 text-sm px-2 py-1 rounded-2xl border border-orange-300 font-medium">Required</span>
+          </div>
+          <p class="text-gray-600 max-w-3xl">
+            It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
+            <%= link_to "Learn more about crafting Code of conduct.", "#", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
+          </p>
         </div>
-        <p class="text-gray-600 max-w-3xl">
-          It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
-          <%= link_to "Learn more about crafting Code of conduct.", "#", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
-        </p>
-      </div>
-      <div class="flex justify-center items-center gap-2">
-        <div class="">
-          <%= button_to "View CoC", "#", method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-        </div>
-        <div class="">
-          <%= button_to "Add CoC", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+        <div class="flex justify-center items-center gap-2">
+          <div class="">
+            <%= button_to "View CoC", "#", method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+          </div>
+          <div class="">
+            <%= button_to "Add CoC", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="p-4 bg-white mt-8 flex justify-between">
-      <!-- Title and Button -->
-      <div class="flex flex-col">
-        <h1 class="text-base font-semibold">Edit/modify standings</h1>
-        <p class="text-gray-600 max-w-3xl">
-          You can edit the color, name, and description of a standing, or you can add a new standing.
-          Students can be promoted or demoted to any standing through the "Edit Student" tab.
-        </p>
-      </div>
-      <div class="flex justify-center items-center gap-2">
-        <%= button_to "Edit standings", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-      </div>
-    </div>
-    <div>
-      <% @presenter.standings.each do |standing|%>
-        <div class="flex items-center gap-3">
-          <i class="if i-shield-solid if-fw text-[<%= standing.color %>] text-5xl" ></i>
-          <span class="bg-gray-50 flex-grow p-3 max-w-md">
-            <%= standing.name %>
-          </span>
-          <% if standing.default %>
-            <span class="text-sm text-gray-600 italic">Default</span>
-          <% end %>
+      <div class="p-4 bg-white mt-8 flex justify-between">
+        <!-- Title and Button -->
+        <div class="flex flex-col">
+          <h1 class="text-base font-semibold">Edit/modify standings</h1>
+          <p class="text-gray-600 max-w-3xl">
+            You can edit the color, name, and description of a standing, or you can add a new standing.
+            Students can be promoted or demoted to any standing through the "Edit Student" tab.
+          </p>
         </div>
-      <% end %>
-    </div>
+        <div class="flex justify-center items-center gap-2">
+          <%= button_to "Edit standings", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+        </div>
+      </div>
+      <div>
+        <% @presenter.standings.each do |standing|%>
+          <div class="flex items-center gap-3">
+            <i class="if i-shield-solid if-fw text-[<%= standing.color %>] text-5xl" ></i>
+            <span class="bg-gray-50 flex-grow p-3 max-w-md">
+              <%= standing.name %>
+            </span>
+            <% if standing.default %>
+              <span class="text-sm text-gray-600 italic">Default</span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>

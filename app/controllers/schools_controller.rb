@@ -43,8 +43,7 @@ class SchoolsController < ApplicationController
   def toggle_standing
     authorize current_school
 
-    if current_school.configuration["enable_standing"].presence == nil &&
-         params[:enable_standing] == "true"
+    if current_school.standings.count == 0 && params[:enable_standing] == "true"
       update_stading_configuration
 
       Standing.create!(

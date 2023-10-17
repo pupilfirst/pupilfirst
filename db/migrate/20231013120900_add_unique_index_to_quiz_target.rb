@@ -4,31 +4,16 @@ class AddUniqueIndexToQuizTarget < ActiveRecord::Migration[6.1]
 
   def up
     puts 'Finding duplicate target_id records for Quizzes...'
-
-    duplicates = Quiz.group(
-      :target_id
-    ).having('COUNT(*) > 1')
-
-    if duplicates.exists?
-      puts 'Found duplicates...'
-      puts 'Deleting the duplicates...'
-
-      duplicate_records = Quiz.where(
-        target_id: duplicates.pluck(:target_id)
-      )
-
-      duplicate_records.find_each do |duplicate|
-        puts "Deleting duplicate for quiz.id: #{duplicate.id}..."
-        # Find and keep one of the duplicates
-        keep_one = Quiz.find_by(target_id: duplicate.target_id)
-
-        # Find all duplicates with the same values and delete them
-        duplicates_to_delete = Quiz.where(
-          target_id: duplicate.target_id
-        ).where.not(id: keep_one.id)
-
-        duplicates_to_delete.delete_all
-      end
+    Quiz.select('MAX(created_at) as latest_time, target_id')
+        .group(:target_id)
+        .having('COUNT(*) > 1')
+        .each do |duplicate|
+      most_recent_record = Quiz.where(target_id: duplicate.target_id)
+                               .order(created_at: :desc)
+                               .first
+      Quiz.where(target_id: duplicate.target_id)
+          .where.not(id: most_recent_record.id)
+          .delete_all
     end
 
     puts "Successfully resolved records duplicate issue!"

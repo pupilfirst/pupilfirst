@@ -31,7 +31,7 @@
         <% cohorts.each do |cohort| %>
           <%= link_to cohort_path(cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
             <div>
-              <span class="inline-block font-medium"><%= cohort.name %></span>
+              <span class="inline-block font-medium break-all"><%= cohort.name %></span>
               <% if cohort.ends_at.present? %>
                 <div>
                   <span class="text-sm text-gray-500 font-medium" ><%= t(".end_date") %> </span>

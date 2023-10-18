@@ -151,9 +151,10 @@ module Mutations
       end
 
       def valid_grading?
-        if not grade_hash.empty?
-          all_criteria_graded? && all_grades_valid?
+        if grade_hash.empty?
+          return true
         end
+        all_criteria_graded? && all_grades_valid?
       end
 
       def all_criteria_graded?

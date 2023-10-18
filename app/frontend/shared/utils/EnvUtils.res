@@ -19,7 +19,7 @@ let decode = envString =>
   }
 
 let env = () =>
-  switch document |> Document.documentElement |> Element.getAttribute("data-env") {
+  switch document->Document.documentElement->Element.getAttribute("data-env") {
   | Some(props) => decode(props)
   | None =>
     let message = "Unable to find data env at envUtils "

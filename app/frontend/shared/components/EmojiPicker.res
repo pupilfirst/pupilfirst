@@ -36,7 +36,11 @@ let make = (~className, ~title, ~onChange) => {
       switch wrapperRef.current->Js.Nullable.toOption {
       | Some(wrapper) =>
         if (
-          !(wrapper |> Element.contains(event |> MouseEvent.target |> EventTarget.unsafeAsElement))
+          !(
+            wrapper->Element.contains(
+              ~child=event |> MouseEvent.target |> EventTarget.unsafeAsElement,
+            )
+          )
         ) {
           setIsOpen(_ => false)
         }
@@ -54,13 +58,13 @@ let make = (~className, ~title, ~onChange) => {
       ()
     }
 
-    document |> Document.addKeyUpEventListener(handleEscKey)
-    document |> Document.addClickEventListener(handleClickOutside)
+    document->Document.addKeyUpEventListener(handleEscKey)
+    document->Document.addClickEventListener(handleClickOutside)
 
     Some(
       () => {
-        document |> Document.removeKeyUpEventListener(handleEscKey)
-        document |> Document.removeClickEventListener(handleClickOutside)
+        document->Document.removeKeyUpEventListener(handleEscKey)
+        document->Document.removeClickEventListener(handleClickOutside)
       },
     )
   })

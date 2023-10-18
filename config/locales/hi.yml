@@ -750,10 +750,6 @@ hi:
         rejected: अस्वीकृत
         reviewing: की समीक्षा
       student: छात्र
-      student_dropped_out_message_with_timestamp: यह सबमिशन उस छात्र की ओर से है जिसकी पाठ्यक्रम तक पहुंच समाप्त हो गई है, या बाहर हो गई है। आप %{timestamp}तक सबमिशन की समीक्षा कर सकते हैं।
-      student_dropped_out_message_without_timestamp: यह सबमिशन उस छात्र की ओर से है जिसकी पाठ्यक्रम तक पहुंच समाप्त हो गई है, या बाहर हो गई है।
-      students_dropped_out_message_with_timestamp: यह सबमिशन एक या अधिक छात्रों से जुड़ा हुआ है, जिनकी कोर्स तक पहुंच समाप्त हो गई है, या बाहर हो गए हैं। आप %{timestamp}तक सबमिशन की समीक्षा कर सकते हैं।
-      students_dropped_out_message_without_timestamp: यह सबमिशन एक या अधिक छात्रों से जुड़ा हुआ है, जिनकी पाठ्यक्रम तक पहुंच समाप्त हो गई है, या बाहर हो गए हैं।
       submission_number: "Submission #%{number}"
       submitted_by: "द्वारा प्रस्तुत "
       submitted_by_team: "टीम द्वारा प्रस्तुत: "
@@ -2520,6 +2516,14 @@ hi:
     issue_certificate_mutator:
       certificate_error: निर्दिष्ट प्रमाणपत्र नहीं मिला।
       issued_error: इस छात्र को इस पाठ्यक्रम के लिए पहले ही प्रमाण पत्र जारी किया जा चुका है।
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
     update_evaluation_criterion_mutator:
       evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
   school:

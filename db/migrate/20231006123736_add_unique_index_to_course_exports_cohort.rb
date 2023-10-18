@@ -4,18 +4,37 @@ class AddUniqueIndexToCourseExportsCohort < ActiveRecord::Migration[6.1]
 
   def up
     puts 'Finding duplicate records for CourseExportsCohort...'
-    CourseExportsCohort.select('MAX(created_at) as latest_time, course_export_id, cohort_id')
-                       .group(:course_export_id, :cohort_id)
-                       .having('COUNT(*) > 1')
-                       .each do |duplicate|
-      most_recent_record = CourseExportsCohort.where(course_export_id: duplicate.course_export_id,
-                                                     cohort_id: duplicate.cohort_id)
-                                              .order(created_at: :desc)
-                                              .first
-      CourseExportsCohort.where(course_export_id: duplicate.course_export_id,
-                                cohort_id: duplicate.cohort_id)
-                         .where.not(id: most_recent_record.id)
-                         .delete_all
+
+    duplicates = CourseExportsCohort.group(
+      :course_export_id,
+      :cohort_id
+    ).having('COUNT(*) > 1')
+
+    if duplicates.exists?
+      puts 'Found duplicates...'
+      puts 'Deleting the duplicates...'
+
+      duplicate_records = CourseExportsCohort.where(
+        course_export_id: duplicates.pluck(:course_export_id),
+        cohort_id: duplicates.pluck(:cohort_id)
+      )
+
+      duplicate_records.find_each do |duplicate|
+        puts "Deleting duplicate for course_exports_cohort.id: #{duplicate.id}..."
+        # Find and keep one of the duplicates
+        keep_one = CourseExportsCohort.find_by(
+          course_export_id: duplicate.course_export_id,
+          cohort_id: duplicate.cohort_id
+        )
+
+        # Find all duplicates with the same values and delete them
+        duplicates_to_delete = CourseExportsCohort.where(
+          course_export_id: duplicate.course_export_id,
+          cohort_id: duplicate.cohort_id
+        ).where.not(id: keep_one.id)
+
+        duplicates_to_delete.delete_all
+      end
     end
 
     puts "Successfully resolved records duplicate issue!"

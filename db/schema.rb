@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
   create_table "course_exports_cohorts", force: :cascade do |t|
     t.bigint "cohort_id"
     t.bigint "course_export_id"
+    t.index ["cohort_id", "course_export_id"], name: "index_course_exports_cohorts_on_cohort_id_and_course_export_id", unique: true
     t.index ["cohort_id"], name: "index_course_exports_cohorts_on_cohort_id"
     t.index ["course_export_id", "cohort_id"], name: "index_course_exports_cohorts_on_course_export_id_and_cohort_id", unique: true
     t.index ["course_export_id"], name: "index_course_exports_cohorts_on_course_export_id"
@@ -876,6 +877,8 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"
   add_foreign_key "course_exports", "users"
+  add_foreign_key "course_exports_cohorts", "cohorts"
+  add_foreign_key "course_exports_cohorts", "course_exports"
   add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
   add_foreign_key "discord_messages", "users"

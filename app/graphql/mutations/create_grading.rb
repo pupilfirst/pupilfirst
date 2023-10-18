@@ -47,7 +47,7 @@ module Mutations
         @grades = value[:grades]
         combine(
           submission_exists,
-          submission_not_graded,
+          submission_not_reviewed,
           valid_evaluation_criteria,
           right_shape_for_checklist,
           checklist_data_is_not_mutated,
@@ -64,10 +64,10 @@ module Mutations
         )
       end
 
-      def submission_not_graded
+      def submission_not_reviewed
         return unless @submission.reviewed?
 
-        I18n.t('mutations.create_grading.submission_graded_error')
+        I18n.t('mutations.create_grading.submission_reviewed_error')
       end
 
       def valid_evaluation_criteria
@@ -151,7 +151,9 @@ module Mutations
       end
 
       def valid_grading?
-        all_criteria_graded? && all_grades_valid?
+        if not grade_hash.empty?
+          all_criteria_graded? && all_grades_valid?
+        end
       end
 
       def all_criteria_graded?

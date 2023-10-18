@@ -13,5 +13,9 @@ module Schools
     def standings
       @standings ||= @school.standings.order(:id)
     end
+
+    def school_has_code_of_conduct?
+      SchoolString.exists?(school: @school, key: "code_of_conduct")
+    end
   end
 end

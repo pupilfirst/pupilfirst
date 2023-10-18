@@ -60,6 +60,11 @@ class SchoolsController < ApplicationController
     redirect_to standing_school_path
   end
 
+  # GET /school/code_of_conduct
+  def code_of_conduct
+    authorize current_school
+  end
+
   # GET /school/
   def school_router
     authorize current_school

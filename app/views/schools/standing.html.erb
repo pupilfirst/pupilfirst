@@ -1,3 +1,6 @@
+<% content_for(:head) do %>
+  <title><%= current_school.name %> | <%= t(".page_title") %> </title>
+<% end %>
 <div class="relative" id="schoolrouter-innerpage-data">
   <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
     <div class="bg-gradient-to-l to-primary-100 from-primary-200 shadow rounded-t-lg grid grid-cols-4 gap-4 items-center">
@@ -13,6 +16,9 @@
     <div class="bg-white p-4 rounded-b-lg shadow flex items-center justify-between">
       <span class="text-base font-semibold">Enable standing for your school?</span>
       <div class="flex items-center bg-white p-2 hover:cursor-pointer">
+        <% if @presenter.standing_enabled? %>
+          <span class="italic text-green-400 mr-5" >Enabled</span>
+        <% end %>
         <%= button_to "Yes", standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-l-md  #{'border border-primary-500 bg-primary-100' if @presenter.standing_enabled? }"%>
         <%= button_to "No", standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-r-md #{'border border-primary-500 bg-primary-100' unless @presenter.standing_enabled? }"%>
       </div>
@@ -30,12 +36,18 @@
           </p>
         </div>
         <div class="flex justify-center items-center gap-2">
-          <div class="">
-            <%= button_to "View CoC", "#", method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-          </div>
-          <div class="">
-            <%= button_to "Add CoC", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-          </div>
+          <% if @presenter.school_has_code_of_conduct? %>
+            <div class="">
+              <%= button_to "View CoC", "#", method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+            </div>
+            <div class="">
+              <%= button_to "Edit CoC", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+            </div>
+          <% else %>
+            <div class="">
+              <%= button_to "Add CoC", code_of_conduct_school_path, method: :get, class: "bg-primary-50 text-primary-500 py-2 px-6 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+            </div>
+          <% end %>
         </div>
       </div>
       <div class="p-4 bg-white mt-8 flex justify-between">

@@ -1,19 +1,19 @@
 module Mutations
   class CreateFeedback < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
     argument :feedback, String, required: true
 
-    description 'Create feedback for submission'
+    description "Create feedback for submission"
 
     field :success, Boolean, null: false
 
     def resolve(_params)
       notify(
         :success,
-        I18n.t('mutations.create_feedback.success_notification.title'),
-        I18n.t('mutations.create_feedback.success_notification.description')
+        I18n.t("mutations.create_feedback.success_notification.title"),
+        I18n.t("mutations.create_feedback.success_notification.description")
       )
 
       { success: create_feedback }

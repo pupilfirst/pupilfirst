@@ -15,6 +15,7 @@ feature "Course students report", js: true do
   let(:course_coach) { create :faculty, school: school }
   let(:team_coach) { create :faculty, school: school }
   let(:coach_without_access) { create :faculty, school: school }
+  let(:school_admin) { create :school_admin }
 
   # Create a team
   let!(:team) { create :team, cohort: cohort }
@@ -481,5 +482,54 @@ feature "Course students report", js: true do
     expect(page).to have_text(
       "This student's access to the course ended on #{time.strftime("%b %-d, %Y")}."
     )
+  end
+
+  context "when user is a school admin" do
+    let!(:school_2) { create :school }
+    let!(:course_2) { create :course, school: school_2 }
+    let!(:cohort_2) { create :cohort, course: course_2 }
+    let!(:user_2) { create :user, school: school_2 }
+    let!(:school_2_student) { create :student, user: user_2, cohort: cohort_2 }
+
+    scenario "can access a student report" do
+      sign_in_user school_admin.user, referrer: student_report_path(student)
+      expect(page).to have_text(student.name)
+
+      expect(page).not_to have_text("Add a New Note")
+      expect(page).not_to have_button("Save Note")
+
+      # Can access student submissions tab
+      find("li", text: "Submissions").click
+
+      expect(page).to have_content(target_l1.title)
+    end
+
+    scenario "admin cannot access the report of a student belonging to another school" do
+      sign_in_user school_admin.user,
+                   referrer: student_report_path(school_2_student)
+
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
+    end
+  end
+
+  context "when the user is a student" do
+    let(:student_2) { create :student }
+
+    scenario "student cannot access another student's report" do
+      sign_in_user student.user, referrer: student_report_path(student_2)
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
+    end
+
+    scenario "student cannot access their own report" do
+      sign_in_user student.user, referrer: student_report_path(student)
+
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
+    end
   end
 end

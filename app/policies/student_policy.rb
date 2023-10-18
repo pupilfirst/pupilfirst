@@ -2,8 +2,10 @@ class StudentPolicy < ApplicationPolicy
   def report?
     return false if user.blank?
 
-    # Coaches who review submissions from this student can view their profile.
-    faculty = user.faculty
-    faculty.present? && faculty.cohorts.exists?(id: record.cohort)
+    return false if record&.course&.school != current_school
+
+    # School admins and coaches assigned to student's cohort can view their profile.
+    current_school_admin.present? ||
+      user.faculty&.cohorts&.exists?(id: record.cohort)
   end
 end

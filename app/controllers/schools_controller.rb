@@ -48,7 +48,7 @@ class SchoolsController < ApplicationController
 
       Standing.create!(
         name: "Neutral",
-        color: "#D3D3D3",
+        color: "#4338ca",
         description: "This is the default standing for all students.",
         school: current_school,
         default: true

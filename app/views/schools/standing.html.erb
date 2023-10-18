@@ -53,8 +53,8 @@
       </div>
       <div>
         <% @presenter.standings.each do |standing|%>
-          <div class="flex items-center gap-3">
-            <i class="if i-shield-solid if-fw text-[<%= standing.color %>] text-5xl" ></i>
+          <div class="flex items-center gap-3 mb-3">
+            <%= render 'shared/standing_shield', color: standing.color %>
             <span class="bg-gray-50 flex-grow p-3 max-w-md">
               <%= standing.name %>
             </span>

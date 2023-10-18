@@ -750,10 +750,6 @@ ml:
         rejected: നിരസിച്ചു
         reviewing: അവലോകനം ചെയ്യുന്നു
       student: വിദ്യാർത്ഥി
-      student_dropped_out_message_with_timestamp: ഈ സമർപ്പണം കോഴ്‌സിലേക്കുള്ള ആക്‌സസ് അവസാനിച്ചതോ ഉപേക്ഷിക്കപ്പെട്ടതോ ആയ ഒരു വിദ്യാർത്ഥിയിൽ നിന്നാണ്. നിങ്ങൾക്ക് %{timestamp}വരെ സമർപ്പിക്കൽ അവലോകനം ചെയ്യാം.
-      student_dropped_out_message_without_timestamp: ഈ സമർപ്പണം കോഴ്‌സിലേക്കുള്ള ആക്‌സസ് അവസാനിച്ചതോ ഉപേക്ഷിക്കപ്പെട്ടതോ ആയ ഒരു വിദ്യാർത്ഥിയിൽ നിന്നാണ്.
-      students_dropped_out_message_with_timestamp: ഈ സമർപ്പണം കോഴ്‌സിലേക്കുള്ള ആക്‌സസ് അവസാനിച്ച അല്ലെങ്കിൽ ഉപേക്ഷിച്ച ഒന്നോ അതിലധികമോ വിദ്യാർത്ഥികളുമായി ലിങ്ക് ചെയ്‌തിരിക്കുന്നു. നിങ്ങൾക്ക് %{timestamp}വരെ സമർപ്പിക്കൽ അവലോകനം ചെയ്യാം
-      students_dropped_out_message_without_timestamp: ഈ സമർപ്പണം കോഴ്‌സിലേക്കുള്ള പ്രവേശനം അവസാനിച്ച അല്ലെങ്കിൽ കൊഴിഞ്ഞുപോയ ഒന്നോ അതിലധികമോ വിദ്യാർത്ഥികളുമായി ലിങ്ക് ചെയ്‌തിരിക്കുന്നു.
       submission_number: "Submission #%{number}"
       submitted_by: "സമർപ്പിച്ചത് "
       submitted_by_team: "ടീം സമർപ്പിച്ചത്: "
@@ -2520,6 +2516,14 @@ ml:
     issue_certificate_mutator:
       certificate_error: നിർദ്ദിഷ്ട സർട്ടിഫിക്കറ്റ് കണ്ടെത്താൻ കഴിഞ്ഞില്ല.
       issued_error: ഈ കോഴ്‌സിനായി ഈ വിദ്യാർത്ഥിക്ക് ഇതിനകം സർട്ടിഫിക്കറ്റ് നൽകിയിട്ടുണ്ട്.
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
     update_evaluation_criterion_mutator:
       evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
   school:

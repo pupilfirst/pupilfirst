@@ -18,15 +18,6 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
-### 2023.5
-
-In this version, we've made a significant modification to the structure of the API response for submission details.
-
-- **Removed**: The keys `inactive_students`, `preview`, and `inactive_submission_review_allowed_days` have been removed from the response of `SubmissionDetailsResolver`.
-- **Added**: New keys `reviewable` and `warning` have been introduced.
-
-Clients or systems that are dependent on the previous structure of the API response will need to adapt to these changes.
-
 ### 2023.4
 
 This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.

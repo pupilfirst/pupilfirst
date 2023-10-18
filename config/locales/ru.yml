@@ -762,10 +762,6 @@ ru:
         rejected: Отклонен
         reviewing: Оценивается
       student: студент
-      student_dropped_out_message_with_timestamp: Это студент, доступ к курсу закончился или у которого закончился. Вы можете просмотреть заявку до %{timestamp}.
-      student_dropped_out_message_without_timestamp: Это задание от студента, доступ к которому закончился или у которого закончился.
-      students_dropped_out_message_with_timestamp: Эта работа связана с одним или несколькими студентами, доступ к курсу закончился или закончился. ou может просмотреть представление до %{timestamp}
-      students_dropped_out_message_without_timestamp: Эта работа связана с одним или несколькими студентами, доступ к курсу закончился или закончился.
       submission_number: "Submission #%{number}"
       submitted_by: "Отправлен от "
       submitted_by_team: "Отправлено командой: "
@@ -2560,6 +2556,18 @@ ru:
     issue_certificate_mutator:
       certificate_error: Указанный сертификат не найден.
       issued_error: Этому студенту уже выдан сертификат о прохождении этого курса.
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        few: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+        many: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        few: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+        many: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
     update_evaluation_criterion_mutator:
       evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
   school:

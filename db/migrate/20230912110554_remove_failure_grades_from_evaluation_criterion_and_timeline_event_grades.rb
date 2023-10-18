@@ -1,4 +1,11 @@
 class RemoveFailureGradesFromEvaluationCriterionAndTimelineEventGrades < ActiveRecord::Migration[6.1]
+
+  class TimelineEvent < ApplicationRecord
+    has_many :timeline_event_grades, dependent: :destroy
+
+  class TimelineEventGrade < ApplicationRecord
+    belongs_to :timeline_event
+
   def up
 
     # remove all grades below pass grade

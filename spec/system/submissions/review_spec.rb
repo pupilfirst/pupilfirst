@@ -298,6 +298,26 @@ feature "Submission review overlay", js: true do
       )
     end
 
+    scenario "coach undo a rejection" do
+      sign_in_user coach.user, referrer: review_course_path(course)
+
+      find("a[data-submission-id='#{submission_pending.id}']").click
+      click_button "Start Review"
+      within("div#is_acceptable") { click_button "No" }
+      click_button "Reject Submission"
+
+      accept_confirm { click_button "Undo Rejection" }
+
+      expect(page).to have_text("Start Review")
+
+      submission = submission_pending.reload
+      expect(submission.evaluator_id).to eq(nil)
+      expect(submission.passed_at).to eq(nil)
+      expect(submission.evaluated_at).to eq(nil)
+      expect(submission.timeline_event_grades).to eq([])
+    end
+
+
     scenario "coaches can view and edit the review checklist without assigning themselves" do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)

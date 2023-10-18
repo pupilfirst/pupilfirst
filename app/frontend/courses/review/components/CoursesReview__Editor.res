@@ -203,19 +203,8 @@ let getNextSubmission = (send, courseId, filter) => {
   |> ignore
 }
 
-let isSubmissionReviewAllowed = submissionDetails => {
-  let daysSinceSubmission = DateFns.differenceInDays(
-    Js.Date.make(),
-    SubmissionDetails.createdAt(submissionDetails),
-  )
-
-  let submissionReviewAllowedTime = SubmissionDetails.inactiveSubmissionReviewAllowedDays(
-    submissionDetails,
-  )
-
-  let submissionReviewAllowed = daysSinceSubmission < submissionReviewAllowedTime
-
-  SubmissionDetails.preview(submissionDetails) && !submissionReviewAllowed
+let isReviewDisabled = submissionDetails => {
+  SubmissionDetails.reviewable(submissionDetails) == false
 }
 
 let makeFeedback = (user, feedback) => {
@@ -351,36 +340,16 @@ let gradeSubmissionQuery = (
   |> ignore
 }
 
-let inactiveWarning = submissionDetails =>
-  if SubmissionDetails.inactiveStudents(submissionDetails) {
-    let submissionDeadlineDate = DateFns.addDays(
-      SubmissionDetails.createdAt(submissionDetails),
-      SubmissionDetails.inactiveSubmissionReviewAllowedDays(submissionDetails),
-    )
-
-    let warning = if Array.length(SubmissionDetails.students(submissionDetails)) > 1 {
-      isSubmissionReviewAllowed(submissionDetails)
-        ? t("students_dropped_out_message_without_timestamp")
-        : t(
-            ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
-            "students_dropped_out_message_with_timestamp",
-          )
-    } else if isSubmissionReviewAllowed(submissionDetails) {
-      t("student_dropped_out_message_without_timestamp")
-    } else {
-      t(
-        ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
-        "student_dropped_out_message_with_timestamp",
-      )
-    }
-
+let warning = submissionDetails => {
+  switch SubmissionDetails.warning(submissionDetails) {
+  | None => React.null
+  | Some(warning) =>
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
       <i className="fas fa-exclamation-triangle" /> <span className="ms-2"> {warning->str} </span>
     </div>
-  } else {
-    React.null
   }
+}
 
 let closeOverlay = (state, courseId, filter) => {
   let path = "/courses/" ++ courseId ++ "/review?" ++ Filter.toQueryString(filter)
@@ -598,7 +567,7 @@ let showGradePill = (
             state,
             send,
           )}
-          disabled={isSubmissionReviewAllowed(submissionDetails)}
+          disabled={isReviewDisabled(submissionDetails)}
           title={GradeLabel.label(gradeLabel)}
           className={gradePillClasses(gradeValue, gradeLabelGrade, passGrade, send)}>
           {switch send {
@@ -905,7 +874,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
             </div>
             <button
               className="btn btn-default mt-2"
-              disabled={isSubmissionReviewAllowed(submissionDetails)}
+              disabled={isReviewDisabled(submissionDetails)}
               onClick={_ => send(UpdateNote(""))}>
               <i className="far fa-edit" /> <span className="ps-2"> {t("write_a_note")->str} </span>
             </button>
@@ -949,7 +918,7 @@ let feedbackGenerator = (
       </div>
       <div className="mt-2 md:ms-8">
         <button
-          disabled={isSubmissionReviewAllowed(submissionDetails)}
+          disabled={isReviewDisabled(submissionDetails)}
           className="bg-primary-100 flex gap-3 items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
@@ -987,7 +956,7 @@ let feedbackGenerator = (
               value=state.newFeedback
               profile=Markdown.Permissive
               maxLength=10000
-              disabled={isSubmissionReviewAllowed(submissionDetails)}
+              disabled={isReviewDisabled(submissionDetails)}
               placeholder={t("feedback_placeholder")}
             />
           </div>
@@ -1141,7 +1110,7 @@ let make = (
         ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
             UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
           ) ||
-          isSubmissionReviewAllowed(submissionDetails)
+          isReviewDisabled(submissionDetails)
             ? GradesEditor
             : AssignReviewer
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
@@ -1197,7 +1166,7 @@ let make = (
       ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
           UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
         ) ||
-        isSubmissionReviewAllowed(submissionDetails)
+        isReviewDisabled(submissionDetails)
           ? GradesEditor
           : AssignReviewer
       : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
@@ -1222,7 +1191,7 @@ let make = (
     [
       <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
       <div key="submission-header">
-        <div> {inactiveWarning(submissionDetails)} </div>
+        <div> {warning(submissionDetails)} </div>
         {headerSection(state, submissionDetails, filter)}
         {ReactUtils.nullIf(
           <div className="flex gap-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
@@ -1334,7 +1303,7 @@ let make = (
                     </div>
                   </div>
                 </div>,
-                isSubmissionReviewAllowed(submissionDetails),
+                isReviewDisabled(submissionDetails),
               )}
               {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
               <div className="w-full px-4 md:px-6 pt-8 space-y-8">
@@ -1443,7 +1412,7 @@ let make = (
                             WindowUtils.confirm(t("undo_grade_warning"), () =>
                               OverlaySubmission.id(overlaySubmission)->undoGrading(send)
                             )}
-                          disabled={isSubmissionReviewAllowed(submissionDetails)}
+                          disabled={isReviewDisabled(submissionDetails)}
                           className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                           <i className="fas fa-undo" />
                           <span className="ms-2"> {t("undo_grading")->str} </span>
@@ -1497,7 +1466,7 @@ let make = (
                   <div className="py-4 md:ms-8 text-center">
                     <button
                       onClick={_ => send(ShowAdditionalFeedbackEditor)}
-                      disabled={isSubmissionReviewAllowed(submissionDetails)}
+                      disabled={isReviewDisabled(submissionDetails)}
                       className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                       <Icon className="if i-plus-regular" />
                       <p className="ps-2">

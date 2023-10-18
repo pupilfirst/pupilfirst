@@ -750,10 +750,6 @@ ta:
         rejected: நிராகரிக்கப்பட்டது
         reviewing: மதிப்பாய்வு செய்கிறது
       student: மாணவர்
-      student_dropped_out_message_with_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய மாணவரிடமிருந்து. நீங்கள் சமர்ப்பிப்பை %{timestamp}வரை மதிப்பாய்வு செய்யலாம்.
-      student_dropped_out_message_without_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய மாணவரிடமிருந்து.
-      students_dropped_out_message_with_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுடன் இணைக்கப்பட்டுள்ளது. நீங்கள் சமர்ப்பிப்பை %{timestamp}வரை மதிப்பாய்வு செய்யலாம்
-      students_dropped_out_message_without_timestamp: இந்தச் சமர்ப்பிப்பு, பாடநெறிக்கான அணுகல் முடிந்துவிட்ட அல்லது வெளியேறிய ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுடன் இணைக்கப்பட்டுள்ளது.
       submission_number: "Submission #%{number}"
       submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
       submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது: "
@@ -2520,6 +2516,14 @@ ta:
     issue_certificate_mutator:
       certificate_error: குறிப்பிட்ட சான்றிதழைக் கண்டுபிடிக்க முடியவில்லை.
       issued_error: இந்த மாணவருக்கு இந்தப் படிப்புக்கான சான்றிதழ் ஏற்கனவே வழங்கப்பட்டுள்ளது.
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
     update_evaluation_criterion_mutator:
       evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
   school:

@@ -2,9 +2,11 @@ class RemoveFailureGradesFromEvaluationCriterionAndTimelineEventGrades < ActiveR
 
   class TimelineEvent < ApplicationRecord
     has_many :timeline_event_grades, dependent: :destroy
+  end
 
   class TimelineEventGrade < ApplicationRecord
     belongs_to :timeline_event
+  end
 
   def up
 

@@ -73,6 +73,7 @@ module StudentDetailsQuery = %graphql(`
           milestoneNumber
           completed
         }
+        canModifyCoachNotes
         team {
           id
           name
@@ -150,6 +151,7 @@ let getStudentDetails = (studentId, setState) => {
     let studentDetails = StudentDetails.make(
       ~id=studentId,
       ~hasArchivedNotes=response.hasArchivedCoachNotes,
+      ~canModifyCoachNotes=response.studentDetails.canModifyCoachNotes,
       ~coachNotes,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
@@ -169,15 +171,16 @@ let getStudentDetails = (studentId, setState) => {
         StudentDetails.makeTeam(
           ~id=team.id,
           ~name=team.name,
-          ~students=team.students->Js.Array2.map(s =>
-            StudentInfo.make(
-              ~id=s.id,
-              ~taggings=s.taggings,
-              ~user=UserDetails.makeFromFragment(s.user),
-              ~cohort=Cohort.makeFromFragment(s.cohort),
-              ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
-              ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
-            )
+          ~students=team.students->Js.Array2.map(
+            s =>
+              StudentInfo.make(
+                ~id=s.id,
+                ~taggings=s.taggings,
+                ~user=UserDetails.makeFromFragment(s.user),
+                ~cohort=Cohort.makeFromFragment(s.cohort),
+                ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+                ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+              ),
           ),
         )
       ),
@@ -190,8 +193,7 @@ let getStudentDetails = (studentId, setState) => {
   |> ignore
 }
 
-let updateSubmissions = (setState, submissions) =>
-  setState(state => {...state, submissions: submissions})
+let updateSubmissions = (setState, submissions) => setState(state => {...state, submissions})
 
 let doughnutChart = (color, percentage) =>
   <svg viewBox="0 0 36 36" className={"student-overlay__doughnut-chart " ++ color}>
@@ -372,8 +374,7 @@ let showSocialLinks = socialLinks =>
     |> React.array}
   </div>
 
-let setSelectedTab = (selectedTab, setState) =>
-  setState(state => {...state, selectedTab: selectedTab})
+let setSelectedTab = (selectedTab, setState) => setState(state => {...state, selectedTab})
 
 let addNote = (setState, studentDetails, onAddCoachNotesCB, note) => {
   onAddCoachNotesCB()
@@ -472,14 +473,12 @@ let inactiveWarning = student => {
   | (None, None) => None
   }
 
-  warning |> OptionUtils.mapWithDefault(
-    warning =>
-      <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
-        <i className="fas fa-exclamation-triangle" />
-        <span className="ms-2"> {warning |> str} </span>
-      </div>,
-    React.null,
-  )
+  warning |> OptionUtils.mapWithDefault(warning =>
+    <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
+      <i className="fas fa-exclamation-triangle" />
+      <span className="ms-2"> {warning |> str} </span>
+    </div>
+  , React.null)
 }
 
 let onAddCoachNotesCB = (studentId, setState, _) => {
@@ -503,6 +502,12 @@ let ids = student => {
         {`#${StudentInfo.id(student)}`->str}
       </span>
     </ClickToCopy>
+    <p>
+      {ts("cohort")->str}
+      <em className="ms-1 font-semibold text-sm text-primary-500">
+        {Cohort.name(student.cohort)->str}
+      </em>
+    </p>
   </div>
 }
 
@@ -670,8 +675,9 @@ let make = (~studentId, ~userId) => {
               | Notes =>
                 <CoursesStudents__CoachNotes
                   studentId
-                  hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
-                  coachNotes={studentDetails |> StudentDetails.coachNotes}
+                  hasArchivedNotes={studentDetails->StudentDetails.hasArchivedNotes}
+                  canModifyCoachNotes={studentDetails->StudentDetails.canModifyCoachNotes}
+                  coachNotes={studentDetails->StudentDetails.coachNotes}
                   addNoteCB={addNote(
                     setState,
                     studentDetails,
@@ -699,7 +705,8 @@ let make = (~studentId, ~userId) => {
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.userDetails())}
         </div>
         <div className="w-full relative md:w-3/5 bg-gray-50 md:border-s p-4 md:p-8 2xl:p-16">
-          {SkeletonLoading.contents()} {SkeletonLoading.userDetails()}
+          {SkeletonLoading.contents()}
+          {SkeletonLoading.userDetails()}
         </div>
       </div>
     }}

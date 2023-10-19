@@ -10,7 +10,7 @@ module Mutations
       end
     end
 
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
     validates MustBeGraded => {}

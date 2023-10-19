@@ -1,5 +1,5 @@
 class CoachesResolver < ApplicationQuery
-  include AuthorizeCoach
+  include AuthorizeViewSubmissions
 
   property :coach_ids
   property :course_id

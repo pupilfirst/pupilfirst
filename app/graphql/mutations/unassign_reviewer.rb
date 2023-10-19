@@ -1,9 +1,9 @@
 module Mutations
   class UnassignReviewer < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
-    description 'Unassign reviewer for a submission'
+    description "Unassign reviewer for a submission"
 
     field :success, Boolean, null: false
 
@@ -11,8 +11,8 @@ module Mutations
       unassign_reviewer
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.unassign_reviewer.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.unassign_reviewer.success_notification")
       )
       { success: true }
     end
@@ -33,13 +33,13 @@ module Mutations
       def submission_not_graded
         return unless @submission.reviewed?
 
-        I18n.t('mutations.assign_reviewer.submission_graded_error')
+        I18n.t("mutations.assign_reviewer.submission_graded_error")
       end
 
       def submission_should_be_assigned
         return if @submission.reviewer_id.present?
 
-        I18n.t('mutations.unassign_reviewer.submission_not_assigned')
+        I18n.t("mutations.unassign_reviewer.submission_not_assigned")
       end
 
       def submission_not_assigned_to_another_coach
@@ -48,7 +48,7 @@ module Mutations
         return if @submission.reviewer == @coach
 
         I18n.t(
-          'mutations.unassign_reviewer.submission_assigned_to_another_coach'
+          "mutations.unassign_reviewer.submission_assigned_to_another_coach"
         )
       end
     end

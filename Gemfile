@@ -13,7 +13,7 @@ gem "fastimage", "~> 2.2"
 gem "image_processing", "~> 1.12" # Gem to support variants in ActiveStorage
 
 gem "vite_rails", "~> 3.0" # Use Vite in Rails and bring joy to your JavaScript experience.
-gem "sprockets-rails"
+gem "sprockets-rails", "~> 3.4" # Provides Sprockets implementation for Rails 4.x (and beyond) Asset Pipeline
 gem "devise", "~> 4.9", ">= 4.9.2" # User auth library.
 gem "jbuilder", "~> 2.11" # Standard part of Rails, but unused, since we don't have an API.
 gem "pg", "~> 1.2" # PostgreSQL support.
@@ -52,7 +52,7 @@ gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates
 gem "discordrb", "~> 3.5" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
-gem 'octokit', '~> 6.1.1' # A Ruby toolkit for the GitHub API.
+gem "octokit", "~> 6.1.1" # A Ruby toolkit for the GitHub API.
 
 # OmniAuth providers
 gem "omniauth-google-oauth2", "~> 1.1" # Oauth2 strategy for Google.
@@ -94,7 +94,7 @@ group :test do
   gem "factory_bot_rails", "~> 6.2" # A library for setting up Ruby objects as test data.
   gem "capybara", "~> 3.39" # For RSpec feature tests.
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
-  gem 'selenium-webdriver', '~> 4.11' # Ruby bindings for Selenium
+  gem "selenium-webdriver", "~> 4.11" # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
   gem "rspec-eventually", "~> 0.2.2" # Rspec helper to match eventually
   gem "diffy", "~> 3.4" # Easy Diffing in Ruby. https://github.com/samg/diffy

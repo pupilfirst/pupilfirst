@@ -20,7 +20,7 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2023.5
 
-This is not a breaking change, but you may want to perform some cleanup during this upgrade where we upgrade to Rails 7.0, and replace use of the _ImageMagick_ library with _libvips_ - a faster, more memory-efficient image processing library which is Rails 7's default choice. Because of this change in image processor, image variants created previously using _ImageMagick_ will no longer be used.
+This is not a breaking change, but you may want to perform some cleanup since we're upgrading to Rails 7.0, and replacing the use of the _ImageMagick_ library with _libvips_ - a faster, more memory-efficient image processing library which is Rails 7's default choice. Because of this change in image processor, image variants created previously using _ImageMagick_ will no longer be used.
 
 ```rb
 # Run this in the `production` Rails console to delete old variants.

@@ -4,7 +4,7 @@ title: Cohort Reports
 sidebar_label: Cohort Reports
 ---
 
-Coaches have access to a _Cohorts_ tab that lists all active and inactive cohorts in the course that the coach has access to.
+Coaches have access to the _Cohorts_ tab that lists all course cohorts that they have been enrolled in as a coach. School admins also have access to this tab, and they can view every cohort.
 
 ![Coach's list of students](../assets/cohort_reports/cohorts_page.png)
 
@@ -50,3 +50,5 @@ However, it's very difficult (if not impossible) to eliminate subjectivity from 
 During your interactions with a student, or while reviewing their submissions, you may notice that a student is particularly weak (or strong) at something. At this point, it might make sense to write a note about it.
 
 Our memory is fallible, so it's wise to leave notes on the student's page which you and other coaches can refer to, later on for a a quick recap, and to help guide future interactions with the student.
+
+School admins can view all the coach notes, but they cannot add a note to a student's profile unless they have been enrolled to that cohort as a coach.

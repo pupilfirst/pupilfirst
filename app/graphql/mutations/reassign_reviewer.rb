@@ -1,9 +1,9 @@
 module Mutations
   class ReassignReviewer < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
-    description 'Reassign reviewer for a submission'
+    description "Reassign reviewer for a submission"
 
     field :reviewer, Types::UserProxyType, null: false
 
@@ -11,8 +11,8 @@ module Mutations
       reassign_reviewer
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.reassign_reviewer.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.reassign_reviewer.success_notification")
       )
       { reviewer: coach }
     end
@@ -29,7 +29,7 @@ module Mutations
       def submission_not_graded
         return unless @submission.reviewed?
 
-        I18n.t('mutations.reassign_reviewer.submission_graded_error')
+        I18n.t("mutations.reassign_reviewer.submission_graded_error")
       end
 
       def submission_not_assigned_to_coach
@@ -37,7 +37,7 @@ module Mutations
 
         return unless @submission.reviewer == @coach
 
-        I18n.t('mutations.reassign_reviewer.submission_not_assigned_to_coach')
+        I18n.t("mutations.reassign_reviewer.submission_not_assigned_to_coach")
       end
     end
 

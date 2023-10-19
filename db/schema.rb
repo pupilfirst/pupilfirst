@@ -908,7 +908,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_200742) do
   add_foreign_key "students", "teams"
   add_foreign_key "students", "users"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
-  add_foreign_key "target_evaluation_criteria", "evaluation_criteria", column: "evaluation_criterion_id"
+  add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_versions", "targets"

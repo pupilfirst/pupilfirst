@@ -35,7 +35,7 @@ Students with same team name will be grouped together; this will not affect exis
 ### Add multiple students at once
 
 1. Fill in the details of the first student, and click the _Add to List_ button.
-2. This will add the first student to a list that is unsaved, and preserve the _cohort_, _Title_, _Affiliation_, and _Tags_, so that you can add more students to the list.
+2. This will add the first student to a list that is unsaved, and preserve the _Cohort_, _Title_, _Affiliation_, and _Tags_, so that you can add more students to the list.
 3. Once you're okay with the list of students to be added, click the _Save List_ button. It'll add everyone you've listed as students in the course, together.
 
 ## Editing student details
@@ -109,7 +109,7 @@ To add new students in bulk to a course, click the _Bulk Import_ button at the t
 
 1. Name and email are mandatory columns and should have valid data. Name can have a maximum of 250 characters.
 2. Title, affiliation and tags are optional similar to the [add new students form](/users/students#adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
-3. Team name is optional and should be only used if you need to club students as a team. If more that one student is assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
+3. Team name is optional and should be only used if you need to club students as a team. If more than one student is assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
 4. A maximum of 1000 students are allowed to be imported at once using the bulk uploader.
 
 The errors in the sheet will appear in the form once you upload a CSV file, which will guide you to easily fix them. Once you have a totally error free sheet, use the _Import Students_ button to initiate the bulk onboarding process. On successful completion, you will receive an email confirming the same.

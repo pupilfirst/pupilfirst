@@ -14,13 +14,13 @@ To enable applications for a course, The course should have [public signups enab
 
 ## Viewing the list of applicants
 
-To view the list of applicants that are waiting to be processed, click on the _Applicants_ rom the course's sub-menu.
+To view the list of applicants that are waiting to be processed, click on _Applicants_ from the course's sub-menu.
 
 ![Applicants page within a course in the school administration interface](../assets/applicants/applicants_page.png)
 
 ## Onboarding applicants
 
-Click on the _onBoard as Student_ button to add the applicant as a student in the course. This will open up a form that allows you to enter the student's details, and add them to the course.
+Click on the _Onboard as Student_ button to add the applicant as a student in the course. This will open up a form that allows you to enter the student's details, and add them to the course.
 
 The following are the fields that you can fill in before adding the student to the course:
 

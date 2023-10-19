@@ -6,7 +6,7 @@
           <%= render 'shared/breadcrumbs', crumbs: [[t('shared.my_org'), "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
         </div>
       <% end %>
-      <h1 class="text-xl md:text-3xl font-bold mt-4">
+      <h1 class="text-xl md:text-3xl font-bold mt-4 break-words">
         <%= @cohort.name %>
       </h1>
       <p class="text-sm font-medium"><%= @cohort.course.name %></p>

@@ -1,16 +1,16 @@
 module Mutations
   class ReRunGithubAction < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     argument :submission_id, ID, required: false
 
-    description 'Re-run the Github Action for a submission'
+    description "Re-run the Github Action for a submission"
 
     field :success, Boolean, null: false
 
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
+        I18n.t("shared.notifications.done_exclamation"),
         I18n.t("mutations.re_run_github_action.success_notification")
       )
       Github::RunActionsJob.perform_later(submission, re_run: true)
@@ -22,7 +22,11 @@ module Mutations
         submission = TimelineEvent.find_by(id: value[:submission_id])
 
         if submission.students.first.github_repository.blank?
-          return I18n.t("mutations.re_run_github_action.validation_error.student_has_no_github_account")
+          return(
+            I18n.t(
+              "mutations.re_run_github_action.validation_error.student_has_no_github_account"
+            )
+          )
         end
       end
     end
@@ -32,7 +36,11 @@ module Mutations
         submission = TimelineEvent.find_by(id: value[:submission_id])
 
         if submission.target.action_config.blank?
-          return I18n.t("mutations.re_run_github_action.validation_error.target_does_not_have_github_action")
+          return(
+            I18n.t(
+              "mutations.re_run_github_action.validation_error.target_does_not_have_github_action"
+            )
+          )
         end
       end
     end

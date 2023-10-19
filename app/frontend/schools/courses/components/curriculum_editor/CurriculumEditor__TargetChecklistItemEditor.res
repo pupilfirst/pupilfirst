@@ -146,7 +146,7 @@ let multiChoiceEditor = (
             {
               let shape = allowMultiple ? "square" : "circle"
               <span className="text-gray-400">
-                <PfIcon className={j`if i-$shape-light if-fw`} />
+                <PfIcon className={`if i-${shape}-light if-fw`} />
               </span>
             }
             <div

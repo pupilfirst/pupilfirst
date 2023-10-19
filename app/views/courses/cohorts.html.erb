@@ -10,13 +10,13 @@
           <h3 class="text-lg font-semibold" ><%= @course.name %></h3>
           <p class="text-sm text-gray-500">
             <%= t('.students_enrolled_prefix_html', count: presenter.students.count) %>
-            <%= t('.students_enrolled_suffix_html', status: params[:status] || 'active', count: presenter.cohorts.count) %>
+            <%= t('.students_enrolled_suffix_html', status: presenter.status, count: presenter.cohorts.count) %>
           </p>
         </div>
       </div>
       <div class="mt-4 md:mt-6 flex gap-4 items-center text-sm">
         <% ['active', 'ended'].each do |status| %>
-          <% is_current_page = status == params[:status] %>
+          <% is_current_page = status == presenter.status %>
           <%= link_to cohorts_course_path(@course, status: status), class: "flex items-center #{'p-2 border-b-2 border-primary-500 text-primary-500 font-medium' if is_current_page || (params[:status].nil? && status == 'active') } #{'font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' unless is_current_page || (params[:status].nil? && status == 'active') }" do %>
             <span><%= t('.cohorts_subheading', status: status.capitalize) %></span>
           <% end %>
@@ -31,7 +31,7 @@
         <% cohorts.each do |cohort| %>
           <%= link_to cohort_path(cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
             <div>
-              <span class="inline-block font-medium"><%= cohort.name %></span>
+              <span class="inline-block font-medium break-all"><%= cohort.name %></span>
               <% if cohort.ends_at.present? %>
                 <div>
                   <span class="text-sm text-gray-500 font-medium" ><%= t(".end_date") %> </span>
@@ -48,11 +48,11 @@
       </div>
       <% if cohorts.total_pages > 1 %>
         <div class="text-center text-sm italic mt-4">
-          <%= t('.pagination_notice', page_start: kaminari_page_start(cohorts), page_end: kaminari_page_end(cohorts), count: cohorts.total_count, status: params[:status] || 'Active')  %>
+          <%= t('.pagination_notice', page_start: kaminari_page_start(cohorts), page_end: kaminari_page_end(cohorts), count: cohorts.total_count, status: presenter.status)  %>
         </div>
       <% end %>
       <% if cohorts.empty? %>
-        <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show', status: params[:status] || 'active' ) %></div>
+        <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show', status: presenter.status ) %></div>
       <% end %>
     </div>
   </div>

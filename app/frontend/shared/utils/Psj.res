@@ -8,7 +8,7 @@ let ready = f => {
   if readyState != "loading" {
     f()
   } else {
-    Document.addEventListener("DOMContentLoaded", _event => f(), document)
+    Document.addEventListener(document, "DOMContentLoaded", _event => f())
   }
 }
 
@@ -24,13 +24,13 @@ let match = (~onReady=true, path, f) => {
       path,
     )
   } else {
-    let metaTag = document |> Document.querySelector("meta[name='psj']")
+    let metaTag = document->Document.querySelector("meta[name='psj']")
 
     switch metaTag {
     | None => ()
     | Some(tag) =>
-      let controller = Element.getAttribute("controller", tag)
-      let action = Element.getAttribute("action", tag)
+      let controller = Element.getAttribute(tag, "controller")
+      let action = Element.getAttribute(tag, "action")
 
       switch (controller, action) {
       | (Some(controller), Some(action)) =>

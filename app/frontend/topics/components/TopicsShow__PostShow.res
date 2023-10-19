@@ -52,7 +52,7 @@ let unmarkPostAsSolution = (postId, unmarkPostAsSolutionCB) =>
   )
 
 let archivePost = (isFirstPost, postId, archivePostCB) =>
-  Webapi.Dom.window |> Webapi.Dom.Window.confirm(
+  Webapi.Dom.window -> Webapi.Dom.Window.confirm(
     isFirstPost ? t("delete_topic_confirm_dialog") : t("delete_post_confirm_dialog"),
   )
     ? ArchivePostQuery.fetch({id: postId})
@@ -153,7 +153,7 @@ let onBorderAnimationEnd = event => {
 
 let navigateToEditor = () => {
   let elementId = "add-reply-to-topic"
-  let element = Webapi.Dom.document |> Webapi.Dom.Document.getElementById(elementId)
+  let element = Webapi.Dom.document -> Webapi.Dom.Document.getElementById(elementId)
   Js.Global.setTimeout(() =>
     switch element {
     | Some(e) =>

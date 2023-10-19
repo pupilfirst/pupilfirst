@@ -106,7 +106,7 @@ let reloadStudents = (courseId, send, params) => {
 }
 
 let onSelect = (key, value, params) => {
-  Webapi.Url.URLSearchParams.set(key, value, params)
+  Webapi.Url.URLSearchParams.set(params, key, value)
   RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
 }
 

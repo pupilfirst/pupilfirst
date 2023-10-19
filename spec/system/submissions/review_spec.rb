@@ -870,11 +870,34 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
 
-    scenario "school admin tries to access the submission review page" do
+    scenario "school admin can view the submission" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_pending)
 
-      expect(page).to have_text("The page you were looking for doesn't exist!")
+      # Admin can access the page, but cannot review the submission.
+
+      expect(page).to have_text("Submission #1")
+
+      expect(page).to have_text(
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
+      )
+
+      expect(page).to have_button("Save grades", disabled: true)
+      expect(page).to have_button("Create Review Checklist", disabled: true)
+      expect(page).to have_selector(
+        'textarea[aria-label="Markdown editor"]:disabled'
+      )
+    end
+
+    scenario "school admin cannot take over a assigned submission" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_pending_2)
+
+      expect(page).to have_text(
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
+      )
+
+      expect(page).not_to have_button("Yes, Assign Me")
     end
 
     scenario "coach is warned when a student has dropped out" do
@@ -1316,6 +1339,20 @@ feature "Submission review overlay", js: true do
       submission = submission_reviewed.reload
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
+    end
+
+    scenario "school admin cannot add feedback or undo grading on a previously reviewed submission" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_reviewed)
+
+      expect(page).to have_text("Submission #1")
+
+      expect(page).to have_text(
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
+      )
+
+      expect(page).to have_button("Add feedback", disabled: true)
+      expect(page).to have_button("Undo Grading", disabled: true)
     end
 
     scenario "coach can undo grading" do

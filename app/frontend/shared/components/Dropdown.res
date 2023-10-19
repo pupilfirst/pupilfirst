@@ -23,10 +23,10 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
   React.useEffect1(() => {
     let curriedFunction = onWindowClick(showDropdown, setShowDropdown)
 
-    let removeEventListener = () => Window.removeEventListener("click", curriedFunction, window)
+    let removeEventListener = () => Window.removeEventListener(window, "click", curriedFunction)
 
     if showDropdown {
-      Window.addEventListener("click", curriedFunction, window)
+      Window.addEventListener(window, "click", curriedFunction)
       Some(removeEventListener)
     } else {
       removeEventListener()

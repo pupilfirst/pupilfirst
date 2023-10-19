@@ -19,11 +19,11 @@ type filter = {
 }
 
 let makeFilter = (key, label, filterType: filterType, color) => {
-  {key: key, label: label, filterType: filterType, color: color}
+  {key, label, filterType, color}
 }
 
 let makeSorter = (key, options, default) => {
-  {key: key, options: options, default: default}
+  {key, options, default}
 }
 
 type filterItem = {
@@ -67,11 +67,11 @@ module Selectable = {
   let searchString = t => Belt.Option.getWithDefault(t.label, t.key) ++ " " ++ t.displayValue
 
   let make = (key, value, label, color) => {
-    key: key,
+    key,
     orginalValue: value,
     displayValue: value->removeIdFromString,
-    label: label,
-    color: color,
+    label,
+    color,
   }
 }
 
@@ -102,7 +102,7 @@ let computeInitialState = () => {
 let selectedFromQueryParams = (params, filters) => {
   filters
   ->Js.Array2.map(filter => {
-    let value = Webapi.Url.URLSearchParams.get(filter.key, params)
+    let value = Webapi.Url.URLSearchParams.get(params, filter.key)
 
     switch value {
     | Some(v) => [Selectable.make(filter.key, v, Some(filter.label), filter.color)]
@@ -113,7 +113,7 @@ let selectedFromQueryParams = (params, filters) => {
 }
 
 let setParams = (key, value, params) => {
-  Webapi.Url.URLSearchParams.set(key, value, params)
+  Webapi.Url.URLSearchParams.set(params, key, value)
 }
 
 let navigateTo = params => {
@@ -129,12 +129,12 @@ let onSelect = (params, send, selectable) => {
 }
 
 let onDeselect = (params, selectable) => {
-  Webapi.Url.URLSearchParams.delete(Selectable.key(selectable), params)
+  Webapi.Url.URLSearchParams.delete(params, Selectable.key(selectable))
   navigateTo(params)
 }
 
 let selectedSorter = (sorter: sorter, params) => {
-  let value = switch Webapi.Url.URLSearchParams.get(sorter.key, params) {
+  let value = switch Webapi.Url.URLSearchParams.get(params, sorter.key) {
   | Some(userSuppliedValue) =>
     sorter.options->Js.Array2.includes(userSuppliedValue) ? userSuppliedValue : sorter.default
   | None => sorter.default
@@ -177,7 +177,9 @@ let make = (
 
   <div className="bg-gray-50 p-4 w-full flex flex-wrap gap-3 rounded-lg">
     <div className="flex-1">
-      <label htmlFor=id className="text-xs uppercase font-medium pb-2"> {I18n.t("shared.filter")->str} </label>
+      <label htmlFor=id className="text-xs uppercase font-medium pb-2">
+        {I18n.t("shared.filter")->str}
+      </label>
       <Multiselect
         id
         unselected={unselected(state, filters)}

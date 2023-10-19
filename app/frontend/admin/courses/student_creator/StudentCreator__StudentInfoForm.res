@@ -32,7 +32,7 @@ let updateName = (send, name) => {
 }
 
 let updateEmail = (send, email) => {
-  let regex = %re(`/.+@.+\\..+/i`)
+  let regex = %re(`/.+@.+\..+/i`)
   let hasError = !Js.Re.test_(regex, email)
   send(UpdateEmail(email, hasError))
 }
@@ -79,11 +79,11 @@ let initialState = () => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name, hasNameError) => {...state, name: name, hasNameError: hasNameError}
-  | UpdateEmail(email, hasEmailError) => {...state, email: email, hasEmailError: hasEmailError}
-  | UpdateTitle(title) => {...state, title: title}
-  | UpdateTeamName(teamName) => {...state, teamName: teamName}
-  | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation}
+  | UpdateName(name, hasNameError) => {...state, name, hasNameError}
+  | UpdateEmail(email, hasEmailError) => {...state, email, hasEmailError}
+  | UpdateTitle(title) => {...state, title}
+  | UpdateTeamName(teamName) => {...state, teamName}
+  | UpdateAffiliation(affiliation) => {...state, affiliation}
   | ResetForm => {
       ...state,
       name: "",
@@ -185,7 +185,8 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
     </div>
     <div className="pt-6">
       <label className="block text-sm font-medium" htmlFor="tags">
-        {t("tags.label")->str} <span className="text-xs ms-1"> {ts("optional_braces")->str} </span>
+        {t("tags.label")->str}
+        <span className="text-xs ms-1"> {ts("optional_braces")->str} </span>
       </label>
     </div>
     <School__SearchableTagList
@@ -204,7 +205,8 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~disabled) => {
       className={"btn btn-primary w-full mt-5" ++ (
         formInvalid(state, emailsToAdd) ? " disabled" : ""
       )}>
-      <i className="fas fa-plus me-2" /> {t("add_to_list")->str}
+      <i className="fas fa-plus me-2" />
+      {t("add_to_list")->str}
     </button>
   </div>
 }

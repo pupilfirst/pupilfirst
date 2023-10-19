@@ -58,7 +58,7 @@ let reducer = (state, action) => {
       dayEventsLoadStatus: Loading,
       selectedMonthDeviation: state.selectedMonthDeviation - 1,
     }
-  | ChangeDate(selectedDate) => {...state, selectedDate: selectedDate}
+  | ChangeDate(selectedDate) => {...state, selectedDate}
   | ChangeDateToToday => {
       ...state,
       selectedDate: Js.Date.make(),
@@ -79,7 +79,7 @@ let decodeJsonAsStringArray = (. x) => {
 let reloadPage = selectedDate => {
   let search = Webapi.Dom.location->Webapi.Dom.Location.search
   let params = Webapi.Url.URLSearchParams.make(search)
-  Webapi.Url.URLSearchParams.set("date", selectedDate, params)
+  Webapi.Url.URLSearchParams.set(params, "date", selectedDate)
   let currentPath = Webapi.Dom.location->Webapi.Dom.Location.pathname
   let searchString = Webapi.Url.URLSearchParams.toString(params)
   Webapi.Dom.window->Webapi.Dom.Window.setLocation(`${currentPath}?${searchString}`)

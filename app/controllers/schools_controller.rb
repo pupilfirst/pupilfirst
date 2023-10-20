@@ -63,6 +63,26 @@ class SchoolsController < ApplicationController
   # GET /school/code_of_conduct
   def code_of_conduct
     authorize current_school
+    @code_of_conduct = SchoolString::CodeOfConduct.for(current_school)
+  end
+
+  # PATCH /school/code_of_conduct
+  def update_code_of_conduct
+    authorize current_school
+    if SchoolString.exists?(school: current_school, key: "code_of_conduct")
+      SchoolString.find_by(
+        school: current_school,
+        key: "code_of_conduct"
+      ).update!(value: params[:code_of_conduct_editor])
+    else
+      SchoolString.create!(
+        school: current_school,
+        key: "code_of_conduct",
+        value: params[:code_of_conduct_editor]
+      )
+    end
+    flash[:success] = "Code of Conduct saved successfully"
+    redirect_to standing_school_path
   end
 
   # GET /school/

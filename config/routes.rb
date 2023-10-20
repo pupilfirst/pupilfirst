@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     get 'admins'
     get 'standing'
     get 'code_of_conduct', action: 'code_of_conduct'
+    patch 'code_of_conduct', action: 'update_code_of_conduct'
     patch 'standing', action: 'toggle_standing'
     post 'images'
   end

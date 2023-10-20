@@ -12,4 +12,5 @@ class SchoolPolicy < ApplicationPolicy
   alias standing? show?
   alias toggle_standing? show?
   alias code_of_conduct? show?
+  alias update_code_of_conduct? show?
 end

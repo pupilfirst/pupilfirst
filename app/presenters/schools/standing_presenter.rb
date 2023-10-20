@@ -15,7 +15,7 @@ module Schools
     end
 
     def school_has_code_of_conduct?
-      SchoolString.exists?(school: @school, key: "code_of_conduct")
+      SchoolString::CodeOfConduct.saved?(@school)
     end
   end
 end

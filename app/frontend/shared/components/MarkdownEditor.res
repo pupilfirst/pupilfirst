@@ -59,7 +59,7 @@ let reducer = (state, action) =>
       Fullscreen(#Preview)
     | Fullscreen(#Preview) => Fullscreen(#Editor)
     }
-    {...state, mode: mode}
+    {...state, mode}
   | ClickSplit =>
     let mode = switch state.mode {
     | Windowed(_) => Fullscreen(#Split)
@@ -68,7 +68,7 @@ let reducer = (state, action) =>
       Fullscreen(#Split)
     | Fullscreen(#Split) => Fullscreen(#Editor)
     }
-    {...state, mode: mode}
+    {...state, mode}
   | ClickFullscreen =>
     let mode = switch state.mode {
     | Windowed(#Editor) => Fullscreen(#Editor)
@@ -77,8 +77,8 @@ let reducer = (state, action) =>
     | Fullscreen(#Preview) => Windowed(#Preview)
     | Fullscreen(#Split) => Windowed(#Editor)
     }
-    {...state, mode: mode}
-  | SetSelection(selection) => {...state, selection: selection}
+    {...state, mode}
+  | SetSelection(selection) => {...state, selection}
   | BumpSelection(offset) =>
     let (selectionStart, selectionEnd) = state.selection
     {...state, selection: (selectionStart + offset, selectionEnd + offset)}
@@ -92,11 +92,11 @@ let reducer = (state, action) =>
     | Fullscreen(#Split) =>
       Windowed(#Editor)
     }
-    {...state, mode: mode}
+    {...state, mode}
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
-  | SelectFile(currentFileName) => {...state, currentFileName: currentFileName}
+  | SelectFile(currentFileName) => {...state, currentFileName}
   | ClearFile => {...state, currentFileName: None}
   }
 
@@ -109,8 +109,8 @@ let computeInitialState = ((value, textareaId, mode)) => {
   let length = value |> String.length
 
   {
-    id: id,
-    mode: mode,
+    id,
+    mode,
     selection: (length, length),
     uploadState: ReadyToUpload(None),
     currentFileName: None,
@@ -179,16 +179,34 @@ let onClickSplit = (state, send, _event) => {
 }
 
 let insertAt = (textToInsert, position, sourceText) => {
-  let head = sourceText->String.sub(0, position)
-  let tail = sourceText->String.sub(position, (sourceText |> String.length) - position)
+  let sourceTextArray = Js.String.castToArrayLike(sourceText)
+  let head =
+    Js.Array2.from(sourceTextArray)
+    ->Js.Array2.slice(~start=0, ~end_=position)
+    ->Js.Array2.joinWith("")
 
-  head ++ (textToInsert ++ tail)
+  let tail =
+    Js.Array2.from(sourceTextArray)
+    ->Js.Array2.slice(~start=position, ~end_=Js.String.length(sourceText))
+    ->Js.Array2.joinWith("")
+
+  head ++ textToInsert ++ tail
 }
 
 let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
-  let head = sourceText->String.sub(0, selectionStart)
-  let selection = sourceText->String.sub(selectionStart, selectionEnd - selectionStart)
-  let tail = sourceText->String.sub(selectionEnd, (sourceText |> String.length) - selectionEnd)
+  let sourceTextArray = Js.String.castToArrayLike(sourceText)
+  let head =
+    Js.Array2.from(sourceTextArray)
+    ->Js.Array2.slice(~start=0, ~end_=selectionStart)
+    ->Js.Array2.joinWith("")
+  let selection =
+    Js.Array2.from(sourceTextArray)
+    ->Js.Array2.slice(~start=selectionStart, ~end_=selectionEnd)
+    ->Js.Array2.joinWith("")
+  let tail =
+    Js.Array2.from(sourceTextArray)
+    ->Js.Array2.slice(~start=selectionEnd, ~end_=Js.String.length(sourceText))
+    ->Js.Array2.joinWith("")
 
   head ++ (wrapper ++ (selection ++ (wrapper ++ tail)))
 }
@@ -218,11 +236,11 @@ let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
   }
 
   open Webapi.Dom
-  switch document -> Document.getElementById(state.id) {
+  switch document->Document.getElementById(state.id) {
   | Some(element) => Js.Global.setTimeout(() => {
       element
-      -> DomUtils.Element.unsafeToHtmlInputElement
-      -> HtmlInputElement.setSelectionRange(startPosition, endPosition)
+      ->DomUtils.Element.unsafeToHtmlInputElement
+      ->HtmlInputElement.setSelectionRange(startPosition, endPosition)
       Webapi.Dom.Document.getElementById(Webapi.Dom.document, state.id)
       ->Belt.Option.flatMap(Webapi.Dom.Element.asHtmlElement)
       ->Belt.Option.mapWithDefault((), Webapi.Dom.HtmlElement.focus)
@@ -555,15 +573,20 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
             {switch error {
             | Some(error) =>
               <span className="text-red-500">
-                <i className="fas fa-exclamation-triangle me-2" /> {error |> str}
+                <i className="fas fa-exclamation-triangle me-2" />
+                {error |> str}
               </span>
             | None =>
-              <span> <i className="far fa-file-image me-2" /> {t("attach_file_label")->str} </span>
+              <span>
+                <i className="far fa-file-image me-2" />
+                {t("attach_file_label")->str}
+              </span>
             }}
           </label>
         | Uploading =>
           <span className="text-xs px-3 py-2 grow cursor-wait">
-            <i className="fas fa-spinner fa-pulse me-2" /> {t("file_upload_wait")->str}
+            <i className="fas fa-spinner fa-pulse me-2" />
+            {t("file_upload_wait")->str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}
@@ -698,11 +721,10 @@ let make = (
       document |> Document.asEventTarget
     }
 
-    documentEventTarget -> Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler)
+    documentEventTarget->Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler)
 
     Some(
-      () =>
-        documentEventTarget -> Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
+      () => documentEventTarget->Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
     )
   })
 
@@ -714,16 +736,14 @@ let make = (
       Document.getElementById(document, state.id)->Belt.Option.map(Element.asEventTarget)
     }
 
-    textareaEventTarget->Belt.Option.mapWithDefault(
-      (),
-      x => Webapi.Dom.EventTarget.addKeyDownEventListener(x, curriedHandler),
+    textareaEventTarget->Belt.Option.mapWithDefault((), x =>
+      Webapi.Dom.EventTarget.addKeyDownEventListener(x, curriedHandler)
     )
 
     Some(
       () =>
-        textareaEventTarget->Belt.Option.mapWithDefault(
-          (),
-          x => Webapi.Dom.EventTarget.removeKeyDownEventListener(x, curriedHandler),
+        textareaEventTarget->Belt.Option.mapWithDefault((), x =>
+          Webapi.Dom.EventTarget.removeKeyDownEventListener(x, curriedHandler)
         ),
     )
   })
@@ -731,11 +751,11 @@ let make = (
   React.useEffect1(() => {
     let textarea = {
       open Webapi.Dom
-      document -> Document.getElementById(state.id)
+      document->Document.getElementById(state.id)
     }
     let preview = {
       open Webapi.Dom
-      document -> Document.getElementById(state.id ++ "-preview")
+      document->Document.getElementById(state.id ++ "-preview")
     }
 
     switch (textarea, preview) {
@@ -744,11 +764,11 @@ let make = (
 
       switch state.mode {
       | Fullscreen(#Split) =>
-        textarea -> Webapi.Dom.Element.addEventListener("scroll", scrollCallback)
+        textarea->Webapi.Dom.Element.addEventListener("scroll", scrollCallback)
 
-        Some(() => textarea -> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback))
+        Some(() => textarea->Webapi.Dom.Element.removeEventListener("scroll", scrollCallback))
       | _anyOtherMode =>
-        textarea -> Webapi.Dom.Element.removeEventListener("scroll", scrollCallback)
+        textarea->Webapi.Dom.Element.removeEventListener("scroll", scrollCallback)
         None
       }
     | (_, _) => None

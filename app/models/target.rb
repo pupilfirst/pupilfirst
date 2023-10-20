@@ -206,6 +206,10 @@ class Target < ApplicationRecord
     quiz.present?
   end
 
+  def mark_as_complete?
+    not (quiz.present? or checklist.present? or link_to_complete.present?)
+  end
+
   def team_target?
     role == ROLE_TEAM
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_20_080749) do
+ActiveRecord::Schema.define(version: 2023_10_20_142848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -528,6 +528,8 @@ ActiveRecord::Schema.define(version: 2023_10_20_080749) do
     t.bigint "target_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "assignment_id"
+    t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
     t.index ["target_id"], name: "index_quizzes_on_target_id"
   end
 
@@ -936,6 +938,7 @@ ActiveRecord::Schema.define(version: 2023_10_20_080749) do
   add_foreign_key "posts", "topics"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
+  add_foreign_key "quizzes", "assignments"
   add_foreign_key "quizzes", "targets"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"

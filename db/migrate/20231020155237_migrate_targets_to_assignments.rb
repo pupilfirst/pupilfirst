@@ -14,7 +14,7 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
         :archived => false
       }
       if target.mark_as_complete?
-        if !target.target_prerequisite.empty? or !target.prerequisite_targets.empty? or target.milestone?
+        if !target.target_prerequisites.empty? or !target.prerequisite_targets.empty? or target.milestone?
           # convert mark as complete to a form submit assignment
           assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Mark this target as completed?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
         else
@@ -25,7 +25,8 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
       end
 
       if target.link_to_complete.present?
-        if !target.target_prerequisite.empty? or !target.prerequisite_targets.empty? or target.milestone?
+        #TODO - add a mardown content block for the link
+        if !target.target_prerequisites.empty? or !target.prerequisite_targets.empty? or target.milestone?
           assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Have you gone through the shared link?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
         else
           target.timeline_events.destroy_all

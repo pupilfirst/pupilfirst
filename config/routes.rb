@@ -65,6 +65,8 @@ Rails.application.routes.draw do
     patch 'code_of_conduct', action: 'update_code_of_conduct'
     patch 'standing', action: 'toggle_standing'
     post 'images'
+
+    resources :standings, controller: 'schools/standings'
   end
 
   namespace :school, module: 'schools' do

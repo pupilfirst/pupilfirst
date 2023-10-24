@@ -11,7 +11,7 @@ module Schools
     end
 
     def standings
-      @standings ||= @school.standings.order(:id)
+      @standings ||= @school.standings.where(archived_at: nil).order(:id)
     end
 
     def school_has_code_of_conduct?

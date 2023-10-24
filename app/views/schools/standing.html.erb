@@ -59,22 +59,36 @@
             Students can be promoted or demoted to any standing through the "Edit Student" tab.
           </p>
         </div>
-        <div class="flex justify-center items-center gap-2">
-          <%= button_to "Edit standings", "#", method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-        </div>
       </div>
       <div>
         <% @presenter.standings.each do |standing|%>
           <div class="flex items-center gap-3 mb-3">
-            <%= render 'shared/standing_shield', color: standing.color %>
-            <span class="bg-gray-50 flex-grow p-3 max-w-md">
-              <%= standing.name %>
-            </span>
+            <%= render 'shared/standing_shield', color: standing.color, size: "5xl" %>
+            <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex">
+              <div class="">
+                <%= standing.name %>
+              </div>
+              <div class="flex">
+                <%= link_to school_standing_path(standing) do %>
+                  <i class="if i-edit-regular if-fw justify-self-end cursor-pointer text-lg font-semibold hover:text-primary-400" ></i>
+                <% end %>
+                <% unless standing.default %>
+                 <%= button_to school_standing_path(standing), method: :patch do%>
+                  <i class="if i-trash-regular if-fw cursor-pointer text-lg font-semibold hover:text-red-400" ></i>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
             <% if standing.default %>
               <span class="text-sm text-gray-600 italic">Default</span>
             <% end %>
           </div>
         <% end %>
+        <div class="flex justify-center max-w-xl">
+          <div class="flex-grow max-w-md ml-4">
+            <%= button_to "Add another standing", new_school_standing_path, method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer w-full" %>
+          </div>
+        </div>
       </div>
     <% end %>
   </div>

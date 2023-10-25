@@ -212,7 +212,7 @@ ta:
         label:
           search: பெயர் அல்லது மின்னஞ்சல் மூலம் தேடவும்
           tag: குறிச்சொல்
-      onboard_as_student: மாணவராக ஆன்போர்டு
+      onboard_as_student: Onboard as Student
       show_actions: செயல்களைக் காட்டு
       show_details: "விவரங்களை காட்டு: "
       sort_criterion:

@@ -26,35 +26,11 @@ The form that pops up will ask you for a few details:
 
 **Enable public signup for this course?**: If enabled, members of the public will be able to sign up for your course.
 
-**Do you want to process applicant information before enrolling them?**: If enabled, applicants will be redirected to a URL of your choice for further processing, after verifying their email address. [This URL can be customized](#customizing-the-processing-url) to include information about the applicant.
-
-<details>
-   <summary>You can use this processing feature to onboard students after approval!</summary>
-   <div>
-      Applicants will not be added as a students until you manually approve them from the <em>Applicants</em> page. This feature could be used for setting up a payments flow for the course.
-   </div>
-</details>
+**Do you want to process applicant information before enrolling them?**: If enabled, instead of being enrolled as students immediately, members of the public who attempt to sign up to your course will be redirected to a URL of your choice, and their information will be shown in [the Applicants page](/users/applicants).
 
 **Course Highlights**: If set, a highlights section will be shown on the course's public page. You can use this session to highlight the core features of the course.
 
 **Allow public to view course curriculum?**: If enabled, members of the public will be able to view the course curriculum without signing in. This will not let them _interact_ with the course in any way.
-
-### Customizing the processing URL
-
-You can add properties related to applicants to the processing URL that the they are redirected to after email verification. The properties that can be added are:
-
-- The unique ID of the course - `course_id`
-- The unique ID of the applicant - `applicant_id`
-- The name of the applicant - `name`
-- The email address of the applicant - `email`
-
-When used in the processing URL, Pupilfirst LMS will replace these special keywords with their actual values when the applicant clicks the link in the verification email.
-
-Here's an example URL that includes all the available properties:
-
-```
-https://paymentgateway.com/process?name=${name}&email=${email}&course_id=${course_id}&applicant_id=${applicant_id}
-```
 
 ## Editing courses
 
@@ -62,7 +38,13 @@ To edit the details of a course, click on the _Edit Course Details_ button locat
 
 ### Default Cohort
 
-A default cohort named _Purple (Auto-generated)_ is created automatically when a course is created. This cohort is automatically assigned to all the students that are added to the course. You can create additional cohorts on [cohorts page](/users/cohorts). You can change the default cohort for a course by selecting a cohort from the _Pick the default Cohort_ dropdown.
+A course's _default cohort_ is the one to which all new students are added when they sign up using the _public sign-up_ option.
+
+You can create additional cohorts on [cohorts page](/users/cohorts), and set any of those as the default cohort for a course by selecting a cohort from the _Pick the default Cohort_ dropdown.
+
+When a new course is created, a cohort named _Purple (Auto-generated)_ is created and set as the default.
+
+### Editing the curriculum
 
 To edit the _contents_ of a course, you'll want to use the [curriculum editor](/users/curriculum_editor), which is documented separately.
 

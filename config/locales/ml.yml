@@ -212,7 +212,7 @@ ml:
         label:
           search: പേരോ ഇമെയിൽ വഴിയോ തിരയുക
           tag: ടാഗ് ചെയ്യുക
-      onboard_as_student: വിദ്യാർത്ഥിയായി ഓൺബോർഡ്
+      onboard_as_student: Onboard as Student
       show_actions: പ്രവർത്തനങ്ങൾ കാണിക്കുക
       show_details: "വിശദാംശങ്ങള് കാണിക്കുക: "
       sort_criterion:

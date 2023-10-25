@@ -38,11 +38,11 @@ class School < ApplicationRecord
 
     case variant
     when :mid
-      logo.variant(resize_to_limit: [200, 200]).processed
+      logo.variant(resize_to_fill: [200, 200, crop: :attention]).processed
     when :high
-      logo.variant(resize_to_limit: [500, 500]).processed
+      logo.variant(resize_to_fill: [500, 500, crop: :attention]).processed
     when :thumb
-      logo.variant(resize_to_limit: [100, 100]).processed
+      logo.variant(resize_to_fill: [100, 100, crop: :attention]).processed
     else
       logo
     end

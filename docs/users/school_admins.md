@@ -6,7 +6,7 @@ sidebar_label: School Administrators
 
 As an admin of a school, you can invite others to share the work in managing the school. You can edit the list of admins from the _Admins_ sub-menu in the school's _Settings_ section.
 
-![School's Admin List Page](../assets/school_admins/school_admins_page_r4dpdw.png)
+![School's Admin List Page](../assets/school_admins/school_admins_page.png)
 
 ## Adding new admins
 

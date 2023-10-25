@@ -874,7 +874,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
             </div>
             <button
               className="btn btn-default btn-small ms-4"
-              disabled={isSubmissionReviewAllowed(submissionDetails)}
+              disabled={isReviewDisabled(submissionDetails)}
               onClick={_ => send(UpdateNote(""))}>
               <i className="far fa-edit" /> <span className="ps-2"> {t("write_a_note")->str} </span>
             </button>
@@ -1169,7 +1169,7 @@ let make = (
       Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
         UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
       ) ||
-      isSubmissionReviewAllowed(submissionDetails)
+      isReviewDisabled(submissionDetails)
         ? GradesEditor
         : AssignReviewer
     | Some(_) => ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
@@ -1495,7 +1495,7 @@ let make = (
                           WindowUtils.confirm(t("undo_rejection_warning"), () =>
                             OverlaySubmission.id(overlaySubmission)->undoGrading(send)
                           )}
-                        disabled={isSubmissionReviewAllowed(submissionDetails)}
+                        disabled={isReviewDisabled(submissionDetails)}
                         className="btn btn-small mt-2 md:mt-0 bg-red-100 md:bg-red-50 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                         <i className="fas fa-undo" />
                         <span className="ms-2"> {t("undo_rejection")->str} </span>

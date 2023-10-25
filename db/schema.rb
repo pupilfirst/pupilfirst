@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_09_22_200742) do
+  
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -218,7 +219,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_200742) do
   create_table "course_exports_cohorts", force: :cascade do |t|
     t.bigint "cohort_id"
     t.bigint "course_export_id"
+    t.index ["cohort_id", "course_export_id"], name: "index_course_exports_cohorts_on_cohort_id_and_course_export_id", unique: true
     t.index ["cohort_id"], name: "index_course_exports_cohorts_on_cohort_id"
+    t.index ["course_export_id", "cohort_id"], name: "index_course_exports_cohorts_on_course_export_id_and_cohort_id", unique: true
     t.index ["course_export_id"], name: "index_course_exports_cohorts_on_course_export_id"
   end
 
@@ -490,9 +493,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_200742) do
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
     t.bigint "target_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.index ["target_id"], name: "index_quizzes_on_target_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true
   end
 
   create_table "resource_versions", force: :cascade do |t|
@@ -874,6 +877,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_200742) do
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"
   add_foreign_key "course_exports", "users"
+  add_foreign_key "course_exports_cohorts", "cohorts"
+  add_foreign_key "course_exports_cohorts", "course_exports"
   add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
   add_foreign_key "discord_messages", "users"

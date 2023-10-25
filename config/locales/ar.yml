@@ -229,7 +229,7 @@ ar:
         label:
           search: Search by name or email
           tag: Tag
-      onboard_as_student: OnBoard as Student
+      onboard_as_student: Onboard as Student
       show_actions: Show Actions
       show_details: "Show Details: "
       sort_criterion:

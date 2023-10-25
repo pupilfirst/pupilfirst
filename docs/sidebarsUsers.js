@@ -4,6 +4,8 @@ module.exports = {
     Administration: [
       "courses",
       "students",
+      "cohorts",
+      "applicants",
       "coaches",
       "curriculum_editor",
       "assignments",

@@ -1,7 +1,9 @@
 class Courses::CohortsPresenter < ApplicationPresenter
+  attr_reader :status
+
   def initialize(view_context, course, status)
     @course = course
-    @status = status || "active"
+    @status = status == "ended" ? "ended" : "active"
     super(view_context)
   end
 
@@ -11,11 +13,11 @@ class Courses::CohortsPresenter < ApplicationPresenter
 
   def cohorts
     @cohorts ||=
-      if @status == "active"
-        current_user.faculty.cohorts.where(course: @course).active
+      if current_school_admin.present?
+        @course.cohorts
       else
-        current_user.faculty.cohorts.where(course: @course).ended
-      end
+        current_user.faculty.cohorts.where(course: @course)
+      end.public_send(@status)
   end
 
   def paged_cohorts

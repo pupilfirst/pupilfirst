@@ -1,6 +1,6 @@
 module Mutations
   class CreateGrading < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include DevelopersNotifications
     include ValidateSubmissionGradable
 
@@ -23,7 +23,7 @@ module Mutations
                }
              }
 
-    description 'Create grading for submission'
+    description "Create grading for submission"
 
     field :success, Boolean, null: false
 
@@ -31,8 +31,8 @@ module Mutations
       grade
       notify(
         :success,
-        I18n.t('mutations.create_grading.grade_recorded'),
-        I18n.t('mutations.create_grading.success_notification')
+        I18n.t("mutations.create_grading.grade_recorded"),
+        I18n.t("mutations.create_grading.success_notification")
       )
       { success: true }
     end
@@ -59,7 +59,7 @@ module Mutations
         return if @submission.present?
 
         I18n.t(
-          'mutations.create_grading.submission_missing_error',
+          "mutations.create_grading.submission_missing_error",
           submission_id: @submission_id
         )
       end
@@ -74,46 +74,46 @@ module Mutations
         return if @evaluation_criteria.present?
 
         I18n.t(
-          'mutations.create_grading.evaluation_criteria_error',
+          "mutations.create_grading.evaluation_criteria_error",
           submission_id: @submission_id
         )
       end
 
       def right_shape_for_checklist
         if @checklist.respond_to?(:all?) &&
-             @checklist.all? do |item|
-               item['title'].is_a?(String) &&
-                 item['kind'].in?(Target.valid_checklist_kind_types) &&
-                 item['status'].in?(
+             @checklist.all? { |item|
+               item["title"].is_a?(String) &&
+                 item["kind"].in?(Target.valid_checklist_kind_types) &&
+                 item["status"].in?(
                    [
                      TimelineEvent::CHECKLIST_STATUS_FAILED,
                      TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
                    ]
                  ) &&
-                 (item['result'].is_a?(String) || item['result'].is_a?(Array))
-             end
+                 (item["result"].is_a?(String) || item["result"].is_a?(Array))
+             }
           return
         end
 
-        I18n.t('mutations.create_grading.invalid_checklist_shape_error')
+        I18n.t("mutations.create_grading.invalid_checklist_shape_error")
       end
 
       def checklist_data_is_not_mutated
         old_checklist =
           @submission.checklist.map do |c|
             [
-              c['title'],
-              c['kind'],
-              c['kind'] == 'files' ? c['result'].sort : c['result']
+              c["title"],
+              c["kind"],
+              c["kind"] == "files" ? c["result"].sort : c["result"]
             ]
           end
 
         new_checklist =
           @checklist.map do |c|
             [
-              c['title'],
-              c['kind'],
-              c['kind'] == 'files' ? c['result'].sort : c['result']
+              c["title"],
+              c["kind"],
+              c["kind"] == "files" ? c["result"].sort : c["result"]
             ]
           end
 
@@ -127,14 +127,14 @@ module Mutations
           return
         end
 
-        I18n.t('mutations.create_grading.invalid_checklist_values_error')
+        I18n.t("mutations.create_grading.invalid_checklist_values_error")
       end
 
       def valid_grading
         return unless valid_grading?
 
         I18n.t(
-          'mutations.create_grading.invalid_grading_error',
+          "mutations.create_grading.invalid_grading_error",
           grades_data: @grades.to_json
         )
       end
@@ -255,7 +255,10 @@ module Mutations
           timeline_event: submission
         )
 
-      StartupFeedbackModule::EmailService.new(startup_feedback, include_grades: true).send
+      StartupFeedbackModule::EmailService.new(
+        startup_feedback,
+        include_grades: true
+      ).send
     end
   end
 end

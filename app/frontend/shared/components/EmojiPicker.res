@@ -7,17 +7,17 @@ type emojiEvent = {
   shortcodes: string,
 }
 
-type args = {
-  title: string,
-  ref: React.ref<Js.Nullable.t<Dom.element>>,
-  theme: string,
-  onEmojiSelect: emojiEvent => unit,
-  data: Js.Json.t,
-}
-
-@module("emoji-mart") @new external picker: args => unit = "Picker"
-
 @module("@emoji-mart/data") external data: Js.Json.t = "default"
+
+module Picker = {
+  @module("@emoji-mart/react") @react.component
+  external make: (
+    ~title: string,
+    ~theme: [#light],
+    ~onEmojiSelect: emojiEvent => unit,
+    ~data: Js.Json.t,
+  ) => React.element = "default"
+}
 
 let emojiDivClassName = isOpen => {
   switch isOpen {
@@ -28,22 +28,10 @@ let emojiDivClassName = isOpen => {
 
 @react.component
 let make = (~className, ~title, ~onChange) => {
-  let ref = React.useRef(Js.Nullable.null)
   let wrapperRef = React.useRef(Js.Nullable.null)
   let (isOpen, setIsOpen) = React.useState(_ => false)
 
   React.useEffect0(() => {
-    picker({
-      title,
-      ref,
-      theme: "light",
-      data,
-      onEmojiSelect: event => {
-        onChange(event)
-        setIsOpen(_ => false)
-      },
-    })
-
     let handleClickOutside: Dom.mouseEvent => unit = event => {
       switch wrapperRef.current->Js.Nullable.toOption {
       | Some(wrapper) =>
@@ -91,7 +79,15 @@ let make = (~className, ~title, ~onChange) => {
       <i className="fas fa-smile" />
     </button>
     <div className={"transition-all " ++ emojiDivClassName(isOpen)}>
-      <div ref={ReactDOM.Ref.domRef(ref)} />
+      <Picker
+        title
+        data
+        onEmojiSelect={event => {
+          onChange(event)
+          setIsOpen(_ => false)
+        }}
+        theme={#light}
+      />
     </div>
   </div>
 }

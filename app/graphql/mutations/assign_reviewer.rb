@@ -1,9 +1,9 @@
 module Mutations
   class AssignReviewer < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
-    description 'Assign reviewer for a submission'
+    description "Assign reviewer for a submission"
 
     field :reviewer, Types::UserProxyType, null: false
 
@@ -11,8 +11,8 @@ module Mutations
       assign_reviewer
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.assign_reviewer.success_notification')
+        I18n.t("shared.notifications.done_exclamation"),
+        I18n.t("mutations.assign_reviewer.success_notification")
       )
       { reviewer: coach }
     end
@@ -28,13 +28,13 @@ module Mutations
       def submission_not_graded
         return unless @submission.reviewed?
 
-        I18n.t('mutations.assign_reviewer.submission_graded_error')
+        I18n.t("mutations.assign_reviewer.submission_graded_error")
       end
 
       def submission_should_be_unassigned
         return if @submission.reviewer_id.blank?
 
-        I18n.t('mutations.assign_reviewer.submission_already_assigned')
+        I18n.t("mutations.assign_reviewer.submission_already_assigned")
       end
     end
 

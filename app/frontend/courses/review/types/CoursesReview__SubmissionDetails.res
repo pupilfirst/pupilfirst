@@ -18,14 +18,13 @@ type t = {
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
-  inactiveStudents: bool,
   coaches: array<Coach.t>,
   teamName: option<string>,
   courseId: string,
-  preview: bool,
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
-  inactiveSubmissionReviewAllowedDays: int,
+  reviewable: bool,
+  warning: option<string>,
 }
 
 let submission = t => t.submission
@@ -36,16 +35,15 @@ let students = t => t.students
 let evaluationCriteria = t => t.evaluationCriteria
 let reviewChecklist = t => t.reviewChecklist
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds
-let inactiveStudents = t => t.inactiveStudents
 let coaches = t => t.coaches
 let teamName = t => t.teamName
 let courseId = t => t.courseId
 let createdAt = t => t.createdAt
-let preview = t => t.preview
 let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
-let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
+let reviewable = t => t.reviewable
+let warning = t => t.warning
 
 let make = (
   ~submission,
@@ -56,16 +54,15 @@ let make = (
   ~evaluationCriteria,
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
-  ~inactiveStudents,
   ~submissionReports,
   ~coaches,
   ~teamName,
   ~courseId,
   ~createdAt,
-  ~preview,
   ~reviewer,
   ~submissionReportPollTime,
-  ~inactiveSubmissionReviewAllowedDays,
+  ~reviewable,
+  ~warning,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -75,16 +72,15 @@ let make = (
   evaluationCriteria: evaluationCriteria,
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
-  inactiveStudents: inactiveStudents,
   submissionReports: submissionReports,
   coaches: coaches,
   teamName: teamName,
   courseId: courseId,
   createdAt: createdAt,
-  preview: preview,
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
-  inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
+  reviewable: reviewable,
+  warning: warning,
 }
 
 let decodeJs = details =>
@@ -99,7 +95,6 @@ let decodeJs = details =>
     ~targetTitle=details["targetTitle"],
     ~students=details["students"]->Js.Array2.map(Student.makeFromJs),
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
-    ~inactiveStudents=details["inactiveStudents"],
     ~createdAt=DateFns.decodeISO(details["createdAt"]),
     ~evaluationCriteria=details["evaluationCriteria"]->Js.Array2.map(ec =>
       EvaluationCriterion.make(
@@ -116,10 +111,10 @@ let decodeJs = details =>
     ~submissionReports=details["submissionReports"]->Js.Array2.map(SubmissionReport.makeFromJS),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
-    ~preview=details["preview"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
-    ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
+    ~reviewable=details["reviewable"],
+    ~warning=details["warning"],
   )
 
 let updateMetaSubmission = submission => {

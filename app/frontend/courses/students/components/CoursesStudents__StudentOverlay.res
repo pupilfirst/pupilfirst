@@ -73,6 +73,7 @@ module StudentDetailsQuery = %graphql(`
           milestoneNumber
           completed
         }
+        canModifyCoachNotes
         team {
           id
           name
@@ -149,6 +150,7 @@ let getStudentDetails = (studentId, setState) => {
     let studentDetails = StudentDetails.make(
       ~id=studentId,
       ~hasArchivedNotes=response.hasArchivedCoachNotes,
+      ~canModifyCoachNotes=response.studentDetails.canModifyCoachNotes,
       ~coachNotes,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
@@ -662,8 +664,9 @@ let make = (~studentId, ~userId) => {
               | Notes =>
                 <CoursesStudents__CoachNotes
                   studentId
-                  hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
-                  coachNotes={studentDetails |> StudentDetails.coachNotes}
+                  hasArchivedNotes={studentDetails->StudentDetails.hasArchivedNotes}
+                  canModifyCoachNotes={studentDetails->StudentDetails.canModifyCoachNotes}
+                  coachNotes={studentDetails->StudentDetails.coachNotes}
                   addNoteCB={addNote(
                     setState,
                     studentDetails,

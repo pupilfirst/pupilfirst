@@ -63,7 +63,7 @@ module Layouts
     end
 
     def review_dashboard
-      "review" if user_is_coach?
+      "review" if current_school_admin.present? || user_is_coach?
     end
 
     def leaderboard
@@ -85,20 +85,22 @@ module Layouts
     end
 
     def user_is_student?
-      current_user.present? &&
-        current_user
-          .students
-          .not_dropped_out
-          .joins(:cohort)
-          .exists?(cohorts: { course_id: @course.id })
+      @user_is_student ||=
+        current_user.present? &&
+          current_user
+            .students
+            .not_dropped_out
+            .joins(:cohort)
+            .exists?(cohorts: { course_id: @course.id })
     end
 
     def user_is_coach?
-      current_coach.present? && @course.in?(current_coach.courses)
+      @user_is_coach ||=
+        current_coach.present? && @course.in?(current_coach.courses)
     end
 
     def cohorts
-      "cohorts" if user_is_coach?
+      "cohorts" if current_school_admin.present? || user_is_coach?
     end
 
     def course_link(course)

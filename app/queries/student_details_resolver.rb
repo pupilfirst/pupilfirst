@@ -12,8 +12,13 @@ class StudentDetailsResolver < ApplicationQuery
       average_grades: average_grades,
       team: team,
       student: student,
-      milestone_targets_completion_status: milestone_targets_completion_status
+      milestone_targets_completion_status: milestone_targets_completion_status,
+      can_modify_coach_notes: user_is_a_coach_for_the_student?
     }
+  end
+
+  def user_is_a_coach_for_the_student?
+    current_user&.faculty&.cohorts&.exists?(id: student&.cohort_id) || false
   end
 
   def average_grades
@@ -51,14 +56,15 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def authorized?
-    return false if current_user.blank?
+    return false if student&.school != current_school
 
-    return false if student.blank?
+    return false if current_user.blank?
 
     return true if current_user.id == student.user_id
 
-    current_user.faculty.present? &&
-      current_user.faculty.cohorts.exists?(id: student.cohort_id)
+    return true if current_school_admin.present?
+
+    current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
   end
 
   def student

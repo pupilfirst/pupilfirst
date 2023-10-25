@@ -212,7 +212,7 @@ hi:
         label:
           search: नाम या ईमेल द्वारा खोजें
           tag: उपनाम
-      onboard_as_student: छात्र के रूप में ऑनबोर्ड
+      onboard_as_student: Onboard as Student
       show_actions: क्रियाएँ दिखाएँ
       show_details: "प्रदर्शन का विवरण: "
       sort_criterion:

@@ -218,7 +218,7 @@ ru:
         label:
           search: Поиск по имени или почте
           tag: Тег
-      onboard_as_student: Добавить как Студента
+      onboard_as_student: Onboard as Student
       show_actions: Показать Действия
       show_details: "Показать Детали: "
       sort_criterion:

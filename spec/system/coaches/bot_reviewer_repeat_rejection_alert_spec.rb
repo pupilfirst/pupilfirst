@@ -18,8 +18,8 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
   let(:grade_labels) do
     [
-      { "grade" => 1, "label" => "Reject" },
-      { "grade" => 2, "label" => "Accept" }
+      { 'grade' => 1, 'label' => 'Okay' },
+      { 'grade' => 2, 'label' => 'Accept' }
     ]
   end
 
@@ -27,7 +27,6 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
     create :evaluation_criterion,
            course: course,
            max_grade: 2,
-           pass_grade: 2,
            grade_labels: grade_labels
   end
 
@@ -73,11 +72,9 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       click_button "Start Review"
 
-      within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
-      ) { find("button[title='Reject']").click }
+      within("div#is_acceptable") { click_button "No" }
 
-      click_button "Save grades"
+      click_button 'Reject Submission'
 
       open_email(coach.email)
       expect(current_email).to be_blank
@@ -95,11 +92,8 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       click_button "Start Review"
 
-      within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
-      ) { find("button[title='Reject']").click }
-
-      click_button "Save grades"
+      within("div#is_acceptable") { click_button "No" }
+      click_button 'Reject Submission'
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
@@ -126,11 +120,8 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       click_button "Start Review"
 
-      within(
-        "div[aria-label='evaluation-criterion-#{evaluation_criterion.id}']"
-      ) { find("button[title='Reject']").click }
-
-      click_button "Save grades"
+      within("div#is_acceptable") { click_button "No" }
+      click_button 'Reject Submission'
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
       open_email(coach.email)

@@ -276,11 +276,8 @@ describe CourseExports::PrepareTeamsExportService do
             team_2.id,
             team_2.name,
             nil,
-            "1/2",
-            {
-              "value" => submission_grading(team_2_reviewed_submission),
-              "style" => "failing-grade"
-            },
+            '1/2',
+            'x',
             nil
           ],
           [team_3.id, team_3.name, "✓", nil, nil, nil],
@@ -289,10 +286,7 @@ describe CourseExports::PrepareTeamsExportService do
             team_4.name,
             nil,
             "1/2",
-            {
-              "value" => submission_grading(team_4_reviewed_submission),
-              "style" => "failing-grade"
-            },
+            'x',
             nil
           ]
         ]

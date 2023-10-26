@@ -101,7 +101,6 @@ let decodeJs = details =>
         ~id=ec["id"],
         ~name=ec["name"],
         ~maxGrade=ec["maxGrade"],
-        ~passGrade=ec["passGrade"],
         ~gradesAndLabels=ec["gradeLabels"]->Js.Array2.map(gradeAndLabel =>
           GradeLabel.makeFromJs(gradeAndLabel)
         ),

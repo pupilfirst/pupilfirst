@@ -27,7 +27,7 @@ module SubmissionDetailsQuery = %graphql(`
           targetUrl
         }
         evaluationCriteria{
-          id, name, maxGrade, passGrade, gradeLabels { grade label}
+          id, name, maxGrade, gradeLabels { grade label}
         },
         reviewChecklist{
           title

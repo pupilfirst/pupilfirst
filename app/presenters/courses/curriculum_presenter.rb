@@ -56,11 +56,10 @@ module Courses
     def evaluation_criteria
       @course.evaluation_criteria.map do |ec|
         ec.attributes.slice(
-          "id",
-          "name",
-          "max_grade",
-          "pass_grade",
-          "grade_labels"
+          'id',
+          'name',
+          'max_grade',
+          'grade_labels'
         )
       end
     end

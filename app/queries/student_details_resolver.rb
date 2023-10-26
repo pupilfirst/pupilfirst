@@ -100,7 +100,6 @@ class StudentDetailsResolver < ApplicationQuery
           id: ec.id,
           name: ec.name,
           max_grade: ec.max_grade,
-          pass_grade: ec.pass_grade
         }
       end
   end

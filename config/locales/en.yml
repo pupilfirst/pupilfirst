@@ -1040,6 +1040,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
         label: What steps should the student take to complete this target?
       target_group: Target Group
+      target_has_assignment: Does this target have an assignment?
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
       target_role:

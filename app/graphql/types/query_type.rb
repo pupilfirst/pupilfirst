@@ -131,6 +131,10 @@ module Types
       argument :target_id, ID, required: true
     end
 
+    resolved_field :assignment_details, Types::AssignmentDetailsType, null: false do
+      argument :target_id, ID, required: true
+    end
+
     resolved_field :coach_stats, Types::CoachStatsType, null: false do
       argument :coach_id, ID, required: true
       argument :course_id, ID, required: true

@@ -43,6 +43,7 @@ type state = {
   targetDetails: option<TargetDetails.t>,
   assignmentDetails: option<AssignmentDetails.t>,
   milestone: bool,
+  hasAssignment: bool,
 }
 
 type action =
@@ -75,6 +76,7 @@ type action =
   | ClearTargetGroupId
   | ResetEditor
   | UpdateMilestone(bool)
+  | UpdateHasAssignment(bool)
 
 module TargetDetailsQuery = %graphql(`
     query TargetDetailsQuery($targetId: ID!) {
@@ -105,6 +107,7 @@ module AssignmentDetailsQuery = %graphql(`
         role
         checklist
         milestone
+        archived
       }
   }
 `)
@@ -121,8 +124,12 @@ let loadTargetDetails = (targetId, send) =>
 let loadAssignmentDetails = (targetId, send) =>
   AssignmentDetailsQuery.make({targetId: targetId})
   |> Js.Promise.then_(result => {
-    let assignmentDetails = AssignmentDetails.makeFromJs(result["assignmentDetails"])
-    send(SaveAssignmentDetails(assignmentDetails))
+    switch result["assignmentDetails"] {
+    | Some(value) =>
+      let assignmentDetails = AssignmentDetails.makeFromJs(value)
+      send(SaveAssignmentDetails(assignmentDetails))
+    | None => Js.log("no assignment")
+    }
     Js.Promise.resolve()
   })
   |> ignore
@@ -178,6 +185,7 @@ let reducer = (state, action) =>
       loading: false,
       assignmentDetails: Some(assignmentDetails),
       milestone: assignmentDetails.milestone,
+      hasAssignment: !assignmentDetails.archived,
     }
   | UpdateTitle(title) => {...state, title: title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
@@ -287,6 +295,11 @@ let reducer = (state, action) =>
     }
   | ClearTargetGroupId => {...state, targetGroupId: None, dirty: true}
   | UpdateMilestone(milestone) => {...state, milestone: milestone, dirty: true}
+  | UpdateHasAssignment(hasAssignment) => {
+      ...state,
+      hasAssignment: hasAssignment,
+      dirty: true,
+    }
   }
 
 let updateTitle = (send, event) => {
@@ -376,14 +389,6 @@ let targetEvaluated = methodOfCompletion =>
   | NoAssignment => false
   }
 
-let hasAssignment = methodOfCompletion =>
-  switch methodOfCompletion {
-  | Evaluated => true
-  | TakeQuiz => true
-  | SubmitForm => true
-  | NoAssignment => false
-  }
-
 let validNumberOfEvaluationCriteria = state => state.evaluationCriteria |> ArrayUtils.isNotEmpty
 
 let setEvaluationCriteriaSearch = (send, value) => send(UpdateEvaluationCriteriaSearchInput(value))
@@ -466,6 +471,11 @@ let updateCompletionInstructions = (send, event) =>
 let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateMethodOfCompletion(methodOfCompletion))
+}
+
+let updateHasAssignment = (hasAssignment, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateHasAssignment(hasAssignment))
 }
 
 let updateMilestone = (milestone, send, event) => {
@@ -932,8 +942,8 @@ module UpdateTargetQuery = %graphql(`
      }
    `)
 module UpdateAssignmentQuery = %graphql(`
-   mutation UpdateAssignmentMutation($targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteAssignments: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean! ) {
-     updateAssignment(targetId: $targetId, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteAssignments: $prerequisiteAssignments, quiz: $quiz, completionInstructions: $completionInstructions, checklist: $checklist, milestone: $milestone)    {
+   mutation UpdateAssignmentMutation($targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteAssignments: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean!, $archived: Boolean ) {
+     updateAssignment(targetId: $targetId, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteAssignments: $prerequisiteAssignments, quiz: $quiz, completionInstructions: $completionInstructions, checklist: $checklist, milestone: $milestone, archived: $archived)    {
         id
        }
      }
@@ -947,10 +957,13 @@ let updateTargetButton = (
   ~hasValidChecklist,
 ) => {
   let onClick = Belt.Option.map(state.targetGroupId, callback)
-  let disabled =
+  let disabled = if state.hasAssignment {
     !hasValidChecklist ||
     (!hasValidTitle ||
     (!hasValidMethodOfCompletion || (!state.dirty || (state.saving || onClick == None))))
+  } else {
+    !hasValidTitle || (!state.dirty || (state.saving || onClick == None))
+  }
 
   <button
     key="target-actions-step"
@@ -980,7 +993,6 @@ let quizAsJsObject = quiz =>
   )
 
 let updateAssignment = (targetId, state, send) => {
-  let id = targetId
   let role = state.role->AssignmentDetails.roleAsString
   let quizAsJs =
     state.quiz
@@ -1003,14 +1015,15 @@ let updateAssignment = (targetId, state, send) => {
     ~completionInstructions=state.completionInstructions,
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
     ~milestone=state.milestone,
+    ~archived=!state.hasAssignment,
     (),
   )
 
   UpdateAssignmentQuery.make(variables)
   |> Js.Promise.then_(result => {
-    switch result["updateTarget"]["id"] {
-    | Some(id) => Js.log("success")
-    | None => send(UpdateSaving)
+    switch result["updateAssignment"]["id"] {
+    | Some(_) => Js.log("assignment upserted")
+    | None => Js.log("No assignment to create")
     }
 
     Js.Promise.resolve()
@@ -1090,6 +1103,7 @@ let make = (
       targetDetails: None,
       assignmentDetails: None,
       milestone: false,
+      hasAssignment: false,
     },
   )
   let targetId = target->Target.id
@@ -1154,20 +1168,20 @@ let make = (
                 </label>
                 <div id="has_assignment" className="flex toggle-button__group shrink-0 rounded-lg">
                   <button
-                    onClick={updateMethodOfCompletion(SubmitForm, send)}
-                    className={booleanButtonClasses(hasAssignment(state.methodOfCompletion))}>
+                    onClick={updateHasAssignment(true, send)}
+                    className={booleanButtonClasses(state.hasAssignment)}>
                     {ts("_yes") |> str}
                   </button>
                   <button
-                    onClick={updateMethodOfCompletion(NoAssignment, send)}
-                    className={booleanButtonClasses(!hasAssignment(state.methodOfCompletion))}>
+                    onClick={updateHasAssignment(false, send)}
+                    className={booleanButtonClasses(!state.hasAssignment)}>
                     {ts("_no") |> str}
                   </button>
                 </div>
               </div>
-              {switch state.methodOfCompletion {
-              | NoAssignment => React.null
-              | _ => assignmentEditor(state, send, target, targets, evaluationCriteria)
+              {switch state.hasAssignment {
+              | false => React.null
+              | true => assignmentEditor(state, send, target, targets, evaluationCriteria)
               }}
             </div>
             <div className="bg-white border-t sticky bottom-0 py-5">

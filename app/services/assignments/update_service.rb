@@ -20,6 +20,8 @@ module Assignments
 
         handle_milestone(assignment_params[:milestone])
 
+        @assignment.archived = assignment_params[:archived]
+
         @assignment.save!
 
         destroy_quiz if @assignment.quiz.present?

@@ -2,16 +2,20 @@ class AssignmentDetailsResolver < ApplicationQuery
   property :target_id
 
   def assignment_details
-    {
-      role: assignment.role,
-      quiz: quiz,
-      evaluation_criteria: assignment.evaluation_criteria.pluck(:id),
-      prerequisite_assignments: assignment.prerequisite_assignment.pluck(:id),
-      completion_instructions: assignment.completion_instructions,
-      checklist: assignment.checklist,
-      milestone: assignment.milestone?,
-      archived: assignment.archived?
-    }
+    if assignment
+      {
+        role: assignment.role,
+        quiz: quiz,
+        evaluation_criteria: assignment.evaluation_criteria.pluck(:id),
+        prerequisite_assignments: assignment.prerequisite_assignments.pluck(:id),
+        completion_instructions: assignment.completion_instructions,
+        checklist: assignment.checklist,
+        milestone: assignment.milestone?,
+        archived: assignment.archived?
+      }
+    else
+      nil
+    end
   end
 
   def authorized?

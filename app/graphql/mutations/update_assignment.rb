@@ -8,14 +8,18 @@ module Mutations
     field :id, ID, null: true
 
     def resolve(_params)
-      updated_assignment =
+      if assignment
+        updated_assignment =
         ::Assignments::UpdateService.new(assignment).execute(assignment_params)
-      notify(
-        :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.update_target.success_notification')
-      )
-      { id: updated_assignment.id }
+        notify(
+          :success,
+          I18n.t('shared.notifications.done_exclamation'),
+          I18n.t('mutations.update_target.success_notification')
+        )
+        { id: updated_assignment.id }
+      else
+        {id: nil}
+      end
     end
 
     def resource_school
@@ -23,7 +27,11 @@ module Mutations
     end
 
     def assignment
-      @assignment ||= Assignment.find_by(target_id: @params[:target_id])
+      assignment ||= Assignment.find_by(target_id: @params[:target_id])
+      if not assignment and not @params[:archived]
+        assignment = target.assignments.create!(target_id: @params[:target_id], role: @params[:role])
+      end
+      @assignment = assignment
     end
 
     def target

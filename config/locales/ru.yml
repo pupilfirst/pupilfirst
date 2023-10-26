@@ -747,6 +747,10 @@ ru:
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
+      reject_submission: Reject Submission
+      reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note_title: "Note: "
+      rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
       review: Проверить
@@ -762,6 +766,7 @@ ru:
         rejected: Отклонен
         reviewing: Оценивается
       student: студент
+      submission_acceptable: "Is this submission acceptable?"
       submission_number: "Submission #%{number}"
       submitted_by: "Отправлен от "
       submitted_by_team: "Отправлено командой: "
@@ -769,6 +774,10 @@ ru:
       team_notice: " Это заявление от команды, поэтому добавленная здесь заметка будет опубликована в отчете всех студентов в команде."
       undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
       undo_grading: Отменить Оценивание
+      undo_rejection_notice_title: "Submission Rejected:"
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection: Undo Rejection
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
       you_are_done: "You're done!"
       write_a_note: Написать Заметку
     CoursesReview__ReviewerManager:
@@ -1128,7 +1137,7 @@ ru:
         help_url: https://docs.pupilfirst.com/users/evaluation_criteria
         label: Оценки и метки
       important: Важное
-      important_details: Значения максимальных и проходных оценок нельзя изменить после создания критерия. Метки, присвоенные каждому классу, могут быть отредактированы позже.
+      important_details: The value of maximum grade cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
       label_grade_placeholder: Метка для класса
       max_grade: Максимальная оценка
       name_error: Введите действительное имя
@@ -2134,13 +2143,13 @@ ru:
     startup:
       feedback_as_email:
         body:
-          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_details_html: "✅ %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
           grading_feedback_header: Here is some feedback on your submission
           grading_header: Your submission was awarded the following grades by %{coach_name}
           link_to: полный отзыв
-          main_html: Вот несколько отзывов от %{coach_name} на вашем %{update_for}
           recent_submission: недавняя сдача
           recent_updates: последние обновления
+          rejected_feedback: Your %{update_for} was rejected by %{coach_name}. Here is some feedback for the rejection
           view_html: Вы можете просмотреть %{link_to}, включая любые файлы, прикрепленные к отзыву.
         subject: Новый отзыв от %{startup_feedback} о вашей работе
     student:
@@ -2270,7 +2279,7 @@ ru:
       invalid_checklist_shape_error: Форма данных в списке отправки не соответствует форме, отправленной с оценкой.
       invalid_checklist_values_error: Значения элементов списка в отправке не совпадают с данными обзора.
       invalid_grading_error: "Указанные значения оценок недействительны: %{grades_data}"
-      submission_graded_error: Работа уже оценена
+      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
     create_post:
@@ -2686,7 +2695,7 @@ ru:
       demo_content_service:
         criterion_one: Correctness of implementation
         criterion_two: Quality of submission
-        grade_1: Bad
+        grade_1: Okay
         grade_2: Good
         grade_3: Great
         level_1: Level 1

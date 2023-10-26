@@ -735,6 +735,10 @@ ta:
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
+      reject_submission: Reject Submission
+      reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note_title: "Note: "
+      rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
       remove_assignment: வேலையை அகற்று
       report_description: சோதனை அறிக்கை
       review: விமர்சனம்
@@ -750,6 +754,7 @@ ta:
         rejected: நிராகரிக்கப்பட்டது
         reviewing: மதிப்பாய்வு செய்கிறது
       student: மாணவர்
+      submission_acceptable: "Is this submission acceptable?"
       submission_number: "Submission #%{number}"
       submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
       submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது: "
@@ -757,6 +762,10 @@ ta:
       team_notice: " இந்தச் சமர்ப்பிப்பு ஒரு குழுவிடமிருந்து வந்தது, எனவே இங்கு சேர்க்கப்பட்ட குறிப்பு, குழுவில் உள்ள அனைத்து மாணவர்களின் அறிக்கையிலும் இடுகையிடப்படும்."
       undo_grade_warning: இந்த கிரேடுகளை நிச்சயமாக அகற்ற விரும்புகிறீர்களா? இது சமர்ப்பிப்பை 'நிலுவையில் உள்ள மதிப்பாய்வு' நிலைக்குத் திருப்பும்.
       undo_grading: கிரேடிங்கை செயல்தவிர்
+      undo_rejection_notice_title: "Submission Rejected:"
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection: Undo Rejection
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
       you_are_done: "You're done!"
       write_a_note: ஒரு குறிப்பு எழுதவும்
     CoursesReview__ReviewerManager:
@@ -1112,7 +1121,7 @@ ta:
         help_url: https://docs.pupilfirst.com/users/evaluation_criteria
         label: கிரேடு மற்றும் லேபிள்கள்
       important: முக்கியமான
-      important_details: ஒரு அளவுகோல் உருவாக்கப்பட்டவுடன் அதிகபட்ச மற்றும் தேர்ச்சி தரங்களுக்கான மதிப்புகளை மாற்ற முடியாது. ஒவ்வொரு தரத்திற்கும் கொடுக்கப்பட்ட லேபிள்கள் பின்னர் திருத்தப்படலாம்.
+      important_details: The value of maximum grade cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
       label_grade_placeholder: தரத்திற்கான லேபிள்
       max_grade: அதிகபட்ச தரம்
       name_error: சரியான பெயரை உள்ளிடவும்
@@ -2102,13 +2111,13 @@ ta:
     startup:
       feedback_as_email:
         body:
-          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_details_html: "✅ %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
           grading_feedback_header: Here is some feedback on your submission
           grading_header: Your submission was awarded the following grades by %{coach_name}
           link_to: முழு கருத்து
-          main_html: உங்கள் %{update_for}இல் %{coach_name} இலிருந்து சில கருத்துகள்
           recent_submission: சமீபத்திய சமர்ப்பிப்பு
           recent_updates: சமீபத்திய புதுப்பிப்புகள்
+          rejected_feedback: Your %{update_for} was rejected by %{coach_name}. Here is some feedback for the rejection
           view_html: பின்னூட்டத்தில் இணைக்கப்பட்டுள்ள கோப்புகள் உட்பட %{link_to}ஐ நீங்கள் பார்க்கலாம்.
         subject: உங்கள் சமர்ப்பிப்புக்கு %{startup_feedback} இலிருந்து புதிய கருத்து
     student:
@@ -2234,7 +2243,7 @@ ta:
       invalid_checklist_shape_error: சமர்ப்பிப்பு சரிபார்ப்புப் பட்டியலில் உள்ள தரவின் வடிவம் மதிப்பாய்வுடன் அனுப்பப்பட்ட வடிவத்துடன் பொருந்தவில்லை
       invalid_checklist_values_error: சமர்ப்பிப்பில் உள்ள சரிபார்ப்புப் பட்டியல் உருப்படிகளுக்கான மதிப்புகள் மதிப்பாய்வுத் தரவுடன் பொருந்தவில்லை
       invalid_grading_error: "வழங்கப்பட்ட கிரேடிங் மதிப்புகள் தவறானவை: %{grades_data}"
-      submission_graded_error: சமர்ப்பிப்பு ஏற்கனவே தரப்படுத்தப்பட்டுள்ளது
+      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "ஐடி: %{submission_id}உடன் சமர்ப்பிப்பைக் கண்டறிய முடியவில்லை"
       success_notification: சமர்ப்பிப்பு மதிப்பாய்வு செய்யப்பட்டதாகக் குறிக்கப்பட்டது.
     create_post:
@@ -2642,7 +2651,7 @@ ta:
       demo_content_service:
         criterion_one: Correctness of implementation
         criterion_two: Quality of submission
-        grade_1: Bad
+        grade_1: Okay
         grade_2: Good
         grade_3: Great
         level_1: Level 1

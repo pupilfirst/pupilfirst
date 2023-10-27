@@ -10003,6 +10003,7 @@ __metadata:
   resolution: "pupilfirst-lms-documentation@workspace:."
   dependencies:
     "@docusaurus/core": "npm:2.4.3"
+    "@docusaurus/plugin-content-docs": "npm:2.4.3"
     "@docusaurus/preset-classic": "npm:2.4.3"
     classnames: "npm:^2.3.2"
     react: "npm:^17.0.0"

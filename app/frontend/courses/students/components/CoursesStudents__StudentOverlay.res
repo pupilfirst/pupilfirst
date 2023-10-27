@@ -41,7 +41,7 @@ module StudentDetailsQuery = %graphql(`
       studentDetails(studentId: $studentId) {
         email,
         evaluationCriteria {
-          id, name, maxGrade, passGrade
+          id, name, maxGrade
         },
         student {
           id,
@@ -126,7 +126,6 @@ let getStudentDetails = (studentId, setState) => {
           ~id=evaluationCriterion.id,
           ~name=evaluationCriterion.name,
           ~maxGrade=evaluationCriterion.maxGrade,
-          ~passGrade=evaluationCriterion.passGrade,
         )
       )
 
@@ -299,8 +298,6 @@ let averageGradeCharts = (
       evaluationCriteria,
       "CoursesStudents__StudentOverlay",
     )
-    let passGrade = criterion |> CoursesStudents__EvaluationCriterion.passGrade |> float_of_int
-    let averageGrade = grade |> StudentDetails.gradeValue
     <div
       ariaLabel={"average-grade-for-criterion-" ++
       (criterion |> CoursesStudents__EvaluationCriterion.id)}
@@ -309,18 +306,10 @@ let averageGradeCharts = (
       <div className="student-overlay__pie-chart-container">
         <div className="flex px-5 pt-4 text-center items-center">
           <svg
-            className={"student-overlay__pie-chart " ++ (
-              averageGrade < passGrade
-                ? "student-overlay__pie-chart--fail"
-                : "student-overlay__pie-chart--pass"
-            )}
+            className="student-overlay__pie-chart student-overlay__pie-chart--pass"
             viewBox="0 0 32 32">
             <circle
-              className={"student-overlay__pie-chart-circle " ++ (
-                averageGrade < passGrade
-                  ? "student-overlay__pie-chart-circle--fail"
-                  : "student-overlay__pie-chart-circle--pass"
-              )}
+              className="student-overlay__pie-chart-circle student-overlay__pie-chart-circle--pass"
               strokeDasharray={StudentDetails.gradeAsPercentage(grade, criterion) ++ ", 100"}
               r="16"
               cx="16"

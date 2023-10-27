@@ -61,7 +61,6 @@ module Courses
         name: name,
         course: @course,
         max_grade: 3,
-        pass_grade: 2,
         grade_labels: [
           {
             "grade" => 1,

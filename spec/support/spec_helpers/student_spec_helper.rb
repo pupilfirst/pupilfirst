@@ -77,7 +77,7 @@ module StudentSpecHelper
               timeline_event: te,
               grade:
                 grade ||
-                  rand(target.course.pass_grade..target.course.max_grade),
+                  rand(target.course.max_grade),
               evaluation_criterion: ec
             )
           end

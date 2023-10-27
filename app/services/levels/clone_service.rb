@@ -87,12 +87,10 @@ module Levels
       target_course.evaluation_criteria.find_by(
         name: source_evaluation_criteria.name,
         max_grade: source_evaluation_criteria.max_grade,
-        pass_grade: source_evaluation_criteria.pass_grade
       ) ||
         target_course.evaluation_criteria.create!(
           name: source_evaluation_criteria.name,
           max_grade: source_evaluation_criteria.max_grade,
-          pass_grade: source_evaluation_criteria.pass_grade,
           grade_labels: source_evaluation_criteria.grade_labels
         )
     end

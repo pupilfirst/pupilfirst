@@ -301,7 +301,6 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
     t.string "name"
     t.bigint "course_id"
     t.integer "max_grade"
-    t.integer "pass_grade"
     t.jsonb "grade_labels"
     t.index ["course_id"], name: "index_evaluation_criteria_on_course_id"
   end

@@ -3977,24 +3977,6 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
-            },
-            {
-              "name": "passGrade",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -6370,22 +6352,6 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "passGrade",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "Int",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "gradesAndLabels",
                   "description": null,
                   "type": {
@@ -6511,19 +6477,15 @@
                   "name": "grades",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
+                    "kind": "LIST",
                     "name": null,
                     "ofType": {
-                      "kind": "LIST",
+                      "kind": "NON_NULL",
                       "name": null,
                       "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "INPUT_OBJECT",
-                          "name": "GradeInput",
-                          "ofType": null
-                        }
+                        "kind": "INPUT_OBJECT",
+                        "name": "GradeInput",
+                        "ofType": null
                       }
                     }
                   },

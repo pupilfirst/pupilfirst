@@ -2542,6 +2542,7 @@ zh-cn:
         add_link_section_title: 添加一个活动链接（可选）
         calendar_label: 添加事件到
         color_label: 颜色
+        color_label_hint: 颜色可帮助您一目了然地区分不同类型的事件
         description_label: 活动描述
         edit_event_heading: 编辑 %{event_title}
         link_title_label: 活动链接标题

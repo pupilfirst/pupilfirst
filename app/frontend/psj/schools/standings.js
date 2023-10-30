@@ -1,14 +1,12 @@
 let colorSelector;
-const defaultColor = "#4338ca";
 
-if (window.location.href.includes("school/standings/new")) {
+if (window.location.href.includes("school/standings/")) {
   window.addEventListener("load", setShieldColor, false);
 }
 
 function setShieldColor() {
   colorSelector = document.getElementById("color_picker");
   if (colorSelector) {
-    colorSelector.value = defaultColor;
     colorSelector.addEventListener("change", update, false);
   }
 }

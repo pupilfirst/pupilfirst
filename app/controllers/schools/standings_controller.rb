@@ -8,8 +8,25 @@ module Schools
       authorize(@standing, policy_class: Schools::StandingPolicy)
     end
 
+    # GET /school/standings/:id/edit
+    def edit
+      @standing = current_school.standings.find(params[:id])
+      authorize(@standing, policy_class: Schools::StandingPolicy)
+    end
+
     # POST /school/standings
     def create
+      @standing = Standing.new
+      authorize(@standing, policy_class: Schools::StandingPolicy)
+
+      standing_params =
+        params.require(:standing).permit(:name, :color, :description)
+
+      @standing = current_school.standings.create!(standing_params)
+
+      flash[:success] = I18n.t("standings.create.success")
+
+      redirect_to standing_school_path
     end
 
     # PATCH /school/standings/:id

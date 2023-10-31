@@ -1957,6 +1957,13 @@ ar:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
+    notify_errors: هناك خطأ ما!
+    vimeo:
+      2230: نوع التحميل غير صالح.
+      4003: هناك مشكلة في بدء التحميل.
+      4101: لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
+      4102: لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
+      4104: لقد تم الوصول إلى الحصة اليومية المخصصة لك.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error

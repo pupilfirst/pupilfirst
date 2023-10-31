@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_05_185509) do
+ActiveRecord::Schema.define(version: 2023_10_31_182510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -800,6 +800,21 @@ ActiveRecord::Schema.define(version: 2023_10_05_185509) do
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
   end
 
+  create_table "user_standings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "standing_id", null: false
+    t.text "reason"
+    t.bigint "creator_id", null: false
+    t.bigint "archiver_id"
+    t.datetime "archived_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["archiver_id"], name: "index_user_standings_on_archiver_id"
+    t.index ["creator_id"], name: "index_user_standings_on_creator_id"
+    t.index ["standing_id"], name: "index_user_standings_on_standing_id"
+    t.index ["user_id"], name: "index_user_standings_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.citext "email"
     t.string "login_token"
@@ -939,6 +954,10 @@ ActiveRecord::Schema.define(version: 2023_10_05_185509) do
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"
   add_foreign_key "topics", "users", column: "locked_by_id"
+  add_foreign_key "user_standings", "standings"
+  add_foreign_key "user_standings", "users"
+  add_foreign_key "user_standings", "users", column: "archiver_id"
+  add_foreign_key "user_standings", "users", column: "creator_id"
   add_foreign_key "users", "organisations"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"

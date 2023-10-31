@@ -1501,11 +1501,17 @@ ar:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_affiliation_format: يحتوي عمود الإرتباط على حرف واحد أو أكثر غير صالح
         invalid_email: Email has to be valid and can't be blank
+        invalid_email_format: يحتوي عمود عنوان البريد على حرف واحد أو أكثر غير صالح
         invalid_name: Name column can't be blank and should be within 250 characters
+        invalid_name_format: يحتوي عمود الاسم على حرف واحد أو أكثر غير صالح
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+        invalid_tags_format: يحتوي عمود العلامات على حرف واحد أو أكثر غير صالح
         invalid_team_name: Team name has to be less than 50 characters
+        invalid_team_name_format: يحتوي عمود اسم الفريق على حرف واحد أو أكثر غير صالح
         invalid_title: Title has to be less than 250 characters
+        invalid_title_format: يحتوي عمود المسمى على حرف واحد أو أكثر غير صالح
       csv_file_errors:
         empty: The selected CSV has no valid rows
         exceeded_entries: The CSV file has more than 1000 entries.

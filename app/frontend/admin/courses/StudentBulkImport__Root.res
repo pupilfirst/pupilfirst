@@ -369,11 +369,17 @@ let errorTabulation = (csvData, fileInvalid) => {
                 {str(
                   switch error {
                   | CSVDataError.Name => t("csv_data_errors.invalid_name")
+                  | InvalidName => t("csv_data_errors.invalid_name_format")
                   | Title => t("csv_data_errors.invalid_title")
+                  | InvalidTitle => t("csv_data_errors.invalid_title_format")
                   | TeamName => t("csv_data_errors.invalid_team_name")
+                  | InvalidTeamName => t("csv_data_errors.invalid_team_name_format")
                   | Email => t("csv_data_errors.invalid_email")
+                  | InvalidEmail => t("csv_data_errors.invalid_email_format")
                   | Affiliation => t("csv_data_errors.invalid_affiliation")
+                  | InvalidAffiliation => t("csv_data_errors.invalid_affiliation_format")
                   | Tags => t("csv_data_errors.invalid_tags")
+                  | InvalidTags => t("csv_data_errors.invalid_tags_format")
                   },
                 )}
               </li>

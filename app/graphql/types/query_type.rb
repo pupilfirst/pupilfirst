@@ -224,5 +224,9 @@ module Types
     resolved_field :user_standings, [Types::UserStandingType], null: false do
       argument :user_id, ID, required: true
     end
+
+    resolved_field :standings, [Types::StandingType], null: true do
+      argument :school_id, ID, required: true
+    end
   end
 end

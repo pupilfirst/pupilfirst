@@ -1,12 +1,13 @@
 class UserStandingsResolver < ApplicationQuery
+  include AuthorizeSchoolAdmin
   property :user_id
 
   def user_standings
-    @user_standings ||= user.user_standings
+    @user_standings ||= user.user_standings.where(archived_at: nil)
   end
 
-  def authorized?
-    user.school == current_school && current_school_admin.present?
+  def resource_school
+    user&.school
   end
 
   def user

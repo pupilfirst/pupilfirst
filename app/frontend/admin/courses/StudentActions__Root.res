@@ -185,7 +185,7 @@ module Editor = {
     ReactEvent.Mouse.preventDefault(event)
     send(SetIssuing)
 
-    IssueCertificateQuery.fetch({certificateId: state.selectedCertificateId, studentId: studentId})
+    IssueCertificateQuery.fetch({certificateId: state.selectedCertificateId, studentId})
     |> Js.Promise.then_((response: IssueCertificateQuery.t) => {
       let data = response.issueCertificate.issuedCertificate
       switch data {
@@ -296,7 +296,7 @@ module Editor = {
   }
 
   let initialState = student => {
-    student: student,
+    student,
     saving: false,
     revoking: false,
     issuing: false,
@@ -428,15 +428,21 @@ module StudentActionsDataQuery = %graphql(`
 let pageLinks = studentId => [
   School__PageHeader.makeLink(
     ~href={`/school/students/${studentId}/details`},
-    ~title="Details",
+    ~title=t("pages.details"),
     ~icon="fas fa-edit",
     ~selected=false,
   ),
   School__PageHeader.makeLink(
     ~href=`/school/students/${studentId}/actions`,
-    ~title="Actions",
+    ~title=t("pages.actions"),
     ~icon="fas fa-cog",
     ~selected=true,
+  ),
+  School__PageHeader.makeLink(
+    ~href=`/school/students/${studentId}/standing`,
+    ~title=t("pages.standing"),
+    ~icon="if i-shield-regular text-base font-bold",
+    ~selected=false,
   ),
 ]
 

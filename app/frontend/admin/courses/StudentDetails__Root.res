@@ -153,14 +153,14 @@ module Editor = {
   }
 
   let initialState = student => {
-    student: student,
+    student,
     coachSearchInput: "",
     saving: false,
   }
 
   let reducer = (state: state, action) =>
     switch action {
-    | UpdateName(name) => {...state, student: {...state.student, name: name}}
+    | UpdateName(name) => {...state, student: {...state.student, name}}
     | AddTag(tag) => {
         ...state,
         student: {...state.student, taggings: state.student.taggings->Js.Array2.concat([tag])},
@@ -176,25 +176,25 @@ module Editor = {
         ...state,
         student: {
           ...state.student,
-          coachIds: coachIds,
+          coachIds,
         },
       }
     | UpdateCoachSearchInput(coachSearchInput) => {
         ...state,
-        coachSearchInput: coachSearchInput,
+        coachSearchInput,
       }
     | UpdateTitle(title) => {
         ...state,
         student: {
           ...state.student,
-          title: title,
+          title,
         },
       }
     | UpdateAffiliation(affiliation) => {
         ...state,
         student: {
           ...state.student,
-          affiliation: affiliation,
+          affiliation,
         },
       }
     | UpdateSaving(bool) => {...state, saving: bool}
@@ -202,7 +202,7 @@ module Editor = {
         ...state,
         student: {
           ...state.student,
-          cohort: cohort,
+          cohort,
         },
       }
     }
@@ -420,6 +420,12 @@ let pageLinks = studentId => [
     ~href=`/school/students/${studentId}/actions`,
     ~title=t("pages.actions"),
     ~icon="fas fa-cog",
+    ~selected=false,
+  ),
+  School__PageHeader.makeLink(
+    ~href=`/school/students/${studentId}/standing`,
+    ~title=t("pages.standing"),
+    ~icon="if i-shield-regular text-base font-bold",
     ~selected=false,
   ),
 ]

@@ -1454,6 +1454,10 @@ en:
       manage_certificates: Manage student certificates
       new_certificate_label: "Issue new certificate:"
       page_description: Actions for the student
+      pages:
+        actions: Actions
+        details: Details
+        standing: Standing
       re_activate_student:
         button: Re-Activate Student
       revoke_certificate_button: Revoke Certificate
@@ -1564,6 +1568,7 @@ en:
       pages:
         actions: Actions
         details: Details
+        standing: Standing
       personal_coaches: Personal Coaches
       pick_a_cohort: Pick a Cohort
       search_coaches_all: You have selected all available coaches!

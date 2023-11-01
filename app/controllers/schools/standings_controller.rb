@@ -22,11 +22,14 @@ module Schools
       standing_params =
         params.require(:standing).permit(:name, :color, :description)
 
-      @standing = current_school.standings.create!(standing_params)
-
-      flash[:success] = I18n.t("standings.create.success")
-
-      redirect_to standing_school_path
+      begin
+        @standing = current_school.standings.create!(standing_params)
+        flash[:success] = I18n.t("standings.create.success")
+        redirect_to standing_school_path
+      rescue ActiveRecord::RecordInvalid => e
+        flash.now[:error] = e.message
+        render :new
+      end
     end
 
     # PATCH /school/standings/:id

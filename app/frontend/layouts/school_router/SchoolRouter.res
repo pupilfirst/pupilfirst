@@ -18,8 +18,6 @@ let make = (~school, ~courses, ~currentUser) => {
   let (selectedCourse, setSelectedCourse) = React.useState(() => None)
   let url = RescriptReactRouter.useUrl()
 
-  let userId = currentUser->User.id
-
   React.useEffect1(() => {
     switch url.path {
     | list{"school", "courses", courseId, ..._tale} =>
@@ -55,7 +53,7 @@ let make = (~school, ~courses, ~currentUser) => {
     )
   | list{"school", "students", studentId, "standing"} => (
       SelectedCourse(Students),
-      Some(<StudentStanding__Root studentId userId />),
+      Some(<StudentStanding__Root studentId />),
     )
   | list{"school", "teams", studentId, "details"} => (
       SelectedCourse(Teams),
@@ -92,7 +90,7 @@ let make = (~school, ~courses, ~currentUser) => {
           )
         | list{"students", studentId, "standing"} => (
             Students,
-            Some(<StudentStanding__Root studentId userId />),
+            Some(<StudentStanding__Root studentId />),
           )
         | list{"teams"} => (Teams, Some(<TeamsIndex__Root courseId search={url.search} />))
         | list{"teams", "new"} => (Teams, Some(<TeamsCreator__Root courseId />))

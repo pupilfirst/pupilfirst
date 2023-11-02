@@ -182,4 +182,7 @@ class Types::MutationType < Types::BaseObject
   field :initiate_password_reset,
         mutation: Mutations::InitiatePasswordReset,
         null: false
+  field :archive_user_standing,
+        mutation: Mutations::ArchiveUserStanding,
+        null: false
 end

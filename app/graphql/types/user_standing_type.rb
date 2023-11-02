@@ -2,6 +2,7 @@ module Types
   class UserStandingType < BaseObject
     field :id, ID, null: false
     field :standing_name, String, null: false
+    field :standing_color, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :creator_name, String, null: false
     field :reason, String, null: false
@@ -12,6 +13,10 @@ module Types
 
     def standing_name
       object.standing.name
+    end
+
+    def standing_color
+      object.standing.color
     end
   end
 end

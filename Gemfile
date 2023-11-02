@@ -70,9 +70,9 @@ gem "batch-loader", "~> 2.0" # Generic lazy batching mechanism to avoid N+1 DB q
 gem "recaptcha", "~> 5.14" # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
 # Feature toggle
-gem "flipper", "~> 0.22"
-gem "flipper-ui", "~> 0.22"
-gem "flipper-active_record", "~> 0.22"
+gem "flipper", "~> 1.0"
+gem "flipper-ui", "~> 1.0"
+gem "flipper-active_record", "~> 1.0"
 
 group :development do
   gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.

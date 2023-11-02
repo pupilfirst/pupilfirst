@@ -523,7 +523,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rbs (3.1.0)
-    recaptcha (5.14.0)
+    recaptcha (5.16.0)
     redis (5.0.8)
       redis-client (>= 0.17.0)
     redis-client (0.18.0)

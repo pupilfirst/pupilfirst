@@ -48,7 +48,7 @@ gem "kaminari", "~> 1.2" # Scope & Engine based, clean, powerful, customizable a
 gem "redis", "~> 5.0" # Redis client for use as cache store for rack-attack
 gem "rack-attack", "~> 6.6" # A rack middleware for throttling and blocking abusive requests
 gem "web-push", "~> 3.0" # Web Push library for Ruby (RFC8030).
-gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates database interactions into no-ops.
+gem "activerecord-nulldb-adapter", "~> 1.0" # A database backend that translates database interactions into no-ops.
 gem "discordrb", "~> 3.5" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.

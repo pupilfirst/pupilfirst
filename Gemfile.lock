@@ -616,10 +616,10 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    slowpoke (0.4.0)
+    slowpoke (0.5.0)
       actionpack
-      rack-timeout (>= 0.4)
-      railties (>= 5.2)
+      rack-timeout (>= 0.6)
+      railties (>= 6.1)
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
@@ -787,7 +787,7 @@ DEPENDENCIES
   seedbank (~> 0.5)
   selenium-webdriver (~> 4.11)
   simplecov (~> 0.21)
-  slowpoke (~> 0.3)
+  slowpoke (~> 0.5.0)
   sprockets-rails (~> 3.4)
   syntax_tree
   syntax_tree-haml

@@ -302,8 +302,8 @@ GEM
       railties
       sprockets-rails
     graphql (2.0.22)
-    groupdate (6.2.1)
-      activesupport (>= 5.2)
+    groupdate (6.4.0)
+      activesupport (>= 6.1)
     haml (6.1.1)
       temple (>= 0.8.2)
       thor

@@ -27,7 +27,12 @@
         </div>
         <div class="col-span-2">
           <label>
-            <span class="text-sm font-medium space-x-1"><span><%= t(".color_label") %></span><i class="if i-question-circle-regular" aria-hidden="true" title="Colors help you to differntiate different types of events at glance"></i></span>
+            <span class="text-sm font-medium space-x-1">
+              <span><%= t(".color_label") %></span>
+              <span title="<%= t(".color_label_hint") %>">
+                <i class="if i-question-circle-regular" aria-hidden="true"></i>
+              </span>
+            </span>
             <%= f.select :color, CalendarEvent.colors , { include_blank: false }, { class: "select mt-1 items-center bg-white border border-gray-300 text-sm w-full outline-none py-3 px-4 pe-10 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" } %>
           </label>
         </div>

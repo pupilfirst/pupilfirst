@@ -2552,6 +2552,7 @@ ta:
         add_link_section_title: Add an event link (optional)
         calendar_label: Add event to
         color_label: Color
+        color_label_hint: Colors help you to differentiate different types of events at glance
         description_label: Event description
         edit_event_heading: Edit %{event_title}
         link_title_label: Event link title

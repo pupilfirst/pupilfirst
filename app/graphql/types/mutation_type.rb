@@ -185,4 +185,7 @@ class Types::MutationType < Types::BaseObject
   field :archive_user_standing,
         mutation: Mutations::ArchiveUserStanding,
         null: false
+  field :create_user_standing,
+        mutation: Mutations::CreateUserStanding,
+        null: false
 end

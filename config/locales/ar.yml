@@ -1957,7 +1957,7 @@ ar:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
-    notify_errors: هناك خطأ ما!
+    something_went_wrong: هناك خطأ ما!
     vimeo:
       2230: نوع التحميل غير صالح.
       4003: هناك مشكلة في بدء التحميل.

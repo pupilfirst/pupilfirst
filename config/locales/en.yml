@@ -1954,7 +1954,7 @@ en:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
-    notify_errors: Something went wrong!
+    something_went_wrong: Something went wrong!
     vimeo:
       2230: The upload type is invalid.
       4003: There is a problem initiating the upload.

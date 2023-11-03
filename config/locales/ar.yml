@@ -2494,6 +2494,7 @@ ar:
         add_link_section_title: إضافة رابط للفعالية (إختياري)
         calendar_label: إضافة الفعالية الى
         color_label: اللون
+        color_label_hint: تساعدك الألوان على التمييز بين أنواع الأحداث المختلفة في لمحة
         description_label: الوصف
         edit_event_heading: تعديل الفعالية
         link_title_label: عنوان الرابط

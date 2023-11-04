@@ -25,6 +25,11 @@ type standing = {
   description: option<string>,
 }
 
+type currentStanding = {
+  color: string,
+  name: string,
+}
+
 type standings = array<standing>
 
 type baseData = {
@@ -32,6 +37,7 @@ type baseData = {
   userStandings: userStandings,
   courseId: string,
   standings: standings,
+  currentStanding: currentStanding,
 }
 
 let pageLinks = studentId => [
@@ -93,34 +99,108 @@ module ArchiveUserStandingMutation = %graphql(`
   }
 `)
 
+module CreateUserStadningMutation = %graphql(`
+    mutation createUserStandingMutation($studentId: ID!, $reason: String!, $standingId: ID!) {
+      createUserStanding(studentId: $studentId, reason: $reason, standingId: $standingId) {
+        userStanding {
+          id
+          standingName
+          standingColor
+          reason
+          createdAt
+          creatorName
+        }
+      }
+    }
+  `)
+
+let createUserStanding = (studentId, reason, standingId, setState, setReason, setStanding) => {
+  CreateUserStadningMutation.fetch({studentId, reason, standingId})
+  |> Js.Promise.then_((response: CreateUserStadningMutation.t) => {
+    let log = response.createUserStanding.userStanding->Belt.Option.map(userStanding => {
+      id: userStanding.id,
+      standingName: userStanding.standingName,
+      standingColor: userStanding.standingColor,
+      createdAt: userStanding.createdAt->DateFns.decodeISO,
+      creatorName: userStanding.creatorName,
+      reason: userStanding.reason,
+    })
+    switch log {
+    | Some(log) =>
+      setReason(_ => "")
+      setStanding(_ => "0")
+      setState(currentState =>
+        switch currentState {
+        | Loaded(data) =>
+          Loaded({
+            ...data,
+            userStandings: Js.Array2.concat([log], data.userStandings),
+            currentStanding: {
+              color: log.standingColor,
+              name: log.standingName,
+            },
+          })
+        | _ => currentState
+        }
+      )
+    | None => ()
+    }
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let updateCurrentStanding = (userStandings: userStandings, standings: standings) => {
+  switch userStandings->Js.Array2.length {
+  | 0 => {
+      let standing = Js.Array2.unsafe_get(standings, 0)
+      {
+        color: standing.color,
+        name: standing.name,
+      }
+    }
+  | _ => {
+      let standing = Js.Array2.unsafe_get(userStandings, 0)
+      {
+        color: standing.standingColor,
+        name: standing.standingName,
+      }
+    }
+  }
+}
+
 let loadData = (studentId, setState, setCourseId) => {
   setState(_ => Loading)
   StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
   |> Js.Promise.then_((response: StudentStandingDataQuery.t) => {
+    let userStandings = response.userStandings->Js.Array2.map(userStanding => {
+      id: userStanding.id,
+      standingName: userStanding.standingName,
+      standingColor: userStanding.standingColor,
+      createdAt: userStanding.createdAt->DateFns.decodeISO,
+      creatorName: userStanding.creatorName,
+      reason: userStanding.reason,
+    })
+
+    let standings = response.standings->Js.Array2.map(standing => {
+      id: standing.id,
+      name: standing.name,
+      color: standing.color,
+      description: standing.description,
+    })
+
     setState(_ => Loaded({
       student: {
         name: response.student.user.name,
         email: response.student.user.email,
       },
-      userStandings: response.userStandings->Js.Array2.map(
-        userStanding => {
-          id: userStanding.id,
-          standingName: userStanding.standingName,
-          standingColor: userStanding.standingColor,
-          createdAt: userStanding.createdAt->DateFns.decodeISO,
-          creatorName: userStanding.creatorName,
-          reason: userStanding.reason,
-        },
-      ),
+      userStandings,
       courseId: response.student.course.id,
-      standings: response.standings->Js.Array2.map(
-        standing => {
-          id: standing.id,
-          name: standing.name,
-          color: standing.color,
-          description: standing.description,
-        },
-      ),
+      standings,
+      currentStanding: updateCurrentStanding(userStandings, standings),
     }))
     setCourseId(response.student.course.id)
     Js.Promise.resolve()
@@ -145,11 +225,15 @@ let archiveStanding = (id: string, setArchive, setState, event) => {
       if response.archiveUserStanding.success {
         setState(currentState =>
           switch currentState {
-          | Loaded(data) =>
-            Loaded({
-              ...data,
-              userStandings: data.userStandings->Js.Array2.filter(standing => standing.id !== id),
-            })
+          | Loaded(data) => {
+              let userStandings =
+                data.userStandings->Js.Array2.filter(standing => standing.id !== id)
+              Loaded({
+                ...data,
+                userStandings,
+                currentStanding: updateCurrentStanding(userStandings, data.standings),
+              })
+            }
           | _ => currentState
           }
         )
@@ -189,19 +273,14 @@ let defaultStanding = (standings: standings) => {
   </div>
 }
 
-let currentStanding = (userStandings: userStandings, standings: standings) => {
-  Js.Array2.length(userStandings) == 0
-    ? defaultStanding(standings)
-    : {
-        let standing = Js.Array2.unsafe_get(userStandings, 0)
-        <div className="shadow  rounded-lg border p-4">
-          <div className="ml-4">
-            {shieldIcon(standing.standingColor)}
-            <div className="font-bold text-lg"> {"Current Standing"->str} </div>
-            <div className="text-gray-600"> {standing.standingName->str} </div>
-          </div>
-        </div>
-      }
+let currentStandingCard = (standing: currentStanding) => {
+  <div className="shadow  rounded-lg border p-4" id="currentStanding">
+    <div className="ml-4">
+      {shieldIcon(standing.color)}
+      <div className="font-bold text-lg"> {"Current Standing"->str} </div>
+      <div className="text-gray-600"> {standing.name->str} </div>
+    </div>
+  </div>
 }
 
 let deleteIcon = (id: string, setArchive, archive, setState) => {
@@ -238,7 +317,7 @@ let standingLogItem = (log: userStanding, setArchive, archive, setState) => {
   </div>
 }
 
-let standingLog = (userStandings: userStandings, setArchive, archive, setState) => {
+let standingLogs = (userStandings: userStandings, setArchive, archive, setState) => {
   <div className="mt-5">
     <h2 className="text-2xl font-semibold mb-4"> {"Standing Log"->str} </h2>
     <div>
@@ -254,10 +333,93 @@ let standingLog = (userStandings: userStandings, setArchive, archive, setState) 
   </div>
 }
 
+let changeStandingButtonDisabled = (reason, standing) => reason == "" || standing == "0"
+
+let editor = (
+  standings,
+  setReason,
+  reason,
+  setState,
+  studentId,
+  setStanding,
+  standing,
+  currentStanding,
+) => {
+  <div>
+    <h2 className="text-2xl font-semibold mb-4"> {"change standing"->str} </h2>
+    <p className="mb-4"> {"You can change users standing to any standing."->str} </p>
+    <div className="flex space-x-2">
+      <div className="relative">
+        <select
+          className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          disabled=true>
+          <option> {currentStanding.name->str} </option>
+        </select>
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <PfIcon className="if i-chevron-down-regular if-fw" />
+        </div>
+      </div>
+      <div>
+        <PfIcon className="if i-arrow-right-short-regular if-fw" />
+      </div>
+      <div className="relative">
+        <select
+          ariaLabel="Select Standing"
+          className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+          id="change-standing"
+          onChange={event => {
+            let value = ReactEvent.Form.target(event)["value"]
+            setStanding(_ => value)
+          }}
+          value=standing>
+          <option key="0" value="0"> {"Select Standing"->str} </option>
+          {standings
+          ->Js.Array2.map(standing => {
+            <option key=standing.id value=standing.id> {standing.name->str} </option>
+          })
+          ->React.array}
+        </select>
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <PfIcon className="if i-chevron-down-regular if-fw" />
+        </div>
+      </div>
+    </div>
+    <div className="mt-4">
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {"Reason for altering standing:"->str}
+      </label>
+      <div>
+        <MarkdownEditor
+          textareaId="reason-for-altering-standing"
+          onChange={value => setReason(_ => value)}
+          maxLength=200
+          value=reason
+          profile=Markdown.Permissive
+          placeholder={"Eg. Plagiarism in assignment name, Misbehave in community..."}
+        />
+      </div>
+    </div>
+    <div>
+      <button
+        className="mt-4 btn btn-primary btn-sm"
+        disabled={changeStandingButtonDisabled(reason, standing)}
+        onClick={_e => {
+          createUserStanding(studentId, reason, standing, setState, setReason, setStanding)
+        }}>
+        {"Change Standing"->str}
+      </button>
+    </div>
+  </div>
+}
+
 @react.component
 let make = (~studentId) => {
   let (state, setState) = React.useState(() => Unloaded)
   let (archive, setArchive) = React.useState(() => false)
+  let (reason, setReason) = React.useState(() => "")
+  let (standing, setStanding) = React.useState(() => "0")
 
   let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
@@ -279,8 +441,18 @@ let make = (~studentId) => {
         links={pageLinks(studentId)}
       />
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-5">
-        {currentStanding(baseData.userStandings, baseData.standings)}
-        {standingLog(baseData.userStandings, setArchive, archive, setState)}
+        {currentStandingCard(baseData.currentStanding)}
+        {standingLogs(baseData.userStandings, setArchive, archive, setState)}
+        {editor(
+          baseData.standings,
+          setReason,
+          reason,
+          setState,
+          studentId,
+          setStanding,
+          standing,
+          baseData.currentStanding,
+        )}
       </div>
     </div>
   | Errored => <ErrorState />

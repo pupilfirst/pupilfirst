@@ -127,4 +127,7 @@ class UsersController < ApplicationController
         course
       end
   end
+
+  def standing
+  end
 end

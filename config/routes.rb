@@ -229,6 +229,7 @@ Rails.application.routes.draw do
     post 'upload_avatar'
     post 'clear_discord_id'
     get 'discord_account_required'
+    get 'standing'
   end
 
   resources :timeline_event_files, only: %i[create] do

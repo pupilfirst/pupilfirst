@@ -5,6 +5,7 @@ let t = I18n.t(~scope="components.StudentTopNav")
 let str = React.string
 
 open StudentTopNav__Types
+open DarkSwitch
 
 let headerLink = (key, link) =>
   <div
@@ -77,6 +78,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
     |> Js.Array.concat([
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
     ])
+    |> Js.Array.concat(isMobile() ? [] : [darkSwitch()])
     |> Js.Array.concat([
       switch (isLoggedIn, isMobile()) {
       | (true, true) => signOutLink()
@@ -122,6 +124,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
               </div>
             }}
           </a>
+          {ReactUtils.nullUnless(darkSwitch(), isMobile())}
           {ReactUtils.nullUnless(
             <div className="flex items-center space-x-2">
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}

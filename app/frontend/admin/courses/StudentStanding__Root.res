@@ -262,23 +262,18 @@ let shieldIcon = color => {
   </svg>
 }
 
-let defaultStanding = (standings: standings) => {
-  let standing = Js.Array2.unsafe_get(standings, 0)
-  <div className="shadow  rounded-lg border p-4">
-    <div className="ml-4">
-      {shieldIcon(standing.color)}
-      <div className="font-medium text-base"> {"Current Standing"->str} </div>
-      <div className="text-gray-600"> {standing.name->str} </div>
-    </div>
-  </div>
-}
-
 let currentStandingCard = (standing: currentStanding) => {
   <div className="shadow  rounded-lg border p-4" id="currentStanding">
-    <div className="ml-4">
-      {shieldIcon(standing.color)}
-      <div className="font-bold text-lg"> {"Current Standing"->str} </div>
-      <div className="text-gray-600"> {standing.name->str} </div>
+    <div className="ml-4 flex flex-col">
+      <div className="font-semibold text-base"> {"Current Standing"->str} </div>
+      <div className="flex flex-col justify-center items-center">
+        {shieldIcon(standing.color)}
+        <div
+          style={ReactDOM.Style.make(~color=standing.color, ())}
+          className={`font-medium text-base`}>
+          {React.string(standing.name)}
+        </div>
+      </div>
     </div>
   </div>
 }

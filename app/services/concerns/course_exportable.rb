@@ -64,7 +64,7 @@ module CourseExportable
         [evaluation_grade, "passing-grade"]
       when [false, true]
         if submission.evaluated_at.present?
-          ['x', '']
+          %w[x failing-grade]
         else
           %w[RP pending-grade]
         end

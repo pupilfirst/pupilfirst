@@ -306,7 +306,9 @@ let standingLogItem = (log: userStanding, setArchive, archive, setState) => {
         <PfIcon className="if i-teacher-coach-regular if-fw" />
         {log.creatorName->str}
       </div>
-      <div className="mt-1"> {log.reason->str} </div>
+      <div className="mt-1">
+        <MarkdownBlock profile=Markdown.Permissive markdown=log.reason />
+      </div>
     </div>
     <div className="ml-4"> {deleteIcon(log.id, setArchive, archive, setState)} </div>
   </div>
@@ -389,10 +391,12 @@ let editor = (
         <MarkdownEditor
           textareaId="reason-for-altering-standing"
           onChange={value => setReason(_ => value)}
-          maxLength=200
+          maxLength=250
           value=reason
           profile=Markdown.Permissive
           placeholder={"Eg. Plagiarism in assignment name, Misbehave in community..."}
+          fileUpload=false
+          dynamicHeight=false
         />
       </div>
     </div>

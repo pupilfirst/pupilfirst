@@ -46,6 +46,5 @@ module Mutations
     def allow_token_auth?
       true
     end
-
   end
 end

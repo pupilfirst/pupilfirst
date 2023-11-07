@@ -318,7 +318,7 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
-let learnSection = (send, state, targetDetails, tab, author, courseId, targetId, targetStatus) => {
+let learnSection = (send, state, targetDetails, tab, author, courseId, targetId, markReadCB) => {
   let addPageRead = targetId => {
     let payload = Js.Dict.empty()
     Js.Dict.set(payload, "target_id", Js.Json.string(targetId))
@@ -337,7 +337,10 @@ let learnSection = (send, state, targetDetails, tab, author, courseId, targetId,
         (),
       ),
     )
-    |> then_(response => response |> Fetch.Response.json)
+    |> then_(_ => {
+      markReadCB(targetId)
+      resolve()
+    })
     |> ignore
   }
 
@@ -579,6 +582,7 @@ let make = (
   ~addSubmissionCB,
   ~targets,
   ~targetRead,
+  ~markReadCB,
   ~statusOfTargets,
   ~users,
   ~evaluationCriteria,
@@ -637,7 +641,7 @@ let make = (
             author,
             Course.id(course),
             Target.id(target),
-            targetStatus,
+            markReadCB,
           )}
           {discussSection(target, targetDetails, state.tab)}
           {completeSection(

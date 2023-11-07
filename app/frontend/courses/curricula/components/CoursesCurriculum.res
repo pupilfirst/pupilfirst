@@ -13,6 +13,7 @@ type state = {
   showLevelZero: bool,
   latestSubmissions: array<LatestSubmission.t>,
   statusOfTargets: array<TargetStatus.t>,
+  targetsRead: array<string>,
   notice: Notice.t,
 }
 
@@ -22,13 +23,14 @@ let targetStatusClasses = targetStatus => {
   "curriculum__target-status px-1 md:px-3 py-px ms-4 h-6 " ++ statusClasses
 }
 
-let rendertarget = (target, statusOfTargets, author, courseId) => {
+let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
   let targetId = target |> Target.id
   let targetStatus =
     statusOfTargets |> ArrayUtils.unsafeFind(
       ts => ts |> TargetStatus.targetId == targetId,
       "Could not find targetStatus for listed target with ID " ++ targetId,
     )
+  let targetRead = Js.Array.includes(targetId, targetsRead)
 
   <div
     key={"target-" ++ targetId}
@@ -43,6 +45,13 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       TargetStatus.statusToString(targetStatus))}>
       <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
       <div className="flex">
+        {targetRead
+          ? <div
+              className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
+              <Icon className="if i-milestone-solid text-sm" />
+              <span className="hidden md:block ms-1"> {t("target_read_label") |> str} </span>
+            </div>
+          : React.null}
         {ReactUtils.nullIf(
           <span className={targetStatusClasses(targetStatus)}>
             {TargetStatus.statusToString(targetStatus)->str}
@@ -71,7 +80,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
   </div>
 }
 
-let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId) => {
+let renderTargetGroup = (targetGroup, targets, statusOfTargets, targetsRead, author, courseId) => {
   let targetGroupId = targetGroup |> TargetGroup.id
   let targets = targets |> Js.Array.filter(t => t |> Target.targetGroupId == targetGroupId)
 
@@ -92,7 +101,9 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
       </div>
       {targets
       |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
+      |> Js.Array.map(target =>
+        rendertarget(target, statusOfTargets, targetsRead, author, courseId)
+      )
       |> React.array}
     </div>
   </div>
@@ -108,6 +119,14 @@ let addSubmission = (setState, latestSubmission) =>
     {
       ...state,
       latestSubmissions: Js.Array.concat([latestSubmission], withoutSubmissionForThisTarget),
+    }
+  })
+
+let addMarkRead = (setState, markedReadTargetId) =>
+  setState(state => {
+    {
+      ...state,
+      targetsRead: Js.Array.concat([markedReadTargetId], state.targetsRead),
     }
   })
 
@@ -302,6 +321,7 @@ let make = (
       latestSubmissions: submissions,
       statusOfTargets,
       notice: computeNotice(course, student, preview),
+      targetsRead,
     }
   })
 
@@ -361,6 +381,7 @@ let make = (
         addSubmissionCB={addSubmission(setState)}
         targets
         targetRead
+        markReadCB={addMarkRead(setState)}
         statusOfTargets=state.statusOfTargets
         users
         evaluationCriteria
@@ -424,6 +445,7 @@ let make = (
                     targetGroup,
                     targets,
                     state.statusOfTargets,
+                    state.targetsRead,
                     author,
                     Course.id(course),
                   )

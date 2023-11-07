@@ -2772,6 +2772,12 @@ en:
     settings: Settings
     sign_out: Sign Out
     sort_by: Sort by
+    user_standing:
+      current_standing: Current Standing
+      empty_standing_info: Your standings have not been altered. Any changes to your standing will be displayed here.
+      no_standing: No standing
+      standing: Standing
+      standing_log: Standing Log
     student:
       never_signed_in: Has never signed in
       time_ago: Last seen %{time_ago} ago
@@ -2908,6 +2914,10 @@ en:
           error: The supplied email address and password do not match. Please check your credentials and try again.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+    standing:
+      current_standing: Current Standing
+      standing: Standing
+      standing_log: Standing Log
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.

@@ -128,6 +128,18 @@ class UsersController < ApplicationController
       end
   end
 
+  # GET /user/standing
   def standing
+    @user = authorize(current_user)
+    @user_standings =
+      @user
+        .user_standings
+        .includes(:standing)
+        .where(archived_at: nil)
+        .order(created_at: :desc)
+    @school_default_standing =
+      Standing.find_by(school: current_school, default: true)
+    @current_standing =
+      @user_standings.first&.standing || @school_default_standing
   end
 end

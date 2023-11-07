@@ -1,7 +1,7 @@
 module Organisations
   class StudentsController < ApplicationController
     before_action :authenticate_user!
-    layout 'student'
+    layout "student"
 
     # GET /org/students/:id
     def show
@@ -14,6 +14,22 @@ module Organisations
       student = authorize Student.find(params[:id])
       @presenter = StudentPresenter.new(view_context, student)
       raise_not_found if @presenter.reviewed_submissions.empty?
+    end
+
+    # GET /org/students/:id/standing
+    def standing
+      student = authorize Student.find(params[:id])
+      @user = student.user
+      @user_standings =
+        @user
+          .user_standings
+          .includes(:standing)
+          .where(archived_at: nil)
+          .order(created_at: :desc)
+      @school_default_standing =
+        Standing.find_by(school: current_school, default: true)
+      @current_standing =
+        @user_standings.first&.standing || @school_default_standing
     end
 
     private

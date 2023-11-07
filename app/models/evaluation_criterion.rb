@@ -9,26 +9,19 @@ class EvaluationCriterion < ApplicationRecord
 
   validates :max_grade, presence: true, numericality: { greater_than: 0 }
 
-  validates :pass_grade,
-            presence: true,
-            numericality: {
-              greater_than: 0,
-              less_than_or_equal_to: :max_grade
-            }
-
   validates :grade_labels, presence: true
   validate :grade_labels_must_match_grades
 
   validates :name,
             presence: true,
             uniqueness: {
-              scope: %i[course_id max_grade pass_grade]
+              scope: %i[course_id max_grade],
             }
 
   validates_with RateLimitValidator, limit: 100, scope: :course_id
 
   def display_name
-    name + " (#{pass_grade},#{max_grade})"
+    name + " #{max_grade}"
   end
 
   private

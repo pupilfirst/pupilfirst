@@ -1,6 +1,6 @@
 module Mutations
   class QueueSubmissionReport < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
     argument :report,

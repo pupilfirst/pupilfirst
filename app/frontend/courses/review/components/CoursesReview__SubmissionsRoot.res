@@ -10,7 +10,7 @@ module UserProxyFragment = UserProxy.Fragment
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, inactiveStudents, createdAt, submissionReportPollTime, inactiveSubmissionReviewAllowedDays
+        targetId, targetTitle, createdAt, submissionReportPollTime
         students {
           id
           name
@@ -27,7 +27,7 @@ module SubmissionDetailsQuery = %graphql(`
           targetUrl
         }
         evaluationCriteria{
-          id, name, maxGrade, passGrade, gradeLabels { grade label}
+          id, name, maxGrade, gradeLabels { grade label}
         },
         reviewChecklist{
           title
@@ -58,7 +58,8 @@ module SubmissionDetailsQuery = %graphql(`
         }
         teamName
         courseId
-        preview
+        reviewable
+        warning
         reviewerDetails{
           assignedAt
           user {

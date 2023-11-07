@@ -229,7 +229,7 @@ ar:
         label:
           search: Search by name or email
           tag: Tag
-      onboard_as_student: OnBoard as Student
+      onboard_as_student: Onboard as Student
       show_actions: Show Actions
       show_details: "Show Details: "
       sort_criterion:
@@ -755,10 +755,6 @@ ar:
       feedback: Feedback
       feedback_generated_text: Feedback generated from review checklist.
       feedback_placeholder: This feedback will be emailed to students when you finish grading.
-      get_next_submission:
-        notice:
-          done: Done!
-          done_description: There are no other similar submissions.
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
@@ -2226,7 +2222,7 @@ ar:
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_graded_error: Submission already graded
+      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Unable to find submission with ID: %{submission_id}"
       success_notification: The submission has been marked as reviewed.
     create_post:
@@ -2498,6 +2494,7 @@ ar:
         add_link_section_title: إضافة رابط للفعالية (إختياري)
         calendar_label: إضافة الفعالية الى
         color_label: اللون
+        color_label_hint: تساعدك الألوان على التمييز بين أنواع الأحداث المختلفة في لمحة
         description_label: الوصف
         edit_event_heading: تعديل الفعالية
         link_title_label: عنوان الرابط

@@ -11,7 +11,7 @@ on:
       - "docs/**"
 env:
   PF_IMAGE_NAME: pupilfirst
-  PF_VERSION: "2023.4"
+  PF_VERSION: "2023.5"
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
@@ -135,7 +135,7 @@ jobs:
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

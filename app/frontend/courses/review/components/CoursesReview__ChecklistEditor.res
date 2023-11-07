@@ -369,7 +369,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
               ariaLabel={t("add_checklist_item")}
               className="flex items-center text-sm font-semibold bg-white rounded-md border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:bg-white focus:border-primary-500 focus:shadow-md"
               onClick={_ => send(AddEmptyChecklistItem)}>
-              <span className="bg-gray-100 py-2 w-10"> <i className="fas fa-plus text-sm" /> </span>
+              <span className="bg-gray-100 py-2 w-10 text-center">
+                <i className="fas fa-plus text-sm" />
+              </span>
               <span className="px-3 py-2"> {t("add_checklist_item")->str} </span>
             </button>
           </div>

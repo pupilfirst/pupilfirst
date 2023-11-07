@@ -20,20 +20,16 @@ let gradeDescription = (gradeLabels, grading) =>
 
 let maxGrade = gradeLabels => gradeLabels |> GradeLabel.maxGrade |> string_of_int
 
-let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
+let gradePillClasses = (gradeReceived, pillGrade, callBack) => {
   let defaultClasses = "grade-bar__grade-pill cursor-auto"
   let resultModifier = switch gradeReceived {
   | None => ""
   | Some(grade) if pillGrade > grade => ""
-  | Some(grade) =>
-    grade < passGrade ? " grade-bar__grade-pill--rejected" : " grade-bar__grade-pill--completed"
+  | Some(_) => " grade-bar__grade-pill--completed"
   }
   let selectableModifier = switch callBack {
   | None => ""
-  | Some(_callBack) =>
-    pillGrade < passGrade
-      ? " grade-bar__grade-pill--selectable-fail cursor-pointer"
-      : " grade-bar__grade-pill--selectable-pass cursor-pointer"
+  | Some(_callBack) => " grade-bar__grade-pill--selectable-pass cursor-pointer"
   }
   defaultClasses ++ (resultModifier ++ selectableModifier)
 }
@@ -56,35 +52,32 @@ let handleClick = (gradeSelectCB, grading, newGrade) =>
   | Some(callBack) => callBack(grading |> Grading.updateGrade(newGrade))
   }
 
-let gradeBarPill = (gradeLabel, grading, gradeSelectCB, passGrade) => {
+let gradeBarPill = (gradeLabel, grading, gradeSelectCB) => {
   let myGrade = gradeLabel |> GradeLabel.grade
   <div
-    key={myGrade |> string_of_int}
-    title={gradeLabel |> GradeLabel.label}
+    key={myGrade->string_of_int}
+    title={gradeLabel->GradeLabel.label}
     role="button"
     onClick={_event => handleClick(gradeSelectCB, grading, myGrade)}
-    className={gradePillClasses(grading |> Grading.grade, passGrade, myGrade, gradeSelectCB)}>
+    className={gradePillClasses(grading->Grading.grade, myGrade, gradeSelectCB)}>
     {switch gradeSelectCB {
     | None => React.null
-    | Some(_CB) => myGrade |> string_of_int |> str
+    | Some(_CB) => myGrade->string_of_int->str
     }}
   </div>
 }
 
-let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
+let gradeBarPanel = (grading, gradeLabels, gradeSelectCB) =>
   <div className="grade-bar__track" role="group">
-    {gradeLabels
-    |> List.map(gradeLabel => gradeBarPill(gradeLabel, grading, gradeSelectCB, passGrade))
-    |> Array.of_list
-    |> React.array}
+    {List.map(gradeLabel => gradeBarPill(gradeLabel, grading, gradeSelectCB), gradeLabels)
+    ->Array.of_list
+    ->React.array}
   </div>
 
 @react.component
 let make = (~grading, ~gradeSelectCB=?, ~criterion) => {
   let gradeLabels = criterion |> EvaluationCriterion.gradesAndLabels |> Array.to_list
-  let passGrade = criterion |> EvaluationCriterion.passGrade
   <div className="flex-column" role="toolbar">
-    {gradeBarHeader(grading, gradeLabels)}
-    {gradeBarPanel(grading, gradeLabels, gradeSelectCB, passGrade)}
+    {gradeBarHeader(grading, gradeLabels)} {gradeBarPanel(grading, gradeLabels, gradeSelectCB)}
   </div>
 }

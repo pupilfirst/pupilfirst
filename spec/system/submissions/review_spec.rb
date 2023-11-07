@@ -20,7 +20,7 @@ feature "Submission review overlay", js: true do
   end
   let(:grade_labels_for_1) do
     [
-      { "grade" => 1, "label" => "Bad" },
+      { "grade" => 1, "label" => "Okay" },
       { "grade" => 2, "label" => "Good" },
       { "grade" => 3, "label" => "Great" },
       { "grade" => 4, "label" => "Wow" }
@@ -30,7 +30,6 @@ feature "Submission review overlay", js: true do
     create :evaluation_criterion,
            course: course,
            max_grade: 4,
-           pass_grade: 2,
            grade_labels: grade_labels_for_1
   end
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
@@ -166,12 +165,12 @@ feature "Submission review overlay", js: true do
           ".course-review-editor__grade-pill",
           count: 4
         )
-        find("button[title='Bad']").click
+        find("button[title='Okay']").click
       end
 
-      # status should be reviewing as the target is not graded completely
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Reviewing")
+      # status should be Pending Review as the target is not graded completely
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Pending Review")
       end
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
@@ -180,24 +179,28 @@ feature "Submission review overlay", js: true do
           ".course-review-editor__grade-pill",
           count: 3
         )
-        find("button[title='Bad']").click
+        find("button[title='Okay']").click
       end
 
-      # the status should be Rejected
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Rejected")
+      # the status should be Completed
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Completed")
       end
 
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
 
-      # the status should be Rejected
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Rejected")
+      # the status should still be Completed
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Completed")
       end
 
       click_button "Save grades & send feedback"
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       student = submission_pending.students.first
       open_email(student.user.email)
@@ -209,7 +212,7 @@ feature "Submission review overlay", js: true do
       expect(submission.reviewer).to eq(nil)
       expect(submission.reviewer_assigned_at).to eq(nil)
       expect(submission.evaluator_id).to eq(coach.id)
-      expect(submission.passed_at).to eq(nil)
+      expect(submission.passed_at).not_to eq(nil)
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
@@ -233,6 +236,87 @@ feature "Submission review overlay", js: true do
         submission
       )
     end
+
+    scenario "coach rejects a pending submission with a feedback" do
+      notification_service = prepare_developers_notification
+
+      sign_in_user coach.user, referrer: review_course_path(course)
+
+      expect(page).to have_content(target.title)
+      expect(page).to have_content(target_2.title)
+
+      find("a[data-submission-id='#{submission_pending.id}']").click
+      click_button "Start Review"
+
+      expect(page).to have_content("Grade Card")
+      expect(submission_pending.reload.reviewer).to eq(coach)
+      expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
+      feedback = Faker::Markdown.sandwich(sentences: 6)
+      add_markdown(feedback)
+
+      within("div#is_acceptable") { click_button "No" }
+      # the status should be Rejected before clicking Reject button
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Rejected")
+      end
+
+      click_button "Reject submission & send feedback"
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Rejected")
+      end
+
+      student = submission_pending.students.first
+      open_email(student.user.email)
+      expect(current_email).to have_content("rejected")
+
+      expect(page).to have_button("Undo Rejection")
+
+      submission = submission_pending.reload
+      expect(submission.reviewer).to eq(nil)
+      expect(submission.reviewer_assigned_at).to eq(nil)
+      expect(submission.evaluator_id).to eq(coach.id)
+      expect(submission.passed_at).to eq(nil)
+      expect(submission.evaluated_at).not_to eq(nil)
+      expect(submission.startup_feedback.count).to eq(1)
+      expect(submission.startup_feedback.last.feedback).to eq(feedback)
+      expect(submission.timeline_event_grades.pluck(:grade)).to eq([])
+
+      # the submission must be removed from the pending list
+
+      find("button[aria-label='submissions-overlay-close']").click
+      click_link "Pending"
+      expect(page).to have_text(submission_pending_2.target.title)
+      expect(page).to_not have_text(submission.target.title)
+
+      expect_published(
+        notification_service,
+        course,
+        :submission_graded,
+        coach.user,
+        submission,
+      )
+    end
+
+    scenario "coach undo a rejection" do
+      sign_in_user coach.user, referrer: review_course_path(course)
+
+      find("a[data-submission-id='#{submission_pending.id}']").click
+      click_button "Start Review"
+      within("div#is_acceptable") { click_button "No" }
+      click_button "Reject Submission"
+
+      accept_confirm { click_button "Undo Rejection" }
+
+      expect(page).to have_text("Start Review")
+
+      submission = submission_pending.reload
+      expect(submission.evaluator_id).to eq(nil)
+      expect(submission.passed_at).to eq(nil)
+      expect(submission.evaluated_at).to eq(nil)
+      expect(submission.timeline_event_grades).to eq([])
+    end
+
 
     scenario "coaches can view and edit the review checklist without assigning themselves" do
       sign_in_user coach.user,
@@ -746,20 +830,25 @@ feature "Submission review overlay", js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) { find("button[title='Good']").click }
 
-      # status should be reviewing as the target is not graded completely
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Reviewing")
+      # status should be Pending Review as the target is not graded completely
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Pending Review")
       end
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
 
-      # the status should be Rejected
-      within("div[aria-label='submission-status']") do
+      # the status should be completed
+      within("div[aria-label='submission-leftpane-status']") do
         expect(page).to have_text("Completed")
       end
 
       click_button "Save grades"
+
+      # the status should be completed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
@@ -838,20 +927,25 @@ feature "Submission review overlay", js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) { find("button[title='Good']").click }
 
-      # status should be reviewing as the target is not graded completely
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text("Reviewing")
+      # status should be pending review as the target is not graded completely
+      within("div[aria-label='submission-leftpane-status']") do
+        expect(page).to have_text("Pending Review")
       end
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
 
       # the status should be completed
-      within("div[aria-label='submission-status']") do
+      within("div[aria-label='submission-leftpane-status']") do
         expect(page).to have_text("Completed")
       end
 
       click_button "Save grades"
+
+      # the status should be completed
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       expect(page).to have_button("Undo Grading")
 
@@ -870,11 +964,34 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
 
-    scenario "school admin tries to access the submission review page" do
+    scenario "school admin can view the submission" do
       sign_in_user school_admin.user,
                    referrer: review_timeline_event_path(submission_pending)
 
-      expect(page).to have_text("The page you were looking for doesn't exist!")
+      # Admin can access the page, but cannot review the submission.
+
+      expect(page).to have_text("Submission #1")
+
+      expect(page).to have_text(
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
+      )
+
+      expect(page).to have_button("Save grades", disabled: true)
+      expect(page).to have_button("Create Review Checklist", disabled: true)
+      expect(page).to have_selector(
+        'textarea[aria-label="Markdown editor"]:disabled'
+      )
+    end
+
+    scenario "school admin cannot take over a assigned submission" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_pending_2)
+
+      expect(page).to have_text(
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
+      )
+
+      expect(page).not_to have_button("Yes, Assign Me")
     end
 
     scenario "coach is warned when a student has dropped out" do
@@ -994,8 +1111,8 @@ feature "Submission review overlay", js: true do
       )
       grade_submission(
         submission_pending,
-        SubmissionsHelper::GRADE_PASS,
-        target
+        SubmissionsHelper::SUBMISSION_PASS,
+        target,
       )
 
       # Open the overlay.
@@ -1112,7 +1229,9 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
       click_button "Save grades"
 
-      expect(page).to have_text("There are no similar pending submissions.")
+      expect(page).to have_text(
+        "This submission has been graded, and there are no more submissions awaiting review."
+      )
     end
   end
 
@@ -1316,6 +1435,20 @@ feature "Submission review overlay", js: true do
       expect(submission.startup_feedback.last.feedback).to eq(feedback)
     end
 
+    scenario "school admin cannot add feedback or undo grading on a previously reviewed submission" do
+      sign_in_user school_admin.user,
+                   referrer: review_timeline_event_path(submission_reviewed)
+
+      expect(page).to have_text("Submission #1")
+
+      expect(page).to have_text(
+        "You cannot review this submission as you're not assigned to this cohort as a coach."
+      )
+
+      expect(page).to have_button("Add feedback", disabled: true)
+      expect(page).to have_button("Undo Grading", disabled: true)
+    end
+
     scenario "coach can undo grading" do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_reviewed)
@@ -1359,8 +1492,8 @@ feature "Submission review overlay", js: true do
         ) { find("button[title='Good']").click }
 
         within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
-        ) { find("button[title='Bad']").click }
+          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
+        ) { find("button[title='Okay']").click }
 
         click_button "Save grades"
 
@@ -1952,6 +2085,57 @@ feature "Submission review overlay", js: true do
       expect(page).to have_text("All automated tests succeeded")
       click_button "Show Report"
       expect(page).to have_text("A new report description")
+    end
+  end
+
+  context "When a milestone submission is ungraded after the course is marked complete for a student" do
+    let(:target_3) do
+      create :target,
+             :for_students,
+             target_group: target_group,
+             milestone_number: 1,
+             milestone: true
+    end
+
+    let!(:submission_3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: team.students,
+        target: target_3,
+        evaluator_id: team_coach.id,
+        evaluated_at: nil,
+        passed_at: nil
+      )
+    end
+
+    before { target_3.evaluation_criteria << [evaluation_criterion_1] }
+
+    scenario "coach grades and than ungrades milestone submission" do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_3)
+
+      click_button "Start Review"
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+      ) do
+        expect(page).to have_selector(
+          ".course-review-editor__grade-pill",
+          count: 4
+        )
+        find("button[title='Great']").click
+      end
+
+      click_button "Save grades"
+
+      expect(page).to have_button("Undo Grading")
+      expect(team.students.reload.pluck(:completed_at)).not_to eq([nil, nil])
+
+      accept_confirm { click_button("Undo Grading") }
+
+      expect(page).to have_button("Start Review")
+      expect(team.students.reload.pluck(:completed_at)).to eq([nil, nil])
     end
   end
 end

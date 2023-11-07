@@ -40,23 +40,28 @@ let reducer = (state, action) =>
   switch action {
   | SelectOverviewTab => {...state, selectedTab: #Overview}
   | SelectSubmissionsTab => {...state, selectedTab: #Submissions}
-  | SaveOverviewData(overviewData) => {...state, overviewData: overviewData}
-  | SaveSubmissions(submissionsData) => {...state, submissionsData: submissionsData}
+  | SaveOverviewData(overviewData) => {...state, overviewData}
+  | SaveSubmissions(submissionsData) => {...state, submissionsData}
   | UpdateStatusFilter(status) => {
       ...state,
       submissionsFilter: {
         selectedStatus: status,
       },
     }
-  | UpdateSortDirection(sortDirection) => {...state, sortDirection: sortDirection}
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   }
 
 module StudentReportOverviewQuery = %graphql(`
     query StudentReportOverviewQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         evaluationCriteria {
-          id, name, maxGrade, passGrade
-        },
+          id, name, maxGrade
+        }
+        student {
+          cohort {
+            name
+          }
+        }
         totalTargets
         targetsCompleted
         targetsPendingReview
@@ -75,14 +80,48 @@ module StudentReportOverviewQuery = %graphql(`
     }
   `)
 
-let saveOverviewData = (studentId, send, data) => {
-  send(SaveOverviewData(Loaded(data |> StudentOverview.makeFromJs(studentId))))
-}
-
 let getOverviewData = (studentId, send, ()) => {
-  StudentReportOverviewQuery.make({studentId: studentId})
-  |> Js.Promise.then_(response => {
-    response["studentDetails"] |> saveOverviewData(studentId, send)
+  StudentReportOverviewQuery.fetch({studentId: studentId})
+  |> Js.Promise.then_((response: StudentReportOverviewQuery.t) => {
+    let evaluationCriteria =
+      response.studentDetails.evaluationCriteria->Js.Array2.map(evaluationCriterion =>
+        CoursesReport__EvaluationCriterion.make(
+          ~id=evaluationCriterion.id,
+          ~name=evaluationCriterion.name,
+          ~maxGrade=evaluationCriterion.maxGrade,
+        )
+      )
+
+    let averageGrades =
+      response.studentDetails.averageGrades->Js.Array2.map(gradeData =>
+        StudentOverview.makeAverageGrade(
+          ~evaluationCriterionId=gradeData.evaluationCriterionId,
+          ~grade=gradeData.averageGrade,
+        )
+      )
+
+    let milestoneTargetsCompletionStatus =
+      response.studentDetails.milestoneTargetsCompletionStatus->Js.Array2.map(milestoneTarget =>
+        CoursesReport__MilestoneTargetCompletionStatus.make(
+          ~id=milestoneTarget.id,
+          ~title=milestoneTarget.title,
+          ~milestoneNumber=milestoneTarget.milestoneNumber,
+          ~completed=milestoneTarget.completed,
+        )
+      )
+
+    let overviewData = StudentOverview.make(
+      ~id=studentId,
+      ~cohortName=response.studentDetails.student.cohort.name,
+      ~evaluationCriteria,
+      ~totalTargets=response.studentDetails.totalTargets,
+      ~targetsCompleted=response.studentDetails.targetsCompleted,
+      ~targetsPendingReview=response.studentDetails.targetsPendingReview,
+      ~quizScores=response.studentDetails.quizScores,
+      ~averageGrades,
+      ~milestoneTargetsCompletionStatus,
+    )
+    send(SaveOverviewData(Loaded(overviewData)))
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => Js.Promise.resolve())

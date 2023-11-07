@@ -1,11 +1,14 @@
-let colorSelector;
+/*
+   TODO: If this code breaks after enabling turbo, we need to move this code to stimulus controller
+*/
 
+// This code is used to set the color of the shield in the school standings edit/new page
 if (window.location.href.includes("school/standings/")) {
   window.addEventListener("load", setShieldColor, false);
 }
 
 function setShieldColor() {
-  colorSelector = document.getElementById("color_picker");
+  let colorSelector = document.getElementById("color_picker");
   if (colorSelector) {
     colorSelector.addEventListener("change", update, false);
   }
@@ -16,6 +19,7 @@ function update(event) {
   content.setAttribute("fill", event.target.value);
 }
 
+//  This code is used to confirm the delete action for standings in the school standing page.
 if (window.location.href.includes("/school/standing")) {
   window.addEventListener("load", deleteStanding, false);
   console.log("delete standing");

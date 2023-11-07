@@ -2171,6 +2171,13 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
+      email_change_in_user_standing:
+        body:
+          link_to: visit user standing page
+          main_html: <p> Your standing in %{school_name} has been changed from <strong>%{previous_standing}</strong> to <strong>%{current_standing}</strong>. The following is the reason:</p>
+          main_html_for_repeat_standing: <p>Your standing in %{school_name} has been updated. While you standing remains the <strong>same</strong> as before but the reason is varied. The following is the reason:</p>
+          view_html: <p>You can %{link_to} to view your current standing.</p>
+        subject: Your standing in %{school_name} has been changed
       new_post:
         body:
           link_to: view the reply on the %{community_name} community

@@ -1950,6 +1950,13 @@ ta:
       enroll: பதிவு செய்யவும்
       preview_course: முன்னோட்ட பாடநெறி
   errors:
+    something_went_wrong: Something went wrong!
+    vimeo:
+      2230: The upload type is invalid.
+      4003: There is a problem initiating the upload.
+      4101: Your maximum disk space has been reached.
+      4102: Your allotted weekly quota has been reached.
+      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: உங்கள் கோரிக்கையைச் செயல்படுத்த முயற்சிக்கும்போது எங்கள் சேவையகம் சிக்கலைத் தாக்கியது போல் தெரிகிறது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
       title: சர்வர் பிழை

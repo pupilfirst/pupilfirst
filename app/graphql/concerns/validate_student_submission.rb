@@ -4,6 +4,7 @@ module ValidateStudentSubmission
   class EnsureSubmittability < GraphQL::Schema::Validator
     def validate(_object, context, value)
       target = Target.find_by(id: value[:target_id])
+      assignment = target.assignments.first
       course = target.course
       student =
         context[:current_user]
@@ -13,7 +14,7 @@ module ValidateStudentSubmission
           .first
       target_status = Targets::StatusService.new(target, student).status
       submittable =
-        target.checklist.present? || target.evaluation_criteria.present?
+      assignment.checklist.present? || assignment.evaluation_criteria.present?
       submission_required =
         target_status.in?(
           [

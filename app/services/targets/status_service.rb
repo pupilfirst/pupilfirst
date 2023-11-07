@@ -42,6 +42,10 @@ module Targets
           end
     end
 
+    def assignment
+      @target.assignments.first
+    end
+
     def reason_to_lock
       @reason_to_lock ||=
         begin
@@ -68,7 +72,7 @@ module Targets
     end
 
     def target_reviewed?
-      @target_reviewed ||= @target.evaluation_criteria.any?
+      @target_reviewed ||= assignment.evaluation_criteria.any?
     end
 
     def prerequisites_incomplete?

@@ -573,6 +573,8 @@ en:
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: Next Target
       pending_team_members_notice: "You have team members who have yet to complete this target:"

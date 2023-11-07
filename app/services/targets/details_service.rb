@@ -9,23 +9,39 @@ module Targets
     end
 
     def details
+      details = default_props
       if @student.present?
-        {
+        details = details.update({
           pending_user_ids: pending_user_ids,
           submissions: details_for_submissions,
           feedback: feedback_for_submissions,
           grading: grading,
-          **default_props
-        }
+        })
       else
-        {
+        details = details.update({
           pending_user_ids: [],
           submissions: [],
           feedback: [],
           grading: [],
-          **default_props
-        }
+        })
       end
+
+      if assignment.present?
+        details = details.update({
+          quiz_questions: quiz_questions,
+          evaluated: assignment.evaluation_criteria.exists?,
+          completion_instructions: assignment.completion_instructions,
+          checklist: assignment.checklist
+        })
+      else
+        details = details.update({
+          quiz_questions: [],
+          evaluated: false,
+          completion_instructions: nil,
+          checklist: []
+        })
+      end
+      details
     end
 
     private
@@ -33,13 +49,8 @@ module Targets
     def default_props
       {
         navigation: links_to_adjacent_targets,
-        quiz_questions: quiz_questions,
         content_blocks: content_blocks,
         communities: community_details,
-        link_to_complete: @target.link_to_complete,
-        evaluated: @target.evaluation_criteria.exists?,
-        completion_instructions: @target.completion_instructions,
-        checklist: @target.checklist
       }
     end
 
@@ -68,6 +79,10 @@ module Targets
       end
 
       links
+    end
+
+    def assignment
+      @target.assignments.where(archived: false).first
     end
 
     def communities
@@ -167,9 +182,9 @@ module Targets
     end
 
     def quiz_questions
-      return [] if @target.quiz.blank?
+      return [] if assignment.quiz.blank?
 
-      @target
+      assignment
         .quiz
         .quiz_questions
         .includes(:answer_options)

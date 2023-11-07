@@ -531,7 +531,7 @@ ActiveRecord::Schema.define(version: 2023_10_20_155237) do
     t.datetime "updated_at", null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
-    t.index ["target_id"], name: "index_quizzes_on_target_id"
+    t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true
   end
 
   create_table "resource_versions", force: :cascade do |t|

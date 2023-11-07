@@ -10,7 +10,6 @@ type t = {
   quizQuestions: array<CoursesCurriculum__QuizQuestion.t>,
   contentBlocks: array<ContentBlock.t>,
   communities: array<CoursesCurriculum__Community.t>,
-  linkToComplete: option<string>,
   evaluated: bool,
   grading: array<CoursesCurriculum__Grade.t>,
   completionInstructions: option<string>,
@@ -28,9 +27,8 @@ let checklist = t => t.checklist
 type completionType =
   | Evaluated
   | TakeQuiz
-  | LinkToComplete
-  | MarkAsComplete
   | SubmitForm
+  | NoAssignment
 
 let decodeNavigation = json => {
   open Json.Decode
@@ -49,7 +47,6 @@ let decode = json => {
     quizQuestions: json |> field("quizQuestions", array(CoursesCurriculum__QuizQuestion.decode)),
     contentBlocks: json |> field("contentBlocks", array(ContentBlock.decode)),
     communities: json |> field("communities", array(CoursesCurriculum__Community.decode)),
-    linkToComplete: json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     evaluated: json |> field("evaluated", bool),
     grading: json |> field("grading", array(CoursesCurriculum__Grade.decode)),
     completionInstructions: json
@@ -64,25 +61,21 @@ let computeCompletionType = targetDetails => {
   let evaluated = targetDetails.evaluated
   let hasQuiz = Js.Array.length(targetDetails.quizQuestions) > 0
 
-  let hasLinkToComplete = switch targetDetails.linkToComplete {
-  | Some(_) => true
-  | None => false
-  }
-
   let hasChecklist = Js.Array.length(targetDetails.checklist) > 0
-  switch (evaluated, hasQuiz, hasLinkToComplete, hasChecklist) {
-  | (true, _, _, _) => Evaluated
-  | (false, true, _, _) => TakeQuiz
-  | (false, false, true, _) => LinkToComplete
-  | (false, false, false, true) => SubmitForm
-  | (_, _, _, _) => MarkAsComplete
+  switch (evaluated, hasQuiz, hasChecklist) {
+  | (true, _, _) => Evaluated
+  | (false, true, _) => TakeQuiz
+  | (false, false, true) => SubmitForm
+  | (_, _, _) => NoAssignment
   }
 }
 
 let contentBlocks = t => t.contentBlocks
 let quizQuestions = t => t.quizQuestions
 let communities = t => t.communities
-let linkToComplete = t => t.linkToComplete
+
+//TODO - remove linktocomplete
+let linkToComplete = t => Some("string")
 
 let completionInstructions = t => t.completionInstructions
 

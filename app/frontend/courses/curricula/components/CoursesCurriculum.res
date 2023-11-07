@@ -229,6 +229,7 @@ let make = (
   ~evaluationCriteria,
   ~preview,
   ~accessLockedLevels,
+  ~targetsRead,
 ) => {
   let url = RescriptReactRouter.useUrl()
 
@@ -299,7 +300,7 @@ let make = (
       | (None, None) => false
       },
       latestSubmissions: submissions,
-      statusOfTargets: statusOfTargets,
+      statusOfTargets,
       notice: computeNotice(course, student, preview),
     }
   })
@@ -352,13 +353,14 @@ let make = (
           ts => ts |> TargetStatus.targetId == (target |> Target.id),
           "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
         )
-
+      let targetRead = Js.Array.includes(target->Target.id, targetsRead)
       <CoursesCurriculum__Overlay
         target
         course
         targetStatus
         addSubmissionCB={addSubmission(setState)}
         targets
+        targetRead
         statusOfTargets=state.statusOfTargets
         users
         evaluationCriteria
@@ -377,11 +379,9 @@ let make = (
           levels
           selectedLevel
           preview
-          setSelectedLevelId={selectedLevelId =>
-            setState(state => {...state, selectedLevelId: selectedLevelId})}
+          setSelectedLevelId={selectedLevelId => setState(state => {...state, selectedLevelId})}
           showLevelZero=state.showLevelZero
-          setShowLevelZero={showLevelZero =>
-            setState(state => {...state, showLevelZero: showLevelZero})}
+          setShowLevelZero={showLevelZero => setState(state => {...state, showLevelZero})}
           levelZero
         />
         {ReactUtils.nullUnless(

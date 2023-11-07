@@ -13,8 +13,10 @@ module Courses
 
     def props
       if current_student.present?
+
         {
           submissions: submissions,
+          targets_read: targets_read,
           student: student_details,
           coaches: faculty.map(&:attributes),
           users: users,
@@ -25,6 +27,7 @@ module Courses
       else
         {
           submissions: [],
+          targets_read: [],
           student: student_details_for_preview_mode,
           coaches: [],
           users: [],
@@ -188,6 +191,10 @@ module Courses
             )
           end
         end - [nil]
+    end
+
+    def targets_read
+      current_student.page_reads.pluck(:target_id).map(&:to_s)
     end
 
     def faculty

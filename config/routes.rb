@@ -287,6 +287,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :page_reads
+
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
   get '/help/:document', to: 'help#show'
   get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: SsoConstraint.new

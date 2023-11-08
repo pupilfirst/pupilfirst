@@ -226,5 +226,7 @@ module Types
     end
 
     resolved_field :standings, [Types::StandingType], null: false
+
+    resolved_field :is_school_standing_enabled, Boolean, null: false
   end
 end

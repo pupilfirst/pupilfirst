@@ -6,8 +6,4 @@ class StandingsResolver < ApplicationQuery
   def authorized?
     current_school && current_school_admin.present?
   end
-
-  def school
-    @school ||= School.find_by(id: school_id)
-  end
 end

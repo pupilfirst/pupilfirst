@@ -30,6 +30,7 @@ module Organisations
         Standing.find_by(school: current_school, default: true)
       @current_standing =
         @user_standings.first&.standing || @school_default_standing
+      @back_link_path = org_student_path(student)
     end
 
     private

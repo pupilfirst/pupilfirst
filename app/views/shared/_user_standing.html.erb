@@ -22,14 +22,23 @@
     </div>
   </div>
 </div>
-<div class="py-12 bg-gray-50 h-full">
+</div>
+<div class="bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-5 flex items-center justify-between bg-gray-50 ">
+    <%= link_to back_link_path, class: "bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" do %>
+      <i class="if i-arrow-left-regular"></i>
+      <span><%= t('shared.back_link') %></span>
+    <% end %>
+  </div>
+</div>
+<div class="bg-gray-50 h-full">
   <div class="max-w-7xl mx-auto block md:grid grid-cols-8 gap-5 px-5">
     <div class="col-span-5">
       <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg">
         <p class="-mt-12 p-3 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full"><%= t(".current_standing") %></p>
         <div class="text-center flex flex-col items-center">
           <%= render 'shared/bordered_standing_shield', color: current_standing.color, size_classes: "w-16 h-16" %>
-          <p class="text-xl font-bold"><%= current_standing.name %></p>
+          <p class="text-xl font-bold" style="color: <%= current_standing.color %>;"><%= current_standing.name %></p>
         </div>
         <div>
         </div>
@@ -45,7 +54,7 @@
                 </div>
                 <div class="-ms-8 pb-5 w-full ps-12 <%= "#{'border-s border-gray-300 border-dashed' if user_standings.length > 1 && index != user_standings.length - 1}" %> group-last:border-s-0">
                   <div class="bg-white p-5 rounded-md border border-gray-200">
-                    <p class="font-semibold text-red-600"><%= user_standing.standing.name %></p>
+                    <p class="font-semibold" style="color: <%= user_standing.standing.color %>;"><%= user_standing.standing.name %></p>
                     <p class="text-sm font-medium"><i class="if i-calendar-light if-fw" ></i> <%= user_standing.created_at.strftime("%-d %B %Y") %><span class="text-gray-500">  •  </span><%= user_standing.created_at.strftime("%-l:%M %p") %></p>
                     <p class="text-sm mt-2 text-gray-500"><%= user_standing.reason %></p>
                   </div>
@@ -68,7 +77,7 @@
     </div>
     <%# Code of conduct section  %>
     <% if request.path == "/user/standing" %>
-      <div class="col-span-3 mt-12 md:mt-0">
+      <div class="col-span-3 mt-12 md:mt-0 mb-4">
         <div class="flex flex-col items-center text-center bg-white px-5 py-8 rounded-md border border-gray-100">
           <svg class="w-16 h-16" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_175_1538)">

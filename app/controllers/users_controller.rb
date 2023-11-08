@@ -141,5 +141,6 @@ class UsersController < ApplicationController
       Standing.find_by(school: current_school, default: true)
     @current_standing =
       @user_standings.first&.standing || @school_default_standing
+    @back_link_path = dashboard_path
   end
 end

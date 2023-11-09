@@ -38,7 +38,7 @@
         <div class="flex justify-center items-center gap-2">
           <% if @presenter.school_has_code_of_conduct? %>
             <div class="">
-              <%= button_to "View CoC", "#", method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+              <%= button_to "View CoC", agreement_path(agreement_type: "code-of-conduct"), method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
             <div class="">
               <%= link_to "Edit CoC", code_of_conduct_school_path,class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>

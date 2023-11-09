@@ -19,6 +19,8 @@ class HomeController < ApplicationController
         SchoolString::PrivacyPolicy
       when "terms-and-conditions"
         SchoolString::TermsAndConditions
+      when "code-of-conduct"
+        SchoolString::CodeOfConduct
       else
         raise_not_found
       end
@@ -33,6 +35,8 @@ class HomeController < ApplicationController
         t(".privacy_policy")
       when "Terms and Conditions"
         t(".terms_and_conditions")
+      when "Code of Conduct"
+        t(".code_of_conduct")
       end
 
     render layout: "student"
@@ -51,13 +55,13 @@ class HomeController < ApplicationController
         provider: params[:provider],
         fqdn: params[:fqdn],
         session_id: params[:session_id],
-        link_data: params[:link_data],
-      }.to_json,
+        link_data: params[:link_data]
+      }.to_json
     )
 
     redirect_to OmniauthProviderUrlService.new(
                   params[:provider],
-                  current_host,
+                  current_host
                 ).oauth_url
   end
 
@@ -71,7 +75,7 @@ class HomeController < ApplicationController
   def favicon
     if current_school.present? && current_school.icon.attached?
       redirect_to view_context.rails_public_blob_url(
-                    current_school.icon_variant(:thumb),
+                    current_school.icon_variant(:thumb)
                   )
     else
       redirect_to "/favicon.png"

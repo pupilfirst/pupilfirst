@@ -14,7 +14,7 @@
   </section>
   <section class="max-w-6xl mx-auto p-4 md:pb-10 md:pl-10 md:pr-10">
   <%= form_with url: code_of_conduct_school_path, method: :patch, local: true do |f| %>
-    <div class="mt-1" data-re-component="SimpleMarkdownEditor" data-re-json="<%= { value: @code_of_conduct || "", textAreaName: "code_of_conduct_editor", profile: "Permissive", dynamicHeight: true}.to_json %>"></div>
+    <div class="mt-1" data-re-component="SimpleMarkdownEditor" data-re-json="<%= { value: @code_of_conduct || "", textAreaName: "code_of_conduct_editor", profile: "Permissive", dynamicHeight: true, maxLength: 20000}.to_json %>"></div>
     <%= f.button "Save code of conduct", class: "btn btn-primary btn-large w-full mt-5 max-w-6xl" %>
   </section>
   <% end %>

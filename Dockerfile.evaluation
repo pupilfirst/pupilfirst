@@ -19,25 +19,26 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesourc
 RUN apt-get update && apt-get install nodejs -y
 RUN corepack enable
 
-# Create a group and user
-RUN groupadd -r pupilfirst && useradd -rm -g pupilfirst pupilfirst
+# Create a writable home directory for www-data
+RUN mkdir /var/www
+RUN chown -R www-data:www-data /var/www
 
-# Use the non-root user to run the application
-USER pupilfirst
+# Use the www-data user to run the application
+USER www-data
 
 WORKDIR /app
 
 # Install gems.
-COPY --chown=pupilfirst:pupilfirst Gemfile .
-COPY --chown=pupilfirst:pupilfirst Gemfile.lock .
+COPY --chown=www-data:www-data Gemfile .
+COPY --chown=www-data:www-data Gemfile.lock .
 RUN gem install bundler -v '2.4.13'
 RUN bundle install -j4
 
 # Install JS dependencies using Yarn.
-COPY --chown=pupilfirst:pupilfirst package.json .
-COPY --chown=pupilfirst:pupilfirst yarn.lock .
-COPY --chown=pupilfirst:pupilfirst .yarnrc.docker.yml .yarnrc.yml
-COPY --chown=pupilfirst:pupilfirst .yarn/releases .yarn/releases
+COPY --chown=www-data:www-data package.json .
+COPY --chown=www-data:www-data yarn.lock .
+COPY --chown=www-data:www-data .yarnrc.docker.yml .yarnrc.yml
+COPY --chown=www-data:www-data .yarn/releases .yarn/releases
 
 # Ignore checksum until issue with react-csv-reader is resolved.
 ENV YARN_CHECKSUM_BEHAVIOR=ignore
@@ -46,9 +47,9 @@ ENV YARN_CHECKSUM_BEHAVIOR=ignore
 RUN yarn install
 
 # Copy over remaining files and set up for precompilation.
-COPY --chown=pupilfirst:pupilfirst . /app
-COPY --chown=pupilfirst:pupilfirst example.env .env
-COPY --chown=pupilfirst:pupilfirst config/database.evaluation.yml config/database.yml
+COPY --chown=www-data:www-data . /app
+COPY --chown=www-data:www-data example.env .env
+COPY --chown=www-data:www-data config/database.evaluation.yml config/database.yml
 
 # Export the locales.json file.
 RUN bundle exec i18n export
@@ -63,7 +64,7 @@ RUN mkdir -p tmp/pids
 
 # Add Tini.
 ENV TINI_VERSION v0.19.0
-ADD --chown=pupilfirst:pupilfirst https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+ADD --chown=www-data:www-data https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 ENTRYPOINT ["/tini", "--"]
 

@@ -493,7 +493,7 @@
               "deprecationReason": null
             },
             {
-              "name": "prerequisiteAssignments",
+              "name": "prerequisiteTargets",
               "description": null,
               "args": [
 
@@ -9439,7 +9439,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "prerequisiteAssignments",
+                  "name": "prerequisiteTargets",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

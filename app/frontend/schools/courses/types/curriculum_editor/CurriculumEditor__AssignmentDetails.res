@@ -8,7 +8,7 @@ type t = {
   // title: string,
   role: role,
   evaluationCriteria: array<string>,
-  prerequisiteAssignments: array<string>,
+  prerequisiteTargets: array<string>,
   quiz: array<CurriculumEditor__QuizQuestion.t>,
   checklist: array<TargetChecklistItem.t>,
   completionInstructions: option<string>,
@@ -20,7 +20,7 @@ let role = t => t.role
 
 let quiz = t => t.quiz
 
-let prerequisiteAssignments = t => t.prerequisiteAssignments
+let prerequisiteTargets = t => t.prerequisiteTargets
 
 let evaluationCriteria = t => t.evaluationCriteria
 
@@ -44,7 +44,7 @@ let roleFromJs = roleString =>
 let makeFromJs = assignmentData => {
   role: roleFromJs(assignmentData["role"]),
   evaluationCriteria: assignmentData["evaluationCriteria"],
-  prerequisiteAssignments: assignmentData["prerequisiteAssignments"],
+  prerequisiteTargets: assignmentData["prerequisiteTargets"],
   quiz: assignmentData["quiz"] |> Array.map(quizQuestion =>
     quizQuestion |> CurriculumEditor__QuizQuestion.makeFromJs
   ),

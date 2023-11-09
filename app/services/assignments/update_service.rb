@@ -15,8 +15,7 @@ module Assignments
           assignment_params[:evaluation_criterion_ids]
         )
 
-        @assignment.prerequisite_assignment_ids =
-          assignment_params[:prerequisite_assignment_ids]
+        @assignment.prerequisite_assignment_ids = get_assignment_ids_from_target_ids(assignment_params[:prerequisite_target_ids])
 
         handle_milestone(assignment_params[:milestone])
 
@@ -46,6 +45,10 @@ module Assignments
           .destroy_all
       end
       @assignment.evaluation_criterion_ids = evaluation_criteria_ids
+    end
+
+    def get_assignment_ids_from_target_ids(target_ids)
+      Assignment.where(target_id: target_ids).pluck(:id)
     end
 
     def handle_milestone(milestone_param)

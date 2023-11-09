@@ -130,7 +130,7 @@ module ValidateAssignmentEditable
     argument :target_id, GraphQL::Types::ID, required: true
     argument :role, GraphQL::Types::String, required: true
     argument :evaluation_criteria, [GraphQL::Types::ID], required: true
-    argument :prerequisite_assignments, [GraphQL::Types::ID], required: true
+    argument :prerequisite_targets, [GraphQL::Types::ID], required: true
     argument :quiz, [Types::AssignmentQuizInputType], required: true
     argument :completion_instructions, GraphQL::Types::String, required: false
     argument :checklist, GraphQL::Types::JSON, required: true
@@ -149,7 +149,7 @@ module ValidateAssignmentEditable
     {
       target_id: @params[:target_id],
       role: @params[:role],
-      prerequisite_assignment_ids: @params[:prerequisite_assignments],
+      prerequisite_target_ids: @params[:prerequisite_targets],
       evaluation_criterion_ids: @params[:evaluation_criteria],
       quiz: @params[:quiz],
       completion_instructions: @params[:completion_instructions],

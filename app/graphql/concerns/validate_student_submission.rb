@@ -4,7 +4,7 @@ module ValidateStudentSubmission
   class EnsureSubmittability < GraphQL::Schema::Validator
     def validate(_object, context, value)
       target = Target.find_by(id: value[:target_id])
-      assignment = target.assignments.first
+      assignment = target.assignments.not_archived.first
       course = target.course
       student =
         context[:current_user]

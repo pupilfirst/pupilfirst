@@ -43,7 +43,7 @@ module Targets
     end
 
     def assignment
-      @target.assignments.first
+      @target.assignments.not_archived.first
     end
 
     def reason_to_lock

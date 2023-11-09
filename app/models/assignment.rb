@@ -11,6 +11,7 @@ class Assignment < ApplicationRecord
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
   scope :milestone, -> { live.where(milestone: true) }
+  scope :not_archived, -> { where.not(archived: true)}
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"

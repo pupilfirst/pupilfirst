@@ -168,7 +168,7 @@ module Courses
         .map do |target|
           details = target.attributes.slice(*attributes)
           #TODO - optimise db queries
-          assignment = target.assignments.first
+          assignment = target.assignments.not_archived.first
           if assignment
             details[:role] = assignment.role
             details[:milestone] = assignment.milestone

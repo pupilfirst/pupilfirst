@@ -1,4 +1,80 @@
 class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
+
+  class Target < ApplicationRecord
+    has_many :timeline_events, dependent: :restrict_with_error
+    has_one :quiz, dependent: :restrict_with_error
+    has_many :target_prerequisites, dependent: :destroy
+    has_many :prerequisite_targets, through: :target_prerequisites
+    has_many :target_evaluation_criteria, dependent: :destroy
+    has_many :evaluation_criteria, through: :target_evaluation_criteria
+    has_many :target_versions, dependent: :destroy
+    has_many :assignments, dependent: :restrict_with_error
+
+    def mark_as_complete?
+      not (quiz.present? or checklist.present? or link_to_complete.present?)
+    end
+
+    def current_target_version
+      target_versions.order(created_at: :desc).first
+    end
+
+  end
+
+  class TimelineEvent < ApplicationRecord
+    belongs_to :target
+  end
+
+  class Quiz < ApplicationRecord
+    belongs_to :target
+    belongs_to :assignment, optional: true
+  end
+
+  class TargetPrerequisite < ApplicationRecord
+    belongs_to :target
+    belongs_to :prerequisite_target, class_name: "Target"
+  end
+
+  class TargetEvaluationCriterion < ApplicationRecord
+    belongs_to :target
+    belongs_to :evaluation_criterion
+  end
+
+  class TargetVersion < ApplicationRecord
+    belongs_to :target
+    has_many :content_blocks, dependent: :destroy
+  end
+
+  class ContentBlock < ApplicationRecord
+    belongs_to :target_version
+
+    BLOCK_TYPE_EMBED = -"embed"
+  end
+
+  class Assignment < ApplicationRecord
+    belongs_to :target
+    has_one :quiz, dependent: :restrict_with_error
+  end
+
+  def embed_code(url)
+    @embed_code ||= ::Oembed::Resolver.new(url).embed_code
+  rescue ::Oembed::Resolver::ProviderNotSupported
+    nil
+  end
+
+  def create_embed_block(target)
+    target_version = target.current_target_version
+    target_version.content_blocks.create!(
+      block_type: ContentBlock::BLOCK_TYPE_EMBED,
+      content: {
+        url: target.link_to_complete,
+        request_source: 'User',
+        embed_code: embed_code(target.link_to_complete),
+        last_resolved_at: Time.zone.now
+      },
+      sort_index: target_version.content_blocks.maximum(:sort_index) + 1
+    )
+  end
+
   def change
     assignments = []
     Target.includes(:quiz, :target_prerequisites).find_each do |target|
@@ -25,7 +101,7 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
       end
 
       if target.link_to_complete.present?
-        #TODO - add a mardown content block for the link
+        create_embed_block(target)
         if !target.target_prerequisites.empty? or !target.prerequisite_targets.empty? or target.milestone?
           assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Have you gone through the shared link?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
         else
@@ -39,7 +115,7 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
 
     Assignment.insert_all(assignments)
 
-    # TODO One sql read and wirte per iteration - see if there are too many quizzes
+    #TODO One sql read and wirte per iteration - see if there are too many quizzes
     Quiz.includes(:target).find_each do |quiz|
       quiz.assignment = quiz.target.assignments.first
       quiz.save
@@ -65,9 +141,14 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
         assignment_prerequisites.append(assignment_prerequisite)
       end
     end
-    puts assignment_evaluation_criterions
-    AssignmentEvaluationCriterion.insert_all(assignment_evaluation_criterions)
-    AssignmentPrerequisite.insert_all(assignment_prerequisites)
+
+    if !assignment_evaluation_criterions.empty?
+      AssignmentEvaluationCriterion.insert_all(assignment_evaluation_criterions)
+    end
+
+    if !assignment_prerequisites.empty?
+      AssignmentPrerequisite.insert_all(assignment_prerequisites)
+    end
 
   end
 end

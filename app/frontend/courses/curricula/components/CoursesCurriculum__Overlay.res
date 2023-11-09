@@ -343,26 +343,66 @@ let addPageRead = (targetId, markReadCB) => {
   |> ignore
 }
 
-let learnSection = (send, state, targetDetails, tab, author, courseId, targetId, markReadCB) => {
+let learnSection = (
+  send,
+  state,
+  targetDetails,
+  tab,
+  author,
+  courseId,
+  targetId,
+  markReadCB,
+  targetStatus,
+  completionType,
+) => {
+  let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
+  | (Pending | Rejected, TargetDetails.Evaluated) =>
+    Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
+  | (Pending | Rejected, TakeQuiz) =>
+    Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
+  | (Pending | Rejected, SubmitForm) =>
+    Some((Complete(completionType), t("learn_cta_submit_form"), "fas fa-feather-alt"))
+  | (Pending | Rejected, NoAssignment) => None
+  | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
+  }
+
+  let linkToTab = Belt.Option.mapWithDefault(suffixLinkInfo, React.null, ((
+    tab,
+    linkText,
+    iconClasses,
+  )) => {
+    <button
+      onClick={_ => send(Select(tab))}
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+      <span>
+        <FaIcon classes={iconClasses ++ " me-2"} />
+        {str(linkText)}
+      </span>
+    </button>
+  })
+
   <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails author courseId targetId />
-    {switch state.targetRead {
-    | true =>
-      <button
-        disabled=true
-        className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-        <span> {str(t("marked_read"))} </span>
-      </button>
-    | false =>
-      <button
-        onClick={_ => {
-          addPageRead(targetId, markReadCB)
-          send(SetTargetRead(true))
-        }}
-        className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-        <span> {str(t("mark_as_read"))} </span>
-      </button>
-    }}
+    <div className="flex gap-10">
+      {switch state.targetRead {
+      | true =>
+        <button
+          disabled=true
+          className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+          <span> {str(t("marked_read"))} </span>
+        </button>
+      | false =>
+        <button
+          onClick={_ => {
+            addPageRead(targetId, markReadCB)
+            send(SetTargetRead(true))
+          }}
+          className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+          <span> {str(t("mark_as_read"))} </span>
+        </button>
+      }}
+      {linkToTab}
+    </div>
   </div>
 }
 
@@ -642,6 +682,8 @@ let make = (
             Course.id(course),
             Target.id(target),
             markReadCB,
+            targetStatus,
+            completionType,
           )}
           {discussSection(target, targetDetails, state.tab)}
           {completeSection(

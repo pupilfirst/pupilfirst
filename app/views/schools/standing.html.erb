@@ -1,69 +1,66 @@
 <% content_for(:head) do %>
-  <title><%= current_school.name %> | <%= t(".page_title") %> </title>
+  <title><%= current_school.name %> | <%= t(".title") %> </title>
 <% end %>
 <div class="relative" id="schoolrouter-innerpage-data">
   <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
     <div class="bg-gradient-to-l to-primary-100 from-primary-200 shadow rounded-t-lg grid grid-cols-4 gap-4 items-center">
       <div class="col-span-3 p-8">
-        <h1 class="text-4xl font-semibold text-gray-800 mb-4">Standings</h1>
-        <p class="text-gray-600 mb-4">Standing serves as a tool for the school to motivate students to adhere to the school's code of conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.</p>
-        <a href="#" class="text-primary-400 hover:text-primary-600 hover:underline">Learn more about standings.</a>
+        <h1 class="text-4xl font-semibold text-gray-800 mb-4"><%= t(".standings") %> </h1>
+        <p class="text-gray-600 mb-4"><%= t(".standing_explanation") %> </p>
+        <a href="#" class="text-primary-400 hover:text-primary-600 hover:underline"><%= t(".learn_more") %> </a>
       </div>
       <div class="">
         <%= image_tag 'school/standings/star_on_shield.svg', alt: 'Star on Shield', class: 'h-40 w-auto' %>
       </div>
     </div>
     <div class="bg-white p-4 rounded-b-lg shadow flex items-center justify-between">
-      <span class="text-base font-semibold">Enable standing for your school?</span>
+      <span class="text-base font-semibold"><%= t(".enable_standing") %> </span>
       <div class="flex items-center bg-white p-2 hover:cursor-pointer">
         <% if @presenter.standing_enabled? %>
-          <span class="italic text-green-400 mr-5" >Enabled</span>
+          <span class="italic text-green-400 mr-5" ><%= t(".enabled") %> </span>
         <% end %>
-        <%= button_to "Yes", standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-l-md  #{'border border-primary-500 bg-primary-100' if @presenter.standing_enabled? }"%>
-        <%= button_to "No", standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-r-md #{'border border-primary-500 bg-primary-100' unless @presenter.standing_enabled? }"%>
+        <%= button_to t("shared._yes"), standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-l-md  #{'border border-primary-500 bg-primary-100' if @presenter.standing_enabled? }"%>
+        <%= button_to t("shared._no"), standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-r-md #{'border border-primary-500 bg-primary-100' unless @presenter.standing_enabled? }"%>
       </div>
     </div>
     <% if @presenter.standing_enabled? %>
       <div class="bg-white shadow rounded-lg p-4 mt-8 flex justify-between">
         <div class="flex-col gap-2">
           <div class="flex items-center justify-start gap-3">
-            <span class="text-base font-semibold">Add/Update your school's code of conduct</span>
-            <span class="bg-orange-100 text-orange-400 text-sm px-2 py-1 rounded-2xl border border-orange-300 font-medium">Required</span>
+            <span class="text-base font-semibold"><%= t(".update_coc_heading") %> </span>
+            <span class="bg-orange-100 text-orange-400 text-sm px-2 py-1 rounded-2xl border border-orange-300 font-medium"><%= t(".required") %> </span>
           </div>
           <p class="text-gray-600 max-w-3xl">
-            It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
-            <%= link_to "Learn more about crafting Code of conduct.", "#", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
+            <%= t(".update_coc_info") %>
+            <%= link_to t(".learn_more_about_crafting_coc"), "#", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
           </p>
         </div>
         <div class="flex justify-center items-center gap-2">
           <% if @presenter.school_has_code_of_conduct? %>
             <div class="">
-              <%= button_to "View CoC", agreement_path(agreement_type: "code-of-conduct"), method: :get, class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+              <%= link_to t(".view_coc"), agreement_path(agreement_type: "code-of-conduct"), class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
             <div class="">
-              <%= link_to "Edit CoC", code_of_conduct_school_path,class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+              <%= link_to t(".edit_coc"), code_of_conduct_school_path,class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
           <% else %>
             <div class="">
-              <%= link_to "Add CoC", code_of_conduct_school_path, class: "bg-primary-50 text-primary-500 py-2 px-6 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+              <%= link_to t(".add_coc"), code_of_conduct_school_path, class: "bg-primary-50 text-primary-500 py-2 px-6 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
           <% end %>
         </div>
       </div>
       <div class="p-4 bg-white mt-8 flex justify-between">
-        <!-- Title and Button -->
         <div class="flex flex-col">
-          <h1 class="text-base font-semibold">Edit/modify standings</h1>
-          <p class="text-gray-600 max-w-3xl">
-            You can edit the color, name, and description of a standing, or you can add a new standing.
-            Students can be promoted or demoted to any standing through the "Edit Student" tab.
+          <h1 class="text-base font-semibold"><%= t(".edit_standings_heading") %></h1>
+          <p class="text-gray-600 max-w-3xl"><%= t(".edit_standings_info") %>
           </p>
         </div>
       </div>
       <div>
         <% @presenter.standings.each do |standing|%>
           <div class="flex items-center gap-3 mb-3">
-            <%= render 'shared/standing_shield', color: standing.color, size: "5xl" %>
+            <%= render 'shared/bordered_standing_shield', color: standing.color, size_classes: "w-12 h-12" %>
             <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex">
               <div class="">
                 <%= standing.name %>
@@ -80,13 +77,13 @@
               </div>
             </div>
             <% if standing.default %>
-              <span class="text-sm text-gray-600 italic">Default</span>
+              <span class="text-sm text-gray-600 italic"><%= t(".default") %></span>
             <% end %>
           </div>
         <% end %>
         <div class="flex justify-center max-w-xl">
           <div class="flex-grow max-w-md ml-4">
-            <%= button_to "Add another standing", new_school_standing_path, method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer w-full" %>
+            <%= button_to t(".add_another_standing"), new_school_standing_path, method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer w-full" %>
           </div>
         </div>
       </div>

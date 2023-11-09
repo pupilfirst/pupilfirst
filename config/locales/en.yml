@@ -2653,6 +2653,29 @@ en:
       students: Students
       submissions_reviewed: submissions reviewed
       title: Overview
+    standing:
+      title: Standing
+      standings: Standings
+      standing_explanation: Standing serves as a tool for the school to motivate students to adhere to the school's code of conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
+      learn_more: Learn more about standings.
+      enable_standing: Enable standing for your school?
+      update_coc_heading: Add/Update your school's code of conduct
+      update_coc_info: It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
+      learn_more_about_crafting_coc: Learn more about crafting a Code of Conduct.
+      view_coc: View CoC
+      edit_coc: Edit CoC
+      add_coc: Add CoC
+      edit_standings_heading: Edit/modify standings
+      edit_standings_info: You can edit the color, name, and description of a standing, or you can add a new standing. Students can be promoted or demoted to any standing through the "Edit Student" tab.
+      default: Default
+      add_another_standing: Add another standing
+      enabled: Enabled
+      required: Required
+      toggle_standing:
+        school_standing_toggle_success:
+          _yes: School Standing is enabled successfully!
+          _no: School Standing is disabled successfully!
+      save_coc_success: Code of Conduct saved successfully!
   services:
     courses:
       demo_content_service:

@@ -318,32 +318,32 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
+let addPageRead = (targetId, markReadCB) => {
+  let payload = Js.Dict.empty()
+  Js.Dict.set(payload, "target_id", Js.Json.string(targetId))
+
+  open Js.Promise
+  Fetch.fetchWithInit(
+    "/page_reads/",
+    Fetch.RequestInit.make(
+      ~method_=Post,
+      ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
+      ~headers=Fetch.HeadersInit.makeWithArray([
+        ("X-CSRF-Token", AuthenticityToken.fromHead()),
+        ("Content-Type", "application/json"),
+      ]),
+      ~credentials=Fetch.SameOrigin,
+      (),
+    ),
+  )
+  |> then_(_ => {
+    markReadCB(targetId)
+    resolve()
+  })
+  |> ignore
+}
+
 let learnSection = (send, state, targetDetails, tab, author, courseId, targetId, markReadCB) => {
-  let addPageRead = targetId => {
-    let payload = Js.Dict.empty()
-    Js.Dict.set(payload, "target_id", Js.Json.string(targetId))
-
-    open Js.Promise
-    Fetch.fetchWithInit(
-      "/page_reads/",
-      Fetch.RequestInit.make(
-        ~method_=Post,
-        ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-        ~headers=Fetch.HeadersInit.makeWithArray([
-          ("X-CSRF-Token", AuthenticityToken.fromHead()),
-          ("Content-Type", "application/json"),
-        ]),
-        ~credentials=Fetch.SameOrigin,
-        (),
-      ),
-    )
-    |> then_(_ => {
-      markReadCB(targetId)
-      resolve()
-    })
-    |> ignore
-  }
-
   <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails author courseId targetId />
     {switch state.targetRead {
@@ -356,7 +356,7 @@ let learnSection = (send, state, targetDetails, tab, author, courseId, targetId,
     | false =>
       <button
         onClick={_ => {
-          addPageRead(targetId)
+          addPageRead(targetId, markReadCB)
           send(SetTargetRead(true))
         }}
         className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">

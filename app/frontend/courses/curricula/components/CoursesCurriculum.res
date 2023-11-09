@@ -373,7 +373,7 @@ let make = (
           ts => ts |> TargetStatus.targetId == (target |> Target.id),
           "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
         )
-      let targetRead = Js.Array.includes(target->Target.id, targetsRead)
+      let targetRead = Js.Array.includes(target->Target.id, state.targetsRead)
       <CoursesCurriculum__Overlay
         target
         course

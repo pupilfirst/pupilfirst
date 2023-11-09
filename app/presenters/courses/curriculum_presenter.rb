@@ -159,7 +159,7 @@ module Courses
           .targets
           .live
           .joins(:target_group)
-          .includes(:target_prerequisites, :assignments)
+          .includes(:assignments)
           .where(target_groups: { level_id: open_level_ids })
           .where(archived: false)
 
@@ -167,20 +167,20 @@ module Courses
         .select(*attributes)
         .map do |target|
           details = target.attributes.slice(*attributes)
-          details[:prerequisite_target_ids] = target.target_prerequisites.pluck(
-            :prerequisite_target_id
-          )
+          #TODO - optimise db queries
           assignment = target.assignments.first
           if assignment
             details[:role] = assignment.role
             details[:milestone] = assignment.milestone
             details[:reviewed] = assignment.evaluation_criteria.present?
             details[:has_assignment] = true
+            details[:prerequisite_target_ids] = assignment.prerequisite_assignments.pluck(:target_id)
           else
             details[:role] = Assignment::ROLE_STUDENT
             details[:milestone] = false
             details[:reviewed] = false
             details[:has_assignment] = false
+            details[:prerequisite_target_ids] = []
           end
           details
         end

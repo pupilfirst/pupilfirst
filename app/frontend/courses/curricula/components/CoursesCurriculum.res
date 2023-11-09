@@ -303,7 +303,7 @@ let make = (
   let initialRender = React.useRef(true)
 
   let (state, setState) = React.useState(() => {
-    let statusOfTargets = computeTargetStatus(submissions)
+    let statusOfTargets = computeTargetStatus(targetsRead, submissions)
     {
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
       | (true, None, _levelZero) => Level.first(levels)->Level.id
@@ -344,11 +344,11 @@ let make = (
       "Could not find selectedLevel with id " ++ state.selectedLevelId,
     )
 
-  React.useEffect1(() => {
+  React.useEffect2(() => {
     if initialRender.current {
       initialRender.current = false
     } else {
-      let newStatusOfTargets = computeTargetStatus(state.latestSubmissions)
+      let newStatusOfTargets = computeTargetStatus(state.targetsRead, state.latestSubmissions)
 
       setState(state => {
         ...state,
@@ -357,7 +357,7 @@ let make = (
       })
     }
     None
-  }, [state.latestSubmissions])
+  }, (state.latestSubmissions, state.targetsRead))
 
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)

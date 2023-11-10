@@ -5,33 +5,33 @@
         <i class="if i-arrow-left-regular"></i>
         <span><%= t('shared.back_link') %></span>
       <% end %>
-      <h1 class="font-bold text-lg pt-5">Add new standing</h1>
-      <p class="text-sm text-gray-600">Add color, name and description of a standing</p>
+      <h1 class="font-bold text-lg pt-5"><%= @standing.persisted? ? t(".edit_standing_heading", standing_name: @standing.name) : t(".add_new_standing_heading")%></h1>
+      <p class="text-sm text-gray-600"><%= @standing.persisted? ? t(".edit_standing_info") : t(".add_standing_info") %></p>
     </div>
   </section>
   <section class="max-w-6xl mx-auto p-4 md:pb-10 md:pl-10 md:pr-10 mt-10">
     <%= form_with model: @standing, url: @standing.persisted? ? school_standing_path(id: @standing.id) : school_standings_path do |f| %>
       <div class="flex gap-4 items-center">
-        <%# There is js code related to shield color setting and standing delete cofirm in standing.js  %>
-        <%= render 'shared/standing_shield', color:  @standing.color || "#4338ca", size: "5xl" %>
+        <%# There is js code related to shield color setting and standing delete confirm in standing.js  %>
+        <%= render 'shared/bordered_standing_shield', color:  @standing.color || "#4338ca", size_classes: "w-12 h-12" %>
         <label for="color_picker" class="flex border border-gray-300 rounded-md cursor-pointer items-center justify-center">
           <%= f.color_field :color, id: "color_picker", class: "p-1 w-8 h-9 bg-white", value: @standing.color || "#4338ca" %>
           <i class="if i-chevron-down-light if-fw" ></i>
         </label>
         <div class="flex-grow max-w-xl">
-          <%= f.text_field :name, placeholder: "Name of the standing", required: true, class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" %>
+          <%= f.text_field :name, placeholder: t(".name_placeholder"), required: true, class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" %>
         </div>
       </div>
       <div class="flex gap-7 items-center mt-4">
         <div class="w-29"></div>
         <div class="flex-grow max-w-xl">
-          <%= f.text_field :description, placeholder: "Description of the standing - optional", class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500 text-sm" %>
+          <%= f.text_field :description, placeholder: t(".description_placeholder"), class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500 text-sm" %>
         </div>
       </div>
       <div class="flex items-center gap-7 mt-10">
         <div class="w-29"></div>
         <div class="flex-grow max-w-xl">
-          <%= f.button "Save Standing", class: "btn btn-primary btn-large w-full max-w-3xl" %>
+          <%= f.button t(".save_standing"), class: "btn btn-primary btn-large w-full max-w-3xl" %>
         </div>
       </div>
     <% end %>

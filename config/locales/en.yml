@@ -2676,6 +2676,20 @@ en:
           _yes: School Standing is enabled successfully!
           _no: School Standing is disabled successfully!
       save_coc_success: Code of Conduct saved successfully!
+    standings:
+      form:
+        add_standing_heading: Add new standing
+        add_standing_info: Add color, name and description of a standing
+        edit_standing_info: Edit color, name and description of a standing
+        name_placeholder: Name of the standing
+        description_placeholder: Description of standing - optional
+        edit_standing_heading: Edit %{standing_name}
+        save_standing: Save Standing
+      new:
+        page_title: Add new standing
+      edit:
+        page_title: Edit standing
+
   services:
     courses:
       demo_content_service:

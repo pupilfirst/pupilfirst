@@ -34,7 +34,7 @@ class ApplicationQuery
   end
 
   def notify_errors
-    notify(:error, 'Something went wrong!', error_messages.join(", "))
+    notify(:error, I18n.t("errors.something_went_wrong"), error_messages.join(", "))
   end
 
   private

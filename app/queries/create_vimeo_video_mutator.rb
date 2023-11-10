@@ -12,7 +12,9 @@ class CreateVimeoVideoMutator < ApplicationQuery
     response = vimeo_api.create_video(size, video_title, description)
 
     if response[:error].present? || response[:error_code].present?
-      if response[:developer_message].present?
+      if response[:error_code].present?
+        errors.add(:base, I18n.t("errors.vimeo.#{response[:error_code]}"))
+      elsif response[:developer_message].present?
         errors.add(:base, response[:developer_message])
       else
         errors.add(

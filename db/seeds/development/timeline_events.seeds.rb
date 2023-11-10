@@ -66,14 +66,13 @@ after "development:students", "development:targets", "development:faculty" do
         )
 
         # Set passed_at if all grades are over the pass grade.
-        if reviewed_submission
-             .timeline_event_grades
-             .includes(:evaluation_criterion)
-             .all? { |grade|
-               grade.grade >= grade.evaluation_criterion.pass_grade
-             }
+        random_passed_boolean = [true, false].sample
+        if reviewed_submission && random_passed_boolean
           reviewed_submission.update!(passed_at: submission_number.days.ago)
+        elsif reviewed_submission && !random_passed_boolean
+          reviewed_submission.timeline_event_grades.destroy_all
         end
+
       end
     end
 

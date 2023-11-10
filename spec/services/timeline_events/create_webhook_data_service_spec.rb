@@ -37,7 +37,6 @@ describe TimelineEvents::CreateWebhookDataService do
             id: criterion.id,
             name: criterion.name,
             max_grade: criterion.max_grade,
-            pass_grade: criterion.pass_grade,
             grade_labels: criterion.grade_labels
           }
         ]

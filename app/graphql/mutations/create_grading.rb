@@ -1,10 +1,10 @@
 module Mutations
   class CreateGrading < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include DevelopersNotifications
     include ValidateSubmissionGradable
 
-    argument :grades, [Types::GradeInputType], required: true
+    argument :grades, [Types::GradeInputType], required: false
     argument :feedback,
              String,
              required: false,
@@ -31,8 +31,8 @@ module Mutations
       grade
       notify(
         :success,
-        I18n.t("mutations.create_grading.grade_recorded"),
-        I18n.t("mutations.create_grading.success_notification")
+        I18n.t('mutations.create_grading.grade_recorded'),
+        I18n.t('mutations.create_grading.success_notification')
       )
       { success: true }
     end
@@ -45,6 +45,7 @@ module Mutations
         @checklist = value[:checklist]
         @evaluation_criteria = @submission&.evaluation_criteria
         @grades = value[:grades]
+
         grade_hash = compute_grade_hash
 
         assignment_must_be_graded(value[:submission_id]) ||
@@ -133,6 +134,8 @@ module Mutations
       end
 
       def valid_grading(grade_hash)
+        return true if grade_hash.blank?
+
         all_criteria_graded?(grade_hash) && all_grades_valid?(grade_hash)
       end
 
@@ -159,16 +162,18 @@ module Mutations
 
     def grade
       TimelineEvent.transaction do
-        evaluation_criteria.each do |criterion|
-          TimelineEventGrade.create!(
-            timeline_event: submission,
-            evaluation_criterion: criterion,
-            grade: grade_hash[criterion.id.to_s]
-          )
+        if passed?
+          evaluation_criteria.each do |criterion|
+            TimelineEventGrade.create!(
+              timeline_event: submission,
+              evaluation_criterion: criterion,
+              grade: grade_hash[criterion.id.to_s]
+            )
+          end
         end
 
         submission.update!(
-          passed_at: (failed? ? nil : Time.zone.now),
+          passed_at: (passed? ? Time.zone.now : nil),
           evaluator: coach,
           evaluated_at: Time.zone.now,
           checklist: @params[:checklist],
@@ -209,15 +214,8 @@ module Mutations
         end
     end
 
-    def pass_grades
-      @pass_grades ||=
-        grade_hash.keys.index_with do |ec_id|
-          evaluation_criteria.find(ec_id).pass_grade
-        end
-    end
-
-    def failed?
-      grade_hash.any? { |ec_id, grade| grade < pass_grades[ec_id] }
+    def passed?
+      @params.key?(:grades)
     end
 
     def allow_token_auth?

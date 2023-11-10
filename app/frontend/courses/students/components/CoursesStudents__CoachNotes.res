@@ -55,34 +55,46 @@ let saveNoteButtonText = (title, iconClasses) =>
   <span> <FaIcon classes={iconClasses ++ " me-2"} /> {title |> str} </span>
 
 @react.component
-let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteCB, ~userId) => {
+let make = (
+  ~studentId,
+  ~coachNotes,
+  ~hasArchivedNotes,
+  ~canModifyCoachNotes,
+  ~addNoteCB,
+  ~removeNoteCB,
+  ~userId,
+) => {
   let (state, setState) = React.useState(() => {newNote: "", saving: false})
   <div className="mt-3 text-sm">
-    <span className="flex">
-      <label
-        htmlFor="course-students__coach-notes-new-note"
-        className="font-semibold text-sm block mb-1">
-        {tr("new_note")->str}
-      </label>
-      <HelpIcon className="ms-1"> {tr("help_text")->str} </HelpIcon>
-    </span>
-    <DisablingCover disabled=state.saving message="Saving...">
-      <MarkdownEditor
-        textareaId="course-students__coach-notes-new-note"
-        onChange={updateCoachNoteCB(setState)}
-        value=state.newNote
-        profile=Markdown.Permissive
-        maxLength=10000
-      />
-    </DisablingCover>
-    <button
-      disabled={state.newNote |> String.length < 1 || state.saving}
-      onClick={_ => saveNote(studentId, setState, state, addNoteCB)}
-      className="btn btn-primary mt-2">
-      {state.saving
-        ? saveNoteButtonText(tr("saving"), "fas fa-spinner")
-        : saveNoteButtonText(tr("save_note"), "")}
-    </button>
+    {canModifyCoachNotes
+      ? <div>
+          <span className="flex">
+            <label
+              htmlFor="course-students__coach-notes-new-note"
+              className="font-semibold text-sm block mb-1">
+              {tr("new_note")->str}
+            </label>
+            <HelpIcon className="ms-1"> {tr("help_text")->str} </HelpIcon>
+          </span>
+          <DisablingCover disabled=state.saving message="Saving...">
+            <MarkdownEditor
+              textareaId="course-students__coach-notes-new-note"
+              onChange={updateCoachNoteCB(setState)}
+              value=state.newNote
+              profile=Markdown.Permissive
+              maxLength=10000
+            />
+          </DisablingCover>
+          <button
+            disabled={state.newNote |> String.length < 1 || state.saving}
+            onClick={_ => saveNote(studentId, setState, state, addNoteCB)}
+            className="btn btn-primary mt-2">
+            {state.saving
+              ? saveNoteButtonText(tr("saving"), "fas fa-spinner")
+              : saveNoteButtonText(tr("save_note"), "")}
+          </button>
+        </div>
+      : React.null}
     <div>
       <h6 className="font-semibold mt-6"> {tr("all_notes") |> str} </h6>
       {coachNotes |> ArrayUtils.isEmpty

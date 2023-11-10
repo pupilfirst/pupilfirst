@@ -733,7 +733,7 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
@@ -763,8 +763,8 @@ en:
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
-      you_are_done: "You're done!"
       write_a_note: Write a Note
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: Assigned %{date}
       change_reviewer_and_start_review: Yes, Assign Me
@@ -921,13 +921,13 @@ en:
       delete_block_confirm: Are you sure you want to delete this block?
       deleting: Deleting...
       editor_content_block: "Editor for content block "
+      embedded_url: Embedded URL
       move_down: Move Down
       move_up: Move Up
       save_changes: Save Changes
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
@@ -1789,19 +1789,9 @@ en:
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
       avatar_uploaded_notification: Avatar uploaded successfully.
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: Cancel
+      change_account_email: Change account email
       change_password: Change your current password
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Change photo
       community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
@@ -1810,6 +1800,7 @@ en:
       confirm_password: Confirm password
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
+      confirm_using_password: Please confirm using your password
       current_password: Current password
       current_password_placeholder: Type current password
       delete_account: Delete account
@@ -1818,9 +1809,11 @@ en:
       disable_email_radio: Disable
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
+      email_change_q: Are you sure you want to change your email?
       email_label: Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
@@ -1835,13 +1828,20 @@ en:
       password_placeholder: Type current password
       photo: Photo
       preferred_name_placeholder: Type your preferred name
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: Save Changes
       security: Security
       select_image_limit: Please select an image with a size less than 5 MB
       select_language: Select the language that you would prefer the user interface to dislpay.
       send_email_radio: Send me a daily email
       set_password: Set password for your account
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
       update_credentials: Update your login credentials for the school.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
@@ -1902,10 +1902,10 @@ en:
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: Apply
@@ -2001,9 +2001,9 @@ en:
           zero: No %{entry_name} found
   home:
     agreement:
+      code_of_conduct: Code of Conduct
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
-      code_of_conduct: Code of Conduct
     index:
       access_ended: Review course content
       active: Continue course
@@ -2310,9 +2310,9 @@ en:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2479,7 +2479,7 @@ en:
           community: Community
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
@@ -2654,42 +2654,41 @@ en:
       submissions_reviewed: submissions reviewed
       title: Overview
     standing:
-      title: Standing
-      standings: Standings
-      standing_explanation: Standing serves as a tool for the school to motivate students to adhere to the school's code of conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
-      learn_more: Learn more about standings.
-      enable_standing: Enable standing for your school?
-      update_coc_heading: Add/Update your school's code of conduct
-      update_coc_info: It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
-      learn_more_about_crafting_coc: Learn more about crafting a Code of Conduct.
-      view_coc: View CoC
-      edit_coc: Edit CoC
+      add_another_standing: Add another standing
       add_coc: Add CoC
+      default: Default
+      edit_coc: Edit CoC
       edit_standings_heading: Edit/modify standings
       edit_standings_info: You can edit the color, name, and description of a standing, or you can add a new standing. Students can be promoted or demoted to any standing through the "Edit Student" tab.
-      default: Default
-      add_another_standing: Add another standing
+      enable_standing: Enable standing for your school?
       enabled: Enabled
+      learn_more: Learn more about standings.
+      learn_more_about_crafting_coc: Learn more about crafting a Code of Conduct.
       required: Required
+      save_coc_success: Code of Conduct saved successfully!
+      standing_explanation: Standing serves as a tool for the school to motivate students to adhere to the school's code of conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
+      standings: Standings
+      title: Standing
       toggle_standing:
         school_standing_toggle_success:
-          _yes: School Standing is enabled successfully!
           _no: School Standing is disabled successfully!
-      save_coc_success: Code of Conduct saved successfully!
+          _yes: School Standing is enabled successfully!
+      update_coc_heading: Add/Update your school's code of conduct
+      update_coc_info: It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
+      view_coc: View CoC
     standings:
+      edit:
+        page_title: Edit standing
       form:
         add_standing_heading: Add new standing
         add_standing_info: Add color, name and description of a standing
-        edit_standing_info: Edit color, name and description of a standing
-        name_placeholder: Name of the standing
         description_placeholder: Description of standing - optional
         edit_standing_heading: Edit %{standing_name}
+        edit_standing_info: Edit color, name and description of a standing
+        name_placeholder: Name of the standing
         save_standing: Save Standing
       new:
         page_title: Add new standing
-      edit:
-        page_title: Edit standing
-
   services:
     courses:
       demo_content_service:
@@ -2704,7 +2703,7 @@ en:
         target_name: Demo Target
     discord:
       community_message_service:
-        post_topic_created: |-
+        post_topic_created:  |-
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
@@ -2793,6 +2792,7 @@ en:
       previous: "&lsaquo; Previous"
       truncate: "&hellip;"
     pass: Pass
+    password_strength: Password Strength
     percentage: Percentage
     percentage_completed: "%{percentage}% completed"
     post: Post
@@ -2810,12 +2810,6 @@ en:
     settings: Settings
     sign_out: Sign Out
     sort_by: Sort by
-    user_standing:
-      current_standing: Current Standing
-      empty_standing_info: Your standings have not been altered. Any changes to your standing will be displayed here.
-      no_standing: No standing
-      standing: Standing
-      standing_log: Standing Log
     student:
       never_signed_in: Has never signed in
       time_ago: Last seen %{time_ago} ago
@@ -2829,10 +2823,15 @@ en:
     update: Update
     updating: Updating
     uploading: Uploading
+    user_standing:
+      current_standing: Current Standing
+      empty_standing_info: Your standings have not been altered. Any changes to your standing will be displayed here.
+      no_standing: No standing
+      standing: Standing
+      standing_log: Standing Log
     version: Version
     versions: Versions
     view: View
-    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2933,7 +2932,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email
@@ -2958,8 +2957,8 @@ en:
       standing_log: Standing Log
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
-      link_expired: That link has expired or is invalid. Please try again.
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: That link has expired or is invalid. Please try again.
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:

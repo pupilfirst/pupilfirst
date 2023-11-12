@@ -5,7 +5,7 @@
         <i class="if i-arrow-left-regular"></i>
         <span><%= t('shared.back_link') %></span>
       <% end %>
-      <h1 class="font-bold text-lg pt-5"><%= @standing.persisted? ? t(".edit_standing_heading", standing_name: @standing.name) : t(".add_new_standing_heading")%></h1>
+      <h1 class="font-bold text-lg pt-5"><%= @standing.persisted? ? t(".edit_standing_heading", standing_name: @standing.name) : t(".add_standing_heading")%></h1>
       <p class="text-sm text-gray-600"><%= @standing.persisted? ? t(".edit_standing_info") : t(".add_standing_info") %></p>
     </div>
   </section>
@@ -22,13 +22,13 @@
           <%= f.text_field :name, placeholder: t(".name_placeholder"), required: true, class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500" %>
         </div>
       </div>
-      <div class="flex gap-7 items-center mt-4">
+      <div class="flex gap-4 items-center mt-4">
         <div class="w-29"></div>
         <div class="flex-grow max-w-xl">
           <%= f.text_field :description, placeholder: t(".description_placeholder"), class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500 text-sm" %>
         </div>
       </div>
-      <div class="flex items-center gap-7 mt-10">
+      <div class="flex items-center gap-4 mt-10">
         <div class="w-29"></div>
         <div class="flex-grow max-w-xl">
           <%= f.button t(".save_standing"), class: "btn btn-primary btn-large w-full max-w-3xl" %>

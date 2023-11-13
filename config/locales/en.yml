@@ -2672,6 +2672,7 @@ en:
     standing:
       add_another_standing: Add another standing
       add_coc: Add CoC
+      confirm_standing_deletion: Are you sure you want to delete this standing?
       default: Default
       edit_coc: Edit CoC
       edit_standings_heading: Edit/modify standings

@@ -20,21 +20,3 @@ function update(event) {
   innerShield.setAttribute("fill", event.target.value);
   outerShield.setAttribute("fill", event.target.value);
 }
-
-//  This code is used to confirm the delete action for standings in the school standing page.
-//  Once turbo is enabled, we can directly use the data-confirm attribute in the delete button
-if (window.location.href.includes("/school/standing")) {
-  window.addEventListener("load", deleteStanding, false);
-  console.log("delete standing");
-}
-
-function deleteStanding() {
-  let deleteButtons = document.getElementsByClassName("delete_button");
-  for (let i = 0; i < deleteButtons.length; i++) {
-    deleteButtons[i].addEventListener("click", function (event) {
-      if (!confirm("Are you sure you want to delete this standing?")) {
-        event.preventDefault();
-      }
-    });
-  }
-}

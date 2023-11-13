@@ -82,6 +82,10 @@ class TimelineEvent < ApplicationRecord
     passed_at.present?
   end
 
+  def evaluated?
+    evaluated_at.present?
+  end
+
   def team_submission?
     target.team_target?
   end

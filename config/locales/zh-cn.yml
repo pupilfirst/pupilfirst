@@ -554,7 +554,7 @@ zh-cn:
       go_to: 去社区
       no_discussion: 最近没有关于这个目标的讨论。
       topics_post: 社区
-      topics_pre: "《Topics From》的主题来源"
+      topics_pre: 《Topics From》的主题来源
       use_community: 利用社区来解决你的疑问，并帮助你的同行！
     CoursesCurriculum__FileForm:
       another_file: 请为上传选择另一个文件。
@@ -835,7 +835,7 @@ zh-cn:
       filter_by_level: 按级别筛选
       filter_by_level_or_submissions_assigned: 按照等级筛选，或只显示分配给教师的提交作品。
       filter_by_target: 按目标筛选
-      filter_hint: "...or start typing to filter by student using their name or email address"
+      filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:
         assigned_to: 指派给：
         level: 等级：
@@ -1053,7 +1053,7 @@ zh-cn:
       merge_levels_hint: 选择另一个级别将此级别合并。此操作将移动所有目标和学生的级别。
       merge_levels_label: 删除和合并为
       merge_levels_select: 选择一个不同的级别。
-      optional: "（可选）"
+      optional: （可选）
       success: 成功
       tabs:
         actions: 行动
@@ -1101,7 +1101,7 @@ zh-cn:
       need_submit: 需要提交。
       no_targets_selected: 没有选择目标
       one_student_team: 一个团队只有一个学生。
-      optional_braces: "（可选）"
+      optional_braces: （可选）
       paste_link_complete: 粘贴链接已完成任务
       prepare_quiz: 现在准备测验。
       prepare_quiz_error: 所有问题必须填写完整，而且每个问题至少应有两个答案。
@@ -2204,7 +2204,7 @@ zh-cn:
           link_to: 在学校管理界面中查看这些新加入的学生。
           report_attachments: 您尝试导入的一些学生已经在该课程中注册了。在导入过程中，这些学生被忽略了。附件中附有这些学生的电子邮件地址列表。
           students_added_html: 学生添加： %{report_params}
-          students_requested_html: "<b>学生们的要求：</b> %{report_params}"
+          students_requested_html: <b>学生们的要求：</b> %{report_params}
           summary_import_html: 您对导入<strong>%{course_name}</strong>课程中的学生的请求已成功完成。以下是导入的简要总结：
           view_html: 你可以%{link_to}。
         subject: 学生的进口已完成。
@@ -2249,7 +2249,7 @@ zh-cn:
           assigned:
             one: "(1 from a student assigned to you)"
             other: "(%{count} from students assigned to you)"
-          assigned_none: "（其中没有分配给你的）"
+          assigned_none: （其中没有分配给你的）
           control_emails_html: 你可以从%{link_to}控制这些电子邮件。
           latest_topics: 您社区最新发布的主题：
           link_to: 个人资料编辑页面
@@ -2269,7 +2269,7 @@ zh-cn:
       new_post:
         body:
           link_to: 在%{community_name}社区上查看回复。
-          main_html: "【%{author_name}】在%{community_name}社区回复了你的留言。你可以%{link_to}。"
+          main_html: 【%{author_name}】在%{community_name}社区回复了你的留言。你可以%{link_to}。
         subject: 对你的帖子的新回复
       update_email_token:
         body:
@@ -2525,7 +2525,7 @@ zh-cn:
       submission:
         accepted: 已接受
         rejected: 已拒绝
-        reviewed_time_ago: "【%{time_ago_in_words}】前进行了审查。"
+        reviewed_time_ago: 【%{time_ago_in_words}】前进行了审查。
         submitted_time_ago: 提交于%{time_ago_in_words}之前
       submissions:
         accepted_submissions_label: 已接受的提交
@@ -2829,14 +2829,14 @@ zh-cn:
       try_again: 再试一次
       unexpected_error: 意外错误！
     optional: 可选的
-    optional_braces: "（可选的）"
+    optional_braces: （可选的）
     or: 或
     pagination:
-      first: "“«”"
-      last: "»"
+      first: “«”
+      last: »
       next: 下一页 »
       previous: 上一页
-      truncate: "..."
+      truncate: ...
     pass: 通过
     percentage: 百分比
     post: 发布
@@ -2935,7 +2935,7 @@ zh-cn:
       discord_connected_message: 你在Discord服务器上的昵称将与你在这里的名字保持同步。你在Discord上被分配了额外的角色。
       discord_connected_message_title: 你的%{school_name}账户现在与你的Discord账户关联起来了。
       discord_description: 加入我们的Discord服务器可以让您立即与我们的团队、教师和同龄人联系上。
-      discord_how_it_works_html: "<li>加入我们的Discord服务器（免费！）</li><li>将你的Discord账号与学校的账号关联起来。</li><li>在Discord上获得我们社区的访问权限！</li>"
+      discord_how_it_works_html: <li>加入我们的Discord服务器（免费！）</li><li>将你的Discord账号与学校的账号关联起来。</li><li>在Discord上获得我们社区的访问权限！</li>
       discord_how_it_works_title: 它是如何工作的？
       discord_title: 加入我们的Discord服务器。
       title: 编辑用户

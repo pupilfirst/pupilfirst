@@ -427,7 +427,7 @@ ar:
         label: Cover Image
       empty_image_label: Please choose an image file.
       image_label:
-        end: ". Click to replace the current image."
+        end: . Click to replace the current image.
         start: "You have selected "
       notification_success:
         description: Images have been updated successfully.
@@ -846,7 +846,7 @@ ar:
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
-      filter_hint: "...or start typing to filter by student using their name or email address"
+      filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:
         assigned_to: "Assigned To: "
         level: "Level: "
@@ -1097,7 +1097,7 @@ ar:
       need_submit: " needs to submit."
       no_targets_selected: No targets selected
       one_student_team: Only one student in a team
-      optional_braces: "(optional)"
+      optional_braces: (optional)
       paste_link_complete: Paste link to complete
       prepare_quiz: Prepare the quiz now.
       prepare_quiz_error: All questions must be filled in, and all questions should have at least two answers.
@@ -1406,7 +1406,7 @@ ar:
     SchoolCustomize__DetailsEditor:
       about_label: About
       details_placeholder: Add more details about the school.
-      max_characters: "(Maximum 500 characters)"
+      max_characters: (Maximum 500 characters)
       school_name: School Name
       school_name_error: name should be greater than 2 characters in length
       school_name_placeholder: Type school name here
@@ -2087,7 +2087,7 @@ ar:
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       title: Invalid Request
-      wasnt_valid: "<em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page."
+      wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
   faculty:
     index:
       coaches_at: المشرفون في
@@ -2196,7 +2196,7 @@ ar:
       email_updated_notification:
         body:
           previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
-          user_html: "<strong>%{name}</strong> from your school has updated the email address."
+          user_html: <strong>%{name}</strong> from your school has updated the email address.
         subject: "%{name} has changed email address."
       school_admin_added:
         body:
@@ -2209,8 +2209,8 @@ ar:
         body:
           link_to: view these newly added students in the school administration interface
           report_attachments: Some of the students you tried to import were already enrolled in the course. These students were ignored during the import. A list of email addresses of such students has been included as an attachment with this email.
-          students_added_html: "<b>Students added:</b> %{report_params}"
-          students_requested_html: "<b>Students requested:</b> %{report_params}"
+          students_added_html: <b>Students added:</b> %{report_params}
+          students_requested_html: <b>Students requested:</b> %{report_params}
           summary_import_html: "Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here's a small summary on the import:"
           view_html: You can %{link_to}.
         subject: Import of Students Completed
@@ -2239,22 +2239,22 @@ ar:
       account_deletion_notification:
         body:
           link_to: please sign into the school
-          main_html: "<p> We noticed that you haven't used your account in %{school_name} for over %{inactivity_months} months.  </p> <p> We will automatically delete your account after one month. Once your account is deleted, all your personal information will be removed and you will no longer have access to the school.</p> <p> If you would like to keep your account, %{link_to} before %{one_month_from_now}.  </p>"
+          main_html: <p> We noticed that you haven't used your account in %{school_name} for over %{inactivity_months} months.  </p> <p> We will automatically delete your account after one month. Once your account is deleted, all your personal information will be removed and you will no longer have access to the school.</p> <p> If you would like to keep your account, %{link_to} before %{one_month_from_now}.  </p>
         subject: Your account in %{school_name} will be deleted in 30 days
       confirm_account_deletion:
         body:
-          html: "<p> Your account in %{school_name} has been successfully deleted. </p> <p> All your personal information has been removed and you will no longer have access to this school.</p>"
+          html: <p> Your account in %{school_name} has been successfully deleted. </p> <p> All your personal information has been removed and you will no longer have access to this school.</p>
         subject: Account deleted successfully from %{school_name}
       confirm_email_update:
         body:
-          html: "<p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>"
+          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
         subject: Your email in %{school_name} school updated successfully
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
           assigned:
-            one: "(1 from a student assigned to you)"
-            other: "(%{count} from students assigned to you)"
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           assigned_none: "(none of which are assigned to you)"
           control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
@@ -2269,30 +2269,30 @@ ar:
       delete_account_token:
         body:
           link_to: link
-          main_html: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>"
-          note_html: "<p>This action is irreversible, and will permanently remove your access to the school.</p>"
+          main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
       new_post:
         body:
           link_to: view the reply on the %{community_name} community
-          main_html: "<p>%{author_name} has posted a reply to something you said on the %{community_name} community.</p> <p>You can %{link_to}."
+          main_html: <p>%{author_name} has posted a reply to something you said on the %{community_name} community.</p> <p>You can %{link_to}.
         subject: New reply for your post
       update_email_token:
         body:
           link_to: link
-          main_html: "<p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>"
-          note_html: "<p>This action is irreversible.</p>"
+          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible.</p>
         subject: Update your email address in %{school_name} school
     user_session:
       send_login_token:
         body:
           link_to: click here
-          main_html: "<p> Please %{link_to} to login to your %{school_name} account.  </p>"
+          main_html: <p> Please %{link_to} to login to your %{school_name} account.  </p>
         subject: Log in to
       send_reset_password_token:
         body:
           link_to: click here
-          main_html: "<p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>"
+          main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
         subject: account recovery
   models:
     faculty:
@@ -2754,7 +2754,7 @@ ar:
       courses: الدورات
       levels: المستويات
       no_submissions: لا يوجد إرساليات
-      overview:
+      overview: null
       students: الطلاب
       submissions_reviewed: الإرساليات المدققة
       title: نظرة عامة
@@ -2839,7 +2839,7 @@ ar:
       try_again: يرجى الملاحظة مرة أخرى
       unexpected_error: خطأ غير متوقع!
     optional: اختياري
-    optional_braces: "(اختياري)"
+    optional_braces: (اختياري)
     or: أو
     pagination:
       first: "&laquo;"
@@ -2929,10 +2929,10 @@ ar:
         heading: Wait a second! You need to link your Discord account first.
       discord_connect: Join Our Discord Community
       discord_connected_account: Go to Discord Community
-      discord_connected_message: "<li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>"
+      discord_connected_message: <li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>
       discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
       discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
-      discord_how_it_works_html: "<li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>"
+      discord_how_it_works_html: <li> Join our Discord server (it's free!) </li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>
       discord_how_it_works_title: How it works
       discord_title: Join Our Discord Server
       title: Edit User
@@ -2947,7 +2947,7 @@ ar:
         email_unregistered: "Your email address: %{email} is unregistered."
         not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
         oauth_origin_missing:
-          details: "<em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page."
+          details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
           invalid_request: Your browser made an invalid request.
     sessions:
       auth_callback:

@@ -15,8 +15,10 @@ function setShieldColor() {
 }
 
 function update(event) {
-  let content = document.getElementById("shield_svg");
-  content.setAttribute("fill", event.target.value);
+  let innerShield = document.getElementById("inner_shield");
+  let outerShield = document.getElementById("outer_shield");
+  innerShield.setAttribute("fill", event.target.value);
+  outerShield.setAttribute("fill", event.target.value);
 }
 
 //  This code is used to confirm the delete action for standings in the school standing page.

@@ -1590,6 +1590,18 @@ en:
       title_error: Title must have at least two characters
       title_placeholder: Student, Coach, CEO, etc.
       update_student: Update Student
+    StudentStanding__Root:
+      change_standing: Change Standing
+      change_standing_info: You can change users standing to any standing.
+      confirm_delete: Are you sure you want to delete this standing log entry?
+      delete_standing_log: Delete Standing Log
+      pages:
+        actions: Actions
+        details: Details
+        standing: Standing
+      select_standing: Select Standing
+      reason_heading: Reason for altering the standing
+      reason_placeholder: Eg. Plagiarism in assignment name, Misbehave in community...
     StudentTopNav:
       sign_in: Sign In
       sign_out: Sign Out
@@ -2221,6 +2233,8 @@ en:
       success_notification: Course archived successfully.
     archive_post:
       post_archived_notification: Post archived successfully
+    archive_user_standing:
+      success_notification: Standing log deleted successfully!
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -2292,6 +2306,8 @@ en:
       success_notification: Team created successfully
     create_topic_subscription:
       success_notification: You will be notified about all the updates.
+    create_user_standing:
+      success_notification: User standing created successfully!
     delete_certificate:
       success_notification: Certificate has been deleted.
     delete_course_author:
@@ -2677,6 +2693,8 @@ en:
       update_coc_info: It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
       view_coc: View CoC
     standings:
+      create:
+        success: Standing created successfully!
       edit:
         page_title: Edit standing
       form:
@@ -2689,6 +2707,10 @@ en:
         save_standing: Save Standing
       new:
         page_title: Add new standing
+      update:
+        success: Standing updated successfully!
+      delete:
+        success: Standing deleted successfully!
   services:
     courses:
       demo_content_service:

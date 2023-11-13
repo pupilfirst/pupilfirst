@@ -1,7 +1,7 @@
 @module("../../../assets/images/users/standing/no_standing_log.svg")
 external noStandingLog: string = "default"
 
-let t = I18n.t(~scope="components.StudentDetails__Root")
+let t = I18n.t(~scope="components.StudentStanding__Root")
 let ts = I18n.ts
 let str = React.string
 
@@ -248,11 +248,11 @@ let loadPageData = (studentId, setState, setCourseId, setPageData) => {
 }
 
 let archiveStanding = (id: string, setArchive, setState, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
 
   if {
     open Webapi.Dom
-    window->Window.confirm(t("sure_delete"))
+    window->Window.confirm(t("confirm_delete"))
   } {
     setArchive(_ => true)
     ArchiveUserStandingMutation.fetch({id: id})
@@ -289,7 +289,7 @@ let currentStandingCard = (standing: currentStanding) => {
     <div className="ml-4 flex flex-col">
       <p
         className="-mt-12 px-3 py-2 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full">
-        {"Current Standing"->str}
+        {ts("user_standing.current_standing")->str}
       </p>
       <div className="flex flex-col justify-center items-center">
         <StandingShield color=standing.color sizeClass="w-16 h-16" />
@@ -303,10 +303,10 @@ let currentStandingCard = (standing: currentStanding) => {
 
 let deleteIcon = (id: string, setArchive, archive, setState) => {
   <button
-    ariaLabel={t("delete_note") ++ id}
+    ariaLabel={t("delete_standing_log") ++ id}
     className="w-10 text-sm text-gray-600 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
     disabled=archive
-    title={t("delete_note") ++ id}
+    title={t("delete_standing_log") ++ id}
     onClick={archiveStanding(id, setArchive, setState)}>
     <PfIcon className="if i-trash-regular if-fw text-2xl" />
   </button>
@@ -320,7 +320,7 @@ let standingLogs = (userStandings: userStandings, setArchive, archive, setState)
       {if userStandingLogsCount > 0 {
         userStandings
         ->Js.Array2.mapi((log, index) => {
-          <div className="flex group">
+          <div className="flex group" key={"Standing Log " ++ index->string_of_int}>
             <div className="p-2 h-full rounded-full bg-focusColor-50 z-10">
               <StandingShield color={log.standingColor} sizeClass="w-12 h-12" />
             </div>
@@ -347,9 +347,9 @@ let standingLogs = (userStandings: userStandings, setArchive, archive, setState)
                       {log.creatorName->str}
                     </span>
                   </p>
-                  <p className="text-sm mt-2 text-gray-500">
+                  <div className="text-sm mt-2 text-gray-500">
                     <MarkdownBlock profile=Markdown.Permissive markdown=log.reason />
-                  </p>
+                  </div>
                 </div>
                 <div className="ml-4"> {deleteIcon(log.id, setArchive, archive, setState)} </div>
               </div>
@@ -381,14 +381,14 @@ let editor = (
   currentStanding,
 ) => {
   <div className="pt-4">
-    <h2 className="text-lg font-semibold"> {"change standing"->str} </h2>
-    <p className="mb-4"> {"You can change users standing to any standing."->str} </p>
+    <h2 className="text-lg font-semibold"> {t("change_standing")->str} </h2>
+    <p className="mb-4"> {t("change_standing_info")->str} </p>
     <div className="flex space-x-2 text-center items-center">
       <div className="relative">
         <select
-          className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="block appearance-none w-64 bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 cursor-not-allowed"
           disabled=true>
-          <option> {currentStanding.name->str} </option>
+          <option key="0"> {currentStanding.name->str} </option>
         </select>
         <div
           className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -400,18 +400,20 @@ let editor = (
       </div>
       <div className="relative">
         <select
-          ariaLabel="Select Standing"
-          className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+          ariaLabel={t("select_standing")}
+          className="block appearance-none w-64 bg-white border text-sm border-gray-300 rounded-s hover:border-gray-500 px-4 py-3 pe-8 rounded-e-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 cursor-pointer"
           id="change-standing"
           onChange={event => {
             let value = ReactEvent.Form.target(event)["value"]
             setSelect(_ => value)
           }}
           value=select>
-          <option key="0" value="0"> {"Select Standing"->str} </option>
+          <option key="0" value="0"> {t("select_standing")->str} </option>
           {standings
           ->Js.Array2.map(standing => {
-            <option key=standing.id value=standing.id> {standing.name->str} </option>
+            <option key=standing.id value=standing.id title=standing.name>
+              {standing.name->str}
+            </option>
           })
           ->React.array}
         </select>
@@ -425,7 +427,10 @@ let editor = (
       ? <div className="text-yellow-900 text-sm font-inter mt-2">
           <PfIcon className="if i-info-light if-fw" />
           {
-            let description = Js.Array2.unsafe_get(standings, int_of_string(select) - 1).description
+            let description =
+              Js.Array2.filter(standings, standing => standing.id == select)
+              ->Js.Array2.unsafe_get(0)
+              ->(standing => standing.description)
 
             {
               Js.String2.length(description) > 0
@@ -437,7 +442,7 @@ let editor = (
       : React.null}
     <div className="mt-4">
       <label className="block text-sm font-medium text-gray-700 mb-2">
-        {"Reason for altering standing:"->str}
+        {t("reason_heading")->str}
       </label>
       <div>
         <MarkdownEditor
@@ -446,7 +451,7 @@ let editor = (
           maxLength=250
           value=reason
           profile=Markdown.Permissive
-          placeholder={"Eg. Plagiarism in assignment name, Misbehave in community..."}
+          placeholder={t("reason_placeholder")}
           fileUpload=false
           dynamicHeight=false
         />
@@ -459,7 +464,7 @@ let editor = (
         onClick={_e => {
           createUserStanding(studentId, reason, select, setState, setReason, setSelect)
         }}>
-        {"Change Standing"->str}
+        {t("change_standing")->str}
       </button>
     </div>
   </div>

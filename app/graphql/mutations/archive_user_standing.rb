@@ -11,7 +11,7 @@ module Mutations
       notify(
         :success,
         I18n.t("shared.notifications.done_exclamation"),
-        I18n.t("mutations.archive_standing_log.success_notification")
+        I18n.t("mutations.archive_user_standing.success_notification")
       )
       { success: archive_standing_log }
     end

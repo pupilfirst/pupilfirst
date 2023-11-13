@@ -13,7 +13,7 @@ module Mutations
       notify(
         :success,
         I18n.t("shared.notifications.done_exclamation"),
-        I18n.t("mutations.create_standing_log.success_notification")
+        I18n.t("mutations.create_user_standing.success_notification")
       )
       { user_standing: create_user_standing }
     end

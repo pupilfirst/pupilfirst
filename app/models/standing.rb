@@ -7,6 +7,10 @@ class Standing < ApplicationRecord
             uniqueness: {
               scope: :school_id,
               message: "should be unique within a school"
+            },
+            length: {
+              maximum: 25,
+              message: "should not be longer than 25 characters"
             }
   validates :color, presence: true
   validates_with RateLimitValidator, limit: 15, scope: :school_id

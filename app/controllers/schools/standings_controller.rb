@@ -24,7 +24,7 @@ module Schools
 
       begin
         @standing = current_school.standings.create!(standing_params)
-        flash[:success] = I18n.t("standings.create.success")
+        flash[:success] = I18n.t("schools.standings.create.success")
         redirect_to standing_school_path
       rescue ActiveRecord::RecordInvalid => e
         flash.now[:error] = e.message
@@ -38,14 +38,18 @@ module Schools
       authorize(@standing, policy_class: Schools::StandingPolicy)
 
       if params[:standing].blank?
-        @standing.update!(archived_at: Time.zone.now)
+        if @standing.user_standings.count > 0
+          @standing.update!(archived_at: Time.zone.now)
+        else
+          @standing.destroy!
+        end
+        flash[:success] = I18n.t("schools.standings.delete.success")
       else
         standing_params =
           params.require(:standing).permit(:name, :color, :description)
         @standing.update!(standing_params)
+        flash[:success] = I18n.t("schools.standings.update.success")
       end
-
-      flash[:success] = I18n.t("standings.update.success")
 
       redirect_to standing_school_path
     end
@@ -56,7 +60,7 @@ module Schools
 
       @standing.update!(archived_at: Time.zone.now)
 
-      flash[:success] = I18n.t("standings.destroy.success")
+      flash[:success] = I18n.t("schools.standings.destroy.success")
 
       redirect_to standing_school_path
     end

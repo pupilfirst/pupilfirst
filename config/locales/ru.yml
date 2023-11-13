@@ -39,7 +39,7 @@ ru:
       filter_search_string_course: обучает курс %{name}
       heading: Менторы
     CommunitiesNewTopic__Root:
-      asked_on: 'Спрошен на '
+      asked_on: "Спрошен на "
       back: Назад
       be_descriptive: Если вы задаете вопрос, постарайтесь быть как можно более описательным, чтобы другим было легче публиковать ответы. Вы можете использовать Markdown для форматирования этого текста.
       body: Основная часть
@@ -49,9 +49,9 @@ ru:
       create_topic_discussion: Создать новую тему для обсуждения
       done: Сделано!
       failed_fetch_similar: Нам не удалось получить похожие темы с сервера! Наша команда была уведомлена об этой ошибке.
-      linked_target: 'Связанные Задачи: '
+      linked_target: "Связанные Задачи: "
       missing_info: Недостаточно Информации!
-      no_category_found: 'Не удалось найти категорию с ID:'
+      no_category_found: "Не удалось найти категорию с ID:"
       no_replies: Нет ответов
       not_selected: Не Выбрано
       one_reply: 1 ответ
@@ -68,10 +68,10 @@ ru:
       all_categories_button: Все Категории
       button_load_more: Загрузить Больше...
       empty_topics: Здесь пока нет обсуждения.
-      filter_input_label: 'Фильтрировать по:'
+      filter_input_label: "Фильтрировать по:"
       filter_input_placeholder_categories: Фильтрировать по категории, решению или поиск по темам
       filter_input_placeholder_default: Искать по темам или фильтровать по решению
-      sort_criterion_input_label: 'Сортировать по:'
+      sort_criterion_input_label: "Сортировать по:"
       sort_criterion_last_activity: Последняя Активность
       sort_criterion_posted_at: Размещено в
       sort_criterion_views: Просмотров
@@ -88,7 +88,7 @@ ru:
         other: "%{count} Views"
       topics_fully_loaded_text: Показать все %{total_topics} темы
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
-      unable_find_id: 'Не удалось найти категорию темы с ID: '
+      unable_find_id: "Не удалось найти категорию темы с ID: "
     CourseApplicants__EditForm:
       add_as_student_button: Добавить как студента
       affiliation:
@@ -126,7 +126,7 @@ ru:
           tag: Тег
       onboard_as_student: Добавить как Студента
       show_actions: Показать Действия
-      show_details: 'Показать Детали: '
+      show_details: "Показать Детали: "
       sort_criterion:
         created_at: Создан В
         name: Имя
@@ -221,16 +221,16 @@ ru:
       no_students_assigned: У этого ментора нет учеников. Вы можете назначать менторов при редактировании сведений об ученике.
       pending_submissions: Ожидающие отправки
       revied_submissions: Рассмотренные работы
-      students_assigned: 'Студенты назначены к ментору:'
+      students_assigned: "Студенты назначены к ментору:"
       notification_coach_updated: Coach updated successfully
       search_cohorts_all: You have selected all cohorts!
       search_cohorts_empty: No cohorts selected
       search_cohorts_placeholder: Search cohorts
-      select_cohorts: 'Cohorts assigned to coach:'
+      select_cohorts: "Cohorts assigned to coach:"
       update_cohort_assignment: Update Cohort Assignment
     CourseCoaches__InfoFormTeam:
       remove_post_confirm: из списка назначенных команд?
-      remove_pre_confirm: 'Вы уверены что хочешь удалить '
+      remove_pre_confirm: "Вы уверены что хочешь удалить "
     CourseCoaches__Root:
       coaches_list: Список тренеров курса
       course_empty: У курса нет назначенных тренеров!
@@ -361,11 +361,11 @@ ru:
       empty_image_label: Пожалуйста, выберите файл изображения.
       image_label:
         end: ". Щелкните, чтобы заменить текущее изображение."
-        start: 'Вы выбрали '
+        start: "Вы выбрали "
       notification_success:
         description: Изображения успешно обновлены.
         title: Сделано!
-      replace_image_label: 'Выберите файл для замены '
+      replace_image_label: "Выберите файл для замены "
       thumbnail:
         error_message: должен быть в формате JPEG/PNG размером менее 2 МБ
         help: Миниатюра будет отображаться на главной странице и здесь, в списке административных курсов.
@@ -453,19 +453,19 @@ ru:
       mark_complete: Отметить Как Завершенный
       saving: Сохраняем
       visit_complete: Перейдите По Ссылке, Чтобы Завершить
-      visit_link: 'Перейти по Ссылке '
+      visit_link: "Перейти по Ссылке "
     CoursesCurriculum__Discuss:
       create: Создать тему
       go_to: Перейти в сообщество
       no_discussion: В последнее время не было обсуждения этой задачи.
       topics_post: " сообщество"
-      topics_pre: 'Темы в сообществе '
+      topics_pre: "Темы в сообществе "
       use_community: Используйте сообщество, чтобы развеять сомнения и взаимно помогать друг-другу!
     CoursesCurriculum__FileForm:
       another_file: Пожалуйста, выберите другой файл для загрузки.
       cannot_attach: Вы не можете прикреплять файлы.
       choose_upload: Выберите файл для загрузки
-      error: 'Ошибка '
+      error: "Ошибка "
       max_file_size: Максимальный размер файла составляет 5 МБ.
       please_reload: Пожалуйста, перезагрузите страницу и повторите попытку.
       preview_mode: Режим Предварительного Просмотра
@@ -483,8 +483,8 @@ ru:
       course_ended_description: Курс завершен, и отправка материалов отключена для всех задачах!
       course_ended_title: Курс Окончен
       level_up_blocked:
-        body_middle_pending_review: 'все еще ожидают рассмотрения ментором. '
-        body_middle_rejected: 'были отклонены. '
+        body_middle_pending_review: "все еще ожидают рассмотрения ментором. "
+        body_middle_rejected: "были отклонены. "
         body_prefix: Вы отправили все контрольные задачи на уровне %{number}, но еще остались задачи
         body_suffix: Вам нужен проходной балл по всем контрольным показателям для повышения уровня.
         title_pending_review: Ожидает оценки
@@ -514,7 +514,7 @@ ru:
       learn_cta_take_quiz: Пройти Тест
       learn_tab: Учиться
       next_target_button: След. Задача
-      pending_team_members_notice: 'У вас есть члены команды, которым еще предстоит выполнить эту задачу:'
+      pending_team_members_notice: "У вас есть члены команды, которым еще предстоит выполнить эту задачу:"
       preview_mode_text: Вы сейчас в режиме предварительного просмотра.
       previous_target_button: Пред. Задача
       scroll_to_top: Пролистать наверх
@@ -537,7 +537,7 @@ ru:
     CoursesCurriculum__SubmissionItem:
       link_error: Это не похоже на действительную ссылку.
       link_placeholder: Введите полный URL, начинающийся с https://...
-      remove: 'Убрать '
+      remove: "Убрать "
       short_text_error: Ответ должен быть меньше 250 символов
       short_text_placeholder: Добавьте короткий текст
       warning_length_limit: Пожалуйста, старайтесь, чтобы ваш ответ не превышал 5000 символов.
@@ -547,13 +547,13 @@ ru:
       add_another_submission: Добавить другую работу
       cancel: Отмена
       completed: Завершено
-      form_response_number: 'Ответ #'
+      form_response_number: "Ответ #"
       grading: Оценивается
       pending_review: Ожидает Оценки
       rejected: Отказано
-      submission_details: 'Детали вашей работы в '
-      submission_number: 'Работа #'
-      submitted_on: 'Отправлено в '
+      submission_details: "Детали вашей работы в "
+      submission_number: "Работа #"
+      submitted_on: "Отправлено в "
       unknown_coach: Неизвестный Ментор
       your_responses: Ваши ответы
       your_submissions: Ваши Работы
@@ -591,14 +591,14 @@ ru:
       average_grades: Средние Оценки
       average_quiz_score: Средний Балл за Тесты
       course_completed: Курс Пройден!
-      incomplete_targets: 'Не Завершены: %{targetsCount}'
+      incomplete_targets: "Не Завершены: %{targetsCount}"
       level_progress: Прогресс Уровня
       personal_coaches: Персональные Менторы
       quiz: Тест
       schedule_coaching_session: Запланировать сеанс с ментором
-      targets_completed: 'Завершены: %{targetsCount}'
+      targets_completed: "Завершены: %{targetsCount}"
       targets_overview: Обзор задач
-      targets_pending_review: 'Ожидают Оценки: %{targetsCount}'
+      targets_pending_review: "Ожидают Оценки: %{targetsCount}"
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
@@ -614,16 +614,16 @@ ru:
       filter_by_level: Фильтровать по уровню
       filter_by_level_or_status: Фильтровать по уровню или статусу
       load_more: Загрузить Больше...
-      no_submissions_to_show: 'Нет представленных материалов для показа '
+      no_submissions_to_show: "Нет представленных материалов для показа "
       pending_review: Ожидает оценки
       rejected: Отклонен
-      sort_by: 'Сортировать по:'
+      sort_by: "Сортировать по:"
       status: Статус
       submission_not_considered: Данная работа не засчитывается для завершения.
       submission_not_considered_help: Данная задача <em>командная</em> и это работа не связана с некоторыми членами вашей команды. Это может произойти, если задача изменилась после вашего индивидуального представления, чтобы потребовать <em>командной</em> работы или если состав вашей команды изменился после создания <em>команды</em>.
       submitted_at: Отправлено в
       submitted_on: Отправлено в %{date}
-      view: 'Посмотреть '
+      view: "Посмотреть "
       filter_by_another_status: Filter by another status
       filter_by_status: Filter by status
     CoursesReview__Checklist:
@@ -678,7 +678,7 @@ ru:
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
       hide_test_report_button: Скрыть Отчет Тестов
       level_acronym: У
-      note_help: 'Хотели бы вы написать об этом заметку '
+      note_help: "Хотели бы вы написать об этом заметку "
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
@@ -705,8 +705,8 @@ ru:
       student_dropped_out_message: Данная работа от студента, у которого закончился доступ к курсу или который выбыл из него.
       students_dropped_out_message: Данная работа связана с одним или несколькими студентами, доступ которых к курсу закончился или которые бросили учебу.
       submission: Работа
-      submitted_by: 'Отправлен от '
-      submitted_by_team: 'Отправлено командой: '
+      submitted_by: "Отправлен от "
+      submitted_by_team: "Отправлено командой: "
       team: команда
       team_notice: " Это заявление от команды, поэтому добавленная здесь заметка будет опубликована в отчете всех студентов в команде."
       undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
@@ -717,14 +717,14 @@ ru:
         re_run_action_button: Yes, Re-Run Github Action
         view_action_button: View Github Action
       no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
-      page_title: 'Submission #%{submission_number} | %{target_title} | %{name}'
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: 'Note: '
+      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
       submission_acceptable: Is this submission acceptable?
-      submission_number: 'Submission #%{number}'
-      undo_rejection_notice_title: 'Submission Rejected:'
+      submission_number: "Submission #%{number}"
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
@@ -736,14 +736,14 @@ ru:
       start_review: Начать Оценивание
     CoursesReview__Root:
       assigned_to: Назначен к
-      assigned_to_coach: 'Назначен к:'
+      assigned_to_coach: "Назначен к:"
       assigned_to_me: " назначен ко мне"
       button_load_more: Загрузить Больше Работ...
       coach_filter_by:
         assigned_to: Фильтровать по тем, кто отправил работы
         personal_coach: Фильтровать по тому, кто назначен студенту
         reviewed_by: Фильтровать по тем, кто просмотрел работу
-      filter_by: 'Фильтровать по:'
+      filter_by: "Фильтровать по:"
       filter_by_another_level: Фильтр по другому уровню
       filter_by_another_level_or_submissions_assigned: Фильтровать по другому уровню или показать только работы, назначенные ментору
       filter_by_level: Фильтровать по уровню
@@ -751,11 +751,11 @@ ru:
       filter_by_target: Фильтровать по задачам
       filter_hint: "... или начните вводить текст, чтобы фильтровать учащегося по имени или адресу электронной почты"
       filter_input:
-        assigned_to: 'Назначен: '
-        level: 'Уровень: '
-        personal_coach: 'Личный Ментор: '
-        reviewed_by: 'Оценен от: '
-        target: 'Задача: '
+        assigned_to: "Назначен: "
+        level: "Уровень: "
+        personal_coach: "Личный Ментор: "
+        reviewed_by: "Оценен от: "
+        target: "Задача: "
       inactive_students: Неактивные Студенты
       include: Включать
       level: Уровень
@@ -770,13 +770,13 @@ ru:
       reviewed_at: Оценено в
       reviewed_by: Оценено
       search:
-        assigned_to: 'Назначен:'
-        level: 'Уровень:'
-        personal_coach: 'личный ментор:'
-        reviewed_by: 'оценен:'
-        status: 'статус: '
-        target: 'задача:'
-      sort_by: 'Сортировать по:'
+        assigned_to: "Назначен:"
+        level: "Уровень:"
+        personal_coach: "личный ментор:"
+        reviewed_by: "оценен:"
+        status: "статус: "
+        target: "задача:"
+      sort_by: "Сортировать по:"
       status: Статус
       submissions_fully_loaded_text:
         one: Здась только одна работа.
@@ -790,11 +790,11 @@ ru:
       completed: Завершено
       created_at: в %{created_at}.
       feedback_sent: Отзыв Отправлен
-      level: 'Уровень '
+      level: "Уровень "
       no_submissions_found: Работы не найдены
       rejected: Отклонено
-      submitted_by: 'Отправлено от '
-      submitted_by_team: 'Отправлено от команды '
+      submitted_by: "Отправлено от "
+      submitted_by_team: "Отправлено от команды "
     CoursesReview__SubmissionInfoCard:
       completed: Завершено
       deleted: Удалено
@@ -803,7 +803,7 @@ ru:
       submission_hash: Работа
     CoursesStudents__CoachNoteShow:
       coach_on: на
-      delete_note: 'Удалить заметку '
+      delete_note: "Удалить заметку "
       deleted_coach: Удаленный Ментор
       sure_delete: Вы уверены, что хотите удалить эту заметку?
       unknown: Неизвестно
@@ -815,7 +815,7 @@ ru:
       no_notes: Здесь нет заметок!
       save_note: Сохранить Заметку
     CoursesStudents__Root:
-      assigned_me: 'Назначено: Мне'
+      assigned_me: "Назначено: Мне"
       assigned_to: Назначен к
       coach_notes: Заметки Ментора
       filter_level: Фильтр по уровню, назначенному ментору или поиск по имени или почте и многое другое...
@@ -823,13 +823,13 @@ ru:
       me: меня
       name_email: Имя или Почта
       no_notes: Не имеет заметок
-      not_found: 'Не удалось найти уровень, выбранный из панели рассылки, с ID '
+      not_found: "Не удалось найти уровень, выбранный из панели рассылки, с ID "
       restore_filer_none: Теперь показаны все студенты этого курса.
       search_assigned_me: " назначенных мне"
-      search_assigned_to: 'назначенных к '
+      search_assigned_to: "назначенных к "
       search_no_notes: нет заметок есть заметки ментор заметки
-      search_tag: 'тег '
-      showing_assigned: 'Теперь показаны учащиеся, назначенные к '
+      search_tag: "тег "
+      showing_assigned: "Теперь показаны учащиеся, назначенные к "
       tagged_with: С тегами
     CoursesStudents__StudentDistribution:
       level_wise: Распределение учащихся по уровням
@@ -859,7 +859,7 @@ ru:
         zero: No Quizzes Attempted
     CoursesStudents__SubmissionsList:
       no_revied_submission: Нет Рассмотренного Работ
-      submitted_on: 'Отправленный в '
+      submitted_on: "Отправленный в "
     CoursesStudents__TeamsList:
       no_teams: Нет поманд для показа
       personal_coaches: Личные Менторы
@@ -913,7 +913,7 @@ ru:
       delete: Удалить
       delete_block_confirm: Вы уверены, что хотите удалить этот блок?
       deleting: Удаление...
-      editor_content_block: 'Редактор блока контента '
+      editor_content_block: "Редактор блока контента "
       move_down: Двигать Вниз
       move_up: Двигать Вверх
       save_changes: Сохранить изменения
@@ -1185,7 +1185,7 @@ ru:
       notifications_fully_loaded_text: Показаны все %{total_notifications} уведомления
       notifications_partially_loaded_text: Показаны %{loaded_notifications_count} из %{total_notifications} уведомлении
     Notifications__Root:
-      close: 'Закрыть '
+      close: "Закрыть "
       show_notifications: Показать уведомления
     SA_Coaches_CoachEditor:
       add_coach: Добавить нового ментора
@@ -1219,7 +1219,7 @@ ru:
       title: Title
     SA_Coaches_SchoolIndex:
       add_new_coach: Добавить Нового Ментора
-      avatar_of: 'Аватар '
+      avatar_of: "Аватар "
       active_coaches: Active Coaches
       coaches: Coaches
       exited_coaches: Exited Coaches
@@ -1253,7 +1253,7 @@ ru:
     SchoolCommunities__CategoryEditor:
       add_new_category: Добавить новую категорию
       delete_category: Удалить категорию
-      editor_category_alt: 'Редактор категории '
+      editor_category_alt: "Редактор категории "
       save_category: Сохранить Категорию
       topics_delete_confirm: В этой категории есть темы! Вы уверены, что хотите удалить эту категорию?
       update_category: Обновить категорию
@@ -1272,7 +1272,7 @@ ru:
       community_editor_placeholder: Этому сообществу нужно имя!
       create_community: Создать Сообщество
       edit_categories: Изменить категории
-      give_access: 'Предоставьте доступ учащимся из:'
+      give_access: "Предоставьте доступ учащимся из:"
       no_topic: В настоящее время в этом сообществе нет категории тем!
       notification_answer_cant_blank: Ответ не может быть пустым
       notification_reload_post: Пожалуйста, перезагрузите страницу перед повторной попыткой публикации.
@@ -1295,7 +1295,7 @@ ru:
       updated_notification: был обновлен.
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
-      update: 'Update '
+      update: "Update "
       updating: Updating...
     SchoolCustomize__ContactsEditor:
       address_placeholder: Оставьте адрес пустым, чтобы скрыть нижний колонтитул.
@@ -1455,7 +1455,7 @@ ru:
       team_header_add_more_members: Добавьте больше членов команды!
       team_header_label: КОМАНДА %{team_name}
       teams_to_add_empty: Этот список пуст! Добавьте несколько студентов, используя форму выше.
-      teams_to_add_label: 'Эти новые студенты будут добавлены к курсу.:'
+      teams_to_add_label: "Эти новые студенты будут добавлены к курсу.:"
       pick_a_cohort: Pick a Cohort
       select_a_cohort: Select a cohort
       select_cohort: Select Cohort
@@ -1499,16 +1499,16 @@ ru:
       empty_course_certificates_text: Этот курс не имеет сертификатов для выдачи.
       empty_issued_certificates_text: Этому студенту не выдавали никаких сертификатов.
       issue_certificate_button: Выдать Сертификат
-      issued_by_label: 'Выдано от:'
-      issued_certificates_label: 'Выданные сертификаты:'
-      issued_date_label: 'Выдано в:'
+      issued_by_label: "Выдано от:"
+      issued_certificates_label: "Выданные сертификаты:"
+      issued_date_label: "Выдано в:"
       manage_certificates: Управление студенческими сертификатами
       mark_dropped_note: Пометка учащегося как выбывшего лишает его доступа к курсу.
-      new_certificate_label: 'Выдать новый сертификат:'
+      new_certificate_label: "Выдать новый сертификат:"
       revoke_certificate_button: Отозвать Сертификат
       revoke_certificate_confirmation: Уверены ли вы? Это действие не может быть отменено.
-      revoked_by_label: 'Отозван от:'
-      revoked_date_label: 'Отозван в:'
+      revoked_by_label: "Отозван от:"
+      revoked_date_label: "Отозван в:"
       revoked_status_label: Отозван
       select_certificate_input_label: Выберите сертификат для выдачи
     StudentsEditor__BulkImportForm:
@@ -1528,15 +1528,15 @@ ru:
       csv_file_input_label: CSV-файл импорта
       csv_file_input_placeholder: Выберите файл CSV для импорта
       drawer_heading: Массовый импорт студентов
-      error_summary_title: 'Вот сводка ошибок в таблице: '
+      error_summary_title: "Вот сводка ошибок в таблице: "
       example_csv_link: Загрузите пример файла .csv
       import_bulk_help: Этот файл будет использоваться для массового импорта учащихся. Проверьте образец файла на наличие необходимого формата.
       import_button_text: Импортировать студентов
-      more_errors_text: 'Ошибок еще больше. Исправьте ошибки в следующих строках и загрузите снова: '
+      more_errors_text: "Ошибок еще больше. Исправьте ошибки в следующих строках и загрузите снова: "
       notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
       success_notification: Импорт успешно начат! После завершения вы получите уведомление по электронной почте.
       valid_data_message: Данные успешно подтверждены!
-      valid_data_summary_text: 'Вот сводка данных о студентах на загруженном листе: '
+      valid_data_summary_text: "Вот сводка данных о студентах на загруженном листе: "
     StudentsEditor__Root:
       button_add_new_students: Добавить новых студентов
       button_all_students: Все Студенты
@@ -1544,13 +1544,13 @@ ru:
       button_inactive_students: Неактивные Студенты
       group_as_team: Группа как команда
       move_out_team: Выйти из команды
-      sort_criterion_label: 'Сортировать по:'
+      sort_criterion_label: "Сортировать по:"
       sort_criterion_last_created: Последнее Создание
       sort_criterion_last_updated: Последнее Обновление
       sort_criterion_name: Имя
       teams_updated_success: Команды успешно обновлены
     StudentsEditor__Search:
-      filter_input_label: 'Фильтровать по:'
+      filter_input_label: "Фильтровать по:"
       filter_input_placeholder: Введите имя, тег или уровень
     StudentsEditor__StudentInforForm:
       add_list: Добавить в список
@@ -1567,7 +1567,7 @@ ru:
       clear_filter: Убрать Фильтры
       empty_message: Здесь нет студентов.
       level: Уровень
-      load_more: 'Загрузить Больше '
+      load_more: "Загрузить Больше "
       no_results_found: Результатов не найдено.
       students_fully_loaded_text:
         one: Здесь только один студент.
@@ -1609,7 +1609,7 @@ ru:
       jump_reply: Перейти к ответу
       navigate_post: Перейти к посту
     TopicsShow__PostShow:
-      add_reply_post: 'Добавить ответ на пост '
+      add_reply_post: "Добавить ответ на пост "
       add_reply_topic: Добавить ответ в тему
       delete_post_confirm_dialog: Вы уверены, что хотите удалить пост? Это не может быть отменено.
       delete_reply_string: Удалить Ответ
@@ -1620,7 +1620,7 @@ ru:
       edit_reply_string: Редактировать Ответ
       go_to_solution_button: Перейти к Решению
       history_button_text: История
-      last_edited_by_label: 'Последнее Редактирование '
+      last_edited_by_label: "Последнее Редактирование "
       mark_as_solution_label: Отметить как решение
       mark_solution: Отметить как решение
       mark_solution_confirm: Вы уверены, что хотите отметить это сообщение как решение?
@@ -1638,14 +1638,14 @@ ru:
         other: "%{count} Replies"
     TopicsShow__Root:
       edit_topic_button: Редактировать
-      linked_target_label: 'Связанная Задача: '
+      linked_target_label: "Связанная Задача: "
       lock_topic_button: Заблокировать
       lock_topic_confirm: Вы уверены, что хотите закрыть эту тему?
       locked_topic_notice: Эта тема заблокирована; публиковать новые ответы нельзя.
       select_category: Выберите категорию
       select_no_category: Не выбирать категорию
       selected_category: Выбранная категория
-      topic_category_label: 'Категория Темы: '
+      topic_category_label: "Категория Темы: "
       topic_details: Детали Темы
       topic_editor_cancel_button: Отмена
       topic_title: Название Темы
@@ -1752,7 +1752,7 @@ ru:
       edit_curricullum: Редактировать Силлабус
       edit_profile: Редактировать Профиль
       empty_courses: В данный момент у вас нет активных курсов.
-      issued_on: 'Выдан в:'
+      issued_on: "Выдан в:"
       my_courses: Мои Курсы
     UsersDeleteAccount:
       cancel: Отменить
@@ -1906,18 +1906,18 @@ ru:
       empty_course_certificates_text: This course does not have any certificates to issue.
       empty_issued_certificates_text: This student has not been issued any certificates.
       issue_certificate_button: Issue Certificate
-      issued_by_label: 'Issued by:'
-      issued_certificates_label: 'Issued certificates:'
-      issued_date_label: 'Issued on:'
+      issued_by_label: "Issued by:"
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
       manage_certificates: Manage student certificates
-      new_certificate_label: 'Issue new certificate:'
+      new_certificate_label: "Issue new certificate:"
       page_description: Actions for the student
       re_activate_student:
         button: Re-Activate Student
       revoke_certificate_button: Revoke Certificate
       revoke_certificate_confirmation: Are you sure? This action cannot be undone.
-      revoked_by_label: 'Revoked by:'
-      revoked_date_label: 'Revoked on:'
+      revoked_by_label: "Revoked by:"
+      revoked_date_label: "Revoked on:"
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
     StudentBulkImport__Root:
@@ -1939,14 +1939,14 @@ ru:
         help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
         label: CSV Import file
         placeholder: Select CSV file to import
-      csv_parse_error: 'We were unable parse the selected file as CSV: %{message}'
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
       drawer_heading: Bulk Import Students
-      error_summary_title: 'Here is a summary of the errors in the sheet: '
+      error_summary_title: "Here is a summary of the errors in the sheet: "
       example_csv_link:
         text: Download an example .csv file
         url: https://docs.pupilfirst.com/files/student_import_sample.csv
       import_button_text: Import Students
-      more_errors_text: 'There are even more errors. Fix the errors in the following rows and upload again: '
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
       notify_students_label: Notify students, and send them a link to sign into this school.
       page_description: Upload the CSV file containing the students you want to add to the course.
       page_title: Import students
@@ -1957,7 +1957,7 @@ ru:
       select_a_cohort: Select a cohort
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
-      valid_data_summary_text: 'Here is a summary of student data in the uploaded sheet: '
+      valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentCreator__Root:
       page_description: You can add multiple students to a list and add them to course
       page_title: Add new students
@@ -2099,7 +2099,7 @@ ru:
       link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Если вы уже завершили регистрацию, пожалуйста, войдите в систему.
       welcome: Добро пожаловать в %{school_name}!
     CoursesController:
-      errors: 'В вашей заявке были ошибки: %{form_errors}'
+      errors: "В вашей заявке были ошибки: %{form_errors}"
       sent_mail: Мы отправили вам письмо с подтверждением. Он должен добраться до вас менее чем за минуту. Нажмите на ссылку в электронном письме, чтобы зарегистрироваться и приступить к обучению.
     Schools__CoursesController:
       teams_active: Команды, отмеченные как активные, успешно!
@@ -2148,7 +2148,7 @@ ru:
       upcoming_events: Upcoming events in %{month}
     cohorts:
       cohorts_subheading: "%{status} Cohorts"
-      end_date: 'End Date:'
+      end_date: "End Date:"
       nothing_to_show: There are no %{status} cohorts to show.
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
       students_enrolled_prefix_html:
@@ -2158,7 +2158,7 @@ ru:
         one: in <span class="font-semibold text-black">1</span> %{status} cohort
         other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     process_application:
-      errors: 'There were errors with your submission: %{form_errors}'
+      errors: "There were errors with your submission: %{form_errors}"
       sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
   dashboard:
     dashboard:
@@ -2282,7 +2282,7 @@ ru:
           Если вы пропустили просмотр в прямом эфире, мы разместим его на панели управления через пару дней.
           Пожалуйста, помогите нам улучшить наши занятия с помощью быстрой обратной связи: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
       send_session_reminders:
-        message: 'Напоминание: "%{title}" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу.'
+        message: "Напоминание: "%{title}" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу."
     timeline_events:
       verification_notification:
         founder:
@@ -2305,9 +2305,9 @@ ru:
             *Описание:* %{event_description}
             %{links_attached_notice}
         team:
-          needs_improvement: 'Ваша команда <%{startup_url}|%{startup_name}> имеет новую запись на таймлайне: (<%{event_url}|%{event_title}>) и был отмечен как ''нуждается в улучшении''. Пожалуйста, отправьте новое и измененное мероприятие временной шкалы на основе отзывов'
+          needs_improvement: "Ваша команда <%{startup_url}|%{startup_name}> имеет новую запись на таймлайне: (<%{event_url}|%{event_title}>) и был отмечен как 'нуждается в улучшении'. Пожалуйста, отправьте новое и измененное мероприятие временной шкалы на основе отзывов"
           not_accepted: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) отправленная вашей командой <%{startup_url}|%{startup_name}> не был принят. Отредактируйте и повторно отправьте измененное событие временной шкалы на основе отзыва
-          verified: 'Ваша команда <%{startup_url}|%{startup_name}> есть новая подтвержденная запись на таймлайне: <%{event_url}|%{event_title}>'
+          verified: "Ваша команда <%{startup_url}|%{startup_name}> есть новая подтвержденная запись на таймлайне: <%{event_url}|%{event_title}>"
   layouts:
     student_footer:
       contact: Contact
@@ -2330,7 +2330,7 @@ ru:
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
   link_fallback:
-    link_fallback: 'Если вы не можете перейти по ссылке выше, пожалуйста, скопируйте и вставьте следующую ссылку в адресную строку вашего браузера:'
+    link_fallback: "Если вы не можете перейти по ссылке выше, пожалуйста, скопируйте и вставьте следующую ссылку в адресную строку вашего браузера:"
   mailers:
     applicant:
       verify: Подтвердите Свой Адрес Почты
@@ -2398,7 +2398,7 @@ ru:
           report_attachments: Some of the students you tried to import were already enrolled in the course. These students were ignored during the import. A list of email addresses of such students has been included as an attachment with this email.
           students_added_html: "<b>Students added:</b> %{report_params}"
           students_requested_html: "<b>Students requested:</b> %{report_params}"
-          summary_import_html: 'Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here''s a small summary on the import:'
+          summary_import_html: "Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here's a small summary on the import:"
           view_html: You can %{link_to}.
         subject: Import of Students Completed
     startup:
@@ -2431,12 +2431,12 @@ ru:
             one: "(1 from a student assigned to you)"
             other: "(%{count} from students assigned to you)"
           control_emails_html: You can control these emails from %{link_to}.
-          latest_topics: 'Latest topics posted on your communities:'
+          latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
           main_html:
-            one: 'There is 1 new submission to review in a course you''re coaching:'
-            other: 'There are %{count} new submissions to review in the courses you''re coaching:'
-          older: 'Older, popular topics that have seen new activity:'
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
+          older: "Older, popular topics that have seen new activity:"
           replies: replies
           views: views
         subject: Daily Digest
@@ -2493,7 +2493,7 @@ ru:
       mail:
         thanks: Thanks,
     link_fallback:
-      link_fallback: 'If you''re unable to click the link above, please copy and paste the following link into your browser''s address bar:'
+      link_fallback: "'If you're unable to click the link above, please copy and paste the following link into your browser's address bar:'"
   maintenance:
     title: Maintenance Mode
     heading: Мы скоро вернемся!
@@ -2534,9 +2534,9 @@ ru:
       grade_recorded: Оценки Записаны
       invalid_checklist_shape_error: Форма данных в списке отправки не соответствует форме, отправленной с оценкой.
       invalid_checklist_values_error: Значения элементов списка в отправке не совпадают с данными обзора.
-      invalid_grading_error: 'Указанные значения оценок недействительны: %{grades_data}'
+      invalid_grading_error: "Указанные значения оценок недействительны: %{grades_data}"
       submission_graded_error: Работа уже оценена
-      submission_missing_error: 'Не удалось найти работу с идентификатором: %{submission_id}'
+      submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
       submission_reviewed_error: Submission already reviewed
     create_school_link:
@@ -2551,7 +2551,7 @@ ru:
       invalid_submission_checklist: Список работ недействителен.
       item_file_limit_error: К отправке можно прикрепить не более трех файлов
       linked_file_exists_error: Некоторые прикрепленные файлы уже связаны с работой
-      missing_answer_error: 'Отсутствует ответ на вопрос: %{title}'
+      missing_answer_error: "Отсутствует ответ на вопрос: %{title}"
       success_notification: Ваша работа находится в очереди на рассмотрение.
     create_target:
       success_notification: Задача успешно создана.
@@ -2592,8 +2592,8 @@ ru:
       success_notification: Данные сертификата обновлены.
     update_course:
       success_notification: Курс успешно обновлен!
-      select_valid_cohort: 'Please select a valid cohort; Unable to find cohort with ID: %{value}'
-      unable_to_find_course: 'Unable to find course with ID: %{value}'
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_school_link:
       success_notification: Ссылка успешно обновлена!
       link_not_found_error: Unable to find link!
@@ -2712,8 +2712,8 @@ ru:
       add_other: Пожалуйста, войдите другим методом.
       denied: В аутентификации было отказано. Пожалуйста, попробуйте снова.
       denied_by: Аутентификация была отклонена от %{provider}. Пожалуйста, повторите снова.
-      email_unregistered: 'Ваша электронная почта: %{email} не зарегестрирована'
-      not_receive_email: 'Извините, но мы не получили ваш адрес электронной почты от #{provider_name}. '
+      email_unregistered: "Ваша электронная почта: %{email} не зарегестрирована"
+      not_receive_email: "Извините, но мы не получили ваш адрес электронной почты от #{provider_name}. "
   posts:
     back_to_post: Обратно на Пост
     created_by: Созданный
@@ -2735,7 +2735,7 @@ ru:
     Communities__Show:
       community: Сообщество
     Courses__Leaderboard:
-      multiple_mid_text: 'находитесь на вершине таблицы лидеров на этой неделе, разделяя оценку '
+      multiple_mid_text: "находитесь на вершине таблицы лидеров на этой неделе, разделяя оценку "
       others: другие
       rank_down_alt: Падение ранга
       rank_down_double_alt: Падение ранга в два раза
@@ -2811,7 +2811,7 @@ ru:
         page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
-          multiple_mid_text: 'are at the top of the leaderboard this week, sharing a score of '
+          multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
           others: others
           top_leaderboard_html: <span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>
           top_week: is at the top of the leaderboard this week with a score of
@@ -2930,7 +2930,7 @@ ru:
     all: Все
     and: и
     archived: Архивирован
-    are: ''
+    are: ""
     avatar: Аватар
     cancel: Отмена
     caption_image: Подпись к изображению
@@ -2960,12 +2960,12 @@ ru:
     icon: Иконка
     image_file_invalid: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.
     invalid_authenticity_token_error: Неверный или отсутствующий токен CSRF. Пожалуйста, обновите эту страницу, прежде чем пытаться выполнить это действие.
-    is: ''
+    is: ""
     level: Уровень
     level_label:
-      long_with_name: 'Уровень %{number}: %{name}'
+      long_with_name: "Уровень %{number}: %{name}"
       long_without_name: Уровень %{number}
-      short_with_name: 'У%{number}: %{name}'
+      short_with_name: "У%{number}: %{name}"
       short_without_name: У%{number}
     live: Боевой
     load_more: Загрузить Больше...
@@ -2979,7 +2979,7 @@ ru:
     next: След
     no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
     none: Ничего
-    note: 'Примечание:'
+    note: "Примечание:"
     notifications:
       author_created: Создан Автор
       author_deleted: Автор Удален
@@ -3184,7 +3184,7 @@ ru:
         link_discord_button: Link Discord
         no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
         process:
-          prefix: 'The process is simple:'
+          prefix: "The process is simple:"
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
@@ -3210,8 +3210,8 @@ ru:
         add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
         add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
         add_other: Please sign in using another method.
-        email_unregistered: 'Your email address: %{email} is unregistered.'
-        not_receive_email: 'We''re sorry, but we did not receive your email address from %{provider_name}. '
+        email_unregistered: "Your email address: %{email} is unregistered."
+        not_receive_email: "'We're sorry, but we did not receive your email address from %{provider_name}. '"
         oauth_origin_missing:
           details: "<em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page."
           invalid_request: Your browser made an invalid request.
@@ -3274,10 +3274,10 @@ ru:
           assigned: "(%{stats} назначено вам)"
           assigned_none: "(из которых ни один не назначен вам)"
           control_emails_html: Вы можете управлять этими электронными письмами с %{link_to}.
-          latest_topics: 'Последние темы, опубликованные в ваших сообществах:'
+          latest_topics: "Последние темы, опубликованные в ваших сообществах:"
           link_to: страница редактирования вашего профиля
           main_html: Есть %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> новых материалов для рассмотрения на некоторых курсах, в которых вы являетесь тренером.
-          older: 'Старые, популярные темы, в которых появились новые действия:'
+          older: "Старые, популярные темы, в которых появились новые действия:"
           replies: ответов
           views: просмотров
       delete_account_token:
@@ -3344,7 +3344,7 @@ ru:
           report_attachments: Некоторые из студентов, которых вы пытались импортировать, уже зачислены на курс. Эти студенты были проигнорированы во время импорта. Список адресов электронной почты таких студентов был включен в качестве приложения к настоящему письму.
           students_added_html: "<b>Учащихся добавлено:</b> %{report_params}"
           students_requested_html: "<b>Учащихся запрошено:</b> %{report_params}"
-          summary_import_html: 'Ваш запрос на импорт учащихся в курс <strong>%{course_name}</strong> успешно выполнен. Вот краткий обзор импорта:'
+          summary_import_html: "Ваш запрос на импорт учащихся в курс <strong>%{course_name}</strong> успешно выполнен. Вот краткий обзор импорта:"
           view_html: Вы можете %{link_to}.
       update_email_token:
         body:
@@ -3394,7 +3394,7 @@ ru:
       active_cohorts_label: Active Cohorts
       course_label: Course
       empty: No %{cohort_status} for this course.
-      end_date: 'End Date:'
+      end_date: "End Date:"
       ended_cohorts_label: Ended Cohorts
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
     index:
@@ -3408,7 +3408,7 @@ ru:
       active_suffix_html:
         one: <span class="font-semibold text-black">1</span> active cohort.
         other: <span class="font-semibold text-black">%{count}</span> active cohorts.
-      end_date: 'End Date:'
+      end_date: "End Date:"
       no_active_cohorts: There are no active cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
@@ -3544,7 +3544,7 @@ ru:
       courses: Courses
       levels: Levels
       no_submissions: No student submissions yet!
-      overview: 
+      overview:
       students: Students
       submissions_reviewed: submissions reviewed
       title: Overview

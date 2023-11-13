@@ -693,9 +693,9 @@ zh-cn:
         other: 已尝试 %{count} 份测验
         zero: 未尝试任何测验。
       schedule_coaching_session: 安排一次辅导会议。
-      targets_completed: '已完成: %{targetsCount}'
+      targets_completed: "已完成: %{targetsCount}"
       targets_overview: 目标概述
-      targets_pending_review: '待审核: %{targetsCount}个'
+      targets_pending_review: "待审核: %{targetsCount}个"
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
@@ -796,7 +796,7 @@ zh-cn:
       student_dropped_out_message_without_timestamp: 这份提交来自一位已经结束了对该课程的访问或者已经退学的学生。
       students_dropped_out_message_with_timestamp: 这个提交与一个或多个学生相关联，这些学生的课程访问已结束，或者已经退出。您可以在%{timestamp}之前查看这个提交。
       students_dropped_out_message_without_timestamp: 这个提交与一个或多个学生相关联，这些学生已经失去了对该课程的访问权限，或者已经退出了该课程。
-      submission_number: '提交 #%{number}'
+      submission_number: "提交 #%{number}"
       submitted_by: 提交者：
       submitted_by_team: 提交者团队：
       team: 团队
@@ -807,10 +807,10 @@ zh-cn:
       no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: 'Note: '
+      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
       submission_acceptable: Is this submission acceptable?
-      undo_rejection_notice_title: 'Submission Rejected:'
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
@@ -2031,7 +2031,7 @@ zh-cn:
       preview_course: 预览课程
     cohorts:
       cohorts_subheading: "%{status} Cohorts"
-      end_date: 'End Date:'
+      end_date: "End Date:"
       nothing_to_show: There are no %{status} cohorts to show.
       pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
       students_enrolled_prefix_html:
@@ -2254,8 +2254,8 @@ zh-cn:
           latest_topics: 您社区最新发布的主题：
           link_to: 个人资料编辑页面
           main_html:
-            one: 'There is 1 new submission to review in a course you''re coaching:'
-            other: 'There are %{count} new submissions to review in the courses you''re coaching:'
+            one: "There is 1 new submission to review in a course you''re coaching:"
+            other: "There are %{count} new submissions to review in the courses you''re coaching:"
           older: 老旧但受欢迎的话题，近期又出现了新的活跃度：
           replies: 回复
           views: 观点
@@ -2803,7 +2803,7 @@ zh-cn:
     level_label:
       long_with_name: 第 %{number} 关：%{name}
       long_without_name: 等级 %{number}
-      short_with_name: 'L%{number}: %{name}'
+      short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
     levels: 层次
     live: 直播

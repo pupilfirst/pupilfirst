@@ -70,8 +70,8 @@
                   <i class="if i-edit-regular if-fw justify-self-end cursor-pointer text-lg font-semibold hover:text-primary-400" ></i>
                 <% end %>
                 <% unless standing.default %>
-                 <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion") } do%>
-                  <i class="if i-trash-regular if-fw cursor-pointer text-lg font-semibold hover:text-red-400"></i>
+                  <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion") } do%>
+                    <i class="if i-trash-regular if-fw cursor-pointer text-lg font-semibold hover:text-red-400"></i>
                   <% end %>
                 <% end %>
               </div>

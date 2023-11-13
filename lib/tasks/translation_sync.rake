@@ -14,7 +14,7 @@ namespace :translations do
       missing_keys = locale_diff(source_translations[source_locale], target_translations[target_locale])
       target_translations[target_locale].deep_merge!(missing_keys)
 
-      File.open(target_file_path, 'w') { |file| file.write(target_translations.to_yaml) }
+      File.open(target_file_path, 'w') { |file| file.write(target_translations.to_yaml(line_width: -1).gsub(/^---\s*\n/, '')) }
       puts "Synchronized missing keys from #{source_locale} to #{target_locale}."
     else
       puts "Translation files not found for #{source_locale} and/or #{target_locale}."

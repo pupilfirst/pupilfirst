@@ -31,15 +31,13 @@ module Mutations
       grade
       notify(
         :success,
-        I18n.t('mutations.create_grading.grade_recorded'),
-        I18n.t('mutations.create_grading.success_notification')
+        I18n.t("mutations.create_grading.grade_recorded"),
+        I18n.t("mutations.create_grading.success_notification")
       )
       { success: true }
     end
 
     class ValidateReviewData < GraphQL::Schema::Validator
-      include ValidatorCombinable
-
       def validate(_object, _context, value)
         @submission = TimelineEvent.find_by(id: value[:submission_id])
         @checklist = value[:checklist]
@@ -49,15 +47,15 @@ module Mutations
         grade_hash = compute_grade_hash
 
         assignment_must_be_graded(value[:submission_id]) ||
-          checklist_must_have_right_shape || submission_must_not_be_graded ||
+          checklist_must_have_right_shape || submission_must_not_be_reviewed ||
           checklist_data_should_not_be_mutated ||
           grading_should_be_valid(grade_hash)
       end
 
-      def submission_must_not_be_graded
+      def submission_must_not_be_reviewed
         return unless @submission.reviewed?
 
-        I18n.t("mutations.create_grading.submission_graded_error")
+        I18n.t("mutations.create_grading.submission_reviewed_error")
       end
 
       def assignment_must_be_graded(submission_id)
@@ -126,7 +124,7 @@ module Mutations
       private
 
       def compute_grade_hash
-        @grades.each_with_object({}) do |incoming_grade, grade_hash|
+        @grades&.each_with_object({}) do |incoming_grade, grade_hash|
           criteria_id = incoming_grade[:evaluation_criterion_id].to_i
           grade = incoming_grade[:grade]
           grade_hash[criteria_id] = grade

@@ -162,8 +162,10 @@ describe Mutations::CreateGrading, type: :request do
 
   context "When submission is already graded" do
     before do
-      submission.evaluator_id = faculty_cohort_enrollment.faculty.id
-      submission.evaluated_at = Time.now
+      submission.update!(
+        evaluator_id: faculty_cohort_enrollment.faculty.id,
+        evaluated_at: Time.zone.now
+      )
       TimelineEventGrade.create!(
         timeline_event: submission,
         evaluation_criterion: evaluation_criteria_1,
@@ -183,7 +185,7 @@ describe Mutations::CreateGrading, type: :request do
             )
         )
 
-      expect(error_message(response_data)).to eq("Submission already graded")
+      expect(error_message(response_data)).to eq("Submission already reviewed")
     end
   end
 

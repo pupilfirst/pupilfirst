@@ -73,4 +73,8 @@ class School < ApplicationRecord
       icon
     end
   end
+
+  def email
+    SchoolString::EmailAddress.for(self)
+  end
 end

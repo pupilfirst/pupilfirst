@@ -130,17 +130,7 @@ class UsersController < ApplicationController
 
   # GET /user/standing
   def standing
-    @user = authorize(current_user)
-    @user_standings =
-      @user
-        .user_standings
-        .includes(:standing)
-        .where(archived_at: nil)
-        .order(created_at: :desc)
-    @school_default_standing =
-      Standing.find_by(school: current_school, default: true)
-    @current_standing =
-      @user_standings.first&.standing || @school_default_standing
-    @back_link_path = dashboard_path
+    @presenter =
+      Users::StandingPresenter.new(view_context, authorize(current_user))
   end
 end

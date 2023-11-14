@@ -360,8 +360,8 @@ let standingLogs = (userStandings: userStandings, setArchive, archive, setState)
       } else {
         <div className="flex flex-col items-center p-5 bg-white border border-gray-200 rounded-md ">
           <img className="w-20 h-20" src=noStandingLog />
-          <p className="text-lg font-semibold"> {"No Standing log"->str} </p>
-          <p className="text-sm text-gray-500"> {"No Standing log"->str} </p>
+          <p className="text-lg font-semibold"> {ts("user_standing.no_standing_log")->str} </p>
+          <p className="text-sm text-gray-500"> {ts("empty_standing_info")->str} </p>
         </div>
       }}
     </div>

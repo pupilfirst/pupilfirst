@@ -18,19 +18,8 @@ module Organisations
 
     # GET /org/students/:id/standing
     def standing
-      student = authorize Student.find(params[:id])
-      @user = student.user
-      @user_standings =
-        @user
-          .user_standings
-          .includes(:standing)
-          .where(archived_at: nil)
-          .order(created_at: :desc)
-      @school_default_standing =
-        Standing.find_by(school: current_school, default: true)
-      @current_standing =
-        @user_standings.first&.standing || @school_default_standing
-      @back_link_path = org_student_path(student)
+      @student = authorize Student.find(params[:id])
+      @presenter = Users::StandingPresenter.new(view_context, @student.user)
     end
 
     private

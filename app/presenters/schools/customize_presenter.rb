@@ -20,7 +20,7 @@ module Schools
           if current_school.icon.attached?
             file_details(current_school.icon)
           else
-            { url: '/favicon.png', filename: 'pupilfirst_icon.png' }
+            { url: "/favicon.png", filename: "pupilfirst_icon.png" }
           end,
         coverImage: image_details(current_school.cover_image)
       }
@@ -33,7 +33,9 @@ module Schools
         address: SchoolString::Address.for(current_school),
         emailAddress: SchoolString::EmailAddress.for(current_school),
         privacyPolicy: SchoolString::PrivacyPolicy.for(current_school),
-        termsAndConditions: SchoolString::TermsAndConditions.for(current_school)
+        termsAndConditions:
+          SchoolString::TermsAndConditions.for(current_school),
+        CodeOfConduct: SchoolString::CodeOfConduct.for(current_school)
       }
     end
 

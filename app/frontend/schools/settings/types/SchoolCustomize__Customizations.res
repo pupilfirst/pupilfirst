@@ -5,6 +5,7 @@ type schoolStrings = {
   emailAddress: option<string>,
   privacyPolicy: option<string>,
   termsAndConditions: option<string>,
+  codeOfConduct: option<string>,
 }
 
 type file = {
@@ -45,6 +46,7 @@ let address = t => t.schoolStrings.address
 let emailAddress = t => t.schoolStrings.emailAddress
 let privacyPolicy = t => t.schoolStrings.privacyPolicy
 let termsAndConditions = t => t.schoolStrings.termsAndConditions
+let codeOfConduct = t => t.schoolStrings.codeOfConduct
 
 let filterLinks = (~header=false, ~footer=false, ~social=false, t) =>
   t.links->Js.Array2.filter(l =>
@@ -127,6 +129,14 @@ let updateTermsAndConditions = (termsAndConditions, t) => {
   },
 }
 
+let updateCodeOfConduct = (codeOfConduct, t) => {
+  ...t,
+  schoolStrings: {
+    ...t.schoolStrings,
+    codeOfConduct: codeOfConduct->optionalString,
+  },
+}
+
 let updateAddress = (address, t) => {
   ...t,
   schoolStrings: {
@@ -169,6 +179,7 @@ let decodeStrings = json => {
     emailAddress: json |> field("emailAddress", optional(string)),
     privacyPolicy: json |> field("privacyPolicy", optional(string)),
     termsAndConditions: json |> field("termsAndConditions", optional(string)),
+    codeOfConduct: json |> field("codeOfConduct", optional(string)),
   }
 }
 

@@ -10,6 +10,7 @@ let ts = I18n.ts
 type kind =
   | PrivacyPolicy
   | TermsAndConditions
+  | CodeOfConduct
 
 type action =
   | UpdateAgreement(string)
@@ -27,12 +28,14 @@ let kindToString = kind =>
   switch kind {
   | PrivacyPolicy => t("privacy_policy")
   | TermsAndConditions => t("terms_and_conditions")
+  | CodeOfConduct => t("code_of_conduct")
   }
 
 let kindToKey = kind =>
   switch kind {
   | PrivacyPolicy => "privacy_policy"
   | TermsAndConditions => "terms_and_conditions"
+  | CodeOfConduct => "code_of_conduct"
   }
 
 let handleAgreementChange = (send, event) => {
@@ -61,6 +64,7 @@ let handleUpdateAgreement = (
   kind,
   updatePrivacyPolicyCB,
   updateTermsAndConditionsCB,
+  updateCodeOfConductCB,
   event,
 ) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -77,6 +81,7 @@ let handleUpdateAgreement = (
       switch kind {
       | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
       | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)
+      | CodeOfConduct => updateCodeOfConductCB(state.agreement)
       }
       send(DoneUpdating)
       Js.Promise.resolve()
@@ -94,6 +99,7 @@ let initialState = (kind, customizations) => {
   let agreement = switch kind {
   | PrivacyPolicy => customizations |> Customizations.privacyPolicy
   | TermsAndConditions => customizations |> Customizations.termsAndConditions
+  | CodeOfConduct => customizations |> Customizations.codeOfConduct
   }
 
   {
@@ -108,14 +114,20 @@ let initialState = (kind, customizations) => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateAgreement(agreement) => {...state, agreement: agreement, formDirty: true}
+  | UpdateAgreement(agreement) => {...state, agreement, formDirty: true}
   | BeginUpdate => {...state, updating: true}
   | ErrorOccured => {...state, updating: false}
   | DoneUpdating => {...state, updating: false, formDirty: false}
   }
 
 @react.component
-let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndConditionsCB) => {
+let make = (
+  ~kind,
+  ~customizations,
+  ~updatePrivacyPolicyCB,
+  ~updateTermsAndConditionsCB,
+  ~updateCodeOfConductCB,
+) => {
   let (state, send) = React.useReducer(reducer, initialState(kind, customizations))
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
@@ -126,7 +138,8 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="agreements-editor__value">
-          {t("agreement_body") ++ " " |> str} <i className="fab fa-markdown text-base" />
+          {t("agreement_body") ++ " " |> str}
+          <i className="fab fa-markdown text-base" />
         </label>
         <textarea
           autoFocus=true
@@ -147,6 +160,7 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
           kind,
           updatePrivacyPolicyCB,
           updateTermsAndConditionsCB,
+          updateCodeOfConductCB,
         )}
         className="w-full btn btn-large btn-primary mt-4">
         {updateAgreementText(state.updating, kind) |> str}

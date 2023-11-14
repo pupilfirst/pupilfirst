@@ -30,6 +30,7 @@ type rec action =
   | MoveLink(Customizations.linkId, SchoolCustomize__LinkComponent.kind, Customizations.direction)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
+  | UpdateCodeOfConduct(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
   | UpdateSchoolDetails(name, about)
@@ -41,7 +42,9 @@ and about = option<string>
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch logoOnLightBg {
   | Some(logo) =>
-    <div className="max-w-xs"> <img className="h-12" src={logo |> Customizations.url} /> </div>
+    <div className="max-w-xs">
+      <img className="h-12" src={logo |> Customizations.url} />
+    </div>
   | None => <span className="text-2xl font-bold"> {schoolName->str} </span>
   }
 
@@ -122,7 +125,8 @@ let emailAddress = email =>
   switch email {
   | Some(email) =>
     <div className="text-xs font-semibold mt-4">
-      {(t("reach_us_at") ++ ": ")->str} <span className="font-bold"> {email->str} </span>
+      {(t("reach_us_at") ++ ": ")->str}
+      <span className="font-bold"> {email->str} </span>
     </div>
   | None =>
     <div
@@ -175,6 +179,7 @@ let editor = (state, send, authenticityToken) =>
           customizations=state.customizations
           updatePrivacyPolicyCB={agreement => send(UpdatePrivacyPolicy(agreement))}
           updateTermsAndConditionsCB={agreement => send(UpdateTermsAndConditions(agreement))}
+          updateCodeOfConductCB={agreement => send(UpdateTermsAndConditions(agreement))}
         />
       | ContactsEditor =>
         <SchoolCustomize__ContactsEditor
@@ -204,9 +209,9 @@ let editor = (state, send, authenticityToken) =>
 
 let initialState = (customizations, schoolName, schoolAbout) => {
   visibleEditor: None,
-  customizations: customizations,
-  schoolName: schoolName,
-  schoolAbout: schoolAbout,
+  customizations,
+  schoolName,
+  schoolAbout,
 }
 
 let moveLink = (linkId, kind, direction, t) => {
@@ -276,6 +281,10 @@ let reducer = (state, action) =>
       ...state,
       customizations: state.customizations |> Customizations.updateTermsAndConditions(agreement),
     }
+  | UpdateCodeOfConduct(agreement) => {
+      ...state,
+      customizations: state.customizations |> Customizations.updateCodeOfConduct(agreement),
+    }
   | UpdateAddress(address) => {
       ...state,
       customizations: state.customizations |> Customizations.updateAddress(address),
@@ -291,8 +300,8 @@ let reducer = (state, action) =>
     }
   | UpdateSchoolDetails(schoolName, schoolAbout) => {
       ...state,
-      schoolName: schoolName,
-      schoolAbout: schoolAbout,
+      schoolName,
+      schoolAbout,
       visibleEditor: None,
     }
   }
@@ -474,6 +483,15 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                   send,
                 ),
                 t("edit_terms"),
+              )}
+            </div>
+            <div
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 ms-6 text-xs">
+              <div> {t("code_of_conduct")->str} </div>
+              {editIcon(
+                "ms-3",
+                showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.CodeOfConduct), send),
+                t("edit_code_of_conduct"),
               )}
             </div>
             <div className="ms-6 flex items-center text-xs text-gray-600">

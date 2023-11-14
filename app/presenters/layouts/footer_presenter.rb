@@ -9,12 +9,12 @@ module Layouts
         if current_user.present?
           [
             {
-              title: I18n.t('presenters.layouts.footer.nav_links.home'),
-              url: '/'
+              title: I18n.t("presenters.layouts.footer.nav_links.home"),
+              url: "/"
             },
             {
-              title: I18n.t('presenters.layouts.footer.nav_links.dashboard'),
-              url: '/dashboard'
+              title: I18n.t("presenters.layouts.footer.nav_links.dashboard"),
+              url: "/dashboard"
             }
           ]
         else
@@ -66,7 +66,7 @@ module Layouts
         flickr
       ].each { |key| return "fab fa-#{key}" if key.in?(title) }
 
-      'fas fa-users'
+      "fas fa-users"
     end
 
     def address
@@ -96,6 +96,10 @@ module Layouts
 
     def terms_and_conditions?
       SchoolString::TermsAndConditions.saved?(current_school)
+    end
+
+    def code_of_conduct?
+      SchoolString::CodeOfConduct.saved?(current_school)
     end
   end
 end

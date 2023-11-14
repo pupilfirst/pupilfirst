@@ -43,13 +43,35 @@ let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
-      <div className="flex">
+      <span className="inline-flex items-center space-x-3">
         {targetRead
+          ? <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="w-4 h-4 text-gray-500"
+                viewBox="0 0 16 16">
+                <path
+                  d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                />
+                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+              </svg>
+            </span>
+          : <span title="Not read yet" className="w-5 h-5 flex items-center justify-center">
+              <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
+            </span>}
+        <span className={targetRead ? "italic text-gray-600" : "text-sm md:text-base font-medium"}>
+          {Target.title(target)->str}
+        </span>
+      </span>
+      <div className="flex">
+        {Target.milestone(target)
           ? <div
               className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
               <Icon className="if i-milestone-solid text-sm" />
-              <span className="hidden md:block ms-1"> {t("target_read_label") |> str} </span>
+              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
             </div>
           : React.null}
         {ReactUtils.nullIf(
@@ -58,13 +80,6 @@ let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
           </span>,
           TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
         )}
-        {Target.milestone(target)
-          ? <div
-              className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
-              <Icon className="if i-milestone-solid text-sm" />
-              <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
-            </div>
-          : React.null}
       </div>
     </Link>
     {ReactUtils.nullUnless(

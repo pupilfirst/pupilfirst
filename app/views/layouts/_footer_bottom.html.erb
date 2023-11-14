@@ -16,12 +16,15 @@
           <% end %>
         </a>
       </div>
-      <div class="w-3/4 md:w-2/5 ltr:text-right rtl:text-left text-xs">
+      <div class="w-2/5 md:w-3/5 ltr:text-right rtl:text-left text-xs">
         <% if presenter.privacy_policy? %>
           <%= link_to t(".privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
         <% end %>
         <% if presenter.terms_and_conditions? %>
           <%= link_to t(".terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
+        <% end %>
+        <% if presenter.code_of_conduct? %>
+          <%= link_to t("shared.code_of_conduct"), agreement_path(agreement_type: 'code-of-conduct'), class: "cursor-pointer md:me-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
         <% end %>
         <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">
           &copy; <%= Time.zone.now.year %> <%= presenter.school_name %>.

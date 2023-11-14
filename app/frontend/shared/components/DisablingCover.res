@@ -4,7 +4,7 @@ let ts = I18n.t(~scope="shared")
 
 @react.component
 let make = (~disabled, ~message=ts("loading"), ~containerClasses="", ~children) =>
-  <div className={"relative " ++ containerClasses}>
+  <div className={"relative min-h-full " ++ containerClasses}>
     {if disabled {
       [
         <div

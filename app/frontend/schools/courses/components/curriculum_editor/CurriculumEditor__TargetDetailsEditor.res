@@ -1146,14 +1146,14 @@ let make = (
   let hasValidTitle = isValidTitle(state.title)
   let hasValidMethodOfCompletion = isValidMethodOfCompletion(state)
 
-  <div className="pt-6" id="target-properties">
+  <div className="pt-6 h-full" id="target-properties">
     {state.loading
       ? <div className="max-w-3xl mx-auto px-3">
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.contents())}
         </div>
       : <DisablingCover message={ts("saving")} disabled=state.saving>
-          <div className="mt-2">
-            <div className="max-w-3xl mx-auto px-3">
+          <div className="mt-2 min-h-screen flex flex-col justify-between ">
+            <div className="max-w-3xl w-full mx-auto px-3">
               <div>
                 <div className="mb-6">
                   <label

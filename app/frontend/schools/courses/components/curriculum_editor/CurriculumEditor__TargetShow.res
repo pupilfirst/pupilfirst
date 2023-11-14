@@ -106,8 +106,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
           : React.null}
         {Target.hasAssignment(target)
           ? <div
-              className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
-              <Icon className="if i-milestone-solid text-sm" />
+              className="flex items-center flex-shrink-0 text-xs font-medium bg-blue-50 border border-blue-200 text-blue-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
               <span className="hidden md:block ms-1"> {t("assignment_label") |> str} </span>
             </div>
           : React.null}

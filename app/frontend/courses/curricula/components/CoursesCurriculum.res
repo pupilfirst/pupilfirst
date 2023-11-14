@@ -62,9 +62,7 @@ let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
           : <span title="Not read yet" className="w-5 h-5 flex items-center justify-center">
               <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
             </span>}
-        <span className={targetRead ? "italic text-gray-600" : "text-sm md:text-base font-medium"}>
-          {Target.title(target)->str}
-        </span>
+        <span className="text-sm md:text-base font-medium"> {Target.title(target)->str} </span>
       </span>
       <div className="flex">
         {Target.milestone(target)

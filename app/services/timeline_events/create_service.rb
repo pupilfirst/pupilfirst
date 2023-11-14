@@ -8,6 +8,7 @@ module TimelineEvents
       @params = params
       @student = student
       @target = params[:target]
+      @assignment = @target.assignments.not_archived.first
       @notification_service = notification_service
     end
 
@@ -16,7 +17,7 @@ module TimelineEvents
         TimelineEvent.transaction do
           timeline_event_params =
             (
-              if @target.evaluation_criteria.blank?
+              if @assignment.evaluation_criteria.blank?
                 @params.merge(passed_at: Time.zone.now)
               else
                 @params
@@ -30,13 +31,13 @@ module TimelineEvents
                 latest: true
               )
 
-              create_team_entries(s) if @params[:target].team_target?
+              create_team_entries(s) if @assignment.team_assignment?
 
               update_latest_flag(s)
             end
         end
 
-      if @target.evaluation_criteria.blank?
+      if @assignment.evaluation_criteria.blank?
         TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
       end
 
@@ -81,7 +82,7 @@ module TimelineEvents
     end
 
     def owners
-      if (@target.team_target? && @student.team)
+      if (@assignment.team_assignment? && @student.team)
         @student.team.students
       else
         @student

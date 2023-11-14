@@ -59,38 +59,38 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:target_l1_evaluated) do
     create :target,
-           :team,
+           :with_shared_assignment,
            target_group: target_group_l1_milestone,
-           evaluation_criteria: [
+           given_role: Assignment::ROLE_TEAM,
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
            sort_index: 1,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
   let!(:target_l1_individual_mark_as_complete) do
-    create :target, :student, target_group: target_group_l1_non_milestone
+    create :target, :with_shared_assignment, given_role:Assignment::ROLE_STUDENT, target_group: target_group_l1_non_milestone
   end # Not a team target - should be excluded.
   let!(:target_l1_mark_as_complete) do
-    create :target, :team, target_group: target_group_l1_non_milestone
+    create :target, :with_shared_assignment, given_role:Assignment::ROLE_TEAM, target_group: target_group_l1_non_milestone
   end
   let!(:quiz) { create :quiz, target: target_l1_quiz }
   let!(:target_l1_quiz) do
     create :target,
-           :team,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
            target_group: target_group_l1_milestone,
-           milestone: true,
-           milestone_number: 2,
+           given_milestone_number: 2,
            sort_index: 0
   end
   let!(:target_l2_evaluated) do
     create :target,
-           :team,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
            target_group: target_group_l2_milestone,
-           evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 1
+           given_evaluation_criteria: [evaluation_criterion_1],
+           given_milestone_number: 1
   end
 
   let(:school) { course.school }
@@ -188,6 +188,8 @@ describe CourseExports::PrepareTeamsExportService do
   let(:sorted_coach_names) { [coach_1.name, coach_2.name].sort.join(", ") }
 
   let(:expected_data) do
+    puts"ass_value #{target_l1_evaluated.assignments.first.role}"
+    puts"ass_value #{target_l1_evaluated.assignments.first.milestone_number}"
     [
       {
         title: "Targets",

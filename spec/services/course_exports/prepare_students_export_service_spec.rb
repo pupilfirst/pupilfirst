@@ -66,36 +66,39 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:target_l1_evaluated) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1_milestone,
-           evaluation_criteria: [
+           sort_index: 1,
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           sort_index: 1,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
 
-  let!(:target_l1_mark_as_complete) do
-    create :target, target_group: target_group_l1_non_milestone
+  let!(:target_l1_quiz_non_milestone) do
+    create :target,
+           :with_shared_assignment,
+           with_quiz: true,
+           target_group: target_group_l1_milestone,
+           sort_index: 1
   end
-
-  let!(:quiz) { create :quiz, target: target_l1_quiz }
 
   let!(:target_l1_quiz) do
     create :target,
+           :with_shared_assignment,
+           with_quiz: true,
            target_group: target_group_l1_milestone,
            sort_index: 0,
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
 
   let!(:target_l2_evaluated) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l2_milestone,
-           evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 1
+           given_evaluation_criteria: [evaluation_criterion_1],
+           given_milestone_number: 3
   end
 
   let(:school) { course.school }
@@ -123,7 +126,7 @@ describe CourseExports::PrepareStudentsExportService do
 
   before do
     # First student has completed everything, but has a pending submission in L2.
-    submit_target target_l1_mark_as_complete, student_1
+    submit_target target_l1_quiz_non_milestone, student_1
     submission = submit_target target_l1_quiz, student_1
     submission.update!(quiz_score: "2/2")
     submit_target target_l2_evaluated, student_1
@@ -165,13 +168,15 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let(:expected_data) do
+    assignment = target_l1_evaluated.assignments.first
+    puts "assignment details - #{assignment.milestone_number} \n #{assignment.evaluation_criteria} \n #{assignment.role}"
     [
       {
         title: "Targets",
         rows: [
           [
             "ID",
-            "L1T#{target_l1_mark_as_complete.id}",
+            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
@@ -179,14 +184,14 @@ describe CourseExports::PrepareStudentsExportService do
           ["Level", 1, 1, 1, 2],
           [
             "Name",
-            target_l1_mark_as_complete.title,
+            target_l1_quiz_non_milestone.title,
             target_l1_quiz.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
           [
             "Completion Method",
-            "Mark as Complete",
+            "Take Quiz",
             "Take Quiz",
             "Graded",
             "Graded"
@@ -290,7 +295,7 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "Student Email / Target ID",
-            "L1T#{target_l1_mark_as_complete.id}",
+            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"

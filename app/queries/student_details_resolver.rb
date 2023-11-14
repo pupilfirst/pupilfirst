@@ -105,8 +105,8 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def milestone_targets_completion_status
-    milestone_targets = course.targets.live.where(milestone: true)
-    passed_assignment_ids =
+    milestone_targets = course.targets.live.milestone
+    passed_target_ids =
       student
         .latest_submissions
         .where(target: milestone_targets)
@@ -117,8 +117,8 @@ class StudentDetailsResolver < ApplicationQuery
       {
         id: target.id,
         title: target.title,
-        completed: passed_assignment_ids.include?(target.id),
-        milestone_number: target.milestone_number
+        completed: passed_target_ids.include?(target.id),
+        milestone_number: target.assignments.first.milestone_number
       }
     end
   end

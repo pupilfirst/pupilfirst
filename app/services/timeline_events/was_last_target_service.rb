@@ -5,13 +5,13 @@ module TimelineEvents
     end
 
     def was_last_target?
-      return false if milestone_targets.empty?
+      return false if milestone_assignments.empty?
 
       if student.team.present?
-        targets_passed?(milestone_targets.team, student) &&
-          students.all? { |s| targets_passed?(milestone_targets.student, s) }
+        targets_passed?(milestone_assignments.team, student) &&
+          students.all? { |s| targets_passed?(milestone_assignments.student, s) }
       else
-        targets_passed?(milestone_targets, student)
+        targets_passed?(milestone_assignments, student)
       end
     end
 
@@ -29,15 +29,16 @@ module TimelineEvents
       student.course
     end
 
-    def milestone_targets
-      course.targets.milestone
+    def milestone_assignments
+      course.assignments.milestone
     end
 
-    def targets_passed?(targets, student)
+    def targets_passed?(assignments, student)
+      target_ids = assignments.pluck(:target_id)
       TimelineEvent
         .includes(:timeline_event_owners)
         .where(
-          target: targets,
+          target_id: target_ids,
           timeline_event_owners: {
             student_id: student.id
           }
@@ -45,7 +46,7 @@ module TimelineEvents
         .where.not(passed_at: nil)
         .pluck(:target_id)
         .uniq
-        .count == targets.count
+        .count == assignments.count
     end
   end
 end

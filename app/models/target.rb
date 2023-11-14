@@ -25,8 +25,8 @@ class Target < ApplicationRecord
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
-  has_many :target_evaluation_criteria, dependent: :destroy
-  has_many :evaluation_criteria, through: :target_evaluation_criteria
+  has_many :assignment_evaluation_criteria, through: :assignments
+  has_many :evaluation_criteria, through: :assignment_evaluation_criteria
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
@@ -44,7 +44,7 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :milestone, -> { live.where(milestone: true) }
+  scope :milestone, -> { joins(:assignments).where(assignments: {milestone: true, archived: false}) }
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"

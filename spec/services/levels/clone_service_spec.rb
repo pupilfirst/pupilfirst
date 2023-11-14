@@ -31,31 +31,31 @@ describe Levels::CloneService do
   end
 
   let!(:target_tc_l1) do
-    create :target, :with_content, :for_team, target_group: target_group_tc_l1
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_tc_l1
   end
 
   let!(:target_l0) do
-    create :target, :with_content, :for_team, target_group: target_group_l0
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l0
   end
 
   let(:target_l1_1_1) do
-    create :target, :with_content, :for_team, target_group: target_group_l1_1
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_1
   end
 
   let(:target_l1_1_2) do
-    create :target, :with_content, :for_team, target_group: target_group_l1_1
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_1
   end
 
   let(:target_l1_2) do
-    create :target, :with_content, :for_team, target_group: target_group_l1_2
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_2
   end
 
   let(:target_l2_1) do
-    create :target, :with_content, :for_students, target_group: target_group_l2
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l2
   end
 
   let!(:target_l2_2) do
-    create :target, :with_content, :for_students, target_group: target_group_l2
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l2
   end
 
   let(:student_l1) { create :student, cohort: cohort }
@@ -66,12 +66,13 @@ describe Levels::CloneService do
   # Quiz target
   let!(:quiz_target) do
     create :target,
+           :with_shared_assignment,
            :with_content,
            target_group: target_group_l1_1,
            days_to_complete: 60,
-           role: Target::ROLE_TEAM,
+           given_role: Assignment::ROLE_TEAM,
            resubmittable: false,
-           completion_instructions: Faker::Lorem.sentence
+           with_completion_instructions: true
   end
 
   let!(:quiz) { create :quiz, target: quiz_target }
@@ -87,9 +88,10 @@ describe Levels::CloneService do
   # prerequisite target
   let!(:prerequisite_target) do
     create :target,
+           :with_shared_assignment,
            :with_content,
            target_group: target_group_l1_1,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
 
   def file_path(filename)
@@ -111,7 +113,7 @@ describe Levels::CloneService do
 
     # set prerequisite target
     target_l1_2.prerequisite_targets << prerequisite_target
-    target_l1_2.evaluation_criteria << ec_1
+    target_l1_2.assignments.first.evaluation_criteria << ec_1
 
     # attach images
     course.cover.attach(

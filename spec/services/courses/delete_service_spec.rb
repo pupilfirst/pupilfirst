@@ -46,9 +46,9 @@ describe Courses::DeleteService do
     create :target,
            :with_content,
            :with_group,
-           :with_default_checklist,
+           :with_shared_assignment,
            level: level_c1,
-           evaluation_criteria: [evaluation_criterion_c1]
+           given_evaluation_criteria: [evaluation_criterion_c1]
   end
   let!(:topic_c1) do
     create :topic,
@@ -63,7 +63,7 @@ describe Courses::DeleteService do
     create :target,
            :with_content,
            target_group: target_reviewed_c1.target_group,
-           prerequisite_targets: [target_reviewed_c1]
+           given_prerequisite_targets: [target_reviewed_c1]
   end
   let!(:quiz_c1) do
     create :quiz, :with_question_and_answers, target: target_with_quiz_c1
@@ -117,9 +117,9 @@ describe Courses::DeleteService do
     create :target,
            :with_content,
            :with_group,
-           :with_default_checklist,
+           :with_shared_assignment,
            level: level_c2,
-           evaluation_criteria: [evaluation_criterion_c2]
+           given_evaluation_criteria: [evaluation_criterion_c2]
   end
   let!(:topic_c2) do
     create :topic,
@@ -134,7 +134,7 @@ describe Courses::DeleteService do
     create :target,
            :with_content,
            target_group: target_reviewed_c2.target_group,
-           prerequisite_targets: [target_reviewed_c2]
+           given_prerequisite_targets: [target_reviewed_c2]
   end
   let!(:quiz_c2) do
     create :quiz, :with_question_and_answers, target: target_with_quiz_c2

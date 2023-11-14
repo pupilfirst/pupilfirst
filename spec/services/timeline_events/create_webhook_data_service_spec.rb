@@ -10,9 +10,9 @@ describe TimelineEvents::CreateWebhookDataService do
 
   let(:target) do
     create :target,
-           :with_default_checklist,
+           :with_shared_assignment,
            target_group: target_group,
-           evaluation_criteria: [criterion]
+           given_evaluation_criteria: [criterion]
   end
 
   let(:submission) { create :timeline_event, target: target }
@@ -98,9 +98,9 @@ describe TimelineEvents::CreateWebhookDataService do
     context 'when the submission does not have evaluation criteria (auto-accepted)' do
       let(:target) do
         create :target,
-               :with_default_checklist,
+               :with_shared_assignment,
                target_group: target_group,
-               evaluation_criteria: []
+               given_evaluation_criteria: []
       end
 
       let(:submission) { create :timeline_event, :passed, target: target }

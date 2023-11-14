@@ -39,11 +39,11 @@ feature 'Target Overlay', js: true do
   let!(:target_l1) do
     create :target,
            :with_content,
-           :with_default_checklist,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM,
-           evaluation_criteria: [criterion_1, criterion_2],
-           completion_instructions: Faker::Lorem.sentence,
+           given_role: Assignment::ROLE_TEAM,
+           given_evaluation_criteria: [criterion_1, criterion_2],
+           with_completion_instructions: true,
            sort_index: 0
   end
   let!(:target_l2) do
@@ -53,47 +53,39 @@ feature 'Target Overlay', js: true do
   let!(:target_l3) do
     create :target,
            :with_content,
-           :with_default_checklist,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM,
-           completion_instructions: Faker::Lorem.sentence,
+           given_role: Assignment::ROLE_TEAM,
+           with_completion_instructions: true,
            sort_index: 4
   end
 
   let!(:prerequisite_target) do
     create :target,
+           :with_shared_assignment,
            :with_content,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM,
+           given_role: Assignment::ROLE_TEAM,
            sort_index: 2
   end
   let!(:target_draft) do
     create :target,
+           :with_shared_assignment,
            :draft,
            :with_content,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:target_archived) do
     create :target,
+           :with_shared_assignment,
            :archived,
            :with_content,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
 
-  # Quiz target
-  let!(:quiz_target) do
-    create :target,
-           :with_content,
-           target_group: target_group_l1,
-           days_to_complete: 60,
-           role: Target::ROLE_TEAM,
-           resubmittable: false,
-           completion_instructions: Faker::Lorem.sentence,
-           sort_index: 3
-  end
-  let!(:quiz) { create :quiz, target: quiz_target }
+  let!(:quiz) { create :quiz }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
   let!(:q1_answer_2) { create :answer_option, quiz_question: quiz_question_1 }
@@ -102,6 +94,21 @@ feature 'Target Overlay', js: true do
   let!(:q2_answer_2) { create :answer_option, quiz_question: quiz_question_2 }
   let!(:q2_answer_3) { create :answer_option, quiz_question: quiz_question_2 }
   let!(:q2_answer_4) { create :answer_option, quiz_question: quiz_question_2 }
+
+
+  # Quiz target
+  let!(:quiz_target) do
+    create :target,
+           :with_shared_assignment,
+           :with_content,
+           target_group: target_group_l1,
+           days_to_complete: 60,
+           given_role: Assignment::ROLE_TEAM,
+           resubmittable: false,
+           with_completion_instructions: true,
+           sort_index: 3,
+           given_quiz: quiz
+  end
 
   before do
     # Set correct answers for all quiz questions.
@@ -309,111 +316,11 @@ feature 'Target Overlay', js: true do
   context 'when the target is auto-verified' do
     let!(:target_l1) do
       create :target,
+             :with_shared_assignment,
              :with_content,
              target_group: target_group_l1,
-             role: Target::ROLE_TEAM,
-             completion_instructions: Faker::Lorem.sentence
-    end
-
-    scenario 'student completes an auto-verified target' do
-      notification_service = prepare_developers_notification
-
-      sign_in_user student.user, referrer: target_path(target_l1)
-
-      # There should be a mark as complete button on the learn page.
-      expect(page).to have_button('Mark As Complete')
-
-      # Completion instructions should be show on learn section for auto-verified targets
-      expect(page).to have_text('Before marking as complete')
-      expect(page).to have_text(target_l1.completion_instructions)
-
-      # The complete button should not be highlighted.
-      expect(page).not_to have_selector('.complete-button-selected')
-
-      # Clicking the mark as complete tab option should highlight the button.
-      find('.course-overlay__body-tab-item', text: 'Mark as Complete').click
-      expect(page).to have_selector('.complete-button-selected')
-
-      click_button 'Mark As Complete'
-
-      # The button should be replaced with a 'completed' marker.
-      expect(page).to have_selector(
-        '.complete-button-selected',
-        text: 'Completed'
-      )
-
-      # The target should be marked as passed.
-      expect(page).to have_selector(
-        '.course-overlay__header-title-card',
-        text: 'Completed'
-      )
-
-      # Since this is a team target, other students shouldn't be listed as pending.
-      expect(page).not_to have_content(
-        'You have team members who have yet to complete this target'
-      )
-
-      # Target should have been marked as passed in the database.
-      expect(target_l1.status(student)).to eq(
-        Targets::StatusService::STATUS_PASSED
-      )
-
-      submission = TimelineEvent.last
-      expect_published(
-        notification_service,
-        course,
-        :submission_automatically_verified,
-        student.user,
-        submission
-      )
-    end
-
-    context 'when the target requires student to visit a link to complete it' do
-      let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) do
-        create :target,
-               :with_content,
-               target_group: target_group_l1,
-               link_to_complete: link_to_complete,
-               completion_instructions: Faker::Lorem.sentence
-      end
-
-      scenario 'student completes a target by visiting a link' do
-        sign_in_user student.user, referrer: target_path(target_with_link)
-
-        # There should be a un-highligted button on the learn page that lets student complete the target.
-        expect(page).to have_button('Visit Link To Complete')
-        expect(page).not_to have_selector('.complete-button-selected')
-
-        # Completion instructions should be show on learn section for targets with link to complete
-        expect(page).to have_text('Before visiting the link')
-        expect(page).to have_text(target_with_link.completion_instructions)
-
-        # Clicking the tab should highlight the button.
-        find('.course-overlay__body-tab-item', text: 'Visit Link to Complete')
-          .click
-        expect(page).to have_selector('.complete-button-selected')
-
-        # Clicking the button should complete the target and send the student to the link.
-        new_window = window_opened_by { click_button 'Visit Link To Complete' }
-
-        # User should be redirected to the link_to_visit.
-        within_window new_window do
-          expect(page).to have_current_path(link_to_complete, url: true)
-          page.driver.browser.close
-        end
-
-        # Target should now be complete for the user.
-        expect(page).to have_selector(
-          '.course-overlay__header-title-card',
-          text: 'Completed'
-        )
-
-        # Target should have been marked as passed in the database.
-        expect(target_with_link.status(student)).to eq(
-          Targets::StatusService::STATUS_PASSED
-        )
-      end
+             given_role: Assignment::ROLE_TEAM,
+             with_completion_instructions: true
     end
 
     scenario 'student completes a target by taking a quiz' do
@@ -665,9 +572,10 @@ feature 'Target Overlay', js: true do
   context "when some team members haven't completed an individual target" do
     let!(:target_l1) do
       create :target,
+             :with_shared_assignment,
              :with_content,
              target_group: target_group_l1,
-             role: Target::ROLE_STUDENT
+             given_role: Assignment::ROLE_STUDENT
     end
     let!(:timeline_event) do
       create :timeline_event,
@@ -700,7 +608,15 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when a pending target has prerequisites' do
-    before { target_l1.prerequisite_targets << prerequisite_target }
+    let!(:target_l1) do
+      create :target,
+             :with_shared_assignment,
+             :with_content,
+             target_group: target_group_l1,
+             given_role: Assignment::ROLE_TEAM,
+             with_completion_instructions: true,
+             given_prerequisite_targets: [prerequisite_target]
+    end
 
     scenario 'student navigates to a prerequisite target' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -944,12 +860,13 @@ feature 'Target Overlay', js: true do
       end
       let!(:target_l1) do
         create :target,
+               :with_shared_assignment,
                :with_content,
-               checklist: checklist,
+               given_checklist: checklist,
                target_group: target_group_l1,
-               role: Target::ROLE_TEAM,
-               evaluation_criteria: [criterion_1, criterion_2],
-               completion_instructions: Faker::Lorem.sentence,
+               given_role: Assignment::ROLE_TEAM,
+               given_evaluation_criteria: [criterion_1, criterion_2],
+               with_completion_instructions: true,
                sort_index: 0
       end
 
@@ -993,40 +910,6 @@ feature 'Target Overlay', js: true do
 
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
-      end
-    end
-
-    context 'when the target is auto-verified' do
-      let!(:target_l1) do
-        create :target,
-               :with_content,
-               target_group: target_group_l1,
-               role: Target::ROLE_TEAM,
-               completion_instructions: Faker::Lorem.sentence
-      end
-
-      scenario 'tries to completes an auto-verified target' do
-        sign_in_user school_admin.user, referrer: target_path(target_l1)
-
-        # There should be a mark as complete button on the learn page.
-        expect(page).to have_button('Mark As Complete', disabled: true)
-      end
-    end
-
-    context 'when the target requires user to visit a link to complete it' do
-      let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) do
-        create :target,
-               :with_content,
-               target_group: target_group_l1,
-               link_to_complete: link_to_complete,
-               completion_instructions: Faker::Lorem.sentence
-      end
-
-      scenario 'link to complete is shown to the user' do
-        sign_in_user school_admin.user, referrer: target_path(target_with_link)
-
-        expect(page).to have_link('Visit Link', href: link_to_complete)
       end
     end
 

@@ -67,7 +67,7 @@ module Assignments
     end
 
     def recreate_quiz(quiz)
-      new_quiz = Quiz.create!(target_id: @assignment.id, title: @assignment.title)
+      new_quiz = Quiz.create!(assignment_id: @assignment.id, title: @assignment.target.title)
       quiz.map do |quiz_question|
         new_quiz_question =
           QuizQuestion.create!(question: quiz_question.question, quiz: new_quiz)

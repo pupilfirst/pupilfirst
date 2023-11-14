@@ -27,14 +27,16 @@ feature "Curriculum Editor", js: true do
   let!(:target_1) { create :target, target_group: target_group_1 }
   let!(:target_2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_1,
-           prerequisite_targets: [target_5]
+           given_prerequisite_targets: [target_5]
   end
   let!(:target_3) { create :target, target_group: target_group_2 }
   let!(:target_4) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_2,
-           prerequisite_targets: [target_3]
+           given_prerequisite_targets: [target_3]
   end
 
   # Target with contents
@@ -311,8 +313,9 @@ feature "Curriculum Editor", js: true do
       let!(:target_2) do
         create :target,
                :with_content,
+               :with_shared_assignment,
                target_group: target_group_1,
-               prerequisite_targets: [target_5]
+               given_prerequisite_targets: [target_5]
       end
 
       let!(:target_3) do
@@ -321,9 +324,10 @@ feature "Curriculum Editor", js: true do
 
       let!(:target_4) do
         create :target,
+               :with_shared_assignment,
                :with_content,
                target_group: target_group_2,
-               prerequisite_targets: [target_3]
+               given_prerequisite_targets: [target_3]
       end
 
       scenario "admin copies level into the same course" do

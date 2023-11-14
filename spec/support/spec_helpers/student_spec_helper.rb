@@ -70,8 +70,8 @@ module StudentSpecHelper
       .create(:timeline_event, :with_owners, **options)
       .tap do |te|
         # Add grades for passing submissions if evaluation criteria are present.
-        if target.evaluation_criteria.present? && options[:passed_at].present?
-          te.evaluation_criteria.each do |ec|
+        if target.assignments.first.evaluation_criteria.present? && options[:passed_at].present?
+          te.assignments.first.evaluation_criteria.each do |ec|
             create(
               :timeline_event_grade,
               timeline_event: te,

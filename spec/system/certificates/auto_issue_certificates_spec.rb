@@ -28,25 +28,25 @@ feature "Automatic issuance of certificates", js: true do
   let!(:target_l1) do
     create :target,
            :with_markdown,
-           :team,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           milestone: true,
-           milestone_number: 1
+           given_role: Assignment::ROLE_TEAM,
+           given_milestone_number: 1
   end
+
   let!(:target_l2) do
     create :target,
            :with_markdown,
-           :team,
+           :with_shared_assignment,
            target_group: target_group_l2,
-           milestone: true,
-           milestone_number: 2
+           given_role: Assignment::ROLE_TEAM,
+           given_milestone_number: 2
   end
 
   before do
     # Add one archived milestone target; it shouldn't interfere with issuance of certificates.
     create :target,
            :with_markdown,
-           :team,
            :archived,
            target_group: target_group_l2
   end
@@ -54,9 +54,9 @@ feature "Automatic issuance of certificates", js: true do
   def complete_milestone_target(target)
     sign_in_user student_1.user, referrer: target_path(target)
 
-    click_button "Mark As Complete"
-
-    expect(page).to have_text("Target has been marked as complete")
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+    replace_markdown Faker::Lorem.sentence
+    click_button "Submit"
 
     # No certificate should be issued at this point.
     expect(student_1.user.issued_certificates.count).to eq(0)
@@ -68,9 +68,9 @@ feature "Automatic issuance of certificates", js: true do
   scenario "student completes one milestone target" do
     sign_in_user student_1.user, referrer: target_path(target_l1)
 
-    click_button "Mark As Complete"
-
-    expect(page).to have_text("Target has been marked as complete")
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+    replace_markdown Faker::Lorem.sentence
+    click_button "Submit"
 
     # No certificate should be issued.
     expect(IssuedCertificate.count).to eq(0)
@@ -81,9 +81,9 @@ feature "Automatic issuance of certificates", js: true do
 
     visit target_path(target_l2)
 
-    click_button "Mark As Complete"
-
-    expect(page).to have_text("Target has been marked as complete", wait: 10)
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+    replace_markdown Faker::Lorem.sentence
+    click_button "Submit"
 
     expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
       student_1.user.id,
@@ -118,11 +118,11 @@ feature "Automatic issuance of certificates", js: true do
       let!(:target_l2_2) do
         create :target,
                :with_markdown,
-               :team,
+               :with_shared_assignment,
                target_group: target_group_l2,
                title: "foo",
-               milestone: true,
-               milestone_number: 3
+               given_milestone_number: 3,
+               given_role: Assignment::ROLE_TEAM
       end
 
       scenario "student completed final milestone target" do
@@ -131,41 +131,9 @@ feature "Automatic issuance of certificates", js: true do
 
         visit target_path(target_l2_2)
 
-        click_button "Mark As Complete"
-
-        expect(page).to have_text(
-          "Target has been marked as complete",
-          wait: 10
-        )
-
-        # Both students should have a certificate at this point.
-        expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
-          student_1.user.id,
-          student_2.user.id
-        )
-      end
-    end
-
-    context "when the second target is completed by a visiting a link" do
-      let!(:target_l2_2) do
-        create :target,
-               :with_markdown,
-               :team,
-               target_group: target_group_l2,
-               link_to_complete: "https://www.example.com",
-               milestone: true,
-               milestone_number: 3
-      end
-
-      scenario "student completed second and final milestone target" do
-        complete_milestone_target(target_l1)
-        complete_milestone_target(target_l2)
-
-        visit target_path(target_l2_2)
-
-        click_button "Visit Link To Complete"
-
-        expect(page).to have_text("Target has been marked as complete")
+        find(".course-overlay__body-tab-item", text: "Submit Form").click
+        replace_markdown Faker::Lorem.sentence
+        click_button "Submit"
 
         # Both students should have a certificate at this point.
         expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
@@ -176,16 +144,15 @@ feature "Automatic issuance of certificates", js: true do
     end
 
     context "when the second target is completed with a quiz" do
-      let(:target_l2_2) do
+      let!(:target_l2_2) do
         create :target,
                :with_markdown,
-               :team,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_TEAM,
+               given_milestone_number: 3,
+               with_quiz: true,
                target_group: target_group_l2,
-               milestone: true,
-               milestone_number: 3
-      end
-      let!(:quiz) do
-        create :quiz, :with_question_and_answers, target: target_l2_2
+               title: "foo"
       end
 
       scenario "student completed second and final milestone target" do
@@ -193,6 +160,7 @@ feature "Automatic issuance of certificates", js: true do
         complete_milestone_target(target_l2)
 
         visit target_path(target_l2_2)
+        sleep 2
 
         find(".course-overlay__body-tab-item", text: "Take Quiz").click
         find(
@@ -215,11 +183,11 @@ feature "Automatic issuance of certificates", js: true do
       let!(:target_l2_2) do
         create :target,
                :with_markdown,
-               :with_default_checklist,
-               :team,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_TEAM,
+               given_milestone_number: 3,
                target_group: target_group_l2,
-               milestone: true,
-               milestone_number: 3
+               title: "foo"
       end
 
       scenario "student completed second and final milestone target" do
@@ -249,13 +217,14 @@ feature "Automatic issuance of certificates", js: true do
       let!(:target_l2_2) do
         create :target,
                :with_markdown,
-               :with_default_checklist,
-               :team,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_TEAM,
+               given_milestone_number: 3,
+               given_evaluation_criteria: [evaluation_criteria],
                target_group: target_group_l2,
-               evaluation_criteria: [evaluation_criterion],
-               milestone: true,
-               milestone_number: 3
+               title: "foo"
       end
+
       let(:coach) { create :faculty, user: student_1.user }
 
       before do
@@ -306,32 +275,33 @@ feature "Automatic issuance of certificates", js: true do
   end
 
   context "when the milestone target is completed individually" do
-    let!(:target_l2) do
-      create :target,
-             :with_markdown,
-             :student,
-             target_group: target_group_l2,
-             milestone: true,
-             milestone_number: 2
-    end
+     let!(:target_l2) do
+        create :target,
+               :with_markdown,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_STUDENT,
+               given_milestone_number: 2,
+               target_group: target_group_l2,
+               title: "foo"
+      end
 
     scenario "each student completes the last target" do
       complete_milestone_target(target_l1)
 
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
-      click_button "Mark As Complete"
-
-      expect(page).to have_text("Target has been marked as complete", wait: 10)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      replace_markdown Faker::Lorem.sentence
+      click_button "Submit"
 
       # No certificate should be issued, yet.
       expect(IssuedCertificate.count).to eq(0)
 
       sign_in_user student_2.user, referrer: target_path(target_l2)
 
-      click_button "Mark As Complete"
-
-      expect(page).to have_text("Target has been marked as complete")
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      replace_markdown Faker::Lorem.sentence
+      click_button "Submit"
 
       visit curriculum_course_path(course)
 
@@ -354,9 +324,9 @@ feature "Automatic issuance of certificates", js: true do
       complete_milestone_target(target_l1)
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
-      click_button "Mark As Complete"
-
-      expect(page).to have_text("Target has been marked as complete")
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      replace_markdown Faker::Lorem.sentence
+      click_button "Submit"
 
       # An active certificate is necessary for the automatic issuance of certificates.
       expect(IssuedCertificate.count).to eq(0)
@@ -367,16 +337,17 @@ feature "Automatic issuance of certificates", js: true do
     let!(:target_l1) do
       create :target,
              :with_markdown,
-             :team,
-             target_group: target_group_l1,
-             milestone: false
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_TEAM,
+             target_group: target_group_l1
     end
+
     let!(:target_l2) do
       create :target,
              :with_markdown,
-             :team,
-             target_group: target_group_l2,
-             milestone: false
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_TEAM,
+             target_group: target_group_l2
     end
 
     scenario "students never receive certificates" do
@@ -384,9 +355,9 @@ feature "Automatic issuance of certificates", js: true do
 
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
-      click_button "Mark As Complete"
-
-      expect(page).to have_text("Target has been marked as complete")
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      replace_markdown Faker::Lorem.sentence
+      click_button "Submit"
 
       # At least one milestone is required for the issuance of certificates.
       expect(IssuedCertificate.count).to eq(0)
@@ -397,17 +368,17 @@ feature "Automatic issuance of certificates", js: true do
     let!(:target_l2) do
       create :target,
              :with_markdown,
-             :team,
-             target_group: target_group_l2,
-             milestone: false
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_TEAM,
+             target_group: target_group_l2
     end
 
     scenario "students receive certificate whenver all milestone targets are completed" do
       sign_in_user student_1.user, referrer: target_path(target_l1)
 
-      click_button "Mark As Complete"
-
-      expect(page).to have_text("Target has been marked as complete")
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      replace_markdown Faker::Lorem.sentence
+      click_button "Submit"
 
       dismiss_notification
       click_button "Close"
@@ -417,9 +388,9 @@ feature "Automatic issuance of certificates", js: true do
 
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
-      click_button "Mark As Complete"
-
-      expect(page).to have_text("Target has been marked as complete")
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      replace_markdown Faker::Lorem.sentence
+      click_button "Submit"
 
       # Completing a non-milestone target in level 2 makes no difference
       expect(student_1.user.issued_certificates.count).to eq(1)
@@ -431,13 +402,13 @@ feature "Automatic issuance of certificates", js: true do
     let!(:target_l2) do
       create :target,
              :with_markdown,
-             :with_default_checklist,
-             :team,
+             :with_shared_assignment,
              target_group: target_group_l2,
-             evaluation_criteria: [evaluation_criterion],
-             milestone: true,
-             milestone_number: 2
+             given_milestone_number: 2,
+             given_evaluation_criteria: [evaluation_criteria],
+             given_role: Assignment::ROLE_TEAM
     end
+
     let(:coach) { create :faculty }
 
     before do

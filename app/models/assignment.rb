@@ -1,5 +1,6 @@
 class Assignment < ApplicationRecord
   belongs_to :target
+  has_one :course, through: :target
   has_one :quiz, dependent: :restrict_with_error
   has_many :assignment_prerequisites, dependent: :destroy
   has_many :prerequisite_assignments, through: :assignment_prerequisites
@@ -10,8 +11,8 @@ class Assignment < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :milestone, -> { live.where(milestone: true) }
   scope :not_archived, -> { where.not(archived: true)}
+  scope :milestone, -> { not_archived.where(milestone: true) }
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"
@@ -53,11 +54,11 @@ class Assignment < ApplicationRecord
     quiz.present?
   end
 
-  def team_target?
+  def team_assignment?
     role == ROLE_TEAM
   end
 
-  def individual_target?
+  def individual_assignment?
     role == ROLE_STUDENT
   end
 

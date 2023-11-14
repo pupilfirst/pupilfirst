@@ -38,19 +38,19 @@ feature "Organisation show" do
 
   let!(:target_l1) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 1
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 1
   end
   let!(:target_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l2,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 2
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 2
   end
 
   before do

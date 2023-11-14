@@ -38,26 +38,23 @@ feature "Public preview of course curriculum", js: true do
   let!(:target_l1) do
     create :target,
            :with_markdown,
-           :with_default_checklist,
-           evaluation_criteria: [evaluation_criterion],
+           :with_shared_assignment,
+           given_evaluation_criteria: [evaluation_criterion],
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
 
   let!(:target_l2) do
     create :target,
            :with_markdown,
+           :with_shared_assignment,
            target_group: target_group_l2,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM,
+           with_quiz: true
   end
 
   let!(:target_l3) do
-    create :target, target_group: target_group_l3, role: Target::ROLE_TEAM
-  end
-
-  before do
-    # Let's have a quiz for L2 target as well.
-    create :quiz, :with_question_and_answers, target: target_l2
+    create :target, :with_shared_assignment, target_group: target_group_l3, given_role: Assignment::ROLE_TEAM
   end
 
   scenario "user can preview course curriculum" do
@@ -142,7 +139,7 @@ feature "Public preview of course curriculum", js: true do
     let(:target_group_l0) { create :target_group, level: level_0 }
 
     before do
-      create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
+      create :target, :with_shared_assignment, target_group: target_group_l0, given_role: Assignment::ROLE_TEAM
     end
 
     scenario "user can preview level zero" do

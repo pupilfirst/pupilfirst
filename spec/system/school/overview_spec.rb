@@ -20,14 +20,14 @@ feature 'School Overview', js: true do
   let!(:c1_level_2) { create :level, :two, course: course_1 }
   let!(:c1_target_group_1) { create :target_group, level: c1_level_1 }
   let!(:c1_target_1) do
-    create :target,
+    create :target, :with_shared_assignment,
            target_group: c1_target_group_1,
-           evaluation_criteria: [c1_evaluation_criterion]
+           given_evaluation_criteria: [c1_evaluation_criterion]
   end
   let!(:c1_target_2) do
-    create :target,
+    create :target, :with_shared_assignment,
            target_group: c1_target_group_1,
-           evaluation_criteria: [c1_evaluation_criterion]
+           given_evaluation_criteria: [c1_evaluation_criterion]
   end
   let!(:c1_team_1) { create :team_with_students, cohort: cohort_1 }
   let!(:c1_team_2) { create :team_with_students, cohort: cohort_1 }
@@ -64,14 +64,14 @@ feature 'School Overview', js: true do
   let!(:c2_level_1) { create :level, :one, course: course_2 }
   let!(:c2_target_group_1) { create :target_group, level: c2_level_1 }
   let!(:c2_target_1) do
-    create :target,
+    create :target, :with_shared_assignment,
            target_group: c2_target_group_1,
-           evaluation_criteria: [c2_evaluation_criterion]
+           given_evaluation_criteria: [c2_evaluation_criterion]
   end
   let!(:c2_target_2) do
-    create :target,
+    create :target, :with_shared_assignment,
            target_group: c2_target_group_1,
-           evaluation_criteria: [c2_evaluation_criterion]
+           given_evaluation_criteria: [c2_evaluation_criterion]
   end
   let!(:c2_team_1) { create :team_with_students, cohort: cohort_2 }
   let!(:c2_team_2) { create :team_with_students, cohort: cohort_2 }

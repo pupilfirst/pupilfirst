@@ -14,7 +14,7 @@ describe Users::InitializeSchoolService do
     create :target_group, level: level_one
   end
   let!(:target_l1_1_1) do
-    create :target, :with_content, :for_team, target_group: target_group_l1_1
+    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_1
   end
 
   let(:new_name) { Faker::Lorem.words(number: 2).join(' ') }

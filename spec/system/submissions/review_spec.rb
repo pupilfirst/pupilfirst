@@ -13,10 +13,10 @@ feature "Submission review overlay", js: true do
   let(:cohort) { course.cohorts.first }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
-  let(:target) { create :target, :for_students, target_group: target_group }
-  let(:target_2) { create :target, :for_students, target_group: target_group }
+  let(:target) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
+  let(:target_2) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
   let(:auto_verify_target) do
-    create :target, :for_students, target_group: target_group
+    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group
   end
   let(:grade_labels_for_1) do
     [
@@ -50,11 +50,11 @@ feature "Submission review overlay", js: true do
            student: student
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
-    target.evaluation_criteria << [
+    target.assignments.first.evaluation_criteria << [
       evaluation_criterion_1,
       evaluation_criterion_2
     ]
-    target_2.evaluation_criteria << [
+    target_2.assignments.first.evaluation_criteria << [
       evaluation_criterion_1,
       evaluation_criterion_2
     ]
@@ -1112,7 +1112,7 @@ feature "Submission review overlay", js: true do
       grade_submission(
         submission_pending,
         SubmissionsHelper::SUBMISSION_PASS,
-        target,
+        target.assignments.first,
       )
 
       # Open the overlay.
@@ -1512,7 +1512,7 @@ feature "Submission review overlay", js: true do
   end
 
   context "when evaluation criteria changed for a target with graded submissions" do
-    let(:target_1) { create :target, :for_students, target_group: target_group }
+    let(:target_1) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
     let!(:submission_reviewed) do
       create(
         :timeline_event,
@@ -1549,7 +1549,7 @@ feature "Submission review overlay", js: true do
       )
     end
 
-    before { target_1.evaluation_criteria << [evaluation_criterion_1] }
+    before { target_1.assignments.first.evaluation_criteria << [evaluation_criterion_1] }
 
     scenario "coach visits a submission and grades pending submission" do
       sign_in_user coach.user,
@@ -1716,7 +1716,7 @@ feature "Submission review overlay", js: true do
   end
 
   context "when there are some submissions that have a mixed list of owners" do
-    let(:target) { create :target, :for_team, target_group: target_group }
+    let(:target) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group }
 
     let(:team_1) { create :team_with_students, cohort: cohort }
     let(:team_2) { create :team_with_students, cohort: cohort }
@@ -1835,9 +1835,9 @@ feature "Submission review overlay", js: true do
 
   context "when there are team targets and individual target submissions to review" do
     let(:individual_target) do
-      create :target, :for_students, target_group: target_group
+      create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group
     end
-    let(:team_target) { create :target, :for_team, target_group: target_group }
+    let(:team_target) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group }
     let(:team_1) { create :team_with_students, cohort: cohort }
     let(:team_2) { create :team_with_students, cohort: cohort }
     let(:student) { team_1.students.first }
@@ -1872,8 +1872,8 @@ feature "Submission review overlay", js: true do
 
     before do
       # Set evaluation criteria on the target so that its submissions can be reviewed.
-      individual_target.evaluation_criteria << [evaluation_criterion_1]
-      team_target.evaluation_criteria << [evaluation_criterion_1]
+      individual_target.assignments.first.evaluation_criteria << [evaluation_criterion_1]
+      team_target.assignments.first.evaluation_criteria << [evaluation_criterion_1]
     end
 
     scenario "coaches are shown team name along with list of students if target is submitted by a team" do
@@ -2091,10 +2091,10 @@ feature "Submission review overlay", js: true do
   context "When a milestone submission is ungraded after the course is marked complete for a student" do
     let(:target_3) do
       create :target,
-             :for_students,
+             :with_shared_assignment, given_role: Assignment::ROLE_STUDENT,
              target_group: target_group,
-             milestone_number: 1,
-             milestone: true
+             given_milestone_number: 1,
+             given_evaluation_criteria: [evaluation_criterion_1]
     end
 
     let!(:submission_3) do
@@ -2109,8 +2109,6 @@ feature "Submission review overlay", js: true do
         passed_at: nil
       )
     end
-
-    before { target_3.evaluation_criteria << [evaluation_criterion_1] }
 
     scenario "coach grades and than ungrades milestone submission" do
       sign_in_user team_coach.user,

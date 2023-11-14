@@ -13,24 +13,24 @@ describe TimelineEvents::WasLastTargetService do
 
   let(:target) do
     create :target,
-           :with_evaluation_criterion,
-           role: Target::ROLE_STUDENT,
+           :with_shared_assignment,
+           with_evaluation_criterion: true,
+           given_role: Assignment::ROLE_STUDENT,
            target_group: target_group,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
 
   let(:target_2) do
     create :target,
-           :with_evaluation_criterion,
-           role: Target::ROLE_TEAM,
+           :with_shared_assignment,
+           with_evaluation_criterion: true,
+           given_role: Assignment::ROLE_TEAM,
            target_group: target_group,
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
 
   let(:target_3) do
-    create :target, role: Target::ROLE_STUDENT, target_group: target_group
+    create :target, given_role: Assignment::ROLE_STUDENT, target_group: target_group
   end
 
   describe "#was_last_target?" do

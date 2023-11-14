@@ -2,11 +2,12 @@ module Schools
   class MilestoneSortService
     def initialize(target, direction)
       @target = target
+      @assignment = @target.assignments.first
       @direction = direction
     end
 
     def execute
-      return unless target.milestone
+      return unless (target.visibility != Target::VISIBILITY_ARCHIVED && @assignment.milestone)
 
       milestone_ids = milestones.map(&:id)
 
@@ -22,8 +23,8 @@ module Schools
       Target.transaction do
         milestones.each do |milestone|
           new_index = milestone_ids.index(milestone.id.to_i) + 1
-          unless milestone.milestone_number == new_index
-            milestone.update!(milestone_number: new_index)
+          unless milestone.assignments.first.milestone_number == new_index
+            milestone.assignments.first.update!(milestone_number: new_index)
           end
         end
       end
@@ -33,7 +34,7 @@ module Schools
 
     def milestones
       @milestones ||=
-        target.course.targets.milestone.order(milestone_number: :asc).to_a
+        target.course.targets.live.milestone.order('assignments.milestone_number ASC').to_a
     end
 
     def move_up?

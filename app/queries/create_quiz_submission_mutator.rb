@@ -67,7 +67,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   end
 
   def quiz
-    @quiz ||= target.quiz
+    @quiz ||= target.assignments.first.quiz
   end
 
   def checklist_item(title, result, status)

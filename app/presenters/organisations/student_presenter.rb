@@ -107,16 +107,17 @@ module Organisations
     end
 
     def milestone_targets
-      @milestone_targets ||= course.targets.live.where(milestone: true)
+      @milestone_targets ||= course.targets.live.milestone
     end
 
     def milestone_completion_status
-      ordered_milestone_targets = milestone_targets.order(:milestone_number)
+      ordered_milestone_targets = milestone_targets.order('assignments.milestone_number')
 
       status = {}
 
       ordered_milestone_targets.each do |target|
-        status[target.milestone_number] = {
+        assignment = target.assignments.not_archived.first
+        status[assignment.milestone_number] = {
           title: target.title,
           completed:
             student.timeline_events.where(target_id: target.id).passed.any?

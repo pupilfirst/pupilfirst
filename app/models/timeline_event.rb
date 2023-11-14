@@ -17,8 +17,8 @@ class TimelineEvent < ApplicationRecord
   belongs_to :evaluator, class_name: "Faculty", optional: true
   belongs_to :reviewer, class_name: "Faculty", optional: true
 
-  has_many :target_evaluation_criteria, through: :target
-  has_many :evaluation_criteria, through: :target_evaluation_criteria
+  has_many :assignment_evaluation_criteria, through: :target
+  has_many :evaluation_criteria, through: :assignment_evaluation_criteria
   has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
   has_many :timeline_event_grades, dependent: :destroy
@@ -32,7 +32,7 @@ class TimelineEvent < ApplicationRecord
 
   delegate :title, to: :target
 
-  scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
+  scope :not_auto_verified, -> { joins(:assignment_evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :live, -> { where(archived_at: nil) }

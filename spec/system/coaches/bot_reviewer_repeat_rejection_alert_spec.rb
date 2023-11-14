@@ -32,9 +32,9 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
   let(:target) do
     create :target,
-           :for_students,
+           :with_shared_assignment, given_role: Assignment::ROLE_STUDENT,
            target_group: target_group,
-           evaluation_criteria: [evaluation_criterion]
+           given_evaluation_criteria: [evaluation_criterion]
   end
 
   around do |example|

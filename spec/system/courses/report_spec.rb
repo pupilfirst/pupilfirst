@@ -26,30 +26,28 @@ feature "Students view performance report and submissions overview", js: true do
   let(:target_group_l3) { create :target_group, level: level_3 }
 
   let(:target_l1) do
-    create :target, :for_students, target_group: target_group_l1
+    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l1
   end
   let!(:milestone_target_l2) do
     create :target,
-           :for_students,
+           :with_shared_assignment, given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l2,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
   let!(:milestone_target_l3) do
     create :target,
-           :for_students,
+           :with_shared_assignment, given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l3,
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
   let!(:target_4) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
   end
   let(:quiz_target_1) do
-    create :target, :for_students, target_group: target_group_l1
+    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l1
   end
   let(:quiz_target_2) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
   end
 
   # Create evaluation criteria for targets
@@ -146,13 +144,13 @@ feature "Students view performance report and submissions overview", js: true do
            faculty: team_coach,
            student: student
 
-    target_l1.evaluation_criteria << evaluation_criterion_1
-    milestone_target_l2.evaluation_criteria << [
+    target_l1.assignments.first.evaluation_criteria << evaluation_criterion_1
+    milestone_target_l2.assignments.first.evaluation_criteria << [
       evaluation_criterion_1,
       evaluation_criterion_2
     ]
-    milestone_target_l3.evaluation_criteria << evaluation_criterion_2
-    target_4.evaluation_criteria << evaluation_criterion_2
+    milestone_target_l3.assignments.first.evaluation_criteria << evaluation_criterion_2
+    target_4.assignments.first.evaluation_criteria << evaluation_criterion_2
 
     submission_target_l1_2.timeline_event_grades.create!(
       evaluation_criterion: evaluation_criterion_1,
@@ -300,7 +298,7 @@ feature "Students view performance report and submissions overview", js: true do
   end
 
   context "student's team members change mid-way of course" do
-    let(:target_l1) { create :target, :for_team, target_group: target_group_l1 }
+    let(:target_l1) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1 }
     let!(:submission_target_l1_1) do
       create(
         :timeline_event,
@@ -351,7 +349,7 @@ feature "Students view performance report and submissions overview", js: true do
     let!(:level_0) { create :level, :zero, course: course }
     let!(:target_group_l0) { create :target_group, level: level_0 }
     let!(:target_l0) do
-      create :target, :for_students, target_group: target_group_l0
+      create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l0
     end
 
     scenario "checks status of total targets completed in report" do
@@ -369,12 +367,12 @@ feature "Students view performance report and submissions overview", js: true do
 
   context "course has archived targets" do
     let!(:target_4) do
-      create :target, :for_students, :archived, target_group: target_group_l3
+      create :target, :archived, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
     end
 
     # Archive target with verified submission for the student
     let(:milestone_target_l3) do
-      create :target, :for_students, :archived, target_group: target_group_l3
+      create :target, :archived, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
     end
 
     scenario "checks status of total targets completed in report" do

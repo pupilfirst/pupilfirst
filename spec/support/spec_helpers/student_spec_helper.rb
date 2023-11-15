@@ -31,8 +31,8 @@ module StudentSpecHelper
     latest: true
   )
     team = student.team
-
-    if target.individual_target?
+    assignment = target.assignments.not_archived.first
+    if assignment.individual_assignment?
       (team&.students || [student]).each do |student|
         create_timeline_event(
           student,
@@ -71,7 +71,7 @@ module StudentSpecHelper
       .tap do |te|
         # Add grades for passing submissions if evaluation criteria are present.
         if target.assignments.first.evaluation_criteria.present? && options[:passed_at].present?
-          te.assignments.first.evaluation_criteria.each do |ec|
+          target.assignments.first.evaluation_criteria.each do |ec|
             create(
               :timeline_event_grade,
               timeline_event: te,

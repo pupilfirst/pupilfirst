@@ -51,7 +51,7 @@ module Courses
     def delete_evaluation_criteria
       evaluation_criteria = EvaluationCriterion.where(course_id: @course.id)
 
-      TargetEvaluationCriterion.where(
+      AssignmentEvaluationCriterion.where(
         evaluation_criterion_id: evaluation_criteria
       ).delete_all
       TimelineEventGrade.where(evaluation_criterion_id: evaluation_criteria)
@@ -108,6 +108,10 @@ module Courses
         .where(courses: { id: @course.id })
         .delete_all
       TargetPrerequisite
+        .joins(target: :course)
+        .where(courses: { id: @course.id })
+        .delete_all
+      Assignment
         .joins(target: :course)
         .where(courses: { id: @course.id })
         .delete_all

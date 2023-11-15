@@ -32,11 +32,11 @@ module Targets
     end
 
     def remove_as_prerequisite
-      AssignmentPrerequisite.where(prerequisite_assignment: assignment).destroy_all
+      AssignmentPrerequisite.where(prerequisite_assignment: assignment).delete_all
     end
 
     def clear_milestone_settings
-      assignment.update!(milestone: false, milestone_number: nil)
+      assignment.update!(milestone: false, milestone_number: nil) if assignment
     end
 
     def unarchive_target_group

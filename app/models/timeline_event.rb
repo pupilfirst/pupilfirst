@@ -32,7 +32,7 @@ class TimelineEvent < ApplicationRecord
 
   delegate :title, to: :target
 
-  scope :not_auto_verified, -> { joins(:assignment_evaluation_criteria).distinct }
+  scope :not_auto_verified, -> { joins(target: {assignments: :evaluation_criteria}).where.not(evaluation_criteria: {id: nil}) }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :live, -> { where(archived_at: nil) }
@@ -83,7 +83,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def team_submission?
-    target.team_target?
+    target.assignments.first.team_assignment?
   end
 
   def pending_review?

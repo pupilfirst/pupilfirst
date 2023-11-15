@@ -17,7 +17,7 @@ module CourseExports
     def target_rows
       values =
         targets.map do |target|
-          milestone = target.milestone? ? "Yes" : "No"
+          milestone = milestone?(target)
 
           [
             target_id(target),
@@ -56,7 +56,7 @@ module CourseExports
     def evaluation_criteria_ids
       @evaluation_criteria_ids ||=
         targets
-          .map { |target| target.evaluation_criteria.order(:name).pluck(:id) }
+          .map { |target| target.assignments.first.evaluation_criteria.order(:name).pluck(:id) }
           .flatten
           .uniq
     end

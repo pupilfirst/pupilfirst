@@ -1,7 +1,7 @@
 module Levels
   class CloneService
     def initialize
-      @target_id_translation = {}
+      @assignment_id_translation = {}
     end
 
     def clone(source_level, target_course)
@@ -10,8 +10,9 @@ module Levels
           target_groups = create_target_groups(source_level, level)
           targets = create_targets(target_groups)
           create_content_blocks(targets)
-          create_prerequisites_targets(targets)
-          create_quiz(targets)
+          assignments = create_assignments(targets)
+          create_quiz(assignments)
+          create_prerequisites_assignments(assignments)
         end
       end
     end
@@ -60,24 +61,16 @@ module Levels
                 old_target
                   .attributes
                   .slice(
-                    'role',
                     'title',
                     'description',
-                    'completion_instructions',
                     'target_action_type',
                     'sort_index',
-                    'link_to_complete',
-                    'checklist',
-                    'review_checklist',
                     'visibility',
-                    'resubmittable'
+                    'resubmittable',
+                    'role'
                   )
                   .merge(target_group: new_target_group)
               )
-            if old_target.evaluation_criteria.exists?
-              create_target_evaluation_criteria(old_target, new_target)
-            end
-            @target_id_translation[old_target.id] = new_target.id
             [old_target, new_target]
           end
       end
@@ -95,13 +88,13 @@ module Levels
         )
     end
 
-    def create_target_evaluation_criteria(old_target, new_target)
-      old_target.target_evaluation_criteria.each do |t_ec|
-        new_target.target_evaluation_criteria.create!(
+    def create_assignment_evaluation_criteria(old_assignment, new_assignment)
+      old_assignment.assignment_evaluation_criteria.each do |a_ec|
+        new_assignment.assignment_evaluation_criteria.create!(
           evaluation_criterion:
             create_evaluation_criteria(
-              t_ec.evaluation_criterion,
-              new_target.course
+              a_ec.evaluation_criterion,
+              new_assignment.course
             )
         )
       end
@@ -128,13 +121,36 @@ module Levels
       end
     end
 
-    def create_quiz(targets)
-      targets.each do |old_target, new_target|
-        next unless old_target.quiz?
+    def create_assignments(targets)
+      targets.flat_map do |old_target, new_target|
+        old_target.assignments.map do |old_assignment|
+          new_assignment = Assignment.create!(
+            target: new_target,
+            role: old_assignment.role,
+            checklist: old_assignment.checklist,
+            completion_instructions: old_assignment.completion_instructions,
+            milestone: old_assignment.milestone,
+            milestone_number: old_assignment.milestone_number,
+            archived: old_assignment.archived,
+          )
+
+          if old_assignment.evaluation_criteria.exists?
+            create_assignment_evaluation_criteria(old_assignment, new_assignment)
+          end
+          @assignment_id_translation[old_assignment.id] = new_assignment.id
+
+          [old_assignment, new_assignment]
+        end
+      end
+    end
+
+    def create_quiz(assignments)
+      assignments.each do |old_assignment, new_assignment|
+        next unless old_assignment.quiz?
 
         # create quiz
-        old_quiz = old_target.quiz
-        new_quiz = Quiz.create!(title: old_quiz.title, target: new_target)
+        old_quiz = old_assignment.quiz
+        new_quiz = Quiz.create!(title: old_quiz.title, assignment: new_assignment)
 
         # create quiz questions
         old_quiz
@@ -168,16 +184,16 @@ module Levels
       end
     end
 
-    def create_prerequisites_targets(targets)
-      targets.each do |old_target, new_target|
-        next if old_target.prerequisite_target_ids.blank?
+    def create_prerequisites_assignments(assignments)
+      assignments.each do |old_assignment, new_assignment|
+        next if old_assignment.prerequisite_assignment_ids.blank?
 
         # translate old prerequisite target ids
-        new_target.prerequisite_target_ids =
-          old_target.prerequisite_target_ids.map do |old_id|
-            @target_id_translation[old_id]
+        new_assignment.prerequisite_assignment_ids =
+        old_assignment.prerequisite_assignment_ids.map do |old_id|
+            @assignment_id_translation[old_id]
           end
-        new_target.save!
+          new_assignment.save!
       end
     end
   end

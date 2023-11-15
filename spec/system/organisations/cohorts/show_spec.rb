@@ -100,11 +100,11 @@ feature "Organisation show" do
       expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_text(
-        "M#{target_l1.milestone_number}: #{target_l1.title}"
+        "M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
       )
 
       expect(page).to have_text(
-        "M#{target_l2.milestone_number}: #{target_l2.title}"
+        "M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}"
       )
 
       expect(page).to have_link(
@@ -164,11 +164,11 @@ feature "Organisation show" do
       expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_text(
-        "M#{target_l1.milestone_number}: #{target_l1.title}"
+        "M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
       )
 
       expect(page).to have_text(
-        "M#{target_l2.milestone_number}: #{target_l2.title}"
+        "M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}"
       )
 
       expect(page).to have_link(

@@ -64,16 +64,13 @@ describe CourseExports::PrepareStudentsExportService do
     create :evaluation_criterion, course: course, name: "Criterion B"
   end
 
-  let!(:target_l1_evaluated) do
+  let!(:target_l1_quiz) do
     create :target,
            :with_shared_assignment,
+           with_quiz: true,
            target_group: target_group_l1_milestone,
-           sort_index: 1,
-           given_evaluation_criteria: [
-             evaluation_criterion_1,
-             evaluation_criterion_2
-           ],
-           given_milestone_number: 1
+           sort_index: 0,
+           given_milestone_number: 2
   end
 
   let!(:target_l1_quiz_non_milestone) do
@@ -84,13 +81,17 @@ describe CourseExports::PrepareStudentsExportService do
            sort_index: 1
   end
 
-  let!(:target_l1_quiz) do
+
+  let!(:target_l1_evaluated) do
     create :target,
            :with_shared_assignment,
-           with_quiz: true,
            target_group: target_group_l1_milestone,
-           sort_index: 0,
-           given_milestone_number: 2
+           sort_index: 2,
+           given_evaluation_criteria: [
+             evaluation_criterion_1,
+             evaluation_criterion_2
+           ],
+           given_milestone_number: 1
   end
 
   let!(:target_l2_evaluated) do
@@ -168,24 +169,22 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let(:expected_data) do
-    assignment = target_l1_evaluated.assignments.first
-    puts "assignment details - #{assignment.milestone_number} \n #{assignment.evaluation_criteria} \n #{assignment.role}"
     [
       {
         title: "Targets",
         rows: [
           [
             "ID",
-            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_quiz.id}",
+            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
           ["Level", 1, 1, 1, 2],
           [
             "Name",
-            target_l1_quiz_non_milestone.title,
             target_l1_quiz.title,
+            target_l1_quiz_non_milestone.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
@@ -196,8 +195,8 @@ describe CourseExports::PrepareStudentsExportService do
             "Graded",
             "Graded"
           ],
-          %w[Milestone? No Yes Yes Yes],
-          ["Students with submissions", 1, 3, 3, 1],
+          %w[Milestone? Yes No Yes Yes],
+          ["Students with submissions", 3, 1, 3, 1],
           ["Submissions pending review", 0, 0, 0, 1],
           [
             'Criterion A 3 - Average',
@@ -295,15 +294,15 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "Student Email / Target ID",
-            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_quiz.id}",
+            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
           [
             student_1.email,
-            "✓",
             "2/2",
+            "✓",
             {
               "value" => submission_grading(student_1_reviewed_submission),
               "style" => "passing-grade"
@@ -312,14 +311,14 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_2.email,
-            nil,
             '1/2',
+            nil,
             'x'
           ],
           [
             student_5.email,
-            nil,
             "1/2",
+            nil,
             'x'
           ]
         ]

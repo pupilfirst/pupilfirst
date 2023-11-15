@@ -44,13 +44,17 @@ feature "Public preview of course curriculum", js: true do
            given_role: Assignment::ROLE_TEAM
   end
 
+  let!(:quiz) do
+    create :quiz, :with_question_and_answers
+  end
+
   let!(:target_l2) do
     create :target,
            :with_markdown,
            :with_shared_assignment,
            target_group: target_group_l2,
            given_role: Assignment::ROLE_TEAM,
-           with_quiz: true
+           given_quiz: quiz
   end
 
   let!(:target_l3) do

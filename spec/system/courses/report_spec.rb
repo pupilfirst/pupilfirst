@@ -41,13 +41,13 @@ feature "Students view performance report and submissions overview", js: true do
            given_milestone_number: 2
   end
   let!(:target_4) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
+    create :target, :with_shared_assignment,  given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
   end
   let(:quiz_target_1) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l1
+    create :target, :with_shared_assignment, with_quiz: true, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l1
   end
   let(:quiz_target_2) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
+    create :target, :with_shared_assignment, with_quiz: true, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
   end
 
   # Create evaluation criteria for targets

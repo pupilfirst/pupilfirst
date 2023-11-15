@@ -69,19 +69,20 @@ describe CourseExports::PrepareTeamsExportService do
            sort_index: 1,
            given_milestone_number: 1
   end
-  let!(:target_l1_individual_mark_as_complete) do
+  let!(:target_l1_individual_submit_form) do
     create :target, :with_shared_assignment, given_role:Assignment::ROLE_STUDENT, target_group: target_group_l1_non_milestone
   end # Not a team target - should be excluded.
-  let!(:target_l1_mark_as_complete) do
+  let!(:target_l1_submit_form) do
     create :target, :with_shared_assignment, given_role:Assignment::ROLE_TEAM, target_group: target_group_l1_non_milestone
   end
-  let!(:quiz) { create :quiz, target: target_l1_quiz }
+  let!(:quiz) { create :quiz}
   let!(:target_l1_quiz) do
     create :target,
            :with_shared_assignment,
            given_role: Assignment::ROLE_TEAM,
            target_group: target_group_l1_milestone,
            given_milestone_number: 2,
+           given_quiz: quiz,
            sort_index: 0
   end
   let!(:target_l2_evaluated) do
@@ -148,8 +149,8 @@ describe CourseExports::PrepareTeamsExportService do
            archived_at: 1.day.ago
 
     # First student has completed everything, but has a pending submission in L2.
-    submit_target target_l1_individual_mark_as_complete, student_1
-    submit_target target_l1_mark_as_complete, student_1
+    submit_target target_l1_individual_submit_form, student_1
+    submit_target target_l1_submit_form, student_1
     submission = submit_target target_l1_quiz, student_1
     submission.update!(quiz_score: "2/2")
     submit_target target_l2_evaluated, student_1
@@ -159,7 +160,7 @@ describe CourseExports::PrepareTeamsExportService do
     submission.update!(quiz_score: "1/2")
 
     # Third student (alone in team) has only completed one target.
-    submit_target target_l1_mark_as_complete, student_3
+    submit_target target_l1_submit_form, student_3
 
     submission = submit_target target_l1_quiz, student_l2_4
     submission.update!(quiz_score: "1/2")
@@ -196,7 +197,7 @@ describe CourseExports::PrepareTeamsExportService do
         rows: [
           [
             "ID",
-            "L1T#{target_l1_mark_as_complete.id}",
+            "L1T#{target_l1_submit_form.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
@@ -204,14 +205,14 @@ describe CourseExports::PrepareTeamsExportService do
           ["Level", 1, 1, 1, 2],
           [
             "Name",
-            target_l1_mark_as_complete.title,
+            target_l1_submit_form.title,
             target_l1_quiz.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
           [
             "Completion Method",
-            "Mark as Complete",
+            "Submit Form",
             "Take Quiz",
             "Graded",
             "Graded"
@@ -257,7 +258,7 @@ describe CourseExports::PrepareTeamsExportService do
           [
             "Team ID",
             "Team Name",
-            "L1T#{target_l1_mark_as_complete.id}",
+            "L1T#{target_l1_submit_form.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"

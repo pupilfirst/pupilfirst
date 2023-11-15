@@ -85,9 +85,9 @@ class StudentDetailsResolver < ApplicationQuery
 
   def submissions_for_grades
     latest_submissions
-      .includes(:students, :target)
+      .includes(:students, target: :assignments)
       .select do |submission|
-        submission.target.individual_target? ||
+        submission.target.assignments.not_archived.first.individual_assignment? ||
           (submission.student_ids.sort == student.team_student_ids)
       end
   end

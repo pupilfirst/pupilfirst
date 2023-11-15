@@ -42,12 +42,14 @@ describe Courses::DeleteService do
   let(:evaluation_criterion_c1) do
     create :evaluation_criterion, course: course_1
   end
+  let(:target_group_c1) do
+    create :target_group, level: level_c1, sort_index: 0
+  end
   let(:target_reviewed_c1) do
     create :target,
            :with_content,
-           :with_group,
            :with_shared_assignment,
-           level: level_c1,
+           target_group: target_group_c1,
            given_evaluation_criteria: [evaluation_criterion_c1]
   end
   let!(:topic_c1) do
@@ -62,11 +64,10 @@ describe Courses::DeleteService do
   let(:target_with_quiz_c1) do
     create :target,
            :with_content,
-           target_group: target_reviewed_c1.target_group,
+           :with_shared_assignment,
+           with_quiz: true,
+           target_group: target_group_c1,
            given_prerequisite_targets: [target_reviewed_c1]
-  end
-  let!(:quiz_c1) do
-    create :quiz, :with_question_and_answers, target: target_with_quiz_c1
   end
   let!(:submission_c1) do
     complete_target(target_reviewed_c1, student_c1, evaluator: common_coach)
@@ -113,12 +114,14 @@ describe Courses::DeleteService do
   let(:evaluation_criterion_c2) do
     create :evaluation_criterion, course: course_2
   end
+  let(:target_group_c2) do
+    create :target_group, level: level_c2, sort_index: 0
+  end
   let(:target_reviewed_c2) do
     create :target,
            :with_content,
-           :with_group,
            :with_shared_assignment,
-           level: level_c2,
+           target_group: target_group_c2,
            given_evaluation_criteria: [evaluation_criterion_c2]
   end
   let!(:topic_c2) do
@@ -133,11 +136,10 @@ describe Courses::DeleteService do
   let(:target_with_quiz_c2) do
     create :target,
            :with_content,
-           target_group: target_reviewed_c2.target_group,
+           :with_shared_assignment,
+           with_quiz: true,
+           target_group: target_group_c2,
            given_prerequisite_targets: [target_reviewed_c2]
-  end
-  let!(:quiz_c2) do
-    create :quiz, :with_question_and_answers, target: target_with_quiz_c2
   end
   let!(:submission_c2) do
     complete_target(target_reviewed_c2, student_c2, evaluator: common_coach)
@@ -184,10 +186,11 @@ describe Courses::DeleteService do
       [Proc.new { CoachNote.count }, 2, 1],
       [Proc.new { EvaluationCriterion.count }, 2, 1],
       [Proc.new { TimelineEventGrade.count }, 2, 1],
-      [Proc.new { TargetEvaluationCriterion.count }, 2, 1],
+      [Proc.new { AssignmentEvaluationCriterion.count }, 2, 1],
       [Proc.new { TargetGroup.count }, 2, 1],
       [Proc.new { Target.count }, 4, 2],
-      [Proc.new { TargetPrerequisite.count }, 2, 1],
+      [Proc.new { Assignment.count }, 4, 2],
+      [Proc.new { AssignmentPrerequisite.count }, 2, 1],
       [Proc.new { TargetVersion.count }, 4, 2],
       [Proc.new { ContentBlock.count }, 16, 8],
       [Proc.new { ResourceVersion.count }, 2, 1],
@@ -204,6 +207,12 @@ describe Courses::DeleteService do
 
   describe "#execute" do
     it "deletes all data related to the course and the course itself" do
+      puts "details - t #{Target.count}, a #{Assignment.count}, ap #{AssignmentPrerequisite.count}"
+
+      Target.all.each do |target|
+        puts "is_quiz #{target.assignments.first.quiz}"
+      end
+
       expect { subject.execute }.to(
         change { expectations.map { |e| e[0].call } }.from(
           expectations.pluck(1)

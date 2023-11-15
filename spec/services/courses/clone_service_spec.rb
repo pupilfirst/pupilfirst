@@ -20,6 +20,15 @@ describe Courses::CloneService do
 
   let(:target_group_l2) { create :target_group, level: level_two }
 
+  # prerequisite target
+  let!(:prerequisite_target) do
+    create :target,
+           :with_shared_assignment,
+           :with_content,
+           target_group: target_group_l1_1,
+           given_role: Assignment::ROLE_TEAM
+  end
+
   let!(:target_l0) do
     create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l0
   end
@@ -33,7 +42,7 @@ describe Courses::CloneService do
   end
 
   let(:target_l1_2) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_2
+    create :target, :with_content, :with_shared_assignment, given_prerequisite_targets: [prerequisite_target], given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_2
   end
 
   let(:target_l2_1) do
@@ -52,19 +61,7 @@ describe Courses::CloneService do
   let(:ec_2) { create :evaluation_criterion, course: course }
   let(:new_name) { Faker::Lorem.words(number: 2).join(" ") }
 
-  # Quiz target
-  let!(:quiz_target) do
-    create :target,
-           :with_shared_assignment,
-           :with_content,
-           target_group: target_group_l1_1,
-           days_to_complete: 60,
-           given_role: Assignment::ROLE_TEAM,
-           resubmittable: false,
-           with_completion_instructions: true
-  end
-
-  let!(:quiz) { create :quiz, target: quiz_target }
+  let!(:quiz) { create :quiz }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
   let!(:q1_answer_2) { create :answer_option, quiz_question: quiz_question_1 }
@@ -74,13 +71,17 @@ describe Courses::CloneService do
   let!(:q2_answer_3) { create :answer_option, quiz_question: quiz_question_2 }
   let!(:q2_answer_4) { create :answer_option, quiz_question: quiz_question_2 }
 
-  # prerequisite target
-  let!(:prerequisite_target) do
+  # Quiz target
+  let!(:quiz_target) do
     create :target,
            :with_shared_assignment,
            :with_content,
+           given_quiz: quiz,
            target_group: target_group_l1_1,
-           given_role: Assignment::ROLE_TEAM
+           days_to_complete: 60,
+           given_role: Assignment::ROLE_TEAM,
+           resubmittable: false,
+           with_completion_instructions: true
   end
 
   def file_path(filename)
@@ -121,6 +122,7 @@ describe Courses::CloneService do
       original_levels = Level.all.order(:number).pluck(:number, :name)
       original_group_names = TargetGroup.all.pluck(:name)
       original_targets = Target.all.pluck(:title, :description)
+      original_assignments = Assignment.all.pluck(:role, :checklist, :milestone, :milestone_number, :archived, :completion_instructions)
       original_team_count = Team.count
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
@@ -159,8 +161,14 @@ describe Courses::CloneService do
         original_targets
       )
 
+      expect(new_course.targets.joins(:assignments).pluck(
+        'assignments.role', 'assignments.checklist', 'assignments.milestone', 'assignments.milestone_number', 'assignments.archived', 'assignments.completion_instructions'
+      )).to match_array(
+        original_assignments
+      )
+
       # Quiz, quiz questions and answer options should have been cloned
-      new_quiz = new_course.targets.joins(:quiz).first.quiz
+      new_quiz = new_course.targets.joins(assignments: :quiz).first.assignments.first.quiz
 
       expect(
         new_quiz.quiz_questions.pluck(:question, :description)
@@ -174,14 +182,14 @@ describe Courses::CloneService do
       expect(
         new_course
           .targets
-          .joins(:prerequisite_targets)
+          .joins(assignments: :prerequisite_assignments)
           .first
-          .prerequisite_targets
-          .first
+          .assignments.first.prerequisite_assignments
+          .first.target
           .title
       ).to eq(prerequisite_target.title)
 
-      evaluated_targets = new_course.targets.joins(:target_evaluation_criteria)
+      evaluated_targets = new_course.targets.joins(assignments: :assignment_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
 
       expect(

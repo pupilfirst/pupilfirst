@@ -13,7 +13,10 @@ module Users
         user_name: current_user.name,
         preferred_name: current_user.preferred_name,
         user_title: current_user.full_title,
-        issued_certificates: issued_certificate_details
+        issued_certificates: issued_certificate_details,
+        standing_enabled: standing_enabled?,
+        current_standing_name: current_standing&.name || "",
+        current_standing_color: current_standing&.color || ""
       }
 
       if current_user.avatar.attached?
@@ -26,6 +29,18 @@ module Users
     end
 
     private
+
+    def standing_enabled?
+      !!Schools::Configuration.new(current_school).standing_enabled?
+    end
+
+    def current_standing
+      @current_standing ||=
+        if standing_enabled?
+          current_user.user_standings.first&.standing ||
+            Standing.find_by(school: current_school, default: true)
+        end
+    end
 
     def issued_certificate_details
       current_user

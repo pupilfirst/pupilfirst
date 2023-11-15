@@ -37,7 +37,12 @@ module Users
     def current_standing
       @current_standing ||=
         if standing_enabled?
-          current_user.user_standings.first&.standing ||
+          current_user
+            .user_standings
+            .includes(:standing)
+            .where(archived_at: nil)
+            .last
+            &.standing ||
             Standing.find_by(school: current_school, default: true)
         end
     end

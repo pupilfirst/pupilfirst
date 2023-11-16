@@ -13,8 +13,8 @@ module.exports = {
     colors: {
       transparent: "transparent",
       current: "currentColor",
-      black: colors.black,
-      white: colors.white,
+      black: "var(--color-black)",
+      white: "var(--color-white)",
       red: colors.rose,
       yellow: colors.yellow,
       orange: colors.orange,

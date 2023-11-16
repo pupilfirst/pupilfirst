@@ -329,8 +329,47 @@
 
   /* Dark mode theme*/
   .dark {
+    --color-primary-50: #17121f;
+    --color-primary-100: #3c2c51;
+    --color-primary-200: #604682;
+    --color-primary-300: #8661b5;
+    --color-primary-400: #aa7ce7;
+    --color-primary-500: #bd89ff;
+    --color-primary-600: #c89dff;
+    --color-primary-700: #d2b0ff;
+    --color-primary-800: #dec5ff;
+    --color-primary-900: #e8d8ff;
+    --color-gray-50: #050506;
+    --color-gray-100: #131115;
+    --color-gray-200: #1a171d;
+    --color-gray-300: #37323d;
+    --color-gray-400: #71697d;
+    --color-gray-500: #8e839e;
+    --color-gray-600: #ab9ebf;
+    --color-gray-700: #c8b9df;
+    --color-gray-800: #e5d4ff;
+    --color-gray-900: #f3ecff;
+    --color-focus-50: #eef2ff;
+    --color-focus-100: #e0e7ff;
+    --color-focus-200: #c7d2fe;
+    --color-focus-300: #a5b4fc;
+    --color-focus-400: #818cf8;
+    --color-focus-500: #6366f1;
+    --color-focus-600: #4f46e5;
+    --color-focus-700: #4338ca;
+    --color-focus-800: #3730a3;
+    --color-focus-900: #312e81;
+    --color-black: white;
+    --color-white: #100e13;
+    --font-family-sans: "Inter", sans-serif;
 
-    --main-black-color: #1A1B18;
+    /* -------------------------------------- */
+    /* -------------------------------------- */
+    /* -------------------------------------- */
+
+    /* REMOVE FOLLOWING STYLES BEFORE MERGING */
+
+    /* --main-black-color: #1A1B18;
     --main-text-color: #d6d3cd;
     --purple-light-color: #844edd;
     --purple-dark-color: #4e1e9c;
@@ -342,9 +381,9 @@
     --nav-color: #cdc8c2;
     --border-color: #363b3d;
     --border-gray-500-color: #655e53;
-    --footer-color: #25282a;
+    --footer-color: #25282a; */
 
-    & button:disabled, .disabled{
+    /* & button:disabled, .disabled{
       background-color: var(--gray-light-color);
       color: var(--black-color);
     }
@@ -456,7 +495,10 @@
       color: var(--purple-light-color) !important;
       background-color: var(--main-black-color) !important;
       border-color: var(--purple-dark-color) !important;
-    }
+    } */
 
+    /* -------------------------------------- */
+    /* -------------------------------------- */
+    /* -------------------------------------- */
   }
 }

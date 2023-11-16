@@ -23,35 +23,37 @@ let headerSection = (
 ) => {
   let name = Belt.Option.getWithDefault(preferredName, userName)
   <div className="max-w-5xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
-    <div className="flex">
+    <div className="flex flex-col sm:flex-row items-center justify-center">
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 me-4"
+          className="w-16 sm:h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 me-4"
           src
         />
       | None =>
         <Avatar
           name
-          className="w-16 h-16 me-4 border border-gray-300 rounded-full overflow-hidden shrink-0"
+          className="w-16 sm:h-16 border border-gray-300 rounded-full overflow-hidden shrink-0 me-4"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
-        <div className="text-black font-bold inline-block"> {name->str} </div>
+        <div className="text-black font-semibold sm:font-bold inline-block text-base sm:text-lg">
+          {name->str}
+        </div>
         <div className="text-gray-600 inline-block"> {userTitle->str} </div>
       </div>
-      {ReactUtils.nullUnless(
-        <a className="btn" href="/user/edit">
-          <i className="fas fa-edit text-xs md:text-sm me-2 ms-2" />
-          <span> {t("edit_profile")->str} </span>
-        </a>,
-        showUserEdit,
-      )}
     </div>
+    {ReactUtils.nullUnless(
+      <a className="btn" href="/user/edit">
+        <i className="fas fa-edit text-xs md:text-sm me-2 ms-2" />
+        <span> {t("edit_profile")->str} </span>
+      </a>,
+      showUserEdit,
+    )}
     {ReactUtils.nullUnless(
       <div
         className="flex flex-col-reverse sm:flex-row items-center justify-center sm:justify-start">
-        <div className="text-right">
+        <div className="text-center sm:text-right">
           <p
             style={ReactDOM.Style.make(~color=currentStandingColor, ())}
             className="text-base font-semibold">
@@ -59,7 +61,7 @@ let headerSection = (
           </p>
           <a href="/user/standing">
             <span className="text-sm text-primary-500 hover:text-primary-800">
-              {t("view_standing")->str}
+              {I18n.ts("view_standing")->str}
             </span>
           </a>
         </div>

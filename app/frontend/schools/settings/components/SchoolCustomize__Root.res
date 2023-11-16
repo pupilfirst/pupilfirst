@@ -487,7 +487,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             </div>
             <div
               className="flex items-center border border-dashed border-gray-500 rounded p-2 ms-6 text-xs">
-              <div> {t("code_of_conduct")->str} </div>
+              <div> {ts("code_of_conduct")->str} </div>
               {editIcon(
                 "ms-3",
                 showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.CodeOfConduct), send),

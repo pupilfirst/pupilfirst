@@ -36,7 +36,7 @@ class HomeController < ApplicationController
       when "Terms and Conditions"
         t(".terms_and_conditions")
       when "Code of Conduct"
-        t(".code_of_conduct")
+        t("shared.code_of_conduct")
       end
 
     render layout: "student"

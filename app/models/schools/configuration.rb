@@ -73,7 +73,7 @@ module Schools
     end
 
     def standing_enabled?
-      @school.configuration["enable_standing"]
+      !!@school.configuration["enable_standing"]
     end
   end
 end

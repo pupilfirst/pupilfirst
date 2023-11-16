@@ -8,7 +8,7 @@ module Users
     end
 
     def standing_enabled?
-      !!Schools::Configuration.new(current_school).standing_enabled?
+      Schools::Configuration.new(current_school).standing_enabled?
     end
 
     def user_standings

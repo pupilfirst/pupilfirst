@@ -4,7 +4,7 @@
       <div class="flex gap-3 items-center">
         <div class="w-16 h-16 border-gray-200 rounded-full overflow-hidden">
           <% if @presenter.user.avatar.attached? %>
-            <%= image_tag user.avatar_url(variant: :mid) %>
+            <%= image_tag @presenter.user.avatar_url(variant: :mid) %>
           <% else %>
             <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.user.name }.to_json %>"></div>
           <% end %>
@@ -65,7 +65,7 @@
                   </div>
                 <% end %>
               <% else %>
-                <div class="flex flex-col items-center p-5 bg-white border border-gray-200 rounded-md ">
+                <div class="flex flex-col items-center p-5 bg-white border border-gray-200 rounded-md mb-8">
                   <%= image_tag 'users/standing/no_standing_log.svg', alt: 'No Standing', class: "w-20 h-20"%>
                   <div class="text-center w-full md:w-2/3 mt-2">
                     <p class="text-lg font-semibold"><%= t(".no_standing_log") %></p>

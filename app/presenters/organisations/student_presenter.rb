@@ -154,6 +154,21 @@ module Organisations
       milestone_targets.count
     end
 
+    def standing_enabled?
+      Schools::Configuration.new(course.school).standing_enabled?
+    end
+
+    def current_standing
+      @current_standing ||=
+        student
+          .user
+          .user_standings
+          .includes(:standing)
+          .where(archived_at: nil)
+          .last
+          &.standing || Standing.find_by(school: course.school, default: true)
+    end
+
     private
 
     def current_course_targets

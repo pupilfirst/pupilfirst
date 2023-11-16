@@ -31,7 +31,7 @@ module Users
     private
 
     def standing_enabled?
-      !!Schools::Configuration.new(current_school).standing_enabled?
+      Schools::Configuration.new(current_school).standing_enabled?
     end
 
     def current_standing

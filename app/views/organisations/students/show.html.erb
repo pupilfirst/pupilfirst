@@ -1,21 +1,32 @@
 <div class="md:pt-18 bg-gray-50">
-  <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6">
-      <div class="mt-4">
-        <a class="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" href="<%= students_organisation_cohort_path(@presenter.organisation, @presenter.cohort, @presenter.filters_in_url) %>"><%= t('shared.back_link') %></a>
-      </div>
-      <div class="mt-5 flex items-center">
-        <div class="w-11">
+  <section class="pt-12 pb-12 border-b border-gray-200 bg-white">
+    <div class="max-w-5xl mx-auto px-5 flex items-center justify-between">
+      <div class="flex flex-col sm:flex-row gap-3 items-center">
+        <div class="w-14 h-14 border-gray-200 rounded-full overflow-hidden">
           <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
         </div>
-        <h1 class="text-xl md:text-2xl font-semibold ps-4 "><%= @presenter.student.name %></h1>
+        <div>
+          <p class="text-base font-semibold"><%= @presenter.student.name %></p>
+        </div>
       </div>
+      <% if @presenter.standing_enabled? %>
+        <div class="flex flex-col-reverse sm:flex-row items-center">
+          <div class="text-center">
+            <p class="text-sm md:text-base font-semibold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
+            <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-sm md:text-base text-primary-500 hover:text-primary-800" %>
+          </div>
+          <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+        </div>
+      <% end %>
     </div>
   </section>
-  <section class="bg-white">
+  <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-5">
+      <div class="pb-5">
+        <a class="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" href="<%= students_organisation_cohort_path(@presenter.organisation, @presenter.cohort, @presenter.filters_in_url) %>"><i class="if i-arrow-left-regular"></i><%= t('shared.back_link') %></a>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5">
-        <div class="col-span-2 p-5 bg-gray-50 rounded-lg">
+        <div class="col-span-2 p-5 bg-gray-100 rounded-lg">
           <h2 class="font-semibold"><%= t('.targets_overview') %></h2>
           <div aria-label="target-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
             <%= render 'donut_chart', color: 'purple', percentage: @presenter.target_completion_percentage %>
@@ -40,7 +51,7 @@
           </div>
         <% end %>
       </div>
-      <div class="w-full p-5 bg-gray-50 rounded-lg mt-5">
+      <div class="w-full p-5 bg-gray-100 rounded-lg mt-5">
         <% stats = @presenter.milestone_completion_stats %>
         <div class="flex justify-between">
           <p class="text-sm font-semibold"><%= t(".milestone_targets") %></p>
@@ -62,7 +73,7 @@
         </div>
         <div class="space-y-2">
           <% @presenter.milestone_completion_status.each do |milestone_number, data| %>
-            <div class="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
+            <div class="flex mt-2 items-center p-2 rounded-md border bg-gray-200 transition">
               <div class="flex items-center">
                 <div class="mr-2">
                   <span class="text-xs font-medium px-1 py-0.5 <%= data[:completed] ? ' bg-green-100  rounded' : 'bg-orange-100 rounded' %>">

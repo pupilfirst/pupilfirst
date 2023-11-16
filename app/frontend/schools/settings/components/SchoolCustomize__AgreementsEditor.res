@@ -28,7 +28,7 @@ let kindToString = kind =>
   switch kind {
   | PrivacyPolicy => t("privacy_policy")
   | TermsAndConditions => t("terms_and_conditions")
-  | CodeOfConduct => t("code_of_conduct")
+  | CodeOfConduct => ts("code_of_conduct")
   }
 
 let kindToKey = kind =>

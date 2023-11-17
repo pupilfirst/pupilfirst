@@ -102,7 +102,6 @@ describe Courses::CloneService do
     quiz_question_2.update!(correct_answer: q2_answer_4)
 
     # set prerequisite target
-    target_l1_2.prerequisite_targets << prerequisite_target
     target_l1_2.assignments.first.evaluation_criteria << ec_1
 
     # attach images
@@ -119,19 +118,19 @@ describe Courses::CloneService do
 
   describe "#clone" do
     it "create a clone of the course with the supplied name" do
-      original_levels = Level.all.order(:number).pluck(:number, :name)
-      original_group_names = TargetGroup.all.pluck(:name)
-      original_targets = Target.all.pluck(:title, :description)
-      original_assignments = Assignment.all.pluck(:role, :checklist, :milestone, :milestone_number, :archived, :completion_instructions)
-      original_team_count = Team.count
-      original_student_count = Student.count
-      original_submission_count = TimelineEvent.count
+      original_levels = course.levels.order(:number).pluck(:number, :name)
+      original_group_names = course.target_groups.pluck(:name)
+      original_targets = course.targets.pluck(:title, :description)
+      original_assignments = course.assignments.pluck(:role, :checklist, :milestone, :milestone_number, :archived, :completion_instructions)
+      original_team_count = course.teams.count
+      original_student_count = course.students.count
+      original_submission_count = course.timeline_events.count
       original_quiz_questions = QuizQuestion.all.pluck(:question, :description)
       original_answer_options = AnswerOption.all.pluck(:value, :hint)
-      original_content_blocks_count = ContentBlock.count
+      original_content_blocks_count = course.content_blocks.count
 
       original_content_blocks =
-        Target.all.map do |t|
+        course.targets.map do |t|
           t
             .current_content_blocks
             .order(:sort_index)

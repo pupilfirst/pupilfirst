@@ -45,39 +45,39 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name, hasNameError) => {
       ...state,
-      name: name,
-      hasNameError: hasNameError,
+      name,
+      hasNameError,
       dirty: true,
     }
   | UpdateTitle(title, hasTitleError) => {
       ...state,
-      title: title,
-      hasTitleError: hasTitleError,
+      title,
+      hasTitleError,
       dirty: true,
     }
   | UpdateEmail(email, hasEmailError) => {
       ...state,
-      email: email,
-      hasEmailError: hasEmailError,
+      email,
+      hasEmailError,
       dirty: true,
     }
 
   | UpdateConnectLink(connectLink, hasConnectLinkError) => {
       ...state,
-      connectLink: connectLink,
-      hasConnectLinkError: hasConnectLinkError,
+      connectLink,
+      hasConnectLinkError,
       dirty: true,
     }
-  | UpdatePublic(public) => {...state, public: public, dirty: true}
+  | UpdatePublic(public) => {...state, public, dirty: true}
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateImageFileName(imageFileName) => {
       ...state,
-      imageFileName: imageFileName,
+      imageFileName,
       dirty: true,
     }
   | MarkAsActive => {...state, exited: false, dirty: true}
   | MarkAsExited => {...state, exited: true, dirty: true}
-  | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation, dirty: true}
+  | UpdateAffiliation(affiliation) => {...state, affiliation, dirty: true}
   }
 
 let str = React.string
@@ -412,7 +412,7 @@ let make = (~coach, ~closeFormCB, ~authenticityToken) => {
                         )}
                     />
                     <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
-                      <i className="fas fa-upload me-2 text-gray-600 text-lg" />
+                      <i className="fas fa-upload me-2 text-primary-300 text-lg" />
                       <span className="truncate"> {avatarUploaderText()->str} </span>
                     </label>
                   </div>

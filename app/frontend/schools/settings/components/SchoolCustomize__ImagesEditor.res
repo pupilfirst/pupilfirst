@@ -107,7 +107,8 @@ let imageUploader = (
       onChange
     />
     <label className="file-input-label mt-2" htmlFor=id>
-      <i className="fas fa-upload" /> <span className="ms-2 truncate"> optionalImageLabel </span>
+      <i className="fas fa-upload text-primary-300 text-lg" />
+      <span className="ms-2 truncate"> optionalImageLabel </span>
     </label>
     <School__InputGroupError message=errorMessage active=errorState />
   </div>
@@ -171,7 +172,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="logo_on_light_bg"
         onChange={updateLogoOnLightBg(send)}
-        labelText=t("logo_light_label")
+        labelText={t("logo_light_label")}
         imageName={logoOnLightBg |> OptionUtils.map(Customizations.filename)}
         selectedImageName=state.logoOnLightBgFilename
         errorState=state.logoOnLightBgInvalid
@@ -181,7 +182,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="icon"
         onChange={updateIcon(send)}
-        labelText=t("icon")
+        labelText={t("icon")}
         imageName=Some(icon |> Customizations.filename)
         selectedImageName=state.iconFilename
         errorState=state.iconInvalid
@@ -191,7 +192,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="cover_image"
         onChange={updateCoverImage(send)}
-        labelText=t("cover_image")
+        labelText={t("cover_image")}
         imageName={coverImage |> OptionUtils.map(Customizations.filename)}
         selectedImageName=state.coverImageFilename
         errorState=state.coverImageInvalid

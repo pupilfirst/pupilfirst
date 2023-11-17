@@ -161,7 +161,7 @@
 }
 
 .drawer-right {
-  background-color: white;
+  @apply bg-white;
   display: flex;
   height: 100vh;
   right: 0px;
@@ -216,10 +216,9 @@
 }
 
 .drawer-right-form {
-  background-color: #fbfafc;
   overflow-x: hidden;
   overflow-y: scroll;
-  @apply text-sm;
+  @apply text-sm bg-white;
 }
 
 .drawer-right-form__error-msg {

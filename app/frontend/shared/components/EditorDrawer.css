@@ -1,8 +1,5 @@
 .editor-drawer {
-  background-color: white;
-  display: flex;
-  height: 100vh;
-  position: fixed;
+  @apply bg-white flex h-screen fixed;
   right: 0px;
   top: 0px;
   width: 100%;

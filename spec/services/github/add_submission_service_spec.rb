@@ -117,7 +117,14 @@ RSpec.describe Github::AddSubmissionService, type: :service do
                 target: {
                   id: target.id,
                   title: target.title,
-                  evaluation_criteria: target.assignments.first.evaluation_criteria,
+                  evaluation_criteria: target.assignments.not_archived.first.evaluation_criteria.map do |ec|
+                    {
+                      id: ec.id,
+                      name: ec.name,
+                      max_grade: ec.max_grade,
+                      grade_labels: ec.grade_labels
+                    }
+                  end,
                 },
                 files: [],
               }

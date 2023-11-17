@@ -68,6 +68,10 @@
 
   /* Accessible File Input */
 
+  input,
+  textarea {
+    @apply bg-white;
+  }
   .form-input__file-sr-only {
     position: absolute;
     margin: -1px;

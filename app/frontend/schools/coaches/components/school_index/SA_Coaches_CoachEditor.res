@@ -418,7 +418,7 @@ let make = (~coach, ~closeFormCB, ~authenticityToken) => {
                   </div>
                 </div>
               </div>
-              <div className="p-6 bg-gray-50">
+              <div className="p-6 bg-white border-t border-gray-200">
                 <div className="max-w-2xl px-6 mx-auto">
                   <div className="flex max-w-2xl w-full justify-between items-center mx-auto">
                     {switch coach {

@@ -261,9 +261,9 @@
 .sa-toggle__menu-btn-inner,
 .sa-toggle__menu-btn-inner::before,
 .sa-toggle__menu-btn-inner::after {
+  @apply bg-black;
   width: 20px;
   height: 2px;
-  background-color: #000;
   border-radius: 4px;
   position: absolute;
   transition-property: transform;
@@ -332,7 +332,7 @@
 }
 
 .toggle-button__button--active {
-  @apply bg-primary-100 text-primary-600 border-primary-500;
+  @apply bg-primary-50 text-primary-500 border-primary-500;
 }
 
 .toggle-button__button--active:not(:last-of-type) {

@@ -149,7 +149,7 @@
   }
 
   .btn-primary-ghost {
-    @apply bg-white text-primary-500 border border-primary-500  !important;
+    @apply bg-white text-primary-500 border border-primary-500;
   }
 
   .btn-primary-ghost:hover {

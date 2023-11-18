@@ -109,6 +109,10 @@ describe CourseExports::PrepareStudentsExportService do
            cohorts: [cohort_live, cohort_2_live]
   end
 
+  let!(:student_1_reviewed_submission_failed) do
+    fail_target target_l1_evaluated, student_1
+  end
+
   let!(:student_1_reviewed_submission) do
     complete_target target_l1_evaluated, student_1
   end
@@ -195,20 +199,22 @@ describe CourseExports::PrepareStudentsExportService do
           ["Students with submissions", 1, 3, 3, 1],
           ["Submissions pending review", 0, 0, 0, 1],
           [
-            'Criterion A 3 - Average',
+            "Criterion A 3 - Average",
             nil,
             nil,
             (
-              evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum / 1.0
+              evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum /
+                1.0
             ).round(2).to_s,
             nil
           ],
           [
-            'Criterion B 3 - Average',
+            "Criterion B 3 - Average",
             nil,
             nil,
             (
-              evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum  / 1.0
+              evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum /
+                1.0
             ).round(2).to_s,
             nil
           ]
@@ -218,18 +224,18 @@ describe CourseExports::PrepareStudentsExportService do
         title: "Students",
         rows: [
           [
-            'User ID',
-            'Student ID',
-            'Email Address',
-            'Name',
-            'Title',
-            'Affiliation',
-            'Cohort',
-            'Tags',
-            'Last Seen At',
-            'Course Completed At',
-            'Criterion A 3 - Average',
-            'Criterion B 3 - Average'
+            "User ID",
+            "Student ID",
+            "Email Address",
+            "Name",
+            "Title",
+            "Affiliation",
+            "Cohort",
+            "Tags",
+            "Last Seen At",
+            "Course Completed At",
+            "Criterion A 3 - Average",
+            "Criterion B 3 - Average"
           ],
           [
             student_1.user_id,
@@ -265,7 +271,7 @@ describe CourseExports::PrepareStudentsExportService do
             student_1.cohort.name,
             "",
             last_seen_at(student_2),
-            student_2.completed_at&.iso8601 || '',
+            student_2.completed_at&.iso8601 || "",
             nil,
             nil
           ],
@@ -300,7 +306,8 @@ describe CourseExports::PrepareStudentsExportService do
             "✓",
             "2/2",
             {
-              "value" => submission_grading(student_1_reviewed_submission),
+              "value" =>
+                "x;#{submission_grading(student_1_reviewed_submission)}",
               "style" => "passing-grade"
             },
             { "value" => "RP", "style" => "pending-grade" }
@@ -308,14 +315,14 @@ describe CourseExports::PrepareStudentsExportService do
           [
             student_2.email,
             nil,
-            '1/2',
-            'x'
+            "1/2",
+            { "value" => "x", "style" => "failing-grade" }
           ],
           [
             student_5.email,
             nil,
             "1/2",
-            'x'
+            { "value" => "x", "style" => "failing-grade" }
           ]
         ]
       }
@@ -370,7 +377,7 @@ describe CourseExports::PrepareStudentsExportService do
               ["Students with submissions", 3, 1],
               ["Submissions pending review", 3, 1],
               [
-                'Criterion A 3 - Average',
+                "Criterion A 3 - Average",
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -380,7 +387,7 @@ describe CourseExports::PrepareStudentsExportService do
                 nil
               ],
               [
-                'Criterion B 3 - Average',
+                "Criterion B 3 - Average",
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_2)
@@ -395,18 +402,18 @@ describe CourseExports::PrepareStudentsExportService do
             title: "Students",
             rows: [
               [
-                'User ID',
-                'Student ID',
-                'Email Address',
-                'Name',
-                'Title',
-                'Affiliation',
-                'Cohort',
-                'Tags',
-                'Last Seen At',
-                'Course Completed At',
-                'Criterion A 3 - Average',
-                'Criterion B 3 - Average'
+                "User ID",
+                "Student ID",
+                "Email Address",
+                "Name",
+                "Title",
+                "Affiliation",
+                "Cohort",
+                "Tags",
+                "Last Seen At",
+                "Course Completed At",
+                "Criterion A 3 - Average",
+                "Criterion B 3 - Average"
               ],
               [
                 student_1.user_id,
@@ -474,7 +481,7 @@ describe CourseExports::PrepareStudentsExportService do
                 student_1.email,
                 {
                   "value" =>
-                    "#{submission_grading(student_1_reviewed_submission)};RP",
+                    "x;#{submission_grading(student_1_reviewed_submission)};RP",
                   "style" => "pending-grade"
                 },
                 { "value" => "RP", "style" => "pending-grade" }

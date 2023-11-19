@@ -3,6 +3,7 @@ require "rails_helper"
 feature "School Standing", js: true do
   include UserSpecHelper
   include NotificationHelper
+  include MarkdownEditorHelper
 
   let!(:school) { create :school, :current }
   let!(:school_admin) { create :school_admin, school: school }
@@ -30,7 +31,7 @@ feature "School Standing", js: true do
     )
   end
 
-  context "Add more standing" do
+  context "When school has standing enabled and standings are created" do
     before do
       # Enable standings in the school configuration
       school.update!(configuration: { enable_standing: true })
@@ -120,6 +121,53 @@ feature "School Standing", js: true do
       expect(page).to have_text("Standing created successfully")
 
       expect(page).to have_text(new_standing_name)
+    end
+
+    scenario "School admin tries to add code of conduct for the school" do
+      sign_in_user school_admin.user, referrer: standing_school_path
+
+      click_button "Yes"
+
+      expect(page).to have_text("Enabled")
+
+      expect(page).to have_link("Add CoC")
+
+      click_link "Add CoC"
+
+      expect(page).to have_text("Code of Conduct")
+
+      code_of_conduct = Faker::Markdown.sandwich(sentences: 6)
+      add_markdown(code_of_conduct)
+
+      expect(page).to have_text(code_of_conduct)
+
+      click_button "Save Code of Conduct"
+
+      expect(page).to have_text("Code of Conduct saved successfully")
+
+      expect(page).to have_link("Edit CoC")
+
+      click_link "Edit CoC"
+
+      expect(page).to have_text("Code of Conduct")
+
+      within("textarea[name='code_of_conduct_editor']") do
+        expect(page).to have_text(code_of_conduct)
+      end
+
+      code_of_conduct = Faker::Markdown.sandwich(sentences: 6)
+
+      replace_markdown(code_of_conduct)
+
+      click_button "Save Code of Conduct"
+
+      expect(page).to have_text("Code of Conduct saved successfully")
+
+      click_link "View CoC"
+
+      expect(page).to have_current_path(
+        agreement_path(agreement_type: "code-of-conduct")
+      )
     end
   end
 end

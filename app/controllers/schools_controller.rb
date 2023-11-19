@@ -40,6 +40,7 @@ class SchoolsController < ApplicationController
     @presenter = Schools::StandingPresenter.new(view_context, current_school)
   end
 
+  # PATCH /school/standing
   def toggle_standing
     authorize current_school
 
@@ -77,17 +78,24 @@ class SchoolsController < ApplicationController
   # PATCH /school/code_of_conduct
   def update_code_of_conduct
     authorize current_school
-    if SchoolString.exists?(school: current_school, key: "code_of_conduct")
+    value = params[:code_of_conduct_editor].strip
+    if SchoolString.exists?(school: current_school, key: "code_of_conduct") &&
+         value.length > 0
       SchoolString.find_by(
         school: current_school,
         key: "code_of_conduct"
-      ).update!(value: params[:code_of_conduct_editor])
-    else
+      ).update!(value: value)
+    elsif value.length > 0
       SchoolString.create!(
         school: current_school,
         key: "code_of_conduct",
-        value: params[:code_of_conduct_editor]
+        value: value
       )
+    else
+      SchoolString.find_by(
+        school: current_school,
+        key: "code_of_conduct"
+      ).destroy
     end
     flash[:success] = I18n.t("schools.standing.save_coc_success")
     redirect_to standing_school_path

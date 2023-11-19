@@ -15,7 +15,7 @@ module Github
         @submission
           .submission_reports
           .find_or_create_by!(
-            reporter: SubmissionReport::VIRTUAL_TEACHING_ASSISTANT,
+            reporter: SubmissionReport::VIRTUAL_TEACHING_ASSISTANT
           )
           .update!(target_url: @submission.actions_url)
       end
@@ -30,7 +30,7 @@ module Github
         "Update workflow [skip ci]",
         ci_file_sha(repo_name),
         @submission.target.action_config,
-        branch: branch,
+        branch: branch
       )
 
       # Add files to the repo
@@ -42,7 +42,7 @@ module Github
         "submission.json",
         "Add submission data",
         submission_data_service.data.to_json,
-        branch: branch,
+        branch: branch
       )
     end
 
@@ -50,17 +50,24 @@ module Github
 
     def create_branch(re_run)
       # Create a branch with the name submission-<student_id>
-      branch_name = "submission-#{@submission.id}"
-
-      branch_name = "#{branch_name}-#{Time.now.to_i}" if re_run
-
+      branch_name_suffix = re_run ? "-#{Time.now.to_i}" : ""
+      branch_name = "submission-#{@submission.id}#{branch_name_suffix}"
       repo_name = @submission.students.first.github_repository
 
-      # Get the sha of the last commit on the main branch
+      # Get the SHA of the last commit on the main branch
       latest_sha = get_main_branch_sha(repo_name)
 
-      # Create the branch with the last commit sha of the main branch as the base
-      github_client.create_ref repo_name, "heads/#{branch_name}", latest_sha
+      # Create the branch with the last commit SHA of the main branch as the base
+      begin
+        github_client.create_ref repo_name, "heads/#{branch_name}", latest_sha
+      rescue Octokit::UnprocessableEntity => e
+        if e.message.include?("Reference already exists")
+          # For whatever reason, this branch already exists - let's skip this step.
+          Rails.logger.info "Branch #{branch_name} already exists. Skipping"
+        else
+          raise e
+        end
+      end
 
       branch_name
     end
@@ -75,7 +82,7 @@ module Github
         # Create the main branch and get the Sha of the last commit
         last_commit =
           Github::SetupRepositoryService.new(
-            @submission.students.first,
+            @submission.students.first
           ).add_workflow_starter(repo_name)
         last_commit.content.sha
       end
@@ -97,7 +104,7 @@ module Github
           "script" + File.extname(file[:filename]),
           "Add submission file[skip ci]",
           file_content,
-          branch: branch,
+          branch: branch
         )
       end
     end
@@ -106,7 +113,7 @@ module Github
       begin
         github_client.contents(
           repo_name,
-          path: ".github/workflows/ci.js.yml",
+          path: ".github/workflows/ci.js.yml"
         ).sha
       rescue StandardError
         Rails.logger.error "Error while fetching the ci.js.yml file"

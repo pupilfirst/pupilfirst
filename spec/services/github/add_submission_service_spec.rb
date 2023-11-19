@@ -87,7 +87,7 @@ RSpec.describe Github::AddSubmissionService, type: :service do
         end
 
         context "when the student's repository already has the branch'" do
-          it "ignores the error from Octokit and continues" do
+          it "deletes the branch and retries" do
             allow(octokit_client).to receive(:commits).and_return(
               [OpenStruct.new(sha: sha)]
             )
@@ -96,22 +96,35 @@ RSpec.describe Github::AddSubmissionService, type: :service do
               OpenStruct.new(sha: sha)
             )
 
+            allow(octokit_client).to receive(:delete_ref)
+
+            allow(octokit_client).to receive(:create_ref) do
+              @times_create_ref_called ||= 0
+              @times_create_ref_called += 1
+
+              if @times_create_ref_called == 1
+                raise Octokit::UnprocessableEntity,
+                      { status: 422, body: "Reference already exists" }
+              else
+                "ref"
+              end
+            end
+
             expect(octokit_client).to receive(:update_contents)
             expect(octokit_client).to receive(:create_contents)
 
-            allow(octokit_client).to receive(:create_ref).and_raise(
-              Octokit::UnprocessableEntity.new(
-                { status: 422, body: "Reference already exists" }
-              )
-            )
-
             expect { service.execute }.not_to raise_error
+
+            expect(octokit_client).to have_received(:delete_ref).with(
+              student.github_repository,
+              "heads/submission-#{submission.id}"
+            )
 
             expect(octokit_client).to have_received(:create_ref).with(
               student.github_repository,
               "heads/submission-#{submission.id}",
               sha
-            )
+            ).twice
           end
         end
 

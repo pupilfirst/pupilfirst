@@ -1,10 +1,10 @@
-<div class="bg-gray-50 h-full">
-  <div class="mt-16 py-12 border-b border-gray-200 bg-white">
-    <div class="max-w-5xl mx-auto px-5 flex items-center justify-between">
-      <div class="flex gap-3 items-center">
-        <div class="w-16 h-16 border-gray-200 rounded-full overflow-hidden">
+<div class="bg-gray-50 md:mt-16">
+  <div class="py-8 md:py-12 border-b border-gray-200 bg-white">
+    <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row items-start justify-between gap-1">
+      <div class="flex gap-1 items-center">
+        <div class="w-15 h-15 border-gray-200 rounded-full overflow-hidden shrink-0 m-1">
           <% if @presenter.user.avatar.attached? %>
-            <%= image_tag @presenter.user.avatar_url(variant: :mid) %>
+            <%= image_tag @presenter.user.avatar_url(variant: :thumb), alt: 'Avatar', class: "w-full h-full" %>
           <% else %>
             <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.user.name }.to_json %>"></div>
           <% end %>
@@ -15,12 +15,14 @@
         </div>
       </div>
       <% if @presenter.standing_enabled? %>
-        <div class="flex items-center">
-          <div class="text-right">
+        <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-1">
+          <div class="text-left md:text-right m-1 md:m-0">
             <p class="text-base font-semibold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
             <p class="text-sm text-gray-500"><%= t(".standing") %></</p>
           </div>
-          <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+          <div>
+            <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+          </div>
         </div>
       <% end %>
     </div>
@@ -57,9 +59,9 @@
                     </div>
                     <div class="-ms-8 pb-5 w-full ps-12 <%= "#{'border-s border-gray-300 border-dashed' if @presenter.user_standings_count > 1 && index != @presenter.user_standings_count - 1}" %> group-last:border-s-0">
                       <div class="bg-white p-5 rounded-md border border-gray-200">
-                        <p class="font-semibold" style="color: <%= user_standing.standing.color %>;"><%= user_standing.standing.name %></p>
+                        <p class="font-semibold break-all" style="color: <%= user_standing.standing.color %>;"><%= user_standing.standing.name %></p>
                         <p class="text-sm font-medium"><i class="if i-calendar-light if-fw" ></i> <%= user_standing.created_at.strftime("%-d %B %Y") %><span class="text-gray-500">  •  </span><%= user_standing.created_at.strftime("%-l:%M %p") %></p>
-                        <p class="text-sm mt-2 text-gray-500"><%= user_standing.reason %></p>
+                        <p class="text-sm mt-2 text-gray-500 break-all"><%= user_standing.reason %></p>
                       </div>
                     </div>
                   </div>
@@ -98,12 +100,12 @@
               <p class="text-sm w-10/12"><%= t(".code_of_conduct_info", school_name: current_school.name )%></p>
               <a href="/agreements/code-of-conduct" class="text-sm font-semibold bg-primary-50 text-primary-500 rounded-md px-5 py-3 mt-5 hover:bg-primary-100 transition"><%= t(".view_code_of_conduct") %><a>
                 </div>
-                <div class="flex items-center gap-4 bg-white p-5 mt-5 rounded-md border border-gray-100">
+                <div class="flex flex-col md:flex-row items-center gap-4 bg-white p-5 mt-5 rounded-md border border-gray-100">
                   <svg class="w-12 h-12" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0.898438" y="0.259766" width="39.2598" height="39.2598" rx="19.6299" fill="#F8F5FC"/>
                     <path d="M15.5293 18.4277L19.2793 21.4277C19.634 21.7117 20.0749 21.8665 20.5293 21.8665C20.9837 21.8665 21.4246 21.7117 21.7793 21.4277L25.5293 18.4277M29.5293 26.4277V16.4277C29.5293 15.8973 29.3186 15.3886 28.9435 15.0135C28.5684 14.6384 28.0597 14.4277 27.5293 14.4277H13.5293C12.9989 14.4277 12.4902 14.6384 12.1151 15.0135C11.74 15.3886 11.5293 15.8973 11.5293 16.4277V26.4277C11.5293 26.9582 11.74 27.4669 12.1151 27.8419C12.4902 28.217 12.9989 28.4277 13.5293 28.4277H27.5293C28.0597 28.4277 28.5684 28.217 28.9435 27.8419C29.3186 27.4669 29.5293 26.9582 29.5293 26.4277Z" stroke="#4D1E9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  <div>
+                  <div class="break-all">
                     <p class="text-lg font-bold"><%= t(".reach_us") %></p>
                     <p class="text-sm"><%= t(".reach_us_info") %> <a href=<%= current_school.email %> class="font-semibold text-primary-500"><%= current_school.email %></a></p>
                   </div>

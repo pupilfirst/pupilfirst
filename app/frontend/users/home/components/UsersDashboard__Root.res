@@ -22,50 +22,52 @@ let headerSection = (
   currentStandingColor,
 ) => {
   let name = Belt.Option.getWithDefault(preferredName, userName)
-  <div className="max-w-5xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
-    <div className="flex flex-col sm:flex-row items-center justify-center">
+  <div
+    className="max-w-5xl mx-auto pt-12 flex flex-col md:flex-row items-start justify-start md:justify-between px-3 lg:px-0">
+    <div className="flex items-center justify-center gap-2">
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 sm:h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 me-4"
-          src
+          className="w-16 h-16 rounded-full border border-gray-300 overflow-hidden shrink-0" src
         />
       | None =>
         <Avatar
-          name
-          className="w-16 sm:h-16 border border-gray-300 rounded-full overflow-hidden shrink-0 me-4"
+          name className="w-16 h-16 border border-gray-300 rounded-full overflow-hidden shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
-        <div className="text-black font-semibold sm:font-bold inline-block text-base sm:text-lg">
+        <div className="text-black font-bold flex items-center justify-start">
           {name->str}
+          {ReactUtils.nullUnless(
+            <a
+              className="hidden md:block ms-2 text-primary-400 font-medium text-xs hover:text-primary-500 rounded-full border px-3 py-1 bg-primary-50 hover:bg-primary-100"
+              href="/user/edit">
+              <span> {t("edit_profile")->str} </span>
+            </a>,
+            showUserEdit,
+          )}
         </div>
         <div className="text-gray-600 inline-block"> {userTitle->str} </div>
       </div>
     </div>
     {ReactUtils.nullUnless(
-      <a className="btn" href="/user/edit">
-        <i className="fas fa-edit text-xs md:text-sm me-2 ms-2" />
-        <span> {t("edit_profile")->str} </span>
-      </a>,
-      showUserEdit,
-    )}
-    {ReactUtils.nullUnless(
       <div
-        className="flex flex-col-reverse sm:flex-row items-center justify-center sm:justify-start">
-        <div className="text-center sm:text-right">
+        className="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2 pt-2 md:pt-0">
+        <div className="text-left md:text-right gap-1">
           <p
             style={ReactDOM.Style.make(~color=currentStandingColor, ())}
             className="text-base font-semibold">
             {currentStandingName->str}
           </p>
           <a href="/user/standing">
-            <span className="text-sm text-primary-500 hover:text-primary-800">
+            <span className="text-sm text-primary-400 hover:text-primary-500">
               {I18n.ts("view_standing")->str}
             </span>
           </a>
         </div>
-        <StandingShield color=currentStandingColor sizeClass={"w-16 h-16"} />
+        <div id="standing_shield">
+          <StandingShield color=currentStandingColor sizeClass={"w-16 h-16"} />
+        </div>
       </div>,
       standingEnabled,
     )}

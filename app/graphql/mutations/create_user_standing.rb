@@ -67,6 +67,10 @@ module Mutations
       student&.school
     end
 
+    def allow_token_auth?
+      true
+    end
+
     def student
       @student ||= Student.find(@params[:student_id])
     end

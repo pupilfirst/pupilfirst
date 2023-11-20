@@ -170,4 +170,22 @@ feature "School Standing", js: true do
       )
     end
   end
+
+  scenario "student cannot access the school standing page" do
+    sign_in_user create(:student, school: school).user,
+                 referrer: standing_school_path
+
+    expect(page).to have_current_path("/school/standing")
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
+  end
+
+  scenario "coach cannot access the school standing page" do
+    sign_in_user create(:faculty, school: school).user,
+                 referrer: standing_school_path
+
+    expect(page).to have_current_path("/school/standing")
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
+  end
 end

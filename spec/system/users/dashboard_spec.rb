@@ -405,20 +405,20 @@ feature "User Dashboard", js: true do
     expect(page).to have_text("You don't have any active courses right now.")
   end
 
-  scenario "dashboard hides standing shield when school has standibg disabled" do
+  scenario "dashboard hides standing shield when school has standing disabled" do
     sign_in_user(student.user, referrer: dashboard_path)
 
     expect(page).not_to have_text("View Standing")
   end
 
-  context "when school has standings enabled" do
+  context "when school has standing enabled" do
     let!(:standing_1) { create :standing, default: true }
     before do
       # Enable standings in the school configuration
       school.update!(configuration: { enable_standing: true })
     end
 
-    scenario "dashboard shows standing shield when school has standing enabled" do
+    scenario "dashboard shows standing information" do
       sign_in_user(student.user, referrer: dashboard_path)
 
       expect(page).to have_text(standing_1.name)

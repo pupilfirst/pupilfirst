@@ -1,4 +1,4 @@
-<div class="bg-gray-50 md:mt-16">
+<div class="bg-gray-50 md:mt-16 h-full">
   <div class="py-8 md:py-12 border-b border-gray-200 bg-white">
     <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row items-start justify-between gap-1">
       <div class="flex gap-1 items-center">
@@ -39,9 +39,9 @@
     <% if @presenter.standing_enabled? %>
       <div class="max-w-5xl mx-auto block md:grid grid-cols-8 gap-5 px-5">
         <div class="col-span-5">
-          <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg">
+          <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg" aria-label="Current Standing Card">
             <p class="-mt-12 p-3 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full"><%= t(".current_standing") %></p>
-            <div class="text-center flex flex-col items-center">
+            <div class="text-center flex flex-col items-center" aria-label="Current Standing Shield">
               <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
               <p class="text-xl font-bold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
             </div>
@@ -116,7 +116,7 @@
         <% end %>
       </div>
     <% else %>
-      <div class="text-center flex flex-col items-center justify-center">
+      <div class="text-center flex flex-col items-center justify-center p-4">
         <%= image_tag 'users/standing/no_standing_log.svg', alt: 'No Standing', class: "w-20 h-20"%>
         <p class="text-lg font-semibold"><%= t(".standing_not_enabled") %></p>
       </div>

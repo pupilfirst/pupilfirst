@@ -124,8 +124,12 @@
 }
 
 .skeleton-animate {
-  animation: skeletonShimmer 3s infinite linear;
-  background: linear-gradient(to right, #f5f3f7 10%, #fbfafc 40%, #f5f3f7 70%);
+  animation: skeletonShimmer 2s infinite linear;
+  background: linear-gradient(
+    to right bottom,
+    theme("colors.gray.100"),
+    theme("colors.gray.200")
+  );
   background-size: 1000px 100%;
 }
 

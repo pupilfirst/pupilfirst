@@ -138,6 +138,6 @@ feature "User standing", js: true do
     sign_in_user org_admin_user,
                  referrer: standing_org_student_path(student_from_another_org)
 
-    expect(page.status_code).to eq(404)
+    expect(page).to have_text("The page you were looking for doesn't exist")
   end
 end

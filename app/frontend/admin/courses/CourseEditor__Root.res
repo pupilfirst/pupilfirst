@@ -86,7 +86,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateSelectedCourse(selectedCourse) => {
       ...state,
-      selectedCourse: selectedCourse,
+      selectedCourse,
     }
   | SetSearchString(string) => {
       ...state,
@@ -143,7 +143,7 @@ let reducer = (state, action) =>
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount, schoolSummary) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
@@ -154,7 +154,7 @@ let reducer = (state, action) =>
       ...state,
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
       schoolStats: Belt.Option.getWithDefault(schoolSummary, state.schoolStats),
     }
   | UpdateCourse(course) =>
@@ -172,7 +172,8 @@ let courseLink = (href, title, icon) =>
     key=href
     href
     className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-    <i className=icon /> <span className="font-semibold ms-2"> {title->str} </span>
+    <i className=icon />
+    <span className="font-semibold ms-2"> {title->str} </span>
   </a>
 
 let courseLinks = course => {
@@ -379,11 +380,12 @@ let showCourse = course => {
                 />
               }}
             </div>
-            <div
-              className="course-editor-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-10"
-              key={Course.id(course)}>
+            <div className="flex gap-2 border-b border-gray-200" key={Course.id(course)}>
+              <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+                <PfIcon className="if i-book-solid if-fw text-primary-400" />
+              </div>
               <h4
-                className="course-editor-course__title text-white font-semibold leading-tight pe-4 text-lg md:text-xl">
+                className="w-full text-black font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
                 {str(Course.name(course))}
               </h4>
             </div>

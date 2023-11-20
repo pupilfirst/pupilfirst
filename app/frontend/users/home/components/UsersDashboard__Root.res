@@ -228,12 +228,8 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
                     />
                   }}
                 </div>
-                <div
-                  className="user-dashboard-course__title-container bg-white/20 border-b absolute w-full flex items-center h-16 bottom-0 z-10"
-                  key={course->Course.id}
-                />
               </div>
-              <div className="flex gap-2 border-b border-gray-200">
+              <div className="flex gap-2 border-b border-gray-200" key={course->Course.id}>
                 <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
                   <PfIcon className="if i-book-solid if-fw text-primary-400" />
                 </div>

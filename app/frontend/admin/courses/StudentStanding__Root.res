@@ -289,7 +289,7 @@ let currentStandingCard = (standing: currentStanding) => {
     <div className="ml-4 flex flex-col">
       <p
         className="-mt-12 px-3 py-2 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full">
-        {ts("standing.current_standing")->str}
+        {ts("user_standing.current_standing")->str}
       </p>
       <div className="flex flex-col justify-center items-center">
         <StandingShield color=standing.color sizeClass="w-16 h-16" />
@@ -360,8 +360,8 @@ let standingLogs = (userStandings: userStandings, setArchive, archive, setState)
       } else {
         <div className="flex flex-col items-center p-5 bg-white border border-gray-200 rounded-md ">
           <img className="w-20 h-20" src=noStandingLog />
-          <p className="text-lg font-semibold"> {ts("standing.no_standing_log")->str} </p>
-          <p className="text-sm text-gray-500"> {ts("standing.empty_standing_info")->str} </p>
+          <p className="text-lg font-semibold"> {ts("user_standing.no_standing_log")->str} </p>
+          <p className="text-sm text-gray-500"> {ts("user_standing.empty_standing_info")->str} </p>
         </div>
       }}
     </div>

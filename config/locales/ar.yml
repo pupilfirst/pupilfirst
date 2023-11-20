@@ -229,7 +229,7 @@ ar:
         label:
           search: Search by name or email
           tag: Tag
-      onboard_as_student: OnBoard as Student
+      onboard_as_student: Onboard as Student
       show_actions: Show Actions
       show_details: "Show Details: "
       sort_criterion:
@@ -1957,6 +1957,13 @@ ar:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
+    something_went_wrong: هناك خطأ ما!
+    vimeo:
+      2230: نوع التحميل غير صالح.
+      4003: هناك مشكلة في بدء التحميل.
+      4101: لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
+      4102: لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
+      4104: لقد تم الوصول إلى الحصة اليومية المخصصة لك.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -2222,7 +2229,7 @@ ar:
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_graded_error: Submission already graded
+      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Unable to find submission with ID: %{submission_id}"
       success_notification: The submission has been marked as reviewed.
     create_post:
@@ -2494,6 +2501,7 @@ ar:
         add_link_section_title: إضافة رابط للفعالية (إختياري)
         calendar_label: إضافة الفعالية الى
         color_label: اللون
+        color_label_hint: تساعدك الألوان على التمييز بين أنواع الأحداث المختلفة في لمحة
         description_label: الوصف
         edit_event_heading: تعديل الفعالية
         link_title_label: عنوان الرابط

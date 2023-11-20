@@ -8,6 +8,9 @@
         <div>
           <p class="text-base font-semibold"><%= @presenter.student.name %></p>
         </div>
+        <div class="text-sm shrink bg-gray-100 px-1.5 py-1 text-gray-600 rounded-lg font-semibold break-all">
+          <%= t("shared.cohort") %>: <%= @presenter.cohort.name %>
+        </div>
       </div>
       <% if @presenter.standing_enabled? %>
         <div class="flex flex-col-reverse sm:flex-row items-center">

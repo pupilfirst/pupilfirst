@@ -42,13 +42,12 @@ feature 'Evaluation criteria index spec', js: true do
     end
 
     select '4', from: 'max_grade'
-    select '2', from: 'pass_grade'
 
     within('div[aria-label="label-editor"]') do
       expect(page).to have_selector('input', count: 4)
     end
 
-    fill_in 'grade-label-for-1', with: 'Bad'
+    fill_in 'grade-label-for-1', with: 'Okay'
     fill_in 'grade-label-for-2', with: 'Good'
     fill_in 'grade-label-for-3', with: 'Great'
     fill_in 'grade-label-for-4', with: 'Wow'
@@ -63,8 +62,7 @@ feature 'Evaluation criteria index spec', js: true do
 
     expect(evaluation_criterion.name).to eq(new_ec_name)
     expect(evaluation_criterion.max_grade).to eq(4)
-    expect(evaluation_criterion.pass_grade).to eq(2)
-    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq('Bad')
+    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq('Okay')
     expect(label_for_grade(evaluation_criterion.grade_labels, 2)).to eq('Good')
     expect(label_for_grade(evaluation_criterion.grade_labels, 3)).to eq('Great')
     expect(label_for_grade(evaluation_criterion.grade_labels, 4)).to eq('Wow')
@@ -78,7 +76,6 @@ feature 'Evaluation criteria index spec', js: true do
 
     fill_in 'Name', with: new_ec_name
     select '4', from: 'max_grade'
-    select '2', from: 'pass_grade'
 
     click_button 'Create Criterion'
 
@@ -120,7 +117,6 @@ feature 'Evaluation criteria index spec', js: true do
     fill_in 'Name', with: evaluation_criterion_1.name
 
     select evaluation_criterion_1.max_grade, from: 'max_grade'
-    select evaluation_criterion_1.pass_grade, from: 'pass_grade'
 
     click_button 'Create Criterion'
     expect(page).to have_text("Criterion already exists with same name, max grade and pass grade")

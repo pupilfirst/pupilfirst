@@ -10,7 +10,6 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
              }
            }
   property :max_grade, validates: { presence: true }
-  property :pass_grade, validates: { presence: true }
   property :grades_and_labels, validates: { presence: true }
   property :course_id, validates: { presence: true }
 
@@ -22,7 +21,7 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
 
     if course
          .evaluation_criteria
-         .find_by(name: name, max_grade: max_grade, pass_grade: pass_grade)
+         .find_by(name: name, max_grade: max_grade)
          .blank?
       return
     end
@@ -45,7 +44,6 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
         name: name,
         course_id: course_id,
         max_grade: max_grade,
-        pass_grade: pass_grade,
         grade_labels: grade_labels
       )
     end

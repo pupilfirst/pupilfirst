@@ -56,16 +56,31 @@ module CourseExportable
   def assign_styled_grade(grade_index, grading, submission)
     evaluation_grade = submission.timeline_event_grades.pluck(:grade).join(",")
 
+    # Determine the grade and style based on submission and evaluation status
     grade, style =
-      case [submission.passed_at.present?, evaluation_grade.empty?]
+      case [submission.passed?, evaluation_grade.present?]
       when [true, true]
-        [submission.quiz_score || "✓", ""]
-      when [true, false]
+        # Case when the submission has passed and there is an evaluation grade
+        # Use the evaluation grade and mark it as a passing grade
         [evaluation_grade, "passing-grade"]
-      when [false, true]
-        %w[RP pending-grade]
+      when [true, false]
+        # Case when the submission has passed and there is no evaluation grade
+        # Use the quiz score as the grade, or a checkmark if the score is not available
+        [submission.quiz_score || "✓", ""]
       when [false, false]
-        [evaluation_grade, "failing-grade"]
+        if submission.evaluated?
+          # Case when the submission has not passed, but has been evaluated
+          # Mark it as failing
+          %w[x failing-grade]
+        else
+          # Case when the submission has not passed and has not been evaluated
+          # Mark it as pending grading
+          %w[RP pending-grade]
+        end
+      when [false, true]
+        # Case when the submission has not passed and there is an evaluation grade
+        # This should be impossible - submissions can be graded only after they're accepted; crash if this happens
+        raise "Submission #{submission.id} responded `false` to `#passed?` but has one or more evaluation grades"
       end
 
     append_grade(grading, grade_index, grade, style)

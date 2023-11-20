@@ -182,6 +182,10 @@ feature "Organisation student details page and submissions list" do
       sign_in_user school_admin_user, referrer: org_student_path(student)
 
       expect(page).to have_text(student.name)
+
+      expect(page).to have_text("Cohort")
+      expect(page).to have_text(cohort.name)
+
       expect(page).to have_text "Targets Overview"
     end
   end
@@ -192,6 +196,9 @@ feature "Organisation student details page and submissions list" do
 
       # Check name.
       expect(page).to have_text(student.name)
+
+      expect(page).to have_text("Cohort")
+      expect(page).to have_text(cohort.name)
 
       # Check target completion stats.
       expect(page).to have_text(

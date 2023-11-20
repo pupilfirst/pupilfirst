@@ -1,6 +1,6 @@
 module Mutations
   class BeginProcessingSubmissionReport < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
     argument :report,
@@ -8,8 +8,8 @@ module Mutations
              required: false,
              validates: {
                length: {
-                 maximum: 1000,
-               },
+                 maximum: 1000
+               }
              }
     argument :reporter, String, required: true
     argument :heading, String, required: false
@@ -31,7 +31,7 @@ module Mutations
         report =
           SubmissionReport.find_by(
             submission_id: @params[:submission_id],
-            reporter: @params[:reporter],
+            reporter: @params[:reporter]
           )
 
         if report.present?
@@ -41,7 +41,7 @@ module Mutations
             started_at: Time.zone.now,
             completed_at: nil,
             heading: @params[:heading],
-            target_url: @params[:target_url].presence || report.target_url,
+            target_url: @params[:target_url].presence || report.target_url
           )
         else
           SubmissionReport.create!(
@@ -52,7 +52,7 @@ module Mutations
             completed_at: nil,
             reporter: @params[:reporter],
             heading: @params[:heading],
-            target_url: @params[:target_url],
+            target_url: @params[:target_url]
           )
         end
       end

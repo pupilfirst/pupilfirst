@@ -1,6 +1,6 @@
 module Mutations
   class ConcludeSubmissionReport < ApplicationQuery
-    include QueryAuthorizeCoach
+    include QueryAuthorizeReviewSubmissions
     include ValidateSubmissionGradable
 
     class ValidConclusionStatuses < GraphQL::Schema::Validator
@@ -18,8 +18,8 @@ module Mutations
              required: false,
              validates: {
                length: {
-                 maximum: 10_000,
-               },
+                 maximum: 10_000
+               }
              }
     argument :status, Types::SubmissionReportStatusType, required: true
     argument :reporter, String, required: true
@@ -42,7 +42,7 @@ module Mutations
         report =
           SubmissionReport.find_by(
             submission_id: @params[:submission_id],
-            reporter: @params[:reporter],
+            reporter: @params[:reporter]
           )
         if report.present?
           report.update!(
@@ -51,7 +51,7 @@ module Mutations
             started_at: report.started_at || time_now,
             completed_at: time_now,
             heading: @params[:heading],
-            target_url: @params[:target_url].presence || report.target_url,
+            target_url: @params[:target_url].presence || report.target_url
           )
         else
           SubmissionReport.create!(
@@ -62,7 +62,7 @@ module Mutations
             completed_at: time_now,
             reporter: @params[:reporter],
             heading: @params[:heading],
-            target_url: @params[:target_url],
+            target_url: @params[:target_url]
           )
         end
       end

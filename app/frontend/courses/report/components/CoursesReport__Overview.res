@@ -158,8 +158,6 @@ let averageGradeCharts = (
   averageGrades
   |> Array.map(grade => {
     let criterion = StudentOverview.evaluationCriterionForGrade(grade, evaluationCriteria)
-    let passGrade = criterion |> CoursesReport__EvaluationCriterion.passGrade |> float_of_int
-    let averageGrade = grade |> StudentOverview.gradeValue
     <div
       ariaLabel={"average-grade-for-criterion-" ++
       (criterion |> CoursesReport__EvaluationCriterion.id)}
@@ -168,18 +166,10 @@ let averageGradeCharts = (
       <div className="courses-report-overview__pie-chart-container">
         <div className="flex px-5 pt-4 text-center items-center">
           <svg
-            className={"courses-report-overview__pie-chart " ++ (
-              averageGrade < passGrade
-                ? "courses-report-overview__pie-chart--fail"
-                : "courses-report-overview__pie-chart--pass"
-            )}
+            className="courses-report-overview__pie-chart courses-report-overview__pie-chart--pass"
             viewBox="0 0 32 32">
             <circle
-              className={"courses-report-overview__pie-chart-circle " ++ (
-                averageGrade < passGrade
-                  ? "courses-report-overview__pie-chart-circle--fail"
-                  : "courses-report-overview__pie-chart-circle--pass"
-              )}
+              className="courses-report-overview__pie-chart-circle courses-report-overview__pie-chart-circle--pass"
               strokeDasharray={StudentOverview.gradeAsPercentage(grade, criterion) ++ ", 100"}
               r="16"
               cx="16"
@@ -206,6 +196,18 @@ let make = (~overviewData, ~coaches) =>
     | OverviewData.Loaded(overview) =>
       <div className="flex flex-col">
         <div className="w-full">
+          <div className="mt-8">
+            <h6 className="text-sm font-semibold"> {ts("cohort")->str} </h6>
+            <div
+              className="max-w-auto shadow rounded-lg p-4 items-center mt-2 bg-white flex shrink gap-2">
+              <div>
+                <PfIcon className="if i-users-light font-normal text-lg" />
+              </div>
+              <p className="text-sm font-semibold break-all">
+                {overview->StudentOverview.cohortName->str}
+              </p>
+            </div>
+          </div>
           <div className="mt-8">
             <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
             <div className="flex -mx-2 flex-wrap mt-2">

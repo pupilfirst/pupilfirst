@@ -207,10 +207,9 @@ describe Levels::CloneService do
         evaluated_targets.first.evaluation_criteria.pluck(
           :name,
           :max_grade,
-          :pass_grade,
           :grade_labels
         )
-      ).to eq([[ec_1.name, ec_1.max_grade, ec_1.pass_grade, ec_1.grade_labels]])
+      ).to eq([[ec_1.name, ec_1.max_grade, ec_1.grade_labels]])
 
       # content block should have been cloned
       expect(
@@ -320,10 +319,9 @@ describe Levels::CloneService do
         evaluated_targets.first.evaluation_criteria.pluck(
           :name,
           :max_grade,
-          :pass_grade,
           :grade_labels
         )
-      ).to eq([[ec_1.name, ec_1.max_grade, ec_1.pass_grade, ec_1.grade_labels]])
+      ).to eq([[ec_1.name, ec_1.max_grade, ec_1.grade_labels]])
 
       # content block should have been cloned
       expect(

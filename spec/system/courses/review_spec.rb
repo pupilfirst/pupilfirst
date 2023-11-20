@@ -724,10 +724,160 @@ feature "Coach's review interface" do
     expect(page).not_to have_content(course.name)
   end
 
-  scenario "school admin tries to access the review dashboard" do
-    sign_in_user school_admin.user, referrer: review_course_path(course)
+  context "when user is an admin" do
+    # Create a couple of passed submissions for the team 3.
+    let!(:submission_l1_t3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_l3],
+        target: target_l1,
+        evaluator_id: team_coach.id,
+        evaluated_at: 4.days.ago,
+        passed_at: 1.day.ago
+      )
+    end
+    let!(:submission_l2_t3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_l3],
+        target: target_l2,
+        evaluator_id: course_coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: nil,
+        created_at: 1.day.ago
+      )
+    end
+    let!(:team_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: team_l3.students,
+        target: team_target,
+        evaluator_id: course_coach.id,
+        evaluated_at: 1.day.ago,
+        passed_at: nil,
+        created_at: 2.days.ago
+      )
+    end
 
-    expect(page).to have_text("The page you were looking for doesn't exist!")
-    expect(page).not_to have_content(course.name)
+    # And one passed submission for team 2.
+    let!(:submission_l1_t2) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [student_l2],
+        target: target_l1,
+        evaluator_id: team_coach.id,
+        evaluated_at: 3.days.ago,
+        passed_at: 3.days.ago,
+        created_at: 4.days.ago
+      )
+    end
+
+    # Create pending submissions for teams
+    let!(:submission_l1_t1) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        target: target_l1,
+        reviewer: course_coach,
+        reviewer_assigned_at: 1.day.ago,
+        owners: [student_l1]
+      )
+    end
+    let!(:submission_l2_t2) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        target: target_l2,
+        owners: [student_l2],
+        created_at: 1.day.ago
+      )
+    end
+    let!(:submission_l3_t3) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        target: target_l3,
+        owners: [student_l3],
+        created_at: 2.days.ago
+      )
+    end
+
+    let!(:feedback) do
+      create(
+        :startup_feedback,
+        faculty_id: course_coach.id,
+        timeline_event: submission_l2_t3
+      )
+    end
+
+    scenario "admin can view all submissions", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      expect(page).to have_title("Review | #{course.name}")
+
+      expect(page).to have_content("Showing all 7 submissions")
+    end
+
+    context "when the course has inactive students" do
+      let(:inactive_cohort) do
+        create :cohort, course: course, ends_at: 1.day.ago
+      end
+
+      let!(:inactive_team) do
+        create :team_with_students, cohort: inactive_cohort
+      end
+
+      before do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: inactive_team.students,
+          target: team_target
+        )
+
+        create(
+          :faculty_cohort_enrollment,
+          faculty: course_coach,
+          cohort: inactive_cohort
+        )
+      end
+
+      scenario "admin can access inactive submissions", js: true do
+        sign_in_user school_admin.user, referrer: review_course_path(course)
+
+        expect(page).to have_content("Showing all 7 submissions")
+
+        fill_in "filter", with: "Inactive Students"
+        click_button "Pick Include: Inactive Students"
+
+        expect(page).to have_content("Showing all 8 submissions")
+        expect(page).to have_content(inactive_team.name)
+      end
+    end
+
+    scenario "admin can access the review page for a submission", js: true do
+      sign_in_user school_admin.user, referrer: review_course_path(course)
+
+      within("a[data-submission-id='#{submission_l3_t3.id}']") do
+        expect(page).to have_text(target_l3.title)
+      end
+
+      click_link submission_l3_t3.title
+
+      # submissions overlay should be visible
+      expect(page).to have_text("Submission #1")
+    end
   end
 end

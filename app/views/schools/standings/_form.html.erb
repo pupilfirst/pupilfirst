@@ -13,7 +13,7 @@
     <%= form_with model: @standing, url: @standing.persisted? ? school_standing_path(id: @standing.id) : school_standings_path do |f| %>
       <div class="flex gap-4 items-center">
         <%# There is js code related to shield color setting and standing delete confirm in standings.js  %>
-        <%= render 'shared/_standing_shield', color:  @standing.color || "#4338ca", size_classes: "w-12 h-12" %>
+        <%= render 'shared/standing_shield', color:  @standing.color || "#4338ca", size_classes: "w-12 h-12" %>
         <label for="color_picker" class="flex border border-gray-300 rounded-md cursor-pointer items-center justify-center">
           <%= f.color_field :color, id: "color_picker", class: "p-1 w-8 h-9 bg-white", value: @standing.color || "#4338ca" %>
           <i class="if i-chevron-down-light if-fw" ></i>

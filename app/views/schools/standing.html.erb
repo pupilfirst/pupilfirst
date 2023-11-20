@@ -60,8 +60,8 @@
       <div>
         <% @presenter.standings.each do |standing|%>
           <div class="flex items-center gap-3 mb-3">
-            <%= render 'shared/_standing_shield', color: standing.color, size_classes: "w-12 h-12" %>
-            <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex">
+            <%= render 'shared/standing_shield', color: standing.color, size_classes: "w-14 h-14" %>
+            <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex rounded">
               <div class="">
                 <%= standing.name %>
               </div>
@@ -82,7 +82,7 @@
           </div>
         <% end %>
         <div class="flex justify-center max-w-xl">
-          <div class="flex-grow max-w-md ml-4">
+          <div class="flex-grow max-w-md ml-2">
             <%= button_to t(".add_another_standing"), new_school_standing_path, method: :get, class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer w-full" %>
           </div>
         </div>

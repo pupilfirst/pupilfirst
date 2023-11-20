@@ -1959,6 +1959,13 @@ en:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
+    something_went_wrong: Something went wrong!
+    vimeo:
+      2230: The upload type is invalid.
+      4003: There is a problem initiating the upload.
+      4101: Your maximum disk space has been reached.
+      4102: Your allotted weekly quota has been reached.
+      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error

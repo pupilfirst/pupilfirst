@@ -110,7 +110,7 @@ describe CourseExports::PrepareTeamsExportService do
   end
 
   let!(:team_1_reviewed_submission_1) do
-    complete_target target_l1_evaluated, student_1
+    fail_target target_l1_evaluated, student_1
   end
 
   let!(:team_1_reviewed_submission_2) do
@@ -270,7 +270,7 @@ describe CourseExports::PrepareTeamsExportService do
             "2/2",
             {
               "value" =>
-                "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)}",
+                "x;#{submission_grading(team_1_reviewed_submission_2)}",
               "style" => "passing-grade"
             },
             { "value" => "RP", "style" => "pending-grade" }
@@ -279,8 +279,8 @@ describe CourseExports::PrepareTeamsExportService do
             team_2.id,
             team_2.name,
             nil,
-            '1/2',
-            'x',
+            "1/2",
+            { "value" => "x", "style" => "failing-grade" },
             nil
           ],
           [team_3.id, team_3.name, "✓", nil, nil, nil],
@@ -289,7 +289,7 @@ describe CourseExports::PrepareTeamsExportService do
             team_4.name,
             nil,
             "1/2",
-            'x',
+            { "value" => "x", "style" => "failing-grade" },
             nil
           ]
         ]
@@ -369,7 +369,7 @@ describe CourseExports::PrepareTeamsExportService do
                 team_1.name,
                 {
                   "value" =>
-                    "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)};RP",
+                    "x;#{submission_grading(team_1_reviewed_submission_2)};RP",
                   "style" => "pending-grade"
                 },
                 { "value" => "RP", "style" => "pending-grade" }

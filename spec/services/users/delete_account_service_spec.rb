@@ -83,6 +83,19 @@ describe Users::DeleteAccountService do
     create :course_export, :teams, user: user, course: course
   end
 
+  # Setup for submission with multiple owners and file uploads
+  let!(:other_student) { create :student, school: user.school }
+  let!(:shared_submission) do
+    create :timeline_event,
+           :with_owners,
+           latest: true,
+           owners: [student, other_student],
+           target: target_2
+  end
+  let!(:shared_submission_file) do
+    create :timeline_event_file, timeline_event: shared_submission, user: user
+  end
+
   describe "#execute" do
     context "user is an admin in school" do
       before { create(:school_admin, user: user, school: user.school) }
@@ -133,6 +146,14 @@ describe Users::DeleteAccountService do
         expect(issued_certificate_for_user.reload.user_id).to eq(nil)
         expect(markdown_attachment_by_user.reload.user_id).to eq(nil)
         expect(course_export.reload.user_id).to eq(nil)
+
+        # Ensure shared submission still exists
+        expect(TimelineEvent.find_by(id: shared_submission.id)).to_not eq(nil)
+
+        # Check that the user_id of the timeline event files has been updated
+        shared_submission.timeline_event_files.each do |file|
+          expect(file.user_id).to eq(other_student.user_id)
+        end
 
         # Check audit record is created
         audit_record = AuditRecord.last

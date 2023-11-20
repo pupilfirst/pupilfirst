@@ -60,7 +60,7 @@
       <div>
         <% @presenter.standings.each do |standing|%>
           <div class="flex items-center gap-3 mb-3">
-            <%= render 'shared/bordered_standing_shield', color: standing.color, size_classes: "w-12 h-12" %>
+            <%= render 'shared/_standing_shield', color: standing.color, size_classes: "w-12 h-12" %>
             <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex">
               <div class="">
                 <%= standing.name %>

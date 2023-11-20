@@ -15,7 +15,7 @@
             <p class="text-base font-semibold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
             <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-base font-medium text-primary-400 hover:text-primary-500" %>
           </div>
-          <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+          <%= render 'shared/_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
         </div>
       <% end %>
     </div>

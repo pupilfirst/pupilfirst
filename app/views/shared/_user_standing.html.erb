@@ -21,7 +21,7 @@
             <p class="text-sm text-gray-500"><%= t(".standing") %></</p>
           </div>
           <div>
-            <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+            <%= render 'shared/_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
           </div>
         </div>
       <% end %>
@@ -42,7 +42,7 @@
           <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg" aria-label="Current Standing Card">
             <p class="-mt-12 p-3 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full"><%= t(".current_standing") %></p>
             <div class="text-center flex flex-col items-center" aria-label="Current Standing Shield">
-              <%= render 'shared/bordered_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+              <%= render 'shared/_standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
               <p class="text-xl font-bold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
             </div>
             <div>
@@ -55,7 +55,7 @@
                 <% @presenter.user_standings.each_with_index do |user_standing, index| %>
                   <div class="flex group">
                     <div class="p-2 h-full rounded-full bg-focusColor-50 z-10">
-                      <%= render 'shared/bordered_standing_shield', color: user_standing.standing.color, size_classes: "w-12 h-12" %>
+                      <%= render 'shared/_standing_shield', color: user_standing.standing.color, size_classes: "w-12 h-12" %>
                     </div>
                     <div class="-ms-8 pb-5 w-full ps-12 <%= "#{'border-s border-gray-300 border-dashed' if @presenter.user_standings_count > 1 && index != @presenter.user_standings_count - 1}" %> group-last:border-s-0">
                       <div class="bg-white p-5 rounded-md border border-gray-200">

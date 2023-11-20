@@ -10,10 +10,6 @@
   background-size: cover;
 }
 
-.user-dashboard-course__title-container {
-  backdrop-filter: blur(8px);
-}
-
 .user-dashboard-course__title {
   text-shadow: 0px 0.5px 1px theme("colors.gray.300");
 }

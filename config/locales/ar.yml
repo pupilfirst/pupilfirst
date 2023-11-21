@@ -2808,6 +2808,5 @@ ar:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: لا يمكن تحديث إرسالية الطلاب غير النشطين
+    owners_should_be_active: لا يمكن تحديث إرسالية الطلاب غير النشطين
     submission_should_be_live: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة

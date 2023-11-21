@@ -2873,6 +2873,5 @@ zh-cn:
       frequent_request_error: 刚刚发送了一封电子邮件，请稍等几分钟后再尝试。
       link_expired: 该链接已过期或无效。请重新尝试。
   validate_submission_gradable:
-    owners_should_be_active:
-      error: 无法更新未激活的学生提交内容。
+    owners_should_be_active: 无法更新未激活的学生提交内容。
     submission_should_be_live: 这样的提交不存在，或者已经被归档。

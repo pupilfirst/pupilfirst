@@ -46,7 +46,7 @@ module Mutations
 
         grade_hash = compute_grade_hash
 
-        assignment_must_be_graded(value[:submission_id]) ||
+        assignment_is_reviewable(value[:submission_id]) ||
           checklist_must_have_right_shape || submission_must_not_be_reviewed ||
           checklist_data_should_not_be_mutated ||
           grading_should_be_valid(grade_hash)
@@ -58,7 +58,7 @@ module Mutations
         I18n.t("mutations.create_grading.submission_reviewed_error")
       end
 
-      def assignment_must_be_graded(submission_id)
+      def assignment_is_reviewable(submission_id)
         return if @evaluation_criteria.present?
         I18n.t(
           "mutations.create_grading.evaluation_criteria_error",

@@ -2924,6 +2924,5 @@ en:
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: Cannot update inactive student submissions.
+    owners_should_be_active: Cannot update inactive student submissions.
     submission_should_be_live: Such a submission does not exist, or it has been archived.

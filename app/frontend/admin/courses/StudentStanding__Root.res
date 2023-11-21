@@ -430,7 +430,7 @@ let editor = (
       </div>
     </div>
     {select != "0"
-      ? <div className="text-yellow-900 text-sm font-inter mt-2 pl-72">
+      ? <div className="text-yellow-900 text-sm font-inter mt-2 ps-72">
           <PfIcon className="if i-info-light if-fw" />
           {
             let description =

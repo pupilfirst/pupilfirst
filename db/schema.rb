@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_13_120900) do
+ActiveRecord::Schema.define(version: 2023_11_20_065210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+    t.string "checksum"
     t.datetime "created_at", null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
@@ -448,6 +448,13 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
     t.index ["school_id"], name: "index_organisations_on_school_id"
   end
 
+  create_table "organisations_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organisation_id", null: false
+    t.index ["organisation_id", "user_id"], name: "index_organisations_users_on_organisation_id_and_user_id"
+    t.index ["user_id", "organisation_id"], name: "index_organisations_users_on_user_id_and_organisation_id"
+  end
+
   create_table "post_likes", force: :cascade do |t|
     t.bigint "post_id"
     t.bigint "user_id"
@@ -825,7 +832,6 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
     t.string "update_email_token"
     t.datetime "update_email_token_sent_at"
     t.string "new_email"
-    t.bigint "organisation_id"
     t.string "discord_user_id"
     t.string "discord_tag"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
@@ -833,7 +839,6 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
     t.index ["discord_user_id"], name: "index_users_on_discord_user_id"
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["login_token_digest"], name: "index_users_on_login_token_digest", unique: true
-    t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
@@ -928,7 +933,6 @@ ActiveRecord::Schema.define(version: 2023_10_13_120900) do
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"
   add_foreign_key "topics", "users", column: "locked_by_id"
-  add_foreign_key "users", "organisations"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"
 end

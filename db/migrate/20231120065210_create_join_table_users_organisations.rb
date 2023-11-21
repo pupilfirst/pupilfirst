@@ -7,11 +7,11 @@ class CreateJoinTableUsersOrganisations < ActiveRecord::Migration[6.1]
 
     RateLimitValidator.migration_running = true
 
-    Organisation.all.each do |organisation|
-      organisation.users.each do |user|
-        user.organisations << organisation
-        user.save
-      end
+    User.find_each do |user|
+      org_id = user.organisation_id
+      next unless org_id
+
+      OrganisationsUser.create!(user_id: user.id, organisation_id: org_id)
     end
 
     remove_column :users, :organisation_id
@@ -23,8 +23,10 @@ class CreateJoinTableUsersOrganisations < ActiveRecord::Migration[6.1]
     add_column :users, :organisation_id, :bigint
     RateLimitValidator.migration_running = true
     User.all.each do |user|
-      user.organisation = user.organisations.first
-      user.save
+      user_org = OrganisationsUser.find(user_id: user.id)
+      next unless user_org
+
+      user.update!(organisation_id: user_org.organisation_id)
     end
     RateLimitValidator.migration_running = false
     drop_join_table :users, :organisations

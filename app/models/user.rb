@@ -7,8 +7,8 @@ class User < ApplicationRecord
   acts_as_taggable
 
   belongs_to :school
-  belongs_to :organisation, optional: true
-  has_many :organisation_admins, dependent: :restrict_with_error
+  # belongs_to :organisation, optional: true
+  has_many :organisations_users, dependent: :destroy
   has_many :organisations, through: :organisation_admins
   has_many :students, dependent: :restrict_with_error
   has_many :teams, through: :students

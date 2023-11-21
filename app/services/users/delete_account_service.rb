@@ -41,7 +41,12 @@ module Users
           submission = submission_ownership.timeline_event
           only_one_owner = submission.timeline_event_owners.one?
           submission_ownership.destroy!
-          submission.destroy! if only_one_owner
+          if only_one_owner
+            submission.destroy!
+          else
+            # update the user_id of timeline event files to one of the other owners
+            handle_timeline_event_files(submission)
+          end
         end
 
       # Cache teams with only the current user as member
@@ -55,6 +60,15 @@ module Users
 
       @user.students.each(&:destroy!)
       Team.where(id: team_ids).each(&:destroy!)
+    end
+
+    def handle_timeline_event_files(submission)
+      return if submission.timeline_event_files.none?
+
+      other_owner = submission.timeline_event_owners.reload.first
+      submission.timeline_event_files.each do |file|
+        file.update!(user_id: other_owner.student.user_id)
+      end
     end
 
     def delete_coach_profile

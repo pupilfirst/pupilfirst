@@ -161,15 +161,15 @@
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-br from-red-500 to-red-700 text-white  !important;
+    @apply bg-primary-500 text-white  !important;
   }
 
   .btn-secondary:hover {
-    @apply bg-gradient-to-br from-red-600 to-red-800;
+    @apply bg-primary-600;
   }
 
   .btn-secondary:focus {
-    @apply bg-red-800;
+    @apply bg-primary-800;
     background-image: none;
   }
 

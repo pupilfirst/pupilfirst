@@ -50,9 +50,13 @@ class SchoolsController < ApplicationController
         update_stading_configuration
 
         Standing.create!(
-          name: "Neutral",
+          name:
+            I18n.t("schools.standing.toggle_standing.default_standing_name"),
           color: "#4338ca",
-          description: "This is the default standing for all students.",
+          description:
+            I18n.t(
+              "schools.standing.toggle_standing.default_standing_description"
+            ),
           school: current_school,
           default: true
         )

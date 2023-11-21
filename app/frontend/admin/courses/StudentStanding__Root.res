@@ -161,6 +161,7 @@ let createUserStanding = (studentId, reason, standingId, setState, setReason, se
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_error => {
+    setState(_ => Errored)
     Js.Promise.resolve()
   })
   |> ignore
@@ -276,6 +277,10 @@ let archiveStanding = (id: string, setArchive, setState, event) => {
       } else {
         setArchive(_ => false)
       }
+      Js.Promise.resolve()
+    })
+    |> Js.Promise.catch(_error => {
+      setState(_ => Errored)
       Js.Promise.resolve()
     })
     |> ignore
@@ -425,7 +430,7 @@ let editor = (
       </div>
     </div>
     {select != "0"
-      ? <div className="text-yellow-900 text-sm font-inter mt-2">
+      ? <div className="text-yellow-900 text-sm font-inter mt-2 pl-72">
           <PfIcon className="if i-info-light if-fw" />
           {
             let description =
@@ -449,7 +454,7 @@ let editor = (
         <MarkdownEditor
           textareaId="reason-for-altering-standing"
           onChange={value => setReason(_ => value)}
-          maxLength=250
+          maxLength=1000
           value=reason
           profile=Markdown.Permissive
           placeholder={t("reason_placeholder")}

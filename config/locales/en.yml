@@ -2720,6 +2720,8 @@ en:
       standings: Standings
       title: Standing
       toggle_standing:
+        default_standing_name: Neutral
+        default_standing_description: This is the default standing for all students.
         school_standing_toggle_success:
           _no: School Standing is disabled successfully!
           _yes: School Standing is enabled successfully!

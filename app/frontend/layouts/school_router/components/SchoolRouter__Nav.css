@@ -36,8 +36,10 @@
   @apply text-primary-500 bg-gray-50;
 }
 
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link--active,
 .school-admin-navbar__primary-nav-link--active {
-  @apply bg-primary-100 text-primary-500 rounded font-semibold;
+  @apply bg-primary-50 text-primary-500 rounded font-semibold;
 }
 
 .school-admin-navbar__primary-nav--shrunk

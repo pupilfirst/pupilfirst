@@ -147,13 +147,13 @@
 
 @keyframes completeButtonGlowing {
   0% {
-    box-shadow: 0 0 20px #7886d7;
+    box-shadow: 0 0 20px theme("colors.focusColor.400");
   }
   50% {
-    box-shadow: 0 0 10px #7886d7;
+    box-shadow: 0 0 10px theme("colors.focusColor.400");
   }
   100% {
-    box-shadow: 0 0 0 #7886d7;
+    box-shadow: 0 0 0 theme("colors.focusColor.400");
   }
 }
 

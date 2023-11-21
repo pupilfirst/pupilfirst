@@ -474,32 +474,6 @@ let onAddCoachNotesCB = (studentId, setState, _) => {
   getStudentDetails(studentId, setState)
 }
 
-let ids = student => {
-  <div className="text-center mt-1">
-    <ClickToCopy
-      copy={StudentInfo.user(student)->UserDetails.id}
-      className="inline-block hover:text-primary-500">
-      <span className="text-xs"> {"User ID "->str} </span>
-      <span className="font-semibold text-sm underline text-primary-500">
-        {`#${StudentInfo.user(student)->UserDetails.id}`->str}
-      </span>
-    </ClickToCopy>
-    <ClickToCopy
-      copy={StudentInfo.id(student)} className="ms-2 inline-block hover:text-primary-500">
-      <span className="text-xs"> {"Student ID "->str} </span>
-      <span className="font-semibold text-sm underline text-primary-500">
-        {`#${StudentInfo.id(student)}`->str}
-      </span>
-    </ClickToCopy>
-    <p>
-      {ts("cohort")->str}
-      <em className="ms-1 font-semibold text-sm text-primary-500">
-        {Cohort.name(student.cohort)->str}
-      </em>
-    </p>
-  </div>
-}
-
 @react.component
 let make = (~studentId, ~userId) => {
   let (state, setState) = React.useState(() => initialState)
@@ -522,31 +496,94 @@ let make = (~studentId, ~userId) => {
         <div className="flex flex-col md:flex-row md:h-screen">
           <div
             className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
-            <div className="student-overlay__student-details relative pb-8">
-              <a
-                ariaLabel={t("close_student_report")}
-                title={t("close_student_report")}
-                href={closeOverlayLink(student)}
-                className="absolute z-50 start-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
-                <Icon className="if i-times-regular text-xl lg:text-2xl" />
-              </a>
-              <div
-                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
-                {switch student->StudentInfo.user->UserDetails.avatarUrl {
-                | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
-                | None =>
-                  <Avatar
-                    name={student->StudentInfo.user->UserDetails.name} className="object-cover"
-                  />
-                }}
+            <div className="student-overlay__student-details pb-4">
+              <div>
+                <div className="flex items-center justify-start gap-2 flex-wrap">
+                  <div>
+                    <a
+                      ariaLabel={t("close_student_report")}
+                      title={t("close_student_report")}
+                      href={closeOverlayLink(student)}
+                      className="z-50 start-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-11 w-11 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                      <Icon className="if i-arrow-left-light if-fw text-xl lg:text-2xl" />
+                    </a>
+                  </div>
+                  <div>
+                    <div
+                      className="student-overlay__student-avatar mx-auto w-14 h-14 md:w-16 md:h-16 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
+                      {switch student->StudentInfo.user->UserDetails.avatarUrl {
+                      | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
+                      | None =>
+                        <Avatar
+                          name={student->StudentInfo.user->UserDetails.name}
+                          className="object-cover"
+                        />
+                      }}
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <h2 className="text-lg text-left font-semibold">
+                        {student->StudentInfo.user->UserDetails.name->str}
+                      </h2>
+                    </div>
+                    <div className="text-sm font-semibold">
+                      {student->StudentInfo.user->UserDetails.title->str}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 space-y-1">
+                  <div className="space-x-1">
+                    <PfIcon className="if i-user-regular if-fw text-xl" />
+                    <span className="text-gray-500 font-normal"> {t("user_id")->str} </span>
+                    <ClickToCopy
+                      copy={StudentInfo.user(student)->UserDetails.id}
+                      className="inline-block hover:text-primary-500">
+                      <span className="ms-2 text-base font-semibold">
+                        {`#${StudentInfo.user(student)->UserDetails.id}`->str}
+                      </span>
+                    </ClickToCopy>
+                  </div>
+                  <div className="space-x-1">
+                    <PfIcon className="if i-academic-cap-light if-fw text-xl" />
+                    <span className="text-gray-500 font-normal"> {t("student_id")->str} </span>
+                    <ClickToCopy
+                      copy={StudentInfo.id(student)}
+                      className="inline-block hover:text-primary-500">
+                      <span className="ms-2 text-base font-semibold">
+                        {`#${StudentInfo.id(student)}`->str}
+                      </span>
+                    </ClickToCopy>
+                  </div>
+                  <div className="space-x-1">
+                    <PfIcon className="if i-users-light if-fw text-xl " />
+                    <span className="text-gray-500 font-normal"> {ts("cohort")->str} </span>
+                    <span className="ms-2 text-base font-semibold">
+                      {student->StudentInfo.cohort->Cohort.name->str}
+                    </span>
+                  </div>
+                  {switch student->StudentInfo.user->UserDetails.currentStandingName {
+                  | Some(name) =>
+                    <div className="space-x-1">
+                      <PfIcon className="if i-shield-light if-fw text-xl" />
+                      <span className="text-gray-500 font-normal">
+                        {ts("user_standing.standing")->str}
+                      </span>
+                      <span className="ms-2 text-base font-semibold"> {name->str} </span>
+                    </div>
+                  | None => React.null
+                  }}
+                  {switch student->StudentInfo.user->UserDetails.affiliation {
+                  | Some(name) =>
+                    <div className="space-x-1">
+                      <PfIcon className="if i-school-light if-fw text-xl" />
+                      <span className="text-gray-500 font-normal"> {t("affiliation")->str} </span>
+                      <span className="ms-2 text-base font-semibold"> {name->str} </span>
+                    </div>
+                  | None => React.null
+                  }}
+                </div>
               </div>
-              <h2 className="text-lg text-center mt-3">
-                {student->StudentInfo.user->UserDetails.name |> str}
-              </h2>
-              <p className="text-sm font-semibold text-center mt-1">
-                {student->StudentInfo.user->UserDetails.fullTitle |> str}
-              </p>
-              {ids(student)}
               {inactiveWarning(student)}
             </div>
             <div className="mt-8">

@@ -14,6 +14,14 @@ module Types
         context[:current_school_admin].present?
       end
     end
+    field :current_standing_name, String, null: true
+
+    def current_standing_name
+      if Schools::Configuration.new(object.school).standing_enabled?
+        object.user_standings.where(archived_at: nil).last&.standing&.name ||
+          Standing.where(school: object.school, default: true).first&.name
+      end
+    end
 
     def avatar_url
       BatchLoader::GraphQL
@@ -44,8 +52,8 @@ module Types
             User
               .joins(taggings: :tag)
               .where(id: user_ids)
-              .distinct('tags.name')
-              .select(:id, 'array_agg(tags.name)')
+              .distinct("tags.name")
+              .select(:id, "array_agg(tags.name)")
               .group(:id)
               .reduce({}) do |acc, user|
                 acc[user.id] = user.array_agg

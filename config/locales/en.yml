@@ -859,6 +859,7 @@ en:
       no_notes: No notes here!
       save_note: Save Note
     CoursesStudents__StudentOverlay:
+      affiliation: Affiliation
       access_ended_at: This student's access to the course ended on %{date}.
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
@@ -873,11 +874,13 @@ en:
         one: 1 Quiz Attempted
         other: "%{count} Quizzes Attempted"
         zero: No Quizzes Attempted
+      student_id: Student ID
       submissions: Submissions
       targets: " Targets"
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
+      user_id: User ID
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "

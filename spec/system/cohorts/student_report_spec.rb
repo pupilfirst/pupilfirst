@@ -16,6 +16,7 @@ feature "Course students report", js: true do
   let(:team_coach) { create :faculty, school: school }
   let(:coach_without_access) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
+  let!(:standing) { create :standing, default: true }
 
   # Create a team
   let!(:team) { create :team, cohort: cohort }
@@ -191,6 +192,8 @@ feature "Course students report", js: true do
       evaluation_criterion: evaluation_criterion_2,
       grade: 2
     )
+
+    school.update!(configuration: { enable_standing: true })
   end
 
   around do |example|
@@ -210,6 +213,16 @@ feature "Course students report", js: true do
 
     expect(page).to have_text("Cohort")
     expect(page).to have_text(cohort.name)
+
+    expect(page).to have_text("Standing")
+    expect(page).to have_text(standing.name)
+
+    school.update!(configuration: { enable_standing: false })
+
+    visit current_path
+
+    expect(page).not_to have_text("Standing")
+    expect(page).not_to have_text(standing.name)
 
     # Only milestone targets should be shown for completion status
 

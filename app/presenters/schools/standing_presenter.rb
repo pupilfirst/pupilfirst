@@ -14,6 +14,13 @@ module Schools
       @standings ||= @school.standings.where(archived_at: nil).order(:id)
     end
 
+    def standing_log_count_for_each_unarchived_standing
+      UserStanding
+        .where(standing: standings, archived_at: nil)
+        .group(:standing_id)
+        .count
+    end
+
     def school_has_code_of_conduct?
       SchoolString::CodeOfConduct.saved?(@school)
     end

@@ -9,7 +9,7 @@
         <p class="text-gray-600 mb-4"><%= t(".standing_explanation") %> </p>
         <a href="#" class="text-primary-400 hover:text-primary-600 hover:underline"><%= t(".learn_more") %> </a>
       </div>
-      <div class="">
+      <div class="p-2">
         <%= image_tag 'school/standings/star_on_shield.svg', alt: 'Star on Shield', class: 'h-40 w-auto' %>
       </div>
     </div>
@@ -35,16 +35,16 @@
             <%= link_to t(".learn_more_about_crafting_coc"), "#", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
           </p>
         </div>
-        <div class="flex justify-center items-center gap-2">
+        <div class="flex flex-wrap justify-center items-center gap-2">
           <% if @presenter.school_has_code_of_conduct? %>
-            <div class="">
+            <div>
               <%= link_to t(".view_coc"), agreement_path(agreement_type: "code-of-conduct"), class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
-            <div class="">
-              <%= link_to t(".edit_coc"), code_of_conduct_school_path,class: "bg-primary-50 text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
+            <div>
+              <%= link_to t(".edit_coc"), code_of_conduct_school_path,class: "bg-primary-50 text-primary-500 py-2 px-5 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
           <% else %>
-            <div class="">
+            <div>
               <%= link_to t(".add_coc"), code_of_conduct_school_path, class: "bg-primary-50 text-primary-500 py-2 px-6 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
             </div>
           <% end %>
@@ -59,7 +59,7 @@
       </div>
       <div>
         <% @presenter.standings.each do |standing|%>
-          <div class="flex items-center gap-3 mb-3">
+          <div class="flex items-center gap-3 mb-3 px-4">
             <%= render 'shared/standing_shield', color: standing.color, size_classes: "w-14 h-14" %>
             <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex rounded">
               <div class="">
@@ -70,7 +70,7 @@
                   <i class="if i-edit-regular if-fw justify-self-end cursor-pointer text-lg font-semibold hover:text-primary-400" ></i>
                 <% end %>
                 <% unless standing.default %>
-                  <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion") }, id: "delete_standing_#{standing.id}" do%>
+                  <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion", count: @presenter.standing_log_count_for_each_unarchived_standing[standing.id] || 0) }, id: "delete_standing_#{standing.id}" do%>
                     <i class="if i-trash-regular if-fw cursor-pointer text-lg font-semibold hover:text-red-400"></i>
                   <% end %>
                 <% end %>

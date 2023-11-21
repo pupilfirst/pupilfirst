@@ -2,12 +2,14 @@ namespace :translations do
   desc 'Synchronize missing translation keys from en to specified language'
   task :sync, [:locale] => :environment do |_task, args|
     source_locale = 'en'
-    target_locale = args[:locale] || 'ar'
+    target_locale = args[:locale]
 
     source_file_path = file_path_for(source_locale)
     target_file_path = file_path_for(target_locale)
 
-    if File.exist?(source_file_path) && File.exist?(target_file_path)
+    if target_locale.blank?
+      puts "Please specify a language!, example: rails translations:sync[ar]"
+    elsif File.exist?(source_file_path) && File.exist?(target_file_path)
       source_translations = YAML.load_file(source_file_path)
       target_translations = YAML.load_file(target_file_path)
 

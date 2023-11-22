@@ -11,4 +11,30 @@ class TargetPolicy < ApplicationPolicy
   end
 
   alias details_v2? show?
+
+  def mark_as_read?
+    return false if @user.blank?
+
+    # Has access to school
+    return false unless course&.school == @current_school && student.present?
+
+    # Student has access to the course
+    return false unless !student.cohort.ended?
+
+    true
+
+  end
+
+  def student
+    @student ||=
+      @user
+        .students
+        .joins(:cohort)
+        .where(cohorts: { course_id: course })
+        .first
+  end
+
+  def course
+    @course ||= record&.course
+  end
 end

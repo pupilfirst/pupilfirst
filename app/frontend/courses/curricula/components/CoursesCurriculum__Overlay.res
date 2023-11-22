@@ -1,4 +1,5 @@
 exception UnexpectedSubmissionStatus(string)
+exception UnexpectedResponse(int)
 
 %%raw(`import "./CoursesCurriculum__Overlay.css"`)
 
@@ -319,15 +320,11 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
 let addPageRead = (targetId, markReadCB) => {
-  let payload = Js.Dict.empty()
-  Js.Dict.set(payload, "target_id", Js.Json.string(targetId))
-
   open Js.Promise
   Fetch.fetchWithInit(
-    "/page_reads/",
+    "/targets/" ++ (targetId ++ "/mark_as_read"),
     Fetch.RequestInit.make(
       ~method_=Post,
-      ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
       ~headers=Fetch.HeadersInit.makeWithArray([
         ("X-CSRF-Token", AuthenticityToken.fromHead()),
         ("Content-Type", "application/json"),
@@ -336,9 +333,13 @@ let addPageRead = (targetId, markReadCB) => {
       (),
     ),
   )
-  |> then_(_ => {
-    markReadCB(targetId)
-    resolve()
+  |> then_(response => {
+    if Fetch.Response.ok(response) {
+      markReadCB(targetId)
+      resolve()
+    } else {
+      Js.Promise.reject(UnexpectedResponse(response->Fetch.Response.status))
+    }
   })
   |> ignore
 }

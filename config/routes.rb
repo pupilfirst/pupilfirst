@@ -251,6 +251,7 @@ Rails.application.routes.draw do
     member do
       get 'details_v2'
       get ':slug', action: 'show'
+      post 'mark_as_read'
     end
   end
 
@@ -286,8 +287,6 @@ Rails.application.routes.draw do
       get '/:token', action: 'download', as: 'download'
     end
   end
-
-  resources :page_reads
 
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
   get '/help/:document', to: 'help#show'

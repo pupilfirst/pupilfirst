@@ -58,45 +58,45 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name) => {...state, name: name, dirty: true}
-  | UpdatePreferredName(preferredName) => {...state, preferredName: preferredName, dirty: true}
-  | UpdateAbout(about) => {...state, about: about, dirty: true}
-  | UpdateEmail(email) => {...state, email: email, dirty: true}
+  | UpdateName(name) => {...state, name, dirty: true}
+  | UpdatePreferredName(preferredName) => {...state, preferredName, dirty: true}
+  | UpdateAbout(about) => {...state, about, dirty: true}
+  | UpdateEmail(email) => {...state, email, dirty: true}
   | SetDisableUpdateEmail(disableEmailInput) => {
       ...state,
-      disableEmailInput: disableEmailInput,
+      disableEmailInput,
     }
-  | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
+  | UpdateLocale(locale) => {...state, locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
       ...state,
-      currentPassword: currentPassword,
+      currentPassword,
       dirty: true,
     }
   | UpdateNewPassword(newPassword) => {
       ...state,
-      newPassword: newPassword,
+      newPassword,
       dirty: true,
     }
   | UpdateNewPassWordConfirm(confirmPassword) => {
       ...state,
-      confirmPassword: confirmPassword,
+      confirmPassword,
       dirty: true,
     }
   | UpdateEmailForDeletion(emailForAccountDeletion) => {
       ...state,
-      emailForAccountDeletion: emailForAccountDeletion,
+      emailForAccountDeletion,
     }
-  | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest: dailyDigest, dirty: true}
+  | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest, dirty: true}
   | StartSaving => {...state, saving: true}
   | ChangeDeleteAccountFormVisibility(showDeleteAccountForm) => {
       ...state,
-      showDeleteAccountForm: showDeleteAccountForm,
+      showDeleteAccountForm,
       emailForAccountDeletion: "",
     }
-  | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError: avatarUploadError}
+  | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError}
   | UpdateAvatarUrl(avatarUrl) => {
       ...state,
-      avatarUrl: avatarUrl,
+      avatarUrl,
       avatarUploadError: None,
     }
   | FinishSaving(hasCurrentPassword) => {
@@ -106,7 +106,7 @@ let reducer = (state, action) =>
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      hasCurrentPassword: hasCurrentPassword,
+      hasCurrentPassword,
     }
   | ResetSaving => {...state, saving: false}
   | StartDeletingAccount => {...state, deletingAccount: true}
@@ -118,7 +118,7 @@ let reducer = (state, action) =>
     }
   | UpdateEmailAndDisableInput(email) => {
       ...state,
-      email: email,
+      email,
       dirty: true,
       disableEmailInput: true,
       showEmailChangePasswordConfirm: false,
@@ -191,7 +191,7 @@ let uploadAvatar = (send, formData) => {
 let updateEmail = (send, email, newEmail, password) => {
   send(SetDisableUpdateEmail(false))
 
-  SendEmailUpdateTokenQuery.fetch({newEmail: newEmail, password: password})
+  SendEmailUpdateTokenQuery.fetch({newEmail, password})
   |> Js.Promise.then_(_ => {
     send(UpdateEmailAndDisableInput(newEmail))
     Js.Promise.resolve()
@@ -391,6 +391,23 @@ let confirmDeletionWindow = (state, send) =>
       }
     : React.null
 
+let themeChip = theme =>
+  <div
+    className={theme ++ " w-16 h-8 grid grid-cols-3 gap-1 p-1 rounded-md border border-gray-200 bg-white"}>
+    <div className="w-full h-full col-span-1 grid grid-rows-2 gap-1">
+      <div className="bg-black h-full w-full rounded-md" />
+      <div className="bg-primary-500 h-full w-full rounded-md" />
+    </div>
+    <div className="col-span-2 grid grid-cols-3 gap-1">
+      <div className="bg-primary-300 h-full w-full rounded-md" />
+      <div className="bg-primary-200 h-full w-full rounded-md" />
+      <div className="bg-primary-100 h-full w-full rounded-md" />
+      <div className="bg-gray-400 h-full w-full rounded-md" />
+      <div className="bg-gray-300 h-full w-full rounded-md" />
+      <div className="bg-gray-200 h-full w-full rounded-md" />
+    </div>
+  </div>
+
 @react.component
 let make = (
   ~name,
@@ -407,13 +424,13 @@ let make = (
   ~schoolName,
 ) => {
   let initialState = {
-    name: name,
-    preferredName: preferredName,
-    about: about,
-    locale: locale,
-    email: email,
+    name,
+    preferredName,
+    about,
+    locale,
+    email,
     disableEmailInput: true,
-    avatarUrl: avatarUrl,
+    avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
     currentPassword: "",
@@ -422,7 +439,7 @@ let make = (
     emailForAccountDeletion: "",
     showEmailChangePasswordConfirm: false,
     showDeleteAccountForm: false,
-    hasCurrentPassword: hasCurrentPassword,
+    hasCurrentPassword,
     deletingAccount: false,
     avatarUploadError: None,
     dirty: false,
@@ -652,7 +669,8 @@ let make = (
                             {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
                             | Some(suggestion) =>
                               <li>
-                                <PfIcon className="if i-info-light if-fw" /> {suggestion->str}
+                                <PfIcon className="if i-info-light if-fw" />
+                                {suggestion->str}
                               </li>
                             | None => React.null
                             }}
@@ -736,6 +754,53 @@ let make = (
                   checked={!state.dailyDigest}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row mt-10 md:mt-12">
+          <div className="w-full md:w-1/3 pe-4">
+            <h3 className="text-lg font-semibold"> {"Apperance"->str} </h3>
+            <p className="mt-1 text-sm text-gray-600"> {"Select your preferred style."->str} </p>
+          </div>
+          <div className="mt-5 md:mt-0 w-full md:w-2/3">
+            <label htmlFor="language" className="font-semibold"> {"Theme preference"->str} </label>
+            <div className="mt-6 flex items-center gap-3">
+              <label
+                htmlFor="theme-system"
+                className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
+                <Radio
+                  // name="theme"
+                  id="theme-system"
+                  label={t("disable_email_radio")}
+                  onChange={event => {Js.log(event)}}
+                />
+                <div
+                  className="w-16 h-8 flex items-center justify-center p-1 rounded-md border border-gray-200 bg-gray-100">
+                  <PfIcon className="if i-desktop-monitor-regular if-fw text-lg text-gray-500" />
+                </div>
+              </label>
+              <label
+                htmlFor="theme-light"
+                className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
+                <Radio
+                  // name="theme"
+                  id="theme-light"
+                  label={t("disable_email_radio")}
+                  onChange={event => {Js.log(event)}}
+                />
+                {themeChip("theme-pupilfirst")}
+              </label>
+              <label
+                htmlFor="theme-dark"
+                className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
+                <Radio
+                  // name="theme"
+                  id="theme-dark"
+                  label={t("disable_email_radio")}
+                  onChange={event => {Js.log(event)}}
+                />
+                {themeChip("dark")}
+              </label>
             </div>
           </div>
         </div>

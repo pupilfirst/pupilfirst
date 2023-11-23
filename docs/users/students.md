@@ -60,6 +60,29 @@ Students whose access to a course has ended by being part of ended cohort or who
 
 Inactive students can be reactivated by moving to a cohort that is not ended or reactivating a dropped out student from the _Actions_ tab.
 
+## Student Standing
+
+Pupilfirst allows you to reward students for positive actions and penalize them for negative actions. This is done through a feature called [Standing](/users/school_standing).
+
+![Student standing page](../assets/students/school_student_standing_page.png)
+
+The standing page contains the following information:
+
+1. **Current Standing:** This section displays the current standing of the student with a standing shield and standing name, along with the color of standing.
+
+2. **Standing Logs:** This section displays the standing logs of students. Each standing log is displayed as a card with the following information:
+
+   - The standing shield styled with color of the standing.
+   - The standing name styled with color of the standing.
+   - The reason for change in standing.
+   - The date and time when the standing log was created.
+   - The name of the user who created the standing log.
+
+3. **Add Standing Log:** This section allows you to add a new standing log for the student. The `change standing` section has the following elements:
+   - A dropdown to select a standing from the list of standings.
+   - A markdown editor to enter the reason for the change in standing.
+   - A button to change the standing of the student and add a standing log.
+
 ## Teaming up students
 
 ![Teams page within a course in the school administration interface](../assets/students/teams_index_page.png)

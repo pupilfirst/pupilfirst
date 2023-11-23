@@ -32,5 +32,13 @@ module Users
     def user_standings_count
       user_standings.length
     end
+
+    def help_icon_perspective
+      if view.request.path.include?("user/standing")
+        I18n.t("shared.user_standing.your")
+      else
+        I18n.t("shared.user_standing.student")
+      end
+    end
   end
 end

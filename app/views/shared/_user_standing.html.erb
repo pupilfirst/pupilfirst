@@ -18,7 +18,10 @@
         <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-1">
           <div class="text-left md:text-right m-1 md:m-0">
             <p class="text-base font-semibold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
-            <p class="text-sm text-gray-500"><%= t(".standing") %></</p>
+            <div class="flex gap-1 items-center justify-start md:justify-end">
+              <p class="text-sm text-gray-500"><%= t(".standing") %></p>
+              <p data-re-component="HelpIcon" data-re-json='<%= {children: t(".help", name: @presenter.current_standing.name, perspective: @presenter.help_icon_perspective, description: @presenter.current_standing.description), className: 'text-xs text-left', responsiveAlignment: 'rcl', link: t(".help_url")}.to_json %>'></p>
+            </div>
           </div>
           <div>
             <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>

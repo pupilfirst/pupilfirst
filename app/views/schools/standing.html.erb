@@ -7,7 +7,7 @@
       <div class="col-span-3 p-8">
         <h1 class="text-4xl font-semibold text-gray-800 mb-4"><%= t(".standings") %> </h1>
         <p class="text-gray-600 mb-4"><%= t(".standing_explanation") %> </p>
-        <a href="#" class="text-primary-400 hover:text-primary-600 hover:underline"><%= t(".learn_more") %> </a>
+        <a href="https://docs.pupilfirst.com/users/school_standing" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-600 hover:underline"><%= t(".learn_more") %> </a>
       </div>
       <div class="p-2">
         <%= image_tag 'school/standings/star_on_shield.svg', alt: 'Star on Shield', class: 'h-40 w-auto' %>
@@ -32,7 +32,7 @@
           </div>
           <p class="text-gray-600 max-w-3xl">
             <%= t(".update_coc_info") %>
-            <%= link_to t(".learn_more_about_crafting_coc"), "#", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
+            <%= link_to t(".learn_more_about_crafting_coc"), "https://docs.pupilfirst.com/users/crafting_code_of_conduct", class: "text-primary-400 hover:text-primary-600 hover:underline" %>
           </p>
         </div>
         <div class="flex flex-wrap justify-center items-center gap-2">

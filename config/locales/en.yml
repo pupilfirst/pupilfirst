@@ -2887,6 +2887,8 @@ en:
       code_of_conduct_info: At %{school_name} School, we follow code of conduct. Any positive actions will lead to a promotion in standing, while any violations will result in a demotion.
       current_standing: Current Standing
       empty_standing_info: Standings have not been altered. Any changes to the standing will be displayed here.
+      help: "%{perspective} current standing is <b>%{name}</b>. The description of the standing is: <b>%{description}</b>"
+      help_url: https://docs.pupilfirst.com/users/school_standing
       no_standing_log: No Standing log
       reach_us: Reach us
       reach_us_info: If you believe there's been an error in your standing, please reach out to us at
@@ -2894,7 +2896,8 @@ en:
       standing_log: Standing Log
       view_code_of_conduct: View Code of Conduct
       standing_not_enabled: Standing is not enabled for this school.
-    version: Version
+      student: Student
+      your: Your
     versions: Versions
     view: View
     view_standing: View Standing

@@ -36,6 +36,7 @@ These are the rate limits applied to the creation of all kinds of resources stor
 | SchoolLink                | School        | Each school can create up to 25 links.                    |
 | StartupFeedback           | Submission    | Each submission can receive up to 25 feedbacks.           |
 | Student                   | Cohort        | Each cohort can admit up to 5,000 students hourly.        |
+| Standing                  | School        | Each school can create upto 15 standings.                 |
 | SubmissionReport          | Submission    | Each submission can receive up to 25 reports hourly.      |
 | Target                    | TargetGroup   | Each target group can have up to 100 targets.             |
 | TargetGroup               | Level         | Each level can contain up to 25 target groups.            |
@@ -45,4 +46,5 @@ These are the rate limits applied to the creation of all kinds of resources stor
 | TimelineEventFile         | User          | Each user can upload up to 50 files hourly.               |
 | Topic                     | Community     | Up to 1,000 topics can be created hourly.                 |
 | TopicCategory             | Community     | Each community can have up to 25 categories.              |
+| UserStanding              | User          | Each Admin user can create upto 100 standing logs hourly  |
 | WebhookEndpoint           | Course        | Each course can set up to 25 endpoints.                   |

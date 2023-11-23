@@ -5,4 +5,8 @@ class UserStanding < ApplicationRecord
   belongs_to :archiver, class_name: "User", optional: true
 
   validates :reason, presence: true
+  validates_with RateLimitValidator,
+                 limit: 100,
+                 scope: :creator_id,
+                 time_frame: 1.hour
 end

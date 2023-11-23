@@ -739,8 +739,8 @@ en:
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -756,7 +756,7 @@ en:
         rejected: Rejected
         reviewing: Reviewing
       student: student
-      submission_acceptable: "Is this submission acceptable?"
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
@@ -764,11 +764,10 @@ en:
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
-      undo_rejection_notice_title: "Submission Rejected:"
-      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
-      you_are_done: "You're done!"
       write_a_note: Write a Note
       you_are_done: You're done!
     CoursesReview__ReviewerManager:
@@ -859,8 +858,8 @@ en:
       no_notes: No notes here!
       save_note: Save Note
     CoursesStudents__StudentOverlay:
-      affiliation: Affiliation
       access_ended_at: This student's access to the course ended on %{date}.
+      affiliation: Affiliation
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       close_student_report: Close student report
@@ -1609,9 +1608,9 @@ en:
         actions: Actions
         details: Details
         standing: Standing
-      select_standing: Select Standing
       reason_heading: Reason for altering the standing
       reason_placeholder: Eg. Plagiarism in assignment name, Misbehave in community...
+      select_standing: Select Standing
     StudentTopNav:
       edit_profile: Edit Profile
       sign_in: Sign In
@@ -1979,13 +1978,6 @@ en:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
-    something_went_wrong: Something went wrong!
-    vimeo:
-      2230: The upload type is invalid.
-      4003: There is a problem initiating the upload.
-      4101: Your maximum disk space has been reached.
-      4102: Your allotted weekly quota has been reached.
-      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -2006,10 +1998,17 @@ en:
       title: Timed out
       too_long: This page took too long to load.
       try_reloading: Could you please try reloading this page?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       title: Invalid Request
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: Coaches at
@@ -2290,8 +2289,8 @@ en:
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      submission_reviewed_error: Submission already reviewed
       success_notification: The submission has been marked as reviewed.
     create_post:
       reply_added_notification: Reply added successfully
@@ -2638,8 +2637,8 @@ en:
         page_title: Create new calendar
     code_of_conduct:
       page_title: Code of Conduct Editor
-      update_code_of_conduct_heading: Update your school's code of conduct
       save_code_of_conduct: Save Code of Conduct
+      update_code_of_conduct_heading: Update your school's code of conduct
     communities:
       index:
         title: Communities
@@ -2720,8 +2719,8 @@ en:
       standings: Standings
       title: Standing
       toggle_standing:
-        default_standing_name: Neutral
         default_standing_description: This is the default standing for all students.
+        default_standing_name: Neutral
         school_standing_toggle_success:
           _no: School Standing is disabled successfully!
           _yes: School Standing is enabled successfully!
@@ -2731,6 +2730,8 @@ en:
     standings:
       create:
         success: Standing created successfully!
+      delete:
+        success: Standing deleted successfully!
       edit:
         page_title: Edit standing
       form:
@@ -2745,8 +2746,6 @@ en:
         page_title: Add new standing
       update:
         success: Standing updated successfully!
-      delete:
-        success: Standing deleted successfully!
   services:
     courses:
       demo_content_service:
@@ -2761,7 +2760,7 @@ en:
         target_name: Demo Target
     discord:
       community_message_service:
-        post_topic_created:  |-
+        post_topic_created: |-
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
@@ -2894,9 +2893,9 @@ en:
       reach_us_info: If you believe there's been an error in your standing, please reach out to us at
       standing: Standing
       standing_log: Standing Log
-      view_code_of_conduct: View Code of Conduct
       standing_not_enabled: Standing is not enabled for this school.
       student: Student
+      view_code_of_conduct: View Code of Conduct
       your: Your
     versions: Versions
     view: View

@@ -521,7 +521,7 @@ let make = (~studentId, ~userId) => {
                       }}
                     </div>
                   </div>
-                  <div>
+                  <div className="ps-1">
                     <div>
                       <h2 className="text-lg text-left font-semibold">
                         {student->StudentInfo.user->UserDetails.name->str}
@@ -532,39 +532,41 @@ let make = (~studentId, ~userId) => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 space-y-1">
-                  <div className="space-x-1">
-                    <PfIcon className="if i-user-regular if-fw text-xl" />
-                    <span className="text-gray-500 font-normal"> {t("user_id")->str} </span>
-                    <ClickToCopy
-                      copy={StudentInfo.user(student)->UserDetails.id}
-                      className="inline-block hover:text-primary-500">
-                      <span className="ms-2 text-base font-semibold">
-                        {`#${StudentInfo.user(student)->UserDetails.id}`->str}
-                      </span>
-                    </ClickToCopy>
+                <div className="mt-4 space-y-1 flex flex-col">
+                  <div className="flex flex-wrap items-center justify-normal gap-2">
+                    <div className="flex">
+                      <PfIcon className="if i-user-regular if-fw text-xl" />
+                      <span className="text-gray-500 font-normal"> {t("user_id")->str} </span>
+                      <ClickToCopy
+                        copy={StudentInfo.user(student)->UserDetails.id}
+                        className="inline-block hover:text-primary-500">
+                        <span className="ms-2 text-base font-semibold">
+                          {`#${StudentInfo.user(student)->UserDetails.id}`->str}
+                        </span>
+                      </ClickToCopy>
+                    </div>
+                    <div className="flex">
+                      <PfIcon className="if i-academic-cap-light if-fw text-xl" />
+                      <span className="text-gray-500 font-normal"> {t("student_id")->str} </span>
+                      <ClickToCopy
+                        copy={StudentInfo.id(student)}
+                        className="inline-block hover:text-primary-500">
+                        <span className="ms-2 text-base font-semibold">
+                          {`#${StudentInfo.id(student)}`->str}
+                        </span>
+                      </ClickToCopy>
+                    </div>
                   </div>
-                  <div className="space-x-1">
-                    <PfIcon className="if i-academic-cap-light if-fw text-xl" />
-                    <span className="text-gray-500 font-normal"> {t("student_id")->str} </span>
-                    <ClickToCopy
-                      copy={StudentInfo.id(student)}
-                      className="inline-block hover:text-primary-500">
-                      <span className="ms-2 text-base font-semibold">
-                        {`#${StudentInfo.id(student)}`->str}
-                      </span>
-                    </ClickToCopy>
-                  </div>
-                  <div className="space-x-1">
+                  <div className="flex">
                     <PfIcon className="if i-users-light if-fw text-xl " />
                     <span className="text-gray-500 font-normal"> {ts("cohort")->str} </span>
-                    <span className="ms-2 text-base font-semibold">
+                    <span className="ms-2 text-base font-semibold break-normal">
                       {student->StudentInfo.cohort->Cohort.name->str}
                     </span>
                   </div>
                   {switch student->StudentInfo.user->UserDetails.currentStandingName {
                   | Some(name) =>
-                    <div className="space-x-1">
+                    <div className="flex">
                       <PfIcon className="if i-shield-light if-fw text-xl" />
                       <span className="text-gray-500 font-normal">
                         {ts("user_standing.standing")->str}

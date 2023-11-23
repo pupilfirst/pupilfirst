@@ -66,7 +66,7 @@ module CourseExportable
       when [true, false]
         # Case when the submission has passed and there is no evaluation grade
         # Use the quiz score as the grade, or a checkmark if the score is not available
-        [submission.quiz_score || "✓", ""]
+        [submission.quiz_score || "✓", "default"]
       when [false, false]
         if submission.evaluated?
           # Case when the submission has not passed, but has been evaluated
@@ -102,11 +102,7 @@ module CourseExportable
         parsed_grade
       end
 
-    grading[grade_index] = if style.present?
-      { value: value, style: style }
-    else
-      value
-    end
+    grading[grade_index] = { value: value, style: style }
 
     grading
   end

@@ -62,8 +62,13 @@ module Github
         github_client.create_ref repo_name, "heads/#{branch_name}", latest_sha
       rescue Octokit::UnprocessableEntity => e
         if e.message.include?("Reference already exists")
-          # For whatever reason, this branch already exists - let's skip this step.
-          Rails.logger.info "Branch #{branch_name} already exists. Skipping"
+          # If the branch already exists, delete it and retry the creation
+          github_client.delete_ref(repo_name, "heads/#{branch_name}")
+
+          # Wait for 5 second to allow GitHub's eventual consistency to catch up.
+          sleep(5) unless Rails.env.test?
+
+          retry
         else
           raise e
         end

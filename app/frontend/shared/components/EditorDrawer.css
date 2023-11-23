@@ -63,9 +63,11 @@
 
 @keyframes blanket-animation {
   from {
-    background: rgba(9, 30, 66, 0);
+    background: rgba(3, 4, 5, 0);
+    @apply backdrop-blur-none;
   }
   to {
-    background: rgba(9, 30, 66, 0.54);
+    background: rgba(3, 4, 5, 0.75);
+    @apply backdrop-blur-sm;
   }
 }

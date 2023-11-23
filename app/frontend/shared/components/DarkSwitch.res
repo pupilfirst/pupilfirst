@@ -20,7 +20,7 @@ let toggleDarkMode = %raw(`
   }
 `)
 
-let darkSwitchClasses = condition => condition ? "fas fa-moon" : "fas fa-sun text-white"
+let darkSwitchClasses = condition => condition ? "fas fa-moon" : "fas fa-sun "
 
 let darkSwitch = () => {
   let (_theme, setTheme) = React.useState(() => theme())

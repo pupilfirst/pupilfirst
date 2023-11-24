@@ -8,6 +8,7 @@ module Types
       end
     connection_type_class Types::PupilfirstConnection
     field :id, ID, null: false
+    field :seo_slug, String, null: true
     field :name, String, null: false
     field :description, String, null: false
     field :enable_leaderboard, Boolean, null: false

@@ -1,5 +1,6 @@
 type t = {
   id: string,
+  seoSlug: string,
   name: string,
   review: bool,
   author: bool,
@@ -14,6 +15,7 @@ type t = {
 
 let name = t => t.name
 let id = t => t.id
+let seoSlug = t => t.seoSlug
 let review = t => t.review
 let author = t => t.author
 let description = t => t.description
@@ -28,6 +30,7 @@ let decode = json => {
   open Json.Decode
   {
     id: json |> field("id", string),
+    seoSlug: json |> field("seoSlug", string),
     name: json |> field("name", string),
     description: json |> field("description", string),
     exited: json |> field("exited", bool),

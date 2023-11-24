@@ -141,6 +141,7 @@ module Users
         .map do |course|
           {
             id: course.id,
+            seo_slug: course.seo_slug,
             name: course.name,
             review: course.id.in?(courses_with_review_access),
             author: course.id.in?(courses_with_author_access),

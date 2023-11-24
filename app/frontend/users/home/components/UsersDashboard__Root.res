@@ -104,7 +104,7 @@ let ctaText = (message, icon) =>
     <span> <i className=icon /> <span className="ms-2"> {message->str} </span> </span>
   </div>
 
-let studentLink = (courseId, suffix) => "/courses/" ++ (courseId ++ ("/" ++ suffix))
+let studentLink = (courseSeoSlug, suffix) => "/courses/" ++ (courseSeoSlug ++ ("/" ++ suffix))
 
 let callToAction = (course, currentSchoolAdmin) =>
   if currentSchoolAdmin {
@@ -125,12 +125,13 @@ let callToAction = (course, currentSchoolAdmin) =>
 
 let ctaFooter = (course, currentSchoolAdmin) => {
   let courseId = Course.id(course)
+  let courseSeoSlug = Course.seoSlug(course)
 
   switch callToAction(course, currentSchoolAdmin) {
-  | #ViewCourse => ctaButton(t("cta.view_course"), studentLink(courseId, "curriculum"))
+  | #ViewCourse => ctaButton(t("cta.view_course"), studentLink(courseSeoSlug, "curriculum"))
   | #EditCourse =>
     ctaButton(t("cta.edit_curriculum"), "/school/courses/" ++ (courseId ++ "/curriculum"))
-  | #ReviewSubmissions => ctaButton(t("cta.review_submissions"), studentLink(courseId, "review"))
+  | #ReviewSubmissions => ctaButton(t("cta.review_submissions"), studentLink(courseSeoSlug, "review"))
   | #DroppedOut => ctaText(t("cta.dropped_out"), "fas fa-user-slash")
   | #AccessEnded => ctaText(t("cta.access_ended"), "fas fa-history")
   | #CourseEnded => ctaText(t("cta.course_ended"), "fas fa-history")
@@ -154,6 +155,7 @@ let communityLinks = (communityIds, communities) => Js.Array.map(id => {
 
 let courseLinks = (course, currentSchoolAdmin, communities) => {
   let courseId = Course.id(course)
+  let courseSeoSlug = Course.seoSlug(course)
   let cta = callToAction(course, currentSchoolAdmin)
 
   <div className="flex flex-wrap px-4 mt-2">
@@ -166,23 +168,23 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
       Course.author(course) && cta != #EditCourse,
     )}
     {ReactUtils.nullUnless(
-      courseLink(studentLink(courseId, "curriculum"), t("cta.view_curriculum"), "fas fa-book"),
+      courseLink(studentLink(courseSeoSlug, "curriculum"), t("cta.view_curriculum"), "fas fa-book"),
       cta != #ViewCourse,
     )}
     {ReactUtils.nullUnless(
-      courseLink(studentLink(courseId, "leaderboard"), t("cta.leaderboard"), "fas fa-calendar-alt"),
+      courseLink(studentLink(courseSeoSlug, "leaderboard"), t("cta.leaderboard"), "fas fa-calendar-alt"),
       Course.enableLeaderboard(course),
     )}
     {ReactUtils.nullUnless(
       courseLink(
-        studentLink(courseId, "review"),
+        studentLink(courseSeoSlug, "review"),
         t("cta.review_submissions"),
         "fas fa-check-square",
       ),
       Course.review(course) && cta != #ReviewSubmissions,
     )}
     {ReactUtils.nullUnless(
-      courseLink(studentLink(courseId, "cohorts"), t("cta.my_cohorts"), "fas fa-user-friends"),
+      courseLink(studentLink(courseSeoSlug, "cohorts"), t("cta.my_cohorts"), "fas fa-user-friends"),
       Course.review(course),
     )}
     {communityLinks(Course.linkedCommunities(course), communities)}

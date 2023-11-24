@@ -168,6 +168,53 @@ feature 'Target Overlay', js: true do
     expect(page).to have_link(file_title)
   end
 
+  scenario 'student marks as read a target without assignment' do
+    sign_in_user student.user, referrer: target_path(target_l2)
+
+    expect(page).to have_button('Mark as read')
+    click_button 'Mark as read'
+
+    expect(page).to_not have_button('Mark as read')
+    expect(page).to have_text('Marked read')
+
+    click_button 'Close'
+
+    within("a[data-target-id='#{target_l2.id}']") do
+      #marking as read a target without assignment should change the status to completed
+      expect(page).to have_content('Completed')
+      expect(find('span[title="Marked read"]')).to be_present
+    end
+
+    click_link target_l2.title
+
+    #should say marked read
+    expect(page).to have_text('Marked read')
+
+  end
+
+  scenario 'student marks assignment target as read' do
+    sign_in_user student.user, referrer: target_path(target_l1)
+
+    expect(page).to have_button('Mark as read')
+    click_button 'Mark as read'
+
+    expect(page).to_not have_button('Mark as read')
+    expect(page).to have_text('Marked read')
+
+    click_button 'Close'
+
+    within("a[data-target-id='#{target_l1.id}']") do
+      #marking an assignment target as read shouldn't change the status
+      expect(page).to_not have_content('Completed')
+      expect(find('span[title="Marked read"]')).to be_present
+    end
+
+    click_link target_l1.title
+
+    #should say marked read
+    expect(page).to have_text('Marked read')
+  end
+
   scenario 'student submits work on a target' do
     sign_in_user student.user, referrer: target_path(target_l1)
 

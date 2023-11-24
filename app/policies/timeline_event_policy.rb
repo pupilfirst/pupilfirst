@@ -22,10 +22,10 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return true if current_school_admin.present?
 
-    organisation = record.students.first.user.organisation
+    organisations = record.students.first.user.organisations
 
-    return false if organisation.blank?
+    return false if organisations.blank?
     # Check if the user is an admin of the organisation.
-    user.organisations.exists?(id: organisation.id)
+    user.admins_organisations.exists?(id: organisations.pluck(:id))
   end
 end

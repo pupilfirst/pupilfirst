@@ -2,7 +2,7 @@
   <section class="md:pt-18 bg-gray-50">
     <div class="max-w-5xl mx-auto p-5">
       <div class="mt-4">
-        <%= link_to t('shared.back_link'), org_student_path(@presenter.student), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
+        <%= link_to t('shared.back_link'), org_organisation_student_path(@presenter.organisation, @presenter.student), class: 'bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500' %>
       </div>
       <p class="mt-5 text-gray-600 text-sm"><%= t('.student_name_label') %></p>
       <h1 class="text-xl md:text-2xl font-bold"><%= @presenter.student.name %></h1>
@@ -37,5 +37,6 @@
           <%= t('.pagination_notice', page_start: kaminari_page_start(@presenter.reviewed_submissions), page_end: kaminari_page_end(@presenter.reviewed_submissions), count: @presenter.reviewed_submissions.total_count) %>
         </div>
       <% end %>
-    </section>
-  </div>
+    </div>
+  </section>
+</div>

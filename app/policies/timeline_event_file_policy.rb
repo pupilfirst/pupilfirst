@@ -20,11 +20,14 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return true if current_school_admin.present?
 
     # Organisation admins can access files
-    organisation = students.first.user.organisation
+    organisation_ids = students.first.user.organisations.pluck(:id)
 
-    return false if organisation.blank?
+    return false if organisation_ids.blank?
 
-    user.organisations.exists?(id: record.user.organisation_id)
+    OrganisationsUser.exists?(
+      organisation_id: user.admins_organisations.pluck(:id),
+      user_id: user.id
+    )
   end
 
   def create?

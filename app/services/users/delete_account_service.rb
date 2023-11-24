@@ -80,6 +80,7 @@ module Users
     end
 
     def create_audit_record
+      organisation_ids = @user.organisations.pluck(:organisation_id)&.first
       AuditRecord.create!(
         audit_type: AuditRecord.audit_types[:delete_account],
         school_id: @user.school_id,
@@ -87,7 +88,7 @@ module Users
           name: @user.name,
           email: @user.email,
           cohort_ids: @user.students.pluck(:cohort_id),
-          organisation_id: @user.organisation_id,
+          organisation_id: organisation_ids, # TODO: rename organisation_id to organisation_ids
           account_deletion_notification_sent_at:
             @user.account_deletion_notification_sent_at&.iso8601
         }

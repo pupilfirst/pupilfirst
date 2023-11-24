@@ -318,7 +318,11 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         student_in_inactive_cohort.name,
-        href: org_student_path(student_in_inactive_cohort)
+        href:
+          org_organisation_student_path(
+            organisation,
+            student_in_inactive_cohort
+          )
       )
     end
   end
@@ -350,7 +354,11 @@ feature "Organisation show" do
 
       expect(page).to have_link(
         student_in_inactive_cohort.name,
-        href: org_student_path(student_in_inactive_cohort)
+        href:
+          org_organisation_student_path(
+            organisation,
+            student_in_inactive_cohort
+          )
       )
     end
   end

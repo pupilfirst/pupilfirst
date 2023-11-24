@@ -165,7 +165,7 @@ feature "Organisation student details page and submissions list" do
 
   context "when the user isn't signed in" do
     scenario "user is required to sign in" do
-      visit org_student_path(student)
+      visit org_organisation_student_path(organisation, student)
 
       expect(page).to have_text("Sign in to #{school.name}")
     end
@@ -179,7 +179,9 @@ feature "Organisation student details page and submissions list" do
     end
 
     scenario "admin visiting an org student page is shown details" do
-      sign_in_user school_admin_user, referrer: org_student_path(student)
+      sign_in_user school_admin_user,
+                   referrer:
+                     org_organisation_student_path(organisation, student)
 
       expect(page).to have_text(student.name)
 
@@ -192,7 +194,9 @@ feature "Organisation student details page and submissions list" do
 
   context "when the user is an org admin" do
     scenario "org admin can see all details of a student", js: true do
-      sign_in_user org_admin_user, referrer: org_student_path(student)
+      sign_in_user org_admin_user,
+                   referrer:
+                     org_organisation_student_path(organisation, student)
 
       # Check name.
       expect(page).to have_text(student.name)
@@ -220,7 +224,9 @@ feature "Organisation student details page and submissions list" do
     end
 
     scenario "org admin can access a list of all previously reviewed submissions" do
-      sign_in_user org_admin_user, referrer: org_student_path(student)
+      sign_in_user org_admin_user,
+                   referrer:
+                     org_organisation_student_path(organisation, student)
 
       click_link "View previously reviewed submissions"
 
@@ -237,7 +243,11 @@ feature "Organisation student details page and submissions list" do
 
     scenario "org admin can access details of a student of inactive cohort" do
       sign_in_user org_admin_user,
-                   referrer: org_student_path(student_in_inactive_cohort)
+                   referrer:
+                     org_organisation_student_path(
+                       organisation,
+                       student_in_inactive_cohort
+                     )
 
       expect(page).to have_text(student_in_inactive_cohort.name)
       expect(page).to have_text "Targets Overview"
@@ -245,7 +255,11 @@ feature "Organisation student details page and submissions list" do
 
     scenario "org admin cannot access details of a student in another org" do
       sign_in_user org_admin_user,
-                   referrer: org_student_path(student_from_another_org)
+                   referrer:
+                     org_organisation_student_path(
+                       organisation_2,
+                       student_from_another_org
+                     )
 
       expect(page.status_code).to eq(404)
     end
@@ -259,11 +273,15 @@ feature "Organisation student details page and submissions list" do
         create :coach_note, student: student_org_admin, author: faculty.user
       end
 
-      before { org_admin_user.update!(organisation: organisation) }
+      before { org_admin_user.organisations << organisation }
 
       scenario "org admin cannot see private notes" do
         sign_in_user org_admin_user,
-                     referrer: org_student_path(student_org_admin)
+                     referrer:
+                       org_organisation_student_path(
+                         org_admin_user.organisations.first,
+                         student_org_admin
+                       )
 
         expect(page).to have_text(org_admin_user.name)
         expect(page).not_to have_text("Notes")

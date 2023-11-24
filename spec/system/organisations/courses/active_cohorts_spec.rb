@@ -52,13 +52,13 @@ feature "Organisation show" do
       team
         .students
         .includes(:user)
-        .each { |f| f.user.update!(organisation: organisation_1) }
+        .each { |f| f.user.organisations << organisation_1 }
     end
 
     team_c1_o2
       .students
       .includes(:user)
-      .each { |f| f.user.update!(organisation: organisation_2) }
+      .each { |f| f.user.organisations << organisation_2 }
   end
 
   context "when the user is an organisation admin" do

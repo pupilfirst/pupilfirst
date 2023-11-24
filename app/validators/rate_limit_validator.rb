@@ -23,7 +23,7 @@ class RateLimitValidator < ActiveModel::Validator
     end
   end
 
-  def self.migration_running?
+  def migration_running?
     self.migration_running
   end
 end

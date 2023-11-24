@@ -7,9 +7,7 @@ class User < ApplicationRecord
   acts_as_taggable
 
   belongs_to :school
-  # belongs_to :organisation, optional: tre
   has_and_belongs_to_many :organisations, through: :organisations_users
-  has_many :organisations, through: :organisation_admins
   has_many :students, dependent: :restrict_with_error
   has_many :teams, through: :students
   has_many :cohorts, through: :students
@@ -235,5 +233,14 @@ class User < ApplicationRecord
 
   def discord_account_connected?
     discord_user_id.present?
+  end
+
+  # Get all the organisations the user is an admin of, if any.
+  def admins_organisations
+    Organisation.joins(:organisation_admins).where(
+      organisation_admins: {
+        user_id: id
+      }
+    )
   end
 end

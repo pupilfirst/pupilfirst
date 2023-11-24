@@ -100,7 +100,7 @@ feature "Submissions show" do
 
   context "submission is of an evaluated target" do
     before do
-      student.user.update!(organisation: organisation)
+      student.user.organisations << organisation
 
       target.evaluation_criteria << [evaluation_criterion]
       target_2.evaluation_criteria << [evaluation_criterion]

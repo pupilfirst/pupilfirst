@@ -19,6 +19,7 @@ feature "Target Details Editor", js: true do
   let!(:target_group_2) { create :target_group, level: level_2 }
   let!(:target_1_l1) { create :target, :with_shared_assignment, target_group: target_group_1 }
   let!(:target_1_l2) { create :target, :with_shared_assignment, target_group: target_group_2 }
+  let!(:target_non_assignment_l2) { create :target, :with_content, target_group: target_group_2 }
   let!(:target_2_l2) do
     create :target, :with_shared_assignment,
            target_group: target_group_2,
@@ -39,6 +40,58 @@ feature "Target Details Editor", js: true do
   let(:quiz_question_2) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_1) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
+
+  scenario "school admin adds and removes assignment from a non assignment target" do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_non_assignment_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to_not have_content("Is this assignment a milestone?")
+    expect(page).to_not have_content("Are there any prerequisite targets with assignments?")
+    expect(page).to_not have_content("Will a coach review submissions on this assignment?")
+
+    within("div#has_assignment") { click_button "Yes" }
+
+    expect(page).to have_content("Is this assignment a milestone?")
+    expect(page).to have_content("Are there any prerequisite targets with assignments?")
+    expect(page).to have_content("Will a coach review submissions on this assignment?")
+
+    within("div#evaluated") { click_button "No" }
+
+    expect(page).to have_button("Submit a form to complete the target.")
+    within("div#method_of_completion") do
+      click_button "Submit a form to complete the target."
+    end
+
+    expect(page).to_not have_text("evaluation criteria")
+
+    find("button", text: "Add another question").click
+    checklist_question = Faker::Lorem.sentence
+    replace_markdown(checklist_question, id: "checklist-item-1-title")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_non_assignment_l2.reload.assignments.first).to_not eq(nil)
+    expect(target_non_assignment_l2.assignments.first.checklist).to_not eq(nil)
+
+    #moving a target with assignment to no assignment doesn't delete assignment data
+
+    within("div#has_assignment") { click_button "No" }
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_non_assignment_l2.reload.assignments.first).to_not eq(nil)
+    expect(target_non_assignment_l2.reload.assignments.first.archived).to eq(true)
+
+    within("div#has_assignment") { click_button "Yes" }
+    expect(page).to have_text(checklist_question)
+  end
 
   scenario "school admin modifies title and adds completion instruction to target" do
     sign_in_user school_admin.user,

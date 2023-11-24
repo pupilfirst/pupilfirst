@@ -1048,7 +1048,6 @@ let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId
 
   UpdateTargetAssignmentQuery.make(variables)
   |> Js.Promise.then_(result => {
-    Js.log(result)
     switch result["updateTarget"]["sortIndex"] {
     | Some(sortIndex) =>
       send(ResetEditor)

@@ -92,7 +92,7 @@
                       <% when nil %>
                       <a
                           class="w-full btn <%= course.public_signup? ? 'btn-primary' : 'btn-default' %>"
-                          href="/courses/<%= course.id %>"
+                          href="/courses/<%= course.to_param %>"
                         >
                         <% if course.public_signup? %>
                           <i class="fas fa-feather-alt me-2"></i>
@@ -112,7 +112,7 @@
                       <% when :access_ended %>
                       <a
                           class="w-full btn btn-secondary"
-                          href="/courses/<%= course.id %>/curriculum"
+                          href="/courses/<%= course.to_param %>/curriculum"
                         >
                         <i class="fas fa-eye me-2"></i>
                         <%= t('.access_ended') %>
@@ -120,7 +120,7 @@
                       <% when :active %>
                       <a
                           class="w-full btn btn-secondary"
-                          href="/courses/<%= course.id %>/curriculum"
+                          href="/courses/<%= course.to_param %>/curriculum"
                         >
                         <i class="fas fa-book me-2"></i>
                         <%= t('.active') %>

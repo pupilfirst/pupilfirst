@@ -100,7 +100,7 @@ class CoursesController < ApplicationController
   private
 
   def course
-    @course ||= Course.find(params[:id])
+    @course ||= find_course
   end
 
   def preview_or_authenticate
@@ -117,7 +117,11 @@ class CoursesController < ApplicationController
   end
 
   def find_course
-    policy_scope(Course).find(params[:id])
+    if params[:seo_slug]&.to_i&.to_s == params[:seo_slug]
+      policy_scope(Course).find(params[:seo_slug])
+    else
+      policy_scope(Course).find_by!(seo_slug: params[:seo_slug])
+    end
   end
 
   def save_tag

@@ -263,6 +263,11 @@ Rails.application.routes.draw do
   resources :courses, only: %i[show] do
     member do
       get 'review', action: 'review'
+    end
+  end
+
+  resources :courses, only: %i[show], param: :seo_slug do
+    member do
       get 'cohorts', action: 'cohorts'
       get 'calendar', action: 'calendar'
       get 'calendar_month_data', action: 'calendar_month_data'

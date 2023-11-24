@@ -61,6 +61,8 @@ class Course < ApplicationRecord
                  scope: :school_id,
                  time_frame: 1.year
 
+  before_save :set_seo_slug
+
   def short_name
     name[0..2].upcase.strip
   end
@@ -104,5 +106,29 @@ class Course < ApplicationRecord
 
   def live?
     archived_at.blank?
+  end
+
+  def to_param
+    seo_slug || id
+  end
+
+private
+
+  def set_seo_slug
+    return if seo_slug.present?
+
+    self.seo_slug = generate_seo_slug(name)
+  end
+
+  def generate_seo_slug(value, count = 0)
+    value = value.gsub(/[^a-zA-Z0-9]/, '-').titleize.parameterize
+
+    if Course.where(seo_slug: value).exists?
+      value = value.rpartition('-').first if count > 0
+      return generate_seo_slug(
+        "#{value}-#{count + 1}", count + 1
+      )
+    end
+    value
   end
 end

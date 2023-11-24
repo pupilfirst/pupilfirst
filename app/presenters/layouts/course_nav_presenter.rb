@@ -112,7 +112,7 @@ module Layouts
         case view.request.path.split("/")[3]
         when "review"
           if courses_as_coach.include?(course)
-            view.review_course_path(course)
+            view.review_course_path(course.id)
           else
             default_path
           end

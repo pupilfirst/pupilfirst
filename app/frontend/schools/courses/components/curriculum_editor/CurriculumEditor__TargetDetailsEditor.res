@@ -950,15 +950,11 @@ let isValidMethodOfCompletion = state =>
   | NoAssignment => true
   }
 
-module UpdateTargetQuery = %graphql(`
-   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $visibility: String!) {
+module UpdateTargetAssignmentQuery = %graphql(`
+   mutation UpdateTargetAssignmentMutation($id: ID!, $targetGroupId: ID!, $title: String!, $visibility: String!, $targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean!, $archived: Boolean ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, visibility: $visibility)    {
         sortIndex
        }
-     }
-   `)
-module UpdateAssignmentQuery = %graphql(`
-   mutation UpdateAssignmentMutation($targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean!, $archived: Boolean ) {
      updateAssignment(targetId: $targetId, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, checklist: $checklist, milestone: $milestone, archived: $archived)    {
         id
        }
@@ -992,7 +988,7 @@ let updateTargetButton = (
 
 let quizAnswersAsJsObject = quizAnswers =>
   quizAnswers |> Array.map(qa =>
-    UpdateAssignmentQuery.makeInputObjectAssignmentQuizAnswerInput(
+    UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizAnswerInput(
       ~answer=AnswerOption.answer(qa),
       ~correctAnswer=AnswerOption.correctAnswer(qa),
       (),
@@ -1001,14 +997,25 @@ let quizAnswersAsJsObject = quizAnswers =>
 
 let quizAsJsObject = quiz =>
   quiz |> Array.map(q =>
-    UpdateAssignmentQuery.makeInputObjectAssignmentQuizInput(
+    UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizInput(
       ~question=QuizQuestion.question(q),
       ~answerOptions=quizAnswersAsJsObject(QuizQuestion.answerOptions(q)),
       (),
     )
   )
 
-let updateAssignment = (targetId, state, send) => {
+let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateSaving)
+  let id = target |> Target.id
+  let visibilityAsString = state.visibility |> TargetDetails.visibilityAsString
+
+  let visibility = switch state.visibility {
+  | Live => Target.Live
+  | Archived => Archived
+  | Draft => Draft
+  }
+
   let role = state.role->AssignmentDetails.roleAsString
   let quizAsJs =
     state.quiz
@@ -1022,8 +1029,12 @@ let updateAssignment = (targetId, state, send) => {
   | NoAssignment => ([], [], [])
   }
 
-  let variables = UpdateAssignmentQuery.makeVariables(
-    ~targetId,
+  let variables = UpdateTargetAssignmentQuery.makeVariables(
+    ~id,
+    ~targetGroupId,
+    ~title=state.title,
+    ~visibility=visibilityAsString,
+    ~targetId=id,
     ~role,
     ~evaluationCriteria,
     ~prerequisiteTargets=state.prerequisiteTargets,
@@ -1035,46 +1046,12 @@ let updateAssignment = (targetId, state, send) => {
     (),
   )
 
-  UpdateAssignmentQuery.make(variables)
+  UpdateTargetAssignmentQuery.make(variables)
   |> Js.Promise.then_(result => {
-    switch result["updateAssignment"]["id"] {
-    // #TODO handle response properly
-    | Some(_) => Js.log("assignment upserted")
-    | None => Js.log("No assignment to create")
-    }
-
-    Js.Promise.resolve()
-  })
-  |> ignore
-  ()
-}
-
-let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) => {
-  ReactEvent.Mouse.preventDefault(event)
-  send(UpdateSaving)
-  let id = target |> Target.id
-  let visibilityAsString = state.visibility |> TargetDetails.visibilityAsString
-
-  let visibility = switch state.visibility {
-  | Live => Target.Live
-  | Archived => Archived
-  | Draft => Draft
-  }
-
-  let variables = UpdateTargetQuery.makeVariables(
-    ~id,
-    ~targetGroupId,
-    ~title=state.title,
-    ~visibility=visibilityAsString,
-    (),
-  )
-
-  UpdateTargetQuery.make(variables)
-  |> Js.Promise.then_(result => {
+    Js.log(result)
     switch result["updateTarget"]["sortIndex"] {
     | Some(sortIndex) =>
       send(ResetEditor)
-      updateAssignment(id, state, send)
       updateTargetCB(
         Target.create(
           ~id,
@@ -1244,7 +1221,7 @@ let make = (
                 </div>
                 <div className="w-auto">
                   {updateTargetButton(
-                    ~callback=updateTarget(target, state, send, updateTargetCB),
+                    ~callback=updateTargetAssignment(target, state, send, updateTargetCB),
                     ~state,
                     ~hasValidTitle,
                     ~hasValidMethodOfCompletion,

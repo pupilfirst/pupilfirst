@@ -74,9 +74,6 @@ let contentBlocks = t => t.contentBlocks
 let quizQuestions = t => t.quizQuestions
 let communities = t => t.communities
 
-//TODO - remove linktocomplete
-let linkToComplete = t => Some("string")
-
 let completionInstructions = t => t.completionInstructions
 
 let grades = (submissionId, t) =>

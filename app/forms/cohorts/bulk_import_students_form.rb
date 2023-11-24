@@ -31,8 +31,14 @@ module Cohorts
     def csv_rows
       @csv_rows ||=
         begin
-          CSV.read(csv, headers: true).map { |r| r.to_hash }
+          CSV.read(csv, headers: true, col_sep: col_sep(csv)).map { |r| r.to_hash }
         end
+    end
+
+    def col_sep(csv)
+      first_line = File.open(csv, &:readline)
+      separators = [',', ';', "\t"]
+      separators.find { |separator| first_line.include?(separator) } || ','
     end
 
     def emails_must_be_valid

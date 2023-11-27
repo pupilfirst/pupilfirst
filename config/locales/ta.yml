@@ -2245,7 +2245,7 @@ ta:
         description: உங்கள் கருத்து மாணவருக்கு மின்னஞ்சலில் அனுப்பப்படும்.
         title: கருத்து அனுப்பப்பட்டது
     create_grading:
-      evaluation_criteria_error: மதிப்பீட்டு அளவுகோல் இல்லாமல் சமர்ப்பிப்பு %{submission_id} ஐ தர முடியாது
+      evaluation_criteria_error: Unable to grade submission without valid evaluation criteria.
       grade_recorded: தரங்கள் பதிவு செய்யப்பட்டன
       invalid_checklist_shape_error: சமர்ப்பிப்பு சரிபார்ப்புப் பட்டியலில் உள்ள தரவின் வடிவம் மதிப்பாய்வுடன் அனுப்பப்பட்ட வடிவத்துடன் பொருந்தவில்லை
       invalid_checklist_values_error: சமர்ப்பிப்பில் உள்ள சரிபார்ப்புப் பட்டியல் உருப்படிகளுக்கான மதிப்புகள் மதிப்பாய்வுத் தரவுடன் பொருந்தவில்லை
@@ -2918,7 +2918,5 @@ ta:
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: செயலற்ற மாணவர் சமர்ப்பிப்புகளை புதுப்பிக்க முடியாது.
-    submission_should_be_live:
-      error: அத்தகைய சமர்ப்பிப்பு இல்லை, அல்லது அது காப்பகப்படுத்தப்பட்டுள்ளது.
+    owners_should_be_active: Cannot update inactive student submissions.
+    submission_should_be_live: Such a submission does not exist, or it has been archived.

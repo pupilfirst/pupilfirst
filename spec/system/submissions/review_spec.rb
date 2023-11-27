@@ -294,7 +294,7 @@ feature "Submission review overlay", js: true do
         course,
         :submission_graded,
         coach.user,
-        submission,
+        submission
       )
     end
 
@@ -316,7 +316,6 @@ feature "Submission review overlay", js: true do
       expect(submission.evaluated_at).to eq(nil)
       expect(submission.timeline_event_grades).to eq([])
     end
-
 
     scenario "coaches can view and edit the review checklist without assigning themselves" do
       sign_in_user coach.user,
@@ -1057,6 +1056,10 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
+
       new_notes = CoachNote.where(note: note)
 
       expect(new_notes.count).to eq(1)
@@ -1086,6 +1089,10 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
+
       new_notes = CoachNote.where(note: note)
 
       expect(new_notes.reload.count).to eq(2)
@@ -1112,7 +1119,7 @@ feature "Submission review overlay", js: true do
       grade_submission(
         submission_pending,
         SubmissionsHelper::SUBMISSION_PASS,
-        target,
+        target
       )
 
       # Open the overlay.
@@ -1216,6 +1223,7 @@ feature "Submission review overlay", js: true do
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
+
       click_button "Save grades"
 
       click_link "Next"
@@ -1492,12 +1500,14 @@ feature "Submission review overlay", js: true do
         ) { find("button[title='Good']").click }
 
         within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']",
+          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
         ) { find("button[title='Okay']").click }
 
         click_button "Save grades"
 
-        click_link "Submission #1"
+        within("div[aria-label='submission-status']") do
+          expect(page).to have_text("Completed")
+        end
 
         expect(page).to have_text("Submission #1")
         expect(page).to have_text("2/4")
@@ -1588,6 +1598,10 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
     end
   end
 

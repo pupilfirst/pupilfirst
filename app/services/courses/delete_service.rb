@@ -87,18 +87,18 @@ module Courses
     def delete_content
       quiz_questions =
         QuizQuestion
-          .joins(quiz: { target: :course })
+          .joins(quiz: { assignment: :course })
           .where(courses: { id: @course.id })
       target_ids =
         Target.joins(:course).where(courses: { id: @course.id }).select(:id)
 
       quiz_questions.update_all(correct_answer_id: nil) # rubocop:disable Rails/SkipsModelValidations
       AnswerOption
-        .joins(quiz_question: { quiz: { target: :course } })
+        .joins(quiz_question: { quiz: { assignment: :course } })
         .where(courses: { id: @course.id })
         .delete_all
       quiz_questions.delete_all
-      Quiz.joins(target: :course).where(courses: { id: @course.id }).delete_all
+      Quiz.joins(assignment: :course).where(courses: { id: @course.id }).delete_all
       ContentBlock
         .joins(target_version: { target: :course })
         .where(courses: { id: @course.id })
@@ -107,14 +107,14 @@ module Courses
         .joins(target: :course)
         .where(courses: { id: @course.id })
         .delete_all
-      TargetPrerequisite
-        .joins(target: :course)
-        .where(courses: { id: @course.id })
-        .delete_all
+      # AssignmentPrerequisite
+      #   .joins(assignment: :course)
+      #   .where(courses: { id: @course.id })
+      #   .delete_all
       Assignment
         .joins(target: :course)
         .where(courses: { id: @course.id })
-        .delete_all
+        .destroy_all
       ResourceVersion.where(
         versionable_type: 'Target',
         versionable_id: @course.targets.select(:id)

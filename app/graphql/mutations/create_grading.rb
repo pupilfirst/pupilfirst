@@ -38,48 +38,35 @@ module Mutations
     end
 
     class ValidateReviewData < GraphQL::Schema::Validator
-      include ValidatorCombinable
       def validate(_object, _context, value)
-        @submission_id = value[:submission_id]
         @submission = TimelineEvent.find_by(id: value[:submission_id])
         @checklist = value[:checklist]
-        @evaluation_criteria = @submission.evaluation_criteria
+        @evaluation_criteria = @submission&.evaluation_criteria
         @grades = value[:grades]
-        combine(
-          submission_exists,
-          submission_not_reviewed,
-          valid_evaluation_criteria,
-          right_shape_for_checklist,
-          checklist_data_is_not_mutated,
-          valid_grading
-        )
+
+        grade_hash = compute_grade_hash
+
+        assignment_is_reviewable(value[:submission_id]) ||
+          checklist_must_have_right_shape || submission_must_not_be_reviewed ||
+          checklist_data_should_not_be_mutated ||
+          grading_should_be_valid(grade_hash)
       end
 
-      def submission_exists
-        return if @submission.present?
-
-        I18n.t(
-          "mutations.create_grading.submission_missing_error",
-          submission_id: @submission_id
-        )
-      end
-
-      def submission_not_reviewed
+      def submission_must_not_be_reviewed
         return unless @submission.reviewed?
 
-        I18n.t('mutations.create_grading.submission_reviewed_error')
+        I18n.t("mutations.create_grading.submission_reviewed_error")
       end
 
-      def valid_evaluation_criteria
+      def assignment_is_reviewable(submission_id)
         return if @evaluation_criteria.present?
-
         I18n.t(
           "mutations.create_grading.evaluation_criteria_error",
-          submission_id: @submission_id
+          submission_id: submission_id
         )
       end
 
-      def right_shape_for_checklist
+      def checklist_must_have_right_shape
         if @checklist.respond_to?(:all?) &&
              @checklist.all? { |item|
                item["title"].is_a?(String) &&
@@ -98,7 +85,7 @@ module Mutations
         I18n.t("mutations.create_grading.invalid_checklist_shape_error")
       end
 
-      def checklist_data_is_not_mutated
+      def checklist_data_should_not_be_mutated
         old_checklist =
           @submission.checklist.map do |c|
             [
@@ -122,16 +109,11 @@ module Mutations
           return
         end
 
-        if (old_checklist - new_checklist).empty? &&
-             old_checklist.count == new_checklist.count
-          return
-        end
-
         I18n.t("mutations.create_grading.invalid_checklist_values_error")
       end
 
-      def valid_grading
-        return unless valid_grading?
+      def grading_should_be_valid(grade_hash)
+        return if valid_grading(grade_hash)
 
         I18n.t(
           "mutations.create_grading.invalid_grading_error",
@@ -141,37 +123,38 @@ module Mutations
 
       private
 
-      def grade_hash
-        @grade_hash ||=
-          @grades.each_with_object({}) do |incoming_grade, grade_hash|
-            criteria_id = incoming_grade[:evaluation_criterion_id]
-            grade = incoming_grade[:grade]
-            grade_hash[criteria_id] = grade
-          end
-      end
-
-      def valid_grading?
-        if grade_hash.empty?
-          return true
+      def compute_grade_hash
+        @grades&.each_with_object({}) do |incoming_grade, grade_hash|
+          criteria_id = incoming_grade[:evaluation_criterion_id].to_i
+          grade = incoming_grade[:grade]
+          grade_hash[criteria_id] = grade
         end
-        all_criteria_graded? && all_grades_valid?
       end
 
-      def all_criteria_graded?
+      def valid_grading(grade_hash)
+        return true if grade_hash.blank?
+
+        all_criteria_graded?(grade_hash) && all_grades_valid?(grade_hash)
+      end
+
+      def all_criteria_graded?(grade_hash)
         (@evaluation_criteria.pluck(:id) - grade_hash.keys).empty?
       end
 
-      def all_grades_valid?
-        grade_hash.all? { |ec_id, grade| grade.in?(1..max_grades[ec_id]) }
+      def all_grades_valid?(grade_hash)
+        grade_hash.all? do |ec_id, grade|
+          grade.in?(1..max_grades(grade_hash)[ec_id])
+        end
       end
 
-      def max_grades
-        @max_grades ||=
-          grade_hash.keys.index_with do |ec_id|
-            @evaluation_criteria.find(ec_id).max_grade
-          end
+      def max_grades(grade_hash)
+        grade_hash.keys.index_with do |ec_id|
+          @evaluation_criteria.find(ec_id).max_grade
+        end
       end
     end
+
+    validates ValidateReviewData => {}
 
     private
 

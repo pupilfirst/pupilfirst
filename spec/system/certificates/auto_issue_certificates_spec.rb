@@ -144,14 +144,16 @@ feature "Automatic issuance of certificates", js: true do
     end
 
     context "when the second target is completed with a quiz" do
-
+      let!(:quiz) do
+        create :quiz, :with_question_and_answers
+      end
       let!(:target_l2_2) do
         create :target,
                :with_markdown,
                :with_shared_assignment,
                given_role: Assignment::ROLE_TEAM,
                given_milestone_number: 3,
-               with_quiz: true,
+               given_quiz: quiz,
                target_group: target_group_l2,
                title: "foo"
       end
@@ -161,8 +163,6 @@ feature "Automatic issuance of certificates", js: true do
         complete_milestone_target(target_l2)
 
         visit target_path(target_l2_2)
-        puts "target details - #{target_l2_2.assignments.first.quiz}"
-        sleep 2
 
         find(".course-overlay__body-tab-item", text: "Take Quiz").click
         find(

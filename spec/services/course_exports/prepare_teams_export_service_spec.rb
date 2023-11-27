@@ -188,8 +188,6 @@ describe CourseExports::PrepareTeamsExportService do
   let(:sorted_coach_names) { [coach_1.name, coach_2.name].sort.join(", ") }
 
   let(:expected_data) do
-    puts"ass_value #{target_l1_evaluated.assignments.first.role}"
-    puts"ass_value #{target_l1_evaluated.assignments.first.milestone_number}"
     [
       {
         title: "Targets",

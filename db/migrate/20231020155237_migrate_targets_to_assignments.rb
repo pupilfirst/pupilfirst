@@ -115,12 +115,11 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
 
     Assignment.insert_all(assignments)
 
-    quizzes_updates = Quiz.joins(target: :assignments).find_in_batches.map do |quiz|
-      { id: quiz.id, assignment_id: quiz.target.assignments.first.id}
+    #TODO - is there a way to bulk update different records with different values
+    Quiz.includes(target: :assignments).find_each do |quiz|
+      quiz.assignment = quiz.target.assignments.first
+      quiz.save
     end
-
-    quiz_ids = quizzes_updates.map { |update| update[:id] }
-    Quiz.where(id: quiz_ids).update_all(quizzes_updates.map { |update| update.except(:id) })
 
     assignment_evaluation_criterions = []
     assignment_prerequisites = []

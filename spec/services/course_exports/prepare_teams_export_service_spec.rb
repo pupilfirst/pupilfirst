@@ -263,8 +263,8 @@ describe CourseExports::PrepareTeamsExportService do
           [
             team_1.id,
             team_1.name,
-            "✓",
-            "2/2",
+            { "value" => "✓", "style" => "default" },
+            { "value" => "2/2", "style" => "default" },
             {
               "value" =>
                 "x;#{submission_grading(team_1_reviewed_submission_2)}",
@@ -276,16 +276,23 @@ describe CourseExports::PrepareTeamsExportService do
             team_2.id,
             team_2.name,
             nil,
-            "1/2",
+            { "value" => "1/2", "style" => "default" },
             { "value" => "x", "style" => "failing-grade" },
             nil
           ],
-          [team_3.id, team_3.name, "✓", nil, nil, nil],
+          [
+            team_3.id,
+            team_3.name,
+            { "value" => "✓", "style" => "default" },
+            nil,
+            nil,
+            nil
+          ],
           [
             team_4.id,
             team_4.name,
             nil,
-            "1/2",
+            { "value" => "1/2", "style" => "default" },
             { "value" => "x", "style" => "failing-grade" },
             nil
           ]

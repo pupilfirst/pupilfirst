@@ -5,7 +5,7 @@ RSpec.describe Github::AddSubmissionService, type: :service do
     {
       access_token: "access_token",
       organization_id: "organization_id",
-      default_team_id: "default_team_id",
+      default_team_id: "default_team_id"
     }
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Github::AddSubmissionService, type: :service do
     create(
       :student,
       cohort: cohort,
-      github_repository: "organization_id/test_repo",
+      github_repository: "organization_id/test_repo"
     )
   end
   let!(:submission) do
@@ -53,44 +53,87 @@ RSpec.describe Github::AddSubmissionService, type: :service do
         end
       end
 
-      context "when the action config is present but student does not have a repository" do
-        let(:setup_repository_service) do
-          instance_double(Github::SetupRepositoryService, execute: nil)
-        end
-
-        before do
-          target.update!(action_config: action_config)
-          student.update!(github_repository: nil)
-          allow(Github::SetupRepositoryService).to receive(:new).and_return(
-            setup_repository_service,
-          )
-        end
-
-        it "creates a repository for the student" do
-          expect(setup_repository_service).to receive(:execute)
-          stub_request(
-            :get,
-            "https://api.github.com/repos/organization_id/student-#{student.id}",
-          ).to_return(status: 200, body: "", headers: {})
-          expect(service).to receive(:create_branch).and_return(branch_name)
-          expect(service).to receive(:ci_file_sha).and_return(sha)
-          expect(octokit_client).to receive(:update_contents)
-          expect(octokit_client).to receive(:create_contents)
-
-          expect do service.execute end.to change {
-            SubmissionReport.count
-          }.from(0).to(1)
-        end
-      end
-
       context "when the action config is present" do
         before { target.update!(action_config: action_config) }
+
+        context "when the student does not have a repository" do
+          let(:setup_repository_service) do
+            instance_double(Github::SetupRepositoryService, execute: nil)
+          end
+
+          before do
+            student.update!(github_repository: nil)
+
+            allow(Github::SetupRepositoryService).to receive(:new).and_return(
+              setup_repository_service
+            )
+          end
+
+          it "creates a repository for the student" do
+            expect(setup_repository_service).to receive(:execute)
+            stub_request(
+              :get,
+              "https://api.github.com/repos/organization_id/student-#{student.id}"
+            ).to_return(status: 200, body: "", headers: {})
+            expect(service).to receive(:create_branch).and_return(branch_name)
+            expect(service).to receive(:ci_file_sha).and_return(sha)
+            expect(octokit_client).to receive(:update_contents)
+            expect(octokit_client).to receive(:create_contents)
+
+            expect do service.execute end.to change {
+              SubmissionReport.count
+            }.from(0).to(1)
+          end
+        end
+
+        context "when the student's repository already has the branch'" do
+          it "deletes the branch and retries" do
+            allow(octokit_client).to receive(:commits).and_return(
+              [OpenStruct.new(sha: sha)]
+            )
+
+            allow(octokit_client).to receive(:contents).and_return(
+              OpenStruct.new(sha: sha)
+            )
+
+            allow(octokit_client).to receive(:delete_ref)
+
+            allow(octokit_client).to receive(:create_ref) do
+              @times_create_ref_called ||= 0
+              @times_create_ref_called += 1
+
+              if @times_create_ref_called == 1
+                raise Octokit::UnprocessableEntity,
+                      { status: 422, body: "Reference already exists" }
+              else
+                "ref"
+              end
+            end
+
+            expect(octokit_client).to receive(:update_contents)
+            expect(octokit_client).to receive(:create_contents)
+
+            expect { service.execute }.not_to raise_error
+
+            expect(octokit_client).to have_received(:delete_ref).with(
+              student.github_repository,
+              "heads/submission-#{submission.id}"
+            )
+
+            expect(octokit_client).to have_received(:create_ref).with(
+              student.github_repository,
+              "heads/submission-#{submission.id}",
+              sha
+            ).twice
+          end
+        end
+
         it "calls create_branch and add_submission_file methods" do
           expect(service).to receive(:ci_file_sha).and_return(sha)
           expect(service).to receive(:create_branch).and_return(branch_name)
           expect(service).to receive(:add_submission_file).with(
             branch_name,
-            student.github_repository,
+            student.github_repository
           )
           expect(octokit_client).to receive(:update_contents).with(
             student.github_repository,
@@ -98,7 +141,7 @@ RSpec.describe Github::AddSubmissionService, type: :service do
             "Update workflow [skip ci]",
             sha,
             action_config,
-            { branch: branch_name },
+            { branch: branch_name }
           )
 
           expect(octokit_client).to receive(:create_contents).with(
@@ -126,10 +169,10 @@ RSpec.describe Github::AddSubmissionService, type: :service do
                     }
                   end,
                 },
-                files: [],
+                files: []
               }
             ).to_json,
-            { branch: branch_name },
+            { branch: branch_name }
           )
 
           service.execute
@@ -138,7 +181,7 @@ RSpec.describe Github::AddSubmissionService, type: :service do
         it "calls create_branch with re_run" do
           expect(service).to receive(:ci_file_sha).and_return(sha)
           expect(service).to receive(:create_branch).with(true).and_return(
-            branch_name,
+            branch_name
           )
           expect(octokit_client).to receive(:update_contents)
           expect(octokit_client).to receive(:create_contents)

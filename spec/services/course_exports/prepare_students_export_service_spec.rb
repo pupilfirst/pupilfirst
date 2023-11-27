@@ -307,8 +307,8 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_1.email,
-            "2/2",
-            "✓",
+            { value: "2/2", style: "default" },
+            { value: "✓", style: "default" },
             {
               "value" =>
                 "x;#{submission_grading(student_1_reviewed_submission)}",
@@ -324,7 +324,7 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_5.email,
-            "1/2",
+            { value: "1/2", style: "default" },
             nil,
             { "value" => "x", "style" => "failing-grade" }
           ]

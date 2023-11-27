@@ -75,6 +75,11 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
     )
   end
 
+  def delete_timeline_events(target)
+    timeline_event_ids = target.timeline_events.pluck(:id)
+    TimelineEventOwner.where(timeline_event_id: timeline_event_ids).delete_all
+  end
+
   def change
     assignments = []
     Target.includes(:quiz, :target_prerequisites).find_each do |target|
@@ -90,11 +95,12 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
         :archived => false
       }
       if target.mark_as_complete?
-        if !target.target_prerequisites.empty? or !target.prerequisite_targets.empty? or target.milestone?
+        # convert to assignment if target has prerequisites or target is a prerequisiste or target is a milestone
+        if !target.prerequisite_targets.empty? or !TargetPrerequisite.where(prerequisite_target: target).empty? or target.milestone?
           # convert mark as complete to a form submit assignment
           assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Mark this target as completed?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
         else
-          target.timeline_events.destroy_all
+          delete_timeline_events(target)
           # skip creating assignment
           next
         end
@@ -102,10 +108,10 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
 
       if target.link_to_complete.present?
         create_embed_block(target)
-        if !target.target_prerequisites.empty? or !target.prerequisite_targets.empty? or target.milestone?
+        if !target.prerequisite_targets.empty? or !TargetPrerequisite.where(prerequisite_target: target).empty? or target.milestone?
           assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Have you gone through the shared link?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
         else
-          target.timeline_events.destroy_all
+          delete_timeline_events(target)
           # skip creating assignment
           next
         end
@@ -115,7 +121,6 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
 
     Assignment.insert_all(assignments)
 
-    #TODO - is there a way to bulk update different records with different values
     Quiz.includes(target: :assignments).find_each do |quiz|
       quiz.assignment = quiz.target.assignments.first
       quiz.save

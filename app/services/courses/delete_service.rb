@@ -107,14 +107,13 @@ module Courses
         .joins(target: :course)
         .where(courses: { id: @course.id })
         .delete_all
-      # AssignmentPrerequisite
-      #   .joins(assignment: :course)
-      #   .where(courses: { id: @course.id })
-      #   .delete_all
-      Assignment
+      assignments = Assignment
         .joins(target: :course)
         .where(courses: { id: @course.id })
-        .destroy_all
+      AssignmentPrerequisite
+        .where(assignment: assignments)
+        .delete_all
+      assignments.delete_all
       ResourceVersion.where(
         versionable_type: 'Target',
         versionable_id: @course.targets.select(:id)

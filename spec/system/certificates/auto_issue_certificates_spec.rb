@@ -144,9 +144,6 @@ feature "Automatic issuance of certificates", js: true do
     end
 
     context "when the second target is completed with a quiz" do
-      let!(:quiz) do
-        create :quiz, :with_question_and_answers
-      end
 
       let!(:target_l2_2) do
         create :target,
@@ -154,7 +151,7 @@ feature "Automatic issuance of certificates", js: true do
                :with_shared_assignment,
                given_role: Assignment::ROLE_TEAM,
                given_milestone_number: 3,
-               given_quiz: quiz,
+               with_quiz: true,
                target_group: target_group_l2,
                title: "foo"
       end

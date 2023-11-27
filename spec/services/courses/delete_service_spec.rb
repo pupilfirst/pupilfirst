@@ -61,13 +61,12 @@ describe Courses::DeleteService do
   let!(:resource_version_c1) do
     create :resource_version, versionable: target_reviewed_c1
   end
-  let!(:quiz_c1) { create :quiz, :with_question_and_answers}
   let!(:target_with_quiz_c1) do
     create :target,
            :with_content,
            :with_shared_assignment,
            target_group: target_group_c1,
-           given_quiz: quiz_c1,
+           with_quiz: true,
            given_prerequisite_targets: [target_reviewed_c1]
   end
   let!(:submission_c1) do
@@ -134,13 +133,12 @@ describe Courses::DeleteService do
   let!(:resource_version_c2) do
     create :resource_version, versionable: target_reviewed_c2
   end
-  let!(:quiz_c2) { create :quiz, :with_question_and_answers}
   let!(:target_with_quiz_c2) do
     create :target,
            :with_content,
            :with_shared_assignment,
            target_group: target_group_c2,
-           given_quiz: quiz_c2,
+           with_quiz: true,
            given_prerequisite_targets: [target_reviewed_c2]
   end
   let!(:submission_c2) do
@@ -209,19 +207,12 @@ describe Courses::DeleteService do
 
   describe "#execute" do
     it "deletes all data related to the course and the course itself" do
-      puts "details - t #{Target.count}, a #{Assignment.count}, ap #{AssignmentPrerequisite.count}"
-      Target.all.each do |target|
-        puts "course - #{target.course.name}"
-      end
-      subject.execute
 
-      # expect { subject.execute }.to(
-      #   change { expectations.map { |e| e[0].call } }.from(
-      #     expectations.pluck(1)
-      #   ).to(expectations.pluck(2))
-      # )
-
-      puts "details - t #{Target.count}, a #{Assignment.count}, ap #{AssignmentPrerequisite.count}"
+      expect { subject.execute }.to(
+        change { expectations.map { |e| e[0].call } }.from(
+          expectations.pluck(1)
+        ).to(expectations.pluck(2))
+      )
 
       expect { course_2.reload }.not_to raise_error
       expect { level_c2.reload }.not_to raise_error
@@ -241,7 +232,6 @@ describe Courses::DeleteService do
       expect { topic_c2.reload }.not_to raise_error
       expect { resource_version_c2.reload }.not_to raise_error
       expect { target_with_quiz_c2.reload }.not_to raise_error
-      expect { quiz_c2.reload }.not_to raise_error
       expect { submission_c2.reload }.not_to raise_error
       expect { submission_file_c2.reload }.not_to raise_error
       expect { feedback_c2.reload }.not_to raise_error

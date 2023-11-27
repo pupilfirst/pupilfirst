@@ -75,14 +75,13 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:target_l1_submit_form) do
     create :target, :with_shared_assignment, given_role:Assignment::ROLE_TEAM, target_group: target_group_l1_non_milestone
   end
-  let!(:quiz) { create :quiz}
   let!(:target_l1_quiz) do
     create :target,
            :with_shared_assignment,
            given_role: Assignment::ROLE_TEAM,
            target_group: target_group_l1_milestone,
            given_milestone_number: 2,
-           given_quiz: quiz,
+           with_quiz: true,
            sort_index: 0
   end
   let!(:target_l2_evaluated) do

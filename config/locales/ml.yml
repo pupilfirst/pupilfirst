@@ -2245,7 +2245,7 @@ ml:
         description: നിങ്ങളുടെ ഫീഡ്‌ബാക്ക് വിദ്യാർത്ഥിക്ക് ഇ-മെയിൽ ചെയ്യും.
         title: ഫീഡ്‌ബാക്ക് അയച്ചു
     create_grading:
-      evaluation_criteria_error: മൂല്യനിർണ്ണയ മാനദണ്ഡമില്ലാതെ സമർപ്പിക്കൽ %{submission_id} ഗ്രേഡ് ചെയ്യാൻ കഴിയില്ല
+      evaluation_criteria_error: Unable to grade submission without valid evaluation criteria.
       grade_recorded: ഗ്രേഡുകൾ രേഖപ്പെടുത്തി
       invalid_checklist_shape_error: സമർപ്പിക്കൽ ചെക്ക്‌ലിസ്റ്റിലെ ഡാറ്റയുടെ ആകൃതി അവലോകനത്തിനൊപ്പം അയച്ചതുമായി പൊരുത്തപ്പെടുന്നില്ല
       invalid_checklist_values_error: സമർപ്പണത്തിലെ ചെക്ക്‌ലിസ്റ്റ് ഇനങ്ങളുടെ മൂല്യങ്ങൾ അവലോകന ഡാറ്റയുമായി പൊരുത്തപ്പെടുന്നില്ല
@@ -2918,7 +2918,5 @@ ml:
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: നിഷ്‌ക്രിയ വിദ്യാർത്ഥി സമർപ്പിക്കലുകൾ അപ്‌ഡേറ്റ് ചെയ്യാൻ കഴിയില്ല.
-    submission_should_be_live:
-      error: അത്തരമൊരു സമർപ്പണം നിലവിലില്ല, അല്ലെങ്കിൽ അത് ആർക്കൈവ് ചെയ്തിരിക്കുന്നു.
+    owners_should_be_active: Cannot update inactive student submissions.
+    submission_should_be_live: Such a submission does not exist, or it has been archived.

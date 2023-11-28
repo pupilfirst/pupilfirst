@@ -16,7 +16,7 @@ module Cohorts
         begin
           milestone_targets_data =
             milestone_targets
-              .pluck(:id,'assignments.milestone_number', :title)
+              .pluck(:id, "assignments.milestone_number", :title)
               .map do |id, number, title|
                 "#{id};#{I18n.t("presenters.cohorts.students.milestone_status_filter_value", m: I18n.t("shared.m"), number: number, title: title)}"
               end
@@ -141,7 +141,7 @@ module Cohorts
 
     def milestone_targets
       @milestone_targets ||=
-        @course.targets.live.milestone.order('assignments.milestone_number')
+        @course.targets.live.milestone.order("assignments.milestone_number")
     end
 
     def page_title
@@ -171,8 +171,8 @@ module Cohorts
 
     def milestone_completed_students(param)
       scope
-        .joins(timeline_events: {target: :assignments})
-        .where(targets: { id: param, assignments: {milestone: true}})
+        .joins(timeline_events: { target: :assignments })
+        .where(targets: { id: param, assignments: { milestone: true } })
         .where.not(timeline_events: { passed_at: nil })
     end
 

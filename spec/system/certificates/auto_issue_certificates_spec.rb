@@ -45,10 +45,7 @@ feature "Automatic issuance of certificates", js: true do
 
   before do
     # Add one archived milestone target; it shouldn't interfere with issuance of certificates.
-    create :target,
-           :with_markdown,
-           :archived,
-           target_group: target_group_l2
+    create :target, :with_markdown, :archived, target_group: target_group_l2
   end
 
   def complete_milestone_target(target)
@@ -144,9 +141,7 @@ feature "Automatic issuance of certificates", js: true do
     end
 
     context "when the second target is completed with a quiz" do
-      let!(:quiz) do
-        create :quiz, :with_question_and_answers
-      end
+      let!(:quiz) { create :quiz, :with_question_and_answers }
       let!(:target_l2_2) do
         create :target,
                :with_markdown,
@@ -277,15 +272,15 @@ feature "Automatic issuance of certificates", js: true do
   end
 
   context "when the milestone target is completed individually" do
-     let!(:target_l2) do
-        create :target,
-               :with_markdown,
-               :with_shared_assignment,
-               given_role: Assignment::ROLE_STUDENT,
-               given_milestone_number: 2,
-               target_group: target_group_l2,
-               title: "foo"
-      end
+    let!(:target_l2) do
+      create :target,
+             :with_markdown,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             given_milestone_number: 2,
+             target_group: target_group_l2,
+             title: "foo"
+    end
 
     scenario "each student completes the last target" do
       complete_milestone_target(target_l1)

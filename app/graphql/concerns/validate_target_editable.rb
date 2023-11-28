@@ -32,14 +32,13 @@ module ValidateTargetEditable
     argument :title, GraphQL::Types::String, required: true
     argument :target_group_id, GraphQL::Types::ID, required: true
     argument :visibility, GraphQL::Types::String, required: true
-
   end
 
   def target_params
     {
       title: @params[:title],
       visibility: @params[:visibility],
-      target_group_id: @params[:target_group_id],
+      target_group_id: @params[:target_group_id]
     }
   end
 end

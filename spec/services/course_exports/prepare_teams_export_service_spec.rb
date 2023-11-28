@@ -70,10 +70,16 @@ describe CourseExports::PrepareTeamsExportService do
            given_milestone_number: 1
   end
   let!(:target_l1_individual_submit_form) do
-    create :target, :with_shared_assignment, given_role:Assignment::ROLE_STUDENT, target_group: target_group_l1_non_milestone
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1_non_milestone
   end # Not a team target - should be excluded.
   let!(:target_l1_submit_form) do
-    create :target, :with_shared_assignment, given_role:Assignment::ROLE_TEAM, target_group: target_group_l1_non_milestone
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l1_non_milestone
   end
   let!(:target_l1_quiz) do
     create :target,
@@ -207,13 +213,7 @@ describe CourseExports::PrepareTeamsExportService do
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
-          [
-            "Completion Method",
-            "Submit Form",
-            "Take Quiz",
-            "Graded",
-            "Graded"
-          ],
+          ["Completion Method", "Submit Form", "Take Quiz", "Graded", "Graded"],
           %w[Milestone? No Yes Yes Yes],
           ["Teams with submissions", 2, 3, 3, 1],
           ["Teams pending review", 0, 0, 0, 1]

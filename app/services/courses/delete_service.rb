@@ -27,8 +27,9 @@ module Courses
     end
 
     def delete_certificates
-      IssuedCertificate.where(certificate_id: @course.certificates.select(:id))
-        .delete_all
+      IssuedCertificate.where(
+        certificate_id: @course.certificates.select(:id)
+      ).delete_all
       @course.certificates.find_each(&:destroy!)
     end
 
@@ -42,7 +43,7 @@ module Courses
 
     def delete_course_exports
       ActsAsTaggableOn::Tagging.where(
-        taggable_type: 'CourseExport',
+        taggable_type: "CourseExport",
         taggable_id: @course.course_exports.select(:id)
       ).delete_all
       @course.course_exports.find_each(&:destroy!)
@@ -54,8 +55,9 @@ module Courses
       AssignmentEvaluationCriterion.where(
         evaluation_criterion_id: evaluation_criteria
       ).delete_all
-      TimelineEventGrade.where(evaluation_criterion_id: evaluation_criteria)
-        .delete_all
+      TimelineEventGrade.where(
+        evaluation_criterion_id: evaluation_criteria
+      ).delete_all
       evaluation_criteria.delete_all
     end
 
@@ -67,13 +69,15 @@ module Courses
 
     def delete_submissions
       timeline_event_owners =
-        TimelineEventOwner
-          .joins(student: :course)
-          .where(courses: { id: @course.id })
+        TimelineEventOwner.joins(student: :course).where(
+          courses: {
+            id: @course.id
+          }
+        )
       submission_ids =
-        timeline_event_owners
-          .distinct(:timeline_event_id)
-          .pluck(:timeline_event_id)
+        timeline_event_owners.distinct(:timeline_event_id).pluck(
+          :timeline_event_id
+        )
 
       TimelineEventFile
         .joins(timeline_event: { students: :course })
@@ -86,9 +90,11 @@ module Courses
 
     def delete_content
       quiz_questions =
-        QuizQuestion
-          .joins(quiz: { assignment: :course })
-          .where(courses: { id: @course.id })
+        QuizQuestion.joins(quiz: { assignment: :course }).where(
+          courses: {
+            id: @course.id
+          }
+        )
       target_ids =
         Target.joins(:course).where(courses: { id: @course.id }).select(:id)
 
@@ -98,7 +104,10 @@ module Courses
         .where(courses: { id: @course.id })
         .delete_all
       quiz_questions.delete_all
-      Quiz.joins(assignment: :course).where(courses: { id: @course.id }).delete_all
+      Quiz
+        .joins(assignment: :course)
+        .where(courses: { id: @course.id })
+        .delete_all
       ContentBlock
         .joins(target_version: { target: :course })
         .where(courses: { id: @course.id })
@@ -107,15 +116,12 @@ module Courses
         .joins(target: :course)
         .where(courses: { id: @course.id })
         .delete_all
-      assignments = Assignment
-        .joins(target: :course)
-        .where(courses: { id: @course.id })
-      AssignmentPrerequisite
-        .where(assignment: assignments)
-        .delete_all
+      assignments =
+        Assignment.joins(target: :course).where(courses: { id: @course.id })
+      AssignmentPrerequisite.where(assignment: assignments).delete_all
       assignments.delete_all
       ResourceVersion.where(
-        versionable_type: 'Target',
+        versionable_type: "Target",
         versionable_id: @course.targets.select(:id)
       ).delete_all
       Topic.where(target_id: target_ids).update_all(target_id: nil) # rubocop:disable Rails/SkipsModelValidations
@@ -136,7 +142,7 @@ module Courses
       CoachNote.joins(:student).where(student: { id: student_ids }).delete_all
 
       ActsAsTaggableOn::Tagging.where(
-        taggable_type: 'Student',
+        taggable_type: "Student",
         taggable_id: student_ids
       ).delete_all
 

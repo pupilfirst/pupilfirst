@@ -9,10 +9,10 @@ feature "Submission Builder", js: true do
   let(:cohort) { create :cohort, course: course }
   let(:grade_labels_for_1) do
     [
-      { 'grade' => 1, 'label' => 'Okay' },
-      { 'grade' => 2, 'label' => 'Good' },
-      { 'grade' => 3, 'label' => 'Great' },
-      { 'grade' => 4, 'label' => 'Wow' }
+      { "grade" => 1, "label" => "Okay" },
+      { "grade" => 2, "label" => "Good" },
+      { "grade" => 3, "label" => "Great" },
+      { "grade" => 4, "label" => "Wow" }
     ]
   end
   let!(:criterion_1) do

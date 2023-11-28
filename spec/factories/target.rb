@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :target do
-    title { Faker::Lorem.words(number: 6).join ' ' }
-    role {Target.valid_roles.sample}
+    title { Faker::Lorem.words(number: 6).join " " }
+    role { Target.valid_roles.sample }
     target_group
     sequence(:sort_index)
     visibility { Target::VISIBILITY_LIVE }
@@ -54,8 +54,8 @@ FactoryBot.define do
         given_checklist { nil }
         given_prerequisite_targets { nil }
         given_quiz { nil }
-        with_quiz {nil}
-        with_evaluation_criterion {false}
+        with_quiz { nil }
+        with_evaluation_criterion { false }
         with_completion_instructions { nil }
       end
 
@@ -63,26 +63,63 @@ FactoryBot.define do
         if evaluator.shared_assignment
           # Choose which type of assignment to create
           if evaluator.with_evaluation_criterion
-            assignment = create(:assignment,:with_evaluation_criterion, :with_default_checklist, target: target)
+            assignment =
+              create(
+                :assignment,
+                :with_evaluation_criterion,
+                :with_default_checklist,
+                target: target
+              )
           elsif evaluator.with_quiz
             assignment = create(:assignment, target: target)
-            quiz = create(:quiz, :with_question_and_answers, assignment: assignment) # rubocop:disable Lint::UselessAssignment
+            quiz = # rubocop:disable Lint::UselessAssignment
+              create(:quiz, :with_question_and_answers, assignment: assignment)
           else
-            assignment = create(:assignment,:with_default_checklist, target: target)
+            assignment =
+              create(:assignment, :with_default_checklist, target: target)
           end
 
-          prerequisite_assignments = Assignment.where(target: evaluator.given_prerequisite_targets).to_a
+          prerequisite_assignments =
+            Assignment.where(target: evaluator.given_prerequisite_targets).to_a
 
           # Update the assignment model based on the traits' transient variables
           # rubocop:disable Rails::SkipsModelValidations
-          assignment.update_attribute(:role, evaluator.given_role) if evaluator.given_role.present?
-          assignment.update_attribute(:milestone_number, evaluator.given_milestone_number) if evaluator.given_milestone_number.present?
-          assignment.update_attribute(:milestone, true) if evaluator.given_milestone_number.present?
-          assignment.update_attribute(:evaluation_criteria, evaluator.given_evaluation_criteria) if evaluator.given_evaluation_criteria.present?
-          assignment.update_attribute(:checklist, evaluator.given_checklist) if evaluator.given_checklist.present?
-          assignment.update_attribute(:quiz, evaluator.given_quiz) if evaluator.given_quiz.present?
-          assignment.update_attribute(:prerequisite_assignments, prerequisite_assignments) if evaluator.given_prerequisite_targets.present?
-          assignment.update_attribute(:completion_instructions, Faker::Lorem.sentence) if evaluator.with_completion_instructions
+          if evaluator.given_role.present?
+            assignment.update_attribute(:role, evaluator.given_role)
+          end
+          if evaluator.given_milestone_number.present?
+            assignment.update_attribute(
+              :milestone_number,
+              evaluator.given_milestone_number
+            )
+          end
+          if evaluator.given_milestone_number.present?
+            assignment.update_attribute(:milestone, true)
+          end
+          if evaluator.given_evaluation_criteria.present?
+            assignment.update_attribute(
+              :evaluation_criteria,
+              evaluator.given_evaluation_criteria
+            )
+          end
+          if evaluator.given_checklist.present?
+            assignment.update_attribute(:checklist, evaluator.given_checklist)
+          end
+          if evaluator.given_quiz.present?
+            assignment.update_attribute(:quiz, evaluator.given_quiz)
+          end
+          if evaluator.given_prerequisite_targets.present?
+            assignment.update_attribute(
+              :prerequisite_assignments,
+              prerequisite_assignments
+            )
+          end
+          if evaluator.with_completion_instructions
+            assignment.update_attribute(
+              :completion_instructions,
+              Faker::Lorem.sentence
+            )
+          end
           # rubocop:enable Rails::SkipsModelValidations
         end
       end
@@ -97,7 +134,12 @@ FactoryBot.define do
       end
 
       after(:build) do |target, evaluator|
-        target.target_group = create(:target_group, level: evaluator.level, milestone: evaluator.milestone)
+        target.target_group =
+          create(
+            :target_group,
+            level: evaluator.level,
+            milestone: evaluator.milestone
+          )
       end
     end
   end

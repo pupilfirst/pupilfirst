@@ -111,17 +111,18 @@ module CourseExportable
     @targets ||=
       begin
         scope =
-          course
-            .targets
-            .live
-            .includes(:level, :target_group, assignments: [:quiz, :evaluation_criteria])
+          course.targets.live.includes(
+            :level,
+            :target_group,
+            assignments: %i[quiz evaluation_criteria]
+          )
 
         scope =
           case role
           when Target::ROLE_STUDENT
-            scope.where(assignments: {role: Target::ROLE_STUDENT})
+            scope.where(assignments: { role: Target::ROLE_STUDENT })
           when Target::ROLE_TEAM
-            scope.where(assignments: {role: Target::ROLE_TEAM})
+            scope.where(assignments: { role: Target::ROLE_TEAM })
           else
             scope
           end
@@ -129,7 +130,7 @@ module CourseExportable
         scope =
           (
             if @course_export.reviewed_only
-              scope.where.not(assignments: {evaluation_criteria: {id: nil}})
+              scope.where.not(assignments: { evaluation_criteria: { id: nil } })
             else
               scope
             end

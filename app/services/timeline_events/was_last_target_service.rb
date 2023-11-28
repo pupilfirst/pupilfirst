@@ -9,7 +9,9 @@ module TimelineEvents
 
       if student.team.present?
         targets_passed?(milestone_assignments.team, student) &&
-          students.all? { |s| targets_passed?(milestone_assignments.student, s) }
+          students.all? do |s|
+            targets_passed?(milestone_assignments.student, s)
+          end
       else
         targets_passed?(milestone_assignments, student)
       end

@@ -1,5 +1,4 @@
 class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
-
   class Target < ApplicationRecord
     has_many :timeline_events, dependent: :restrict_with_error
     has_one :quiz, dependent: :restrict_with_error
@@ -17,7 +16,6 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
     def current_target_version
       target_versions.order(created_at: :desc).first
     end
-
   end
 
   class TimelineEvent < ApplicationRecord
@@ -67,7 +65,7 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
       block_type: ContentBlock::BLOCK_TYPE_EMBED,
       content: {
         url: target.link_to_complete,
-        request_source: 'User',
+        request_source: "User",
         embed_code: embed_code(target.link_to_complete),
         last_resolved_at: Time.zone.now
       },
@@ -82,69 +80,102 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
 
   def change
     assignments = []
-    Target.includes(:quiz, :target_prerequisites).find_each do |target|
-      assignment_hash = {
-        :target_id => target.id,
-        :role => target.role,
-        :completion_instructions => target.completion_instructions,
-        :milestone => target.milestone,
-        :milestone_number => target.milestone_number,
-        :checklist => target.checklist,
-        :created_at => target.created_at,
-        :updated_at => target.updated_at,
-        :archived => false
-      }
-      if target.mark_as_complete?
-        # convert to assignment if target has prerequisites or target is a prerequisiste or target is a milestone
-        if !target.prerequisite_targets.empty? or !TargetPrerequisite.where(prerequisite_target: target).empty? or target.milestone?
-          # convert mark as complete to a form submit assignment
-          assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Mark this target as completed?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
-        else
-          delete_timeline_events(target)
-          # skip creating assignment
-          next
+    Target
+      .includes(:quiz, :target_prerequisites)
+      .find_each do |target|
+        assignment_hash = {
+          target_id: target.id,
+          role: target.role,
+          completion_instructions: target.completion_instructions,
+          milestone: target.milestone,
+          milestone_number: target.milestone_number,
+          checklist: target.checklist,
+          created_at: target.created_at,
+          updated_at: target.updated_at,
+          archived: false
+        }
+        if target.mark_as_complete?
+          # convert to assignment if target has prerequisites or target is a prerequisiste or target is a milestone
+          if !target.prerequisite_targets.empty? or
+               !TargetPrerequisite.where(prerequisite_target: target).empty? or
+               target.milestone?
+            # convert mark as complete to a form submit assignment
+            assignment_hash[:checklist] = [
+              {
+                "kind" => "multiChoice",
+                "title" => "Mark this target as completed?",
+                "metadata" => {
+                  "choices" => ["Yes"],
+                  "allowMultiple" => false
+                },
+                "optional" => false
+              }
+            ]
+          else
+            delete_timeline_events(target)
+            # skip creating assignment
+            next
+          end
         end
-      end
 
-      if target.link_to_complete.present?
-        create_embed_block(target)
-        if !target.prerequisite_targets.empty? or !TargetPrerequisite.where(prerequisite_target: target).empty? or target.milestone?
-          assignment_hash[:checklist] = [{"kind"=>"multiChoice", "title"=>"Have you gone through the shared link?", "metadata"=>{"choices"=>["Yes"], "allowMultiple"=>false}, "optional"=>false}]
-        else
-          delete_timeline_events(target)
-          # skip creating assignment
-          next
+        if target.link_to_complete.present?
+          create_embed_block(target)
+          if !target.prerequisite_targets.empty? or
+               !TargetPrerequisite.where(prerequisite_target: target).empty? or
+               target.milestone?
+            assignment_hash[:checklist] = [
+              {
+                "kind" => "multiChoice",
+                "title" => "Have you gone through the shared link?",
+                "metadata" => {
+                  "choices" => ["Yes"],
+                  "allowMultiple" => false
+                },
+                "optional" => false
+              }
+            ]
+          else
+            delete_timeline_events(target)
+            # skip creating assignment
+            next
+          end
         end
+        assignments.append(assignment_hash)
       end
-      assignments.append(assignment_hash)
-    end
 
     Assignment.insert_all(assignments)
 
-    Quiz.includes(target: :assignments).find_each do |quiz|
-      quiz.assignment = quiz.target.assignments.first
-      quiz.save
-    end
+    Quiz
+      .includes(target: :assignments)
+      .find_each do |quiz|
+        quiz.assignment = quiz.target.assignments.first
+        quiz.save
+      end
 
     assignment_evaluation_criterions = []
     assignment_prerequisites = []
-    Target.joins(:assignments).includes(:assignments, :evaluation_criteria, :prerequisite_targets).find_each do |target|
-      assignment_id = target.assignments.first.id
-      target.evaluation_criteria.each do |evaluation_criteria|
-        assignment_evaluation_criteria = {
-          :assignment_id => assignment_id,
-          :evaluation_criterion_id => evaluation_criteria.id
-        }
-        assignment_evaluation_criterions.append(assignment_evaluation_criteria)
+    Target
+      .joins(:assignments)
+      .includes(:assignments, :evaluation_criteria, :prerequisite_targets)
+      .find_each do |target|
+        assignment_id = target.assignments.first.id
+        target.evaluation_criteria.each do |evaluation_criteria|
+          assignment_evaluation_criteria = {
+            assignment_id: assignment_id,
+            evaluation_criterion_id: evaluation_criteria.id
+          }
+          assignment_evaluation_criterions.append(
+            assignment_evaluation_criteria
+          )
+        end
+        target.prerequisite_targets.each do |prerequisite_target|
+          assignment_prerequisite = {
+            assignment_id: assignment_id,
+            prerequisite_assignment_id: prerequisite_target.assignments.first.id
+          }
+          assignment_prerequisites.append(assignment_prerequisite)
+        end
       end
-      target.prerequisite_targets.each do |prerequisite_target|
-        assignment_prerequisite = {
-          :assignment_id => assignment_id,
-          :prerequisite_assignment_id => prerequisite_target.assignments.first.id
-        }
-        assignment_prerequisites.append(assignment_prerequisite)
-      end
-    end
 
     if !assignment_evaluation_criterions.empty?
       AssignmentEvaluationCriterion.insert_all(assignment_evaluation_criterions)
@@ -153,6 +184,5 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
     if !assignment_prerequisites.empty?
       AssignmentPrerequisite.insert_all(assignment_prerequisites)
     end
-
   end
 end

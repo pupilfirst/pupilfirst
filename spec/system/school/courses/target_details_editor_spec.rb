@@ -17,15 +17,24 @@ feature "Target Details Editor", js: true do
   let!(:level_2) { create :level, :two, course: course }
   let!(:target_group_1) { create :target_group, level: level_1 }
   let!(:target_group_2) { create :target_group, level: level_2 }
-  let!(:target_1_l1) { create :target, :with_shared_assignment, target_group: target_group_1 }
-  let!(:target_1_l2) { create :target, :with_shared_assignment, target_group: target_group_2 }
-  let!(:target_non_assignment_l2) { create :target, :with_content, target_group: target_group_2 }
+  let!(:target_1_l1) do
+    create :target, :with_shared_assignment, target_group: target_group_1
+  end
+  let!(:target_1_l2) do
+    create :target, :with_shared_assignment, target_group: target_group_2
+  end
+  let!(:target_non_assignment_l2) do
+    create :target, :with_content, target_group: target_group_2
+  end
   let!(:target_2_l2) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            target_group: target_group_2,
            given_evaluation_criteria: [evaluation_criterion]
   end
-  let!(:target_3_l2) { create :target, :with_shared_assignment, target_group: target_group_2 }
+  let!(:target_3_l2) do
+    create :target, :with_shared_assignment, target_group: target_group_2
+  end
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:link_to_complete) { Faker::Internet.url }
@@ -46,18 +55,28 @@ feature "Target Details Editor", js: true do
                  referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
-    find("a[title='Edit details of target #{target_non_assignment_l2.title}']").click
+    find(
+      "a[title='Edit details of target #{target_non_assignment_l2.title}']"
+    ).click
     expect(page).to have_text("Title")
 
     expect(page).to_not have_content("Is this assignment a milestone?")
-    expect(page).to_not have_content("Are there any prerequisite targets with assignments?")
-    expect(page).to_not have_content("Will a coach review submissions on this assignment?")
+    expect(page).to_not have_content(
+      "Are there any prerequisite targets with assignments?"
+    )
+    expect(page).to_not have_content(
+      "Will a coach review submissions on this assignment?"
+    )
 
     within("div#has_assignment") { click_button "Yes" }
 
     expect(page).to have_content("Is this assignment a milestone?")
-    expect(page).to have_content("Are there any prerequisite targets with assignments?")
-    expect(page).to have_content("Will a coach review submissions on this assignment?")
+    expect(page).to have_content(
+      "Are there any prerequisite targets with assignments?"
+    )
+    expect(page).to have_content(
+      "Will a coach review submissions on this assignment?"
+    )
 
     within("div#evaluated") { click_button "No" }
 
@@ -87,7 +106,9 @@ feature "Target Details Editor", js: true do
     dismiss_notification
 
     expect(target_non_assignment_l2.reload.assignments.first).to_not eq(nil)
-    expect(target_non_assignment_l2.reload.assignments.first.archived).to eq(true)
+    expect(target_non_assignment_l2.reload.assignments.first.archived).to eq(
+      true
+    )
 
     within("div#has_assignment") { click_button "Yes" }
     expect(page).to have_text(checklist_question)
@@ -112,7 +133,9 @@ feature "Target Details Editor", js: true do
     dismiss_notification
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
-    expect(target_1_l2.assignments.first.completion_instructions).to eq(completion_instructions)
+    expect(target_1_l2.assignments.first.completion_instructions).to eq(
+      completion_instructions
+    )
 
     # Check sort index is unaffected
     expect(target_1_l2.sort_index).to eq(current_sort_index)
@@ -128,7 +151,9 @@ feature "Target Details Editor", js: true do
     click_button "Update Target"
     dismiss_notification
 
-    expect(target_1_l2.reload.assignments.first.completion_instructions).to eq("")
+    expect(target_1_l2.reload.assignments.first.completion_instructions).to eq(
+      ""
+    )
   end
 
   scenario "school admin updates a target as reviewed by faculty" do
@@ -238,14 +263,18 @@ feature "Target Details Editor", js: true do
 
     expect(target.assignments.first.evaluation_criteria).to eq([])
     expect(target.assignments.first.quiz.quiz_questions.count).to eq(2)
-    expect(target.assignments.first.quiz.quiz_questions.first.question).to eq(quiz_question_1)
-    expect(target.assignments.first.quiz.quiz_questions.first.correct_answer.value).to eq(
-      quiz_question_1_answer_option_3
+    expect(target.assignments.first.quiz.quiz_questions.first.question).to eq(
+      quiz_question_1
     )
-    expect(target.assignments.first.quiz.quiz_questions.last.question).to eq(quiz_question_2)
-    expect(target.assignments.first.quiz.quiz_questions.last.correct_answer.value).to eq(
-      quiz_question_2_answer_option_1
+    expect(
+      target.assignments.first.quiz.quiz_questions.first.correct_answer.value
+    ).to eq(quiz_question_1_answer_option_3)
+    expect(target.assignments.first.quiz.quiz_questions.last.question).to eq(
+      quiz_question_2
     )
+    expect(
+      target.assignments.first.quiz.quiz_questions.last.correct_answer.value
+    ).to eq(quiz_question_2_answer_option_1)
   end
 
   scenario "school admin updates a target to one with submit a form" do
@@ -269,21 +298,33 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text("Target updated successfully")
     dismiss_notification
 
-    expect(target_2_l2.reload.assignments.first.evaluation_criteria.count).to eq(0)
+    expect(
+      target_2_l2.reload.assignments.first.evaluation_criteria.count
+    ).to eq(0)
     expect(target_2_l2.assignments.first.quiz).to eq(nil)
     expect(target_2_l2.visibility).to eq(Target::VISIBILITY_LIVE)
   end
 
   scenario "course author modifies target role and prerequisite targets" do
-    draft_target = create :target, :with_shared_assignment, :draft, target_group: target_group_2
-    archived_target = create :target, :with_shared_assignment, :archived, target_group: target_group_2
+    draft_target =
+      create :target,
+             :with_shared_assignment,
+             :draft,
+             target_group: target_group_2
+    archived_target =
+      create :target,
+             :with_shared_assignment,
+             :archived,
+             target_group: target_group_2
 
     sign_in_user course_author.user,
                  referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
-    expect(page).to have_text("Are there any prerequisite targets with assignments?")
+    expect(page).to have_text(
+      "Are there any prerequisite targets with assignments?"
+    )
 
     within("div#prerequisite_targets") do
       expect(page).to have_text(target_2_l2.title)
@@ -301,9 +342,15 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text("Target updated successfully")
     dismiss_notification
 
-    expect(target_1_l2.reload.assignments.first.role).to eq(Assignment::ROLE_TEAM)
-    expect(target_1_l2.assignments.first.prerequisite_assignments.count).to eq(2)
-    expect(target_1_l2.assignments.first.prerequisite_assignment_ids).to contain_exactly(
+    expect(target_1_l2.reload.assignments.first.role).to eq(
+      Assignment::ROLE_TEAM
+    )
+    expect(target_1_l2.assignments.first.prerequisite_assignments.count).to eq(
+      2
+    )
+    expect(
+      target_1_l2.assignments.first.prerequisite_assignment_ids
+    ).to contain_exactly(
       target_2_l2.assignments.first.id,
       draft_target.assignments.first.id
     )
@@ -325,7 +372,9 @@ feature "Target Details Editor", js: true do
     click_button "Update Target"
     expect(page).to have_text("Target updated successfully")
 
-    expect(draft_target.reload.assignments.first.prerequisite_assignment_ids).to eq([target_2_l2.assignments.first.id])
+    expect(
+      draft_target.reload.assignments.first.prerequisite_assignment_ids
+    ).to eq([target_2_l2.assignments.first.id])
   end
 
   scenario "user is notified on reloading window if target editor has unsaved changes" do
@@ -336,7 +385,9 @@ feature "Target Details Editor", js: true do
                      id: target_1_l2.id
                    )
 
-    expect(page).to have_text("Are there any prerequisite targets with assignments?")
+    expect(page).to have_text(
+      "Are there any prerequisite targets with assignments?"
+    )
 
     # Can refresh the page without any confirm dialog
     visit current_path
@@ -351,7 +402,8 @@ feature "Target Details Editor", js: true do
 
   context "when targets have an existing checklist" do
     let!(:target_2_l2) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              target_group: target_group_2,
              given_evaluation_criteria: [evaluation_criterion]
     end
@@ -377,13 +429,16 @@ feature "Target Details Editor", js: true do
     end
 
     let!(:target_3_l2) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              target_group: target_group_2,
              given_checklist: checklist_with_multiple_items,
              given_evaluation_criteria: [evaluation_criterion]
     end
 
-    let!(:quiz_target) { create :target, :with_shared_assignment, target_group: target_group_2 }
+    let!(:quiz_target) do
+      create :target, :with_shared_assignment, target_group: target_group_2
+    end
     let(:quiz) { create :quiz, target: quiz_target }
     let(:quiz_question) { create :quiz_question, :with_answers, quiz: quiz }
 
@@ -588,7 +643,9 @@ feature "Target Details Editor", js: true do
         }
       ]
 
-      expect(target_2_l2.reload.assignments.first.checklist).to eq(expected_checklist)
+      expect(target_2_l2.reload.assignments.first.checklist).to eq(
+        expected_checklist
+      )
     end
 
     scenario "admin changes the target with an existing checklist to a form submission" do
@@ -802,8 +859,12 @@ feature "Target Details Editor", js: true do
 
       dismiss_notification
 
-      expect(target_2_l2.reload.assignments.first.evaluation_criteria.count).to eq(0)
-      expect(target_2_l2.reload.assignments.first.checklist).to eq(expected_checklist)
+      expect(
+        target_2_l2.reload.assignments.first.evaluation_criteria.count
+      ).to eq(0)
+      expect(target_2_l2.reload.assignments.first.checklist).to eq(
+        expected_checklist
+      )
     end
 
     scenario "admin uses controls in checklist to remove, copy and move checklist items" do
@@ -879,7 +940,9 @@ feature "Target Details Editor", js: true do
         }
       ]
 
-      expect(target_3_l2.reload.assignments.first.checklist).to eq(expected_checklist)
+      expect(target_3_l2.reload.assignments.first.checklist).to eq(
+        expected_checklist
+      )
     end
 
     scenario "admin changes target from quiz target to evaluated and adds a new checklist" do
@@ -919,7 +982,9 @@ feature "Target Details Editor", js: true do
       expected_checklist = []
       expect(target.checklist).to eq(expected_checklist)
       expect(target.quiz).to eq(nil)
-      expect(target.assignments.first.evaluation_criteria.first).to eq(evaluation_criterion)
+      expect(target.assignments.first.evaluation_criteria.first).to eq(
+        evaluation_criterion
+      )
 
       # Check only the graded submissions are preserved on switching to an evaluated target
       expect(target.timeline_events.count).to eq(1)
@@ -973,15 +1038,20 @@ feature "Target Details Editor", js: true do
       create :target_group, :archived, level: level_2
     end
     let!(:target_l2_1) do
-      create :target, :with_shared_assignment, target_group: target_group_l2_1, sort_index: 1
+      create :target,
+             :with_shared_assignment,
+             target_group: target_group_l2_1,
+             sort_index: 1
     end
     let!(:target_l2_2) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              target_group: target_group_l2_1,
              given_prerequisite_targets: [target_l2_1]
     end
     let!(:target_l2_3) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              target_group: target_group_l1,
              sort_index: 1,
              given_prerequisite_targets: [target_l2_2]
@@ -1015,7 +1085,9 @@ feature "Target Details Editor", js: true do
 
       expect(target_l2_2.reload.sort_index).to eq(1)
       expect(target_l2_2.target_group).to eq(target_group_l2_2)
-      expect(target_l2_2.assignments.first.prerequisite_assignments).to eq(target_l2_1.assignments)
+      expect(target_l2_2.assignments.first.prerequisite_assignments).to eq(
+        target_l2_1.assignments
+      )
     end
 
     scenario "author moves a target to another group on a different level" do

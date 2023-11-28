@@ -17,10 +17,7 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
   let(:bot_reviewer) { create :faculty, school: school }
 
   let(:grade_labels) do
-    [
-      { 'grade' => 1, 'label' => 'Okay' },
-      { 'grade' => 2, 'label' => 'Accept' }
-    ]
+    [{ "grade" => 1, "label" => "Okay" }, { "grade" => 2, "label" => "Accept" }]
   end
 
   let(:evaluation_criterion) do
@@ -32,7 +29,8 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
   let(:target) do
     create :target,
-           :with_shared_assignment, given_role: Assignment::ROLE_STUDENT,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
            target_group: target_group,
            given_evaluation_criteria: [evaluation_criterion]
   end
@@ -74,7 +72,7 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       within("div#is_acceptable") { click_button "No" }
 
-      click_button 'Reject Submission'
+      click_button "Reject Submission"
 
       open_email(coach.email)
       expect(current_email).to be_blank
@@ -93,7 +91,7 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
       click_button "Start Review"
 
       within("div#is_acceptable") { click_button "No" }
-      click_button 'Reject Submission'
+      click_button "Reject Submission"
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
@@ -121,7 +119,7 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
       click_button "Start Review"
 
       within("div#is_acceptable") { click_button "No" }
-      click_button 'Reject Submission'
+      click_button "Reject Submission"
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
       open_email(coach.email)

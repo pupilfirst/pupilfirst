@@ -33,68 +33,94 @@ feature "Student's view of Course Curriculum", js: true do
 
   # Individual targets of different types.
   let!(:completed_target_l1) do
-    create :target, :with_shared_assignment, target_group: target_group_l1, given_role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l1,
+           given_role: Target::ROLE_TEAM
   end
   let!(:completed_target_l2) do
-    create :target, :with_shared_assignment, target_group: target_group_l2, given_role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l2,
+           given_role: Target::ROLE_TEAM
   end
   let!(:completed_target_l3) do
-    create :target, :with_shared_assignment, target_group: target_group_l3, given_role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l3,
+           given_role: Target::ROLE_TEAM
   end
   let!(:completed_target_l4) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
            given_role: Target::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:pending_target_g1) do
-    create :target, :with_shared_assignment, target_group: target_group_l4_1, given_role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l4_1,
+           given_role: Target::ROLE_TEAM
   end
   let!(:pending_target_g2) do
-    create :target, :with_shared_assignment, target_group: target_group_l4_2, given_role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l4_2,
+           given_role: Target::ROLE_TEAM
   end
   let!(:submitted_target) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
            given_role: Target::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:failed_target) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
            given_role: Target::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:target_with_prerequisites) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
            given_prerequisite_targets: [pending_target_g1],
            given_role: Target::ROLE_TEAM
   end
   let!(:l5_reviewed_target) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            target_group: target_group_l5,
            given_role: Target::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:l5_non_reviewed_target) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            :with_markdown,
            target_group: target_group_l5,
            given_role: Target::ROLE_TEAM
   end
   let!(:l5_non_reviewed_target_with_prerequisite) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            :with_markdown,
            target_group: target_group_l5,
            given_role: Target::ROLE_TEAM,
            given_prerequisite_targets: [l5_non_reviewed_target]
   end
   let!(:level_6_target) do
-    create :target, :with_shared_assignment, target_group: target_group_l6, given_role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l6,
+           given_role: Target::ROLE_TEAM
   end
   let!(:level_6_draft_target) do
-    create :target, :with_shared_assignment,
+    create :target,
+           :with_shared_assignment,
            :draft,
            target_group: target_group_l6,
            given_role: Target::ROLE_TEAM
@@ -371,7 +397,10 @@ feature "Student's view of Course Curriculum", js: true do
     let(:level_0) { create :level, :zero, course: course }
     let(:target_group_l0) { create :target_group, level: level_0 }
     let!(:level_0_target) do
-      create :target, :with_shared_assignment, target_group: target_group_l0, given_role: Target::ROLE_TEAM
+      create :target,
+             :with_shared_assignment,
+             target_group: target_group_l0,
+             given_role: Target::ROLE_TEAM
     end
 
     scenario "student visits the dashboard" do
@@ -413,7 +442,10 @@ feature "Student's view of Course Curriculum", js: true do
       let(:c2_level_1) { create :level, :one, course: course_2 }
       let(:c2_target_group) { create :target_group, level: c2_level_1 }
       let!(:c2_target) do
-        create :target, :with_shared_assignment, target_group: c2_target_group, given_role: Target::ROLE_TEAM
+        create :target,
+               :with_shared_assignment,
+               target_group: c2_target_group,
+               given_role: Target::ROLE_TEAM
       end
       let!(:c2_student) do
         create :student, user: student.user, cohort: cohort_2
@@ -583,7 +615,8 @@ feature "Student's view of Course Curriculum", js: true do
 
   context "when a course has milestone targets" do
     let!(:milestone_l1) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              :with_shared_assignment,
              target_group: target_group_l1,
              given_role: Target::ROLE_TEAM,
@@ -592,7 +625,8 @@ feature "Student's view of Course Curriculum", js: true do
     end
 
     let!(:milestone_l2) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              :with_shared_assignment,
              target_group: target_group_l2,
              given_role: Target::ROLE_TEAM,
@@ -601,7 +635,8 @@ feature "Student's view of Course Curriculum", js: true do
     end
 
     let!(:milestone_l3) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              :with_shared_assignment,
              target_group: target_group_l3,
              given_role: Target::ROLE_TEAM,
@@ -646,7 +681,8 @@ feature "Student's view of Course Curriculum", js: true do
 
     # create another pending submission to test the progression limit as there is already one
     let!(:target_1) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              target_group: target_group_l1,
              given_role: Target::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion]
@@ -664,7 +700,8 @@ feature "Student's view of Course Curriculum", js: true do
 
     # Create another reviewed target to test the progression limit message
     let!(:target_2) do
-      create :target, :with_shared_assignment,
+      create :target,
+             :with_shared_assignment,
              target_group: target_group_l1,
              given_role: Target::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion]
@@ -701,7 +738,8 @@ feature "Student's view of Course Curriculum", js: true do
 
     context "when a reviewed target has another reviewed target as prerequisite" do
       let!(:target_2) do
-        create :target, :with_shared_assignment,
+        create :target,
+               :with_shared_assignment,
                target_group: target_group_l1,
                given_role: Target::ROLE_TEAM,
                given_evaluation_criteria: [evaluation_criterion],

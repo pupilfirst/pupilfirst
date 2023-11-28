@@ -33,16 +33,18 @@ describe Schools::MilestoneSortService do
     it "swaps specified target down" do
       expect { described_class.new(target_1, "down").execute }.to change {
         target_1.reload.assignments.first.milestone_number
-      }.from(1).to(2)
-      .and change { target_2.reload.assignments.first.milestone_number }.from(4).to(1)
+      }.from(1).to(2).and change {
+              target_2.reload.assignments.first.milestone_number
+            }.from(4).to(1)
       expect(archived_target.reload.assignments.first.milestone_number).to eq(3)
     end
 
     it "swaps specified target up" do
       expect { described_class.new(target_2, "up").execute }.to change {
         target_1.reload.assignments.first.milestone_number
-      }.from(1).to(2)
-      .and change { target_2.reload.assignments.first.milestone_number }.from(4).to(1)
+      }.from(1).to(2).and change {
+              target_2.reload.assignments.first.milestone_number
+            }.from(4).to(1)
     end
 
     it "does not swap target up" do
@@ -62,7 +64,9 @@ describe Schools::MilestoneSortService do
     it "does not swap target, when target is not milestone" do
       expect {
         described_class.new(archived_target, "up").execute
-      }.not_to change { archived_target.reload.assignments.first.milestone_number }.from(3)
+      }.not_to change {
+        archived_target.reload.assignments.first.milestone_number
+      }.from(3)
 
       expect(target_1.reload.assignments.first.milestone_number).to eq(1)
       expect(target_2.reload.assignments.first.milestone_number).to eq(4)

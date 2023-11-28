@@ -111,7 +111,8 @@ module Organisations
     end
 
     def milestone_completion_status
-      ordered_milestone_targets = milestone_targets.order('assignments.milestone_number')
+      ordered_milestone_targets =
+        milestone_targets.order("assignments.milestone_number")
 
       status = {}
 

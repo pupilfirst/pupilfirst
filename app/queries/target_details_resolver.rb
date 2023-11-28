@@ -5,7 +5,7 @@ class TargetDetailsResolver < ApplicationQuery
     {
       title: target.title,
       target_group_id: target.target_group_id,
-      visibility: target.visibility,
+      visibility: target.visibility
     }
   end
 
@@ -17,7 +17,6 @@ class TargetDetailsResolver < ApplicationQuery
   end
 
   def target
-    @target ||=
-      Target.find_by(id: target_id)
+    @target ||= Target.find_by(id: target_id)
   end
 end

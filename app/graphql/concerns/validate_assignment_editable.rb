@@ -29,30 +29,6 @@ module ValidateAssignmentEditable
     end
   end
 
-  # class PrerequisitesNotArchived < GraphQL::Schema::Validator
-  #   def validate(_object, _context, value)
-  #     prerequisite_targets = value[:prerequisite_targets]
-  #     non_archived_targets =
-  #       Target
-  #         .where(id: prerequisite_targets)
-  #         .where.not(visibility: Target::VISIBILITY_ARCHIVED)
-
-  #     return if prerequisite_targets.uniq.count == non_archived_targets.count
-
-  #     I18n.t("mutations.update_target.prerequisities_archived_error")
-  #   end
-  # end
-
-  # class TargetNotPrerequisiteToItself < GraphQL::Schema::Validator
-  #   def validate(_object, _context, value)
-  #     prerequisite_targets = value[:prerequisite_targets]
-
-  #     return unless prerequisite_targets.include?(value[:id])
-
-  #     I18n.t("mutations.update_target.prerequisities_self_error")
-  #   end
-  # end
-
   class OnlyOneMethodOfCompletion < GraphQL::Schema::Validator
     def validate(_object, _context, value)
       completion_criteria = [
@@ -155,7 +131,7 @@ module ValidateAssignmentEditable
       completion_instructions: @params[:completion_instructions],
       checklist: @params[:checklist],
       milestone: @params[:milestone],
-      archived: @params[:archived],
+      archived: @params[:archived]
     }
   end
 end

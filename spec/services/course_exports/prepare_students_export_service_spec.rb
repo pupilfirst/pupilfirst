@@ -81,7 +81,6 @@ describe CourseExports::PrepareStudentsExportService do
            sort_index: 1
   end
 
-
   let!(:target_l1_evaluated) do
     create :target,
            :with_shared_assignment,
@@ -192,13 +191,7 @@ describe CourseExports::PrepareStudentsExportService do
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
-          [
-            "Completion Method",
-            "Take Quiz",
-            "Take Quiz",
-            "Graded",
-            "Graded"
-          ],
+          ["Completion Method", "Take Quiz", "Take Quiz", "Graded", "Graded"],
           %w[Milestone? Yes No Yes Yes],
           ["Students with submissions", 3, 1, 3, 1],
           ["Submissions pending review", 0, 0, 0, 1],
@@ -318,7 +311,7 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_2.email,
-            '1/2',
+            "1/2",
             nil,
             { "value" => "x", "style" => "failing-grade" }
           ],

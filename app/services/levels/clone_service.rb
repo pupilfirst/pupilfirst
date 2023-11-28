@@ -28,7 +28,7 @@ module Levels
       Level.create!(
         source_level
           .attributes
-          .slice('name', 'description')
+          .slice("name", "description")
           .merge(course: target_course, number: new_level_number)
       )
     end
@@ -43,7 +43,7 @@ module Levels
             TargetGroup.create!(
               target_group
                 .attributes
-                .slice('name', 'description', 'sort_index', 'milestone')
+                .slice("name", "description", "sort_index", "milestone")
                 .merge(level: target_level)
             )
           ]
@@ -52,34 +52,31 @@ module Levels
 
     def create_targets(target_groups)
       target_groups.flat_map do |old_target_group, new_target_group|
-        old_target_group
-          .targets
-          .live
-          .map do |old_target|
-            new_target =
-              Target.create!(
-                old_target
-                  .attributes
-                  .slice(
-                    'title',
-                    'description',
-                    'target_action_type',
-                    'sort_index',
-                    'visibility',
-                    'resubmittable',
-                    'role'
-                  )
-                  .merge(target_group: new_target_group)
-              )
-            [old_target, new_target]
-          end
+        old_target_group.targets.live.map do |old_target|
+          new_target =
+            Target.create!(
+              old_target
+                .attributes
+                .slice(
+                  "title",
+                  "description",
+                  "target_action_type",
+                  "sort_index",
+                  "visibility",
+                  "resubmittable",
+                  "role"
+                )
+                .merge(target_group: new_target_group)
+            )
+          [old_target, new_target]
+        end
       end
     end
 
     def create_evaluation_criteria(source_evaluation_criteria, target_course)
       target_course.evaluation_criteria.find_by(
         name: source_evaluation_criteria.name,
-        max_grade: source_evaluation_criteria.max_grade,
+        max_grade: source_evaluation_criteria.max_grade
       ) ||
         target_course.evaluation_criteria.create!(
           name: source_evaluation_criteria.name,
@@ -124,18 +121,22 @@ module Levels
     def create_assignments(targets)
       targets.flat_map do |old_target, new_target|
         old_target.assignments.map do |old_assignment|
-          new_assignment = Assignment.create!(
-            target: new_target,
-            role: old_assignment.role,
-            checklist: old_assignment.checklist,
-            completion_instructions: old_assignment.completion_instructions,
-            milestone: old_assignment.milestone,
-            milestone_number: old_assignment.milestone_number,
-            archived: old_assignment.archived,
-          )
+          new_assignment =
+            Assignment.create!(
+              target: new_target,
+              role: old_assignment.role,
+              checklist: old_assignment.checklist,
+              completion_instructions: old_assignment.completion_instructions,
+              milestone: old_assignment.milestone,
+              milestone_number: old_assignment.milestone_number,
+              archived: old_assignment.archived
+            )
 
           if old_assignment.evaluation_criteria.exists?
-            create_assignment_evaluation_criteria(old_assignment, new_assignment)
+            create_assignment_evaluation_criteria(
+              old_assignment,
+              new_assignment
+            )
           end
           @assignment_id_translation[old_assignment.id] = new_assignment.id
 
@@ -150,7 +151,8 @@ module Levels
 
         # create quiz
         old_quiz = old_assignment.quiz
-        new_quiz = Quiz.create!(title: old_quiz.title, assignment: new_assignment)
+        new_quiz =
+          Quiz.create!(title: old_quiz.title, assignment: new_assignment)
 
         # create quiz questions
         old_quiz
@@ -190,10 +192,10 @@ module Levels
 
         # translate old prerequisite target ids
         new_assignment.prerequisite_assignment_ids =
-        old_assignment.prerequisite_assignment_ids.map do |old_id|
+          old_assignment.prerequisite_assignment_ids.map do |old_id|
             @assignment_id_translation[old_id]
           end
-          new_assignment.save!
+        new_assignment.save!
       end
     end
   end

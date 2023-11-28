@@ -207,7 +207,6 @@ describe Courses::DeleteService do
 
   describe "#execute" do
     it "deletes all data related to the course and the course itself" do
-
       expect { subject.execute }.to(
         change { expectations.map { |e| e[0].call } }.from(
           expectations.pluck(1)

@@ -2,7 +2,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
   include DevelopersNotifications
 
-  property :target_id, validates: { presence: { message: 'Blank Target Id' } }
+  property :target_id, validates: { presence: { message: "Blank Target Id" } }
   property :answer_ids
 
   validate :target_should_have_a_quiz
@@ -45,13 +45,13 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   def target_should_have_a_quiz
     return if quiz.present?
 
-    errors.add(:base, 'TargetDoesNotHaveQuiz')
+    errors.add(:base, "TargetDoesNotHaveQuiz")
   end
 
   def all_questions_answered
     return if number_of_questions == answers_from_user.count
 
-    errors.add(:base, 'The answers are incomplete. Please try again.')
+    errors.add(:base, "The answers are incomplete. Please try again.")
   end
 
   def number_of_questions
@@ -71,7 +71,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   end
 
   def checklist_item(title, result, status)
-    { title: title, result: result, kind: 'longText', status: status }
+    { title: title, result: result, kind: "longText", status: status }
   end
 
   def result
@@ -87,9 +87,9 @@ class CreateQuizSubmissionMutator < ApplicationQuery
 
             stripped_question = question.question.strip
             end_with_lb_or_space =
-              stripped_question.ends_with?('```') ? "\n\n" : "  \n"
+              stripped_question.ends_with?("```") ? "\n\n" : "  \n"
 
-            title = "#{I18n.t('mutations.quiz.question')} #{index + 1}"
+            title = "#{I18n.t("mutations.quiz.question")} #{index + 1}"
             result =
               " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
             status =
@@ -107,16 +107,16 @@ class CreateQuizSubmissionMutator < ApplicationQuery
 
   def pretty_answer(answer)
     stripped_answer = answer.strip
-    start_with_lb_or_space = stripped_answer.starts_with?('```') ? "\n" : ' '
-    end_with_lb_or_space = stripped_answer.ends_with?('```') ? "\n\n" : "  \n"
+    start_with_lb_or_space = stripped_answer.starts_with?("```") ? "\n" : " "
+    end_with_lb_or_space = stripped_answer.ends_with?("```") ? "\n\n" : "  \n"
     "#{start_with_lb_or_space}#{stripped_answer}#{end_with_lb_or_space}"
   end
 
   def answer_text(correct_answer, u_answer)
     if u_answer == correct_answer
-      "**#{I18n.t('mutations.quiz.your_correct_answer')}:**#{pretty_answer(u_answer.value)}"
+      "**#{I18n.t("mutations.quiz.your_correct_answer")}:**#{pretty_answer(u_answer.value)}"
     else
-      "**#{I18n.t('mutations.quiz.your_answer')}:**#{pretty_answer(u_answer.value)}**#{I18n.t('mutations.quiz.correct_answer')}:**#{pretty_answer(correct_answer.value)}"
+      "**#{I18n.t("mutations.quiz.your_answer")}:**#{pretty_answer(u_answer.value)}**#{I18n.t("mutations.quiz.correct_answer")}:**#{pretty_answer(correct_answer.value)}"
     end
   end
 end

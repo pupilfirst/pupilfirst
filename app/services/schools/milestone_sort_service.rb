@@ -7,7 +7,12 @@ module Schools
     end
 
     def execute
-      return unless (target.visibility != Target::VISIBILITY_ARCHIVED && @assignment.milestone)
+      unless (
+               target.visibility != Target::VISIBILITY_ARCHIVED &&
+                 @assignment.milestone
+             )
+        return
+      end
 
       milestone_ids = milestones.map(&:id)
 
@@ -34,7 +39,13 @@ module Schools
 
     def milestones
       @milestones ||=
-        target.course.targets.live.milestone.order('assignments.milestone_number ASC').to_a
+        target
+          .course
+          .targets
+          .live
+          .milestone
+          .order("assignments.milestone_number ASC")
+          .to_a
     end
 
     def move_up?

@@ -7,7 +7,10 @@ class AssignmentDetailsResolver < ApplicationQuery
         role: assignment.role,
         quiz: quiz,
         evaluation_criteria: assignment.evaluation_criteria.pluck(:id),
-        prerequisite_targets: target_ids_from_assignment_ids(assignment.prerequisite_assignments.pluck(:id)),
+        prerequisite_targets:
+          target_ids_from_assignment_ids(
+            assignment.prerequisite_assignments.pluck(:id)
+          ),
         completion_instructions: assignment.completion_instructions,
         checklist: assignment.checklist,
         milestone: assignment.milestone?,
@@ -26,8 +29,7 @@ class AssignmentDetailsResolver < ApplicationQuery
   end
 
   def target
-    @target ||=
-      Target.find_by(id: target_id)
+    @target ||= Target.find_by(id: target_id)
   end
 
   def assignment
@@ -35,7 +37,7 @@ class AssignmentDetailsResolver < ApplicationQuery
       Assignment.includes(
         quiz: {
           quiz_questions: %I[answer_options correct_answer]
-        },
+        }
       ).find_by(target_id: target_id)
   end
 

@@ -161,23 +161,44 @@ feature "Course Coaches Index", js: true do
     end
 
     let(:target_c1_1) do
-      create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_c1
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_c1
     end
     let(:target_c1_2) do
-      create :target, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_c1
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_TEAM,
+             target_group: target_group_c1
     end
     let(:target_c1_3) do
-      create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_c1
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_c1
     end
     let(:target_c2) do
-      create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_c2
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_c2
     end
 
     before do
       # Make all of these targets evaluated.
-      target_c1_1.assignments.first.evaluation_criteria << evaluation_criteria_c1
-      target_c1_2.assignments.first.evaluation_criteria << evaluation_criteria_c1
-      target_c1_3.assignments.first.evaluation_criteria << evaluation_criteria_c1
+      target_c1_1
+        .assignments
+        .first
+        .evaluation_criteria << evaluation_criteria_c1
+      target_c1_2
+        .assignments
+        .first
+        .evaluation_criteria << evaluation_criteria_c1
+      target_c1_3
+        .assignments
+        .first
+        .evaluation_criteria << evaluation_criteria_c1
       target_c2.assignments.first.evaluation_criteria << evaluation_criteria_c2
 
       # Enroll the coach directly onto one student in this course, an another in a different course.

@@ -20,15 +20,11 @@ describe Levels::CloneService do
 
   let(:target_group_l0) { create :target_group, level: level_zero }
 
-  let(:target_group_l1_1) do
-    create :target_group, level: level_one
-  end
+  let(:target_group_l1_1) { create :target_group, level: level_one }
 
   let(:target_group_l1_2) { create :target_group, level: level_one }
 
-  let(:target_group_l2) do
-    create :target_group, level: level_two
-  end
+  let(:target_group_l2) { create :target_group, level: level_two }
 
   # prerequisite target
   let!(:prerequisite_target) do
@@ -40,31 +36,60 @@ describe Levels::CloneService do
   end
 
   let!(:target_tc_l1) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_tc_l1
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_tc_l1
   end
 
   let!(:target_l0) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l0
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l0
   end
 
   let(:target_l1_1_1) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_1
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l1_1
   end
 
   let(:target_l1_1_2) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_1
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l1_1
   end
 
   let(:target_l1_2) do
-    create :target, :with_content, :with_shared_assignment, given_prerequisite_targets: [prerequisite_target], given_role: Assignment::ROLE_TEAM, target_group: target_group_l1_2
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_prerequisite_targets: [prerequisite_target],
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l1_2
   end
 
   let(:target_l2_1) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l2
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l2
   end
 
   let!(:target_l2_2) do
-    create :target, :with_content, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l2
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l2
   end
 
   let(:student_l1) { create :student, cohort: cohort }
@@ -132,9 +157,18 @@ describe Levels::CloneService do
     it "creates a clone of the level into another course" do
       original_group_names = level_one.target_groups.pluck(:name)
       original_targets = level_one.targets.pluck(:title, :description)
-      original_assignments = level_one.targets.joins(:assignments).pluck(
-        'assignments.role', 'assignments.checklist', 'assignments.milestone', 'assignments.milestone_number', 'assignments.archived', 'assignments.completion_instructions'
-      )
+      original_assignments =
+        level_one
+          .targets
+          .joins(:assignments)
+          .pluck(
+            "assignments.role",
+            "assignments.checklist",
+            "assignments.milestone",
+            "assignments.milestone_number",
+            "assignments.archived",
+            "assignments.completion_instructions"
+          )
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
 
@@ -184,14 +218,23 @@ describe Levels::CloneService do
         original_targets
       )
 
-      expect(new_level.targets.joins(:assignments).pluck(
-        'assignments.role', 'assignments.checklist', 'assignments.milestone', 'assignments.milestone_number', 'assignments.archived', 'assignments.completion_instructions'
-      )).to match_array(
-        original_assignments
-      )
+      expect(
+        new_level
+          .targets
+          .joins(:assignments)
+          .pluck(
+            "assignments.role",
+            "assignments.checklist",
+            "assignments.milestone",
+            "assignments.milestone_number",
+            "assignments.archived",
+            "assignments.completion_instructions"
+          )
+      ).to match_array(original_assignments)
 
       # Quiz, quiz questions and answer options should have been cloned
-      new_quiz = new_level.targets.joins(assignments: :quiz).first.assignments.first.quiz
+      new_quiz =
+        new_level.targets.joins(assignments: :quiz).first.assignments.first.quiz
 
       expect(
         new_quiz.quiz_questions.pluck(:question, :description)
@@ -207,12 +250,16 @@ describe Levels::CloneService do
           .targets
           .joins(assignments: :prerequisite_assignments)
           .first
-          .assignments.first.prerequisite_assignments
-          .first.target
+          .assignments
+          .first
+          .prerequisite_assignments
+          .first
+          .target
           .title
       ).to eq(prerequisite_target.title)
 
-      evaluated_targets = new_level.targets.joins(assignments: :assignment_evaluation_criteria)
+      evaluated_targets =
+        new_level.targets.joins(assignments: :assignment_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
 
       expect(
@@ -255,9 +302,18 @@ describe Levels::CloneService do
       original_level_names = course.levels.pluck(:name)
       original_group_names = level_one.target_groups.pluck(:name)
       original_targets = level_one.targets.pluck(:title, :description)
-      original_assignments = level_one.targets.joins(:assignments).pluck(
-        'assignments.role', 'assignments.checklist', 'assignments.milestone', 'assignments.milestone_number', 'assignments.archived', 'assignments.completion_instructions'
-      )
+      original_assignments =
+        level_one
+          .targets
+          .joins(:assignments)
+          .pluck(
+            "assignments.role",
+            "assignments.checklist",
+            "assignments.milestone",
+            "assignments.milestone_number",
+            "assignments.archived",
+            "assignments.completion_instructions"
+          )
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
 
@@ -305,14 +361,23 @@ describe Levels::CloneService do
         original_targets
       )
 
-      expect(new_level.targets.joins(:assignments).pluck(
-        'assignments.role', 'assignments.checklist', 'assignments.milestone', 'assignments.milestone_number', 'assignments.archived', 'assignments.completion_instructions'
-      )).to match_array(
-        original_assignments
-      )
+      expect(
+        new_level
+          .targets
+          .joins(:assignments)
+          .pluck(
+            "assignments.role",
+            "assignments.checklist",
+            "assignments.milestone",
+            "assignments.milestone_number",
+            "assignments.archived",
+            "assignments.completion_instructions"
+          )
+      ).to match_array(original_assignments)
 
       # Quiz, quiz questions and answer options should have been cloned
-      new_quiz = new_level.targets.joins(assignments: :quiz).first.assignments.first.quiz
+      new_quiz =
+        new_level.targets.joins(assignments: :quiz).first.assignments.first.quiz
 
       expect(
         new_quiz.quiz_questions.pluck(:question, :description)
@@ -328,12 +393,16 @@ describe Levels::CloneService do
           .targets
           .joins(assignments: :prerequisite_assignments)
           .first
-          .assignments.first.prerequisite_assignments
-          .first.target
+          .assignments
+          .first
+          .prerequisite_assignments
+          .first
+          .target
           .title
       ).to eq(prerequisite_target.title)
 
-      evaluated_targets = new_level.targets.joins(assignments: :assignment_evaluation_criteria)
+      evaluated_targets =
+        new_level.targets.joins(assignments: :assignment_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
 
       expect(

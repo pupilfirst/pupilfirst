@@ -13,17 +13,34 @@ feature "Coach's review interface" do
   let(:target_group_l2) { create :target_group, level: level_2 }
   let(:target_group_l3) { create :target_group, level: level_3 }
   let(:target_l1) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1
   end
   let(:target_l2) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l2
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l2
   end
   let(:target_l3) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l3
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l3
   end
-  let(:team_target) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group_l2 }
+  let(:team_target) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l2
+  end
   let(:auto_verify_target) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group_l1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1
   end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
@@ -438,7 +455,11 @@ feature "Coach's review interface" do
 
     context "when random filters are applied" do
       let(:random_level) { create :level, :one }
-      let(:random_target) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT }
+      let(:random_target) do
+        create :target,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_STUDENT
+      end
 
       scenario "coach visits review dashboard", js: true do
         sign_in_user course_coach.user,

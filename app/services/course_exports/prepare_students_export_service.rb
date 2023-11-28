@@ -56,13 +56,18 @@ module CourseExports
     def evaluation_criteria_ids
       @evaluation_criteria_ids ||=
         targets
-          .map { |target|
+          .map do |target|
             if target.assignments.first
-              target.assignments.first.evaluation_criteria.order(:name).pluck(:id)
+              target
+                .assignments
+                .first
+                .evaluation_criteria
+                .order(:name)
+                .pluck(:id)
             else
               []
             end
-          }
+          end
           .flatten
           .uniq
     end

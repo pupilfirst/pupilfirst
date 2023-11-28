@@ -32,7 +32,9 @@ module Targets
     end
 
     def remove_as_prerequisite
-      AssignmentPrerequisite.where(prerequisite_assignment: assignment).delete_all
+      AssignmentPrerequisite.where(
+        prerequisite_assignment: assignment
+      ).delete_all
     end
 
     def clear_milestone_settings

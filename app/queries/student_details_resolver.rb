@@ -87,7 +87,12 @@ class StudentDetailsResolver < ApplicationQuery
     latest_submissions
       .includes(:students, target: :assignments)
       .select do |submission|
-        submission.target.assignments.not_archived.first.individual_assignment? ||
+        submission
+          .target
+          .assignments
+          .not_archived
+          .first
+          .individual_assignment? ||
           (submission.student_ids.sort == student.team_student_ids)
       end
   end
@@ -95,13 +100,7 @@ class StudentDetailsResolver < ApplicationQuery
   def evaluation_criteria
     EvaluationCriterion
       .where(id: average_grades.pluck(:evaluation_criterion_id))
-      .map do |ec|
-        {
-          id: ec.id,
-          name: ec.name,
-          max_grade: ec.max_grade,
-        }
-      end
+      .map { |ec| { id: ec.id, name: ec.name, max_grade: ec.max_grade } }
   end
 
   def milestone_targets_completion_status

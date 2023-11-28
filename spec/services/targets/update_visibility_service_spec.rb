@@ -4,7 +4,9 @@ describe Targets::UpdateVisibilityService do
   subject { described_class }
 
   let(:target_group) { create :target_group }
-  let(:prerequisite_target) { create :target, :with_shared_assignment, target_group: target_group }
+  let(:prerequisite_target) do
+    create :target, :with_shared_assignment, target_group: target_group
+  end
   let(:target) do
     create :target,
            :with_shared_assignment,
@@ -15,17 +17,26 @@ describe Targets::UpdateVisibilityService do
 
   context "when the requested visibility is archived" do
     let!(:another_target) do
-      create :target, :with_shared_assignment, target_group: target_group, given_prerequisite_targets: [target]
+      create :target,
+             :with_shared_assignment,
+             target_group: target_group,
+             given_prerequisite_targets: [target]
     end
 
     it "removes prerequisites from target and resets milestone" do
-      expect(another_target.assignments.first.prerequisite_assignments.count).to eq(1)
+      expect(
+        another_target.assignments.first.prerequisite_assignments.count
+      ).to eq(1)
 
       expect {
         subject.new(target, Target::VISIBILITY_ARCHIVED).execute
-      }.to change { target.assignments.first.prerequisite_assignments.count }.from(1).to(0)
+      }.to change {
+        target.assignments.first.prerequisite_assignments.count
+      }.from(1).to(0)
 
-      expect(another_target.assignments.first.prerequisite_assignments.count).to eq(0)
+      expect(
+        another_target.assignments.first.prerequisite_assignments.count
+      ).to eq(0)
 
       expect(target.assignments.first.milestone).to eq(false)
       expect(target.assignments.first.milestone_number).to eq(nil)

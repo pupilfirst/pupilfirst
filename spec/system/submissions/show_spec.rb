@@ -9,8 +9,18 @@ feature "Submissions show" do
   let(:cohort) { create :cohort, course: course }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
-  let(:target) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_TEAM, target_group: target_group }
-  let(:target_2) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
+  let(:target) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group
+  end
+  let(:target_2) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:submission_file_1) { create :timeline_event_file }

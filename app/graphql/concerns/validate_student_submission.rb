@@ -14,7 +14,7 @@ module ValidateStudentSubmission
           .first
       target_status = Targets::StatusService.new(target, student).status
       submittable =
-      assignment.checklist.present? || assignment.evaluation_criteria.present?
+        assignment.checklist.present? || assignment.evaluation_criteria.present?
       submission_required =
         target_status.in?(
           [

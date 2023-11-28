@@ -178,7 +178,7 @@ module Schools
           .targets
           .live
           .milestone
-          .order('assignments.milestone_number asc')
+          .order("assignments.milestone_number asc")
           .page(params[:page])
           .per(20)
       @page_no = params[:page].presence || 1

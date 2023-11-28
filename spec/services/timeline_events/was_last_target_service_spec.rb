@@ -30,7 +30,10 @@ describe TimelineEvents::WasLastTargetService do
   end
 
   let(:target_3) do
-    create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
   end
 
   describe "#was_last_target?" do

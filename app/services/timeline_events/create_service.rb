@@ -73,12 +73,10 @@ module TimelineEvents
     end
 
     def update_latest_flag(timeline_event)
-      TimelineEventOwner
-        .where(
-          timeline_event_id: old_events(timeline_event).live,
-          student: owners
-        )
-        .update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
+      TimelineEventOwner.where(
+        timeline_event_id: old_events(timeline_event).live,
+        student: owners
+      ).update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def owners

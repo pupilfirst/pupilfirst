@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Courses::CreateLeaderboardEntriesService do
   subject { described_class.new(course) }
@@ -13,15 +13,40 @@ describe Courses::CreateLeaderboardEntriesService do
   let(:cohort_ended) { create :cohort, course: course, ends_at: 1.day.ago }
   let(:level_1) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level_1 }
-  let(:target_1) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
-  let(:target_2) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
-  let(:target_3) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
-  let(:target_4) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
-  let(:target_5) { create :target, :with_shared_assignment, given_role: Assignment::ROLE_STUDENT, target_group: target_group }
-  let(:team_1) { create :team_with_students, name: 's1', cohort: cohort }
-  let(:team_2) { create :team_with_students, name: 's2', cohort: cohort }
-  let(:team_3) { create :team_with_students, name: 's3', cohort: cohort }
-  let(:team_4) { create :team_with_students, name: 's4', cohort: cohort_ended }
+  let(:target_1) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
+  let(:target_2) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
+  let(:target_3) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
+  let(:target_4) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
+  let(:target_5) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
+  let(:team_1) { create :team_with_students, name: "s1", cohort: cohort }
+  let(:team_2) { create :team_with_students, name: "s2", cohort: cohort }
+  let(:team_3) { create :team_with_students, name: "s3", cohort: cohort }
+  let(:team_4) { create :team_with_students, name: "s4", cohort: cohort_ended }
 
   let(:lts) { LeaderboardTimeService.new }
 
@@ -83,15 +108,13 @@ describe Courses::CreateLeaderboardEntriesService do
     )
   end
 
-  describe '#execute' do
-    it 'does something' do
+  describe "#execute" do
+    it "does something" do
       expected_entry_count = team_1.students.count + team_2.students.count
 
       expect { subject.execute(lts.week_start, lts.week_end) }.to change {
-          LeaderboardEntry.count
-        }
-        .from(0)
-        .to(expected_entry_count)
+        LeaderboardEntry.count
+      }.from(0).to(expected_entry_count)
 
       # There should be no entry on the leaderboard for members of team_3.
       expect(

@@ -3,22 +3,24 @@ module Mutations
     include QueryAuthorizeAuthor
     include ValidateAssignmentEditable
 
-    description 'Update an assignment'
+    description "Update an assignment"
 
     field :id, ID, null: true
 
     def resolve(_params)
       if assignment
         updated_assignment =
-        ::Assignments::UpdateService.new(assignment).execute(assignment_params)
+          ::Assignments::UpdateService.new(assignment).execute(
+            assignment_params
+          )
         notify(
           :success,
-          I18n.t('shared.notifications.done_exclamation'),
-          I18n.t('mutations.update_target.success_notification')
+          I18n.t("shared.notifications.done_exclamation"),
+          I18n.t("mutations.update_target.success_notification")
         )
         { id: updated_assignment.id }
       else
-        {id: nil}
+        { id: nil }
       end
     end
 
@@ -29,7 +31,11 @@ module Mutations
     def assignment
       assignment ||= Assignment.find_by(target_id: @params[:target_id])
       if not assignment and not @params[:archived]
-        assignment = target.assignments.create!(target_id: @params[:target_id], role: @params[:role])
+        assignment =
+          target.assignments.create!(
+            target_id: @params[:target_id],
+            role: @params[:role]
+          )
       end
       @assignment = assignment
     end

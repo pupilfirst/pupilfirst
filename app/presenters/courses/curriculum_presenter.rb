@@ -13,7 +13,6 @@ module Courses
 
     def props
       if current_student.present?
-
         {
           submissions: submissions,
           targets_read: targets_read,
@@ -58,12 +57,7 @@ module Courses
 
     def evaluation_criteria
       @course.evaluation_criteria.map do |ec|
-        ec.attributes.slice(
-          'id',
-          'name',
-          'max_grade',
-          'grade_labels'
-        )
+        ec.attributes.slice("id", "name", "max_grade", "grade_labels")
       end
     end
 
@@ -146,13 +140,7 @@ module Courses
     end
 
     def targets
-      attributes = %w[
-        id
-        title
-        target_group_id
-        sort_index
-        resubmittable
-      ]
+      attributes = %w[id title target_group_id sort_index resubmittable]
 
       scope =
         @course
@@ -173,7 +161,9 @@ module Courses
             details[:milestone] = assignment.milestone
             details[:reviewed] = assignment.evaluation_criteria.present?
             details[:has_assignment] = true
-            details[:prerequisite_target_ids] = assignment.prerequisite_assignments.pluck(:target_id)
+            details[
+              :prerequisite_target_ids
+            ] = assignment.prerequisite_assignments.pluck(:target_id)
           else
             details[:role] = Assignment::ROLE_STUDENT
             details[:milestone] = false

@@ -15,7 +15,10 @@ module Assignments
           assignment_params[:evaluation_criterion_ids]
         )
 
-        @assignment.prerequisite_assignment_ids = get_assignment_ids_from_target_ids(assignment_params[:prerequisite_target_ids])
+        @assignment.prerequisite_assignment_ids =
+          get_assignment_ids_from_target_ids(
+            assignment_params[:prerequisite_target_ids]
+          )
 
         handle_milestone(assignment_params[:milestone])
 
@@ -25,7 +28,9 @@ module Assignments
 
         destroy_quiz if @assignment.quiz.present?
 
-        recreate_quiz(assignment_params[:quiz]) if assignment_params[:quiz].present?
+        if assignment_params[:quiz].present?
+          recreate_quiz(assignment_params[:quiz])
+        end
 
         @assignment
       end
@@ -67,7 +72,11 @@ module Assignments
     end
 
     def recreate_quiz(quiz)
-      new_quiz = Quiz.create!(assignment_id: @assignment.id, title: @assignment.target.title)
+      new_quiz =
+        Quiz.create!(
+          assignment_id: @assignment.id,
+          title: @assignment.target.title
+        )
       quiz.map do |quiz_question|
         new_quiz_question =
           QuizQuestion.create!(question: quiz_question.question, quiz: new_quiz)
@@ -99,6 +108,5 @@ module Assignments
       @assignment.quiz.quiz_questions.destroy_all
       @assignment.quiz.destroy
     end
-
   end
 end

@@ -31,7 +31,7 @@ module Posts
     end
 
     def updated_at(object)
-      object.updated_at.to_formatted_s(:long)
+      object.updated_at.to_fs(:long)
     end
 
     def versions_count

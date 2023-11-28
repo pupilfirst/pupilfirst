@@ -2254,7 +2254,7 @@ zh-cn:
         description: 您的反馈将通过电子邮件发送给学生。
         title: 已发送反馈
     create_grading:
-      evaluation_criteria_error: 无法在没有评估标准的情况下对提交物进行评分。
+      evaluation_criteria_error: 如果没有有效的评估标准，则无法对提交的内容进行评分。
       grade_recorded: 成绩记录完毕。
       invalid_checklist_shape_error: 提交清单中的数据形状与发送给审查的数据形状不匹配。
       invalid_checklist_values_error: 提交的清单项目的值与审核数据不匹配。
@@ -2873,7 +2873,5 @@ zh-cn:
       frequent_request_error: 刚刚发送了一封电子邮件，请稍等几分钟后再尝试。
       link_expired: 该链接已过期或无效。请重新尝试。
   validate_submission_gradable:
-    owners_should_be_active:
-      error: 无法更新未激活的学生提交内容。
-    submission_should_be_live:
-      error: 这样的提交不存在，或者已经被归档。
+    owners_should_be_active: 无法更新未激活的学生提交内容。
+    submission_should_be_live: 这样的提交不存在，或者已经被归档。

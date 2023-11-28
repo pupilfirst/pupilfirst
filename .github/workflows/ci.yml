@@ -11,7 +11,7 @@ on:
       - "docs/**"
 env:
   PF_IMAGE_NAME: pupilfirst
-  PF_VERSION: "2023.5"
+  PF_VERSION: "2023.6"
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
@@ -51,6 +51,10 @@ jobs:
       RECAPTCHA_V2_SECRET_KEY: ignored
 
     steps:
+      - name: Install libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips
       - uses: actions/checkout@v2
       - name: Use Ruby 3.2
         uses: ruby/setup-ruby@v1

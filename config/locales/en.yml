@@ -1027,7 +1027,7 @@ en:
       paste_link_complete: Paste link to complete
       prepare_quiz: Prepare the quiz now.
       prepare_quiz_error: All questions must be filled in, and all questions should have at least two answers.
-      prerequisite_targets_label: Are there any prerequisite targets with assignments?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: You have selected all evaluation criteria!
       search_criteria_empty: No criteria selected
       search_criteria_placeholder: Search evaluation criteria
@@ -1044,7 +1044,7 @@ en:
         form_limit_warning: Maximum allowed questions is 25!
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
-        label: What steps should the student take to complete this target?
+        label: What steps should the student take to complete this assignment?
       target_group: Target Group
       target_has_assignment: Does this target have an assignment?
       target_method_of_completion_label: How do you want the student to complete the assignment?
@@ -1054,7 +1054,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
         label: Is this assignment a milestone?
       target_title_placeholder: Type target title here

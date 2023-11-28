@@ -1,4 +1,4 @@
-class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
+class TargetsToAssignmentsMigrations < ActiveRecord::Migration[6.1]
   class Target < ApplicationRecord
     has_many :timeline_events, dependent: :restrict_with_error
     has_one :quiz, dependent: :restrict_with_error
@@ -20,6 +20,12 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
 
   class TimelineEvent < ApplicationRecord
     belongs_to :target
+    has_many :timeline_event_owners
+  end
+
+  class TimelineEventOwner < ApplicationRecord
+    belongs_to :timeline_event
+    belongs_to :student
   end
 
   class Quiz < ApplicationRecord
@@ -78,7 +84,24 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
     TimelineEventOwner.where(timeline_event_id: timeline_event_ids).delete_all
   end
 
-  def change
+  def add_page_reads_for_timeline_events
+    TimelineEventOwner
+      .includes(:timeline_event)
+      .find_in_batches do |timeline_event_owners|
+        page_reads_array = []
+        timeline_event_owners.each do |timeline_event_owner|
+          page_read_hash = {
+            target_id: timeline_event_owner.timeline_event.target_id,
+            student_id: timeline_event_owner.student_id,
+            created_at: timeline_event_owner.timeline_event.created_at
+          }
+          page_reads_array.append(page_read_hash)
+        end
+        PageRead.insert_all(page_reads_array)
+      end
+  end
+
+  def separate_assignments_from_targets
     assignments = []
     Target
       .includes(:quiz, :target_prerequisites)
@@ -184,5 +207,49 @@ class MigrateTargetsToAssignments < ActiveRecord::Migration[6.1]
     if !assignment_prerequisites.empty?
       AssignmentPrerequisite.insert_all(assignment_prerequisites)
     end
+  end
+
+  def up
+    create_table :assignments do |t|
+      t.references :target, null: false, foreign_key: true
+      t.string :role
+      t.jsonb :checklist
+      t.string :completion_instructions
+      t.boolean :milestone
+      t.integer :milestone_number
+      t.boolean :archived
+
+      t.timestamps
+    end
+
+    create_join_table :assignments, :evaluation_criteria do |t|
+      t.index %i[assignment_id evaluation_criterion_id],
+              name: "index_assignment_evaluation_criterion"
+      t.index %i[evaluation_criterion_id assignment_id],
+              name: "index_evaluation_criterion_assignment"
+    end
+
+    create_join_table :assignments, :prerequisite_assignments do |t|
+      t.index %i[assignment_id prerequisite_assignment_id],
+              name: "index_assignment_prerequisite"
+      t.index %i[prerequisite_assignment_id assignment_id],
+              name: "index_prerequisite_assignment"
+    end
+
+    create_table :page_reads do |t|
+      t.references :target, null: false, foreign_key: true
+      t.references :student, null: false, foreign_key: true
+      t.datetime :created_at
+    end
+
+    add_reference :quizzes, :assignment, null: true, foreign_key: true
+
+    add_page_reads_for_timeline_events
+
+    separate_assignments_from_targets
+  end
+
+  def down
+    raise ActiveRecord::IrreversibleMigration
   end
 end

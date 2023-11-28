@@ -38,23 +38,11 @@ class School < ApplicationRecord
 
     case variant
     when :mid
-      logo.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "200x200>"
-      ).processed
+      logo.variant(resize_to_limit: [nil, 200]).processed
     when :high
-      logo.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "500x500>"
-      ).processed
+      logo.variant(resize_to_limit: [nil, 500]).processed
     when :thumb
-      logo.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "100x100>"
-      ).processed
+      logo.variant(resize_to_limit: [nil, 100]).processed
     else
       logo
     end
@@ -63,11 +51,7 @@ class School < ApplicationRecord
   def icon_variant(variant)
     case variant
     when :thumb
-      icon.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "100x100>"
-      ).processed
+      icon.variant(resize_to_limit: [100, 100]).processed
     else
       icon
     end

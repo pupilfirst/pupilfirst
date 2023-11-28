@@ -51,13 +51,13 @@ class HomeController < ApplicationController
         provider: params[:provider],
         fqdn: params[:fqdn],
         session_id: params[:session_id],
-        link_data: params[:link_data],
-      }.to_json,
+        link_data: params[:link_data]
+      }.to_json
     )
 
     redirect_to OmniauthProviderUrlService.new(
                   params[:provider],
-                  current_host,
+                  current_host
                 ).oauth_url
   end
 
@@ -72,6 +72,7 @@ class HomeController < ApplicationController
     if current_school.present? && current_school.icon.attached?
       redirect_to view_context.rails_public_blob_url(
                     current_school.icon_variant(:thumb),
+                    allow_other_host: true
                   )
     else
       redirect_to "/favicon.png"

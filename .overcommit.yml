@@ -8,6 +8,8 @@ PreCommit:
   FileSize:
     enabled: true
     size_limit_bytes: 1048576
+    exclude:
+      - ".yarn/releases/yarn-4.0.0.cjs"
   RuboCop:
     enabled: true
     on_warn: fail

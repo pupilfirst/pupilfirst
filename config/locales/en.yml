@@ -2284,7 +2284,7 @@ en:
         description: Your feedback will be e-mailed to the student.
         title: Feedback Sent
     create_grading:
-      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      evaluation_criteria_error: Unable to grade submission without valid evaluation criteria.
       grade_recorded: Grades Recorded
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
@@ -3030,7 +3030,5 @@ en:
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: Cannot update inactive student submissions.
-    submission_should_be_live:
-      error: Such a submission does not exist, or it has been archived.
+    owners_should_be_active: Cannot update inactive student submissions.
+    submission_should_be_live: Such a submission does not exist, or it has been archived.

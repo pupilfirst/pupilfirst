@@ -23,6 +23,11 @@ RUN corepack enable
 RUN mkdir /var/www
 RUN chown -R www-data:www-data /var/www
 
+# Set up Tini.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 # Use the www-data user to run the application
 USER www-data
 
@@ -62,10 +67,7 @@ RUN bundle exec bin/vite build
 
 RUN mkdir -p tmp/pids
 
-# Add Tini.
-ENV TINI_VERSION v0.19.0
-ADD --chown=www-data:www-data https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+# Use Tini.
 ENTRYPOINT ["/tini", "--"]
 
 # Run under tini to ensure proper signal handling.

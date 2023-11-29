@@ -70,7 +70,12 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" | tee
 RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
-# Use a non-root user to run the application
+# Set up Tini.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
+# Use the www-data user to run the application
 USER www-data
 
 # Let's also upgrade bundler to the same version used in the build.
@@ -93,10 +98,7 @@ ENV RAILS_ENV="production"
 
 RUN mkdir -p tmp/pids
 
-# Add Tini.
-ENV TINI_VERSION v0.19.0
-ADD --chown=www-data:www-data https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+# Use Tini.
 ENTRYPOINT ["/tini", "--"]
 
 # Run under tini to ensure proper signal handling.

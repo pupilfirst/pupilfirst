@@ -21,9 +21,7 @@ Rails/Date:
 Rails/HasAndBelongsToMany:
   Enabled: false # This disallows HABTM.
 Rails/I18nLocaleTexts:
-  Enabled: false # This should be enabled when #933 is merged
-Rails/FindEach:
-  Enabled: false # Blanket find_each isn't a good idea
+  Enabled: false # This should be enabled when #933 is merged.
 
 # Project styling
 

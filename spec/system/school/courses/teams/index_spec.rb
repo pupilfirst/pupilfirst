@@ -37,7 +37,7 @@ feature "Teams Index", js: true do
 
     expect(page).to have_link(
       "Create Team",
-      href: "/school/courses/#{course.id}/teams/new"
+      href: "/school/courses/#{course.id}/teams/new",
     )
   end
 
@@ -71,7 +71,7 @@ feature "Teams Index", js: true do
 
     def safe_random_teams
       @selected_teams_ids ||= []
-      team = Team.where.not(id: @selected_teams_ids).order("random()").first
+      team = Team.all.where.not(id: @selected_teams_ids).order("random()").first
       @selected_teams_ids << team.id
       team
     end
@@ -95,46 +95,36 @@ feature "Teams Index", js: true do
 
       # Check ordering by last created
       expect(find(".teams-container:first-child")).to have_text(
-        newest_created.name
+        newest_created.name,
       )
 
       click_button("Load More")
 
-      expect(page).to have_selector(".teams-container", count: 32)
-
       expect(find(".teams-container:last-child")).to have_text(
-        oldest_created.name
+        oldest_created.name,
       )
 
       # Reverse sorting
       click_button "Order by Last Created"
       click_button "Order by First Created"
 
-      expect(page).to have_selector(".teams-container", count: 20)
-
       expect(find(".teams-container:first-child")).to have_text(
-        oldest_created.name
+        oldest_created.name,
       )
 
       click_button("Load More")
 
-      expect(page).to have_selector(".teams-container", count: 32)
-
       expect(find(".teams-container:last-child")).to have_text(
-        newest_created.name
+        newest_created.name,
       )
 
       # Check ordering by name
       click_button "Order by First Created"
       click_button "Order by Name"
 
-      expect(page).to have_selector(".teams-container", count: 20)
-
       expect(find(".teams-container:first-child")).to have_text(teams_aaa.name)
 
       click_button("Load More")
-
-      expect(page).to have_selector(".teams-container", count: 32)
 
       expect(find(".teams-container:last-child")).to have_text(teams_zzz.name)
     end

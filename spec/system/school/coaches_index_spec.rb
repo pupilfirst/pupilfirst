@@ -135,7 +135,7 @@ feature "Coaches Index", js: true do
     end
 
     scenario "school admin paginates through coaches on exited tab" do
-      Faculty.limit(5).each { |faculty| faculty.update!(exited: true) }
+      Faculty.all.limit(5).each { |faculty| faculty.update!(exited: true) }
 
       sign_in_user school_admin.user,
                    referrer: school_coaches_path(status: "exited")

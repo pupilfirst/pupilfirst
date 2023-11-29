@@ -559,7 +559,7 @@ feature "School students index", js: true do
     def safe_random_students
       @selected_student_ids ||= []
       student =
-        Student.where.not(id: @selected_student_ids).order("random()").first
+        Student.all.where.not(id: @selected_student_ids).order("random()").first
       @selected_student_ids << student.id
       student
     end

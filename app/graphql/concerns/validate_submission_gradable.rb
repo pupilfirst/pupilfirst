@@ -1,47 +1,43 @@
 module ValidateSubmissionGradable
   extend ActiveSupport::Concern
 
-  class SubmissionShouldBeGradable < GraphQL::Schema::Validator
+  class OwnersShouldBeActive < GraphQL::Schema::Validator
     def validate(_object, _context, value)
-      @submission = TimelineEvent.find_by(id: value[:submission_id])
+      submission = TimelineEvent.find(value[:submission_id])
 
-      submission_must_exist(value[:submission_id]) || owners_must_be_active ||
-        submission_must_be_live
-    end
-
-    def submission_must_exist(submission_id)
-      return if @submission.present?
-
-      I18n.t(
-        "mutations.create_grading.submission_missing_error",
-        submission_id: submission_id
-      )
-    end
-
-    def owners_must_be_active
-      # days since submission
+      #days since submission
       days_since_submission =
-        (Time.zone.now - @submission.created_at) / (3600 * 24)
+        (Time.zone.now - submission.created_at) / (3600 * 24)
       submission_review_allowed_days =
         Rails.application.secrets.inactive_submission_review_allowed_days
 
       submission_review_allowed =
         (days_since_submission < submission_review_allowed_days)
 
-      if !submission_review_allowed && @submission.students.active.empty?
-        I18n.t("validate_submission_gradable.owners_should_be_active")
+      if (submission.students.active.empty? && !submission_review_allowed)
+        return(
+          I18n.t('validate_submission_gradable.owners_should_be_active.error')
+        )
       end
     end
+  end
 
-    def submission_must_be_live
-      return unless @submission.archived?
-      I18n.t("validate_submission_gradable.submission_should_be_live")
+  class SubmissionShouldBeLive < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      submission = TimelineEvent.find(value[:submission_id])
+
+      if submission.archived?
+        return(
+          I18n.t('validate_submission_gradable.submission_should_be_live.error')
+        )
+      end
     end
   end
 
   included do
     argument :submission_id, GraphQL::Types::ID, required: true
 
-    validates SubmissionShouldBeGradable => {}
+    validates OwnersShouldBeActive => {}
+    validates SubmissionShouldBeLive => {}
   end
 end

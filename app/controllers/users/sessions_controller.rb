@@ -74,7 +74,7 @@ module Users
     # Post /users/update_password
     def update_password
       @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
-      if @form.validate(params)
+      if @form.validate(params[:session])
         @form.save
         @form.user.update!(account_deletion_notification_sent_at: nil)
         sign_in @form.user

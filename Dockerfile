@@ -58,7 +58,7 @@ RUN apt-get update && apt-get install -y \
   cron \
   curl \
   gnupg \
-  libvips \
+  imagemagick \
   && rm -rf /var/lib/apt/lists/*
 
 # We'll also need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.

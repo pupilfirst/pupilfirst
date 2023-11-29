@@ -44,10 +44,7 @@ class ApplicationController < ActionController::Base
 
   # Redirect all requests from unknown domains to service homepage.
   rescue_from RequestFromUnknownDomain do
-    redirect_to(
-      "https://lms.pupilfirst.org?redirect_from=#{current_host}",
-      allow_other_host: true
-    )
+    redirect_to "https://lms.pupilfirst.org?redirect_from=#{current_host}"
   end
 
   def raise_not_found
@@ -130,7 +127,7 @@ class ApplicationController < ActionController::Base
       render plain:
                "If this wasn't an integration test, you'd be redirected to: #{url}"
     else
-      redirect_to(url, allow_other_host: true)
+      redirect_to(url)
     end
   end
 

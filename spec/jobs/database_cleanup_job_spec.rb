@@ -20,7 +20,7 @@ describe DatabaseCleanupJob do
       .from(3)
       .to(2)
 
-    expect(TimelineEventFile.pluck(:id)).to contain_exactly(
+    expect(TimelineEventFile.all.pluck(:id)).to contain_exactly(
       tef_1.id,
       tef_2.id
     )

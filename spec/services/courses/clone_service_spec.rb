@@ -116,14 +116,14 @@ describe Courses::CloneService do
 
   describe "#clone" do
     it "create a clone of the course with the supplied name" do
-      original_levels = Level.order(:number).pluck(:number, :name)
-      original_group_names = TargetGroup.pluck(:name)
-      original_targets = Target.pluck(:title, :description)
+      original_levels = Level.all.order(:number).pluck(:number, :name)
+      original_group_names = TargetGroup.all.pluck(:name)
+      original_targets = Target.all.pluck(:title, :description)
       original_team_count = Team.count
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
-      original_quiz_questions = QuizQuestion.pluck(:question, :description)
-      original_answer_options = AnswerOption.pluck(:value, :hint)
+      original_quiz_questions = QuizQuestion.all.pluck(:question, :description)
+      original_answer_options = AnswerOption.all.pluck(:value, :hint)
       original_content_blocks_count = ContentBlock.count
 
       original_content_blocks =

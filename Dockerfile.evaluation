@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
   cron \
   curl \
   gnupg \
-  libvips
+  imagemagick
 
 # Install gems.
 COPY Gemfile .

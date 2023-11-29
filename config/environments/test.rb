@@ -1,46 +1,41 @@
-require "active_support/core_ext/integer/time"
-
-# The test environment is used exclusively to run your application's
-# test suite. You never need to work with it otherwise. Remember that
-# your test database is "scratch space" for the test suite and is wiped
-# and recreated between test runs. Don't rely on the data there!
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Turn false under Spring and add config.action_view.cache_template_loading = true.
+  # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is "scratch space" for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
   config.action_view.cache_template_loading = true
 
-  # Eager loading loads your whole application. When running a single test locally,
-  # this probably isn't necessary. It's a good idea to do in a continuous integration
-  # system, or in some way before deploying your code.
-  config.eager_load = ENV["CI"].present?
+  # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
+    'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = false
-  # config.cache_store = :null_store
 
   # Request timeout using Slowpoke.
-  config.slowpoke.timeout = ENV.fetch("SLOWPOKE_TIMEOUT", "120").to_i
+  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '120').to_i
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = true
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = true
-
-  # Store uploaded files on the local file system in a temporary directory.
-  config.active_storage.service = :test
-
   config.action_mailer.perform_caching = false
+
+  # config.cache_store = :null_store
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
@@ -60,8 +55,8 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
-  # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  # Raises error for missing translations
+  # config.action_view.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
@@ -71,10 +66,13 @@ Rails.application.configure do
   test_adapter.perform_enqueued_jobs = true
   config.active_job.queue_adapter = test_adapter
 
-  config.after_initialize { I18nJS.call(config_file: "config/i18n.yml") }
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
+
+  config.after_initialize { I18nJS.call(config_file: 'config/i18n.yml') }
 end
 
-require "flipper/adapters/pstore"
+require 'flipper/adapters/pstore'
 Flipper.configure do |config|
-  config.adapter { Flipper::Adapters::PStore.new("flipper.pstore", true) }
+  config.adapter { Flipper::Adapters::PStore.new('flipper.pstore', true) }
 end

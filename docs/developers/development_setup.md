@@ -16,7 +16,7 @@ for Ubuntu also apply to Windows (WSL), except where special instructions are no
 
 We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on macOS:
 
-- libvips - `brew install vips`
+- imagemagick - `brew install imagemagick`
 - nginx - `brew install nginx`. Start Nginx server after installation.
 - postgresql - Install [Postgres.app](http://postgresapp.com) and follow its
   [instructions](https://postgresapp.com/documentation/install.html), **including** the part about setting up
@@ -30,7 +30,7 @@ be printed to the command-line after it's successfully installed.
 The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
 adapt the command to work with the package manager available with your distribution.
 
-    sudo apt-get install libvips postgresql postgresql-contrib autoconf libtool nginx libpq-dev
+    sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx libpq-dev
 
 ### Install Ruby & Node.js
 
@@ -107,7 +107,7 @@ Then, in the PostgreSQL CLI, set a new password and quit.
    ```ruby
    # In the Rails console...
    vapid_key = WebPush.generate_key
-
+   
    # Save the printed string in your .env file.
    puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
    ```

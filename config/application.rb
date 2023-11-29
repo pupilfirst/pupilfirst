@@ -1,5 +1,4 @@
 require_relative "boot"
-
 require "rails/all"
 require_relative "../lib/maintenance"
 
@@ -15,17 +14,16 @@ Bundler.require(*Rails.groups)
 module Pupilfirst
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
+    #
+    # Note: This is not the original Rails version. However, this is the easiest way to enforce the latest defaults.
     config.load_defaults 6.1
 
     config.assets.precompile << "delayed/web/application.css"
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
     config.i18n.enforce_available_locales = true
 
     # include nested directories inside locale
@@ -43,9 +41,6 @@ module Pupilfirst
     config.middleware.use BatchLoader::Middleware
 
     config.middleware.insert_before Rack::Runtime, Maintenance
-
-    # Disables the deprecated #to_s override in some Ruby core classes
-    config.active_support.disable_to_s_conversion = true
   end
 end
 

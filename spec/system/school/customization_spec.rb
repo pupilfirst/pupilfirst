@@ -32,7 +32,9 @@ feature "School Customization", js: true do
     attach_file "logo_on_light_bg",
                 image_path("logo_lipsum_on_light_bg.png"),
                 visible: false
-    attach_file "icon", image_path("icon_pupilfirst.png"), visible: false
+    attach_file "icon_on_light_bg",
+                image_path("icon_pupilfirst.png"),
+                visible: false
     attach_file "cover_image", image_path("cover_image.jpg"), visible: false
 
     click_button "Update Images"
@@ -42,7 +44,7 @@ feature "School Customization", js: true do
     expect(school.reload.logo_on_light_bg.filename).to eq(
       "logo_lipsum_on_light_bg.png"
     )
-    expect(school.icon.filename).to eq("icon_pupilfirst.png")
+    expect(school.icon_on_light_bg.filename).to eq("icon_pupilfirst.png")
     expect(school.cover_image.filename).to eq("cover_image.jpg")
   end
 

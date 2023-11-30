@@ -4,28 +4,29 @@ class ErrorPresenter < ApplicationPresenter
   end
 
   def site_name
-    @site_name ||= current_school.present? ? current_school.name : 'Pupilfirst'
+    @site_name ||= current_school.present? ? current_school.name : "Pupilfirst"
   end
 
   def contact_email
-    @contact_email ||= begin
-      if current_school.present?
-        SchoolString::EmailAddress.for(current_school)
+    @contact_email ||=
+      begin
+        if current_school.present?
+          SchoolString::EmailAddress.for(current_school)
+        end
       end
-    end
   end
 
   def school_has_icon?
     return true if current_school.blank?
 
-    current_school.icon.attached?
+    current_school.icon_on_light_bg.attached?
   end
 
   def school_icon_url
     if current_school.present?
       view.rails_public_blob_url(current_school.icon_variant(:thumb))
     else
-      view.image_path('shared/pupilfirst-icon.svg')
+      view.image_path("shared/pupilfirst-icon.svg")
     end
   end
 end

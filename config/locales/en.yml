@@ -1333,6 +1333,7 @@ en:
       cover_image: Cover image
       icon: Icon
       logo_light_label: Logo on a light background
+      logo_dark_label: Logo on a dark background
       manage_images: Manage Images
       update_images: Update Images
       updated_notification: Images have been updated successfully.

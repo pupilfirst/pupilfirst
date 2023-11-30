@@ -7,6 +7,7 @@ let ts = I18n.t(~scope="shared")
 
 type action =
   | SelectLogoOnLightBgFile(string, bool)
+  | SelectLogoOnDarkBgFile(string, bool)
   | SelectCoverImageFile(string, bool)
   | SelectIconFile(string, bool)
   | BeginUpdate
@@ -15,7 +16,9 @@ type action =
 
 type state = {
   logoOnLightBgFilename: option<string>,
+  logoOnDarkBgFilename: option<string>,
   logoOnLightBgInvalid: bool,
+  logoOnDarkBgInvalid: bool,
   coverImageFilename: option<string>,
   coverImageInvalid: bool,
   iconFilename: option<string>,
@@ -68,17 +71,22 @@ let isInvalidImageFile = image =>
 
 let updateLogoOnLightBg = (send, event) => {
   let imageFile = ReactEvent.Form.target(event)["files"][0]
-  send(SelectLogoOnLightBgFile(imageFile["name"], imageFile |> isInvalidImageFile))
+  send(SelectLogoOnLightBgFile(imageFile["name"], imageFile->isInvalidImageFile))
+}
+
+let updateLogoOnDarkBg = (send, event) => {
+  let imageFile = ReactEvent.Form.target(event)["files"][0]
+  send(SelectLogoOnDarkBgFile(imageFile["name"], imageFile->isInvalidImageFile))
 }
 
 let updateCoverImage = (send, event) => {
   let imageFile = ReactEvent.Form.target(event)["files"][0]
-  send(SelectCoverImageFile(imageFile["name"], imageFile |> isInvalidImageFile))
+  send(SelectCoverImageFile(imageFile["name"], imageFile->isInvalidImageFile))
 }
 
 let updateIcon = (send, event) => {
   let imageFile = ReactEvent.Form.target(event)["files"][0]
-  send(SelectIconFile(imageFile["name"], imageFile |> isInvalidImageFile))
+  send(SelectIconFile(imageFile["name"], imageFile->isInvalidImageFile))
 }
 
 let imageUploader = (
@@ -115,7 +123,9 @@ let imageUploader = (
 
 let initialState = () => {
   logoOnLightBgFilename: None,
+  logoOnDarkBgFilename: None,
   logoOnLightBgInvalid: false,
+  logoOnDarkBgInvalid: false,
   coverImageFilename: None,
   coverImageInvalid: false,
   iconFilename: None,
@@ -130,6 +140,12 @@ let reducer = (state, action) =>
       ...state,
       logoOnLightBgFilename: Some(name),
       logoOnLightBgInvalid: invalid,
+      formDirty: true,
+    }
+  | SelectLogoOnDarkBgFile(name, invalid) => {
+      ...state,
+      logoOnDarkBgFilename: Some(name),
+      logoOnDarkBgInvalid: invalid,
       formDirty: true,
     }
   | SelectIconFile(name, invalid) => {
@@ -152,9 +168,10 @@ let reducer = (state, action) =>
 @react.component
 let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
   let (state, send) = React.useReducer(reducer, initialState())
-  let logoOnLightBg = customizations |> Customizations.logoOnLightBg
-  let coverImage = customizations |> Customizations.coverImage
-  let icon = customizations |> Customizations.icon
+  let logoOnLightBg = customizations->Customizations.logoOnLightBg
+  let logoOnDarkBg = customizations->Customizations.logoOnDarkBg
+  let coverImage = customizations->Customizations.coverImage
+  let icon = customizations->Customizations.iconOnLightBg
 
   <form
     className="mx-8 pt-8"
@@ -176,6 +193,17 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         imageName={logoOnLightBg |> OptionUtils.map(Customizations.filename)}
         selectedImageName=state.logoOnLightBgFilename
         errorState=state.logoOnLightBgInvalid
+      />
+      <SchoolCustomize__ImageFileInput
+        autoFocus=true
+        id="sc-images-editor__logo-dark-on-400-bg-input"
+        disabled=state.updating
+        name="logo_on_dark_bg"
+        onChange={updateLogoOnDarkBg(send)}
+        labelText={t("logo_dark_label")}
+        imageName={Customizations.filename->OptionUtils.map(logoOnDarkBg)}
+        selectedImageName=state.logoOnDarkBgFilename
+        errorState=state.logoOnDarkBgInvalid
       />
       <SchoolCustomize__ImageFileInput
         id="sc-images-editor__icon-input"

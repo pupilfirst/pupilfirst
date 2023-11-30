@@ -253,7 +253,7 @@ module Layouts
     end
 
     def icon_url
-      if current_school.icon.attached?
+      if current_school.icon_on_light_bg.attached?
         view.rails_public_blob_url(current_school.icon_variant("thumb"))
       else
         "/favicon.png"

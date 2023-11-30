@@ -14,8 +14,9 @@ type file = {
 
 type schoolImages = {
   logoOnLightBg: option<file>,
+  logoOnDarkBg: option<file>,
   coverImage: option<file>,
-  icon: file,
+  iconOnLightBg: file,
 }
 
 type linkId = string
@@ -35,7 +36,8 @@ type t = {
 }
 
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg
-let icon = t => t.schoolImages.icon
+let logoOnDarkBg = t => t.schoolImages.logoOnDarkBg
+let iconOnLightBg = t => t.schoolImages.iconOnLightBg
 let coverImage = t => t.schoolImages.coverImage
 
 let url = file => file.url
@@ -154,9 +156,10 @@ let decodeFile = json => {
 let decodeImages = json => {
   open Json.Decode
   {
-    logoOnLightBg: json |> field("logoOnLightBg", optional(decodeFile)),
-    coverImage: json |> field("coverImage", optional(decodeFile)),
-    icon: json |> field("icon", decodeFile),
+    logoOnLightBg: field("logoOnLightBg", optional(decodeFile), json),
+    logoOnDarkBg: field("logoOnDarkBg", optional(decodeFile), json),
+    coverImage: field("coverImage", optional(decodeFile), json),
+    iconOnLightBg: field("iconOnLightBg", decodeFile, json),
   }
 }
 

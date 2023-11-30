@@ -41,7 +41,9 @@ and about = option<string>
 let headerLogo = (schoolName, logoOnLightBg) =>
   switch logoOnLightBg {
   | Some(logo) =>
-    <div className="max-w-xs"> <img className="h-12" src={logo |> Customizations.url} /> </div>
+    <div className="max-w-xs">
+      <img className="h-12" src={logo->Customizations.url} />
+    </div>
   | None => <span className="text-2xl font-bold"> {schoolName->str} </span>
   }
 
@@ -122,7 +124,8 @@ let emailAddress = email =>
   switch email {
   | Some(email) =>
     <div className="text-xs font-semibold mt-4">
-      {(t("reach_us_at") ++ ": ")->str} <span className="font-bold"> {email->str} </span>
+      {(t("reach_us_at") ++ ": ")->str}
+      <span className="font-bold"> {email->str} </span>
     </div>
   | None =>
     <div
@@ -204,9 +207,9 @@ let editor = (state, send, authenticityToken) =>
 
 let initialState = (customizations, schoolName, schoolAbout) => {
   visibleEditor: None,
-  customizations: customizations,
-  schoolName: schoolName,
-  schoolAbout: schoolAbout,
+  customizations,
+  schoolName,
+  schoolAbout,
 }
 
 let moveLink = (linkId, kind, direction, t) => {
@@ -291,8 +294,8 @@ let reducer = (state, action) =>
     }
   | UpdateSchoolDetails(schoolName, schoolAbout) => {
       ...state,
-      schoolName: schoolName,
-      schoolAbout: schoolAbout,
+      schoolName,
+      schoolAbout,
       visibleEditor: None,
     }
   }
@@ -496,7 +499,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="h-3 w-3 rounded-full bg-gray-500 ms-2" />
             <div className="p-3 ms-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
-                src={state.customizations |> Customizations.icon |> Customizations.url}
+                src={state.customizations->Customizations.iconOnLightBg->Customizations.url}
                 className="h-5 w-5"
               />
               <span className="ms-1 text-xs font-semibold max-w-xs truncate">

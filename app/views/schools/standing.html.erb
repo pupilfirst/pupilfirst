@@ -3,91 +3,80 @@
 <% end %>
 <div class="relative" id="schoolrouter-innerpage-data">
   <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
-    <div class="bg-gradient-to-l to-primary-100 from-primary-200 shadow rounded-t-lg grid grid-cols-4 gap-4 items-center">
-      <div class="col-span-3 p-8">
-        <h1 class="text-4xl font-semibold text-gray-800 mb-4"><%= t(".standings") %> </h1>
-        <p class="text-gray-600 mb-4"><%= t(".standing_explanation") %> </p>
-        <a href="https://docs.pupilfirst.com/users/school_standing" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-600 hover:underline"><%= t(".learn_more") %> </a>
+    <div class="border border-gray-200 rounded-lg ">
+      <div class="p-5 bg-gradient-to-l from-primary-200 to-primary-100 grid grid-cols-4 gap-4 items-center rounded-t-lg">
+        <div class="col-span-3">
+          <h1 class="text-2xl font-semibold"><%= t(".standings") %> </h1>
+          <p class="text-gray-600 text-sm"><%= t(".standing_explanation") %> </p>
+          <a href="https://docs.pupilfirst.com/users/school_standing" target="_blank" rel="noopener noreferrer" class="text-sm text-primary-500 hover:text-primary-600 hover:underline transition"><%= t(".learn_more") %> </a>
+        </div>
+        <div class="-mt-12 pb-5 flex items-center justify-center">
+          <%= image_tag 'school/standings/star_on_shield.svg', alt: 'Star on Shield', class: 'h-40 w-auto' %>
+        </div>
       </div>
-      <div class="p-2">
-        <%= image_tag 'school/standings/star_on_shield.svg', alt: 'Star on Shield', class: 'h-40 w-auto' %>
-      </div>
-    </div>
-    <div class="bg-white p-4 rounded-b-lg shadow flex items-center justify-between">
-      <span class="text-base font-semibold"><%= t(".enable_standing") %> </span>
-      <div class="flex items-center bg-white p-2 hover:cursor-pointer">
-        <% if @presenter.standing_enabled? %>
-          <span class="italic text-green-400 mr-5" ><%= t(".enabled") %> </span>
-        <% end %>
-        <%= button_to t("shared._yes"), standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-l-md  #{'border border-primary-500 bg-primary-100' if @presenter.standing_enabled? }"%>
-        <%= button_to t("shared._no"), standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-r-md #{'border border-primary-500 bg-primary-100' unless @presenter.standing_enabled? }"%>
+      <div class="p-5 rounded-b-lg flex items-center justify-between">
+        <h2 class="text-base font-semibold"><%= t(".enable_standing") %> </h2>
+        <div class="flex items-center">
+          <% if @presenter.standing_enabled? %>
+            <span class="italic text-green-500 me-5" ><%= t(".enabled") %> </span>
+          <% end %>
+          <%= button_to t("shared._yes"), standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-s-md  #{'border-primary-500 bg-primary-100' if @presenter.standing_enabled? }"%>
+          <%= button_to t("shared._no"), standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-e-md #{'border-primary-500 bg-primary-100' unless @presenter.standing_enabled? }"%>
+        </div>
       </div>
     </div>
     <% if @presenter.standing_enabled? %>
-      <div class="bg-white shadow rounded-lg p-4 mt-8 flex justify-between">
-        <div class="flex-col gap-2">
-          <div class="flex items-center justify-start gap-3">
-            <span class="text-base font-semibold"><%= t(".update_coc_heading") %> </span>
-            <span class="bg-orange-100 text-orange-400 text-sm px-2 py-1 rounded-2xl border border-orange-300 font-medium"><%= t(".required") %> </span>
-          </div>
-          <p class="text-gray-600 max-w-3xl">
+      <div class="mt-8 pb-5 border-b border-gray-200 flex gap-2 items-start justify-between">
+        <div>
+          <h3 class="font-semibold">
+            <%= t(".update_coc_heading") %>
+            <span class="inline-block bg-orange-50 text-orange-500 text-sm px-3 py-1 rounded-full border border-orange-300 font-medium ms-2"><%= t(".required") %> </span>
+          </h3>
+          <p class="text-gray-500 text-sm max-w-3xl">
             <%= t(".update_coc_info") %>
-            <%= link_to t(".learn_more_about_crafting_coc"), "https://docs.pupilfirst.com/users/crafting_code_of_conduct", class: "text-primary-400 hover:text-primary-600 hover:underline", target:"_blank", rel: "noopener noreferrer" %>
+            <%= link_to t(".learn_more_about_crafting_coc"), "https://docs.pupilfirst.com/users/crafting_code_of_conduct", class: "text-primary-500 hover:text-primary-600 hover:underline transition", target:"_blank", rel: "noopener noreferrer" %>
           </p>
         </div>
-        <div class="flex flex-wrap justify-center items-center gap-2">
+        <div class="flex items-center gap-2 min-w-max">
           <% if @presenter.school_has_code_of_conduct? %>
-            <div>
-              <%= link_to t(".view_coc"), agreement_path(agreement_type: "code-of-conduct"), class: "text-primary-500 py-2 px-4 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-            </div>
-            <div>
-              <%= link_to t(".edit_coc"), code_of_conduct_school_path,class: "bg-primary-50 text-primary-500 py-2 px-5 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-            </div>
+            <%= link_to t(".view_coc"), agreement_path(agreement_type: "code-of-conduct"), class: "text-sm max-w-max block text-primary-500 py-2 px-4 rounded-md border border-gray-100 hover:border-primary-400 transition focus:outline-none cursor-pointer" %>
+            <%= link_to t(".edit_coc"), code_of_conduct_school_path,class: "text-sm max-w-max block bg-primary-50 text-primary-500 py-2 px-5 rounded-md border border-primary-100 hover:bg-primary-100 hover:border-primary-400 transition focus:outline-none cursor-pointer" %>
           <% else %>
-            <div>
-              <%= link_to t(".add_coc"), code_of_conduct_school_path, class: "bg-primary-50 text-primary-500 py-2 px-6 rounded border hover:border-primary-400 focus:outline-none cursor-pointer" %>
-            </div>
+            <%= link_to t(".add_coc"), code_of_conduct_school_path, class: "text-sm max-w-max block bg-primary-50 text-primary-500 py-2 px-6 rounded-md border border-primary-100 hover:bg-primary-100 transition focus:outline-none cursor-pointer" %>
           <% end %>
         </div>
       </div>
-      <div class="p-4 bg-white mt-8 flex justify-between">
-        <div class="flex flex-col">
-          <h1 class="text-base font-semibold"><%= t(".edit_standings_heading") %></h1>
-          <p class="text-gray-600 max-w-3xl"><%= t(".edit_standings_info") %>
-          </p>
-        </div>
+      <div class="mt-5">
+        <h3 class="font-semibold"><%= t(".edit_standings_heading") %></h1>
+        <p class="text-gray-500 text-sm max-w-full md:max-w-3xl"><%= t(".edit_standings_info") %></p>
       </div>
-      <div>
+      <div class="mt-5 flex flex-col gap-4">
         <% @presenter.standings.each do |standing|%>
-          <div class="flex items-center gap-2 mb-3 px-4">
-            <%= render 'shared/standing_shield', color: standing.color, size_classes: "w-14 h-14" %>
-            <div class="bg-gray-50 flex-grow p-3 max-w-md justify-between flex rounded">
-              <div class="">
+          <div class="flex items-center gap-2">
+            <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-full">
+              <%= render 'shared/standing_shield', color: standing.color, size_classes: "w-8 h-8" %>
+            </div>
+            <div class="bg-gray-50 w-full md:w-72 flex justify-between rounded-md overflow-hidden">
+              <p class="p-3 text-sm">
                 <%= standing.name %>
-              </div>
+              </p>
               <div class="flex">
-                <%= link_to edit_school_standing_path(standing), id: "edit_standing_#{standing.id}" do %>
-                  <i class="if i-edit-regular if-fw justify-self-end cursor-pointer text-lg font-semibold hover:text-primary-400" ></i>
+                <%= link_to edit_school_standing_path(standing), id: "edit_standing_#{standing.id}", class: "p-2 flex items-center justify-center cursor-pointer text-lg h-full bg-primary-50 text-primary-500 font-semibold hover:text-primary-600 hover:bg-primary-100 transition", title: "Edit standing" do %>
+                  <i class="if i-edit-regular if-fw" ></i>
                 <% end %>
                 <% unless standing.default %>
-                  <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion", count: @presenter.standing_log_count_for_each_unarchived_standing[standing.id] || 0) }, id: "delete_standing_#{standing.id}" do%>
-                    <i class="if i-trash-regular if-fw cursor-pointer text-lg font-semibold hover:text-red-400"></i>
+                  <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion", count: @presenter.standing_log_count_for_each_unarchived_standing[standing.id] || 0) }, id: "delete_standing_#{standing.id}", class: "p-2 flex items-center justify-center cursor-pointer text-lg h-full bg-red-50 text-red-500 font-semibold hover:text-red-600 hover:bg-red-100 transition", title: "Delete standing" do%>
+                    <i class="if i-trash-regular if-fw"></i>
                   <% end %>
                 <% end %>
               </div>
             </div>
             <% if standing.default %>
-              <span class="text-sm text-gray-600 italic"><%= t(".default") %></span>
+              <span class="text-sm text-gray-500 italic"><%= t(".default") %></span>
             <% end %>
           </div>
         <% end %>
-        <div class="flex justify-center max-w-xl">
-          <div class="w-8">
-          </div>
-          <div class="flex-grow max-w-md">
-            <%= button_to t(".add_another_standing"), new_school_standing_path, method: :get, class: "bg-primary-50 text-primary-500 py-2 px-8 rounded border hover:border-primary-400 focus:outline-none cursor-pointer w-full" %>
-          </div>
-        </div>
+        <%= button_to t(".add_another_standing"), new_school_standing_path, method: :get, class: "text-sm ms-14 w-full md:w-72 bg-primary-50 text-primary-500 py-2 rounded-md border hover:border-primary-300 hover:bg-primary-100 transition focus:outline-none cursor-pointer" %>
       </div>
     <% end %>
   </div>

@@ -69,10 +69,10 @@ module StudentSpecHelper
     FactoryBot
       .create(:timeline_event, :with_owners, **options)
       .tap do |te|
+        evaluation_criteria = target.assignments.first.evaluation_criteria
         # Add grades for passing submissions if evaluation criteria are present.
-        if target.assignments.first.evaluation_criteria.present? &&
-             options[:passed_at].present?
-          target.assignments.first.evaluation_criteria.each do |ec|
+        if evaluation_criteria.present? && options[:passed_at].present?
+          evaluation_criteria.each do |ec|
             create(
               :timeline_event_grade,
               timeline_event: te,

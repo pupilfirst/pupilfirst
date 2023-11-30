@@ -57,13 +57,9 @@ module CourseExports
       @evaluation_criteria_ids ||=
         targets
           .map do |target|
-            if target.assignments.first
-              target
-                .assignments
-                .first
-                .evaluation_criteria
-                .order(:name)
-                .pluck(:id)
+            assignment = target.assignments.not_archived.first
+            if assignment
+              assignment.evaluation_criteria.order(:name).pluck(:id)
             else
               []
             end

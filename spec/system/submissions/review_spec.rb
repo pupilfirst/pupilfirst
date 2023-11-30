@@ -1069,6 +1069,10 @@ feature "Submission review overlay", js: true do
 
       click_button "Save grades"
 
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
+
       new_notes = CoachNote.where(note: note)
 
       expect(new_notes.count).to eq(1)
@@ -1097,6 +1101,10 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
 
       new_notes = CoachNote.where(note: note)
 
@@ -1228,6 +1236,7 @@ feature "Submission review overlay", js: true do
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) { find("button[title='Good']").click }
+
       click_button "Save grades"
 
       click_link "Next"
@@ -1509,7 +1518,9 @@ feature "Submission review overlay", js: true do
 
         click_button "Save grades"
 
-        click_link "Submission #1"
+        within("div[aria-label='submission-status']") do
+          expect(page).to have_text("Completed")
+        end
 
         expect(page).to have_text("Submission #1")
         expect(page).to have_text("2/4")
@@ -1607,6 +1618,10 @@ feature "Submission review overlay", js: true do
       ) { find("button[title='Good']").click }
 
       click_button "Save grades"
+
+      within("div[aria-label='submission-status']") do
+        expect(page).to have_text("Completed")
+      end
     end
   end
 
@@ -1744,13 +1759,14 @@ feature "Submission review overlay", js: true do
 
     let(:team_1) { create :team_with_students, cohort: cohort }
     let(:team_2) { create :team_with_students, cohort: cohort }
+    let(:team_2_student) { team_2.students.first }
 
     let!(:submission_reviewed_1) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [team_2.students.first] + team_1.students,
+        owners: [team_2_student] + team_1.students,
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
@@ -1830,7 +1846,7 @@ feature "Submission review overlay", js: true do
       # submission 1
       expect(page).to have_text(submission_reviewed_1.checklist.first["title"])
       expect(page).to have_text(team_1.students.last.name)
-      expect(page).to have_text(team_2.students.first.name)
+      expect(page).to have_text(team_2_student.name)
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
       expect(page).not_to have_text(
@@ -1844,7 +1860,7 @@ feature "Submission review overlay", js: true do
       visit review_timeline_event_path(submission_reviewed_3)
 
       expect(page).to have_text(team_1.students.last.name)
-      expect(page).to have_text(team_2.students.first.name)
+      expect(page).to have_text(team_2_student.name)
       expect(page).to have_link(
         href: "/submissions/#{submission_reviewed_3.id}/review"
       )
@@ -1873,6 +1889,7 @@ feature "Submission review overlay", js: true do
     let(:team_1) { create :team_with_students, cohort: cohort }
     let(:team_2) { create :team_with_students, cohort: cohort }
     let(:student) { team_1.students.first }
+    let(:team_2_student) { team_2.students.first }
 
     let!(:submission_individual_target) do
       create(
@@ -1883,6 +1900,7 @@ feature "Submission review overlay", js: true do
         target: individual_target
       )
     end
+
     let!(:submission_team_target) do
       create(
         :timeline_event,
@@ -1892,12 +1910,13 @@ feature "Submission review overlay", js: true do
         target: team_target
       )
     end
+
     let!(:submission_team_target_2) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
-        owners: [student, team_2.students.first],
+        owners: [student, team_2_student],
         target: team_target
       )
     end
@@ -1920,8 +1939,8 @@ feature "Submission review overlay", js: true do
         "Submission #1 | #{team_target.title} | #{team_2.name}"
       )
 
-      expect(page).to have_text(team_2.students.first.name)
-      expect(page).to have_text(team_2.students.last.name)
+      team_2.students.each { |student| expect(page).to have_text(student.name) }
+
       expect(page).to have_text(team_2.name)
     end
 
@@ -1943,10 +1962,10 @@ feature "Submission review overlay", js: true do
                    referrer:
                      review_timeline_event_path(submission_team_target_2)
       expect(page).to have_title(
-        "Submission #1 | #{team_target.title} | #{student.name}, #{team_2.students.first.name}"
+        "Submission #1 | #{team_target.title} | #{student.name}, #{team_2_student.name}"
       )
       expect(page).to have_text(student.name)
-      expect(page).to have_text(team_2.students.first.name)
+      expect(page).to have_text(team_2_student.name)
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
     end

@@ -43,7 +43,8 @@ module Targets
     end
 
     def assignment
-      @target.assignments.not_archived.first
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
     end
 
     def reason_to_lock

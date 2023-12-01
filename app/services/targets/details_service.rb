@@ -90,7 +90,8 @@ module Targets
     end
 
     def assignment
-      @target.assignments.where(archived: false).first
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
     end
 
     def communities

@@ -42,9 +42,9 @@ class TargetsController < ApplicationController
         .first if current_user.present?
     page_read = PageRead.new(target: @target, student_id: student.id)
     if page_read.save
-      render json: page_read, status: :created
+      head :ok
     else
-      render json: page_read.errors, status: :unprocessable_entity
+      head :unprocessable_entity
     end
   end
 

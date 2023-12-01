@@ -242,6 +242,8 @@ class TargetsToAssignmentsMigrations < ActiveRecord::Migration[6.1]
       t.datetime :created_at
     end
 
+    add_index :page_reads, %i[student_id target_id], unique: true
+
     add_reference :quizzes, :assignment, null: true, foreign_key: true
 
     add_page_reads_for_timeline_events

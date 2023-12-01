@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_20_155237) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -478,7 +477,8 @@ ActiveRecord::Schema.define(version: 2023_10_20_155237) do
   create_table "page_reads", force: :cascade do |t|
     t.bigint "target_id", null: false
     t.bigint "student_id", null: false
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
+    t.index ["student_id", "target_id"], name: "index_page_reads_on_student_id_and_target_id", unique: true
     t.index ["student_id"], name: "index_page_reads_on_student_id"
     t.index ["target_id"], name: "index_page_reads_on_target_id"
   end

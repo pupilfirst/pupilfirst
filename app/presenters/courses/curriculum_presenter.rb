@@ -147,7 +147,9 @@ module Courses
           .targets
           .live
           .joins(:target_group)
-          .includes(:assignments)
+          .includes(
+            assignments: %i[evaluation_criteria prerequisite_assignments]
+          )
           .where(target_groups: { level_id: open_level_ids })
           .where(archived: false)
 

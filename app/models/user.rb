@@ -174,19 +174,9 @@ class User < ApplicationRecord
   def avatar_variant(version)
     case version
     when :mid
-      avatar.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "320x320^",
-        crop: "320x320+0+0"
-      ).processed
+      avatar.variant(resize_to_fill: [320, 320, crop: :attention]).processed
     when :thumb
-      avatar.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "100x100^",
-        crop: "100x100+0+0"
-      ).processed
+      avatar.variant(resize_to_fill: [100, 100, crop: :attention]).processed
     else
       avatar
     end

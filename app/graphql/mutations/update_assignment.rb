@@ -30,7 +30,7 @@ module Mutations
 
     def assignment
       assignment ||= Assignment.find_by(target_id: @params[:target_id])
-      if not assignment and not @params[:archived]
+      if !assignment && !@params[:archived]
         assignment =
           target.assignments.create!(
             target_id: @params[:target_id],

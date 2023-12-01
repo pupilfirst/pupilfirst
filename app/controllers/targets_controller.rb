@@ -41,7 +41,7 @@ class TargetsController < ApplicationController
         .where(courses: { id: course.id })
         .first if current_user.present?
     page_read = PageRead.new(target: @target, student_id: student.id)
-    if page_read.save
+    if page_read.save!
       head :ok
     else
       head :unprocessable_entity

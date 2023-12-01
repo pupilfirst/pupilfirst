@@ -19,12 +19,6 @@ module Schools
           model.name = name
           model.description = description
 
-          if model.level_id != level_id.to_i
-            model.sort_index = level.target_groups.maximum(:sort_index).to_i + 1
-            model.level_id = level_id
-            ::Targets::DetachFromPrerequisitesService.new(model.targets).execute
-          end
-
           model.save!
 
           archive_target_group(model, archived)

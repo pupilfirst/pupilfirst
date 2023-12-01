@@ -29,10 +29,6 @@ module Targets
       @target.sort_index =
         (new_target_group.targets.maximum(:sort_index).to_i + 1)
 
-      if @target.target_group.level_id != new_target_group.level_id
-        Targets::DetachFromPrerequisitesService.new([@target]).execute
-      end
-
       @target.target_group = new_target_group
     end
 

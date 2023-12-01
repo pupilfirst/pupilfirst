@@ -27,7 +27,7 @@ module Targets
 
     def detach_from_prerequisites
       AssignmentPrerequisite.transaction do
-        Targets::DetachFromPrerequisitesService.new([@target]).execute
+        Assignments::DetachFromPrerequisitesService.new([@target]).execute
       end
     end
 

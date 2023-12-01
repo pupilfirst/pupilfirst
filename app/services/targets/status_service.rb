@@ -73,11 +73,10 @@ module Targets
     end
 
     def target_reviewed?
-      if assignment
-        @target_reviewed ||= assignment.evaluation_criteria.any?
-      else
-        false
-      end
+    def target_reviewed?
+      return @target_reviewed if defined?(@target_reviewed)
+      @target_reviewed = assignment && assignment.evaluation_criteria.any?
+    end
     end
 
     def prerequisites_incomplete?

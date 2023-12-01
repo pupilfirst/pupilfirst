@@ -5,15 +5,6 @@ module Layouts
       super(view_context)
     end
 
-    def props
-      {
-        current_course_id: @course.id,
-        courses: courses,
-        additional_links: additional_links,
-        cover_image: @course.cover_url
-      }
-    end
-
     def course_thumbnail
       return @course_thumbnail if defined?(@course_thumbnail)
 

@@ -9,19 +9,22 @@
           <p class="text-base font-semibold"><%= @presenter.student.name %></p>
         </div>
       </div>
-      <% if @presenter.standing_enabled? %>
-        <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-1">
-          <div class="text-left md:text-right m-1 md:m-0">
-            <p class="text-base font-semibold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
-            <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-base font-medium text-primary-400 hover:text-primary-500" %>
-          </div>
-          <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+      <div class="flex gap-4 items-center ">
+        <div class="pe-4 border-e border-gray-300">
+          <p class="text-sm text-gray-500"><%= t("shared.cohort") %></p>
+          <p class="text-sm font-semibold"><%= @presenter.cohort.name %></p>
         </div>
-      <% end %>
-    </div>
-    <div class="max-w-5xl mx-auto pt-4 items-start justify-center px-5">
-      <div class="text-sm shrink bg-gray-100 px-1.5 py-1 text-gray-600 rounded-lg font-semibold break-all max-w-fit">
-        <%= t("shared.cohort") %>: <%= @presenter.cohort.name %>
+        <% if @presenter.standing_enabled? %>
+          <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
+            <div class="text-left rtl:text-right rtl:md:text-left md:text-right">
+              <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
+              <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-sm text-primary-500 hover:text-primary-700 hover:underline transition" %>
+            </div>
+            <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
+              <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-12 h-12" %>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
   </section>

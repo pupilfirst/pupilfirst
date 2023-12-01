@@ -52,21 +52,23 @@ let headerSection = (
     </div>
     {ReactUtils.nullUnless(
       <div
-        className="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2 pt-2 md:pt-0">
-        <div className="text-left md:text-right gap-1">
+        className="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
+        <div className="text-left rtl:text-right rtl:md:text-left md:text-right">
           <p
             style={ReactDOM.Style.make(~color=currentStandingColor, ())}
-            className="text-base font-semibold">
+            className="font-semibold text-sm">
             {currentStandingName->str}
           </p>
-          <a href="/user/standing">
-            <span className="text-sm text-primary-400 hover:text-primary-500">
-              {I18n.ts("view_standing")->str}
-            </span>
+          <a
+            href="/user/standing"
+            className="text-sm text-primary-500 hover:text-primary-700 hover:underline transition">
+            {I18n.ts("view_standing")->str}
           </a>
         </div>
-        <div id="standing_shield">
-          <StandingShield color=currentStandingColor sizeClass={"w-16 h-16"} />
+        <div
+          id="standing_shield"
+          className="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
+          <StandingShield color=currentStandingColor sizeClass={"w-12 h-12"} />
         </div>
       </div>,
       standingEnabled,

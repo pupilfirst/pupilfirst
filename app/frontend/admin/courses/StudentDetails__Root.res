@@ -413,13 +413,13 @@ let pageLinks = studentId => [
   School__PageHeader.makeLink(
     ~href={`/school/students/${studentId}/details`},
     ~title=t("pages.details"),
-    ~icon="fas fa-edit",
+    ~icon="if i-edit-regular text-base font-bold",
     ~selected=true,
   ),
   School__PageHeader.makeLink(
     ~href=`/school/students/${studentId}/actions`,
     ~title=t("pages.actions"),
-    ~icon="fas fa-cog",
+    ~icon="if i-cog-regular text-base font-bold",
     ~selected=false,
   ),
   School__PageHeader.makeLink(

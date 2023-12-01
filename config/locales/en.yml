@@ -1010,7 +1010,7 @@ en:
         label: Do you have any completion instructions for the student?
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: Enter a valid link
       enter_valid_title: Enter a valid title
       github_action:

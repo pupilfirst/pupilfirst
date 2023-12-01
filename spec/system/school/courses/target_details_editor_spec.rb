@@ -62,7 +62,7 @@ feature "Target Details Editor", js: true do
 
     expect(page).to_not have_content("Is this assignment a milestone?")
     expect(page).to_not have_content(
-      "Are there any prerequisite targets with assignments?"
+      "Does this assignment have any prerequisites?"
     )
     expect(page).to_not have_content(
       "Will a coach review submissions on this assignment?"
@@ -71,9 +71,7 @@ feature "Target Details Editor", js: true do
     within("div#has_assignment") { click_button "Yes" }
 
     expect(page).to have_content("Is this assignment a milestone?")
-    expect(page).to have_content(
-      "Are there any prerequisite targets with assignments?"
-    )
+    expect(page).to have_content("Does this assignment have any prerequisites?")
     expect(page).to have_content(
       "Will a coach review submissions on this assignment?"
     )
@@ -322,9 +320,7 @@ feature "Target Details Editor", js: true do
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
-    expect(page).to have_text(
-      "Are there any prerequisite targets with assignments?"
-    )
+    expect(page).to have_text("Does this assignment have any prerequisites?")
 
     within("div#prerequisite_targets") do
       expect(page).to have_text(target_2_l2.title)
@@ -385,9 +381,7 @@ feature "Target Details Editor", js: true do
                      id: target_1_l2.id
                    )
 
-    expect(page).to have_text(
-      "Are there any prerequisite targets with assignments?"
-    )
+    expect(page).to have_text("Does this assignment have any prerequisites?")
 
     # Can refresh the page without any confirm dialog
     visit current_path
@@ -477,7 +471,7 @@ feature "Target Details Editor", js: true do
                        id: target_2_l2.id
                      )
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Change the existing item
@@ -656,7 +650,7 @@ feature "Target Details Editor", js: true do
                        id: target_2_l2.id
                      )
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Change the existing item
@@ -876,7 +870,7 @@ feature "Target Details Editor", js: true do
                      )
 
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Move checklist item 1 down
@@ -953,14 +947,14 @@ feature "Target Details Editor", js: true do
                        id: quiz_target.id
                      )
       expect(page).to_not have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Change target into an evaluated target with checklist
       within("div#evaluated") { click_button "Yes" }
 
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Remove the default checklist item
@@ -969,7 +963,7 @@ feature "Target Details Editor", js: true do
       end
 
       expect(page).to have_text(
-        "There are currently no questions for the student to submit. The target needs to have atleast one question."
+        "There are currently no questions for the student to submit. The assignment needs to have atleast one question."
       )
 
       find("button[title='Select #{evaluation_criterion.display_name}']").click
@@ -1018,7 +1012,7 @@ feature "Target Details Editor", js: true do
                        )
 
         expect(page).to have_text(
-          "What steps should the student take to complete this target?"
+          "What steps should the student take to complete this assignment?"
         )
 
         click_button "Add another question"

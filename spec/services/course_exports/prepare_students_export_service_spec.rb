@@ -311,7 +311,7 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_2.email,
-            "1/2",
+            { value: "1/2", style: "default" },
             nil,
             { "value" => "x", "style" => "failing-grade" }
           ],

@@ -14,6 +14,15 @@ module Layouts
       }
     end
 
+    def course_thumbnail
+      return @course_thumbnail if defined?(@course_thumbnail)
+
+      @course_thumbnail = {
+        available: @course.thumbnail_url.present?,
+        url: @course.thumbnail_url
+      }
+    end
+
     def courses
       if current_user.blank?
         current_school

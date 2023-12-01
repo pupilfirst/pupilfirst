@@ -102,6 +102,36 @@ module ValidateAssignmentEditable
     end
   end
 
+  class PrerequisitesNotArchived < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      prerequisite_targets = value[:prerequisite_targets]
+      prerequisite_assignments =
+        Assignment.where(target_id: prerequisite_targets)
+      non_archived_assignments = prerequisite_assignments.not_archived
+      non_archived_targets =
+        Target
+          .where(id: prerequisite_targets)
+          .where.not(visibility: Target::VISIBILITY_ARCHIVED)
+
+      if prerequisite_targets.uniq.count == non_archived_targets.count &&
+           prerequisite_assignments.count == non_archived_assignments.count
+        return
+      end
+
+      I18n.t("mutations.update_target.prerequisities_archived_error")
+    end
+  end
+
+  class TargetNotPrerequisiteToItself < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      prerequisite_targets = value[:prerequisite_targets]
+
+      return unless prerequisite_targets.include?(value[:id])
+
+      I18n.t("mutations.update_target.prerequisities_self_error")
+    end
+  end
+
   included do
     argument :target_id, GraphQL::Types::ID, required: true
     argument :role, GraphQL::Types::String, required: true
@@ -114,11 +144,11 @@ module ValidateAssignmentEditable
     argument :archived, GraphQL::Types::Boolean, required: false
 
     validates ValidateAssignmentAndEvaluationCriteria => {}
-    # validates PrerequisitesNotArchived => {}
+    validates PrerequisitesNotArchived => {}
     validates OnlyOneMethodOfCompletion => {}
     validates ChecklistHasValidData => {}
     validates ChecklistHasValidLength => {}
-    # validates TargetNotPrerequisiteToItself => {}
+    validates TargetNotPrerequisiteToItself => {}
   end
 
   def assignment_params

@@ -77,11 +77,11 @@ feature "User standing", js: true do
 
         expect(page).to have_text(user.full_title)
 
-        within("div[aria-label='Current Standing Card']") do
+        within("div[aria-label='Current standing card']") do
           expect(page).to have_text(standing_3.name)
         end
 
-        within("div[aria-label='Current Standing Shield']") do
+        within("div[aria-label='Current standing shield']") do
           svg_content = find("svg")
           expect(svg_content[:fill]).to include(standing_3.color)
         end

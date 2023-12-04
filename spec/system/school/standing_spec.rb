@@ -126,8 +126,6 @@ feature "School Standing", js: true do
     scenario "School admin tries to add code of conduct for the school" do
       sign_in_user school_admin.user, referrer: standing_school_path
 
-      click_button "Yes"
-
       expect(page).to have_text("Enabled")
 
       expect(page).to have_link("Add CoC")

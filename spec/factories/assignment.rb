@@ -41,7 +41,7 @@ FactoryBot.define do
       after(:create) do |assignment|
         evaluation_criteria =
           create :evaluation_criterion, course: assignment.course
-        create :assignment_evaluation_criterion,
+        create :assignments_evaluation_criterion,
                assignment: assignment,
                evaluation_criterion: evaluation_criteria
         assignment.reload

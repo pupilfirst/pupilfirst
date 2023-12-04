@@ -86,8 +86,8 @@ module Levels
     end
 
     def create_assignment_evaluation_criteria(old_assignment, new_assignment)
-      old_assignment.assignment_evaluation_criteria.each do |a_ec|
-        new_assignment.assignment_evaluation_criteria.create!(
+      old_assignment.assignments_evaluation_criteria.each do |a_ec|
+        new_assignment.assignments_evaluation_criteria.create!(
           evaluation_criterion:
             create_evaluation_criteria(
               a_ec.evaluation_criterion,

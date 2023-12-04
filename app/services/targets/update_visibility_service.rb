@@ -27,7 +27,7 @@ module Targets
 
     def detach_from_prerequisites
       AssignmentsPrerequisiteAssignment.transaction do
-        Assignments::DetachFromPrerequisitesService.new([@target]).execute
+        Assignments::DetachFromPrerequisitesService.new([assignment]).execute
       end
     end
 
@@ -46,7 +46,8 @@ module Targets
     end
 
     def assignment
-      @target.assignments.not_archived.first
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
     end
   end
 end

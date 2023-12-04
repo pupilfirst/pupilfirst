@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :assignment_evaluation_criterion do
+  factory :assignments_evaluation_criterion do
     assignment
     evaluation_criterion
   end

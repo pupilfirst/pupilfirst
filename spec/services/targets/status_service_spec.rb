@@ -70,9 +70,9 @@ describe Targets::StatusService do
         end
 
         before do
-          student_target_1.prerequisite_targets << [
-            team_target_1,
-            student_target_2
+          student_target_1.assignments.first.prerequisite_assignments << [
+            team_target_1.assignments.first,
+            student_target_2.assignments.first
           ]
         end
 

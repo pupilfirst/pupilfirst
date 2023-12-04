@@ -259,7 +259,7 @@ describe Levels::CloneService do
       ).to eq(prerequisite_target.title)
 
       evaluated_targets =
-        new_level.targets.joins(assignments: :assignment_evaluation_criteria)
+        new_level.targets.joins(assignments: :assignments_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
 
       expect(
@@ -402,7 +402,7 @@ describe Levels::CloneService do
       ).to eq(prerequisite_target.title)
 
       evaluated_targets =
-        new_level.targets.joins(assignments: :assignment_evaluation_criteria)
+        new_level.targets.joins(assignments: :assignments_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
 
       expect(

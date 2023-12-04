@@ -73,24 +73,24 @@ module Targets
     end
 
     def target_reviewed?
-    def target_reviewed?
       return @target_reviewed if defined?(@target_reviewed)
       @target_reviewed = assignment && assignment.evaluation_criteria.any?
     end
-    end
 
     def prerequisites_incomplete?
-      applicable_targets = @target.prerequisite_targets.live
+      applicable_assignments = assignment.prerequisite_assignments.not_archived
 
       submitted_prerequisites =
-        applicable_targets.joins(timeline_events: :timeline_event_owners).where(
+        applicable_assignments.joins(
+          timeline_events: :timeline_event_owners
+        ).where(
           timeline_event_owners: {
             student_id: @student.id,
             latest: true
           }
         )
 
-      submitted_prerequisites.count != applicable_targets.count
+      submitted_prerequisites.count != applicable_assignments.count
     end
   end
 end

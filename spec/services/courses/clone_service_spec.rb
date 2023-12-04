@@ -158,8 +158,8 @@ describe Courses::CloneService do
       original_team_count = course.teams.count
       original_student_count = course.students.count
       original_submission_count = course.timeline_events.count
-      original_quiz_questions = QuizQuestion.all.pluck(:question, :description)
-      original_answer_options = AnswerOption.all.pluck(:value, :hint)
+      original_quiz_questions = QuizQuestion.pluck(:question, :description)
+      original_answer_options = AnswerOption.pluck(:value, :hint)
       original_content_blocks_count = course.content_blocks.count
 
       original_content_blocks =
@@ -240,7 +240,7 @@ describe Courses::CloneService do
       ).to eq(prerequisite_target.title)
 
       evaluated_targets =
-        new_course.targets.joins(assignments: :assignment_evaluation_criteria)
+        new_course.targets.joins(assignments: :assignments_evaluation_criteria)
       expect(evaluated_targets.count).to eq(1)
 
       expect(

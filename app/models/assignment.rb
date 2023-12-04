@@ -1,6 +1,7 @@
 class Assignment < ApplicationRecord
   belongs_to :target
   has_one :course, through: :target
+  has_many :timeline_events, through: :target
   has_one :quiz, dependent: :restrict_with_error
   has_many :assignments_prerequisite_assignments, dependent: :destroy
   has_many :prerequisite_assignments,

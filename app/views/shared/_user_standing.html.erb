@@ -42,9 +42,9 @@
       <% if @presenter.standing_enabled? %>
         <div class="block md:grid grid-cols-8 gap-5">
           <div class="col-span-5">
-            <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg" aria-label="Current Standing Card">
+            <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg" aria-label="<%= t(".current_standing_card_aria") %>">
               <p class="-mt-12 p-3 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full"><%= t(".current_standing") %></p>
-              <div class="text-center flex flex-col items-center" aria-label="Current Standing Shield">
+              <div class="text-center flex flex-col items-center" aria-label="<%= t(".current_standing_shield_aria") %>">
                 <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
                 <p class="text-xl font-bold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
               </div>

@@ -43,7 +43,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   switch logoOnLightBg {
   | Some(logo) =>
     <div className="max-w-xs">
-      <img className="h-12" src={logo |> Customizations.url} />
+      <img className="h-12" src={logo->Customizations.url} />
     </div>
   | None => <span className="text-2xl font-bold"> {schoolName->str} </span>
   }
@@ -137,7 +137,7 @@ let emailAddress = email =>
 
 let footerLogo = (schoolName, logoOnDarkBg) =>
   switch logoOnDarkBg {
-  | Some(logo) => <img className="h-8" src={logo |> Customizations.url} />
+  | Some(logo) => <img className="h-8" src={logo->Customizations.url} />
   | None => <span className="text-lg font-bold"> {schoolName->str} </span>
   }
 
@@ -214,7 +214,7 @@ let initialState = (customizations, schoolName, schoolAbout) => {
   schoolAbout,
 }
 
-let moveLink = (linkId, kind, direction, t) => {
+let moveLink = (t, linkId, kind, direction) => {
   // find links of similar kind
   let similarKindLinks = switch kind {
   | SchoolCustomize__LinkComponent.HeaderLink => Customizations.filterLinks(~header=true, t)
@@ -259,43 +259,43 @@ let reducer = (state, action) =>
   | CloseEditor => {...state, visibleEditor: None}
   | AddLink(link) => {
       ...state,
-      customizations: state.customizations |> Customizations.addLink(link),
+      customizations: state.customizations->Customizations.addLink(link),
     }
   | UpdateLink(linkId, title, url) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateLink(linkId, title, url),
+      customizations: state.customizations->Customizations.updateLink(linkId, title, url),
     }
   | RemoveLink(linkId) => {
       ...state,
-      customizations: state.customizations |> Customizations.removeLink(linkId),
+      customizations: state.customizations->Customizations.removeLink(linkId),
     }
   | MoveLink(id, kind, direction) => {
       ...state,
-      customizations: state.customizations |> moveLink(id, kind, direction),
+      customizations: state.customizations->moveLink(id, kind, direction),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updatePrivacyPolicy(agreement),
+      customizations: state.customizations->Customizations.updatePrivacyPolicy(agreement),
     }
   | UpdateTermsAndConditions(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateTermsAndConditions(agreement),
+      customizations: state.customizations->Customizations.updateTermsAndConditions(agreement),
     }
   | UpdateCodeOfConduct(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateCodeOfConduct(agreement),
+      customizations: state.customizations->Customizations.updateCodeOfConduct(agreement),
     }
   | UpdateAddress(address) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateAddress(address),
+      customizations: state.customizations->Customizations.updateAddress(address),
     }
   | UpdateEmailAddress(emailAddress) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateEmailAddress(emailAddress),
+      customizations: state.customizations->Customizations.updateEmailAddress(emailAddress),
     }
   | UpdateImages(json) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateImages(json),
+      customizations: state.customizations->Customizations.updateImages(json),
       visibleEditor: None,
     }
   | UpdateSchoolDetails(schoolName, schoolAbout) => {
@@ -349,11 +349,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </button>
         </div>
         <div className="relative pb-1/2 md:pb-1/4 rounded-b-lg overflow-hidden">
-          {switch state.customizations |> Customizations.coverImage {
+          {switch state.customizations->Customizations.coverImage {
           | Some(image) =>
-            <img
-              className="absolute h-full w-full object-cover" src={image |> Customizations.url}
-            />
+            <img className="absolute h-full w-full object-cover" src={image->Customizations.url} />
           | None =>
             <div
               className="school-customize__cover-default absolute h-full w-full svg-bg-pattern-6"

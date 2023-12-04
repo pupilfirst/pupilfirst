@@ -23,7 +23,7 @@ let headerSection = (
 ) => {
   let name = Belt.Option.getWithDefault(preferredName, userName)
   <div
-    className="max-w-5xl mx-auto pt-12 flex flex-col md:flex-row items-start justify-start md:justify-between px-3 lg:px-0">
+    className="max-w-5xl mx-auto pt-12 flex flex-col md:flex-row items-start justify-start md:justify-between px-3 lg:px-0 gap-1">
     <div className="flex items-center justify-center gap-2">
       {switch avatarUrl {
       | Some(src) =>

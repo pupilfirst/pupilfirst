@@ -26,13 +26,13 @@ module Targets
     private
 
     def detach_from_prerequisites
-      AssignmentPrerequisite.transaction do
+      AssignmentsPrerequisiteAssignment.transaction do
         Assignments::DetachFromPrerequisitesService.new([@target]).execute
       end
     end
 
     def remove_as_prerequisite
-      AssignmentPrerequisite.where(
+      AssignmentsPrerequisiteAssignment.where(
         prerequisite_assignment: assignment
       ).delete_all
     end

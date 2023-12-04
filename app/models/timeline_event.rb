@@ -17,8 +17,8 @@ class TimelineEvent < ApplicationRecord
   belongs_to :evaluator, class_name: "Faculty", optional: true
   belongs_to :reviewer, class_name: "Faculty", optional: true
 
-  has_many :assignment_evaluation_criteria, through: :target
-  has_many :evaluation_criteria, through: :assignment_evaluation_criteria
+  has_many :assignments_evaluation_criteria, through: :target
+  has_many :evaluation_criteria, through: :assignments_evaluation_criteria
   has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
   has_many :timeline_event_grades, dependent: :destroy

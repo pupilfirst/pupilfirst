@@ -201,11 +201,13 @@ class TargetsToAssignmentsMigrations < ActiveRecord::Migration[6.1]
       end
 
     if !assignment_evaluation_criterions.empty?
-      AssignmentEvaluationCriterion.insert_all(assignment_evaluation_criterions)
+      AssignmentsEvaluationCriterion.insert_all(
+        assignment_evaluation_criterions
+      )
     end
 
     if !assignment_prerequisites.empty?
-      AssignmentPrerequisite.insert_all(assignment_prerequisites)
+      AssignmentsPrerequisiteAssignment.insert_all(assignment_prerequisites)
     end
   end
 

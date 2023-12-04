@@ -2,10 +2,11 @@ class Assignment < ApplicationRecord
   belongs_to :target
   has_one :course, through: :target
   has_one :quiz, dependent: :restrict_with_error
-  has_many :assignment_prerequisites, dependent: :destroy
-  has_many :prerequisite_assignments, through: :assignment_prerequisites
-  has_many :assignment_evaluation_criteria, dependent: :destroy
-  has_many :evaluation_criteria, through: :assignment_evaluation_criteria
+  has_many :assignments_prerequisite_assignments, dependent: :destroy
+  has_many :prerequisite_assignments,
+           through: :assignments_prerequisite_assignments
+  has_many :assignments_evaluation_criteria, dependent: :destroy
+  has_many :evaluation_criteria, through: :assignments_evaluation_criteria
 
   scope :student, -> { where(role: ROLE_STUDENT) }
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }

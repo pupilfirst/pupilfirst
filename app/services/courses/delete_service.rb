@@ -52,7 +52,7 @@ module Courses
     def delete_evaluation_criteria
       evaluation_criteria = EvaluationCriterion.where(course_id: @course.id)
 
-      AssignmentEvaluationCriterion.where(
+      AssignmentsEvaluationCriterion.where(
         evaluation_criterion_id: evaluation_criteria
       ).delete_all
       TimelineEventGrade.where(
@@ -118,7 +118,9 @@ module Courses
         .delete_all
       assignments =
         Assignment.joins(target: :course).where(courses: { id: @course.id })
-      AssignmentPrerequisite.where(assignment: assignments).delete_all
+      AssignmentsPrerequisiteAssignment.where(
+        assignment: assignments
+      ).delete_all
       assignments.delete_all
       ResourceVersion.where(
         versionable_type: "Target",

@@ -5,9 +5,9 @@ module Assignments
     end
 
     def execute
-      AssignmentPrerequisite
+      AssignmentsPrerequisiteAssignment
         .where(prerequisite_assignment: @assignments)
-        .or(AssignmentPrerequisite.where(assignment: @assignments))
+        .or(AssignmentsPrerequisiteAssignment.where(assignment: @assignments))
         .delete_all
     end
   end

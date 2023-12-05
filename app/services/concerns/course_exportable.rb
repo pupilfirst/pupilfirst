@@ -147,7 +147,7 @@ module CourseExportable
   end
 
   def target_type(target)
-    assignment = target.assignments.first
+    assignment = target.assignments.not_archived.first
     if assignment
       if assignment.evaluation_criteria.present?
         "Graded"

@@ -624,7 +624,8 @@ feature "Target Overlay", js: true do
              :with_shared_assignment,
              :with_content,
              target_group: target_group_l1,
-             given_role: Assignment::ROLE_STUDENT
+             given_role: Assignment::ROLE_STUDENT,
+             given_evaluation_criteria: [criterion_1, criterion_2]
     end
     let!(:timeline_event) do
       create :timeline_event,
@@ -632,7 +633,8 @@ feature "Target Overlay", js: true do
              latest: true,
              target: target_l1,
              owners: [student],
-             passed_at: 2.days.ago
+             passed_at: 2.days.ago,
+             evaluated_at: 2.days.ago
     end
 
     scenario "student is shown pending team members on individual targets" do

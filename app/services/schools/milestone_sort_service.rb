@@ -2,7 +2,7 @@ module Schools
   class MilestoneSortService
     def initialize(target, direction)
       @target = target
-      @assignment = @target.assignments.first
+      @assignment = @target.assignments.not_archived.first
       @direction = direction
     end
 
@@ -28,8 +28,9 @@ module Schools
       Target.transaction do
         milestones.each do |milestone|
           new_index = milestone_ids.index(milestone.id.to_i) + 1
-          unless milestone.assignments.first.milestone_number == new_index
-            milestone.assignments.first.update!(milestone_number: new_index)
+          milestone_assignment = milestone.assignments.first
+          unless milestone_assignment.milestone_number == new_index
+            milestone_assignment.update!(milestone_number: new_index)
           end
         end
       end

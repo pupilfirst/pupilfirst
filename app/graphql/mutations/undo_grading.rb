@@ -34,7 +34,7 @@ module Mutations
         # Clear existing grades
         TimelineEventGrade.where(timeline_event: submission).destroy_all
 
-        if submission.target.assignments.first.milestone
+        if submission.target.assignments.not_archived.first.milestone
           submission.students.find_each do |student|
             student.update!(completed_at: nil)
           end

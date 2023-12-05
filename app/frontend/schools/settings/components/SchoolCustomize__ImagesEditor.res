@@ -9,7 +9,8 @@ type action =
   | SelectLogoOnLightBgFile(string, bool)
   | SelectLogoOnDarkBgFile(string, bool)
   | SelectCoverImageFile(string, bool)
-  | SelectIconFile(string, bool)
+  | SelectIconOnLightBgFile(string, bool)
+  | SelectIconOnDarkBgFile(string, bool)
   | BeginUpdate
   | ErrorOccured
   | DoneUpdating
@@ -21,8 +22,10 @@ type state = {
   logoOnDarkBgInvalid: bool,
   coverImageFilename: option<string>,
   coverImageInvalid: bool,
-  iconFilename: option<string>,
-  iconInvalid: bool,
+  iconOnLightBgFilename: option<string>,
+  iconOnLightBgInvalid: bool,
+  iconOnDarkBgFilename: option<string>,
+  iconOnDarkBgInvalid: bool,
   updating: bool,
   formDirty: bool,
 }
@@ -56,7 +59,11 @@ let updateButtonDisabled = state =>
   if state.updating {
     true
   } else {
-    !state.formDirty || (state.logoOnLightBgInvalid || state.iconInvalid)
+    !state.formDirty ||
+    (state.logoOnLightBgInvalid ||
+    state.iconOnLightBgInvalid ||
+    state.iconOnDarkBgInvalid ||
+    state.logoOnDarkBgInvalid)
   }
 
 let maxAllowedSize = 2 * 1024 * 1024
@@ -84,9 +91,14 @@ let updateCoverImage = (send, event) => {
   send(SelectCoverImageFile(imageFile["name"], imageFile->isInvalidImageFile))
 }
 
-let updateIcon = (send, event) => {
+let updateIconOnLightBg = (send, event) => {
   let imageFile = ReactEvent.Form.target(event)["files"][0]
-  send(SelectIconFile(imageFile["name"], imageFile->isInvalidImageFile))
+  send(SelectIconOnLightBgFile(imageFile["name"], imageFile->isInvalidImageFile))
+}
+
+let updateIconOnDarkBg = (send, event) => {
+  let imageFile = ReactEvent.Form.target(event)["files"][0]
+  send(SelectIconOnDarkBgFile(imageFile["name"], imageFile->isInvalidImageFile))
 }
 
 let imageUploader = (
@@ -128,8 +140,10 @@ let initialState = () => {
   logoOnDarkBgInvalid: false,
   coverImageFilename: None,
   coverImageInvalid: false,
-  iconFilename: None,
-  iconInvalid: false,
+  iconOnLightBgFilename: None,
+  iconOnLightBgInvalid: false,
+  iconOnDarkBgFilename: None,
+  iconOnDarkBgInvalid: false,
   updating: false,
   formDirty: false,
 }
@@ -148,10 +162,16 @@ let reducer = (state, action) =>
       logoOnDarkBgInvalid: invalid,
       formDirty: true,
     }
-  | SelectIconFile(name, invalid) => {
+  | SelectIconOnLightBgFile(name, invalid) => {
       ...state,
-      iconFilename: Some(name),
-      iconInvalid: invalid,
+      iconOnLightBgFilename: Some(name),
+      iconOnLightBgInvalid: invalid,
+      formDirty: true,
+    }
+  | SelectIconOnDarkBgFile(name, invalid) => {
+      ...state,
+      iconOnDarkBgFilename: Some(name),
+      iconOnDarkBgInvalid: invalid,
       formDirty: true,
     }
   | SelectCoverImageFile(name, invalid) => {
@@ -171,7 +191,8 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
   let logoOnLightBg = customizations->Customizations.logoOnLightBg
   let logoOnDarkBg = customizations->Customizations.logoOnDarkBg
   let coverImage = customizations->Customizations.coverImage
-  let icon = customizations->Customizations.iconOnLightBg
+  let iconOnLightBg = customizations->Customizations.iconOnLightBg
+  let iconOnDarkBg = customizations->Customizations.iconOnDarkBg
 
   <form
     className="mx-8 pt-8"
@@ -206,14 +227,24 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         errorState=state.logoOnDarkBgInvalid
       />
       <SchoolCustomize__ImageFileInput
-        id="sc-images-editor__icon-input"
+        id="sc-images-editor__icon-light-input"
         disabled=state.updating
-        name="icon"
-        onChange={updateIcon(send)}
-        labelText={t("icon")}
-        imageName=Some(icon |> Customizations.filename)
-        selectedImageName=state.iconFilename
-        errorState=state.iconInvalid
+        name="icon_on_light_bg"
+        onChange={updateIconOnLightBg(send)}
+        labelText={t("icon_light_label")}
+        imageName=Some(iconOnLightBg->Customizations.filename)
+        selectedImageName=state.iconOnLightBgFilename
+        errorState=state.iconOnLightBgInvalid
+      />
+      <SchoolCustomize__ImageFileInput
+        id="sc-images-editor__icon-dark-input"
+        disabled=state.updating
+        name="icon_on_dark_bg"
+        onChange={updateIconOnDarkBg(send)}
+        labelText={t("icon_dark_label")}
+        imageName=Some(iconOnDarkBg->Customizations.filename)
+        selectedImageName=state.iconOnDarkBgFilename
+        errorState=state.iconOnDarkBgInvalid
       />
       <SchoolCustomize__ImageFileInput
         id="sc-images-editor__cover-image-input"

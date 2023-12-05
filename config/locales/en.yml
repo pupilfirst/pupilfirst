@@ -1331,7 +1331,8 @@ en:
       you_selected_pre: You have selected
     SchoolCustomize__ImagesEditor:
       cover_image: Cover image
-      icon: Icon
+      icon_light_label: Icon on a light background
+      icon_dark_label: Icon on a dark background
       logo_light_label: Logo on a light background
       logo_dark_label: Logo on a dark background
       manage_images: Manage Images

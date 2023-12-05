@@ -17,6 +17,7 @@ type schoolImages = {
   logoOnDarkBg: option<file>,
   coverImage: option<file>,
   iconOnLightBg: file,
+  iconOnDarkBg: file,
 }
 
 type linkId = string
@@ -38,6 +39,7 @@ type t = {
 let logoOnLightBg = t => t.schoolImages.logoOnLightBg
 let logoOnDarkBg = t => t.schoolImages.logoOnDarkBg
 let iconOnLightBg = t => t.schoolImages.iconOnLightBg
+let iconOnDarkBg = t => t.schoolImages.iconOnDarkBg
 let coverImage = t => t.schoolImages.coverImage
 
 let url = file => file.url
@@ -160,6 +162,7 @@ let decodeImages = json => {
     logoOnDarkBg: field("logoOnDarkBg", optional(decodeFile), json),
     coverImage: field("coverImage", optional(decodeFile), json),
     iconOnLightBg: field("iconOnLightBg", decodeFile, json),
+    iconOnDarkBg: field("iconOnDarkBg", decodeFile, json),
   }
 }
 

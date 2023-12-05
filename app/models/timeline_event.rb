@@ -33,7 +33,7 @@ class TimelineEvent < ApplicationRecord
 
   scope :not_auto_verified,
         -> do
-          joins(target: { assignments: :evaluation_criteria })
+          joins(:evaluation_criteria)
             .where.not(evaluation_criteria: { id: nil })
             .distinct
         end

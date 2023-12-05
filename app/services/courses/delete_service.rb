@@ -67,6 +67,13 @@ module Courses
       Level.where(course_id: @course.id).delete_all
     end
 
+    def delete_page_reads
+      PageRead
+        .joins(student: :course)
+        .where(courses: { id: @course.id })
+        .delete_all
+    end
+
     def delete_submissions
       timeline_event_owners =
         TimelineEventOwner.joins(student: :course).where(
@@ -137,6 +144,7 @@ module Courses
 
       # clean up submissions
       delete_submissions
+      delete_page_reads
 
       # clean up enrollments and coach notes
       FacultyCohortEnrollment.where(cohort_id: cohort_ids).delete_all

@@ -12,10 +12,13 @@ module Users
         if oauth_origin[:link_data].present?
           passthru_oauth_data
         elsif @email.blank?
-          redirect_to oauth_error_url(
-                        host: oauth_origin[:fqdn],
-                        error: email_blank_flash,
-                      )
+          redirect_to(
+            oauth_error_url(
+              host: oauth_origin[:fqdn],
+              error: email_blank_flash
+            ),
+            allow_other_host: true
+          )
           nil
         else
           sign_in_at_oauth_origin
@@ -34,7 +37,11 @@ module Users
     def failure
       if oauth_origin.present?
         message = t(".denied_by", provider: oauth_origin[:provider].capitalize)
-        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
+
+        redirect_to(
+          oauth_error_url(host: oauth_origin[:fqdn], error: message),
+          allow_other_host: true
+        )
       else
         flash[:error] = t(".denied")
         redirect_to new_user_session_path
@@ -62,15 +69,18 @@ module Users
     def passthru_oauth_data
       encrypted_token =
         EncryptorService.new.encrypt(
-          { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] },
+          { auth_hash: auth_hash_data, session_id: oauth_origin[:session_id] }
         )
 
       token_url_options = {
         encrypted_token: Base64.urlsafe_encode64(encrypted_token),
-        host: oauth_origin[:fqdn],
+        host: oauth_origin[:fqdn]
       }
 
-      redirect_to user_auth_callback_url(token_url_options)
+      redirect_to user_auth_callback_url(
+                    token_url_options,
+                    allow_other_host: true
+                  )
     end
 
     # This method is called when the user is not signed in, and is trying to sign in using OAuth.
@@ -83,25 +93,31 @@ module Users
             {
               login_token: user.original_login_token,
               auth_hash: auth_hash_data,
-              session_id: oauth_origin[:session_id],
-            },
+              session_id: oauth_origin[:session_id]
+            }
           )
 
         token_url_options = {
           encrypted_token: Base64.urlsafe_encode64(encrypted_token),
-          host: oauth_origin[:fqdn],
+          host: oauth_origin[:fqdn]
         }
 
-        redirect_to user_auth_callback_url(token_url_options)
+        redirect_to(
+          user_auth_callback_url(token_url_options),
+          allow_other_host: true
+        )
       else
-        redirect_to oauth_error_url(
-                      host: oauth_origin[:fqdn],
-                      error:
-                        t(
-                          "users.omniauth_callbacks.oauth_callback.email_unregistered",
-                          email: @email,
-                        ),
-                    )
+        redirect_to(
+          oauth_error_url(
+            host: oauth_origin[:fqdn],
+            error:
+              t(
+                "users.omniauth_callbacks.oauth_callback.email_unregistered",
+                email: @email
+              )
+          ),
+          allow_other_host: true
+        )
       end
     end
 
@@ -128,8 +144,8 @@ module Users
             uid: auth_hash[:uid],
             tag:
               "#{auth_hash[:extra][:raw_info][:username]}##{auth_hash[:extra][:raw_info][:discriminator]}",
-            access_token: auth_hash[:credentials][:token],
-          },
+            access_token: auth_hash[:credentials][:token]
+          }
         }
       else
         raise_unexpected_provider(provider)
@@ -166,7 +182,7 @@ module Users
       message =
         t(
           "users.omniauth_callbacks.oauth_callback.not_receive_email",
-          provider_name: provider_name,
+          provider_name: provider_name
         )
 
       message +=

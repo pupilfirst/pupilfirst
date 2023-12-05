@@ -9,10 +9,12 @@ is managed using [Docusaurus](https://v2.docusaurus.io/).
 
 ## Serving docs locally
 
-Simply navigate to the `docs` folder, run `yarn install`, followed by the `start` script:
+Simply navigate to the `docs` folder, run `npm install`, followed by the `start` script:
 
-    cd docs
-    yarn install
-    yarn run start
+```bash
+cd docs
+npm install
+npm run start
+```
 
 This should launch the documentation website in your browser.

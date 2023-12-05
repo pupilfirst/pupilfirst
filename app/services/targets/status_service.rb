@@ -78,7 +78,12 @@ module Targets
     end
 
     def prerequisites_incomplete?
-      applicable_assignments = assignment.prerequisite_assignments.not_archived
+      applicable_assignments =
+        assignment
+          .prerequisite_assignments
+          .not_archived
+          .joins(:target)
+          .where(target: { visibility: Target::VISIBILITY_LIVE })
 
       submitted_prerequisites =
         applicable_assignments.joins(

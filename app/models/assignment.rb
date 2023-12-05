@@ -43,7 +43,7 @@ class Assignment < ApplicationRecord
   end
 
   validates :role, presence: true, inclusion: { in: valid_roles }
-  validates_with RateLimitValidator, limit: 1, scope: :target_id
+  validates_with RateLimitValidator, limit: 2, scope: :target_id
 
   def milestone_should_have_a_number
     return unless milestone?

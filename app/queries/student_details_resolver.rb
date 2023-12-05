@@ -36,7 +36,8 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def targets_completed
-    latest_submissions.passed.distinct(:target_id).count(:target_id)
+    latest_submissions.passed.distinct(:target_id).count(:target_id) +
+    student.page_reads.joins(:target).where(targets: { id: current_course_targets.non_assignment }).distinct.count(:target_id)
   end
 
   def targets_pending_review

@@ -43,6 +43,7 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
+  scope :non_assignment, -> {where.missing(:assignments)}
   scope :milestone,
         -> do
           joins(:assignments).where(

@@ -43,7 +43,7 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :non_assignment, -> {where.missing(:assignments)}
+  scope :non_assignment, -> { where.missing(:assignments) }
   scope :milestone,
         -> do
           joins(:assignments).where(
@@ -102,7 +102,6 @@ class Target < ApplicationRecord
               in: valid_target_action_types
             },
             allow_nil: true
-  validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :call_to_action, length: { maximum: 20 }
   validates :visibility,

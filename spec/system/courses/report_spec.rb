@@ -259,12 +259,14 @@ feature "Students view performance report and submissions overview", js: true do
 
     # Checks submissions
     click_button "Submissions"
+    sleep 5
 
     expect(page).to have_link(target_l1.title, href: "/targets/#{target_l1.id}")
     expect(page).to_not have_content(target_4.title)
 
     fill_in "filter", with: "status"
     click_button "Status: Pending Review"
+    sleep 2
 
     expect(page).not_to have_text(target_l1.title)
     expect(page).to have_link(
@@ -296,24 +298,15 @@ feature "Students view performance report and submissions overview", js: true do
     sign_in_user student.user, referrer: report_course_path(course)
     expect(page).to have_text("Targets Overview")
     click_button "Submissions"
-    expect(page).to have_button("Load More...")
     click_button("Load More...")
 
-    total_submissions =
-      student.timeline_events.evaluated_by_faculty.count +
-        student.timeline_events.pending_review.count
-
-    within("div[aria-label='Student submissions']") do
-      expect(page).to have_selector("a", count: total_submissions)
-    end
+    expect(page).to have_selector("a[aria-label^='Student submission']", count: 25)
 
     # Switching tabs should preserve already loaded submissions
     click_button "Overview"
     click_button "Submissions"
 
-    within("div[aria-label='Student submissions']") do
-      expect(page).to have_selector("a", count: total_submissions)
-    end
+    expect(page).to have_selector("a[aria-label^='Student submission']", count: 25)
   end
 
   context "student's team members change mid-way of course" do

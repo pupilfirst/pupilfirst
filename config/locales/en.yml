@@ -2305,8 +2305,8 @@ en:
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
     evaluation_criterion:
-      name_exists: Criterion already exists with same name, max grade and pass grade
-      no_course: "Course with ID %{course_id} does not exist"
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated

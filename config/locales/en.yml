@@ -1954,6 +1954,13 @@ en:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
+    something_went_wrong: Something went wrong!
+    vimeo:
+      2230: The upload type is invalid.
+      4003: There is a problem initiating the upload.
+      4101: Your maximum disk space has been reached.
+      4102: Your allotted weekly quota has been reached.
+      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -2244,7 +2251,7 @@ en:
         description: Your feedback will be e-mailed to the student.
         title: Feedback Sent
     create_grading:
-      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      evaluation_criteria_error: Unable to grade submission without valid evaluation criteria.
       grade_recorded: Grades Recorded
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
@@ -2558,6 +2565,7 @@ en:
         add_link_section_title: Add an event link (optional)
         calendar_label: Add event to
         color_label: Color
+        color_label_hint: Colors help you to differentiate different types of events at glance
         description_label: Event description
         edit_event_heading: Edit %{event_title}
         link_title_label: Event link title
@@ -2916,7 +2924,5 @@ en:
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: Cannot update inactive student submissions.
-    submission_should_be_live:
-      error: Such a submission does not exist, or it has been archived.
+    owners_should_be_active: Cannot update inactive student submissions.
+    submission_should_be_live: Such a submission does not exist, or it has been archived.

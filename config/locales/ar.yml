@@ -1957,6 +1957,13 @@ ar:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
+    something_went_wrong: هناك خطأ ما!
+    vimeo:
+      2230: نوع التحميل غير صالح.
+      4003: هناك مشكلة في بدء التحميل.
+      4101: لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
+      4102: لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
+      4104: لقد تم الوصول إلى الحصة اليومية المخصصة لك.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -2217,7 +2224,7 @@ ar:
         description: Your feedback will be e-mailed to the student.
         title: Feedback Sent
     create_grading:
-      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      evaluation_criteria_error: غير قادر على تقدير الإرسال دون معايير تقييم صالحة
       grade_recorded: Grades Recorded
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
@@ -2494,6 +2501,7 @@ ar:
         add_link_section_title: إضافة رابط للفعالية (إختياري)
         calendar_label: إضافة الفعالية الى
         color_label: اللون
+        color_label_hint: تساعدك الألوان على التمييز بين أنواع الأحداث المختلفة في لمحة
         description_label: الوصف
         edit_event_heading: تعديل الفعالية
         link_title_label: عنوان الرابط
@@ -2800,7 +2808,5 @@ ar:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       link_expired: That link has expired or is invalid. Please try again.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: لا يمكن تحديث إرسالية الطلاب غير النشطين
-    submission_should_be_live:
-      error: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة
+    owners_should_be_active: لا يمكن تحديث إرسالية الطلاب غير النشطين
+    submission_should_be_live: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة

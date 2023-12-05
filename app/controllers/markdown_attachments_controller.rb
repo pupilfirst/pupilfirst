@@ -19,6 +19,6 @@ class MarkdownAttachmentsController < ApplicationController
   def download
     markdown_attachment = authorize(MarkdownAttachment.where(token: params[:token]).find(params[:id]))
     markdown_attachment.update!(last_accessed_at: Time.zone.now)
-    redirect_to view_context.rails_public_blob_url(markdown_attachment.file)
+    redirect_to(view_context.rails_public_blob_url(markdown_attachment.file), allow_other_host: true)
   end
 end

@@ -21,26 +21,26 @@ class User < ApplicationRecord
   has_many :markdown_attachments, dependent: :nullify
   has_many :issued_certificates, dependent: :nullify
   has_many :locked_topics,
-           class_name: 'Topic',
-           foreign_key: 'locked_by_id',
+           class_name: "Topic",
+           foreign_key: "locked_by_id",
            inverse_of: :locked_by,
            dependent: :nullify
   has_many :post_likes, dependent: :nullify
   has_many :text_versions, dependent: :nullify
   has_many :course_exports, dependent: :nullify
   has_many :created_posts,
-           class_name: 'Post',
-           foreign_key: 'creator_id',
+           class_name: "Post",
+           foreign_key: "creator_id",
            inverse_of: :creator,
            dependent: :nullify
   has_many :edited_posts,
-           class_name: 'Post',
-           foreign_key: 'editor_id',
+           class_name: "Post",
+           foreign_key: "editor_id",
            inverse_of: :editor,
            dependent: :nullify
   has_many :coach_notes,
-           class_name: 'CoachNote',
-           foreign_key: 'author_id',
+           class_name: "CoachNote",
+           foreign_key: "author_id",
            inverse_of: :author,
            dependent: :nullify
   has_many :topic_subscription, dependent: :destroy
@@ -48,6 +48,7 @@ class User < ApplicationRecord
            foreign_key: :recipient_id,
            inverse_of: :recipient,
            dependent: :destroy
+  has_many :discord_messages, dependent: :destroy
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,
@@ -68,7 +69,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
-  scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
+  scope :with_email, ->(email) { where("lower(email) = ?", email.downcase) }
 
   before_save :capitalize_name_fragments
 
@@ -82,7 +83,7 @@ class User < ApplicationRecord
           name_fragment[0] = name_fragment[0].capitalize
           name_fragment
         end
-        .join(' ')
+        .join(" ")
   end
 
   attr_reader :delete_account_token_original
@@ -97,7 +98,7 @@ class User < ApplicationRecord
   end
 
   def original_login_token
-    @original_login_token || raise('Original login token is unavailable')
+    @original_login_token || raise("Original login token is unavailable")
   end
 
   def regenerate_reset_password_token
@@ -110,7 +111,7 @@ class User < ApplicationRecord
 
   def original_reset_password_token
     @original_reset_password_token ||
-      raise('Original reset password token is unavailable')
+      raise("Original reset password token is unavailable")
   end
 
   def regenerate_delete_account_token
@@ -123,7 +124,7 @@ class User < ApplicationRecord
 
   def original_update_email_token
     @original_update_email_token ||
-      raise('Original update email token is unavailable')
+      raise("Original update email token is unavailable")
   end
 
   def regenerate_update_email_token
@@ -157,7 +158,7 @@ class User < ApplicationRecord
     (
       login_token_generated_at +
         Rails.application.secrets.login_token_time_limit
-    ).strftime('%B %-d, %Y at %-l:%M %p')
+    ).strftime("%B %-d, %Y at %-l:%M %p")
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.
@@ -172,19 +173,9 @@ class User < ApplicationRecord
   def avatar_variant(version)
     case version
     when :mid
-      avatar.variant(
-        auto_orient: true,
-        gravity: 'center',
-        resize: '320x320^',
-        crop: '320x320+0+0'
-      ).processed
+      avatar.variant(resize_to_fill: [320, 320, crop: :attention]).processed
     when :thumb
-      avatar.variant(
-        auto_orient: true,
-        gravity: 'center',
-        resize: '100x100^',
-        crop: '100x100+0+0'
-      ).processed
+      avatar.variant(resize_to_fill: [100, 100, crop: :attention]).processed
     else
       avatar
     end
@@ -209,7 +200,7 @@ class User < ApplicationRecord
 
   # TODO: Remove User#image_or_avatar_url when all of its usages are gone. Use the avatar_url method instead, and generate initial avatars client-side.
   def image_or_avatar_url(variant: nil, background_shape: nil)
-    ActiveSupport::Deprecation.warn('Use `avatar_url` instead')
+    ActiveSupport::Deprecation.warn("Use `avatar_url` instead")
 
     if avatar.attached?
       if variant.blank?

@@ -16,13 +16,11 @@ module Discord
           roles: []
         )
       rescue Discordrb::Errors::UnknownMember
-        Rails.logger.error "Unknown member #{@user.discord_user_id}"
-        @user.update!(discord_user_id: nil)
+        Rails.logger.error "Unknown member #{@discord_user_id}"
       rescue Discordrb::Errors::NoPermission
         Rails.logger.error "No permission to update member #{@discord_user_id}"
       rescue RestClient::BadRequest => e
-        Rails
-          .logger.error "Bad request with discord_user_id: #{@discord_user_id}; #{e.response.body}"
+        Rails.logger.error "Bad request with discord_user_id: #{@discord_user_id}; #{e.response.body}"
       end
     end
   end

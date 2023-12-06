@@ -5,8 +5,8 @@
       <div class="flex-1 flex flex-col pt-4 pb-4 md:overflow-y-auto">
         <nav class="flex-1 px-4 bg-white">
           <div class="relative pb-1/2 bg-gray-800 rounded-lg">
-            <% if @course.cover_url.present? %>
-              <img class="absolute h-full w-full object-cover rounded-lg" src="<%= @course.cover_url %>" />
+            <% if presenter.course_thumbnail[:available] %>
+              <img class="absolute h-full w-full object-cover rounded-lg" src="<%= presenter.course_thumbnail[:url] %>" />
             <% else %>
               <div class="app-router-nav__course-cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "></div>
             <% end %>
@@ -32,8 +32,8 @@
     <div class="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto">
       <nav class="flex-1 px-4 bg-white">
         <div class="relative pb-1/2 bg-gray-800 rounded-lg">
-          <% if @course.cover_url.present? %>
-            <img class="absolute h-full w-full object-cover rounded-lg" src="<%= @course.cover_url %>" />
+          <% if presenter.course_thumbnail[:available] %>
+            <img class="absolute h-full w-full object-cover rounded-lg" src="<%= presenter.course_thumbnail[:url] %>" />
           <% else %>
             <div class="app-router-nav__course-cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "></div>
           <% end %>

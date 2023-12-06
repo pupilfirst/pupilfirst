@@ -119,7 +119,7 @@ feature 'Evaluation criteria index spec', js: true do
     select evaluation_criterion_1.max_grade, from: 'max_grade'
 
     click_button 'Create Criterion'
-    expect(page).to have_text("Criterion already exists with same name, max grade and pass grade")
+    expect(page).to have_text("A criterion already exists with this name and maximum grade")
   end
 
   scenario 'course author creates and edits a criterion' do

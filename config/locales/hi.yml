@@ -514,6 +514,7 @@ hi:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
+      target_read_label: Read
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: फिर से रिकॉर्ड करें
       button_text_start_recording: रिकॉर्डिंग शुरू
@@ -572,6 +573,8 @@ hi:
       learn_cta_submit_work: समीक्षा के लिए कार्य सबमिट करें
       learn_cta_take_quiz: कोई प्रश्नोत्तरी लें
       learn_tab: सीखना
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: अगला निशाना
       pending_team_members_notice: "आपके पास टीम के सदस्य हैं जिन्होंने अभी तक इस लक्ष्य को पूरा नहीं किया है:"
@@ -1004,7 +1007,7 @@ hi:
         label: क्या आपके पास छात्र के लिए कोई पूर्णता निर्देश है?
       could_not_find: आईडी के साथ चयनित मूल्यांकन मानदंड नहीं मिल सका
       describe_submission: अपने सबमिशन का वर्णन करें
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: एक मान्य लिंक दर्ज करें
       enter_valid_title: एक मान्य शीर्षक दर्ज करें
       github_action:
@@ -1021,7 +1024,7 @@ hi:
       paste_link_complete: पूरा करने के लिए लिंक पेस्ट करें
       prepare_quiz: अब प्रश्नोत्तरी तैयार करें।
       prepare_quiz_error: सभी प्रश्नों को भरा जाना चाहिए और सभी प्रश्नों के कम से कम दो उत्तर होने चाहिए।
-      prerequisite_targets_label: क्या कोई पूर्वापेक्षित लक्ष्य हैं?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: आपने सभी मूल्यांकन मानदंड चुन लिए हैं!
       search_criteria_empty: कोई मानदंड नहीं चुना गया
       search_criteria_placeholder: खोज मूल्यांकन मानदंड
@@ -1038,18 +1041,19 @@ hi:
         form_limit_warning: Maximum allowed questions is 25!
         help: लक्ष्य पर काम जमा करने के लिए एक छात्र को ये चरण पूरे करने होंगे। यह जानकारी कोच को समीक्षा के लिए दिखाई जाएगी।
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
-        label: इस लक्ष्य को पूरा करने के लिए विद्यार्थी को क्या कदम उठाने चाहिए?
+        label: What steps should the student take to complete this assignment?
       target_group: लक्ष्य समूह
-      target_method_of_completion_label: आप कैसे चाहते हैं कि छात्र लक्ष्य को पूरा करे?
-      target_reviewed_by_coach: क्या कोई कोच इस लक्ष्य पर सबमिशन की समीक्षा करेगा?
+      target_has_assignment: Does this target have an assignment?
+      target_method_of_completion_label: How do you want the student to complete the assignment?
+      target_reviewed_by_coach: Will a coach review submissions on this assignment?
       target_role:
         help: क्या एक टीम में छात्रों को व्यक्तिगत रूप से या एक साथ लक्ष्य पर काम जमा करना चाहिए?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
-        label: टीमों को इस लक्ष्य से कैसे निपटना चाहिए?
+        label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
-        label: Is this target a milestone?
+        label: Is this assignment a milestone?
       target_title_placeholder: यहां लक्ष्य शीर्षक टाइप करें
       target_visibility: लक्ष्य दृश्यता
       title: शीर्षक
@@ -1092,6 +1096,7 @@ hi:
       question: प्रश्न
       remove_question: प्रश्नोत्तरी प्रश्न निकालें
     CurriculumEditor__TargetShow:
+      assignment_label: Assignment
       draft: प्रारूप
       edit: संपादन करना
       edit_content: लक्ष्य की सामग्री संपादित करें

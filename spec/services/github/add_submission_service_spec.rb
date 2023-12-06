@@ -15,12 +15,13 @@ RSpec.describe Github::AddSubmissionService, type: :service do
   let!(:course) { create(:course, school: school) }
   let(:level) { create(:level, course: course) }
   let(:target_group) { create(:target_group, level: level) }
-  let(:target) do
+  let(:target) { create(:target, target_group: target_group) }
+  let!(:assignment) do
     create(
-      :target,
-      :with_shared_assignment,
-      with_evaluation_criterion: true,
-      target_group: target_group
+      :assignment,
+      :with_evaluation_criterion,
+      :with_default_checklist,
+      target: target
     )
   end
   let(:cohort) { create(:cohort, course: course) }

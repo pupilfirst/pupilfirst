@@ -25,23 +25,30 @@ feature "Curriculum Editor", js: true do
   let!(:target_group_1) { create :target_group, level: level_1, sort_index: 1 }
   let!(:target_group_2) { create :target_group, level: level_2, sort_index: 1 }
   let!(:target_1) { create :target, target_group: target_group_1 }
-  let!(:target_2) do
-    create :target,
-           :with_shared_assignment,
-           target_group: target_group_1,
-           given_prerequisite_targets: [target_5]
+  let!(:target_2) { create :target, target_group: target_group_1 }
+  let!(:assignment_target_2) do
+    create :assignment,
+           :with_default_checklist,
+           target: target_2,
+           prerequisite_assignments: [target_5.assignments.first]
   end
-  let!(:target_3) { create :target, target_group: target_group_2 }
-  let!(:target_4) do
-    create :target,
-           :with_shared_assignment,
-           target_group: target_group_2,
-           given_prerequisite_targets: [target_3]
+  let!(:target_3) do
+    create :target, :with_shared_assignment, target_group: target_group_2
+  end
+  let!(:target_4) { create :target, target_group: target_group_2 }
+  let!(:assignment_target_4) do
+    create :assignment,
+           :with_default_checklist,
+           target: target_4,
+           prerequisite_assignments: [target_3.assignments.first]
   end
 
   # Target with contents
   let!(:target_5) do
-    create :target, :with_content, target_group: target_group_2
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           target_group: target_group_2
   end
 
   # Data for level
@@ -311,23 +318,29 @@ feature "Curriculum Editor", js: true do
       end
 
       let!(:target_2) do
-        create :target,
-               :with_content,
-               :with_shared_assignment,
-               target_group: target_group_1,
-               given_prerequisite_targets: [target_5]
+        create :target, :with_content, target_group: target_group_1
+      end
+      let!(:assignment_target_2) do
+        create :assignment,
+               :with_default_checklist,
+               target: target_2,
+               prerequisite_assignments: [target_5.assignments.first]
       end
 
       let!(:target_3) do
-        create :target, :with_content, target_group: target_group_2
+        create :target,
+               :with_content,
+               :with_shared_assignment,
+               target_group: target_group_2
       end
 
       let!(:target_4) do
-        create :target,
-               :with_shared_assignment,
-               :with_content,
-               target_group: target_group_2,
-               given_prerequisite_targets: [target_3]
+        create :target, :with_content, target_group: target_group_2
+      end
+      let!(:assignment_target_4) do
+        create :assignment,
+               target: target_4,
+               prerequisite_assignments: [target_3.assignments.first]
       end
 
       scenario "admin copies level into the same course" do

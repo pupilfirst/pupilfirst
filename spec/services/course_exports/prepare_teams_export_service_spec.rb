@@ -82,13 +82,19 @@ describe CourseExports::PrepareTeamsExportService do
            target_group: target_group_l1_non_milestone
   end
   let!(:target_l1_quiz) do
-    create :target,
-           :with_shared_assignment,
-           given_role: Assignment::ROLE_TEAM,
-           target_group: target_group_l1_milestone,
-           given_milestone_number: 2,
-           with_quiz: true,
-           sort_index: 0
+    create :target, target_group: target_group_l1_milestone, sort_index: 0
+  end
+  let!(:assignment_target_l1_quiz) do
+    create :assignment,
+           target: target_l1_quiz,
+           milestone_number: 2,
+           milestone: true,
+           role: Assignment::ROLE_TEAM
+  end
+  let!(:quiz_target_l1) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_target_l1_quiz
   end
   let!(:target_l2_evaluated) do
     create :target,

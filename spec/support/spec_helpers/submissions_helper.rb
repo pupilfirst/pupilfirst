@@ -86,7 +86,7 @@ module SubmissionsHelper
   )
     students =
       (
-        if (assignment.team_assignment? && student.team)
+        if (target.team_target? && student.team)
           student.team.students
         else
           [student]

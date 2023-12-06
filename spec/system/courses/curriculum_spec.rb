@@ -84,11 +84,14 @@ feature "Student's view of Course Curriculum", js: true do
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:target_with_prerequisites) do
-    create :target,
-           :with_shared_assignment,
-           target_group: target_group_l4_1,
-           given_prerequisite_targets: [pending_target_g1],
-           given_role: Target::ROLE_TEAM
+    create :target, target_group: target_group_l4_1
+  end
+  let!(:assignment_target_with_prerequisites) do
+    create :assignment,
+           :with_default_checklist,
+           target: target_with_prerequisites,
+           prerequisite_assignments: [pending_target_g1.assignments.first],
+           role: Target::ROLE_TEAM
   end
   let!(:l5_reviewed_target) do
     create :target,
@@ -105,12 +108,14 @@ feature "Student's view of Course Curriculum", js: true do
            given_role: Target::ROLE_TEAM
   end
   let!(:l5_non_reviewed_target_with_prerequisite) do
-    create :target,
-           :with_shared_assignment,
-           :with_markdown,
-           target_group: target_group_l5,
-           given_role: Target::ROLE_TEAM,
-           given_prerequisite_targets: [l5_non_reviewed_target]
+    create :target, :with_markdown, target_group: target_group_l5
+  end
+  let!(:assignment_l5_non_reviewed_target_with_prerequisite) do
+    create :assignment,
+           :with_default_checklist,
+           target: l5_non_reviewed_target_with_prerequisite,
+           role: Target::ROLE_TEAM,
+           prerequisite_assignments: [l5_non_reviewed_target.assignments.first]
   end
   let!(:level_6_target) do
     create :target,
@@ -737,13 +742,13 @@ feature "Student's view of Course Curriculum", js: true do
     end
 
     context "when a reviewed target has another reviewed target as prerequisite" do
-      let!(:target_2) do
-        create :target,
-               :with_shared_assignment,
-               target_group: target_group_l1,
-               given_role: Target::ROLE_TEAM,
-               given_evaluation_criteria: [evaluation_criterion],
-               given_prerequisite_targets: [target_1]
+      let!(:target_2) { create :target, target_group: target_group_l1 }
+      let!(:assignment_target_2) do
+        create :assignment,
+               target: target_2,
+               role: Assignment::ROLE_TEAM,
+               evaluation_criteria: [evaluation_criterion],
+               prerequisite_assignments: [target_1.assignments.first]
       end
 
       before { course.update!(progression_limit: 3) }

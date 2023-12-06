@@ -422,12 +422,13 @@ feature "Target Details Editor", js: true do
       ]
     end
 
-    let!(:target_3_l2) do
-      create :target,
-             :with_shared_assignment,
-             target_group: target_group_2,
-             given_checklist: checklist_with_multiple_items,
-             given_evaluation_criteria: [evaluation_criterion]
+    let!(:target_3_l2) { create :target, target_group: target_group_2 }
+
+    let!(:assignment_target_3_l2) do
+      create :assignment,
+             target: target_3_l2,
+             checklist: checklist_with_multiple_items,
+             evaluation_criteria: [evaluation_criterion]
     end
 
     let!(:quiz_target) do
@@ -1037,18 +1038,21 @@ feature "Target Details Editor", js: true do
              target_group: target_group_l2_1,
              sort_index: 1
     end
-    let!(:target_l2_2) do
-      create :target,
-             :with_shared_assignment,
-             target_group: target_group_l2_1,
-             given_prerequisite_targets: [target_l2_1]
+    let!(:target_l2_2) { create :target, target_group: target_group_l2_1 }
+    let!(:assignment_target_l2_2) do
+      create :assignment,
+             :with_default_checklist,
+             target: target_l2_2,
+             prerequisite_assignments: [target_l2_1.assignments.first]
     end
     let!(:target_l2_3) do
-      create :target,
-             :with_shared_assignment,
-             target_group: target_group_l1,
-             sort_index: 1,
-             given_prerequisite_targets: [target_l2_2]
+      create :target, target_group: target_group_l1, sort_index: 1
+    end
+    let!(:assignment_target_l2_3) do
+      create :assignment,
+             :with_default_checklist,
+             target: target_l2_3,
+             prerequisite_assignments: [target_l2_2.assignments.first]
     end
 
     scenario "author moves a target to another group in the same level" do

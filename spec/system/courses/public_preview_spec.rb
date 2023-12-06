@@ -41,12 +41,14 @@ feature "Public preview of course curriculum", js: true do
   let!(:quiz) { create :quiz, :with_question_and_answers }
 
   let!(:target_l2) do
-    create :target,
-           :with_markdown,
-           :with_shared_assignment,
-           target_group: target_group_l2,
-           given_role: Assignment::ROLE_TEAM,
-           given_quiz: quiz
+    create :target, :with_markdown, target_group: target_group_l2
+  end
+  let!(:assignment_target_l2) do
+    create :assignment,
+           target: target_l2,
+           role: Assignment::ROLE_TEAM,
+           quiz: quiz,
+           checklist: []
   end
 
   let!(:target_l3) do

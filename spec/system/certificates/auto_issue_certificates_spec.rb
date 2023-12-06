@@ -145,12 +145,17 @@ feature "Automatic issuance of certificates", js: true do
       let!(:target_l2_2) do
         create :target,
                :with_markdown,
-               :with_shared_assignment,
-               given_role: Assignment::ROLE_TEAM,
-               given_milestone_number: 3,
-               given_quiz: quiz,
                target_group: target_group_l2,
                title: "foo"
+      end
+      let!(:assignment_target_l2_2) do
+        create :assignment,
+               role: Assignment::ROLE_TEAM,
+               milestone: true,
+               milestone_number: 3,
+               quiz: quiz,
+               checklist: [],
+               target: target_l2_2
       end
 
       scenario "student completed second and final milestone target" do

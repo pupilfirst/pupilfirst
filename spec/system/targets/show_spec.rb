@@ -35,27 +35,29 @@ feature "Target Overlay", js: true do
     create :target, :with_content, target_group: target_group_l0
   end
   let!(:target_l1) do
-    create :target,
-           :with_content,
-           :with_shared_assignment,
-           target_group: target_group_l1,
-           given_role: Assignment::ROLE_TEAM,
-           given_evaluation_criteria: [criterion_1, criterion_2],
-           with_completion_instructions: true,
-           sort_index: 0
+    create :target, :with_content, target_group: target_group_l1, sort_index: 0
+  end
+  let!(:assignment_target_l1) do
+    create :assignment,
+           :with_completion_instructions,
+           :with_default_checklist,
+           target: target_l1,
+           role: Assignment::ROLE_TEAM,
+           evaluation_criteria: [criterion_1, criterion_2]
   end
   let!(:target_l2) do
     create :target, :with_content, target_group: target_group_l2
   end
 
   let!(:target_l3) do
-    create :target,
-           :with_content,
-           :with_shared_assignment,
-           target_group: target_group_l1,
-           given_role: Assignment::ROLE_TEAM,
-           with_completion_instructions: true,
-           sort_index: 4
+    create :target, :with_content, target_group: target_group_l1, sort_index: 4
+  end
+  let!(:assignment_target_l3) do
+    create :assignment,
+           :with_completion_instructions,
+           :with_default_checklist,
+           target: target_l3,
+           role: Assignment::ROLE_TEAM
   end
 
   let!(:prerequisite_target) do
@@ -96,15 +98,19 @@ feature "Target Overlay", js: true do
   # Quiz target
   let!(:quiz_target) do
     create :target,
-           :with_shared_assignment,
            :with_content,
            target_group: target_group_l1,
            days_to_complete: 60,
-           given_role: Assignment::ROLE_TEAM,
            resubmittable: false,
-           with_completion_instructions: true,
-           sort_index: 3,
-           given_quiz: quiz
+           sort_index: 3
+  end
+  let!(:assignment_quiz_target) do
+    create :assignment,
+           :with_completion_instructions,
+           target: quiz_target,
+           role: Assignment::ROLE_TEAM,
+           quiz: quiz,
+           checklist: []
   end
 
   before do
@@ -358,12 +364,14 @@ feature "Target Overlay", js: true do
 
   context "when the target is auto-verified" do
     let!(:target_l1) do
-      create :target,
-             :with_shared_assignment,
-             :with_content,
-             target_group: target_group_l1,
-             given_role: Assignment::ROLE_TEAM,
-             with_completion_instructions: true
+      create :target, :with_content, target_group: target_group_l1
+    end
+    let!(:assignment_target_l1) do
+      create :assignment,
+             :with_completion_instructions,
+             :with_default_checklist,
+             target: target_l1,
+             role: Assignment::ROLE_TEAM
     end
 
     scenario "student completes a target by taking a quiz" do
@@ -660,13 +668,14 @@ feature "Target Overlay", js: true do
 
   context "when a pending target has prerequisites" do
     let!(:target_l1) do
-      create :target,
-             :with_shared_assignment,
-             :with_content,
-             target_group: target_group_l1,
-             given_role: Assignment::ROLE_TEAM,
-             with_completion_instructions: true,
-             given_prerequisite_targets: [prerequisite_target]
+      create :target, :with_content, target_group: target_group_l1
+    end
+    let!(:assignment_target_l1) do
+      create :assignment,
+             :with_completion_instructions,
+             target: target_l1,
+             role: Assignment::ROLE_TEAM,
+             prerequisite_assignments: [prerequisite_target.assignments.first]
     end
 
     scenario "student navigates to a prerequisite target" do
@@ -914,14 +923,18 @@ feature "Target Overlay", js: true do
       end
       let!(:target_l1) do
         create :target,
-               :with_shared_assignment,
                :with_content,
-               given_checklist: checklist,
                target_group: target_group_l1,
-               given_role: Assignment::ROLE_TEAM,
-               given_evaluation_criteria: [criterion_1, criterion_2],
-               with_completion_instructions: true,
                sort_index: 0
+      end
+
+      let!(:assignment_target_l1) do
+        create :assignment,
+               target: target_l1,
+               checklist: checklist,
+               role: Assignment::ROLE_TEAM,
+               evaluation_criteria: [criterion_1, criterion_2],
+               completion_instructions: Faker::Lorem.sentence
       end
 
       scenario "admin views the target in preview mode" do

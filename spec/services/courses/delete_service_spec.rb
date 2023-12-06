@@ -62,12 +62,19 @@ describe Courses::DeleteService do
     create :resource_version, versionable: target_reviewed_c1
   end
   let!(:target_with_quiz_c1) do
-    create :target,
-           :with_content,
-           :with_shared_assignment,
-           target_group: target_group_c1,
-           with_quiz: true,
-           given_prerequisite_targets: [target_reviewed_c1]
+    create :target, :with_content, target_group: target_group_c1
+  end
+  let!(:assignment_target_with_quiz_c1) do
+    create :assignment,
+           target: target_with_quiz_c1,
+           prerequisite_assignments: [target_reviewed_c1.assignments.first]
+  end
+  let!(:quiz_c1) do
+    create(
+      :quiz,
+      :with_question_and_answers,
+      assignment: assignment_target_with_quiz_c1
+    )
   end
   let!(:submission_c1) do
     complete_target(target_reviewed_c1, student_c1, evaluator: common_coach)
@@ -134,12 +141,19 @@ describe Courses::DeleteService do
     create :resource_version, versionable: target_reviewed_c2
   end
   let!(:target_with_quiz_c2) do
-    create :target,
-           :with_content,
-           :with_shared_assignment,
-           target_group: target_group_c2,
-           with_quiz: true,
-           given_prerequisite_targets: [target_reviewed_c2]
+    create :target, :with_content, target_group: target_group_c2
+  end
+  let!(:assignment_target_with_quiz_c2) do
+    create :assignment,
+           target: target_with_quiz_c2,
+           prerequisite_assignments: [target_reviewed_c2.assignments.first]
+  end
+  let!(:quiz_c2) do
+    create(
+      :quiz,
+      :with_question_and_answers,
+      assignment: assignment_target_with_quiz_c2
+    )
   end
   let!(:submission_c2) do
     complete_target(target_reviewed_c2, student_c2, evaluator: common_coach)

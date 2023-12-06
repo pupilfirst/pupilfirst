@@ -51,19 +51,25 @@ feature "Students view performance report and submissions overview", js: true do
            given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l3
   end
-  let(:quiz_target_1) do
-    create :target,
-           :with_shared_assignment,
-           with_quiz: true,
-           given_role: Assignment::ROLE_STUDENT,
-           target_group: target_group_l1
+
+  let!(:quiz_target_1) { create :target, target_group: target_group_l1 }
+  let!(:assignment_quiz_target_1) do
+    create :assignment, target: quiz_target_1, role: Assignment::ROLE_STUDENT
   end
-  let(:quiz_target_2) do
-    create :target,
-           :with_shared_assignment,
-           with_quiz: true,
-           given_role: Assignment::ROLE_STUDENT,
-           target_group: target_group_l3
+  let!(:target_1_quiz) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_quiz_target_1
+  end
+
+  let!(:quiz_target_2) { create :target, target_group: target_group_l3 }
+  let!(:assignment_quiz_target_2) do
+    create :assignment, target: quiz_target_2, role: Assignment::ROLE_STUDENT
+  end
+  let!(:target_2_quiz) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_quiz_target_2
   end
 
   # Create evaluation criteria for targets

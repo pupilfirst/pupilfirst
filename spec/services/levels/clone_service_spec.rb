@@ -67,13 +67,15 @@ describe Levels::CloneService do
            target_group: target_group_l1_1
   end
 
-  let(:target_l1_2) do
-    create :target,
-           :with_content,
-           :with_shared_assignment,
-           given_prerequisite_targets: [prerequisite_target],
-           given_role: Assignment::ROLE_TEAM,
-           target_group: target_group_l1_2
+  let!(:target_l1_2) do
+    create :target, :with_content, target_group: target_group_l1_2
+  end
+
+  let!(:assignment_target_l1_2) do
+    create :assignment,
+           prerequisite_assignments: [prerequisite_target.assignments.first],
+           role: Assignment::ROLE_TEAM,
+           target: target_l1_2
   end
 
   let(:target_l2_1) do
@@ -110,14 +112,17 @@ describe Levels::CloneService do
   # Quiz target
   let!(:quiz_target) do
     create :target,
-           :with_shared_assignment,
            :with_content,
-           given_quiz: quiz,
            target_group: target_group_l1_1,
            days_to_complete: 60,
-           given_role: Assignment::ROLE_TEAM,
-           resubmittable: false,
-           with_completion_instructions: true
+           resubmittable: false
+  end
+  let!(:assignment_quiz_target) do
+    create :assignment,
+           :with_completion_instructions,
+           quiz: quiz,
+           target: quiz_target,
+           role: Assignment::ROLE_TEAM
   end
 
   def file_path(filename)

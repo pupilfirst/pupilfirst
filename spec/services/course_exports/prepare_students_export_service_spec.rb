@@ -65,20 +65,30 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let!(:target_l1_quiz) do
-    create :target,
-           :with_shared_assignment,
-           with_quiz: true,
-           target_group: target_group_l1_milestone,
-           sort_index: 0,
-           given_milestone_number: 2
+    create :target, target_group: target_group_l1_milestone, sort_index: 0
+  end
+  let!(:assignment_target_l1_quiz) do
+    create :assignment,
+           target: target_l1_quiz,
+           milestone_number: 2,
+           milestone: true
+  end
+  let!(:quiz_target_l1) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_target_l1_quiz
   end
 
   let!(:target_l1_quiz_non_milestone) do
-    create :target,
-           :with_shared_assignment,
-           with_quiz: true,
-           target_group: target_group_l1_milestone,
-           sort_index: 1
+    create :target, target_group: target_group_l1_milestone, sort_index: 1
+  end
+  let!(:assignment_target_l1_quiz_non_milestone) do
+    create :assignment, target: target_l1_quiz_non_milestone
+  end
+  let!(:quiz_target_l1_quiz_non_milestone) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_target_l1_quiz_non_milestone
   end
 
   let!(:target_l1_evaluated) do

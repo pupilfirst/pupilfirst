@@ -2298,6 +2298,9 @@ ta:
       course_not_found_error: கொடுக்கப்பட்ட ஐடியுடன் படிப்பைக் கண்டுபிடிக்க முடியவில்லை
       success_notification: உங்கள் ஏற்றுமதி செயலாக்கப்படுகிறது. அது தயாரானவுடன் உங்களுக்கு அறிவிப்போம்.
       tag_not_found_error: கொடுக்கப்பட்ட ஐடிகளுடன் குறிச்சொற்களைக் கண்டறிய முடியவில்லை
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: மேலும் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்!
       deletion_init_notification: கணக்கு நீக்குதல் தொடங்கப்பட்டது

@@ -524,6 +524,7 @@ ru:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
+      target_read_label: Read
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Записать Снова
       button_text_start_recording: Начать Запись
@@ -582,6 +583,8 @@ ru:
       learn_cta_submit_work: Отправить работу на рассмотрение
       learn_cta_take_quiz: Пройти Тест
       learn_tab: Учиться
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: След. Задача
       pending_team_members_notice: "У вас есть члены команды, которым еще предстоит выполнить эту задачу:"
@@ -1020,7 +1023,7 @@ ru:
         label: У вас есть инструкции для завершения обучения?
       could_not_find: Не удалось найти выбранный критерий оценки с идентификатором
       describe_submission: Опишите вашу работу
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: Введите действительную ссылку
       enter_valid_title: Введите правильный заголовок
       github_action:
@@ -1037,7 +1040,7 @@ ru:
       paste_link_complete: Вставьте ссылку, чтобы завершить
       prepare_quiz: Подготовьте тест прямо сейчас.
       prepare_quiz_error: Все вопросы должны быть заполнены, и на все вопросы должно быть не менее двух ответов.
-      prerequisite_targets_label: Есть ли предварительные задачи?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: Вы выбрали все критерии оценки!
       search_criteria_empty: Критерии не выбраны
       search_criteria_placeholder: Критерии оценки поиска
@@ -1054,18 +1057,19 @@ ru:
         form_limit_warning: Maximum allowed questions is 25!
         help: Это шаги, которые должен пройти студент для сдачи работы над целью. Эта информация будет показана наставнику для проверки.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
-        label: Какие шаги должен предпринять студент для достижения этой цели?
+        label: What steps should the student take to complete this assignment?
       target_group: Группа задач
-      target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
-      target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?
+      target_has_assignment: Does this target have an assignment?
+      target_method_of_completion_label: How do you want the student to complete the assignment?
+      target_reviewed_by_coach: Will a coach review submissions on this assignment?
       target_role:
         help: Должны ли студенты в команде сдавать работу по цели в индивидуальном порядке или вместе?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of completion'
-        label: Как команды должны бороться с этой целью?
+        label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
-        label: Is this target a milestone?
+        label: Is this assignment a milestone?
       target_title_placeholder: Введите название задачи здесь
       target_visibility: Видимость Задачи
       title: Заголовок
@@ -1108,6 +1112,7 @@ ru:
       question: Вопрос
       remove_question: Удалить Вопрос Теста
     CurriculumEditor__TargetShow:
+      assignment_label: Assignment
       draft: Черновик
       edit: Редактировать
       edit_content: Редактировать контент задачи

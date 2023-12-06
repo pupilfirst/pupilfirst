@@ -21,14 +21,14 @@
             <%= f.color_field :color, id: "color_picker", class: " w-6 h-6 bg-white cursor-pointer focus:outline-none", value: @standing.color || "#4338ca" %>
             <i class="if i-chevron-down-light if-fw" ></i>
           </label>
-          <div class="w-full">
+          <div class="flex-1">
             <%= f.text_field :name, placeholder: t(".name_placeholder"), required: true, class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500", maxLength: 25 %>
           </div>
         </div>
-        <div class="flex ms-27 mt-4">
+        <div class="flex ms-32 mt-4">
           <%= f.text_field :description, placeholder: t(".description_placeholder"), class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500 text-sm", maxLength:150 %>
         </div>
-        <div class="flex ms-27 mt-4">
+        <div class="flex ms-32 mt-4">
           <%= f.button t(".save_standing"), class: "btn btn-primary btn-large w-full max-w-3xl" %>
         </div>
       <% end %>

@@ -1,38 +1,40 @@
 <div class="md:pt-18 bg-gray-50">
   <section class="pt-12 pb-12 border-b border-gray-200 bg-white">
-    <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row items-start justify-between gap-1">
-      <div class="flex gap-3 items-center">
-        <div class="w-14 h-14 border-gray-200 rounded-full overflow-hidden m-1 shrink-0">
-          <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
-        </div>
-        <div>
-          <p class="text-base font-semibold"><%= @presenter.student.name %></p>
-        </div>
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="pb-5">
+        <a class="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" href="<%= students_organisation_cohort_path(@presenter.organisation, @presenter.cohort, @presenter.filters_in_url) %>"><i class="if i-arrow-left-regular"></i><%= t('shared.back_link') %></a>
       </div>
-      <div class="flex gap-4 items-center ">
-        <div class="pe-4 border-e border-gray-300">
-          <p class="text-sm text-gray-500"><%= t("shared.cohort") %></p>
-          <p class="text-sm font-semibold"><%= @presenter.cohort.name %></p>
-        </div>
-        <% if @presenter.standing_enabled? %>
-          <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
-            <div class="text-left rtl:text-right rtl:md:text-left md:text-right">
-              <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
-              <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-sm text-primary-500 hover:text-primary-700 hover:underline transition" %>
-            </div>
-            <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
-              <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-12 h-12" %>
-            </div>
+      <div class="flex flex-col md:flex-row items-start justify-between gap-2">
+        <div class="flex gap-3 items-center">
+          <div class="w-14 h-14 border-gray-200 rounded-full overflow-hidden m-1 shrink-0">
+            <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
           </div>
-        <% end %>
+          <div>
+            <p class="text-base font-semibold"><%= @presenter.student.name %></p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-4 items-center">
+          <div class="pe-4 border-e border-gray-300">
+            <p class="text-sm text-gray-500"><%= t("shared.cohort") %></p>
+            <p class="text-sm font-semibold"><%= @presenter.cohort.name %></p>
+          </div>
+          <% if @presenter.standing_enabled? %>
+            <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
+              <div class="text-left rtl:text-right rtl:md:text-left md:text-right">
+                <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
+                <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-sm text-primary-500 hover:text-primary-700 hover:underline transition" %>
+              </div>
+              <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
+                <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-12 h-12" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </section>
   <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-5">
-      <div class="pb-5">
-        <a class="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" href="<%= students_organisation_cohort_path(@presenter.organisation, @presenter.cohort, @presenter.filters_in_url) %>"><i class="if i-arrow-left-regular"></i><%= t('shared.back_link') %></a>
-      </div>
       <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5">
         <div class="col-span-2 p-5 bg-gray-100 rounded-lg">
           <h2 class="font-semibold"><%= t('.targets_overview') %></h2>

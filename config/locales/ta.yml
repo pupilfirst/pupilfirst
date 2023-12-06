@@ -514,6 +514,7 @@ ta:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
+      target_read_label: Read
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: மீண்டும் பதிவு செய்யுங்கள்
       button_text_start_recording: பதிவைத் தொடங்கவும்
@@ -572,6 +573,8 @@ ta:
       learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
       learn_cta_take_quiz: வினாடி வினா எடுங்கள்
       learn_tab: அறிய
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: அடுத்த இலக்கு
       pending_team_members_notice: "இந்த இலக்கை இன்னும் முடிக்காத குழு உறுப்பினர்கள் உங்களிடம் உள்ளனர்:"
@@ -1004,7 +1007,7 @@ ta:
         label: மாணவர்களுக்கான நிறைவு வழிமுறைகள் உங்களிடம் உள்ளதா?
       could_not_find: ஐடியுடன் தேர்ந்தெடுக்கப்பட்ட மதிப்பீட்டு அளவுகோலைக் கண்டறிய முடியவில்லை
       describe_submission: உங்கள் சமர்ப்பிப்பை விவரிக்கவும்
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: சரியான இணைப்பை உள்ளிடவும்
       enter_valid_title: சரியான தலைப்பை உள்ளிடவும்
       github_action:
@@ -1021,7 +1024,7 @@ ta:
       paste_link_complete: முடிக்க இணைப்பை ஒட்டவும்
       prepare_quiz: வினாடி வினாவை இப்போதே தயார் செய்யுங்கள்.
       prepare_quiz_error: அனைத்து கேள்விகளும் நிரப்பப்பட வேண்டும், மேலும் அனைத்து கேள்விகளுக்கும் குறைந்தது இரண்டு பதில்கள் இருக்க வேண்டும்.
-      prerequisite_targets_label: ஏதேனும் முன்நிபந்தனை இலக்குகள் உள்ளதா?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: நீங்கள் அனைத்து மதிப்பீட்டு அளவுகோல்களையும் தேர்ந்தெடுத்துள்ளீர்கள்!
       search_criteria_empty: எந்த அளவுகோலும் தேர்ந்தெடுக்கப்படவில்லை
       search_criteria_placeholder: தேடல் மதிப்பீட்டு அளவுகோல்கள்
@@ -1038,18 +1041,19 @@ ta:
         form_limit_warning: Maximum allowed questions is 25!
         help: இலக்கில் பணியைச் சமர்ப்பிக்க ஒரு மாணவர் முடிக்க வேண்டிய படிகள் இவை. இந்தத் தகவல் பயிற்சியாளருக்கு மதிப்பாய்வுக்காகக் காண்பிக்கப்படும்.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
-        label: இந்த இலக்கை முடிக்க மாணவர் என்ன நடவடிக்கைகளை எடுக்க வேண்டும்?
+        label: What steps should the student take to complete this assignment?
       target_group: இலக்கு குழு
-      target_method_of_completion_label: மாணவர் இலக்கை எப்படி முடிக்க வேண்டும் என்று விரும்புகிறீர்கள்?
-      target_reviewed_by_coach: இந்த இலக்கின் சமர்ப்பிப்புகளை பயிற்சியாளர் மதிப்பாய்வு செய்வாரா?
+      target_has_assignment: Does this target have an assignment?
+      target_method_of_completion_label: How do you want the student to complete the assignment?
+      target_reviewed_by_coach: Will a coach review submissions on this assignment?
       target_role:
         help: ஒரு குழுவில் உள்ள மாணவர்கள் தனித்தனியாகவோ அல்லது ஒன்றாகவோ இலக்கில் பணியைச் சமர்ப்பிக்க வேண்டுமா?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
-        label: இந்த இலக்கை அணிகள் எவ்வாறு எதிர்கொள்ள வேண்டும்?
+        label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
-        label: Is this target a milestone?
+        label: Is this assignment a milestone?
       target_title_placeholder: இலக்கு தலைப்பை இங்கே தட்டச்சு செய்யவும்
       target_visibility: இலக்கு தெரிவுநிலை
       title: தலைப்பு
@@ -1092,6 +1096,7 @@ ta:
       question: கேள்வி
       remove_question: வினாடி வினா கேள்வியை அகற்று
     CurriculumEditor__TargetShow:
+      assignment_label: Assignment
       draft: வரைவு
       edit: தொகு
       edit_content: இலக்கின் உள்ளடக்கத்தைத் திருத்தவும்

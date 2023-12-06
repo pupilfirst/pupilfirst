@@ -2334,6 +2334,9 @@ ru:
       course_not_found_error: Не удалось найти курс с указанным идентификатором
       success_notification: Ваш экспорт обрабатывается. Мы сообщим вам, как только он будет готов.
       tag_not_found_error: Не удалось найти теги с указанными идентификаторами
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: Проверьте свой почтовый ящик для дальнейших шагов!
       deletion_init_notification: Удаление учетной записи начато

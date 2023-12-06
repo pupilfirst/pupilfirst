@@ -514,6 +514,7 @@ ml:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
+      target_read_label: Read
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: വീണ്ടും രേഖപ്പെടുത്തുക
       button_text_start_recording: റെക്കോർഡിംഗ് ആരംഭിക്കുക
@@ -572,6 +573,8 @@ ml:
       learn_cta_submit_work: അവലോകനത്തിനായി ജോലി സമർപ്പിക്കുക
       learn_cta_take_quiz: ഒരു ക്വിസ് എടുക്കുക
       learn_tab: പഠിക്കുക
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: അടുത്ത ലക്ഷ്യം
       pending_team_members_notice: "ഈ ടാർഗെറ്റ് പൂർത്തിയാക്കാൻ ഇനിയും നിങ്ങൾക്ക് ടീം അംഗങ്ങളുണ്ട്:"
@@ -1004,7 +1007,7 @@ ml:
         label: നിങ്ങൾക്ക് വിദ്യാർത്ഥിക്ക് എന്തെങ്കിലും പൂർത്തീകരണ നിർദ്ദേശങ്ങൾ ഉണ്ടോ?
       could_not_find: ഐഡി ഉപയോഗിച്ച് തിരഞ്ഞെടുത്ത മൂല്യനിർണ്ണയ മാനദണ്ഡം കണ്ടെത്താൻ കഴിഞ്ഞില്ല
       describe_submission: നിങ്ങളുടെ സമർപ്പണം വിവരിക്കുക
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: സാധുവായ ഒരു ലിങ്ക് നൽകുക
       enter_valid_title: സാധുവായ ഒരു ശീർഷകം നൽകുക
       github_action:
@@ -1021,7 +1024,7 @@ ml:
       paste_link_complete: പൂർത്തിയാക്കാൻ ലിങ്ക് ഒട്ടിക്കുക
       prepare_quiz: ക്വിസ് ഇപ്പോൾ തയ്യാറാക്കുക.
       prepare_quiz_error: എല്ലാ ചോദ്യങ്ങളും പൂരിപ്പിക്കണം, എല്ലാ ചോദ്യങ്ങൾക്കും കുറഞ്ഞത് രണ്ട് ഉത്തരങ്ങളെങ്കിലും ഉണ്ടായിരിക്കണം.
-      prerequisite_targets_label: എന്തെങ്കിലും മുൻകൂർ ലക്ഷ്യങ്ങൾ ഉണ്ടോ?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: നിങ്ങൾ എല്ലാ മൂല്യനിർണ്ണയ മാനദണ്ഡങ്ങളും തിരഞ്ഞെടുത്തു!
       search_criteria_empty: മാനദണ്ഡങ്ങളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല
       search_criteria_placeholder: തിരയൽ മൂല്യനിർണ്ണയ മാനദണ്ഡം
@@ -1038,18 +1041,19 @@ ml:
         form_limit_warning: Maximum allowed questions is 25!
         help: ഒരു ലക്ഷ്യത്തിൽ ജോലി സമർപ്പിക്കാൻ ഒരു വിദ്യാർത്ഥി പൂർത്തിയാക്കേണ്ട ഘട്ടങ്ങളാണിത്. ഈ വിവരം കോച്ചിനെ അവലോകനത്തിനായി കാണിക്കും.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
-        label: ഈ ലക്ഷ്യം പൂർത്തിയാക്കാൻ വിദ്യാർത്ഥി എന്ത് നടപടികളാണ് സ്വീകരിക്കേണ്ടത്?
+        label: What steps should the student take to complete this assignment?
       target_group: ടാർഗെറ്റ് ഗ്രൂപ്പ്
-      target_method_of_completion_label: വിദ്യാർത്ഥി ലക്ഷ്യം എങ്ങനെ പൂർത്തിയാക്കണമെന്നാണ് നിങ്ങൾ ആഗ്രഹിക്കുന്നത്?
-      target_reviewed_by_coach: ഈ ലക്ഷ്യത്തെക്കുറിച്ചുള്ള സമർപ്പണങ്ങൾ ഒരു പരിശീലകൻ അവലോകനം ചെയ്യുമോ?
+      target_has_assignment: Does this target have an assignment?
+      target_method_of_completion_label: How do you want the student to complete the assignment?
+      target_reviewed_by_coach: Will a coach review submissions on this assignment?
       target_role:
         help: ഒരു ടീമിലെ വിദ്യാർത്ഥികൾ ഒരു ടാർഗെറ്റിലെ ജോലി വ്യക്തിഗതമായോ ഒരുമിച്ച് സമർപ്പിക്കണോ?
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
-        label: ഈ ലക്ഷ്യം ടീമുകൾ എങ്ങനെ നേരിടണം?
+        label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
-        label: Is this target a milestone?
+        label: Is this assignment a milestone?
       target_title_placeholder: ഇവിടെ ടാർഗെറ്റ് ടൈറ്റിൽ ടൈപ്പ് ചെയ്യുക
       target_visibility: ടാർഗെറ്റ് ദൃശ്യപരത
       title: തലക്കെട്ട്
@@ -1092,6 +1096,7 @@ ml:
       question: ചോദ്യം
       remove_question: ക്വിസ് ചോദ്യം നീക്കം ചെയ്യുക
     CurriculumEditor__TargetShow:
+      assignment_label: Assignment
       draft: ഡ്രാഫ്റ്റ്
       edit: എഡിറ്റ് ചെയ്യുക
       edit_content: ലക്ഷ്യത്തിന്റെ ഉള്ളടക്കം എഡിറ്റ് ചെയ്യുക

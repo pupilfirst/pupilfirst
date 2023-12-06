@@ -96,15 +96,19 @@ The _Details_ tab can be accessed by clicking on the tab once the editor is open
 
 This tab contains other basic details and configuration for the target, such as its name, whether it has an assignment, its completion method, and its visibility to the student and other course authors.
 
-### Does target have an assignment?
+### Does this target have an assignment?
 
-The first thing to decide when creating a target is whether it will have an assignment or not. Having an assignment means a student has to complete the assignment ( quiz, form submission etc) to complete the target. If you want the target to just contain the information from the content tab then you can provide the name and target group and choose the target to have no assignment.
+If you would like the student to perform an action of some kind after going through the content of the target, you can set up an assignment.
+
+Having an assignment means a student has to _complete_ the assignment - by taking a quiz, or submitting a customized form - to complete the target.
+
+If you want the target to just show information from the content tab to the student, then you can answer _"No"_ to this question.
 
 ![Choosing whether a target has assignment](../assets/curriculum_editor/target_choose_assignment.png)
 
 ### Assignment details
 
-If you choose yes to the question, then all the options for an assignment will become visible.
+If you choose _"Yes"_ to the above question, then all the options for an assignment will become visible.
 
 #### Setting assignment as a milestone
 
@@ -137,9 +141,10 @@ To decide how a student can complete an assignment, this interface asks you a fe
 
 **Does this assignment have any prerequisites?**<br/>
 You can select other assignment from the course as prerequisite assignments. This will _lock_ the assignment until the student made a submission for reviewed prerequisite assignments and completes the non reviewed prerequisite assignments.
+
 There are 3 other scenarios in which an assignment can be locked:
 
-1. The student has submissions queued for review with count greater than the progression limit set for the course. This is only applicable to targets that are reviewable.
+1. The student has submissions queued for review with count greater than the progression limit set for the course. This is only applicable to assignments that are reviewable.
 2. The student's [access to the course](/users/students#editing-student-details) has ended, because of which they have read-only access to the course content.
 3. The course's [end date](/users/courses#creating-courses) has passed, because of which students have read-only access to the course content.
 

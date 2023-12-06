@@ -44,7 +44,7 @@ If you choose No then, you would have the option to reject the submission by cli
 
 ![Rejecting a submission](../assets/reviewing_submissions/reject_submission.png)
 
-This means the student has failed the submission and they're _expected_ to re-submit the target till it is accepted. If the target in question is a milestone target, or is a prerequisite for another, this can cause other targets to [become locked](/users/targets#locked-targets) and block a student's progression in the course until they get the submission accepted.
+This means the student has failed the submission and they're _expected_ to re-submit the assignment till it is accepted. If the assignment in question is a milestone, or is a prerequisite for another, this can cause other targets to become locked and block a student's progression in the course until they get the submission accepted.
 
 If you choose Yes then the option to grade the submission will be shown which we will discuss next.
 

@@ -49,6 +49,8 @@ module Users
           end
         end
 
+      # Remove all page read entries associated with the user
+      PageRead.where(student: @user.students).delete_all
       # Cache teams with only the current user as member
       team_ids =
         Team

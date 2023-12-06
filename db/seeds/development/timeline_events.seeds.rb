@@ -30,7 +30,6 @@ after "development:students", "development:targets", "development:faculty" do
   # Add lots of reviewed submissions.
   course
     .targets
-    .joins(:target_evaluation_criteria)
     .includes(:level, :evaluation_criteria)
     .each do |target|
       # Create two such submissions per target.
@@ -72,14 +71,13 @@ after "development:students", "development:targets", "development:faculty" do
         elsif reviewed_submission && !random_passed_boolean
           reviewed_submission.timeline_event_grades.destroy_all
         end
-
       end
     end
 
   # Add a few pending review submissions and archived ones.
   course
     .targets
-    .joins(:target_evaluation_criteria, :level)
+    .joins(:level)
     .where(levels: { id: final_level.id })
     .each do |target|
       pending_review =

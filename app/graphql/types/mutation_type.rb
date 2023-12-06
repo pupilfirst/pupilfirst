@@ -82,6 +82,7 @@ class Types::MutationType < Types::BaseObject
         mutation: Mutations::UpdateImageContentBlock,
         null: false
   field :update_target, mutation: Mutations::UpdateTarget, null: false
+  field :update_assignment, mutation: Mutations::UpdateAssignment, null: false
   field :create_target_version,
         mutation: Mutations::CreateTargetVersion,
         null: false

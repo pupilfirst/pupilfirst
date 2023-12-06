@@ -111,18 +111,18 @@ module CourseExportable
     @targets ||=
       begin
         scope =
-          course
-            .targets
-            .live
-            .joins(:level)
-            .includes(:level, :evaluation_criteria, :quiz, :target_group)
+          course.targets.live.includes(
+            :level,
+            :target_group,
+            assignments: %i[quiz evaluation_criteria]
+          )
 
         scope =
           case role
           when Target::ROLE_STUDENT
-            scope.student
+            scope.where(assignments: { role: Target::ROLE_STUDENT })
           when Target::ROLE_TEAM
-            scope.team
+            scope.where(assignments: { role: Target::ROLE_TEAM })
           else
             scope
           end
@@ -130,7 +130,7 @@ module CourseExportable
         scope =
           (
             if @course_export.reviewed_only
-              scope.joins(:evaluation_criteria)
+              scope.where.not(assignments: { evaluation_criteria: { id: nil } })
             else
               scope
             end
@@ -147,14 +147,28 @@ module CourseExportable
   end
 
   def target_type(target)
-    if target.evaluation_criteria.present?
-      "Graded"
-    elsif target.quiz.present?
-      "Take Quiz"
-    elsif target.link_to_complete.present?
-      "Visit Link"
+    assignment = target.assignments.not_archived.first
+    if assignment
+      if assignment.evaluation_criteria.present?
+        "Graded"
+      elsif assignment.quiz.present?
+        "Take Quiz"
+      elsif assignment.checklist.present?
+        "Submit Form"
+      else
+        "Mark as Read"
+      end
     else
-      "Mark as Complete"
+      "Mark as Read"
+    end
+  end
+
+  def milestone?(target)
+    assignment = target.assignments.not_archived.first
+    if assignment
+      assignment.milestone? ? "Yes" : "No"
+    else
+      "No"
     end
   end
 

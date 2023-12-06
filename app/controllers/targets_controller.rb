@@ -33,6 +33,21 @@ class TargetsController < ApplicationController
              )
   end
 
+  def mark_as_read
+    student =
+      current_user
+        .students
+        .joins(:course)
+        .where(courses: { id: course.id })
+        .first if current_user.present?
+    page_read = PageRead.new(target: @target, student_id: student.id)
+    if page_read.save!
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def course

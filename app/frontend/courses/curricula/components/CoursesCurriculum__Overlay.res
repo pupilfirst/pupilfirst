@@ -1,4 +1,5 @@
 exception UnexpectedSubmissionStatus(string)
+exception UnexpectedResponse(int)
 
 %%raw(`import "./CoursesCurriculum__Overlay.css"`)
 
@@ -18,26 +19,32 @@ type tab =
 type state = {
   targetDetails: option<TargetDetails.t>,
   tab: tab,
+  targetRead: bool,
 }
 
 type action =
   | Select(tab)
   | ResetState
   | SetTargetDetails(TargetDetails.t)
+  | SetTargetRead(bool)
   | AddSubmission(Target.role)
   | PerformQuickNavigation
 
-let initialState = {targetDetails: None, tab: Learn}
+let initialState = {targetDetails: None, tab: Learn, targetRead: false}
 
 let reducer = (state, action) =>
   switch action {
-  | Select(tab) => {...state, tab: tab}
+  | Select(tab) => {...state, tab}
   | ResetState => initialState
   | SetTargetDetails(targetDetails) => {
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | PerformQuickNavigation => {targetDetails: None, tab: Learn}
+  | SetTargetRead(targetRead) => {
+      ...state,
+      targetRead,
+    }
+  | PerformQuickNavigation => {targetDetails: None, tab: Learn, targetRead: false}
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -66,8 +73,7 @@ let completionTypeToString = (completionType, targetStatus) =>
   switch (targetStatus |> TargetStatus.status, (completionType: TargetDetails.completionType)) {
   | (Pending, Evaluated) => t("completion_tab_complete")
   | (Pending, TakeQuiz) => t("completion_tab_take_quiz")
-  | (Pending, LinkToComplete) => t("completion_tab_visit_link")
-  | (Pending, MarkAsComplete) => t("completion_tab_mark_complete")
+  | (Pending, NoAssignment) => ""
   | (Pending, SubmitForm) => t("completion_tab_submit_form")
   | (
       PendingReview
@@ -93,10 +99,8 @@ let completionTypeToString = (completionType, targetStatus) =>
       SubmitForm,
     ) =>
     t("completion_tab_form_response")
-  | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-    t("completion_tab_completed")
-  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete | SubmitForm) =>
-    t("completion_tab_locked")
+  | (PendingReview | Completed | Rejected, NoAssignment) => t("completion_tab_completed")
+  | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => t("completion_tab_locked")
   }
 
 let tabToString = (targetStatus, tab) =>
@@ -117,7 +121,7 @@ let tabClasses = (selection, tab) =>
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
-    let element = Webapi.Dom.document -> Webapi.Dom.Document.getElementById("auto-verify-target")
+    let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById("auto-verify-target")
     switch element {
     | Some(e) =>
       Webapi.Dom.Element.scrollIntoView(e)
@@ -159,8 +163,7 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
       TargetDetails.submissions(targetDetails) != []
         ? tabButton(Complete(completionType), state, send, targetStatus)
         : React.null
-    | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-      tabLink(Complete(completionType), state, send, targetStatus)
+    | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
     | (Locked(_), _) => React.null
     }}
   </div>
@@ -226,7 +229,8 @@ let overlayHeaderTitleCardClasses = targetStatus =>
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fas fa-lock text-lg" /> <span className="ms-2"> {text |> str} </span>
+    <i className="fas fa-lock text-lg" />
+    <span className="ms-2"> {text |> str} </span>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
@@ -315,13 +319,40 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
+let addPageRead = (targetId, markReadCB) => {
+  open Js.Promise
+  Fetch.fetchWithInit(
+    "/targets/" ++ (targetId ++ "/mark_as_read"),
+    Fetch.RequestInit.make(
+      ~method_=Post,
+      ~headers=Fetch.HeadersInit.makeWithArray([
+        ("X-CSRF-Token", AuthenticityToken.fromHead()),
+        ("Content-Type", "application/json"),
+      ]),
+      ~credentials=Fetch.SameOrigin,
+      (),
+    ),
+  )
+  |> then_(response => {
+    if Fetch.Response.ok(response) {
+      markReadCB(targetId)
+      resolve()
+    } else {
+      Js.Promise.reject(UnexpectedResponse(response->Fetch.Response.status))
+    }
+  })
+  |> ignore
+}
+
 let learnSection = (
   send,
+  state,
   targetDetails,
   tab,
   author,
   courseId,
   targetId,
+  markReadCB,
   targetStatus,
   completionType,
 ) => {
@@ -332,7 +363,7 @@ let learnSection = (
     Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
   | (Pending | Rejected, SubmitForm) =>
     Some((Complete(completionType), t("learn_cta_submit_form"), "fas fa-feather-alt"))
-  | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
+  | (Pending | Rejected, NoAssignment) => None
   | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
   }
 
@@ -343,13 +374,50 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-      <span> <FaIcon classes={iconClasses ++ " me-2"} /> {str(linkText)} </span>
+      className="cursor-pointer flex rounded btn-success text-base justify-center w-full font-semibold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+      <span>
+        <FaIcon classes={iconClasses ++ " me-2"} />
+        {str(linkText)}
+      </span>
     </button>
   })
 
   <div className={overlayContentClasses(tab == Learn)}>
-    <CoursesCurriculum__Learn targetDetails author courseId targetId /> {linkToTab}
+    <CoursesCurriculum__Learn targetDetails author courseId targetId />
+    <div className="flex flex-wrap gap-4 mt-4">
+      {switch state.targetRead {
+      | true =>
+        <div
+          className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
+          <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="w-5 h-5 text-gray-500"
+              viewBox="0 0 16 16">
+              <path
+                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+              />
+              <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+            </svg>
+          </span>
+          <span> {str(t("marked_read"))} </span>
+        </div>
+      | false =>
+        <button
+          onClick={_ => {
+            addPageRead(targetId, markReadCB)
+            send(SetTargetRead(true))
+          }}
+          className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+          <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
+          <span> {str(t("mark_as_read"))} </span>
+        </button>
+      }}
+      {linkToTab}
+    </div>
   </div>
 }
 
@@ -363,9 +431,9 @@ let discussSection = (target, targetDetails, tab) =>
 let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
   | (Learn, TargetDetails.Evaluated | TakeQuiz | SubmitForm)
-  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => "hidden"
-  | (Learn, MarkAsComplete | LinkToComplete)
-  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => ""
+  | (Discuss, Evaluated | TakeQuiz | NoAssignment | SubmitForm) => "hidden"
+  | (Learn, NoAssignment)
+  | (Complete(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => ""
   }
 
 let completeSection = (
@@ -446,11 +514,8 @@ let completeSection = (
         preview
         checklist={targetDetails |> TargetDetails.checklist}
       />
-    | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-      <CoursesCurriculum__AutoVerify
-        target targetDetails targetStatus addSubmissionCB=addVerifiedSubmissionCB preview
-      />
-    | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => React.null
+    | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
+    | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
     }}
   </div>
 }
@@ -490,7 +555,7 @@ let performQuickNavigation = (send, _event) => {
   {
     open // Scroll to the top of the overlay before pushing the new URL.
     Webapi.Dom
-    switch document -> Document.getElementById("target-overlay") {
+    switch document->Document.getElementById("target-overlay") {
     | Some(element) => Webapi.Dom.Element.setScrollTop(element, 0.0)
     | None => ()
     }
@@ -524,7 +589,7 @@ let navigationLink = (direction, url, send) => {
 let scrollOverlayToTop = _event => {
   let element = {
     open Webapi.Dom
-    document -> Document.getElementById("target-overlay")
+    document->Document.getElementById("target-overlay")
   }
   element->Belt.Option.mapWithDefault((), element => element->Webapi.Dom.Element.setScrollTop(0.0))
 }
@@ -545,7 +610,9 @@ let quickNavigationLinks = (targetDetails, send) => {
           onClick=scrollOverlayToTop
           className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50">
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
-          <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
+          <span className="mx-2 md:hidden">
+            <i className="fas fa-arrow-up" />
+          </span>
         </button>
       </div>
       <div className="w-1/3 ms-2">
@@ -569,6 +636,8 @@ let make = (
   ~targetStatus,
   ~addSubmissionCB,
   ~targets,
+  ~targetRead,
+  ~markReadCB,
   ~statusOfTargets,
   ~users,
   ~evaluationCriteria,
@@ -576,7 +645,7 @@ let make = (
   ~preview,
   ~author,
 ) => {
-  let (state, send) = React.useReducer(reducer, initialState)
+  let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
 
@@ -621,11 +690,13 @@ let make = (
         <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
           {learnSection(
             send,
+            state,
             targetDetails,
             state.tab,
             author,
             Course.id(course),
             Target.id(target),
+            markReadCB,
             targetStatus,
             completionType,
           )}

@@ -1,5 +1,5 @@
 module Types
-  class TargetQuizAnswerType < Types::BaseObject
+  class AssignmentQuizAnswerType < Types::BaseObject
     field :id, ID, null: false
     field :answer, String, null: false
     field :hint, String, null: true

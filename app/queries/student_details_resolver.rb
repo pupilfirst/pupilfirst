@@ -36,7 +36,13 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def targets_completed
-    latest_submissions.passed.distinct(:target_id).count(:target_id)
+    latest_submissions.passed.distinct(:target_id).count(:target_id) +
+      student
+        .page_reads
+        .joins(:target)
+        .where(targets: { id: current_course_targets.non_assignment })
+        .distinct
+        .count(:target_id)
   end
 
   def targets_pending_review
@@ -85,7 +91,7 @@ class StudentDetailsResolver < ApplicationQuery
 
   def submissions_for_grades
     latest_submissions
-      .includes(:students, :target)
+      .includes(:students, target: :assignments)
       .select do |submission|
         submission.target.individual_target? ||
           (submission.student_ids.sort == student.team_student_ids)
@@ -95,18 +101,12 @@ class StudentDetailsResolver < ApplicationQuery
   def evaluation_criteria
     EvaluationCriterion
       .where(id: average_grades.pluck(:evaluation_criterion_id))
-      .map do |ec|
-        {
-          id: ec.id,
-          name: ec.name,
-          max_grade: ec.max_grade,
-        }
-      end
+      .map { |ec| { id: ec.id, name: ec.name, max_grade: ec.max_grade } }
   end
 
   def milestone_targets_completion_status
-    milestone_targets = course.targets.live.where(milestone: true)
-    passed_assignment_ids =
+    milestone_targets = course.targets.live.milestone
+    passed_target_ids =
       student
         .latest_submissions
         .where(target: milestone_targets)
@@ -117,8 +117,8 @@ class StudentDetailsResolver < ApplicationQuery
       {
         id: target.id,
         title: target.title,
-        completed: passed_assignment_ids.include?(target.id),
-        milestone_number: target.milestone_number
+        completed: passed_target_ids.include?(target.id),
+        milestone_number: target.assignments.first.milestone_number
       }
     end
   end

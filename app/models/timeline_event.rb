@@ -17,8 +17,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :evaluator, class_name: "Faculty", optional: true
   belongs_to :reviewer, class_name: "Faculty", optional: true
 
-  has_many :target_evaluation_criteria, through: :target
-  has_many :evaluation_criteria, through: :target_evaluation_criteria
+  has_many :evaluation_criteria, through: :target
   has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
   has_many :timeline_event_grades, dependent: :destroy
@@ -32,7 +31,12 @@ class TimelineEvent < ApplicationRecord
 
   delegate :title, to: :target
 
-  scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
+  scope :not_auto_verified,
+        -> do
+          left_joins(:evaluation_criteria)
+            .where.not(evaluation_criteria: { id: nil })
+            .distinct
+        end
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :live, -> { where(archived_at: nil) }
@@ -40,13 +44,13 @@ class TimelineEvent < ApplicationRecord
   scope :pending_review, -> { live.not_auto_verified.where(evaluated_at: nil) }
   scope :evaluated_by_faculty, -> { where.not(evaluated_at: nil) }
   scope :from_students,
-        ->(students) {
+        ->(students) do
           joins(:timeline_event_owners).where(
             timeline_event_owners: {
               student: students
             }
           )
-        }
+        end
 
   CHECKLIST_STATUS_NO_ANSWER = "noAnswer"
   CHECKLIST_STATUS_PASSED = "passed"

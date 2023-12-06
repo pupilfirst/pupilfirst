@@ -40,12 +40,8 @@ class TargetsController < ApplicationController
         .joins(:course)
         .where(courses: { id: course.id })
         .first if current_user.present?
-    page_read = PageRead.new(target: @target, student_id: student.id)
-    if page_read.save!
-      head :ok
-    else
-      head :unprocessable_entity
-    end
+    PageRead.where(target: @target, student_id: student.id).first_or_create
+    head :ok
   end
 
   private

@@ -2298,6 +2298,9 @@ ml:
       course_not_found_error: നൽകിയ ഐഡിയിൽ ഒരു കോഴ്സ് കണ്ടെത്താൻ കഴിഞ്ഞില്ല
       success_notification: നിങ്ങളുടെ കയറ്റുമതി പ്രോസസ്സ് ചെയ്യുകയാണ്. ഇത് തയ്യാറായാലുടൻ ഞങ്ങൾ നിങ്ങളെ അറിയിക്കും.
       tag_not_found_error: നൽകിയിരിക്കുന്ന ഐഡികളുള്ള ടാഗുകൾ കണ്ടെത്താനായില്ല
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: കൂടുതൽ നടപടികൾക്കായി നിങ്ങളുടെ ഇൻബോക്സ് പരിശോധിക്കുക!
       deletion_init_notification: അക്കൗണ്ട് ഇല്ലാതാക്കൽ ആരംഭിച്ചു

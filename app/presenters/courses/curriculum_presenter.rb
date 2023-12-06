@@ -180,7 +180,7 @@ module Courses
     def submissions
       current_student
         .latest_submissions
-        .includes(:target)
+        .includes(target: :assignments)
         .map do |submission|
           if submission.target.individual_target? ||
                submission.student_ids.sort == current_student.team_student_ids

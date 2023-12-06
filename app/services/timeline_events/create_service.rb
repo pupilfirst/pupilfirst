@@ -31,7 +31,7 @@ module TimelineEvents
                 latest: true
               )
 
-              create_team_entries(s) if @assignment.team_assignment?
+              create_team_entries(s) if @target.team_target?
 
               update_latest_flag(s)
             end
@@ -80,7 +80,7 @@ module TimelineEvents
     end
 
     def owners
-      if (@assignment.team_assignment? && @student.team)
+      if (@target.team_target? && @student.team)
         @student.team.students
       else
         @student

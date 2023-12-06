@@ -91,7 +91,7 @@ class TimelineEvent < ApplicationRecord
   end
 
   def team_submission?
-    target.assignments.first.team_assignment?
+    target.team_target?
   end
 
   def pending_review?

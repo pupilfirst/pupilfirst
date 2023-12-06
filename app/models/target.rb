@@ -183,9 +183,11 @@ class Target < ApplicationRecord
   end
 
   def title_with_milestone
-    return title unless milestone?
+    assignment = assignments.not_archived.first
+    return title unless assignment
+    return title unless assignment.milestone?
 
-    "#{I18n.t("shared.m")}#{milestone_number} - #{title}"
+    "#{I18n.t("shared.m")}#{assignment.milestone_number} - #{title}"
   end
 
   def status(student)
@@ -218,11 +220,13 @@ class Target < ApplicationRecord
   end
 
   def team_target?
-    role == ROLE_TEAM
+    assignment = assignments.not_archived.first
+    assignment && assignment.role == Assignment::ROLE_TEAM
   end
 
   def individual_target?
-    role == ROLE_STUDENT
+    assignment = assignments.not_archived.first
+    assignment && assignment.role == Assignment::ROLE_STUDENT
   end
 
   # Returns the latest submission linked to this target from a student

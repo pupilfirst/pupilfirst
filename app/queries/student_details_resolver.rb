@@ -37,7 +37,12 @@ class StudentDetailsResolver < ApplicationQuery
 
   def targets_completed
     latest_submissions.passed.distinct(:target_id).count(:target_id) +
-    student.page_reads.joins(:target).where(targets: { id: current_course_targets.non_assignment }).distinct.count(:target_id)
+      student
+        .page_reads
+        .joins(:target)
+        .where(targets: { id: current_course_targets.non_assignment })
+        .distinct
+        .count(:target_id)
   end
 
   def targets_pending_review
@@ -88,12 +93,7 @@ class StudentDetailsResolver < ApplicationQuery
     latest_submissions
       .includes(:students, target: :assignments)
       .select do |submission|
-        submission
-          .target
-          .assignments
-          .not_archived
-          .first
-          .individual_assignment? ||
+        submission.target.individual_target? ||
           (submission.student_ids.sort == student.team_student_ids)
       end
   end

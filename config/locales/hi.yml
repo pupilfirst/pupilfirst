@@ -2298,6 +2298,9 @@ hi:
       course_not_found_error: दी गई आईडी के साथ कोर्स नहीं मिल सका
       success_notification: आपका निर्यात संसाधित किया जा रहा है। जैसे ही यह तैयार होगा हम आपको सूचित करेंगे।
       tag_not_found_error: दिए गए आईडी वाले टैग नहीं ढूंढ सके
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: आगे के चरणों के लिए अपना इनबॉक्स देखें!
       deletion_init_notification: खाता हटाने की पहल

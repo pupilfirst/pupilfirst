@@ -19,8 +19,21 @@ const notify = (title, text, type) => {
     reloadRequired = true;
   }
 
-  const notificationContainer = document.getElementById("notifications");
-  document.body.appendChild(notificationContainer);
+  if (typeof window.notificationStack === "undefined") {
+    window.notificationStack = new Stack({
+      dir1: "down",
+      dir2: "left",
+      firstpos1: 20,
+      firstpos2: 20,
+      spacing1: 20,
+      spacing2: 20,
+      push: "top",
+      modal: false,
+      maxOpen: 6,
+      maxStrategy: "close",
+      maxClosureCausesWait: false,
+    });
+  }
 
   const notification = alert({
     type: type,
@@ -35,19 +48,7 @@ const notify = (title, text, type) => {
     closer: true,
     sticker: false,
     delay: 6000,
-    stack: new Stack({
-      context: notificationContainer,
-      dir1: "down",
-      dir2: "left",
-      firstpos1: 0,
-      firstpos2: 0,
-      push: "down",
-      spacing1: 0,
-      spacing2: 0,
-      maxStrategy: 'wait',
-      maxOpen: 6,
-      modal: false,
-    }),
+    stack: window.notificationStack,
     modules: new Map([...defaultModules, [PNotifyMobile, {}]]),
   });
 

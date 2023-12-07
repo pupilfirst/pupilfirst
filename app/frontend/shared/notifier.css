@@ -246,7 +246,3 @@
 [data-pnotify] .custom-paginate-count-of {
   opacity: 0.8;
 }
-
-.pnotify.pnotify-positioned{
-  position: relative;
-}

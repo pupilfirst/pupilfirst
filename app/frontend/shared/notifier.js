@@ -43,7 +43,6 @@ const notify = (title, text, type) => {
     styling: "custom",
     icons: "custom",
     mode: "light",
-    addClass: "mb-4",
     maxTextHeight: null,
     closer: true,
     sticker: false,

@@ -12,7 +12,10 @@ describe Targets::StatusService do
   let(:student_2) { create :student, cohort: cohort, team: team }
   let(:target_group) { create :target_group, level: level_2 }
   let(:student_target_1) do
-    create :target, target_group: target_group, role: Target::ROLE_STUDENT
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group,
+           given_role: Assignment::ROLE_STUDENT
   end
 
   describe "#status" do
@@ -54,16 +57,22 @@ describe Targets::StatusService do
 
       context "when the target has other prerequisite targets" do
         let(:team_target_1) do
-          create :target, target_group: target_group, role: Target::ROLE_TEAM
+          create :target,
+                 :with_shared_assignment,
+                 target_group: target_group,
+                 given_role: Assignment::ROLE_TEAM
         end
         let(:student_target_2) do
-          create :target, target_group: target_group, role: Target::ROLE_STUDENT
+          create :target,
+                 :with_shared_assignment,
+                 target_group: target_group,
+                 given_role: Assignment::ROLE_STUDENT
         end
 
         before do
-          student_target_1.prerequisite_targets << [
-            team_target_1,
-            student_target_2
+          student_target_1.assignments.first.prerequisite_assignments << [
+            team_target_1.assignments.first,
+            student_target_2.assignments.first
           ]
         end
 
@@ -79,8 +88,9 @@ describe Targets::StatusService do
           let(:team_target_1) do
             create :target,
                    :draft,
+                   :with_shared_assignment,
                    target_group: target_group,
-                   role: Target::ROLE_TEAM
+                   given_role: Target::ROLE_TEAM
           end
 
           before do

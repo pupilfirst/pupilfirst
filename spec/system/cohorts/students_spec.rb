@@ -28,29 +28,29 @@ feature "Organisation show" do
 
   let!(:target_l1) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 1
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 1
   end
 
   let!(:target_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l2,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 2
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 2
   end
 
   let!(:target_l3) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l3,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 3
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 3
   end
 
   let(:cohort) { create :cohort, course: course }
@@ -169,13 +169,13 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone completed: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone completed: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
 
       expect(page).to have_text(students.first.name)
       expect(page).not_to have_text(students.second.name)
 
       find(
-        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+        "button[title='Remove selection: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(students.second.name)
     end
@@ -197,13 +197,13 @@ feature "Organisation show" do
                      students_organisation_cohort_path(organisation, cohort)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone incomplete: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone incomplete: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
 
       expect(page).not_to have_content("#{students.first.name}\n")
       expect(page).to have_text(students.second.name)
 
       find(
-        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+        "button[title='Remove selection: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(students.first.name)
     end

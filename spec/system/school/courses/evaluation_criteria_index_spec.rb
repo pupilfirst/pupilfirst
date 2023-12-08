@@ -79,7 +79,7 @@ feature "Evaluation criteria index spec", js: true do
     expect(page).to have_text("Maximum grade is")
 
     fill_in "Name", with: new_ec_name
-    select "4", from: "max_grade"
+    select "1", from: "max_grade", exact: true
 
     click_button "Create Criterion"
 

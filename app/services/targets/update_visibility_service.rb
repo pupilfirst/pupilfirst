@@ -26,21 +26,28 @@ module Targets
     private
 
     def detach_from_prerequisites
-      TargetPrerequisite.transaction do
-        Targets::DetachFromPrerequisitesService.new([@target]).execute
+      AssignmentsPrerequisiteAssignment.transaction do
+        Assignments::DetachFromPrerequisitesService.new([assignment]).execute
       end
     end
 
     def remove_as_prerequisite
-      TargetPrerequisite.where(prerequisite_target: @target).destroy_all
+      AssignmentsPrerequisiteAssignment.where(
+        prerequisite_assignment: assignment
+      ).delete_all
     end
 
     def clear_milestone_settings
-      @target.update!(milestone: false, milestone_number: nil)
+      assignment.update!(milestone: false, milestone_number: nil) if assignment
     end
 
     def unarchive_target_group
       TargetGroups::ArchivalService.new(@target.target_group).unarchive
+    end
+
+    def assignment
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
     end
   end
 end

@@ -19,6 +19,17 @@ feature "Markdown editor", js: true do
 
   let(:intro_sentence) { Faker::Lorem.sentence }
 
+  scenario "user adds hyperlinks inside a checklist item" do
+    sign_in_user(student.user, referrer: new_topic_community_path(community))
+
+    expect(page).to have_text("Create a new topic")
+
+    add_markdown("- [ ] This is [a link to the dashboard](/dashboard)")
+    click_button "Preview"
+
+    expect { click_link "a link to the dashboard" }.not_to raise_error
+  end
+
   scenario "user uploads an image and a PDF" do
     sign_in_user(student.user, referrer: new_topic_community_path(community))
 

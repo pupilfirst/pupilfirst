@@ -186,9 +186,9 @@ feature "Certificates", js: true do
     let!(:target_group_c2) { create :target_group, level: level_c2 }
     let!(:milestone_target) do
       create :target,
+             :with_shared_assignment,
              target_group: target_group_c2,
-             milestone: true,
-             milestone_number: 1
+             given_milestone_number: 1
     end
     let!(:certificate_c2) do
       create :certificate, :active, course: course_with_milestone_target
@@ -203,9 +203,9 @@ feature "Certificates", js: true do
     let!(:milestone_target_c3) do
       create :target,
              :archived,
+             :with_shared_assignment,
              target_group: target_group_c3,
-             milestone: true,
-             milestone_number: 2
+             given_milestone_number: 2
     end
     let!(:certificate_c3) do
       create :certificate, :active, course: course_with_archived_milestone

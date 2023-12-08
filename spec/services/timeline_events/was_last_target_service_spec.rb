@@ -11,26 +11,33 @@ describe TimelineEvents::WasLastTargetService do
   let!(:team) { create :team_with_students, cohort: cohort }
   let(:student) { team.students.first }
 
-  let(:target) do
-    create :target,
+  let(:target) { create :target, target_group: target_group }
+  let!(:assignment_target) do
+    create :assignment,
+           :with_default_checklist,
            :with_evaluation_criterion,
-           role: Target::ROLE_STUDENT,
-           target_group: target_group,
-           milestone: true,
-           milestone_number: 1
+           role: Assignment::ROLE_STUDENT,
+           target: target,
+           milestone_number: 1,
+           milestone: true
   end
 
-  let(:target_2) do
-    create :target,
+  let(:target_2) { create :target, target_group: target_group }
+  let!(:assignment_target_2) do
+    create :assignment,
+           :with_default_checklist,
            :with_evaluation_criterion,
-           role: Target::ROLE_TEAM,
-           target_group: target_group,
-           milestone: true,
-           milestone_number: 2
+           role: Assignment::ROLE_TEAM,
+           target: target_2,
+           milestone_number: 2,
+           milestone: true
   end
 
   let(:target_3) do
-    create :target, role: Target::ROLE_STUDENT, target_group: target_group
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
   end
 
   describe "#was_last_target?" do

@@ -12,6 +12,14 @@ let getSystemTheme = () => {
   }
 }
 
+let getTheme = () => {
+  let themePreference =
+    Dom.Storage2.localStorage
+    ->Dom.Storage2.getItem("themePreference")
+    ->Belt.Option.getWithDefault("system")
+  themePreference == "system" ? getSystemTheme() : themePreference
+}
+
 let applyTheme = theme => {
   let root = Webapi.Dom.document->Webapi.Dom.Document.documentElement
   switch theme {
@@ -22,13 +30,7 @@ let applyTheme = theme => {
 }
 
 let setThemeBasedOnPreference = () => {
-  let themePreference = Dom.Storage2.getItem(Dom.Storage2.localStorage, "themePreference")
-  switch themePreference {
-  | Some("dark") | Some("light") => applyTheme(themePreference->Belt.Option.getExn)
-  | Some("system") => getSystemTheme()->applyTheme
-  | None => getSystemTheme()->applyTheme
-  | _ => () // Do nothing for other cases
-  }
+  getTheme()->applyTheme
 }
 
 // Add the DOMContentLoaded listener

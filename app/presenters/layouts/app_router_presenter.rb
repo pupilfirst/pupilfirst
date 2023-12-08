@@ -18,8 +18,10 @@ module Layouts
     def school_details
       {
         name: school_name,
-        logo_url: logo_url,
-        icon_url: icon_url,
+        logo_on_light_bg_url: logo_on_light_bg_url,
+        logo_on_dark_bg_url: logo_on_dark_bg_url,
+        icon_on_light_bg_url: icon_on_light_bg_url,
+        icon_on_dark_bg_url: icon_on_dark_bg_url,
         cover_image_url: cover_image_url,
         links: nav_links
       }
@@ -240,9 +242,17 @@ module Layouts
         current_school.present? ? current_school.name : "Pupilfirst"
     end
 
-    def logo_url
+    def logo_on_light_bg_url
       if current_school.logo_on_light_bg.attached?
         view.rails_public_blob_url(current_school.logo_variant(:high))
+      end
+    end
+
+    def logo_on_dark_bg_url
+      if current_school.logo_on_dark_bg.attached?
+        view.rails_public_blob_url(
+          current_school.logo_variant(:high, background: :dark)
+        )
       end
     end
 
@@ -252,9 +262,19 @@ module Layouts
       end
     end
 
-    def icon_url
+    def icon_on_light_bg_url
       if current_school.icon_on_light_bg.attached?
         view.rails_public_blob_url(current_school.icon_variant("thumb"))
+      else
+        "/favicon.png"
+      end
+    end
+
+    def icon_on_dark_bg_url
+      if current_school.icon_on_dark_bg.attached?
+        view.rails_public_blob_url(
+          current_school.icon_variant("thumb", background: :dark)
+        )
       else
         "/favicon.png"
       end

@@ -1,5 +1,7 @@
 %%raw(`import "./CourseEditor__Root.css"`)
 
+open ThemeSwitch
+
 @module("../../shared/images/add-new-course.svg")
 external addNewCourseSVG: string = "default"
 
@@ -605,7 +607,9 @@ let make = (~school) => {
               <div className="flex gap-6 px-6">
                 <div
                   className="school-overview__logo-container flex items-center bg-white p-3 border-4 border-white shadow-md ring-1 ring-gray-100 rounded-full -mt-16 overflow-hidden">
-                  {switch School.logoUrl(school) {
+                  {switch getTheme() == "light"
+                    ? School.logoOnLightBgUrl(school)
+                    : School.logoOnDarkBgUrl(school) {
                   | Some(url) =>
                     <img
                       className="h-9 md:h-12 object-contain flex text-sm items-center"

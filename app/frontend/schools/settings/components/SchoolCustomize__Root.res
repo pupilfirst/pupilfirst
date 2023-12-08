@@ -38,14 +38,17 @@ type rec action =
 and name = string
 and about = option<string>
 
-let headerLogo = (schoolName, logoOnLightBg) =>
-  switch logoOnLightBg {
-  | Some(logo) =>
-    <div className="max-w-xs">
-      <img className="h-12" src={logo->Customizations.url} />
-    </div>
-  | None => <span className="text-2xl font-bold"> {schoolName->str} </span>
+let renderLogo = (logo, imageClasses, schoolName, textSize) =>
+  switch logo {
+  | Some(logo) => <img className={imageClasses} src={logo->Customizations.url} />
+  | None => <span className={textSize ++ " font-bold"}> {schoolName->str} </span>
   }
+
+let headerLogo = (schoolName, logoOnLightBg, logoOnDarkBg) =>
+  <div className="max-w-xs">
+    {renderLogo(logoOnLightBg, "h-12 block dark:hidden", schoolName, "2xl")}
+    {renderLogo(logoOnDarkBg, "h-12 hidden dark:block", schoolName, "2xl")}
+  </div>
 
 let headerLink = ((id, title, _, _)) =>
   <div className="ms-6 text-sm font-semibold cursor-default" key=id>
@@ -134,11 +137,11 @@ let emailAddress = email =>
     </div>
   }
 
-let footerLogo = (schoolName, logoOnDarkBg) =>
-  switch logoOnDarkBg {
-  | Some(logo) => <img className="h-8" src={logo |> Customizations.url} />
-  | None => <span className="text-lg font-bold"> {schoolName->str} </span>
-  }
+let footerLogo = (schoolName, logoOnLightBg, logoOnDarkBg) =>
+  <div className="">
+    {renderLogo(logoOnLightBg, "h-8 block dark:hidden", schoolName, "text-lg")}
+    {renderLogo(logoOnDarkBg, "h-8 hidden dark:block", schoolName, "text-lg")}
+  </div>
 
 let editIcon = (additionalClasses, clickHandler, title) =>
   <button
@@ -317,7 +320,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <h1 className="font-bold"> {t("homepage")->str} </h1>
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-50 rounded p-2">
-          {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
+          {headerLogo(
+            schoolName,
+            state.customizations->Customizations.logoOnLightBg,
+            state.customizations->Customizations.logoOnDarkBg,
+          )}
           {editIcon("ms-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
         </div>
         <div className="flex items-center">
@@ -454,7 +461,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div className="flex items-center border border-dashed border-gray-500 rounded p-2">
-            {footerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
+            {footerLogo(
+              schoolName,
+              state.customizations->Customizations.logoOnLightBg,
+              state.customizations->Customizations.logoOnDarkBg,
+            )}
             {editIcon("ms-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
           </div>
           <div className="flex items-center text-sm">
@@ -500,7 +511,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="p-3 ms-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
                 src={state.customizations->Customizations.iconOnLightBg->Customizations.url}
-                className="h-5 w-5"
+                className="h-5 w-5 block dark:hidden"
+              />
+              <img
+                src={state.customizations->Customizations.iconOnDarkBg->Customizations.url}
+                className="h-5 w-5 hidden dark:block"
               />
               <span className="ms-1 text-xs font-semibold max-w-xs truncate">
                 {schoolName->str}

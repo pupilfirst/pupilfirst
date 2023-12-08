@@ -1,4 +1,5 @@
 let str = React.string
+open ThemeSwitch
 
 @val @scope(("window", "pupilfirst"))
 external maxUploadFileSize: int = "maxUploadFileSize"
@@ -20,6 +21,7 @@ type state = {
   passwordForEmailChange: string,
   showEmailChangePasswordConfirm: bool,
   dailyDigest: bool,
+  themePreference: string,
   emailForAccountDeletion: string,
   showDeleteAccountForm: bool,
   hasCurrentPassword: bool,
@@ -42,6 +44,7 @@ type action =
   | UpdateNewPassWordConfirm(string)
   | UpdateEmailForDeletion(string)
   | UpdateDailyDigest(bool)
+  | UpdateThemePreference(string)
   | UpdateAvatarUrl(option<string>)
   | ChangeDeleteAccountFormVisibility(bool)
   | SetAvatarUploadError(option<string>)
@@ -87,6 +90,11 @@ let reducer = (state, action) =>
       emailForAccountDeletion,
     }
   | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest, dirty: true}
+  | UpdateThemePreference(themePreference) => {
+      Dom.Storage2.setItem(Dom.Storage2.localStorage, "themePreference", themePreference)
+      setThemeBasedOnPreference()
+      {...state, themePreference}
+    }
   | StartSaving => {...state, saving: true}
   | ChangeDeleteAccountFormVisibility(showDeleteAccountForm) => {
       ...state,
@@ -432,6 +440,9 @@ let make = (
     disableEmailInput: true,
     avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
+    themePreference: Dom.Storage2.localStorage
+    ->Dom.Storage2.getItem("themePreference")
+    ->Belt.Option.getWithDefault("system"),
     saving: false,
     currentPassword: "",
     newPassword: "",
@@ -769,10 +780,10 @@ let make = (
                 htmlFor="theme-system"
                 className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
                 <Radio
-                  // name="theme"
                   id="theme-system"
-                  label={t("disable_email_radio")}
-                  onChange={event => {Js.log(event)}}
+                  label={t("system")}
+                  checked={state.themePreference == "system"}
+                  onChange={event => send(UpdateThemePreference("system"))}
                 />
                 <div
                   className="w-16 h-8 flex items-center justify-center p-1 rounded-md border border-gray-200 bg-gray-100">
@@ -783,10 +794,10 @@ let make = (
                 htmlFor="theme-light"
                 className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
                 <Radio
-                  // name="theme"
                   id="theme-light"
-                  label={t("disable_email_radio")}
-                  onChange={event => {Js.log(event)}}
+                  label={t("light")}
+                  checked={state.themePreference == "light"}
+                  onChange={event => send(UpdateThemePreference("light"))}
                 />
                 {themeChip("theme-pupilfirst")}
               </label>
@@ -794,10 +805,10 @@ let make = (
                 htmlFor="theme-dark"
                 className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
                 <Radio
-                  // name="theme"
                   id="theme-dark"
-                  label={t("disable_email_radio")}
-                  onChange={event => {Js.log(event)}}
+                  label={t("dark")}
+                  checked={state.themePreference == "dark"}
+                  onChange={event => send(UpdateThemePreference("dark"))}
                 />
                 {themeChip("dark")}
               </label>

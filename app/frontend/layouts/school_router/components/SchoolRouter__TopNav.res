@@ -1,5 +1,4 @@
 open SchoolRouter__Types
-open DarkSwitch
 
 let str = React.string
 
@@ -87,7 +86,6 @@ let make = (~courses, ~currentUser) => {
           hasNotifications={User.hasNotifications(currentUser)}
         />
       </div>
-      {darkSwitch()}
       <Layout__UserControls user={Some(currentUser)} />
     </div>
   </div>

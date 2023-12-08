@@ -1797,6 +1797,7 @@ en:
       update_email: Update email
       cancel: Cancel
       change_password: Change your current password
+      dark: Dark
       set_password_button_text: Set password
       set_up_password: Set up password
       set_password_subtext: You have not set a password for your account.
@@ -1825,6 +1826,7 @@ en:
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
+      light: Light
       localization: Localization
       manage_account: Manage your account in this school
       name_error: Name can't be blank
@@ -1842,6 +1844,7 @@ en:
       select_language: Select the language that you would prefer the user interface to dislpay.
       send_email_radio: Send me a daily email
       set_password: Set password for your account
+      system: System
       update_credentials: Update your login credentials for the school.
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.

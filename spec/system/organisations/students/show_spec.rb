@@ -28,38 +28,39 @@ feature "Organisation student details page and submissions list" do
 
   let(:target_l1_1) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           evaluation_criteria: [
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
 
   let(:target_l1_2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           evaluation_criteria: [
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
 
   let(:target_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 2
+           given_evaluation_criteria: [evaluation_criterion_1],
+           given_milestone_number: 2
   end
 
   let!(:target_l3) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l3,
-           evaluation_criteria: [evaluation_criterion_2]
+           given_evaluation_criteria: [evaluation_criterion_2]
   end
 
   let(:cohort) { create :cohort, course: course }

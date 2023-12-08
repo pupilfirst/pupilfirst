@@ -253,6 +253,7 @@ Rails.application.routes.draw do
     member do
       get 'details_v2'
       get ':slug', action: 'show'
+      post 'mark_as_read'
     end
   end
 

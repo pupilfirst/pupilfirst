@@ -47,7 +47,7 @@ module Cloudfront
 
       uri.query = {
         "response-content-disposition":
-          "#{content_disposition}; filename=\"#{blob.filename}\";",
+          "#{content_disposition}; filename=\"#{URI.encode_www_form_component(blob.filename)}\";",
         "response-content-type": blob.content_type
       }.to_query
 

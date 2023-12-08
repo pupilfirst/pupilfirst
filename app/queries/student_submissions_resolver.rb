@@ -5,7 +5,7 @@ class StudentSubmissionsResolver < ApplicationQuery
 
   def student_submissions
     applicable_submissions
-      .includes(:target)
+      .includes(target: :assignments)
       .distinct
       .order("timeline_events.created_at #{sort_direction_string}")
   end

@@ -23,7 +23,10 @@ let buttonContents = (formState, checklist) => {
   | Ready => checklist |> ArrayUtils.isEmpty ? tr("complete") : tr("submit")
   } |> str
 
-  <span> icon text </span>
+  <span>
+    icon
+    text
+  </span>
 }
 
 type state = {
@@ -47,7 +50,7 @@ let reducer = (state, action) =>
   | SetAttaching => {...state, formState: Attaching}
   | SetSaving => {...state, formState: Saving}
   | SetReady => {...state, formState: Ready}
-  | UpdateResponse(checklist) => {checklist: checklist, formState: Ready}
+  | UpdateResponse(checklist) => {checklist, formState: Ready}
   }
 
 let isBusy = formState =>
@@ -85,7 +88,7 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
   let checklist = state.checklist |> ChecklistItem.encodeArray
   let targetId = Target.id(target)
 
-  CreateSubmissionQuery.make({targetId: targetId, fileIds: fileIds, checklist: checklist})
+  CreateSubmissionQuery.make({targetId, fileIds, checklist})
   |> Js.Promise.then_(response => {
     switch response["createSubmission"]["submission"] {
     | Some(submission) =>
@@ -96,8 +99,7 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
       let status = switch completionType {
       | Evaluated => Submission.Pending
       | TakeQuiz
-      | LinkToComplete
-      | MarkAsComplete
+      | NoAssignment
       | SubmitForm =>
         Submission.MarkedAsComplete
       }
@@ -141,9 +143,17 @@ let statusText = formState =>
 
 let tooltipText = preview =>
   if preview {
-    <span> {tr("accessing_preview") |> str} <br /> {tr("for_course") |> str} </span>
+    <span>
+      {tr("accessing_preview") |> str}
+      <br />
+      {tr("for_course") |> str}
+    </span>
   } else {
-    <span> {tr("compete_all") |> str} <br /> {tr("steps_submit") |> str} </span>
+    <span>
+      {tr("compete_all") |> str}
+      <br />
+      {tr("steps_submit") |> str}
+    </span>
   }
 
 @react.component

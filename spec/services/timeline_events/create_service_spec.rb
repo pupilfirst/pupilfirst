@@ -7,7 +7,10 @@ describe TimelineEvents::CreateService do
   let(:level) { create :level }
   let(:target_group) { create :target_group, level: level }
   let(:target) do
-    create :target, role: Target::ROLE_STUDENT, target_group: target_group
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
   end
   let(:links) { [Faker::Internet.url, Faker::Internet.url] }
   let(:description) { Faker::Lorem.sentence }
@@ -65,7 +68,10 @@ describe TimelineEvents::CreateService do
       let(:team) { create :team_with_students }
       let(:student) { team.students.first }
       let(:target) do
-        create :target, role: Target::ROLE_TEAM, target_group: target_group
+        create :target,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_TEAM,
+               target_group: target_group
       end
 
       it "creates submission linked to all students in team" do

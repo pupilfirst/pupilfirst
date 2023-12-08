@@ -44,16 +44,13 @@ feature "Evaluation criteria index spec", js: true do
       expect(page).to have_selector("input", count: 5)
     end
 
-    select "4", from: "max_grade"
+    select "1", from: "max_grade"
 
     within('div[aria-label="label-editor"]') do
-      expect(page).to have_selector("input", count: 4)
+      expect(page).to have_selector("input", count: 1)
     end
 
-    fill_in "grade-label-for-1", with: "Okay"
-    fill_in "grade-label-for-2", with: "Good"
-    fill_in "grade-label-for-3", with: "Great"
-    fill_in "grade-label-for-4", with: "Wow"
+    fill_in "grade-label-for-1", with: "Accepted"
 
     click_button "Create Criterion"
 
@@ -64,11 +61,11 @@ feature "Evaluation criteria index spec", js: true do
     evaluation_criterion = course.evaluation_criteria.last
 
     expect(evaluation_criterion.name).to eq(new_ec_name)
-    expect(evaluation_criterion.max_grade).to eq(4)
-    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq("Okay")
-    expect(label_for_grade(evaluation_criterion.grade_labels, 2)).to eq("Good")
-    expect(label_for_grade(evaluation_criterion.grade_labels, 3)).to eq("Great")
-    expect(label_for_grade(evaluation_criterion.grade_labels, 4)).to eq("Wow")
+    expect(evaluation_criterion.max_grade).to eq(1)
+
+    expect(label_for_grade(evaluation_criterion.grade_labels, 1)).to eq(
+      "Accepted"
+    )
   end
 
   scenario "school admin adds a new criterion without labels" do
@@ -79,12 +76,16 @@ feature "Evaluation criteria index spec", js: true do
     expect(page).to have_text("Maximum grade is")
 
     fill_in "Name", with: new_ec_name
-    select "1", from: "max_grade", exact: true
+    select "4", from: "max_grade", exact: true
 
+    within('div[aria-label="label-editor"]') do
+      expect(page).to have_selector("input", count: 4)
+    end
+
+    # Don't fill in labels; simply click the "Create Criterion" button.
     click_button "Create Criterion"
 
     expect(page).to have_text("Evaluation criterion created successfully")
-    dismiss_notification
 
     evaluation_criterion = course.evaluation_criteria.last
 

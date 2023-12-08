@@ -12,6 +12,7 @@ type t = {
   sortIndex: int,
   visibility: visibility,
   milestone: bool,
+  hasAssignment: bool,
 }
 
 let id = t => t.id
@@ -25,6 +26,8 @@ let sortIndex = t => t.sortIndex
 let visibility = t => t.visibility
 
 let milestone = t => t.milestone
+
+let hasAssignment = t => t.hasAssignment
 
 let decodeVisbility = visibilityString =>
   switch visibilityString {
@@ -43,6 +46,7 @@ let decode = json => {
     sortIndex: json |> field("sortIndex", int),
     visibility: decodeVisbility(json |> field("visibility", string)),
     milestone: json |> field("milestone", bool),
+    hasAssignment: json |> field("hasAssignment", bool),
   }
 }
 
@@ -50,13 +54,14 @@ let updateArray = (targets, target) => {
   targets |> Js.Array.filter(t => t.id != target.id) |> Js.Array.concat([target])
 }
 
-let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility, ~milestone) => {
-  id: id,
-  targetGroupId: targetGroupId,
-  title: title,
-  sortIndex: sortIndex,
-  visibility: visibility,
-  milestone: milestone,
+let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility, ~milestone, ~hasAssignment) => {
+  id,
+  targetGroupId,
+  title,
+  sortIndex,
+  visibility,
+  milestone,
+  hasAssignment,
 }
 
 let sort = targets => targets |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
@@ -84,8 +89,17 @@ let updateSortIndex = sortedTargets =>
       ~sortIndex,
       ~visibility=t.visibility,
       ~milestone=t.milestone,
+      ~hasAssignment=t.hasAssignment,
     )
   )
 
 let template = (id, targetGroupId, title) =>
-  create(~id, ~targetGroupId, ~title, ~sortIndex=999, ~visibility=Draft, ~milestone=false)
+  create(
+    ~id,
+    ~targetGroupId,
+    ~title,
+    ~sortIndex=999,
+    ~visibility=Draft,
+    ~milestone=false,
+    ~hasAssignment=false,
+  )

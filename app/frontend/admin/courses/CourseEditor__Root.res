@@ -587,7 +587,8 @@ let make = (~school) => {
     <div className="flex-1 flex flex-col">
       <div className="w-full">
         <div className="max-w-full mx-auto relative overflow-hidden">
-          <div className="bg-gradient-to-r from-secondary-500 to-secondary-600 bg-cover h-40">
+          <div
+            className="bg-gradient-to-r from-secondary-500 to-secondary-600 bg-cover h-40 lg:h-56 2xl:h-64 relative">
             {switch School.coverImageUrl(school) {
             | Some(image) =>
               <img
@@ -599,7 +600,7 @@ let make = (~school) => {
               <div className="school-customize__cover-default h-full w-full svg-bg-pattern-6" />
             }}
           </div>
-          <div className="w-full bg-white p-6">
+          <div className="w-full bg-white relative p-6 z-10">
             <div className="flex items-center max-w-4xl 2xl:max-w-5xl mx-auto justify-between">
               <div className="flex gap-6 px-6">
                 <div
@@ -628,7 +629,7 @@ let make = (~school) => {
               {switch state.schoolStats {
               | Unloaded => React.null
               | Loaded(stats) =>
-                <div className="flex gap-6">
+                <div className="flex gap-6 px-6">
                   <div className="border-e pe-6">
                     <Spread props={"data-t": "school students"}>
                       <div>
@@ -655,7 +656,7 @@ let make = (~school) => {
           </div>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto w-full">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto w-full">
         <div className="w-full sticky top-0 z-30 mt-4 px-6">
           <label
             htmlFor="search_courses"
@@ -676,7 +677,7 @@ let make = (~school) => {
           />
         </div>
       </div>
-      <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl w-full">
+      <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl 2xl:max-w-5xl w-full">
         {switch state.courses {
         | Unloaded =>
           <div className="px-2 lg:px-5 mt-8">

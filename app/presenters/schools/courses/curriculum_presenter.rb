@@ -59,16 +59,27 @@ module Schools
       end
 
       def targets
-        @course.targets.map do |target|
-          {
-            id: target.id,
-            target_group_id: target.target_group_id,
-            title: target.title,
-            sort_index: target.sort_index,
-            visibility: target.visibility,
-            milestone: target.milestone
-          }
-        end
+        @course
+          .targets
+          .includes(:assignments)
+          .map do |target|
+            has_assignment = target.assignments.not_archived.any?
+            if has_assignment
+              milestone = target.assignments.not_archived.first.milestone
+            else
+              milestone = false
+            end
+
+            {
+              id: target.id,
+              target_group_id: target.target_group_id,
+              title: target.title,
+              sort_index: target.sort_index,
+              visibility: target.visibility,
+              milestone: milestone,
+              has_assignment: has_assignment
+            }
+          end
       end
 
       def vimeo_access_token?

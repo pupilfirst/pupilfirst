@@ -22,42 +22,40 @@ feature "Public preview of course curriculum", js: true do
   end
 
   # Target groups.
-  let(:target_group_l1) do
-    create :target_group, level: level_1
-  end
+  let(:target_group_l1) { create :target_group, level: level_1 }
 
-  let(:target_group_l2) do
-    create :target_group, level: level_2
-  end
+  let(:target_group_l2) { create :target_group, level: level_2 }
 
-  let(:target_group_l3) do
-    create :target_group, level: locked_level_3
-  end
+  let(:target_group_l3) { create :target_group, level: locked_level_3 }
 
   # Individual targets of different types.
   let!(:target_l1) do
     create :target,
            :with_markdown,
-           :with_default_checklist,
-           evaluation_criteria: [evaluation_criterion],
+           :with_shared_assignment,
+           given_evaluation_criteria: [evaluation_criterion],
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
 
+  let!(:quiz) { create :quiz, :with_question_and_answers }
+
   let!(:target_l2) do
-    create :target,
-           :with_markdown,
-           target_group: target_group_l2,
-           role: Target::ROLE_TEAM
+    create :target, :with_markdown, target_group: target_group_l2
+  end
+  let!(:assignment_target_l2) do
+    create :assignment,
+           target: target_l2,
+           role: Assignment::ROLE_TEAM,
+           quiz: quiz,
+           checklist: []
   end
 
   let!(:target_l3) do
-    create :target, target_group: target_group_l3, role: Target::ROLE_TEAM
-  end
-
-  before do
-    # Let's have a quiz for L2 target as well.
-    create :quiz, :with_question_and_answers, target: target_l2
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l3,
+           given_role: Assignment::ROLE_TEAM
   end
 
   scenario "user can preview course curriculum" do
@@ -142,7 +140,10 @@ feature "Public preview of course curriculum", js: true do
     let(:target_group_l0) { create :target_group, level: level_0 }
 
     before do
-      create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
+      create :target,
+             :with_shared_assignment,
+             target_group: target_group_l0,
+             given_role: Assignment::ROLE_TEAM
     end
 
     scenario "user can preview level zero" do

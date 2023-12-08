@@ -13,17 +13,34 @@ feature "Coach's review interface" do
   let(:target_group_l2) { create :target_group, level: level_2 }
   let(:target_group_l3) { create :target_group, level: level_3 }
   let(:target_l1) do
-    create :target, :for_students, target_group: target_group_l1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1
   end
   let(:target_l2) do
-    create :target, :for_students, target_group: target_group_l2
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l2
   end
   let(:target_l3) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l3
   end
-  let(:team_target) { create :target, :for_team, target_group: target_group_l2 }
+  let(:team_target) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l2
+  end
   let(:auto_verify_target) do
-    create :target, :for_students, target_group: target_group_l1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1
   end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
@@ -47,11 +64,11 @@ feature "Coach's review interface" do
            student: student_l3
 
     # Set evaluation criteria on the target so that its submissions can be reviewed.
-    target_l1.evaluation_criteria << evaluation_criterion
-    target_l2.evaluation_criteria << evaluation_criterion
-    target_l3.evaluation_criteria << evaluation_criterion
-    target_l3.evaluation_criteria << evaluation_criterion_2
-    team_target.evaluation_criteria << evaluation_criterion
+    target_l1.assignments.first.evaluation_criteria << evaluation_criterion
+    target_l2.assignments.first.evaluation_criteria << evaluation_criterion
+    target_l3.assignments.first.evaluation_criteria << evaluation_criterion
+    target_l3.assignments.first.evaluation_criteria << evaluation_criterion_2
+    team_target.assignments.first.evaluation_criteria << evaluation_criterion
     student_l3.user.update!(email: "pupilfirst@example.com")
     student_l2.user.update!(name: "Pupilfirst Test User")
   end
@@ -438,7 +455,11 @@ feature "Coach's review interface" do
 
     context "when random filters are applied" do
       let(:random_level) { create :level, :one }
-      let(:random_target) { create :target, :for_students }
+      let(:random_target) do
+        create :target,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_STUDENT
+      end
 
       scenario "coach visits review dashboard", js: true do
         sign_in_user course_coach.user,

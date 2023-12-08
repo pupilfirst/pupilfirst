@@ -26,30 +26,50 @@ feature "Students view performance report and submissions overview", js: true do
   let(:target_group_l3) { create :target_group, level: level_3 }
 
   let(:target_l1) do
-    create :target, :for_students, target_group: target_group_l1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1
   end
   let!(:milestone_target_l2) do
     create :target,
-           :for_students,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l2,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
   let!(:milestone_target_l3) do
     create :target,
-           :for_students,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l3,
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
   let!(:target_4) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l3
   end
-  let(:quiz_target_1) do
-    create :target, :for_students, target_group: target_group_l1
+
+  let!(:quiz_target_1) { create :target, target_group: target_group_l1 }
+  let!(:assignment_quiz_target_1) do
+    create :assignment, target: quiz_target_1, role: Assignment::ROLE_STUDENT
   end
-  let(:quiz_target_2) do
-    create :target, :for_students, target_group: target_group_l3
+  let!(:target_1_quiz) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_quiz_target_1
+  end
+
+  let!(:quiz_target_2) { create :target, target_group: target_group_l3 }
+  let!(:assignment_quiz_target_2) do
+    create :assignment, target: quiz_target_2, role: Assignment::ROLE_STUDENT
+  end
+  let!(:target_2_quiz) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_quiz_target_2
   end
 
   # Create evaluation criteria for targets
@@ -146,13 +166,16 @@ feature "Students view performance report and submissions overview", js: true do
            faculty: team_coach,
            student: student
 
-    target_l1.evaluation_criteria << evaluation_criterion_1
-    milestone_target_l2.evaluation_criteria << [
+    target_l1.assignments.first.evaluation_criteria << evaluation_criterion_1
+    milestone_target_l2.assignments.first.evaluation_criteria << [
       evaluation_criterion_1,
       evaluation_criterion_2
     ]
-    milestone_target_l3.evaluation_criteria << evaluation_criterion_2
-    target_4.evaluation_criteria << evaluation_criterion_2
+    milestone_target_l3
+      .assignments
+      .first
+      .evaluation_criteria << evaluation_criterion_2
+    target_4.assignments.first.evaluation_criteria << evaluation_criterion_2
 
     submission_target_l1_2.timeline_event_grades.create!(
       evaluation_criterion: evaluation_criterion_1,
@@ -279,28 +302,30 @@ feature "Students view performance report and submissions overview", js: true do
     sign_in_user student.user, referrer: report_course_path(course)
     expect(page).to have_text("Targets Overview")
     click_button "Submissions"
-    expect(page).to have_button("Load More...")
     click_button("Load More...")
 
-    total_submissions =
-      student.timeline_events.evaluated_by_faculty.count +
-        student.timeline_events.pending_review.count
-
-    within("div[aria-label='Student submissions']") do
-      expect(page).to have_selector("a", count: total_submissions)
-    end
+    expect(page).to have_selector(
+      "a[aria-label^='Student submission']",
+      count: 25
+    )
 
     # Switching tabs should preserve already loaded submissions
     click_button "Overview"
     click_button "Submissions"
 
-    within("div[aria-label='Student submissions']") do
-      expect(page).to have_selector("a", count: total_submissions)
-    end
+    expect(page).to have_selector(
+      "a[aria-label^='Student submission']",
+      count: 25
+    )
   end
 
   context "student's team members change mid-way of course" do
-    let(:target_l1) { create :target, :for_team, target_group: target_group_l1 }
+    let(:target_l1) do
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_TEAM,
+             target_group: target_group_l1
+    end
     let!(:submission_target_l1_1) do
       create(
         :timeline_event,
@@ -351,7 +376,10 @@ feature "Students view performance report and submissions overview", js: true do
     let!(:level_0) { create :level, :zero, course: course }
     let!(:target_group_l0) { create :target_group, level: level_0 }
     let!(:target_l0) do
-      create :target, :for_students, target_group: target_group_l0
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_l0
     end
 
     scenario "checks status of total targets completed in report" do
@@ -369,12 +397,20 @@ feature "Students view performance report and submissions overview", js: true do
 
   context "course has archived targets" do
     let!(:target_4) do
-      create :target, :for_students, :archived, target_group: target_group_l3
+      create :target,
+             :archived,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_l3
     end
 
     # Archive target with verified submission for the student
     let(:milestone_target_l3) do
-      create :target, :for_students, :archived, target_group: target_group_l3
+      create :target,
+             :archived,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_l3
     end
 
     scenario "checks status of total targets completed in report" do

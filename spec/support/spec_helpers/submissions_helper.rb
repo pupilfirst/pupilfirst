@@ -30,18 +30,29 @@ module SubmissionsHelper
     evaluator: nil,
     latest: true
   )
-    options = submission_options(target, student, submission_evaluation, evaluator, latest)
+    assignment = target.assignments.first
+    options =
+      submission_options(
+        target,
+        assignment,
+        student,
+        submission_evaluation,
+        evaluator,
+        latest
+      )
 
     FactoryBot
       .create(:timeline_event, :with_owners, **options)
-      .tap { |submission| grade_submission(submission, submission_evaluation, target) }
+      .tap do |submission|
+        grade_submission(submission, submission_evaluation, assignment)
+      end
   end
 
-  def grade_submission(submission, submission_evaluation, target)
-    if target.evaluation_criteria.present? && submission_evaluation == SUBMISSION_PASS
-      target.evaluation_criteria.each do |ec|
+  def grade_submission(submission, submission_evaluation, assignment)
+    if assignment.evaluation_criteria.present? &&
+         submission_evaluation == SUBMISSION_PASS
+      assignment.evaluation_criteria.each do |ec|
         evaluation_grade = rand(ec.max_grade)
-
         create(
           :timeline_event_grade,
           timeline_event: submission,
@@ -65,12 +76,25 @@ module SubmissionsHelper
       end
   end
 
-  def submission_options(target, student, submission_evaluation, evaluator, latest)
+  def submission_options(
+    target,
+    assignment,
+    student,
+    submission_evaluation,
+    evaluator,
+    latest
+  )
     students =
-      (target.team_target? && student.team) ? student.team.students : [student]
+      (
+        if (target.team_target? && student.team)
+          student.team.students
+        else
+          [student]
+        end
+      )
 
     passed_at, evaluated_at =
-      if target.evaluation_criteria.present?
+      if assignment.evaluation_criteria.present?
         case submission_evaluation
         when SUBMISSION_PASS
           [Time.zone.now, Time.zone.now]

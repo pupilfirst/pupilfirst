@@ -20,18 +20,24 @@ feature "School Customization", js: true do
     find('button[title="Edit logo (on light backgrounds)"]').click
 
     # Unhappy path.
-    attach_file "icon", image_path("high_resolution.png"), visible: false
+    attach_file "icon_on_light_bg",
+                image_path("high_resolution.png"),
+                visible: false
 
     click_button "Update Images"
 
     expect(page).to have_content(
-      "Icon must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high"
+      "Icon on light bg must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high"
     )
 
     # Happy path.
     attach_file "logo_on_light_bg",
                 image_path("logo_lipsum_on_light_bg.png"),
                 visible: false
+    attach_file "logo_on_dark_bg",
+                image_path("logo_lipsum_on_dark_bg.png"),
+                visible: false
+    attach_file "icon_on_dark_bg", image_path("icon_white.png"), visible: false
     attach_file "icon_on_light_bg",
                 image_path("icon_pupilfirst.png"),
                 visible: false

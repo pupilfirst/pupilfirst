@@ -99,7 +99,9 @@ let renderLogo = (logoUrl, schoolName, additionalClasses) =>
       alt={"Logo of " ++ schoolName}
     />
   | None =>
-    <div className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600">
+    <div
+      className={"p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600 " ++
+      additionalClasses}>
       <span className="text-xl font-bold leading-tight"> {schoolName->str} </span>
     </div>
   }

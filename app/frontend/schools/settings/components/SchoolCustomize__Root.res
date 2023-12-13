@@ -1,4 +1,5 @@
 open SchoolCustomize__Types
+open ThemeSwitch
 
 %%raw(`import "./SchoolCustomize__Root.css"`)
 
@@ -38,17 +39,11 @@ type rec action =
 and name = string
 and about = option<string>
 
-let renderLogo = (logo, imageClasses, schoolName, textSize) =>
+let renderLogo = (schoolName, logo, textSize, logoHeight) =>
   switch logo {
-  | Some(logo) => <img className={imageClasses} src={logo->Customizations.url} />
+  | Some(logo) => <img className={logoHeight ++ " block"} src={logo->Customizations.url} />
   | None => <span className={textSize ++ " font-bold"}> {schoolName->str} </span>
   }
-
-let headerLogo = (schoolName, logoOnLightBg, logoOnDarkBg) =>
-  <div className="max-w-xs">
-    {renderLogo(logoOnLightBg, "h-12 block dark:hidden", schoolName, "2xl")}
-    {renderLogo(logoOnDarkBg, "h-12 hidden dark:block", schoolName, "2xl")}
-  </div>
 
 let headerLink = ((id, title, _, _)) =>
   <div className="ms-6 text-sm font-semibold cursor-default" key=id>
@@ -136,12 +131,6 @@ let emailAddress = email =>
       {t("add_contact_email_q")->str}
     </div>
   }
-
-let footerLogo = (schoolName, logoOnLightBg, logoOnDarkBg) =>
-  <div className="">
-    {renderLogo(logoOnLightBg, "h-8 block dark:hidden", schoolName, "text-lg")}
-    {renderLogo(logoOnDarkBg, "h-8 hidden dark:block", schoolName, "text-lg")}
-  </div>
 
 let editIcon = (additionalClasses, clickHandler, title) =>
   <button
@@ -315,16 +304,18 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
     reducer,
     initialState(customizations, schoolName, schoolAbout),
   )
+
+  let logo =
+    getTheme() == "light"
+      ? state.customizations->Customizations.logoOnLightBg
+      : state.customizations->Customizations.logoOnDarkBg
+
   <div className="bg-gray-50 min-h-full">
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <h1 className="font-bold"> {t("homepage")->str} </h1>
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-50 rounded p-2">
-          {headerLogo(
-            schoolName,
-            state.customizations->Customizations.logoOnLightBg,
-            state.customizations->Customizations.logoOnDarkBg,
-          )}
+          <div className="max-w-xs"> {renderLogo(schoolName, logo, "2xl", "h-12")} </div>
           {editIcon("ms-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
         </div>
         <div className="flex items-center">
@@ -461,11 +452,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div className="flex items-center border border-dashed border-gray-500 rounded p-2">
-            {footerLogo(
-              schoolName,
-              state.customizations->Customizations.logoOnLightBg,
-              state.customizations->Customizations.logoOnDarkBg,
-            )}
+            {renderLogo(schoolName, logo, "text-lg", "h-8")}
             {editIcon("ms-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
           </div>
           <div className="flex items-center text-sm">

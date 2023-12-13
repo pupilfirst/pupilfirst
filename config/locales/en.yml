@@ -2052,7 +2052,6 @@ en:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2521,6 +2520,7 @@ en:
         nav_links:
           dashboard: Dashboard
           home: Home
+        logo_alt: Logo of %{school_name}
       students_top_nav:
         admin_link:
           title: Admin

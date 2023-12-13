@@ -16,17 +16,19 @@ class ErrorPresenter < ApplicationPresenter
       end
   end
 
-  def school_has_icon?
-    return true if current_school.blank?
+  def school_icon(background)
+    icon = background == :dark ? :icon_on_dark_bg : :icon_on_light_bg
 
-    current_school.icon_on_light_bg.attached?
-  end
-
-  def school_icon_url
-    if current_school.present?
-      view.rails_public_blob_url(current_school.icon_variant(:thumb))
+    if current_school.present? && current_school.public_send(icon).attached?
+      icon_url =
+        view.rails_public_blob_url(
+          current_school.icon_variant(:thumb, background: background)
+        )
+      view.image_tag(icon_url, class: "w-12 #{icon}")
+    elsif current_school.present?
+      view.content_tag(:span, current_school.name, class: " #{icon}")
     else
-      view.image_path("shared/pupilfirst-icon.svg")
+      view.image_tag("shared/pupilfirst-icon.svg", class: "w-12 #{icon}")
     end
   end
 end

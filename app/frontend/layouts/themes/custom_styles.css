@@ -573,3 +573,19 @@
     /* -------------------------------------- */
   }
 }
+
+.dark .logo_on_light_bg {
+  display: none;
+}
+
+.dark .logo_on_dark_bg {
+  display: block;
+}
+
+.dark .icon_on_light_bg {
+  display: none;
+}
+
+.dark .icon_on_dark_bg {
+  display: block;
+}

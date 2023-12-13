@@ -109,3 +109,19 @@
     @apply theme-pupilfirst;
   }
 }
+
+.theme-pupilfirst .logo_on_light_bg {
+  display: block;
+}
+
+.theme-pupilfirst .logo_on_dark_bg {
+  display: none;
+}
+
+.theme-pupilfirst .icon_on_light_bg {
+  display: block;
+}
+
+.theme-pupilfirst .icon_on_dark_bg {
+  display: none;
+}

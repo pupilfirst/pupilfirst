@@ -90,8 +90,30 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
   }
 }
 
+let renderLogo = (logoUrl, schoolName, additionalClasses) =>
+  switch logoUrl {
+  | Some(url) =>
+    <img
+      className={"h-8 md:h-10 object-contain flex text-sm items-center " ++ additionalClasses}
+      src=url
+      alt={"Logo of " ++ schoolName}
+    />
+  | None =>
+    <div className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600">
+      <span className="text-xl font-bold leading-tight"> {schoolName->str} </span>
+    </div>
+  }
+
 @react.component
-let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifications) => {
+let make = (
+  ~schoolName,
+  ~logoOnLightBgUrl,
+  ~logoOnDarkBgUrl,
+  ~links,
+  ~isLoggedIn,
+  ~currentUser,
+  ~hasNotifications,
+) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile())
 
   React.useEffect(() => {
@@ -108,19 +130,8 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
       <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
-            {switch logoUrl {
-            | Some(url) =>
-              <img
-                className="h-8 md:h-10 object-contain flex text-sm items-center"
-                src=url
-                alt={"Logo of " ++ schoolName}
-              />
-            | None =>
-              <div
-                className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600">
-                <span className="text-xl font-bold leading-tight"> {schoolName |> str} </span>
-              </div>
-            }}
+            {renderLogo(logoOnLightBgUrl, schoolName, "logo_on_light_bg")}
+            {renderLogo(logoOnDarkBgUrl, schoolName, "logo_on_dark_bg")}
           </a>
           {ReactUtils.nullUnless(
             <div className="flex items-center space-x-2">

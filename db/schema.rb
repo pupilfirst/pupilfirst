@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_31_182510) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -79,6 +78,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_182510) do
     t.index ["email", "course_id"], name: "index_applicants_on_email_and_course_id", unique: true
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
     t.index ["login_token_digest"], name: "index_applicants_on_login_token_digest", unique: true
+  end
+
+  create_table "assignments", force: :cascade do |t|
+    t.bigint "target_id", null: false
+    t.string "role"
+    t.jsonb "checklist"
+    t.string "completion_instructions"
+    t.boolean "milestone"
+    t.integer "milestone_number"
+    t.boolean "archived"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["target_id"], name: "index_assignments_on_target_id"
+  end
+
+  create_table "assignments_evaluation_criteria", id: false, force: :cascade do |t|
+    t.bigint "assignment_id", null: false
+    t.bigint "evaluation_criterion_id", null: false
+    t.index ["assignment_id", "evaluation_criterion_id"], name: "index_assignment_evaluation_criterion"
+    t.index ["evaluation_criterion_id", "assignment_id"], name: "index_evaluation_criterion_assignment"
+  end
+
+  create_table "assignments_prerequisite_assignments", id: false, force: :cascade do |t|
+    t.bigint "assignment_id", null: false
+    t.bigint "prerequisite_assignment_id", null: false
+    t.index ["assignment_id", "prerequisite_assignment_id"], name: "index_assignment_prerequisite"
+    t.index ["prerequisite_assignment_id", "assignment_id"], name: "index_prerequisite_assignment"
   end
 
   create_table "audit_records", force: :cascade do |t|
@@ -448,6 +474,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_182510) do
     t.index ["school_id"], name: "index_organisations_on_school_id"
   end
 
+  create_table "page_reads", force: :cascade do |t|
+    t.bigint "target_id", null: false
+    t.bigint "student_id", null: false
+    t.datetime "created_at", precision: nil
+    t.index ["student_id", "target_id"], name: "index_page_reads_on_student_id_and_target_id", unique: true
+    t.index ["student_id"], name: "index_page_reads_on_student_id"
+    t.index ["target_id"], name: "index_page_reads_on_target_id"
+  end
+
   create_table "post_likes", force: :cascade do |t|
     t.bigint "post_id"
     t.bigint "user_id"
@@ -494,6 +529,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_182510) do
     t.bigint "target_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "assignment_id"
+    t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
     t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true
   end
 
@@ -895,6 +932,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_182510) do
   add_foreign_key "admin_users", "users"
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "applicants", "courses"
+  add_foreign_key "assignments", "targets"
   add_foreign_key "certificates", "courses"
   add_foreign_key "cohorts", "courses"
   add_foreign_key "communities", "schools"
@@ -925,10 +963,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_182510) do
   add_foreign_key "organisation_admins", "organisations"
   add_foreign_key "organisation_admins", "users"
   add_foreign_key "organisations", "schools"
+  add_foreign_key "page_reads", "students"
+  add_foreign_key "page_reads", "targets"
   add_foreign_key "posts", "posts", column: "reply_to_post_id"
   add_foreign_key "posts", "topics"
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
+  add_foreign_key "quizzes", "assignments"
   add_foreign_key "quizzes", "targets"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"

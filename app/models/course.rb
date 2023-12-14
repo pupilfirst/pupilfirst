@@ -21,6 +21,7 @@ class Course < ApplicationRecord
   has_many :users, through: :students
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
+  has_many :assignments, through: :targets
   has_many :timeline_events, through: :targets
   has_many :evaluation_criteria, dependent: :restrict_with_error
   has_many :calendars, dependent: :destroy

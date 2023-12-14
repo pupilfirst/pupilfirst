@@ -515,6 +515,7 @@ en:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
+      target_read_label: Read
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
@@ -573,6 +574,8 @@ en:
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: Next Target
       pending_team_members_notice: "You have team members who have yet to complete this target:"
@@ -1010,7 +1013,7 @@ en:
         label: Do you have any completion instructions for the student?
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: Enter a valid link
       enter_valid_title: Enter a valid title
       github_action:
@@ -1027,7 +1030,7 @@ en:
       paste_link_complete: Paste link to complete
       prepare_quiz: Prepare the quiz now.
       prepare_quiz_error: All questions must be filled in, and all questions should have at least two answers.
-      prerequisite_targets_label: Are there any prerequisite targets?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: You have selected all evaluation criteria!
       search_criteria_empty: No criteria selected
       search_criteria_placeholder: Search evaluation criteria
@@ -1044,18 +1047,19 @@ en:
         form_limit_warning: Maximum allowed questions is 25!
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
-        label: What steps should the student take to complete this target?
+        label: What steps should the student take to complete this assignment?
       target_group: Target Group
-      target_method_of_completion_label: How do you want the student to complete the target?
-      target_reviewed_by_coach: Will a coach review submissions on this target?
+      target_has_assignment: Does this target have an assignment?
+      target_method_of_completion_label: How do you want the student to complete the assignment?
+      target_reviewed_by_coach: Will a coach review submissions on this assignment?
       target_role:
         help: Should students in a team submit work on a target individually, or together?
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
-        label: How should teams tackle this target?
+        label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
-        label: Is this target a milestone?
+        label: Is this assignment a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -1098,6 +1102,7 @@ en:
       question: Question
       remove_question: Remove Quiz Question
     CurriculumEditor__TargetShow:
+      assignment_label: Assignment
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
@@ -2339,6 +2344,9 @@ en:
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated

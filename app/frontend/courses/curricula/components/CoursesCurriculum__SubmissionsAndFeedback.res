@@ -42,7 +42,8 @@ let statusBar = (~color, ~text) => {
     className={"font-semibold p-2 py-4 flex border-t w-full items-center justify-center " ++
     (textColor ++
     bgColor)}>
-    <span className={"fa-stack text-lg me-1 " ++ textColor}> icon </span> {text |> str}
+    <span className={"fa-stack text-lg me-1 " ++ textColor}> icon </span>
+    {text |> str}
   </div>
 }
 
@@ -115,9 +116,8 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           {switch completionType {
           | SubmitForm =>
             str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
-          | MarkAsComplete
+          | NoAssignment
           | TakeQuiz
-          | LinkToComplete
           | Evaluated =>
             str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)
           }}
@@ -169,8 +169,8 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
         )
         |> Js.Array.map(feedback => {
           let coach =
-            Feedback.coachId(feedback)->Belt.Option.flatMap(id =>
-              coaches |> Js.Array.find(c => c |> Coach.id == id)
+            Feedback.coachId(feedback)->Belt.Option.flatMap(
+              id => coaches |> Js.Array.find(c => c |> Coach.id == id),
             )
 
           let user = switch coach {
@@ -249,9 +249,8 @@ let make = (
       <h4 className="text-base md:text-xl">
         {switch completionType {
         | SubmitForm => tr("your_responses")->str
-        | MarkAsComplete
+        | NoAssignment
         | TakeQuiz
-        | LinkToComplete
         | Evaluated =>
           tr("your_submissions")->str
         }}
@@ -274,9 +273,8 @@ let make = (
               <span className="hidden md:inline">
                 {switch completionType {
                 | SubmitForm => tr("add_another_response")->str
-                | MarkAsComplete
+                | NoAssignment
                 | TakeQuiz
-                | LinkToComplete
                 | Evaluated =>
                   tr("add_another_submission")->str
                 }}

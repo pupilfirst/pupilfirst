@@ -34,34 +34,46 @@ feature "Course students report", js: true do
 
   let(:target_l1) do
     create :target,
-           :for_students,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l1,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
 
   let(:target_l2) do
     create :target,
-           :for_students,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
            target_group: target_group_l2,
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
 
   let(:target_l3_1) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l3
   end
 
   let!(:target_l3_2) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l3
   end
 
   let(:quiz_target_1) do
-    create :target, :for_students, target_group: target_group_l1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1
   end
 
   let(:quiz_target_2) do
-    create :target, :for_students, target_group: target_group_l3
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l3
   end
 
   # Create evaluation criteria for targets
@@ -158,15 +170,15 @@ feature "Course students report", js: true do
            faculty: team_coach,
            student: student
 
-    target_l1.evaluation_criteria << evaluation_criterion_1
+    target_l1.assignments.first.evaluation_criteria << evaluation_criterion_1
 
-    target_l2.evaluation_criteria << [
+    target_l2.assignments.first.evaluation_criteria << [
       evaluation_criterion_1,
       evaluation_criterion_2
     ]
 
-    target_l3_1.evaluation_criteria << evaluation_criterion_2
-    target_l3_2.evaluation_criteria << evaluation_criterion_2
+    target_l3_1.assignments.first.evaluation_criteria << evaluation_criterion_2
+    target_l3_2.assignments.first.evaluation_criteria << evaluation_criterion_2
 
     submission_target_l1_2.timeline_event_grades.create!(
       evaluation_criterion: evaluation_criterion_1,

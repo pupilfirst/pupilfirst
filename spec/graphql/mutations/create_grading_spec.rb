@@ -16,8 +16,9 @@ describe Mutations::CreateGrading, type: :request do
   let(:target_group) { create :target_group, level: level }
   let(:target) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group,
-           evaluation_criteria: [evaluation_criteria_1]
+           given_evaluation_criteria: [evaluation_criteria_1]
   end
 
   let(:submission) do
@@ -116,7 +117,9 @@ describe Mutations::CreateGrading, type: :request do
     let!(:evaluation_criteria_2) do
       create :evaluation_criterion, course: course
     end
-    before { target.evaluation_criteria << evaluation_criteria_2 }
+    before do
+      target.assignments.first.evaluation_criteria << evaluation_criteria_2
+    end
     it "should return invalid grading values error" do
       response_data =
         make_request(

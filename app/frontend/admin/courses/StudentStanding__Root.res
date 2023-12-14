@@ -128,8 +128,12 @@ module CreateUserStadningMutation = %graphql(`
   `)
 
 let createUserStanding = (studentId, reason, standingId, setState, setReason, setSelect) => {
-  CreateUserStadningMutation.fetch({studentId, reason, standingId})
-  |> Js.Promise.then_((response: CreateUserStadningMutation.t) => {
+  CreateUserStadningMutation.fetch({
+    studentId,
+    reason,
+    standingId,
+  })
+  ->Js.Promise2.then((response: CreateUserStadningMutation.t) => {
     let log = response.createUserStanding.userStanding->Belt.Option.map(userStanding => {
       id: userStanding.id,
       standingName: userStanding.standingName,
@@ -160,11 +164,11 @@ let createUserStanding = (studentId, reason, standingId, setState, setReason, se
     }
     Js.Promise.resolve()
   })
-  |> Js.Promise.catch(_error => {
+  ->Js.Promise2.catch(_error => {
     setState(_ => Errored)
     Js.Promise.resolve()
   })
-  |> ignore
+  ->ignore
 }
 
 let updateCurrentStanding = (userStandings: userStandings, standings: standings) => {
@@ -189,7 +193,7 @@ let updateCurrentStanding = (userStandings: userStandings, standings: standings)
 let loadStandingData = (studentId, setState) => {
   setState(_ => Loading)
   StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
-  |> Js.Promise.then_((response: StudentStandingDataQuery.t) => {
+  ->Js.Promise2.then((response: StudentStandingDataQuery.t) => {
     let userStandings = response.userStandings->Js.Array2.map(userStanding => {
       id: userStanding.id,
       standingName: userStanding.standingName,
@@ -213,18 +217,18 @@ let loadStandingData = (studentId, setState) => {
     }))
     Js.Promise.resolve()
   })
-  |> Js.Promise.catch(_error => {
+  ->Js.Promise2.catch(_error => {
     setState(_ => Errored)
     Js.Promise.resolve()
   })
-  |> ignore
+  ->ignore
 }
 
 let loadPageData = (studentId, setState, setCourseId, setPageData) => {
   SchoolAndStudentDataQuery.fetch({
     studentId: studentId,
   })
-  |> Js.Promise.then_((response: SchoolAndStudentDataQuery.t) => {
+  ->Js.Promise2.then((response: SchoolAndStudentDataQuery.t) => {
     setPageData(_ => {
       student: {
         name: response.student.user.name,
@@ -241,11 +245,11 @@ let loadPageData = (studentId, setState, setCourseId, setPageData) => {
     }
     Js.Promise.resolve()
   })
-  |> Js.Promise.catch(_error => {
+  ->Js.Promise2.catch(_error => {
     setState(_ => Errored)
     Js.Promise.resolve()
   })
-  |> ignore
+  ->ignore
 }
 
 let archiveStanding = (id: string, setArchive, setState, event) => {
@@ -256,8 +260,10 @@ let archiveStanding = (id: string, setArchive, setState, event) => {
     window->Window.confirm(t("confirm_delete"))
   } {
     setArchive(_ => true)
-    ArchiveUserStandingMutation.fetch({id: id})
-    |> Js.Promise.then_((response: ArchiveUserStandingMutation.t) => {
+    ArchiveUserStandingMutation.fetch({
+      id: id,
+    })
+    ->Js.Promise2.then((response: ArchiveUserStandingMutation.t) => {
       if response.archiveUserStanding.success {
         setState(currentState =>
           switch currentState {
@@ -279,11 +285,11 @@ let archiveStanding = (id: string, setArchive, setState, event) => {
       }
       Js.Promise.resolve()
     })
-    |> Js.Promise.catch(_error => {
+    ->Js.Promise2.catch(_error => {
       setState(_ => Errored)
       Js.Promise.resolve()
     })
-    |> ignore
+    ->ignore
   } else {
     ()
   }

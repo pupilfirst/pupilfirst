@@ -20,11 +20,12 @@ class Target < ApplicationRecord
   ].freeze
 
   has_many :timeline_events, dependent: :restrict_with_error
+  has_many :assignments, dependent: :restrict_with_error
+  has_many :page_reads, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
-  has_many :target_evaluation_criteria, dependent: :destroy
-  has_many :evaluation_criteria, through: :target_evaluation_criteria
+  has_many :evaluation_criteria, through: :assignments
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
@@ -42,7 +43,16 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :milestone, -> { live.where(milestone: true) }
+  scope :non_assignment, -> { where.missing(:assignments) }
+  scope :milestone,
+        -> do
+          joins(:assignments).where(
+            assignments: {
+              milestone: true,
+              archived: false
+            }
+          )
+        end
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"
@@ -92,7 +102,6 @@ class Target < ApplicationRecord
               in: valid_target_action_types
             },
             allow_nil: true
-  validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :call_to_action, length: { maximum: 20 }
   validates :visibility,
@@ -174,9 +183,11 @@ class Target < ApplicationRecord
   end
 
   def title_with_milestone
-    return title unless milestone?
+    assignment = assignments.not_archived.first
+    return title unless assignment
+    return title unless assignment.milestone?
 
-    "#{I18n.t("shared.m")}#{milestone_number} - #{title}"
+    "#{I18n.t("shared.m")}#{assignment.milestone_number} - #{title}"
   end
 
   def status(student)
@@ -204,12 +215,18 @@ class Target < ApplicationRecord
     quiz.present?
   end
 
+  def mark_as_complete?
+    not (quiz.present? or checklist.present? or link_to_complete.present?)
+  end
+
   def team_target?
-    role == ROLE_TEAM
+    assignment = assignments.not_archived.first
+    assignment && assignment.role == Assignment::ROLE_TEAM
   end
 
   def individual_target?
-    role == ROLE_STUDENT
+    assignment = assignments.not_archived.first
+    assignment && assignment.role == Assignment::ROLE_STUDENT
   end
 
   # Returns the latest submission linked to this target from a student

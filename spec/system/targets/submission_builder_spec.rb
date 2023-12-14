@@ -9,10 +9,10 @@ feature "Submission Builder", js: true do
   let(:cohort) { create :cohort, course: course }
   let(:grade_labels_for_1) do
     [
-      { 'grade' => 1, 'label' => 'Okay' },
-      { 'grade' => 2, 'label' => 'Good' },
-      { 'grade' => 3, 'label' => 'Great' },
-      { 'grade' => 4, 'label' => 'Wow' }
+      { "grade" => 1, "label" => "Okay" },
+      { "grade" => 2, "label" => "Good" },
+      { "grade" => 3, "label" => "Great" },
+      { "grade" => 4, "label" => "Wow" }
     ]
   end
   let!(:criterion_1) do
@@ -26,44 +26,29 @@ feature "Submission Builder", js: true do
   let!(:target_group_l1) { create :target_group, level: level_1 }
   let!(:target) do
     create :target,
+           :with_shared_assignment,
            :with_content,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM,
-           evaluation_criteria: [criterion_1]
+           given_role: Assignment::ROLE_TEAM,
+           given_evaluation_criteria: [criterion_1]
   end
+  let!(:target_assignment) { target.assignments.first }
 
   let!(:form_submission_target) do
     create :target,
+           :with_shared_assignment,
            :with_content,
-           :with_default_checklist,
            target_group: target_group_l1,
-           role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
 
-  scenario "student submits a target with no checklist" do
-    sign_in_user student.user, referrer: target_path(target)
-
-    # This target should have a 'Complete' section.
-    find(".course-overlay__body-tab-item", text: "Complete").click
-
-    expect(page).to have_text(
-      "This target has no actions. Click submit to complete the target"
-    )
-
-    within('div[id="submission-builder"]') { click_button "Complete" }
-
-    expect(page).to have_content("Your submission has been queued for review")
-
-    last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([])
-
-    # The submission contents should be on the page.
-    expect(page).to have_content("Target was marked as complete.")
+  let!(:form_submission_target_assignment) do
+    form_submission_target.assignments.first
   end
 
   scenario "student submits a target with long text" do
     question = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         {
           title: question,
@@ -113,7 +98,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a target with short text" do
     question = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         {
           title: question,
@@ -163,7 +148,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a target with a link" do
     question = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         { title: question, kind: Target::CHECKLIST_KIND_LINK, optional: false }
       ]
@@ -212,7 +197,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a target with files" do
     question = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         { title: question, kind: Target::CHECKLIST_KIND_FILES, optional: false }
       ]
@@ -297,7 +282,7 @@ feature "Submission Builder", js: true do
   scenario "student submits a target with an MCQ" do
     question = Faker::Lorem.sentence
     choices = Faker::Lorem.sentences(number: 4)
-    target.update!(
+    target_assignment.update!(
       checklist: [
         {
           title: question,
@@ -350,7 +335,7 @@ feature "Submission Builder", js: true do
   scenario "student submits a target with long text and skips a link" do
     question_1 = Faker::Lorem.sentence
     question_2 = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         {
           title: question_1,
@@ -423,7 +408,7 @@ feature "Submission Builder", js: true do
   scenario "student submits a target with multiple files checklist items" do
     question_1 = Faker::Lorem.sentence
     question_2 = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         {
           title: question_1,
@@ -542,7 +527,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a target with audio upload item" do
     question = Faker::Lorem.sentence
-    target.update!(
+    target_assignment.update!(
       checklist: [
         { title: question, kind: Target::CHECKLIST_KIND_AUDIO, optional: false }
       ]
@@ -621,7 +606,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a form target with long text" do
     question = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         {
           title: question,
@@ -671,7 +656,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a form target with short text" do
     question = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         {
           title: question,
@@ -721,7 +706,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a form target with a link" do
     question = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         { title: question, kind: Target::CHECKLIST_KIND_LINK, optional: false }
       ]
@@ -770,7 +755,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a form target with files" do
     question = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         { title: question, kind: Target::CHECKLIST_KIND_FILES, optional: false }
       ]
@@ -854,7 +839,7 @@ feature "Submission Builder", js: true do
   scenario "student submits a form target with an MCQ" do
     question = Faker::Lorem.sentence
     choices = Faker::Lorem.sentences(number: 4)
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         {
           title: question,
@@ -907,7 +892,7 @@ feature "Submission Builder", js: true do
   scenario "student submits a form target with long text and skips a link" do
     question_1 = Faker::Lorem.sentence
     question_2 = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         {
           title: question_1,
@@ -980,7 +965,7 @@ feature "Submission Builder", js: true do
   scenario "student submits a form target with multiple files checklist items" do
     question_1 = Faker::Lorem.sentence
     question_2 = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         {
           title: question_1,
@@ -1099,7 +1084,7 @@ feature "Submission Builder", js: true do
 
   scenario "student submits a form target with audio upload item" do
     question = Faker::Lorem.sentence
-    form_submission_target.update!(
+    form_submission_target_assignment.update!(
       checklist: [
         { title: question, kind: Target::CHECKLIST_KIND_AUDIO, optional: false }
       ]

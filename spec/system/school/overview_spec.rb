@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'School Overview', js: true do
+feature "School Overview", js: true do
   include UserSpecHelper
 
   # Setup a course 1
@@ -21,13 +21,15 @@ feature 'School Overview', js: true do
   let!(:c1_target_group_1) { create :target_group, level: c1_level_1 }
   let!(:c1_target_1) do
     create :target,
+           :with_shared_assignment,
            target_group: c1_target_group_1,
-           evaluation_criteria: [c1_evaluation_criterion]
+           given_evaluation_criteria: [c1_evaluation_criterion]
   end
   let!(:c1_target_2) do
     create :target,
+           :with_shared_assignment,
            target_group: c1_target_group_1,
-           evaluation_criteria: [c1_evaluation_criterion]
+           given_evaluation_criteria: [c1_evaluation_criterion]
   end
   let!(:c1_team_1) { create :team_with_students, cohort: cohort_1 }
   let!(:c1_team_2) { create :team_with_students, cohort: cohort_1 }
@@ -65,13 +67,15 @@ feature 'School Overview', js: true do
   let!(:c2_target_group_1) { create :target_group, level: c2_level_1 }
   let!(:c2_target_1) do
     create :target,
+           :with_shared_assignment,
            target_group: c2_target_group_1,
-           evaluation_criteria: [c2_evaluation_criterion]
+           given_evaluation_criteria: [c2_evaluation_criterion]
   end
   let!(:c2_target_2) do
     create :target,
+           :with_shared_assignment,
            target_group: c2_target_group_1,
-           evaluation_criteria: [c2_evaluation_criterion]
+           given_evaluation_criteria: [c2_evaluation_criterion]
   end
   let!(:c2_team_1) { create :team_with_students, cohort: cohort_2 }
   let!(:c2_team_2) { create :team_with_students, cohort: cohort_2 }
@@ -118,7 +122,7 @@ feature 'School Overview', js: true do
   let!(:course_ended) { create :course, :ended, school: school }
   let!(:course_archived) { create :course, :archived, school: school }
 
-  scenario 'school admin visit the school overview' do
+  scenario "school admin visit the school overview" do
     sign_in_user school_admin.user, referrer: school_path
     expect(page).to have_text(school.name)
 
@@ -166,8 +170,8 @@ feature 'School Overview', js: true do
     expect(page).not_to have_text(course_archived.name)
   end
 
-  scenario 'user who is not logged in gets redirected to sign in page' do
+  scenario "user who is not logged in gets redirected to sign in page" do
     visit school_path
-    expect(page).to have_text('Please sign in to continue.')
+    expect(page).to have_text("Please sign in to continue.")
   end
 end

@@ -63,7 +63,7 @@ let reducer = (state, action) =>
       ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
   | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, coaches) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedSubmission.toArray(state.submissions), newTopics)
@@ -74,7 +74,7 @@ let reducer = (state, action) =>
       ...state,
       submissions: PagedSubmission.make(updatedTopics, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
       targets: ArrayUtils.isEmpty(state.targets)
         ? Belt.Option.mapWithDefault(target, [], t => [t])
         : state.targets,
@@ -82,13 +82,13 @@ let reducer = (state, action) =>
     }
   | LoadCoaches(coaches) => {
       ...state,
-      coaches: coaches,
+      coaches,
       filterLoading: false,
       coachesLoaded: Loaded,
     }
   | LoadTargets(targets) => {
       ...state,
-      targets: targets,
+      targets,
       filterLoading: false,
       targetsLoaded: Loaded,
     }
@@ -268,7 +268,7 @@ let submissionsSorter = filter => {
       onDirectionChange={direction => {
         updateParams({...filter, sortDirection: Some(direction)})
       }}
-      onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion: sortCriterion})}
+      onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion})}
     />
   </div>
 }
@@ -507,7 +507,7 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
     updateParams({
       ...filter,
       assignedCoachId: Some(Coach.id(coach)),
-      tab: tab,
+      tab,
       reviewingCoachId: None,
     })
   | PersonalCoach(coach, _currentCoachId) =>
@@ -680,7 +680,9 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
   }, [state.filterInput])
 
   <>
-    <Helmet> <title> {str(pageTitle(courses, courseId))} </title> </Helmet>
+    <Helmet>
+      <title> {str(pageTitle(courses, courseId))} </title>
+    </Helmet>
     <div role="main" ariaLabel="Review" className="flex-1 flex flex-col md:pt-18 pb-20 md:pb-4">
       // <div className="hidden md:block h-18" />
       <div className="course-review-root__submissions-list-container">

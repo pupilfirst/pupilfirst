@@ -46,6 +46,7 @@ type cachedTarget = {
   targetReviewed: bool,
   levelNumber: int,
   milestone: bool,
+  hasAssignment: bool,
   submissionStatus: submissionStatus,
   prerequisiteTargetIds: array<string>,
 }
@@ -66,7 +67,7 @@ let allTargetsAttempted = (targetCache, targetIds) =>
     )
   })
 
-let compute = (preview, student, course, levels, targetGroups, targets, submissions) =>
+let compute = (preview, student, course, levels, targetGroups, targets, targetsRead, submissions) =>
   /* Eliminate the two course ended and student access ended conditions. */
   if preview {
     makePending(targets)
@@ -112,11 +113,12 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
       }
 
       {
-        targetId: targetId,
+        targetId,
         targetReviewed: target->Target.reviewed,
-        levelNumber: levelNumber,
+        levelNumber,
         milestone: target->Target.milestone,
-        submissionStatus: submissionStatus,
+        hasAssignment: target->Target.hasAssignment,
+        submissionStatus,
         prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }
     })
@@ -141,12 +143,14 @@ let compute = (preview, student, course, levels, targetGroups, targets, submissi
           Locked(SubmissionLimitReached(string_of_int(submissionsPendingReviewCount)))
         } else if !(ct.prerequisiteTargetIds |> allTargetsAttempted(targetCache)) {
           Locked(PrerequisitesIncomplete)
+        } else if !ct.hasAssignment && Js.Array.includes(ct.targetId, targetsRead) {
+          Completed
         } else {
           Pending
         }
       }
 
-      {targetId: ct.targetId, status: status}
+      {targetId: ct.targetId, status}
     })
   }
 

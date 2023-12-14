@@ -4,7 +4,9 @@ title: Taking Courses
 sidebar_label: Taking Courses
 ---
 
-All students begin a course in its first level and progress through levels by completing targets. Specifically, they need to complete (or submit) all [milestone targets](/users/targets#milestone-targets). A course is deemed to be completed when all of its milestone targets have been completed. Levels are a way to organize the content of a course and progression is only through milestone targets.
+All students begin a course in its first level and progress by completing milestone assignments.
+
+Specifically, they need to complete all [milestone assignments](/users/curriculum_editor#does-this-target-have-an-assignment). A course is deemed to be completed when all of its milestone targets have been completed. Levels are a way to organize the content of a course and progression is only through milestone targets.
 
 ![A student in level 1](../assets/taking_courses/student_curriculum_l1.png)
 

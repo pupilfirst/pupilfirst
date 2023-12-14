@@ -42,13 +42,15 @@ describe Courses::DeleteService do
   let(:evaluation_criterion_c1) do
     create :evaluation_criterion, course: course_1
   end
-  let(:target_reviewed_c1) do
+  let!(:target_group_c1) do
+    create :target_group, level: level_c1, sort_index: 0
+  end
+  let!(:target_reviewed_c1) do
     create :target,
            :with_content,
-           :with_group,
-           :with_default_checklist,
-           level: level_c1,
-           evaluation_criteria: [evaluation_criterion_c1]
+           :with_shared_assignment,
+           target_group: target_group_c1,
+           given_evaluation_criteria: [evaluation_criterion_c1]
   end
   let!(:topic_c1) do
     create :topic,
@@ -59,14 +61,20 @@ describe Courses::DeleteService do
   let!(:resource_version_c1) do
     create :resource_version, versionable: target_reviewed_c1
   end
-  let(:target_with_quiz_c1) do
-    create :target,
-           :with_content,
-           target_group: target_reviewed_c1.target_group,
-           prerequisite_targets: [target_reviewed_c1]
+  let!(:target_with_quiz_c1) do
+    create :target, :with_content, target_group: target_group_c1
+  end
+  let!(:assignment_target_with_quiz_c1) do
+    create :assignment,
+           target: target_with_quiz_c1,
+           prerequisite_assignments: [target_reviewed_c1.assignments.first]
   end
   let!(:quiz_c1) do
-    create :quiz, :with_question_and_answers, target: target_with_quiz_c1
+    create(
+      :quiz,
+      :with_question_and_answers,
+      assignment: assignment_target_with_quiz_c1
+    )
   end
   let!(:submission_c1) do
     complete_target(target_reviewed_c1, student_c1, evaluator: common_coach)
@@ -113,13 +121,15 @@ describe Courses::DeleteService do
   let(:evaluation_criterion_c2) do
     create :evaluation_criterion, course: course_2
   end
-  let(:target_reviewed_c2) do
+  let!(:target_group_c2) do
+    create :target_group, level: level_c2, sort_index: 0
+  end
+  let!(:target_reviewed_c2) do
     create :target,
            :with_content,
-           :with_group,
-           :with_default_checklist,
-           level: level_c2,
-           evaluation_criteria: [evaluation_criterion_c2]
+           :with_shared_assignment,
+           target_group: target_group_c2,
+           given_evaluation_criteria: [evaluation_criterion_c2]
   end
   let!(:topic_c2) do
     create :topic,
@@ -130,14 +140,20 @@ describe Courses::DeleteService do
   let!(:resource_version_c2) do
     create :resource_version, versionable: target_reviewed_c2
   end
-  let(:target_with_quiz_c2) do
-    create :target,
-           :with_content,
-           target_group: target_reviewed_c2.target_group,
-           prerequisite_targets: [target_reviewed_c2]
+  let!(:target_with_quiz_c2) do
+    create :target, :with_content, target_group: target_group_c2
+  end
+  let!(:assignment_target_with_quiz_c2) do
+    create :assignment,
+           target: target_with_quiz_c2,
+           prerequisite_assignments: [target_reviewed_c2.assignments.first]
   end
   let!(:quiz_c2) do
-    create :quiz, :with_question_and_answers, target: target_with_quiz_c2
+    create(
+      :quiz,
+      :with_question_and_answers,
+      assignment: assignment_target_with_quiz_c2
+    )
   end
   let!(:submission_c2) do
     complete_target(target_reviewed_c2, student_c2, evaluator: common_coach)
@@ -184,10 +200,11 @@ describe Courses::DeleteService do
       [Proc.new { CoachNote.count }, 2, 1],
       [Proc.new { EvaluationCriterion.count }, 2, 1],
       [Proc.new { TimelineEventGrade.count }, 2, 1],
-      [Proc.new { TargetEvaluationCriterion.count }, 2, 1],
+      [Proc.new { AssignmentsEvaluationCriterion.count }, 2, 1],
       [Proc.new { TargetGroup.count }, 2, 1],
       [Proc.new { Target.count }, 4, 2],
-      [Proc.new { TargetPrerequisite.count }, 2, 1],
+      [Proc.new { Assignment.count }, 4, 2],
+      [Proc.new { AssignmentsPrerequisiteAssignment.count }, 2, 1],
       [Proc.new { TargetVersion.count }, 4, 2],
       [Proc.new { ContentBlock.count }, 16, 8],
       [Proc.new { ResourceVersion.count }, 2, 1],
@@ -228,7 +245,6 @@ describe Courses::DeleteService do
       expect { topic_c2.reload }.not_to raise_error
       expect { resource_version_c2.reload }.not_to raise_error
       expect { target_with_quiz_c2.reload }.not_to raise_error
-      expect { quiz_c2.reload }.not_to raise_error
       expect { submission_c2.reload }.not_to raise_error
       expect { submission_file_c2.reload }.not_to raise_error
       expect { feedback_c2.reload }.not_to raise_error

@@ -3,6 +3,7 @@ require "rails_helper"
 feature "Student's view of Course Curriculum", js: true do
   include NotificationHelper
   include UserSpecHelper
+  include MarkdownEditorHelper
 
   # The basics.
   let(:course) { create :course }
@@ -32,71 +33,102 @@ feature "Student's view of Course Curriculum", js: true do
 
   # Individual targets of different types.
   let!(:completed_target_l1) do
-    create :target, target_group: target_group_l1, role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l1,
+           given_role: Target::ROLE_TEAM
   end
   let!(:completed_target_l2) do
-    create :target, target_group: target_group_l2, role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l2,
+           given_role: Target::ROLE_TEAM
   end
   let!(:completed_target_l3) do
-    create :target, target_group: target_group_l3, role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l3,
+           given_role: Target::ROLE_TEAM
   end
   let!(:completed_target_l4) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
-           role: Target::ROLE_TEAM,
-           evaluation_criteria: [evaluation_criterion]
+           given_role: Target::ROLE_TEAM,
+           given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:pending_target_g1) do
-    create :target, target_group: target_group_l4_1, role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l4_1,
+           given_role: Target::ROLE_TEAM
   end
   let!(:pending_target_g2) do
-    create :target, target_group: target_group_l4_2, role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l4_2,
+           given_role: Target::ROLE_TEAM
   end
   let!(:submitted_target) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
-           role: Target::ROLE_TEAM,
-           evaluation_criteria: [evaluation_criterion]
+           given_role: Target::ROLE_TEAM,
+           given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:failed_target) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l4_1,
-           role: Target::ROLE_TEAM,
-           evaluation_criteria: [evaluation_criterion]
+           given_role: Target::ROLE_TEAM,
+           given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:target_with_prerequisites) do
-    create :target,
-           target_group: target_group_l4_1,
-           prerequisite_targets: [pending_target_g1],
+    create :target, target_group: target_group_l4_1
+  end
+  let!(:assignment_target_with_prerequisites) do
+    create :assignment,
+           :with_default_checklist,
+           target: target_with_prerequisites,
+           prerequisite_assignments: [pending_target_g1.assignments.first],
            role: Target::ROLE_TEAM
   end
   let!(:l5_reviewed_target) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l5,
-           role: Target::ROLE_TEAM,
-           evaluation_criteria: [evaluation_criterion]
+           given_role: Target::ROLE_TEAM,
+           given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:l5_non_reviewed_target) do
     create :target,
+           :with_shared_assignment,
            :with_markdown,
            target_group: target_group_l5,
-           role: Target::ROLE_TEAM
+           given_role: Target::ROLE_TEAM
   end
   let!(:l5_non_reviewed_target_with_prerequisite) do
-    create :target,
-           :with_markdown,
-           target_group: target_group_l5,
+    create :target, :with_markdown, target_group: target_group_l5
+  end
+  let!(:assignment_l5_non_reviewed_target_with_prerequisite) do
+    create :assignment,
+           :with_default_checklist,
+           target: l5_non_reviewed_target_with_prerequisite,
            role: Target::ROLE_TEAM,
-           prerequisite_targets: [l5_non_reviewed_target]
+           prerequisite_assignments: [l5_non_reviewed_target.assignments.first]
   end
   let!(:level_6_target) do
-    create :target, target_group: target_group_l6, role: Target::ROLE_TEAM
+    create :target,
+           :with_shared_assignment,
+           target_group: target_group_l6,
+           given_role: Target::ROLE_TEAM
   end
   let!(:level_6_draft_target) do
     create :target,
+           :with_shared_assignment,
            :draft,
            target_group: target_group_l6,
-           role: Target::ROLE_TEAM
+           given_role: Target::ROLE_TEAM
   end
 
   # Submissions
@@ -305,9 +337,9 @@ feature "Student's view of Course Curriculum", js: true do
 
     # Non-reviewed targets that do not have prerequisites should be unlocked for completion.
     click_link l5_non_reviewed_target.title
-    click_button "Mark As Complete"
-
-    expect(page).to have_text("Target has been marked as complete")
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+    replace_markdown Faker::Lorem.sentence
+    click_button "Submit"
 
     dismiss_notification
     click_button "Close"
@@ -323,7 +355,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).not_to have_text(
       "This target has prerequisites that are incomplete."
     )
-    expect(page).to have_button "Mark As Complete"
+    expect(page).to have_button "Submit"
 
     click_button "Close"
   end
@@ -370,7 +402,10 @@ feature "Student's view of Course Curriculum", js: true do
     let(:level_0) { create :level, :zero, course: course }
     let(:target_group_l0) { create :target_group, level: level_0 }
     let!(:level_0_target) do
-      create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
+      create :target,
+             :with_shared_assignment,
+             target_group: target_group_l0,
+             given_role: Target::ROLE_TEAM
     end
 
     scenario "student visits the dashboard" do
@@ -412,7 +447,10 @@ feature "Student's view of Course Curriculum", js: true do
       let(:c2_level_1) { create :level, :one, course: course_2 }
       let(:c2_target_group) { create :target_group, level: c2_level_1 }
       let!(:c2_target) do
-        create :target, target_group: c2_target_group, role: Target::ROLE_TEAM
+        create :target,
+               :with_shared_assignment,
+               target_group: c2_target_group,
+               given_role: Target::ROLE_TEAM
       end
       let!(:c2_student) do
         create :student, user: student.user, cohort: cohort_2
@@ -583,29 +621,32 @@ feature "Student's view of Course Curriculum", js: true do
   context "when a course has milestone targets" do
     let!(:milestone_l1) do
       create :target,
+             :with_shared_assignment,
+             :with_shared_assignment,
              target_group: target_group_l1,
-             role: Target::ROLE_TEAM,
-             evaluation_criteria: [evaluation_criterion],
-             milestone: true,
-             milestone_number: 1
+             given_role: Target::ROLE_TEAM,
+             given_evaluation_criteria: [evaluation_criterion],
+             given_milestone_number: 1
     end
 
     let!(:milestone_l2) do
       create :target,
+             :with_shared_assignment,
+             :with_shared_assignment,
              target_group: target_group_l2,
-             role: Target::ROLE_TEAM,
-             evaluation_criteria: [evaluation_criterion],
-             milestone: true,
-             milestone_number: 2
+             given_role: Target::ROLE_TEAM,
+             given_evaluation_criteria: [evaluation_criterion],
+             given_milestone_number: 2
     end
 
     let!(:milestone_l3) do
       create :target,
+             :with_shared_assignment,
+             :with_shared_assignment,
              target_group: target_group_l3,
-             role: Target::ROLE_TEAM,
-             evaluation_criteria: [evaluation_criterion],
-             milestone: true,
-             milestone_number: 3
+             given_role: Target::ROLE_TEAM,
+             given_evaluation_criteria: [evaluation_criterion],
+             given_milestone_number: 3
     end
 
     scenario "student checks few milestone targets" do
@@ -646,9 +687,10 @@ feature "Student's view of Course Curriculum", js: true do
     # create another pending submission to test the progression limit as there is already one
     let!(:target_1) do
       create :target,
+             :with_shared_assignment,
              target_group: target_group_l1,
-             role: Target::ROLE_TEAM,
-             evaluation_criteria: [evaluation_criterion]
+             given_role: Target::ROLE_TEAM,
+             given_evaluation_criteria: [evaluation_criterion]
     end
 
     let!(:submission_pending_t1) do
@@ -664,9 +706,10 @@ feature "Student's view of Course Curriculum", js: true do
     # Create another reviewed target to test the progression limit message
     let!(:target_2) do
       create :target,
+             :with_shared_assignment,
              target_group: target_group_l1,
-             role: Target::ROLE_TEAM,
-             evaluation_criteria: [evaluation_criterion]
+             given_role: Target::ROLE_TEAM,
+             given_evaluation_criteria: [evaluation_criterion]
     end
 
     scenario "student sees the progression limit lock message when the pending submissions count has reached the limit" do
@@ -699,12 +742,13 @@ feature "Student's view of Course Curriculum", js: true do
     end
 
     context "when a reviewed target has another reviewed target as prerequisite" do
-      let!(:target_2) do
-        create :target,
-               target_group: target_group_l1,
-               role: Target::ROLE_TEAM,
+      let!(:target_2) { create :target, target_group: target_group_l1 }
+      let!(:assignment_target_2) do
+        create :assignment,
+               target: target_2,
+               role: Assignment::ROLE_TEAM,
                evaluation_criteria: [evaluation_criterion],
-               prerequisite_targets: [target_1]
+               prerequisite_assignments: [target_1.assignments.first]
       end
 
       before { course.update!(progression_limit: 3) }

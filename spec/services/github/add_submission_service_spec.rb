@@ -16,6 +16,14 @@ RSpec.describe Github::AddSubmissionService, type: :service do
   let(:level) { create(:level, course: course) }
   let(:target_group) { create(:target_group, level: level) }
   let(:target) { create(:target, target_group: target_group) }
+  let!(:assignment) do
+    create(
+      :assignment,
+      :with_evaluation_criterion,
+      :with_default_checklist,
+      target: target
+    )
+  end
   let(:cohort) { create(:cohort, course: course) }
   let!(:student) do
     create(
@@ -160,7 +168,20 @@ RSpec.describe Github::AddSubmissionService, type: :service do
                 target: {
                   id: target.id,
                   title: target.title,
-                  evaluation_criteria: target.evaluation_criteria
+                  evaluation_criteria:
+                    target
+                      .assignments
+                      .not_archived
+                      .first
+                      .evaluation_criteria
+                      .map do |ec|
+                      {
+                        id: ec.id,
+                        name: ec.name,
+                        max_grade: ec.max_grade,
+                        grade_labels: ec.grade_labels
+                      }
+                    end
                 },
                 files: []
               }

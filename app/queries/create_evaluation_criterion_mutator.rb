@@ -28,14 +28,14 @@ class CreateEvaluationCriterionMutator < ApplicationQuery
 
     errors.add(
       :base,
-      'Criterion already exists with same name, max grade and pass grade'
+      I18n.t('mutations.evaluation_criterion.name_exists')
     )
   end
 
   def course_must_be_present
     return if course.present?
 
-    errors.add(:base, "Course with ID #{course_id} does not exist")
+    errors.add(:base, I18n.t("mutations.evaluation_criterion.no_course", course_id: course.id))
   end
 
   def create_evaluation_criterion

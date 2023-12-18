@@ -817,10 +817,11 @@ let make = (
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <label htmlFor="language" className="font-semibold"> {t("theme_title")->str} </label>
-            <div className="mt-6 flex items-center gap-3">
+            <div
+              className="mt-6 flex flex-col md:flex-row items-start md:grow-0 md:items-center gap-3">
               <label
                 htmlFor="theme-system"
-                className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
+                className="w-full md:w-auto p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
                 <Radio
                   id="theme-system"
                   label={t("system")}
@@ -834,7 +835,7 @@ let make = (
               </label>
               <label
                 htmlFor="theme-light"
-                className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
+                className="w-full md:w-auto p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
                 <Radio
                   id="theme-light"
                   label={t("light")}
@@ -845,7 +846,7 @@ let make = (
               </label>
               <label
                 htmlFor="theme-dark"
-                className="p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
+                className="w-full md:w-auto p-3 cursor-pointer flex justify-between items-center border border-gray-300 rounded-lg focus-within:outline-none focus-within:border-transparent focus-within:ring-2 focus-within:ring-focusColor-500 ">
                 <Radio
                   id="theme-dark"
                   label={t("dark")}

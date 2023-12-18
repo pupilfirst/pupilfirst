@@ -30,10 +30,10 @@ after "schools" do
             "support",
             "uploads",
             "files",
-            "logo_lipsum_on_dark_bg.png"
+            "logo_carpe_diem_on_dark_bg.png"
           )
         ),
-      filename: "logo_lipsum_on_dark_bg.png"
+      filename: "logo_carpe_diem_on_dark_bg.png"
     )
   end
 

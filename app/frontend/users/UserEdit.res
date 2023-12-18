@@ -770,6 +770,48 @@ let make = (
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pe-4">
+            <h3 className="text-lg font-semibold"> {t("localization")->str} </h3>
+            <p className="mt-1 text-sm text-gray-600"> {t("update_locale")->str} </p>
+          </div>
+          <div className="mt-5 md:mt-0 w-full md:w-2/3">
+            <label htmlFor="language" className="font-semibold"> {t("language")->str} </label>
+            <p className="text-sm text-gray-600"> {t("select_language")->str} </p>
+            <div className="mt-6">
+              <select
+                id="language"
+                value={state.locale}
+                onChange={event => {
+                  send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
+                }}
+                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
+                {availableLocales
+                ->Js.Array2.map(availableLocale =>
+                  <option
+                    key=availableLocale
+                    value=availableLocale
+                    ariaSelected={state.locale === availableLocale}>
+                    {Locale.humanize(availableLocale)->str}
+                  </option>
+                )
+                ->React.array}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
+        <button
+          disabled={saveDisabled(state)}
+          onClick={updateUser(state, send)}
+          className="btn btn-primary">
+          {t("save_changes")->str}
+        </button>
+      </div>
+    </div>
+    <div className="bg-white max-w-5xl mx-auto shadow sm:rounded-lg mt-10">
+      <div className="px-4 py-5 sm:p-6">
+        <div className="flex flex-col md:flex-row">
+          <div className="w-full md:w-1/3 pe-4">
             <h3 className="text-lg font-semibold"> {"Apperance"->str} </h3>
             <p className="mt-1 text-sm text-gray-600"> {"Select your preferred style."->str} </p>
           </div>
@@ -815,44 +857,6 @@ let make = (
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row mt-10 md:mt-12">
-          <div className="w-full md:w-1/3 pe-4">
-            <h3 className="text-lg font-semibold"> {t("localization")->str} </h3>
-            <p className="mt-1 text-sm text-gray-600"> {t("update_locale")->str} </p>
-          </div>
-          <div className="mt-5 md:mt-0 w-full md:w-2/3">
-            <label htmlFor="language" className="font-semibold"> {t("language")->str} </label>
-            <p className="text-sm text-gray-600"> {t("select_language")->str} </p>
-            <div className="mt-6">
-              <select
-                id="language"
-                value={state.locale}
-                onChange={event => {
-                  send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
-                }}
-                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
-                {availableLocales
-                ->Js.Array2.map(availableLocale =>
-                  <option
-                    key=availableLocale
-                    value=availableLocale
-                    ariaSelected={state.locale === availableLocale}>
-                    {Locale.humanize(availableLocale)->str}
-                  </option>
-                )
-                ->React.array}
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
-        <button
-          disabled={saveDisabled(state)}
-          onClick={updateUser(state, send)}
-          className="btn btn-primary">
-          {t("save_changes")->str}
-        </button>
       </div>
     </div>
     <div className="bg-white max-w-5xl mx-auto shadow sm:rounded-lg mt-10">

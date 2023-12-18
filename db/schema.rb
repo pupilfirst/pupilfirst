@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -85,11 +85,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
     t.string "role"
     t.jsonb "checklist"
     t.string "completion_instructions"
-    t.boolean "milestone"
+    t.boolean "milestone", default: false, null: false
     t.integer "milestone_number"
-    t.boolean "archived"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "archived", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["target_id"], name: "index_assignments_on_target_id"
   end
 

@@ -736,14 +736,14 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -759,7 +759,7 @@ en:
         rejected: Rejected
         reviewing: Reviewing
       student: student
-      submission_acceptable: "Is this submission acceptable?"
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
@@ -767,12 +767,12 @@ en:
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
-      undo_rejection_notice_title: "Submission Rejected:"
-      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
-      you_are_done: "You're done!"
       write_a_note: Write a Note
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: Assigned %{date}
       change_reviewer_and_start_review: Yes, Assign Me
@@ -929,13 +929,13 @@ en:
       delete_block_confirm: Are you sure you want to delete this block?
       deleting: Deleting...
       editor_content_block: "Editor for content block "
+      embedded_url: Embedded URL
       move_down: Move Down
       move_up: Move Up
       save_changes: Save Changes
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
@@ -1336,10 +1336,10 @@ en:
       you_selected_pre: You have selected
     SchoolCustomize__ImagesEditor:
       cover_image: Cover image
-      icon_light_label: Icon on a light background
       icon_dark_label: Icon on a dark background
-      logo_light_label: Logo on a light background
+      icon_light_label: Icon on a light background
       logo_dark_label: Logo on a dark background
+      logo_light_label: Logo on a light background
       manage_images: Manage Images
       update_images: Update Images
       updated_notification: Images have been updated successfully.
@@ -1794,21 +1794,12 @@ en:
       account: Account
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: Avatar uploaded successfully.
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: Cancel
+      change_account_email: Change account email
       change_password: Change your current password
-      dark: Dark
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Change photo
       community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
@@ -1817,17 +1808,21 @@ en:
       confirm_password: Confirm password
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
+      confirm_using_password: Please confirm using your password
       current_password: Current password
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
       disable_email_radio: Disable
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
+      email_change_q: Are you sure you want to change your email?
       email_label: Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
@@ -1843,21 +1838,26 @@ en:
       password_placeholder: Type current password
       photo: Photo
       preferred_name_placeholder: Type your preferred name
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: Save Changes
       security: Security
       select_image_limit: Please select an image with a size less than 5 MB
       select_language: Select the language that you would prefer the user interface to dislpay.
       send_email_radio: Send me a daily email
       set_password: Set password for your account
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
       system: System
+      theme_title: User Interface Theme
       update_credentials: Update your login credentials for the school.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
-      appearance_title: Appearance
-      appearance_description: Select your preferred style.
-      theme_title: User Interface Theme
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password
@@ -1914,10 +1914,10 @@ en:
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: Apply
@@ -1967,13 +1967,6 @@ en:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
-    something_went_wrong: Something went wrong!
-    vimeo:
-      2230: The upload type is invalid.
-      4003: There is a problem initiating the upload.
-      4101: Your maximum disk space has been reached.
-      4102: Your allotted weekly quota has been reached.
-      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -1994,10 +1987,17 @@ en:
       title: Timed out
       too_long: This page took too long to load.
       try_reloading: Could you please try reloading this page?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       title: Invalid Request
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: Coaches at
@@ -2268,8 +2268,8 @@ en:
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      submission_reviewed_error: Submission already reviewed
       success_notification: The submission has been marked as reviewed.
     create_post:
       reply_added_notification: Reply added successfully
@@ -2311,21 +2311,21 @@ en:
       success_notification: Team deleted successfully
     dropout_student:
       student_updated_notification: Student updated successfully
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
-    evaluation_criterion:
-      name_exists: A criterion already exists with this name and maximum grade.
-      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2492,7 +2492,7 @@ en:
           community: Community
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
@@ -2520,10 +2520,10 @@ en:
         dashboard_link:
           title: Dashboard
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: Dashboard
           home: Home
-        logo_alt: Logo of %{school_name}
       students_top_nav:
         admin_link:
           title: Admin
@@ -2780,6 +2780,7 @@ en:
       previous: "&lsaquo; Previous"
       truncate: "&hellip;"
     pass: Pass
+    password_strength: Password Strength
     percentage: Percentage
     percentage_completed: "%{percentage}% completed"
     post: Post
@@ -2813,7 +2814,6 @@ en:
     version: Version
     versions: Versions
     view: View
-    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2914,7 +2914,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email
@@ -2935,8 +2935,8 @@ en:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
-      link_expired: That link has expired or is invalid. Please try again.
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: That link has expired or is invalid. Please try again.
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:

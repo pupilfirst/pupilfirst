@@ -1855,6 +1855,9 @@ en:
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion.
+      appearance_title: Appearance
+      appearance_description: Select your preferred style.
+      theme_title: User Interface Theme
     UserSessionResetPassword:
       confirm_password: Confirm Password
       confirm_password_placeholder: Please re-enter your password

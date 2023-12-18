@@ -812,11 +812,11 @@ let make = (
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pe-4">
-            <h3 className="text-lg font-semibold"> {"Apperance"->str} </h3>
-            <p className="mt-1 text-sm text-gray-600"> {"Select your preferred style."->str} </p>
+            <h3 className="text-lg font-semibold"> {t("appearance_title")->str} </h3>
+            <p className="mt-1 text-sm text-gray-600"> {t("appearance_description")->str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
-            <label htmlFor="language" className="font-semibold"> {"Theme preference"->str} </label>
+            <label htmlFor="language" className="font-semibold"> {t("theme_title")->str} </label>
             <div className="mt-6 flex items-center gap-3">
               <label
                 htmlFor="theme-system"

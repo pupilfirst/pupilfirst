@@ -30,7 +30,8 @@ after "development:students", "development:targets", "development:faculty" do
   # Add lots of reviewed submissions.
   course
     .targets
-    .includes(:level, :evaluation_criteria)
+    .joins(:evaluation_criteria)
+    .includes(:level)
     .each do |target|
       # Create two such submissions per target.
       (1..2).each do |submission_number|
@@ -77,7 +78,8 @@ after "development:students", "development:targets", "development:faculty" do
   # Add a few pending review submissions and archived ones.
   course
     .targets
-    .joins(:level)
+    .joins(:evaluation_criteria)
+    .includes(:level)
     .where(levels: { id: final_level.id })
     .each do |target|
       pending_review =
@@ -136,7 +138,7 @@ after "development:students", "development:targets", "development:faculty" do
     TimelineEvent.create!(
       checklist: form_submission_checklist,
       created_at: 2.hours.ago,
-      target_id: 7
+      target_id: 6
     )
 
   form_submission.timeline_event_owners.create!(latest: true, student: student)

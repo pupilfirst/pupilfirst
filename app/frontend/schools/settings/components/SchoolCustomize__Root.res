@@ -490,7 +490,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       </div>
       <div className="mt-6 font-bold"> {t("icon")->str} </div>
       <div className="mt-3 w-1/2 max-w-sm">
-        <div className="bg-gray-300 rounded-t-lg h-12 flex items-end icon-display">
+        <div className="bg-gray-300 rounded-t-lg h-12 flex items-end">
           <div className="w-full flex items-center pe-3">
             <div className="h-3 w-3 rounded-full bg-gray-500 ms-4" />
             <div className="h-3 w-3 rounded-full bg-gray-500 ms-2" />

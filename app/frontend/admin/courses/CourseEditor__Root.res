@@ -387,7 +387,7 @@ let showCourse = course => {
                 <PfIcon className="if i-book-solid if-fw text-primary-400" />
               </div>
               <h4
-                className="w-full text-black font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
+                className="w-full text-gray-900 font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
                 {str(Course.name(course))}
               </h4>
             </div>

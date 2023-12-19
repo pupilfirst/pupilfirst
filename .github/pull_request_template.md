@@ -13,7 +13,7 @@
   - Add tests for authorization, if required.
 - [ ] Ensure that UI text is kept in I18n files.
 - [ ] Update developer and product docs, where applicable.
-- [ ] If the docs update include images, ensure they are compressed.
+  - If the documentation updates include images, ensure they are compressed.
 - [ ] Prep screenshot or demo video for changelog entry, and attach it to issue.
 - [ ] Check if new tables or columns that have been added need to be handled in the following services:
   - `Users::DeleteAccountService`

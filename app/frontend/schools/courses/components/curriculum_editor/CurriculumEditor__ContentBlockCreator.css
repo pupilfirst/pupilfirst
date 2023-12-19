@@ -54,22 +54,3 @@
     @apply shadow-lg;
   }
 }
-
-/* .content-block-creator__block-content-type-picker {
-  @apply relative cursor-pointer;
-}
-
-.content-block-creator__block-content-type-picker:hover {
-  @apply text-primary-400;
-  transition: all 0.2s;
-}
-
-.content-block-creator__block-content-type-picker:not(:last-child):before {
-  position: absolute;
-  content: "";
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  background-color: rgba(55, 36, 89, 0.9);
-} */

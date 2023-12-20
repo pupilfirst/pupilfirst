@@ -1,5 +1,7 @@
 %%raw(`import "./CourseEditor__Root.css"`)
 
+open ThemeSwitch
+
 @module("../../shared/images/add-new-course.svg")
 external addNewCourseSVG: string = "default"
 
@@ -380,11 +382,12 @@ let showCourse = course => {
                 />
               }}
             </div>
-            <div
-              className="course-editor-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-10"
-              key={Course.id(course)}>
+            <div className="flex gap-2 border-b border-gray-200" key={Course.id(course)}>
+              <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+                <PfIcon className="if i-book-solid if-fw text-primary-400" />
+              </div>
               <h4
-                className="course-editor-course__title text-white font-semibold leading-tight pe-4 text-lg md:text-xl">
+                className="w-full text-gray-900 font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
                 {str(Course.name(course))}
               </h4>
             </div>
@@ -604,7 +607,9 @@ let make = (~school) => {
               <div className="flex gap-6 px-6">
                 <div
                   className="school-overview__logo-container flex items-center bg-white p-3 border-4 border-white shadow-md ring-1 ring-gray-100 rounded-full -mt-16 overflow-hidden">
-                  {switch School.logoUrl(school) {
+                  {switch getTheme() == "light"
+                    ? School.logoOnLightBgUrl(school)
+                    : School.logoOnDarkBgUrl(school) {
                   | Some(url) =>
                     <img
                       className="h-9 md:h-12 object-contain flex text-sm items-center"

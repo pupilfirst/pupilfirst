@@ -27,11 +27,11 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name) => {...state, name: name}
+  | UpdateName(name) => {...state, name}
   | UpdateImageFilename(imageFilename, fileInvalid) => {
       ...state,
       imageFilename: Some(imageFilename),
-      fileInvalid: fileInvalid,
+      fileInvalid,
     }
   | RemoveFilename => {...state, imageFilename: None}
   | BeginSaving => {...state, saving: true}
@@ -124,7 +124,8 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       {t("certificate_base_image.help")->str}
                     </HelpIcon>
                   </div>
-                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+                  <div
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0 focus:outline-none"
@@ -136,7 +137,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       onChange={selectFile(send)}
                     />
                     <label className="file-input-label mt-2" htmlFor="certificate-file-input">
-                      <i className="fas fa-upload me-2 text-gray-600 text-lg" />
+                      <i className="fas fa-upload me-2 text-primary-300 text-lg" />
                       <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
                     </label>
                   </div>

@@ -149,9 +149,9 @@ feature "Target Details Editor", js: true do
     click_button "Update Target"
     dismiss_notification
 
-    expect(target_1_l2.reload.assignments.first.completion_instructions).to eq(
-      ""
-    )
+    expect(
+      target_1_l2.reload.assignments.first.completion_instructions
+    ).to be_nil
   end
 
   scenario "school admin updates a target as reviewed by faculty" do

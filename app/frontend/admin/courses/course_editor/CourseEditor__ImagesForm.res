@@ -88,7 +88,8 @@ let optionalImageLabelText = (image, selectedFilename) =>
     switch image {
     | Some(existingImage) =>
       <span>
-        {t("replace_image_label")->str} <code> {Course.filename(existingImage)->str} </code>
+        {t("replace_image_label")->str}
+        <code> {Course.filename(existingImage)->str} </code>
       </span>
     | None => t("empty_image_label") |> str
     }
@@ -164,7 +165,8 @@ let make = (~course, ~updateCourseCB) => {
           link={t("thumbnail.help_url")}>
           {t("thumbnail.help")->str}
         </HelpIcon>
-        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+        <div
+          className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"
@@ -177,7 +179,7 @@ let make = (~course, ~updateCourseCB) => {
             onChange={updateImage(send, false)}
           />
           <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
-            <i className="fas fa-upload" />
+            <i className="fas fa-upload text-primary-300 text-lg" />
             <span className="ms-2 truncate">
               {optionalImageLabelText(thumbnail, state.filenameThumb)}
             </span>
@@ -197,7 +199,8 @@ let make = (~course, ~updateCourseCB) => {
           link={t("cover_image.help_url")}>
           {t("cover_image.help") |> str}
         </HelpIcon>
-        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+        <div
+          className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"
@@ -210,7 +213,7 @@ let make = (~course, ~updateCourseCB) => {
             onChange={updateImage(send, true)}
           />
           <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
-            <i className="fas fa-upload" />
+            <i className="fas fa-upload text-primary-300 text-lg" />
             <span className="ms-2 truncate">
               {optionalImageLabelText(cover, state.filenameCover)}
             </span>

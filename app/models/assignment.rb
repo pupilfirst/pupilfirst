@@ -16,6 +16,8 @@ class Assignment < ApplicationRecord
   scope :not_archived, -> { where.not(archived: true) }
   scope :milestone, -> { not_archived.where(milestone: true) }
 
+  normalize_attribute :completion_instructions
+
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"
 

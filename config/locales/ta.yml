@@ -734,14 +734,14 @@ ta:
       grade_card: தர அட்டை
       help_text: '%{note_about}இன் முன்னேற்றத்தைக் கண்காணிக்க குறிப்புகளைப் பயன்படுத்தலாம். இந்தக் குறிப்புகள் மாணவர் அறிக்கையில் பயிற்சியாளர்களுக்கு மட்டுமே காட்டப்படும். %{additional_help}'
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: இந்த சமர்ப்பிப்பை மதிப்பாய்வு செய்யும் போது ஏதாவது கவனித்தீர்களா?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: வேலையை அகற்று
       report_description: சோதனை அறிக்கை
       review: விமர்சனம்
@@ -757,7 +757,7 @@ ta:
         rejected: நிராகரிக்கப்பட்டது
         reviewing: மதிப்பாய்வு செய்கிறது
       student: மாணவர்
-      submission_acceptable: "Is this submission acceptable?"
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "மூலம் சமர்ப்பிக்கப்பட்டது "
       submitted_by_team: "குழுவால் சமர்ப்பிக்கப்பட்டது: "
@@ -765,12 +765,12 @@ ta:
       team_notice: " இந்தச் சமர்ப்பிப்பு ஒரு குழுவிடமிருந்து வந்தது, எனவே இங்கு சேர்க்கப்பட்ட குறிப்பு, குழுவில் உள்ள அனைத்து மாணவர்களின் அறிக்கையிலும் இடுகையிடப்படும்."
       undo_grade_warning: இந்த கிரேடுகளை நிச்சயமாக அகற்ற விரும்புகிறீர்களா? இது சமர்ப்பிப்பை 'நிலுவையில் உள்ள மதிப்பாய்வு' நிலைக்குத் திருப்பும்.
       undo_grading: கிரேடிங்கை செயல்தவிர்
-      undo_rejection_notice_title: "Submission Rejected:"
-      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
-      you_are_done: "You're done!"
       write_a_note: ஒரு குறிப்பு எழுதவும்
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: ஒதுக்கப்பட்டது %{date}
       change_reviewer_and_start_review: ஆம், என்னை ஒதுக்கு
@@ -926,13 +926,13 @@ ta:
       delete_block_confirm: இந்தத் தடுப்பை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
       deleting: நீக்குகிறது...
       editor_content_block: "உள்ளடக்கத் தொகுதிக்கான எடிட்டர் "
+      embedded_url: Embedded URL
       move_down: கீழே இறங்கு
       move_up: மேலே நகர்த்து
       save_changes: மாற்றங்களை சேமியுங்கள்
       undo_block_confirm: இந்தத் தொகுதியில் நீங்கள் செய்த மாற்றங்களை நிச்சயமாகச் செயல்தவிர்க்க விரும்புகிறீர்களா?
       undo_changes: மாற்றங்களை செயல்தவிர்
       uploading: புதுப்பிக்கிறது...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: கடைசியாக புதுப்பிக்கப்பட்டது
@@ -1332,7 +1332,9 @@ ta:
       you_selected_pre: நீங்கள் தேர்ந்தெடுத்துள்ளீர்கள்
     SchoolCustomize__ImagesEditor:
       cover_image: அட்டைப் படம்
-      icon: ஐகான்
+      icon_dark_label: Icon on a dark background
+      icon_light_label: Icon on a light background
+      logo_dark_label: Logo on a dark background
       logo_light_label: ஒளி பின்னணியில் லோகோ
       manage_images: படங்களை நிர்வகிக்கவும்
       update_images: படங்களை புதுப்பிக்கவும்
@@ -1788,20 +1790,12 @@ ta:
       account: கணக்கு
       account_delete_q: உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இது எங்கள் சேவையகங்களிலிருந்து உங்கள் தரவை நிரந்தரமாக அகற்றுவதற்கான செயல்முறையைத் தொடங்கும்.
       already_iniated_deletion_warning: நீங்கள் ஏற்கனவே கணக்கை நீக்கிவிட்டீர்கள். உங்கள் கணக்கை நீக்குவதற்கான கூடுதல் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்.
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: அவதார் வெற்றிகரமாக பதிவேற்றப்பட்டது.
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: ரத்து செய்
+      change_account_email: Change account email
       change_password: உங்கள் தற்போதைய கடவுச்சொல்லை மாற்றவும்
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: புகைப்படத்தை மாற்று
       community_digest: Community Digest
       community_digest_emails: Community digest மின்னஞ்சல்களில் உங்கள் சமூகங்களில் இருந்து புதிய கேள்விகள் மற்றும் கடந்த வாரத்தில் இருந்து பதிலளிக்கப்படாத கேள்விகள் உள்ளன.
@@ -1810,20 +1804,25 @@ ta:
       confirm_password: கடவுச்சொல்லை உறுதிப்படுத்தவும்
       confirm_password_error: புதிய கடவுச்சொல் மற்றும் உறுதிப்படுத்தல் பொருந்த வேண்டும் மற்றும் குறைந்தது 8 எழுத்துக்கள் இருக்க வேண்டும்
       confirm_password_placeholder: புதிய கடவு சொல்லை உறுதி செய்
+      confirm_using_password: Please confirm using your password
       current_password: தற்போதைய கடவுச்சொல்
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: கணக்கை நீக்குக
       delete_your_account: உங்கள் கணக்கை நீக்கவும்
       deleting_account_warning: உங்கள் பயனர் கணக்கை நீக்குவது இந்தப் பள்ளியிலிருந்து உங்கள் எல்லாத் தரவையும் நீக்கிவிடும். சமூகங்களில் உள்ள இடுகைகளுக்கான பதில்களும் மாணவர்களுக்கான கருத்துகளும் (பயனர் பயிற்சியாளர் சுயவிவரத்தை வைத்திருந்தால்) நீக்கப்படாது. இந்தப் பள்ளியில் நீங்கள் நிர்வாகியாக இருந்தால் நிர்வாக உரிமைகள் ரத்து செய்யப்பட வேண்டும்.
       disable_email_radio: முடக்கு
       displayed_publicly: இந்தத் தகவல் பொதுவில் காட்டப்படும், எனவே நீங்கள் எதைப் பகிர்கிறீர்கள் என்பதில் கவனமாக இருக்கவும்.
       edit_profile: உங்கள் சுயவிவரத்தை திருத்தவும்
+      email_change_q: Are you sure you want to change your email?
       email_label: மின்னஞ்சல்
       email_placeholder: உங்கள் மின்னஞ்சலை தட்டச்சு செய்யவும்
       email_sent_notification: உங்கள் புதிய மின்னஞ்சலைச் சரிபார்க்கவும். உங்கள் மின்னஞ்சல் முகவரியைப் புதுப்பிப்பதற்கான வழிமுறைகளை அனுப்பியுள்ளோம்.
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: நீக்குதலைத் தொடங்கவும்
       language: மொழி
+      light: Light
       localization: உள்ளூர்மயமாக்கல்
       manage_account: இந்தப் பள்ளியில் உங்கள் கணக்கை நிர்வகிக்கவும்
       name_error: பெயர் காலியாக இருக்க முடியாது
@@ -1835,13 +1834,22 @@ ta:
       password_placeholder: தற்போதைய கடவுச்சொல்லை உள்ளிடவும்
       photo: புகைப்படம்
       preferred_name_placeholder: உங்களுக்கு விருப்பமான பெயரை உள்ளிடவும்
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: மாற்றங்களை சேமியுங்கள்
       security: பாதுகாப்பு
       select_image_limit: 5 MB க்கும் குறைவான அளவு கொண்ட படத்தைத் தேர்ந்தெடுக்கவும்
       select_language: பயனர் இடைமுகத்தை செலுத்த விரும்பும் மொழியைத் தேர்ந்தெடுக்கவும்.
       send_email_radio: எனக்கு தினசரி மின்னஞ்சல் அனுப்பு
       set_password: உங்கள் கணக்கிற்கான கடவுச்சொல்லை அமைக்கவும்
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
+      system: System
+      theme_title: User Interface Theme
       update_credentials: பள்ளிக்கான உங்கள் உள்நுழைவுச் சான்றுகளைப் புதுப்பிக்கவும்.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: மின்னஞ்சல் அறிவிப்புகளுக்கான அமைப்புகளைப் புதுப்பிக்கவும்.
       update_locale: உங்கள் மொழி தொடர்பான அமைப்புகளைப் புதுப்பிக்கவும்.
       upload_failed: பதிவேற்ற முடியவில்லை
@@ -1902,10 +1910,10 @@ ta:
       subscribed_on_another_device: இந்தச் சாதனத்தில் குழுசேரவும்
       unsubscribe: குழுவிலகவும்
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: விண்ணப்பிக்கவும்
@@ -1955,13 +1963,6 @@ ta:
       enroll: பதிவு செய்யவும்
       preview_course: முன்னோட்ட பாடநெறி
   errors:
-    something_went_wrong: Something went wrong!
-    vimeo:
-      2230: The upload type is invalid.
-      4003: There is a problem initiating the upload.
-      4101: Your maximum disk space has been reached.
-      4102: Your allotted weekly quota has been reached.
-      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: உங்கள் கோரிக்கையைச் செயல்படுத்த முயற்சிக்கும்போது எங்கள் சேவையகம் சிக்கலைத் தாக்கியது போல் தெரிகிறது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
       title: சர்வர் பிழை
@@ -1982,10 +1983,17 @@ ta:
       title: நேரம் கடந்துவிட்டது
       too_long: இந்தப் பக்கம் ஏற்றப்படுவதற்கு அதிக நேரம் எடுத்தது.
       try_reloading: இந்தப் பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்க முடியுமா?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: உங்கள் உலாவி தவறான கோரிக்கையை வைத்துள்ளது.
       title: தவறான கோரிக்கை
       wasnt_valid: <em>உங்கள் உலாவி அனுப்பிய கோரிக்கையைப் பற்றிய ஏதோ</em> தவறானது. இந்தப் பிழைகளைத் தானாகக் கண்காணிக்கிறோம், ஆனால் சிக்கல் தொடர்ந்தால், எங்களைத் தொடர்பு கொள்ளலாம். இதற்கிடையில், பக்கத்தை மீண்டும் ஏற்ற முயற்சிக்கவும்.
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: பயிற்சியாளர்கள்
@@ -2041,7 +2049,6 @@ ta:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2255,8 +2262,8 @@ ta:
       invalid_checklist_shape_error: சமர்ப்பிப்பு சரிபார்ப்புப் பட்டியலில் உள்ள தரவின் வடிவம் மதிப்பாய்வுடன் அனுப்பப்பட்ட வடிவத்துடன் பொருந்தவில்லை
       invalid_checklist_values_error: சமர்ப்பிப்பில் உள்ள சரிபார்ப்புப் பட்டியல் உருப்படிகளுக்கான மதிப்புகள் மதிப்பாய்வுத் தரவுடன் பொருந்தவில்லை
       invalid_grading_error: "வழங்கப்பட்ட கிரேடிங் மதிப்புகள் தவறானவை: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "ஐடி: %{submission_id}உடன் சமர்ப்பிப்பைக் கண்டறிய முடியவில்லை"
+      submission_reviewed_error: Submission already reviewed
       success_notification: சமர்ப்பிப்பு மதிப்பாய்வு செய்யப்பட்டதாகக் குறிக்கப்பட்டது.
     create_post:
       reply_added_notification: பதில் வெற்றிகரமாக சேர்க்கப்பட்டது
@@ -2298,21 +2305,21 @@ ta:
       success_notification: குழு வெற்றிகரமாக நீக்கப்பட்டது
     dropout_student:
       student_updated_notification: மாணவர் வெற்றிகரமாக புதுப்பிக்கப்பட்டார்
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: கொடுக்கப்பட்ட ஐடியுடன் படிப்பைக் கண்டுபிடிக்க முடியவில்லை
       success_notification: உங்கள் ஏற்றுமதி செயலாக்கப்படுகிறது. அது தயாரானவுடன் உங்களுக்கு அறிவிப்போம்.
       tag_not_found_error: கொடுக்கப்பட்ட ஐடிகளுடன் குறிச்சொற்களைக் கண்டறிய முடியவில்லை
-    evaluation_criterion:
-      name_exists: A criterion already exists with this name and maximum grade.
-      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: மேலும் படிகளுக்கு உங்கள் இன்பாக்ஸைச் சரிபார்க்கவும்!
       deletion_init_notification: கணக்கு நீக்குதல் தொடங்கப்பட்டது
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: சான்றிதழ் வெற்றிகரமாக வழங்கப்பட்டது!
     lock_topic:
@@ -2479,7 +2486,7 @@ ta:
           community: சமூக
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "இந்த வாரம் லீடர்போர்டில் முதலிடத்தில் உள்ளன, ஸ்கோரைப் பகிர்ந்து கொள்கின்றன "
@@ -2507,6 +2514,7 @@ ta:
         dashboard_link:
           title: டாஷ்போர்டு
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: டாஷ்போர்டு
           home: வீடு
@@ -2530,7 +2538,7 @@ ta:
           continue_with_discord: டிஸ்கார்டுடன் தொடரவும்
           continue_with_email_link: மின்னஞ்சலுடன் தொடரவும்
           continue_with_facebook: Facebook உடன் தொடரவும்
-          continue_with_github: Github உடன் தொடரவும்
+          continue_with_github: Continue with GitHub
           continue_with_google: Google உடன் தொடரவும்
         page_title:
           title: உள்நுழையவும்
@@ -2766,6 +2774,7 @@ ta:
       previous: "&lsaquo; முந்தையது"
       truncate: "&hellip;"
     pass: பாஸ்
+    password_strength: Password Strength
     percentage: சதவிதம்
     percentage_completed: "%{percentage}% completed"
     post: அஞ்சல்
@@ -2799,7 +2808,6 @@ ta:
     version: பதிப்பு
     versions: பதிப்புகள்
     view: காண்க
-    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2900,7 +2908,7 @@ ta:
         subtitle: கடவுச்சொல் மீட்புக்கு உங்கள் மின்னஞ்சலை உள்ளிடவும்.
       reset_password:
         link_used: அந்த ஒரு முறை இணைப்பு ஏற்கனவே பயன்படுத்தப்பட்டது அல்லது தவறானது. உங்கள் கடவுச்சொல்லை மீண்டும் அமைக்க முயற்சிக்கவும்.
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
         email: மின்னஞ்சலுடன் தொடரவும்
@@ -2921,8 +2929,8 @@ ta:
         link_expired: அந்த ஒரு முறை இணைப்பு காலாவதியானது அல்லது தவறானது. மீண்டும் உள்நுழைய முயற்சிக்கவும்.
     update_email:
       frequent_request_error: இரண்டு நிமிடங்களுக்கு முன் ஒரு மின்னஞ்சல் அனுப்பப்பட்டது. மீண்டும் முயற்சிக்கும் முன் சில நிமிடங்கள் காத்திருக்கவும்.
-      link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: அந்த இணைப்பு காலாவதியானது அல்லது தவறானது. தயவுசெய்து மீண்டும் முயற்சி செய்க.
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:

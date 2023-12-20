@@ -21,11 +21,15 @@
       <% end %>
     </ul>
     <p style="margin: 0px; padding-top: 16px">
-      <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header", coach_name: coach_name, update_for: update_for) %>
+      <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header") %>
     </p>
-  <% else %>
+  <% elsif target&.evaluation_criteria.present? %>
     <p style="margin: 0px;">
       <%= t("mailers.startup.feedback_as_email.body.rejected_feedback", coach_name: coach_name, update_for: update_for) %>
+    </p>
+  <% else %>
+    <p style="margin: 0px; padding-top: 16px">
+      <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header") %>
     </p>
   <% end %>
   <div style="margin: 8px 0px 0px 0px; padding-left: 8px">

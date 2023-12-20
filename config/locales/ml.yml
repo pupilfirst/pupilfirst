@@ -734,14 +734,14 @@ ml:
       grade_card: ഗ്രേഡ് കാർഡ്
       help_text: '%{note_about}ന്റെ പുരോഗതി ട്രാക്ക് ചെയ്യാൻ കുറിപ്പുകൾ ഉപയോഗിക്കാം. ഈ കുറിപ്പുകൾ ഒരു വിദ്യാർത്ഥിയുടെ റിപ്പോർട്ടിൽ പരിശീലകർക്ക് മാത്രം കാണിക്കുന്നു. %{additional_help}'
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: ഈ സമർപ്പണം അവലോകനം ചെയ്യുമ്പോൾ നിങ്ങൾ എന്തെങ്കിലും ശ്രദ്ധിച്ചോ?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: അസൈൻമെന്റ് നീക്കം ചെയ്യുക
       report_description: പരിശോധനാ ഫലം
       review: അവലോകനം
@@ -757,7 +757,7 @@ ml:
         rejected: നിരസിച്ചു
         reviewing: അവലോകനം ചെയ്യുന്നു
       student: വിദ്യാർത്ഥി
-      submission_acceptable: "Is this submission acceptable?"
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "സമർപ്പിച്ചത് "
       submitted_by_team: "ടീം സമർപ്പിച്ചത്: "
@@ -765,12 +765,12 @@ ml:
       team_notice: " ഈ സമർപ്പിക്കൽ ഒരു ടീമിൽ നിന്നുള്ളതാണ്, അതിനാൽ ഇവിടെ ചേർത്ത ഒരു കുറിപ്പ് ടീമിലെ എല്ലാ വിദ്യാർത്ഥികളുടെയും റിപ്പോർട്ടിൽ പോസ്റ്റ് ചെയ്യും."
       undo_grade_warning: ഈ ഗ്രേഡുകൾ നീക്കം ചെയ്യണമെന്ന് തീർച്ചയാണോ? ഇത് സമർപ്പണത്തെ 'തീർച്ചപ്പെടുത്താത്ത അവലോകനം' നിലയിലേക്ക് തിരികെ കൊണ്ടുവരും.
       undo_grading: ഗ്രേഡിംഗ് പഴയപടിയാക്കുക
-      undo_rejection_notice_title: "Submission Rejected:"
-      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
-      you_are_done: "You're done!"
       write_a_note: ഒരു കുറിപ്പ് എഴുതുക
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: '%{date}അസൈൻ ചെയ്‌തു'
       change_reviewer_and_start_review: അതെ, എന്നെ അസൈൻ ചെയ്യുക
@@ -926,13 +926,13 @@ ml:
       delete_block_confirm: ഈ ബ്ലോക്ക് ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ?
       deleting: ഇല്ലാതാക്കുന്നു...
       editor_content_block: "ഉള്ളടക്ക ബ്ലോക്കിനുള്ള എഡിറ്റർ "
+      embedded_url: Embedded URL
       move_down: താഴേക്ക് നീക്കുക
       move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
       save_changes: മാറ്റങ്ങൾ സൂക്ഷിക്കുക
       undo_block_confirm: ഈ ബ്ലോക്കിലെ നിങ്ങളുടെ മാറ്റങ്ങൾ പഴയപടിയാക്കണമെന്ന് തീർച്ചയാണോ?
       undo_changes: മാറ്റങ്ങൾ പഴയപടിയാക്കുക
       uploading: അപ്ഡേറ്റ് ചെയ്യുന്നു...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: അവസാനമായി പുതുക്കിയത്
@@ -1332,7 +1332,9 @@ ml:
       you_selected_pre: നിങ്ങൾ തിരഞ്ഞെടുത്തു
     SchoolCustomize__ImagesEditor:
       cover_image: മുഖചിത്രം
-      icon: ഐക്കൺ
+      icon_dark_label: Icon on a dark background
+      icon_light_label: Icon on a light background
+      logo_dark_label: Logo on a dark background
       logo_light_label: ഇളം പശ്ചാത്തലത്തിലുള്ള ലോഗോ
       manage_images: ചിത്രങ്ങൾ കൈകാര്യം ചെയ്യുക
       update_images: ചിത്രങ്ങൾ അപ്ഡേറ്റ് ചെയ്യുക
@@ -1788,20 +1790,12 @@ ml:
       account: അക്കൗണ്ട്
       account_delete_q: നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ? ഇത് ഞങ്ങളുടെ സെർവറുകളിൽ നിന്ന് നിങ്ങളുടെ ഡാറ്റ ശാശ്വതമായി നീക്കം ചെയ്യുന്നതിനുള്ള പ്രക്രിയ ആരംഭിക്കും.
       already_iniated_deletion_warning: നിങ്ങൾ ഇതിനകം അക്കൗണ്ട് ഇല്ലാതാക്കൽ ആരംഭിച്ചിട്ടുണ്ട്. നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കുന്നതിനുള്ള തുടർ നടപടികൾക്കായി നിങ്ങളുടെ ഇൻബോക്സ് പരിശോധിക്കുക.
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: അവതാർ അപ്‌ലോഡ് ചെയ്‌തു.
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: റദ്ദാക്കുക
+      change_account_email: Change account email
       change_password: നിങ്ങളുടെ നിലവിലെ പാസ്‌വേഡ് മാറ്റുക
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: ചിത്രം മാറ്റുക
       community_digest: Community Digest
       community_digest_emails: കമ്മ്യൂണിറ്റി ഡൈജസ്റ്റ് ഇമെയിലുകളിൽ നിങ്ങളുടെ കമ്മ്യൂണിറ്റികളിൽ നിന്നുള്ള പുതിയ ചോദ്യങ്ങളും കഴിഞ്ഞ ആഴ്‌ചയിലെ ഉത്തരം ലഭിക്കാത്ത ചോദ്യങ്ങളും അടങ്ങിയിരിക്കുന്നു.
@@ -1810,20 +1804,25 @@ ml:
       confirm_password: പാസ്വേഡ് സ്ഥിരീകരിക്കുക
       confirm_password_error: പുതിയ പാസ്‌വേഡും സ്ഥിരീകരണവും പൊരുത്തപ്പെടണം കൂടാതെ കുറഞ്ഞത് 8 പ്രതീകങ്ങൾ ഉണ്ടായിരിക്കണം
       confirm_password_placeholder: പുതിയ പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക
+      confirm_using_password: Please confirm using your password
       current_password: ഇപ്പോഴത്തെ പാസ്സ്വേർഡ്
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: അക്കൗണ്ട് ഇല്ലാതാക്കുക
       delete_your_account: നിങ്ങളുടെ അക്കൗണ്ട് ഇല്ലാതാക്കുക
       deleting_account_warning: നിങ്ങളുടെ ഉപയോക്തൃ അക്കൗണ്ട് ഇല്ലാതാക്കുന്നത് ഈ സ്കൂളിൽ നിന്ന് നിങ്ങളുടെ എല്ലാ ഡാറ്റയും നീക്കം ചെയ്യുന്നു. കമ്മ്യൂണിറ്റികളിലെ പോസ്റ്റുകൾക്കുള്ള മറുപടികളും വിദ്യാർത്ഥികൾക്കുള്ള ഫീഡ്‌ബാക്കും (ഉപയോക്താവിന് ഒരു കോച്ച് പ്രൊഫൈൽ ഉണ്ടെങ്കിൽ) ഇല്ലാതാക്കില്ല. നിങ്ങൾ ഈ സ്കൂളിൽ അഡ്മിൻ ആണെങ്കിൽ അഡ്മിൻ അവകാശങ്ങൾ റദ്ദാക്കേണ്ടതുണ്ട്.
       disable_email_radio: പ്രവർത്തനരഹിതമാക്കുക
       displayed_publicly: ഈ വിവരങ്ങൾ പൊതുവായി പ്രദർശിപ്പിക്കും, അതിനാൽ നിങ്ങൾ പങ്കിടുന്ന കാര്യങ്ങൾ ശ്രദ്ധിക്കുക.
       edit_profile: നിങ്ങളുടെ പ്രൊഫൈൽ എഡിറ്റുചെയ്യുക
+      email_change_q: Are you sure you want to change your email?
       email_label: ഇമെയിൽ
       email_placeholder: നിങ്ങളുടെ ഇമെയിൽ ടൈപ്പ് ചെയ്യുക
       email_sent_notification: ദയവായി നിങ്ങളുടെ പുതിയ ഇമെയിൽ പരിശോധിക്കുക. നിങ്ങളുടെ ഇമെയിൽ വിലാസം അപ്ഡേറ്റ് ചെയ്യുന്നതിനുള്ള നിർദ്ദേശങ്ങൾ ഞങ്ങൾ അയച്ചിട്ടുണ്ട്.
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: ഇല്ലാതാക്കൽ ആരംഭിക്കുക
       language: ഭാഷ
+      light: Light
       localization: പ്രാദേശികവൽക്കരണം
       manage_account: ഈ സ്കൂളിൽ നിങ്ങളുടെ അക്കൗണ്ട് മാനേജ് ചെയ്യുക
       name_error: പേര് ശൂന്യമാക്കാൻ കഴിയില്ല
@@ -1835,13 +1834,22 @@ ml:
       password_placeholder: നിലവിലെ പാസ്‌വേഡ് ടൈപ്പ് ചെയ്യുക
       photo: ഫോട്ടോ
       preferred_name_placeholder: നിങ്ങൾക്ക് ഇഷ്ടപ്പെട്ട പേര് ടൈപ്പ് ചെയ്യുക
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: മാറ്റങ്ങൾ സൂക്ഷിക്കുക
       security: സുരക്ഷ
       select_image_limit: 5 MB-യിൽ താഴെ വലിപ്പമുള്ള ഒരു ചിത്രം തിരഞ്ഞെടുക്കുക
       select_language: ഡിസ്‌പേ ചെയ്യാൻ നിങ്ങൾ ഉപയോക്തൃ ഇന്റർഫേസ് തിരഞ്ഞെടുക്കുന്ന ഭാഷ തിരഞ്ഞെടുക്കുക.
       send_email_radio: എനിക്ക് ദിവസേന ഒരു ഇമെയിൽ അയയ്ക്കുക
       set_password: നിങ്ങളുടെ അക്കൗണ്ടിനായി പാസ്‌വേഡ് സജ്ജമാക്കുക
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
+      system: System
+      theme_title: User Interface Theme
       update_credentials: സ്കൂളിനായി നിങ്ങളുടെ ലോഗിൻ ക്രെഡൻഷ്യലുകൾ അപ്ഡേറ്റ് ചെയ്യുക.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: ഇമെയിൽ അറിയിപ്പുകൾക്കായുള്ള ക്രമീകരണങ്ങൾ അപ്‌ഡേറ്റ് ചെയ്യുക.
       update_locale: നിങ്ങളുടെ ലൊക്കേലുമായി ബന്ധപ്പെട്ട ക്രമീകരണങ്ങൾ അപ്‌ഡേറ്റ് ചെയ്യുക.
       upload_failed: അപ്‌ലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു
@@ -1902,10 +1910,10 @@ ml:
       subscribed_on_another_device: ഈ ഉപകരണത്തിൽ സബ്സ്ക്രൈബ് ചെയ്യുക
       unsubscribe: അൺസബ്സ്ക്രൈബ് ചെയ്യുക
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: അപേക്ഷിക്കുക
@@ -1955,13 +1963,6 @@ ml:
       enroll: പേര് ചേർക്കുക
       preview_course: പ്രിവ്യൂ കോഴ്സ്
   errors:
-    something_went_wrong: Something went wrong!
-    vimeo:
-      2230: The upload type is invalid.
-      4003: There is a problem initiating the upload.
-      4101: Your maximum disk space has been reached.
-      4102: Your allotted weekly quota has been reached.
-      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: നിങ്ങളുടെ അഭ്യർത്ഥന പ്രോസസ്സ് ചെയ്യാൻ ശ്രമിക്കുന്നതിനിടയിൽ ഞങ്ങളുടെ സെർവറിന് ഒരു തകരാർ സംഭവിച്ചതായി തോന്നുന്നു. ഞങ്ങൾ ഈ പിശകുകൾ സ്വയമേവ ട്രാക്ക് ചെയ്യുന്നു, പക്ഷേ പ്രശ്നം നിലനിൽക്കുകയാണെങ്കിൽ ഞങ്ങളെ ബന്ധപ്പെടാൻ മടിക്കേണ്ടതില്ല. അതിനിടയിൽ, പേജ് വീണ്ടും ലോഡ് ചെയ്യാൻ ശ്രമിക്കുക.
       title: സെർവർ തകരാർ
@@ -1982,10 +1983,17 @@ ml:
       title: സമയപരിധി കഴിഞ്ഞു
       too_long: ഈ പേജ് ലോഡുചെയ്യാൻ വളരെയധികം സമയമെടുത്തു.
       try_reloading: ഈ പേജ് വീണ്ടും ലോഡുചെയ്യാൻ ശ്രമിക്കാമോ?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: നിങ്ങളുടെ ബ്രൗസർ ഒരു അസാധുവായ അഭ്യർത്ഥന നടത്തി.
       title: അസാധുവായ അഭ്യർത്ഥന
       wasnt_valid: <em>നിങ്ങളുടെ ബ്രൗസർ അയച്ച അഭ്യർത്ഥനയെക്കുറിച്ചുള്ള ചിലത്</em> സാധുവായതല്ല. ഞങ്ങൾ ഈ പിശകുകൾ സ്വയമേവ ട്രാക്ക് ചെയ്യുന്നു, പക്ഷേ പ്രശ്നം നിലനിൽക്കുകയാണെങ്കിൽ ഞങ്ങളെ ബന്ധപ്പെടാൻ മടിക്കേണ്ടതില്ല. അതിനിടയിൽ, പേജ് വീണ്ടും ലോഡ് ചെയ്യാൻ ശ്രമിക്കുക.
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: കോച്ചുകൾ
@@ -2041,7 +2049,6 @@ ml:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2255,8 +2262,8 @@ ml:
       invalid_checklist_shape_error: സമർപ്പിക്കൽ ചെക്ക്‌ലിസ്റ്റിലെ ഡാറ്റയുടെ ആകൃതി അവലോകനത്തിനൊപ്പം അയച്ചതുമായി പൊരുത്തപ്പെടുന്നില്ല
       invalid_checklist_values_error: സമർപ്പണത്തിലെ ചെക്ക്‌ലിസ്റ്റ് ഇനങ്ങളുടെ മൂല്യങ്ങൾ അവലോകന ഡാറ്റയുമായി പൊരുത്തപ്പെടുന്നില്ല
       invalid_grading_error: "നൽകിയ ഗ്രേഡിംഗ് മൂല്യങ്ങൾ അസാധുവാണ്: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "ഐഡി: %{submission_id}ഉള്ള സമർപ്പണം കണ്ടെത്താനായില്ല"
+      submission_reviewed_error: Submission already reviewed
       success_notification: സമർപ്പണം അവലോകനം ചെയ്തതായി അടയാളപ്പെടുത്തി.
     create_post:
       reply_added_notification: മറുപടി വിജയകരമായി ചേർത്തു
@@ -2298,21 +2305,21 @@ ml:
       success_notification: ടീം വിജയകരമായി ഇല്ലാതാക്കി
     dropout_student:
       student_updated_notification: വിദ്യാർത്ഥി വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: നൽകിയ ഐഡിയിൽ ഒരു കോഴ്സ് കണ്ടെത്താൻ കഴിഞ്ഞില്ല
       success_notification: നിങ്ങളുടെ കയറ്റുമതി പ്രോസസ്സ് ചെയ്യുകയാണ്. ഇത് തയ്യാറായാലുടൻ ഞങ്ങൾ നിങ്ങളെ അറിയിക്കും.
       tag_not_found_error: നൽകിയിരിക്കുന്ന ഐഡികളുള്ള ടാഗുകൾ കണ്ടെത്താനായില്ല
-    evaluation_criterion:
-      name_exists: A criterion already exists with this name and maximum grade.
-      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: കൂടുതൽ നടപടികൾക്കായി നിങ്ങളുടെ ഇൻബോക്സ് പരിശോധിക്കുക!
       deletion_init_notification: അക്കൗണ്ട് ഇല്ലാതാക്കൽ ആരംഭിച്ചു
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: സർട്ടിഫിക്കറ്റ് വിതരണം ചെയ്തു!
     lock_topic:
@@ -2479,7 +2486,7 @@ ml:
           community: സമൂഹം
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "ഈ ആഴ്‌ച ലീഡർബോർഡിന്റെ മുകളിൽ സ്‌കോർ പങ്കിടുന്നു "
@@ -2507,6 +2514,7 @@ ml:
         dashboard_link:
           title: ഡാഷ്ബോർഡ്
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: ഡാഷ്ബോർഡ്
           home: വീട്
@@ -2530,7 +2538,7 @@ ml:
           continue_with_discord: ഡിസ്കോർഡുമായി തുടരുക
           continue_with_email_link: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക
           continue_with_facebook: ഫേസ്ബുക്കിൽ തുടരുക
-          continue_with_github: Github-ൽ തുടരുക
+          continue_with_github: Continue with GitHub
           continue_with_google: Google-ൽ തുടരുക
         page_title:
           title: സൈൻ ഇൻ
@@ -2766,6 +2774,7 @@ ml:
       previous: "&lsaquo; മുമ്പത്തെ"
       truncate: "&hellip;"
     pass: കടന്നുപോകുക
+    password_strength: Password Strength
     percentage: ശതമാനം
     percentage_completed: "%{percentage}% completed"
     post: പോസ്റ്റ്
@@ -2799,7 +2808,6 @@ ml:
     version: പതിപ്പ്
     versions: പതിപ്പുകൾ
     view: കാണുക
-    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2900,7 +2908,7 @@ ml:
         subtitle: പാസ്‌വേഡ് വീണ്ടെടുക്കലിനായി നിങ്ങളുടെ ഇമെയിൽ നൽകുക.
       reset_password:
         link_used: ആ ഒറ്റത്തവണ ലിങ്ക് ഇതിനകം ഉപയോഗിച്ചു, അല്ലെങ്കിൽ അസാധുവാണ്. നിങ്ങളുടെ പാസ്‌വേഡ് വീണ്ടും പുനഃസജ്ജമാക്കാൻ ശ്രമിക്കുക.
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: നിങ്ങൾ ഇതിനകം സൈൻ ഇൻ ചെയ്തിട്ടുണ്ട്.
         email: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക
@@ -2921,8 +2929,8 @@ ml:
         link_expired: ആ ഒറ്റത്തവണ ലിങ്ക് കാലഹരണപ്പെട്ടു, അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും സൈൻ ഇൻ ചെയ്യാൻ ശ്രമിക്കുക.
     update_email:
       frequent_request_error: രണ്ട് മിനിറ്റിനുള്ളിൽ ഒരു ഇമെയിൽ അയച്ചു. വീണ്ടും ശ്രമിക്കുന്നതിന് മുമ്പ് കുറച്ച് മിനിറ്റ് കാത്തിരിക്കുക.
-      link_expired: ആ ലിങ്ക് കാലഹരണപ്പെട്ടു അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: ആ ലിങ്ക് കാലഹരണപ്പെട്ടു അല്ലെങ്കിൽ അസാധുവാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക.
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:

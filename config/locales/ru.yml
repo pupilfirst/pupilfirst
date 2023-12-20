@@ -746,14 +746,14 @@ ru:
       grade_card: Оценочная Карта
       help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: Удалить задание
       report_description: Отчет Тестов
       review: Проверить
@@ -769,7 +769,7 @@ ru:
         rejected: Отклонен
         reviewing: Оценивается
       student: студент
-      submission_acceptable: "Is this submission acceptable?"
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "Отправлен от "
       submitted_by_team: "Отправлено командой: "
@@ -777,12 +777,12 @@ ru:
       team_notice: " Это заявление от команды, поэтому добавленная здесь заметка будет опубликована в отчете всех студентов в команде."
       undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
       undo_grading: Отменить Оценивание
-      undo_rejection_notice_title: "Submission Rejected:"
-      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
-      you_are_done: "You're done!"
       write_a_note: Написать Заметку
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: Назначен в %{date}
       change_reviewer_and_start_review: Да, Назначьте меня
@@ -942,13 +942,13 @@ ru:
       delete_block_confirm: Вы уверены, что хотите удалить этот блок?
       deleting: Удаление...
       editor_content_block: "Редактор блока контента "
+      embedded_url: Embedded URL
       move_down: Двигать Вниз
       move_up: Двигать Вверх
       save_changes: Сохранить изменения
       undo_block_confirm: Вы уверены, что хотите отменить изменения в этом блоке?
       undo_changes: Отменить изменения
       uploading: Обновление...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Последнее Обновление
@@ -1352,7 +1352,9 @@ ru:
       you_selected_pre: Вы выбрали
     SchoolCustomize__ImagesEditor:
       cover_image: Изображение обложки
-      icon: Иконка
+      icon_dark_label: Icon on a dark background
+      icon_light_label: Icon on a light background
+      logo_dark_label: Logo on a dark background
       logo_light_label: Логотип на светлом фоне
       manage_images: Управление изображениями
       update_images: Обновить Изображения
@@ -1812,20 +1814,12 @@ ru:
       account: Аккаунт
       account_delete_q: Вы уверены, что хотите удалить свой аккаунт? Это запустит процесс окончательного удаления ваших данных с наших серверов.
       already_iniated_deletion_warning: Вы уже инициировали удаление учетной записи. Проверьте свой почтовый ящик, чтобы узнать о дальнейших действиях по удалению учетной записи.
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: Аватар успешно загружен.
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: Отмена
+      change_account_email: Change account email
       change_password: Изменить текущий пароль
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Изменить фото
       community_digest: Community Digest
       community_digest_emails: Дайджесты сообщества содержат новые вопросы от ваших сообществ, а также подборку оставшихся без ответа вопросов за прошедшую неделю.
@@ -1834,20 +1828,25 @@ ru:
       confirm_password: Подтверждение Пароля
       confirm_password_error: Новый пароль и подтверждение должны совпадать и содержать не менее 8 символов.
       confirm_password_placeholder: Подтвердите новый пароль
+      confirm_using_password: Please confirm using your password
       current_password: Текущий пароль
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: Удалить аккаунт
       delete_your_account: Удалить учетную запись
       deleting_account_warning: Удаление вашей учетной записи пользователя приведет к удалению всех ваших данных из этой школы. Ответы на сообщения в сообществах и отзывы учеников (если у пользователя есть профиль тренера) не удаляются. Права администратора должны быть отозваны, если вы являетесь администратором в этой школе.
       disable_email_radio: Запрещать
       displayed_publicly: Эта информация будет отображаться публично, поэтому будьте осторожны с тем, что вы делитесь.
       edit_profile: Редактировать профиль
+      email_change_q: Are you sure you want to change your email?
       email_label: Эл. адрес
       email_placeholder: Введите адрес электронной почты
       email_sent_notification: Пожалуйста, проверьте новую электронную почту. Мы отправили инструкции по обновлению вашего адреса электронной почты.
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Инициировать Удаление
       language: Язык
+      light: Light
       localization: Локализация
       manage_account: Управляйте своей учетной записью в этой школе
       name_error: Имя не может быть пустым
@@ -1859,13 +1858,22 @@ ru:
       password_placeholder: Введите текущий пароль
       photo: Фото
       preferred_name_placeholder: Введите предпочитаемое имя
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: Сохранить изменения
       security: Безопасность
       select_image_limit: Выберите изображение размером менее 5\_МБ.
       select_language: Выберите язык, на котором вы предпочитаете отображать пользовательский интерфейс.
       send_email_radio: Присылайте мне ежедневный дайджест
       set_password: Установите пароль для своей учетной записи
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
+      system: System
+      theme_title: User Interface Theme
       update_credentials: Обновите свои учетные данные для входа в школу.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: Обновите настройки уведомлений по почте.
       update_locale: Обновите настройки, связанные с вашей локалью.
       upload_failed: Не удалось загрузить
@@ -1926,10 +1934,10 @@ ru:
       subscribed_on_another_device: Подписаться на этом Устройстве
       unsubscribe: Отписаться
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: Применить
@@ -1983,13 +1991,6 @@ ru:
       enroll: Записаться
       preview_course: Предварительный просмотр
   errors:
-    something_went_wrong: Something went wrong!
-    vimeo:
-      2230: The upload type is invalid.
-      4003: There is a problem initiating the upload.
-      4101: Your maximum disk space has been reached.
-      4102: Your allotted weekly quota has been reached.
-      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: Кажется, наш сервер попал в snag при попытке обработки вашего запроса. Мы отслеживаем эти ошибки автоматически, но если проблема не стесняйтесь связаться с нами. А пока попробуйте перезагрузить страницу.
       title: Ошибка сервера
@@ -2010,10 +2011,17 @@ ru:
       title: Время истекло
       too_long: Эта страница загружалась слишком долго.
       try_reloading: Не могли бы вы попробовать перезагрузить страницу?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: Ваш браузер отправил неверный запрос.
       title: Недопустимый запрос
       wasnt_valid: <em>Что-то </em> в запросе, отправленном вашим браузером, не было действительным. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: Наставники в
@@ -2073,7 +2081,6 @@ ru:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2291,8 +2298,8 @@ ru:
       invalid_checklist_shape_error: Форма данных в списке отправки не соответствует форме, отправленной с оценкой.
       invalid_checklist_values_error: Значения элементов списка в отправке не совпадают с данными обзора.
       invalid_grading_error: "Указанные значения оценок недействительны: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
+      submission_reviewed_error: Submission already reviewed
       success_notification: Работа отмечена как рассмотренная.
     create_post:
       reply_added_notification: Ответ успешно добавлен
@@ -2334,21 +2341,21 @@ ru:
       success_notification: Команда успешно удалена
     dropout_student:
       student_updated_notification: Ученик успешно обновлен
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Не удалось найти курс с указанным идентификатором
       success_notification: Ваш экспорт обрабатывается. Мы сообщим вам, как только он будет готов.
       tag_not_found_error: Не удалось найти теги с указанными идентификаторами
-    evaluation_criterion:
-      name_exists: A criterion already exists with this name and maximum grade.
-      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: Проверьте свой почтовый ящик для дальнейших шагов!
       deletion_init_notification: Удаление учетной записи начато
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: Сертификат успешно выдан!
     lock_topic:
@@ -2519,7 +2526,7 @@ ru:
           community: Сообщество
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "находятся в верхней части таблицы лидеров на этой неделе, указав баллы "
@@ -2547,6 +2554,7 @@ ru:
         dashboard_link:
           title: Панель
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: Панель
           home: Домашний
@@ -2570,7 +2578,7 @@ ru:
           continue_with_discord: Продолжить в Дискорде
           continue_with_email_link: Продолжить по электронной почте
           continue_with_facebook: Продолжить с Facebook
-          continue_with_github: Продолжить на Github
+          continue_with_github: Continue with GitHub
           continue_with_google: Продолжить через Google
         page_title:
           title: Войти
@@ -2810,6 +2818,7 @@ ru:
       previous: "&lsaquo; Предыдущий"
       truncate: "&hellip;"
     pass: Пройдено
+    password_strength: Password Strength
     percentage: Процент
     percentage_completed: "%{percentage}% completed"
     post: Пост
@@ -2843,7 +2852,6 @@ ru:
     version: Версия
     versions: Версии
     view: Посмотреть
-    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2946,7 +2954,7 @@ ru:
         subtitle: Введите ваш email для восстановления пароля.
       reset_password:
         link_used: Эта одноразовая ссылка уже была использована или неверна. Пожалуйста, попробуйте сбросить пароль еще раз.
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: Вы уже вошли в систему.
         email: Продолжить по электронной почте
@@ -2967,8 +2975,8 @@ ru:
         link_expired: Эта одноразовая ссылка истекла или неверна. Пожалуйста, попробуйте войти снова.
     update_email:
       frequent_request_error: Письмо было отправлено менее двух минут назад. Пожалуйста, подождите несколько минут, прежде чем повторить попытку.
-      link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:

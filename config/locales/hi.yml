@@ -734,14 +734,14 @@ hi:
       grade_card: ग्रेड कार्ड
       help_text: नोट्स का उपयोग %{note_about}की प्रगति पर नज़र रखने के लिए किया जा सकता है। ये नोट केवल एक छात्र की रिपोर्ट में कोचों को दिखाए जाते हैं। %{additional_help}
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: क्या आपने इस सबमिशन की समीक्षा करते समय कुछ नोटिस किया?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
       reject_submission: Reject Submission
       reject_submission_and_send_feedback: Reject submission & send feedback
-      rejection_help_note_title: "Note: "
       rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: असाइनमेंट हटाएं
       report_description: जाँच रिपोर्ट
       review: समीक्षा
@@ -757,7 +757,7 @@ hi:
         rejected: अस्वीकृत
         reviewing: की समीक्षा
       student: छात्र
-      submission_acceptable: "Is this submission acceptable?"
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "द्वारा प्रस्तुत "
       submitted_by_team: "टीम द्वारा प्रस्तुत: "
@@ -765,12 +765,12 @@ hi:
       team_notice: " यह सबमिशन एक टीम की ओर से है, इसलिए यहां जोड़ा गया एक नोट टीम के सभी छात्रों की रिपोर्ट में पोस्ट किया जाएगा।"
       undo_grade_warning: क्या आप वाकई इन ग्रेड को हटाना चाहते हैं? यह सबमिशन को 'लंबित समीक्षा' स्थिति में लौटा देगा।
       undo_grading: ग्रेडिंग पूर्ववत करें
-      undo_rejection_notice_title: "Submission Rejected:"
-      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
       undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
       undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
-      you_are_done: "You're done!"
       write_a_note: एक लेख लिखो
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: असाइन किया गया %{date}
       change_reviewer_and_start_review: हाँ, मुझे असाइन करें
@@ -926,13 +926,13 @@ hi:
       delete_block_confirm: क्या आप वाकई इस ब्लॉक को हटाना चाहते हैं?
       deleting: मिटाया जा रहा है...
       editor_content_block: "सामग्री ब्लॉक के लिए संपादक "
+      embedded_url: Embedded URL
       move_down: नीचे की ओर
       move_up: बढ़ाना
       save_changes: परिवर्तनों को सुरक्षित करें
       undo_block_confirm: क्या आप वाकई इस ब्लॉक में अपने परिवर्तन पूर्ववत करना चाहते हैं?
       undo_changes: परिवर्तन पूर्ववत करें
       uploading: अपडेट हो रहा है...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: आखरी अपडेट
@@ -1332,7 +1332,9 @@ hi:
       you_selected_pre: आपके द्वारा चुने गए
     SchoolCustomize__ImagesEditor:
       cover_image: कवर छवि
-      icon: आइकन
+      icon_dark_label: Icon on a dark background
+      icon_light_label: Icon on a light background
+      logo_dark_label: Logo on a dark background
       logo_light_label: हल्की पृष्ठभूमि पर लोगो
       manage_images: छवियाँ प्रबंधित करें
       update_images: छवियों को अपडेट करें
@@ -1788,20 +1790,12 @@ hi:
       account: खाता
       account_delete_q: क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं? यह हमारे सर्वर से आपके डेटा को स्थायी रूप से हटाने की प्रक्रिया शुरू करेगा।
       already_iniated_deletion_warning: आपने पहले ही खाता हटाना शुरू कर दिया है। अपना खाता हटाने के लिए आगे के चरणों के लिए कृपया अपना इनबॉक्स देखें।
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: अवतार सफलतापूर्वक अपलोड किया गया।
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: रद्द करना
+      change_account_email: Change account email
       change_password: अपना वर्तमान पासवर्ड बदलें
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: तस्वीर बदलिये
       community_digest: Community Digest
       community_digest_emails: समुदाय डाइजेस्ट ईमेल में आपके समुदायों के नए प्रश्न और पिछले सप्ताह के अनुत्तरित प्रश्नों का चयन होता है।
@@ -1810,20 +1804,25 @@ hi:
       confirm_password: पासवर्ड की पुष्टि कीजिये
       confirm_password_error: नया पासवर्ड और पुष्टिकरण मेल खाना चाहिए और उसमें कम से कम 8 अक्षर होने चाहिए
       confirm_password_placeholder: नए पासवर्ड की पुष्टि करें
+      confirm_using_password: Please confirm using your password
       current_password: वर्तमान पासवर्ड
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: खाता हटा दो
       delete_your_account: अपने खाते को नष्ट करो
       deleting_account_warning: आपका उपयोगकर्ता खाता हटाने से इस विद्यालय से आपका सारा डेटा निकल जाता है। समुदायों में पोस्ट के जवाब और छात्रों की प्रतिक्रिया (यदि उपयोगकर्ता के पास कोच प्रोफ़ाइल है) को हटाया नहीं जाएगा। यदि आप इस विद्यालय के व्यवस्थापक हैं, तो व्यवस्थापक अधिकारों को निरस्त करने की आवश्यकता है।
       disable_email_radio: बंद करना
       displayed_publicly: यह जानकारी सार्वजनिक रूप से प्रदर्शित की जाएगी इसलिए सावधान रहें कि आप क्या साझा करते हैं।
       edit_profile: अपने प्रोफ़ाइल संपादित करें
+      email_change_q: Are you sure you want to change your email?
       email_label: ईमेल
       email_placeholder: अपना ईमेल टाइप करें
       email_sent_notification: कृपया अपना नया ईमेल जांचें। हमने आपका ईमेल पता अपडेट करने के निर्देश भेज दिए हैं।
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: हटाना आरंभ करें
       language: भाषा
+      light: Light
       localization: स्थानीयकरण
       manage_account: इस स्कूल में अपना खाता प्रबंधित करें
       name_error: नाम खाली नहीं हो सकता
@@ -1835,13 +1834,22 @@ hi:
       password_placeholder: वर्तमान पासवर्ड टाइप करें
       photo: फ़ोटो
       preferred_name_placeholder: अपना पसंदीदा नाम टाइप करें
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: परिवर्तनों को सुरक्षित करें
       security: सुरक्षा
       select_image_limit: कृपया 5 एमबी से कम आकार वाली छवि चुनें
       select_language: उस भाषा का चयन करें जिसे आप भुगतान करने के लिए यूजर इंटरफेस पसंद करेंगे।
       send_email_radio: मुझे एक दैनिक ईमेल भेजें
       set_password: अपने खाते के लिए पासवर्ड सेट करें
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
+      system: System
+      theme_title: User Interface Theme
       update_credentials: स्कूल के लिए अपने लॉगिन क्रेडेंशियल अपडेट करें।
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: ईमेल सूचनाओं के लिए सेटिंग अपडेट करें।
       update_locale: अपने स्थान से संबंधित सेटिंग अपडेट करें।
       upload_failed: अपलोड करने में विफल
@@ -1902,10 +1910,10 @@ hi:
       subscribed_on_another_device: इस डिवाइस पर सदस्यता लें
       unsubscribe: सदस्यता रद्द
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: आवेदन करना
@@ -1955,13 +1963,6 @@ hi:
       enroll: में भर्ती
       preview_course: पूर्वावलोकन पाठ्यक्रम
   errors:
-    something_went_wrong: Something went wrong!
-    vimeo:
-      2230: The upload type is invalid.
-      4003: There is a problem initiating the upload.
-      4101: Your maximum disk space has been reached.
-      4102: Your allotted weekly quota has been reached.
-      4104: Your allotted daily quota has been reached.
     internal_server_error:
       details: ऐसा लगता है कि हमारे सर्वर ने आपके अनुरोध को संसाधित करने का प्रयास करते समय एक रोड़ा मारा है। हम इन त्रुटियों को स्वचालित रूप से ट्रैक करते हैं, लेकिन यदि समस्या बनी रहती है तो बेझिझक हमसे संपर्क करें। इस बीच, पृष्ठ को पुनः लोड करने का प्रयास करें।
       title: सर्वर त्रुटि
@@ -1982,10 +1983,17 @@ hi:
       title: समय समााप्त
       too_long: इस पृष्ठ को लोड होने में बहुत अधिक समय लगा।
       try_reloading: क्या आप कृपया इस पृष्ठ को पुनः लोड करने का प्रयास कर सकते हैं?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: आपके ब्राउज़र ने एक अमान्य अनुरोध किया है।
       title: अमान्य अनुरोध
       wasnt_valid: <em>आपके ब्राउज़र द्वारा भेजे गए अनुरोध के बारे में कुछ</em> मान्य नहीं था। हम इन त्रुटियों को स्वचालित रूप से ट्रैक करते हैं, लेकिन यदि समस्या बनी रहती है तो बेझिझक हमसे संपर्क करें। इस बीच, पृष्ठ को पुनः लोड करने का प्रयास करें।
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: कोच ए.टी
@@ -2041,7 +2049,6 @@ hi:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2255,8 +2262,8 @@ hi:
       invalid_checklist_shape_error: सबमिशन चेकलिस्ट में डेटा का आकार समीक्षा के साथ भेजे गए डेटा से मेल नहीं खाता
       invalid_checklist_values_error: सबमिशन में चेकलिस्ट आइटम के मान समीक्षा डेटा से मेल नहीं खाते
       invalid_grading_error: "प्रदान किए गए ग्रेडिंग मान अमान्य हैं: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "आईडी के साथ सबमिशन खोजने में असमर्थ: %{submission_id}"
+      submission_reviewed_error: Submission already reviewed
       success_notification: सबमिशन को समीक्षा के रूप में चिह्नित किया गया है।
     create_post:
       reply_added_notification: उत्तर सफलतापूर्वक जोड़ा गया
@@ -2298,21 +2305,21 @@ hi:
       success_notification: टीम सफलतापूर्वक हटाई गई
     dropout_student:
       student_updated_notification: छात्र सफलतापूर्वक अपडेट किया गया
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: दी गई आईडी के साथ कोर्स नहीं मिल सका
       success_notification: आपका निर्यात संसाधित किया जा रहा है। जैसे ही यह तैयार होगा हम आपको सूचित करेंगे।
       tag_not_found_error: दिए गए आईडी वाले टैग नहीं ढूंढ सके
-    evaluation_criterion:
-      name_exists: A criterion already exists with this name and maximum grade.
-      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: आगे के चरणों के लिए अपना इनबॉक्स देखें!
       deletion_init_notification: खाता हटाने की पहल
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: प्रमाणपत्र सफलतापूर्वक जारी किया गया!
     lock_topic:
@@ -2479,7 +2486,7 @@ hi:
           community: समुदाय
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "का स्कोर साझा करते हुए इस सप्ताह लीडरबोर्ड में शीर्ष पर हैं "
@@ -2507,6 +2514,7 @@ hi:
         dashboard_link:
           title: डैशबोर्ड
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: डैशबोर्ड
           home: घर
@@ -2530,7 +2538,7 @@ hi:
           continue_with_discord: कलह के साथ जारी रखें
           continue_with_email_link: ईमेल के साथ जारी रखें
           continue_with_facebook: फेसबुक के साथ जारी रखें
-          continue_with_github: गीथूब के साथ जारी रखें
+          continue_with_github: Continue with GitHub
           continue_with_google: Google के साथ जारी रखें
         page_title:
           title: साइन इन करें
@@ -2766,6 +2774,7 @@ hi:
       previous: "&lsaquo; पिछला"
       truncate: "&hellip;"
     pass: रास्ता
+    password_strength: Password Strength
     percentage: प्रतिशत
     percentage_completed: "%{percentage}% completed"
     post: पद
@@ -2799,7 +2808,6 @@ hi:
     version: संस्करण
     versions: संस्करणों
     view: राय
-    password_strength: "Password Strength"
   timeline_events:
     show:
       accepted: Accepted
@@ -2900,7 +2908,7 @@ hi:
         subtitle: पासवर्ड पुनर्प्राप्ति के लिए अपना ईमेल दर्ज करें।
       reset_password:
         link_used: वह वन-टाइम लिंक पहले ही उपयोग किया जा चुका है, या अमान्य है। कृपया अपना पासवर्ड फिर से रीसेट करने का प्रयास करें।
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: आप पहले ही साइन इन कर चुके हैं।
         email: ईमेल के साथ जारी रखें
@@ -2921,8 +2929,8 @@ hi:
         link_expired: वह एकमुश्त लिंक समाप्त हो गया है, या अमान्य है। कृपया दुबारा साइन - इन करने की प्रयास करें।
     update_email:
       frequent_request_error: 'दो मिनट से भी कम समय पहले एक ईमेल भेजा गया था। कृपया पुन: प्रयास करने से पहले कुछ मिनट प्रतीक्षा करें।'
-      link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: 'वह लिंक समाप्त हो गया है या अमान्य है। कृपया पुन: प्रयास करें।'
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:

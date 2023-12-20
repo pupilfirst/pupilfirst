@@ -72,7 +72,7 @@ after "development:evaluation_criteria", "development:target_groups" do
 
     form_submission =
       target_group.targets.create!(
-        title: Faker::Lorem.sentence,
+        title: "Form: #{Faker::Lorem.sentence}",
         resubmittable: true,
         visibility: "live",
         sort_index: 5
@@ -83,7 +83,7 @@ after "development:evaluation_criteria", "development:target_groups" do
         checklist: [
           {
             kind: Target::CHECKLIST_KIND_MULTI_CHOICE,
-            title: "Do you play cricket?",
+            title: "Do you play any sport?",
             optional: false,
             metadata: {
               choices: %w[Yes No],
@@ -92,19 +92,19 @@ after "development:evaluation_criteria", "development:target_groups" do
           },
           {
             kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            title: "Describe your cricketing experience",
+            title: "Describe your experience playing sports",
             optional: false
           },
           {
             kind: Target::CHECKLIST_KIND_SHORT_TEXT,
-            title: "Are you morning person or night owl?",
+            title: "Are you early bird or night owl?",
             optional: false,
             metadata: {
             }
           },
           {
             kind: Target::CHECKLIST_KIND_LINK,
-            title: "Please, fill your portifolio link",
+            title: "Please, fill your github link",
             optional: true,
             metadata: {
             }

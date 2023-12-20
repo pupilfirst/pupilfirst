@@ -125,7 +125,12 @@
 
 .skeleton-animate {
   animation: skeletonShimmer 3s infinite linear;
-  background: linear-gradient(to right, #f5f3f7 10%, #fbfafc 40%, #f5f3f7 70%);
+  background: linear-gradient(
+    to right,
+    theme("colors.gray.100"),
+    theme("colors.gray.200"),
+    theme("colors.gray.100")
+  );
   background-size: 1000px 100%;
 }
 
@@ -142,13 +147,13 @@
 
 @keyframes completeButtonGlowing {
   0% {
-    box-shadow: 0 0 20px #7886d7;
+    box-shadow: 0 0 20px theme("colors.focusColor.400");
   }
   50% {
-    box-shadow: 0 0 10px #7886d7;
+    box-shadow: 0 0 10px theme("colors.focusColor.400");
   }
   100% {
-    box-shadow: 0 0 0 #7886d7;
+    box-shadow: 0 0 0 theme("colors.focusColor.400");
   }
 }
 

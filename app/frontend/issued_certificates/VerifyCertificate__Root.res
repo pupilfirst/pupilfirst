@@ -47,9 +47,9 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
 
   switch viewMode {
   | Screen =>
-    <div className="container mx-auto px-3 max-w-5xl py-8">
+    <div className="container mt-16 mx-auto px-3 max-w-5xl py-8">
       <div
-        className="border border-gray-300 rounded-lg shadow-lg bg-white p-3 md:p-6 flex flex-col md:flex-row items-start md:items-center">
+        className="border border-gray-300 rounded-lg bg-gray-50 p-3 md:p-6 flex flex-col md:flex-row items-start md:items-center">
         <div className="text-center md:w-5/12 pe-0  md:pe-5">
           <img src=graduateIcon className="w-18 md:w-24 mx-auto" />
           <h3 className="font-semibold mt-1 md:mt-2">
@@ -101,7 +101,9 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
         <div
           id="name-change-notice"
           className="border border-blue-200 rounded-lg shadow-lg bg-blue-100 p-3 md:p-6 mt-6 flex items-center">
-          <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
+          <div>
+            <i className="fas fa-exclamation-circle text-2xl text-blue-500" />
+          </div>
           <div
             className="ms-4 text-sm"
             dangerouslySetInnerHTML={DOMPurify.sanitizedHTMLOpt(
@@ -122,7 +124,8 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
       <button
         onClick={handleCancelPrint(setViewMode)}
         className="btn btn-secondary my-4 md:my-6 verify-certificate__cancel-button">
-        <i className="fas fa-undo-alt" /> <span className="ms-1"> {t("cancel")->str} </span>
+        <i className="fas fa-undo-alt" />
+        <span className="ms-1"> {t("cancel")->str} </span>
       </button>
       <IssuedCertificate__Root issuedCertificate verifyImageUrl />
     </div>

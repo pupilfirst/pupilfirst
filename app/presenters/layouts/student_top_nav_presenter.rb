@@ -3,7 +3,8 @@ module Layouts
     def props
       {
         school_name: school_name,
-        logo_url: logo_url,
+        logo_on_light_bg_url: logo_url(:light),
+        logo_on_dark_bg_url: logo_url(:dark),
         links: nav_links,
         authenticity_token: view.form_authenticity_token,
         is_logged_in: current_user.present?,
@@ -14,14 +15,18 @@ module Layouts
 
     def school_name
       @school_name ||=
-        current_school.present? ? current_school.name : 'Pupilfirst'
+        current_school.present? ? current_school.name : "Pupilfirst"
     end
 
-    def logo_url
+    def logo_url(background)
       if current_school.blank?
-        view.image_url('mailer/pupilfirst-logo.png')
-      elsif current_school.logo_on_light_bg.attached?
+        view.image_url("mailer/pupilfirst-logo.png")
+      elsif background == :light && current_school.logo_on_light_bg.attached?
         view.rails_public_blob_url(current_school.logo_variant(:high))
+      elsif background == :dark && current_school.logo_on_dark_bg.attached?
+        view.rails_public_blob_url(
+          current_school.logo_variant(:high, background: :background)
+        )
       end
     end
 
@@ -55,7 +60,7 @@ module Layouts
         [
           {
             title:
-              I18n.t('presenters.layouts.students_top_nav.admin_link.title'),
+              I18n.t("presenters.layouts.students_top_nav.admin_link.title"),
             url: view.school_path,
             local: true
           }
@@ -64,7 +69,7 @@ module Layouts
         [
           {
             title:
-              I18n.t('presenters.layouts.students_top_nav.admin_link.title'),
+              I18n.t("presenters.layouts.students_top_nav.admin_link.title"),
             url:
               view.curriculum_school_course_path(course_authors.first.course),
             local: true
@@ -81,9 +86,9 @@ module Layouts
           {
             title:
               I18n.t(
-                'presenters.layouts.students_top_nav.dashboard_link.title'
+                "presenters.layouts.students_top_nav.dashboard_link.title"
               ),
-            url: '/dashboard',
+            url: "/dashboard",
             local: true
           }
         ]
@@ -98,7 +103,7 @@ module Layouts
           {
             title:
               I18n.t(
-                'presenters.layouts.students_top_nav.organisations_link.title'
+                "presenters.layouts.students_top_nav.organisations_link.title"
               ),
             url: view.organisations_path,
             local: true
@@ -129,8 +134,8 @@ module Layouts
         [
           {
             title:
-              I18n.t('presenters.layouts.students_top_nav.coaches_link.title'),
-            url: '/coaches',
+              I18n.t("presenters.layouts.students_top_nav.coaches_link.title"),
+            url: "/coaches",
             local: true
           }
         ]

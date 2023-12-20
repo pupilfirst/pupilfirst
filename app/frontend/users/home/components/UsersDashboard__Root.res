@@ -55,7 +55,8 @@ let navSection = (view, setView, communities, issuedCertificates) =>
         ariaSelected={view == ShowCourses}
         className={navButtonClasses(view == ShowCourses)}
         onClick={_ => setView(_ => ShowCourses)}>
-        <i className="fas fa-book text-xs md:text-sm me-2" /> <span> {t("my_courses")->str} </span>
+        <i className="fas fa-book text-xs md:text-sm me-2" />
+        <span> {t("my_courses")->str} </span>
       </button>
       {ReactUtils.nullUnless(
         <button
@@ -87,21 +88,28 @@ let courseLink = (href, title, icon) =>
     key=href
     href
     className="px-2 py-1 me-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
-    <i className=icon /> <span className="font-medium ms-2"> {title->str} </span>
+    <i className=icon />
+    <span className="font-medium ms-2"> {title->str} </span>
   </a>
 
 let ctaButton = (title, href) =>
   <a
     href
     className="w-full bg-primary-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-primary-100 focus:outline-none focus:bg-primary-100">
-    <span> <i className="fas fa-book" /> <span className="ms-2"> {title->str} </span> </span>
+    <span>
+      <i className="fas fa-book" />
+      <span className="ms-2"> {title->str} </span>
+    </span>
     <i className="fas fa-arrow-right rtl:rotate-180" />
   </a>
 
 let ctaText = (message, icon) =>
   <div
     className="w-full bg-red-100 text-red-600 mt-4 px-6 py-4 flex text-sm font-semibold justify-center items-center ">
-    <span> <i className=icon /> <span className="ms-2"> {message->str} </span> </span>
+    <span>
+      <i className=icon />
+      <span className="ms-2"> {message->str} </span>
+    </span>
   </div>
 
 let studentLink = (courseId, suffix) => "/courses/" ++ (courseId ++ ("/" ++ suffix))
@@ -220,17 +228,18 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
                     />
                   }}
                 </div>
-                <div
-                  className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-10"
-                  key={course->Course.id}>
-                  <h4
-                    className="user-dashboard-course__title text-white font-semibold leading-tight ps-6 pe-4 text-lg md:text-xl">
-                    {Course.name(course)->str}
-                  </h4>
+              </div>
+              <div className="flex gap-2 border-b border-gray-200" key={course->Course.id}>
+                <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+                  <PfIcon className="if i-book-solid if-fw text-primary-400" />
                 </div>
+                <h4
+                  className="w-full text-black font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
+                  {Course.name(course)->str}
+                </h4>
               </div>
               <div
-                className="user-dashboard-course__description text-sm px-6 pt-4 w-full leading-relaxed">
+                className="user-dashboard-course__description text-sm px-6 pt-3 w-full leading-relaxed">
                 {Course.description(course)->str}
               </div>
               {if course->Course.exited && (!(course->Course.review) && !(course->Course.author)) {
@@ -249,71 +258,62 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
 
 let communitiesSection = communities =>
   <div className="w-full max-w-5xl mx-auto">
-    <div className="flex flex-wrap flex-1 lg:-mx-5">
-      {Js.Array.map(
-        community =>
-          <div
-            key={community->Community.id}
-            className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
-            <a
-              className="w-full h-full shadow rounded-lg hover:shadow-lg"
-              href={Community.path(community)}>
-              <div
-                className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
-              />
-              <div className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
-                <h4 className="font-bold text-sm pt-2 leading-tight">
-                  {Community.name(community)->str}
-                </h4>
-                <div className="btn btn-small btn-primary-ghost mt-2">
-                  {t("cta.visit_community")->str}
-                </div>
+    <div className="flex flex-wrap flex-1 lg:-mx-5"> {Js.Array.map(community =>
+        <div
+          key={community->Community.id} className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+          <a
+            className="w-full h-full bg-white border border-gray-300 rounded-lg overflow-hidden"
+            href={Community.path(community)}>
+            <div
+              className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4"
+            />
+            <div className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
+              <h4 className="font-bold text-sm pt-2 leading-tight">
+                {Community.name(community)->str}
+              </h4>
+              <div className="btn btn-small btn-primary-ghost mt-2">
+                {t("cta.visit_community")->str}
               </div>
-            </a>
-          </div>,
-        communities,
-      )->React.array}
-    </div>
+            </div>
+          </a>
+        </div>
+      , communities)->React.array} </div>
   </div>
 
 let certificatesSection = issuedCertificates =>
   <div className="w-full max-w-5xl mx-auto">
-    <div className="flex flex-wrap flex-1 lg:-mx-5">
-      {Js.Array.map(
-        issuedCertificate =>
-          <div
-            key={issuedCertificate->IssuedCertificate.id}
-            className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
-            <a
-              className="w-full h-full shadow rounded-lg hover:shadow-lg"
-              href={"/c/" ++ issuedCertificate->IssuedCertificate.serialNumber}>
-              <div
-                className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
-              />
-              <div className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
-                <div>
-                  <h4 className="font-bold text-sm pt-2 leading-tight">
-                    {IssuedCertificate.courseName(issuedCertificate)->str}
-                  </h4>
-                  <div className="text-xs">
-                    <span> {t("issued_on")->str} </span>
-                    <span className="ms-1">
-                      {issuedCertificate
-                      ->IssuedCertificate.createdAt
-                      ->DateFns.formatPreset(~short=true, ~year=true, ())
-                      ->str}
-                    </span>
-                  </div>
-                </div>
-                <div className="btn btn-small btn-primary-ghost mt-2">
-                  {t("cta.view_certificate")->str}
+    <div className="flex flex-wrap flex-1 lg:-mx-5"> {Js.Array.map(issuedCertificate =>
+        <div
+          key={issuedCertificate->IssuedCertificate.id}
+          className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+          <a
+            className="w-full h-full bg-white border border-gray-300 rounded-lg overflow-hidden"
+            href={"/c/" ++ issuedCertificate->IssuedCertificate.serialNumber}>
+            <div
+              className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4"
+            />
+            <div className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
+              <div>
+                <h4 className="font-bold text-sm pt-2 leading-tight">
+                  {IssuedCertificate.courseName(issuedCertificate)->str}
+                </h4>
+                <div className="text-xs">
+                  <span> {t("issued_on")->str} </span>
+                  <span className="ms-1">
+                    {issuedCertificate
+                    ->IssuedCertificate.createdAt
+                    ->DateFns.formatPreset(~short=true, ~year=true, ())
+                    ->str}
+                  </span>
                 </div>
               </div>
-            </a>
-          </div>,
-        issuedCertificates,
-      )->React.array}
-    </div>
+              <div className="btn btn-small btn-primary-ghost mt-2">
+                {t("cta.view_certificate")->str}
+              </div>
+            </div>
+          </a>
+        </div>
+      , issuedCertificates)->React.array} </div>
   </div>
 
 @react.component

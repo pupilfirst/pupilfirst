@@ -65,8 +65,10 @@
                       <div class="-ms-8 pb-5 w-full ps-12 <%= "#{'border-s border-gray-300 border-dashed' if @presenter.user_standings_count > 1 && index != @presenter.user_standings_count - 1}" %> group-last:border-s-0">
                         <div class="bg-white p-5 rounded-md border border-gray-200">
                           <p class="font-semibold break-all" style="color: <%= user_standing.standing.color %>;"><%= user_standing.standing.name %></p>
-                          <p class="text-sm font-medium"><i class="if i-calendar-light if-fw" ></i> <%= user_standing.created_at.strftime("%-d %B %Y") %><span class="text-gray-500">  •  </span><%= user_standing.created_at.strftime("%-l:%M %p") %></p>
-                          <p class="text-sm mt-2 text-gray-500 break-all"><%= user_standing.reason %></p>
+                          <p class="text-sm font-medium"><i class="if i-calendar-light if-fw" ></i> <%= user_standing.created_at.strftime("%B %-d, %Y") %><span class="text-gray-500"> • </span><%= user_standing.created_at.strftime("%-l:%M %p") %></p>
+                          <div class="text-sm mt-2 text-gray-500 break-all">
+                            <%= Kramdown::Document.new(user_standing.reason).to_html.html_safe %>
+                          </div>
                         </div>
                       </div>
                     </div>

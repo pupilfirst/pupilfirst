@@ -2905,17 +2905,13 @@ en:
       current_standing_card_aria: Current standing card
       current_standing_shield_aria: Current standing shield
       empty_standing_info: Standings have not been altered. Any changes to the standing will be displayed here.
-      help: "%{perspective} current standing is <b>%{name}</b>. The description of the standing is: <b>%{description}</b>"
-      help_url: https://docs.pupilfirst.com/users/school_standing
       no_standing_log: No Standing log
       reach_us: Reach us
       reach_us_info: If you believe there's been an error in your standing, please reach out to us at
       standing: Standing
       standing_log: Standing Log
       standing_not_enabled: Standing is not enabled for this school.
-      student: Student
       view_code_of_conduct: View Code of Conduct
-      your: Your
     versions: Versions
     view: View
     view_standing: View Standing

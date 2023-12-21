@@ -20,7 +20,9 @@
             <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
             <div class="flex gap-1 items-center justify-start md:justify-end">
               <p class="text-sm text-gray-500"><%= t(".standing") %></p>
-              <p data-re-component="HelpIcon" data-re-json='<%= {children: t(".help", name: @presenter.current_standing.name, perspective: @presenter.help_icon_perspective, description: @presenter.current_standing.description), className: 'text-xs text-left', responsiveAlignment: 'rcl', link: t(".help_url")}.to_json %>'></p>
+              <% if @presenter.standing_help? %>
+                <p data-re-component="HelpIcon" data-re-json='<%= @presenter.help_props.to_json %>'></p>
+              <% end %>
             </div>
           </div>
           <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">

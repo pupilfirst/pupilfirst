@@ -33,12 +33,16 @@ module Users
       user_standings.length
     end
 
-    def help_icon_perspective
-      if view.request.path.include?("user/standing")
-        I18n.t("shared.user_standing.your")
-      else
-        I18n.t("shared.user_standing.student")
-      end
+    def standing_help?
+      current_standing.description.present?
+    end
+
+    def help_props
+      {
+        children: current_standing.description,
+        className: "text-xs text-left",
+        responsiveAlignment: "rcl"
+      }
     end
   end
 end

@@ -1607,16 +1607,17 @@ en:
       title_placeholder: Student, Coach, CEO, etc.
       update_student: Update Student
     StudentStanding__Root:
-      change_standing: Change Standing
-      change_standing_info: You can change users standing to any standing.
+      change_standing: Add an entry to the log
+      add_entry_button: Add Entry
+      change_standing_info: When adding an entry, you can also change the student's standing.
       confirm_delete: Are you sure you want to delete this standing log entry?
       delete_standing_log: Delete Standing Log
       pages:
         actions: Actions
         details: Details
         standing: Standing
-      reason_heading: Reason for altering the standing
-      reason_placeholder: Eg. Plagiarism in assignment name, Misbehave in community...
+      reason_heading: Reason for this entry
+      reason_placeholder: This reason will be visible to the student and to organisation admins.
       select_standing: Select Standing
       standing_description_missing: "Selected standing has no description."
     StudentTopNav:
@@ -2907,8 +2908,8 @@ en:
       current_standing: Current Standing
       current_standing_card_aria: Current standing card
       current_standing_shield_aria: Current standing shield
-      empty_standing_info: Standings have not been altered. Any changes to the standing will be displayed here.
-      no_standing_log: No Standing log
+      empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
+      no_standing_log: There are no entries in the log.
       reach_us: Reach us
       reach_us_info: If you believe there's been an error in your standing, please reach out to us at
       standing: Standing

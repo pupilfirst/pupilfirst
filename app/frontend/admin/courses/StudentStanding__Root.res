@@ -474,7 +474,7 @@ let editor = (
         onClick={_e => {
           createUserStanding(studentId, reason, select, setState, setReason, setSelect)
         }}>
-        {t("change_standing")->str}
+        {t("add_entry_button")->str}
       </button>
     </div>
   </div>

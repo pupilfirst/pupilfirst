@@ -48,5 +48,5 @@ These are the rate limits applied to the creation of all kinds of resources stor
 | TimelineEventFile                 | User          | Each user can upload up to 50 files hourly.               |
 | Topic                             | Community     | Up to 1,000 topics can be created hourly.                 |
 | TopicCategory                     | Community     | Each community can have up to 25 categories.              |
-| UserStanding                      | User          | Each Admin user can create upto 100 standing logs hourly  |
+| UserStanding                      | User          | Each admin can create up to 100 standing log entries hourly  |
 | WebhookEndpoint                   | Course        | Each course can set up to 25 endpoints.                   |

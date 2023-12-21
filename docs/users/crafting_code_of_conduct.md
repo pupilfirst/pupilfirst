@@ -4,11 +4,11 @@ title: Crafting Code of Conduct
 sidebar_label: Crafting Code of Conduct
 ---
 
-Pupilfirst allows you to create a custom code of conduct for your school. The code of conduct is a set of rules that students/members of your school are expected to follow. The members of the school can access the code of conduct from the user standing page or from the link in the footer of the school website.
+Pupilfirst allows you to create a custom Code of Conduct for your school. The Code of Conduct is a set of rules that students/members of your school are expected to follow. The members of the school can access the Code of Conduct from the user standing page or from the link in the footer of the school website.
 
-This page lists a code of conduct template which breaks down the code of conduct into different sections and explains what each section can contain in simple words. Your can also refer the <a href="https://www.pupilfirst.school/agreements/code-of-conduct" target="_blank" rel="noopener noreferrer">code of conduct of Pupilfirst School</a> and any other code of conduct you can find on the internet to get an idea of what a code of conduct can contain.
+This page lists an example Code of Conduct template that shows different sections and explains what each section could contain in simple words. Your can also refer the <a href="https://www.pupilfirst.school/agreements/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct of Pupilfirst School</a> and any other Code of Conduct you can find on the internet to get an idea of what a Code of Conduct should contain.
 
-> **Note:** The some parts of the code of conduct template are generated using ChatGPT.
+> **Note:** Some parts of the following example Code of Conduct template was generated using ChatGPT.
 
 ## Code of Conduct Template
 
@@ -67,10 +67,9 @@ This page lists a code of conduct template which breaks down the code of conduct
 
 **Acknowledgments and Attribution**
 
-- This Code of Conduct is adapted from the Contributor Covenant, version 2.0, available at [Contributor Covenant](https://www.contributor-covenant.org/version/2/0/code_of_conduct.html).
-- Part of this template was generated using AI assistance from ChatGPT.
+- Parts of this template were generated using AI assistance from ChatGPT.
 
 **Updates & Contact Information**
 
-- Last updated on [Date]. If you have questions, email us at [Your School's Contact Email].
+- Last updated on [Date]. If you have questions, email us at [Your School's Contact Email Address].
 ```

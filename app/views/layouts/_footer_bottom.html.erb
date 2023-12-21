@@ -5,15 +5,8 @@
     <div class="w-full flex flex-col-reverse sm:flex-col-reverse md:flex-row justify-between items-center">
       <div class="w-1/4 my-4">
         <a class="text-xs focus:outline-none" href="/">
-          <% if presenter.logo? %>
-            <img
-                class="w-27"
-                src="<%= presenter.logo_url %>"
-                alt="<%= t(".logo_alt", school_name: presenter.school_name) %>"
-              />
-            <% else %>
-              <span><%= presenter.school_name %></span>
-          <% end %>
+          <%= presenter.logo_image_tag(:light) %>
+          <%= presenter.logo_image_tag(:dark) %>
         </a>
       </div>
       <div class="flex flex-col sm:flex-row space-x-3 ltr:text-right rtl:text-left text-xs">

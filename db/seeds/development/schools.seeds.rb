@@ -30,16 +30,16 @@ after "schools" do
             "support",
             "uploads",
             "files",
-            "logo_lipsum_on_dark_bg.png"
+            "logo_carpe_diem_on_dark_bg.png"
           )
         ),
-      filename: "logo_lipsum_on_dark_bg.png"
+      filename: "logo_carpe_diem_on_dark_bg.png"
     )
   end
 
-  # Attach an icon for school.
-  unless school.icon.attached?
-    school.icon.attach(
+  # Attach an icon (on light) for school.
+  unless school.icon_on_light_bg.attached?
+    school.icon_on_light_bg.attach(
       io:
         File.open(
           Rails.root.join(
@@ -51,6 +51,23 @@ after "schools" do
           )
         ),
       filename: "icon_pupilfirst.png"
+    )
+  end
+
+  # Attach an icon (on dark) for school.
+  unless school.icon_on_dark_bg.attached?
+    school.icon_on_dark_bg.attach(
+      io:
+        File.open(
+          Rails.root.join(
+            "spec",
+            "support",
+            "uploads",
+            "files",
+            "icon_white.png"
+          )
+        ),
+      filename: "icon_white.png"
     )
   end
 

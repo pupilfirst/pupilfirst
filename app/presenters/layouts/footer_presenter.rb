@@ -42,6 +42,29 @@ module Layouts
       current_school.name
     end
 
+    def logo_image_tag(background)
+      logo = background == :dark ? :logo_on_dark_bg : :logo_on_light_bg
+
+      if current_school.public_send(logo).attached?
+        logo_url =
+          view.rails_public_blob_url(
+            current_school.logo_variant(:mid, background: background)
+          )
+
+        view.image_tag(
+          logo_url,
+          class: "w-25 #{logo}",
+          alt:
+            I18n.t(
+              "presenters.layouts.footer.logo_alt",
+              school_name: current_school.name
+            )
+        )
+      else
+        view.content_tag(:span, current_school.name, class: "#{logo}")
+      end
+    end
+
     def logo?
       current_school.logo_on_dark_bg.attached?
     end

@@ -262,17 +262,18 @@ let coursesSection = (courses, communities, currentSchoolAdmin) =>
                     />
                   }}
                 </div>
-                <div
-                  className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-10"
-                  key={course->Course.id}>
-                  <h4
-                    className="user-dashboard-course__title text-white font-semibold leading-tight ps-6 pe-4 text-lg md:text-xl">
-                    {Course.name(course)->str}
-                  </h4>
+              </div>
+              <div className="flex gap-2 border-b border-gray-200" key={course->Course.id}>
+                <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+                  <PfIcon className="if i-book-solid if-fw text-primary-400" />
                 </div>
+                <h4
+                  className="w-full text-black font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
+                  {Course.name(course)->str}
+                </h4>
               </div>
               <div
-                className="user-dashboard-course__description text-sm px-6 pt-4 w-full leading-relaxed">
+                className="user-dashboard-course__description text-sm px-6 pt-3 w-full leading-relaxed">
                 {Course.description(course)->str}
               </div>
               {if course->Course.exited && (!(course->Course.review) && !(course->Course.author)) {
@@ -295,10 +296,10 @@ let communitiesSection = communities =>
         <div
           key={community->Community.id} className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
           <a
-            className="w-full h-full shadow rounded-lg hover:shadow-lg"
+            className="w-full h-full bg-white border border-gray-300 rounded-lg overflow-hidden"
             href={Community.path(community)}>
             <div
-              className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+              className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4"
             />
             <div className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
               <h4 className="font-bold text-sm pt-2 leading-tight">
@@ -320,10 +321,10 @@ let certificatesSection = issuedCertificates =>
           key={issuedCertificate->IssuedCertificate.id}
           className="flex w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
           <a
-            className="w-full h-full shadow rounded-lg hover:shadow-lg"
+            className="w-full h-full bg-white border border-gray-300 rounded-lg overflow-hidden"
             href={"/c/" ++ issuedCertificate->IssuedCertificate.serialNumber}>
             <div
-              className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4 shadow rounded-t-lg"
+              className="user-dashboard-community__cover flex w-full bg-gray-600 h-40 svg-bg-pattern-5 items-center justify-center p-4"
             />
             <div className="w-full flex justify-between items-center flex-wrap px-4 pt-2 pb-4">
               <div>

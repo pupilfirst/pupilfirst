@@ -26,5 +26,5 @@
   left: 0;
   height: 1px;
   width: 100%;
-  background-color: white;
+  background-color: theme("colors.white");
 }

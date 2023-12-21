@@ -27,7 +27,8 @@ class School < ApplicationRecord
 
   has_one_attached :logo_on_light_bg
   has_one_attached :logo_on_dark_bg
-  has_one_attached :icon
+  has_one_attached :icon_on_light_bg
+  has_one_attached :icon_on_dark_bg
   has_one_attached :cover_image
 
   def school_admins
@@ -49,7 +50,8 @@ class School < ApplicationRecord
     end
   end
 
-  def icon_variant(variant)
+  def icon_variant(variant, background: :light)
+    icon = background == :light ? icon_on_light_bg : icon_on_dark_bg
     case variant
     when :thumb
       icon.variant(resize_to_limit: [100, 100]).processed

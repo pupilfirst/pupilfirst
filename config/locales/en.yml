@@ -1339,7 +1339,9 @@ en:
       you_selected_pre: You have selected
     SchoolCustomize__ImagesEditor:
       cover_image: Cover image
-      icon: Icon
+      icon_dark_label: Icon on a dark background
+      icon_light_label: Icon on a light background
+      logo_dark_label: Logo on a dark background
       logo_light_label: Logo on a light background
       manage_images: Manage Images
       update_images: Update Images
@@ -1815,6 +1817,8 @@ en:
       account: Account
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: Avatar uploaded successfully.
       cancel: Cancel
       change_account_email: Change account email
@@ -1830,6 +1834,7 @@ en:
       confirm_using_password: Please confirm using your password
       current_password: Current password
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
@@ -1844,6 +1849,7 @@ en:
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
+      light: Light
       localization: Localization
       manage_account: Manage your account in this school
       name_error: Name can't be blank
@@ -1866,6 +1872,8 @@ en:
       set_password_button_text: Set password
       set_password_subtext: You have not set a password for your account.
       set_up_password: Set up password
+      system: System
+      theme_title: User Interface Theme
       update_credentials: Update your login credentials for the school.
       update_email: Update email
       update_email_disabled_notice: You must set a password before you can edit your account email address.
@@ -2071,7 +2079,6 @@ en:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2339,14 +2346,14 @@ en:
       success_notification: Team deleted successfully
     dropout_student:
       student_updated_notification: Student updated successfully
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
-    evaluation_criterion:
-      name_exists: A criterion already exists with this name and maximum grade.
-      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
@@ -2548,6 +2555,7 @@ en:
         dashboard_link:
           title: Dashboard
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: Dashboard
           home: Home
@@ -2571,7 +2579,7 @@ en:
           continue_with_discord: Continue with Discord
           continue_with_email_link: Continue with email
           continue_with_facebook: Continue with Facebook
-          continue_with_github: Continue with Github
+          continue_with_github: Continue with GitHub
           continue_with_google: Continue with Google
         page_title:
           title: Sign In

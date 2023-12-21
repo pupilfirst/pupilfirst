@@ -5,7 +5,7 @@ after "development:schools" do
 
   # create a default standing for school
   Standing.create!(
-    name: Faker::Lorem.word,
+    name: "Normal",
     color: Faker::Color.hex_color,
     description: Faker::Lorem.sentence,
     school: school,
@@ -14,7 +14,7 @@ after "development:schools" do
 
   # create non-default standings for school
   Standing.create!(
-    name: Faker::Lorem.word,
+    name: "Poor",
     color: Faker::Color.hex_color,
     description: Faker::Lorem.sentence,
     school: school,
@@ -22,7 +22,7 @@ after "development:schools" do
   )
 
   Standing.create!(
-    name: Faker::Lorem.word,
+    name: "Good",
     color: Faker::Color.hex_color,
     description: Faker::Lorem.sentence,
     school: school,
@@ -30,7 +30,7 @@ after "development:schools" do
   )
 
   Standing.create!(
-    name: Faker::Lorem.word,
+    name: "Great",
     color: Faker::Color.hex_color,
     description: Faker::Lorem.sentence,
     school: school,

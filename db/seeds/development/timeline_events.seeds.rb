@@ -142,6 +142,13 @@ after "development:students", "development:targets", "development:faculty" do
 
   form_submission.update!(passed_at: 2.hours.ago)
 
+  # Add feedback to form submission
+  form_submission.startup_feedback.create!(
+    feedback: "Feedback for form submission",
+    faculty_id: 1,
+    sent_at: Time.current + Rational(500, 1000)
+  )
+
   puts "\nStudent with submissions"
   puts "------------------------"
   puts "Email: #{user.email}"

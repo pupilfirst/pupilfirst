@@ -30,7 +30,6 @@ describe Mutations::CreateFeedback, type: :request do
 
   context "when a feedback is added to form submission" do
     it "creates new feedback and sends the mailer" do
-      puts "form_submission.id: #{form_submission.id}"
       response =
         make_request(
           variables:

@@ -1,12 +1,12 @@
 <% content_for(:head) do %>
-  <title><%= current_school.name %> | <%= t(".title") %> </title>
+  <title><%= t(".page_title") %> | <%= current_school.name %> </title>
 <% end %>
 <div class="relative" id="schoolrouter-innerpage-data">
   <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
     <div class="border border-gray-200 rounded-lg ">
       <div class="p-5 bg-gradient-to-l from-primary-200 to-primary-100 grid grid-cols-4 gap-4 items-center rounded-t-lg">
         <div class="col-span-3">
-          <h1 class="text-2xl font-semibold"><%= t(".standings") %> </h1>
+          <h1 class="text-2xl font-semibold"><%= t(".page_title") %> </h1>
           <p class="text-gray-600 text-sm"><%= t(".standing_explanation") %> </p>
           <a href="https://docs.pupilfirst.com/users/school_standing" target="_blank" rel="noopener noreferrer" class="text-sm text-primary-500 hover:text-primary-600 hover:underline transition"><%= t(".learn_more") %> </a>
         </div>

@@ -1434,7 +1434,7 @@ en:
         settings:
           admins: Admins
           customization: Customization
-          standing: Standing
+          standing: Standings
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -2734,9 +2734,8 @@ en:
       learn_more_about_crafting_coc: Learn more about crafting a Code of Conduct.
       required: Required
       save_coc_success: Code of Conduct saved successfully!
-      standing_explanation: Standing serves as a tool for the school to motivate students to adhere to the school's code of conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
-      standings: Standings
-      title: Standing
+      standing_explanation: Use standings to communicate where a student stands with respect to your school's Code of Conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
+      page_title: Standings
       toggle_standing:
         default_standing_description: This is the default standing for all students.
         default_standing_name: Neutral

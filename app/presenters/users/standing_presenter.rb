@@ -7,6 +7,23 @@ module Users
       @user = user
     end
 
+    def page_title(perspective)
+      case perspective
+      when :user
+        view.t(
+          "shared.user_standing.page_title_user",
+          school_name: current_school.name
+        )
+      when :org_admin
+        view.t(
+          "shared.user_standing.page_title_org_admin",
+          school_name: current_school.name
+        )
+      else
+        raise "Unexpected perspective: #{perspective}"
+      end
+    end
+
     def standing_enabled?
       Schools::Configuration.new(current_school).standing_enabled?
     end

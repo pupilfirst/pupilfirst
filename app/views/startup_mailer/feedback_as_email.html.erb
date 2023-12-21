@@ -1,6 +1,6 @@
 <%
   timeline_event = @startup_feedback.timeline_event
-  graded = timeline_event.timeline_event_grades.present?
+  graded = @grading_details.present?
   has_additional_feedback = timeline_event.startup_feedback.count > 1
   target = @startup_feedback.timeline_event&.target
   target_has_evaluation_criteria = target&.evaluation_criteria.present?
@@ -12,7 +12,7 @@
 <% end %>
 <% content_for :body do %>
   <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission") : t("mailers.startup.feedback_as_email.body.recent_updates") %>
-  <% if @grading_details.present? %>
+  <% if graded %>
     <p>
       <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
     </p>
@@ -30,13 +30,13 @@
     <p style="margin: 0px;">
       <%= t("mailers.startup.feedback_as_email.body.rejected_feedback", coach_name: coach_name, update_for: update_for) %>
     </p>
-  <% elsif target_has_evaluation_criteria && has_additional_feedback %>
+  <% elsif !target_has_evaluation_criteria %>
     <p style="margin: 0px;">
-      <%= t("mailers.startup.feedback_as_email.body.additional_feedback_header", coach_name: coach_name) %>
+      <%= t("mailers.startup.feedback_as_email.body.form_response_feedback_header", coach_name: coach_name) %>
     </p>
   <% else %>
     <p style="margin: 0px;">
-      <%= t("mailers.startup.feedback_as_email.body.form_response_feedback_header", coach_name: coach_name) %>
+      <%= t("mailers.startup.feedback_as_email.body.additional_feedback_header", coach_name: coach_name) %>
     </p>
   <% end %>
   <div style="margin: 8px 0px 0px 0px; padding-left: 8px">

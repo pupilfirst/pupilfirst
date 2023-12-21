@@ -25,7 +25,7 @@ type standing = {
   id: string,
   name: string,
   color: string,
-  description: string,
+  description: option<string>,
 }
 
 type currentStanding = {
@@ -445,9 +445,7 @@ let editor = (
               ->(standing => standing.description)
 
             {
-              Js.String2.length(description) > 0
-                ? description
-                : "Selected Standing has no description"
+              Belt.Option.getWithDefault(description, t("standing_description_missing"))
             }->str
           }
         </div>

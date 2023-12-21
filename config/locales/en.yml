@@ -1618,6 +1618,7 @@ en:
       reason_heading: Reason for altering the standing
       reason_placeholder: Eg. Plagiarism in assignment name, Misbehave in community...
       select_standing: Select Standing
+      standing_description_missing: "Selected standing has no description."
     StudentTopNav:
       edit_profile: Edit Profile
       sign_in: Sign In

@@ -798,7 +798,7 @@ feature "School students index", js: true do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/standing"
 
-      expect(page).to have_text("No Standing log")
+      expect(page).to have_text("There are no entries in the log")
 
       expect(page).to have_text(standing_1.name)
     end
@@ -807,7 +807,7 @@ feature "School students index", js: true do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/standing"
 
-      expect(page).to have_text("No Standing log")
+      expect(page).to have_text("There are no entries in the log")
 
       expect(page).to have_select(
         "current-standing",
@@ -828,7 +828,7 @@ feature "School students index", js: true do
 
       fill_in "reason-for-altering-standing", with: reason
 
-      click_button "Change Standing"
+      click_button "Add Entry"
 
       expect(page).to have_text("User standing created successfully")
 
@@ -870,7 +870,7 @@ feature "School students index", js: true do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/standing"
 
-      expect(page).to have_text("No Standing log")
+      expect(page).to have_text("There are no entries in the log")
 
       expect(page).to have_select(
         "current-standing",
@@ -891,7 +891,7 @@ feature "School students index", js: true do
 
       fill_in "reason-for-altering-standing", with: reason
 
-      click_button "Change Standing"
+      click_button "Add Entry"
 
       expect(page).to have_text("User standing created successfully")
 
@@ -922,7 +922,7 @@ feature "School students index", js: true do
 
       dismiss_notification
 
-      expect(page).to have_text("No Standing log")
+      expect(page).to have_text("There are no entries in the log")
 
       expect(page).to have_select(
         "current-standing",

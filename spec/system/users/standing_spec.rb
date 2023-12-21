@@ -37,7 +37,7 @@ feature "User standing", js: true do
 
       expect(page).to have_text(standing_1.name)
 
-      expect(page).to have_text("No Standing log")
+      expect(page).to have_text("There are no entries in the log")
 
       expect(page).to have_link("View Code of Conduct")
 
@@ -88,7 +88,7 @@ feature "User standing", js: true do
 
         expect(page).to have_text(standing_1.name)
         expect(page).to have_text(
-          standing_log_1.created_at.strftime("%-d %B %Y")
+          standing_log_1.created_at.strftime("%B %-d, %Y")
         )
         expect(page).to have_text(
           standing_log_1.created_at.strftime("%-l:%M %p")
@@ -97,7 +97,7 @@ feature "User standing", js: true do
 
         expect(page).to have_text(standing_2.name)
         expect(page).to have_text(
-          standing_log_2.created_at.strftime("%-d %B %Y")
+          standing_log_2.created_at.strftime("%B %-d, %Y")
         )
         expect(page).to have_text(
           standing_log_2.created_at.strftime("%-l:%M %p")
@@ -106,7 +106,7 @@ feature "User standing", js: true do
 
         expect(page).to have_text(standing_3.name)
         expect(page).to have_text(
-          standing_log_3.created_at.strftime("%-d %B %Y")
+          standing_log_3.created_at.strftime("%B %-d, %Y")
         )
         expect(page).to have_text(
           standing_log_3.created_at.strftime("%-l:%M %p")

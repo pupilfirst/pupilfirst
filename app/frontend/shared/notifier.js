@@ -1,4 +1,4 @@
-import { alert, defaultModules } from "@pnotify/core";
+import { alert, defaultModules, Stack } from "@pnotify/core";
 import "@pnotify/core/dist/PNotify.css";
 import * as PNotifyMobile from "@pnotify/mobile";
 import "@pnotify/mobile/dist/PNotifyMobile.css";
@@ -19,6 +19,22 @@ const notify = (title, text, type) => {
     reloadRequired = true;
   }
 
+  if (typeof window.notificationStack === "undefined") {
+    window.notificationStack = new Stack({
+      dir1: "down",
+      dir2: "left",
+      firstpos1: 20,
+      firstpos2: 20,
+      spacing1: 20,
+      spacing2: 20,
+      push: "top",
+      modal: false,
+      maxOpen: 6,
+      maxStrategy: "close",
+      maxClosureCausesWait: false,
+    });
+  }
+
   const notification = alert({
     type: type,
     title: title,
@@ -31,6 +47,7 @@ const notify = (title, text, type) => {
     closer: true,
     sticker: false,
     delay: 6000,
+    stack: window.notificationStack,
     modules: new Map([...defaultModules, [PNotifyMobile, {}]]),
   });
 

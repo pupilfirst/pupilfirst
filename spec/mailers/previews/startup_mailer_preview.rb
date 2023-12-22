@@ -6,15 +6,15 @@ class StartupMailerPreview < ActionMailer::Preview
     StartupMailer.feedback_as_email(startup_feedback, true)
   end
 
-  def feedback_as_email
-    timeline_event = TimelineEventGrade.last.timeline_event
+  def additional_feedback_as_email
+    timeline_event =
+      TimelineEvent
+        .joins(:startup_feedback)
+        .group(:id)
+        .having("count(startup_feedback.id) > 1")
+        .first
 
-    startup_feedback =
-      StartupFeedback.create!(
-        timeline_event: timeline_event,
-        faculty: timeline_event.startup_feedback.first.faculty,
-        feedback: "This is additional feedback"
-      )
+    startup_feedback = timeline_event.startup_feedback.last
 
     StartupMailer.feedback_as_email(startup_feedback, false)
   end

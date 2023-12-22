@@ -62,7 +62,7 @@ after "development:students", "development:targets", "development:faculty" do
         reviewed_submission.startup_feedback.create!(
           feedback: "Here is some feedback for the submission.",
           faculty_id: 1,
-          sent_at: Time.current + Rational(500, 1000)
+          sent_at: Time.zone.now
         )
 
         # Set passed_at if all grades are over the pass grade.
@@ -146,7 +146,7 @@ after "development:students", "development:targets", "development:faculty" do
   form_submission.startup_feedback.create!(
     feedback: "Feedback for form submission",
     faculty_id: 1,
-    sent_at: Time.current + Rational(500, 1000)
+    sent_at: Time.zone.now
   )
 
   puts "\nStudent with submissions"

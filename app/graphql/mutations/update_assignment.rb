@@ -13,11 +13,6 @@ module Mutations
           ::Assignments::UpdateService.new(assignment).execute(
             assignment_params
           )
-        notify(
-          :success,
-          I18n.t("shared.notifications.done_exclamation"),
-          I18n.t("mutations.update_target.success_notification")
-        )
         { id: updated_assignment.id }
       else
         { id: nil }

@@ -2,21 +2,23 @@
 class StartupMailer < SchoolMailer
   def feedback_as_email(startup_feedback, include_grades)
     @startup_feedback = startup_feedback
+
     @students =
-      @startup_feedback.timeline_event.students.map(&:fullname).join(', ')
+      @startup_feedback.timeline_event.students.map(&:fullname).join(", ")
+
     @grading_details = grading_details(startup_feedback, include_grades)
 
     send_to =
-      startup_feedback
-        .timeline_event
-        .students
-        .map { |e| "#{e.fullname} <#{e.email}>" }
+      startup_feedback.timeline_event.students.map do |e|
+        "#{e.fullname} <#{e.email}>"
+      end
+
     @school = startup_feedback.timeline_event.students.first.school
 
     subject =
       I18n.t(
-        'mailers.startup.feedback_as_email.subject',
-        startup_feedback: startup_feedback.faculty.name
+        "mailers.startup.feedback_as_email.subject",
+        coach_name: startup_feedback.faculty.name
       )
     simple_mail(send_to, subject)
   end
@@ -29,22 +31,24 @@ class StartupMailer < SchoolMailer
         :evaluation_criterion
       )
 
-    timeline_event_grades.map { |te_grade|
+    timeline_event_grades.map do |te_grade|
       criteria_name = te_grade.evaluation_criterion.name
       grade = te_grade.grade
+
       grade_label =
-        te_grade
-          .evaluation_criterion
-          .grade_labels
-          .find { |g| g['grade'] == grade }['label']
+        te_grade.evaluation_criterion.grade_labels.find do |g|
+          g["grade"] == grade
+        end[
+          "label"
+        ]
 
       I18n.t(
-        'mailers.startup.feedback_as_email.body.grading_details_html',
+        "mailers.startup.feedback_as_email.body.grading_details_html",
         criteria_name: criteria_name,
         grade_label: grade_label,
         grade: grade,
         max_grade: te_grade.evaluation_criterion.max_grade
       ).html_safe
-    }
+    end
   end
 end

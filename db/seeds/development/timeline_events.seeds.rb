@@ -62,7 +62,7 @@ after "development:students", "development:targets", "development:faculty" do
         reviewed_submission.startup_feedback.create!(
           feedback: "Here is some feedback for the submission.",
           faculty_id: 1,
-          sent_at: Time.current + Rational(500, 1000)
+          sent_at: Time.zone.now
         )
 
         # Set passed_at if all grades are over the pass grade.
@@ -141,6 +141,13 @@ after "development:students", "development:targets", "development:faculty" do
   form_submission.timeline_event_owners.create!(latest: true, student: student)
 
   form_submission.update!(passed_at: 2.hours.ago)
+
+  # Add feedback to form submission
+  form_submission.startup_feedback.create!(
+    feedback: "Feedback for form submission",
+    faculty_id: 1,
+    sent_at: Time.zone.now
+  )
 
   puts "\nStudent with submissions"
   puts "------------------------"

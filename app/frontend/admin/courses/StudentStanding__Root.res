@@ -315,7 +315,7 @@ let currentStandingCard = (standing: currentStanding) => {
 let deleteIcon = (id: string, setArchive, archive, setState) => {
   <button
     ariaLabel={t("delete_standing_log") ++ id}
-    className="w-10 text-sm text-gray-600 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
+    className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
     disabled=archive
     title={t("delete_standing_log") ++ id}
     onClick={archiveStanding(id, setArchive, setState)}>

@@ -4,6 +4,8 @@ title: User Standing
 sidebar_label: User Standing
 ---
 
+Standing is used to communicate student/user standing with respect to school's code of conduct. Positive actions such as submitting assignments early, active participation in the community, may be rewarded with positive standing. Negative actions such as plagiarizing assignments, misbehaving in the community, can result in a negative standing.
+
 The user standing page is accessible to all users. The link to access the user standing page is present on the dashboard page.
 
 ![User standing page](../assets/user_standing/user_standing_page.png)

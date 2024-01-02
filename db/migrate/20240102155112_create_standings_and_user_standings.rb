@@ -1,5 +1,19 @@
-class CreateUserStandings < ActiveRecord::Migration[6.1]
+class CreateStandingsAndUserStandings < ActiveRecord::Migration[7.0]
   def change
+    create_table :standings do |t|
+      t.string :name
+      t.string :color
+      t.text :description
+      t.boolean :default
+      t.datetime :archived_at
+
+      t.references :school, null: false, foreign_key: true
+
+      t.timestamps
+    end
+
+    add_index :standings, %i[name school_id], unique: true
+
     create_table :user_standings do |t|
       t.references :user, null: false, foreign_key: true
       t.references :standing, null: false, foreign_key: true

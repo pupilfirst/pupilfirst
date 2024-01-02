@@ -47,7 +47,7 @@ class SchoolsController < ApplicationController
     begin
       if current_school.standings.count == 0 &&
            params[:enable_standing] == "true"
-        update_stading_configuration
+        update_standing_configuration
 
         Standing.create!(
           name:
@@ -61,7 +61,7 @@ class SchoolsController < ApplicationController
           default: true
         )
       else
-        update_stading_configuration
+        update_standing_configuration
       end
       flash[:success] = I18n.t(
         "schools.standing.toggle_standing.school_standing_toggle_success.#{params[:enable_standing] == "true" ? "_yes" : "_no"}"
@@ -113,7 +113,7 @@ class SchoolsController < ApplicationController
 
   private
 
-  def update_stading_configuration
+  def update_standing_configuration
     current_school.update(
       configuration:
         current_school.configuration.merge(

@@ -296,7 +296,7 @@ let archiveStanding = (id: string, setArchive, setState, event) => {
 }
 
 let currentStandingCard = (standing: currentStanding) => {
-  <div className="bg-white rounded-md p-8 border border-gray-100 shadow-lg" id="currentStanding">
+  <div className="bg-white rounded-md p-8 border border-gray-200 shadow-lg" id="currentStanding">
     <div className="ml-4 flex flex-col">
       <p
         className="-mt-12 px-3 py-2 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full">

@@ -49,17 +49,5 @@ module Users
     def user_standings_count
       user_standings.length
     end
-
-    def standing_help?
-      current_standing.description.present?
-    end
-
-    def help_props
-      {
-        children: current_standing.description,
-        className: "text-xs text-left",
-        responsiveAlignment: "rcl"
-      }
-    end
   end
 end

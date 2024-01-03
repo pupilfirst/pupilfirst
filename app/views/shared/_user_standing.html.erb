@@ -20,9 +20,6 @@
             <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
             <div class="flex gap-1 items-center justify-start md:justify-end">
               <p class="text-sm text-gray-500"><%= t(".standing") %></p>
-              <% if @presenter.standing_help? %>
-                <p data-re-component="HelpIcon" data-re-json='<%= @presenter.help_props.to_json %>'></p>
-              <% end %>
             </div>
           </div>
           <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
@@ -49,8 +46,7 @@
               <div class="text-center flex flex-col items-center" aria-label="<%= t(".current_standing_shield_aria") %>">
                 <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
                 <p class="text-xl font-bold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
-              </div>
-              <div>
+                <p class="text-base text-gray-500 break-all" title="<%= t(".description_tooltip") %>"><%= @presenter.current_standing.description %></p>
               </div>
             </div>
             <h2 class="font-semibold text-lg mt-8"><%= t(".standing_log") %></h2>
@@ -66,7 +62,7 @@
                         <div class="bg-white p-5 rounded-md border border-gray-200">
                           <p class="font-semibold break-all" style="color: <%= user_standing.standing.color %>;"><%= user_standing.standing.name %></p>
                           <p class="text-sm font-medium"><i class="if i-calendar-light if-fw" ></i> <%= user_standing.created_at.strftime("%B %-d, %Y") %><span class="text-gray-500"> • </span><%= user_standing.created_at.strftime("%-l:%M %p") %></p>
-                          <div class="text-sm mt-2 text-gray-500 break-all">
+                          <div class="text-sm mt-2 text-gray-500 break-all" title="<%= t(".reason_tooltip") %>">
                             <%= Kramdown::Document.new(user_standing.reason).to_html.html_safe %>
                           </div>
                         </div>

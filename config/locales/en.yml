@@ -2901,8 +2901,10 @@ en:
     updating: Updating
     uploading: Uploading
     user_standing:
+      description_tooltip: Description of the standing
       page_title_user: Your Standing | %{school_name}
       page_title_org_admin: Student Standing | %{school_name}
+      reason_tooltip: Reason for the log.
       code_of_conduct_info: At %{school_name} School, we follow code of conduct. Any positive actions will lead to a promotion in standing, while any violations will result in a demotion.
       current_standing: Current Standing
       current_standing_card_aria: Current standing card

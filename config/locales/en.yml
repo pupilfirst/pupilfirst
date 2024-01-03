@@ -1612,6 +1612,7 @@ en:
       change_standing_info: When adding an entry, you can also change the student's standing.
       confirm_delete: Are you sure you want to delete this standing log entry?
       delete_standing_log: Delete Standing Log
+      empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
       pages:
         actions: Actions
         details: Details
@@ -2906,7 +2907,7 @@ en:
       current_standing_card_aria: Current standing card
       current_standing_shield_aria: Current standing shield
       description_tooltip: Description of the standing
-      empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
+      empty_standing_info: Any entries added will be displayed here.
       no_standing_log: There are no entries in the log.
       page_title_org_admin: Student Standing | %{school_name}
       page_title_user: Your Standing | %{school_name}

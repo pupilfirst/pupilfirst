@@ -13,7 +13,7 @@
     <div class="max-w-xl">
       <%= form_with model: @standing, url: @standing.persisted? ? school_standing_path(id: @standing.id) : school_standings_path do |f| %>
         <div class="flex gap-2 items-center">
-          <%# There is js code related to shield color setting and standing delete confirm in standings.js  %>
+          <%# There is js code related to shield color setting in standings.js  %>
           <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-full">
             <%= render 'shared/standing_shield', color:  @standing.color || "#4338ca", size_classes: "w-8 h-8" %>
           </div>

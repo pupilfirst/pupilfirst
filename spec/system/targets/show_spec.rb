@@ -85,6 +85,23 @@ feature "Target Overlay", js: true do
            given_role: Assignment::ROLE_TEAM
   end
 
+  # Create an target with an checklist and it is different from the checklist of its assignment.
+  let!(:target_with_checklist) do
+    create :target,
+           :with_shared_assignment,
+           :with_content,
+           target_group: target_group_l2,
+           given_role: Target::ROLE_TEAM,
+           given_evaluation_criteria: [criterion_1],
+           checklist: [
+             {
+               kind: Target::CHECKLIST_KIND_LONG_TEXT,
+               title: "Write something about your target submission",
+               optional: false
+             }
+           ]
+  end
+
   let!(:quiz) { create :quiz }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -128,6 +145,16 @@ feature "Target Overlay", js: true do
   end
 
   around { |example| Time.use_zone(student.user.time_zone) { example.run } }
+
+  scenario "student can make a submission for a target with a checklist different from its assignment checklist" do
+    sign_in_user student.user, referrer: target_path(target_with_checklist)
+    click_button "Submit work for review"
+
+    fill_in "Write something about your submission", with: "Test"
+    click_button "Submit"
+
+    expect(page).to have_content("Your submission has been queued for review")
+  end
 
   scenario "student selects a target to view its content" do
     sign_in_user student.user, referrer: curriculum_course_path(course)

@@ -165,7 +165,9 @@ module CourseExports
             student.cohort.name,
             student.tags.order(:name).pluck(:name).join(", "),
             last_seen_at(user),
-            student.completed_at&.iso8601 || ""
+            student.completed_at&.iso8601 || "",
+            user.user_standings.where(archived_at: nil).last&.standing&.name ||
+              Standing.find_by(school: user.school, default: true)&.name || ""
           ] + average_grades_for_student(student)
         end
 
@@ -180,7 +182,8 @@ module CourseExports
           "Cohort",
           "Tags",
           "Last Seen At",
-          "Course Completed At"
+          "Course Completed At",
+          "Current Standing"
         ] + evaluation_criteria_names
       ] + rows
     end

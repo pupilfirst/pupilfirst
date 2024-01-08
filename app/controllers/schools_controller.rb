@@ -109,13 +109,4 @@ class SchoolsController < ApplicationController
     authorize current_school
     render html: "", layout: "school_router"
   end
-
-  private
-
-  def update_standing_configuration(value)
-    current_school.update(
-      configuration:
-        current_school.configuration.merge("enable_standing" => value)
-    )
-  end
 end

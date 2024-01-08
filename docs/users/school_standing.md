@@ -24,7 +24,7 @@ The standing creation and edit form has the following fields:
 
 - **Name:** The name of the standing. For example, `Neutral`, `Good`, `Community Hero`, `Warned`, `Disreputed` etc.
 
-- **Description:** The description of the standing. It is optional, and can be used to describe the standing in a sentence. This description will be shown to admins (in the student standing editor), students (in their standing page) and to organisation admins (when viewing student records).
+- **Description:** The description of the standing. It is optional, but we recommend that you use it to briefly describe the standing. This description will be shown to admins (in the student standing editor), students (in their standing page) and to organisation admins (when viewing student records).
 
 - **Color:** A color picker is present to select the color of the standing. This color will be used to display the standing shield and standing name across the platform. For example, `Banned` standing can be red. If you do not select a color, the color picker will use a default color.
 

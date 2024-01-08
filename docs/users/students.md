@@ -74,14 +74,14 @@ The standing page contains the following information:
 
    - The standing shield styled with color of the standing.
    - The standing name styled with color of the standing.
-   - The reason for change in standing.
+   - The details of the standing log entry.
    - The date and time when the standing log was created.
    - The name of the user who created the standing log.
 
 3. **Add Standing Log:** This section allows you to add a new standing log for the student. The `change standing` section has the following elements:
-   - A dropdown to select a standing from the list of standings.
-   - A markdown editor to enter the reason for the change in standing.
-   - A button to change the standing of the student and add a standing log.
+   - A dropdown to select a standing from the list of available standings.
+   - A markdown editor to type in the details of the entry in the log.
+   - A button add an entry to the standing log and to optionally change the standing of the student.
 
 ## Teaming up students
 

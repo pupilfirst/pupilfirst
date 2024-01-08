@@ -39,9 +39,10 @@ module ValidateStudentSubmission
 
   class AttemptedMinimumQuestions < GraphQL::Schema::Validator
     def validate(_object, _context, value)
-      target = Target.find_by(id: value[:target_id])
+      assignment =
+        Target.find_by(id: value[:target_id]).assignments.not_archived.last
       checklist = value[:checklist]
-      target
+      assignment
         .checklist
         .each_with_object([]) do |c, result|
           next if c["optional"] == true

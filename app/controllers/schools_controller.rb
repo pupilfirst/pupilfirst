@@ -44,12 +44,17 @@ class SchoolsController < ApplicationController
   def toggle_standing
     authorize current_school
 
-    standing_enabled = params[:enable_standing] == "true" ? true : false
+    standing_enabled = params[:enable_standing] == "true"
 
-    begin
-      if current_school.standings.count == 0 && standing_enabled
-        update_standing_configuration(standing_enabled)
+    Standing.transaction do
+      current_school.update!(
+        configuration:
+          current_school.configuration.merge(
+            "enable_standing" => standing_enabled
+          )
+      )
 
+      if standing_enabled && current_school.standings.count.zero?
         Standing.create!(
           name:
             I18n.t("schools.standing.toggle_standing.default_standing_name"),
@@ -61,15 +66,12 @@ class SchoolsController < ApplicationController
           school: current_school,
           default: true
         )
-      else
-        update_standing_configuration(standing_enabled)
       end
-      flash[:success] = I18n.t(
-        "schools.standing.toggle_standing.school_standing_toggle_success.#{params[:enable_standing] == "true" ? "_yes" : "_no"}"
-      )
-    rescue ActiveRecord::RecordInvalid => e
-      flash[:error] = e.message
     end
+
+    flash[:success] = I18n.t(
+      "schools.standing.toggle_standing.school_standing_toggle_success.#{params[:enable_standing] == "true" ? "_yes" : "_no"}"
+    )
 
     redirect_to standing_school_path
   end

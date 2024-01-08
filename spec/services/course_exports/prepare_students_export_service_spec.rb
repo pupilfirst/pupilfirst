@@ -138,6 +138,9 @@ describe CourseExports::PrepareStudentsExportService do
     fail_target target_l1_evaluated, student_5
   end
 
+  let!(:standing_1) { create :standing, school: school, default: true }
+  let!(:standing_2) { create :standing, school: school }
+
   before do
     # First student has completed everything, but has a pending submission in L2.
     submit_target target_l1_quiz_non_milestone, student_1
@@ -159,6 +162,15 @@ describe CourseExports::PrepareStudentsExportService do
            owners: [student_1],
            created_at: 3.days.ago,
            archived_at: 1.day.ago
+
+    # Enable standing for the school
+    school.update!(configuration: { enable_standing: true })
+
+    # Create standing log for student 1
+    create :user_standing,
+           user: student_1.user,
+           standing: standing_2,
+           creator: school_admin.user
   end
 
   def submission_grading(submission)
@@ -179,6 +191,11 @@ describe CourseExports::PrepareStudentsExportService do
 
   def last_seen_at(student)
     student.user.last_seen_at&.iso8601 || ""
+  end
+
+  def current_standing(student)
+    student.user.user_standings.where(archived_at: nil).last&.standing&.name ||
+      Standing.find_by(school: student.user.school, default: true)&.name || ""
   end
 
   let(:expected_data) do
@@ -241,6 +258,7 @@ describe CourseExports::PrepareStudentsExportService do
             "Tags",
             "Last Seen At",
             "Course Completed At",
+            "Current Standing",
             "Criterion A 3 - Average",
             "Criterion B 3 - Average"
           ],
@@ -255,6 +273,7 @@ describe CourseExports::PrepareStudentsExportService do
             "tag 1, tag 2",
             last_seen_at(student_1),
             student_1.completed_at&.iso8601 || "",
+            current_standing(student_1),
             student_1_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -279,6 +298,7 @@ describe CourseExports::PrepareStudentsExportService do
             "",
             last_seen_at(student_2),
             student_2.completed_at&.iso8601 || "",
+            current_standing(student_2),
             nil,
             nil
           ],
@@ -293,6 +313,7 @@ describe CourseExports::PrepareStudentsExportService do
             "",
             last_seen_at(student_5),
             student_5.completed_at&.iso8601 || "",
+            current_standing(student_5),
             nil,
             nil
           ]
@@ -419,6 +440,7 @@ describe CourseExports::PrepareStudentsExportService do
                 "Tags",
                 "Last Seen At",
                 "Course Completed At",
+                "Current Standing",
                 "Criterion A 3 - Average",
                 "Criterion B 3 - Average"
               ],
@@ -433,6 +455,7 @@ describe CourseExports::PrepareStudentsExportService do
                 "tag 1, tag 2",
                 last_seen_at(student_1),
                 student_1.completed_at&.iso8601 || "",
+                current_standing(student_1),
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -457,6 +480,7 @@ describe CourseExports::PrepareStudentsExportService do
                 "tag 2",
                 last_seen_at(student_3_access_ended),
                 student_3_access_ended.completed_at&.iso8601 || "",
+                current_standing(student_3_access_ended),
                 nil,
                 nil
               ],
@@ -471,6 +495,7 @@ describe CourseExports::PrepareStudentsExportService do
                 "tag 3",
                 last_seen_at(student_4_dropped_out),
                 student_4_dropped_out.completed_at&.iso8601 || "",
+                current_standing(student_4_dropped_out),
                 nil,
                 nil
               ]

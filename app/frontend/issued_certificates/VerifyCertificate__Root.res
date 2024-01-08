@@ -120,13 +120,15 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
       )}
     </div>
   | Print =>
-    <div className="flex flex-col items-center">
-      <button
-        onClick={handleCancelPrint(setViewMode)}
-        className="btn btn-secondary my-4 md:my-6 verify-certificate__cancel-button">
-        <i className="fas fa-undo-alt" />
-        <span className="ms-1"> {t("cancel")->str} </span>
-      </button>
+    <div className="flex flex-col items-start">
+      <div className="print:hidden pb-4 md:pt-20">
+        <button
+          onClick={handleCancelPrint(setViewMode)}
+          className="btn btn-subtle verify-certificate__cancel-button">
+          <i className="fas fa-undo-alt" />
+          <span className="ms-1"> {t("cancel")->str} </span>
+        </button>
+      </div>
       <IssuedCertificate__Root issuedCertificate verifyImageUrl />
     </div>
   }

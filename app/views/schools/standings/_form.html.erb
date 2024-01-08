@@ -29,7 +29,7 @@
           <%= f.text_field :description, placeholder: t(".description_placeholder"), class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500 text-sm", maxLength:150 %>
         </div>
         <div class="flex ms-32 mt-4">
-          <%= f.button t(".save_standing"), class: "btn btn-primary btn-large w-full max-w-3xl" %>
+          <%= f.button t(".save_standing"), class: "btn btn-primary btn-large w-full max-w-3xl", data: { disable_with: t("shared.saving") } %>
         </div>
       <% end %>
     </div>

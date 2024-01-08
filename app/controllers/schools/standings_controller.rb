@@ -37,30 +37,27 @@ module Schools
       @standing = current_school.standings.find(params[:id])
       authorize(@standing, policy_class: Schools::StandingPolicy)
 
-      if params[:standing].blank?
-        if @standing.user_standings.count > 0
-          @standing.update!(archived_at: Time.zone.now)
-        else
-          @standing.destroy!
-        end
-        flash[:success] = I18n.t("schools.standings.delete.success")
-      else
-        standing_params =
-          params.require(:standing).permit(:name, :color, :description)
-        @standing.update!(standing_params)
-        flash[:success] = I18n.t("schools.standings.update.success")
-      end
+      standing_params =
+        params.require(:standing).permit(:name, :color, :description)
+      @standing.update!(standing_params)
+
+      flash[:success] = I18n.t("schools.standings.update.success")
 
       redirect_to standing_school_path
     end
 
+    # DELETE /school/standings/:id
     def destroy
       @standing = current_school.standings.find(params[:id])
       authorize(@standing, policy_class: Schools::StandingPolicy)
 
-      @standing.update!(archived_at: Time.zone.now)
+      if @standing.user_standings.count > 0
+        @standing.update!(archived_at: Time.zone.now)
+      else
+        @standing.destroy!
+      end
 
-      flash[:success] = I18n.t("schools.standings.destroy.success")
+      flash[:success] = I18n.t("schools.standings.delete.success")
 
       redirect_to standing_school_path
     end

@@ -65,7 +65,7 @@
                   <i class="if i-edit-regular if-fw" ></i>
                 <% end %>
                 <% unless standing.default %>
-                  <%= button_to school_standing_path(standing), method: :patch, data: {confirm: t(".confirm_standing_deletion", count: @presenter.standing_log_count_for_each_unarchived_standing[standing.id] || 0) }, id: "delete_standing_#{standing.id}", class: "p-2 flex items-center justify-center cursor-pointer text-lg h-full bg-red-50 text-red-500 font-semibold hover:text-red-600 hover:bg-red-100 transition", title: "Delete standing" do%>
+                  <%= button_to school_standing_path(standing), method: :delete, data: {confirm: t(".confirm_standing_deletion", count: @presenter.standing_log_count_for_each_unarchived_standing[standing.id] || 0) }, id: "delete_standing_#{standing.id}", class: "p-2 flex items-center justify-center cursor-pointer text-lg h-full bg-red-50 text-red-500 font-semibold hover:text-red-600 hover:bg-red-100 transition", title: "Delete standing" do%>
                     <i class="if i-trash-regular if-fw"></i>
                   <% end %>
                 <% end %>

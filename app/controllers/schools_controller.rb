@@ -86,19 +86,20 @@ class SchoolsController < ApplicationController
   def update_code_of_conduct
     authorize current_school
     value = params[:code_of_conduct_editor].strip
-    school_string = school.school_strings.find_by(key: "code_of_conduct")
-    
+    school_string =
+      current_school.school_strings.find_by(key: "code_of_conduct")
+
     if school_string.present? && value.present?
       school_string.update!(value: value)
     elsif value.present?
-      school.school_strings.create!(
-        key: 'code_of_conduct',
+      current_school.school_strings.create!(
+        key: "code_of_conduct",
         value: value
       )
     else
-      school_string.destroy
+      school_string&.destroy
     end
-    
+
     flash[:success] = I18n.t("schools.standing.save_coc_success")
     redirect_to standing_school_path
   end

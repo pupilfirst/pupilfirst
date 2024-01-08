@@ -20,29 +20,30 @@ class AddMarkdownForVisitLinkTargets < ActiveRecord::Migration[7.0]
   end
 
   def change
-    Target.find_each do |target|
-      if target.link_to_complete.present?
+    Target
+      .where.not(link_to_complete: nil)
+      .find_each do |target|
         target_version = target.current_target_version
-        last_content_block =
-          target_version.content_blocks.order(sort_index: :desc).first
+        latest_embed_content_block =
+          target_version
+            .content_blocks
+            .where(block_type: ContentBlock::BLOCK_TYPE_EMBED)
+            .order(sort_index: :desc)
+            .first
 
-        #Only add markdown if the last block is an embed block
-        if last_content_block.block_type == ContentBlock::BLOCK_TYPE_EMBED
-          last_content_block.delete
-          target_version.content_blocks.create(
-            block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
-            content: {
-              markdown:
-                "Visit the following link to complete this target: #{target.link_to_complete}"
-            },
-            sort_index: target_version.content_blocks.maximum(:sort_index) + 1
-          )
+        #Convert the latest embed block to a markdown block
+        if latest_embed_content_block &&
+             latest_embed_content_block.content[:url] == target.link_to_complete
+          latest_embed_content_block.block_type =
+            ContentBlock::BLOCK_TYPE_MARKDOWN
+          latest_embed_content_block.content = {
+            markdown:
+              "Visit the following link to complete this target: #{target.link_to_complete}"
+          }
+          latest_embed_content_block.save
         else
           next
         end
-      else
-        next
       end
-    end
   end
 end

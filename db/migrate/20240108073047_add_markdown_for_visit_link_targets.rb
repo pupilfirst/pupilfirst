@@ -20,29 +20,29 @@ class AddMarkdownForVisitLinkTargets < ActiveRecord::Migration[7.0]
   end
 
   def change
-    Target
-      .where.not(link_to_complete: nil)
-      .find_each do |target|
-        target_version = target.current_target_version
-        embed_content_block =
-          target_version
-            .content_blocks
-            .where(block_type: ContentBlock::BLOCK_TYPE_EMBED)
-            .where("content->>'url' = ?", target.link_to_complete)
-            .order(sort_index: :desc)
-            .first
+    possibly_affected_content_blocks =
+      ContentBlock
+        .joins(target_version: :target)
+        .where(block_type: ContentBlock::BLOCK_TYPE_EMBED)
+        .where("content_blocks.content->>'url' = targets.link_to_complete")
+    possibly_affected_content_blocks.each do |content_block|
+      # Remove last_resolved_at.
+      content_block.content = content_block.content.except("last_resolved_at")
+      content_block.save!
 
-        #Convert the embed block to a markdown block
-        if embed_content_block
-          embed_content_block.block_type = ContentBlock::BLOCK_TYPE_MARKDOWN
-          embed_content_block.content = {
-            markdown:
-              "Visit the following link to complete this target: #{target.link_to_complete}"
-          }
-          embed_content_block.save!
-        else
-          next
-        end
+      # Re-resolve the content block.
+      embed_code =
+        ContentBlocks::ResolveEmbedCodeService.new(content_block).execute
+
+      # If the resulting embed_code is nil, change this to a markdown block
+      if not embed_code
+        content_block.block_type = ContentBlock::BLOCK_TYPE_MARKDOWN
+        content_block.content = {
+          markdown:
+            "Visit the following link to complete this target: #{content_block.content["url"]}"
+        }
+        content_block.save!
       end
+    end
   end
 end

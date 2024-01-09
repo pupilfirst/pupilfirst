@@ -193,9 +193,12 @@ describe CourseExports::PrepareStudentsExportService do
     student.user.last_seen_at&.iso8601 || ""
   end
 
-  def current_standing(student)
-    student.user.user_standings.where(archived_at: nil).last&.standing&.name ||
-      Standing.find_by(school: student.user.school, default: true)&.name || ""
+  def latest_user_standing(student)
+    student.user.user_standings.where(archived_at: nil).last
+  end
+
+  def school_default_standing(student)
+    Standing.find_by(school: student.user.school, default: true)
   end
 
   let(:expected_data) do
@@ -259,6 +262,7 @@ describe CourseExports::PrepareStudentsExportService do
             "Last Seen At",
             "Course Completed At",
             "Current Standing",
+            "Current Standing Reason",
             "Criterion A 3 - Average",
             "Criterion B 3 - Average"
           ],
@@ -273,7 +277,10 @@ describe CourseExports::PrepareStudentsExportService do
             "tag 1, tag 2",
             last_seen_at(student_1),
             student_1.completed_at&.iso8601 || "",
-            current_standing(student_1),
+            latest_user_standing(student_1)&.standing&.name ||
+              school_default_standing(student_1)&.name || "",
+            latest_user_standing(student_1)&.reason ||
+              school_default_standing(student_1)&.description || "",
             student_1_reviewed_submission
               .timeline_event_grades
               .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -298,7 +305,10 @@ describe CourseExports::PrepareStudentsExportService do
             "",
             last_seen_at(student_2),
             student_2.completed_at&.iso8601 || "",
-            current_standing(student_2),
+            latest_user_standing(student_2)&.standing&.name ||
+              school_default_standing(student_2)&.name || "",
+            latest_user_standing(student_2)&.reason ||
+              school_default_standing(student_2)&.description || "",
             nil,
             nil
           ],
@@ -313,7 +323,10 @@ describe CourseExports::PrepareStudentsExportService do
             "",
             last_seen_at(student_5),
             student_5.completed_at&.iso8601 || "",
-            current_standing(student_5),
+            latest_user_standing(student_5)&.standing&.name ||
+              school_default_standing(student_5)&.name || "",
+            latest_user_standing(student_5)&.reason ||
+              school_default_standing(student_5)&.description || "",
             nil,
             nil
           ]
@@ -441,6 +454,7 @@ describe CourseExports::PrepareStudentsExportService do
                 "Last Seen At",
                 "Course Completed At",
                 "Current Standing",
+                "Current Standing Reason",
                 "Criterion A 3 - Average",
                 "Criterion B 3 - Average"
               ],
@@ -455,7 +469,10 @@ describe CourseExports::PrepareStudentsExportService do
                 "tag 1, tag 2",
                 last_seen_at(student_1),
                 student_1.completed_at&.iso8601 || "",
-                current_standing(student_1),
+                latest_user_standing(student_1)&.standing&.name ||
+                  school_default_standing(student_1)&.name || "",
+                latest_user_standing(student_1)&.reason ||
+                  school_default_standing(student_1)&.description || "",
                 student_1_reviewed_submission
                   .timeline_event_grades
                   .find_by(evaluation_criterion: evaluation_criterion_1)
@@ -480,7 +497,12 @@ describe CourseExports::PrepareStudentsExportService do
                 "tag 2",
                 last_seen_at(student_3_access_ended),
                 student_3_access_ended.completed_at&.iso8601 || "",
-                current_standing(student_3_access_ended),
+                latest_user_standing(student_3_access_ended)&.standing&.name ||
+                  school_default_standing(student_3_access_ended)&.name || "",
+                latest_user_standing(student_3_access_ended)&.reason ||
+                  school_default_standing(
+                    student_3_access_ended
+                  )&.description || "",
                 nil,
                 nil
               ],
@@ -495,7 +517,11 @@ describe CourseExports::PrepareStudentsExportService do
                 "tag 3",
                 last_seen_at(student_4_dropped_out),
                 student_4_dropped_out.completed_at&.iso8601 || "",
-                current_standing(student_4_dropped_out),
+                latest_user_standing(student_4_dropped_out)&.standing&.name ||
+                  school_default_standing(student_4_dropped_out)&.name || "",
+                latest_user_standing(student_4_dropped_out)&.reason ||
+                  school_default_standing(student_4_dropped_out)&.description ||
+                  "",
                 nil,
                 nil
               ]

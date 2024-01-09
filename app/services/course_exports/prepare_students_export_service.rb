@@ -150,6 +150,14 @@ module CourseExports
       "oooc:=HYPERLINK(\"#{report_path(student)}\"; \"#{student.id}\")"
     end
 
+    def latest_user_standing(user)
+      user.user_standings.where(archived_at: nil).last
+    end
+
+    def school_default_standing(user)
+      Standing.find_by(school: user.school, default: true)
+    end
+
     def student_rows
       rows =
         students.map do |student|
@@ -166,8 +174,10 @@ module CourseExports
             student.tags.order(:name).pluck(:name).join(", "),
             last_seen_at(user),
             student.completed_at&.iso8601 || "",
-            user.user_standings.where(archived_at: nil).last&.standing&.name ||
-              Standing.find_by(school: user.school, default: true)&.name || ""
+            latest_user_standing(user)&.standing&.name ||
+              school_default_standing(user)&.name || "",
+            latest_user_standing(user)&.reason ||
+              school_default_standing(user)&.description || ""
           ] + average_grades_for_student(student)
         end
 
@@ -183,7 +193,8 @@ module CourseExports
           "Tags",
           "Last Seen At",
           "Course Completed At",
-          "Current Standing"
+          "Current Standing",
+          "Current Standing Reason"
         ] + evaluation_criteria_names
       ] + rows
     end

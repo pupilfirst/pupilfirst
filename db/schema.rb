@@ -582,11 +582,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_02_155112) do
     t.string "name"
     t.string "color"
     t.text "description"
-    t.boolean "default"
+    t.boolean "default", default: false, null: false
     t.datetime "archived_at"
     t.bigint "school_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["archived_at"], name: "index_standings_on_archived_at"
+    t.index ["default"], name: "index_standings_on_default", where: "(\"default\" = true)"
     t.index ["name", "school_id"], name: "index_standings_on_name_and_school_id", unique: true
     t.index ["school_id"], name: "index_standings_on_school_id"
   end
@@ -847,6 +849,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_02_155112) do
     t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["archived_at"], name: "index_user_standings_on_archived_at"
     t.index ["archiver_id"], name: "index_user_standings_on_archiver_id"
     t.index ["creator_id"], name: "index_user_standings_on_creator_id"
     t.index ["standing_id"], name: "index_user_standings_on_standing_id"

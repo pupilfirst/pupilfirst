@@ -4,7 +4,7 @@ class CreateStandingsAndUserStandings < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :color
       t.text :description
-      t.boolean :default
+      t.boolean :default, null: false, default: false
       t.datetime :archived_at
 
       t.references :school, null: false, foreign_key: true
@@ -13,6 +13,8 @@ class CreateStandingsAndUserStandings < ActiveRecord::Migration[7.0]
     end
 
     add_index :standings, %i[name school_id], unique: true
+    add_index :standings, :default, where: '("default" = true)'
+    add_index :standings, :archived_at
 
     create_table :user_standings do |t|
       t.references :user, null: false, foreign_key: true
@@ -24,5 +26,7 @@ class CreateStandingsAndUserStandings < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :user_standings, :archived_at
   end
 end

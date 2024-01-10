@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     patch 'standing', action: 'toggle_standing'
     post 'images'
 
-    resources :standings, controller: 'schools/standings'
+    resources :standings, controller: 'schools/standings', except: [:index, :show]
   end
 
   namespace :school, module: 'schools' do

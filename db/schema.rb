@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -90,6 +90,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
     t.boolean "archived", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "discussion", default: false
+    t.boolean "allow_anonymous", default: false
     t.index ["target_id"], name: "index_assignments_on_target_id"
   end
 
@@ -534,6 +536,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
     t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true
   end
 
+  create_table "reactions", force: :cascade do |t|
+    t.string "reaction_value"
+    t.bigint "user_id", null: false
+    t.string "reactionable_type", null: false
+    t.bigint "reactionable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reactionable_type", "reactionable_id"], name: "index_reactions_on_reactionable"
+    t.index ["user_id"], name: "index_reactions_on_user_id"
+  end
+
   create_table "resource_versions", force: :cascade do |t|
     t.jsonb "value"
     t.string "versionable_type"
@@ -609,6 +622,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
     t.index ["level_id"], name: "index_students_on_level_id"
     t.index ["team_id"], name: "index_students_on_team_id"
     t.index ["user_id"], name: "index_students_on_user_id"
+  end
+
+  create_table "submission_comments", force: :cascade do |t|
+    t.text "comment"
+    t.bigint "user_id", null: false
+    t.bigint "timeline_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timeline_event_id"], name: "index_submission_comments_on_timeline_event_id"
+    t.index ["user_id"], name: "index_submission_comments_on_user_id"
+  end
+
+  create_table "submission_moderations", force: :cascade do |t|
+    t.text "reason"
+    t.bigint "user_id", null: false
+    t.bigint "timeline_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timeline_event_id"], name: "index_submission_moderations_on_timeline_event_id"
+    t.index ["user_id"], name: "index_submission_moderations_on_user_id"
   end
 
   create_table "submission_reports", force: :cascade do |t|
@@ -786,6 +819,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at", precision: nil
     t.datetime "archived_at", precision: nil
+    t.boolean "anonymous", default: false
+    t.boolean "pinned", default: false
     t.index ["evaluator_id"], name: "index_timeline_events_on_evaluator_id"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
     t.index ["target_id"], name: "index_timeline_events_on_target_id"
@@ -943,6 +978,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "assignments"
   add_foreign_key "quizzes", "targets"
+  add_foreign_key "reactions", "users"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
@@ -952,6 +988,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
   add_foreign_key "students", "levels"
   add_foreign_key "students", "teams"
   add_foreign_key "students", "users"
+  add_foreign_key "submission_comments", "timeline_events"
+  add_foreign_key "submission_comments", "users"
+  add_foreign_key "submission_moderations", "timeline_events"
+  add_foreign_key "submission_moderations", "users"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"

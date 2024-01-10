@@ -23,6 +23,9 @@ class TimelineEvent < ApplicationRecord
   has_many :timeline_event_grades, dependent: :destroy
   has_many :timeline_event_owners, dependent: :destroy
   has_many :students, through: :timeline_event_owners
+  has_many :submission_comments, dependent: :destroy
+  has_many :submission_moderations, dependent: :destroy
+  has_many :reactions, as: :reactionable, dependent: :destroy
   has_one :course, through: :target
   has_many :submission_reports,
            foreign_key: "submission_id",

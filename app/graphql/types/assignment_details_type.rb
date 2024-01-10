@@ -8,5 +8,7 @@ module Types
     field :checklist, GraphQL::Types::JSON, null: false
     field :milestone, Boolean, null: false
     field :archived, Boolean, null: false
+    field :discussion, Boolean, null: false
+    field :allow_anonymous, Boolean, null: false
   end
 end

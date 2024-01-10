@@ -23,6 +23,8 @@ module Assignments
         handle_milestone(assignment_params[:milestone])
 
         @assignment.archived = assignment_params[:archived]
+        @assignment.discussion = assignment_params[:discussion]
+        @assignment.allow_anonymous = assignment_params[:allow_anonymous]
 
         @assignment.save!
 

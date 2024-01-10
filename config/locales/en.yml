@@ -1003,6 +1003,14 @@ en:
       remove_choice: Remove Choice
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      assignment_discussion:
+        title: Do you want to enable discussion on this assignment?
+        sub_title: It allow students and instructors to engage in discussions, conversations or exchanges of information about a particular assignment
+      allow_anonymous:
+        title: Setup submission anonymity
+        sub_title: Select whether or not a student can choose to submit assignment anonymously
+        anonymous_text: Student will have an option to enable anonymity
+        no_anonymous: Students won't be able to submit anonymously
       choose_target_group: Choose a target group
       completion_instructions:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.

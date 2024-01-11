@@ -51,7 +51,7 @@ module Schools
       @standing = current_school.standings.find(params[:id])
       authorize(@standing, policy_class: Schools::StandingPolicy)
 
-      if @standing.user_standings.count > 0
+      if @standing.user_standings.exists?
         @standing.update!(archived_at: Time.zone.now)
       else
         @standing.destroy!

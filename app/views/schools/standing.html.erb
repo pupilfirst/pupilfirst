@@ -20,8 +20,8 @@
           <% if @presenter.standing_enabled? %>
             <span class="italic text-green-500 me-5" ><%= t(".enabled") %> </span>
           <% end %>
-          <%= button_to t("shared._yes"), standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-s-md  #{'border-primary-500 bg-primary-100 pointer-events-none cursor-not-allowed' if @presenter.standing_enabled? }"%>
-          <%= button_to t("shared._no"), standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-e-md #{'border-primary-500 bg-primary-100 pointer-events-none' unless @presenter.standing_enabled? }", data: {confirm: t(".confirm_school_standing_disable")}%>
+          <%= button_to t("shared._yes"), toggle_standing_school_path(enable_standing: true), method: :patch, class: "text-gray py-1 px-3 cursor-pointer border hover:border-primary-400 rounded-s-md  #{'border-primary-500 bg-primary-100 pointer-events-none cursor-not-allowed' if @presenter.standing_enabled? }"%>
+          <%= button_to t("shared._no"), toggle_standing_school_path(enable_standing: false), method: :patch, class: "text-gray py-1 px-3 focus:outline-none cursor-pointer border hover:border-primary-400 rounded-e-md #{'border-primary-500 bg-primary-100 pointer-events-none' unless @presenter.standing_enabled? }", data: {confirm: t(".confirm_school_standing_disable")}%>
         </div>
       </div>
     </div>

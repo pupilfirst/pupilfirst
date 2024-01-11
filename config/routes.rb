@@ -61,9 +61,9 @@ Rails.application.routes.draw do
     get 'customize'
     get 'admins'
     get 'standing'
-    get 'code_of_conduct', action: 'code_of_conduct'
+    get 'code_of_conduct'
     patch 'code_of_conduct', action: 'update_code_of_conduct'
-    patch 'standing', action: 'toggle_standing'
+    patch 'toggle_standing'
     post 'images'
 
     resources :standings, controller: 'schools/standings', except: [:index, :show]

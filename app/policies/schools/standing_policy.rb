@@ -1,7 +1,7 @@
 module Schools
   class StandingPolicy < ApplicationPolicy
     def new?
-      user&.school_admin.present? && user.school == current_school
+      current_school_admin.present? && user.school == current_school
     end
 
     alias create? new?

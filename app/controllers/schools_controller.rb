@@ -40,7 +40,7 @@ class SchoolsController < ApplicationController
     @presenter = Schools::StandingPresenter.new(view_context, current_school)
   end
 
-  # PATCH /school/standing
+  # PATCH /school/toggle_standing
   def toggle_standing
     authorize current_school
 
@@ -54,7 +54,7 @@ class SchoolsController < ApplicationController
           )
       )
 
-      if standing_enabled && current_school.standings.count.zero?
+      if standing_enabled && !current_school.standings.exists?
         Standing.create!(
           name:
             I18n.t("schools.standing.toggle_standing.default_standing_name"),
@@ -70,7 +70,7 @@ class SchoolsController < ApplicationController
     end
 
     flash[:success] = I18n.t(
-      "schools.standing.toggle_standing.school_standing_toggle_success.#{params[:enable_standing] == "true" ? "_yes" : "_no"}"
+      "schools.standing.toggle_standing.school_standing_toggle_success.#{standing_enabled == "true" ? "_yes" : "_no"}"
     )
 
     redirect_to standing_school_path

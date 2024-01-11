@@ -68,6 +68,26 @@ let pageLinks = studentId => [
   ),
 ]
 
+module UserStandingFragment = %graphql(`
+  fragment UserStandingFragment on UserStanding {
+    id
+    standingName
+    standingColor
+    createdAt
+    creatorName
+    reason
+  }
+`)
+
+let makeFromUserStandingFragment = (userStanding: UserStandingFragment.t) => {
+  id: userStanding.id,
+  standingName: userStanding.standingName,
+  standingColor: userStanding.standingColor,
+  createdAt: userStanding.createdAt->DateFns.decodeISO,
+  creatorName: userStanding.creatorName,
+  reason: userStanding.reason,
+}
+
 type state = Unloaded | Loading | Loaded(baseData) | Errored | NotFound
 
 module SchoolAndStudentDataQuery = %graphql(`
@@ -88,12 +108,7 @@ module SchoolAndStudentDataQuery = %graphql(`
 module StudentStandingDataQuery = %graphql(`
   query studentStandingDataQuery($studentId: ID!) {
     userStandings(studentId: $studentId) {
-      id
-      standingName
-      standingColor
-      createdAt
-      creatorName
-      reason
+      ...UserStandingFragment
     }
     standings {
       id
@@ -116,12 +131,7 @@ module CreateUserStadningMutation = %graphql(`
     mutation createUserStandingMutation($studentId: ID!, $reason: String!, $standingId: ID!) {
       createUserStanding(studentId: $studentId, reason: $reason, standingId: $standingId) {
         userStanding {
-          id
-          standingName
-          standingColor
-          reason
-          createdAt
-          creatorName
+          ...UserStandingFragment
         }
       }
     }
@@ -134,14 +144,8 @@ let createUserStanding = (studentId, reason, standingId, setState, setReason, se
     standingId,
   })
   ->Js.Promise2.then((response: CreateUserStadningMutation.t) => {
-    let log = response.createUserStanding.userStanding->Belt.Option.map(userStanding => {
-      id: userStanding.id,
-      standingName: userStanding.standingName,
-      standingColor: userStanding.standingColor,
-      createdAt: userStanding.createdAt->DateFns.decodeISO,
-      creatorName: userStanding.creatorName,
-      reason: userStanding.reason,
-    })
+    let log =
+      response.createUserStanding.userStanding->Belt.Option.map(makeFromUserStandingFragment)
     switch log {
     | Some(log) =>
       setReason(_ => "")
@@ -194,14 +198,7 @@ let loadStandingData = (studentId, setState) => {
   setState(_ => Loading)
   StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
   ->Js.Promise2.then((response: StudentStandingDataQuery.t) => {
-    let userStandings = response.userStandings->Js.Array2.map(userStanding => {
-      id: userStanding.id,
-      standingName: userStanding.standingName,
-      standingColor: userStanding.standingColor,
-      createdAt: userStanding.createdAt->DateFns.decodeISO,
-      creatorName: userStanding.creatorName,
-      reason: userStanding.reason,
-    })
+    let userStandings = response.userStandings->Js.Array2.map(makeFromUserStandingFragment)
 
     let standings = response.standings->Js.Array2.map(standing => {
       id: standing.id,

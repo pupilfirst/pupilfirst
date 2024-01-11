@@ -6,18 +6,19 @@ class Standing < ApplicationRecord
             presence: true,
             uniqueness: {
               scope: :school_id,
-              message: "should be unique within a school"
+              message: I18n.t("schools.standings.form.unique_name_error")
             },
             length: {
               maximum: 25,
-              message: "should not be longer than 25 characters"
+              message: I18n.t("schools.standings.form.name_max_length_error")
             }
 
   validates :description,
             presence: false,
             length: {
               maximum: 150,
-              message: "should not be longer than 255 characters"
+              message:
+                I18n.t("schools.standings.form.description_max_length_error")
             }
 
   validates :color, presence: true

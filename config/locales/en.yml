@@ -2762,6 +2762,9 @@ en:
         edit_standing_info: Edit color, name and description of a standing
         name_placeholder: Name of the standing
         save_standing: Save Standing
+        unique_name_error: should be unique within a school.
+        name_max_length_error: should not be longer than 25 characters.
+        description_max_length_error: should not be longer than 150 characters.
       new:
         page_title: Add new standing
       update:

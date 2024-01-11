@@ -480,8 +480,8 @@ let editor = (
 let schoolStandingDisabled = () => {
   <div className="flex flex-col items-center max-w-4xl 2xl:max-w-5xl mx-auto px-4 py-8">
     <img className="w-20 h-20" src=noStandingLog />
-    <p className="text-lg font-semibold"> {"School Standing is disabled"->str} </p>
-    <p className="text-sm text-gray-500"> {"Please contact your school admin"->str} </p>
+    <p className="text-lg font-semibold"> {t("school_standing_disabled")->str} </p>
+    <p className="text-sm text-gray-500"> {t("contact_admin")->str} </p>
   </div>
 }
 

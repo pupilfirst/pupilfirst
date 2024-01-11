@@ -1608,6 +1608,7 @@ en:
       update_student: Update Student
     StudentStanding__Root:
       add_entry_button: Add Entry
+      contact_admin: Please contact your school admin.
       change_standing: Add an entry to the log
       change_standing_info: When adding an entry, you can also change the student's standing.
       confirm_delete: Are you sure you want to delete this standing log entry?
@@ -1619,6 +1620,7 @@ en:
         standing: Standing
       reason_heading: Reason for this entry
       reason_placeholder: This reason will be visible to the student and to organisation admins.
+      school_standing_disabled: School Standing is disabled.
       select_standing: Select Standing
       standing_description_missing: Selected standing has no description.
     StudentTopNav:

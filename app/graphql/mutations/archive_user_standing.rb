@@ -19,7 +19,7 @@ module Mutations
     private
 
     def standing_log
-      @standing_log ||= UserStanding.find(@params[:id])
+      @standing_log ||= UserStanding.find_by(id: @params[:id])
     end
 
     def archive_standing_log

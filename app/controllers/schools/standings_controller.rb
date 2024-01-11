@@ -16,18 +16,17 @@ module Schools
 
     # POST /school/standings
     def create
-      @standing = Standing.new
-      authorize(@standing, policy_class: Schools::StandingPolicy)
-
       standing_params =
         params.require(:standing).permit(:name, :color, :description)
+      @standing = current_school.standings.new(standing_params)
 
-      begin
-        @standing = current_school.standings.create!(standing_params)
+      authorize :standing, policy_class: Schools::StandingPolicy
+
+      if @standing.save
         flash[:success] = I18n.t("schools.standings.create.success")
         redirect_to standing_school_path
-      rescue ActiveRecord::RecordInvalid => e
-        flash.now[:error] = e.message
+      else
+        flash.now[:error] = @standing.errors.full_messages.to_sentence
         render :new
       end
     end
@@ -39,11 +38,14 @@ module Schools
 
       standing_params =
         params.require(:standing).permit(:name, :color, :description)
-      @standing.update!(standing_params)
 
-      flash[:success] = I18n.t("schools.standings.update.success")
-
-      redirect_to standing_school_path
+      if @standing.update(standing_params)
+        flash[:success] = I18n.t("schools.standings.update.success")
+        redirect_to standing_school_path
+      else
+        flash.now[:error] = @standing.errors.full_messages.to_sentence
+        render :edit
+      end
     end
 
     # DELETE /school/standings/:id

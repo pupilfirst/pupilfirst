@@ -97,9 +97,9 @@ let updateAgreementDisabled = state => !state.formDirty
 
 let initialState = (kind, customizations) => {
   let agreement = switch kind {
-  | PrivacyPolicy => customizations |> Customizations.privacyPolicy
-  | TermsAndConditions => customizations |> Customizations.termsAndConditions
-  | CodeOfConduct => customizations |> Customizations.codeOfConduct
+  | PrivacyPolicy => customizations->Customizations.privacyPolicy
+  | TermsAndConditions => customizations->Customizations.termsAndConditions
+  | CodeOfConduct => customizations->Customizations.codeOfConduct
   }
 
   {

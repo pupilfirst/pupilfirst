@@ -35,7 +35,7 @@ class AddMarkdownForVisitLinkTargets < ActiveRecord::Migration[7.0]
         ContentBlocks::ResolveEmbedCodeService.new(content_block).execute
 
       # If the resulting embed_code is nil, change this to a markdown block
-      if not embed_code
+      if embed_code.nil?
         content_block.block_type = ContentBlock::BLOCK_TYPE_MARKDOWN
         content_block.content = {
           markdown:

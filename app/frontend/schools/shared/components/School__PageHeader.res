@@ -1,8 +1,6 @@
 let str = React.string
 let ts = I18n.t(~scope="shared")
 
-module StringUtils = StringUtils
-
 type link = {
   title: string,
   href: string,

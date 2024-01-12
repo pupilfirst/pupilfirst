@@ -23,9 +23,7 @@ module Mutations
     end
 
     def archive_standing_log
-      UserStanding.transaction do
-        standing_log.update!(archived_at: Time.zone.now, archiver: current_user)
-      end
+      standing_log.update!(archived_at: Time.zone.now, archiver: current_user)
     end
 
     def resource_school

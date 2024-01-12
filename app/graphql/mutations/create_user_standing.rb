@@ -69,7 +69,7 @@ module Mutations
     end
 
     def student
-      @student ||= Student.find(@params[:student_id])
+      @student ||= Student.find_by(id: @params[:student_id])
     end
   end
 end

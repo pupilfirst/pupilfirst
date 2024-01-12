@@ -219,6 +219,10 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           </div>
         })
         |> React.array}
+        {switch targetDetails->TargetDetails.discussion {
+        | false => React.null
+        | true => <CoursesCurriculum__SubmissionCommentsAndReactions submission targetDetails />
+        }}
       </div>
     </div>
   }) |> React.array

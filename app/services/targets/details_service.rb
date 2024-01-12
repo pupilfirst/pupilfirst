@@ -34,7 +34,11 @@ module Targets
               quiz_questions: quiz_questions,
               evaluated: assignment.evaluation_criteria.exists?,
               completion_instructions: assignment.completion_instructions,
-              checklist: assignment.checklist
+              checklist: assignment.checklist,
+              comments: comments_for_submissions,
+              reactions: reactions_for_submissions,
+              discussion: assignment.discussion?,
+              allow_anonymous: assignment.allow_anonymous?
             }
           )
       else
@@ -44,7 +48,9 @@ module Targets
               quiz_questions: [],
               evaluated: false,
               completion_instructions: nil,
-              checklist: []
+              checklist: [],
+              discussion: false,
+              allow_anonymous: false
             }
           )
       end
@@ -162,6 +168,33 @@ module Targets
           submission.student_ids.sort == @student.team_student_ids
         end
       end
+    end
+
+    def comments_for_submissions
+      SubmissionComment
+        .where(timeline_event_id: submissions.pluck(:id))
+        .map do |comment|
+          {
+            id: comment.id,
+            user_id: comment.user_id,
+            submission_id: comment.timeline_event_id,
+            comment: comment.comment
+          }
+        end
+    end
+
+    def reactions_for_submissions
+      Reaction
+        .where(reactionable_type: "TimelineEvent")
+        .where(reactionable_id: submissions.pluck(:id))
+        .map do |reaction|
+          {
+            id: reaction.id,
+            user_id: reaction.user_id,
+            submission_id: reaction.reactionable_id,
+            reaction_value: reaction.reaction_value
+          }
+        end
     end
 
     def feedback_for_submissions

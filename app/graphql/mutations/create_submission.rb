@@ -3,18 +3,25 @@ module Mutations
     include QueryAuthorizeStudent
     include ValidateStudentSubmission
 
-    description 'Create a new submission for a target'
+    description "Create a new submission for a target"
 
     field :submission, Types::SubmissionType, null: true
 
     def resolve(_params)
       submission = create_submission
 
-      success_message = submission.passed_at.blank? ? I18n.t('mutations.create_submission.success_notification') : I18n.t('mutations.create_submission.form_success_notification')
+      success_message =
+        (
+          if submission.passed_at.blank?
+            I18n.t("mutations.create_submission.success_notification")
+          else
+            I18n.t("mutations.create_submission.form_success_notification")
+          end
+        )
 
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
+        I18n.t("shared.notifications.done_exclamation"),
         success_message
       )
 
@@ -23,7 +30,11 @@ module Mutations
 
     def create_submission
       TimelineEvent.transaction do
-        params = { target: target, checklist: @params[:checklist] }
+        params = {
+          target: target,
+          checklist: @params[:checklist],
+          anonymous: @params[:anonymous]
+        }
 
         timeline_event =
           TimelineEvents::CreateService.new(params, student).execute

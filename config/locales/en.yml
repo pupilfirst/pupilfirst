@@ -596,6 +596,7 @@ en:
       steps_submit: steps to submit this target
       submit: Submit
       submitting: Submitting
+      submit_anonymous_label: Submit anonymously
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...

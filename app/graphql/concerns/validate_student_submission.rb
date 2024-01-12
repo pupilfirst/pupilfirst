@@ -151,6 +151,7 @@ module ValidateStudentSubmission
     argument :target_id, GraphQL::Types::ID, required: true
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :file_ids, [GraphQL::Types::ID], required: true
+    argument :anonymous, GraphQL::Types::Boolean, required: true
 
     validates ValidResponse => {}
     validates ValidateFileAttachments => {}

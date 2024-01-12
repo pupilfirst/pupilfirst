@@ -32,6 +32,7 @@ let buttonContents = (formState, checklist) => {
 type state = {
   formState: formState,
   checklist: array<ChecklistItem.t>,
+  anonymous: bool,
 }
 
 type action =
@@ -39,10 +40,12 @@ type action =
   | SetSaving
   | SetReady
   | UpdateResponse(array<ChecklistItem.t>)
+  | ToggleAnonymous
 
 let initialState = checklist => {
   formState: Ready,
   checklist: ChecklistItem.fromTargetChecklistItem(checklist),
+  anonymous: false,
 }
 
 let reducer = (state, action) =>
@@ -50,7 +53,8 @@ let reducer = (state, action) =>
   | SetAttaching => {...state, formState: Attaching}
   | SetSaving => {...state, formState: Saving}
   | SetReady => {...state, formState: Ready}
-  | UpdateResponse(checklist) => {checklist, formState: Ready}
+  | UpdateResponse(checklist) => {...state, checklist, formState: Ready}
+  | ToggleAnonymous => {...state, anonymous: !state.anonymous}
   }
 
 let isBusy = formState =>
@@ -61,8 +65,8 @@ let isBusy = formState =>
   }
 
 module CreateSubmissionQuery = %graphql(`
-  mutation CreateSubmissionMutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
-    createSubmission(targetId: $targetId, checklist: $checklist, fileIds: $fileIds) {
+  mutation CreateSubmissionMutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!, $anonymous: Boolean!) {
+    createSubmission(targetId: $targetId, checklist: $checklist, fileIds: $fileIds, anonymous: $anonymous) {
       submission {
         id
         createdAt
@@ -86,9 +90,10 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
 
   let fileIds = state.checklist |> ChecklistItem.fileIds
   let checklist = state.checklist |> ChecklistItem.encodeArray
+  let anonymous = state.anonymous
   let targetId = Target.id(target)
 
-  CreateSubmissionQuery.make({targetId, fileIds, checklist})
+  CreateSubmissionQuery.make({targetId, fileIds, checklist, anonymous})
   |> Js.Promise.then_(response => {
     switch response["createSubmission"]["submission"] {
     | Some(submission) =>
@@ -175,15 +180,38 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
             />
           )
           |> React.array}
-      <div className={buttonClasses(state.checklist)}>
-        <Tooltip tip={tooltipText(preview)} position=#Start disabled={!isButtonDisabled(state)}>
-          <button
-            onClick={submit(state, send, target, targetDetails, addSubmissionCB)}
-            disabled={isButtonDisabled(state) || preview}
-            className="btn btn-primary flex justify-center grow md:grow-0">
-            {buttonContents(state.formState, checklist)}
-          </button>
-        </Tooltip>
+      <div>
+        {switch targetDetails->TargetDetails.discussion {
+        | false => React.null
+        | true =>
+          <div className="mt-4 flex justify-start">
+            <input
+              onChange={_event => send(ToggleAnonymous)}
+              checked=state.anonymous
+              className="checkbox-input"
+              id="anonymous"
+              type_="checkbox"
+            />
+            <label className="checkbox-label flex gap-2 " htmlFor="anonymous">
+              <span className="flex-shrink-0 mt-1">
+                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                  <polyline points="1.5 6 4.5 9 10.5 1" />
+                </svg>
+              </span>
+              <span className="text-sm"> {tr("submit_anonymous_label")->str} </span>
+            </label>
+          </div>
+        }}
+        <div className={buttonClasses(state.checklist)}>
+          <Tooltip tip={tooltipText(preview)} position=#Start disabled={!isButtonDisabled(state)}>
+            <button
+              onClick={submit(state, send, target, targetDetails, addSubmissionCB)}
+              disabled={isButtonDisabled(state) || preview}
+              className="btn btn-primary flex justify-center grow md:grow-0">
+              {buttonContents(state.formState, checklist)}
+            </button>
+          </Tooltip>
+        </div>
       </div>
     </DisablingCover>
   </div>

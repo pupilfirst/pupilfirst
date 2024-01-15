@@ -4328,10 +4328,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^2.4.0":
-  version: 2.4.5
-  resolution: "dompurify@npm:2.4.5"
-  checksum: d764c2ff126b3749dad35bc34eed40f51141d7dfd620e938c92f08d68c32beeb259d06abadeee91f6e2a8c8737ce670e2124ac9a257ba3bcdc666598cebcde01
+"dompurify@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "dompurify@npm:3.0.8"
+  checksum: 671fa18bd4bcb1a6ff2e59ecf919f807615b551e7add8834b27751d4e0f3d754a67725482d1efdd259317cadcaaccb72a8afc3aba829ac59730e760041591a1a
   languageName: node
   linkType: hard
 
@@ -9198,7 +9198,7 @@ __metadata:
     cloc: "npm:^2.10.0"
     date-fns: "npm:^2.29.2"
     date-fns-tz: "npm:^1.3.7"
-    dompurify: "npm:^2.4.0"
+    dompurify: "npm:^3.0.8"
     dotenv: "npm:^10.0.0"
     emoji-mart: "npm:^5.5.2"
     file-saver: "npm:^2.0.5"

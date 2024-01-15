@@ -650,14 +650,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emoji-mart/data@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "@emoji-mart/data@npm:1.0.6"
-  checksum: 9cb1c502e4c7eef3ebaea5564502f190f7ce05e14c2b812313cb75a0a1685c62c1e04a40ef4e8a03d234e60e2bbc800e26047288737bbea0bf678725c8b9e54a
+"@emoji-mart/data@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@emoji-mart/data@npm:1.1.2"
+  checksum: c285aa159b00b728d37bc2c6a30ad007fd0d468982c80b16bc8ef6a982c615e9811d297a11ff485ee981bd9a41a63988ad34e8d4a65fb807c4a1bf74f3e92443
   languageName: node
   linkType: hard
 
-"@emoji-mart/react@npm:^1.0.6":
+"@emoji-mart/react@npm:^1.1.1":
   version: 1.1.1
   resolution: "@emoji-mart/react@npm:1.1.1"
   peerDependencies:
@@ -9069,8 +9069,8 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.19.0"
     "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#esm"
-    "@emoji-mart/data": "npm:^1.0.6"
-    "@emoji-mart/react": "npm:^1.0.6"
+    "@emoji-mart/data": "npm:^1.1.2"
+    "@emoji-mart/react": "npm:^1.1.1"
     "@fortawesome/fontawesome-free": "npm:^5.15.4"
     "@glennsl/bs-json": "npm:^5.0.4"
     "@jeff-tian/markdown-it-katex": "npm:^2.1.0"

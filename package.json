@@ -59,7 +59,7 @@
     "prop-types": "^15.8.1",
     "qrcode.react": "^3.1.0",
     "react": "^16.8.6",
-    "react-datepicker": "^4.8.0",
+    "react-datepicker": "^4.25.0",
     "react-dom": "^16.8.6",
     "react-helmet": "^6.1.0",
     "react_ujs": "^2.6.2",

@@ -387,6 +387,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.21.0":
+  version: 7.23.8
+  resolution: "@babel/runtime@npm:7.23.8"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: ec8f1967a36164da6cac868533ffdff97badd76d23d7d820cc84f0818864accef972f22f9c6a710185db1e3810e353fc18c3da721e5bb3ee8bc61bdbabce03ff
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.20.7":
   version: 7.20.7
   resolution: "@babel/template@npm:7.20.7"
@@ -2545,10 +2554,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.9.2":
-  version: 2.11.7
-  resolution: "@popperjs/core@npm:2.11.7"
-  checksum: 31b330f1551acf0eddcb13f472946a274b92b7f4391a52c0c85f448c935d5efc1c9c832a608214a5b74397ff632d4e5af5fcfa749f825afc63db97b8f72f3eeb
+"@popperjs/core@npm:^2.11.8":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: ddd16090cde777aaf102940f05d0274602079a95ad9805bd20bc55dcc7c3a2ba1b99dd5c73e5cc2753c3d31250ca52a67d58059459d7d27debb983a9f552936c
   languageName: node
   linkType: hard
 
@@ -4108,10 +4117,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.24.0, date-fns@npm:^2.29.2":
+"date-fns@npm:^2.29.2":
   version: 2.29.3
   resolution: "date-fns@npm:2.29.3"
   checksum: 05b6ce6093ed2a09aafe89bb7a6d51ff72971341d7db1e531299d117df305c4a9f408bcdd533687622ae820ba9ea8859437b12074d7043b76325c7828e5d41fc
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.30.0":
+  version: 2.30.0
+  resolution: "date-fns@npm:2.30.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.21.0"
+  checksum: 70b3e8ea7aaaaeaa2cd80bd889622a4bcb5d8028b4de9162cbcda359db06e16ff6e9309e54eead5341e71031818497f19aaf9839c87d1aba1e27bb4796e758a9
   languageName: node
   linkType: hard
 
@@ -9162,7 +9180,7 @@ __metadata:
     prop-types: "npm:^15.8.1"
     qrcode.react: "npm:^3.1.0"
     react: "npm:^16.8.6"
-    react-datepicker: "npm:^4.8.0"
+    react-datepicker: "npm:^4.25.0"
     react-dom: "npm:^16.8.6"
     react-helmet: "npm:^6.1.0"
     react_ujs: "npm:^2.6.2"
@@ -9223,20 +9241,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^4.8.0":
-  version: 4.11.0
-  resolution: "react-datepicker@npm:4.11.0"
+"react-datepicker@npm:^4.25.0":
+  version: 4.25.0
+  resolution: "react-datepicker@npm:4.25.0"
   dependencies:
-    "@popperjs/core": "npm:^2.9.2"
+    "@popperjs/core": "npm:^2.11.8"
     classnames: "npm:^2.2.6"
-    date-fns: "npm:^2.24.0"
+    date-fns: "npm:^2.30.0"
     prop-types: "npm:^15.7.2"
-    react-onclickoutside: "npm:^6.12.2"
+    react-onclickoutside: "npm:^6.13.0"
     react-popper: "npm:^2.3.0"
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
-  checksum: 206bafad590353a069ee68320fa1068def6a8f4b501e5060d11d6f9b88708dce76781df9a760e2b378051b0dbea3ef64a7abdec0e5f073fad236a8a93a9cac74
+  checksum: 3c9adc959ce65f701d94741a387ccba2ad21a04ea725a4863abf51221c81349c98a5468f324412a8fefd9727cfd3401989842dc4e6292a291f6c7dc3a87e9555
   languageName: node
   linkType: hard
 
@@ -9296,7 +9314,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-onclickoutside@npm:^6.12.2":
+"react-onclickoutside@npm:^6.13.0":
   version: 6.13.0
   resolution: "react-onclickoutside@npm:6.13.0"
   peerDependencies:
@@ -9549,6 +9567,13 @@ __metadata:
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: d493e9e118abef5b099c78170834f18540c4933cedf9bfabc32d3af94abfb59a7907bd7950259cbab0a929ebca7db77301e8024e5121e6482a82f78283dfd20c
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.14.0":
+  version: 0.14.1
+  resolution: "regenerator-runtime@npm:0.14.1"
+  checksum: 5db3161abb311eef8c45bcf6565f4f378f785900ed3945acf740a9888c792f75b98ecb77f0775f3bf95502ff423529d23e94f41d80c8256e8fa05ed4b07cf471
   languageName: node
   linkType: hard
 

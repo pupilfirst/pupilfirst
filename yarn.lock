@@ -3112,10 +3112,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autosize@npm:^5.0.1":
-  version: 5.0.2
-  resolution: "autosize@npm:5.0.2"
-  checksum: 8e608a3f8b5a6384273f5705c2953e319b20b733baaf0d37a8e77772e7f57deee817d9bf81bf41c0d45b4c475251f22e9549d5d62fd3ba566524eae090442ea7
+"autosize@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "autosize@npm:6.0.1"
+  checksum: 9a08739b527c19c55c154cabf90d39b38a7e78d5e419fefe40ab6df3dd2be4dd7c714db2c7dfdef755c41e44e0ec93975f8df33a0a1c90c0cd1ce8ddc21ad269
   languageName: node
   linkType: hard
 
@@ -9127,7 +9127,7 @@ __metadata:
     "@rescript/react": "npm:^0.10.3"
     animate.css: "npm:3.7.2"
     autoprefixer: "npm:^10.4.16"
-    autosize: "npm:^5.0.1"
+    autosize: "npm:^6.0.1"
     babel-plugin-prismjs: "npm:^2.1.0"
     blob-polyfill: "npm:^5.0.20210201"
     bs-fetch: "npm:^0.6.2"

@@ -24,7 +24,7 @@
     "@rescript/react": "^0.10.3",
     "animate.css": "3.7.2",
     "autoprefixer": "^10.4.16",
-    "autosize": "^5.0.1",
+    "autosize": "^6.0.1",
     "babel-plugin-prismjs": "^2.1.0",
     "blob-polyfill": "^5.0.20210201",
     "bs-fetch": "^0.6.2",

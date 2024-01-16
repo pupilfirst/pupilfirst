@@ -11,7 +11,8 @@ module Schools
     end
 
     def standings
-      @standings ||= @school.standings.where(archived_at: nil).order(:id)
+      @standings ||=
+        @school.standings.where(archived_at: nil).order(:created_at)
     end
 
     def standing_log_count_for_each_unarchived_standing

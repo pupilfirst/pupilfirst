@@ -79,7 +79,7 @@ feature "Course students bulk importer", js: true do
     open_email("super@man.com")
 
     expect(current_email.subject).to have_content(
-      "You have been added as a student in #{school.name}"
+      "Super Man, you have been added as a student in #{school.name}"
     )
   end
 

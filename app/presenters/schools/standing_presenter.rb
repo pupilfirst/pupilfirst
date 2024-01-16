@@ -7,7 +7,7 @@ module Schools
     end
 
     def standing_enabled?
-      @school.configuration["enable_standing"]
+      Schools::Configuration.new(@school).standing_enabled?
     end
 
     def standings

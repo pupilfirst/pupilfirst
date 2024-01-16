@@ -47,6 +47,32 @@ type baseData = {
   currentStanding: currentStanding,
 }
 
+type standingData = Unloaded | Loading | Loaded(baseData) | Errored | NotFound
+
+type state = {
+  standingData: standingData,
+  archive: bool,
+  reason: string,
+  select: string,
+  pageData: pageData,
+}
+
+type action =
+  | SetStandingData(standingData)
+  | SetArchive(bool)
+  | SetReason(string)
+  | SetSelect(string)
+  | SetPageData(pageData)
+
+let reducer = (state, action) =>
+  switch action {
+  | SetStandingData(standingData) => {...state, standingData}
+  | SetArchive(archive) => {...state, archive}
+  | SetReason(reason) => {...state, reason}
+  | SetSelect(select) => {...state, select}
+  | SetPageData(pageData) => {...state, pageData}
+  }
+
 let pageLinks = studentId => [
   School__PageHeader.makeLink(
     ~href={`/school/students/${studentId}/details`},
@@ -88,8 +114,6 @@ let makeFromUserStandingFragment = (userStanding: UserStandingFragment.t) => {
   reason: userStanding.reason,
 }
 
-type state = Unloaded | Loading | Loaded(baseData) | Errored | NotFound
-
 module SchoolAndStudentDataQuery = %graphql(`
   query schoolAndStudentDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
@@ -127,7 +151,7 @@ module ArchiveUserStandingMutation = %graphql(`
   }
 `)
 
-module CreateUserStadningMutation = %graphql(`
+module CreateUserStandingMutation = %graphql(`
     mutation createUserStandingMutation($studentId: ID!, $reason: String!, $standingId: ID!) {
       createUserStanding(studentId: $studentId, reason: $reason, standingId: $standingId) {
         userStanding {
@@ -137,39 +161,37 @@ module CreateUserStadningMutation = %graphql(`
     }
   `)
 
-let createUserStanding = (studentId, reason, standingId, setState, setReason, setSelect) => {
-  CreateUserStadningMutation.fetch({
+let createUserStanding = (studentId, send, reason, standingId, baseData) => {
+  CreateUserStandingMutation.fetch({
     studentId,
     reason,
     standingId,
   })
-  ->Js.Promise2.then((response: CreateUserStadningMutation.t) => {
+  ->Js.Promise2.then((response: CreateUserStandingMutation.t) => {
     let log =
       response.createUserStanding.userStanding->Belt.Option.map(makeFromUserStandingFragment)
     switch log {
     | Some(log) =>
-      setReason(_ => "")
-      setSelect(_ => "0")
-      setState(currentState =>
-        switch currentState {
-        | Loaded(data) =>
+      send(
+        SetStandingData(
           Loaded({
-            ...data,
-            userStandings: Js.Array2.concat([log], data.userStandings),
+            userStandings: Js.Array2.concat([log], baseData.userStandings),
+            standings: baseData.standings,
             currentStanding: {
               color: log.standingColor,
               name: log.standingName,
             },
-          })
-        | _ => currentState
-        }
+          }),
+        ),
       )
+      send(SetReason(""))
+      send(SetSelect("0"))
     | None => ()
     }
     Js.Promise.resolve()
   })
   ->Js.Promise2.catch(_error => {
-    setState(_ => Errored)
+    send(SetStandingData(Errored))
     Js.Promise.resolve()
   })
   ->ignore
@@ -194,8 +216,8 @@ let updateCurrentStanding = (userStandings: userStandings, standings: standings)
   }
 }
 
-let loadStandingData = (studentId, setState) => {
-  setState(_ => Loading)
+let loadStandingData = (studentId, send) => {
+  send(SetStandingData(Loading))
   StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
   ->Js.Promise2.then((response: StudentStandingDataQuery.t) => {
     let userStandings = response.userStandings->Js.Array2.map(makeFromUserStandingFragment)
@@ -207,83 +229,90 @@ let loadStandingData = (studentId, setState) => {
       description: standing.description,
     })
 
-    setState(_ => Loaded({
-      userStandings,
-      standings,
-      currentStanding: updateCurrentStanding(userStandings, standings),
-    }))
+    send(
+      SetStandingData(
+        Loaded({
+          userStandings,
+          standings,
+          currentStanding: updateCurrentStanding(userStandings, standings),
+        }),
+      ),
+    )
     Js.Promise.resolve()
   })
   ->Js.Promise2.catch(_error => {
-    setState(_ => Errored)
+    send(SetStandingData(Errored))
     Js.Promise.resolve()
   })
   ->ignore
 }
 
-let loadPageData = (studentId, setState, setCourseId, setPageData) => {
+let loadPageData = (studentId, send, setCourseId) => {
+  send(SetStandingData(Loading))
   SchoolAndStudentDataQuery.fetch({
     studentId: studentId,
   })
   ->Js.Promise2.then((response: SchoolAndStudentDataQuery.t) => {
-    setPageData(_ => {
-      student: {
-        name: response.student.user.name,
-        email: response.student.user.email,
-      },
-      courseId: response.student.course.id,
-      schoolStandingEnabled: response.isSchoolStandingEnabled,
-    })
+    send(
+      SetPageData({
+        student: {
+          name: response.student.user.name,
+          email: response.student.user.email,
+        },
+        courseId: response.student.course.id,
+        schoolStandingEnabled: response.isSchoolStandingEnabled,
+      }),
+    )
     setCourseId(response.student.course.id)
     if response.isSchoolStandingEnabled {
-      loadStandingData(studentId, setState)
+      loadStandingData(studentId, send)
     } else {
-      setState(_ => NotFound)
+      send(SetStandingData(NotFound))
     }
     Js.Promise.resolve()
   })
   ->Js.Promise2.catch(_error => {
-    setState(_ => Errored)
+    send(SetStandingData(Errored))
     Js.Promise.resolve()
   })
   ->ignore
 }
 
-let archiveStanding = (id: string, setArchive, setState, event) => {
+let archiveStanding = (id: string, send, baseData, event) => {
   event->ReactEvent.Mouse.preventDefault
 
   if {
     open Webapi.Dom
     window->Window.confirm(t("confirm_delete"))
   } {
-    setArchive(_ => true)
+    send(SetArchive(true))
     ArchiveUserStandingMutation.fetch({
       id: id,
     })
     ->Js.Promise2.then((response: ArchiveUserStandingMutation.t) => {
       if response.archiveUserStanding.success {
-        setState(currentState =>
-          switch currentState {
-          | Loaded(data) => {
-              let userStandings =
-                data.userStandings->Js.Array2.filter(standing => standing.id !== id)
-              Loaded({
-                ...data,
-                userStandings,
-                currentStanding: updateCurrentStanding(userStandings, data.standings),
-              })
-            }
-          | _ => currentState
-          }
+        send(
+          SetStandingData(
+            Loaded({
+              userStandings: Js.Array2.filter(baseData.userStandings, standing =>
+                standing.id !== id
+              ),
+              standings: baseData.standings,
+              currentStanding: updateCurrentStanding(
+                Js.Array2.filter(baseData.userStandings, standing => standing.id !== id),
+                baseData.standings,
+              ),
+            }),
+          ),
         )
-        setArchive(_ => false)
+        send(SetArchive(false))
       } else {
-        setArchive(_ => false)
+        send(SetArchive(false))
       }
       Js.Promise.resolve()
     })
     ->Js.Promise2.catch(_error => {
-      setState(_ => Errored)
+      send(SetStandingData(Errored))
       Js.Promise.resolve()
     })
     ->ignore
@@ -309,18 +338,18 @@ let currentStandingCard = (standing: currentStanding) => {
   </div>
 }
 
-let deleteIcon = (id: string, setArchive, archive, setState) => {
+let deleteIcon = (id: string, send, baseData) => {
   <button
     ariaLabel={t("delete_standing_log") ++ id}
     className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
-    disabled=archive
+    disabled={false}
     title={t("delete_standing_log") ++ id}
-    onClick={archiveStanding(id, setArchive, setState)}>
+    onClick={archiveStanding(id, send, baseData)}>
     <PfIcon className="if i-trash-regular if-fw text-2xl" />
   </button>
 }
 
-let standingLogs = (userStandings: userStandings, setArchive, archive, setState) => {
+let standingLogs = (userStandings: userStandings, send, baseData) => {
   let userStandingLogsCount = userStandings->Js.Array2.length
   <div className="mt-3">
     <h2 className="font-semibold text-lg mt-8"> {"Standing log"->str} </h2>
@@ -359,7 +388,7 @@ let standingLogs = (userStandings: userStandings, setArchive, archive, setState)
                     <MarkdownBlock profile=Markdown.Permissive markdown=log.reason />
                   </div>
                 </div>
-                <div className="ml-4"> {deleteIcon(log.id, setArchive, archive, setState)} </div>
+                <div className="ml-4"> {deleteIcon(log.id, send, baseData)} </div>
               </div>
             </div>
           </div>
@@ -378,16 +407,7 @@ let standingLogs = (userStandings: userStandings, setArchive, archive, setState)
 
 let changeStandingButtonDisabled = (reason, select) => reason == "" || select == "0"
 
-let editor = (
-  standings,
-  setReason,
-  reason,
-  setState,
-  studentId,
-  setSelect,
-  select,
-  currentStanding,
-) => {
+let editor = (standings, send, state, studentId, currentStanding, baseData) => {
   <div className="pt-4">
     <h2 className="text-lg font-semibold"> {t("change_standing")->str} </h2>
     <p className="mb-4"> {t("change_standing_info")->str} </p>
@@ -414,9 +434,9 @@ let editor = (
           id="change-standing"
           onChange={event => {
             let value = ReactEvent.Form.target(event)["value"]
-            setSelect(_ => value)
+            send(SetSelect(value))
           }}
-          value=select>
+          value=state.select>
           <option key="0" value="0"> {t("select_standing")->str} </option>
           {standings
           ->Js.Array2.map(standing => {
@@ -432,12 +452,12 @@ let editor = (
         </div>
       </div>
     </div>
-    {select != "0"
+    {state.select != "0"
       ? <div className="text-yellow-900 text-sm font-inter mt-2 ps-72">
           <PfIcon className="if i-info-light if-fw" />
           {
             let description =
-              Js.Array2.filter(standings, standing => standing.id == select)
+              Js.Array2.filter(standings, standing => standing.id == state.select)
               ->Js.Array2.unsafe_get(0)
               ->(standing => standing.description)
 
@@ -454,9 +474,9 @@ let editor = (
       <div>
         <MarkdownEditor
           textareaId="reason-for-altering-standing"
-          onChange={value => setReason(_ => value)}
+          onChange={value => send(SetReason(value))}
           maxLength=1000
-          value=reason
+          value=state.reason
           profile=Markdown.Permissive
           placeholder={t("reason_placeholder")}
           fileUpload=false
@@ -467,9 +487,9 @@ let editor = (
     <div>
       <button
         className="mt-4 btn btn-primary btn-sm"
-        disabled={changeStandingButtonDisabled(reason, select)}
+        disabled={changeStandingButtonDisabled(state.reason, state.select)}
         onClick={_e => {
-          createUserStanding(studentId, reason, select, setState, setReason, setSelect)
+          createUserStanding(studentId, send, state.reason, state.select, baseData)
         }}>
         {t("add_entry_button")->str}
       </button>
@@ -496,52 +516,48 @@ let renderSchoolPageHeader = (studentId, studentName, studentEmail) => {
 
 @react.component
 let make = (~studentId) => {
-  let (state, setState) = React.useState(() => Unloaded)
-  let (archive, setArchive) = React.useState(() => false)
-  let (reason, setReason) = React.useState(() => "")
-  let (select, setSelect) = React.useState(() => "0")
-  let (pageData, setPageData) = React.useState(() => {
-    student: {
-      name: "",
-      email: "",
+  let (state, send) = React.useReducer(
+    reducer,
+    {
+      standingData: Unloaded,
+      archive: false,
+      reason: "",
+      select: "0",
+      pageData: {
+        student: {
+          name: "",
+          email: "",
+        },
+        courseId: "",
+        schoolStandingEnabled: false,
+      },
     },
-    courseId: "",
-    schoolStandingEnabled: false,
-  })
+  )
 
   let courseContext = React.useContext(SchoolRouter__CourseContext.context)
 
   React.useEffect1(() => {
-    loadPageData(studentId, setState, courseContext.setCourseId, setPageData)
+    loadPageData(studentId, send, courseContext.setCourseId)
     None
   }, [studentId])
 
-  switch state {
+  switch state.standingData {
   | Unloaded
   | Loading =>
     SkeletonLoading.coursePage()
   | Loaded(baseData) =>
     <div>
-      {renderSchoolPageHeader(studentId, pageData.student.name, pageData.student.email)}
+      {renderSchoolPageHeader(studentId, state.pageData.student.name, state.pageData.student.email)}
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 py-8">
         {currentStandingCard(baseData.currentStanding)}
-        {standingLogs(baseData.userStandings, setArchive, archive, setState)}
-        {editor(
-          baseData.standings,
-          setReason,
-          reason,
-          setState,
-          studentId,
-          setSelect,
-          select,
-          baseData.currentStanding,
-        )}
+        {standingLogs(baseData.userStandings, send, baseData)}
+        {editor(baseData.standings, send, state, studentId, baseData.currentStanding, baseData)}
       </div>
     </div>
   | Errored => <ErrorState />
   | NotFound =>
     <div>
-      {renderSchoolPageHeader(studentId, pageData.student.name, pageData.student.email)}
+      {renderSchoolPageHeader(studentId, state.pageData.student.name, state.pageData.student.email)}
       {schoolStandingDisabled()}
     </div>
   }

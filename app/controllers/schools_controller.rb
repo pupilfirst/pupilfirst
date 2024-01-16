@@ -70,7 +70,7 @@ class SchoolsController < ApplicationController
     end
 
     flash[:success] = I18n.t(
-      "schools.standing.toggle_standing.school_standing_toggle_success.#{standing_enabled == "true" ? "_yes" : "_no"}"
+      "schools.standing.toggle_standing.school_standing_toggle_success.#{standing_enabled == true ? "_yes" : "_no"}"
     )
 
     redirect_to standing_school_path

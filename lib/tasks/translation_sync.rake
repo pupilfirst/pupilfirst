@@ -8,7 +8,7 @@ namespace :translations do
     target_file_path = file_path_for(target_locale)
 
     if target_locale.blank?
-      puts "Please specify a language!, example: rails translations:sync[ar]"
+      puts "Please specify a target language code. Example: rails translations:sync[ar]"
     elsif File.exist?(source_file_path) && File.exist?(target_file_path)
       source_translations = YAML.load_file(source_file_path)
       target_translations = YAML.load_file(target_file_path)

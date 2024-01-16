@@ -2,11 +2,12 @@
   @apply flex items-center justify-center w-1/3 p-3 font-medium rounded-t-lg leading-relaxed border border-gray-300 bg-gray-50 text-gray-600;
 }
 
-.curriculum-editor__target-drawer-tab:not(.curriculum-editor__target-drawer-tab--selected):hover {
+.curriculum-editor__target-drawer-tab:not(
+    .curriculum-editor__target-drawer-tab--selected
+  ):hover {
   @apply bg-gray-50 text-primary-400 text-gray-900;
 }
 
 .curriculum-editor__target-drawer-tab--selected {
-  border-bottom-color: white;
-  @apply text-primary-500 bg-white;
+  @apply text-primary-500 bg-white border-b-white;
 }

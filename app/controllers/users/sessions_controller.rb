@@ -145,7 +145,7 @@ module Users
         session_id = Base64.urlsafe_decode64(data[:session_id])
 
         # Abort if the session is invalid
-        if session_id.to_s != session.id.private_id.to_s
+        if session.id.nil? || session_id.to_s != session.id.private_id.to_s
           flash[:error] = t(".invalid_session")
           redirect_to new_user_session_path
           return

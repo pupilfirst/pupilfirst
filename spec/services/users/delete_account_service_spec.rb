@@ -29,9 +29,17 @@ describe Users::DeleteAccountService do
   let(:level_1) { create :level, :one, course: course_1 }
   let(:target_group_1) { create :target_group, level: level_1 }
   let!(:target_1) do
-    create :target, :for_students, target_group: target_group_1
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_1
   end
-  let!(:target_2) { create :target, :for_team, target_group: target_group_1 }
+  let!(:target_2) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_1
+  end
   let!(:submission_by_student) do
     create :timeline_event,
            :with_owners,

@@ -92,7 +92,7 @@ let reducer = (state, action) =>
       Hidden
     }
 
-    {...state, ui: ui}
+    {...state, ui}
   | ToggleSaving => {...state, saving: !state.saving, error: None}
   | FinishSaving(isAboveTarget) => computeInitialState(isAboveTarget)
   | SetError(error) => {...state, error: Some(error)}
@@ -111,8 +111,8 @@ let reducer = (state, action) =>
   | ShowUploadVideoForm => {...state, ui: UploadVideo}
   | HideUploadVideoForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
-  | UpdateVideoTitle(videoTitle) => {...state, videoTitle: videoTitle}
-  | UpdateVideoDescription(videoDescription) => {...state, videoDescription: videoDescription}
+  | UpdateVideoTitle(videoTitle) => {...state, videoTitle}
+  | UpdateVideoDescription(videoDescription) => {...state, videoDescription}
   | UpdateUploadProgress(uploadProgress) => {
       ...state,
       uploadProgress: Some(uploadProgress),
@@ -201,9 +201,10 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   <label
     ?htmlFor
     key=buttonText
-    className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
+    className="px-3 pt-4 pb-3 flex-1 text-center text-primary-500 cursor-pointer border-e last:border-e-0 border-primary-100 hover:bg-primary-100 hover:text-primary-600 transition"
     onClick={onBlockTypeSelect(target, aboveContentBlock, send, addContentBlockCB, blockType)}>
-    <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {str(buttonText)} </p>
+    <i className={faIcon ++ " text-2xl"} />
+    <p> {str(buttonText)} </p>
   </label>
 }
 
@@ -682,7 +683,7 @@ let make = (
         | Hidden => React.null
         | BlockSelector =>
           <div
-            className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4">
+            className="content-block-creator__block-content-type text-sm hidden mx-auto relative bg-primary-50 border border-primary-100 rounded-lg -mt-4 overflow-hidden">
             {(
               hasVimeoAccessToken
                 ? [#Markdown, #Image, #Embed, #VideoEmbed, #File, #Audio]

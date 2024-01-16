@@ -42,6 +42,11 @@ module Targets
           end
     end
 
+    def assignment
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
+    end
+
     def reason_to_lock
       @reason_to_lock ||=
         begin
@@ -59,30 +64,34 @@ module Targets
         end
     end
 
-    def student_level_number
-      @student_level_number ||= @student.level.number
-    end
-
     def target_level_number
       @target_level_number ||= @target.level.number
     end
 
     def target_reviewed?
-      @target_reviewed ||= @target.evaluation_criteria.any?
+      return @target_reviewed if defined?(@target_reviewed)
+      @target_reviewed = assignment && assignment.evaluation_criteria.any?
     end
 
     def prerequisites_incomplete?
-      applicable_targets = @target.prerequisite_targets.live
+      applicable_assignments =
+        assignment
+          .prerequisite_assignments
+          .not_archived
+          .joins(:target)
+          .where(target: { visibility: Target::VISIBILITY_LIVE })
 
       submitted_prerequisites =
-        applicable_targets.joins(timeline_events: :timeline_event_owners).where(
+        applicable_assignments.joins(
+          timeline_events: :timeline_event_owners
+        ).where(
           timeline_event_owners: {
             student_id: @student.id,
             latest: true
           }
         )
 
-      submitted_prerequisites.count != applicable_targets.count
+      submitted_prerequisites.count != applicable_assignments.count
     end
   end
 end

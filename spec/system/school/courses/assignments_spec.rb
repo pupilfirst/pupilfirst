@@ -24,17 +24,17 @@ feature "Assignments", js: true do
   context "when course does have milestones" do
     let!(:target_1) do
       create :target,
-             :student,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
              target_group: target_group,
-             milestone: true,
-             milestone_number: 1
+             given_milestone_number: 1
     end
     let!(:target_2) do
       create :target,
-             :student,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
              target_group: target_group,
-             milestone: true,
-             milestone_number: 2
+             given_milestone_number: 2
     end
 
     scenario "school admin changes order of milestones" do
@@ -51,8 +51,8 @@ feature "Assignments", js: true do
         expect(page).to have_text(target_1.title)
       end
 
-      expect(target_1.reload.milestone_number).to eq(2)
-      expect(target_2.reload.milestone_number).to eq(1)
+      expect(target_1.reload.assignments.first.milestone_number).to eq(2)
+      expect(target_2.reload.assignments.first.milestone_number).to eq(1)
 
       # Move first target down.
       find('button[title="Move down"]').click
@@ -61,8 +61,8 @@ feature "Assignments", js: true do
         expect(page).to have_text(target_2.title)
       end
 
-      expect(target_1.reload.milestone_number).to eq(1)
-      expect(target_2.reload.milestone_number).to eq(2)
+      expect(target_1.assignments.first.reload.milestone_number).to eq(1)
+      expect(target_2.assignments.first.reload.milestone_number).to eq(2)
     end
 
     scenario "school admin clicks on milestone" do
@@ -89,8 +89,8 @@ feature "Assignments", js: true do
         expect(page).to have_text(target_1.title)
       end
 
-      expect(target_1.reload.milestone_number).to eq(2)
-      expect(target_2.reload.milestone_number).to eq(1)
+      expect(target_1.assignments.first.reload.milestone_number).to eq(2)
+      expect(target_2.assignments.first.reload.milestone_number).to eq(1)
     end
   end
 end

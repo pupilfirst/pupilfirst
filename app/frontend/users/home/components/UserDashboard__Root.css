@@ -10,13 +10,8 @@
   background-size: cover;
 }
 
-.user-dashboard-course__title-container {
-  background: rgba(0, 0, 0, 0.3);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6));
-}
-
 .user-dashboard-course__title {
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 0px 0.5px 1px theme("colors.gray.300");
 }
 
 .user-dashboard-course__description {

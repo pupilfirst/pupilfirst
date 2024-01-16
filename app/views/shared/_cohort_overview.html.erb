@@ -32,7 +32,7 @@
                   <% milestone_target_stats = milestone_completion_status[target.id] %>
                   <div>
                     <div class="flex justify-between">
-                      <p class="text-xs font-medium"><%= "#{t("shared.m")}#{target.milestone_number}: #{target.title}" %></p>
+                      <p class="text-xs font-medium"><%= "#{t("shared.m")}#{target.assignments.first.milestone_number}: #{target.title}" %></p>
                       <div class="flex space-x-2">
                         <p class="text-xs font-medium text-gray-500"><%= "#{milestone_target_stats[:students_count]}/#{total_students_count}" %></p>
                         <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{milestone_target_stats[:percentage]}%" %></p>

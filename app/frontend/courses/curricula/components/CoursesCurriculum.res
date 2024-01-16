@@ -13,6 +13,7 @@ type state = {
   showLevelZero: bool,
   latestSubmissions: array<LatestSubmission.t>,
   statusOfTargets: array<TargetStatus.t>,
+  targetsRead: array<string>,
   notice: Notice.t,
 }
 
@@ -22,13 +23,14 @@ let targetStatusClasses = targetStatus => {
   "curriculum__target-status px-1 md:px-3 py-px ms-4 h-6 " ++ statusClasses
 }
 
-let rendertarget = (target, statusOfTargets, author, courseId) => {
+let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
   let targetId = target |> Target.id
   let targetStatus =
     statusOfTargets |> ArrayUtils.unsafeFind(
       ts => ts |> TargetStatus.targetId == targetId,
       "Could not find targetStatus for listed target with ID " ++ targetId,
     )
+  let targetRead = Js.Array.includes(targetId, targetsRead)
 
   <div
     key={"target-" ++ targetId}
@@ -41,14 +43,28 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       (Target.title(target) ++
       ", Status: " ++
       TargetStatus.statusToString(targetStatus))}>
-      <span className="text-sm md:text-base"> {Target.title(target)->str} </span>
+      <span className="inline-flex items-center space-x-3">
+        {targetRead
+          ? <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="w-4 h-4 text-gray-500"
+                viewBox="0 0 16 16">
+                <path
+                  d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                />
+                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+              </svg>
+            </span>
+          : <span title="Not read yet" className="w-5 h-5 flex items-center justify-center">
+              <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
+            </span>}
+        <span className="text-sm md:text-base font-medium"> {Target.title(target)->str} </span>
+      </span>
       <div className="flex">
-        {ReactUtils.nullIf(
-          <span className={targetStatusClasses(targetStatus)}>
-            {TargetStatus.statusToString(targetStatus)->str}
-          </span>,
-          TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
-        )}
         {Target.milestone(target)
           ? <div
               className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
@@ -56,6 +72,12 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
               <span className="hidden md:block ms-1"> {t("milestone_target_label") |> str} </span>
             </div>
           : React.null}
+        {ReactUtils.nullIf(
+          <span className={targetStatusClasses(targetStatus)}>
+            {TargetStatus.statusToString(targetStatus)->str}
+          </span>,
+          TargetStatus.isAccessEnded(targetStatus) || TargetStatus.isPending(targetStatus),
+        )}
       </div>
     </Link>
     {ReactUtils.nullUnless(
@@ -71,7 +93,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
   </div>
 }
 
-let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId) => {
+let renderTargetGroup = (targetGroup, targets, statusOfTargets, targetsRead, author, courseId) => {
   let targetGroupId = targetGroup |> TargetGroup.id
   let targets = targets |> Js.Array.filter(t => t |> Target.targetGroupId == targetGroupId)
 
@@ -92,7 +114,9 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
       </div>
       {targets
       |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
+      |> Js.Array.map(target =>
+        rendertarget(target, statusOfTargets, targetsRead, author, courseId)
+      )
       |> React.array}
     </div>
   </div>
@@ -108,6 +132,14 @@ let addSubmission = (setState, latestSubmission) =>
     {
       ...state,
       latestSubmissions: Js.Array.concat([latestSubmission], withoutSubmissionForThisTarget),
+    }
+  })
+
+let addMarkRead = (setState, markedReadTargetId) =>
+  setState(state => {
+    {
+      ...state,
+      targetsRead: Js.Array.concat([markedReadTargetId], state.targetsRead),
     }
   })
 
@@ -229,6 +261,7 @@ let make = (
   ~evaluationCriteria,
   ~preview,
   ~accessLockedLevels,
+  ~targetsRead,
 ) => {
   let url = RescriptReactRouter.useUrl()
 
@@ -283,7 +316,7 @@ let make = (
   let initialRender = React.useRef(true)
 
   let (state, setState) = React.useState(() => {
-    let statusOfTargets = computeTargetStatus(submissions)
+    let statusOfTargets = computeTargetStatus(targetsRead, submissions)
     {
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
       | (true, None, _levelZero) => Level.first(levels)->Level.id
@@ -299,8 +332,9 @@ let make = (
       | (None, None) => false
       },
       latestSubmissions: submissions,
-      statusOfTargets: statusOfTargets,
+      statusOfTargets,
       notice: computeNotice(course, student, preview),
+      targetsRead,
     }
   })
 
@@ -323,11 +357,11 @@ let make = (
       "Could not find selectedLevel with id " ++ state.selectedLevelId,
     )
 
-  React.useEffect1(() => {
+  React.useEffect2(() => {
     if initialRender.current {
       initialRender.current = false
     } else {
-      let newStatusOfTargets = computeTargetStatus(state.latestSubmissions)
+      let newStatusOfTargets = computeTargetStatus(state.targetsRead, state.latestSubmissions)
 
       setState(state => {
         ...state,
@@ -336,7 +370,7 @@ let make = (
       })
     }
     None
-  }, [state.latestSubmissions])
+  }, (state.latestSubmissions, state.targetsRead))
 
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
@@ -352,13 +386,15 @@ let make = (
           ts => ts |> TargetStatus.targetId == (target |> Target.id),
           "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
         )
-
+      let targetRead = Js.Array.includes(target->Target.id, state.targetsRead)
       <CoursesCurriculum__Overlay
         target
         course
         targetStatus
         addSubmissionCB={addSubmission(setState)}
         targets
+        targetRead
+        markReadCB={addMarkRead(setState)}
         statusOfTargets=state.statusOfTargets
         users
         evaluationCriteria
@@ -377,11 +413,9 @@ let make = (
           levels
           selectedLevel
           preview
-          setSelectedLevelId={selectedLevelId =>
-            setState(state => {...state, selectedLevelId: selectedLevelId})}
+          setSelectedLevelId={selectedLevelId => setState(state => {...state, selectedLevelId})}
           showLevelZero=state.showLevelZero
-          setShowLevelZero={showLevelZero =>
-            setState(state => {...state, showLevelZero: showLevelZero})}
+          setShowLevelZero={showLevelZero => setState(state => {...state, showLevelZero})}
           levelZero
         />
         {ReactUtils.nullUnless(
@@ -424,6 +458,7 @@ let make = (
                     targetGroup,
                     targets,
                     state.statusOfTargets,
+                    state.targetsRead,
                     author,
                     Course.id(course),
                   )

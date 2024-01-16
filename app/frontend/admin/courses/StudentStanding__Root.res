@@ -161,7 +161,7 @@ module CreateUserStandingMutation = %graphql(`
     }
   `)
 
-let createUserStanding = (studentId, send, reason, standingId, baseData) => {
+let addEntry = (studentId, send, reason, standingId, baseData) => {
   CreateUserStandingMutation.fetch({
     studentId,
     reason,
@@ -321,6 +321,17 @@ let archiveStanding = (id: string, send, baseData, event) => {
   }
 }
 
+let deleteIcon = (id: string, send, baseData) => {
+  <button
+    ariaLabel={t("delete_standing_log") ++ id}
+    className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
+    disabled={false}
+    title={t("delete_standing_log") ++ id}
+    onClick={archiveStanding(id, send, baseData)}>
+    <PfIcon className="if i-trash-regular if-fw text-2xl" />
+  </button>
+}
+
 let currentStandingCard = (standing: currentStanding) => {
   <div className="bg-white rounded-md p-8 border border-gray-200 shadow-lg" id="currentStanding">
     <div className="ml-4 flex flex-col">
@@ -338,21 +349,10 @@ let currentStandingCard = (standing: currentStanding) => {
   </div>
 }
 
-let deleteIcon = (id: string, send, baseData) => {
-  <button
-    ariaLabel={t("delete_standing_log") ++ id}
-    className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
-    disabled={false}
-    title={t("delete_standing_log") ++ id}
-    onClick={archiveStanding(id, send, baseData)}>
-    <PfIcon className="if i-trash-regular if-fw text-2xl" />
-  </button>
-}
-
 let standingLogs = (userStandings: userStandings, send, baseData) => {
   let userStandingLogsCount = userStandings->Js.Array2.length
   <div className="mt-3">
-    <h2 className="font-semibold text-lg mt-8"> {"Standing log"->str} </h2>
+    <h2 className="font-semibold text-lg mt-8"> {ts("user_standing.standing_log")->str} </h2>
     <div className="pt-4">
       {if userStandingLogsCount > 0 {
         userStandings
@@ -405,9 +405,9 @@ let standingLogs = (userStandings: userStandings, send, baseData) => {
   </div>
 }
 
-let changeStandingButtonDisabled = (reason, select) => reason == "" || select == "0"
+let addEntryButtonDisabled = (reason, select) => reason == "" || select == "0"
 
-let editor = (standings, send, state, studentId, currentStanding, baseData) => {
+let editor = (send, state, studentId, baseData) => {
   <div className="pt-4">
     <h2 className="text-lg font-semibold"> {t("change_standing")->str} </h2>
     <p className="mb-4"> {t("change_standing_info")->str} </p>
@@ -417,7 +417,7 @@ let editor = (standings, send, state, studentId, currentStanding, baseData) => {
           className="block appearance-none w-64 bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 cursor-not-allowed"
           id="current-standing"
           disabled=true>
-          <option key="0"> {currentStanding.name->str} </option>
+          <option key="0"> {baseData.currentStanding.name->str} </option>
         </select>
         <div
           className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -438,7 +438,7 @@ let editor = (standings, send, state, studentId, currentStanding, baseData) => {
           }}
           value=state.select>
           <option key="0" value="0"> {t("select_standing")->str} </option>
-          {standings
+          {baseData.standings
           ->Js.Array2.map(standing => {
             <option key=standing.id value=standing.id title=standing.name>
               {standing.name->str}
@@ -457,7 +457,7 @@ let editor = (standings, send, state, studentId, currentStanding, baseData) => {
           <PfIcon className="if i-info-light if-fw" />
           {
             let description =
-              Js.Array2.filter(standings, standing => standing.id == state.select)
+              Js.Array2.filter(baseData.standings, standing => standing.id == state.select)
               ->Js.Array2.unsafe_get(0)
               ->(standing => standing.description)
 
@@ -487,9 +487,9 @@ let editor = (standings, send, state, studentId, currentStanding, baseData) => {
     <div>
       <button
         className="mt-4 btn btn-primary btn-sm"
-        disabled={changeStandingButtonDisabled(state.reason, state.select)}
+        disabled={addEntryButtonDisabled(state.reason, state.select)}
         onClick={_e => {
-          createUserStanding(studentId, send, state.reason, state.select, baseData)
+          addEntry(studentId, send, state.reason, state.select, baseData)
         }}>
         {t("add_entry_button")->str}
       </button>
@@ -551,7 +551,7 @@ let make = (~studentId) => {
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 py-8">
         {currentStandingCard(baseData.currentStanding)}
         {standingLogs(baseData.userStandings, send, baseData)}
-        {editor(baseData.standings, send, state, studentId, baseData.currentStanding, baseData)}
+        {editor(send, state, studentId, baseData)}
       </div>
     </div>
   | Errored => <ErrorState />

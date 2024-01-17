@@ -1,21 +1,31 @@
+type errorVariants =
+  | InvalidFormat
+  | InvalidCharacters
+
 type errorType =
   | Name
-  | InvalidName
   | Email
-  | InvalidEmail
   | Title
-  | InvalidTitle
   | TeamName
-  | InvalidTeamName
   | Tags
-  | InvalidTags
   | Affiliation
-  | InvalidAffiliation
+
+type error = {
+  errorType: errorType,
+  variant: errorVariants,
+}
 
 type t = {
   rowNumber: int,
-  errors: array<errorType>,
+  errors: array<error>,
 }
+
+let error = (errorType, variant) => {
+  {errorType, variant}
+}
+
+let errorType = error => error.errorType
+let errorVariant = error => error.variant
 
 let rowNumber = t => t.rowNumber
 
@@ -34,18 +44,20 @@ let nameError = data => {
   switch StudentsEditor__StudentCSVRow.name(data) {
   | None => []
   | Some(name) =>
-    StringUtils.isPresent(name) ? containsInvalidUTF8Characters(name) ? [InvalidName] : [] : [Name]
+    StringUtils.isPresent(name)
+      ? containsInvalidUTF8Characters(name) ? [error(Name, InvalidCharacters)] : []
+      : [error(Name, InvalidFormat)]
   }
 }
 
 let emailError = data => {
   switch StudentsEditor__StudentCSVRow.email(data) {
-  | None => [Email]
+  | None => [error(Email, InvalidFormat)]
   | Some(email) =>
     EmailUtils.isInvalid(false, email)
-      ? [Email]
+      ? [error(Email, InvalidFormat)]
       : containsInvalidUTF8Characters(email)
-      ? [InvalidEmail]
+      ? [error(Email, InvalidCharacters)]
       : []
   }
 }
@@ -55,8 +67,8 @@ let titleError = data => {
   | None => []
   | Some(title) =>
     String.length(title) <= 250
-      ? containsInvalidUTF8Characters(title) ? [InvalidTitle] : []
-      : [Title]
+      ? containsInvalidUTF8Characters(title) ? [error(Title, InvalidCharacters)] : []
+      : [error(Title, InvalidFormat)]
   }
 }
 
@@ -65,8 +77,8 @@ let affiliationError = data => {
   | None => []
   | Some(affiliation) =>
     String.length(affiliation) <= 250
-      ? containsInvalidUTF8Characters(affiliation) ? [InvalidAffiliation] : []
-      : [Affiliation]
+      ? containsInvalidUTF8Characters(affiliation) ? [error(Affiliation, InvalidCharacters)] : []
+      : [error(Affiliation, InvalidFormat)]
   }
 }
 
@@ -75,8 +87,8 @@ let teamNameError = data => {
   | None => []
   | Some(teamName) =>
     String.length(teamName) <= 50
-      ? containsInvalidUTF8Characters(teamName) ? [InvalidTeamName] : []
-      : [TeamName]
+      ? containsInvalidUTF8Characters(teamName) ? [error(TeamName, InvalidCharacters)] : []
+      : [error(TeamName, InvalidFormat)]
   }
 }
 
@@ -87,8 +99,8 @@ let tagsError = data => {
       let tags = Js.String.split(",", tagsList)
       let validTags = tags |> Js.Array.filter(tag => String.length(tag) <= 50)
       tags->Array.length <= 5 && validTags == tags
-        ? containsInvalidUTF8Characters(tagsList) ? [InvalidTags] : []
-        : [Tags]
+        ? containsInvalidUTF8Characters(tagsList) ? [error(Tags, InvalidCharacters)] : []
+        : [error(Tags, InvalidFormat)]
     }
   }
 }
@@ -104,7 +116,7 @@ let parseError = studentCSVRow => {
       teamNameError(data),
       tagsError(data),
     ])
-    errors |> ArrayUtils.isEmpty ? [] : [{rowNumber: index + 2, errors: errors}]
+    errors |> ArrayUtils.isEmpty ? [] : [{rowNumber: index + 2, errors}]
   })
   |> ArrayUtils.flattenV2
 }
@@ -112,9 +124,8 @@ let parseError = studentCSVRow => {
 let hasNameError = t => {
   t.errors
   |> Js.Array.filter(x =>
-    switch x {
+    switch x.errorType {
     | Name => true
-    | InvalidName => true
     | _ => false
     }
   )
@@ -124,9 +135,8 @@ let hasNameError = t => {
 let hasTitleError = t => {
   t.errors
   |> Js.Array.filter(x =>
-    switch x {
+    switch x.errorType {
     | Title => true
-    | InvalidTitle => true
     | _ => false
     }
   )
@@ -136,9 +146,8 @@ let hasTitleError = t => {
 let hasEmailError = t => {
   t.errors
   |> Js.Array.filter(x =>
-    switch x {
+    switch x.errorType {
     | Email => true
-    | InvalidEmail => true
     | _ => false
     }
   )
@@ -148,9 +157,8 @@ let hasEmailError = t => {
 let hasAffiliationError = t => {
   t.errors
   |> Js.Array.filter(x =>
-    switch x {
+    switch x.errorType {
     | Affiliation => true
-    | InvalidAffiliation => true
     | _ => false
     }
   )
@@ -160,9 +168,8 @@ let hasAffiliationError = t => {
 let hasTeamNameError = t => {
   t.errors
   |> Js.Array.filter(x =>
-    switch x {
+    switch x.errorType {
     | TeamName => true
-    | InvalidTeamName => true
     | _ => false
     }
   )
@@ -172,9 +179,8 @@ let hasTeamNameError = t => {
 let hasTagsError = t => {
   t.errors
   |> Js.Array.filter(x =>
-    switch x {
+    switch x.errorType {
     | Tags => true
-    | InvalidTags => true
     | _ => false
     }
   )

@@ -40,15 +40,26 @@ let containsInvalidUTF8Characters = (text: string) => {
   }
 }
 
-let nameError = data => {
-  switch StudentsEditor__StudentCSVRow.name(data) {
+// Validates the name, title, affiliation, and team name fields
+let validateField = (field, allowBlank, maxLength, value) => {
+  switch value {
   | None => []
-  | Some(name) =>
-    StringUtils.isPresent(name)
-      ? containsInvalidUTF8Characters(name) ? [error(Name, InvalidCharacters)] : []
-      : [error(Name, InvalidFormat)]
+  | Some(value) =>
+    StringUtils.lengthBetween(~allowBlank, value, 1, maxLength)
+      ? containsInvalidUTF8Characters(value) ? [error(field, InvalidCharacters)] : []
+      : [error(field, InvalidFormat)]
   }
 }
+
+let nameError = data => validateField(Name, false, 250, StudentsEditor__StudentCSVRow.name(data))
+
+let titleError = data => validateField(Title, true, 250, StudentsEditor__StudentCSVRow.title(data))
+
+let affiliationError = data =>
+  validateField(Affiliation, true, 250, StudentsEditor__StudentCSVRow.affiliation(data))
+
+let teamNameError = data =>
+  validateField(TeamName, true, 50, StudentsEditor__StudentCSVRow.teamName(data))
 
 let emailError = data => {
   switch StudentsEditor__StudentCSVRow.email(data) {
@@ -59,36 +70,6 @@ let emailError = data => {
       : containsInvalidUTF8Characters(email)
       ? [error(Email, InvalidCharacters)]
       : []
-  }
-}
-
-let titleError = data => {
-  switch StudentsEditor__StudentCSVRow.title(data) {
-  | None => []
-  | Some(title) =>
-    String.length(title) <= 250
-      ? containsInvalidUTF8Characters(title) ? [error(Title, InvalidCharacters)] : []
-      : [error(Title, InvalidFormat)]
-  }
-}
-
-let affiliationError = data => {
-  switch StudentsEditor__StudentCSVRow.affiliation(data) {
-  | None => []
-  | Some(affiliation) =>
-    String.length(affiliation) <= 250
-      ? containsInvalidUTF8Characters(affiliation) ? [error(Affiliation, InvalidCharacters)] : []
-      : [error(Affiliation, InvalidFormat)]
-  }
-}
-
-let teamNameError = data => {
-  switch StudentsEditor__StudentCSVRow.teamName(data) {
-  | None => []
-  | Some(teamName) =>
-    String.length(teamName) <= 50
-      ? containsInvalidUTF8Characters(teamName) ? [error(TeamName, InvalidCharacters)] : []
-      : [error(TeamName, InvalidFormat)]
   }
 }
 

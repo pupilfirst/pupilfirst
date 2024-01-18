@@ -333,12 +333,12 @@ let errorsTable = (csvData, errors) => {
 
 let errorMessage = error => {
   let key = switch CSVDataError.errorType(error) {
-  | Name => "name"
-  | Title => "title"
-  | TeamName => "team_name"
-  | Email => "email"
-  | Affiliation => "affiliation"
-  | Tags => "tags"
+  | Name => ts("name")
+  | Title => ts("title")
+  | TeamName => ts("team_name")
+  | Email => ts("email")
+  | Affiliation => ts("affiliation")
+  | Tags => ts("tags")
   }
 
   CSVDataError.errorVariant(error) == CSVDataError.InvalidCharacters

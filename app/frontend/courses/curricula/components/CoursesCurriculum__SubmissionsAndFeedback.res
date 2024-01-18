@@ -221,7 +221,22 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
         |> React.array}
         {switch targetDetails->TargetDetails.discussion {
         | false => React.null
-        | true => <CoursesCurriculum__SubmissionCommentsAndReactions submission targetDetails />
+        | true => {
+            let comments =
+              targetDetails
+              ->TargetDetails.comments
+              ->Js.Array2.filter(comment =>
+                comment->Comment.submissionId == submission->Submission.id
+              )
+            // let reactions = []
+            let reactions =
+              targetDetails
+              ->TargetDetails.reactions
+              ->Js.Array2.filter(reaction =>
+                reaction->Reaction.reactionableId == submission->Submission.id
+              )
+            <CoursesCurriculum__SubmissionCommentsAndReactions submission comments reactions />
+          }
         }}
       </div>
     </div>

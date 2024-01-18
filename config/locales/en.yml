@@ -597,6 +597,11 @@ en:
       submit: Submit
       submitting: Submitting
       submit_anonymous_label: Submit anonymously
+    CoursesCurriculum__SubmissionCommentsAndReactions:
+      comment: Comment
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...
@@ -2303,6 +2308,8 @@ en:
       linked_file_exists_error: Some file attachments have already been linked to a submission
       missing_answer_error: "Missing answer for question: %{title}"
       success_notification: Your submission has been queued for review.
+    create_submission_comment:
+      success_notification: Comment added successfully.
     create_target:
       success_notification: Target created successfully.
     create_target_version:

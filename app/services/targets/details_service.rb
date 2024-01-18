@@ -172,27 +172,32 @@ module Targets
 
     def comments_for_submissions
       SubmissionComment
+        .includes(:user)
         .where(timeline_event_id: submissions.pluck(:id))
         .map do |comment|
           {
             id: comment.id,
-            user_id: comment.user_id,
+            user_name: comment.user.name,
             submission_id: comment.timeline_event_id,
-            comment: comment.comment
+            comment: comment.comment,
+            updated_at: comment.updated_at
           }
         end
     end
 
     def reactions_for_submissions
       Reaction
+        .includes(:user)
         .where(reactionable_type: "TimelineEvent")
         .where(reactionable_id: submissions.pluck(:id))
         .map do |reaction|
           {
             id: reaction.id,
-            user_id: reaction.user_id,
-            submission_id: reaction.reactionable_id,
-            reaction_value: reaction.reaction_value
+            user_name: reaction.user.name,
+            reactionable_id: reaction.reactionable_id,
+            reactionable_type: reaction.reactionable_type,
+            reaction_value: reaction.reaction_value,
+            updated_at: reaction.updated_at
           }
         end
     end

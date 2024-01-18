@@ -180,4 +180,8 @@ class Types::MutationType < Types::BaseObject
   field :initiate_password_reset,
         mutation: Mutations::InitiatePasswordReset,
         null: false
+  field :create_submission_comment,
+        mutation: Mutations::CreateSubmissionComment,
+        null: false
+  field :create_reaction, mutation: Mutations::CreateReaction, null: false
 end

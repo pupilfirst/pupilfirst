@@ -71,7 +71,7 @@ let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
         ? updatedGradeAndLabel
         : gl
     )
-  setState(state => {...state, gradesAndLabels: gradesAndLabels, dirty: true})
+  setState(state => {...state, gradesAndLabels, dirty: true})
 }
 
 let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criterion) => {
@@ -91,7 +91,7 @@ let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criter
   UpdateEvaluationCriterionQuery.make({
     id: criterion |> EvaluationCriterion.id,
     name: state.name,
-    gradesAndLabels: gradesAndLabels,
+    gradesAndLabels,
   })
   |> Js.Promise.then_(result => {
     switch result["updateEvaluationCriterion"]["evaluationCriterion"] {
@@ -258,7 +258,6 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   value={state.maxGrade |> string_of_int}
                   className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-blue-500 px-3 py-2 leading-tight rounded-none focus:outline-none focus:border-focusColor-500">
                   {possibleGradeValues
-                  |> List.filter(g => g != 1)
                   |> List.map(possibleGradeValue =>
                     <option
                       key={possibleGradeValue |> string_of_int}

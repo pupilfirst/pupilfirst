@@ -26,7 +26,8 @@ class School < ApplicationRecord
 
   has_one_attached :logo_on_light_bg
   has_one_attached :logo_on_dark_bg
-  has_one_attached :icon
+  has_one_attached :icon_on_light_bg
+  has_one_attached :icon_on_dark_bg
   has_one_attached :cover_image
 
   def school_admins
@@ -38,36 +39,21 @@ class School < ApplicationRecord
 
     case variant
     when :mid
-      logo.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "200x200>"
-      ).processed
+      logo.variant(resize_to_limit: [nil, 200]).processed
     when :high
-      logo.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "500x500>"
-      ).processed
+      logo.variant(resize_to_limit: [nil, 500]).processed
     when :thumb
-      logo.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "100x100>"
-      ).processed
+      logo.variant(resize_to_limit: [nil, 100]).processed
     else
       logo
     end
   end
 
-  def icon_variant(variant)
+  def icon_variant(variant, background: :light)
+    icon = background == :light ? icon_on_light_bg : icon_on_dark_bg
     case variant
     when :thumb
-      icon.variant(
-        auto_orient: true,
-        gravity: "center",
-        resize: "100x100>"
-      ).processed
+      icon.variant(resize_to_limit: [100, 100]).processed
     else
       icon
     end

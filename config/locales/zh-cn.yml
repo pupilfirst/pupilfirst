@@ -385,6 +385,7 @@ zh-cn:
         limited:
           description_end: 没有进行审核的情况下。
           description_start: 学生可以升级。
+          four_times: four times
           once: 一旦
           thrice: 三次
           title: 有限的
@@ -526,6 +527,7 @@ zh-cn:
       level_locked_explanation: 您可以在%{date}访问到内容。
       level_locked_for_students_notice: 这个关卡对学生来说仍然是锁定状态，将在<strong>%{date}</strong>解锁。
       level_locked_notice: 当前关卡已锁定！
+      milestone_target_label: Milestone
       milestone_targets: 里程碑目标
       nav_aria_next_level: 进入下一个层次
       nav_aria_previous_level: 返回上一级
@@ -607,6 +609,7 @@ zh-cn:
       learn_cta_submit_work: 提交作品进行审查。
       learn_cta_take_quiz: 参加一个问答游戏
       learn_tab: 学习。
+      milestone_target_label: Milestone
       next_target_button: 下一个目标
       pending_team_members_notice: 你还有团队成员尚未完成这个目标：
       preview_mode_text: 您目前正在查看本课程的预览。
@@ -660,6 +663,7 @@ zh-cn:
         pending: 待定
         pending_review: 待审核
         rejected: 已拒绝
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: 出现了意外错误，我们的团队已经收到了通知。请重新加载页面后再试。
       notification_error_head: 意外错误
@@ -683,6 +687,10 @@ zh-cn:
       course_completed: 课程完成了！
       incomplete_targets: 未完成：%{targetsCount}个。
       level_progress: 级别进度
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: 个人教师
       quizzes_attempted:
         one: 1次测验已尝试。
@@ -696,8 +704,10 @@ zh-cn:
       completed: 已完成
       filter_by_another_level: 按另一个层级筛选
       filter_by_another_level_or_status: 按另一个层级筛选，或按状态筛选。
+      filter_by_another_status: Filter by another status
       filter_by_level: 按照等级筛选
       filter_by_level_or_status: 按级别筛选，或按状态筛选。
+      filter_by_status: Filter by status
       load_more: 点击加载更多...
       no_submissions_to_show: 暂无可展示的提交内容。
       pending_review: 待审核
@@ -764,9 +774,14 @@ zh-cn:
       grade_card: 成绩单
       help_text: 笔记可以用来跟踪关于%{note_about}的进展。这些笔记仅在学生的报告中向教师显示。%{additional_help}
       hide_test_report_button: 隐藏测试报告
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: 你愿意写一篇关于这个 %{noteAbout} 的笔记吗？
       note_placeholder: 在审核这个提交时，你注意到了什么吗？
       page_title: 提交
+      reject_submission: Reject Submission
+      reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: 取消任务
       report_description: 测试报告
       review: 评论
@@ -786,6 +801,7 @@ zh-cn:
       student_dropped_out_message_without_timestamp: 这份提交来自一位已经结束了对该课程的访问或者已经退学的学生。
       students_dropped_out_message_with_timestamp: 这个提交与一个或多个学生相关联，这些学生的课程访问已结束，或者已经退出。您可以在%{timestamp}之前查看这个提交。
       students_dropped_out_message_without_timestamp: 这个提交与一个或多个学生相关联，这些学生已经失去了对该课程的访问权限，或者已经退出了该课程。
+      submission_acceptable: Is this submission acceptable?
       submission_number: "提交 #%{number}"
       submitted_by: 提交者：
       submitted_by_team: 提交者团队：
@@ -793,7 +809,12 @@ zh-cn:
       team_notice: 这份提交来自一个团队，因此在这里添加的备注将会被发布到团队中所有学生的报告中。
       undo_grade_warning: 你确定要删除这些成绩吗？这将使提交状态变为“待审核”。
       undo_grading: 撤销评分
+      undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
       write_a_note: 写一张便条
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: 分配于%{date}
       change_reviewer_and_start_review: 改变审核人员并开始审核
@@ -813,6 +834,7 @@ zh-cn:
       filter_by_another_level_or_submissions_assigned: 按照另一个层级筛选，或者只显示分配给教师的提交作品。
       filter_by_level: 按级别筛选
       filter_by_level_or_submissions_assigned: 按照等级筛选，或只显示分配给教师的提交作品。
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: 按目标筛选
       filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:
@@ -917,6 +939,7 @@ zh-cn:
       course_completed: 课程完成了！
       dropped_out_at: 这名学生在%{date}退课了。
       level_progress: 等级进展
+      milestone_targets: Milestone Targets
       notes: 笔记
       other_team_members: 其他团队成员
       personal_coaches: 个人教师
@@ -984,12 +1007,14 @@ zh-cn:
       delete_block_confirm: 你确定要删除这个区块吗？
       deleting: 正在删除
       editor_content_block: 内容块的编辑器
+      embedded_url: Embedded URL
       move_down: 下移
       move_up: 提升
       save_changes: 保存更改
       undo_block_confirm: 你确定要撤销对此块的更改吗？
       undo_changes: 撤销更改
       uploading: 上传中
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: 最后更新时间
       not_versioned: 未版本化
@@ -1105,6 +1130,10 @@ zh-cn:
         help: 学生在团队中应该个别提交还是一起提交作业目标？
         help_url: http://
         label: 团队应该如何应对这个目标？
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
       target_title_placeholder: 请提供需要翻译的具体内容，谢谢！
       target_visibility: 目标可见性
       title: 标题
@@ -1151,6 +1180,7 @@ zh-cn:
       draft: 起草稿
       edit: 编辑
       edit_content: 编辑
+      milestone_target_label: Milestone
       move_down: 下移
       move_up: 提升
       of_target: 目标的定义是指在一定时间内所要达到的特定结果或成就。目标可以是个人、团队或组织的，它们通常是为了实现某种愿望、追求某种价值或满足某种需求而设定的。目标的设定需要具体、可衡量和可实现，以便能够有针对性地制定相应的计划和行动步骤。通过设定明确的目标，人们可以更加有效地管理自己的时间和资源，提高工作效率，实现个人或组织的长期发展和成功。
@@ -1393,6 +1423,8 @@ zh-cn:
       updated_notification: 图片已成功更新。
     SchoolCustomize__LinkComponent:
       cancel_editing: 取消编辑
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: 下移
       move_up: 提升
     SchoolCustomize__LinkEditor:
@@ -1409,6 +1441,7 @@ zh-cn:
       full_url_placeholder: 完整的URL，以https://开头
       header: 页眉
       header_links: 当前的页眉链接
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: 链接的位置
       manage_links: 管理自定义链接
       no_custom_links: 这里没有自定义链接。要添加一些吗？
@@ -1456,6 +1489,7 @@ zh-cn:
       nav:
         course:
           applicants: 申请人
+          assignments: Assignments
           authors: 作者
           calendar: 日历
           certificates: 证书
@@ -1841,6 +1875,7 @@ zh-cn:
       already_iniated_deletion_warning: 你已经开始了账户删除的流程。请查看你的收件箱，了解进一步的账户删除步骤。
       avatar_uploaded_notification: 头像上传成功。
       cancel: 取消
+      change_account_email: Change account email
       change_password: 修改您当前的密码
       change_photo: 更换照片
       community_digest: 社区摘要
@@ -1850,16 +1885,20 @@ zh-cn:
       confirm_password: 确认密码
       confirm_password_error: 新密码和确认密码应该一致，并且至少包含8个字符。
       confirm_password_placeholder: 确认新密码
+      confirm_using_password: Please confirm using your password
       current_password: 当前密码
+      current_password_placeholder: Type current password
       delete_account: 删除账户
       delete_your_account: 删除你的账号
       deleting_account_warning: 删除您的用户账户将从该学校中删除所有您的数据。在社区中对帖子的回复以及对学生的反馈（如果用户具有教师资料）将不会被删除。如果您是该学校的管理员，则需要撤销管理员权限。
       disable_email_radio: 禁用
       displayed_publicly: 这些信息将公开展示，请小心分享内容。
       edit_profile: 编辑个人资料
+      email_change_q: Are you sure you want to change your email?
       email_label: 电子邮件
       email_placeholder: 请在此处输入您的电子邮件。
       email_sent_notification: 请查看您的新电子邮件。我们已经发送了更新电子邮件地址的说明。
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: 电子邮件地址错误
       initiate_deletion: 发起删除
       language: 语言
@@ -1874,13 +1913,20 @@ zh-cn:
       password_placeholder: 请输入当前密码。
       photo: 照片
       preferred_name_placeholder: 请输入您的首选名称。
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: 保存更改
       security: 安全
       select_image_limit: 请选择一张大小小于5 MB的图片。
       select_language: 请选择您希望用户界面显示的语言。
       send_email_radio: 每天给我发送一封电子邮件。
       set_password: 为您的账户设置密码
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
       update_credentials: 请更新您在学校的登录凭据。
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: 更新电子邮件通知的设置。
       update_locale: 更新与您所在地区相关的设置。
       upload_failed: 上传失败
@@ -1907,6 +1953,7 @@ zh-cn:
         dropped_out: 辍学
         edit_curriculum: 编辑课程
         leaderboard: 排行榜
+        my_cohorts: My Cohorts
         my_students: 我的学生们
         review_submissions: 审查提交内容
         view_certificate: 查看证书
@@ -1940,6 +1987,11 @@ zh-cn:
       subscribe: 订阅
       subscribed_on_another_device: 在此设备上订阅
       unsubscribe: 取消订阅
+    Zxcvbn:
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: 申请
@@ -1956,6 +2008,17 @@ zh-cn:
       no_events_text: 所选日期没有安排任何活动。
       today: 今天
       upcoming_events: 在%{month}即将举行的活动
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: 积极的学生
       change: 变化
@@ -1998,10 +2061,17 @@ zh-cn:
       title: 连接超时
       too_long: 这个页面加载时间太长了。
       try_reloading: 请问您可以尝试重新加载此页面吗？
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: 您的浏览器发出了一个无效的请求。
       title: 出错了
       wasnt_valid: 您的浏览器发送的请求有一些问题。我们会自动跟踪这些错误，但如果问题持续存在，请随时与我们联系。同时，您可以尝试重新加载页面。
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: 教师们在
@@ -2051,6 +2121,13 @@ zh-cn:
           post_created: "%{user_name} 在 %{community_name} 社区的一个帖子中回复了你"
           topic_created: "%{user_name} 在 %{community_name} 社区创建了一个新主题"
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
     footer_bottom:
       logo_alt: 校徽：%{school_name}
       privacy_policy: 隐私政策
@@ -2141,6 +2218,7 @@ zh-cn:
           main_html: 这是来自 %{coach_name} 关于你的 %{update_for} 的一些建议反馈。
           recent_submission: 最近的提交
           recent_updates: 最近的更新
+          rejected_feedback: Your %{update_for} was rejected by %{coach_name}. Here is some feedback for the rejection
           view_html: 您可以查看%{link_to}，其中包括与反馈相关的任何附件。
         subject: 您的提交收到了 %{startup_feedback} 的新反馈。
     student:
@@ -2168,12 +2246,16 @@ zh-cn:
       daily_digest:
         body:
           asked: 已回答
-          assigned: （%{stats}分配给你）
+          assigned:
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           assigned_none: （其中没有分配给你的）
           control_emails_html: 你可以从%{link_to}控制这些电子邮件。
           latest_topics: 您社区最新发布的主题：
           link_to: 个人资料编辑页面
-          main_html: 你在一些课程中担任教师，有 %{article_pending_submissions_count} 个新提交需要审核：
+          main_html:
+            one: "There is 1 new submission to review in a course you''re coaching:"
+            other: "There are %{count} new submissions to review in the courses you''re coaching:"
           older: 老旧但受欢迎的话题，近期又出现了新的活跃度：
           replies: 回复
           views: 观点
@@ -2206,6 +2288,10 @@ zh-cn:
           link_to: 点击这里
           main_html: 我们收到了重置你的%{school_name}密码的请求。请%{link_to}以更改你的密码。
         subject: 账号恢复
+  maintenance:
+    heading: We'll be back soon!
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2214,6 +2300,7 @@ zh-cn:
     target:
       role:
         founder: 所有创始人
+        students: All Students
         team: 团队
   mutations:
     archive_coach_note:
@@ -2254,13 +2341,14 @@ zh-cn:
         description: 您的反馈将通过电子邮件发送给学生。
         title: 已发送反馈
     create_grading:
-      evaluation_criteria_error: 无法在没有评估标准的情况下对提交物进行评分。
+      evaluation_criteria_error: 如果没有有效的评估标准，则无法对提交的内容进行评分。
       grade_recorded: 成绩记录完毕。
       invalid_checklist_shape_error: 提交清单中的数据形状与发送给审查的数据形状不匹配。
       invalid_checklist_values_error: 提交的清单项目的值与审核数据不匹配。
       invalid_grading_error: 提供的评分数值无效：%{grades_data}
       submission_graded_error: 提交已经评分完成。
       submission_missing_error: 无法找到 ID 为 %{submission_id} 的提交。
+      submission_reviewed_error: Submission already reviewed
       success_notification: 该提交已被标记为已审阅。
     create_post:
       reply_added_notification: 回复成功添加
@@ -2311,6 +2399,10 @@ zh-cn:
     initiate_account_deletion:
       check_inbox_notification: 请查看您的收件箱以获取后续步骤！
       deletion_init_notification: 账户删除已启动。
+    initiate_password_reset:
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: 证书成功颁发！
     lock_topic:
@@ -2388,6 +2480,7 @@ zh-cn:
       multiple_method_of_completion: 不止一种完成方法
       prerequisities_archived_error: 无法有已归档的先决条件。
       prerequisities_in_same_level: 先决目标必须与目标处于同一层级。
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: 目标已成功更新！
       target_group_not_present_error: 目标群体不存在。
       target_missing_error: 目标不存在。
@@ -2425,6 +2518,7 @@ zh-cn:
     students:
       show:
         average_grades: 平均成绩
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: 查看之前审核过的提交
           heading: 审查了提交的内容
@@ -2454,6 +2548,17 @@ zh-cn:
   presenters:
     apply:
       page_title: 报名参加%{course_name}。
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2463,6 +2568,8 @@ zh-cn:
         page_title:
           community: 社区
     courses:
+      cohorts:
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: 本周位列排行榜榜首，共享同分的得分。
@@ -2523,6 +2630,14 @@ zh-cn:
     issue_certificate_mutator:
       certificate_error: 找不到指定的证书。
       issued_error: 这名学生已经领取了这门课程的证书。
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
     update_evaluation_criterion_mutator:
       evaluation_criterion_not_found: 无法找到 ID 为 %{id} 的评估准则。
   school:
@@ -2583,6 +2698,11 @@ zh-cn:
     courses:
       applicants:
         title: 申请人
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: 作者们
       calendar_events:
@@ -2666,6 +2786,19 @@ zh-cn:
     caption_image: 这幅图片的标题是：
     close: 关闭
     coaches: 教师们
+    cohort: Cohort
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: 同伴、同事、队友、同学、同年级学生、同乡、同龄人、同辈人群、同一群体的人
     community: 社区
     completed: 已完成
@@ -2694,6 +2827,8 @@ zh-cn:
     load_more: 加载更多...
     loading: 正在加载...
     login_token_expiration_warning_html: 此链接将在%{timestamp}之前失效。如果链接已过期，您可以从<a href="%{login_url}" %>登录页面</a>请求另一个一次性令牌。请注意，这是一个私密的链接，请勿分享。
+    m: M
+    my_org: My Org
     name: 名字
     name_email: 姓名或电子邮件
     no_email_found: 无法找到使用该电子邮件的用户。请检查您输入的电子邮件。
@@ -2722,7 +2857,9 @@ zh-cn:
       previous: 上一页
       truncate: ...
     pass: 通过
+    password_strength: Password Strength
     percentage: 百分比
+    percentage_completed: "%{percentage}% completed"
     post: 发布
     preferred_name: 首选姓名
     processing: 处理中。
@@ -2738,6 +2875,9 @@ zh-cn:
     settings: 设置
     sign_out: 退出登录
     sort_by: 按照...进行排序
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
     students: 学生们
     tag: 标签
     tags: 标签
@@ -2851,6 +2991,7 @@ zh-cn:
         subtitle: 请输入您的电子邮件以进行密码恢复。
       reset_password:
         link_used: 该一次性链接已被使用或已失效。请再次尝试重置您的密码。
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: 您已经登录。
         email: 继续通过电子邮件进行沟通。
@@ -2871,7 +3012,10 @@ zh-cn:
         link_expired: 该一次性链接已过期或无效。请尝试重新登录。
     update_email:
       frequent_request_error: 刚刚发送了一封电子邮件，请稍等几分钟后再尝试。
+      invalid_password_error: The password you entered is incorrect. Please try again.
       link_expired: 该链接已过期或无效。请重新尝试。
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
     owners_should_be_active:
       error: 无法更新未激活的学生提交内容。

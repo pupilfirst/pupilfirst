@@ -1,71 +1,25 @@
 [data-pnotify].custom-elem,
 [data-pnotify].custom-elem.pnotify-mode-light {
-  --notice-background-color: #fefce8;
-  --notice-border-color: #fef9c3;
-  --notice-text-color: #854d0e;
+  --notice-background-color: theme("colors.yellow.100");
+  --notice-border-color: theme("colors.yellow.200");
+  --notice-text-color: theme("colors.yellow.900");
   --notice-icon-filter: invert(60%) sepia(70%) saturate(808%) hue-rotate(8deg)
     brightness(105%) contrast(94%);
-  --info-background-color: #eff6ff;
-  --info-border-color: #dbeafe;
-  --info-text-color: #1d4ed8;
+  --info-background-color: theme("colors.blue.100");
+  --info-border-color: theme("colors.blue.200");
+  --info-text-color: theme("colors.blue.900");
   --info-icon-filter: invert(31%) sepia(94%) saturate(1957%) hue-rotate(213deg)
     brightness(90%) contrast(106%);
-  --success-background-color: #f0fdf4;
-  --success-border-color: #dcfce7;
-  --success-text-color: #15803d;
+  --success-background-color: theme("colors.green.100");
+  --success-border-color: theme("colors.green.200");
+  --success-text-color: theme("colors.green.900");
   --success-icon-filter: invert(42%) sepia(95%) saturate(421%) hue-rotate(89deg)
     brightness(97%) contrast(90%);
-  --error-background-color: #fef2f2;
-  --error-border-color: #fee2e2;
-  --error-text-color: #991b1b;
+  --error-background-color: theme("colors.red.100");
+  --error-border-color: theme("colors.red.200");
+  --error-text-color: ;
   --error-icon-filter: invert(14%) sepia(89%) saturate(5618%) hue-rotate(357deg)
     brightness(96%) contrast(78%);
-}
-@media (prefers-color-scheme: dark) {
-  [data-pnotify].custom-elem.pnotify-mode-no-preference {
-    --notice-background-color: #4f4f00;
-    --notice-border-color: #282814;
-    --notice-text-color: #ffffa2;
-    --notice-icon-filter: invert(92%) sepia(18%) saturate(781%) hue-rotate(6deg)
-      brightness(106%) contrast(107%);
-    --info-background-color: #012831;
-    --info-border-color: #0c1618;
-    --info-text-color: #8fcedd;
-    --info-icon-filter: invert(85%) sepia(14%) saturate(933%) hue-rotate(153deg)
-      brightness(92%) contrast(87%);
-    --success-background-color: #104300;
-    --success-border-color: #152111;
-    --success-text-color: #aff29a;
-    --success-icon-filter: invert(90%) sepia(9%) saturate(1647%)
-      hue-rotate(52deg) brightness(103%) contrast(90%);
-    --error-background-color: #4f0800;
-    --error-border-color: #281614;
-    --error-text-color: #ffaba2;
-    --error-icon-filter: invert(70%) sepia(24%) saturate(717%)
-      hue-rotate(315deg) brightness(103%) contrast(104%);
-  }
-}
-[data-pnotify].custom-elem.pnotify-mode-dark {
-  --notice-background-color: #4f4f00;
-  --notice-border-color: #282814;
-  --notice-text-color: #ffffa2;
-  --notice-icon-filter: invert(92%) sepia(18%) saturate(781%) hue-rotate(6deg)
-    brightness(106%) contrast(107%);
-  --info-background-color: #012831;
-  --info-border-color: #0c1618;
-  --info-text-color: #8fcedd;
-  --info-icon-filter: invert(85%) sepia(14%) saturate(933%) hue-rotate(153deg)
-    brightness(92%) contrast(87%);
-  --success-background-color: #104300;
-  --success-border-color: #152111;
-  --success-text-color: #aff29a;
-  --success-icon-filter: invert(90%) sepia(9%) saturate(1647%) hue-rotate(52deg)
-    brightness(103%) contrast(90%);
-  --error-background-color: #4f0800;
-  --error-border-color: #281614;
-  --error-text-color: #ffaba2;
-  --error-icon-filter: invert(70%) sepia(24%) saturate(717%) hue-rotate(315deg)
-    brightness(103%) contrast(104%);
 }
 
 [data-pnotify] .custom-notice {

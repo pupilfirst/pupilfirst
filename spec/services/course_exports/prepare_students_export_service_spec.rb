@@ -64,38 +64,51 @@ describe CourseExports::PrepareStudentsExportService do
     create :evaluation_criterion, course: course, name: "Criterion B"
   end
 
+  let!(:target_l1_quiz) do
+    create :target, target_group: target_group_l1_milestone, sort_index: 0
+  end
+  let!(:assignment_target_l1_quiz) do
+    create :assignment,
+           target: target_l1_quiz,
+           milestone_number: 2,
+           milestone: true
+  end
+  let!(:quiz_target_l1) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_target_l1_quiz
+  end
+
+  let!(:target_l1_quiz_non_milestone) do
+    create :target, target_group: target_group_l1_milestone, sort_index: 1
+  end
+  let!(:assignment_target_l1_quiz_non_milestone) do
+    create :assignment, target: target_l1_quiz_non_milestone
+  end
+  let!(:quiz_target_l1_quiz_non_milestone) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_target_l1_quiz_non_milestone
+  end
+
   let!(:target_l1_evaluated) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1_milestone,
-           evaluation_criteria: [
+           sort_index: 2,
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           sort_index: 1,
-           milestone: true,
-           milestone_number: 1
-  end
-
-  let!(:target_l1_mark_as_complete) do
-    create :target, target_group: target_group_l1_non_milestone
-  end
-
-  let!(:quiz) { create :quiz, target: target_l1_quiz }
-
-  let!(:target_l1_quiz) do
-    create :target,
-           target_group: target_group_l1_milestone,
-           sort_index: 0,
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 1
   end
 
   let!(:target_l2_evaluated) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l2_milestone,
-           evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 1
+           given_evaluation_criteria: [evaluation_criterion_1],
+           given_milestone_number: 3
   end
 
   let(:school) { course.school }
@@ -127,7 +140,7 @@ describe CourseExports::PrepareStudentsExportService do
 
   before do
     # First student has completed everything, but has a pending submission in L2.
-    submit_target target_l1_mark_as_complete, student_1
+    submit_target target_l1_quiz_non_milestone, student_1
     submission = submit_target target_l1_quiz, student_1
     submission.update!(quiz_score: "2/2")
     submit_target target_l2_evaluated, student_1
@@ -175,28 +188,22 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "ID",
-            "L1T#{target_l1_mark_as_complete.id}",
             "L1T#{target_l1_quiz.id}",
+            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
           ["Level", 1, 1, 1, 2],
           [
             "Name",
-            target_l1_mark_as_complete.title,
             target_l1_quiz.title,
+            target_l1_quiz_non_milestone.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
-          [
-            "Completion Method",
-            "Mark as Complete",
-            "Take Quiz",
-            "Graded",
-            "Graded"
-          ],
-          %w[Milestone? No Yes Yes Yes],
-          ["Students with submissions", 1, 3, 3, 1],
+          ["Completion Method", "Take Quiz", "Take Quiz", "Graded", "Graded"],
+          %w[Milestone? Yes No Yes Yes],
+          ["Students with submissions", 3, 1, 3, 1],
           ["Submissions pending review", 0, 0, 0, 1],
           [
             "Criterion A 3 - Average",
@@ -296,15 +303,15 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "Student Email / Target ID",
-            "L1T#{target_l1_mark_as_complete.id}",
             "L1T#{target_l1_quiz.id}",
+            "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
           [
             student_1.email,
-            "✓",
-            "2/2",
+            { value: "2/2", style: "default" },
+            { value: "✓", style: "default" },
             {
               "value" =>
                 "x;#{submission_grading(student_1_reviewed_submission)}",
@@ -314,14 +321,14 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_2.email,
+            { value: "1/2", style: "default" },
             nil,
-            "1/2",
             { "value" => "x", "style" => "failing-grade" }
           ],
           [
             student_5.email,
+            { value: "1/2", style: "default" },
             nil,
-            "1/2",
             { "value" => "x", "style" => "failing-grade" }
           ]
         ]

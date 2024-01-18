@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe TimelineEvents::CreateWebhookDataService do
   subject { described_class.new(submission) }
@@ -10,9 +10,9 @@ describe TimelineEvents::CreateWebhookDataService do
 
   let(:target) do
     create :target,
-           :with_default_checklist,
+           :with_shared_assignment,
            target_group: target_group,
-           evaluation_criteria: [criterion]
+           given_evaluation_criteria: [criterion]
   end
 
   let(:submission) { create :timeline_event, target: target }
@@ -22,13 +22,13 @@ describe TimelineEvents::CreateWebhookDataService do
 
   let!(:png_file) do
     create :timeline_event_file,
-           file_path: 'files/icon_pupilfirst.png',
+           file_path: "files/icon_pupilfirst.png",
            timeline_event: submission
   end
 
-  describe '#data' do
+  describe "#data" do
     before { submission.timeline_event_owners.create!(student: student) }
-    it 'returns data appropriate for sending via webhook' do
+    it "returns data appropriate for sending via webhook" do
       expected_target_data = {
         id: target.id,
         title: target.title,
@@ -44,20 +44,22 @@ describe TimelineEvents::CreateWebhookDataService do
 
       pdf_file_data =
         hash_including(
-          filename: 'pdf-sample.pdf',
-          content_type: 'application/pdf',
+          filename: "pdf-sample.pdf",
+          content_type: "application/pdf",
           byte_size: 7945,
-          checksum: '+n1+ZQss7GjzArMbooI12A==',
-          url: %r{https://test\.host/rails/active_storage/blobs/.*/pdf-sample\.pdf}
+          checksum: "+n1+ZQss7GjzArMbooI12A==",
+          url:
+            %r{https://test\.host/rails/active_storage/blobs/.*/pdf-sample\.pdf}
         )
 
       image_file_data =
         hash_including(
-          filename: 'icon_pupilfirst.png',
-          content_type: 'image/png',
+          filename: "icon_pupilfirst.png",
+          content_type: "image/png",
           byte_size: 10_026,
-          checksum: 'm5ZqQ7BpvaojhnIlEkoRiQ==',
-          url: %r{https://test\.host/rails/active_storage/blobs/.*/icon_pupilfirst\.png}
+          checksum: "m5ZqQ7BpvaojhnIlEkoRiQ==",
+          url:
+            %r{https://test\.host/rails/active_storage/blobs/.*/icon_pupilfirst\.png}
         )
 
       data = subject.data
@@ -74,7 +76,7 @@ describe TimelineEvents::CreateWebhookDataService do
       expect(data[:files]).to include(image_file_data)
     end
 
-    context 'when the submission has been graded' do
+    context "when the submission has been graded" do
       let(:submission) { create :timeline_event, :evaluated, target: target }
 
       let!(:submission_grading) do
@@ -83,7 +85,7 @@ describe TimelineEvents::CreateWebhookDataService do
                timeline_event: submission
       end
 
-      it 'includes grades in the response' do
+      it "includes grades in the response" do
         data = subject.data
 
         expect(data[:grades]).to eq(
@@ -95,17 +97,17 @@ describe TimelineEvents::CreateWebhookDataService do
       end
     end
 
-    context 'when the submission does not have evaluation criteria (auto-accepted)' do
+    context "when the submission does not have evaluation criteria (auto-accepted)" do
       let(:target) do
         create :target,
-               :with_default_checklist,
+               :with_shared_assignment,
                target_group: target_group,
-               evaluation_criteria: []
+               given_evaluation_criteria: []
       end
 
       let(:submission) { create :timeline_event, :passed, target: target }
 
-      it 'leaves out evaluation criteria from the data' do
+      it "leaves out evaluation criteria from the data" do
         expect(subject.data[:target][:evaluation_criteria]).to be_empty
       end
     end

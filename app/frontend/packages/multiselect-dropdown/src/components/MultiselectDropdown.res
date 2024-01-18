@@ -155,7 +155,7 @@ module Make = (Selectable: Selectable) => {
         <button
           ariaLabel={"Remove selection: " ++ value}
           title={"Remove selection: " ++ value}
-          className="bg-black bg-opacity-5 text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
+          className="bg-gray-200 text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
           onClick={removeSelection(onDeselect, selection)}>
           <PfIcon className="if i-times-regular" />
         </button>

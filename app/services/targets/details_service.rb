@@ -9,23 +9,46 @@ module Targets
     end
 
     def details
+      details = default_props
       if @student.present?
-        {
-          pending_user_ids: pending_user_ids,
-          submissions: details_for_submissions,
-          feedback: feedback_for_submissions,
-          grading: grading,
-          **default_props
-        }
+        details =
+          details.update(
+            {
+              pending_user_ids: pending_user_ids,
+              submissions: details_for_submissions,
+              feedback: feedback_for_submissions,
+              grading: grading
+            }
+          )
       else
-        {
-          pending_user_ids: [],
-          submissions: [],
-          feedback: [],
-          grading: [],
-          **default_props
-        }
+        details =
+          details.update(
+            { pending_user_ids: [], submissions: [], feedback: [], grading: [] }
+          )
       end
+
+      if assignment.present?
+        details =
+          details.update(
+            {
+              quiz_questions: quiz_questions,
+              evaluated: assignment.evaluation_criteria.exists?,
+              completion_instructions: assignment.completion_instructions,
+              checklist: assignment.checklist
+            }
+          )
+      else
+        details =
+          details.update(
+            {
+              quiz_questions: [],
+              evaluated: false,
+              completion_instructions: nil,
+              checklist: []
+            }
+          )
+      end
+      details
     end
 
     private
@@ -33,13 +56,8 @@ module Targets
     def default_props
       {
         navigation: links_to_adjacent_targets,
-        quiz_questions: quiz_questions,
         content_blocks: content_blocks,
-        communities: community_details,
-        link_to_complete: @target.link_to_complete,
-        evaluated: @target.evaluation_criteria.exists?,
-        completion_instructions: @target.completion_instructions,
-        checklist: @target.checklist
+        communities: community_details
       }
     end
 
@@ -52,22 +70,28 @@ module Targets
           .target_groups
           .joins(:targets)
           .merge(Target.live)
-          .order('target_groups.sort_index', 'targets.sort_index')
-          .pluck('targets.id')
+          .order("target_groups.sort_index", "targets.sort_index")
+          .pluck("targets.id")
 
       target_index = sorted_target_ids.index(@target.id)
 
       if target_index.present?
-        previous_target_id = sorted_target_ids[target_index - 1] if target_index
-          .positive?
+        previous_target_id =
+          sorted_target_ids[target_index - 1] if target_index.positive?
         next_target_id = sorted_target_ids[target_index + 1]
 
-        links[:previous] =
-          "/targets/#{previous_target_id}" if previous_target_id.present?
+        links[
+          :previous
+        ] = "/targets/#{previous_target_id}" if previous_target_id.present?
         links[:next] = "/targets/#{next_target_id}" if next_target_id.present?
       end
 
       links
+    end
+
+    def assignment
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
     end
 
     def communities
@@ -88,7 +112,7 @@ module Targets
         .live
         .joins(:target)
         .where(targets: { id: @target })
-        .order('last_activity_at DESC NULLs FIRST')
+        .order("last_activity_at DESC NULLs FIRST")
         .first(3)
         .map { |topic| { id: topic.id, title: topic.title } }
     end
@@ -154,22 +178,19 @@ module Targets
     end
 
     def files(submission)
-      submission
-        .timeline_event_files
-        .with_attached_file
-        .map do |file|
-          {
-            id: file.id,
-            name: file.file.filename,
-            url: url_helpers.download_timeline_event_file_path(file)
-          }
-        end
+      submission.timeline_event_files.with_attached_file.map do |file|
+        {
+          id: file.id,
+          name: file.file.filename,
+          url: url_helpers.download_timeline_event_file_path(file)
+        }
+      end
     end
 
     def quiz_questions
-      return [] if @target.quiz.blank?
+      return [] if assignment.quiz.blank?
 
-      @target
+      assignment
         .quiz
         .quiz_questions
         .includes(:answer_options)
@@ -186,31 +207,27 @@ module Targets
 
     def answer_options(question)
       question.answer_options.map do |answer|
-        answer.attributes.slice('id', 'value')
+        answer.attributes.slice("id", "value")
       end
     end
 
     def content_blocks
       return [] if @target.current_content_blocks.blank?
 
-      @target
-        .current_content_blocks
-        .with_attached_file
-        .map do |content_block|
-          cb =
-            content_block.attributes.slice(
-              'id',
-              'block_type',
-              'content',
-              'sort_index'
-            )
-          if content_block.file.attached?
-            cb['file_url'] =
-              url_helpers.rails_public_blob_url(content_block.file)
-            cb['filename'] = content_block.file.filename
-          end
-          cb
+      @target.current_content_blocks.with_attached_file.map do |content_block|
+        cb =
+          content_block.attributes.slice(
+            "id",
+            "block_type",
+            "content",
+            "sort_index"
+          )
+        if content_block.file.attached?
+          cb["file_url"] = url_helpers.rails_public_blob_url(content_block.file)
+          cb["filename"] = content_block.file.filename
         end
+        cb
+      end
     end
 
     def grading

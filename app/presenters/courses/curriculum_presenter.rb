@@ -15,6 +15,7 @@ module Courses
       if current_student.present?
         {
           submissions: submissions,
+          targets_read: targets_read,
           student: student_details,
           coaches: faculty.map(&:attributes),
           users: users,
@@ -25,6 +26,7 @@ module Courses
       else
         {
           submissions: [],
+          targets_read: [],
           student: student_details_for_preview_mode,
           coaches: [],
           users: [],
@@ -55,12 +57,7 @@ module Courses
 
     def evaluation_criteria
       @course.evaluation_criteria.map do |ec|
-        ec.attributes.slice(
-          'id',
-          'name',
-          'max_grade',
-          'grade_labels'
-        )
+        ec.attributes.slice("id", "name", "max_grade", "grade_labels")
       end
     end
 
@@ -143,22 +140,16 @@ module Courses
     end
 
     def targets
-      attributes = %w[
-        id
-        role
-        title
-        target_group_id
-        sort_index
-        resubmittable
-        milestone
-      ]
+      attributes = %w[id title target_group_id sort_index resubmittable]
 
       scope =
         @course
           .targets
           .live
           .joins(:target_group)
-          .includes(:target_prerequisites, :evaluation_criteria)
+          .includes(
+            assignments: %i[evaluation_criteria prerequisite_assignments]
+          )
           .where(target_groups: { level_id: open_level_ids })
           .where(archived: false)
 
@@ -166,10 +157,22 @@ module Courses
         .select(*attributes)
         .map do |target|
           details = target.attributes.slice(*attributes)
-          details[:prerequisite_target_ids] = target.target_prerequisites.pluck(
-            :prerequisite_target_id
-          )
-          details[:reviewed] = target.evaluation_criteria.present?
+          assignment = target.assignments.not_archived.first
+          if assignment
+            details[:role] = assignment.role
+            details[:milestone] = assignment.milestone
+            details[:reviewed] = assignment.evaluation_criteria.present?
+            details[:has_assignment] = true
+            details[
+              :prerequisite_target_ids
+            ] = assignment.prerequisite_assignments.pluck(:target_id)
+          else
+            details[:role] = Assignment::ROLE_STUDENT
+            details[:milestone] = false
+            details[:reviewed] = false
+            details[:has_assignment] = false
+            details[:prerequisite_target_ids] = []
+          end
           details
         end
     end
@@ -177,7 +180,7 @@ module Courses
     def submissions
       current_student
         .latest_submissions
-        .includes(:target)
+        .includes(target: :assignments)
         .map do |submission|
           if submission.target.individual_target? ||
                submission.student_ids.sort == current_student.team_student_ids
@@ -188,6 +191,10 @@ module Courses
             )
           end
         end - [nil]
+    end
+
+    def targets_read
+      current_student.page_reads.pluck(:target_id).map(&:to_s)
     end
 
     def faculty

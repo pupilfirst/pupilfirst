@@ -55,7 +55,7 @@ md.use(videoPlugin, {
   .use(alignPlugin)
   .use(checkboxPlugin, {
     disabled: true,
-    liClass: "flex items-center gap-2 pointer-events-none -ms-10",
+    liClass: "flex items-center gap-2 -ms-10",
     ulClass: "list-none",
   });
 

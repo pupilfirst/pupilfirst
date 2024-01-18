@@ -16,17 +16,16 @@ let ts = I18n.ts
 
 type methodOfCompletion =
   | Evaluated
-  | VisitLink
   | TakeQuiz
-  | MarkAsComplete
   | SubmitForm
+  | NoAssignment
 
 type evaluationCriterion = (int, string, bool)
 
 type state = {
   title: string,
   targetGroupId: option<string>,
-  role: TargetDetails.role,
+  role: AssignmentDetails.role,
   evaluationCriteria: array<string>,
   prerequisiteTargets: array<string>,
   prerequisiteSearchInput: string,
@@ -34,7 +33,6 @@ type state = {
   targetGroupSearchInput: string,
   methodOfCompletion: methodOfCompletion,
   quiz: array<QuizQuestion.t>,
-  linkToComplete: string,
   dirty: bool,
   saving: bool,
   loading: bool,
@@ -42,11 +40,14 @@ type state = {
   checklist: array<ChecklistItem.t>,
   completionInstructions: string,
   targetDetails: option<TargetDetails.t>,
+  assignmentDetails: option<AssignmentDetails.t>,
   milestone: bool,
+  hasAssignment: bool,
 }
 
 type action =
   | SaveTargetDetails(TargetDetails.t)
+  | SaveAssignmentDetails(AssignmentDetails.t)
   | UpdateTitle(string)
   | UpdatePrerequisiteTargets(array<string>)
   | UpdateMethodOfCompletion(methodOfCompletion)
@@ -56,9 +57,8 @@ type action =
   | UpdateTargetGroupSearchInput(string)
   | UpdateTargetGroup(string)
   | UpdateTargetGroupAndClearPrerequisiteTargets(string)
-  | UpdateLinkToComplete(string)
   | UpdateCompletionInstructions(string)
-  | UpdateTargetRole(TargetDetails.role)
+  | UpdateAssignmentRole(AssignmentDetails.role)
   | AddQuizQuestion
   | UpdateQuizQuestion(QuizQuestion.id, QuizQuestion.t)
   | RemoveQuizQuestion(QuizQuestion.id)
@@ -73,12 +73,21 @@ type action =
   | ClearTargetGroupId
   | ResetEditor
   | UpdateMilestone(bool)
+  | UpdateHasAssignment(bool)
 
 module TargetDetailsQuery = %graphql(`
     query TargetDetailsQuery($targetId: ID!) {
       targetDetails(targetId: $targetId) {
         title
         targetGroupId
+        visibility
+      }
+  }
+`)
+
+module AssignmentDetailsQuery = %graphql(`
+    query AssignmentDetailsQuery($targetId: ID!) {
+      assignmentDetails(targetId: $targetId) {
         evaluationCriteria
         prerequisiteTargets
         quiz {
@@ -92,11 +101,10 @@ module TargetDetailsQuery = %graphql(`
           }
         }
         completionInstructions
-        visibility
-        linkToComplete
         role
         checklist
         milestone
+        archived
       }
   }
 `)
@@ -110,105 +118,114 @@ let loadTargetDetails = (targetId, send) =>
   })
   |> ignore
 
+let loadAssignmentDetails = (targetId, send) =>
+  AssignmentDetailsQuery.make({targetId: targetId})
+  |> Js.Promise.then_(result => {
+    switch result["assignmentDetails"] {
+    | Some(value) =>
+      let assignmentDetails = AssignmentDetails.makeFromJs(value)
+      send(SaveAssignmentDetails(assignmentDetails))
+    | None => Js.log("no assignment")
+    }
+    Js.Promise.resolve()
+  })
+  |> ignore
+
 let defaultChecklist = [
   ChecklistItem.make(~title=t("describe_submission"), ~kind=LongText, ~optional=false),
 ]
 
-let computeMethodOfCompletion = targetDetails => {
-  let hasQuiz = targetDetails |> TargetDetails.quiz |> ArrayUtils.isNotEmpty
-  let hasEvaluationCriteria = targetDetails.evaluationCriteria |> ArrayUtils.isNotEmpty
-  let hasLinkToComplete = switch targetDetails.linkToComplete {
-  | Some(_) => true
-  | None => false
-  }
-  let hasChecklist = targetDetails.checklist |> ArrayUtils.isNotEmpty
-  switch (hasEvaluationCriteria, hasQuiz, hasLinkToComplete, hasChecklist) {
-  | (true, _x, _y, _z) => Evaluated
-  | (_w, true, _y, _z) => TakeQuiz
-  | (_w, _x, true, _z) => VisitLink
-  | (_w, _x, _y, true) => SubmitForm
-  | (false, false, false, false) => MarkAsComplete
+let computeMethodOfCompletion = assignmentDetails => {
+  let hasQuiz = assignmentDetails |> AssignmentDetails.quiz |> ArrayUtils.isNotEmpty
+  let hasEvaluationCriteria = assignmentDetails.evaluationCriteria |> ArrayUtils.isNotEmpty
+  let hasChecklist = assignmentDetails.checklist |> ArrayUtils.isNotEmpty
+  switch (hasEvaluationCriteria, hasQuiz, hasChecklist) {
+  | (true, _y, _z) => Evaluated
+  | (_x, true, _z) => TakeQuiz
+  | (_x, _y, true) => SubmitForm
+  | (false, false, false) => NoAssignment
   }
 }
 
 let reducer = (state, action) =>
   switch action {
-  | SaveTargetDetails(targetDetails) =>
-    let methodOfCompletion = computeMethodOfCompletion(targetDetails)
-    let checklist =
-      targetDetails.checklist |> ArrayUtils.isNotEmpty ? targetDetails.checklist : defaultChecklist
-    let quiz =
-      targetDetails.quiz |> ArrayUtils.isNotEmpty ? targetDetails.quiz : [QuizQuestion.empty("0")]
-    {
+  | SaveTargetDetails(targetDetails) => {
       ...state,
       title: targetDetails.title,
-      role: targetDetails.role,
       targetGroupId: Some(targetDetails.targetGroupId),
-      evaluationCriteria: targetDetails.evaluationCriteria,
-      prerequisiteTargets: targetDetails.prerequisiteTargets,
-      methodOfCompletion: methodOfCompletion,
-      linkToComplete: switch targetDetails.linkToComplete {
-      | Some(link) => link
-      | None => ""
-      },
-      quiz: quiz,
-      completionInstructions: switch targetDetails.completionInstructions {
+      visibility: targetDetails.visibility,
+      loading: false,
+      targetDetails: Some(targetDetails),
+    }
+  | SaveAssignmentDetails(assignmentDetails) =>
+    let methodOfCompletion = computeMethodOfCompletion(assignmentDetails)
+    let checklist =
+      assignmentDetails.checklist |> ArrayUtils.isNotEmpty
+        ? assignmentDetails.checklist
+        : defaultChecklist
+    let quiz =
+      assignmentDetails.quiz |> ArrayUtils.isNotEmpty
+        ? assignmentDetails.quiz
+        : [QuizQuestion.empty("0")]
+    {
+      ...state,
+      role: assignmentDetails.role,
+      evaluationCriteria: assignmentDetails.evaluationCriteria,
+      prerequisiteTargets: assignmentDetails.prerequisiteTargets,
+      methodOfCompletion,
+      quiz,
+      completionInstructions: switch assignmentDetails.completionInstructions {
       | Some(instructions) => instructions
       | None => ""
       },
-      visibility: targetDetails.visibility,
-      checklist: checklist,
+      checklist,
       loading: false,
-      targetDetails: Some(targetDetails),
-      milestone: targetDetails.milestone,
+      assignmentDetails: Some(assignmentDetails),
+      milestone: assignmentDetails.milestone,
+      hasAssignment: !assignmentDetails.archived,
     }
-  | UpdateTitle(title) => {...state, title: title, dirty: true}
+  | UpdateTitle(title) => {...state, title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
       ...state,
-      prerequisiteTargets: prerequisiteTargets,
+      prerequisiteTargets,
       prerequisiteSearchInput: "",
       dirty: true,
     }
   | UpdatePrerequisiteSearchInput(prerequisiteSearchInput) => {
       ...state,
-      prerequisiteSearchInput: prerequisiteSearchInput,
+      prerequisiteSearchInput,
     }
   | UpdateMethodOfCompletion(methodOfCompletion) => {
       ...state,
-      methodOfCompletion: methodOfCompletion,
+      methodOfCompletion,
       dirty: true,
     }
   | UpdateEvaluationCriteria(evaluationCriteria) => {
       ...state,
-      evaluationCriteria: evaluationCriteria,
+      evaluationCriteria,
       evaluationCriteriaSearchInput: "",
       dirty: true,
     }
   | UpdateEvaluationCriteriaSearchInput(evaluationCriteriaSearchInput) => {
       ...state,
-      evaluationCriteriaSearchInput: evaluationCriteriaSearchInput,
-    }
-  | UpdateLinkToComplete(linkToComplete) => {
-      ...state,
-      linkToComplete: linkToComplete,
-      dirty: true,
+      evaluationCriteriaSearchInput,
     }
   | UpdateCompletionInstructions(instruction) => {
       ...state,
       completionInstructions: instruction,
       dirty: true,
     }
-  | UpdateTargetRole(role) => {...state, role: role, dirty: true}
+  | UpdateAssignmentRole(role) => {...state, role, dirty: true}
   | AddQuizQuestion =>
     let quiz = Js.Array.concat([QuizQuestion.empty(Js.Date.now() |> Js.Float.toString)], state.quiz)
-    {...state, quiz: quiz, dirty: true}
+    {...state, quiz, dirty: true}
   | UpdateQuizQuestion(id, quizQuestion) =>
     let quiz = state.quiz |> Js.Array.map(q => QuizQuestion.id(q) == id ? quizQuestion : q)
-    {...state, quiz: quiz, dirty: true}
+    {...state, quiz, dirty: true}
   | RemoveQuizQuestion(id) =>
     let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id)
-    {...state, quiz: quiz, dirty: true}
-  | UpdateVisibility(visibility) => {...state, visibility: visibility, dirty: true}
+    {...state, quiz, dirty: true}
+  | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
   | UpdateChecklistItem(indexToChange, newItem) => {
       ...state,
       checklist: state.checklist |> Js.Array.mapi((checklistItem, index) =>
@@ -245,7 +262,7 @@ let reducer = (state, action) =>
   | ResetEditor => {...state, saving: false, dirty: false}
   | UpdateTargetGroupSearchInput(targetGroupSearchInput) => {
       ...state,
-      targetGroupSearchInput: targetGroupSearchInput,
+      targetGroupSearchInput,
     }
   | UpdateTargetGroup(targetGroupId) => {
       ...state,
@@ -261,7 +278,12 @@ let reducer = (state, action) =>
       prerequisiteTargets: [],
     }
   | ClearTargetGroupId => {...state, targetGroupId: None, dirty: true}
-  | UpdateMilestone(milestone) => {...state, milestone: milestone, dirty: true}
+  | UpdateMilestone(milestone) => {...state, milestone, dirty: true}
+  | UpdateHasAssignment(hasAssignment) => {
+      ...state,
+      hasAssignment,
+      dirty: true,
+    }
   }
 
 let updateTitle = (send, event) => {
@@ -271,6 +293,7 @@ let updateTitle = (send, event) => {
 
 let eligiblePrerequisiteTargets = (targetId, targets) => {
   targets
+  ->Js.Array2.filter(target => Target.hasAssignment(target))
   ->Js.Array2.filter(target => !Target.archived(target))
   ->Js.Array2.filter(target => Target.id(target) != targetId)
 }
@@ -311,7 +334,9 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
     ? <div className="mb-6">
         <label
           className="block tracking-wide text-sm font-semibold mb-2" htmlFor="prerequisite_targets">
-          <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
+          <span className="me-2">
+            <i className="fas fa-list rtl:rotate-180 text-base" />
+          </span>
           {t("prerequisite_targets_label") |> str}
         </label>
         <div id="prerequisite_targets" className="mb-6 ms-6">
@@ -346,10 +371,9 @@ let targetRoleClasses = selected =>
 let targetEvaluated = methodOfCompletion =>
   switch methodOfCompletion {
   | Evaluated => true
-  | VisitLink => false
   | TakeQuiz => false
-  | MarkAsComplete => false
   | SubmitForm => false
+  | NoAssignment => false
   }
 
 let validNumberOfEvaluationCriteria = state => state.evaluationCriteria |> ArrayUtils.isNotEmpty
@@ -404,7 +428,9 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
   <div id="evaluation_criteria" className="mb-6">
     <label
       className="block tracking-wide text-sm font-semibold me-6 mb-2" htmlFor="evaluation_criteria">
-      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
+      <span className="me-2">
+        <i className="fas fa-list rtl:rotate-180 text-base" />
+      </span>
       {t("select_criterion_label") |> str}
     </label>
     <div className="ms-6">
@@ -428,9 +454,6 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
   </div>
 }
 
-let updateLinkToComplete = (send, event) =>
-  send(UpdateLinkToComplete(ReactEvent.Form.target(event)["value"]))
-
 let updateCompletionInstructions = (send, event) =>
   send(UpdateCompletionInstructions(ReactEvent.Form.target(event)["value"]))
 
@@ -439,41 +462,25 @@ let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
   send(UpdateMethodOfCompletion(methodOfCompletion))
 }
 
+let updateHasAssignment = (hasAssignment, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateHasAssignment(hasAssignment))
+}
+
 let updateMilestone = (milestone, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateMilestone(milestone))
 }
 
-let updateTargetRole = (role, send, event) => {
+let updateAssignmentRole = (role, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
-  send(UpdateTargetRole(role))
+  send(UpdateAssignmentRole(role))
 }
 
 let updateVisibility = (visibility, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateVisibility(visibility))
 }
-
-let linkEditor = (state, send) =>
-  <div className="mb-6">
-    <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="link_to_complete">
-      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
-      {t("link_complete") |> str}
-    </label>
-    <div className="ms-6">
-      <input
-        className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-        id="link_to_complete"
-        type_="text"
-        placeholder={t("paste_link_complete")}
-        value=state.linkToComplete
-        onChange={updateLinkToComplete(send)}
-      />
-      {state.linkToComplete |> UrlUtils.isInvalid(false)
-        ? <School__InputGroupError message={t("enter_valid_link")} active=true />
-        : React.null}
-    </div>
-  </div>
 
 module SelectableTargetGroup = {
   type t = {
@@ -497,7 +504,7 @@ module SelectableTargetGroup = {
 
   let level = t => t.level
 
-  let make = (level, targetGroup) => {level: level, targetGroup: targetGroup}
+  let make = (level, targetGroup) => {level, targetGroup}
 }
 
 module TargetGroupSelector = MultiselectDropdown.Make(SelectableTargetGroup)
@@ -551,7 +558,9 @@ let targetGroupOnSelect = (state, send, targetGroups, selectable) => {
 let targetGroupEditor = (state, targetGroups, levels, send) =>
   <div id="target_group_id" className="mb-6">
     <label className="block tracking-wide text-sm font-semibold me-6 mb-2" htmlFor="target_group">
-      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
+      <span className="me-2">
+        <i className="fas fa-list rtl:rotate-180 text-base" />
+      </span>
       {t("target_group") |> str}
     </label>
     <div className="ms-6">
@@ -581,31 +590,23 @@ let methodOfCompletionButtonClasses = value => {
 let methodOfCompletionSelection = polyMethodOfCompletion =>
   switch polyMethodOfCompletion {
   | #TakeQuiz => TakeQuiz
-  | #VisitLink => VisitLink
-  | #MarkAsComplete => MarkAsComplete
   | #SubmitForm => SubmitForm
   }
 
 let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   let buttonString = switch methodOfCompletion {
   | #TakeQuiz => t("take_quiz")
-  | #VisitLink => t("visit_link")
-  | #MarkAsComplete => t("mark_as_complete")
   | #SubmitForm => t("submit_form")
   }
 
   let selected = switch (state.methodOfCompletion, methodOfCompletion) {
   | (TakeQuiz, #TakeQuiz) => true
-  | (VisitLink, #VisitLink) => true
-  | (MarkAsComplete, #MarkAsComplete) => true
   | (SubmitForm, #SubmitForm) => true
   | _anyOtherCombo => false
   }
 
   let icon = switch methodOfCompletion {
   | #TakeQuiz => quizIcon
-  | #VisitLink => linkIcon
-  | #MarkAsComplete => markIcon
   | #SubmitForm => formIcon
   }
 
@@ -613,7 +614,9 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
     <button
       onClick={updateMethodOfCompletion(methodOfCompletion |> methodOfCompletionSelection, send)}
       className={methodOfCompletionButtonClasses(selected)}>
-      <div className="mb-1"> <img className="w-12 h-12" src=icon /> </div>
+      <div className="mb-1">
+        <img className="w-12 h-12" src=icon />
+      </div>
       <div className="text-center"> {buttonString |> str} </div>
     </button>
   </div>
@@ -625,11 +628,13 @@ let methodOfCompletionSelector = (state, send) =>
       <label
         className="block tracking-wide text-sm font-semibold me-6 mb-3"
         htmlFor="method_of_completion">
-        <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
         {t("target_method_of_completion_label") |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2 ps-6 ">
-        {[#MarkAsComplete, #VisitLink, #TakeQuiz, #SubmitForm]
+        {[#TakeQuiz, #SubmitForm]
         |> Js.Array.mapi((methodOfCompletion, index) =>
           methodOfCompletionButton(methodOfCompletion, state, send, index)
         )
@@ -661,7 +666,9 @@ let quizEditor = (state, send) =>
   <div>
     <label
       className="block tracking-wide text-sm font-semibold me-6 mb-3" htmlFor="Quiz question 1">
-      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
+      <span className="me-2">
+        <i className="fas fa-list rtl:rotate-180 text-base" />
+      </span>
       {t("prepare_quiz") |> str}
     </label>
     <div className="ms-6">
@@ -725,7 +732,9 @@ let formEditor = (state, send) => {
 
   <div className="mb-6">
     <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
-      <span className="me-2"> <i className="fas fa-list rtl:rotate-180 text-base" /> </span>
+      <span className="me-2">
+        <i className="fas fa-list rtl:rotate-180 text-base" />
+      </span>
       {status ? t("target_checklist.label")->str : t("target_checklist.form_label")->str}
     </label>
     {status
@@ -760,7 +769,8 @@ let formEditor = (state, send) => {
       {ArrayUtils.isEmpty(state.checklist)
         ? <div
             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
-            <i className="fas fa-info-circle me-2" /> {t("empty_questions_warning")->str}
+            <i className="fas fa-info-circle me-2" />
+            {t("empty_questions_warning")->str}
           </div>
         : React.null}
       {Js.Array.length(state.checklist) >= 25
@@ -780,20 +790,173 @@ let formEditor = (state, send) => {
     </div>
   </div>
 }
+
+let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
+  let targetId = target |> Target.id
+  <div>
+    <div className="flex items-center mb-6">
+      <label className="block tracking-wide text-sm font-semibold me-1" htmlFor="milestone">
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
+        {t("target_setting_milestone.label")->str}
+      </label>
+      <HelpIcon link={t("target_setting_milestone.help_url")} className="me-6">
+        {t("target_setting_milestone.help") |> str}
+      </HelpIcon>
+      <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
+        <button
+          onClick={updateMilestone(true, send)} className={booleanButtonClasses(state.milestone)}>
+          {ts("_yes") |> str}
+        </button>
+        <button
+          onClick={updateMilestone(false, send)} className={booleanButtonClasses(!state.milestone)}>
+          {ts("_no") |> str}
+        </button>
+      </div>
+    </div>
+    {prerequisiteTargetEditor(send, eligiblePrerequisiteTargets(targetId, targets), state)}
+    <div className="flex items-center mb-6">
+      <label className="block tracking-wide text-sm font-semibold me-6" htmlFor="evaluated">
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
+        {t("target_reviewed_by_coach") |> str}
+      </label>
+      <div id="evaluated" className="flex toggle-button__group shrink-0 rounded-lg">
+        <button
+          onClick={updateMethodOfCompletion(Evaluated, send)}
+          className={booleanButtonClasses(targetEvaluated(state.methodOfCompletion))}>
+          {ts("_yes") |> str}
+        </button>
+        <button
+          onClick={updateMethodOfCompletion(SubmitForm, send)}
+          className={booleanButtonClasses(!targetEvaluated(state.methodOfCompletion))}>
+          {ts("_no") |> str}
+        </button>
+      </div>
+    </div>
+    {switch state.methodOfCompletion {
+    | NoAssignment
+    | TakeQuiz => React.null
+    | SubmitForm => React.null
+    | Evaluated => formEditor(state, send)
+    }}
+    {targetEvaluated(state.methodOfCompletion)
+      ? React.null
+      : methodOfCompletionSelector(state, send)}
+    {switch state.methodOfCompletion {
+    | NoAssignment
+    | Evaluated =>
+      evaluationCriteriaEditor(state, evaluationCriteria, send)
+    | TakeQuiz => quizEditor(state, send)
+    | SubmitForm => formEditor(state, send)
+    }}
+    <div className="mb-6">
+      <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
+        {t("target_role.label") |> str}
+      </label>
+      <HelpIcon className="ms-1" link={t("target_role.help_url")}>
+        {t("target_role.help") |> str}
+      </HelpIcon>
+      <div id="role" className="flex mt-4 ms-6">
+        <button
+          onClick={updateAssignmentRole(AssignmentDetails.Student, send)}
+          className={"me-4 " ++
+          targetRoleClasses(
+            switch state.role {
+            | AssignmentDetails.Student => true
+            | Team => false
+            },
+          )}>
+          <span className="me-4">
+            <Icon className="if i-users-check-light text-3xl" />
+          </span>
+          <span className="text-sm"> {t("submit_individually") |> str} </span>
+        </button>
+        <button
+          onClick={updateAssignmentRole(AssignmentDetails.Team, send)}
+          className={targetRoleClasses(
+            switch state.role {
+            | AssignmentDetails.Team => true
+            | Student => false
+            },
+          )}>
+          <span className="me-4">
+            <Icon className="if i-user-check-light text-2xl" />
+          </span>
+          <span className="text-sm">
+            {t("one_student_team") |> str}
+            <br />
+            {t("need_submit") |> str}
+          </span>
+        </button>
+      </div>
+    </div>
+    <div className="mb-6">
+      <label className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
+        {t("github_action.title")->str}
+        <span className="ms-1 text-xs font-normal"> {ts("optional_braces")->str} </span>
+      </label>
+      <HelpIcon link={t("github_action.help_url")} className="ms-1">
+        {t("github_action.help_description")->str}
+      </HelpIcon>
+      <div className="ms-6 mt-4">
+        <a
+          href={`/school/targets/${Target.id(target)}/action`}
+          className="btn btn-subtle flex max-w-min gap-3">
+          <PfIcon className="if i-external-link-light if-fw" />
+          {t("github_action.button_text")->str}
+        </a>
+      </div>
+    </div>
+    <div className="mb-6">
+      <label className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
+        {t("completion_instructions.label") |> str}
+        <span className="ms-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
+      </label>
+      <HelpIcon link={t("completion_instructions.help_url")} className="ms-1">
+        {t("completion_instructions.help") |> str}
+      </HelpIcon>
+      <div className="ms-6">
+        <input
+          className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          id="completion-instructions"
+          type_="text"
+          maxLength=255
+          value=state.completionInstructions
+          onChange={updateCompletionInstructions(send)}
+        />
+      </div>
+    </div>
+  </div>
+}
+
 let isValidMethodOfCompletion = state =>
   switch state.methodOfCompletion {
   | TakeQuiz => isValidQuiz(state.quiz)
-  | MarkAsComplete => true
   | Evaluated =>
     state.evaluationCriteria |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
-  | VisitLink => !(state.linkToComplete |> UrlUtils.isInvalid(false))
   | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
+  | NoAssignment => true
   }
 
-module UpdateTargetQuery = %graphql(`
-   mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON!, $milestone: Boolean! ) {
-     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist, milestone: $milestone)    {
+module UpdateTargetAssignmentQuery = %graphql(`
+   mutation UpdateTargetAssignmentMutation($id: ID!, $targetGroupId: ID!, $title: String!, $visibility: String!, $targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean!, $archived: Boolean ) {
+     updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, visibility: $visibility)    {
         sortIndex
+       }
+     updateAssignment(targetId: $targetId, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, checklist: $checklist, milestone: $milestone, archived: $archived)    {
+        id
        }
      }
    `)
@@ -806,10 +969,13 @@ let updateTargetButton = (
   ~hasValidChecklist,
 ) => {
   let onClick = Belt.Option.map(state.targetGroupId, callback)
-  let disabled =
+  let disabled = if state.hasAssignment {
     !hasValidChecklist ||
     (!hasValidTitle ||
     (!hasValidMethodOfCompletion || (!state.dirty || (state.saving || onClick == None))))
+  } else {
+    !hasValidTitle || (!state.dirty || (state.saving || onClick == None))
+  }
 
   <button
     key="target-actions-step"
@@ -822,7 +988,7 @@ let updateTargetButton = (
 
 let quizAnswersAsJsObject = quizAnswers =>
   quizAnswers |> Array.map(qa =>
-    UpdateTargetQuery.makeInputObjectTargetQuizAnswerInput(
+    UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizAnswerInput(
       ~answer=AnswerOption.answer(qa),
       ~correctAnswer=AnswerOption.correctAnswer(qa),
       (),
@@ -831,31 +997,18 @@ let quizAnswersAsJsObject = quizAnswers =>
 
 let quizAsJsObject = quiz =>
   quiz |> Array.map(q =>
-    UpdateTargetQuery.makeInputObjectTargetQuizInput(
+    UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizInput(
       ~question=QuizQuestion.question(q),
       ~answerOptions=quizAnswersAsJsObject(QuizQuestion.answerOptions(q)),
       (),
     )
   )
 
-let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) => {
+let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateSaving)
   let id = target |> Target.id
-  let role = state.role |> TargetDetails.roleAsString
   let visibilityAsString = state.visibility |> TargetDetails.visibilityAsString
-  let quizAsJs =
-    state.quiz
-    |> Js.Array.filter(question => QuizQuestion.isValidQuizQuestion(question))
-    |> quizAsJsObject
-
-  let (quiz, evaluationCriteria, linkToComplete, checklist) = switch state.methodOfCompletion {
-  | Evaluated => ([], state.evaluationCriteria, "", state.checklist)
-  | VisitLink => ([], [], state.linkToComplete, [])
-  | TakeQuiz => (quizAsJs, [], "", [])
-  | MarkAsComplete => ([], [], "", [])
-  | SubmitForm => ([], [], "", state.checklist)
-  }
 
   let visibility = switch state.visibility {
   | Live => Target.Live
@@ -863,23 +1016,37 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   | Draft => Draft
   }
 
-  let variables = UpdateTargetQuery.makeVariables(
+  let role = state.role->AssignmentDetails.roleAsString
+  let quizAsJs =
+    state.quiz
+    |> Js.Array.filter(question => QuizQuestion.isValidQuizQuestion(question))
+    |> quizAsJsObject
+
+  let (quiz, evaluationCriteria, checklist) = switch state.methodOfCompletion {
+  | Evaluated => ([], state.evaluationCriteria, state.checklist)
+  | TakeQuiz => (quizAsJs, [], [])
+  | SubmitForm => ([], [], state.checklist)
+  | NoAssignment => ([], [], [])
+  }
+
+  let variables = UpdateTargetAssignmentQuery.makeVariables(
     ~id,
     ~targetGroupId,
     ~title=state.title,
+    ~visibility=visibilityAsString,
+    ~targetId=id,
     ~role,
     ~evaluationCriteria,
     ~prerequisiteTargets=state.prerequisiteTargets,
     ~quiz,
     ~completionInstructions=state.completionInstructions,
-    ~linkToComplete,
-    ~visibility=visibilityAsString,
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
     ~milestone=state.milestone,
+    ~archived=!state.hasAssignment,
     (),
   )
 
-  UpdateTargetQuery.make(variables)
+  UpdateTargetAssignmentQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["updateTarget"]["sortIndex"] {
     | Some(sortIndex) =>
@@ -891,6 +1058,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
           ~title=state.title,
           ~sortIndex,
           ~visibility,
+          ~hasAssignment=state.hasAssignment,
           ~milestone=state.milestone,
         ),
       )
@@ -918,14 +1086,13 @@ let make = (
     {
       title: "",
       targetGroupId: None,
-      role: TargetDetails.Student,
+      role: AssignmentDetails.Student,
       evaluationCriteria: [],
       evaluationCriteriaSearchInput: "",
       prerequisiteTargets: [],
       prerequisiteSearchInput: "",
       methodOfCompletion: Evaluated,
       quiz: [],
-      linkToComplete: "",
       dirty: false,
       saving: false,
       loading: true,
@@ -934,12 +1101,15 @@ let make = (
       completionInstructions: "",
       targetGroupSearchInput: "",
       targetDetails: None,
+      assignmentDetails: None,
       milestone: false,
+      hasAssignment: false,
     },
   )
-  let targetId = target |> Target.id
+  let targetId = target->Target.id
   React.useEffect1(() => {
     loadTargetDetails(targetId, send)
+    loadAssignmentDetails(targetId, send)
     None
   }, [targetId])
 
@@ -952,192 +1122,67 @@ let make = (
   let hasValidTitle = isValidTitle(state.title)
   let hasValidMethodOfCompletion = isValidMethodOfCompletion(state)
 
-  <div className="pt-6" id="target-properties">
+  <div className="pt-6 h-full" id="target-properties">
     {state.loading
       ? <div className="max-w-3xl mx-auto px-3">
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.contents())}
         </div>
       : <DisablingCover message={ts("saving")} disabled=state.saving>
-          <div className="mt-2">
-            <div className="max-w-3xl mx-auto px-3">
-              <div className="mb-6">
-                <label
-                  className="items-center inline-block tracking-wide text-sm font-semibold mb-2"
-                  htmlFor="title">
-                  <span className="me-2">
-                    <i className="fas fa-list rtl:rotate-180 text-base" />
-                  </span>
-                  {t("title") |> str}
-                </label>
-                <div className="ms-6">
-                  <input
-                    autoFocus=true
-                    className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-                    id="title"
-                    type_="text"
-                    placeholder={t("target_title_placeholder")}
-                    onChange={updateTitle(send)}
-                    value=state.title
-                  />
-                  <School__InputGroupError
-                    message={t("enter_valid_title")} active={!hasValidTitle}
-                  />
+          <div className="mt-2 min-h-screen flex flex-col justify-between ">
+            <div className="max-w-3xl w-full mx-auto px-3">
+              <div>
+                <div className="mb-6">
+                  <label
+                    className="items-center inline-block tracking-wide text-sm font-semibold mb-2"
+                    htmlFor="title">
+                    <span className="me-2">
+                      <i className="fas fa-list rtl:rotate-180 text-base" />
+                    </span>
+                    {t("title") |> str}
+                  </label>
+                  <div className="ms-6">
+                    <input
+                      autoFocus=true
+                      className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                      id="title"
+                      type_="text"
+                      placeholder={t("target_title_placeholder")}
+                      onChange={updateTitle(send)}
+                      value=state.title
+                    />
+                    <School__InputGroupError
+                      message={t("enter_valid_title")} active={!hasValidTitle}
+                    />
+                  </div>
                 </div>
+                {targetGroupEditor(state, targetGroups, levels, send)}
               </div>
-              {targetGroupEditor(state, targetGroups, levels, send)}
               <div className="flex items-center mb-6">
                 <label
-                  className="block tracking-wide text-sm font-semibold me-1" htmlFor="milestone">
+                  className="block tracking-wide text-sm font-semibold me-6"
+                  htmlFor="has_assignment">
                   <span className="me-2">
                     <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
-                  {t("target_setting_milestone.label")->str}
+                  {t("target_has_assignment") |> str}
                 </label>
-                <HelpIcon link={t("target_setting_milestone.help_url")} className="me-6">
-                  {t("target_setting_milestone.help") |> str}
-                </HelpIcon>
-                <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
+                <div id="has_assignment" className="flex toggle-button__group shrink-0 rounded-lg">
                   <button
-                    onClick={updateMilestone(true, send)}
-                    className={booleanButtonClasses(state.milestone)}>
+                    onClick={updateHasAssignment(true, send)}
+                    className={booleanButtonClasses(state.hasAssignment)}>
                     {ts("_yes") |> str}
                   </button>
                   <button
-                    onClick={updateMilestone(false, send)}
-                    className={booleanButtonClasses(!state.milestone)}>
+                    onClick={updateHasAssignment(false, send)}
+                    className={booleanButtonClasses(!state.hasAssignment)}>
                     {ts("_no") |> str}
                   </button>
                 </div>
               </div>
-              {prerequisiteTargetEditor(
-                send,
-                eligiblePrerequisiteTargets(targetId, targets),
-                state,
-              )}
-              <div className="flex items-center mb-6">
-                <label
-                  className="block tracking-wide text-sm font-semibold me-6" htmlFor="evaluated">
-                  <span className="me-2">
-                    <i className="fas fa-list rtl:rotate-180 text-base" />
-                  </span>
-                  {t("target_reviewed_by_coach") |> str}
-                </label>
-                <div id="evaluated" className="flex toggle-button__group shrink-0 rounded-lg">
-                  <button
-                    onClick={updateMethodOfCompletion(Evaluated, send)}
-                    className={booleanButtonClasses(targetEvaluated(state.methodOfCompletion))}>
-                    {ts("_yes") |> str}
-                  </button>
-                  <button
-                    onClick={updateMethodOfCompletion(MarkAsComplete, send)}
-                    className={booleanButtonClasses(!targetEvaluated(state.methodOfCompletion))}>
-                    {ts("_no") |> str}
-                  </button>
-                </div>
-              </div>
-              {switch state.methodOfCompletion {
-              | Evaluated => formEditor(state, send)
-              | VisitLink
-              | TakeQuiz
-              | SubmitForm
-              | MarkAsComplete => React.null
+              {switch state.hasAssignment {
+              | false => React.null
+              | true => assignmentEditor(state, send, target, targets, evaluationCriteria)
               }}
-              {targetEvaluated(state.methodOfCompletion)
-                ? React.null
-                : methodOfCompletionSelector(state, send)}
-              {switch state.methodOfCompletion {
-              | Evaluated => evaluationCriteriaEditor(state, evaluationCriteria, send)
-              | MarkAsComplete => React.null
-              | TakeQuiz => quizEditor(state, send)
-              | VisitLink => linkEditor(state, send)
-              | SubmitForm => formEditor(state, send)
-              }}
-              <div className="mb-6">
-                <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
-                  <span className="me-2">
-                    <i className="fas fa-list rtl:rotate-180 text-base" />
-                  </span>
-                  {t("target_role.label") |> str}
-                </label>
-                <HelpIcon className="ms-1" link={t("target_role.help_url")}>
-                  {t("target_role.help") |> str}
-                </HelpIcon>
-                <div id="role" className="flex mt-4 ms-6">
-                  <button
-                    onClick={updateTargetRole(TargetDetails.Student, send)}
-                    className={"me-4 " ++
-                    targetRoleClasses(
-                      switch state.role {
-                      | TargetDetails.Student => true
-                      | Team => false
-                      },
-                    )}>
-                    <span className="me-4">
-                      <Icon className="if i-users-check-light text-3xl" />
-                    </span>
-                    <span className="text-sm"> {t("submit_individually") |> str} </span>
-                  </button>
-                  <button
-                    onClick={updateTargetRole(TargetDetails.Team, send)}
-                    className={targetRoleClasses(
-                      switch state.role {
-                      | TargetDetails.Team => true
-                      | Student => false
-                      },
-                    )}>
-                    <span className="me-4">
-                      <Icon className="if i-user-check-light text-2xl" />
-                    </span>
-                    <span className="text-sm">
-                      {t("one_student_team") |> str} <br /> {t("need_submit") |> str}
-                    </span>
-                  </button>
-                </div>
-              </div>
-              <div className="mb-6">
-                <label
-                  className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
-                  <span className="me-2">
-                    <i className="fas fa-list rtl:rotate-180 text-base" />
-                  </span>
-                  {t("github_action.title")->str}
-                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces")->str} </span>
-                </label>
-                <HelpIcon link={t("github_action.help_url")} className="ms-1">
-                  {t("github_action.help_description")->str}
-                </HelpIcon>
-                <div className="ms-6 mt-4">
-                  <a
-                    href={`/school/targets/${Target.id(target)}/action`}
-                    className="btn btn-subtle flex max-w-min gap-3">
-                    <PfIcon className="if i-external-link-light if-fw" />
-                    {t("github_action.button_text")->str}
-                  </a>
-                </div>
-              </div>
-              <div className="mb-6">
-                <label
-                  className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
-                  <span className="me-2">
-                    <i className="fas fa-list rtl:rotate-180 text-base" />
-                  </span>
-                  {t("completion_instructions.label") |> str}
-                  <span className="ms-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
-                </label>
-                <HelpIcon link={t("completion_instructions.help_url")} className="ms-1">
-                  {t("completion_instructions.help") |> str}
-                </HelpIcon>
-                <div className="ms-6">
-                  <input
-                    className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-                    id="completion-instructions"
-                    type_="text"
-                    maxLength=255
-                    value=state.completionInstructions
-                    onChange={updateCompletionInstructions(send)}
-                  />
-                </div>
-              </div>
             </div>
             <div className="bg-white border-t sticky bottom-0 py-5">
               <div className="flex max-w-3xl mx-auto px-3 justify-between items-center">
@@ -1175,7 +1220,7 @@ let make = (
                 </div>
                 <div className="w-auto">
                   {updateTargetButton(
-                    ~callback=updateTarget(target, state, send, updateTargetCB),
+                    ~callback=updateTargetAssignment(target, state, send, updateTargetCB),
                     ~state,
                     ~hasValidTitle,
                     ~hasValidMethodOfCompletion,

@@ -495,7 +495,7 @@ let make = (~courseId) => {
                     onClick={_event => clearFile(send, "csv-file-input")}
                     className="file-input-label mt-2"
                     htmlFor="csv-file-input">
-                    <i className="fas fa-upload me-2 text-gray-600 text-lg" />
+                    <i className="fas fa-upload me-2 text-primary-300 text-lg" />
                     <span className="truncate">
                       {fileInputText(~fileInfo=state.fileInfo)->str}
                     </span>
@@ -532,8 +532,8 @@ let make = (~courseId) => {
               />
             </div>}
           </div>
-          <div className="flex justify-end px-6 pb-6 mx-auto">
-            <button disabled={saveDisabled(state)} className="w-auto btn btn-success">
+          <div className="flex pb-6 mx-auto">
+            <button disabled={saveDisabled(state)} className="w-auto btn btn-primary">
               {t("import_button_text")->str}
             </button>
           </div>

@@ -1,16 +1,14 @@
 class RemoveArchivedAssignmentPrerequisites < ActiveRecord::Migration[7.0]
   def up
-    # delete all prerequisite records where the prerequisites have been archived
-    AssignmentsPrerequisiteAssignment
-      .joins(:prerequisite_assignment)
-      .where("assignments.archived = ?", true)
-      .delete_all
-
-    # delete all prerequisite records for the assignments that have been archived
-    AssignmentsPrerequisiteAssignment
-      .joins(:assignment)
-      .where("assignments.archived = ?", true)
-      .delete_all
+      archived_assignments = Assignment.where(archived: true)
+      AssignmentsPrerequisiteAssignment
+        .where(prerequisite_assignment: archived_assignments)
+        .or(
+          AssignmentsPrerequisiteAssignment.where(
+            assignment: archived_assignments
+          )
+        )
+        .delete_all
   end
 
   def down

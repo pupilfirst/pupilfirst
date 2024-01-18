@@ -492,8 +492,6 @@ ar:
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
-    CourseResourcesFilter:
-      filter_resources: تصفية الموارد
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -510,6 +508,8 @@ ar:
           active: Active
           archived: Archived
           ended: Ended
+    CourseResourcesFilter:
+      filter_resources: تصفية الموارد
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -759,16 +759,16 @@ ar:
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
       level_acronym: L
-      note_help: هل ترغب في كتابة ملاحظة حول %{noteAbout} هذا؟
+      note_help: "هل ترغب في كتابة ملاحظة حول %{noteAbout} هذا؟"
       note_placeholder: Did you notice something while reviewing this submission?
       remove_assignment: Remove assignment
       report_description: Test Report
       report_status_string:
         error: Automated tests could not complete due to errors
         failure: Some automated tests failed
+        success: All automated tests succeeded
         in_progress: Automated tests are in progress
         queued: Automated tests are queued
-        success: All automated tests succeeded
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -931,11 +931,11 @@ ar:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
+      hide_archived: إخفاء المؤرشف
+      show_archived: إظهار المؤرشف
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
-      hide_archived: إخفاء المؤرشف
-      show_archived: إظهار المؤرشف
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: Please select a file with a size less than 10 MB.
       button_labels:
@@ -1328,14 +1328,14 @@ ar:
       close_community_editor: Close Community Editor
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
     SchoolCustomize__AgreementsEditor:
+      updating: جارٍ التحديث ...
+      update: " تحديث"
       agreement_body: Body of Agreement
       agreement_placeholder: Leave the agreement body empty to hide the footer link.
       manage: Manage
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
-      update: " تحديث"
       updated_notification: has been updated.
-      updating: جارٍ التحديث ...
     SchoolCustomize__ContactsEditor:
       address_placeholder: Leave the address empty to hide the footer section.
       contact_address: Contact Address
@@ -1958,6 +1958,13 @@ ar:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
+    something_went_wrong: هناك خطأ ما!
+    vimeo:
+      2230: نوع التحميل غير صالح.
+      4003: هناك مشكلة في بدء التحميل.
+      4101: لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
+      4102: لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
+      4104: لقد تم الوصول إلى الحصة اليومية المخصصة لك.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -1978,17 +1985,10 @@ ar:
       title: Timed out
       too_long: This page took too long to load.
       try_reloading: Could you please try reloading this page?
-    something_went_wrong: هناك خطأ ما!
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       title: Invalid Request
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-    vimeo:
-      "2230": نوع التحميل غير صالح.
-      "4003": هناك مشكلة في بدء التحميل.
-      "4101": لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
-      "4102": لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
-      "4104": لقد تم الوصول إلى الحصة اليومية المخصصة لك.
   faculty:
     index:
       coaches_at: المشرفون في
@@ -2230,8 +2230,8 @@ ar:
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
       submission_reviewed_error: Submission already reviewed
+      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
       success_notification: The submission has been marked as reviewed.
     create_post:
       reply_added_notification: Reply added successfully
@@ -2240,14 +2240,14 @@ ar:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
-    create_student_from_applicant:
-      success_notification: Student created successfully.
     create_students:
       invalid_emails: واحد أو أكثر من الإدخالات بها عنوان بريد إلكتروني غير صالح
-      invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
       soft_limit_number: لقد وصلت إلى الحد الأدنى لعدد الطلاب في هذه الدورة
-      thousand_students_limit: يمكنك فقط ضم 1000 طالب في المرة الواحدة
       unique_emails: يجب أن تكون عناوين البريد الإلكتروني فريدة
+      invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
+      thousand_students_limit: يمكنك فقط ضم 1000 طالب في المرة الواحدة
+    create_student_from_applicant:
+      success_notification: Student created successfully.
     create_submission:
       blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
       form_success_notification: Your response has been saved.
@@ -2488,7 +2488,7 @@ ar:
       certificate_error: تعذر العثور على الشهادة المحددة.
       issued_error: لقد تم بالفعل إصدار شهادة لهذا الطالب لهذه الدورة.
     update_evaluation_criterion_mutator:
-      evaluation_criterion_not_found: تعذر العثور على معيار التقييم بالمعرف %{id}
+      evaluation_criterion_not_found: "تعذر العثور على معيار التقييم بالمعرف %{id}"
   schools:
     admins:
       title: المدراء
@@ -2581,8 +2581,8 @@ ar:
       course_index:
         title: المشرفون
       school_index:
-        coach: مشرفين
         title: المشرفون
+        coach: مشرفين
     show:
       coaches: المشرفون
       courses: الدورات
@@ -2698,8 +2698,8 @@ ar:
     search: بحث
     settings: الإعدادات
     sign_out: خروج
-    sort_by: ترتيب حسب
     students: الطلاب
+    sort_by: ترتيب حسب
     tag: علامة
     tags: علامات
     target: هدف

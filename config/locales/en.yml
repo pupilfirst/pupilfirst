@@ -2701,6 +2701,7 @@ en:
     _no: "No"
     _yes: "Yes"
     admin: Admin
+    affiliation: Affiliation
     all: All
     and: and
     archived: Archived
@@ -2809,6 +2810,7 @@ en:
     team: Team
     team_name: Team Name
     teams: Teams
+    title: Title
     update: Update
     updating: Updating
     uploading: Uploading

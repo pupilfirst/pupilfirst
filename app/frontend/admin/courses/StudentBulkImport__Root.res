@@ -192,15 +192,23 @@ let tableHeader = {
   <thead>
     <tr className="bg-gray-300">
       <th className="w-12 border border-gray-400 text-xs px-2 py-1 font-semibold" />
-      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold"> {"name"->str} </th>
-      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold"> {"email"->str} </th>
-      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold"> {"title"->str} </th>
       <th className="border border-gray-400 text-xs px-2 py-1 font-semibold">
-        {"team_name"->str}
+        {ts("name")->str}
       </th>
-      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold"> {"tags"->str} </th>
       <th className="border border-gray-400 text-xs px-2 py-1 font-semibold">
-        {"affiliation"->str}
+        {ts("email")->str}
+      </th>
+      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold">
+        {ts("title")->str}
+      </th>
+      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold">
+        {ts("team_name")->str}
+      </th>
+      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold">
+        {ts("tags")->str}
+      </th>
+      <th className="border border-gray-400 text-xs px-2 py-1 font-semibold">
+        {ts("affiliation")->str}
       </th>
     </tr>
   </thead>

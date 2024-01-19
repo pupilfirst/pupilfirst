@@ -123,6 +123,18 @@ feature "Course students bulk importer", js: true do
     )
   end
 
+  scenario "admin uploads a csv with invalid template header for import" do
+    sign_in_user school_admin.user,
+                 referrer: "/school/courses/#{course.id}/students/import"
+
+    # file with a invalid field name in header
+    attach_csv_file("student_import_wrong_header.csv")
+
+    expect(page).to have_text(
+      "The selected CSV file does not have a valid template"
+    )
+  end
+
   scenario "admin uploads a file that is not valid CSV" do
     sign_in_user school_admin.user,
                  referrer: "/school/courses/#{course.id}/students/import"

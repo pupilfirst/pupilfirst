@@ -4,8 +4,8 @@ let tr = I18n.t(~scope="components.CoursesCurriculum__Reactions")
 open CoursesCurriculum__Types
 
 module CreateReactionMutation = %graphql(`
-   mutation CreateReactionMutation($reactionValue: String!, $submissionId: String!, $commentId: String ) {
-     createReaction(reactionValue: $reactionValue, submissionId: $submissionId, commentId: $commentId ) {
+   mutation CreateReactionMutation($reactionValue: String!, $reactionableId: String!, $reactionableType: String! ) {
+     createReaction(reactionValue: $reactionValue, reactionableId: $reactionableId, reactionableType: $reactionableType ) {
        reaction {
          id
          reactionValue
@@ -32,13 +32,11 @@ let groupByReaction = reactions => {
 }
 
 @react.component
-let make = (~submission, ~reactions) => {
+let make = (~reactionableType, ~reactionableId, ~reactions) => {
   let (reactions, setReactions) = React.useState(() => reactions)
-  let handleCreateReaction = (submissionId, reactionValue, event) => {
-    Js.log(reactionValue)
-    ReactEvent.Mouse.preventDefault(event)
-    let commentId = Some("")
-    CreateReactionMutation.make({reactionValue, submissionId, commentId})
+
+  let handleCreateReaction = reactionValue => {
+    CreateReactionMutation.make({reactionValue, reactionableId, reactionableType})
     |> Js.Promise.then_(response => {
       switch response["createReaction"]["reaction"] {
       | Some(reaction) => setReactions(reactions => Js.Array2.concat([reaction], reactions))
@@ -48,18 +46,34 @@ let make = (~submission, ~reactions) => {
     })
     |> ignore
   }
+
+  let handleAddExistingEmoji = (reactionValue, event) => {
+    ReactEvent.Mouse.preventDefault(event)
+    handleCreateReaction(reactionValue)
+  }
+
+  let handleAddNewEmoji = (e: EmojiPicker.emojiEvent) => {
+    handleCreateReaction(e.native)
+  }
+
   let aggregatedReactions = groupByReaction(reactions)
   let buttons = []
-  <div>
+  let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
+  <div className="bg-white border border-gray-300 rounded-t border-b-0">
     {
       aggregatedReactions->Belt.Map.String.forEach((reactionValue, count) => {
         let buttonElement =
-          <button onClick={handleCreateReaction(submission->Submission.id, reactionValue)}>
+          <button onClick={handleAddExistingEmoji(reactionValue)}>
             {(reactionValue ++ Belt.Int.toString(count))->str}
           </button>
         buttons->Belt.Array.push(buttonElement)
       })
       React.array(buttons)
     }
+    <EmojiPicker
+      onChange={handleAddNewEmoji}
+      className={buttonClasses ++ "border-s border-gray-400 hidden md:block"}
+      title={tr("emoji_picker")}
+    />
   </div>
 }

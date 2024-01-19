@@ -7224,7 +7224,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "submissionId",
+                  "name": "reactionableId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -7240,12 +7240,16 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "commentId",
+                  "name": "reactionableType",
                   "description": null,
                   "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -16031,6 +16035,32 @@
                   "kind": "SCALAR",
                   "name": "ID",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reactions",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Reaction",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,

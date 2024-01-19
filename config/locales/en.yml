@@ -586,6 +586,8 @@ en:
       next_question: Next Question
       question: Question
       submit_quiz: Submit Quiz
+    CoursesCurriculum__Reactions:
+      emoji_picker: Emoji
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching
@@ -597,7 +599,7 @@ en:
       submit: Submit
       submitting: Submitting
       submit_anonymous_label: Submit anonymously
-    CoursesCurriculum__SubmissionCommentsAndReactions:
+    CoursesCurriculum__SubmissionComments:
       comment: Comment
       hide_comments: Hide Comments
       view_comments: View Comments

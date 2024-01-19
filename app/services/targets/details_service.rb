@@ -171,8 +171,17 @@ module Targets
     end
 
     def comments_for_submissions
+      #TODO - clean up this code using the list of attributes
+      reaction_attributes = [
+        :id,
+        :reactionable_id,
+        :reactionable_type,
+        :reaction_value,
+        :updated_at,
+        "users.name"
+      ]
       SubmissionComment
-        .includes(:user)
+        .includes(:user, :reactions)
         .where(timeline_event_id: submissions.pluck(:id))
         .map do |comment|
           {
@@ -180,6 +189,21 @@ module Targets
             user_name: comment.user.name,
             submission_id: comment.timeline_event_id,
             comment: comment.comment,
+            reactions:
+              comment
+                .reactions
+                .includes(:user)
+                .pluck(*reaction_attributes)
+                .map do |id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
+                  {
+                    id: id,
+                    reactionable_id: reactionable_id,
+                    reactionable_type: reactionable_type,
+                    reaction_value: reaction_value,
+                    updated_at: updated_at,
+                    user_name: user_name
+                  }
+                end,
             updated_at: comment.updated_at
           }
         end

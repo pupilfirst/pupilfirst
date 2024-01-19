@@ -1,5 +1,5 @@
 let str = React.string
-let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionCommentsAndReactions")
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionComments")
 
 open CoursesCurriculum__Types
 
@@ -22,7 +22,7 @@ let toggleComments = (setShowComments, event) => {
 }
 
 @react.component
-let make = (~submission, ~comments, ~reactions) => {
+let make = (~submission, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
   let (showComments, setShowComments) = React.useState(() => false)
   let (newComment, setNewComment) = React.useState(() => "")
@@ -46,12 +46,6 @@ let make = (~submission, ~comments, ~reactions) => {
 
   <div>
     <div className="max-w-3xl flex items-center justify-between mx-auto">
-      <div className="flex">
-        <div>
-          <button onClick={toggleComments(setShowComments)}> {"Comment"->str} </button>
-        </div>
-        <CoursesCurriculum__Reactions submission reactions />
-      </div>
       <div>
         <button onClick={toggleComments(setShowComments)}>
           {switch showComments {
@@ -80,6 +74,9 @@ let make = (~submission, ~comments, ~reactions) => {
         </div>
         {submissionComments
         ->Js.Array2.map(comment => {
+          let reactions = comment->Comment.reactions
+          let reactionableType = "SubmissionComment"
+          let reactionableId = comment->Comment.id
           <div className="bg-white border-t p-4 md:p-6" key={comment->Comment.id}>
             <div className="flex items-center">
               // <div
@@ -98,6 +95,7 @@ let make = (~submission, ~comments, ~reactions) => {
             <MarkdownBlock
               profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
             />
+            <CoursesCurriculum__Reactions reactionableType reactionableId reactions />
           </div>
         })
         ->React.array}

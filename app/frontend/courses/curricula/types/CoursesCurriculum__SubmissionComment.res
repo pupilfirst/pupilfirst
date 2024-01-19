@@ -5,6 +5,7 @@ type t = {
   userName: string,
   submissionId: string,
   comment: string,
+  reactions: array<CoursesCurriculum__Reaction.t>,
   updatedAt: Js.Date.t,
 }
 
@@ -12,6 +13,7 @@ let id = t => t.id
 let userName = t => t.userName
 let submissionId = t => t.submissionId
 let comment = t => t.comment
+let reactions = t => t.reactions
 let updatedAt = t => t.updatedAt
 
 let decode = json => {
@@ -21,6 +23,7 @@ let decode = json => {
     userName: json |> field("userName", string),
     submissionId: json |> field("submissionId", string),
     comment: json |> field("comment", string),
+    reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
     updatedAt: json |> field("updatedAt", DateFns.decodeISO),
   }
 }

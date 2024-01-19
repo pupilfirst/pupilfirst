@@ -85,9 +85,18 @@ let onParseComplete = (send, results, file) => {
     name: file["name"],
   }
 
+  let expectedHeaders = ["name", "email", "title", "teamName", "tags", "affiliation"]
+
+  let hasExpectedHeaders = switch results["meta"]["fields"] {
+  | Some(actualHeaders) => Belt.Array.eq(expectedHeaders, actualHeaders, (a, b) => a == b)
+  | None => false
+  }
+
   if ArrayUtils.isNotEmpty(results["errors"]) {
     let errorMessage = CSVParser.errorMessage(results["errors"][0])
     send(UpdateFileInvalid(Some(ParseError(errorMessage))))
+  } else if !hasExpectedHeaders {
+    send(UpdateFileInvalid(Some(InvalidTemplate)))
   } else {
     send(LoadCSVData(results["data"], fileInfo))
   }

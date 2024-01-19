@@ -152,6 +152,8 @@ feature "Course students bulk importer", js: true do
       "Name column can't be blank and should be within 250 characters"
     )
     expect(page).to have_text("Email has to be valid and can't be blank")
+    expect(page).to have_text("Team name has to be less than 50 characters")
+
     expect(page).to have_text(
       "Name column contains one or more invalid characters"
     )

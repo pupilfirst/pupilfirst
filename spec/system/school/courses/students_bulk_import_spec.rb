@@ -152,6 +152,12 @@ feature "Course students bulk importer", js: true do
       "Name column can't be blank and should be within 250 characters"
     )
     expect(page).to have_text("Email has to be valid and can't be blank")
+    expect(page).to have_text(
+      "Name column contains one or more invalid characters"
+    )
+    expect(page).to have_text(
+      "Tags column contains one or more invalid characters"
+    )
   end
 
   context "import list has a student that already exists" do

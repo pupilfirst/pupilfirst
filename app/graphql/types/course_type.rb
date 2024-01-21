@@ -18,6 +18,7 @@ module Types
     field :cover, Types::ImageType, null: true
     field :featured, Boolean, null: false
     field :progression_limit, Integer, null: false
+    field :sort_index, Integer, null: false
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :highlights, [Types::CourseHighlightType], null: false
     field :processing_url, String, null: true

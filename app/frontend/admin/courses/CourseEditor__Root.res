@@ -39,6 +39,14 @@ module CoursesQuery = %graphql(`
   }
   `)
 
+module MoveCourseQuery = %graphql(`
+  mutation MoveCourseMutation($id: ID!,$direction: MoveDirection!) {
+    moveCourse(id:$id,direction:$direction) {
+      success
+    }
+  }
+  `)
+
 module Item = {
   type t = Course.t
 }
@@ -69,6 +77,22 @@ type state = {
   schoolStats: schoolStats,
 }
 
+let initialState = () => {
+  {
+    courses: Pagination.Unloaded,
+    totalEntriesCount: 0,
+    loading: LoadingV2.empty(),
+    filterString: "",
+    filter: {
+      name: None,
+      status: Some(#Active),
+    },
+    reloadCourses: false,
+    selectedCourse: None,
+    schoolStats: Unloaded,
+  }
+}
+
 type action =
   | SetSearchString(string)
   | UnsetSearchString
@@ -83,6 +107,7 @@ type action =
   | UpdateCourse(Course.t)
   | LoadCourses(option<string>, bool, array<Course.t>, int, option<schoolStats>)
   | UpdateSelectedCourse(option<Course.t>)
+  | ReorderCourses(array<Course.t>)
 
 let reducer = (state, action) =>
   switch action {
@@ -162,48 +187,8 @@ let reducer = (state, action) =>
   | UpdateCourse(course) =>
     let newCourses = Pagination.update(state.courses, Course.updateList(course))
     {...state, courses: newCourses}
+  | ReorderCourses(newCourses) => {...state, courses: Pagination.FullyLoaded(newCourses)}
   }
-
-let updateCourse = (send, course) => {
-  RescriptReactRouter.push("/school/courses/")
-  send(UpdateCourse(course))
-}
-
-let courseLink = (href, title, icon) =>
-  <a
-    key=href
-    href
-    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-    <i className=icon />
-    <span className="font-semibold ms-2"> {title->str} </span>
-  </a>
-
-let courseLinks = course => {
-  let baseUrl = "/school/courses/" ++ Course.id(course)
-  [
-    courseLink(
-      "/courses/" ++ Course.id(course) ++ "/curriculum",
-      t("course_links.view_as_student"),
-      "fas fa-eye",
-    ),
-    courseLink(
-      baseUrl ++ "/curriculum",
-      t("course_links.edit_curriculum"),
-      "fas fa-fw fa-check-square",
-    ),
-    courseLink(
-      baseUrl ++ "/students",
-      t("course_links.manage_students"),
-      "fas fa-fw fa-users fa-fw",
-    ),
-    courseLink(baseUrl ++ "/coaches", t("course_links.manage_coaches"), "fas fa-fw fa-user fa-fw"),
-    courseLink(
-      baseUrl ++ "/exports",
-      t("course_links.download_reports"),
-      "fas fa-fw fa-file fa-fw",
-    ),
-  ]
-}
 
 let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => {
   let variables = CoursesQuery.makeVariables(
@@ -245,6 +230,71 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
     Js.Promise.resolve()
   })
   |> ignore
+}
+
+let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) => {
+  let id = Course.id(course)
+  MoveCourseQuery.fetch(
+    ~notify=false,
+    {
+      id,
+      direction: switch direction {
+      | Up => #Up
+      | Down => #Down
+      },
+    },
+  )
+  |> Js.Promise.then_(_ => {
+    let index = Js.Array.indexOf(course, Pagination.toArray(state.courses))
+    let newCourses =
+      direction == Up
+        ? ArrayUtils.swapUp(index, Pagination.toArray(state.courses))
+        : ArrayUtils.swapDown(index, Pagination.toArray(state.courses))
+    send(ReorderCourses(newCourses))
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let updateCourse = (send, course) => {
+  RescriptReactRouter.push("/school/courses/")
+  send(UpdateCourse(course))
+}
+
+let courseLink = (href, title, icon) =>
+  <a
+    key=href
+    href
+    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
+    <i className=icon />
+    <span className="font-semibold ms-2"> {title->str} </span>
+  </a>
+
+let courseLinks = course => {
+  let baseUrl = "/school/courses/" ++ Course.id(course)
+  [
+    courseLink(
+      "/courses/" ++ Course.id(course) ++ "/curriculum",
+      t("course_links.view_as_student"),
+      "fas fa-eye",
+    ),
+    courseLink(
+      baseUrl ++ "/curriculum",
+      t("course_links.edit_curriculum"),
+      "fas fa-fw fa-check-square",
+    ),
+    courseLink(
+      baseUrl ++ "/students",
+      t("course_links.manage_students"),
+      "fas fa-fw fa-users fa-fw",
+    ),
+    courseLink(baseUrl ++ "/coaches", t("course_links.manage_coaches"), "fas fa-fw fa-user fa-fw"),
+    courseLink(
+      baseUrl ++ "/exports",
+      t("course_links.download_reports"),
+      "fas fa-fw fa-file fa-fw",
+    ),
+  ]
 }
 
 module Selectable = {
@@ -358,39 +408,51 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 
 let dropdownSelected =
   <button
-    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-100 appearance-none flex items-center justify-between hover:bg-gray-800 md:hover:bg-gray-50 hover:text-gray-50 focus:bg-gray-50 md:hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
+    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-100 appearance-none flex items-center justify-between hover:bg-gray-800 md:hover:bg-gray-50 hover:text-gray-50 focus:bg-gray-50 md:hover:text-primary-500 focus:outline-none focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
     <span> {str(t("quick_links"))} </span>
     <i className="fas fa-chevron-down text-xs ms-3 font-semibold" />
   </button>
-
-let showCourse = course => {
+let showCourse = (course, index, state, send) => {
   <Spread key={Course.id(course)} props={"data-t": Course.name(course)}>
-    <div className="w-full relative">
-      <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
-        <div>
-          <div className="relative">
-            <div className="relative pb-1/2 bg-gray-800 rounded-t-lg z-0">
-              {switch Course.thumbnail(course) {
-              | Some(image) =>
-                <img
-                  className="absolute h-full w-full object-cover rounded-t-lg"
-                  src={Course.imageUrl(image)}
-                />
-              | None =>
-                <div
-                  className="course-editor-course__cover rounded-t-lg absolute h-full w-full svg-bg-pattern-1"
-                />
-              }}
+    <div className="w-full relative mb-8">
+      <div className="flex flex-row shadow bg-white rounded-lg">
+        <div className="flex flex-col bg-gray-100">
+          <button
+            ariaLabel={t("move_up")}
+            title={t("move_up")}
+            disabled={index == 0}
+            onClick={e => handleMoveCourse(~course, ~direction=Up, ~send, ~state)}
+            className={"p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500"}>
+            <FaIcon classes="fas fa-arrow-up" />
+          </button>
+          <button
+            ariaLabel={t("move_down")}
+            title={t("move_down")}
+            onClick={e => handleMoveCourse(~course, ~direction=Down, ~send, ~state)}
+            disabled={index == state.totalEntriesCount - 1}
+            className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
+            <FaIcon classes="fas fa-arrow-down" />
+          </button>
+        </div>
+        <div className="flex flex-col w-1/2 mr-8">
+          {switch Course.thumbnail(course) {
+          | Some(image) =>
+            <img className="h-full object-cover rounded-lg" src={Course.imageUrl(image)} />
+          | None =>
+            <div
+              className="course-editor-course__cover rounded-lg h-full w-full svg-bg-pattern-1"
+            />
+          }}
+        </div>
+        <div className="flex flex-col w-1/2">
+          <div className="flex gap-2 border-b border-gray-200" key={Course.id(course)}>
+            <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+              <PfIcon className="if i-book-solid if-fw text-primary-400" />
             </div>
-            <div className="flex gap-2 border-b border-gray-200" key={Course.id(course)}>
-              <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
-                <PfIcon className="if i-book-solid if-fw text-primary-400" />
-              </div>
-              <h4
-                className="w-full text-gray-900 font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
-                {str(Course.name(course))}
-              </h4>
-            </div>
+            <h4
+              className="w-full text-gray-900 font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
+              {str(Course.name(course))}
+            </h4>
           </div>
           {ReactUtils.nullIf(
             <div className="px-4 pt-4">
@@ -406,74 +468,74 @@ let showCourse = course => {
             Belt.Option.isSome(Course.archivedAt(course)),
           )}
           <p className="text-sm px-4 py-2 text-gray-600"> {str(Course.description(course))} </p>
-        </div>
-        <div className="grid grid-cols-3 py-4 divide-x rtl:divide-x-reverse divide-gray-300">
-          <Spread props={"data-t": `${Course.name(course)} cohorts count`}>
-            <div className="flex-1 px-4">
-              <p className="text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
-              <p className="mt-1 text-lg font-semibold">
-                {Course.cohortsCount(course)->string_of_int->str}
-              </p>
-            </div>
-          </Spread>
-          <Spread props={"data-t": `${Course.name(course)} coaches count`}>
-            <div className="flex-1 px-4">
-              <p className="text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
-              <p className="mt-1 text-lg font-semibold">
-                {Course.coachesCount(course)->string_of_int->str}
-              </p>
-            </div>
-          </Spread>
-          <Spread props={"data-t": `${Course.name(course)} levels count`}>
-            <div className="flex-1 px-4">
-              <p className="pe-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
-              <p className="mt-1 text-lg font-semibold">
-                {Course.levelsCount(course)->string_of_int->str}
-              </p>
-            </div>
-          </Spread>
-        </div>
-        {ReactUtils.nullIf(
-          <div className="px-4">
-            <Dropdown
-              className="col-span-2 w-full"
-              selected={dropdownSelected}
-              contents={courseLinks(course)}
-            />
-          </div>,
-          Belt.Option.isSome(Course.archivedAt(course)),
-        )}
-        <div className="grid grid-cols-6 gap-4 p-4">
-          <a
-            title={"View Course"}
-            className="col-span-3 btn btn-primary px-4 py-2 bg-primary-50 rounded text-sm cursor-pointer"
-            href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}>
-            <div>
-              <FaIcon classes="far fa-edit me-3" />
-              <span className="font-semibold"> {str(t("course_links.edit_curriculum"))} </span>
-            </div>
-          </a>
-          <button
-            title={ts("edit") ++ " " ++ Course.name(course)}
-            className="col-span-3 btn btn-default px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"
-            onClick={_ =>
-              RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
-            <div>
-              <FaIcon classes="far fa-edit me-3" />
-              <span className="font-semibold"> {str(t("edit_course_details"))} </span>
-            </div>
-          </button>
+          <div className="grid grid-cols-3 py-4 divide-x rtl:divide-x-reverse divide-gray-300">
+            <Spread props={"data-t": `${Course.name(course)} cohorts count`}>
+              <div className="flex-1 px-4">
+                <p className="text-sm text-gray-500 font-medium"> {ts("cohorts")->str} </p>
+                <p className="mt-1 text-lg font-semibold">
+                  {Course.cohortsCount(course)->string_of_int->str}
+                </p>
+              </div>
+            </Spread>
+            <Spread props={"data-t": `${Course.name(course)} coaches count`}>
+              <div className="flex-1 px-4">
+                <p className="text-sm text-gray-500 font-medium"> {ts("coaches")->str} </p>
+                <p className="mt-1 text-lg font-semibold">
+                  {Course.coachesCount(course)->string_of_int->str}
+                </p>
+              </div>
+            </Spread>
+            <Spread props={"data-t": `${Course.name(course)} levels count`}>
+              <div className="flex-1 px-4">
+                <p className="pe-6 text-sm text-gray-500 font-medium"> {ts("levels")->str} </p>
+                <p className="mt-1 text-lg font-semibold">
+                  {Course.levelsCount(course)->string_of_int->str}
+                </p>
+              </div>
+            </Spread>
+          </div>
+          {ReactUtils.nullIf(
+            <div className="px-4">
+              <Dropdown
+                className="col-span-2 w-full"
+                selected={dropdownSelected}
+                contents={courseLinks(course)}
+              />
+            </div>,
+            Belt.Option.isSome(Course.archivedAt(course)),
+          )}
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 p-4">
+            <a
+              title={"View Course"}
+              className="btn btn-primary px-4 py-2 bg-primary-50 rounded text-sm cursor-pointer"
+              href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}>
+              <div>
+                <FaIcon classes="far fa-edit me-3" />
+                <span className="font-semibold"> {str(t("course_links.edit_curriculum"))} </span>
+              </div>
+            </a>
+            <button
+              title={ts("edit") ++ " " ++ Course.name(course)}
+              className="btn btn-default px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"
+              onClick={_ =>
+                RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
+              <div>
+                <FaIcon classes="far fa-edit me-3" />
+                <span className="font-semibold"> {str(t("edit_course_details"))} </span>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </Spread>
 }
 
-let showCourses = (courses, state) => {
+let showCourses = (courses, state, send) => {
   <div className="w-full">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+    <div className="flex flex-col mt-8">
       <div
-        className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg p-4 text-center grid place-items-center">
+        className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg mb-8 text-center">
         <EmptyState
           title={t("add_new_course")}
           description={t("create_description")}
@@ -485,10 +547,10 @@ let showCourses = (courses, state) => {
             <PfIcon className="if i-plus-circle-regular if-fw" />
             <span className="font-semibold ms-1"> {str(t("add_new_course"))} </span>
           </button>}
-          image={<img src={addNewCourseSVG} />}
+          image={<img src={addNewCourseSVG} className="h-50" />}
         />
       </div>
-      {courses->Js.Array2.map(showCourse)->React.array}
+      {courses->Js.Array2.mapi( (course, index) => showCourse(course, index, state, send))->React.array}
     </div>
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>
@@ -517,22 +579,7 @@ let raiseUnsafeFindError = id => {
 
 @react.component
 let make = (~school) => {
-  let (state, send) = React.useReducer(
-    reducer,
-    {
-      courses: Pagination.Unloaded,
-      totalEntriesCount: 0,
-      loading: LoadingV2.empty(),
-      filterString: "",
-      filter: {
-        name: None,
-        status: Some(#Active),
-      },
-      reloadCourses: false,
-      selectedCourse: None,
-      schoolStats: Unloaded,
-    },
-  )
+  let (state, send) = React.useReducer(reducer, initialState())
 
   let url = RescriptReactRouter.useUrl()
 
@@ -691,7 +738,7 @@ let make = (~school) => {
           </div>
         | PartiallyLoaded(courses, cursor) =>
           <div>
-            {showCourses(courses, state)}
+            {showCourses(courses, state, send)}
             {switch state.loading {
             | LoadingMore =>
               <div className="px-2 lg:px-5">
@@ -715,7 +762,7 @@ let make = (~school) => {
               )
             }}
           </div>
-        | FullyLoaded(courses) => <div> {showCourses(courses, state)} </div>
+        | FullyLoaded(courses) => <div> {showCourses(courses, state, send)} </div>
         }}
       </div>
       {Pagination.showLoading(state.courses, state.loading)}

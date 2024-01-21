@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_08_150948) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -271,6 +271,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
     t.bigint "default_cohort_id"
     t.boolean "discord_account_required", default: false
     t.integer "github_team_id"
+    t.integer "sort_index", default: 0
     t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
@@ -527,8 +528,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_123723) do
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
     t.bigint "target_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
     t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true

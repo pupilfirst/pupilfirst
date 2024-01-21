@@ -41,6 +41,7 @@ class Course < ApplicationRecord
   has_one_attached :thumbnail
   has_one_attached :cover
 
+  default_scope { order(sort_index: :asc) }
   scope :featured, -> { where(featured: true) }
   scope :live, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }

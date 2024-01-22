@@ -89,7 +89,7 @@ module Cohorts
                optional: true
              ) &&
              valid_string?(
-               string: r["teamName"],
+               string: r["team_name"],
                max_length: 50,
                optional: true
              )

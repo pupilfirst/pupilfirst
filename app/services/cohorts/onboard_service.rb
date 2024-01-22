@@ -17,7 +17,7 @@ module Cohorts
               title: row["title"],
               affiliation: row["affiliation"],
               tags: tags,
-              team_name: row["teamName"]
+              team_name: row["team_name"]
             )
           end
 

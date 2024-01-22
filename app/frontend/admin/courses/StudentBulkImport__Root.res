@@ -85,10 +85,10 @@ let onParseComplete = (send, results, file) => {
     name: file["name"],
   }
 
-  let expectedHeaders = ["name", "email", "title", "teamName", "tags", "affiliation"]
+  let expectedHeaders = ["name", "email", "title", "team_name", "tags", "affiliation"]
 
   let hasExpectedHeaders = switch results["meta"]["fields"] {
-  | Some(actualHeaders) => Belt.Array.eq(expectedHeaders, actualHeaders, (a, b) => a == b)
+  | Some(actualHeaders) => expectedHeaders->Js.Array2.every(Js.Array2.includes(actualHeaders))
   | None => false
   }
 

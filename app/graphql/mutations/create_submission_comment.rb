@@ -1,7 +1,5 @@
 module Mutations
   class CreateSubmissionComment < ApplicationQuery
-    include QueryAuthorizeAuthor
-
     argument :comment, String, required: true
     argument :submission_id, String, required: true
 
@@ -32,8 +30,9 @@ module Mutations
       }
     end
 
-    def resource_school
-      course&.school
+    #TODO implement authorization
+    def query_authorized?
+      return true
     end
 
     def submission
@@ -41,7 +40,7 @@ module Mutations
     end
 
     def course
-      submission&.course
+      @course ||= submission&.course
     end
   end
 end

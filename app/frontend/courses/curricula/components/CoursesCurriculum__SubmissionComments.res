@@ -41,7 +41,6 @@ let make = (~submissionId, ~comments) => {
   }
 
   let handleCreateSubmissionComment = event => {
-    Js.log("entered_create")
     ReactEvent.Mouse.preventDefault(event)
     CreateSubmissionCommentMutation.make({comment: newComment, submissionId})
     |> Js.Promise.then_(response => {

@@ -1,7 +1,5 @@
 module Mutations
   class CreateReaction < ApplicationQuery
-    include QueryAuthorizeAuthor
-
     argument :reaction_value, String, required: true
     argument :reactionable_id, String, required: true
     argument :reactionable_type, String, required: true
@@ -29,8 +27,9 @@ module Mutations
       }
     end
 
-    def resource_school
-      course&.school
+    #TODO implement authorization
+    def query_authorized?
+      return true
     end
 
     def submission
@@ -44,13 +43,8 @@ module Mutations
       end
     end
 
-    def submission_comment
-      @submission_comment ||=
-        SubmissionComment.find_by(id: @params[:comment_id])
-    end
-
     def course
-      submission&.course
+      @course ||= submission&.course
     end
   end
 end

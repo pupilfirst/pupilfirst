@@ -537,6 +537,11 @@ en:
       topics_post: " community"
       topics_pre: "Topics From "
       use_community: Use the community to clear your doubts, and to help your peers!
+    CoursesCurriculum__DiscussSubmission:
+      anonymous: Anonymous
+      created_at: on %{created_at}.
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
     CoursesCurriculum__FileForm:
       another_file: Please choose another file for upload.
       cannot_attach: You cannot attach files.
@@ -569,7 +574,6 @@ en:
       completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
-      created_at: on %{created_at}.
       discuss_tab: Discuss
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
@@ -579,12 +583,11 @@ en:
       marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: Next Target
+      no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
-      submitted_by: "Submitted by "
-      submitted_by_team: "Submitted by team: "
 
     CoursesCurriculum__Quiz:
       next_question: Next Question

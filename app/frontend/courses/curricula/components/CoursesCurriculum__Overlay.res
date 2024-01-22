@@ -78,10 +78,11 @@ let loadTargetDetails = (target, send, ()) => {
 }
 
 module DiscussionSubmissionsQuery = %graphql(`
-    query DiscussionSubmissionsQuery($targetId: ID!, $pinned: Boolean!) {
-      discussionSubmissions(targetId: $targetId,  pinned: $pinned) {
+    query DiscussionSubmissionsQuery($targetId: ID!) {
+      discussionSubmissions(targetId: $targetId) {
         nodes {
           id,
+          targetId,
           createdAt,
           checklist,
           files {
@@ -114,13 +115,15 @@ module DiscussionSubmissionsQuery = %graphql(`
             userName,
             updatedAt
           }
+          anonymous
+          pinned
         }
       }
     }
   `)
 
-let getDiscussionSubmissions = (send, targetId, pinned) => {
-  DiscussionSubmissionsQuery.make({targetId, pinned})
+let getDiscussionSubmissions = (send, targetId) => {
+  DiscussionSubmissionsQuery.make({targetId: targetId})
   |> Js.Promise.then_(response => {
     send(
       LoadSubmissions(
@@ -502,6 +505,7 @@ let completeSectionClasses = (tab, completionType) =>
 let completeSection = (
   state,
   send,
+  author,
   target,
   targetDetails,
   targetStatus,
@@ -581,59 +585,21 @@ let completeSection = (
       | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
       | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
       }}
-    </div>
-    <div>
-      <h4 className="text-base md:text-xl"> {"Submissions by peers"->str} </h4>
-      {switch state.peerSubmissions {
-      | [] => React.null
-      | peerSubmissions =>
-        Js.Array2.mapi(DiscussionSubmission.sort(peerSubmissions), (submission, _) => {
-          let submissionId = submission->DiscussionSubmission.id
-          <div
-            key={submission |> DiscussionSubmission.id}
-            className="mt-4 pb-4 relative curriculum__submission-feedback-container"
-            ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
-            <div className="flex justify-between items-end">
-              {switch DiscussionSubmission.teamName(submission) {
-              | Some(name) =>
-                <span>
-                  {str(t("submitted_by_team"))}
-                  <span className="font-semibold"> {str(name)} </span>
-                </span>
-              | None =>
-                <span>
-                  {str(t("submitted_by"))}
-                  <span className="font-semibold">
-                    {DiscussionSubmission.userNames(submission)->str}
-                  </span>
-                </span>
-              }}
-              <span className="ms-1" title={DiscussionSubmission.createdAtPretty(submission)}>
-                {{
-                  t(
-                    ~variables=[("created_at", DiscussionSubmission.createdAtPretty(submission))],
-                    "created_at",
-                  )
-                }->str}
-              </span>
-            </div>
-            <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
-              <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
-                <SubmissionChecklistShow
-                  checklist={submission |> DiscussionSubmission.checklist} updateChecklistCB=None
-                />
-              </div>
-              <CoursesCurriculum__Reactions
-                reactionableType="TimelineEvent"
-                reactionableId={submissionId}
-                reactions={submission->DiscussionSubmission.reactions}
+      {switch targetDetails.discussion {
+      | false => React.null
+      | true =>
+        <div>
+          <h4 className="text-base md:text-xl"> {"Submissions by peers"->str} </h4>
+          {switch state.peerSubmissions {
+          | [] => <p> {t("no_peer_submissions")->str} </p>
+          | peerSubmissions =>
+            Js.Array2.mapi(DiscussionSubmission.sortByPinned(peerSubmissions), (submission, _) => {
+              <CoursesCurriculum__DiscussSubmission
+                author submission callBack={getDiscussionSubmissions(send)}
               />
-              <CoursesCurriculum__SubmissionComments
-                submissionId comments={submission->DiscussionSubmission.comments}
-              />
-            </div>
-          </div>
-        }) |> React.array
+            }) |> React.array
+          }}
+        </div>
       }}
     </div>
   </div>
@@ -768,7 +734,7 @@ let make = (
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
   React.useEffect1(() => {
-    getDiscussionSubmissions(send, target->Target.id, false)
+    getDiscussionSubmissions(send, target->Target.id)
     None
   }, [Target.id(target)])
 
@@ -827,6 +793,7 @@ let make = (
           {completeSection(
             state,
             send,
+            author,
             target,
             targetDetails,
             targetStatus,

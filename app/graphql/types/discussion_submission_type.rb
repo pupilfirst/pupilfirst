@@ -1,6 +1,7 @@
 module Types
   class DiscussionSubmissionType < Types::BaseObject
     field :id, ID, null: false
+    field :target_id, ID, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :checklist, GraphQL::Types::JSON, null: false
     field :files, [Types::SubmissionFileType], null: false
@@ -8,6 +9,8 @@ module Types
     field :team_name, String, null: true
     field :comments, [SubmissionCommentType], null: true
     field :reactions, [ReactionType], null: true
+    field :anonymous, Boolean, null: false
+    field :pinned, Boolean, null: false
 
     def files
       BatchLoader::GraphQL

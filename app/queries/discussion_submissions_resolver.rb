@@ -3,12 +3,6 @@ class DiscussionSubmissionsResolver < ApplicationQuery
   property :pinned
 
   def discussion_submissions
-    student =
-      current_user
-        .students
-        .joins(:course)
-        .where(courses: { id: @course.id })
-        .first if current_user.present?
     submissions =
       course
         .timeline_events
@@ -25,19 +19,38 @@ class DiscussionSubmissionsResolver < ApplicationQuery
     end
   end
 
-  #TODO use correct authorization for students
   def authorized?
-    return false if course&.school != current_school
+    return false if current_user.blank?
 
-    return true if current_school_admin.present?
+    # Has access to school
+    return false unless student&.school == current_school
 
-    return false if coach.blank?
+    # school admin or course author
+    if current_school_admin.present? ||
+         current_user.course_authors.where(course: course).present?
+      return true
+    end
 
-    coach.courses.exists?(id: course)
+    return true if current_user.id == student.user_id
+
+    current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+  end
+
+  def student
+    @student ||=
+      current_user
+        .students
+        .joins(:cohort)
+        .where(cohorts: { course_id: course })
+        .first
   end
 
   def course
-    @course ||= Target.find_by(id: target_id).course
+    @course ||= target&.course
+  end
+
+  def target
+    @target ||= Target.find_by(id: target_id)
   end
 
   def allow_token_auth?

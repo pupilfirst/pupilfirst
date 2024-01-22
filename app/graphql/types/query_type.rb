@@ -231,7 +231,6 @@ module Types
                    Types::DiscussionSubmissionType.connection_type,
                    null: false do
       argument :target_id, ID, required: true
-      argument :pinned, Boolean, required: false
     end
   end
 end

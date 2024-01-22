@@ -1492,6 +1492,7 @@ ru:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Аффилиация должна быть меньше 250 символов
+        invalid_characters: "%{column_name} column contains one or more invalid characters"
         invalid_email: Электронная почта должна быть действительной и не может быть пустой
         invalid_name: Столбец имени не может быть пустым и должен содержать не более 250 символов.
         invalid_tags: Максимум 5 тегов разрешено на одного учащегося с ограничением 50 символов каждый
@@ -2738,6 +2739,7 @@ ru:
     _no: "Нет"
     _yes: "Да"
     admin: Admin
+    affiliation: Affiliation
     all: Все
     and: и
     archived: Архивирован
@@ -2846,6 +2848,7 @@ ru:
     team: Команда
     team_name: Название команды
     teams: Команды
+    title: Title
     update: Обновить
     updating: Обновляем
     uploading: Загрузка

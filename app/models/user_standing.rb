@@ -6,7 +6,8 @@ class UserStanding < ApplicationRecord
 
   validates :reason, presence: true
   validates_with RateLimitValidator,
-                 limit: 100,
+                 limit: 5000,
                  scope: :creator_id,
                  time_frame: 1.hour
+  validates_with RateLimitValidator, limit: 100, scope: :user_id
 end

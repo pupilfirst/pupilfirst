@@ -42,8 +42,7 @@ module Users
             .includes(:standing)
             .where(archived_at: nil)
             .last
-            &.standing ||
-            Standing.find_by(school: current_school, default: true)
+            &.standing || current_school.default_standing
         end
     end
 

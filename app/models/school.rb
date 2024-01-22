@@ -63,4 +63,8 @@ class School < ApplicationRecord
   def email
     SchoolString::EmailAddress.for(self)
   end
+
+  def default_standing
+    standings.find_by(default: true)
+  end
 end

@@ -168,7 +168,7 @@ module Organisations
           .includes(:standing)
           .where(archived_at: nil)
           .last
-          &.standing || Standing.find_by(school: course.school, default: true)
+          &.standing || current_school.default_standing
     end
 
     private

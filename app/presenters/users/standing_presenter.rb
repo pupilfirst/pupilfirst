@@ -37,13 +37,9 @@ module Users
           .order(created_at: :desc)
     end
 
-    def school_default_standing
-      Standing.find_by(school: current_school, default: true)
-    end
-
     def current_standing
       @current_standing ||=
-        user_standings.first&.standing || school_default_standing
+        user_standings.first&.standing || current_school.default_standing
     end
 
     def user_standings_count

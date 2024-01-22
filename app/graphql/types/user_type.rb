@@ -19,7 +19,7 @@ module Types
     def current_standing_name
       if Schools::Configuration.new(object.school).standing_enabled?
         object.user_standings.where(archived_at: nil).last&.standing&.name ||
-          Standing.where(school: object.school, default: true).first&.name
+          object.school.default_standing.name
       end
     end
 

@@ -37,12 +37,9 @@ module Mutations
     end
 
     def send_email
-      current_standing, previous_standing =
-        user_standings.first(2).map(&:standing)
+      current_standing, previous_standing = user_standings.map(&:standing)
 
-      previous_standing =
-        previous_standing ||
-          Standing.where(school_id: resource_school.id, default: true).first
+      previous_standing = previous_standing || resource_school.default_standing
 
       UserMailer.email_change_in_user_standing(
         student.user,

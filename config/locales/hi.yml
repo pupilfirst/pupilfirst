@@ -1472,6 +1472,7 @@ hi:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: संबद्धता 250 वर्णों से कम होनी चाहिए
+        invalid_characters: "%{column_name} column contains one or more invalid characters"
         invalid_email: ईमेल मान्य होना चाहिए और खाली नहीं हो सकता
         invalid_name: नाम कॉलम खाली नहीं हो सकता और 250 वर्णों के भीतर होना चाहिए
         invalid_tags: प्रति छात्र अधिकतम 5 टैग की अनुमति है, प्रत्येक 50 वर्णों की सीमा के साथ
@@ -2694,6 +2695,7 @@ hi:
     _no: "नहीं"
     _yes: "हाँ"
     admin: Admin
+    affiliation: Affiliation
     all: सभी
     and: तथा
     archived: संग्रहीत
@@ -2802,6 +2804,7 @@ hi:
     team: टीम
     team_name: टीम का नाम
     teams: टीमों
+    title: Title
     update: अद्यतन
     updating: अद्यतन करने
     uploading: अपलोडिंग

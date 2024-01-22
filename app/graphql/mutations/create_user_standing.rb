@@ -50,11 +50,10 @@ module Mutations
     end
 
     def user_standings
-      @user_standings ||=
-        UserStanding
-          .where(user_id: student.user.id, archived_at: nil)
-          .order(created_at: :desc)
-          .limit(2)
+      UserStanding
+        .where(user_id: student.user.id, archived_at: nil)
+        .order(created_at: :desc)
+        .limit(2)
     end
 
     def resource_school

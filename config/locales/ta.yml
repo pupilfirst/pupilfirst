@@ -1472,6 +1472,7 @@ ta:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: இணைப்பு 250 எழுத்துகளுக்கு குறைவாக இருக்க வேண்டும்
+        invalid_characters: "%{column_name} column contains one or more invalid characters"
         invalid_email: மின்னஞ்சல் சரியானதாக இருக்க வேண்டும் மற்றும் காலியாக இருக்க முடியாது
         invalid_name: பெயர் நெடுவரிசை காலியாக இருக்கக்கூடாது மற்றும் 250 எழுத்துகளுக்குள் இருக்க வேண்டும்
         invalid_tags: ஒரு மாணவருக்கு அதிகபட்சம் 5 குறிச்சொற்கள் அனுமதிக்கப்படும், ஒவ்வொன்றும் 50 எழுத்துகள் மட்டுமே
@@ -2694,6 +2695,7 @@ ta:
     _no: "இல்லை"
     _yes: "ஆம்"
     admin: Admin
+    affiliation: Affiliation
     all: அனைத்து
     and: மற்றும்
     archived: காப்பகப்படுத்தப்பட்டது
@@ -2802,6 +2804,7 @@ ta:
     team: குழு
     team_name: குழு பெயர்
     teams: அணிகள்
+    title: Title
     update: புதுப்பிக்கவும்
     updating: புதுப்பிக்கிறது
     uploading: பதிவேற்றுகிறது

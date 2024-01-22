@@ -1472,6 +1472,7 @@ ml:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: അഫിലിയേഷൻ 250 പ്രതീകങ്ങളിൽ കുറവായിരിക്കണം
+        invalid_characters: "%{column_name} column contains one or more invalid characters"
         invalid_email: ഇമെയിൽ സാധുതയുള്ളതായിരിക്കണം, അത് ശൂന്യമാക്കാൻ പാടില്ല
         invalid_name: നെയിം കോളം ശൂന്യമാക്കരുത് കൂടാതെ 250 പ്രതീകങ്ങൾക്കുള്ളിൽ ആയിരിക്കണം
         invalid_tags: ഒരു വിദ്യാർത്ഥിക്ക് പരമാവധി 5 ടാഗുകൾ അനുവദനീയമാണ്, ഓരോന്നിനും 50 പ്രതീകങ്ങൾ
@@ -2694,6 +2695,7 @@ ml:
     _no: "ഇല്ല"
     _yes: "അതെ"
     admin: Admin
+    affiliation: Affiliation
     all: എല്ലാം
     and: ഒപ്പം
     archived: ആർക്കൈവ് ചെയ്തു
@@ -2802,6 +2804,7 @@ ml:
     team: ടീം
     team_name: ടീമിന്റെ പേര്
     teams: ടീമുകൾ
+    title: Title
     update: അപ്ഡേറ്റ് ചെയ്യുക
     updating: അപ്ഡേറ്റ് ചെയ്യുന്നു
     uploading: അപ്‌ലോഡ് ചെയ്യുന്നു

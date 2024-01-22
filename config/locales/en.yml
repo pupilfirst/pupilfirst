@@ -569,6 +569,7 @@ en:
       completion_tab_submit_form: Submit Form
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
+      created_at: on %{created_at}.
       discuss_tab: Discuss
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
@@ -582,6 +583,9 @@ en:
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+
     CoursesCurriculum__Quiz:
       next_question: Next Question
       question: Question

@@ -5,6 +5,7 @@ module Target = CoursesCurriculum__Target
 module TargetDetails = CoursesCurriculum__TargetDetails
 module LatestSubmission = CoursesCurriculum__LatestSubmission
 module Submission = CoursesCurriculum__Submission
+module DiscussionSubmission = CoursesCurriculum__DiscussionSubmission
 module Student = CoursesCurriculum__Student
 module Coach = CoursesCurriculum__Coach
 module User = CoursesCurriculum__User

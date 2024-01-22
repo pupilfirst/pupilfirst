@@ -228,8 +228,6 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
               ->Js.Array2.filter(comment =>
                 comment->Comment.submissionId == submission->Submission.id
               )
-            let reactionableType = "TimelineEvent"
-            let reactionableId = submission->Submission.id
             let reactions =
               targetDetails
               ->TargetDetails.reactions
@@ -237,8 +235,14 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
                 reaction->Reaction.reactionableId == submission->Submission.id
               )
             <div>
-              <CoursesCurriculum__Reactions reactionableType reactionableId reactions />
-              <CoursesCurriculum__SubmissionComments submission comments />
+              <CoursesCurriculum__Reactions
+                reactionableType="TimelineEvent"
+                reactionableId={submission->Submission.id}
+                reactions
+              />
+              <CoursesCurriculum__SubmissionComments
+                submissionId={submission->Submission.id} comments
+              />
             </div>
           }
         }}

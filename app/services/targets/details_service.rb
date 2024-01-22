@@ -49,6 +49,8 @@ module Targets
               evaluated: false,
               completion_instructions: nil,
               checklist: [],
+              comments: [],
+              reactions: [],
               discussion: false,
               allow_anonymous: false
             }

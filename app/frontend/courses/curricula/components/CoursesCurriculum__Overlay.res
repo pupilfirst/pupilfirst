@@ -20,6 +20,7 @@ type state = {
   targetDetails: option<TargetDetails.t>,
   tab: tab,
   targetRead: bool,
+  peerSubmissions: array<DiscussionSubmission.t>,
 }
 
 type action =
@@ -29,8 +30,9 @@ type action =
   | SetTargetRead(bool)
   | AddSubmission(Target.role)
   | PerformQuickNavigation
+  | LoadSubmissions(array<DiscussionSubmission.t>)
 
-let initialState = {targetDetails: None, tab: Learn, targetRead: false}
+let initialState = {targetDetails: None, tab: Learn, targetRead: false, peerSubmissions: []}
 
 let reducer = (state, action) =>
   switch action {
@@ -44,7 +46,12 @@ let reducer = (state, action) =>
       ...state,
       targetRead,
     }
-  | PerformQuickNavigation => {targetDetails: None, tab: Learn, targetRead: false}
+  | PerformQuickNavigation => {
+      targetDetails: None,
+      tab: Learn,
+      targetRead: false,
+      peerSubmissions: [],
+    }
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -53,6 +60,7 @@ let reducer = (state, action) =>
         targetDetails: state.targetDetails |> OptionUtils.map(TargetDetails.clearPendingUserIds),
       }
     }
+  | LoadSubmissions(peerSubmissions) => {...state, peerSubmissions}
   }
 
 let closeOverlay = course =>
@@ -67,6 +75,61 @@ let loadTargetDetails = (target, send, ()) => {
   } |> ignore
 
   None
+}
+
+module DiscussionSubmissionsQuery = %graphql(`
+    query DiscussionSubmissionsQuery($targetId: ID!, $pinned: Boolean!) {
+      discussionSubmissions(targetId: $targetId,  pinned: $pinned) {
+        nodes {
+          id,
+          createdAt,
+          checklist,
+          files {
+            id,
+            title,
+            url
+          },
+          userNames,
+          teamName,
+          comments {
+            id,
+            submissionId,
+            comment,
+            reactions {
+              id,
+              reactionableId,
+              reactionValue,
+              reactionableType,
+              userName,
+              updatedAt
+            },
+            userName,
+            updatedAt
+          },
+          reactions {
+            id,
+            reactionableId,
+            reactionValue,
+            reactionableType,
+            userName,
+            updatedAt
+          }
+        }
+      }
+    }
+  `)
+
+let getDiscussionSubmissions = (send, targetId, pinned) => {
+  DiscussionSubmissionsQuery.make({targetId, pinned})
+  |> Js.Promise.then_(response => {
+    send(
+      LoadSubmissions(
+        Js.Array.map(DiscussionSubmission.decode, response["discussionSubmissions"]["nodes"]),
+      ),
+    )
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let completionTypeToString = (completionType, targetStatus) =>
@@ -451,72 +514,128 @@ let completeSection = (
 ) => {
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
 
-  <div className={completeSectionClasses(state.tab, completionType)}>
-    {switch (targetStatus |> TargetStatus.status, completionType) {
-    | (Pending, Evaluated) =>
-      [
-        <CoursesCurriculum__CompletionInstructions
-          key="completion-instructions" targetDetails title="Instructions"
-        />,
-        <CoursesCurriculum__SubmissionBuilder
-          key="courses-curriculum-submission-form"
-          target
-          targetDetails
-          checklist={targetDetails |> TargetDetails.checklist}
-          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-          preview
-        />,
-      ] |> React.array
-    | (Pending, TakeQuiz) =>
-      [
-        <CoursesCurriculum__CompletionInstructions
-          key="completion-instructions" targetDetails title="Instructions"
-        />,
-        <CoursesCurriculum__Quiz
-          key="courses-curriculum-quiz"
-          target
-          targetDetails
-          addSubmissionCB=addVerifiedSubmissionCB
-          preview
-        />,
-      ] |> React.array
+  <div>
+    <div className={completeSectionClasses(state.tab, completionType)}>
+      {switch (targetStatus |> TargetStatus.status, completionType) {
+      | (Pending, Evaluated) =>
+        [
+          <CoursesCurriculum__CompletionInstructions
+            key="completion-instructions" targetDetails title="Instructions"
+          />,
+          <CoursesCurriculum__SubmissionBuilder
+            key="courses-curriculum-submission-form"
+            target
+            targetDetails
+            checklist={targetDetails |> TargetDetails.checklist}
+            addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+            preview
+          />,
+        ] |> React.array
+      | (Pending, TakeQuiz) =>
+        [
+          <CoursesCurriculum__CompletionInstructions
+            key="completion-instructions" targetDetails title="Instructions"
+          />,
+          <CoursesCurriculum__Quiz
+            key="courses-curriculum-quiz"
+            target
+            targetDetails
+            addSubmissionCB=addVerifiedSubmissionCB
+            preview
+          />,
+        ] |> React.array
 
-    | (Pending, SubmitForm) =>
-      [
-        <CoursesCurriculum__CompletionInstructions
-          key="completion-instructions" targetDetails title="Instructions"
-        />,
-        <CoursesCurriculum__SubmissionBuilder
-          key="courses-curriculum-submission-form"
-          target
-          targetDetails
-          checklist={targetDetails |> TargetDetails.checklist}
-          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-          preview
-        />,
-      ] |> React.array
+      | (Pending, SubmitForm) =>
+        [
+          <CoursesCurriculum__CompletionInstructions
+            key="completion-instructions" targetDetails title="Instructions"
+          />,
+          <CoursesCurriculum__SubmissionBuilder
+            key="courses-curriculum-submission-form"
+            target
+            targetDetails
+            checklist={targetDetails |> TargetDetails.checklist}
+            addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+            preview
+          />,
+        ] |> React.array
 
-    | (
-        PendingReview
-        | Completed
-        | Rejected
-        | Locked(CourseLocked | AccessLocked),
-        Evaluated | TakeQuiz | SubmitForm,
-      ) =>
-      <CoursesCurriculum__SubmissionsAndFeedback
-        targetDetails
-        target
-        evaluationCriteria
-        addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-        targetStatus
-        coaches
-        users
-        preview
-        checklist={targetDetails |> TargetDetails.checklist}
-      />
-    | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
-    | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
-    }}
+      | (
+          PendingReview
+          | Completed
+          | Rejected
+          | Locked(CourseLocked | AccessLocked),
+          Evaluated | TakeQuiz | SubmitForm,
+        ) =>
+        <CoursesCurriculum__SubmissionsAndFeedback
+          targetDetails
+          target
+          evaluationCriteria
+          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+          targetStatus
+          coaches
+          users
+          preview
+          checklist={targetDetails |> TargetDetails.checklist}
+        />
+      | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
+      | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
+      }}
+    </div>
+    <div>
+      <h4 className="text-base md:text-xl"> {"Submissions by peers"->str} </h4>
+      {switch state.peerSubmissions {
+      | [] => React.null
+      | peerSubmissions =>
+        Js.Array2.mapi(DiscussionSubmission.sort(peerSubmissions), (submission, _) => {
+          let submissionId = submission->DiscussionSubmission.id
+          <div
+            key={submission |> DiscussionSubmission.id}
+            className="mt-4 pb-4 relative curriculum__submission-feedback-container"
+            ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
+            <div className="flex justify-between items-end">
+              {switch DiscussionSubmission.teamName(submission) {
+              | Some(name) =>
+                <span>
+                  {str(t("submitted_by_team"))}
+                  <span className="font-semibold"> {str(name)} </span>
+                </span>
+              | None =>
+                <span>
+                  {str(t("submitted_by"))}
+                  <span className="font-semibold">
+                    {DiscussionSubmission.userNames(submission)->str}
+                  </span>
+                </span>
+              }}
+              <span className="ms-1" title={DiscussionSubmission.createdAtPretty(submission)}>
+                {{
+                  t(
+                    ~variables=[("created_at", DiscussionSubmission.createdAtPretty(submission))],
+                    "created_at",
+                  )
+                }->str}
+              </span>
+            </div>
+            <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
+              <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
+                <SubmissionChecklistShow
+                  checklist={submission |> DiscussionSubmission.checklist} updateChecklistCB=None
+                />
+              </div>
+              <CoursesCurriculum__Reactions
+                reactionableType="TimelineEvent"
+                reactionableId={submissionId}
+                reactions={submission->DiscussionSubmission.reactions}
+              />
+              <CoursesCurriculum__SubmissionComments
+                submissionId comments={submission->DiscussionSubmission.comments}
+              />
+            </div>
+          </div>
+        }) |> React.array
+      }}
+    </div>
   </div>
 }
 
@@ -648,6 +767,10 @@ let make = (
   let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
+  React.useEffect1(() => {
+    getDiscussionSubmissions(send, target->Target.id, false)
+    None
+  }, [Target.id(target)])
 
   React.useEffect(() => {
     ScrollLock.activate()

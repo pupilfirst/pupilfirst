@@ -25,7 +25,9 @@ module Mutations
           id: comment.id,
           submission_id: comment.timeline_event_id,
           comment: comment.comment,
-          user_name: current_user.name
+          user_name: current_user.name,
+          updated_at: comment.updated_at,
+          reactions: []
         }
       }
     end

@@ -131,7 +131,9 @@ module Types
       argument :target_id, ID, required: true
     end
 
-    resolved_field :assignment_details, Types::AssignmentDetailsType, null: true do
+    resolved_field :assignment_details,
+                   Types::AssignmentDetailsType,
+                   null: true do
       argument :target_id, ID, required: true
     end
 
@@ -223,6 +225,13 @@ module Types
 
     resolved_field :applicant, Types::ApplicantType, null: false do
       argument :applicant_id, ID, required: true
+    end
+
+    resolved_field :discussion_submissions,
+                   Types::DiscussionSubmissionType.connection_type,
+                   null: false do
+      argument :target_id, ID, required: true
+      argument :pinned, Boolean, required: false
     end
   end
 end

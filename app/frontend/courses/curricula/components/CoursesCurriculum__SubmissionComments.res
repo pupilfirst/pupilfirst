@@ -11,6 +11,15 @@ module CreateSubmissionCommentMutation = %graphql(`
          comment
          submissionId
          userName
+         updatedAt
+         reactions {
+            id,
+            reactionableId,
+            reactionValue,
+            reactionableType,
+            userName,
+            updatedAt
+          }
        }
      }
    }
@@ -22,7 +31,7 @@ let toggleComments = (setShowComments, event) => {
 }
 
 @react.component
-let make = (~submission, ~comments) => {
+let make = (~submissionId, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
   let (showComments, setShowComments) = React.useState(() => false)
   let (newComment, setNewComment) = React.useState(() => "")
@@ -31,12 +40,17 @@ let make = (~submission, ~comments) => {
     setNewComment(ReactEvent.Form.currentTarget(event)["value"])
   }
 
-  let handleCreateSubmissionComment = (comment, submissionId, event) => {
+  let handleCreateSubmissionComment = event => {
+    Js.log("entered_create")
     ReactEvent.Mouse.preventDefault(event)
-    CreateSubmissionCommentMutation.make({comment, submissionId})
+    CreateSubmissionCommentMutation.make({comment: newComment, submissionId})
     |> Js.Promise.then_(response => {
       switch response["createSubmissionComment"]["comment"] {
-      | Some(comment) => setSubmissionComments(comments => Js.Array2.concat([comment], comments))
+      | Some(createdComment) =>
+        setNewComment(_ => "")
+        setSubmissionComments(existingComments =>
+          Js.Array2.concat([createdComment], existingComments)
+        )
       | None => ()
       }
       Js.Promise.resolve()
@@ -58,7 +72,7 @@ let make = (~submission, ~comments) => {
     {switch showComments {
     | false => React.null
     | true =>
-      <div className="submissionComments" key={submission->Submission.id}>
+      <div className="submissionComments" key={submissionId}>
         <div className="ms-6">
           <input
             className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
@@ -68,15 +82,10 @@ let make = (~submission, ~comments) => {
             placeholder={tr("write_comment")}
             onChange=handleInputChange
           />
-          <button onClick={handleCreateSubmissionComment(newComment, submission->Submission.id)}>
-            {tr("comment")->str}
-          </button>
+          <button onClick={handleCreateSubmissionComment}> {tr("comment")->str} </button>
         </div>
         {submissionComments
         ->Js.Array2.map(comment => {
-          let reactions = comment->Comment.reactions
-          let reactionableType = "SubmissionComment"
-          let reactionableId = comment->Comment.id
           <div className="bg-white border-t p-4 md:p-6" key={comment->Comment.id}>
             <div className="flex items-center">
               // <div
@@ -95,7 +104,11 @@ let make = (~submission, ~comments) => {
             <MarkdownBlock
               profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
             />
-            <CoursesCurriculum__Reactions reactionableType reactionableId reactions />
+            <CoursesCurriculum__Reactions
+              reactionableType="SubmissionComment"
+              reactionableId={comment->Comment.id}
+              reactions={comment->Comment.reactions}
+            />
           </div>
         })
         ->React.array}

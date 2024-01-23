@@ -41,16 +41,36 @@ feature "School Standing", js: true do
     let!(:standing_2) { create :standing }
     let!(:standing_3) { create :standing }
 
+    let!(:user_standing_1) do
+      create :user_standing, user: school_admin.user, standing: standing_2
+    end
+
     scenario "school admin tries to delete a standing" do
       sign_in_user school_admin.user, referrer: standing_school_path
 
       expect(page).to have_content("Standings")
 
-      accept_confirm do
-        find("button[id='delete_standing_#{standing_2.id}']").click
-      end
+      # Standing 2 will be archived because it has a user_standing
+      alert_text =
+        accept_confirm do
+          find("button[id='delete_standing_#{standing_2.id}']").click
+        end
+
+      expect(alert_text).to have_text(
+        "Are you sure you want to archive this standing? It has 1 log associated with it."
+      )
 
       expect(page).not_to have_text(standing_2.name)
+
+      # Standing 3 will be deleted because it has no user_standings
+      alert_text =
+        accept_confirm do
+          find("button[id='delete_standing_#{standing_3.id}']").click
+        end
+
+      expect(alert_text).to have_text(
+        "Are you sure you want to delete this standing? It has no logs associated with it."
+      )
 
       expect(page).to have_text(standing_1.name)
     end

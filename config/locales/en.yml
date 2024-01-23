@@ -2729,9 +2729,9 @@ en:
       add_coc: Add CoC
       confirm_school_standing_disable: Are you sure you want to disable standing for your school?
       confirm_standing_deletion:
-        one: Are you sure you want to archive this standing?. It has %{count} log associated with it.
-        other: Are you sure you want to archive this standing?. It has %{count} logs associated with it.
-        zero: Are you sure you want to delete this standing?. It has %{count} logs associated with it.
+        one: Are you sure you want to archive this standing? It has %{count} log associated with it.
+        other: Are you sure you want to archive this standing? It has %{count} logs associated with it.
+        zero: Are you sure you want to delete this standing? It has no logs associated with it.
       default: Default
       edit_coc: Edit CoC
       edit_standings_heading: Edit/modify standings

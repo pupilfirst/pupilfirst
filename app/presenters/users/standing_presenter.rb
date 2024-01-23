@@ -30,11 +30,7 @@ module Users
 
     def user_standings
       @user_standings ||=
-        @user
-          .user_standings
-          .includes(:standing)
-          .where(archived_at: nil)
-          .order(created_at: :desc)
+        @user.user_standings.includes(:standing).live.order(created_at: :desc)
     end
 
     def current_standing

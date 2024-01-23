@@ -151,11 +151,11 @@ module CourseExports
     end
 
     def latest_user_standing(user)
-      user.user_standings.where(archived_at: nil).last
+      user.user_standings.live.last
     end
 
     def school_default_standing(user)
-      Standing.find_by(school: user.school, default: true)
+      user.school.default_standing
     end
 
     def student_rows

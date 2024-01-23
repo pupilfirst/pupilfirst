@@ -10,4 +10,7 @@ class UserStanding < ApplicationRecord
                  scope: :creator_id,
                  time_frame: 1.hour
   validates_with RateLimitValidator, limit: 100, scope: :user_id
+
+  scope :live, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 end

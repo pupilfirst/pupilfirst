@@ -194,11 +194,11 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   def latest_user_standing(student)
-    student.user.user_standings.where(archived_at: nil).last
+    student.user.user_standings.live.last
   end
 
   def school_default_standing(student)
-    Standing.find_by(school: student.user.school, default: true)
+    student.user.school.default_standing
   end
 
   let(:expected_data) do

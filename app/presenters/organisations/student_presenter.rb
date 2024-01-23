@@ -162,13 +162,8 @@ module Organisations
 
     def current_standing
       @current_standing ||=
-        student
-          .user
-          .user_standings
-          .includes(:standing)
-          .where(archived_at: nil)
-          .last
-          &.standing || current_school.default_standing
+        student.user.user_standings.includes(:standing).live.last&.standing ||
+          current_school.default_standing
     end
 
     private

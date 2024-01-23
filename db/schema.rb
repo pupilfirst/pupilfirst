@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -530,8 +528,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
     t.bigint "target_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
     t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true

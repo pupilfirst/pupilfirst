@@ -155,7 +155,7 @@ module Types
         .for(object.id)
         .batch do |course_ids, loader|
           Course
-            .includes(thumbnail_attachment: :blob)
+            .includes(thumbnail_attachment: :blob, cover_attachment: :blob)
             .where(id: course_ids)
             .each do |course|
               if course.cover.attached?

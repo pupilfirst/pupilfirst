@@ -50,13 +50,13 @@ module Layouts
     def courses
       if current_user.blank?
         current_school
-          .courses
+          .courses.includes([:thumbnail_attachment])
           .live
           .where(public_preview: true)
-          .order("LOWER(name)")
+          .order(sort_index: :asc)
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live.order("LOWER(name)")
+        current_school.courses.includes(thumbnail_attachment: :blob).live.order(sort_index: :asc)
       else
         # current course if course has public preview.
         previewed_course = @course&.public_preview? ? [@course] : []
@@ -77,7 +77,7 @@ module Layouts
             students: {
               id: current_user.students.select(:id)
             }
-          )
+          ).order(sort_index: :asc)
           .to_a
     end
 
@@ -94,7 +94,7 @@ module Layouts
 
     def courses_with_author_access
       if current_user.course_authors.present?
-        Course.joins(:course_authors).where(
+        Course.joins(:course_authors).order(sort_index: :asc).where(
           course_authors: current_user.course_authors
         )
       else

@@ -28,7 +28,7 @@ module Mutations
 
     def move_course
       direction = @params[:direction]
-      ordered_courses = Course.order(sort_index: :ASC).to_a
+      ordered_courses = Course.includes(:school).order(sort_index: :ASC).to_a
 
       if direction == "Up"
         swap_up(ordered_courses, course)

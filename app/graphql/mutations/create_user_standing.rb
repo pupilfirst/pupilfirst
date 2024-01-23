@@ -44,19 +44,17 @@ module Mutations
     private
 
     def create_user_standing
-      UserStanding.transaction do
-        user_standing =
-          UserStanding.create!(
-            user_id: student.user.id,
-            reason: @params[:reason],
-            standing_id: @params[:standing_id],
-            creator: current_user
-          )
+      user_standing =
+        UserStanding.create!(
+          user_id: student.user.id,
+          reason: @params[:reason],
+          standing_id: @params[:standing_id],
+          creator: current_user
+        )
 
-        send_email
+      send_email
 
-        user_standing
-      end
+      user_standing
     end
 
     def send_email

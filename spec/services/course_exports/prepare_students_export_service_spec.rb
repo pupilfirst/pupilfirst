@@ -198,7 +198,7 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   def school_default_standing(student)
-    student.user.school.default_standing
+    @school_default_standing ||= student.user.school.default_standing
   end
 
   let(:expected_data) do

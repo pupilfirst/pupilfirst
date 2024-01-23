@@ -155,7 +155,7 @@ module CourseExports
     end
 
     def school_default_standing(user)
-      user.school.default_standing
+      @school_default_standing ||= user.school.default_standing
     end
 
     def student_rows

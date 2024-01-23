@@ -123,6 +123,18 @@ feature "Course students bulk importer", js: true do
     )
   end
 
+  scenario "admin uploads a csv with invalid template header for import" do
+    sign_in_user school_admin.user,
+                 referrer: "/school/courses/#{course.id}/students/import"
+
+    # file with a invalid field name in header
+    attach_csv_file("student_import_wrong_header.csv")
+
+    expect(page).to have_text(
+      "The selected CSV file does not have a valid template"
+    )
+  end
+
   scenario "admin uploads a file that is not valid CSV" do
     sign_in_user school_admin.user,
                  referrer: "/school/courses/#{course.id}/students/import"
@@ -152,6 +164,14 @@ feature "Course students bulk importer", js: true do
       "Name column can't be blank and should be within 250 characters"
     )
     expect(page).to have_text("Email has to be valid and can't be blank")
+    expect(page).to have_text("Team name has to be less than 50 characters")
+
+    expect(page).to have_text(
+      "Name column contains one or more invalid characters"
+    )
+    expect(page).to have_text(
+      "Tags column contains one or more invalid characters"
+    )
   end
 
   context "import list has a student that already exists" do

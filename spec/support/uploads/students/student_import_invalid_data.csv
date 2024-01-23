@@ -1,4 +1,4 @@
 name,email,title,team_name,tags,affiliation
-Super Man,test,Test,,"tag1, tag2",
+Super Man�,test,Test,,"tag1, tag2�",
 Bat Man,bat@man.com,Head,,tag1,
-,spidey@gmail.com,,,"tag1, tag2, tag3, tag4, tag5, tag6",
+,spidey@gmail.com,,spideyspideyspideyspideyspideyspideyspideyspideyTeam,"tag1, tag2, tag3, tag4, tag5, tag6",

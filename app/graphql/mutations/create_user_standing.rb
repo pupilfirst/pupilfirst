@@ -18,6 +18,29 @@ module Mutations
       { user_standing: create_user_standing }
     end
 
+    class ValidateStandingExists < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        if !Standing.exists?(id: value[:standing_id])
+          return(
+            I18n.t("mutations.create_user_standing.standing_not_found_error")
+          )
+        end
+      end
+    end
+
+    class ValidateStandingIsNotArchived < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        if Standing.find_by(id: value[:standing_id])&.archived_at.present?
+          return(
+            I18n.t("mutations.create_user_standing.standing_archived_error")
+          )
+        end
+      end
+    end
+
+    validates ValidateStandingExists => {}
+    validates ValidateStandingIsNotArchived => {}
+
     private
 
     def create_user_standing

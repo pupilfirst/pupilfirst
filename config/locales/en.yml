@@ -2343,7 +2343,9 @@ en:
     create_topic_subscription:
       success_notification: You will be notified about all the updates.
     create_user_standing:
-      success_notification: User standing created successfully!
+      standing_archived_error: Selected standing is no longer active. Please refresh the page and try again.
+      standing_not_found_error: Selected standing doesn't exist. Please refresh the page and try again.
+      success_notification: Standing log created successfully!.
     delete_certificate:
       success_notification: Certificate has been deleted.
     delete_course_author:

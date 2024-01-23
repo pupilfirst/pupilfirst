@@ -55,11 +55,11 @@ module Schools
 
       if @standing.user_standings.exists?
         @standing.update!(archived_at: Time.zone.now)
+        flash[:success] = I18n.t("schools.standings.delete.archive_success")
       else
         @standing.destroy!
+        flash[:success] = I18n.t("schools.standings.delete.success")
       end
-
-      flash[:success] = I18n.t("schools.standings.delete.success")
 
       redirect_to standing_school_path
     end

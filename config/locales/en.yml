@@ -2380,7 +2380,7 @@ en:
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Course updated successfully!
       unable_to_find_course: "Unable to find course with ID: %{value}"
-      course_not_found_error: Course not four!
+      course_not_found_error: Course not found
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated

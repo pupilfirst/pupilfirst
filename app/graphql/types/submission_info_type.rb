@@ -28,10 +28,13 @@ module Types
         .for(object.target_id)
         .batch do |target_ids, loader|
           Target
+            .includes(:assignments)
             .where(id: target_ids)
-            .each { |target| loader.call(target.id, target.milestone_number) }
+            .each do |target|
+              loader.call(target.id, target.assignments.first.milestone_number)
+            end
         end
-      # object.target.milestone_number
+      # object.target.assignments.first.milestone_number
     end
 
     def user_names

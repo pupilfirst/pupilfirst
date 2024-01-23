@@ -25,4 +25,7 @@ class Standing < ApplicationRecord
   validates_with RateLimitValidator, limit: 15, scope: :school_id
 
   normalize_attributes :description
+
+  scope :live, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 end

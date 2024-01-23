@@ -1,6 +1,6 @@
 class StandingsResolver < ApplicationQuery
   def standings
-    @standings ||= current_school.standings.where(archived_at: nil)
+    @standings ||= current_school.standings.live
   end
 
   def authorized?

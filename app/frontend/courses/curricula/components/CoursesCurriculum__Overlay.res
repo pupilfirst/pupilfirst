@@ -117,6 +117,13 @@ module DiscussionSubmissionsQuery = %graphql(`
           }
           anonymous
           pinned
+          moderationReports {
+            id,
+            userId,
+            reportableId,
+            reason,
+            reportableType
+          }
         }
       }
     }
@@ -515,6 +522,7 @@ let completeSection = (
   users,
   preview,
   completionType,
+  currentUser,
 ) => {
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
 
@@ -595,7 +603,7 @@ let completeSection = (
           | peerSubmissions =>
             Js.Array2.mapi(DiscussionSubmission.sortByPinned(peerSubmissions), (submission, _) => {
               <CoursesCurriculum__DiscussSubmission
-                author submission callBack={getDiscussionSubmissions(send)}
+                currentUser author submission callBack={getDiscussionSubmissions(send)}
               />
             }) |> React.array
           }}
@@ -729,6 +737,7 @@ let make = (
   ~coaches,
   ~preview,
   ~author,
+  ~currentUser,
 ) => {
   let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
 
@@ -803,6 +812,7 @@ let make = (
             users,
             preview,
             completionType,
+            currentUser,
           )}
         </div>
         {quickNavigationLinks(targetDetails, send)}

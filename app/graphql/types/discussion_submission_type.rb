@@ -11,6 +11,7 @@ module Types
     field :reactions, [ReactionType], null: true
     field :anonymous, Boolean, null: false
     field :pinned, Boolean, null: false
+    field :moderation_reports, [ModerationReportType], null: false
 
     def files
       BatchLoader::GraphQL

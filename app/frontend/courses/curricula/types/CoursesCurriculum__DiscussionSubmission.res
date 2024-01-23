@@ -11,6 +11,7 @@ type t = {
   reactions: array<CoursesCurriculum__Reaction.t>,
   anonymous: bool,
   pinned: bool,
+  moderationReports: array<CoursesCurriculum__ModerationReport.t>,
 }
 
 let id = t => t.id
@@ -23,6 +24,7 @@ let comments = t => t.comments
 let reactions = t => t.reactions
 let anonymous = t => t.anonymous
 let pinned = t => t.pinned
+let moderationReports = t => t.moderationReports
 
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
@@ -65,6 +67,10 @@ let decode = json => {
     reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
     anonymous: json |> field("anonymous", bool),
     pinned: json |> field("pinned", bool),
+    moderationReports: json |> field(
+      "moderationReports",
+      array(CoursesCurriculum__ModerationReport.decode),
+    ),
   }
 }
 
@@ -79,6 +85,7 @@ let make = (
   ~reactions,
   ~anonymous,
   ~pinned,
+  ~moderationReports,
 ) => {
   id,
   targetId,
@@ -90,4 +97,5 @@ let make = (
   reactions,
   anonymous,
   pinned,
+  moderationReports,
 }

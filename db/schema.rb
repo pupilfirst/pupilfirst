@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -444,6 +444,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
   end
 
+  create_table "moderation_reports", force: :cascade do |t|
+    t.text "reason"
+    t.bigint "user_id", null: false
+    t.string "reportable_type", null: false
+    t.bigint "reportable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reportable_type", "reportable_id"], name: "index_moderation_reports_on_reportable"
+    t.index ["user_id"], name: "index_moderation_reports_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.bigint "actor_id"
     t.bigint "recipient_id"
@@ -614,12 +625,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
     t.boolean "excluded_from_leaderboard", default: false
     t.datetime "dropped_out_at", precision: nil
     t.bigint "cohort_id"
-    t.bigint "level_id"
     t.bigint "team_id"
     t.datetime "completed_at", precision: nil
     t.string "github_repository"
     t.index ["cohort_id"], name: "index_students_on_cohort_id"
-    t.index ["level_id"], name: "index_students_on_level_id"
     t.index ["team_id"], name: "index_students_on_team_id"
     t.index ["user_id"], name: "index_students_on_user_id"
   end
@@ -632,16 +641,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
     t.datetime "updated_at", null: false
     t.index ["timeline_event_id"], name: "index_submission_comments_on_timeline_event_id"
     t.index ["user_id"], name: "index_submission_comments_on_user_id"
-  end
-
-  create_table "submission_moderations", force: :cascade do |t|
-    t.text "reason"
-    t.bigint "user_id", null: false
-    t.bigint "timeline_event_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["timeline_event_id"], name: "index_submission_moderations_on_timeline_event_id"
-    t.index ["user_id"], name: "index_submission_moderations_on_user_id"
   end
 
   create_table "submission_reports", force: :cascade do |t|
@@ -967,6 +966,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "schools"
   add_foreign_key "markdown_attachments", "users"
+  add_foreign_key "moderation_reports", "users"
   add_foreign_key "organisation_admins", "organisations"
   add_foreign_key "organisation_admins", "users"
   add_foreign_key "organisations", "schools"
@@ -985,13 +985,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_081603) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "students", "cohorts"
-  add_foreign_key "students", "levels"
   add_foreign_key "students", "teams"
   add_foreign_key "students", "users"
   add_foreign_key "submission_comments", "timeline_events"
   add_foreign_key "submission_comments", "users"
-  add_foreign_key "submission_moderations", "timeline_events"
-  add_foreign_key "submission_moderations", "users"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"

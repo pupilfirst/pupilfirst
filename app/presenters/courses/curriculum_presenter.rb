@@ -39,6 +39,7 @@ module Courses
 
     def default_props
       {
+        current_user: user_details,
         author: author?,
         course: course_details,
         levels: levels_details,
@@ -46,6 +47,22 @@ module Courses
         targets: targets,
         access_locked_levels: access_locked_levels
       }
+    end
+
+    def user_details
+      user = {
+        id: current_user.id,
+        name: current_user.name,
+        title: current_user.full_title
+      }
+      if current_user.avatar.attached?
+        user[:avatar_url] = view.rails_public_blob_url(
+          current_user.avatar_variant(:thumb)
+        )
+      end
+
+      user[:coach_id] = current_coach.id if current_coach.present?
+      user
     end
 
     def author?

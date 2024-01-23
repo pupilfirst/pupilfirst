@@ -14,10 +14,10 @@ class AssignmentDiscussionMigrations < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    create_table :submission_moderations do |t|
+    create_table :moderation_reports do |t|
       t.text :reason
       t.references :user, null: false, foreign_key: true
-      t.references :timeline_event, null: false, foreign_key: true
+      t.references :reportable, polymorphic: true, null: false
 
       t.timestamps
     end

@@ -18,6 +18,20 @@ module PinSubmissionMutation = %graphql(`
    }
    `)
 
+module CreateModerationReportMutation = %graphql(`
+   mutation CreateModerationReportMutation($reason: String!, $reportableId: String!, $reportableType: String! ) {
+     createModerationReport(reason: $reason, reportableId: $reportableId, reportableType: $reportableType ) {
+       moderationReport {
+         id
+         reason
+         reportableId
+         reportableType
+         userId
+       }
+     }
+   }
+   `)
+
 let pinSubmission = (submission, callBack, event) => {
   ReactEvent.Mouse.preventDefault(event)
   let pinned = !(submission->DiscussionSubmission.pinned)
@@ -33,14 +47,51 @@ let pinSubmission = (submission, callBack, event) => {
   |> ignore
 }
 
-let menuItems = (author, submission, callBack) => {
+let createModerationReport = (submission, reason, setModerationReports, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  CreateModerationReportMutation.make({
+    reason,
+    reportableId: submission->DiscussionSubmission.id,
+    reportableType: "TimelineEvent",
+  })
+  |> Js.Promise.then_(response => {
+    switch response["createModerationReport"]["moderationReport"] {
+    | Some(moderationReport) =>
+      setModerationReports(moderationReports =>
+        Js.Array2.concat([moderationReport], moderationReports)
+      )
+    | None => ()
+    }
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let menuItems = (
+  currentUser,
+  author,
+  submission,
+  callBack,
+  moderationReports,
+  setModerationReports,
+) => {
   let pinned = submission->DiscussionSubmission.pinned
+  let reported = Belt.Array.reduce(moderationReports, false, (acc, report) =>
+    acc || report->ModerationReport.userId === currentUser->User.id
+  )
   let items = [
     <button
+      onClick={createModerationReport(submission, "spam", setModerationReports)}
+      disabled={reported}
       className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
       // <i className=icon />
 
-      <span className="font-semibold ms-2"> {"Report Submission"->str} </span>
+      <span className="font-semibold ms-2">
+        {switch reported {
+        | true => "Reported"->str
+        | false => "Report Submission"->str
+        }}
+      </span>
     </button>,
   ]
   let pinButton =
@@ -64,8 +115,11 @@ let menuItems = (author, submission, callBack) => {
 }
 
 @react.component
-let make = (~author, ~submission, ~callBack) => {
+let make = (~currentUser, ~author, ~submission, ~callBack) => {
   let submissionId = submission->DiscussionSubmission.id
+  let (moderationReports, setModerationReports) = React.useState(() =>
+    submission->DiscussionSubmission.moderationReports
+  )
   <div
     key={submissionId}
     className="mt-4 pb-4 relative curriculum__submission-feedback-container"
@@ -102,7 +156,17 @@ let make = (~author, ~submission, ~callBack) => {
         }->str}
       </span>
     </div>
-    <Dropdown selected={dropdownSelected} contents={menuItems(author, submission, callBack)} />
+    <Dropdown
+      selected={dropdownSelected}
+      contents={menuItems(
+        currentUser,
+        author,
+        submission,
+        callBack,
+        moderationReports,
+        setModerationReports,
+      )}
+    />
     <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
       <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
         <SubmissionChecklistShow

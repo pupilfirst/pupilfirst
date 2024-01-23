@@ -1,6 +1,5 @@
 class DiscussionSubmissionsResolver < ApplicationQuery
   property :target_id
-  property :pinned
 
   def discussion_submissions
     submissions =

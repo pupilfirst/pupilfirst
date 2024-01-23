@@ -185,4 +185,7 @@ class Types::MutationType < Types::BaseObject
         null: false
   field :create_reaction, mutation: Mutations::CreateReaction, null: false
   field :pin_submission, mutation: Mutations::PinSubmission, null: false
+  field :create_moderation_report,
+        mutation: Mutations::CreateModerationReport,
+        null: false
 end

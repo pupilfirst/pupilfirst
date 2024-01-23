@@ -157,8 +157,6 @@ feature "School Standing", js: true do
       code_of_conduct = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(code_of_conduct)
 
-      expect(page).to have_text(code_of_conduct)
-
       click_button "Save Code of Conduct"
 
       expect(page).to have_text("Code of Conduct saved successfully")

@@ -132,7 +132,7 @@ module Types
                 submission.id,
                 submission
                   .submission_comments
-                  .includes(:user, :reactions)
+                  .includes(:user, :reactions, :moderation_reports)
                   .map do |comment|
                     {
                       id: comment.id,
@@ -154,6 +154,7 @@ module Types
                               user_name: user_name
                             }
                           end,
+                      moderation_reports: comment.moderation_reports,
                       updated_at: comment.updated_at
                     }
                   end

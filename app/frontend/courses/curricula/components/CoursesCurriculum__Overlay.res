@@ -104,6 +104,13 @@ module DiscussionSubmissionsQuery = %graphql(`
               userName,
               updatedAt
             },
+            moderationReports {
+              id,
+              userId,
+              reportableId,
+              reason,
+              reportableType
+            },
             userName,
             updatedAt
           },
@@ -580,6 +587,7 @@ let completeSection = (
           Evaluated | TakeQuiz | SubmitForm,
         ) =>
         <CoursesCurriculum__SubmissionsAndFeedback
+          currentUser
           targetDetails
           target
           evaluationCriteria

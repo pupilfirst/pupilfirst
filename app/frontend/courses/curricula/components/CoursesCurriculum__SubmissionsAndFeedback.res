@@ -96,7 +96,15 @@ let handleAddAnotherSubmission = (setShowSubmissionForm, event) => {
   setShowSubmissionForm(showSubmissionForm => !showSubmissionForm)
 }
 
-let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coaches, users) => {
+let submissions = (
+  currentUser,
+  target,
+  targetStatus,
+  targetDetails,
+  evaluationCriteria,
+  coaches,
+  users,
+) => {
   let curriedGradeBar = gradeBar(evaluationCriteria)
 
   let submissions = TargetDetails.submissions(targetDetails)
@@ -241,7 +249,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
                 reactions
               />
               <CoursesCurriculum__SubmissionComments
-                submissionId={submission->Submission.id} comments
+                currentUser submissionId={submission->Submission.id} comments
               />
             </div>
           }
@@ -258,6 +266,7 @@ let addSubmission = (setShowSubmissionForm, addSubmissionCB, submission) => {
 
 @react.component
 let make = (
+  ~currentUser,
   ~targetDetails,
   ~target,
   ~evaluationCriteria,
@@ -319,6 +328,14 @@ let make = (
           checklist
           preview
         />
-      : submissions(target, targetStatus, targetDetails, evaluationCriteria, coaches, users)}
+      : submissions(
+          currentUser,
+          target,
+          targetStatus,
+          targetDetails,
+          evaluationCriteria,
+          coaches,
+          users,
+        )}
   </div>
 }

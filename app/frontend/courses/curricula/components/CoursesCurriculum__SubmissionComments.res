@@ -31,7 +31,7 @@ let toggleComments = (setShowComments, event) => {
 }
 
 @react.component
-let make = (~submissionId, ~comments) => {
+let make = (~currentUser, ~submissionId, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
   let (showComments, setShowComments) = React.useState(() => false)
   let (newComment, setNewComment) = React.useState(() => "")
@@ -100,6 +100,12 @@ let make = (~submissionId, ~comments) => {
                 </div>
               </div>
             </div>
+            <CoursesCurriculum__ModerationReportButton
+              currentUser
+              moderationReports={comment->Comment.moderationReports}
+              reportableId={comment->Comment.id}
+              reportableType={"SubmissionComment"}
+            />
             <MarkdownBlock
               profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
             />

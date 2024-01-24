@@ -11,17 +11,9 @@ type view =
   | ShowCommunities
   | ShowCertificates
 
-let headerSection = (
-  userName,
-  preferredName,
-  userTitle,
-  avatarUrl,
-  showUserEdit,
-  standingEnabled,
-  currentStandingName,
-  currentStandingColor,
-) => {
+let headerSection = (userName, preferredName, userTitle, avatarUrl, showUserEdit, standing) => {
   let name = Belt.Option.getWithDefault(preferredName, userName)
+
   <div
     className="max-w-5xl mx-auto pt-12 flex flex-col md:flex-row items-start justify-start md:justify-between px-3 lg:px-0 gap-1">
     <div className="flex items-center justify-center gap-2">
@@ -50,14 +42,15 @@ let headerSection = (
         <div className="text-gray-600 inline-block"> {userTitle->str} </div>
       </div>
     </div>
-    {ReactUtils.nullUnless(
+    {switch standing {
+    | Some(standing) =>
       <div
         className="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
         <div className="text-left rtl:text-right rtl:md:text-left md:text-right">
           <p
-            style={ReactDOM.Style.make(~color=currentStandingColor, ())}
+            style={ReactDOM.Style.make(~color=Standing.color(standing), ())}
             className="font-semibold text-sm">
-            {currentStandingName->str}
+            {Standing.name(standing)->str}
           </p>
           <a
             href="/user/standing"
@@ -68,11 +61,11 @@ let headerSection = (
         <div
           id="standing_shield"
           className="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
-          <StandingShield color=currentStandingColor sizeClass={"w-12 h-12"} />
+          <StandingShield color={Standing.color(standing)} sizeClass={"w-12 h-12"} />
         </div>
-      </div>,
-      standingEnabled,
-    )}
+      </div>
+    | None => React.null
+    }}
   </div>
 }
 
@@ -361,23 +354,12 @@ let make = (
   ~userTitle,
   ~avatarUrl,
   ~issuedCertificates,
-  ~standingEnabled,
-  ~currentStandingName,
-  ~currentStandingColor,
+  ~standing,
 ) => {
   let (view, setView) = React.useState(() => ShowCourses)
   <div className="bg-gray-50 h-full">
     <div className="bg-white">
-      {headerSection(
-        userName,
-        preferredName,
-        userTitle,
-        avatarUrl,
-        showUserEdit,
-        standingEnabled,
-        currentStandingName,
-        currentStandingColor,
-      )}
+      {headerSection(userName, preferredName, userTitle, avatarUrl, showUserEdit, standing)}
       {navSection(view, setView, communities, issuedCertificates)}
     </div>
     <div className="pb-8">

@@ -12,9 +12,7 @@ let decodeProps = json => {
     field("userTitle", string, json),
     optional(field("avatarUrl", string), json),
     field("issuedCertificates", array(IssuedCertificate.decode), json),
-    field("standingEnabled", bool, json),
-    field("currentStandingName", string, json),
-    field("currentStandingColor", string, json),
+    optional(field("standing", Standing.decode), json),
   )
 }
 
@@ -29,9 +27,7 @@ Psj.match("users#dashboard", () => {
     userTitle,
     avatarUrl,
     issuedCertificates,
-    standingEnabled,
-    currentStandingName,
-    currentStandingColor,
+    standing,
   ) =
     DomUtils.parseJSONTag(~id="users-dashboard-data", ())->decodeProps
 
@@ -48,9 +44,7 @@ Psj.match("users#dashboard", () => {
         userTitle
         avatarUrl
         issuedCertificates
-        standingEnabled
-        currentStandingName
-        currentStandingColor
+        standing
       />,
       element,
     )

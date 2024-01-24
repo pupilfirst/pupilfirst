@@ -2182,7 +2182,7 @@ en:
           main_html: You have been enrolled as a student in the course <strong>%{course_name}</strong>, on %{school_name}.
           sign_html: You can now %{link_to}.
           team: You have also been teamed up with %{team_members}; this means that you will be expected to work together to progress in this course.
-        subject: You have been added as a student in %{school_name}
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:

@@ -177,7 +177,7 @@ feature "School students index", js: true do
       open_email(student_1_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_1_user.name}, you have been added as a student in #{school.name}"
       )
 
       expect(current_email.body).to have_link(
@@ -187,13 +187,13 @@ feature "School students index", js: true do
       open_email(student_2_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_2_user.name}, you have been added as a student in #{school.name}"
       )
 
       open_email(student_3_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_3_user.name}, you have been added as a student in #{school.name}"
       )
 
       expect(sanitize_html(current_email.body)).to include(
@@ -203,7 +203,7 @@ feature "School students index", js: true do
       open_email(student_4_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_4_user.name}, you have been added as a student in #{school.name}"
       )
 
       expect(sanitize_html(current_email.body)).to include(
@@ -273,7 +273,7 @@ feature "School students index", js: true do
         open_email(coach_user.email)
 
         expect(current_email.subject).to include(
-          "You have been added as a student in #{school.name}"
+          "#{coach_user.name}, you have been added as a student in #{school.name}"
         )
 
         expect(current_email.body).to have_link(

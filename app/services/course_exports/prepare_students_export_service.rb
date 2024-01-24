@@ -151,7 +151,7 @@ module CourseExports
     end
 
     def latest_user_standing(user)
-      user.user_standings.live.last
+      user.user_standings.live.order(created_at: :desc).first
     end
 
     def school_default_standing(user)

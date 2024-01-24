@@ -1,0 +1,5 @@
+0 0 0 * * * * cd /app && bundle exec rake cleanup
+
+0 0 0 * * * * cd /app && bundle exec rake daily_digest
+
+0 0 0 * * * * cd /app && bundle exec rake notify_and_delete_inactive_users

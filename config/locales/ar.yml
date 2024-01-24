@@ -1570,6 +1570,7 @@ ar:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_characters: "%{column_name} يحتوي على حرف واحد أو أكثر غير صالح"
         invalid_email: Email has to be valid and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
@@ -2408,14 +2409,14 @@ ar:
       success_notification: Team deleted successfully
     dropout_student:
       student_updated_notification: Student updated successfully
+    evaluation_criterion:
+      name_exists: اسم المعيار موجود مسبقاً
+      no_course: لا توجد دورة تحمل الرقم %{course_id}
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Could not find a course with the given ID
       success_notification: Your export is being processed. We'll notify you as soon as it is ready.
       tag_not_found_error: Could not find tags with the given IDs
-    evaluation_criterion:
-      name_exists: اسم المعيار موجود مسبقاً
-      no_course: لا توجد دورة تحمل الرقم %{course_id}
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
@@ -2807,6 +2808,7 @@ ar:
     _no: لا
     _yes: نعم
     admin: إدارة
+    affiliation: انتساب
     all: الكل
     and: و
     archived: مؤرشف
@@ -2916,6 +2918,7 @@ ar:
     team: فريق
     team_name: اسم الفريق
     teams: الفرق
+    title: عنوان
     update: تحديث
     updating: جار التحديث
     uploading: جار الرفع

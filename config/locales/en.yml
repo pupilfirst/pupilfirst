@@ -1476,6 +1476,7 @@ en:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_characters: "%{column_name} column contains one or more invalid characters"
         invalid_email: Email has to be valid and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
@@ -2152,7 +2153,7 @@ en:
           main_html: You have been enrolled as a student in the course <strong>%{course_name}</strong>, on %{school_name}.
           sign_html: You can now %{link_to}.
           team: You have also been teamed up with %{team_members}; this means that you will be expected to work together to progress in this course.
-        subject: You have been added as a student in %{school_name}
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:
@@ -2701,6 +2702,7 @@ en:
     _no: "No"
     _yes: "Yes"
     admin: Admin
+    affiliation: Affiliation
     all: All
     and: and
     archived: Archived
@@ -2809,6 +2811,7 @@ en:
     team: Team
     team_name: Team Name
     teams: Teams
+    title: Title
     update: Update
     updating: Updating
     uploading: Uploading

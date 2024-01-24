@@ -2179,7 +2179,7 @@ ru:
           main_html: Вы были записаны на курс <strong>%{course_name}</strong>, %{school_name}.
           sign_html: Теперь вы можете %{link_to}.
           team: Вы также были объединены с %{team_members}; это означает, что вы будете работать вместе для достижения прогресса на этом курсе.
-        subject: Вы были добавлены в качестве студента в %{school_name}
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:

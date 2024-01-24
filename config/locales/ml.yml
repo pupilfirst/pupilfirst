@@ -2147,7 +2147,7 @@ ml:
           main_html: നിങ്ങൾ %{school_name}-ന് <strong>%{course_name}</strong>എന്ന കോഴ്‌സിൽ വിദ്യാർത്ഥിയായി എൻറോൾ ചെയ്‌തു.
           sign_html: നിങ്ങൾക്ക് ഇപ്പോൾ %{link_to}കഴിയും.
           team: നിങ്ങളും %{team_members}-മായി ചേർന്നു; ഈ കോഴ്‌സിൽ പുരോഗതി കൈവരിക്കുന്നതിന് നിങ്ങൾ ഒരുമിച്ച് പ്രവർത്തിക്കുമെന്ന് പ്രതീക്ഷിക്കുന്നു എന്നാണ് ഇതിനർത്ഥം.
-        subject: നിങ്ങളെ %{school_name}-ൽ ഒരു വിദ്യാർത്ഥിയായി ചേർത്തു
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:

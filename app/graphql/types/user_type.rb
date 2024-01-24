@@ -17,10 +17,22 @@ module Types
     field :current_standing_name, String, null: true
 
     def current_standing_name
-      if Schools::Configuration.new(object.school).standing_enabled?
-        object.user_standings.live.last&.standing&.name ||
-          object.school.default_standing.name
-      end
+      return unless Schools::Configuration.new(object.school).standing_enabled?
+
+      BatchLoader
+        .for(object.id)
+        .batch(default_value: default_standing_for_school) do |user_ids, loader|
+          UserStanding
+            .where(user_id: user_ids, archived_at: nil)
+            .order(:user_id, created_at: :desc)
+            .each_with_object({}) do |user_standing, current_standings|
+              # Ensure we only keep the most recent standing per user
+              current_standings[
+                user_standing.user_id
+              ] ||= user_standing.standing.name
+            end
+            .each { |user_id, name| loader.call(user_id, name) }
+        end
     end
 
     def avatar_url
@@ -61,6 +73,12 @@ module Types
               end
           user_ids.each { |id| loader.call(id, tags.fetch(id, [])) }
         end
+    end
+
+    private
+
+    def default_standing_for_school
+      @default_standing_for_school ||= object.school.default_standing.name
     end
   end
 end

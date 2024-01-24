@@ -2147,7 +2147,7 @@ hi:
           main_html: आपको पाठ्यक्रम <strong>%{course_name}</strong>, %{school_name}पर एक छात्र के रूप में नामांकित किया गया है।
           sign_html: अब आप %{link_to}कर सकते हैं।
           team: आपको %{team_members}के साथ भी जोड़ा गया है; इसका मतलब है कि आपसे इस पाठ्यक्रम में प्रगति के लिए मिलकर काम करने की अपेक्षा की जाएगी।
-        subject: आपको %{school_name}. में एक छात्र के रूप में जोड़ा गया है
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:

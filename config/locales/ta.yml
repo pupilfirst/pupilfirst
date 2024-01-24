@@ -2147,7 +2147,7 @@ ta:
           main_html: '%{school_name}ஆம் தேதி <strong>%{course_name}</strong>பாடத்தில் மாணவராகப் பதிவு செய்துள்ளீர்கள்.'
           sign_html: நீங்கள் இப்போது %{link_to}முடியும்.
           team: நீங்களும் %{team_members}உடன் இணைந்திருக்கிறீர்கள்; இந்த பாடத்திட்டத்தில் முன்னேற நீங்கள் ஒன்றாக வேலை செய்வீர்கள் என்று எதிர்பார்க்கப்படுகிறது.
-        subject: நீங்கள் %{school_name}இல் மாணவராக சேர்க்கப்பட்டீர்கள்
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:

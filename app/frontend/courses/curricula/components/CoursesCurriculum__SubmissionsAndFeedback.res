@@ -98,6 +98,7 @@ let handleAddAnotherSubmission = (setShowSubmissionForm, event) => {
 
 let submissions = (
   currentUser,
+  author,
   target,
   targetStatus,
   targetDetails,
@@ -249,7 +250,7 @@ let submissions = (
                 reactions
               />
               <CoursesCurriculum__SubmissionComments
-                currentUser submissionId={submission->Submission.id} comments
+                currentUser author submissionId={submission->Submission.id} comments
               />
             </div>
           }
@@ -267,6 +268,7 @@ let addSubmission = (setShowSubmissionForm, addSubmissionCB, submission) => {
 @react.component
 let make = (
   ~currentUser,
+  ~author,
   ~targetDetails,
   ~target,
   ~evaluationCriteria,
@@ -330,6 +332,7 @@ let make = (
         />
       : submissions(
           currentUser,
+          author,
           target,
           targetStatus,
           targetDetails,

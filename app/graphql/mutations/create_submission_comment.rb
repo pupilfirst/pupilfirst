@@ -13,11 +13,6 @@ module Mutations
           comment: @params[:comment],
           user_id: current_user.id
         )
-      notify(
-        :success,
-        I18n.t("shared.notifications.done_exclamation"),
-        I18n.t("mutations.create_submission_comment.success_notification")
-      )
       {
         comment: {
           id: comment.id,

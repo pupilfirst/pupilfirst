@@ -2,6 +2,7 @@ type id = string
 
 type t = {
   id: id,
+  userId: string,
   userName: string,
   submissionId: string,
   comment: string,
@@ -11,6 +12,7 @@ type t = {
 }
 
 let id = t => t.id
+let userId = t => t.userId
 let userName = t => t.userName
 let submissionId = t => t.submissionId
 let comment = t => t.comment
@@ -22,6 +24,7 @@ let decode = json => {
   open Json.Decode
   {
     id: json |> field("id", string),
+    userId: json |> field("userId", string),
     userName: json |> field("userName", string),
     submissionId: json |> field("submissionId", string),
     comment: json |> field("comment", string),

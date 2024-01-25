@@ -588,6 +588,7 @@ let completeSection = (
         ) =>
         <CoursesCurriculum__SubmissionsAndFeedback
           currentUser
+          author
           targetDetails
           target
           evaluationCriteria

@@ -122,7 +122,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         reactions={submission->DiscussionSubmission.reactions}
       />
       <CoursesCurriculum__SubmissionComments
-        currentUser submissionId comments={submission->DiscussionSubmission.comments}
+        currentUser author submissionId comments={submission->DiscussionSubmission.comments}
       />
     </div>
   </div>

@@ -5,11 +5,18 @@ class AssignmentDiscussionMigrations < ActiveRecord::Migration[7.0]
 
     add_column :timeline_events, :anonymous, :boolean, default: false
     add_column :timeline_events, :pinned, :boolean, default: false
+    add_reference :timeline_events,
+                  :archived_by,
+                  foreign_key: {
+                    to_table: :users
+                  }
 
     create_table :submission_comments do |t|
       t.text :comment
       t.references :user, null: false, foreign_key: true
       t.references :timeline_event, null: false, foreign_key: true
+      t.references :archived_by, foreign_key: { to_table: :users }
+      t.datetime :archived_at
 
       t.timestamps
     end

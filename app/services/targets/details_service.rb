@@ -184,10 +184,12 @@ module Targets
       ]
       SubmissionComment
         .includes(:user, :reactions)
+        .not_archived
         .where(timeline_event_id: submissions.pluck(:id))
         .map do |comment|
           {
             id: comment.id,
+            user_id: comment.user.id,
             user_name: comment.user.name,
             submission_id: comment.timeline_event_id,
             comment: comment.comment,

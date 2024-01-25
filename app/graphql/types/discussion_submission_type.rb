@@ -132,10 +132,12 @@ module Types
                 submission.id,
                 submission
                   .submission_comments
+                  .not_archived
                   .includes(:user, :reactions, :moderation_reports)
                   .map do |comment|
                     {
                       id: comment.id,
+                      user_id: comment.user.id,
                       user_name: comment.user.name,
                       submission_id: comment.timeline_event_id,
                       comment: comment.comment,

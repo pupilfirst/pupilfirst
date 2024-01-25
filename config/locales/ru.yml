@@ -3,9 +3,15 @@ ru:
     new_topic: Новая Тема
     note: " Менторы в вашей школе имеют доступ ко всем сообществам."
     welcome: Добро пожаловать в
+    show:
+      community_title: "%{name} Community"
+      new_topic: New Topic
+      note: " Coaches in your school have access to all communities."
+      welcome: Welcome to the
   components:
     Api:
       error_notification_body: Наша команда была уведомлена об этой ошибке. Пожалуйста, обновите страницу и попробуйте еще раз.
+      error_notification_title: An unexpected error occurred
     AppRouter__Dropdown:
       more: Больше
       show_more_links: Показать больше ссылок
@@ -21,6 +27,7 @@ ru:
       review: Оценить
       sign_out: Выйти
       students: Студенты
+      calendar: Calendar
     CoachesIndex__Root:
       button_about: О Менторе
       button_connect: Подключиться
@@ -70,9 +77,15 @@ ru:
       sort_criterion_views: Просмотров
       topic_last_updated_text: Последнне обновление
       topic_posted_by_text: Сообщение от
-      topic_stats_likes: Лайк
-      topic_stats_replies: Ответить
-      topic_stats_views: Посмотреть
+      topic_stats_likes:
+        one: 1 Like
+        other: "%{count} Likes"
+      topic_stats_replies:
+        one: 1 Reply
+        other: "%{count} Replies"
+      topic_stats_views:
+        one: 1 View
+        other: "%{count} Views"
       topics_fully_loaded_text: Показать все %{total_topics} темы
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
       unable_find_id: "Не удалось найти категорию темы с ID: "
@@ -142,6 +155,11 @@ ru:
       name_label: Имя
       name_placeholder: Имя для идентификации этого сертификата
       success_notification: Теперь вы можете редактировать этот сертификат.
+      certificate_base_image:
+        help: This base image must include a full line's space to insert a student's name.
+        help_url: https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate
+        label: Certificate Base Image
+        placeholder: Select a base image for certificate
     CourseCertificates__EditDrawer:
       active_help: Хоть у вас может быть несколько сертификатов, только один может быть выдан автоматически; он будет выдан, когда студент <em>окончит</em> курс.
       active_label: Следует ли студентам автоматически выдавать этот сертификат?
@@ -165,6 +183,14 @@ ru:
       update_issued_certificates_warning:
         one: Этот сертификат однажды выдавался. <br/>Эти изменения также будут применены к выданному сертификату.
         other: Этот сертификат выдаввался %{count} раз.<br/>Эти изменения также будут применены к другим %{count} выданным сертификатам.
+      active:
+        help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
+        help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
+        label: Should students be automatically issued this certificate?
+      qr_visibility:
+        help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
+        help_url: https://docs.pupilfirst.com/users/certificates
+        label: Add QR Code?
     CourseCertificates__Root:
       auto_issue_tag: Авто-выпуск
       create_action: Создать новый сертификат
@@ -178,6 +204,7 @@ ru:
         other: Выдавался %{count} раз
         zero: Никогда не выдавался
       no_certificates: Вы еще не создали ни одного сертификата!
+      certificate: Certificate
     CourseCoaches__EnrollmentForm:
       add_course: Добавить Менторов на Курс
       assign_coaches: НАЗНАЧЕНИЕ МЕНТОРОВ НА КУРС
@@ -186,11 +213,21 @@ ru:
       search_coaches_empty: Менторы не выбраны
       search_coaches_placeholder: Искать менторов
       select_coaches: Выберите менторов
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      select_cohorts: Select Cohorts
     CourseCoaches__InfoForm:
       no_students_assigned: У этого ментора нет учеников. Вы можете назначать менторов при редактировании сведений об ученике.
       pending_submissions: Ожидающие отправки
       revied_submissions: Рассмотренные работы
       students_assigned: "Студенты назначены к ментору:"
+      notification_coach_updated: Coach updated successfully
+      search_cohorts_all: You have selected all cohorts!
+      search_cohorts_empty: No cohorts selected
+      search_cohorts_placeholder: Search cohorts
+      select_cohorts: "Cohorts assigned to coach:"
+      update_cohort_assignment: Update Cohort Assignment
     CourseCoaches__InfoFormTeam:
       remove_post_confirm: из списка назначенных команд?
       remove_pre_confirm: "Вы уверены что хочешь удалить "
@@ -202,6 +239,7 @@ ru:
       enrollment_delete_notificaion_success_body: Зачисление тренера успешно удалена
       remove_confirm_post: с этого курса?
       remove_confirm_pre: Вы уверены, что хочите удалить
+      assign_coaches: Assign Coaches to Course
     CourseEditor:
       add_new_course: Добавить новый курс
       button_load_more: Загрузить Больше Курсов...
@@ -269,6 +307,7 @@ ru:
         error: Недействительный URL обработки
         help: Вы можете отправить URL курса абитурентам после того, как они подадут заявку на курс.
         label: Хотите ли вы обработать информацию о абитурентах перед их зачислением?
+        help_url: https://docs.pupilfirst.com/users/courses#processing-url
       progression_behavior:
         help: Это применимо только в том случае, если ваш курс имеет контрольные задачи, требующие от студентов представления своей работы на рассмотрение менторам.
         label: Успешность
@@ -279,17 +318,24 @@ ru:
           thrice: три раза
           title: Лимитировано
           twice: два раза
+          four_times: four times
         strict:
           description: Учащиеся могут повысить свой уровень только после проверки и сдачи работ.
           title: Строго
         unlimited:
           description: Студенты могут повышать свой уровень до конца курса без рассмотрения их работ.
           title: Без Лимита
+        help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
       tabs:
         actions: Действия
         details: Детали
         images: Картинки
       update_course: Обновить Курс
+      pick_a_cohort: Pick a Cohort
+      pick_default_cohort: Pick the default cohort
+      title:
+        add_new_course: Add New Course
+        edit_course_details: Edit Course Details
     CourseEditor__HighlightsEditor:
       add_highlight: Добавить Главные Моменты Курса
       delete_highlight: Удалить выделение
@@ -311,6 +357,7 @@ ru:
         error_message: должен быть в формате JPEG/PNG размером менее 2 МБ.
         help: Обложка будет отображаться в верхней части всех студенческих страниц в рамках курса, а также в качестве заголовка некоторых электронных писем по курсу.
         label: Обложка
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
       empty_image_label: Пожалуйста, выберите файл изображения.
       image_label:
         end: . Щелкните, чтобы заменить текущее изображение.
@@ -323,6 +370,7 @@ ru:
         error_message: должен быть в формате JPEG/PNG размером менее 2 МБ
         help: Миниатюра будет отображаться на главной странице и здесь, в списке административных курсов.
         label: Миниатюра
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
     CourseExport__Root:
       active_students_label: Активные Студенты
       all_students_label: Все Студенты
@@ -349,6 +397,9 @@ ru:
       students_label: Студенты
       students_to_include_label: Выберите учащихся для включения в экспорт курса
       teams_label: Команды
+      export_cohorts_label: Export only the students in the following cohort(s)
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
     CourseSelect:
       button_load_more: Загрузить Больше Курсов...
       courses_fully_loaded_text: Показаны все %{total_courses} курсов
@@ -382,6 +433,13 @@ ru:
       milestone_targets: Контрольные задачи
       nav_next_level: След. Уровень
       nav_previous_level: Пред. Уровень
+      milestone_target_label: Milestone
+      nav_aria_next_level: Go to the next level
+      nav_aria_previous_level: Go to the previous level
+      nav_long_next_level: Next Level
+      nav_long_previous_level: Previous Level
+      nav_short_next_level: Next
+      nav_short_previous_level: Previous
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Записать Снова
       button_text_start_recording: Начать Запись
@@ -460,6 +518,8 @@ ru:
       preview_mode_text: Вы сейчас в режиме предварительного просмотра.
       previous_target_button: Пред. Задача
       scroll_to_top: Пролистать наверх
+      learn_cta_submit_form: Submit Form
+      milestone_target_label: Milestone
     CoursesCurriculum__Quiz:
       next_question: След. Вопрос
       question: Вопрос
@@ -508,6 +568,7 @@ ru:
         pending: В Ожидании
         pending_review: Ожидает оценки
         rejected: Отклонен
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: Произошла непредвиденная ошибка, и наша команда была уведомлена об этом. Пожалуйста, перезагрузите страницу перед повторной попыткой.
       notification_error_head: Непредвиденная ошибка
@@ -515,6 +576,9 @@ ru:
       notification_notice_head: Не удалось отменить отправку
       undo_submission_title: Удалить эту работу
       window_confirm: Вы уверены, что хотите удалить это задачу?
+      undo: Undo
+      undo_submission: Undo submission
+      undoing: Undoing...
     CoursesCurriculum__UrlForm:
       button_placeholder: Введите полный URL, начинающийся с https://...
       button_text: Прикрепить ссылку
@@ -535,6 +599,14 @@ ru:
       targets_completed: "Завершены: %{targetsCount}"
       targets_overview: Обзор задач
       targets_pending_review: "Ожидают Оценки: %{targetsCount}"
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
+      quizzes_attempted:
+        one: 1 Quiz Attempted
+        other: "%{count} Quizzes Attempted"
+        zero: No Quizzes Attempted
     CoursesReport__SubmissionsList:
       completed: Завершено
       filter_by_another_level: Фильтровать по другому уровню
@@ -552,6 +624,8 @@ ru:
       submitted_at: Отправлено в
       submitted_on: Отправлено в %{date}
       view: "Посмотреть "
+      filter_by_another_status: Filter by another status
+      filter_by_status: Filter by status
     CoursesReview__Checklist:
       create_review_checklist: Создайте список оценки
       create_review_checklist_description: Подготовьтесь к оценки курса, составив контрольный список
@@ -565,10 +639,14 @@ ru:
       checklist_item_title:
         placeholder: Добавить результат элемента
         remove_button_title: Удалить результат элемента
+        move_down_button_title: Move Down checklist result
+        move_up_button_title: Move Up checklist result
       checklist_title:
         error_message: Список не может быть пустым
         placeholder: Добавить элемент списка
         remove_button_title: Удалить элемент списка
+        move_down_button_title: Move Down checklist item
+        move_up_button_title: Move Up checklist item
       create_review_checklist: Создать список для оценки
       disabled: Отключено
       edit_review_checklist: Изменить список оценки
@@ -578,6 +656,9 @@ ru:
       feedback_placeholder: Добавить отзыв (необязательно)
       generate_feedback_button: Создать отзыв
       review_checklist: Проверить список
+      add_additional_feedback: Add Additional Feedback
+      back_to_review: Back to Review
+      remove_additional_feedback: Remove Additional Feedback
     CoursesReview__Editor:
       add_another_feedback: Добавить еще один отзыв
       add_feedback: Добавить отзыв
@@ -631,6 +712,23 @@ ru:
       undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
       undo_grading: Отменить Оценивание
       write_a_note: Написать Заметку
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
+      reject_submission: Reject Submission
+      reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note_title: "Note: "
+      rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      submission_acceptable: Is this submission acceptable?
+      submission_number: "Submission #%{number}"
+      undo_rejection_notice_title: "Submission Rejected:"
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection: Undo Rejection
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: Назначен в %{date}
       change_reviewer_and_start_review: Да, Назначьте меня
@@ -686,6 +784,7 @@ ru:
       submissions_partially_loaded_text: Показаны %{loaded_submissions_count} из %{total_submissions} курсов
       submitted_at: Отправлено в
       target: Задача
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
     CoursesReview__SubmissionCard:
       assigned_to: Назначен
       completed: Завершено
@@ -753,6 +852,11 @@ ru:
       targets_overview: Обзор Задач
       team_coaches: Менторы Команд
       total_targets_completed: Всего задач выполнено
+      milestone_targets: Milestone Targets
+      quizzes_attempted:
+        one: 1 Quiz Attempted
+        other: "%{count} Quizzes Attempted"
+        zero: No Quizzes Attempted
     CoursesStudents__SubmissionsList:
       no_revied_submission: Нет Рассмотренного Работ
       submitted_on: "Отправленный в "
@@ -764,6 +868,8 @@ ru:
       create_level: Создать Уровень
       create_target_group: Создать группу задач
       edit_selected_level: Редактировать выбранный уровень
+      hide_archived: Hide Archived
+      show_archived: Show Archived
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: Пожалуйста, выберите файл размером менее 10 МБ.
       button_labels:
@@ -798,6 +904,11 @@ ru:
         title_label: Заголовок
         upload_limit_warning: Пожалуйста, выберите файл меньше чем %{maximumVideoSize}.
         uploading: Загружаем
+      embed_url:
+        help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#content-block-types
+        label: URL to Embed
+        save_button: Save
     CurriculumEditor__ContentBlockEditor:
       delete: Удалить
       delete_block_confirm: Вы уверены, что хотите удалить этот блок?
@@ -809,6 +920,8 @@ ru:
       undo_block_confirm: Вы уверены, что хотите отменить изменения в этом блоке?
       undo_changes: Отменить изменения
       uploading: Обновление...
+      embedded_url: Embedded URL
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Последнее Обновление
       not_versioned: Без Версии
@@ -816,8 +929,8 @@ ru:
     CurriculumEditor__EmbedBlockResolver:
       error_notification: Произошла непредвиденная ошибка, и наша команда была уведомлена об этом. Пожалуйста, перезагрузите страницу перед повторной попыткой.
       trying_embed: Попытка встроить URL...
-      unable_embed: "Не удалось встроить, повторная попытка через 1\_минуту..."
-      video_processed: "Видео обрабатывается, повторная попытка через 1\_минуту..."
+      unable_embed: Не удалось встроить, повторная попытка через 1 минуту...
+      video_processed: Видео обрабатывается, повторная попытка через 1 минуту...
     CurriculumEditor__FileBlockEditor:
       placeholder: Название для этого файла
       title: Название
@@ -871,6 +984,8 @@ ru:
       optional: Необязательный
       question_cannot_empty: Вопрос не может быть пустым
       remove_choice: Убрать Выбор
+      choices_not_unique: Choices must be unique
+      multi_choice: Allow multiple selections
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Добавить еще один вопрос
       choose_target_group: Выберите группу задач
@@ -916,6 +1031,31 @@ ru:
       title: Заголовок
       update_target: Обновить Задачу
       visit_link: Пройдите по ссылке, чтобы выполнить задачу.
+      completion_instructions:
+        help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: Do you have any completion instructions for the student?
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor/#github-actions
+        title: Github Actions
+      submit_form: Submit a form to complete the target.
+      target_checklist:
+        form_help: These are the questions a student must answer to complete the target.
+        form_label: What are the questions you would like the student to answer?
+        form_limit_warning: Maximum allowed questions is 25!
+        help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
+        label: What steps should the student take to complete this target?
+      target_role:
+        help: Should students in a team submit work on a target individually, or together?
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: How should teams tackle this target?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
     CurriculumEditor__TargetDrawer:
       content: Контент
       details: Детали
@@ -960,6 +1100,7 @@ ru:
       move_down: Двинуть Вниз
       move_up: Двинуть Вверх
       of_target: задачи
+      milestone_target_label: Milestone
     CurriculumEditor__TargetVersionSelector:
       edit: Редактировать
       preview: Предпросмотр
@@ -969,6 +1110,8 @@ ru:
       save_version: Сохранить эту версию
       select_version: Выберите версию
       version_feature_help: Используйте функцию версий, чтобы сохранить существующее состояние содержимого задачи, просмотреть ранее сохраненные версии и восстановить их, если это необходимо.
+      help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
+      help_url: https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions
     EditorDrawer:
       close_editor: Закрыть Редактор
     EvaluationCriteria__Index:
@@ -976,7 +1119,10 @@ ru:
     EvaluationCriterionEditor__Form:
       add_criterion: Добавить Критерий Оценки
       create_criterion: Создать Критерий
-      grade_labels: Оценка и Метки
+      grade_labels:
+        help: Assign labels for each grade, to reflect in grade cards for students and coaches
+        help_url: https://docs.pupilfirst.com/users/evaluation_criteria
+        label: Grade and Labels
       grade_lables_help: Назначьте метки для каждой оценки, чтобы отразить их в карточках оценок для учащихся и тренеров.
       important: Важное
       important_details: Значения максимальных и проходных оценок нельзя изменить после создания критерия. Метки, присвоенные каждому классу, могут быть отредактированы позже.
@@ -1012,6 +1158,7 @@ ru:
       mode_label_split: Просмотр редактора и предварительный просмотр в режиме разделения
       mode_label_split_exit: Закрыть разделенный вид
       strikethrough_insert: зачеркнутый
+      emoji_picker: Emoji
     Notifications__EntryCard:
       mark_read: Пометить, как прочитанное
     Notifications__List:
@@ -1060,15 +1207,34 @@ ru:
       input_group_error: Должно быть не менее двух символов
       replace_avatar: Заменить аватар
       upload_avatar: Загрузить аватар
+      active: Active
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      archived: Archived
+      coach_status: Coach Status
+      coach_visibility: Coach Visibility
+      email: Email
+      exited: Exited
+      name: Name
+      title: Title
     SA_Coaches_SchoolIndex:
       add_new_coach: Добавить Нового Ментора
       avatar_of: "Аватар "
+      active_coaches: Active Coaches
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: Все Студенты
       inactive_students: Неактивные Студенты
       reactivate_students: Реактивировать студентов
       search_empty: Ни один неактивный учащийся не соответствует вашим критериям поиска.
       search_placeholder: Поиск по названию студента или команды...
+      next: Next
+      prev: Prev
+      team: Team
     SchoolAdmin__EditorDrawer:
       close_editor: Закрыть Редактор
     SchoolAdmins__Editor:
@@ -1081,6 +1247,9 @@ ru:
       admin_updated_notification: Администратор успешно обновлен.
       create_admin: Создать Администратора
       update_admin: Обновить Администратора
+      email_error: Enter a valid Email
+      email_placeholder: Add email here
+      name_placeholder: Add name here
     SchoolCommunities__CategoryEditor:
       add_new_category: Добавить новую категорию
       delete_category: Удалить категорию
@@ -1088,6 +1257,9 @@ ru:
       save_category: Сохранить Категорию
       topics_delete_confirm: В этой категории есть темы! Вы уверены, что хотите удалить эту категорию?
       update_category: Обновить категорию
+      topics:
+        one: 1 topic
+        other: "%{count} topics"
     SchoolCommunities__CategoryManager:
       categories_in: Категории в
     SchoolCommunities__Editor:
@@ -1109,6 +1281,8 @@ ru:
       search_course_empty: Курсы не выбраны
       topic_categories: Категории Тем
       update_community: Обновить Сообщество
+      community_updated_notification: Community updated successfully.
+      note: " Coaches in your school have access to all communities."
     SchoolCommunities__Index:
       add_new_community: Добавить Новое Сообщество
       close_category_editor: Закрыть Редактор Категорий
@@ -1119,6 +1293,10 @@ ru:
       agreement_placeholder: Оставьте основную часть документа пустым, чтобы скрыть ссылку в нижнем колонтитуле.
       manage: Управлять
       updated_notification: был обновлен.
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms & Conditions
+      update: "Update "
+      updating: Updating...
     SchoolCustomize__ContactsEditor:
       address_placeholder: Оставьте адрес пустым, чтобы скрыть нижний колонтитул.
       contact_address: Контактный Адрес
@@ -1138,6 +1316,7 @@ ru:
       school_name_error: длина имени должна быть больше 2 символов
       school_name_placeholder: Введите название школы здесь
       update_details: Обновить Детали
+      about_label: About
     SchoolCustomize__ImageFileInput:
       choose_customize: Пожалуйста, выберите файл изображения для кастомизации
       image_error_message: должен быть JPEG / PNG размером до 2 МБ
@@ -1150,10 +1329,13 @@ ru:
       manage_images: Управление изображениями
       update_images: Обновить Изображения
       updated_notification: Изображения успешно обновлены.
+      icon: Icon
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
       move_down: Move Down
       move_up: Move Up
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
     SchoolCustomize__LinkEditor:
       add_new_link: Добавить Новую Ссылку
       adding_new_link: Добавление новой ссылки...
@@ -1177,6 +1359,8 @@ ru:
       social_links: Текущие Ссылки Социальных Сетей
       social_links_title: Показать ссылки на социальные сети
       title_placeholder: Краткое название для новой ссылки
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      title: Title
     SchoolCustomize__MoreLinks:
       more: Больше
       show_more_links: Показать больше ссылок
@@ -1202,6 +1386,12 @@ ru:
       homepage: домашняя страница
       reach_us_at: Свяжитесь с нами по адресу
       social_links_q: Добавить ссылки на социальные сети?
+      contact: Contact
+      icon: Icon
+      privacy_policy: Privacy Policy
+      sitemap: Sitemap
+      social: Social
+      terms_and_conditions: Terms & Conditions
     SchoolRouter__Page:
       nav:
         course:
@@ -1213,6 +1403,10 @@ ru:
           evaluation_criteria: Критерии Оценивания
           exports: Экспорты
           students: Студенты
+          assignments: Assignments
+          calendar: Calendars
+          cohorts: Cohorts
+          teams: Teams
         main:
           admins: Админы
           coaches: Менторы
@@ -1221,6 +1415,9 @@ ru:
           customization: Кастомизация
           overview: Обзор
           settings: Настройки
+        settings:
+          admins: Admins
+          customization: Customization
     School__SearchableTagList:
       add_new_tag: Добавить новый тег
       pick_tag: Выберите тег
@@ -1259,6 +1456,10 @@ ru:
       team_header_label: КОМАНДА %{team_name}
       teams_to_add_empty: Этот список пуст! Добавьте несколько студентов, используя форму выше.
       teams_to_add_label: "Эти новые студенты будут добавлены к курсу.:"
+      pick_a_cohort: Pick a Cohort
+      select_a_cohort: Select a cohort
+      select_cohort: Select Cohort
+      student_list: Student list
     StudentEditor__UpdateDetailsForm:
       access_ends: Доступ заканчивается
       personal_coaches: Персональные Менторы
@@ -1432,6 +1633,9 @@ ru:
       solution_icon_label: Решение
       unmark_solution: Снять отметку как решение
       unmark_solution_confirm: Вы уверены, что хотите снять отметку с этой записи как с решением?
+      show_replies_button:
+        one: 1 Reply
+        other: "%{count} Replies"
     TopicsShow__Root:
       edit_topic_button: Редактировать
       linked_target_label: "Связанная Задача: "
@@ -1490,7 +1694,7 @@ ru:
       preferred_name_placeholder: Введите предпочитаемое имя
       save_changes: Сохранить изменения
       security: Безопасность
-      select_image_limit: "Выберите изображение размером менее 5\_МБ."
+      select_image_limit: Выберите изображение размером менее 5 МБ.
       select_language: Выберите язык, на котором вы предпочитаете отображать пользовательский интерфейс.
       send_email_radio: Присылайте мне ежедневный дайджест
       set_password: Установите пароль для своей учетной записи
@@ -1499,6 +1703,23 @@ ru:
       update_locale: Обновите настройки, связанные с вашей локалью.
       upload_failed: Не удалось загрузить
       you_admin_warning: В настоящее время вы являетесь администратором этой школы. Удалите доступ администратора, чтобы разрешить удаление учетной записи.
+      email_change_q: Are you sure you want to change your email?
+      confirm_using_password: Please confirm using your password
+      change_account_email: Change account email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
+      update_email: Update email
+      set_password_button_text: Set password
+      set_up_password: Set up password
+      set_password_subtext: You have not set a password for your account.
+      forgot_password: Forgot your password?
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
+      community_digest: Community Digest
+      current_password_placeholder: Type current password
+      email_label: Email
+      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      incorrect_email_for_deletion: Incorrect email
+      name_error_length: Name should be at least 2 characters long
     UserSessionResetPassword:
       confirm_password: Подтвердить Пароль
       confirm_password_placeholder: Пожалуйста, введите пароль еще раз
@@ -1527,6 +1748,7 @@ ru:
         view_course: Посмотреть Курс
         view_curriculum: Посмотреть Учебную Программу
         visit_community: Посетить Сообщество
+        my_cohorts: My Cohorts
       edit_curricullum: Редактировать Силлабус
       edit_profile: Редактировать Профиль
       empty_courses: В данный момент у вас нет активных курсов.
@@ -1554,6 +1776,324 @@ ru:
       subscribe: Подписаться
       subscribed_on_another_device: Подписаться на этом Устройстве
       unsubscribe: Отписаться
+    AdminCoursesShared__CohortsEditor:
+      add_new_cohort: Add new cohort
+      cohort:
+        label: Cohort name
+        message: Enter a valid cohort name
+        placeholder: eg, Batch 1
+      cohort_description:
+        label: Cohort description
+        message: Enter a valid description for the cohort
+        placeholder: eg, Batch 1 of some year
+      cohort_ends_at:
+        help: The cohort will be archived on this date
+        label: Cohort end date
+      update_cohort: Update cohort
+    AdminCoursesShared__StudentsPicker:
+      all_students_selected: All students selected
+      no_students_found: No Students found
+      no_students_selected: No students selected
+    AdminCoursesShared__TeamEditor:
+      add_new_team: Add new team
+      select_cohort:
+        label: Select a cohort
+        placeholder: Pick a Cohort
+      team_name:
+        label: Team name
+        message: Enter a valid team name
+        placeholder: eg, Batch 1
+      update_team: Update Team
+    CalendarsIndex__DatePicker:
+      today: Today
+    ClickToCopy:
+      copied: Copied!
+      copy: Copy to clipboard
+    CohortsActions__Root:
+      button_text: Merge and delete
+      edit: Edit
+      merge_heading_html: Merge <em>%{cohort_name}</em> into another cohort
+      merge_help: Merging cohorts will move all students from the selected cohort to the target cohort. This action can be used to delete unnecessary cohorts. This action cannot be undone.
+      page_description: Actions for the cohort.
+      pick_a_cohort: Pick a Cohort
+    CohortsCreator__Root:
+      page_description: Create a new cohort for the course.
+      page_title: Add new cohort
+    CohortsDetails__Root:
+      page_description: Update cohort details
+      page_title: Edit %{cohort_name}
+    CohortsIndex__Root:
+      active_cohorts: Active Cohorts
+      add_new_cohort: Add new cohort
+      all_cohorts: All Cohorts
+      coaches: Coaches
+      cohort: cohort
+      cohorts: cohorts
+      cohorts_end_date: Cohort end date
+      edit: Edit
+      filter:
+        first_created: First Created
+        last_created: Last Created
+        last_ending: Last Ending
+        name: Name
+        search_by_name: Search by Name
+      load_more: Load More
+      no_cohorts_found: No Cohorts Found
+      students: Students
+    CourseEditor__Root:
+      add_new_course: Add New Course
+      button_load_more: Load More Courses...
+      course_links:
+        download_reports: Download Reports
+        edit_curriculum: Edit Curriculum
+        manage_coaches: Manage Coaches
+        manage_students: Manage Students
+        view_as_student: View as Student
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      create_description: Let's create another course.
+      edit_course_details: Edit Course Details
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+      notification_error_body: Our team has been notified about this error. Please try reloading this page.
+      notification_error_head: An unexpected error occurred
+      quick_links: Quick Links
+      view_public_page: View public page
+    CourseResourcesFilter:
+      filter_resources: Filter Resources
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        in_progress: Actions are in progress
+        queued: Actions are queued
+        success: All actions succeeded
+      show_report_button: Show Report
+      test_report: Test Report
+    Layout__UserControls:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+      user_controls: Show user controls
+    Pagination:
+      fully_loaded_text:
+        one: Only one %{singular_name} to show
+        other: Showing all %{count} %{plural_name}
+        zero: No %{plural_name} to show
+      partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
+    SchoolRouter__CoursesDropdown:
+      select_course: Select Course
+    StudentActions__Root:
+      active_label: Active
+      certificates_label: Course Certificates
+      details_certificate: Details of issued certificate
+      dropout_student:
+        button: Dropout Student
+        help: Marking a student as dropped out will remove all of their access to the course.
+        help_url: https://docs.pupilfirst.com/users/students#student-actions
+        label: Has this student dropped out?
+      edit: Edit
+      empty_course_certificates_text: This course does not have any certificates to issue.
+      empty_issued_certificates_text: This student has not been issued any certificates.
+      issue_certificate_button: Issue Certificate
+      issued_by_label: "Issued by:"
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      manage_certificates: Manage student certificates
+      new_certificate_label: "Issue new certificate:"
+      page_description: Actions for the student
+      re_activate_student:
+        button: Re-Activate Student
+      revoke_certificate_button: Revoke Certificate
+      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
+      revoked_by_label: "Revoked by:"
+      revoked_date_label: "Revoked on:"
+      revoked_status_label: Revoked
+      select_certificate_input_label: Select a certificate to issue
+    StudentBulkImport__Root:
+      csv_data_errors:
+        invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_email: Email has to be valid and can't be blank
+        invalid_name: Name column can't be blank and should be within 250 characters
+        invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+        invalid_team_name: Team name has to be less than 50 characters
+        invalid_title: Title has to be less than 250 characters
+      csv_file_errors:
+        empty: The selected CSV has no valid rows
+        exceeded_entries: The CSV file has more than 1000 entries.
+        invalid: Please select a valid CSV file with size less than 5 MB
+        invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
+        invalid_template: The selected CSV file does not have a valid template; please check the sample file for the required format.
+      csv_file_input:
+        help: This file will be used to import students in bulk. Check the sample file for the required format.
+        help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
+        label: CSV Import file
+        placeholder: Select CSV file to import
+      csv_parse_error: "We were unable parse the selected file as CSV: %{message}"
+      drawer_heading: Bulk Import Students
+      error_summary_title: "Here is a summary of the errors in the sheet: "
+      example_csv_link:
+        text: Download an example .csv file
+        url: https://docs.pupilfirst.com/files/student_import_sample.csv
+      import_button_text: Import Students
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
+      notify_students_label: Notify students, and send them a link to sign into this school.
+      page_description: Upload the CSV file containing the students you want to add to the course.
+      page_title: Import students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+      pick_a_cohort: Pick a Cohort
+      select_a_cohort: Select a cohort
+      success_notification: Import initiated successfully! You will be notified in an email once complete.
+      valid_data_message: Data validated successfully!
+      valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
+    StudentCreator__Root:
+      page_description: You can add multiple students to a list and add them to course
+      page_title: Add new students
+      pages:
+        csv_import: CSV File Import
+        manual: Manual
+    StudentCreator__StudentInfoForm:
+      add_to_list: Add to List
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        error:
+          invalid: invalid email
+          not_unique: email address not unique for student
+        label: Email
+        placeholder: Student email here
+      name:
+        label: Name
+        message: is not valid
+        placeholder: Student name here
+      tags:
+        label: Tags
+      team:
+        help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+        label: Team Name
+        placeholder: Avengers, Fantastic Four, etc.
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    StudentDetails__Root:
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      edit: Edit
+      name: Name
+      pages:
+        actions: Actions
+        details: Details
+      personal_coaches: Personal Coaches
+      pick_a_cohort: Pick a Cohort
+      search_coaches_all: You have selected all available coaches!
+      search_coaches_empty: No coaches selected
+      search_coaches_placeholder: Search coaches
+      select_a_cohort: Select a cohort
+      student_name_placeholder: Student name here
+      student_updated: Student updated successfully
+      student_updated_moved: Student has been updated, and moved to list of inactive students
+      tags_applied: Tags applied
+      tags_applied_team: Tags applied to team
+      tags_applied_user: Tags applied to user
+      team_coaches: Team Coaches
+      team_name: Team Name
+      team_name_error: Team Name must have at least two characters
+      team_name_placeholder: Team name here
+      team_updated_moved: Team has been updated, and moved to list of inactive students
+      title: Title
+      title_error: Title must have at least two characters
+      title_placeholder: Student, Coach, CEO, etc.
+      update_student: Update Student
+    StudentsEditor__StudentInfoForm:
+      add_list: Add to List
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      email: Email
+      email_not_unique: email address not unique for student
+      email_placeholder: Student email here
+      invalid_email: invalid email
+      name: Name
+      name_placeholder: Student name here
+      tags: Tags
+      team_name: Team Name
+      team_name_help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+      team_name_placeholder: Avengers, Fantastic Four, etc.
+      title: Title
+      title_placeholder: Student, Coach, CEO, etc.
+    StudentsEditor__UpdateForm:
+      actions: Actions
+      details: Details
+    StudentsIndex__Root:
+      add_new_students: Add New Students
+      cohort: Cohort
+      edit_details: Edit %{name}'s details
+      filter:
+        search_by_email: Search by Email
+        search_by_name: Search by Name
+        user_tag: User Tag
+      level: Level
+      load_more: Load More
+      pagination:
+        empty_message: No Students Found
+      sorter:
+        first_created: First Created
+        first_updated: First Updated
+        last_created: Last Created
+        last_updated: Last Updated
+        name: Name
+      student: student
+      students: students
+      title: Students
+    TeamsActions__Root:
+      delete: Delete
+      delete_team: Delete team
+      delete_team_info: Delete will remove all the students from the team and delete the team
+      edit: Edit
+      pages:
+        actions: Actions
+        links: Details
+      team_actions: Team actions
+    TeamsCreator__Root:
+      title: Create new team
+    TeamsDetails__Root:
+      edit: Edit
+      page_description: Edit team details
+      pages:
+        actions: Actions
+        details: Details
+    TeamsIndex__Root:
+      create_team: Create Team
+      edit: Edit
+      filter:
+        search_by_team_name: Search by Team Name
+      load_more: Load More
+      page_title: Teams
+      pagination:
+        empty_message: No Teams Found
+      sorter:
+        first_created: First Created
+        last_created: Last Created
+        name: Name
+      team: team
+      teams: teams
+    Zxcvbn:
+      weak: Weak
+      fair: Fair
+      medium: Medium
+      strong: Strong
   controllers:
     ApplicantsController:
       link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Если вы уже завершили регистрацию, пожалуйста, войдите в систему.
@@ -1578,6 +2118,10 @@ ru:
       name_label: Имя
       name_placeholder: John Doe
       page_title: Регистрация в %{course_name}
+      email_placeholder: john@example.com
+      enroll: Enroll in
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms & Conditions
     enroll: Зарегистрироваться в
     leaderboard:
       active_students: Активные Студенты
@@ -1590,9 +2134,32 @@ ru:
       rank: Ранг
       score: Баллы
       student: Студент
+      page_title: Enroll in %{course_name}
     show:
       continue_course: Продолжить Курс
       preview_course: Предварительный просмотр
+      apply_button: Apply
+      apply_now: Apply Now
+      enroll: Enroll in
+    calendar:
+      events: Events
+      no_events_text: No event scheduled for the selected date
+      today: Today
+      upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
+    process_application:
+      errors: "There were errors with your submission: %{form_errors}"
+      sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
   dashboard:
     dashboard:
       tour:
@@ -1618,18 +2185,36 @@ ru:
     not_acceptable:
       details: Похоже, ваш браузер запросил ответ в формате, который наш сервер не может обработать. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
       invalid_format: Ваш браузер запросил недопустимый формат.
+      title: Invalid Request
     not_found:
       mistyped_moved: Возможно, вы ошиблись адресом или страница переехала.
       not_exist: Страница, которую вы искали, не существует!
       try_homepage: Попробуйте вернуться на нашу домашнюю страницу.
+      title: Not Found
     service_unavailable:
       too_long: Эта страница загружалась слишком долго.
       try_reloading: Не могли бы вы попробовать перезагрузить страницу?
+      title: Timed out
     unprocessable_entity:
       invalid_request: Ваш браузер отправил неверный запрос.
       wasnt_valid: <em>Что-то </em> в запросе, отправленном вашим браузером, не было действительным. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
+      title: Invalid Request
+    something_went_wrong: Something went wrong!
+    vimeo:
+      2230: The upload type is invalid.
+      4003: There is a problem initiating the upload.
+      4101: Your maximum disk space has been reached.
+      4102: Your allotted weekly quota has been reached.
+      4104: Your allotted daily quota has been reached.
+    internal_server_error:
+      details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      title: Server Error
+      went_wrong: We're sorry, but something went wrong.
   faculty:
     coaches_at: Менторы в
+    index:
+      coaches_at: Coaches at
+      title: Coaches
   footer:
     contact: Контакты
     logo: Логотип
@@ -1641,6 +2226,8 @@ ru:
     terms_conditions: Правила и Условия
   help:
     help: Помощь
+    show:
+      title: Help
   helpers:
     page_entries_info:
       entry:
@@ -1664,6 +2251,16 @@ ru:
       get_started: Начать
       learn_more: Узнать больше
       welcome_prefix: Привет, добро пожаловать в
+      access_ended: Review course content
+      active: Continue course
+      dropped_out: Dropped out
+    agreement:
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms & Conditions
+    offline:
+      heading: You are offline!
+      message_html: It seems there is a problem with your connection.<br/>Please check your network status.
+      title: You are offline
   jobs:
     courses:
       clone_course:
@@ -1673,6 +2270,10 @@ ru:
         post_created: "%{user_name} ответил(-а) в чате, в котором вы состоите в сообществе %{community_name}"
       topic_created_job:
         topic_created: "%{user_name} создал(-а) новую тему в сообществе %{community_name}"
+      create:
+        message:
+          post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
+          topic_created: "%{user_name} has created a new topic in %{community_name} community"
     targets:
       send_session_feedback_notification:
         message: |
@@ -1681,7 +2282,7 @@ ru:
           Если вы пропустили просмотр в прямом эфире, мы разместим его на панели управления через пару дней.
           Пожалуйста, помогите нам улучшить наши занятия с помощью быстрой обратной связи: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
       send_session_reminders:
-        message: "Напоминание: \"%{title}\" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу."
+        message: 'Напоминание: "%{title}" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу.'
     timeline_events:
       verification_notification:
         founder:
@@ -1717,39 +2318,186 @@ ru:
       social: Social
       support: Contact Support
       terms_conditions: Terms & Conditions
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
+    footer_bottom:
+      logo_alt: Logo of %{school_name}
+      privacy_policy: Privacy Policy
+      terms_conditions: Terms & Conditions
   link_fallback:
     link_fallback: "Если вы не можете перейти по ссылке выше, пожалуйста, скопируйте и вставьте следующую ссылку в адресную строку вашего браузера:"
   mailers:
     applicant:
       verify: Подтвердите Свой Адрес Почты
+      enrollment_verification:
+        body_html: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this %{link_to} will verify your email-address and confirm that you wish to create an account at %{school_name}.
+        body_processing_url_html: We've received your application to the %{course_name} course at %{school_name}.<br/> Please verify your email address by clicking %{link_to}. Once your email address is verified, you will be shown the next steps required to complete your application.
+        link_text: one-time link
+        link_text_processing_url: this link
+        subject: Verify Your Email Address
+        subject_with_processing_url: Complete your %{course_name} course application
     coach:
       added: Вы были добавлены в качестве ментора в %{course_name}
+      course_enrollment:
+        subject: You have been added as a coach in %{course_name}
+      repeat_rejections_alert:
+        body_html: Please consider going through <a href="%{review_url}">the student's submission</a> to see if there's some feedback you can give to help the student progress.
+        header: A bot has rejected a student's submission %{rejection_count} times in the %{course_name} course.
+        subject: Repeated rejection of a student's submission (%{rejection_count} times)
     course_author:
       added: Вы были добавлены в качестве автора в %{course_name}
+      addition:
+        body:
+          added_author_html: You have been added as an author in the course <strong>%{course_name}</strong>, on %{school_name}. This gives you the ability to use the school administration interface to edit the contents of the course, and to <em>preview</em> the course as a student.
+          link_to: this link
+          use_link_html: Use %{link_to} to sign into %{school_name} and view the course
+        subject: You have been added as an author in %{course_name}
     course_export:
       export: Экспорт курса %{course_export} готов к загрузке
+      prepared:
+        body:
+          footer: The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all popular spreadsheet applications.
+          header_html: The export that you requested for the course %{course_name} on %{course_export_created_at} is now ready for download. Please visit <a href="%{link}">the course exports page</a> to download the export.
+          link_to: link
+        subject: Export of %{course_export} course is ready for download
+        subtitle: The export of data from course %{course_name} is ready for download.
+        title: Export of course is ready
+        title_button_text: Visit Exports Page
     issued_certificate:
       awarded: Вы получили сертификат!
+      issued:
+        body:
+          awarded_certificate_html: You've been awarded a certificate for completing the <strong>%{course_name}</strong> course.
+          congratulations: Congratulations!
+          issued_on_html: The certificate was issued on %{issued_certificate} and can be viewed or printed by %{link_to}.
+          link_to: visiting the certificate's public link
+        subject: You have been awarded a certificate!
     school_admin:
       added: Добавлен Новый Администратор Школы
       import: Импорт студентов завершен
+      email_updated_notification:
+        body:
+          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
+          user_html: "<strong>%{name}</strong> from your school has updated the email address."
+        subject: "%{name} has changed email address."
+      school_admin_added:
+        body:
+          admin_name_html: The new admin's name is <strong>%{new_school_admin_name}</strong>, and has the registered email address <a href="mailto:%{new_school_admin_email}">%{new_school_admin_email}</a>.
+          link_to: link
+          new_admin_html: A new administrator was added to your school <strong>%{school_name}</strong>, on %{new_school_admin} by %{adding_user_name}.
+          not_recognized_html: If you do not recognize this user, you can can remove them from the school administration interface using this %{link_to}.
+        subject: New School Admin Added
+      students_bulk_import_complete:
+        body:
+          link_to: view these newly added students in the school administration interface
+          report_attachments: Some of the students you tried to import were already enrolled in the course. These students were ignored during the import. A list of email addresses of such students has been included as an attachment with this email.
+          students_added_html: "<b>Students added:</b> %{report_params}"
+          students_requested_html: "<b>Students requested:</b> %{report_params}"
+          summary_import_html: "Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here's a small summary on the import:"
+          view_html: You can %{link_to}.
+        subject: Import of Students Completed
     startup:
       new_feedback: Новый отзыв от %{startup_feedback} о вашей заявке
+      feedback_as_email:
+        body:
+          grading_details_html: "✅ %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+          grading_feedback_header: Here is some feedback on your submission
+          grading_header: Your submission was awarded the following grades by %{coach_name}
+          link_to: the full feedback
+          recent_submission: recent submission
+          recent_updates: recent updates
+          rejected_feedback: Your %{update_for} was rejected by %{coach_name}. Here is some feedback for the rejection
+          view_html: You can view %{link_to}, including any files attached to the feedback.
+        subject: New feedback from %{startup_feedback} on your submission
     student:
       added_as: Вы были добавлены в качестве студента в %{school_name}
+      enrollment:
+        body:
+          link_to: sign into %{school_name} and start working on this course
+          main_html: You have been enrolled as a student in the course <strong>%{course_name}</strong>, on %{school_name}.
+          sign_html: You can now %{link_to}.
+          team: You have also been teamed up with %{team_members}; this means that you will be expected to work together to progress in this course.
+        subject: You have been added as a student in %{school_name}
     user:
-      daily_digest: Ежедневный дайджест
+      daily_digest:
+        body:
+          asked: asked %{days_ago} days ago.
+          assigned:
+            one: "(1 from a student assigned to you)"
+            other: "(%{count} from students assigned to you)"
+          control_emails_html: You can control these emails from %{link_to}.
+          latest_topics: "Latest topics posted on your communities:"
+          link_to: your profile edit page
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
+          older: "Older, popular topics that have seen new activity:"
+          replies: replies
+          views: views
+        subject: Daily Digest
       delete_account: Удаление учетной записи из %{school_name}
       deleted_in: Ваша учетная запись в %{school_name} будет удалена через 30 дней
       deleted_success: Учетная запись успешно удалена из %{school_name}
       new_reply: Новый ответ на ваш пост
+      account_deletion_notification:
+        body:
+          link_to: please sign into the school
+          main_html: "<p> We noticed that you haven't used your account in %{school_name} for over %{inactivity_months} months.  </p> <p> We will automatically delete your account after one month. Once your account is deleted, all your personal information will be removed and you will no longer have access to the school.</p> <p> If you would like to keep your account, %{link_to} before %{one_month_from_now}.  </p>"
+        subject: Your account in %{school_name} will be deleted in 30 days
+      confirm_account_deletion:
+        body:
+          html: "<p> Your account in %{school_name} has been successfully deleted. </p> <p> All your personal information has been removed and you will no longer have access to this school.</p>"
+        subject: Account deleted successfully from %{school_name}
+      confirm_email_update:
+        body:
+          html: "<p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>"
+        subject: Your email in %{school_name} school updated successfully
+      delete_account_token:
+        body:
+          link_to: link
+          main_html: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>"
+          note_html: "<p>This action is irreversible, and will permanently remove your access to the school.</p>"
+        subject: Delete account from %{school_name}
+      new_post:
+        body:
+          link_to: view the reply on the %{community_name} community
+          main_html: "<p>%{author_name} has posted a reply to something you said on the %{community_name} community.</p> <p>You can %{link_to}."
+        subject: New reply for your post
+      update_email_token:
+        body:
+          link_to: link
+          main_html: "<p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>"
+          note_html: "<p>This action is irreversible.</p>"
+        subject: Update your email address in %{school_name} school
     user_session:
       log_in: Войти в
       recovery: восставновление аккаунта
+      send_login_token:
+        body:
+          link_to: click here
+          main_html: "<p> Please %{link_to} to login to your %{school_name} account.  </p>"
+        subject: Log in to
+      send_reset_password_token:
+        body:
+          link_to: click here
+          main_html: "<p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>"
+        subject: password reset
+    course_enrollement:
+      added_coach_html: You have been added as a coach in the course <strong>%{course_name}</strong>, on %{school_name}. This gives you the ability to review submissions from students, assign grades, and give them feedback on their work.
+    layouts:
+      mail:
+        thanks: Thanks,
+    link_fallback:
+      link_fallback: "'If you're unable to click the link above, please copy and paste the following link into your browser's address bar:'"
   maintenance:
-      title: Maintenance Mode
-      heading: Мы скоро вернемся!
-      message: Приносим извинения за неудобства. В настоящее время мы проводим <strong>технические работы</strong>, чтобы улучшить ваш опыт.
+    title: Maintenance Mode
+    heading: Мы скоро вернемся!
+    message: Приносим извинения за неудобства. В настоящее время мы проводим <strong>технические работы</strong>, чтобы улучшить ваш опыт.
   models:
     faculty:
       commitment:
@@ -1759,6 +2507,7 @@ ru:
       role:
         founder: Все учредители
         team: Команда
+        students: All Students
   mutations:
     archive_course:
       success_notification: Курс успешно заархивирован.
@@ -1774,6 +2523,8 @@ ru:
       success_notification: Запрошена копия уровня. Скоро он появится в намеченном курсе!
     create_course:
       success_notification: Курс успешно создан!
+      auto_generated_cohort_description: Auto generated cohort for active students in %{course_name}
+      auto_generated_cohort_name: Purple (Auto-generated)
     create_feedback:
       success_notification:
         description: Ваш отзыв будет отправлен студенту по электронной почте.
@@ -1787,6 +2538,7 @@ ru:
       submission_graded_error: Работа уже оценена
       submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
       success_notification: Работа отмечена как рассмотренная.
+      submission_reviewed_error: Submission already reviewed
     create_school_link:
       blank_title_error: Требуется заголовок
       success_notification: добавлена пользовательская ссылка.
@@ -1811,6 +2563,7 @@ ru:
       course_not_found_error: Не удалось найти курс с указанным идентификатором
       success_notification: Ваш экспорт обрабатывается. Мы сообщим вам, как только он будет готов.
       tag_not_found_error: Не удалось найти теги с указанными идентификаторами
+      cohorts_not_found_error: Could not find cohorts with the given IDs
     issue_certificate:
       success_notification: Сертификат успешно выдан!
     lock_topic:
@@ -1839,8 +2592,11 @@ ru:
       success_notification: Данные сертификата обновлены.
     update_course:
       success_notification: Курс успешно обновлен!
+      select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
+      unable_to_find_course: "Unable to find course with ID: %{value}"
     update_school_link:
       success_notification: Ссылка успешно обновлена!
+      link_not_found_error: Unable to find link!
     update_target:
       checklist_items_exceeded_error: Список должен содержать менее 15 пунктов.
       evaluation_criteria_course_error: Критерии оценки должны быть из того же курса, что и задача
@@ -1851,6 +2607,95 @@ ru:
       success_notification: Задача обновлена успешна!
       target_group_not_present_error: Группа задач не существуеш
       target_missing_error: Задачи не существует
+      prerequisities_self_error: Prerequisite cannot be the target itself
+    archive_coach_note:
+      note_removed_notification: Note removed successfully
+    archive_post:
+      post_archived_notification: Post archived successfully
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
+    create_coach_note:
+      note_added_notification: Note added successfully
+    create_cohort:
+      success_notification: Cohort created successfully.
+    create_community:
+      community_created_notification: Community created successfully
+    create_course_author:
+      author_created_notification: Author Created
+      new_author_added_notification: A new author has been added to this course.
+    create_evaluation_criterion:
+      eval_crit_notification: Evaluation criterion created successfully!
+    create_post:
+      reply_added_notification: Reply added successfully
+    create_quiz_submission:
+      responses_saved_notification: Your responses have been saved.
+    create_students:
+      invalid_emails: One or more of the entries have an invalid email address
+      invalid_strings: One or more of the entries have invalid strings
+      soft_limit_number: You've hit the soft-limit for number of students in this course
+      thousand_students_limit: You can only onboard 1000 students at a time
+      unique_emails: Email addresses must be unique
+    create_target_version:
+      new_version_notification: A new version has been created.
+    create_team:
+      success_notification: Team created successfully
+    delete_course_author:
+      author_deleted_details_notification: The author has been removed from this course.
+      author_deleted_notification: Author Deleted
+    destroy_team:
+      success_notification: Team deleted successfully
+    dropout_student:
+      student_updated_notification: Student updated successfully
+    initiate_account_deletion:
+      check_inbox_notification: Check your inbox for further steps!
+      deletion_init_notification: Account Deletion Initiated
+    initiate_password_reset:
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
+    mark_post_as_solution:
+      reply_marked_notification: Reply marked as solution successfully
+    merge_cohort:
+      success_notification: Cohorts merged successfully.
+    merge_levels:
+      merge_complete_notification: Merge complete!
+    quiz:
+      correct_answer: Correct Answer
+      question: Question
+      your_answer: Your Answer
+      your_correct_answer: Your Correct Answer
+    re_activate_student:
+      success_notification: Student re-activated successfully!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
+    send_update_email_token:
+      success_notification: We've sent you a link to verify your new email!
+    unmark_post_as_solution:
+      reply_unmarked_notification: Reply unmarked as solution!
+    update_cohort:
+      success_notification: Cohort updated successfully.
+    update_course_author:
+      author_name_updated_notification: The author's name has been updated.
+      author_updated_notification: Author Updated
+    update_evaluation_criterion:
+      eval_crit_updated_notification: Evaluation criterion updated successfully!
+    update_post:
+      updated_success_notification: updated successfully
+    update_review_checklist:
+      review_updated_notification: Review checklist updated successfully
+    update_school:
+      details_updated_notification: Details updated successfully!
+    update_student_details:
+      success_notification: Student updated successfully
+    update_team:
+      success_notification: Team updated successfully
+    update_topic:
+      topic_updated_notification: Topic updated successfully!
+    update_user:
+      profile_saved_notification: Profile updated successfully!
   navbar:
     admin: Администрация
     coaches: Менторы
@@ -1876,6 +2721,13 @@ ru:
     edit_history: История Изменении Поста
     edited_by: Редактированный
     reason: Причин
+    versions:
+      back_to_post: Back to Post
+      created_by: Created by
+      current_version: Current Version
+      edit_history: Post Edit History
+      edited_by: Edited by
+      reason: Reason
   presenters:
     Communities__NewTopic:
       community: Сообщество
@@ -1931,12 +2783,81 @@ ru:
           title: Coaches
         dashboard_link:
           title: Dashboard
+        organisations_link:
+          title: My Org
+    apply:
+      page_title: Enroll in %{course_name}
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: "...or start typing to search by student name or email address."
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
+    communities:
+      new_topic:
+        page_title:
+          community: Community
+          new_topic: New Topic
+      show:
+        page_title:
+          community: Community
+    courses:
+      cohorts:
+        page_title: Cohorts | %{course_name}
+      leaderboard:
+        heading:
+          multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
+          others: others
+          top_leaderboard_html: <span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>
+          top_week: is at the top of the leaderboard this week with a score of
+        rank_change_icon:
+          rank_down_alt: Rank change down
+          rank_down_double_alt: Rank change down double
+          rank_no_change_alt: Rank no change
+          rank_up_alt: Rank change up
+          rank_up_double_alt: Rank change up double
+      report:
+        student_report: Student Report
+      review:
+        review_dashboard: Review Dashboard
+      students:
+        students_in_course: Students In Course
+    posts:
+      versions:
+        page_title:
+          title: Versions | Post
+    users:
+      sessions_new:
+        button_text:
+          continue_as_developer: Continue as Developer
+          continue_with_discord: Continue with Discord
+          continue_with_email_link: Continue with email
+          continue_with_facebook: Continue with Facebook
+          continue_with_github: Continue with Github
+          continue_with_google: Continue with Google
+        page_title:
+          title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.
     issue_certificate_mutator:
       certificate_error: Указанный сертификат не найден.
       issued_error: Этому студенту уже выдан сертификат о прохождении этого курса.
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+    update_evaluation_criterion_mutator:
+      evaluation_criterion_not_found: Could not find evaluation criterion with ID %{id}
   quiz:
     correct_answer: Правильный Ответ
     question: Вопрос
@@ -1945,6 +2866,25 @@ ru:
   services:
     team_up_service:
       must_be_on_the_same_level: Для объединения в команду студенты должны принадлежать к одному уровню
+    courses:
+      demo_content_service:
+        criterion_one: Correctness of implementation
+        criterion_two: Quality of submission
+        grade_1: Okay
+        grade_2: Good
+        grade_3: Great
+        level_1: Level 1
+        target_group_description: Description of demo target group
+        target_group_name: Demo Target Group
+        target_name: Demo Target
+    discord:
+      community_message_service:
+        post_topic_created: |-
+          **%{user_name}** created a new discussion:
+          %{topic_url}
+          > %{topic_title}
+    team_up:
+      must_be_on_the_same_level: Students must belong to the same level for teaming up
   sessions:
     create:
       invalid_credentials: Почта и пароль не совпадают. Пожалуйста, проверьте свои учетные данные и попробуйте еще раз.
@@ -2078,6 +3018,8 @@ ru:
       try_again: Пожалуйста, попробуйте еще раз
       unexpected_error: Непредвиденная Ошибка!
       updated_success: обновлено успешно
+      done_exclamation: Done!
+      empty: Empty
     optional: необязательно
     optional_braces: (необязательно)
     or: или
@@ -2123,9 +3065,37 @@ ru:
     version: Версия
     versions: Версии
     view: Посмотреть
+    admin: Admin
+    back_link: Back
+    cohort: Cohort
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
+    filter: Filter
+    levels: Levels
+    m: M
+    my_org: My Org
+    notes: Notes
+    percentage_completed: "%{percentage}% completed"
+    sort_by: Sort by
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
+    password_strength: Password Strength
   users:
     delete_account:
       edit_user: Редактировать Пользователя
+      link_expired: That link has expired or is invalid. Please try again.
+      title: Edit User
     oauth:
       details: <em>Что-то</em> в запросе, отправленном вашим браузером, было недействительным. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
       invalid_request: Ваш браузер сделал неверный запрос.
@@ -2141,9 +3111,110 @@ ru:
       question: Вопрос
       shared: Вы используете общее устройство?
       with_password: Войти с паролем
+      auth_callback:
+        discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
+        discord_link_error: We were unable to link your Discord account. Please try again.
+        error: Invalid login credentials
+        invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
+        success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
+      email_sent:
+        image_alt: An email flying into to your inbox
+        magic_link:
+          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
+          heading: We've sent you a magic link!
+          notice: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Magic link is on its way!
+        reset_password_link:
+          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: We've sent you a link to reset your password!
+          notice: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Confirm your request
+      new:
+        already_signed: You are already signed in.
+        continue_with_email_link: Continue with email
+        heading: Sign in to %{school_name}
+        sign_in_options_separator: OR
+      request_password_reset:
+        cancel_link: Sign in with Google, Facebook, or Github
+        email_label: Email
+        email_placeholder: john@example.com
+        heading: Reset your password
+        image_alt: A student holding a giant key with a reset symbol on it
+        page_title: Reset password
+        submit_button: Request password reset
+        subtitle: Enter your email for password recovery.
+      reset_password:
+        link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+        page_title: Reset Password | %{title}
+      sign_in_with_email:
+        already_signed: You are already signed in.
+        email: Continue with email
+        email_address: Email Address
+        email_me: Email me a link to sign in
+        magic_link: We can email you a magic link so you can sign in without having to type your password.
+        oauth: Sign in with Google, Facebook, or Github
+        password: Password
+        password_free: Password-free sign in
+        password_new: Reset Your Password
+        shared: Are you using a shared device?
+        type_password: Type your password
+        with_password: Sign in with password.
+      sign_in_with_password_form:
+        check_credentials:
+          error: The supplied email address and password do not match. Please check your credentials and try again.
+      token:
+        link_expired: That one-time link has expired, or is invalid. Please try signing in again.
     update_email:
       frequent_request_error: Письмо было отправлено менее двух минут назад. Пожалуйста, подождите несколько минут, прежде чем повторить попытку.
       link_expired: Эта ссылка устарела или недействительна. Пожалуйста, попробуйте еще раз.
+      invalid_password_error: The password you entered is incorrect. Please try again.
+    clear_discord_id:
+      success: Discord unlinked successfully.
+    discord_account_required:
+      linked:
+        description: Your Discord account has been linked to your %{school_name} account. You can now browse the course and post messages on our Discord server. If you ever need help, don't hesitate to ask for it on the server.
+        footer_html: Happy learning! <i class="text-primary-500 if i-heart-solid if-fw"></i>
+        go_to_course_button: Begin course
+        go_to_dashboard_button: Return to dashboard
+        heading: You're all set!
+      page_title: Discord Account Required
+      unlinked:
+        description: The course you're trying to access requires you to connect your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
+        heading: Let's link your Discord account first.
+        link_discord_button: Link Discord
+        no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
+        process:
+          prefix: "The process is simple:"
+          step_1_description_html: Click on the <em>Link Discord</em> button below.
+          step_1_label: 1
+          step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_label: 2
+          step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
+          step_3_label: 3
+    edit:
+      discord_connect: Join Our Discord Community
+      discord_connected_account: Go to Discord Community
+      discord_connected_message: "<li>Your nickname on the Discord server will be kept in sync with your name here.</li><li>You've been assigned additional roles on Discord.</li>"
+      discord_connected_message_title: Your %{school_name} account is now linked to your Discord account.
+      discord_description: Joining our Discord server will let you get in touch with our team, coaches, and your peers instantly.
+      discord_how_it_works_html: "<li>Join our Discord server (it's free!)</li><li>Link your Discord account with this school's account.</li><li>Gain access to our community on Discord!</li>"
+      discord_how_it_works_title: How it works
+      discord_title: Join Our Discord Server
+      title: Edit User
+    omniauth_callbacks:
+      failure:
+        denied: Authentication was denied. Please try again.
+        denied_by: Authentication was denied by %{provider}. Please try again.
+      oauth_callback:
+        add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
+        add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
+        add_other: Please sign in using another method.
+        email_unregistered: "Your email address: %{email} is unregistered."
+        not_receive_email: "'We're sorry, but we did not receive your email address from %{provider_name}. '"
+        oauth_origin_missing:
+          details: "<em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page."
+          invalid_request: Your browser made an invalid request.
   validate_submission_gradable:
     owners_should_be_active: Невозможно обновить неактивные работы учащихся.
     submission_should_be_live: Такой подачи не существует, или оно было заархивировано.
@@ -2210,7 +3281,7 @@ ru:
       delete_account_token:
         body:
           link_to: ссылку
-          main_html: "<p>Мы получили запрос на удаление вашей учетной записи в %{school_name}.</p> <p> Нажмите на эту %{link_to}, чтобы подтвердить удаление учетной записи. Ссылка действительна только в течение 30\_минут.</p> <p> Если вы не можете перейти по приведенной выше ссылке, скопируйте и вставьте следующую ссылку в адресную строку браузера: </p>"
+          main_html: "<p>Мы получили запрос на удаление вашей учетной записи в %{school_name}.</p> <p> Нажмите на эту %{link_to}, чтобы подтвердить удаление учетной записи. Ссылка действительна только в течение 30 минут.</p> <p> Если вы не можете перейти по приведенной выше ссылке, скопируйте и вставьте следующую ссылку в адресную строку браузера: </p>"
           note_html: <p> Это действие необратимо и навсегда лишит вас доступа к школе.</p>
       enrollment:
         body:
@@ -2276,7 +3347,7 @@ ru:
       update_email_token:
         body:
           link_to: link
-          main_html: "<p>Мы получили запрос на обновление вашей электронной почты в %{school_name}.</p> <p> Нажмите на эту ссылку %{link_to}, чтобы обновить электронную почту. Ссылка действительна только в течение 30\_минут.</p>"
+          main_html: "<p>Мы получили запрос на обновление вашей электронной почты в %{school_name}.</p> <p> Нажмите на эту ссылку %{link_to}, чтобы обновить электронную почту. Ссылка действительна только в течение 30 минут.</p>"
           note_html: <p>Это действие необратимо.</p>
         subject: Обновите свой адрес электронной почты в школе %{school_name}
     sign_in_with_email:
@@ -2285,3 +3356,209 @@ ru:
       title: Студенты
     timeline_events:
       submitted_on: Отправлено в
+  applicants:
+    enroll:
+      errors:
+        email_should_not_have_bounced: The email address you supplied cannot be used because an email we sent earlier bounced
+        ensure_time_between_requests: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+        not_a_student: You are already enrolled in %{course_name} course. Try signing in, instead.
+      link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
+      welcome: Welcome to %{school_name}!
+    resolve_applicant_path:
+      welcome: Welcome to %{school_name}!
+  calendar_events:
+    create:
+      success: Event created successfully!
+    create_or_update_form:
+      calendar_error: Please select a calendar from the list
+      color_error: Please select a valid color for the event
+      invalid_url: Please enter a valid URL for the event
+      start_time_error: Please select a valid time for the event
+      title_error: Please enter a valid title for the event
+    delete:
+      success: Event deleted successfully!
+    update:
+      success: Event updated successfully!
+  calendars:
+    create:
+      success: Calendar created successfully!
+    update:
+      success: Calendar updated successfully!
+  issued_certificates:
+    verify:
+      title: Certificate
+  organisations:
+    courses:
+      active_cohorts_label: Active Cohorts
+      course_label: Course
+      empty: No %{cohort_status} for this course.
+      end_date: "End Date:"
+      ended_cohorts_label: Ended Cohorts
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{cohort_status}.
+    index:
+      heading: Organisations
+    show:
+      active_cohorts_subheading: Active Cohorts
+      active_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
+      active_students_label: Active Students
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
+      end_date: "End Date:"
+      no_active_cohorts: There are no active cohorts for this course.
+      organisation_label: Organisation
+      students_enrolled_heading: Students enrolled in
+      total_students_label: Total Students
+      view_all_cohorts: View All Cohorts
+    students:
+      show:
+        average_grades: Average Grades
+        milestone_targets: Milestone Targets
+        reviewed_submissions:
+          button: View previously reviewed submissions
+          heading: Reviewed submissions
+        targets_completed: "%{completed}/%{total} Targets"
+        targets_overview: Targets Overview
+        total_targets_completed: Total Targets Completed
+        waiting_for_review: Submissions waiting for review
+      submission:
+        accepted: Accepted
+        rejected: Rejected
+        reviewed_time_ago: Reviewed %{time_ago_in_words} ago
+        submitted_time_ago: Submitted %{time_ago_in_words} ago
+      submissions:
+        accepted_submissions_label: Accepted
+        pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} reviewed submissions.
+        rejected_submissions_label: Rejected
+        student_name_label: Reviewed submissions from
+        total_reviewed_submissions: Total
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
+  schools:
+    admins:
+      title: Admins
+    calendar_events:
+      edit:
+        page_title: Edit event
+      form:
+        add_event_button: Add event
+        add_event_heading: Add new event
+        add_link_section_subtitle: Add a link to your event. For example, on Google Meet, or Zoom.
+        add_link_section_title: Add an event link (optional)
+        calendar_label: Add event to
+        color_label: Color
+        color_label_hint: Colors help you to differentiate different types of events at glance
+        description_label: Event description
+        edit_event_heading: Edit %{event_title}
+        link_title_label: Event link title
+        link_title_placeholder: eg. Google Meet
+        link_url_label: Event link URL
+        link_url_placeholder: eg. https://meet.google.com/xxx-yyyy-zzz
+        start_time_label: Date and Time
+        title_label: Event Title
+        title_placeholder: eg. Group Discussion
+        update_event_button: Update event
+      new:
+        page_title: Add new event
+      show:
+        confirm_delete: Are you sure to delete the event?
+        date_and_time: Date and time
+        description_label: Description
+        link_label: Event Link
+        title: Calendar event details
+    calendars:
+      edit:
+        page_title: Update calendar
+      form:
+        add_calendar_button: Add calendar
+        add_calendar_heading: Create new calendar
+        all_cohorts_selected: All available cohorts have been selected
+        cohorts_label: Link calendar to cohorts
+        cohorts_label_hint: This will link calendar to specified cohorts
+        edit_calendar_heading: Edit %{calendar_name}
+        name_label: Calendar name
+        name_placeholder: eg. Holidays
+        no_cohorts_selected: No cohorts selected
+        update_calendar_button: Update calendar
+      new:
+        page_title: Create new calendar
+    communities:
+      index:
+        title: Communities
+    courses:
+      applicants:
+        title: Applicants
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
+      authors:
+        title: Authors
+      calendar_events:
+        add_calendar_button: Add Calendar
+        add_event_button: Add an event
+        calendar: Calendar
+        calendar_filter_label: Showing events from
+        calendars: Calendars
+        empty_events: No event scheduled for the selected date
+        events: Events
+        no_calendars_message: No calendars yet
+        no_calendars_sub_text: Calendar helps you to schedule events and reminders for upcoming activities.
+        select_calendar_filter: Select a calendar
+        title: Calendars and Events
+        today: Today
+        upcoming_events_in: Upcoming events in
+      certificates:
+        title: Certificates
+      curriculum:
+        title: Curriculum
+      evaluation_criteria:
+        title: Evaluation Criteria
+      exports:
+        title: Exports
+      inactive_students:
+        title: Students
+      index:
+        title: Courses
+      mark_teams_active:
+        teams_active: Teams marked active successfully!
+      students:
+        title: Students
+    customize:
+      title: Customization
+    faculty:
+      course_index:
+        title: Coaches
+      school_index:
+        coach: Coach
+        title: Coaches
+    show:
+      coaches: Coaches
+      courses: Courses
+      levels: Levels
+      no_submissions: No student submissions yet!
+      overview:
+      students: Students
+      submissions_reviewed: submissions reviewed
+      title: Overview
+  timeline_events:
+    show:
+      accepted: Accepted
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
+      pending: Pending
+      rejected: Rejected
+      reviewed_on: Reviewed on
+      status: Status
+      submission_from: Submission from
+      submitted_on: Submitted on
+      team: Team
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.

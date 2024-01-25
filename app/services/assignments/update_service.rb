@@ -22,6 +22,11 @@ module Assignments
 
         handle_milestone(assignment_params[:milestone])
 
+        # If assignment archived remove all prerequisites
+        if assignment_params[:archived] && !@assignment.archived
+          Assignments::DetachFromPrerequisitesService.new([@assignment]).execute
+        end
+
         @assignment.archived = assignment_params[:archived]
         @assignment.discussion = assignment_params[:discussion]
         @assignment.allow_anonymous = assignment_params[:allow_anonymous]

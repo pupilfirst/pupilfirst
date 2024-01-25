@@ -9,7 +9,7 @@ class AssignmentDetailsResolver < ApplicationQuery
         evaluation_criteria: assignment.evaluation_criteria.pluck(:id),
         prerequisite_targets:
           target_ids_from_assignment_ids(
-            assignment.prerequisite_assignments.pluck(:id)
+            assignment.prerequisite_assignments.not_archived.pluck(:id)
           ),
         completion_instructions: assignment.completion_instructions,
         checklist: assignment.checklist,

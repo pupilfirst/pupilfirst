@@ -77,10 +77,10 @@ module Users
         host: oauth_origin[:fqdn]
       }
 
-      redirect_to user_auth_callback_url(
-                    token_url_options,
-                    allow_other_host: true
-                  )
+      redirect_to(
+        user_auth_callback_url(**token_url_options),
+        allow_other_host: true
+      )
     end
 
     # This method is called when the user is not signed in, and is trying to sign in using OAuth.

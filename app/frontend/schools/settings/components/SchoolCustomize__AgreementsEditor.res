@@ -41,7 +41,7 @@ let handleAgreementChange = (send, event) => {
 }
 
 let updateAgreementText = (updating, kind) =>
-  updating ? t("updating") : t("update") ++ kindToString(kind)
+  updating ? t("updating") : t("update") ++ " " ++ kindToString(kind)
 
 module UpdateSchoolStringQuery = %graphql(`
    mutation UpdateSchoolStringMutation($key: String!, $value: String!) {
@@ -108,7 +108,7 @@ let initialState = (kind, customizations) => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateAgreement(agreement) => {...state, agreement: agreement, formDirty: true}
+  | UpdateAgreement(agreement) => {...state, agreement, formDirty: true}
   | BeginUpdate => {...state, updating: true}
   | ErrorOccured => {...state, updating: false}
   | DoneUpdating => {...state, updating: false, formDirty: false}
@@ -126,7 +126,8 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="agreements-editor__value">
-          {t("agreement_body") ++ " " |> str} <i className="fab fa-markdown text-base" />
+          {t("agreement_body") ++ " " |> str}
+          <i className="fab fa-markdown text-base" />
         </label>
         <textarea
           autoFocus=true

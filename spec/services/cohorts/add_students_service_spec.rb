@@ -66,7 +66,7 @@ describe Cohorts::AddStudentsService do
       email_subject = current_email.subject
 
       expect(email_subject).to eq(
-        "You have been added as a student in #{cohort.school.name}"
+        "#{student_1_data.name}, you have been added as a student in #{cohort.school.name}"
       )
 
       # Check if students are teamed up correctly

@@ -385,6 +385,7 @@ ar:
         limited:
           description_end: " without getting submissions reviewed."
           description_start: Students can level up
+          four_times: four times
           once: once
           thrice: thrice
           title: Limited
@@ -477,6 +478,7 @@ ar:
       create_button_text: Create Export
       download_course_export: Download Course Export
       export: Export
+      export_cohorts_label: Export only the students in the following cohort(s)
       export_tags_label: Export only students with the following tags
       export_targets_label: Which targets should the export include?
       export_type_label: Please select the kind of export you need
@@ -487,11 +489,15 @@ ar:
       requested: Requested
       reviewed_only_tag: Reviewed Submissions Only
       reviewed_only_targets_label: Only targets with reviewed submissions
+      search_cohort_placeholder: Search for a cohort
+      search_cohorts_empty: No cohorts selected
       search_tag_placeholder: Search for a tag
       search_tags_empty: No tags selected
       students_label: Students
       students_to_include_label: Select the students to include in course export
       teams_label: Teams
+    CourseResourcesFilter:
+      filter_resources: تصفية الموارد
     CourseSelect:
       button_load_more: Load More Courses...
       courses_fully_loaded_text: Showing all %{total_courses} courses
@@ -508,8 +514,6 @@ ar:
           active: Active
           archived: Archived
           ended: Ended
-    CourseResourcesFilter:
-      filter_resources: تصفية الموارد
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -524,6 +528,7 @@ ar:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
+      milestone_target_label: Milestone
       milestone_targets: Milestone targets
       nav_aria_next_level: انتقل إلى المستوى التالي
       nav_aria_previous_level: انتقل إلى المستوى السابق
@@ -605,6 +610,7 @@ ar:
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
+      milestone_target_label: Milestone
       next_target_button: Next Target
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
@@ -658,6 +664,7 @@ ar:
         pending: Pending
         pending_review: Pending Review
         rejected: Rejected
+      submission_limit_reached: You have %{pending_count} pending submissions and cannot submit more until they are reviewed.
     CoursesCurriculum__UndoButton:
       notification_error_body: An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.
       notification_error_head: Unexpected Error
@@ -681,6 +688,10 @@ ar:
       course_completed: Course Completed!
       incomplete_targets: "Incomplete: %{targetsCount}"
       level_progress: Level Progress
+      milestone_completed: Completed
+      milestone_pending: Pending
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
+      milestone_status_title: Milestone targets
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -694,8 +705,10 @@ ar:
       completed: Completed
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_status: Filter by another level, or by status
+      filter_by_another_status: Filter by another status
       filter_by_level: Filter by level
       filter_by_level_or_status: Filter by level, or by status
+      filter_by_status: Filter by status
       load_more: Load More...
       no_submissions_to_show: "No submissions to show "
       pending_review: Pending Review
@@ -755,20 +768,30 @@ ar:
       feedback: Feedback
       feedback_generated_text: Feedback generated from review checklist.
       feedback_placeholder: This feedback will be emailed to students when you finish grading.
+      github_action:
+        description: Do you want to re-run the Github action on this submission?
+        re_run_action_button: Yes, Re-Run Github Action
+        view_action_button: View Github Action
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
       level_acronym: L
-      note_help: "هل ترغب في كتابة ملاحظة حول %{noteAbout} هذا؟"
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
+      note_help: هل ترغب في كتابة ملاحظة حول %{noteAbout} هذا؟
       note_placeholder: Did you notice something while reviewing this submission?
+      page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
+      reject_submission: Reject Submission
+      reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: Remove assignment
       report_description: Test Report
       report_status_string:
         error: Automated tests could not complete due to errors
         failure: Some automated tests failed
-        success: All automated tests succeeded
         in_progress: Automated tests are in progress
         queued: Automated tests are queued
+        success: All automated tests succeeded
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -788,6 +811,8 @@ ar:
       students_dropped_out_message_with_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.You can review the submission until %{timestamp}
       students_dropped_out_message_without_timestamp: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
       submission: Submission
+      submission_acceptable: Is this submission acceptable?
+      submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
       team: team
@@ -795,7 +820,12 @@ ar:
       test_report: Test Report
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
+      undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
       write_a_note: Write a Note
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: Assigned %{date}
       change_reviewer_and_start_review: Yes, Assign Me
@@ -815,6 +845,7 @@ ar:
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_submissions_assigned: Only show submissions assigned to a coach
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
       filter_input:
@@ -867,6 +898,16 @@ ar:
       pending_review: Pending Review
       rejected: Rejected
       submission_hash: Submission
+    CoursesReview__SubmissionReportShow:
+      hide_report_button: Hide Report
+      report_status_string:
+        error: Actions could not complete due to errors
+        failure: Some actions failed
+        in_progress: Actions are in progress
+        queued: Actions are queued
+        success: All actions succeeded
+      show_report_button: Show Report
+      test_report: Test Report
     CoursesStudents__CoachNoteShow:
       coach_on: "on"
       delete_note: "Delete note "
@@ -909,6 +950,7 @@ ar:
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
       level_progress: Level Progress
+      milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
@@ -931,11 +973,11 @@ ar:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
     CurriculumEditor:
-      hide_archived: إخفاء المؤرشف
-      show_archived: إظهار المؤرشف
       create_level: Create Level
       create_target_group: Create target group
       edit_selected_level: Edit selected level
+      hide_archived: إخفاء المؤرشف
+      show_archived: إظهار المؤرشف
     CurriculumEditor__ContentBlockCreator:
       audio_upload_size_limit_warning: Please select a file with a size less than 10 MB.
       button_labels:
@@ -976,12 +1018,14 @@ ar:
       delete_block_confirm: Are you sure you want to delete this block?
       deleting: Deleting...
       editor_content_block: "Editor for content block "
+      embedded_url: Embedded URL
       move_down: Move Down
       move_up: Move Up
       save_changes: Save Changes
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
+      video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
       not_versioned: Not Versioned
@@ -1058,6 +1102,11 @@ ar:
       empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
       enter_valid_link: Enter a valid link
       enter_valid_title: Enter a valid title
+      github_action:
+        button_text: Configure Github Actions
+        help_description: You can configure Github Actions to automatically grade this target when a student submits a submission.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor/#github-actions
+        title: Github Actions
       link_complete: Link to complete
       mark_as_complete: Simply mark the target as completed.
       need_submit: " needs to submit."
@@ -1092,6 +1141,10 @@ ar:
         help: Should students in a team submit work on a target individually, or together?
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: How should teams tackle this target?
+      target_setting_milestone:
+        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
+        label: Is this target a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -1137,6 +1190,7 @@ ar:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
+      milestone_target_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
@@ -1238,9 +1292,11 @@ ar:
         zero: No %{plural_name} to show
       partially_loaded_text: Showing %{loaded} of %{total} %{plural_name}
     SA_Coaches_CoachEditor:
+      active: Active
       add_coach: Add New Coach
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
+      archived: Archived
       coach_add: Add Coach
       coach_created: Coach created successfully
       coach_email: Coach email address
@@ -1248,23 +1304,32 @@ ar:
       coach_name: Coach Name
       coach_profile_warn: Since the coach profile isn't public, this won't be shown anywhere
       coach_public_q: Should the coach profile be public?
+      coach_status: Coach Status
       coach_title: Coach Title/Expertise
       coach_title_error: Must have at least two characters
       coach_update: Update Coach
       coach_updated: Coach updated successfully
+      coach_visibility: Coach Visibility
       connect_link: Connect Link
       connect_link_error: This doesn't look like a valid URL
       connect_link_placeholder: Student connect request link for the coach
       email: Email
       email_input_error: Please enter a valid email address
+      exited: Exited
       input_group_error: Must have at least two characters
       name: Name
       replace_avatar: Replace avatar
       title: Title
       upload_avatar: Upload an avatar
     SA_Coaches_SchoolIndex:
+      active_coaches: Active Coaches
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
+      coaches: Coaches
+      exited_coaches: Exited Coaches
+      no_active_coaches: Your school doesn't have active coaches.
+      no_coaches: No Coaches Found
+      no_exited_coaches: Your school doesn't have exited coaches.
     SA_InactiveStudentsPanel:
       all_students: All Students
       inactive_students: Inactive Students
@@ -1328,14 +1393,14 @@ ar:
       close_community_editor: Close Community Editor
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
     SchoolCustomize__AgreementsEditor:
-      updating: جارٍ التحديث ...
-      update: " تحديث"
       agreement_body: Body of Agreement
       agreement_placeholder: Leave the agreement body empty to hide the footer link.
       manage: Manage
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
+      update: " تحديث"
       updated_notification: has been updated.
+      updating: جارٍ التحديث ...
     SchoolCustomize__ContactsEditor:
       address_placeholder: Leave the address empty to hide the footer section.
       contact_address: Contact Address
@@ -1371,6 +1436,8 @@ ar:
       updated_notification: Images have been updated successfully.
     SchoolCustomize__LinkComponent:
       cancel_editing: Cancel Editing
+      invalid_title: Please enter a non empty title with no more than 24 characters.
+      invalid_url: Please enter a valid URL
       move_down: Move Down
       move_up: Move Up
     SchoolCustomize__LinkEditor:
@@ -1387,6 +1454,7 @@ ar:
       full_url_placeholder: Full URL, staring with https://
       header: Header
       header_links: Current Header Links
+      invalid_title: Please enter a non empty title with no more than 24 characters.
       location_link: Location of Link
       manage_links: Manage custom links
       no_custom_links: There are no custom links here. Add some?
@@ -1434,6 +1502,7 @@ ar:
       nav:
         course:
           applicants: Applicants
+          assignments: Assignments
           authors: Authors
           calendar: Calendars
           certificates: Certificates
@@ -1501,6 +1570,7 @@ ar:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_characters: "%{column_name} يحتوي على حرف واحد أو أكثر غير صالح"
         invalid_email: Email has to be valid and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
@@ -1683,6 +1753,7 @@ ar:
       add_new_students: Add New Students
       cohort: Cohort
       edit: Edit
+      edit_details: Edit %{name}'s details
       filter:
         search_by_email: Search by Email
         search_by_name: Search by Name
@@ -1821,6 +1892,7 @@ ar:
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
       avatar_uploaded_notification: Avatar uploaded successfully.
       cancel: Cancel
+      change_account_email: Change account email
       change_password: Change your current password
       change_photo: Change photo
       community_digest: community digest
@@ -1830,16 +1902,21 @@ ar:
       confirm_password: Confirm password
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
+      confirm_using_password: Please confirm using your password
       current_password: Current password
+      current_password_placeholder: Type current password
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
       disable_email_radio: Disable
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
+      email_change_q: Are you sure you want to change your email?
       email_label: Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      forgot_password: Forgot your password?
+      incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
       localization: Localization
@@ -1853,13 +1930,20 @@ ar:
       password_placeholder: Type current password
       photo: Photo
       preferred_name_placeholder: Type your preferred name
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: Save Changes
       security: Security
       select_image_limit: Please select an image with a size less than 5 MB
       select_language: Select the language that you would prefer the user interface to dislpay.
       send_email_radio: Send me a daily email
       set_password: Set password for your account
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
       update_credentials: Update your login credentials for the school.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
@@ -1886,6 +1970,7 @@ ar:
         dropped_out: Dropped out
         edit_curriculum: Edit Curriculum
         leaderboard: Leaderboard
+        my_cohorts: My Cohorts
         my_students: My Students
         review_submissions: Review Submissions
         view_certificate: View Certificate
@@ -1919,6 +2004,11 @@ ar:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+    Zxcvbn:
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: Apply
@@ -1935,6 +2025,17 @@ ar:
       no_events_text: No event scheduled for the selected date
       today: Today
       upcoming_events: Upcoming events in %{month}
+    cohorts:
+      cohorts_subheading: "%{status} Cohorts"
+      end_date: "End Date:"
+      nothing_to_show: There are no %{status} cohorts to show.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} %{status} cohorts.
+      students_enrolled_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled
+      students_enrolled_suffix_html:
+        one: in <span class="font-semibold text-black">1</span> %{status} cohort
+        other: in <span class="font-semibold text-black">%{count}</span> %{status} cohorts
     leaderboard:
       active_students: Active Students
       change: Change
@@ -1957,13 +2058,6 @@ ar:
       enroll: Enroll in
       preview_course: Preview Course
   errors:
-    something_went_wrong: هناك خطأ ما!
-    vimeo:
-      2230: نوع التحميل غير صالح.
-      4003: هناك مشكلة في بدء التحميل.
-      4101: لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
-      4102: لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
-      4104: لقد تم الوصول إلى الحصة اليومية المخصصة لك.
     internal_server_error:
       details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
       title: Server Error
@@ -1984,10 +2078,17 @@ ar:
       title: Timed out
       too_long: This page took too long to load.
       try_reloading: Could you please try reloading this page?
+    something_went_wrong: هناك خطأ ما!
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       title: Invalid Request
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    vimeo:
+      "2230": نوع التحميل غير صالح.
+      "4003": هناك مشكلة في بدء التحميل.
+      "4101": لقد تم الوصول إلى الحد الأقصى لمساحة القرص لديك.
+      "4102": لقد تم الوصول إلى الحصة الأسبوعية المخصصة لك.
+      "4104": لقد تم الوصول إلى الحصة اليومية المخصصة لك.
   faculty:
     index:
       coaches_at: المشرفون في
@@ -1995,6 +2096,19 @@ ar:
   help:
     show:
       title: مساعدة
+  helpers:
+    page_entries_info:
+      entry:
+        one: entry
+        other: entries
+        zero: entries
+      more_pages:
+        display_entries: Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total
+      one_page:
+        display_entries:
+          one: Displaying <b>1</b> %{entry_name}
+          other: Displaying <b>all %{count}</b> %{entry_name}
+          zero: No %{entry_name} found
   home:
     agreement:
       privacy_policy: الحقوق والخصوصية
@@ -2024,6 +2138,17 @@ ar:
           post_created: رد %{user_name} على نقاش شاركت فيه في مجتمع %{community_name}
           topic_created: أنشئ %{user_name} نقاشا جديدا في مجتمع %{community_name}
   layouts:
+    course_nav:
+      calendar: Calendar
+      cohorts: Cohorts
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
+    footer_bottom:
+      logo_alt: Logo of %{school_name}
+      privacy_policy: Privacy Policy
+      terms_conditions: Terms & Conditions
     student_footer:
       contact: تواصل معنا
       logo: الشعار
@@ -2113,6 +2238,7 @@ ar:
           main_html: Here is some feedback from %{coach_name} on your %{update_for}
           recent_submission: recent submission
           recent_updates: recent updates
+          rejected_feedback: Your %{update_for} was rejected by %{coach_name}. Here is some feedback for the rejection
           view_html: You can view %{link_to}, including any files attached to the feedback.
         subject: New feedback from %{startup_feedback} on your submission
     student:
@@ -2140,12 +2266,16 @@ ar:
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
-          assigned: (%{stats} assigned to you)
+          assigned:
+            one: (1 from a student assigned to you)
+            other: (%{count} from students assigned to you)
           assigned_none: (none of which are assigned to you)
           control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
-          main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in some courses that you are a coach in:"
+          main_html:
+            one: "There is 1 new submission to review in a course you're coaching:"
+            other: "There are %{count} new submissions to review in the courses you're coaching:"
           older: "Older, popular topics that have seen new activity:"
           replies: replies
           views: views
@@ -2178,6 +2308,10 @@ ar:
           link_to: click here
           main_html: <p> We received a request to reset your %{school_name} password.  </p> <p> Please %{link_to} to change your password.  </p>
         subject: account recovery
+  maintenance:
+    heading: We'll be back soon!
+    message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
+    title: Maintenance Mode
   models:
     faculty:
       commitment:
@@ -2204,6 +2338,8 @@ ar:
       success_notification: Course copy requested. It will appear here soon!
     clone_level:
       success_notification: Level copy requested. It will apppear in target course soon!
+    conclude_submission_report:
+      invalid_status: The status for this submission is not valid.
     create_coach_note:
       note_added_notification: Note added successfully
     create_cohort:
@@ -2229,8 +2365,8 @@ ar:
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_reviewed_error: Submission already reviewed
       submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      submission_reviewed_error: Submission already reviewed
       success_notification: The submission has been marked as reviewed.
     create_post:
       reply_added_notification: Reply added successfully
@@ -2239,14 +2375,14 @@ ar:
     create_school_link:
       blank_title_error: A title is required
       success_notification: A custom link has been added.
-    create_students:
-      invalid_emails: واحد أو أكثر من الإدخالات بها عنوان بريد إلكتروني غير صالح
-      soft_limit_number: لقد وصلت إلى الحد الأدنى لعدد الطلاب في هذه الدورة
-      unique_emails: يجب أن تكون عناوين البريد الإلكتروني فريدة
-      invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
-      thousand_students_limit: يمكنك فقط ضم 1000 طالب في المرة الواحدة
     create_student_from_applicant:
       success_notification: Student created successfully.
+    create_students:
+      invalid_emails: واحد أو أكثر من الإدخالات بها عنوان بريد إلكتروني غير صالح
+      invalid_strings: يحتوي واحد أو أكثر من الإدخالات على سلاسل غير صالحة
+      soft_limit_number: لقد وصلت إلى الحد الأدنى لعدد الطلاب في هذه الدورة
+      thousand_students_limit: يمكنك فقط ضم 1000 طالب في المرة الواحدة
+      unique_emails: يجب أن تكون عناوين البريد الإلكتروني فريدة
     create_submission:
       blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
       form_success_notification: Your response has been saved.
@@ -2273,16 +2409,21 @@ ar:
       success_notification: Team deleted successfully
     dropout_student:
       student_updated_notification: Student updated successfully
-    export_course_report:
-      course_not_found_error: Could not find a course with the given ID
-      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
-      tag_not_found_error: Could not find tags with the given IDs
     evaluation_criterion:
       name_exists: اسم المعيار موجود مسبقاً
       no_course: لا توجد دورة تحمل الرقم %{course_id}
+    export_course_report:
+      cohorts_not_found_error: Could not find cohorts with the given IDs
+      course_not_found_error: Could not find a course with the given ID
+      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
+      tag_not_found_error: Could not find tags with the given IDs
     initiate_account_deletion:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
+    initiate_password_reset:
+      email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
+      success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2300,6 +2441,11 @@ ar:
       your_correct_answer: Your Correct Answer
     re_activate_student:
       success_notification: Student re-activated successfully!
+    re_run_github_action:
+      success_notification: Submission queued for re-run on Github
+      validation_error:
+        student_has_no_github_account: Student does not have a Github account
+        target_does_not_have_github_action: Target does not have a Github action configured
     reassign_reviewer:
       submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.
@@ -2355,6 +2501,7 @@ ar:
       multiple_method_of_completion: More than one method of completion
       prerequisities_archived_error: Cannot have archived prerequisites
       prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      prerequisities_self_error: Prerequisite cannot be the target itself
       success_notification: Target updated successfully!
       target_group_not_present_error: Target group does not exist
       target_missing_error: Target does not exist
@@ -2370,14 +2517,25 @@ ar:
       active_cohorts_label: الأفواج النشطة
       course_label: دورة
       empty: لا يوجد %{cohort_status} لهذه الدورة التدريبية.
+      end_date: "End Date:"
+      ended_cohorts_label: Ended Cohorts
       inactive_cohorts_count: "%{count}"
       inactive_cohorts_label: الأفواج غير النشطة
       pagination_notice: يظهر الآن %{page_start}-%{page_end} من إجمالي %{count} %{cohort_status}.
     index:
       heading: Organisations
     show:
+      active_cohorts_subheading: Active Cohorts
+      active_prefix_html:
+        one: <span class="font-semibold text-black">1</span> student enrolled in
+        other: <span class="font-semibold text-black">%{count}</span> students enrolled in
       active_students_label: Active Students
+      active_suffix_html:
+        one: <span class="font-semibold text-black">1</span> active cohort.
+        other: <span class="font-semibold text-black">%{count}</span> active cohorts.
       cohorts_subheading: Cohorts
+      end_date: "End Date:"
+      no_active_cohorts: There are no active cohorts for this course.
       organisation_label: Organisation
       students_enrolled_heading: Students enrolled in
       students_enrolled_prefix_html:
@@ -2391,6 +2549,7 @@ ar:
     students:
       show:
         average_grades: Average Grades
+        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2420,6 +2579,17 @@ ar:
   presenters:
     apply:
       page_title: سجّل في %{course_name}
+    cohorts:
+      students:
+        course_completion: Course completion
+        filter_hint: ...or start typing to search by student name or email address.
+        filter_placeholder: Click to see options
+        milestone_completed: Milestone completed
+        milestone_incomplete: Milestone incomplete
+        milestone_status_filter_value: "%{m}%{number}: %{title}"
+        page_title: "%{cohort_name} | %{course_name}"
+        search_by_email: Search by email address
+        search_by_name: Search by name
     communities:
       new_topic:
         page_title:
@@ -2429,6 +2599,8 @@ ar:
         page_title:
           community: مجتمع
     courses:
+      cohorts:
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "يتصدرون لوحة المتفوقين هذا الاسبوع بنتيجة "
@@ -2489,8 +2661,20 @@ ar:
     issue_certificate_mutator:
       certificate_error: تعذر العثور على الشهادة المحددة.
       issued_error: لقد تم بالفعل إصدار شهادة لهذا الطالب لهذه الدورة.
+    submission_details_resolver:
+      only_coaches_can_review: You cannot review this submission as you're not assigned to this cohort as a coach.
+      student_dropped_out_message_with_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out. You can review the submission until %{timestamp}.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out. You can review the submission until %{timestamp}.
+      student_dropped_out_message_without_timestamp:
+        one: This submission is from a student whose access to the course has ended, or has dropped out.
+        other: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
     update_evaluation_criterion_mutator:
-      evaluation_criterion_not_found: "تعذر العثور على معيار التقييم بالمعرف %{id}"
+      evaluation_criterion_not_found: تعذر العثور على معيار التقييم بالمعرف %{id}
+  school:
+    targets:
+      update_action:
+        error_message: Action could not be updated, please check the YAML syntax
   schools:
     admins:
       title: المدراء
@@ -2545,6 +2729,11 @@ ar:
     courses:
       applicants:
         title: المتقدمون
+      assignments:
+        list_title: Arrange milestone assignments
+        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
+        title: Assignments
       authors:
         title: المؤلفون
       calendar_events:
@@ -2583,8 +2772,8 @@ ar:
       course_index:
         title: المشرفون
       school_index:
-        title: المشرفون
         coach: مشرفين
+        title: المشرفون
     show:
       coaches: المشرفون
       courses: الدورات
@@ -2618,6 +2807,7 @@ ar:
     _no: لا
     _yes: نعم
     admin: إدارة
+    affiliation: انتساب
     all: الكل
     and: و
     archived: مؤرشف
@@ -2628,6 +2818,19 @@ ar:
     caption_image: أضف وصفا لهذه الصورة
     close: إغلاق
     coaches: المشرفون
+    cohort: Cohort
+    cohort_overview:
+      no_milestone_targets: There are no milestone targets.
+      no_students: There are no students in this cohort.
+      overview_link: Overview
+      student_distribution_by_milestone: Student Distribution by Milestone Completion
+      students_completed: Students Completed
+      students_link: Students
+      total_students: Total Students
+      view_all: View All
+    cohort_students:
+      nothing_to_show: There are no students matching the selected filters.
+      pagination_notice: Now showing %{page_start}-%{page_end} of a total of %{count} such students.
     cohorts: المجموعات
     community: المجتمع
     completed: مكتمل
@@ -2656,6 +2859,8 @@ ar:
     load_more: تحميل المزيد...
     loading: جار التحميل...
     login_token_expiration_warning_html: ستنتهي صلاحية الرابط في %{timestamp}. في حال انتهاء صلاحية الرابط, يمكنك تجديد الرابط من خلال <a href="%{login_url}" %>صفحة تسجيل الدخول</a>. يرجى الانتباه أن هذا الرابط مخصص لك ولا يفترض مشاركته.
+    m: M
+    my_org: My Org
     name: الاسم
     name_email: اسم أو بريد
     no_email_found: لا يوجد مستخدم بهذا البريد. يرجى مراجعة البريد المدخل
@@ -2684,7 +2889,9 @@ ar:
       previous: "&lsaquo; Previous"
       truncate: "&hellip;"
     pass: نجاح
+    password_strength: Password Strength
     percentage: نسبة
+    percentage_completed: "%{percentage}% completed"
     post: Post
     preferred_name: الاسم
     processing: معالجة
@@ -2699,14 +2906,18 @@ ar:
     search: بحث
     settings: الإعدادات
     sign_out: خروج
-    students: الطلاب
     sort_by: ترتيب حسب
+    student:
+      never_signed_in: Has never signed in
+      time_ago: Last seen %{time_ago} ago
+    students: الطلاب
     tag: علامة
     tags: علامات
     target: هدف
     team: فريق
     team_name: اسم الفريق
     teams: الفرق
+    title: عنوان
     update: تحديث
     updating: جار التحديث
     uploading: جار الرفع
@@ -2715,16 +2926,49 @@ ar:
     view: عرض
   timeline_events:
     show:
+      accepted: Accepted
       accepted_on: تم المراجعة والقبول في %{date}
+      feedback:
+        one: Feedback
+        other: Feedbacks
+      no_feedbacks: No feedback received for this submission.
+      pending: Pending
       question_with_number: "سؤال #%{number}"
+      rejected: Rejected
       rejected_on: تم المراجعة والرفض في %{date}
+      reviewed_on: Reviewed on
+      status: Status
+      submission_from: Submission from
       submitted_on: مرسل في %{date}
+      team: Team
   users:
     clear_discord_id:
       success: Discord unlinked successfully.
     delete_account:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
+    discord_account_required:
+      linked:
+        description: Your Discord account has been linked to your %{school_name} account. You can now browse the course and post messages on our Discord server. If you ever need help, don't hesitate to ask for it on the server.
+        footer_html: Happy learning! <i class="text-primary-500 if i-heart-solid if-fw"></i>
+        go_to_course_button: Begin course
+        go_to_dashboard_button: Return to dashboard
+        heading: You're all set!
+      page_title: Discord Account Required
+      unlinked:
+        description: The course you're trying to access requires you to connect your Discord account to %{school_name}. Our Discord server is where you get to interact with the community!
+        heading: Let's link your Discord account first.
+        link_discord_button: Link Discord
+        no_discord_account: You don't have a Discord account yet? You can sign up for one and link it in one go.
+        process:
+          prefix: "The process is simple:"
+          step_1_description_html: Click on the <em>Link Discord</em> button below.
+          step_1_label: 1
+          step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_label: 2
+          step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
+          step_3_label: 3
     edit:
       course_discord_requirement_met:
         description_html: Your Discord account has been linked to your %{school_name} account. You can now <a class="underline" href="%{course_path}">continue browsing the course curriculum</a>.
@@ -2789,6 +3033,7 @@ ar:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email
@@ -2809,7 +3054,12 @@ ar:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
+      invalid_password_error: The password you entered is incorrect. Please try again.
       link_expired: That link has expired or is invalid. Please try again.
+  validate_school_link_title:
+    title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active: لا يمكن تحديث إرسالية الطلاب غير النشطين
-    submission_should_be_live: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة
+    owners_should_be_active:
+      error: لا يمكن تحديث إرسالية الطلاب غير النشطين
+    submission_should_be_live:
+      error: هذه الإرسالية لم تعد موجودة، أو قد تكون مؤرشفة

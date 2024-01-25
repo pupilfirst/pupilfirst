@@ -112,6 +112,53 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text(checklist_question)
   end
 
+  scenario "school admin removes assignment from a prerequisite target" do
+    prerequisite_target =
+      create :target, :with_content, target_group: target_group_2
+
+    assignment_prerequisite_target =
+      create :assignment,
+             :with_default_checklist,
+             prerequisite_assignments: [target_3_l2.assignments.first],
+             role: Assignment::ROLE_STUDENT,
+             target: prerequisite_target
+
+    target_2_l2.assignments.first.prerequisite_assignments = [
+      assignment_prerequisite_target
+    ]
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{prerequisite_target.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to have_content("Is this assignment a milestone?")
+    expect(
+      target_2_l2.reload.assignments.first.prerequisite_assignments
+    ).to_not eq([])
+    expect(
+      prerequisite_target.reload.assignments.first.prerequisite_assignments
+    ).to_not eq([])
+
+    within("div#has_assignment") { click_button "No" }
+
+    expect(page).to_not have_content("Is this assignment a milestone?")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    # Removing an assignment removes all prerequisite relations
+    expect(target_2_l2.reload.assignments.first.prerequisite_assignments).to eq(
+      []
+    )
+    expect(
+      prerequisite_target.reload.assignments.first.prerequisite_assignments
+    ).to eq([])
+  end
+
   scenario "school admin modifies title and adds completion instruction to target" do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course)

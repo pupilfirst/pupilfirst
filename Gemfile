@@ -117,5 +117,4 @@ group :production do
   gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
-  gem "whenever", "~> 1.0", require: false
 end

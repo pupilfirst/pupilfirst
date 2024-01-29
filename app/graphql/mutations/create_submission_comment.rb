@@ -16,11 +16,13 @@ module Mutations
       {
         comment: {
           id: comment.id,
+          user_id: comment.user_id,
           submission_id: comment.timeline_event_id,
           comment: comment.comment,
           user_name: current_user.name,
           updated_at: comment.updated_at,
-          reactions: []
+          reactions: [],
+          moderation_reports: []
         }
       }
     end

@@ -10,7 +10,7 @@ module Mutations
       submission_comment.archived_at = Time.zone.now
       submission_comment.archived_by = current_user
 
-      submission.save!
+      submission_comment.save!
       { success: true }
     end
 

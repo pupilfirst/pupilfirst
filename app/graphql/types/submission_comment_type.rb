@@ -1,6 +1,7 @@
 module Types
   class SubmissionCommentType < Types::BaseObject
     field :id, ID, null: false
+    field :user_id, ID, null: false
     field :submission_id, ID, null: false
     field :comment, String, null: false
     field :reactions, [ReactionType], null: false

@@ -25,6 +25,7 @@ module Mutations
           user_id: current_user.id
         }
       }
+      #TODO send an email to the school admin
     end
 
     #TODO implement authorization

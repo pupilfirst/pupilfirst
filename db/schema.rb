@@ -637,8 +637,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.text "comment"
     t.bigint "user_id", null: false
     t.bigint "timeline_event_id", null: false
+    t.bigint "archived_by_id"
+    t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["archived_by_id"], name: "index_submission_comments_on_archived_by_id"
     t.index ["timeline_event_id"], name: "index_submission_comments_on_timeline_event_id"
     t.index ["user_id"], name: "index_submission_comments_on_user_id"
   end
@@ -820,6 +823,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.datetime "archived_at", precision: nil
     t.boolean "anonymous", default: false
     t.boolean "pinned", default: false
+    t.bigint "archived_by_id"
+    t.index ["archived_by_id"], name: "index_timeline_events_on_archived_by_id"
     t.index ["evaluator_id"], name: "index_timeline_events_on_evaluator_id"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
     t.index ["target_id"], name: "index_timeline_events_on_target_id"
@@ -989,6 +994,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   add_foreign_key "students", "users"
   add_foreign_key "submission_comments", "timeline_events"
   add_foreign_key "submission_comments", "users"
+  add_foreign_key "submission_comments", "users", column: "archived_by_id"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
@@ -1002,6 +1008,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"
   add_foreign_key "timeline_events", "targets"
+  add_foreign_key "timeline_events", "users", column: "archived_by_id"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"

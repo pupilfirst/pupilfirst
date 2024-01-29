@@ -208,6 +208,7 @@ module Targets
                     user_name: user_name
                   }
                 end,
+            moderation_reports: [],
             updated_at: comment.updated_at
           }
         end

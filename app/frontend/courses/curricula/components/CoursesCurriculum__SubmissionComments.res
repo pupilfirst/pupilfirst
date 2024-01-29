@@ -8,6 +8,7 @@ module CreateSubmissionCommentMutation = %graphql(`
      createSubmissionComment(comment: $comment, submissionId: $submissionId ) {
        comment {
          id
+         userId
          comment
          submissionId
          userName
@@ -20,6 +21,13 @@ module CreateSubmissionCommentMutation = %graphql(`
             userName,
             updatedAt
           }
+          moderationReports {
+            id,
+            userId,
+            reportableId,
+            reason,
+            reportableType
+          },
        }
      }
    }
@@ -69,7 +77,7 @@ let menuItems = (currentUser, author, comment, setSubmissionComments) => {
       className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
       // <i className=icon />
 
-      <span className="font-semibold ms-2"> {"Archive Submission"->str} </span>
+      <span className="font-semibold ms-2"> {"Archive"->str} </span>
     </button>
   if author || currentUser->User.id == comment->Comment.userId {
     items->Js.Array2.concat([archiveButton])

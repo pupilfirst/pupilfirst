@@ -17,8 +17,8 @@ let userName = t => t.userName
 let submissionId = t => t.submissionId
 let comment = t => t.comment
 let reactions = t => t.reactions
-let updatedAt = t => t.updatedAt
 let moderationReports = t => t.moderationReports
+let updatedAt = t => t.updatedAt
 
 let decode = json => {
   open Json.Decode

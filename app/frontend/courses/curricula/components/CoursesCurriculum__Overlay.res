@@ -94,6 +94,7 @@ module DiscussionSubmissionsQuery = %graphql(`
           teamName,
           comments {
             id,
+            userId,
             submissionId,
             comment,
             reactions {

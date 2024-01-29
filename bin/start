@@ -9,6 +9,7 @@ if ( [ "$PROCESS_TYPE" = "worker" ] || beginswith worker "$DYNO" ); then
   bundle exec rake jobs:work
 elif [ "$PROCESS_TYPE" = "scheduler" ]; then
   # This will run only if PROCESS_TYPE is 'scheduler'
+  bundle exec rails generate_crontab
   supercronic crontab
 else
   bundle exec puma -C config/puma.rb

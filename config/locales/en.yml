@@ -563,6 +563,7 @@ en:
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
     CoursesCurriculum__Overlay:
+      button_load_more: Load More Submissions...
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
@@ -588,6 +589,10 @@ en:
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
 
     CoursesCurriculum__Quiz:
       next_question: Next Question

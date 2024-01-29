@@ -11,11 +11,12 @@ class DiscussionSubmissionsResolver < ApplicationQuery
         .where.not(students: { id: student })
 
     # Filter by target
-    if course.targets.exists?(id: target_id)
-      submissions.where(target_id: target_id)
-    else
-      submissions
-    end
+    submissions =
+      submissions.where(target_id: target_id) if course.targets.exists?(
+      id: target_id
+    )
+
+    submissions.order(pinned: :desc)
   end
 
   def authorized?

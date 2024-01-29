@@ -11,16 +11,26 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CoursesCurriculum__Overlay")
 
+module Item = {
+  type t = DiscussionSubmission.t
+}
+
+module PagedSubmission = Pagination.Make(Item)
+
+type loading = Unloaded | Loading | Loaded
+
 type tab =
   | Learn
   | Discuss
   | Complete(TargetDetails.completionType)
 
 type state = {
+  loading: LoadingV2.t,
   targetDetails: option<TargetDetails.t>,
   tab: tab,
   targetRead: bool,
-  peerSubmissions: array<DiscussionSubmission.t>,
+  peerSubmissions: PagedSubmission.t,
+  totalEntriesCount: int,
 }
 
 type action =
@@ -30,9 +40,18 @@ type action =
   | SetTargetRead(bool)
   | AddSubmission(Target.role)
   | PerformQuickNavigation
-  | LoadSubmissions(array<DiscussionSubmission.t>)
+  | BeginReloading
+  | BeginLoadingMore
+  | LoadSubmissions(option<string>, bool, array<DiscussionSubmission.t>, int)
 
-let initialState = {targetDetails: None, tab: Learn, targetRead: false, peerSubmissions: []}
+let initialState = {
+  loading: LoadingV2.empty(),
+  targetDetails: None,
+  tab: Learn,
+  targetRead: false,
+  peerSubmissions: Unloaded,
+  totalEntriesCount: 0,
+}
 
 let reducer = (state, action) =>
   switch action {
@@ -46,12 +65,7 @@ let reducer = (state, action) =>
       ...state,
       targetRead,
     }
-  | PerformQuickNavigation => {
-      targetDetails: None,
-      tab: Learn,
-      targetRead: false,
-      peerSubmissions: [],
-    }
+  | PerformQuickNavigation => initialState
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -60,7 +74,21 @@ let reducer = (state, action) =>
         targetDetails: state.targetDetails |> OptionUtils.map(TargetDetails.clearPendingUserIds),
       }
     }
-  | LoadSubmissions(peerSubmissions) => {...state, peerSubmissions}
+  | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
+  | BeginLoadingMore => {...state, loading: LoadingMore}
+  | LoadSubmissions(endCursor, hasNextPage, newSubmissions, totalEntriesCount) =>
+    let updatedSubmissions = switch state.loading {
+    | LoadingMore =>
+      Js.Array2.concat(PagedSubmission.toArray(state.peerSubmissions), newSubmissions)
+    | Reloading(_) => newSubmissions
+    }
+
+    {
+      ...state,
+      peerSubmissions: PagedSubmission.make(updatedSubmissions, hasNextPage, endCursor),
+      loading: LoadingV2.setNotLoading(state.loading),
+      totalEntriesCount,
+    }
   }
 
 let closeOverlay = course =>
@@ -78,8 +106,8 @@ let loadTargetDetails = (target, send, ()) => {
 }
 
 module DiscussionSubmissionsQuery = %graphql(`
-    query DiscussionSubmissionsQuery($targetId: ID!) {
-      discussionSubmissions(targetId: $targetId) {
+    query DiscussionSubmissionsQuery($targetId: ID!, $after: String) {
+      discussionSubmissions(targetId: $targetId, first: 2, after: $after) {
         nodes {
           id,
           targetId,
@@ -133,21 +161,70 @@ module DiscussionSubmissionsQuery = %graphql(`
             reportableType
           }
         }
+        pageInfo {
+          endCursor,
+          hasNextPage
+        }
+        totalCount
       }
     }
   `)
 
-let getDiscussionSubmissions = (send, targetId) => {
-  DiscussionSubmissionsQuery.make({targetId: targetId})
+let getDiscussionSubmissions = (send, cursor, targetId) => {
+  DiscussionSubmissionsQuery.make({targetId, after: cursor})
   |> Js.Promise.then_(response => {
     send(
       LoadSubmissions(
+        response["discussionSubmissions"]["pageInfo"]["endCursor"],
+        response["discussionSubmissions"]["pageInfo"]["hasNextPage"],
         Js.Array.map(DiscussionSubmission.decode, response["discussionSubmissions"]["nodes"]),
+        response["discussionSubmissions"]["totalCount"],
       ),
     )
     Js.Promise.resolve()
   })
   |> ignore
+}
+
+let reloadSubmissions = (send, targetId) => {
+  send(BeginReloading)
+  getDiscussionSubmissions(send, None, targetId)
+}
+
+let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
+  <p
+    tabIndex=0
+    className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+    {str(
+      totalSubmissionsCount == loadedSubmissionsCount
+        ? t(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")
+        : t(
+            ~count=loadedSubmissionsCount,
+            ~variables=[
+              ("total_submissions", string_of_int(totalSubmissionsCount)),
+              ("loaded_submissions_count", string_of_int(loadedSubmissionsCount)),
+            ],
+            "submissions_partially_loaded_text",
+          ),
+    )}
+  </p>
+
+let submissionsList = (submissions, state, currentUser, author, callBack) => {
+  <div>
+    {ArrayUtils.isEmpty(submissions)
+      ? <p> {t("no_peer_submissions")->str} </p>
+      : {
+          Js.Array2.map(submissions, submission =>
+            <CoursesCurriculum__DiscussSubmission currentUser author submission callBack />
+          )
+        }->React.array}
+    {ReactUtils.nullIf(
+      <div className="text-center pb-4">
+        {submissionsLoadedData(state.totalEntriesCount, Array.length(submissions))}
+      </div>,
+      ArrayUtils.isEmpty(submissions),
+    )}
+  </div>
 }
 
 let completionTypeToString = (completionType, targetStatus) =>
@@ -533,6 +610,7 @@ let completeSection = (
   currentUser,
 ) => {
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
+  let targetId = target->Target.id
 
   <div>
     <div className={completeSectionClasses(state.tab, completionType)}>
@@ -608,14 +686,58 @@ let completeSection = (
       | true =>
         <div>
           <h4 className="text-base md:text-xl"> {"Submissions by peers"->str} </h4>
+          <div>
+            {switch state.peerSubmissions {
+            | Unloaded =>
+              <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
+            | PartiallyLoaded(submissions, cursor) =>
+              <div>
+                {submissionsList(
+                  submissions,
+                  state,
+                  currentUser,
+                  author,
+                  getDiscussionSubmissions(send, None),
+                )}
+                {switch state.loading {
+                | LoadingMore =>
+                  <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
+                | Reloading(times) =>
+                  ReactUtils.nullUnless(
+                    <div className="pb-6">
+                      <button
+                        className="btn btn-primary-ghost cursor-pointer w-full"
+                        onClick={_ => {
+                          send(BeginLoadingMore)
+                          getDiscussionSubmissions(send, Some(cursor), targetId)
+                        }}>
+                        {t("button_load_more")->str}
+                      </button>
+                    </div>,
+                    ArrayUtils.isEmpty(times),
+                  )
+                }}
+              </div>
+            | FullyLoaded(submissions) =>
+              <div>
+                {submissionsList(
+                  submissions,
+                  state,
+                  currentUser,
+                  author,
+                  getDiscussionSubmissions(send, None),
+                )}
+              </div>
+            }}
+          </div>
           {switch state.peerSubmissions {
-          | [] => <p> {t("no_peer_submissions")->str} </p>
-          | peerSubmissions =>
-            Js.Array2.mapi(DiscussionSubmission.sortByPinned(peerSubmissions), (submission, _) => {
-              <CoursesCurriculum__DiscussSubmission
-                currentUser author submission callBack={getDiscussionSubmissions(send)}
-              />
-            }) |> React.array
+          | Unloaded => React.null
+          | _ =>
+            let loading = switch state.loading {
+            | Reloading(times) => ArrayUtils.isNotEmpty(times)
+            | LoadingMore => false
+            }
+            <LoadingSpinner loading />
           }}
         </div>
       }}
@@ -753,7 +875,7 @@ let make = (
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
   React.useEffect1(() => {
-    getDiscussionSubmissions(send, target->Target.id)
+    reloadSubmissions(send, target->Target.id)
     None
   }, [Target.id(target)])
 

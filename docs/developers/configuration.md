@@ -275,7 +275,7 @@ To deactivate this feature, simply avoid setting the `BOT_EVALUATOR_IDS` environ
 
 ### Scheduled jobs
 
-If you're setting up a worker with `PROCESS_TYPE=scheduler` as recommended, you can customize the schedule used to run these jobs:
+If you're setting up scheduler process with `PROCESS_TYPE=scheduler`, you can customize the schedule used to run these rake tasks:
 
 ```
 # This is the default configuration, which will run each task daily at midnight, server-time.

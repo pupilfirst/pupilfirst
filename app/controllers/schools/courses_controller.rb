@@ -188,18 +188,9 @@ module Schools
 
     private
 
-    def gap?(arr)
-      arr.sort! # Sort the array in ascending order
-      n = arr.length
-
-      # Check if there is a gap between consecutive elements
-      (0..n - 2).each do |i|
-        if arr[i + 1] - arr[i] > 1
-          return true # Gap found
-        end
-      end
-
-      return false # No gaps found
+    def gap?(numbers)
+      remains = (1..numbers.length).to_a - numbers
+      remains.present?
     end
 
     def scope

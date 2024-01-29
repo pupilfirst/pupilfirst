@@ -99,11 +99,11 @@ let renderLogo = (logoUrl, schoolName, additionalClasses) =>
       alt={"Logo of " ++ schoolName}
     />
   | None =>
-    <div
-      className={"p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600 " ++
+    <span
+      className={"text-xl bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600 font-bold leading-tight  truncate max-w-full " ++
       additionalClasses}>
-      <span className="text-xl font-bold leading-tight"> {schoolName->str} </span>
-    </div>
+      {schoolName->str}
+    </span>
   }
 
 @react.component
@@ -129,12 +129,14 @@ let make = (
 
   <div className="border-b">
     <div className="mx-auto p-4">
-      <nav className="flex justify-between items-center">
+      <nav className="flex">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
-            {renderLogo(logoOnLightBgUrl, schoolName, "logo_on_light_bg")}
-            {renderLogo(logoOnDarkBgUrl, schoolName, "logo_on_dark_bg")}
-          </a>
+          <div className="flex-shrink truncate max-w-full">
+            <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
+              {renderLogo(logoOnLightBgUrl, schoolName, "logo_on_light_bg")}
+              {renderLogo(logoOnDarkBgUrl, schoolName, "logo_on_dark_bg")}
+            </a>
+          </div>
           {ReactUtils.nullUnless(
             <div className="flex items-center space-x-2">
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
@@ -151,13 +153,15 @@ let make = (
             </div>,
             isMobile(),
           )}
+          {!menuHidden && !isMobile()
+            ? <div className="flex items-center space-x-2">
+                <div
+                  className="student-navbar__links-container flex justify-end items-center w-auto">
+                  {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
+                </div>
+              </div>
+            : React.null}
         </div>
-        {!menuHidden && !isMobile()
-          ? <div
-              className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap shrink-0">
-              {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
-            </div>
-          : React.null}
       </nav>
     </div>
     {isMobile() && !menuHidden

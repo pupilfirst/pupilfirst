@@ -99,7 +99,9 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
       />
       <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
         <SubmissionChecklistShow
-          checklist={submission |> DiscussionSubmission.checklist} updateChecklistCB=None
+          checklist={submission |> DiscussionSubmission.checklist}
+          updateChecklistCB=None
+          forDiscussion=true
         />
       </div>
       <CoursesCurriculum__Reactions

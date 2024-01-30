@@ -5,7 +5,7 @@ class DiscussionSubmissionsResolver < ApplicationQuery
     submissions =
       course
         .timeline_events
-        .not_auto_verified
+        .discussion_enabled
         .live
         .joins(:students)
         .where.not(students: { id: student })

@@ -56,6 +56,16 @@ class TimelineEvent < ApplicationRecord
             }
           )
         end
+  scope :discussion_enabled,
+        -> do
+          joins(target: :assignments).where(
+            target: {
+              assignments: {
+                discussion: true
+              }
+            }
+          )
+        end
 
   CHECKLIST_STATUS_NO_ANSWER = "noAnswer"
   CHECKLIST_STATUS_PASSED = "passed"

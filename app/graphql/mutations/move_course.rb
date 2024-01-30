@@ -6,7 +6,7 @@ module Mutations
         course = Course.find_by(id: id)
 
         if course.blank?
-          I18n.t("mutations.update_course.link_not_found_error")
+          I18n.t("mutations.update_course.course_not_found_error")
         end
       end
     end
@@ -21,6 +21,11 @@ module Mutations
     validates CourseMustBePresent => {}
 
     field :success, Boolean, null: false
+
+    def allow_token_auth?
+      true
+    end
+
 
     def resolve(_params)
       { success: move_course }
@@ -55,13 +60,10 @@ module Mutations
 
     def swap_up(array, element)
       index = array.index(element)
-
-      return array if index.nil? || index.zero? || index.blank?
-
+      return if index.blank? || index.zero?
       element_above = array[index - 1]
       array[index - 1] = element
       array[index] = element_above
-      array
     end
 
     def swap_down(array, element)

@@ -3,13 +3,6 @@ let t = I18n.t(~scope="components.CoursesCurriculum__DiscussSubmission")
 
 open CoursesCurriculum__Types
 
-let dropdownSelected =
-  <button
-    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-100 appearance-none flex items-center justify-between hover:bg-gray-800 md:hover:bg-gray-50 hover:text-gray-50 focus:bg-gray-50 md:hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
-    <span> {"Menu"->str} </span>
-    <i className="fas fa-chevron-down text-xs ms-3 font-semibold" />
-  </button>
-
 module PinSubmissionMutation = %graphql(`
    mutation PinSubmissionMutation($pinned: Boolean!, $submissionId: String!) {
      pinSubmission(pinned: $pinned, submissionId: $submissionId ) {
@@ -36,36 +29,6 @@ let pinSubmission = (submission, callBack, event) => {
 @react.component
 let make = (~currentUser, ~author, ~submission, ~callBack) => {
   let submissionId = submission->DiscussionSubmission.id
-
-  let menuItems = (author, submission, callBack) => {
-    let pinned = submission->DiscussionSubmission.pinned
-    let items = [
-      <button
-        className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-        // <i className=icon />
-
-        <span className="font-semibold ms-2"> {"Archive Submission"->str} </span>
-      </button>,
-    ]
-    let pinButton =
-      <button
-        onClick={pinSubmission(submission, callBack)}
-        className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-        // <i className=icon />
-
-        <span className="font-semibold ms-2">
-          {switch pinned {
-          | true => "Unpin Submission"->str
-          | false => "Pin Submission"->str
-          }}
-        </span>
-      </button>
-    if author {
-      items->Js.Array2.concat([pinButton])
-    } else {
-      items
-    }
-  }
 
   <div
     key={submissionId}
@@ -103,7 +66,30 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         }->str}
       </span>
     </div>
-    <Dropdown selected={dropdownSelected} contents={menuItems(author, submission, callBack)} />
+    {switch author {
+    | false => React.null
+    | true =>
+      <div>
+        <button
+          onClick={pinSubmission(submission, callBack)}
+          className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
+          // <i className=icon />
+
+          <span className="font-semibold ms-2">
+            {switch submission->DiscussionSubmission.pinned {
+            | true => "Unpin Submission"->str
+            | false => "Pin Submission"->str
+            }}
+          </span>
+        </button>
+        <button
+          className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
+          // <i className=icon />
+
+          <span className="font-semibold ms-2"> {"Hide Submission"->str} </span>
+        </button>
+      </div>
+    }}
     <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
       <CoursesCurriculum__ModerationReportButton
         currentUser

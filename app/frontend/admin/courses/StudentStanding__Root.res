@@ -116,7 +116,7 @@ let makeFromUserStandingFragment = (userStanding: UserStandingFragment.t) => {
 }
 
 module SchoolAndStudentDataQuery = %graphql(`
-  query schoolAndStudentDataQuery($studentId: ID!) {
+  query SchoolAndStudentDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
       user {
         id
@@ -131,8 +131,8 @@ module SchoolAndStudentDataQuery = %graphql(`
   }
 `)
 
-module StudentStandingDataQuery = %graphql(`
-  query studentStandingDataQuery($userId: ID!) {
+module StandingDataQuery = %graphql(`
+  query StandingDataQuery($userId: ID!) {
     userStandings(userId: $userId) {
       ...UserStandingFragment
     }
@@ -220,8 +220,8 @@ let updateCurrentStanding = (userStandings: userStandings, standings: standings)
 
 let loadStandingData = (userId, send) => {
   send(SetStandingData(Loading))
-  StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {userId: userId})
-  ->Js.Promise2.then((response: StudentStandingDataQuery.t) => {
+  StandingDataQuery.fetch(~notifyOnNotFound=false, {userId: userId})
+  ->Js.Promise2.then((response: StandingDataQuery.t) => {
     let userStandings = response.userStandings->Js.Array2.map(makeFromUserStandingFragment)
 
     let standings = response.standings->Js.Array2.map(standing => {

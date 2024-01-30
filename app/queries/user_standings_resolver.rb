@@ -1,6 +1,6 @@
 class UserStandingsResolver < ApplicationQuery
   include AuthorizeSchoolAdmin
-  property :student_id
+  property :user_id
 
   def user_standings
     @user_standings ||= user.user_standings.live.order(created_at: :desc)
@@ -11,6 +11,6 @@ class UserStandingsResolver < ApplicationQuery
   end
 
   def user
-    @user ||= Student.find_by(id: student_id).user
+    @user ||= User.find_by(id: user_id)
   end
 end

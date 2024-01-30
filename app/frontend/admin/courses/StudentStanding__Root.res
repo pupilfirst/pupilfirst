@@ -6,6 +6,7 @@ let ts = I18n.ts
 let str = React.string
 
 type student = {
+  userId: string,
   name: string,
   email: string,
 }
@@ -118,6 +119,7 @@ module SchoolAndStudentDataQuery = %graphql(`
   query schoolAndStudentDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
       user {
+        id
         name
         email
       }
@@ -130,8 +132,8 @@ module SchoolAndStudentDataQuery = %graphql(`
 `)
 
 module StudentStandingDataQuery = %graphql(`
-  query studentStandingDataQuery($studentId: ID!) {
-    userStandings(studentId: $studentId) {
+  query studentStandingDataQuery($userId: ID!) {
+    userStandings(userId: $userId) {
       ...UserStandingFragment
     }
     standings {
@@ -216,9 +218,9 @@ let updateCurrentStanding = (userStandings: userStandings, standings: standings)
   }
 }
 
-let loadStandingData = (studentId, send) => {
+let loadStandingData = (userId, send) => {
   send(SetStandingData(Loading))
-  StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
+  StudentStandingDataQuery.fetch(~notifyOnNotFound=false, {userId: userId})
   ->Js.Promise2.then((response: StudentStandingDataQuery.t) => {
     let userStandings = response.userStandings->Js.Array2.map(makeFromUserStandingFragment)
 
@@ -256,6 +258,7 @@ let loadPageData = (studentId, send, setCourseId) => {
     send(
       SetPageData({
         student: {
+          userId: response.student.user.id,
           name: response.student.user.name,
           email: response.student.user.email,
         },
@@ -265,7 +268,7 @@ let loadPageData = (studentId, send, setCourseId) => {
     )
     setCourseId(response.student.course.id)
     if response.isSchoolStandingEnabled {
-      loadStandingData(studentId, send)
+      loadStandingData(response.student.user.id, send)
     } else {
       send(SetStandingData(NotFound))
     }
@@ -525,6 +528,7 @@ let make = (~studentId) => {
       select: "0",
       pageData: {
         student: {
+          userId: "",
           name: "",
           email: "",
         },

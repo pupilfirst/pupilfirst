@@ -226,7 +226,7 @@ module Types
     end
 
     resolved_field :user_standings, [Types::UserStandingType], null: false do
-      argument :student_id, ID, required: true
+      argument :user_id, ID, required: true
     end
 
     resolved_field :standings, [Types::StandingType], null: false

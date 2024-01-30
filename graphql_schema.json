@@ -13832,7 +13832,7 @@
               "description": null,
               "args": [
                 {
-                  "name": "studentId",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

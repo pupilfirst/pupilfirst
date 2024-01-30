@@ -7872,7 +7872,7 @@
               "description": "Create a new standing log",
               "args": [
                 {
-                  "name": "studentId",
+                  "name": "userId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

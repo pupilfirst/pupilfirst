@@ -154,8 +154,8 @@ module ArchiveUserStandingMutation = %graphql(`
 `)
 
 module CreateUserStandingMutation = %graphql(`
-    mutation createUserStandingMutation($studentId: ID!, $reason: String!, $standingId: ID!) {
-      createUserStanding(studentId: $studentId, reason: $reason, standingId: $standingId) {
+    mutation createUserStandingMutation($userId: ID!, $reason: String!, $standingId: ID!) {
+      createUserStanding(userId: $userId, reason: $reason, standingId: $standingId) {
         userStanding {
           ...UserStandingFragment
         }
@@ -163,9 +163,9 @@ module CreateUserStandingMutation = %graphql(`
     }
   `)
 
-let addEntry = (studentId, send, reason, standingId, baseData) => {
+let addEntry = (userId, send, reason, standingId, baseData) => {
   CreateUserStandingMutation.fetch({
-    studentId,
+    userId,
     reason,
     standingId,
   })
@@ -410,7 +410,7 @@ let standingLogs = (userStandings: userStandings, send, baseData) => {
 
 let addEntryButtonDisabled = (reason, select) => reason == "" || select == "0"
 
-let editor = (send, state, studentId, baseData) => {
+let editor = (send, state, baseData) => {
   <div className="pt-4">
     <h2 className="text-lg font-semibold"> {t("change_standing")->str} </h2>
     <p className="mb-4"> {t("change_standing_info")->str} </p>
@@ -492,7 +492,7 @@ let editor = (send, state, studentId, baseData) => {
         className="mt-4 btn btn-primary btn-sm"
         disabled={addEntryButtonDisabled(state.reason, state.select)}
         onClick={_e => {
-          addEntry(studentId, send, state.reason, state.select, baseData)
+          addEntry(state.pageData.student.userId, send, state.reason, state.select, baseData)
         }}>
         {t("add_entry_button")->str}
       </button>
@@ -555,7 +555,7 @@ let make = (~studentId) => {
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 py-8">
         {currentStandingCard(baseData.currentStanding)}
         {standingLogs(baseData.userStandings, send, baseData)}
-        {editor(send, state, studentId, baseData)}
+        {editor(send, state, baseData)}
       </div>
     </div>
   | Errored => <ErrorState />

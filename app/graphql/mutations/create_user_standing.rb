@@ -1,7 +1,7 @@
 module Mutations
   class CreateUserStanding < ApplicationQuery
     include QueryAuthorizeSchoolAdmin
-    argument :student_id, ID, required: true
+    argument :user_id, ID, required: true
     argument :reason, String, required: true
     argument :standing_id, ID, required: true
 
@@ -45,8 +45,7 @@ module Mutations
 
     def create_user_standing
       user_standing =
-        UserStanding.create!(
-          user_id: student.user.id,
+        user.user_standings.create!(
           reason: @params[:reason],
           standing_id: @params[:standing_id],
           creator: current_user
@@ -63,7 +62,7 @@ module Mutations
       previous_standing = previous_standing || resource_school.default_standing
 
       UserMailer.email_change_in_user_standing(
-        student.user,
+        user,
         current_standing.name,
         previous_standing.name,
         @params[:reason]
@@ -72,21 +71,21 @@ module Mutations
 
     def user_standings
       UserStanding
-        .where(user_id: student.user.id, archived_at: nil)
+        .where(user: user.id, archived_at: nil)
         .order(created_at: :desc)
         .limit(2)
     end
 
     def resource_school
-      student&.school
+      user&.school
     end
 
     def allow_token_auth?
       true
     end
 
-    def student
-      @student ||= Student.find_by(id: @params[:student_id])
+    def user
+      @user ||= User.find_by(id: @params[:user_id])
     end
   end
 end

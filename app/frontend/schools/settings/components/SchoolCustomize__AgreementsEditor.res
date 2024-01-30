@@ -44,7 +44,7 @@ let handleAgreementChange = (send, event) => {
 }
 
 let updateAgreementText = (updating, kind) =>
-  updating ? t("updating") : t("update") ++ kindToString(kind)
+  updating ? t("updating") : t("update") ++ " " ++ kindToString(kind)
 
 module UpdateSchoolStringQuery = %graphql(`
    mutation UpdateSchoolStringMutation($key: String!, $value: String!) {

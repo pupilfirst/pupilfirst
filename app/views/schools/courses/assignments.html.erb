@@ -16,12 +16,13 @@
         </div>
       </div>
       <% if @have_gaps%>
-        <div class="w-3/4">
-          <p class="text-sm text-gray-600 mt-1"><%= t(".milestone_gap_msg")%></p>
+        <div class="flex items-start gap-3 bg-yellow-100 p-2 rounded-lg ">
+          <i class="if i-info-solid text-3xl text-yellow-500 mt-2" ></i>
+          <p class="text-sm text-yellow-700 mt-1"><%= t(".milestone_gap_msg")%></p>
         </div>
       <% end %>
     </div>
-    <div class="pb-10">
+    <div class="pb-10 pt-4">
       <div class="rounded-lg border border-gray-300 shadow-md divide-y overflow-hidden">
         <% @milestones.each_with_index do |target, index| %>
           <div class="flex items-center target-group__target-container overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">

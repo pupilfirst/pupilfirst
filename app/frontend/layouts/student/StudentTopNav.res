@@ -131,7 +131,7 @@ let make = (
     <div className="mx-auto p-4">
       <nav className="flex">
         <div className="flex w-full items-center justify-between">
-          <div className="flex-shrink truncate max-w-full">
+          <div className="shrink truncate max-w-full">
             <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
               {renderLogo(logoOnLightBgUrl, schoolName, "logo_on_light_bg")}
               {renderLogo(logoOnDarkBgUrl, schoolName, "logo_on_dark_bg")}

@@ -1,14 +1,14 @@
 module Mutations
-  class ArchiveSubmissionComment < ApplicationQuery
+  class HideSubmissionComment < ApplicationQuery
     argument :submission_comment_id, String, required: true
 
-    description "Archive a submission comment"
+    description "Hide a submission comment from discussion"
 
     field :success, Boolean, null: false
 
     def resolve(_params)
-      submission_comment.archived_at = Time.zone.now
-      submission_comment.archived_by = current_user
+      submission_comment.hidden_at = Time.zone.now
+      submission_comment.hidden_by = current_user
 
       submission_comment.save!
       { success: true }

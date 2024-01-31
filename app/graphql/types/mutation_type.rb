@@ -188,7 +188,8 @@ class Types::MutationType < Types::BaseObject
   field :create_moderation_report,
         mutation: Mutations::CreateModerationReport,
         null: false
-  field :archive_submission_comment,
-        mutation: Mutations::ArchiveSubmissionComment,
+  field :hide_submission_comment,
+        mutation: Mutations::HideSubmissionComment,
         null: false
+  field :hide_submission, mutation: Mutations::HideSubmission, null: false
 end

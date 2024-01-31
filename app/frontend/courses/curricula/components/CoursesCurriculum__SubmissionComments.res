@@ -33,19 +33,19 @@ module CreateSubmissionCommentMutation = %graphql(`
    }
    `)
 
-module ArchiveSubmissionCommentMutation = %graphql(`
-   mutation ArchiveSubmissionCommentMutation($submissionCommentId: String!) {
-     archiveSubmissionComment(submissionCommentId: $submissionCommentId ) {
+module HideSubmissionCommentMutation = %graphql(`
+   mutation HideSubmissionCommentMutation($submissionCommentId: String!) {
+     hideSubmissionComment(submissionCommentId: $submissionCommentId ) {
        success
      }
    }
    `)
 
-let archiveComment = (submissionCommentId, setSubmissionComments, event) => {
+let hideComment = (submissionCommentId, setSubmissionComments, event) => {
   ReactEvent.Mouse.preventDefault(event)
-  ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
+  HideSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
   |> Js.Promise.then_(response => {
-    switch response["archiveSubmissionComment"]["success"] {
+    switch response["hideSubmissionComment"]["success"] {
     | true =>
       setSubmissionComments(submissionComments =>
         submissionComments->Js.Array2.filter(comment => comment.Comment.id !== submissionCommentId)
@@ -138,7 +138,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
             | true =>
               <div>
                 <button
-                  onClick={archiveComment(comment->Comment.id, setSubmissionComments)}
+                  onClick={hideComment(comment->Comment.id, setSubmissionComments)}
                   className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
                   // <i className=icon />
 

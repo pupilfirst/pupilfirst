@@ -132,7 +132,7 @@ module Types
                 submission.id,
                 submission
                   .submission_comments
-                  .not_archived
+                  .not_hidden
                   .includes(:user, :reactions, :moderation_reports)
                   .map do |comment|
                     {

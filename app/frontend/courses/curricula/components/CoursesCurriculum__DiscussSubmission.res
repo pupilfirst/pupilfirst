@@ -11,6 +11,14 @@ module PinSubmissionMutation = %graphql(`
    }
    `)
 
+module HideSubmissionMutation = %graphql(`
+   mutation HideSubmissionMutation($submissionId: String!) {
+     hideSubmission(submissionId: $submissionId ) {
+       success
+     }
+   }
+   `)
+
 let pinSubmission = (submission, callBack, event) => {
   ReactEvent.Mouse.preventDefault(event)
   let pinned = !(submission->DiscussionSubmission.pinned)
@@ -18,6 +26,21 @@ let pinSubmission = (submission, callBack, event) => {
   PinSubmissionMutation.make({pinned, submissionId})
   |> Js.Promise.then_(response => {
     switch response["pinSubmission"]["success"] {
+    | true => callBack(submission->DiscussionSubmission.targetId)
+    | false => ()
+    }
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let hideSubmission = (submission, callBack, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+
+  let submissionId = submission->DiscussionSubmission.id
+  HideSubmissionMutation.make({submissionId: submissionId})
+  |> Js.Promise.then_(response => {
+    switch response["hideSubmission"]["success"] {
     | true => callBack(submission->DiscussionSubmission.targetId)
     | false => ()
     }
@@ -83,6 +106,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
           </span>
         </button>
         <button
+          onClick={hideSubmission(submission, callBack)}
           className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
           // <i className=icon />
 

@@ -16,7 +16,7 @@ class TimelineEvent < ApplicationRecord
   belongs_to :target
   belongs_to :evaluator, class_name: "Faculty", optional: true
   belongs_to :reviewer, class_name: "Faculty", optional: true
-  belongs_to :archived_by, class_name: "User", optional: true
+  belongs_to :hidden_by, class_name: "User", optional: true
 
   has_many :evaluation_criteria, through: :target
   has_many :startup_feedback, dependent: :destroy
@@ -56,6 +56,7 @@ class TimelineEvent < ApplicationRecord
             }
           )
         end
+  scope :not_hidden, -> { where(hidden_at: nil) }
   scope :discussion_enabled,
         -> do
           joins(target: :assignments).where(

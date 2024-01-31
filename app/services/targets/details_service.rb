@@ -184,12 +184,12 @@ module Targets
       ]
       SubmissionComment
         .includes(:user, :reactions)
-        .not_hidden
+        .not_archived
         .where(timeline_event_id: submissions.pluck(:id))
         .map do |comment|
           {
             id: comment.id,
-            user_id: comment.user.id,
+            user_id: comment.user_id,
             user_name: comment.user.name,
             submission_id: comment.timeline_event_id,
             comment: comment.comment,
@@ -201,6 +201,7 @@ module Targets
                 .map do |id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
                   {
                     id: id,
+                    user_id: reaction.user_id,
                     reactionable_id: reactionable_id,
                     reactionable_type: reactionable_type,
                     reaction_value: reaction_value,
@@ -222,6 +223,7 @@ module Targets
         .map do |reaction|
           {
             id: reaction.id,
+            user_id: reaction.user_id,
             user_name: reaction.user.name,
             reactionable_id: reaction.reactionable_id,
             reactionable_type: reaction.reactionable_type,

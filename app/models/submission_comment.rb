@@ -7,4 +7,5 @@ class SubmissionComment < ApplicationRecord
   has_many :moderation_reports, as: :reportable, dependent: :destroy
 
   scope :not_hidden, -> { where(hidden_at: nil) }
+  scope :not_archived, -> { where(archived_at: nil) }
 end

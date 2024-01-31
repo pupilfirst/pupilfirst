@@ -34,18 +34,72 @@ module CreateSubmissionCommentMutation = %graphql(`
    `)
 
 module HideSubmissionCommentMutation = %graphql(`
-   mutation HideSubmissionCommentMutation($submissionCommentId: String!) {
-     hideSubmissionComment(submissionCommentId: $submissionCommentId ) {
+   mutation HideSubmissionCommentMutation($submissionCommentId: String!, $hide: Boolean!) {
+     hideSubmissionComment(submissionCommentId: $submissionCommentId, hide: $hide ) {
+       comment {
+         id
+         userId
+         comment
+         submissionId
+         userName
+         updatedAt
+         hiddenAt
+         hiddenById
+         reactions {
+            id,
+            reactionableId,
+            reactionValue,
+            reactionableType,
+            userName,
+            updatedAt
+          }
+          moderationReports {
+            id,
+            userId,
+            reportableId,
+            reason,
+            reportableType
+          },
+       }
+     }
+   }
+   `)
+
+module ArchiveSubmissionCommentMutation = %graphql(`
+   mutation ArchiveSubmissionCommentMutation($submissionCommentId: String!) {
+     archiveSubmissionComment(submissionCommentId: $submissionCommentId ) {
        success
      }
    }
    `)
 
-let hideComment = (submissionCommentId, setSubmissionComments, event) => {
+let hideComment = (submissionCommentId, hide, setSubmissionComments, event) => {
   ReactEvent.Mouse.preventDefault(event)
-  HideSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
+  HideSubmissionCommentMutation.make({submissionCommentId, hide})
   |> Js.Promise.then_(response => {
-    switch response["hideSubmissionComment"]["success"] {
+    switch response["hideSubmissionComment"]["comment"] {
+    | Some(hiddenComment) =>
+      setSubmissionComments(existingComments =>
+        Js.Array2.concat(
+          [hiddenComment],
+          Js.Array2.filter(
+            existingComments,
+            comment => comment->Comment.id != hiddenComment->Comment.id,
+          ),
+        )
+      )
+    | None => ()
+    }
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let archiveComment = (submissionCommentId, setSubmissionComments, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
+  |> Js.Promise.then_(response => {
+    switch response["archiveSubmissionComment"]["success"] {
     | true =>
       setSubmissionComments(submissionComments =>
         submissionComments->Js.Array2.filter(comment => comment.Comment.id !== submissionCommentId)
@@ -89,6 +143,67 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
     |> ignore
   }
 
+  let normalComment = comment => {
+    let commentHidden = Belt.Option.isSome(comment->Comment.hiddenAt)
+
+    <div className="bg-white border-t p-4 md:p-6" key={comment->Comment.id}>
+      <div className="flex items-center">
+        <div>
+          <div>
+            <h4 className="font-semibold text-base leading-tight block md:inline-flex self-end">
+              {comment.userName |> str}
+            </h4>
+          </div>
+        </div>
+      </div>
+      {switch author {
+      | false => React.null
+      | true =>
+        <div>
+          <button
+            onClick={hideComment(comment->Comment.id, !commentHidden, setSubmissionComments)}
+            className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
+            // <i className=icon />
+
+            <span className="font-semibold ms-2">
+              {switch commentHidden {
+              | true => "Un-hide Comment"->str
+              | false => "Hide Comment"->str
+              }}
+            </span>
+          </button>
+        </div>
+      }}
+      {switch currentUser->User.id == comment->Comment.userId {
+      | false => React.null
+      | true =>
+        <div>
+          <button
+            onClick={archiveComment(comment->Comment.id, setSubmissionComments)}
+            className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
+            // <i className=icon />
+
+            <span className="font-semibold ms-2"> {"Delete Comment"->str} </span>
+          </button>
+        </div>
+      }}
+      <CoursesCurriculum__ModerationReportButton
+        currentUser
+        moderationReports={comment->Comment.moderationReports}
+        reportableId={comment->Comment.id}
+        reportableType={"SubmissionComment"}
+      />
+      <MarkdownBlock
+        profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
+      />
+      <CoursesCurriculum__Reactions
+        reactionableType="SubmissionComment"
+        reactionableId={comment->Comment.id}
+        reactions={comment->Comment.reactions}
+      />
+    </div>
+  }
+
   <div>
     <div className="max-w-3xl flex items-center justify-between mx-auto">
       <div>
@@ -117,50 +232,14 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         </div>
         {submissionComments
         ->Js.Array2.map(comment => {
-          <div className="bg-white border-t p-4 md:p-6" key={comment->Comment.id}>
-            <div className="flex items-center">
-              // #TODO Use each user's avatar
-              <div
-                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
-                {currentUser->User.avatar}
-              </div>
-              <div>
-                <div>
-                  <h4
-                    className="font-semibold text-base leading-tight block md:inline-flex self-end">
-                    {comment.userName |> str}
-                  </h4>
-                </div>
-              </div>
-            </div>
-            {switch author {
+          switch comment->Comment.hiddenAt {
+          | Some(_) =>
+            switch author {
+            | true => normalComment(comment)
             | false => React.null
-            | true =>
-              <div>
-                <button
-                  onClick={hideComment(comment->Comment.id, setSubmissionComments)}
-                  className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-                  // <i className=icon />
-
-                  <span className="font-semibold ms-2"> {"Hide Comment"->str} </span>
-                </button>
-              </div>
-            }}
-            <CoursesCurriculum__ModerationReportButton
-              currentUser
-              moderationReports={comment->Comment.moderationReports}
-              reportableId={comment->Comment.id}
-              reportableType={"SubmissionComment"}
-            />
-            <MarkdownBlock
-              profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
-            />
-            <CoursesCurriculum__Reactions
-              reactionableType="SubmissionComment"
-              reactionableId={comment->Comment.id}
-              reactions={comment->Comment.reactions}
-            />
-          </div>
+            }
+          | _ => normalComment(comment)
+          }
         })
         ->React.array}
       </div>

@@ -18,6 +18,7 @@ class AssignmentDiscussionMigrations < ActiveRecord::Migration[7.0]
       t.references :timeline_event, null: false, foreign_key: true
       t.references :hidden_by, foreign_key: { to_table: :users }
       t.datetime :hidden_at
+      t.datetime :archived_at
 
       t.timestamps
     end

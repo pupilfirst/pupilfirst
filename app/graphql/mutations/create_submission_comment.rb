@@ -22,7 +22,9 @@ module Mutations
           user_name: current_user.name,
           updated_at: comment.updated_at,
           reactions: [],
-          moderation_reports: []
+          moderation_reports: [],
+          hidden_at: comment.hidden_at,
+          hidden_by_id: comment.hidden_by_id
         }
       }
     end

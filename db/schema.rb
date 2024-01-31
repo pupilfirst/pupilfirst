@@ -639,6 +639,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.bigint "timeline_event_id", null: false
     t.bigint "hidden_by_id"
     t.datetime "hidden_at"
+    t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hidden_by_id"], name: "index_submission_comments_on_hidden_by_id"

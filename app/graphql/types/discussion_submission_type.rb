@@ -100,6 +100,7 @@ module Types
                   .map do |reaction|
                     {
                       id: reaction.id,
+                      user_id: reaction.user_id,
                       user_name: reaction.user.name,
                       reactionable_id: reaction.reactionable_id,
                       reactionable_type: reaction.reactionable_type,
@@ -115,6 +116,7 @@ module Types
     def comments
       reaction_attributes = [
         :id,
+        :user_id,
         :reactionable_id,
         :reactionable_type,
         :reaction_value,
@@ -132,12 +134,12 @@ module Types
                 submission.id,
                 submission
                   .submission_comments
-                  .not_hidden
+                  .not_archived
                   .includes(:user, :reactions, :moderation_reports)
                   .map do |comment|
                     {
                       id: comment.id,
-                      user_id: comment.user.id,
+                      user_id: comment.user_id,
                       user_name: comment.user.name,
                       submission_id: comment.timeline_event_id,
                       comment: comment.comment,
@@ -146,9 +148,10 @@ module Types
                           .reactions
                           .includes(:user)
                           .pluck(*reaction_attributes)
-                          .map do |id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
+                          .map do |id, user_id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
                             {
                               id: id,
+                              user_id: user_id,
                               reactionable_id: reactionable_id,
                               reactionable_type: reactionable_type,
                               reaction_value: reaction_value,
@@ -157,7 +160,9 @@ module Types
                             }
                           end,
                       moderation_reports: comment.moderation_reports,
-                      updated_at: comment.updated_at
+                      updated_at: comment.updated_at,
+                      hidden_at: comment.hidden_at,
+                      hidden_by_id: comment.hidden_by_id
                     }
                   end
               )

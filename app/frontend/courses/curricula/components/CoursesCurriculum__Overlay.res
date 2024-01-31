@@ -127,6 +127,7 @@ module DiscussionSubmissionsQuery = %graphql(`
             comment,
             reactions {
               id,
+              userId,
               reactionableId,
               reactionValue,
               reactionableType,
@@ -142,9 +143,12 @@ module DiscussionSubmissionsQuery = %graphql(`
             },
             userName,
             updatedAt
+            hiddenAt
+            hiddenById
           },
           reactions {
             id,
+            userId,
             reactionableId,
             reactionValue,
             reactionableType,

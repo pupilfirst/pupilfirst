@@ -8,5 +8,7 @@ module Types
     field :moderation_reports, [ModerationReportType], null: false
     field :user_name, String, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :hidden_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :hidden_by_id, ID, null: true
   end
 end

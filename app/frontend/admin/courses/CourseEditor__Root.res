@@ -77,22 +77,6 @@ type state = {
   schoolStats: schoolStats,
 }
 
-let initialState = () => {
-  {
-    courses: Pagination.Unloaded,
-    totalEntriesCount: 0,
-    loading: LoadingV2.empty(),
-    filterString: "",
-    filter: {
-      name: None,
-      status: Some(#Active),
-    },
-    reloadCourses: false,
-    selectedCourse: None,
-    schoolStats: Unloaded,
-  }
-}
-
 type action =
   | SetSearchString(string)
   | UnsetSearchString
@@ -552,7 +536,9 @@ let showCourses = (courses, state, send) => {
           image={<img src={addNewCourseSVG} className="h-50" />}
         />
       </div>
-      {courses->Js.Array2.mapi( (course, index) => showCourse(course, index, state, send))->React.array}
+      {courses
+      ->Js.Array2.mapi((course, index) => showCourse(course, index, state, send))
+      ->React.array}
     </div>
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>
@@ -581,7 +567,21 @@ let raiseUnsafeFindError = id => {
 
 @react.component
 let make = (~school) => {
-  let (state, send) = React.useReducer(reducer, initialState())
+  let initialState = {
+    courses: Pagination.Unloaded,
+    totalEntriesCount: 0,
+    loading: LoadingV2.empty(),
+    filterString: "",
+    filter: {
+      name: None,
+      status: Some(#Active),
+    },
+    reloadCourses: false,
+    selectedCourse: None,
+    schoolStats: Unloaded,
+  }
+
+  let (state, send) = React.useReducer(reducer, initialState)
 
   let url = RescriptReactRouter.useUrl()
 

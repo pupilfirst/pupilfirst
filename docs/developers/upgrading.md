@@ -18,6 +18,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2024.1
+
+The recommended method for running scheduled jobs under Docker have changed. We've switched to using a foreground process to manage scheduled jobs; [related documentation](https://docs.pupilfirst.com/developers/digitalocean#components) has been updated.
+
 ### 2023.6
 
 This is not a breaking change, but you may want to perform some cleanup since we're upgrading to Rails 7.0, and replacing the use of the _ImageMagick_ library with _libvips_ - a faster, more memory-efficient image processing library which is Rails 7's default choice. Because of this change in image processor, image variants created previously using _ImageMagick_ will no longer be used.

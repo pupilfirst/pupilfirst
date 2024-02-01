@@ -24,6 +24,13 @@ let updatedAt = t => t.updatedAt
 let hiddenAt = t => t.hiddenAt
 let hiddenById = t => t.hiddenById
 
+let updatedAtPretty = t => t.updatedAt->DateFns.format("MMMM d, yyyy")
+let hiddenAtPretty = t =>
+  switch t.hiddenAt {
+  | Some(hiddenAt) => hiddenAt->DateFns.format("MMMM d, yyyy")
+  | None => ""
+  }
+
 let decode = json => {
   open Json.Decode
   {

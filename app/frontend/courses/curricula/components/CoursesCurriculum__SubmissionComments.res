@@ -154,6 +154,9 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
               {comment.userName |> str}
             </h4>
           </div>
+          <span className="ms-1" title={Comment.updatedAtPretty(comment)}>
+            {comment->Comment.updatedAtPretty->str}
+          </span>
         </div>
       </div>
       {switch author {
@@ -175,7 +178,13 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         </div>
       }}
       {switch currentUser->User.id == comment->Comment.userId {
-      | false => React.null
+      | false =>
+        <CoursesCurriculum__ModerationReportButton
+          currentUser
+          moderationReports={comment->Comment.moderationReports}
+          reportableId={comment->Comment.id}
+          reportableType={"SubmissionComment"}
+        />
       | true =>
         <div>
           <button
@@ -187,12 +196,6 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
           </button>
         </div>
       }}
-      <CoursesCurriculum__ModerationReportButton
-        currentUser
-        moderationReports={comment->Comment.moderationReports}
-        reportableId={comment->Comment.id}
-        reportableType={"SubmissionComment"}
-      />
       <MarkdownBlock
         profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
       />
@@ -201,6 +204,16 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         reactionableId={comment->Comment.id}
         reactions={comment->Comment.reactions}
       />
+      {switch commentHidden {
+      | true =>
+        <div>
+          <p>
+            {("This comment was hidden by course moderator at " ++ comment->Comment.hiddenAtPretty)
+              ->str}
+          </p>
+        </div>
+      | false => React.null
+      }}
     </div>
   }
 
@@ -234,7 +247,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         ->Js.Array2.map(comment => {
           switch comment->Comment.hiddenAt {
           | Some(_) =>
-            switch author {
+            switch author || currentUser->User.id == comment->Comment.userId {
             | true => normalComment(comment)
             | false => React.null
             }

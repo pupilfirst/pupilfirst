@@ -159,6 +159,29 @@ feature "Target Details Editor", js: true do
     ).to eq([])
   end
 
+  scenario "school admin makes a target milestone when there is another existing milestone" do
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           target_group: target_group_2,
+           given_milestone_number: 1
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the assignment target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    # Change it to a milestone
+    within("div#milestone") { click_button "Yes" }
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+
+    #Make sure the assignment milestone number is incremented correctly
+    expect(target_1_l2.reload.assignments.first.milestone_number).to eq(2)
+  end
+
   scenario "school admin modifies title and adds completion instruction to target" do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course)

@@ -145,6 +145,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         />
       </div>
       <CoursesCurriculum__Reactions
+        currentUser
         reactionableType="TimelineEvent"
         reactionableId={submissionId}
         reactions={submission->DiscussionSubmission.reactions}

@@ -256,6 +256,7 @@ let submissions = (
               | None => React.null
               }}
               <CoursesCurriculum__Reactions
+                currentUser
                 reactionableType="TimelineEvent"
                 reactionableId={submission->Submission.id}
                 reactions

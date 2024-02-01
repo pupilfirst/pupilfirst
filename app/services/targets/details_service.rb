@@ -177,6 +177,7 @@ module Targets
       #TODO - clean up this code using the list of attributes
       reaction_attributes = [
         :id,
+        :user_id,
         :reactionable_id,
         :reactionable_type,
         :reaction_value,
@@ -199,10 +200,10 @@ module Targets
                 .reactions
                 .includes(:user)
                 .pluck(*reaction_attributes)
-                .map do |id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
+                .map do |id, user_id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
                   {
                     id: id,
-                    user_id: reaction.user_id,
+                    user_id: user_id,
                     reactionable_id: reactionable_id,
                     reactionable_type: reactionable_type,
                     reaction_value: reaction_value,

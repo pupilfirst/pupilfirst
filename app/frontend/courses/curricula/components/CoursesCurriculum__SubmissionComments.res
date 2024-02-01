@@ -201,6 +201,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
       />
       <CoursesCurriculum__Reactions
+        currentUser
         reactionableType="SubmissionComment"
         reactionableId={comment->Comment.id}
         reactions={comment->Comment.reactions}

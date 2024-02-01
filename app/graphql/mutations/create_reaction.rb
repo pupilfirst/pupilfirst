@@ -19,6 +19,7 @@ module Mutations
       {
         reaction: {
           id: reaction.id,
+          user_id: reaction.user_id,
           reactionable_id: reaction.reactionable_id,
           reactionable_type: reaction.reactionable_type,
           reaction_value: reaction.reaction_value,

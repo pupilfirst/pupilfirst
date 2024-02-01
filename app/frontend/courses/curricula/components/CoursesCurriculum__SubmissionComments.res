@@ -79,6 +79,7 @@ let hideComment = (submissionCommentId, hide, setSubmissionComments, event) => {
   |> Js.Promise.then_(response => {
     switch response["hideSubmissionComment"]["comment"] {
     | Some(hiddenComment) =>
+      let hiddenComment = hiddenComment->Comment.decode
       setSubmissionComments(existingComments =>
         Js.Array2.concat(
           [hiddenComment],
@@ -155,7 +156,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
             </h4>
           </div>
           <span className="ms-1" title={Comment.updatedAtPretty(comment)}>
-            {comment->Comment.updatedAtPretty->str}
+            {Comment.updatedAtPretty(comment)->str}
           </span>
         </div>
       </div>

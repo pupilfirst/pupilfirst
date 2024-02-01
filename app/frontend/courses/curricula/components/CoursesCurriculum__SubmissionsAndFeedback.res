@@ -243,7 +243,18 @@ let submissions = (
               ->Js.Array2.filter(reaction =>
                 reaction->Reaction.reactionableId == submission->Submission.id
               )
+
             <div>
+              {switch submission->Submission.hiddenAt {
+              | Some(_) =>
+                <div>
+                  <p>
+                    {("This submission was hidden by course moderators on " ++
+                    Submission.hiddenAtPretty(submission))->str}
+                  </p>
+                </div>
+              | None => React.null
+              }}
               <CoursesCurriculum__Reactions
                 reactionableType="TimelineEvent"
                 reactionableId={submission->Submission.id}

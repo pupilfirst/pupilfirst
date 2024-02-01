@@ -12,6 +12,7 @@ type t = {
   anonymous: bool,
   pinned: bool,
   moderationReports: array<CoursesCurriculum__ModerationReport.t>,
+  hiddenAt: option<Js.Date.t>,
 }
 
 let id = t => t.id
@@ -25,8 +26,14 @@ let reactions = t => t.reactions
 let anonymous = t => t.anonymous
 let pinned = t => t.pinned
 let moderationReports = t => t.moderationReports
+let hiddenAt = t => t.hiddenAt
 
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
+let hiddenAtPretty = t =>
+  switch t.hiddenAt {
+  | Some(hiddenAt) => hiddenAt->DateFns.format("MMMM d, yyyy")
+  | None => ""
+  }
 
 let sort = ts =>
   ts |> ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
@@ -71,6 +78,7 @@ let decode = json => {
       "moderationReports",
       array(CoursesCurriculum__ModerationReport.decode),
     ),
+    hiddenAt: json |> optional(field("hiddenAt", DateFns.decodeISO)),
   }
 }
 
@@ -86,6 +94,7 @@ let make = (
   ~anonymous,
   ~pinned,
   ~moderationReports,
+  ~hiddenAt,
 ) => {
   id,
   targetId,
@@ -98,4 +107,5 @@ let make = (
   anonymous,
   pinned,
   moderationReports,
+  hiddenAt,
 }

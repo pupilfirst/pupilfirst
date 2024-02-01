@@ -12,6 +12,7 @@ module Types
     field :anonymous, Boolean, null: false
     field :pinned, Boolean, null: false
     field :moderation_reports, [ModerationReportType], null: false
+    field :hidden_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def files
       BatchLoader::GraphQL

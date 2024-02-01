@@ -113,6 +113,7 @@ let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
         ~createdAt=DateFns.decodeISO(submission["createdAt"]),
         ~status,
         ~checklist=submissionChecklist,
+        ~hiddenAt=None,
       )
 
       addSubmissionCB(newSubmission)

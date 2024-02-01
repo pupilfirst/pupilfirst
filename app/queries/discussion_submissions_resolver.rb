@@ -6,7 +6,6 @@ class DiscussionSubmissionsResolver < ApplicationQuery
       course
         .timeline_events
         .discussion_enabled
-        .not_hidden
         .live
         .joins(:students)
         .where.not(students: { id: student })

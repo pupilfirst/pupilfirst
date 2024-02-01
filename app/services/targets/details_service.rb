@@ -150,6 +150,7 @@ module Targets
           created_at: submission.created_at,
           status: submission.status,
           checklist: submission.checklist,
+          hidden_at: submission.hidden_at,
           files: files(submission)
         }
       end

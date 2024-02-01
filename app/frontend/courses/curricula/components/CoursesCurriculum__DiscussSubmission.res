@@ -12,8 +12,8 @@ module PinSubmissionMutation = %graphql(`
    `)
 
 module HideSubmissionMutation = %graphql(`
-   mutation HideSubmissionMutation($submissionId: String!) {
-     hideSubmission(submissionId: $submissionId ) {
+   mutation HideSubmissionMutation($submissionId: String!, $hide: Boolean!) {
+     hideSubmission(submissionId: $submissionId, hide: $hide ) {
        success
      }
    }
@@ -34,11 +34,11 @@ let pinSubmission = (submission, callBack, event) => {
   |> ignore
 }
 
-let hideSubmission = (submission, callBack, event) => {
+let hideSubmission = (submission, hide, callBack, event) => {
   ReactEvent.Mouse.preventDefault(event)
 
   let submissionId = submission->DiscussionSubmission.id
-  HideSubmissionMutation.make({submissionId: submissionId})
+  HideSubmissionMutation.make({submissionId, hide})
   |> Js.Promise.then_(response => {
     switch response["hideSubmission"]["success"] {
     | true => callBack(submission->DiscussionSubmission.targetId)
@@ -52,6 +52,7 @@ let hideSubmission = (submission, callBack, event) => {
 @react.component
 let make = (~currentUser, ~author, ~submission, ~callBack) => {
   let submissionId = submission->DiscussionSubmission.id
+  let submissionHidden = Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)
 
   <div
     key={submissionId}
@@ -89,6 +90,16 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         }->str}
       </span>
     </div>
+    {switch submissionHidden {
+    | true =>
+      <div>
+        <p>
+          {("This submission was hidden by course moderators on " ++
+          submission->DiscussionSubmission.hiddenAtPretty)->str}
+        </p>
+      </div>
+    | false => React.null
+    }}
     {switch author {
     | false => React.null
     | true =>
@@ -106,11 +117,16 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
           </span>
         </button>
         <button
-          onClick={hideSubmission(submission, callBack)}
+          onClick={hideSubmission(submission, !submissionHidden, callBack)}
           className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
           // <i className=icon />
 
-          <span className="font-semibold ms-2"> {"Hide Submission"->str} </span>
+          <span className="font-semibold ms-2">
+            {switch submissionHidden {
+            | true => "Un-hide submission"->str
+            | false => "Hide submission"->str
+            }}
+          </span>
         </button>
       </div>
     }}

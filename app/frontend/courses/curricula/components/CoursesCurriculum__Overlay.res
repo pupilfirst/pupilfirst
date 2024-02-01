@@ -112,6 +112,7 @@ module DiscussionSubmissionsQuery = %graphql(`
           id,
           targetId,
           createdAt,
+          hiddenAt,
           checklist,
           files {
             id,
@@ -219,7 +220,13 @@ let submissionsList = (submissions, state, currentUser, author, callBack) => {
       ? <p> {t("no_peer_submissions")->str} </p>
       : {
           Js.Array2.map(submissions, submission =>
-            <CoursesCurriculum__DiscussSubmission currentUser author submission callBack />
+            switch (author, Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)) {
+            | (true, _) =>
+              <CoursesCurriculum__DiscussSubmission currentUser author submission callBack />
+            | (false, true) => React.null
+            | (false, false) =>
+              <CoursesCurriculum__DiscussSubmission currentUser author submission callBack />
+            }
           )
         }->React.array}
     {ReactUtils.nullIf(

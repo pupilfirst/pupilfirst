@@ -20,7 +20,6 @@ module Types
             .where(id: target_ids)
             .each { |target| loader.call(target.id, target.title) }
         end
-      # object.target.title
     end
 
     def milestone_number
@@ -34,7 +33,6 @@ module Types
               loader.call(target.id, target.assignments.first.milestone_number)
             end
         end
-      # object.target.assignments.first.milestone_number
     end
 
     def user_names
@@ -54,7 +52,6 @@ module Types
               )
             end
         end
-      # object.students.map { |student| student.user.name }.join(', ')
     end
 
     def feedback_sent
@@ -68,7 +65,6 @@ module Types
               loader.call(submission.id, submission.startup_feedback.present?)
             end
         end
-      # object.startup_feedback.present?
     end
 
     def students_have_same_team?(submission)

@@ -16,7 +16,7 @@ These are a list of changes that should be accounted for when upgrading an exist
 encounter any problems while following these instructions, please [create a new issue](https://github.com/pupilfirst/pupilfirst/issues/new/choose)
 on our Github repo.
 
-Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
+Your current version can be found in the Docker image tag, or in `env.PF_VERSION` in the `.github/workflows/ci.yml` file.
 
 ### 2024.1
 

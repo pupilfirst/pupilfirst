@@ -50,7 +50,12 @@ after "development:evaluation_criteria", "development:target_groups" do
       checklist: [],
       milestone: true,
       milestone_number:
-        target_group.course.targets.maximum(:milestone_number).to_i + 1
+        target_group
+          .course
+          .targets
+          .joins(:assignments)
+          .maximum("assignments.milestone_number")
+          .to_i + 1
     )
 
     # Create two other targets in archived and draft state.

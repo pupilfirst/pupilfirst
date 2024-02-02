@@ -19,19 +19,24 @@ let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB) => {
     setIsHovered(_ => false)
   }
 
-  <div>
+  <div className="flex shrink-0 ps-2">
     <button
+      className="rounded-full px-2 py-1 bg-primary-100 border border-primary-300"
       onClick={addReactionCB(reactionValue)}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}>
-      {(reactionValue ++ Belt.Int.toString(reactionDetails["count"]))->str}
+      {(reactionValue ++ " " ++ Belt.Int.toString(reactionDetails["count"]))->str}
     </button>
     {switch isHovered {
     | false => React.null
     | true =>
-      <div className="modal">
+      <div className="modal absolute z-10 bg-white border p-2 mt-0.5 rounded-lg space-y-2">
         {reactionDetails["userNames"]
-        ->Js.Array2.map(userName => {<li> {userName->str} </li>})
+        ->Js.Array2.map(userName => {
+          <div className="text-sm whitespace-nowrap text-gray-600 font-medium">
+            {userName->str}
+          </div>
+        })
         ->React.array}
       </div>
     }}

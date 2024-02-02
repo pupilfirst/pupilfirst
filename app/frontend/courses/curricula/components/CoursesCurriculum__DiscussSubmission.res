@@ -129,7 +129,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         </button>
       </div>
     }}
-    <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
+    <div className="rounded-lg bg-gray-50 border shadow-md">
       <CoursesCurriculum__ModerationReportButton
         currentUser
         moderationReports={submission->DiscussionSubmission.moderationReports}

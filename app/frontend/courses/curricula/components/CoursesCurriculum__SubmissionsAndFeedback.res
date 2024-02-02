@@ -137,7 +137,7 @@ let submissions = (
           {submission |> Submission.createdAtPretty |> str}
         </div>
       </div>
-      <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
+      <div className="rounded-lg bg-gray-50 border shadow-md">
         <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
           <SubmissionChecklistShow
             checklist={submission |> Submission.checklist} updateChecklistCB=None
@@ -244,10 +244,10 @@ let submissions = (
                 reaction->Reaction.reactionableId == submission->Submission.id
               )
 
-            <div>
+            <div className="flex flex-col-reverse md:flex-row gap-4 items-start relative p-4">
               {switch submission->Submission.hiddenAt {
               | Some(_) =>
-                <div>
+                <div className="w-full">
                   <p>
                     {("This submission was hidden by course moderators on " ++
                     Submission.hiddenAtPretty(submission))->str}
@@ -255,15 +255,17 @@ let submissions = (
                 </div>
               | None => React.null
               }}
-              <CoursesCurriculum__Reactions
-                currentUser
-                reactionableType="TimelineEvent"
-                reactionableId={submission->Submission.id}
-                reactions
-              />
               <CoursesCurriculum__SubmissionComments
                 currentUser author submissionId={submission->Submission.id} comments
               />
+              <div className="md:absolute left-32 pl-8">
+                <CoursesCurriculum__Reactions
+                  currentUser
+                  reactionableType="TimelineEvent"
+                  reactionableId={submission->Submission.id}
+                  reactions
+                />
+              </div>
             </div>
           }
         }}

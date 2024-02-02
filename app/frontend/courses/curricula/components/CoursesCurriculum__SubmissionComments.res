@@ -64,10 +64,12 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
     |> ignore
   }
 
-  <div>
-    <div className="max-w-3xl flex items-center justify-between mx-auto">
+  <div className="w-full">
+    <div className="flex items-center justify-between mx-auto">
       <div>
-        <button onClick={toggleComments(setShowComments)}>
+        <button
+          className="border border-primary-400 px-3 py-1.5 font-medium text-sm rounded-full"
+          onClick={toggleComments(setShowComments)}>
           {switch showComments {
           | true => tr("hide_comments")->str
           | false => tr("view_comments")->str
@@ -76,7 +78,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
       </div>
     </div>
     <div hidden={!showComments} className="submissionComments" key={submissionId}>
-      <div className="ms-6">
+      <div>
         <input
           className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           type_="text"

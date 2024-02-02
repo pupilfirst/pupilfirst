@@ -20,7 +20,7 @@ module Picker = {
 
 let emojiDivClassName = isOpen => {
   switch isOpen {
-  | true => "absolute top-full -start-32 md:-translate-x-0 z-10 shadow "
+  | true => "fixed md:absolute bottom-0 md:bottom-auto md:top-0 inset-x-0 w-full right-0 md:right-auto md:left-0 z-10 shadow-lg "
   | false => "hidden"
   }
 }
@@ -68,7 +68,7 @@ let make = (~className, ~title, ~onChange) => {
     )
   })
 
-  <div className="sm:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
+  <div className="relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
     <button
       type_="button"
       ariaLabel={title}
@@ -77,7 +77,7 @@ let make = (~className, ~title, ~onChange) => {
       className={className}>
       <i className="fas fa-smile" />
     </button>
-    <div className={"transition-all " ++ emojiDivClassName(isOpen)}>
+    <div className={"transition " ++ emojiDivClassName(isOpen)}>
       <Picker
         title
         data

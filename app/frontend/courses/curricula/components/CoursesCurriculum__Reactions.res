@@ -72,7 +72,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
   let aggregatedReactions = groupByReaction(reactions)
   let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
 
-  <div className="bg-white border border-gray-300 rounded-t border-b-0">
+  <div className="flex flex-row-reverse md:flex-row">
     {aggregatedReactions
     ->Belt.Map.String.toArray
     ->Belt.Array.map(((reactionValue, reactionDetails)) => {
@@ -82,9 +82,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
     })
     ->React.array}
     <EmojiPicker
-      onChange={handleAddNewEmoji}
-      className={buttonClasses ++ "border-s border-gray-400 hidden md:block"}
-      title={tr("emoji_picker")}
+      onChange={handleAddNewEmoji} className={buttonClasses ++ ""} title={tr("emoji_picker")}
     />
   </div>
 }

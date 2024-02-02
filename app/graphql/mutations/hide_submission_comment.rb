@@ -5,7 +5,7 @@ module Mutations
 
     description "Hide or unhide a submission comment from discussion"
 
-    field :comment, Types::SubmissionCommentType, null: false
+    field :success, Boolean, null: false
 
     def resolve(_params)
       if @params[:hide]
@@ -17,20 +17,7 @@ module Mutations
       end
 
       submission_comment.save!
-      {
-        comment: {
-          id: submission_comment.id,
-          user_id: submission_comment.user_id,
-          submission_id: submission_comment.timeline_event_id,
-          comment: submission_comment.comment,
-          user_name: current_user.name,
-          updated_at: submission_comment.updated_at,
-          reactions: [],
-          moderation_reports: [],
-          hidden_at: submission_comment.hidden_at,
-          hidden_by_id: submission_comment.hidden_by_id
-        }
-      }
+      { success: true }
     end
 
     #TODO implement authorization

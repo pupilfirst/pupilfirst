@@ -6,7 +6,6 @@ open CoursesCurriculum__Types
 @react.component
 let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB) => {
   let (isHovered, setIsHovered) = React.useState(() => false)
-  Js.log(isHovered)
   let currentUserReacted = reactionDetails["userIds"]->Js.Array2.includes(currentUser->User.id)
 
   /* Event handlers to update the hover state */
@@ -28,11 +27,8 @@ let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB) => {
       {(reactionValue ++ Belt.Int.toString(reactionDetails["count"]))->str}
     </button>
     {switch isHovered {
-    | false =>
-      Js.log("not hovered")
-      React.null
+    | false => React.null
     | true =>
-      Js.log("hovered")
       <div className="modal">
         {reactionDetails["userNames"]
         ->Js.Array2.map(userName => {<li> {userName->str} </li>})

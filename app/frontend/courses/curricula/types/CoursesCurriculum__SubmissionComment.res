@@ -8,7 +8,7 @@ type t = {
   comment: string,
   reactions: array<CoursesCurriculum__Reaction.t>,
   moderationReports: array<CoursesCurriculum__ModerationReport.t>,
-  updatedAt: Js.Date.t,
+  createdAt: Js.Date.t,
   hiddenAt: option<Js.Date.t>,
   hiddenById: option<string>,
 }
@@ -20,11 +20,11 @@ let submissionId = t => t.submissionId
 let comment = t => t.comment
 let reactions = t => t.reactions
 let moderationReports = t => t.moderationReports
-let updatedAt = t => t.updatedAt
+let createdAt = t => t.createdAt
 let hiddenAt = t => t.hiddenAt
 let hiddenById = t => t.hiddenById
 
-let updatedAtPretty = t => t.updatedAt->DateFns.format("MMMM d, yyyy")
+let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 let hiddenAtPretty = t =>
   switch t.hiddenAt {
   | Some(hiddenAt) => hiddenAt->DateFns.format("MMMM d, yyyy")
@@ -40,7 +40,7 @@ let decode = json => {
     submissionId: json |> field("submissionId", string),
     comment: json |> field("comment", string),
     reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
-    updatedAt: json |> field("updatedAt", DateFns.decodeISO),
+    createdAt: json |> field("createdAt", DateFns.decodeISO),
     hiddenAt: json |> optional(field("hiddenAt", DateFns.decodeISO)),
     hiddenById: json |> optional(field("hiddenById", string)),
     moderationReports: json |> field(

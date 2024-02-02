@@ -34,14 +34,14 @@ let pinSubmission = (submission, callBack, event) => {
   |> ignore
 }
 
-let hideSubmission = (submission, hide, callBack, event) => {
+let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
   ReactEvent.Mouse.preventDefault(event)
 
   let submissionId = submission->DiscussionSubmission.id
   HideSubmissionMutation.make({submissionId, hide})
   |> Js.Promise.then_(response => {
     switch response["hideSubmission"]["success"] {
-    | true => callBack(submission->DiscussionSubmission.targetId)
+    | true => setSubmissionHidden(_ => hide)
     | false => ()
     }
     Js.Promise.resolve()
@@ -52,7 +52,9 @@ let hideSubmission = (submission, hide, callBack, event) => {
 @react.component
 let make = (~currentUser, ~author, ~submission, ~callBack) => {
   let submissionId = submission->DiscussionSubmission.id
-  let submissionHidden = Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)
+  let (submissionHidden, setSubmissionHidden) = React.useState(() =>
+    Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)
+  )
 
   <div
     key={submissionId}
@@ -93,10 +95,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
     {switch submissionHidden {
     | true =>
       <div>
-        <p>
-          {("This submission was hidden by course moderators on " ++
-          submission->DiscussionSubmission.hiddenAtPretty)->str}
-        </p>
+        <p> {"This submission was hidden by course moderators"->str} </p>
       </div>
     | false => React.null
     }}
@@ -117,7 +116,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
           </span>
         </button>
         <button
-          onClick={hideSubmission(submission, !submissionHidden, callBack)}
+          onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
           className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
           // <i className=icon />
 

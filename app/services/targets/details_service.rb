@@ -212,7 +212,7 @@ module Targets
                   }
                 end,
             moderation_reports: [],
-            updated_at: comment.updated_at,
+            created_at: comment.created_at,
             hidden_at: comment.hidden_at,
             hidden_by_id: comment.hidden_by_id
           }

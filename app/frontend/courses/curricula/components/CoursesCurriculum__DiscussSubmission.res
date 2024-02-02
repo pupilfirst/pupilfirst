@@ -95,7 +95,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
     {switch submissionHidden {
     | true =>
       <div>
-        <p> {"This submission was hidden by course moderators"->str} </p>
+        <p> {"This submission is hidden from discussions"->str} </p>
       </div>
     | false => React.null
     }}

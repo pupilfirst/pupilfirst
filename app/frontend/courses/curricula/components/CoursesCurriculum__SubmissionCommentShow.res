@@ -32,12 +32,12 @@ let hideComment = (submissionCommentId, hide, setCommentHidden, event) => {
   |> ignore
 }
 
-let archiveComment = (submissionCommentId, setCommentArchived, event) => {
+let archiveComment = (submissionCommentId, archiveCommentCB, event) => {
   ReactEvent.Mouse.preventDefault(event)
   ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
   |> Js.Promise.then_(response => {
     switch response["archiveSubmissionComment"]["success"] {
-    | true => setCommentArchived(_ => true)
+    | true => archiveCommentCB(submissionCommentId)
     | false => ()
     }
     Js.Promise.resolve()
@@ -46,11 +46,10 @@ let archiveComment = (submissionCommentId, setCommentArchived, event) => {
 }
 
 @react.component
-let make = (~currentUser, ~author, ~comment) => {
+let make = (~currentUser, ~author, ~comment, ~archiveCommentCB) => {
   let (commentHidden, setCommentHidden) = React.useState(() =>
     Belt.Option.isSome(comment->Comment.hiddenAt)
   )
-  let (commentArchived, setCommentArchived) = React.useState(() => false)
 
   let commentDisplay =
     <div className="bg-white border-t p-4 md:p-6" key={comment->Comment.id}>
@@ -95,7 +94,7 @@ let make = (~currentUser, ~author, ~comment) => {
       | true =>
         <div>
           <button
-            onClick={archiveComment(comment->Comment.id, setCommentArchived)}
+            onClick={archiveComment(comment->Comment.id, archiveCommentCB)}
             className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
             // <i className=icon />
 
@@ -115,21 +114,17 @@ let make = (~currentUser, ~author, ~comment) => {
       {switch commentHidden {
       | true =>
         <div>
-          <p> {"This comment was hidden by course moderators"->str} </p>
+          <p> {"This comment is hidden from discussions"->str} </p>
         </div>
       | false => React.null
       }}
     </div>
 
   {
-    switch (commentArchived, commentHidden) {
-    | (true, _) => React.null
-    | (false, false) => commentDisplay
-    | (false, true) =>
-      switch author || currentUser->User.id == comment->Comment.userId {
-      | true => commentDisplay
-      | false => React.null
-      }
+    switch (commentHidden, author || currentUser->User.id == comment->Comment.userId) {
+    | (false, _) => commentDisplay
+    | (true, true) => commentDisplay
+    | (true, false) => React.null
     }
   }
 }

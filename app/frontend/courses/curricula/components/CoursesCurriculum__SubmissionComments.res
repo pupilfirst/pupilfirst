@@ -37,6 +37,12 @@ let toggleComments = (setShowComments, event) => {
   setShowComments(prevState => !prevState)
 }
 
+let archiveCommentCB = (setSubmissionComments, submissionCommentId) => {
+  setSubmissionComments(submissionComments =>
+    submissionComments->Js.Array2.filter(comment => comment.Comment.id !== submissionCommentId)
+  )
+}
+
 @react.component
 let make = (~currentUser, ~author, ~submissionId, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
@@ -92,7 +98,9 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         </div>
         {submissionComments
         ->Js.Array2.map(comment => {
-          <CoursesCurriculum__SubmissionCommentShow currentUser author comment />
+          <CoursesCurriculum__SubmissionCommentShow
+            currentUser author comment archiveCommentCB={archiveCommentCB(setSubmissionComments)}
+          />
         })
         ->React.array}
       </div>

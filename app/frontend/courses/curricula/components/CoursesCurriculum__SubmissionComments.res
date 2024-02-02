@@ -37,12 +37,6 @@ let toggleComments = (setShowComments, event) => {
   setShowComments(prevState => !prevState)
 }
 
-let archiveCommentCB = (setSubmissionComments, submissionCommentId) => {
-  setSubmissionComments(submissionComments =>
-    submissionComments->Js.Array2.filter(comment => comment.Comment.id !== submissionCommentId)
-  )
-}
-
 @react.component
 let make = (~currentUser, ~author, ~submissionId, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
@@ -81,29 +75,23 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         </button>
       </div>
     </div>
-    {switch showComments {
-    | false => React.null
-    | true =>
-      <div className="submissionComments" key={submissionId}>
-        <div className="ms-6">
-          <input
-            className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-            type_="text"
-            value=newComment
-            maxLength=255
-            placeholder={tr("write_comment")}
-            onChange=handleInputChange
-          />
-          <button onClick={handleCreateSubmissionComment}> {tr("comment")->str} </button>
-        </div>
-        {submissionComments
-        ->Js.Array2.map(comment => {
-          <CoursesCurriculum__SubmissionCommentShow
-            currentUser author comment archiveCommentCB={archiveCommentCB(setSubmissionComments)}
-          />
-        })
-        ->React.array}
+    <div hidden={!showComments} className="submissionComments" key={submissionId}>
+      <div className="ms-6">
+        <input
+          className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          type_="text"
+          value=newComment
+          maxLength=255
+          placeholder={tr("write_comment")}
+          onChange=handleInputChange
+        />
+        <button onClick={handleCreateSubmissionComment}> {tr("comment")->str} </button>
       </div>
-    }}
+      {submissionComments
+      ->Js.Array2.map(comment => {
+        <CoursesCurriculum__SubmissionCommentShow currentUser author comment />
+      })
+      ->React.array}
+    </div>
   </div>
 }

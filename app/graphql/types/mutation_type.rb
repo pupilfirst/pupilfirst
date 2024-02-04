@@ -195,4 +195,5 @@ class Types::MutationType < Types::BaseObject
         mutation: Mutations::ArchiveSubmissionComment,
         null: false
   field :hide_submission, mutation: Mutations::HideSubmission, null: false
+  field :remove_reaction, mutation: Mutations::RemoveReaction, null: false
 end

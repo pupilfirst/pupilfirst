@@ -18,6 +18,14 @@ module CreateReactionMutation = %graphql(`
    }
    `)
 
+module RemoveReactionMutation = %graphql(`
+   mutation RemoveReactionMutation($reactionId: String!) {
+     removeReaction(reactionId: $reactionId ) {
+       success
+     }
+   }
+   `)
+
 let groupByReaction = reactions => {
   Belt.Array.reduce(reactions, Belt.Map.String.empty, (accumulator, currentItem) => {
     let reactionValue = currentItem->Reaction.reactionValue
@@ -60,7 +68,42 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
     |> ignore
   }
 
-  let handleAddExistingEmoji = (reactionValue, event) => {
+  let removeReaction = reactionValue => {
+    let reactionId = Belt.Array.reduce(reactions, None, (acc, reaction) =>
+      switch acc {
+      | Some(_) => acc
+      | None =>
+        switch reaction->Reaction.reactionValue === reactionValue &&
+          reaction->Reaction.userId == currentUser->User.id {
+        | true => Some(reaction->Reaction.id)
+        | false => None
+        }
+      }
+    )
+    switch reactionId {
+    | None => ()
+    | Some(reactionId) =>
+      RemoveReactionMutation.make({reactionId: reactionId})
+      |> Js.Promise.then_(response => {
+        switch response["removeReaction"]["success"] {
+        | true =>
+          setReactions(reactions =>
+            reactions->Js.Array2.filter(reaction => reaction->Reaction.id !== reactionId)
+          )
+        | false => ()
+        }
+        Js.Promise.resolve()
+      })
+      |> ignore
+    }
+  }
+
+  let removeReactionCB = (reactionValue, event) => {
+    ReactEvent.Mouse.preventDefault(event)
+    removeReaction(reactionValue)
+  }
+
+  let addReactionCB = (reactionValue, event) => {
     ReactEvent.Mouse.preventDefault(event)
     handleCreateReaction(reactionValue)
   }
@@ -77,7 +120,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
     ->Belt.Map.String.toArray
     ->Belt.Array.map(((reactionValue, reactionDetails)) => {
       <CoursesCurriculum__ReactionButton
-        currentUser reactionValue reactionDetails addReactionCB=handleAddExistingEmoji
+        currentUser reactionValue reactionDetails addReactionCB removeReactionCB
       />
     })
     ->React.array}

@@ -4,7 +4,7 @@ let tr = I18n.t(~scope="components.CoursesCurriculum__ReactionButton")
 open CoursesCurriculum__Types
 
 @react.component
-let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB) => {
+let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB, ~removeReactionCB) => {
   let (isHovered, setIsHovered) = React.useState(() => false)
   let currentUserReacted = reactionDetails["userIds"]->Js.Array2.includes(currentUser->User.id)
 
@@ -19,12 +19,13 @@ let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB) => {
     setIsHovered(_ => false)
   }
 
-  <div className="flex shrink-0 ps-2">
+  <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="flex shrink-0 ps-2">
     <button
       className="rounded-full px-2 py-1 bg-primary-100 border border-primary-300"
-      onClick={addReactionCB(reactionValue)}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}>
+      onClick={switch currentUserReacted {
+      | true => removeReactionCB(reactionValue)
+      | false => addReactionCB(reactionValue)
+      }}>
       {(reactionValue ++ " " ++ Belt.Int.toString(reactionDetails["count"]))->str}
     </button>
     {switch isHovered {

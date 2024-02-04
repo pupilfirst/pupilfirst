@@ -50,13 +50,13 @@ module Layouts
     def courses
       if current_user.blank?
         current_school
-          .courses.includes([:thumbnail_attachment])
+          .courses.with_attached_thumbnail
           .live
           .where(public_preview: true)
           .order(sort_index: :asc)
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.includes(thumbnail_attachment: :blob).live.order(sort_index: :asc)
+        current_school.courses.with_attached_thumbnail.live.order(sort_index: :asc)
       else
         # current course if course has public preview.
         previewed_course = @course&.public_preview? ? [@course] : []

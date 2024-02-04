@@ -185,7 +185,7 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
     (),
   )
   CoursesQuery.fetch(variables)
-  |> Js.Promise.then_((response: CoursesQuery.t) => {
+  -> Js.Promise2.then((response: CoursesQuery.t) => {
     let responseCourses = Belt.SortArray.stableSortBy(response.courses.nodes, (a, b) =>
       a.sortIndex - b.sortIndex
     )
@@ -230,7 +230,7 @@ let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) =>
       },
     },
   )
-  |> Js.Promise.then_(_ => {
+  -> Js.Promise2.then(_ => {
     let index = Js.Array.indexOf(course, Pagination.toArray(state.courses))
     let newCourses =
       direction == Up

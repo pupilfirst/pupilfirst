@@ -13,7 +13,7 @@ module Home
     alias school_name page_title
 
     def courses
-      @school.courses.includes(thumbnail_attachment: :blob).live.where(featured: true).order(sort_index: :asc)
+      @school.courses.with_attached_thumbnail.live.where(featured: true).order(sort_index: :asc)
     end
 
     def cover_image

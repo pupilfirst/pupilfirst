@@ -57,6 +57,20 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.confirm_email_update(user.name, user.email, user.school)
   end
 
+  def email_change_in_user_standing
+    school = School.first
+    user = school.users.first
+    previous_standing = "Netural"
+    current_standing = "Community Hero"
+    reason = "Very active in community forum."
+    UserMailer.email_change_in_user_standing(
+      user,
+      current_standing,
+      previous_standing,
+      reason
+    )
+  end
+
   private
 
   def new_topics

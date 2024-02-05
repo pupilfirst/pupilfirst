@@ -9,10 +9,10 @@ type link = {
 }
 
 let makeLink = (~selected=false, ~title, ~href, ~icon) => {
-  title: title,
-  href: href,
-  selected: selected,
-  icon: icon,
+  title,
+  href,
+  selected,
+  icon,
 }
 
 let selectedClasses = bool => {
@@ -24,7 +24,9 @@ let selectedClasses = bool => {
 @react.component
 let make = (~exitUrl, ~title, ~description, ~links=[]) => {
   <>
-    <Helmet> <title> {str(title)} </title> </Helmet>
+    <Helmet>
+      <title> {str(title)} </title>
+    </Helmet>
     <div className="bg-gray-50 border-b">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 pt-12">
         <div>
@@ -45,14 +47,20 @@ let make = (~exitUrl, ~title, ~description, ~links=[]) => {
                   key={string_of_int(index)}
                   href={link.href}
                   className={selectedClasses(link.selected)}>
-                  <i className={link.icon} /> <span className="ms-2"> {str(link.title)} </span>
+                  {Js.String2.startsWith(link.icon, "if")
+                    ? <PfIcon className={link.icon} />
+                    : <i className={link.icon} />}
+                  <span className="ms-2"> {str(link.title)} </span>
                 </div>
               : <Link
                   href={link.href}
                   className={selectedClasses(link.selected)}
                   key={string_of_int(index)}>
                   <div>
-                    <i className={link.icon} /> <span className="ms-2"> {str(link.title)} </span>
+                    {Js.String2.startsWith(link.icon, "if")
+                      ? <PfIcon className={link.icon} />
+                      : <i className={link.icon} />}
+                    <span className="ms-2"> {str(link.title)} </span>
                   </div>
                 </Link>
           })

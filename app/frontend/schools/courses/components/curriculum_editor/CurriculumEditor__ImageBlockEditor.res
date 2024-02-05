@@ -20,9 +20,9 @@ let onChangeWidth = (contentBlock, updateContentBlockCB, width, event) => {
 let imageResizeButton = (~width, ~currentWidth, ~contentBlock, ~updateContentBlockCB) => {
   let active = width == currentWidth
 
-  let defaultClasses = "rounded-s flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 hover:text-green-400 transition duration-500 ease-in-out"
+  let defaultClasses = "flex justify-center items-center px-4 py-2 h-full w-full text-primary-100 hover:bg-primary-700 transition duration-500 ease-in-out"
 
-  let classes = defaultClasses ++ (active ? " bg-primary-900 text-green-500" : "")
+  let classes = defaultClasses ++ (active ? " bg-primary-500 text-primary-100" : "")
 
   let iconClass = switch width {
   | ContentBlock.Auto => "i-image-auto"
@@ -51,7 +51,8 @@ let imageResizePanel = (currentWidth, contentBlock, updateContentBlockCB) => {
 
   <div
     className="image-block-editor__image-resize-panel flex justify-center absolute w-full top-0 opacity-0 transform translate-y-0 transition duration-500 ease-in-out">
-    <div className="image-block-editor__image-resize-panel-box mx-auto rounded shadow-lg h-full">
+    <div
+      className="bg-primary-900 border border-primary-100 mx-auto rounded h-full overflow-hidden">
       <div className="grid grid-cols-5 place-items-center text-white text-center">
         {button(~width=ContentBlock.Full)}
         {button(~width=ContentBlock.FourFifths)}

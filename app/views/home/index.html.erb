@@ -12,7 +12,7 @@
         />
       <% else %>
         <div
-          class="school-index__cover-default opacity-75 absolute h-full w-full svg-bg-pattern-6"
+          class="school-index__cover-default absolute h-full w-full svg-bg-pattern-6"
         ></div>
       <% end %>
     </div>
@@ -71,15 +71,15 @@
                         ></div>
                       <% end %>
                     </div>
-                    <div
-                      class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
-                    >
-                      <h4
-                        class="school-index-course__title text-white font-medium leading-tight ps-6 pe-4 text-lg md:text-xl"
-                      >
-                        <%= course.name %>
-                      </h4>
+                  </div>
+                  <div class="flex gap-2 border-b border-gray-200">
+                    <div class="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+                      <i class="if i-book-solid if-fw text-primary-400">s</i>
                     </div>
+                    <h4
+                  class="w-full text-black font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
+                      <%= course.name %>
+                    </h4>
                   </div>
                   <div class="flex flex-col justify-between h-full">
                     <div

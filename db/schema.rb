@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -85,11 +85,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
     t.string "role"
     t.jsonb "checklist"
     t.string "completion_instructions"
-    t.boolean "milestone"
+    t.boolean "milestone", default: false, null: false
     t.integer "milestone_number"
-    t.boolean "archived"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "archived", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["target_id"], name: "index_assignments_on_target_id"
   end
 
@@ -608,12 +608,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
     t.boolean "excluded_from_leaderboard", default: false
     t.datetime "dropped_out_at", precision: nil
     t.bigint "cohort_id"
-    t.bigint "level_id"
     t.bigint "team_id"
     t.datetime "completed_at", precision: nil
     t.string "github_repository"
     t.index ["cohort_id"], name: "index_students_on_cohort_id"
-    t.index ["level_id"], name: "index_students_on_level_id"
     t.index ["team_id"], name: "index_students_on_team_id"
     t.index ["user_id"], name: "index_students_on_user_id"
   end
@@ -954,7 +952,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_121837) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "students", "cohorts"
-  add_foreign_key "students", "levels"
   add_foreign_key "students", "teams"
   add_foreign_key "students", "users"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"

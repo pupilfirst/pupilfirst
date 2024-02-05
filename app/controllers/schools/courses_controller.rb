@@ -176,15 +176,22 @@ module Schools
       @milestones =
         @course
           .targets
+          .includes(:assignments)
           .live
           .milestone
           .order("assignments.milestone_number asc")
           .page(params[:page])
           .per(20)
       @page_no = params[:page].presence || 1
+      @have_gaps = gap?(@milestones.pluck("assignments.milestone_number"))
     end
 
     private
+
+    def gap?(numbers)
+      remains = (1..numbers.length).to_a - numbers
+      remains.present?
+    end
 
     def scope
       @scope ||=

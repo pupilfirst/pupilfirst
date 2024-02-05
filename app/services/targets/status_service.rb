@@ -64,10 +64,6 @@ module Targets
         end
     end
 
-    def student_level_number
-      @student_level_number ||= @student.level.number
-    end
-
     def target_level_number
       @target_level_number ||= @target.level.number
     end

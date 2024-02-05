@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-bold md:mt-8"><%= t('.heading') %></h1>
   <div class="space-y-4 mt-6">
     <% @organisations.each do |organisation| %>
-      <%= link_to organisation_path(organisation), class: "p-6 flex bg-white items-center border border-transparent rounded-lg shadow font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500" do %>
+      <%= link_to organisation_path(organisation), class: "p-6 flex bg-white items-center border border-gray-300 rounded-lg font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500" do %>
         <%= organisation.name %>
       <% end %>
     <% end %>

@@ -3,7 +3,7 @@
 }
 
 .level-editor__tab--selected {
-  border-bottom-color: white;
+  border-bottom-color: theme("colors.white");
   @apply text-primary-500 bg-white;
 }
 

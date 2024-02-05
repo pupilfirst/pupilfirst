@@ -22,7 +22,7 @@
   top: 0;
   left: 0;
   fill: none;
-  stroke: #ffffff;
+  stroke: theme("colors.white");
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;

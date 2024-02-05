@@ -118,7 +118,7 @@ feature "Organisation show" do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       find(
-        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_text(team_2.students.first.name)
@@ -182,7 +182,7 @@ feature "Organisation show" do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       find(
-        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_text(team_2.students.first.name)

@@ -10,8 +10,8 @@ module Cohorts
              validates: {
                presence: true,
                file_size: {
-                 less_than: 5.megabytes,
-               },
+                 less_than: 5.megabytes
+               }
              }
 
     validate :soft_limit_student_count
@@ -24,21 +24,23 @@ module Cohorts
         model,
         csv_rows,
         current_user,
-        notify_students == "true",
+        notify_students == "true"
       )
     end
 
     def csv_rows
       @csv_rows ||=
         begin
-          CSV.read(csv, headers: true, col_sep: col_sep(csv)).map { |r| r.to_hash }
+          CSV
+            .read(csv, headers: true, col_sep: col_sep(csv))
+            .map { |r| r.to_hash }
         end
     end
 
     def col_sep(csv)
       first_line = File.open(csv, &:readline)
-      separators = [',', ';', "\t"]
-      separators.find { |separator| first_line.include?(separator) } || ','
+      separators = [",", ";", "\t"]
+      separators.find { |separator| first_line.include?(separator) } || ","
     end
 
     def emails_must_be_valid
@@ -62,7 +64,10 @@ module Cohorts
     def soft_limit_student_count
       return if csv_rows.count <= 1000
 
-      errors.add(:base, I18n.t("mutations.create_students.thousand_students_limit"))
+      errors.add(
+        :base,
+        I18n.t("mutations.create_students.thousand_students_limit")
+      )
     end
 
     def valid_string?(string:, max_length:, optional: false)
@@ -76,17 +81,17 @@ module Cohorts
              valid_string?(
                string: r["title"],
                max_length: 250,
-               optional: true,
+               optional: true
              ) &&
              valid_string?(
                string: r["affiliation"],
                max_length: 250,
-               optional: true,
+               optional: true
              ) &&
              valid_string?(
                string: r["team_name"],
                max_length: 50,
-               optional: true,
+               optional: true
              )
          }
         return

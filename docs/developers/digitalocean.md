@@ -25,15 +25,17 @@ These images are ideal for quickly and easily deploying the LMS to
 
 There are several environment variables you'll need to set up to get the application fully functional. These variables are [documented separately](./configuration).
 
-In addition to the environment variables listed there, make sure that you have the following additional variables:
+## Components
+
+On DigitalOcean's App Platform, you'll need three components minimum - a web process (to server web requests), a worker process (to run background jobs), and a scheduler process (to run scheduled jobs).
+
+You can run these different processes by using the following environment variables:
 
 ```bash
-# Configure the bin/start script to migrate the database when it runs, and to set up the
-# cron to run required scheduled jobs.
-WORKER_MIGRATE=true
-WORKER_SETUP_CRON=true
-
 # Component-level environment variables. This will control whether it's the web process,
-# or the worker process that executes when the bin/start script runs.
-PROCESS_TYPE=web OR worker
+# the worker process, or the scheduler process that executes when the bin/start script runs.
+PROCESS_TYPE=web|worker|scheduler
+
+# Configure the worker process to run database migrations before it loads.
+WORKER_MIGRATE=true
 ```

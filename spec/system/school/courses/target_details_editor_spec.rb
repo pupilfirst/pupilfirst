@@ -112,6 +112,76 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text(checklist_question)
   end
 
+  scenario "school admin removes assignment from a prerequisite target" do
+    prerequisite_target =
+      create :target, :with_content, target_group: target_group_2
+
+    assignment_prerequisite_target =
+      create :assignment,
+             :with_default_checklist,
+             prerequisite_assignments: [target_3_l2.assignments.first],
+             role: Assignment::ROLE_STUDENT,
+             target: prerequisite_target
+
+    target_2_l2.assignments.first.prerequisite_assignments = [
+      assignment_prerequisite_target
+    ]
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{prerequisite_target.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to have_content("Is this assignment a milestone?")
+    expect(
+      target_2_l2.reload.assignments.first.prerequisite_assignments
+    ).to_not eq([])
+    expect(
+      prerequisite_target.reload.assignments.first.prerequisite_assignments
+    ).to_not eq([])
+
+    within("div#has_assignment") { click_button "No" }
+
+    expect(page).to_not have_content("Is this assignment a milestone?")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    # Removing an assignment removes all prerequisite relations
+    expect(target_2_l2.reload.assignments.first.prerequisite_assignments).to eq(
+      []
+    )
+    expect(
+      prerequisite_target.reload.assignments.first.prerequisite_assignments
+    ).to eq([])
+  end
+
+  scenario "school admin makes a target milestone when there is another existing milestone" do
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           target_group: target_group_2,
+           given_milestone_number: 1
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the assignment target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    # Change it to a milestone
+    within("div#milestone") { click_button "Yes" }
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+
+    #Make sure the assignment milestone number is incremented correctly
+    expect(target_1_l2.reload.assignments.first.milestone_number).to eq(2)
+  end
+
   scenario "school admin modifies title and adds completion instruction to target" do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course)
@@ -149,9 +219,9 @@ feature "Target Details Editor", js: true do
     click_button "Update Target"
     dismiss_notification
 
-    expect(target_1_l2.reload.assignments.first.completion_instructions).to eq(
-      ""
-    )
+    expect(
+      target_1_l2.reload.assignments.first.completion_instructions
+    ).to be_nil
   end
 
   scenario "school admin updates a target as reviewed by faculty" do

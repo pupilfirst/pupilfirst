@@ -106,7 +106,7 @@
       <% end %>
       <% if @presenter.reviewed_submissions.exists? %>
         <h2 class="text-base md:text-xl font-semibold mt-8"><%= t(".reviewed_submissions.heading") %></h2>
-        <a class="mt-4 p-5 flex bg-white items-center border border-gray-200 rounded-lg shadow-lg font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500 cursor-pointer" href="<%= submissions_org_student_path(@presenter.student) %>">
+        <a class="mt-4 p-5 flex bg-white items-center border border-gray-200 rounded-lg shadow-lg font-semibold hover:bg-primary-50 hover:text-primary-500 hover:border-primary-500 cursor-pointer" href="<%= submissions_org_organisation_student_path(@presenter.organisation, @presenter.student) %>">
           <i class="if i-clipboard-check-regular if-fw"></i>
           <span class="ps-2 text-sm"><%= t('.reviewed_submissions.button') %></span>
         </a>

@@ -4,7 +4,7 @@ class OrganisationPolicy < ApplicationPolicy
       if user.school_admin.present?
         user.school.organisations
       else
-        user.organisations
+        user.admins_organisations
       end
     end
   end

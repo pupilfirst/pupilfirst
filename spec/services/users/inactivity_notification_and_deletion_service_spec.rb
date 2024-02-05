@@ -58,7 +58,6 @@ describe Users::InactivityNotificationAndDeletionService do
       end
       it "sends notification and deletes users only in school with configuration" do
         subject.execute
-
         # Check emails of all users
         open_email(inactive_user_school_1.email)
 

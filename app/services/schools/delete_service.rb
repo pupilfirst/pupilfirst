@@ -52,7 +52,7 @@ module Schools
 
     def delete_taggings
       ActsAsTaggableOn::Tagging
-        .where(taggable_type: 'School')
+        .where(taggable_type: "School")
         .where(taggable_id: @school.id)
         .delete_all
     end
@@ -75,7 +75,9 @@ module Schools
     end
 
     def delete_organisations
-      @school.users.update_all(organisation_id: nil) # rubocop:disable Rails/SkipsModelValidations
+      OrganisationsUser.where(
+        organisation_id: @school.organisations.pluck(:id)
+      ).delete_all
 
       @school.organisations.each do |organisation|
         organisation.organisation_admins.destroy_all

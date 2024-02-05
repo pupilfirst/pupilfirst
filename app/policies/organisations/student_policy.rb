@@ -5,7 +5,7 @@ module Organisations
 
       return true if current_school_admin.present?
 
-      user.organisations.exists?(id: record.user.organisation_id)
+      user.admins_organisations.exists?(id: record.user.organisations)
     end
 
     alias submissions? show?

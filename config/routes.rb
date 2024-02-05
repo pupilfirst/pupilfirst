@@ -189,7 +189,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :courses,  module: 'organisations', only: [] do
+    resources :courses, module: 'organisations', only: [] do
       member do
         get 'active_cohorts'
         get 'ended_cohorts'
@@ -198,9 +198,11 @@ Rails.application.routes.draw do
   end
 
   namespace :org, module: 'organisations' do
-    resources :students, only: %[show] do
-      member do
-        get 'submissions'
+    resources :organisations, only: [] do
+      resources :students, only: %[show] do
+        member do
+          get 'submissions'
+        end
       end
     end
   end

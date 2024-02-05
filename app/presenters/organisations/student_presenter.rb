@@ -1,7 +1,8 @@
 module Organisations
   class StudentPresenter < ApplicationPresenter
-    def initialize(view_context, student)
+    def initialize(view_context, student, organisation_id)
       @student = student
+      @organisation_id = organisation_id
       super(view_context)
     end
 
@@ -10,7 +11,7 @@ module Organisations
     end
 
     def organisation
-      @student.user.organisation
+      @student.user.organisations.where(id: @organisation_id).first
     end
 
     def cohort
@@ -72,7 +73,9 @@ module Organisations
     end
 
     def coach_notes
-      if @student.user.organisations.exists?(id: @student.user.organisation)
+      if @student.user.admins_organisations.exists?(
+           id: @student.user.organisations
+         )
         CoachNote.none
       else
         @student.coach_notes.not_archived

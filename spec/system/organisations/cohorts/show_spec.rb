@@ -59,7 +59,7 @@ feature "Organisation show" do
       team
         .students
         .includes(:user)
-        .each { |f| f.user.update!(organisation: organisation) }
+        .each { |f| f.user.organisations << organisation }
     end
 
     # Mark one team of students as having completed the course.

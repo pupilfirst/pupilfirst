@@ -75,7 +75,7 @@ let make = (~className, ~title, ~onChange) => {
       title={title}
       onClick={_ => setIsOpen(prev => !prev)}
       className={className}>
-      <i className="fas fa-smile" />
+      <Icon className="if i-emoji-add-regular" />
     </button>
     <div className={"transition " ++ emojiDivClassName(isOpen)}>
       <Picker

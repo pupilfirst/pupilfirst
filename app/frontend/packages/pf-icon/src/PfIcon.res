@@ -7,5 +7,6 @@ let make = (~className) => {
     transformIcons()
     None
   }, [className])
-  <span key=className> <i className /> </span>
+
+  <i className />
 }

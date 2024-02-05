@@ -258,7 +258,7 @@ let submissions = (
               <CoursesCurriculum__SubmissionComments
                 currentUser author submissionId={submission->Submission.id} comments
               />
-              <div className="md:absolute left-32 pl-8">
+              <div className="md:absolute md:left-36">
                 <CoursesCurriculum__Reactions
                   currentUser
                   reactionableType="TimelineEvent"

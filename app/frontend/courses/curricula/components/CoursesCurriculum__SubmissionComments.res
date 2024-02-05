@@ -68,7 +68,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
     <div className="flex items-center justify-between mx-auto">
       <div>
         <button
-          className="border border-primary-400 px-3 py-1.5 font-medium text-sm rounded-full"
+          className="border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition"
           onClick={toggleComments(setShowComments)}>
           {switch showComments {
           | true => tr("hide_comments")->str
@@ -78,16 +78,19 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
       </div>
     </div>
     <div hidden={!showComments} className="submissionComments" key={submissionId}>
-      <div>
+      <div className="flex">
         <input
           className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           type_="text"
           value=newComment
           maxLength=255
+          autoFocus=true
           placeholder={tr("write_comment")}
           onChange=handleInputChange
         />
-        <button onClick={handleCreateSubmissionComment}> {tr("comment")->str} </button>
+        <button className="btn-primary btn-small" onClick={handleCreateSubmissionComment}>
+          {tr("comment")->str}
+        </button>
       </div>
       {submissionComments
       ->Js.Array2.map(comment => {

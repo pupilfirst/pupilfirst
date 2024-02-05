@@ -53,65 +53,81 @@ let make = (~currentUser, ~author, ~comment) => {
   let (commentArchived, setCommentArchived) = React.useState(() => false)
 
   let commentDisplay =
-    <div className="bg-white border-t p-4 md:p-6" key={comment->Comment.id}>
-      <div className="flex items-center">
+    <div className="mt-6" key={comment->Comment.id}>
+      <div className="flex items-center justify-between">
         <div>
-          <div>
-            <h4 className="font-semibold text-base leading-tight block md:inline-flex self-end">
-              {comment.userName |> str}
-            </h4>
+          <div className="flex gap-3">
+            <div
+              className="w-8 h-8 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
+              {String.sub(comment.userName, 0, 2) |> str}
+            </div>
+            <div className="flex flex-col flex-wrap">
+              <p className="font-semibold text-xs leading-tight block md:inline-flex">
+                {comment.userName |> str}
+              </p>
+              <p
+                className="text-xs text-gray-600 leading-tight pt-1"
+                title={Comment.createdAtPretty(comment)}>
+                {Comment.createdAtPretty(comment)->str}
+              </p>
+            </div>
           </div>
-          <span className="ms-1" title={Comment.createdAtPretty(comment)}>
-            {Comment.createdAtPretty(comment)->str}
-          </span>
+        </div>
+        <div className="flex">
+          {switch author {
+          | false => React.null
+          | true =>
+            <div>
+              <button
+                onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
+                className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap"
+                title={commentHidden ? "Unhide Comment" : "Hide Comment"}>
+                <span className="font-semibold ms-2">
+                  {switch commentHidden {
+                  | true =>
+                    <span>
+                      <Icon className="if i-eye-light if-fw" />
+                    </span>
+                  | false => "Hide Comment"->str
+                  }}
+                </span>
+              </button>
+            </div>
+          }}
+          {switch currentUser->User.id == comment->Comment.userId {
+          | false =>
+            <CoursesCurriculum__ModerationReportButton
+              currentUser
+              moderationReports={comment->Comment.moderationReports}
+              reportableId={comment->Comment.id}
+              reportableType={"SubmissionComment"}
+            />
+          | true =>
+            <div>
+              <button
+                onClick={archiveComment(comment->Comment.id, setCommentArchived)}
+                className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
+                // <i className=icon />
+
+                <span className="font-semibold ms-2"> {"Delete Comment"->str} </span>
+              </button>
+            </div>
+          }}
         </div>
       </div>
-      {switch author {
-      | false => React.null
-      | true =>
-        <div>
-          <button
-            onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
-            className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-            // <i className=icon />
-
-            <span className="font-semibold ms-2">
-              {switch commentHidden {
-              | true => "Un-hide Comment"->str
-              | false => "Hide Comment"->str
-              }}
-            </span>
-          </button>
-        </div>
-      }}
-      {switch currentUser->User.id == comment->Comment.userId {
-      | false =>
-        <CoursesCurriculum__ModerationReportButton
-          currentUser
-          moderationReports={comment->Comment.moderationReports}
-          reportableId={comment->Comment.id}
-          reportableType={"SubmissionComment"}
-        />
-      | true =>
-        <div>
-          <button
-            onClick={archiveComment(comment->Comment.id, setCommentArchived)}
-            className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-            // <i className=icon />
-
-            <span className="font-semibold ms-2"> {"Delete Comment"->str} </span>
-          </button>
-        </div>
-      }}
       <MarkdownBlock
-        profile=Markdown.Permissive className="ms-15" markdown={comment |> Comment.comment}
+        profile=Markdown.Permissive
+        className="text-sm ms-11 mt-2"
+        markdown={comment |> Comment.comment}
       />
-      <CoursesCurriculum__Reactions
-        currentUser
-        reactionableType="SubmissionComment"
-        reactionableId={comment->Comment.id}
-        reactions={comment->Comment.reactions}
-      />
+      <div className="ms-11">
+        <CoursesCurriculum__Reactions
+          currentUser
+          reactionableType="SubmissionComment"
+          reactionableId={comment->Comment.id}
+          reactions={comment->Comment.reactions}
+        />
+      </div>
       {switch commentHidden {
       | true =>
         <div>

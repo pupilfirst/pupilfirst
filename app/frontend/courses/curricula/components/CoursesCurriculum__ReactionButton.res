@@ -21,13 +21,9 @@ let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB, ~rem
 
   <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="flex shrink-0">
     <button
-      className={"rounded-full flex items-center space-x-1 relative px-1 md:px-2 py-0.5 border " ++ if (
-        currentUserReacted
-      ) {
-        "bg-primary-100 border-primary-300"
-      } else {
-        "bg-gray-100 border-gray-300"
-      }}
+      className={`rounded-full flex items-center space-x-1 relative px-1 md:px-2 py-0.5 border " ${currentUserReacted
+          ? "bg-primary-100 border-primary-300"
+          : "bg-gray-100 border-gray-300"} hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition`}
       onClick={switch currentUserReacted {
       | true => removeReactionCB(reactionValue)
       | false => addReactionCB(reactionValue)

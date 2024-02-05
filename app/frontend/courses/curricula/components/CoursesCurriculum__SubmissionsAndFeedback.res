@@ -137,7 +137,7 @@ let submissions = (
           {submission |> Submission.createdAtPretty |> str}
         </div>
       </div>
-      <div className="rounded-lg bg-gray-50 border shadow-md">
+      <div className="rounded-lg bg-gray-50 border border-gray-200">
         <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
           <SubmissionChecklistShow
             checklist={submission |> Submission.checklist} updateChecklistCB=None
@@ -258,7 +258,7 @@ let submissions = (
               <CoursesCurriculum__SubmissionComments
                 currentUser author submissionId={submission->Submission.id} comments
               />
-              <div className="md:absolute md:left-36">
+              <div className="md:absolute md:left-40">
                 <CoursesCurriculum__Reactions
                   currentUser
                   reactionableType="TimelineEvent"

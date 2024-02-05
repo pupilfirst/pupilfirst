@@ -70,17 +70,20 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
         <button
           className="border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition"
           onClick={toggleComments(setShowComments)}>
-          {switch showComments {
-          | true => tr("hide_comments")->str
-          | false => tr("view_comments")->str
-          }}
+          <Icon className="if i-comment-alt-light if-fw" />
+          <span className="ps-1">
+            {switch showComments {
+            | true => tr("hide_comments")->str
+            | false => tr("view_comments")->str
+            }}
+          </span>
         </button>
       </div>
     </div>
-    <div hidden={!showComments} className="submissionComments" key={submissionId}>
-      <div className="flex">
+    <div hidden={!showComments} className="submissionComments mt-4" key={submissionId}>
+      <div className="flex gap-2">
         <input
-          className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-3 py-1.5 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           type_="text"
           value=newComment
           maxLength=255
@@ -88,7 +91,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
           placeholder={tr("write_comment")}
           onChange=handleInputChange
         />
-        <button className="btn-primary btn-small" onClick={handleCreateSubmissionComment}>
+        <button className="btn btn-primary text-sm" onClick={handleCreateSubmissionComment}>
           {tr("comment")->str}
         </button>
       </div>

@@ -211,7 +211,10 @@ module Targets
                     user_name: user_name
                   }
                 end,
-            moderation_reports: [],
+            moderation_reports:
+              comment.moderation_reports.map do |report|
+                report.attributes.transform_values(&:to_s)
+              end,
             created_at: comment.created_at,
             hidden_at: comment.hidden_at,
             hidden_by_id: comment.hidden_by_id

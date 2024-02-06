@@ -90,4 +90,20 @@ class UserMailer < SchoolMailer
       )
     )
   end
+
+  def confirm_moderation_report(user, submission, reported_item)
+    @user = user
+    @submission = submission
+    @reported_item = reported_item
+
+    @school = user.school
+
+    simple_mail(
+      user.email,
+      I18n.t(
+        "mailers.user.confirm_moderation_report.subject",
+        school_name: @school.name
+      )
+    )
+  end
 end

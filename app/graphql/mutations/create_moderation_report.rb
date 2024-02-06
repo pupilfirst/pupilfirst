@@ -16,6 +16,13 @@ module Mutations
           reportable_type: @params[:reportable_type],
           user_id: current_user.id
         )
+
+      UserMailer.confirm_moderation_report(
+        current_user,
+        submission,
+        reported_item
+      ).deliver_later
+
       {
         moderation_report: {
           id: moderation_report.id,
@@ -37,8 +44,20 @@ module Mutations
       if @params[:reportable_type] == "TimelineEvent"
         @submission ||= TimelineEvent.find_by(id: @params[:reportable_id])
       else
-        @submission ||=
-          SubmissionComment.find_by(id: @params[:reportable_id]).timeline_event
+        @submission ||= submission_comment.timeline_event
+      end
+    end
+
+    def submission_comment
+      @submission_comment ||=
+        SubmissionComment.find_by(id: @params[:reportable_id])
+    end
+
+    def reported_item
+      if @params[:reportable_type] == "TimelineEvent"
+        submission
+      else
+        submission_comment
       end
     end
 

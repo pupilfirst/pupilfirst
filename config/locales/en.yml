@@ -2218,6 +2218,11 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
+      confirm_moderation_report:
+        body:
+          main_html: <p> Your report of the content made by %{content_created_by} on %{content_created_at} for the target %{target_name} has been successfully recorded and an update send to the school admin </p>
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       new_post:
         body:
           link_to: view the reply on the %{community_name} community

@@ -1,0 +1,16 @@
+<%
+  target = @submission.target
+  target_url = target_url(target) if target.present?
+%>
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @user.name) %>
+<% end %>
+<% content_for :body do %>
+  <%= t("mailers.user.confirm_moderation_report.body.main_html", content_created_by: @reported_item.user.name, content_created_at: @reported_item.created_at, target_name: target.title) %>
+  <% if target.present? %>
+    <p>
+      <%= t("mailers.user.confirm_moderation_report.body.footer_html", link: target_url) %>
+    </p>
+  <% end %>
+  <%= render('mailers/link_fallback', url: target_url) %>
+<% end %>

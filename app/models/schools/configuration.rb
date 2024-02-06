@@ -4,10 +4,10 @@ module Schools
       attr_accessor :bot_token, :server_id, :default_role_ids
 
       def initialize(school)
-        @discord = school.configuration['discord'].presence || {}
-        @bot_token = @discord['bot_token']
-        @server_id = @discord['server_id']
-        @default_role_ids = @discord['default_role_ids']
+        @discord = school.configuration["discord"].presence || {}
+        @bot_token = @discord["bot_token"]
+        @server_id = @discord["server_id"]
+        @default_role_ids = @discord["default_role_ids"]
       end
 
       def configured?
@@ -19,10 +19,10 @@ module Schools
       attr_accessor :name, :email, :confirmed_at
 
       def initialize(school)
-        @ess = school.configuration['email_sender_signature'].presence || {}
-        @name = @ess['name']
-        @email = @ess['email']
-        @confirmed_at = @ess['confirmed_at']
+        @ess = school.configuration["email_sender_signature"].presence || {}
+        @name = @ess["name"]
+        @email = @ess["email"]
+        @confirmed_at = @ess["confirmed_at"]
       end
 
       def configured?
@@ -34,9 +34,9 @@ module Schools
       attr_accessor :account_type, :access_token
 
       def initialize(school)
-        @vimeo = school.configuration['vimeo'].presence || {}
-        @account_type = @vimeo['account_type']
-        @access_token = @vimeo['access_token']
+        @vimeo = school.configuration["vimeo"].presence || {}
+        @account_type = @vimeo["account_type"]
+        @access_token = @vimeo["access_token"]
       end
 
       def configured?
@@ -48,10 +48,10 @@ module Schools
       attr_accessor :access_token, :organization_id, :default_team_id
 
       def initialize(school)
-        @github = school.configuration['github'].presence || {}
-        @access_token = @github['access_token']
-        @organization_id = @github['organization_id']
-        @default_team_id = @github['default_team_id']
+        @github = school.configuration["github"].presence || {}
+        @access_token = @github["access_token"]
+        @organization_id = @github["organization_id"]
+        @default_team_id = @github["default_team_id"]
       end
 
       def configured?
@@ -65,11 +65,15 @@ module Schools
     end
 
     def disable_primary_domain_redirection?
-      @school.configuration['disable_primary_domain_redirection']
+      @school.configuration["disable_primary_domain_redirection"]
     end
 
     def delete_inactive_users_after
-      @school.configuration['delete_inactive_users_after']
+      @school.configuration["delete_inactive_users_after"]
+    end
+
+    def standing_enabled?
+      !!@school.configuration["enable_standing"]
     end
   end
 end

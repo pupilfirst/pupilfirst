@@ -120,5 +120,9 @@ module Layouts
     def terms_and_conditions?
       SchoolString::TermsAndConditions.saved?(current_school)
     end
+
+    def code_of_conduct?
+      SchoolString::CodeOfConduct.saved?(current_school)
+    end
   end
 end

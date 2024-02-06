@@ -9,5 +9,6 @@ module Organisations
     end
 
     alias submissions? show?
+    alias standing? show?
   end
 end

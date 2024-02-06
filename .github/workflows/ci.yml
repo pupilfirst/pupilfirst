@@ -13,7 +13,7 @@ on:
 
 env:
   PF_IMAGE_NAME: pupilfirst
-  PF_VERSION: "2023.6"
+  PF_VERSION: "2024.1"
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:

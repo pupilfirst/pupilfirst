@@ -60,7 +60,13 @@ Rails.application.routes.draw do
   resource :school, only: [] do
     get 'customize'
     get 'admins'
+    get 'standing'
+    get 'code_of_conduct'
+    patch 'code_of_conduct', action: 'update_code_of_conduct'
+    patch 'toggle_standing'
     post 'images'
+
+    resources :standings, controller: 'schools/standings', except: [:index, :show]
   end
 
   namespace :school, module: 'schools' do
@@ -81,6 +87,7 @@ Rails.application.routes.draw do
       'courses/:course_id/students/import',
       'students/:student_id/details',
       'students/:student_id/actions',
+      'students/:student_id/standing',
       'courses/:course_id/teams',
       'courses/:course_id/teams/new',
       'teams/:team_id/details',
@@ -201,6 +208,7 @@ Rails.application.routes.draw do
     resources :students, only: %[show] do
       member do
         get 'submissions'
+        get 'standing'
       end
     end
   end
@@ -222,6 +230,7 @@ Rails.application.routes.draw do
     post 'upload_avatar'
     post 'clear_discord_id'
     get 'discord_account_required'
+    get 'standing'
   end
 
   resources :timeline_event_files, only: %i[create] do

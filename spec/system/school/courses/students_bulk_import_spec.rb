@@ -158,12 +158,13 @@ feature "Course students bulk importer", js: true do
     expect(page).to_not have_text("Bat Man")
     expect(page).to have_text("Super Man")
     expect(page).to have_text("tag6")
+    expect(page).to have_text("The Flash")
 
     expect(page).to have_text("Here is a summary of the errors in the sheet:")
     expect(page).to have_text(
       "Name column can't be blank and should be within 250 characters"
     )
-    expect(page).to have_text("Email has to be valid and can't be blank")
+    expect(page).to have_text("Email has to be valid, not repeated and can't be blank")
     expect(page).to have_text("Team name has to be less than 50 characters")
 
     expect(page).to have_text(

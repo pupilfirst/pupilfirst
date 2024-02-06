@@ -31,12 +31,24 @@ let rowNumber = t => t.rowNumber
 
 let errors = t => t.errors
 
+let emails = []
+
 let containsInvalidUTF8Characters = (text: string) => {
   let regexp = Js.Re.fromString("[^\\x00-\\x7F\\u00C0-\\u00FF\\u0600-\\u06FF]+")
   let result = Js.Re.exec_(regexp, text)
   switch result {
   | Some(_) => true
   | None => false
+  }
+}
+
+let emailAlreadyExists = (email: string) => {
+  let exists = Belt.Array.some(emails, v => v == email)
+  if exists {
+    true
+  } else {
+    emails->Belt.Array.push(email)
+    false
   }
 }
 
@@ -69,6 +81,8 @@ let emailError = data => {
       ? [error(Email, InvalidFormat)]
       : containsInvalidUTF8Characters(email)
       ? [error(Email, InvalidCharacters)]
+      : emailAlreadyExists(email)
+      ? [error(Email, InvalidFormat)]
       : []
   }
 }

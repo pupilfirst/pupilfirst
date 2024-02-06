@@ -7,6 +7,7 @@ type t = {
   avatarUrl: option<string>,
   taggings: array<string>,
   lastSeenAt: option<Js.Date.t>,
+  currentStandingName: option<string>,
 }
 
 let id = t => t.id
@@ -17,7 +18,7 @@ let lastSeenAt = t => t.lastSeenAt
 let taggings = t => t.taggings
 let affiliation = t => t.affiliation
 let title = t => t.title
-
+let currentStandingName = t => t.currentStandingName
 module Fragment = %graphql(`
   fragment UserDetailsFragment on User {
     id
@@ -28,6 +29,7 @@ module Fragment = %graphql(`
     avatarUrl
     taggings
     lastSeenAt
+    currentStandingName
   }
 `)
 
@@ -40,6 +42,7 @@ let makeFromFragment = (user: Fragment.t) => {
   avatarUrl: user.avatarUrl,
   taggings: user.taggings,
   lastSeenAt: user.lastSeenAt->Belt.Option.map(DateFns.decodeISO),
+  currentStandingName: user.currentStandingName,
 }
 
 let makeFromJs = jsObject => {
@@ -51,4 +54,5 @@ let makeFromJs = jsObject => {
   lastSeenAt: jsObject["lastSeenAt"]->Belt.Option.map(DateFns.decodeISO),
   title: jsObject["title"],
   affiliation: jsObject["affiliation"],
+  currentStandingName: jsObject["currentStandingName"],
 }

@@ -206,11 +206,24 @@ feature "School Customization", js: true do
     fill_in("Body of Agreement", with: terms_and_conditions)
     click_button "Update Terms & Conditions"
     expect(page).to have_content("Terms & Conditions has been updated")
+    dismiss_notification
+
+    find('button[title="Close Editor"]').click
+
+    # Edit code of conduct.
+    find('button[title="Edit Code of Conduct"]').click
+
+    code_of_conduct = Faker::Lorem.paragraphs(number: 2).join("\n\n")
+
+    fill_in("Body of Agreement", with: code_of_conduct)
+    click_button "Update Code of Conduct"
+    expect(page).to have_content("Code of Conduct has been updated")
 
     expect(SchoolString::PrivacyPolicy.for(school)).to eq(privacy_policy)
     expect(SchoolString::TermsAndConditions.for(school)).to eq(
       terms_and_conditions
     )
+    expect(SchoolString::CodeOfConduct.for(school)).to eq(code_of_conduct)
   end
 
   scenario "school admin customizes school name and about" do

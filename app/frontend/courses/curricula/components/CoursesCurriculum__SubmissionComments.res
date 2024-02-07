@@ -81,7 +81,15 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
       </div>
     </div>
     <div hidden={!showComments} className="submissionComments mt-4" key={submissionId}>
-      <div className="flex gap-2">
+      <div className="flex gap-2 relative">
+        <div className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 ">
+          <div
+            className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
+          />
+        </div>
+        <div
+          className="w-8 h-8 shrink-0 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center"
+        />
         <input
           className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-3 py-1.5 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           type_="text"

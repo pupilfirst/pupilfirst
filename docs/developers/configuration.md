@@ -273,6 +273,19 @@ BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD=4
 
 To deactivate this feature, simply avoid setting the `BOT_EVALUATOR_IDS` environment variable, or set `BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD` to zero.
 
+### Scheduled jobs
+
+If you're setting up a scheduler process with `PROCESS_TYPE=scheduler`, you can customize the schedule used to run these rake tasks:
+
+```
+# This is the default configuration, which will run each task daily at midnight, server-time.
+SCHEDULE_CLEANUP="0 0 0 * * * *"
+SCHEDULE_DAILY_DIGEST="0 0 0 * * * *"
+SCHEDULE_NOTIFY_AND_DELETE_INACTIVE_USERS="0 0 0 * * * *"
+```
+
+Documentation of the schedule's format can be [found in supercronic's README file](https://github.com/aptible/supercronic?tab=readme-ov-file#crontab-format).
+
 ## School Specific Configuration
 
 LMS allows you to configure specific settings for a school using various integrations such as Discord, Email Sender Signature, Vimeo, and Github. The following documentation describes how to set up the configurations field in school model.

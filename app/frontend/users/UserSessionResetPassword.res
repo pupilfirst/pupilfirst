@@ -23,9 +23,9 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateNewPassword(newPassword) => {...state, newPassword: newPassword}
-  | UpdateConfirmPassword(confirmPassword) => {...state, confirmPassword: confirmPassword}
-  | UpdateSaving(saving) => {...state, saving: saving}
+  | UpdateNewPassword(newPassword) => {...state, newPassword}
+  | UpdateConfirmPassword(confirmPassword) => {...state, confirmPassword}
+  | UpdateSaving(saving) => {...state, saving}
   }
 
 let handleUpdatePasswordCB = response => {
@@ -120,7 +120,10 @@ let renderUpdatePassword = (state, send, schoolName) => {
           <ul className="text-yellow-900 text-[10px]">
             {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
             | Some(suggestion) =>
-              <li> <PfIcon className="if i-info-light if-fw" /> {suggestion->str} </li>
+              <li>
+                <PfIcon className="if i-info-light if-fw" />
+                {suggestion->str}
+              </li>
             | None => React.null
             }}
           </ul>
@@ -154,10 +157,10 @@ let renderUpdatePassword = (state, send, schoolName) => {
 @react.component
 let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
   let initialState = {
-    authenticityToken: authenticityToken,
-    token: token,
-    name: name,
-    email: email,
+    authenticityToken,
+    token,
+    name,
+    email,
     newPassword: "",
     confirmPassword: "",
     saving: false,
@@ -165,7 +168,7 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
 
   let (state, send) = React.useReducer(reducer, initialState)
 
-  <div className="bg-gray-50 sm:py-10">
+  <div className="h-full bg-gray-50 py-10 md:py-24">
     <div className="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
       <img className="mx-auto h-20 sm:h-32" src=resetPasswordIcon />
       <div className="text-lg sm:text-2xl font-bold text-center mt-4">

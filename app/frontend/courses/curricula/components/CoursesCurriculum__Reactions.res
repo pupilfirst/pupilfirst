@@ -74,7 +74,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
       | Some(_) => acc
       | None =>
         switch reaction->Reaction.reactionValue === reactionValue &&
-          reaction->Reaction.userId == currentUser->User.id {
+          reaction->Reaction.userId == currentUser->CurrentUser.id {
         | true => Some(reaction->Reaction.id)
         | false => None
         }

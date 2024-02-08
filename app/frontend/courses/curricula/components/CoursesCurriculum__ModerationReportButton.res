@@ -64,7 +64,7 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
   let (reportReason, setReportReason) = React.useState(() => "")
 
   let reported = Belt.Array.reduce(moderationReports, false, (acc, report) =>
-    acc || report->ModerationReport.userId === currentUser->User.id
+    acc || report->ModerationReport.userId === currentUser->CurrentUser.id
   )
 
   <div>

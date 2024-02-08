@@ -9,6 +9,7 @@ module DiscussionSubmission = CoursesCurriculum__DiscussionSubmission
 module Student = CoursesCurriculum__Student
 module Coach = CoursesCurriculum__Coach
 module User = CoursesCurriculum__User
+module CurrentUser = CoursesCurriculum__CurrentUser
 module QuizQuestion = CoursesCurriculum__QuizQuestion
 module Community = CoursesCurriculum__Community
 module Grade = CoursesCurriculum__Grade

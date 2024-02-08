@@ -214,18 +214,18 @@ let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
     )}
   </p>
 
-let submissionsList = (submissions, state, currentUser, author, callBack) => {
+let submissionsList = (submissions, state, currentUser, callBack) => {
+  let isModerator = currentUser->CurrentUser.isModerator
   <div>
     {ArrayUtils.isEmpty(submissions)
       ? <p> {t("no_peer_submissions")->str} </p>
       : {
           Js.Array2.map(submissions, submission =>
-            switch (author, Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)) {
-            | (true, _) =>
-              <CoursesCurriculum__DiscussSubmission currentUser author submission callBack />
+            switch (isModerator, Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)) {
+            | (true, _) => <CoursesCurriculum__DiscussSubmission currentUser submission callBack />
             | (false, true) => React.null
             | (false, false) =>
-              <CoursesCurriculum__DiscussSubmission currentUser author submission callBack />
+              <CoursesCurriculum__DiscussSubmission currentUser submission callBack />
             }
           )
         }->React.array}
@@ -608,7 +608,6 @@ let completeSectionClasses = (tab, completionType) =>
 let completeSection = (
   state,
   send,
-  author,
   target,
   targetDetails,
   targetStatus,
@@ -678,7 +677,6 @@ let completeSection = (
         ) =>
         <CoursesCurriculum__SubmissionsAndFeedback
           currentUser
-          author
           targetDetails
           target
           evaluationCriteria
@@ -707,7 +705,6 @@ let completeSection = (
                   submissions,
                   state,
                   currentUser,
-                  author,
                   getDiscussionSubmissions(send, None),
                 )}
                 {switch state.loading {
@@ -735,7 +732,6 @@ let completeSection = (
                   submissions,
                   state,
                   currentUser,
-                  author,
                   getDiscussionSubmissions(send, None),
                 )}
               </div>
@@ -945,7 +941,6 @@ let make = (
           {completeSection(
             state,
             send,
-            author,
             target,
             targetDetails,
             targetStatus,

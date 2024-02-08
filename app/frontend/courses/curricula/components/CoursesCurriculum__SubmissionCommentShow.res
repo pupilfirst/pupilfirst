@@ -53,12 +53,14 @@ let updateShowConfirmDelete = (setShowConfirmDelete, showConfirmDelete, event) =
 }
 
 @react.component
-let make = (~currentUser, ~author, ~comment) => {
+let make = (~currentUser, ~comment) => {
   let (commentHidden, setCommentHidden) = React.useState(() =>
     Belt.Option.isSome(comment->Comment.hiddenAt)
   )
   let (commentArchived, setCommentArchived) = React.useState(() => false)
   let (showConfirmDelete, setShowConfirmDelete) = React.useState(() => false)
+
+  let isModerator = currentUser->CurrentUser.isModerator
 
   let commentDisplay =
     <div className="relative mt-4">
@@ -109,7 +111,7 @@ let make = (~currentUser, ~author, ~comment) => {
             </div>
           </div>
           <div className="flex space-x-2">
-            {switch author {
+            {switch isModerator {
             | false => React.null
             | true =>
               <div>
@@ -130,7 +132,7 @@ let make = (~currentUser, ~author, ~comment) => {
                 </button>
               </div>
             }}
-            {switch currentUser->User.id == comment->Comment.userId {
+            {switch currentUser->CurrentUser.id == comment->Comment.userId {
             | false =>
               <CoursesCurriculum__ModerationReportButton
                 currentUser
@@ -184,7 +186,7 @@ let make = (~currentUser, ~author, ~comment) => {
     | (true, _) => React.null
     | (false, false) => commentDisplay
     | (false, true) =>
-      switch author || currentUser->User.id == comment->Comment.userId {
+      switch isModerator || currentUser->CurrentUser.id == comment->Comment.userId {
       | true => commentDisplay
       | false => React.null
       }

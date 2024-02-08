@@ -6,7 +6,8 @@ open CoursesCurriculum__Types
 @react.component
 let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB, ~removeReactionCB) => {
   let (isHovered, setIsHovered) = React.useState(() => false)
-  let currentUserReacted = reactionDetails["userIds"]->Js.Array2.includes(currentUser->User.id)
+  let currentUserReacted =
+    reactionDetails["userIds"]->Js.Array2.includes(currentUser->CurrentUser.id)
 
   /* Event handlers to update the hover state */
   let onMouseEnter = event => {

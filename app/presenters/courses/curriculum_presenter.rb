@@ -53,16 +53,15 @@ module Courses
       user = {
         id: current_user.id,
         name: current_user.name,
-        title: current_user.full_title
+        is_admin: current_school_admin.present?,
+        is_author: @course.course_authors.exists?(user: current_user),
+        is_coach: current_coach.present?
       }
-      if current_user.avatar.attached?
-        user[:avatar_url] = view.rails_public_blob_url(
-          current_user.avatar_variant(:thumb)
-        )
-      end
-
-      user[:coach_id] = current_coach.id if current_coach.present?
       user
+    end
+
+    def moderator?
+      author? || current_coach.present?
     end
 
     def author?

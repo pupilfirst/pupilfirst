@@ -50,7 +50,7 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
 }
 
 @react.component
-let make = (~currentUser, ~author, ~submission, ~callBack) => {
+let make = (~currentUser, ~submission, ~callBack) => {
   let submissionId = submission->DiscussionSubmission.id
   let (submissionHidden, setSubmissionHidden) = React.useState(() =>
     Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)
@@ -104,7 +104,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         </div>
       | false => React.null
       }}
-      {switch author {
+      {switch currentUser->CurrentUser.isModerator {
       | false => React.null
       | true =>
         <div>
@@ -165,7 +165,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         //   />
         // </div>
         <CoursesCurriculum__SubmissionComments
-          currentUser author submissionId comments={submission->DiscussionSubmission.comments}
+          currentUser submissionId comments={submission->DiscussionSubmission.comments}
         />
       </div>
     </div>

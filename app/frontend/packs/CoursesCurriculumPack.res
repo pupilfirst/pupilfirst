@@ -3,7 +3,7 @@ open CoursesCurriculum__Types
 let decodeProps = json => {
   open Json.Decode
   (
-    field("currentUser", User.decode, json),
+    field("currentUser", CurrentUser.decode, json),
     field("author", bool, json),
     field("course", Course.decode, json),
     field("levels", array(Level.decode), json),

@@ -38,7 +38,7 @@ let toggleComments = (setShowComments, event) => {
 }
 
 @react.component
-let make = (~currentUser, ~author, ~submissionId, ~comments) => {
+let make = (~currentUser, ~submissionId, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
   let (showComments, setShowComments) = React.useState(() => false)
   let (newComment, setNewComment) = React.useState(() => "")
@@ -105,7 +105,7 @@ let make = (~currentUser, ~author, ~submissionId, ~comments) => {
       </div>
       {submissionComments
       ->Js.Array2.map(comment => {
-        <CoursesCurriculum__SubmissionCommentShow currentUser author comment />
+        <CoursesCurriculum__SubmissionCommentShow currentUser comment />
       })
       ->React.array}
     </div>

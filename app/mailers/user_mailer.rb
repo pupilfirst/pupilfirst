@@ -90,4 +90,34 @@ class UserMailer < SchoolMailer
       )
     )
   end
+
+  def email_change_in_user_standing(
+    user,
+    current_standing,
+    previous_standing,
+    reason
+  )
+    @user = user
+    @school = user.school
+    @current_standing = current_standing
+    @previous_standing = previous_standing
+    @reason = reason
+
+    subject =
+      (
+        if @previous_standing != @current_standing
+          I18n.t(
+            "mailers.user.email_change_in_user_standing.subject",
+            school_name: @school.name
+          )
+        else
+          I18n.t(
+            "mailers.user.email_change_in_user_standing.subject_no_change_in_standing",
+            school_name: @school.name
+          )
+        end
+      )
+
+    simple_mail(user.email, subject)
+  end
 end

@@ -20,9 +20,6 @@ class Types::MutationType < Types::BaseObject
   field :create_quiz_submission,
         mutation: Mutations::CreateQuizSubmission,
         null: false
-  field :auto_verify_submission,
-        mutation: Mutations::AutoVerifySubmission,
-        null: false
   field :create_submission, mutation: Mutations::CreateSubmission, null: false
   field :delete_content_block,
         mutation: Mutations::DeleteContentBlock,
@@ -182,5 +179,11 @@ class Types::MutationType < Types::BaseObject
         null: false
   field :initiate_password_reset,
         mutation: Mutations::InitiatePasswordReset,
+        null: false
+  field :archive_user_standing,
+        mutation: Mutations::ArchiveUserStanding,
+        null: false
+  field :create_user_standing,
+        mutation: Mutations::CreateUserStanding,
         null: false
 end

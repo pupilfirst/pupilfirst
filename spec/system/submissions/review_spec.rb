@@ -279,6 +279,9 @@ feature "Submission review overlay", js: true do
         expect(page).to have_text("Rejected")
       end
 
+      open_email submission_pending.students.first.user.email
+      expect(current_email).to have_content("rejected")
+
       student = submission_pending.students.first
       open_email(student.user.email)
       expect(current_email).to have_content("rejected")
@@ -1682,6 +1685,9 @@ feature "Submission review overlay", js: true do
       dismiss_notification
 
       expect(page).to have_button("Add another feedback")
+
+      open_email(student.email)
+      expect(current_email.body).to include("Here is some additional feedback")
 
       submission = submission_reviewed.reload
       expect(submission.startup_feedback.count).to eq(2)

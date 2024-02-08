@@ -28,7 +28,8 @@ Here's a list of things you can edit:
    - In the footer: These will be placed in the footer after the link to the _Home_ page, and will be visible to the public.
    - Social media: You can add a list of social media links that will be automatically converted to icons placed in the footer.
 
-4. **User Agreements:** You can create a custom _Privacy Policy_ and _Terms & Conditions_ for your students.
+4. **User Agreements:** You can create a custom _Privacy Policy_ and _Terms & Conditions_ and _Code of Conduct_ for your school. These will be displayed in the footer, and will be visible to the public.
+
 5. **Contact Details:**
 
    - Your physical address, to display in the footer.

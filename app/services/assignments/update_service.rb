@@ -22,6 +22,11 @@ module Assignments
 
         handle_milestone(assignment_params[:milestone])
 
+        # If assignment archived remove all prerequisites
+        if assignment_params[:archived] && !@assignment.archived
+          Assignments::DetachFromPrerequisitesService.new([@assignment]).execute
+        end
+
         @assignment.archived = assignment_params[:archived]
 
         @assignment.save!
@@ -63,7 +68,12 @@ module Assignments
 
       if milestone_param
         current_maximum_milestone_number =
-          @assignment.target.course.targets.maximum(:milestone_number) || 0
+          @assignment
+            .target
+            .course
+            .targets
+            .joins(:assignments)
+            .maximum("assignments.milestone_number") || 0
 
         @assignment.milestone_number = current_maximum_milestone_number + 1
       else

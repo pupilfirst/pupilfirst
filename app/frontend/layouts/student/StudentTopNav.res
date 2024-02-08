@@ -34,6 +34,18 @@ let signOutLink = () =>
     </div>
   </div>
 
+let editProfileLink = () =>
+  <div
+    key="edit-profile-button"
+    className="md:ms-2 text-sm font-medium text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-e border-b md:border-0">
+    <a
+      href="/user/edit"
+      rel="nofollow"
+      className="whitespace-nowrap no-underline bg-gray-50 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+      <span className="ms-2"> {t("edit_profile")->str} </span>
+    </a>
+  </div>
+
 let signInLink = () =>
   <div
     key="SignIn-button"
@@ -77,6 +89,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
     |> Js.Array.concat([
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
     ])
+    |> Js.Array.concat([ReactUtils.nullUnless(editProfileLink(), isLoggedIn && isMobile())])
     |> Js.Array.concat([
       switch (isLoggedIn, isMobile()) {
       | (true, true) => signOutLink()
@@ -90,8 +103,32 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
   }
 }
 
+let renderLogo = (logoUrl, schoolName, additionalClasses) =>
+  switch logoUrl {
+  | Some(url) =>
+    <img
+      className={"h-8 md:h-10 object-contain flex text-sm items-center " ++ additionalClasses}
+      src=url
+      alt={"Logo of " ++ schoolName}
+    />
+  | None =>
+    <div
+      className={"p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600 " ++
+      additionalClasses}>
+      <span className="text-xl font-bold leading-tight"> {schoolName->str} </span>
+    </div>
+  }
+
 @react.component
-let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifications) => {
+let make = (
+  ~schoolName,
+  ~logoOnLightBgUrl,
+  ~logoOnDarkBgUrl,
+  ~links,
+  ~isLoggedIn,
+  ~currentUser,
+  ~hasNotifications,
+) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile())
 
   React.useEffect(() => {
@@ -108,19 +145,8 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
       <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
-            {switch logoUrl {
-            | Some(url) =>
-              <img
-                className="h-8 md:h-10 object-contain flex text-sm items-center"
-                src=url
-                alt={"Logo of " ++ schoolName}
-              />
-            | None =>
-              <div
-                className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600">
-                <span className="text-xl font-bold leading-tight"> {schoolName |> str} </span>
-              </div>
-            }}
+            {renderLogo(logoOnLightBgUrl, schoolName, "logo_on_light_bg")}
+            {renderLogo(logoOnDarkBgUrl, schoolName, "logo_on_dark_bg")}
           </a>
           {ReactUtils.nullUnless(
             <div className="flex items-center space-x-2">

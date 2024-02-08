@@ -13,7 +13,6 @@ module Picker = {
   @module("@emoji-mart/react") @react.component
   external make: (
     ~title: string,
-    ~theme: [#light],
     ~onEmojiSelect: emojiEvent => unit,
     ~data: Js.Json.t,
   ) => React.element = "default"
@@ -86,7 +85,6 @@ let make = (~className, ~title, ~onChange) => {
           onChange(event)
           setIsOpen(_ => false)
         }}
-        theme={#light}
       />
     </div>
   </div>

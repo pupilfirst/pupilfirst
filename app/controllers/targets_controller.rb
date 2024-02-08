@@ -33,6 +33,7 @@ class TargetsController < ApplicationController
              )
   end
 
+  # POST /targets/:id/mark_as_read
   def mark_as_read
     student =
       current_user
@@ -40,12 +41,9 @@ class TargetsController < ApplicationController
         .joins(:course)
         .where(courses: { id: course.id })
         .first if current_user.present?
-    page_read = PageRead.new(target: @target, student_id: student.id)
-    if page_read.save!
-      head :ok
-    else
-      head :unprocessable_entity
-    end
+
+    student.page_reads.where(target: @target).first_or_create
+    head :ok
   end
 
   private

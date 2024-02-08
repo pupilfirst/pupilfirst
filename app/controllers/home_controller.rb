@@ -19,6 +19,8 @@ class HomeController < ApplicationController
         SchoolString::PrivacyPolicy
       when "terms-and-conditions"
         SchoolString::TermsAndConditions
+      when "code-of-conduct"
+        SchoolString::CodeOfConduct
       else
         raise_not_found
       end
@@ -33,6 +35,8 @@ class HomeController < ApplicationController
         t(".privacy_policy")
       when "Terms and Conditions"
         t(".terms_and_conditions")
+      when "Code of Conduct"
+        t("shared.code_of_conduct")
       end
 
     render layout: "student"
@@ -69,7 +73,7 @@ class HomeController < ApplicationController
 
   # GET /favicon.ico
   def favicon
-    if current_school.present? && current_school.icon.attached?
+    if current_school.present? && current_school.icon_on_light_bg.attached?
       redirect_to(
         view_context.rails_public_blob_url(current_school.icon_variant(:thumb)),
         allow_other_host: true

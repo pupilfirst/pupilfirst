@@ -34,7 +34,7 @@ class GenerateManifestService
   end
 
   def icon
-    @icon ||= @school.icon
+    @icon ||= @school.icon_on_light_bg
   end
 
   def default_icon_variant(variant)

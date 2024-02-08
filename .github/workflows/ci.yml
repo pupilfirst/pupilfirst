@@ -13,7 +13,7 @@ on:
 
 env:
   PF_IMAGE_NAME: pupilfirst
-  PF_VERSION: "2023.6"
+  PF_VERSION: "2024.1"
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
@@ -60,8 +60,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Use Ruby 3.2
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.2"
       - name: Set branch name & commit SHA in env
         uses: actions/github-script@v3
         with:

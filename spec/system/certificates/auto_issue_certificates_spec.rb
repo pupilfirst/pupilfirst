@@ -82,6 +82,8 @@ feature "Automatic issuance of certificates", js: true do
     replace_markdown Faker::Lorem.sentence
     click_button "Submit"
 
+    expect(page).to have_content("Your response has been saved.")
+
     expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
       student_1.user.id,
       student_2.user.id
@@ -110,35 +112,6 @@ feature "Automatic issuance of certificates", js: true do
 
   context "when there are multiple milestone targets" do
     let(:target_group_l2_2) { create :target_group, level: level_2 }
-
-    context "when the final target is simply marked as complete" do
-      let!(:target_l2_2) do
-        create :target,
-               :with_markdown,
-               :with_shared_assignment,
-               target_group: target_group_l2,
-               title: "foo",
-               given_milestone_number: 3,
-               given_role: Assignment::ROLE_TEAM
-      end
-
-      scenario "student completed final milestone target" do
-        complete_milestone_target(target_l1)
-        complete_milestone_target(target_l2)
-
-        visit target_path(target_l2_2)
-
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-        replace_markdown Faker::Lorem.sentence
-        click_button "Submit"
-
-        # Both students should have a certificate at this point.
-        expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(
-          student_1.user.id,
-          student_2.user.id
-        )
-      end
-    end
 
     context "when the second target is completed with a quiz" do
       let!(:quiz) { create :quiz, :with_question_and_answers }
@@ -297,6 +270,8 @@ feature "Automatic issuance of certificates", js: true do
       replace_markdown Faker::Lorem.sentence
       click_button "Submit"
 
+      expect(page).to have_content("Your response has been saved")
+
       # No certificate should be issued, yet.
       expect(IssuedCertificate.count).to eq(0)
 
@@ -394,6 +369,7 @@ feature "Automatic issuance of certificates", js: true do
       find(".course-overlay__body-tab-item", text: "Submit Form").click
       replace_markdown Faker::Lorem.sentence
       click_button "Submit"
+      expect(page).to have_content("Your response has been saved")
 
       # Completing a non-milestone target in level 2 makes no difference
       expect(student_1.user.issued_certificates.count).to eq(1)

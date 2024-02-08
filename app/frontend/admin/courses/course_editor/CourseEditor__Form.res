@@ -12,7 +12,7 @@ type tabs =
 
 let selectedTabClasses = selected =>
   "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
+    selected ? "text-primary-500 bg-white border-b-transparent" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"
@@ -63,31 +63,31 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: false}
   | UpdateName(name, hasNameError) => {
       ...state,
-      name: name,
-      hasNameError: hasNameError,
+      name,
+      hasNameError,
       dirty: true,
     }
   | UpdateDescription(description, hasDescriptionError) => {
       ...state,
-      description: description,
-      hasDescriptionError: hasDescriptionError,
+      description,
+      hasDescriptionError,
       dirty: true,
     }
-  | UpdatePublicSignup(publicSignup) => {...state, publicSignup: publicSignup, dirty: true}
-  | UpdatePublicPreview(publicPreview) => {...state, publicPreview: publicPreview, dirty: true}
-  | UpdateAbout(about) => {...state, about: about, dirty: true}
-  | UpdateFeatured(featured) => {...state, featured: featured, dirty: true}
+  | UpdatePublicSignup(publicSignup) => {...state, publicSignup, dirty: true}
+  | UpdatePublicPreview(publicPreview) => {...state, publicPreview, dirty: true}
+  | UpdateAbout(about) => {...state, about, dirty: true}
+  | UpdateFeatured(featured) => {...state, featured, dirty: true}
   | UpdateProgressionBehavior(progressionBehavior) => {
       ...state,
-      progressionBehavior: progressionBehavior,
+      progressionBehavior,
       dirty: true,
     }
-  | UpdateHighlights(highlights) => {...state, highlights: highlights, dirty: true}
+  | UpdateHighlights(highlights) => {...state, highlights, dirty: true}
   | SetHasProcessingUrl => {...state, hasProcessingUrl: true, dirty: true}
   | ClearHasProcessingUrl => {...state, hasProcessingUrl: false, dirty: true}
   | UpdateProcessingUrl(processingUrl) => {
       ...state,
-      processingUrl: processingUrl,
+      processingUrl,
       dirty: true,
     }
   | SetCohortsData(cohortsData) => {...state, cohorts: cohortsData, loading: false}

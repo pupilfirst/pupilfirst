@@ -6,13 +6,13 @@ let imageLabel = (imageName, selectedImageName) =>
   switch selectedImageName {
   | Some(name) =>
     <span>
-      { t("you_selected_pre") ++ " " |> str}
+      {t("you_selected_pre") ++ " " |> str}
       <code className="me-1"> {name |> str} </code>
       {" " ++ t("you_selected_post") |> str}
     </span>
   | None =>
     switch imageName {
-    | Some(existingName) => <span> { t("pick_replace_pre") ++ " " ++ existingName |> str} </span>
+    | Some(existingName) => <span> {t("pick_replace_pre") ++ " " ++ existingName |> str} </span>
     | None => t("choose_customize") |> str
     }
   }
@@ -34,7 +34,8 @@ let make = (
     <label className="block tracking-wide text-gray-800 text-xs font-semibold" htmlFor=id>
       {labelText |> str}
     </label>
-    <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+    <div
+      className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
       <input
         autoFocus
         disabled
@@ -48,7 +49,7 @@ let make = (
         onChange
       />
       <label className="file-input-label mt-2" htmlFor=id>
-        <i className="fas fa-upload" />
+        <i className="fas fa-upload text-primary-300 text-lg" />
         <span className="ms-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
       </label>
     </div>

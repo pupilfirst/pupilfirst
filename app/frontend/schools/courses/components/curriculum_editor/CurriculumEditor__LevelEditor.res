@@ -34,16 +34,16 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name, hasNameError) => {
       ...state,
-      name: name,
-      hasNameError: hasNameError,
+      name,
+      hasNameError,
       dirty: true,
     }
   | UpdateUnlockAt(date) => {...state, unlockAt: date, dirty: true}
   | BeginSaving => {...state, saving: true}
   | FinishSaving => {...state, saving: false}
-  | UpdateTab(tab) => {...state, tab: tab}
-  | SelectLevelToMergeInto(mergeIntoLevelId) => {...state, mergeIntoLevelId: mergeIntoLevelId}
-  | SelectCourseToCloneInto(cloneIntoCourseId) => {...state, cloneIntoCourseId: cloneIntoCourseId}
+  | UpdateTab(tab) => {...state, tab}
+  | SelectLevelToMergeInto(mergeIntoLevelId) => {...state, mergeIntoLevelId}
+  | SelectCourseToCloneInto(cloneIntoCourseId) => {...state, cloneIntoCourseId}
   }
 
 let updateName = (send, name) => {
@@ -78,8 +78,8 @@ let computeInitialState = level => {
   }
 
   {
-    name: name,
-    unlockAt: unlockAt,
+    name,
+    unlockAt,
     hasNameError: false,
     dirty: false,
     saving: false,
@@ -348,7 +348,8 @@ let tab = (tab, state, send) => {
   let classes = selected ? defaultClasses ++ " level-editor__tab--selected" : defaultClasses
 
   <button onClick={_e => send(UpdateTab(tab))} className=classes>
-    <i className={"fas " ++ iconClass} /> <span className="ms-2"> {title |> str} </span>
+    <i className={"fas " ++ iconClass} />
+    <span className="ms-2"> {title |> str} </span>
   </button>
 }
 
@@ -358,12 +359,15 @@ let make = (~level, ~levels, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
 
   <SchoolAdmin__EditorDrawer closeDrawerCB=hideEditorActionCB>
     <DisablingCover disabled=state.saving>
-      <div className="bg-gray-50 pt-6">
-        <div className="max-w-2xl px-6 mx-auto"> <h3> {drawerTitle(level)->str} </h3> </div>
+      <div className="bg-white  border-t border-gray-200 pt-6">
+        <div className="max-w-2xl px-6 mx-auto">
+          <h3> {drawerTitle(level)->str} </h3>
+        </div>
         {switch level {
         | Some(_) =>
           <div className="flex w-full max-w-2xl mx-auto px-6 text-sm -mb-px mt-2">
-            {tab(Details, state, send)} {tab(Actions, state, send)}
+            {tab(Details, state, send)}
+            {tab(Actions, state, send)}
           </div>
         | None => <div className="h-4" />
         }}

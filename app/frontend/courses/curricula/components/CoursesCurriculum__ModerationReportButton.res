@@ -71,27 +71,44 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
     {switch showReport {
     | false => React.null
     | true =>
-      <div className="blanket mx-auto grid place-items-center">
-        <div className="max-w-xl mx-auto p-4 bg-white rounded-lg shadow-lg">
-          <h2> {"Report"->str} </h2>
-          <p> {"Please provide a reason for reporting"->str} </p>
-          <input
+      <div className="blanket grid place-items-center mx-auto">
+        <div className="max-w-xl w-full mx-auto p-4 bg-white rounded-lg shadow-lg">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold leading-tight"> {"Report"->str} </h2>
+            <button
+              className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+              <Icon className="if i-times-light text-xl if-fw" />
+              <span className="sr-only"> {"Close"->str} </span>
+            </button>
+          </div>
+          <label className="block text-sm text-gray-600 mt-4">
+            {"Please provide a reason for reporting"->str}
+          </label>
+          <textarea
+            className="w-full text-sm p-2 border rounded-md mt-1"
             type_="text"
             value={reportReason}
             placeholder={"Share reason for reporting"}
             onChange={updateReportReason(setReportReason)}
           />
-          <button
-            onClick={createModerationReport(
-              reportableType,
-              reportableId,
-              reportReason,
-              setModerationReports,
-              setShowReport,
-              setReportReason,
-            )}>
-            {"Report"->str}
-          </button>
+          <div className="mt-3 sm:mt-4 sm:flex">
+            <button
+              className="btn btn-primary"
+              onClick={createModerationReport(
+                reportableType,
+                reportableId,
+                reportReason,
+                setModerationReports,
+                setShowReport,
+                setReportReason,
+              )}>
+              {"Report"->str}
+            </button>
+            <button
+              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
+              {"Cancel"->str}
+            </button>
+          </div>
         </div>
       </div>
     }}

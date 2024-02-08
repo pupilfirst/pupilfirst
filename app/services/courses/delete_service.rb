@@ -92,7 +92,7 @@ module Courses
         .delete_all
       timeline_event_owners.delete_all
       StartupFeedback.where(timeline_event_id: submission_ids).delete_all
-      TimelineEvent.where(id: submission_ids).delete_all
+      TimelineEvent.where(id: submission_ids).destroy_all
     end
 
     def delete_content

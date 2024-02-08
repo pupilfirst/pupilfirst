@@ -11,22 +11,13 @@ module Mutations
       { success: true }
     end
 
-    #TODO implement authorization
     def query_authorized?
-      return true
-    end
-
-    def submission
-      @submission ||= submission_comment.timeline_event
+      current_user.id == submission_comment.user_id
     end
 
     def submission_comment
       @submission_comment ||=
         SubmissionComment.find_by(id: @params[:submission_comment_id])
-    end
-
-    def course
-      @course ||= submission&.course
     end
   end
 end

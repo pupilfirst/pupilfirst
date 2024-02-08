@@ -22,17 +22,16 @@ class DiscussionSubmissionsResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
-    # Has access to school
-    return false unless student&.school == current_school
-
     # school admin or course author
     if current_school_admin.present? ||
          current_user.course_authors.where(course: course).present?
       return true
     end
 
+    # student of the course
     return true if current_user.id == student.user_id
 
+    # faculty of the course
     current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
   end
 
@@ -51,9 +50,5 @@ class DiscussionSubmissionsResolver < ApplicationQuery
 
   def target
     @target ||= Target.find_by(id: target_id)
-  end
-
-  def allow_token_auth?
-    true
   end
 end

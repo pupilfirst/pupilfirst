@@ -7,30 +7,16 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(_params)
-      Reaction.find_by(id: @params[:reaction_id]).delete
+      reaction.delete
       { success: true }
     end
 
-    #TODO implement authorization
     def query_authorized?
-      return true
+      reaction.user_id == current_user.id
     end
 
-    def submission
-      if @params[:reactionable_type] == "TimelineEvent"
-        @submission ||= TimelineEvent.find_by(id: @params[:reactionable_id])
-      else
-        @submission ||= submission_comment.timeline_event
-      end
-    end
-
-    def submission_comment
-      @submission_comment ||=
-        SubmissionComment.find_by(id: @params[:reactionable_id])
-    end
-
-    def course
-      @course ||= submission&.course
+    def reaction
+      @reaction ||= Reaction.find_by(id: @params[:reaction_id])
     end
   end
 end

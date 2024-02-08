@@ -20,9 +20,17 @@ module Mutations
       { success: true }
     end
 
-    #TODO implement authorization
     def query_authorized?
-      return true
+      return false if current_user.blank?
+
+      # school admin or course author
+      if current_school_admin.present? ||
+           current_user.course_authors.where(course: course).present?
+        return true
+      end
+
+      # faculty of the course
+      current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
     end
 
     def submission

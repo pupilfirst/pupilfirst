@@ -36,12 +36,31 @@ module Mutations
           user_id: current_user.id
         }
       }
-      #TODO send an email to the school admin
     end
 
-    #TODO implement authorization
     def query_authorized?
-      return true
+      return false if current_user.blank?
+
+      # school admin or course author
+      if current_school_admin.present? ||
+           current_user.course_authors.where(course: course).present?
+        return true
+      end
+
+      # student of the course
+      return true if current_user.id == student.user_id
+
+      # faculty of the course
+      current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+    end
+
+    def student
+      @student ||=
+        current_user
+          .students
+          .joins(:cohort)
+          .where(cohorts: { course_id: course })
+          .first
     end
 
     def submission

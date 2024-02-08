@@ -33,8 +33,9 @@ let hideComment = (submissionCommentId, hide, setCommentHidden, event) => {
   |> ignore
 }
 
-let archiveComment = (submissionCommentId, setCommentArchived, event) => {
+let archiveComment = (submissionCommentId, setCommentArchived, setShowConfirmDelete, event) => {
   ReactEvent.Mouse.preventDefault(event)
+  setShowConfirmDelete(_ => false)
   ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
   |> Js.Promise.then_(response => {
     switch response["archiveSubmissionComment"]["success"] {
@@ -46,12 +47,18 @@ let archiveComment = (submissionCommentId, setCommentArchived, event) => {
   |> ignore
 }
 
+let updateShowConfirmDelete = (setShowConfirmDelete, showConfirmDelete, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  setShowConfirmDelete(_ => showConfirmDelete)
+}
+
 @react.component
 let make = (~currentUser, ~author, ~comment) => {
   let (commentHidden, setCommentHidden) = React.useState(() =>
     Belt.Option.isSome(comment->Comment.hiddenAt)
   )
   let (commentArchived, setCommentArchived) = React.useState(() => false)
+  let (showConfirmDelete, setShowConfirmDelete) = React.useState(() => false)
 
   let commentDisplay =
     <div className="relative mt-4">
@@ -134,7 +141,7 @@ let make = (~currentUser, ~author, ~comment) => {
             | true =>
               <div>
                 <button
-                  onClick={archiveComment(comment->Comment.id, setCommentArchived)}
+                  onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
                   className="w-7 h-7 flex items-center justify-center cursor-pointer p-0.5 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
                   <span>
                     <Icon className="if i-trash-light if-fw" />
@@ -160,8 +167,20 @@ let make = (~currentUser, ~author, ~comment) => {
       </div>
     </div>
 
-  {
-    switch (commentArchived, commentHidden) {
+  <div>
+    {switch showConfirmDelete {
+    | false => React.null
+    | true =>
+      <div className="blanket">
+        <h2> {"Delete comment"->str} </h2>
+        <p> {"Are you sure you want to delete comment?"->str} </p>
+        <button
+          onClick={archiveComment(comment->Comment.id, setCommentArchived, setShowConfirmDelete)}>
+          {"Delete"->str}
+        </button>
+      </div>
+    }}
+    {switch (commentArchived, commentHidden) {
     | (true, _) => React.null
     | (false, false) => commentDisplay
     | (false, true) =>
@@ -169,6 +188,6 @@ let make = (~currentUser, ~author, ~comment) => {
       | true => commentDisplay
       | false => React.null
       }
-    }
-  }
+    }}
+  </div>
 }

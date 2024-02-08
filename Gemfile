@@ -117,5 +117,5 @@ group :production do
   gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
-  gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in rails when using cloudflare
+  gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare
 end

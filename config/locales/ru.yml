@@ -2376,7 +2376,7 @@ ru:
           congratulations: Congratulations!
           issued_on_html: The certificate was issued on %{issued_certificate} and can be viewed or printed by %{link_to}.
           link_to: visiting the certificate's public link
-        subject: You have been awarded a certificate!
+        subject: "%{name}, you have been awarded a certificate!"
     school_admin:
       added: Добавлен Новый Администратор Школы
       import: Импорт студентов завершен

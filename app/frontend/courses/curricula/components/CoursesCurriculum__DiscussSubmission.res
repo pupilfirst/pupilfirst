@@ -60,7 +60,7 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
     key={submissionId}
     className="mt-4 pb-4 relative curriculum__submission-feedback-container"
     ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
-    <div className="flex justify-between">
+    <div className="flex items-start justify-between">
       <div className="flex gap-3">
         <div
           className="w-8 h-8 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
@@ -104,36 +104,52 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
         </div>
       | false => React.null
       }}
-      {switch author {
-      | false => React.null
-      | true =>
-        <div>
-          <button
-            onClick={pinSubmission(submission, callBack)}
-            className="cursor-pointer block p-1 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-            // <i className=icon />
-
-            <span className="font-semibold ms-2">
+      <div className="flex space-x-2">
+        {switch author {
+        | false => React.null
+        | true =>
+          <div className="flex space-x-2">
+            <button
+              onClick={pinSubmission(submission, callBack)}
+              className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
               {switch submission->DiscussionSubmission.pinned {
-              | true => "Unpin Submission"->str
-              | false => "Pin Submission"->str
+              | true =>
+                <span className="flex items-center md:space-x-1">
+                  <Icon className="if i-eye-closed-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {"Unpin"->str} </span>
+                </span>
+              | false =>
+                <span className="flex items-center md:space-x-1">
+                  <Icon className="if i-eye-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {"Pin"->str} </span>
+                </span>
               }}
-            </span>
-          </button>
-          <button
-            onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
-            className="cursor-pointer block p-1 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-            // <i className=icon />
-
-            <span className="font-semibold ms-2">
+            </button>
+            <button
+              onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
+              className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
               {switch submissionHidden {
-              | true => "Un-hide submission"->str
-              | false => "Hide submission"->str
+              | true =>
+                <span className="flex items-center md:space-x-1">
+                  <Icon className="if i-eye-closed-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {"Un-hide submission"->str} </span>
+                </span>
+              | false =>
+                <span className="flex items-center md:space-x-1">
+                  <Icon className="if i-eye-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {"Hide Submission"->str} </span>
+                </span>
               }}
-            </span>
-          </button>
-        </div>
-      }}
+            </button>
+          </div>
+        }}
+        <CoursesCurriculum__ModerationReportButton
+          currentUser
+          moderationReports={submission->DiscussionSubmission.moderationReports}
+          reportableId={submission->DiscussionSubmission.id}
+          reportableType={"TimelineEvent"}
+        />
+      </div>
     </div>
     <div className="relative">
       <div className="absolute w-8 top-0 left-0 bottom-0 flex justify-center items-center z-0">
@@ -146,12 +162,6 @@ let make = (~currentUser, ~author, ~submission, ~callBack) => {
           forDiscussion=true
         />
       </div>
-      <CoursesCurriculum__ModerationReportButton
-        currentUser
-        moderationReports={submission->DiscussionSubmission.moderationReports}
-        reportableId={submission->DiscussionSubmission.id}
-        reportableType={"TimelineEvent"}
-      />
       <CoursesCurriculum__Reactions
         currentUser
         reactionableType="TimelineEvent"

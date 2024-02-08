@@ -71,40 +71,46 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
     {switch showReport {
     | false => React.null
     | true =>
-      <div className="blanket">
-        <h2> {"Report"->str} </h2>
-        <p> {"Please provide a reason for reporting"->str} </p>
-        <input
-          type_="text"
-          value={reportReason}
-          placeholder={"Share reason for reporting"}
-          onChange={updateReportReason(setReportReason)}
-        />
-        <button
-          onClick={createModerationReport(
-            reportableType,
-            reportableId,
-            reportReason,
-            setModerationReports,
-            setShowReport,
-            setReportReason,
-          )}>
-          {"Report"->str}
-        </button>
+      <div className="blanket mx-auto grid place-items-center">
+        <div className="max-w-xl mx-auto p-4 bg-white rounded-lg shadow-lg">
+          <h2> {"Report"->str} </h2>
+          <p> {"Please provide a reason for reporting"->str} </p>
+          <input
+            type_="text"
+            value={reportReason}
+            placeholder={"Share reason for reporting"}
+            onChange={updateReportReason(setReportReason)}
+          />
+          <button
+            onClick={createModerationReport(
+              reportableType,
+              reportableId,
+              reportReason,
+              setModerationReports,
+              setShowReport,
+              setReportReason,
+            )}>
+            {"Report"->str}
+          </button>
+        </div>
       </div>
     }}
     <button
       onClick={updateShowReport(setShowReport, true)}
       disabled={reported}
-      className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-      // <i className=icon />
-
-      <span className="font-semibold ms-2">
-        {switch reported {
-        | true => "Reported"->str
-        | false => "Report"->str
-        }}
-      </span>
+      className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+      {switch reported {
+      | true =>
+        <span className="flex items-center md:space-x-1">
+          <Icon className="if i-eye-closed-light if-fw" />
+          <span className="hidden md:inline-block text-xs"> {"Reported"->str} </span>
+        </span>
+      | false =>
+        <span className="flex items-center md:space-x-1">
+          <Icon className="if i-eye-light if-fw" />
+          <span className="hidden md:inline-block text-xs"> {"Report"->str} </span>
+        </span>
+      }}
     </button>
   </div>
 }

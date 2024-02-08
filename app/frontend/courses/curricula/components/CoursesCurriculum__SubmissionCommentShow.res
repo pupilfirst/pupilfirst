@@ -115,16 +115,18 @@ let make = (~currentUser, ~author, ~comment) => {
               <div>
                 <button
                   onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
-                  className="w-7 h-7 flex items-center justify-center cursor-pointer p-0.5 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
+                  className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
                   title={commentHidden ? "Unhide Comment" : "Hide Comment"}>
                   {switch commentHidden {
                   | true =>
-                    <span>
+                    <span className="flex items-center md:space-x-1">
                       <Icon className="if i-eye-closed-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {"Unhide"->str} </span>
                     </span>
                   | false =>
-                    <span>
+                    <span className="flex items-center md:space-x-1">
                       <Icon className="if i-eye-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {"Hide"->str} </span>
                     </span>
                   }}
                 </button>
@@ -142,10 +144,9 @@ let make = (~currentUser, ~author, ~comment) => {
               <div>
                 <button
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
-                  className="w-7 h-7 flex items-center justify-center cursor-pointer p-0.5 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
-                  <span>
-                    <Icon className="if i-trash-light if-fw" />
-                  </span>
+                  className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                  <Icon className="if i-trash-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {"Delete"->str} </span>
                 </button>
               </div>
             }}

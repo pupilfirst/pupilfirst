@@ -99,7 +99,7 @@ feature "Automatic issuance of certificates", js: true do
     # Two emails should also have been sent out.
     open_email(student_1.email)
 
-    exopect(current_email.subject).to include(student_1.name)
+    expect(current_email.subject).to include(student_1.name)
 
     expect(sanitize_html(current_email.body)).to include(
       "http://test.host/c/#{issued_certificate.serial_number}"
@@ -107,7 +107,7 @@ feature "Automatic issuance of certificates", js: true do
 
     open_email(student_2.email)
 
-    exopect(current_email.subject).to include(student_2.name)
+    expect(current_email.subject).to include(student_2.name)
 
     expect(sanitize_html(current_email.body)).to include(
       "http://test.host/c/#{student_2.user.issued_certificates.first.serial_number}"

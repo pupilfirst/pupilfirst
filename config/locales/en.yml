@@ -2140,6 +2140,16 @@ en:
         thanks: Thanks,
     link_fallback:
       link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+    school_contact:
+      moderation_report:
+        subject: Content reported on %{course}
+        body:
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2196,6 +2206,15 @@ en:
         body:
           html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Your email in %{school_name} school updated successfully
+      confirm_moderation_report:
+        body:
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
@@ -2218,11 +2237,6 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
-      confirm_moderation_report:
-        body:
-          main_html: <p> Your report of the content made by %{content_created_by} on %{content_created_at} for the target %{target_name} has been successfully recorded and an update send to the school admin </p>
-          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
-        subject: Content reported successfully on %{school_name}
       new_post:
         body:
           link_to: view the reply on the %{community_name} community

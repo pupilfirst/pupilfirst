@@ -17,10 +17,14 @@ module Mutations
           user_id: current_user.id
         )
 
+      SchoolContactMailer.moderation_report(
+        moderation_report,
+        submission
+      ).deliver_later
+
       UserMailer.confirm_moderation_report(
-        current_user,
-        submission,
-        reported_item
+        moderation_report,
+        submission
       ).deliver_later
 
       {

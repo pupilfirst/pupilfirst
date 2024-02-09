@@ -1,6 +1,6 @@
 module Mutations
   class PinSubmission < ApplicationQuery
-    argument :pinned, Boolean, required: true
+    argument :pin, Boolean, required: true
     argument :submission_id, String, required: true
 
     description "Pin or unpin a submission"
@@ -8,7 +8,7 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(_params)
-      submission.pinned = @params[:pinned]
+      submission.pinned = @params[:pin]
       submission.save!
       { success: true }
     end

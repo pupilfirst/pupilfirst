@@ -9821,7 +9821,7 @@
               "description": "Pin or unpin a submission",
               "args": [
                 {
-                  "name": "pinned",
+                  "name": "pin",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

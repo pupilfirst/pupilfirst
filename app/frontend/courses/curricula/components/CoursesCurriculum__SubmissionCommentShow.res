@@ -205,6 +205,7 @@ let make = (~currentUser, ~comment) => {
               </div>
               <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                 <button
+                  onClick={updateShowConfirmDelete(setShowConfirmDelete, false)}
                   className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
                   <Icon className="if i-times-light text-xl if-fw" />
                   <span className="sr-only"> {"Close"->str} </span>
@@ -223,6 +224,7 @@ let make = (~currentUser, ~comment) => {
               {"Delete"->str}
             </button>
             <button
+              onClick={updateShowConfirmDelete(setShowConfirmDelete, false)}
               className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
               {"Cancel"->str}
             </button>

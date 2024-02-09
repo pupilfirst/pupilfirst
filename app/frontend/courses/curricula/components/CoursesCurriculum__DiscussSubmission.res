@@ -4,8 +4,8 @@ let t = I18n.t(~scope="components.CoursesCurriculum__DiscussSubmission")
 open CoursesCurriculum__Types
 
 module PinSubmissionMutation = %graphql(`
-   mutation PinSubmissionMutation($pinned: Boolean!, $submissionId: String!) {
-     pinSubmission(pinned: $pinned, submissionId: $submissionId ) {
+   mutation PinSubmissionMutation($pin: Boolean!, $submissionId: String!) {
+     pinSubmission(pin: $pin, submissionId: $submissionId ) {
        success
      }
    }
@@ -21,9 +21,9 @@ module HideSubmissionMutation = %graphql(`
 
 let pinSubmission = (submission, callBack, event) => {
   ReactEvent.Mouse.preventDefault(event)
-  let pinned = !(submission->DiscussionSubmission.pinned)
+  let pin = !(submission->DiscussionSubmission.pinned)
   let submissionId = submission->DiscussionSubmission.id
-  PinSubmissionMutation.make({pinned, submissionId})
+  PinSubmissionMutation.make({pin, submissionId})
   |> Js.Promise.then_(response => {
     switch response["pinSubmission"]["success"] {
     | true => callBack(submission->DiscussionSubmission.targetId)
@@ -49,6 +49,13 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
   |> ignore
 }
 
+let pinnedClasses = pinned => {
+  switch pinned {
+  | true => ""
+  | false => ""
+  }
+}
+
 @react.component
 let make = (~currentUser, ~submission, ~callBack) => {
   let submissionId = submission->DiscussionSubmission.id
@@ -58,7 +65,8 @@ let make = (~currentUser, ~submission, ~callBack) => {
 
   <div
     key={submissionId}
-    className="group mt-4 pb-4 relative curriculum__submission-feedback-container"
+    className={"group mt-4 pb-4 relative curriculum__submission-feedback-container" ++
+    pinnedClasses(submission->DiscussionSubmission.pinned)}
     ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
     <div className="flex items-start justify-between">
       <div className="flex gap-3">

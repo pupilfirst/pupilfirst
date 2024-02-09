@@ -115,12 +115,12 @@ let make = (~currentUser, ~submission, ~callBack) => {
               {switch submission->DiscussionSubmission.pinned {
               | true =>
                 <span className="flex items-center md:space-x-1">
-                  <Icon className="if i-eye-closed-light if-fw" />
+                  <Icon className="if i-pin-angle-light if-fw" />
                   <span className="hidden md:inline-block text-xs"> {"Unpin"->str} </span>
                 </span>
               | false =>
                 <span className="flex items-center md:space-x-1">
-                  <Icon className="if i-eye-light if-fw" />
+                  <Icon className="if i-pin-angle-light if-fw" />
                   <span className="hidden md:inline-block text-xs"> {"Pin"->str} </span>
                 </span>
               }}

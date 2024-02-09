@@ -117,7 +117,7 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
     <button
       onClick={updateShowReport(setShowReport, true)}
       disabled={reported}
-      className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+      className="md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
       {switch reported {
       | true =>
         <span className="flex items-center md:space-x-1">

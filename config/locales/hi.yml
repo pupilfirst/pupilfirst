@@ -2339,7 +2339,7 @@ hi:
     create_user_standing:
       standing_archived_error: Selected standing is no longer active. Please refresh the page and try again.
       standing_not_found_error: Selected standing doesn't exist. Please refresh the page and try again.
-      success_notification: Standing log created successfully!.
+      success_notification: Standing log created successfully!
     delete_certificate:
       success_notification: प्रमाणपत्र हटा दिया गया है।
     delete_course_author:

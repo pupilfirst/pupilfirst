@@ -6,6 +6,7 @@ type t = {
   createdAt: Js.Date.t,
   checklist: array<SubmissionChecklistItem.t>,
   userNames: string,
+  users: array<CoursesCurriculum__User.t>,
   teamName: option<string>,
   comments: array<CoursesCurriculum__SubmissionComment.t>,
   reactions: array<CoursesCurriculum__Reaction.t>,
@@ -20,6 +21,7 @@ let targetId = t => t.targetId
 let createdAt = t => t.createdAt
 let checklist = t => t.checklist
 let userNames = t => t.userNames
+let users = t => t.users
 let teamName = t => t.teamName
 let comments = t => t.comments
 let reactions = t => t.reactions
@@ -38,21 +40,7 @@ let hiddenAtPretty = t =>
 let sort = ts =>
   ts |> ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
 
-let compareByPinned = (a, b) => {
-  if a.pinned === b.pinned {
-    0
-  } /* Elements are equal */
-  else if a.pinned {
-    -1
-  } else {
-    /* a should come before b */
-
-    1 /* b should come before a */
-  }
-}
-
-let sortByPinned = submissions =>
-  submissions |> ArrayUtils.copyAndSort((t1, t2) => compareByPinned(t1, t2))
+let firstUser = t => t.users[0]
 
 let decode = json => {
   open Json.Decode
@@ -69,6 +57,7 @@ let decode = json => {
       ),
     ),
     userNames: json |> field("userNames", string),
+    users: json |> field("users", array(CoursesCurriculum__User.decode)),
     teamName: json |> optional(field("teamName", string)),
     comments: json |> field("comments", array(CoursesCurriculum__SubmissionComment.decode)),
     reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
@@ -88,6 +77,7 @@ let make = (
   ~createdAt,
   ~checklist,
   ~userNames,
+  ~users,
   ~teamName,
   ~comments,
   ~reactions,
@@ -101,6 +91,7 @@ let make = (
   createdAt,
   checklist,
   userNames,
+  users,
   teamName,
   comments,
   reactions,

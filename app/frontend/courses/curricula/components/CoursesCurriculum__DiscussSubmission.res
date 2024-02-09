@@ -63,6 +63,8 @@ let make = (~currentUser, ~submission, ~callBack) => {
     Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)
   )
 
+  let teamStrength = Belt.Array.length(submission->DiscussionSubmission.users)
+
   <div
     key={submissionId}
     className={"group mt-4 pb-4 relative curriculum__submission-feedback-container" ++
@@ -72,6 +74,14 @@ let make = (~currentUser, ~submission, ~callBack) => {
       <div className="flex gap-3">
         <div
           className="w-8 h-8 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
+          {switch submission->DiscussionSubmission.anonymous {
+          | true => <span className="font-semibold"> {"A"->str} </span>
+          | false => submission->DiscussionSubmission.firstUser->User.avatar
+          }}
+          {switch teamStrength {
+          | 1 => React.null
+          | teamStrength => <span> {("+" ++ Belt.Int.toString(teamStrength - 1))->str} </span>
+          }}
           <span className="font-semibold" />
         </div>
         <div className="flex flex-col flex-wrap">

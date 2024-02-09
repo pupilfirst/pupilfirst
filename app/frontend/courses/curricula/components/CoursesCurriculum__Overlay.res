@@ -120,6 +120,12 @@ module DiscussionSubmissionsQuery = %graphql(`
             url
           },
           userNames,
+          users {
+            id,
+            name,
+            title,
+            avatarUrl
+          }
           teamName,
           comments {
             id,

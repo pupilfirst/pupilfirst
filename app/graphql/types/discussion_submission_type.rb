@@ -6,6 +6,7 @@ module Types
     field :checklist, GraphQL::Types::JSON, null: false
     field :files, [Types::SubmissionFileType], null: false
     field :user_names, String, null: false
+    field :users, [UserType], null: false
     field :team_name, String, null: true
     field :comments, [SubmissionCommentType], null: true
     field :reactions, [ReactionType], null: true
@@ -59,6 +60,22 @@ module Types
             end
         end
       # object.students.map { |student| student.user.name }.join(', ')
+    end
+
+    def users
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch do |submission_ids, loader|
+          TimelineEvent
+            .includes(students: :user)
+            .where(id: submission_ids)
+            .each do |submission|
+              loader.call(
+                submission.id,
+                submission.students.map { |student| student.user }
+              )
+            end
+        end
     end
 
     def students_have_same_team?(submission)

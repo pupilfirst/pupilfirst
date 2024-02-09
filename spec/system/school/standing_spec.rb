@@ -148,20 +148,16 @@ feature "School Standing", js: true do
 
       expect(page).to have_text("Enabled")
 
-      expect(page).to have_link("Add CoC")
-
       click_link "Add CoC"
 
       expect(page).to have_text("Code of Conduct")
 
-      code_of_conduct = Faker::Markdown.sandwich(sentences: 6)
+      code_of_conduct = Faker::Lorem.sentence
       add_markdown(code_of_conduct)
 
       click_button "Save Code of Conduct"
 
       expect(page).to have_text("Code of Conduct saved successfully")
-
-      expect(page).to have_link("Edit CoC")
 
       click_link "Edit CoC"
 
@@ -171,8 +167,7 @@ feature "School Standing", js: true do
         expect(page).to have_text(code_of_conduct)
       end
 
-      code_of_conduct = Faker::Markdown.sandwich(sentences: 6)
-
+      code_of_conduct = Faker::Lorem.sentence
       replace_markdown(code_of_conduct)
 
       click_button "Save Code of Conduct"

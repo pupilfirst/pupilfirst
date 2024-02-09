@@ -111,14 +111,14 @@ let make = (~currentUser, ~comment) => {
               </div>
             </div>
           </div>
-          <div className="flex md:hidden md:group-hover:flex space-x-2">
+          <div className="flex space-x-2">
             {switch isModerator {
             | false => React.null
             | true =>
               <div>
                 <button
                   onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
-                  className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
+                  className="md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
                   title={commentHidden ? "Unhide Comment" : "Hide Comment"}>
                   {switch commentHidden {
                   | true =>

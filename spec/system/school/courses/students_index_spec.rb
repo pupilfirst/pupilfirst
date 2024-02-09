@@ -4,6 +4,7 @@ feature "School students index", js: true do
   include UserSpecHelper
   include NotificationHelper
   include HtmlSanitizerSpecHelper
+  include MarkdownEditorHelper
 
   let(:tag_1) { "Single Student" }
   let(:tag_2) { "Another Tag" }
@@ -826,8 +827,7 @@ feature "School students index", js: true do
 
       reason = Faker::Lorem.sentence
 
-      fill_in "reason-for-altering-standing", with: reason
-
+      add_markdown reason
       click_button "Add Entry"
 
       expect(page).to have_text("Standing log created successfully!")
@@ -835,9 +835,7 @@ feature "School students index", js: true do
       dismiss_notification
 
       expect(page).to have_text(standing_2.name)
-
       expect(page).to have_text(school_admin.user.name)
-
       expect(page).to have_text(reason)
 
       expect(page).to have_select(
@@ -889,7 +887,7 @@ feature "School students index", js: true do
 
       reason = Faker::Lorem.sentence
 
-      fill_in "reason-for-altering-standing", with: reason
+      add_markdown reason
 
       click_button "Add Entry"
 
@@ -898,7 +896,6 @@ feature "School students index", js: true do
       dismiss_notification
 
       expect(page).to have_text(standing_2.name)
-
       expect(page).to have_text(reason)
 
       expect(page).to have_select(

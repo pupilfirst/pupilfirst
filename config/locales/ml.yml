@@ -2339,7 +2339,7 @@ ml:
     create_user_standing:
       standing_archived_error: Selected standing is no longer active. Please refresh the page and try again.
       standing_not_found_error: Selected standing doesn't exist. Please refresh the page and try again.
-      success_notification: Standing log created successfully!.
+      success_notification: Standing log created successfully!
     delete_certificate:
       success_notification: സർട്ടിഫിക്കറ്റ് ഇല്ലാതാക്കി.
     delete_course_author:

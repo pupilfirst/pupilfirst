@@ -804,7 +804,7 @@ feature "School students index", js: true do
       expect(page).to have_text(standing_1.name)
     end
 
-    scenario "school admin changes the student standing" do
+    scenario "school admin adds an entry to the student standing log" do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/standing"
 
@@ -864,73 +864,52 @@ feature "School students index", js: true do
       expect(body).to have_text(reason)
     end
 
-    scenario "school admin deletes a user standing log" do
-      sign_in_user school_admin.user,
-                   referrer: "/school/students/#{student.id}/standing"
-
-      expect(page).to have_text("There are no entries in the log")
-
-      expect(page).to have_select(
-        "current-standing",
-        selected: standing_1.name,
-        disabled: true
-      )
-
-      expect(page).to have_select(
-        "change-standing",
-        selected: "Select Standing"
-      )
-
-      select standing_2.name, from: "change-standing"
-
-      expect(page).to have_text(standing_2.description)
-
-      reason = Faker::Lorem.sentence
-
-      add_markdown reason
-
-      click_button "Add Entry"
-
-      expect(page).to have_text("Standing log created successfully!")
-
-      dismiss_notification
-
-      expect(page).to have_text(standing_2.name)
-      expect(page).to have_text(reason)
-
-      expect(page).to have_select(
-        "current-standing",
-        selected: standing_2.name,
-        disabled: true
-      )
-
-      expect(page).to have_select(
-        "change-standing",
-        selected: "Select Standing"
-      )
-
-      accept_confirm do
-        find(
-          "button[title='Delete Standing Log#{student.user.user_standings.last.id}']"
-        ).click
+    context "when there are entries in the standing log" do
+      let!(:user_standing) do
+        create :user_standing, user: student.user, standing: standing_2
       end
 
-      expect(page).to have_text("Standing log deleted successfully")
+      scenario "school admin deletes an entry in the log" do
+        sign_in_user school_admin.user,
+                     referrer: "/school/students/#{student.id}/standing"
 
-      dismiss_notification
+        expect(page).to have_text(standing_2.name)
+        expect(page).to have_text(user_standing.reason)
 
-      expect(page).to have_text("There are no entries in the log")
+        expect(page).to have_select(
+          "current-standing",
+          selected: standing_2.name,
+          disabled: true
+        )
 
-      expect(page).to have_select(
-        "current-standing",
-        selected: standing_1.name,
-        disabled: true
-      )
+        expect(page).to have_select(
+          "change-standing",
+          selected: "Select Standing"
+        )
 
-      expect(page).to have_select(
-        "change-standing",
-        selected: "Select Standing"
-      )
+        accept_confirm do
+          find(
+            "button[title='Delete Standing Log#{student.user.user_standings.last.id}']"
+          ).click
+        end
+
+        expect(page).to have_text("Standing log deleted successfully")
+
+        dismiss_notification
+
+        expect(page).to have_text("There are no entries in the log")
+
+        expect(page).to have_select(
+          "current-standing",
+          selected: standing_1.name,
+          disabled: true
+        )
+
+        expect(page).to have_select(
+          "change-standing",
+          selected: "Select Standing"
+        )
+      end
     end
   end
 end

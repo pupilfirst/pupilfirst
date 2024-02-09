@@ -3,7 +3,7 @@ type id = string
 type t = {
   id: id,
   userId: string,
-  userName: string,
+  user: CoursesCurriculum__User.t,
   submissionId: string,
   comment: string,
   reactions: array<CoursesCurriculum__Reaction.t>,
@@ -15,7 +15,7 @@ type t = {
 
 let id = t => t.id
 let userId = t => t.userId
-let userName = t => t.userName
+let user = t => t.user
 let submissionId = t => t.submissionId
 let comment = t => t.comment
 let reactions = t => t.reactions
@@ -36,7 +36,7 @@ let decode = json => {
   {
     id: json |> field("id", string),
     userId: json |> field("userId", string),
-    userName: json |> field("userName", string),
+    user: json |> field("user", CoursesCurriculum__User.decode),
     submissionId: json |> field("submissionId", string),
     comment: json |> field("comment", string),
     reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),

@@ -10,7 +10,12 @@ module CreateSubmissionCommentMutation = %graphql(`
          userId
          comment
          submissionId
-         userName
+         user {
+            id
+            name
+            title
+            avatarUrl
+         },
          createdAt
          reactions {
             id,
@@ -83,9 +88,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
     <div hidden={!showComments} className="submissionComments mt-4" key={submissionId}>
       <div className="flex gap-2 relative">
         <div className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 ">
-          <div
-            className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
-          />
+          <div> {currentUser->CurrentUser.avatar} </div>
         </div>
         <div
           className="w-8 h-8 shrink-0 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center"

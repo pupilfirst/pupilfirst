@@ -830,7 +830,7 @@ feature "School students index", js: true do
 
       click_button "Add Entry"
 
-      expect(page).to have_text("Standing log created successfully!.")
+      expect(page).to have_text("Standing log created successfully!")
 
       dismiss_notification
 
@@ -893,7 +893,7 @@ feature "School students index", js: true do
 
       click_button "Add Entry"
 
-      expect(page).to have_text("Standing log created successfully!.")
+      expect(page).to have_text("Standing log created successfully!")
 
       dismiss_notification
 

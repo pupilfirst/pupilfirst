@@ -58,7 +58,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
 
   <div
     key={submissionId}
-    className="mt-4 pb-4 relative curriculum__submission-feedback-container"
+    className="group mt-4 pb-4 relative curriculum__submission-feedback-container"
     ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
     <div className="flex items-start justify-between">
       <div className="flex gap-3">
@@ -104,7 +104,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
         </div>
       | false => React.null
       }}
-      <div className="flex space-x-2">
+      <div className="flex md:hidden md:group-hover:flex space-x-2">
         {switch currentUser->CurrentUser.isModerator {
         | false => React.null
         | true =>
@@ -157,7 +157,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
       <div className="absolute w-8 top-0 left-0 bottom-0 flex justify-center items-center z-0">
         <div className="w-px h-full border-l border-gray-300" />
       </div>
-      <div className="ms-11 pb-4">
+      <div className="ms-11 pb-4 pt-6">
         <SubmissionChecklistShow
           checklist={submission |> DiscussionSubmission.checklist}
           updateChecklistCB=None

@@ -63,7 +63,7 @@ let make = (~currentUser, ~comment) => {
   let isModerator = currentUser->CurrentUser.isModerator
 
   let commentDisplay =
-    <div className="relative mt-4">
+    <div className="group relative mt-4">
       <div
         className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 last:bg-white ">
         <div className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl" />
@@ -110,7 +110,7 @@ let make = (~currentUser, ~comment) => {
               </div>
             </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex md:hidden md:group-hover:flex space-x-2">
             {switch isModerator {
             | false => React.null
             | true =>

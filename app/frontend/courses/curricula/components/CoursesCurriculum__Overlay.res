@@ -142,7 +142,12 @@ module DiscussionSubmissionsQuery = %graphql(`
               reason,
               reportableType
             },
-            userName,
+            user {
+              id
+              name
+              title
+              avatarUrl
+            },
             createdAt
             hiddenAt
             hiddenById

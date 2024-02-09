@@ -141,7 +141,7 @@ module Types
                     {
                       id: comment.id,
                       user_id: comment.user_id,
-                      user_name: comment.user.name,
+                      user: comment.user,
                       submission_id: comment.timeline_event_id,
                       comment: comment.comment,
                       reactions:

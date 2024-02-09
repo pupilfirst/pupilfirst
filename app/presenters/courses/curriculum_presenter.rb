@@ -53,6 +53,7 @@ module Courses
       user = {
         id: current_user.id,
         name: current_user.name,
+        avatar_url: current_user.avatar_url(variant: :thumb),
         is_admin: current_school_admin.present?,
         is_author: @course.course_authors.exists?(user: current_user),
         is_coach: current_coach.present?

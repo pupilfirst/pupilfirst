@@ -19,7 +19,7 @@ module Mutations
           user_id: comment.user_id,
           submission_id: comment.timeline_event_id,
           comment: comment.comment,
-          user_name: current_user.name,
+          user: current_user,
           created_at: comment.created_at,
           reactions: [],
           moderation_reports: [],

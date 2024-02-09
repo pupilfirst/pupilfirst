@@ -61,6 +61,7 @@ let make = (~currentUser, ~comment) => {
   let (showConfirmDelete, setShowConfirmDelete) = React.useState(() => false)
 
   let isModerator = currentUser->CurrentUser.isModerator
+  let userName = comment->Comment.user->User.name
 
   let commentDisplay =
     <div className="relative mt-4">
@@ -95,12 +96,12 @@ let make = (~currentUser, ~comment) => {
               //   />
               // </div>
               <div
-                className="w-8 h-8 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
-                {String.sub(comment.userName, 0, 2) |> str}
+                className="w-8 h-8 border bg-gray-200 rounded-full flex items-center justify-center">
+                {comment->Comment.user->User.avatar}
               </div>
               <div className="flex flex-col flex-wrap">
                 <p className="font-semibold text-xs leading-tight block md:inline-flex">
-                  {comment.userName |> str}
+                  {userName |> str}
                 </p>
                 <p
                   className="text-xs text-gray-600 leading-tight pt-1"

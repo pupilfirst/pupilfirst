@@ -173,6 +173,12 @@ module Targets
       end
     end
 
+    def user_details(user)
+      details = user.attributes.slice("id", "name", "title")
+      details["avatar_url"] = user.avatar_url(variant: :thumb)
+      details
+    end
+
     def comments_for_submissions
       #TODO - clean up this code using the list of attributes
       reaction_attributes = [
@@ -192,7 +198,7 @@ module Targets
           {
             id: comment.id,
             user_id: comment.user_id,
-            user_name: comment.user.name,
+            user: user_details(comment.user),
             submission_id: comment.timeline_event_id,
             comment: comment.comment,
             reactions:

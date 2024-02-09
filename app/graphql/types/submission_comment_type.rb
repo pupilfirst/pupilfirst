@@ -6,7 +6,7 @@ module Types
     field :comment, String, null: false
     field :reactions, [ReactionType], null: false
     field :moderation_reports, [ModerationReportType], null: false
-    field :user_name, String, null: false
+    field :user, UserType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :hidden_at, GraphQL::Types::ISO8601DateTime, null: true
     field :hidden_by_id, ID, null: true

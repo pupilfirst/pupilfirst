@@ -122,11 +122,11 @@ let make = (~currentUser, ~submission, ~callBack) => {
         </div>
       | false => React.null
       }}
-      <div className="flex md:hidden md:group-hover:flex space-x-2">
+      <div className="flex space-x-2">
         {switch currentUser->CurrentUser.isModerator {
         | false => React.null
         | true =>
-          <div className="flex space-x-2">
+          <div className="flex md:hidden md:group-hover:flex space-x-2">
             <button
               onClick={pinSubmission(submission, callBack)}
               className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
@@ -145,7 +145,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
             </button>
             <button
               onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
-              className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+              className="flex md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
               {switch submissionHidden {
               | true =>
                 <span className="flex items-center md:space-x-1">

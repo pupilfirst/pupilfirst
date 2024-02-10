@@ -67,35 +67,42 @@ let make = (~currentUser, ~submission, ~callBack) => {
 
   <div
     key={submissionId}
-    className={"group mt-4 pb-4 relative curriculum__submission-feedback-container" ++
+    className={"mt-4 pb-4 relative curriculum__submission-feedback-container" ++
     pinnedClasses(submission->DiscussionSubmission.pinned)}
     ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
     <div className="flex items-start justify-between">
       <div className="flex gap-3">
-        <div
-          className="w-8 h-8 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
-          {switch submission->DiscussionSubmission.anonymous {
-          | true => <span className="font-semibold"> {t("anonymous_avatar")->str} </span>
-          | false => submission->DiscussionSubmission.firstUser->User.avatar
-          }}
+        <div className="isolate flex -space-x-2 overflow-hidden">
+          <div
+            className="w-8 h-8 relative z-10 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
+            {switch submission->DiscussionSubmission.anonymous {
+            | true => <span className="font-semibold"> {t("anonymous_avatar")->str} </span>
+            | false => submission->DiscussionSubmission.firstUser->User.avatar
+            }}
+            <span className="font-semibold" />
+          </div>
           {switch teamStrength {
           | 1 => React.null
-          | teamStrength => <span> {("+" ++ Belt.Int.toString(teamStrength - 1))->str} </span>
+          | teamStrength =>
+            <div
+              className="flex items-center justify-center w-8 h-8 text-xs border bg-gray-200 text-gray-600 relative z-0 rounded-full">
+              <span> {("+" ++ Belt.Int.toString(teamStrength - 1))->str} </span>
+            </div>
           }}
-          <span className="font-semibold" />
         </div>
         <div className="flex flex-col flex-wrap">
           {switch submission->DiscussionSubmission.anonymous {
           | true =>
-            <span>
-              <span className="font-semibold"> {t("anonymous")->str} </span>
+            <span className="font-semibold text-xs leading-tight block md:inline-flex">
+              {t("anonymous")->str}
             </span>
+
           | false =>
             switch DiscussionSubmission.teamName(submission) {
             | Some(name) =>
-              <span>
-                {str(t("submitted_by_team"))}
-                <span className="font-semibold"> {str(name)} </span>
+              <span className="font-semibold text-xs leading-tight block md:inline-flex">
+                <span className="text-gray-500"> {str(t("submitted_by_team"))} </span>
+                <span className="ms-1"> {str(name)} </span>
               </span>
             | None =>
               <span className="font-semibold text-xs leading-tight block md:inline-flex">
@@ -126,7 +133,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
         {switch currentUser->CurrentUser.isModerator {
         | false => React.null
         | true =>
-          <div className="flex md:hidden md:group-hover:flex space-x-2">
+          <div className="flex space-x-2">
             <button
               onClick={pinSubmission(submission, callBack)}
               className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
@@ -145,7 +152,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
             </button>
             <button
               onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
-              className="flex md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+              className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
               {switch submissionHidden {
               | true =>
                 <span className="flex items-center md:space-x-1">
@@ -187,7 +194,8 @@ let make = (~currentUser, ~submission, ~callBack) => {
         reactions={submission->DiscussionSubmission.reactions}
       />
       <div className="relative ms-11">
-        // <div className="flex justify-end align-start relative bg-gray-50">
+        // <div
+        //   className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 bg-white ">
         //   <div
         //     className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
         //   />

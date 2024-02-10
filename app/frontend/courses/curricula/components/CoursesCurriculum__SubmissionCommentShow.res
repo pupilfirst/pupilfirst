@@ -65,10 +65,10 @@ let make = (~currentUser, ~comment) => {
 
   let commentDisplay =
     <div className="group relative mt-4">
-      <div
-        className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 last:bg-white ">
-        <div className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl" />
-      </div>
+      // <div
+      //   className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 last:bg-white ">
+      //   <div className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl" />
+      // </div>
       {switch commentHidden {
       | true =>
         <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-0">
@@ -89,12 +89,12 @@ let make = (~currentUser, ~comment) => {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex gap-3">
-              // <div
-              //   className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 bg-white ">
-              //   <div
-              //     className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
-              //   />
-              // </div>
+              <div
+                className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 bg-white ">
+                <div
+                  className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
+                />
+              </div>
               <div
                 className="w-8 h-8 border bg-gray-200 rounded-full flex items-center justify-center">
                 {comment->Comment.user->User.avatar}
@@ -137,12 +137,14 @@ let make = (~currentUser, ~comment) => {
             }}
             {switch currentUser->CurrentUser.id == comment->Comment.userId {
             | false =>
-              <CoursesCurriculum__ModerationReportButton
-                currentUser
-                moderationReports={comment->Comment.moderationReports}
-                reportableId={comment->Comment.id}
-                reportableType={"SubmissionComment"}
-              />
+              <div className="md:hidden md:group-hover:flex">
+                <CoursesCurriculum__ModerationReportButton
+                  currentUser
+                  moderationReports={comment->Comment.moderationReports}
+                  reportableId={comment->Comment.id}
+                  reportableType={"SubmissionComment"}
+                />
+              </div>
             | true =>
               <div className="md:hidden md:group-hover:flex">
                 <button

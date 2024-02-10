@@ -75,7 +75,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
         <div
           className="w-8 h-8 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
           {switch submission->DiscussionSubmission.anonymous {
-          | true => <span className="font-semibold"> {"A"->str} </span>
+          | true => <span className="font-semibold"> {t("anonymous_avatar")->str} </span>
           | false => submission->DiscussionSubmission.firstUser->User.avatar
           }}
           {switch teamStrength {
@@ -118,7 +118,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
       {switch submissionHidden {
       | true =>
         <div>
-          <p> {"This submission is hidden from discussions"->str} </p>
+          <p> {t("submission_hidden")->str} </p>
         </div>
       | false => React.null
       }}
@@ -134,12 +134,12 @@ let make = (~currentUser, ~submission, ~callBack) => {
               | true =>
                 <span className="flex items-center md:space-x-1">
                   <Icon className="if i-pin-angle-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {"Unpin"->str} </span>
+                  <span className="hidden md:inline-block text-xs"> {t("unpin")->str} </span>
                 </span>
               | false =>
                 <span className="flex items-center md:space-x-1">
                   <Icon className="if i-pin-angle-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {"Pin"->str} </span>
+                  <span className="hidden md:inline-block text-xs"> {t("pin")->str} </span>
                 </span>
               }}
             </button>
@@ -150,14 +150,12 @@ let make = (~currentUser, ~submission, ~callBack) => {
               | true =>
                 <span className="flex items-center md:space-x-1">
                   <Icon className="if i-eye-closed-light if-fw" />
-                  <span className="hidden md:inline-block text-xs">
-                    {"Un-hide submission"->str}
-                  </span>
+                  <span className="hidden md:inline-block text-xs"> {t("unhide")->str} </span>
                 </span>
               | false =>
                 <span className="flex items-center md:space-x-1">
                   <Icon className="if i-eye-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {"Hide Submission"->str} </span>
+                  <span className="hidden md:inline-block text-xs"> {t("hide")->str} </span>
                 </span>
               }}
             </button>

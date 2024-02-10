@@ -74,7 +74,7 @@ let make = (~currentUser, ~comment) => {
         <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-0">
           <p
             className="px-2 py-1 bg-white/75 border border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-700">
-            {"This comment is hidden from discussions."->str}
+            {tr("hidden")->str}
           </p>
         </div>
       | false => React.null
@@ -124,12 +124,12 @@ let make = (~currentUser, ~comment) => {
                   | true =>
                     <span className="flex items-center md:space-x-1">
                       <Icon className="if i-eye-closed-light if-fw" />
-                      <span className="hidden md:inline-block text-xs"> {"Unhide"->str} </span>
+                      <span className="hidden md:inline-block text-xs"> {tr("unhide")->str} </span>
                     </span>
                   | false =>
                     <span className="flex items-center md:space-x-1">
                       <Icon className="if i-eye-light if-fw" />
-                      <span className="hidden md:inline-block text-xs"> {"Hide"->str} </span>
+                      <span className="hidden md:inline-block text-xs"> {tr("hide")->str} </span>
                     </span>
                   }}
                 </button>
@@ -149,7 +149,7 @@ let make = (~currentUser, ~comment) => {
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
                   className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
                   <Icon className="if i-trash-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {"Delete"->str} </span>
+                  <span className="hidden md:inline-block text-xs"> {tr("delete")->str} </span>
                 </button>
               </div>
             }}
@@ -196,19 +196,17 @@ let make = (~currentUser, ~comment) => {
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
               <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">
-                {"Delete Comment"->str}
+                {tr("delete_comment")->str}
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">
-                  {"Are you sure you want to delete comment?"->str}
-                </p>
+                <p className="text-sm text-gray-500"> {tr("delete_confirm")->str} </p>
               </div>
               <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                 <button
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, false)}
                   className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
                   <Icon className="if i-times-light text-xl if-fw" />
-                  <span className="sr-only"> {"Close"->str} </span>
+                  <span className="sr-only"> {tr("close")->str} </span>
                 </button>
               </div>
             </div>
@@ -221,12 +219,12 @@ let make = (~currentUser, ~comment) => {
                 setCommentArchived,
                 setShowConfirmDelete,
               )}>
-              {"Delete"->str}
+              {tr("delete")->str}
             </button>
             <button
               onClick={updateShowConfirmDelete(setShowConfirmDelete, false)}
               className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
-              {"Cancel"->str}
+              {tr("cancel")->str}
             </button>
           </div>
         </div>

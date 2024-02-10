@@ -74,17 +74,15 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
       <div className="blanket grid place-items-center mx-auto">
         <div className="max-w-xl w-full mx-auto p-4 bg-white rounded-lg shadow-lg">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold leading-tight"> {"Report"->str} </h2>
+            <h2 className="font-semibold leading-tight"> {tr("report")->str} </h2>
             <button
               onClick={updateShowReport(setShowReport, false)}
               className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
               <Icon className="if i-times-light text-xl if-fw" />
-              <span className="sr-only"> {"Close"->str} </span>
+              <span className="sr-only"> {tr("close")->str} </span>
             </button>
           </div>
-          <label className="block text-sm text-gray-600 mt-4">
-            {"Please provide a reason for reporting"->str}
-          </label>
+          <label className="block text-sm text-gray-600 mt-4"> {tr("provide_reason")->str} </label>
           <textarea
             className="w-full text-sm p-2 border rounded-md mt-1"
             type_="text"
@@ -103,12 +101,12 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
                 setShowReport,
                 setReportReason,
               )}>
-              {"Report"->str}
+              {tr("report")->str}
             </button>
             <button
               onClick={updateShowReport(setShowReport, false)}
               className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
-              {"Cancel"->str}
+              {tr("cancel")->str}
             </button>
           </div>
         </div>
@@ -122,12 +120,12 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
       | true =>
         <span className="flex items-center md:space-x-1">
           <Icon className="if i-eye-closed-light if-fw" />
-          <span className="hidden md:inline-block text-xs"> {"Reported"->str} </span>
+          <span className="hidden md:inline-block text-xs"> {tr("reported")->str} </span>
         </span>
       | false =>
         <span className="flex items-center md:space-x-1">
           <Icon className="if i-eye-light if-fw" />
-          <span className="hidden md:inline-block text-xs"> {"Report"->str} </span>
+          <span className="hidden md:inline-block text-xs"> {tr("report")->str} </span>
         </span>
       }}
     </button>

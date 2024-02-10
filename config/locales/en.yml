@@ -538,10 +538,16 @@ en:
       topics_pre: "Topics From "
       use_community: Use the community to clear your doubts, and to help your peers!
     CoursesCurriculum__DiscussSubmission:
-      anonymous: Anonymous
+      anonymous_avatar: A
+      anonymous_name: Anonymous
       created_at: on %{created_at}.
+      hide: Hide submission
+      pin: Pin
+      submission_hidden: This submission is hidden from discussions
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
+      unhide: Un-hide submission
+      unpin: Unpin
     CoursesCurriculum__FileForm:
       another_file: Please choose another file for upload.
       cannot_attach: You cannot attach files.
@@ -553,6 +559,12 @@ en:
       smth_went_wrong: Something went wrong!
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
+    CoursesCurriculum__ModerationReportButton:
+      cancel: Cancel
+      close: Close
+      provide_reason: Please provide a reason for reporting
+      report: Report
+      reported: Reported
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
@@ -593,7 +605,7 @@ en:
         one: There's only one submission.
         other: Showing all %{count} submissions
       submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
-
+      submissions_peers: Submissions by peers
     CoursesCurriculum__Quiz:
       next_question: Next Question
       question: Question
@@ -616,6 +628,15 @@ en:
       hide_comments: Hide Comments
       view_comments: View Comments
       write_comment: Write your comment
+    CoursesCurriculum__SubmissionCommentShow:
+      cancel: Cancel
+      close: Close
+      delete: Delete
+      delete_comment: Delete Comment
+      delete_confirm: Are you sure you want to delete comment?
+      hidden: This comment is hidden from discussions
+      hide: Hide
+      unhide: Unhide
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...

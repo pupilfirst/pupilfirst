@@ -1,3 +1,4 @@
+%%raw(`import "./CoursesCurriculum__SubmissionComments.css";`)
 let str = React.string
 let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionComments")
 
@@ -77,37 +78,48 @@ let make = (~currentUser, ~submissionId, ~comments) => {
           onClick={toggleComments(setShowComments)}>
           <Icon className="if i-comment-alt-light if-fw" />
           <span className="ps-1">
-            {switch showComments {
-            | true => tr("hide_comments")->str
-            | false => tr("view_comments")->str
-            }}
+            // {switch showComments {
+            // | true => tr("hide_comments")->str
+            // | false => tr("view_comments")->str
+            // }}
+            {tr("comment")->str}
           </span>
         </button>
       </div>
     </div>
-    <div hidden={!showComments} className="submissionComments mt-4" key={submissionId}>
-      <div className="flex items-start gap-2 relative">
-        <div
-          className="w-8 h-8 shrink-0 border bg-gray-200 rounded-full flex items-center justify-center">
-          {currentUser->CurrentUser.avatar}
+    <div hidden={!showComments} className="submissionComments mt-4 space-y-8" key={submissionId}>
+      <div className="submission-comments__comment">
+        <div className="flex items-start gap-2 relative">
+          <div
+            className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 ">
+            <div
+              className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
+            />
+          </div>
+          <div
+            className="w-8 h-8 shrink-0 border bg-gray-200 rounded-full flex items-center justify-center">
+            {currentUser->CurrentUser.avatar}
+          </div>
+          <input
+            className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-3 py-1.5 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+            type_="text"
+            value=newComment
+            maxLength=255
+            autoFocus=true
+            placeholder={tr("write_comment")}
+            onChange=handleInputChange
+          />
+          <button className="btn btn-primary text-sm" onClick={handleCreateSubmissionComment}>
+            {tr("comment")->str}
+          </button>
         </div>
-        <input
-          className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-3 py-1.5 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-          type_="text"
-          value=newComment
-          maxLength=255
-          autoFocus=true
-          placeholder={tr("write_comment")}
-          onChange=handleInputChange
-        />
-        <button className="btn btn-primary text-sm" onClick={handleCreateSubmissionComment}>
-          {tr("comment")->str}
-        </button>
       </div>
       {submissionComments
-      ->Js.Array2.map(comment => {
-        <CoursesCurriculum__SubmissionCommentShow currentUser comment />
-      })
+      ->Js.Array2.map(comment =>
+        <div className="submission-comments__comment">
+          <CoursesCurriculum__SubmissionCommentShow currentUser comment />
+        </div>
+      )
       ->React.array}
     </div>
   </div>

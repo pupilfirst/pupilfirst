@@ -178,7 +178,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
     </div>
     <div className="relative">
       <div className="absolute w-8 top-0 left-0 bottom-0 flex justify-center items-center z-0">
-        <div className="w-px h-full border-l border-gray-300" />
+        <div className="w-px h-full bg-gradient-to-b from-gray-300 via-gray-300 " />
       </div>
       <div className="ms-11 pb-4 pt-6">
         <SubmissionChecklistShow
@@ -187,22 +187,20 @@ let make = (~currentUser, ~submission, ~callBack) => {
           forDiscussion=true
         />
       </div>
-      <CoursesCurriculum__Reactions
-        currentUser
-        reactionableType="TimelineEvent"
-        reactionableId={submissionId}
-        reactions={submission->DiscussionSubmission.reactions}
-      />
-      <div className="relative ms-11">
-        // <div
-        //   className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 bg-white ">
-        //   <div
-        //     className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
-        //   />
-        // </div>
-        <CoursesCurriculum__SubmissionComments
-          currentUser submissionId comments={submission->DiscussionSubmission.comments}
-        />
+      <div className="flex flex-col-reverse md:flex-row gap-4 items-start relative py-4 ps-11">
+        <div className="md:absolute md:left-[9.5rem] z-10">
+          <CoursesCurriculum__Reactions
+            currentUser
+            reactionableType="TimelineEvent"
+            reactionableId={submissionId}
+            reactions={submission->DiscussionSubmission.reactions}
+          />
+        </div>
+        <div className="relative">
+          <CoursesCurriculum__SubmissionComments
+            currentUser submissionId comments={submission->DiscussionSubmission.comments}
+          />
+        </div>
       </div>
     </div>
   </div>

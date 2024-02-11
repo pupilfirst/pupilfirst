@@ -65,10 +65,6 @@ let make = (~currentUser, ~comment) => {
 
   let commentDisplay =
     <div className="group relative mt-4">
-      // <div
-      //   className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 last:bg-white ">
-      //   <div className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl" />
-      // </div>
       {switch commentHidden {
       | true =>
         <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-0">
@@ -90,7 +86,7 @@ let make = (~currentUser, ~comment) => {
           <div>
             <div className="flex gap-3">
               <div
-                className="flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 bg-white ">
+                className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8">
                 <div
                   className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
                 />

@@ -705,7 +705,7 @@ let completeSection = (
       | false => React.null
       | true =>
         <div>
-          <h4 className="text-base md:text-xl"> {t("submissions_peers")->str} </h4>
+          <h4 className="text-base md:text-xl mt-12"> {t("submissions_peers")->str} </h4>
           <div>
             {switch state.peerSubmissions {
             | Unloaded =>

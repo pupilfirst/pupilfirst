@@ -254,10 +254,12 @@ let submissions = (
                 </div>
               | None => React.null
               }}
-              <CoursesCurriculum__SubmissionComments
-                currentUser submissionId={submission->Submission.id} comments
-              />
-              <div className="md:absolute md:left-40">
+              <div className="curriculum-submission-comments__container flex-1">
+                <CoursesCurriculum__SubmissionComments
+                  currentUser submissionId={submission->Submission.id} comments
+                />
+              </div>
+              <div className="md:absolute md:left-[8rem]">
                 <CoursesCurriculum__Reactions
                   currentUser
                   reactionableType="TimelineEvent"

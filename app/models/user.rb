@@ -49,6 +49,7 @@ class User < ApplicationRecord
            inverse_of: :recipient,
            dependent: :destroy
   has_many :discord_messages, dependent: :destroy
+  has_many :user_standings, dependent: :destroy
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,

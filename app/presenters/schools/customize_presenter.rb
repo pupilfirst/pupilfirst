@@ -30,7 +30,9 @@ module Schools
         address: SchoolString::Address.for(current_school),
         emailAddress: SchoolString::EmailAddress.for(current_school),
         privacyPolicy: SchoolString::PrivacyPolicy.for(current_school),
-        termsAndConditions: SchoolString::TermsAndConditions.for(current_school)
+        termsAndConditions:
+          SchoolString::TermsAndConditions.for(current_school),
+        CodeOfConduct: SchoolString::CodeOfConduct.for(current_school)
       }
     end
 

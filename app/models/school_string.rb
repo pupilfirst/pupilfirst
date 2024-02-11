@@ -28,6 +28,9 @@ class SchoolString < ApplicationRecord
   class TermsAndConditions < Key
   end
 
+  class CodeOfConduct < Key
+  end
+
   # School description shouldn't contain double-quotes, since this is used as meta-description in layouts.
   class Description < Key
   end
@@ -39,7 +42,8 @@ class SchoolString < ApplicationRecord
     Address,
     PrivacyPolicy,
     TermsAndConditions,
-    Description
+    Description,
+    CodeOfConduct
   ].map(&:key).freeze
 
   belongs_to :school

@@ -11,34 +11,61 @@ type view =
   | ShowCommunities
   | ShowCertificates
 
-let headerSectiom = (userName, preferredName, userTitle, avatarUrl, showUserEdit) => {
+let headerSection = (userName, preferredName, userTitle, avatarUrl, showUserEdit, standing) => {
   let name = Belt.Option.getWithDefault(preferredName, userName)
-  <div className="max-w-5xl mx-auto pt-12 flex items-center justify-between px-3 lg:px-0">
-    <div className="flex">
+
+  <div
+    className="max-w-5xl mx-auto pt-12 flex flex-col md:flex-row items-start justify-start md:justify-between px-3 lg:px-0 gap-1">
+    <div className="flex items-center justify-center gap-2">
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden shrink-0 me-4"
-          src
+          className="w-16 h-16 rounded-full border border-gray-300 overflow-hidden shrink-0" src
         />
       | None =>
         <Avatar
-          name
-          className="w-16 h-16 me-4 border border-gray-300 rounded-full overflow-hidden shrink-0"
+          name className="w-16 h-16 border border-gray-300 rounded-full overflow-hidden shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
-        <div className="text-black font-bold inline-block"> {name->str} </div>
+        <div className="text-black font-bold flex items-center justify-start">
+          {name->str}
+          {ReactUtils.nullUnless(
+            <a
+              className="hidden md:block ms-2 text-primary-400 font-medium text-xs hover:text-primary-500 rounded-full border px-3 py-1 bg-primary-50 hover:bg-primary-100"
+              href="/user/edit">
+              <span> {t("edit_profile")->str} </span>
+            </a>,
+            showUserEdit,
+          )}
+        </div>
         <div className="text-gray-600 inline-block"> {userTitle->str} </div>
       </div>
     </div>
-    {ReactUtils.nullUnless(
-      <a className="btn" href="/user/edit">
-        <i className="fas fa-edit text-xs md:text-sm me-2" />
-        <span> {t("edit_profile")->str} </span>
-      </a>,
-      showUserEdit,
-    )}
+    {switch standing {
+    | Some(standing) =>
+      <div
+        className="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
+        <div className="text-left rtl:text-right rtl:md:text-left md:text-right">
+          <p
+            style={ReactDOM.Style.make(~color=Standing.color(standing), ())}
+            className="font-semibold text-sm">
+            {Standing.name(standing)->str}
+          </p>
+          <a
+            href="/user/standing"
+            className="text-sm text-primary-500 hover:text-primary-700 hover:underline transition">
+            {I18n.ts("view_standing")->str}
+          </a>
+        </div>
+        <div
+          id="standing_shield"
+          className="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
+          <StandingShield color={Standing.color(standing)} sizeClass={"w-12 h-12"} />
+        </div>
+      </div>
+    | None => React.null
+    }}
   </div>
 }
 
@@ -327,11 +354,12 @@ let make = (
   ~userTitle,
   ~avatarUrl,
   ~issuedCertificates,
+  ~standing,
 ) => {
   let (view, setView) = React.useState(() => ShowCourses)
   <div className="bg-gray-50 h-full">
     <div className="bg-white">
-      {headerSectiom(userName, preferredName, userTitle, avatarUrl, showUserEdit)}
+      {headerSection(userName, preferredName, userTitle, avatarUrl, showUserEdit, standing)}
       {navSection(view, setView, communities, issuedCertificates)}
     </div>
     <div className="pb-8">

@@ -85,7 +85,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
       <div className="submission-comments__comment">
         <div className="flex items-start gap-2 relative">
           <div
-            className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8 ">
+            className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8 ">
             <div
               className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
             />

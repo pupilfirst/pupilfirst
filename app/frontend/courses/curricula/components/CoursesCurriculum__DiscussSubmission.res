@@ -53,7 +53,7 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
 
 let pinnedClasses = pinned => {
   switch pinned {
-  | true => "bg-white p-6 rounded-lg shadow-xl"
+  | true => "bg-white px-6 pt-6 pb-2 rounded-lg shadow-xl border border-gray-200/75"
   | false => "py-4"
   }
 }
@@ -69,9 +69,22 @@ let make = (~currentUser, ~submission, ~callBack) => {
 
   <div
     key={submissionId}
-    className={"relative curriculum-discuss-submission__container mt-4 " ++
-    pinnedClasses(submission->DiscussionSubmission.pinned)}
+    className={"relative curriculum-discuss-submission__container group mt-12 " ++
+    pinnedClasses(submission->DiscussionSubmission.pinned) ++ if submissionHidden {
+      " curriculum-discuss-submission__hidden"
+    } else {
+      ""
+    }}
     ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
+    {switch submission->DiscussionSubmission.pinned {
+    | true =>
+      <p
+        className="absolute bg-green-100 inline-flex items-center text-green-800 text-xs border border-green-300 px-1.5 py-0.5 leading-tight rounded-md -top-3">
+        <Icon className="if i-pin-angle-light if-fw" />
+        <span className="ps-1.5"> {t("pinned_submission")->str} </span>
+      </p>
+    | false => React.null
+    }}
     <div className="flex items-start justify-between">
       <div className="flex gap-3">
         <div className="isolate flex -space-x-2 overflow-hidden">
@@ -126,12 +139,15 @@ let make = (~currentUser, ~submission, ~callBack) => {
       </div>
       {switch submissionHidden {
       | true =>
-        <div>
-          <p> {t("submission_hidden")->str} </p>
+        <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-px">
+          <p
+            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
+          {t("submission_hidden")->str}
+          </p>
         </div>
       | false => React.null
       }}
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 relative z-20">
         {switch currentUser->CurrentUser.isModerator {
         | false => React.null
         | true =>
@@ -190,7 +206,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
         />
       </div>
       <div className="flex flex-col-reverse md:flex-row gap-4 items-start relative py-4 ps-11">
-        <div className="md:absolute md:left-[9.5rem] z-10">
+        <div className="md:absolute md:left-[9.5rem] z-1">
           <CoursesCurriculum__Reactions
             currentUser
             reactionableType="TimelineEvent"

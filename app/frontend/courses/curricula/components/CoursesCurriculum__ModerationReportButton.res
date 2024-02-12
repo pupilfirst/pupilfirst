@@ -114,22 +114,24 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
         </div>
       </dialog>
     }}
-    <button
-      onClick={updateShowReport(setShowReport, true)}
-      disabled={reported}
-      className="curriculum-moderation__report-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
-      {switch reported {
-      | true =>
+    {switch reported {
+    | true =>
+      <div className="flex items-center justify-center p-1 text-sm text-red-600 whitespace-nowrap">
         <span className="flex items-center md:space-x-1">
-          <Icon className="if i-eye-closed-light if-fw" />
+          <Icon className="if i-flag-light if-fw" />
           <span className="hidden md:inline-block text-xs"> {tr("reported")->str} </span>
         </span>
-      | false =>
+      </div>
+    | false =>
+      <button
+        onClick={updateShowReport(setShowReport, true)}
+        disabled={reported}
+        className="curriculum-moderation__report-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
         <span className="flex items-center md:space-x-1">
-          <Icon className="if i-eye-light if-fw" />
+          <Icon className="if i-flag-light if-fw" />
           <span className="hidden md:inline-block text-xs"> {tr("report")->str} </span>
         </span>
-      }}
-    </button>
+      </button>
+    }}
   </div>
 }

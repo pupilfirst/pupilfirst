@@ -67,9 +67,9 @@ let make = (~currentUser, ~comment) => {
     <div className="relative mt-4">
       {switch commentHidden {
       | true =>
-        <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-0">
+        <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-px">
           <p
-            className="px-2 py-1 bg-white/75 border border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-700">
+            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
             {tr("hidden")->str}
           </p>
         </div>
@@ -77,7 +77,7 @@ let make = (~currentUser, ~comment) => {
       }}
       <div
         className={if commentHidden {
-          "relative curriculum__submission-comment-hidden"
+          "relative curriculum__submission-comment-hidden rounded-b-xl"
         } else {
           "flex-1"
         }}
@@ -86,7 +86,7 @@ let make = (~currentUser, ~comment) => {
           <div>
             <div className="flex gap-3">
               <div
-                className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] w-8">
+                className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8">
                 <div
                   className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
                 />
@@ -107,7 +107,7 @@ let make = (~currentUser, ~comment) => {
               </div>
             </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 relative z-20">
             {switch isModerator {
             | false => React.null
             | true =>
@@ -200,7 +200,8 @@ let make = (~currentUser, ~comment) => {
                 <p className="text-sm text-gray-500"> {tr("delete_confirm")->str} </p>
               </div>
               <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
-                <button autoFocus={true}
+                <button
+                  autoFocus={true}
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, false)}
                   className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
                   <Icon className="if i-times-light text-xl if-fw" />

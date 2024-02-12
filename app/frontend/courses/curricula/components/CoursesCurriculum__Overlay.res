@@ -210,7 +210,7 @@ let reloadSubmissions = (send, targetId) => {
 let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
   <p
     tabIndex=0
-    className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+    className="inline-block mt-8 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
       totalSubmissionsCount == loadedSubmissionsCount
         ? t(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")

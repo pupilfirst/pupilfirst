@@ -543,6 +543,7 @@ en:
       created_at: on %{created_at}.
       hide: Hide submission
       pin: Pin
+      pinned_submission: Pinned Submission
       submission_hidden: This submission is hidden from discussions
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "

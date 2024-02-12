@@ -13,4 +13,8 @@ class UserStandingsResolver < ApplicationQuery
   def user
     @user ||= User.find_by(id: user_id)
   end
+
+  def allow_token_auth?
+    true
+  end
 end

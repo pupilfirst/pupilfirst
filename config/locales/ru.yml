@@ -1502,7 +1502,7 @@ ru:
       csv_data_errors:
         invalid_affiliation: Аффилиация должна быть меньше 250 символов
         invalid_characters: "%{column_name} column contains one or more invalid characters"
-        invalid_email: Электронная почта должна быть действительной и не может быть пустой
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: Столбец имени не может быть пустым и должен содержать не более 250 символов.
         invalid_tags: Максимум 5 тегов разрешено на одного учащегося с ограничением 50 символов каждый
         invalid_team_name: Название команды должно содержать менее 50 символов.

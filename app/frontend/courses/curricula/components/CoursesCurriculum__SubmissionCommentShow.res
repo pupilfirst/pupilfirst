@@ -64,7 +64,7 @@ let make = (~currentUser, ~comment) => {
   let userName = comment->Comment.user->User.name
 
   let commentDisplay =
-    <div className="group relative mt-4">
+    <div className="relative mt-4">
       {switch commentHidden {
       | true =>
         <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-0">
@@ -133,7 +133,7 @@ let make = (~currentUser, ~comment) => {
             }}
             {switch currentUser->CurrentUser.id == comment->Comment.userId {
             | false =>
-              <div className="md:hidden md:group-hover:flex">
+              <div className="">
                 <CoursesCurriculum__ModerationReportButton
                   currentUser
                   moderationReports={comment->Comment.moderationReports}
@@ -200,7 +200,7 @@ let make = (~currentUser, ~comment) => {
                 <p className="text-sm text-gray-500"> {tr("delete_confirm")->str} </p>
               </div>
               <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
-                <button
+                <button autoFocus={true}
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, false)}
                   className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
                   <Icon className="if i-times-light text-xl if-fw" />

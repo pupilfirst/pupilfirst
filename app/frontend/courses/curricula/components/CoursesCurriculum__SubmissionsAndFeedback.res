@@ -244,17 +244,19 @@ let submissions = (
               )
 
             <div className="flex flex-col-reverse md:flex-row gap-4 items-start relative p-4">
-              {switch submission->Submission.hiddenAt {
-              | Some(_) =>
-                <div className="w-full">
-                  <p>
-                    {("This submission was hidden by course moderators on " ++
-                    Submission.hiddenAtPretty(submission))->str}
-                  </p>
-                </div>
-              | None => React.null
-              }}
-              <div className="curriculum-submission-comments__container flex-1">
+              <div
+                className="curriculum-submission-comments__container relative flex-1 flex flex-col-reverse md:flex-row justify-end">
+                {switch submission->Submission.hiddenAt {
+                | Some(_) =>
+                  <div
+                    className="inline-flex md:absolute z-20 justify-center md:justify-end text-xs pt-1.5">
+                    <p>
+                      {("This submission was hidden by course moderators on " ++
+                      Submission.hiddenAtPretty(submission))->str}
+                    </p>
+                  </div>
+                | None => React.null
+                }}
                 <CoursesCurriculum__SubmissionComments
                   currentUser submissionId={submission->Submission.id} comments
                 />

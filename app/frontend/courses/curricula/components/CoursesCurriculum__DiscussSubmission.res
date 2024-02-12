@@ -1,3 +1,5 @@
+%%raw(`import "./CoursesCurriculum__DiscussSubmission.css"`)
+
 let str = React.string
 let t = I18n.t(~scope="components.CoursesCurriculum__DiscussSubmission")
 
@@ -51,8 +53,8 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
 
 let pinnedClasses = pinned => {
   switch pinned {
-  | true => ""
-  | false => ""
+  | true => "bg-white p-6 rounded-lg shadow-xl"
+  | false => "py-4"
   }
 }
 
@@ -67,7 +69,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
 
   <div
     key={submissionId}
-    className={"mt-4 pb-4 relative curriculum__submission-feedback-container" ++
+    className={"relative curriculum-discuss-submission__container mt-4 " ++
     pinnedClasses(submission->DiscussionSubmission.pinned)}
     ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
     <div className="flex items-start justify-between">
@@ -136,7 +138,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
           <div className="flex space-x-2">
             <button
               onClick={pinSubmission(submission, callBack)}
-              className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+              className="curriculum-discuss-submission__pin-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
               {switch submission->DiscussionSubmission.pinned {
               | true =>
                 <span className="flex items-center md:space-x-1">
@@ -152,7 +154,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
             </button>
             <button
               onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
-              className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+              className="curriculum-discuss-submission__hide-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
               {switch submissionHidden {
               | true =>
                 <span className="flex items-center md:space-x-1">

@@ -71,13 +71,14 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
     {switch showReport {
     | false => React.null
     | true =>
-      <div className="blanket grid place-items-center mx-auto">
+      <dialog
+        className="fixed inset-0 z-50 grid place-items-center w-full h-full bg-gray-950/75 backdrop-blur-sm ease-in duration-300">
         <div className="max-w-xl w-full mx-auto p-4 bg-white rounded-lg shadow-lg">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold leading-tight"> {tr("report")->str} </h2>
             <button
               onClick={updateShowReport(setShowReport, false)}
-              className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+              className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-focusColor-500 focus:ring-offset-2 transition">
               <Icon className="if i-times-light text-xl if-fw" />
               <span className="sr-only"> {tr("close")->str} </span>
             </button>
@@ -86,6 +87,7 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
           <textarea
             className="w-full text-sm p-2 border rounded-md mt-1"
             type_="text"
+            autoFocus={true}
             value={reportReason}
             placeholder={"Share reason for reporting"}
             onChange={updateReportReason(setReportReason)}
@@ -105,17 +107,17 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
             </button>
             <button
               onClick={updateShowReport(setShowReport, false)}
-              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
+              className="mt-3 inline-flex w-full justify-center rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focusColor-500">
               {tr("cancel")->str}
             </button>
           </div>
         </div>
-      </div>
+      </dialog>
     }}
     <button
       onClick={updateShowReport(setShowReport, true)}
       disabled={reported}
-      className="flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+      className="curriculum-moderation__report-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
       {switch reported {
       | true =>
         <span className="flex items-center md:space-x-1">

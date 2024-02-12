@@ -77,13 +77,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
           className="border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition"
           onClick={toggleComments(setShowComments)}>
           <Icon className="if i-comment-alt-light if-fw" />
-          <span className="ps-1">
-            // {switch showComments {
-            // | true => tr("hide_comments")->str
-            // | false => tr("view_comments")->str
-            // }}
-            {tr("comment")->str}
-          </span>
+          <span className="ps-1"> {tr("comment")->str} </span>
         </button>
       </div>
     </div>
@@ -105,7 +99,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
             type_="text"
             value=newComment
             maxLength=255
-            autoFocus=true
+            autoFocus={true}
             placeholder={tr("write_comment")}
             onChange=handleInputChange
           />
@@ -116,7 +110,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
       </div>
       {submissionComments
       ->Js.Array2.map(comment =>
-        <div className="submission-comments__comment">
+        <div className="submission-comments__comment group">
           <CoursesCurriculum__SubmissionCommentShow currentUser comment />
         </div>
       )

@@ -1,0 +1,10 @@
+.curriculum-discuss-submission__container:hover .curriculum-discuss-submission__pin-button {
+  @apply flex;
+}
+.curriculum-discuss-submission__container:hover .curriculum-discuss-submission__hide-button {
+  @apply flex;
+}
+
+.curriculum-discuss-submission__container:hover .curriculum-moderation__report-button {
+  @apply flex;
+}

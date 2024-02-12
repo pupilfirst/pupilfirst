@@ -17,3 +17,4 @@ import "~/psj/schools/courses/exports.js";
 import "~/psj/schools/customize.js";
 import "~/psj/schools/admins.js";
 import "~/psj/schools/communities/index.js";
+import "~/psj/schools/standings.js";

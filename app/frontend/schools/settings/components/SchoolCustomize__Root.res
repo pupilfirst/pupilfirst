@@ -31,6 +31,7 @@ type rec action =
   | MoveLink(Customizations.linkId, SchoolCustomize__LinkComponent.kind, Customizations.direction)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
+  | UpdateCodeOfConduct(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
   | UpdateSchoolDetails(name, about)
@@ -170,6 +171,7 @@ let editor = (state, send, authenticityToken) =>
           customizations=state.customizations
           updatePrivacyPolicyCB={agreement => send(UpdatePrivacyPolicy(agreement))}
           updateTermsAndConditionsCB={agreement => send(UpdateTermsAndConditions(agreement))}
+          updateCodeOfConductCB={agreement => send(UpdateTermsAndConditions(agreement))}
         />
       | ContactsEditor =>
         <SchoolCustomize__ContactsEditor
@@ -204,7 +206,7 @@ let initialState = (customizations, schoolName, schoolAbout) => {
   schoolAbout,
 }
 
-let moveLink = (linkId, kind, direction, t) => {
+let moveLink = (t, linkId, kind, direction) => {
   // find links of similar kind
   let similarKindLinks = switch kind {
   | SchoolCustomize__LinkComponent.HeaderLink => Customizations.filterLinks(~header=true, t)
@@ -249,39 +251,43 @@ let reducer = (state, action) =>
   | CloseEditor => {...state, visibleEditor: None}
   | AddLink(link) => {
       ...state,
-      customizations: state.customizations |> Customizations.addLink(link),
+      customizations: state.customizations->Customizations.addLink(link),
     }
   | UpdateLink(linkId, title, url) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateLink(linkId, title, url),
+      customizations: state.customizations->Customizations.updateLink(linkId, title, url),
     }
   | RemoveLink(linkId) => {
       ...state,
-      customizations: state.customizations |> Customizations.removeLink(linkId),
+      customizations: state.customizations->Customizations.removeLink(linkId),
     }
   | MoveLink(id, kind, direction) => {
       ...state,
-      customizations: state.customizations |> moveLink(id, kind, direction),
+      customizations: state.customizations->moveLink(id, kind, direction),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updatePrivacyPolicy(agreement),
+      customizations: state.customizations->Customizations.updatePrivacyPolicy(agreement),
     }
   | UpdateTermsAndConditions(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateTermsAndConditions(agreement),
+      customizations: state.customizations->Customizations.updateTermsAndConditions(agreement),
+    }
+  | UpdateCodeOfConduct(agreement) => {
+      ...state,
+      customizations: state.customizations->Customizations.updateCodeOfConduct(agreement),
     }
   | UpdateAddress(address) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateAddress(address),
+      customizations: state.customizations->Customizations.updateAddress(address),
     }
   | UpdateEmailAddress(emailAddress) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateEmailAddress(emailAddress),
+      customizations: state.customizations->Customizations.updateEmailAddress(emailAddress),
     }
   | UpdateImages(json) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateImages(json),
+      customizations: state.customizations->Customizations.updateImages(json),
       visibleEditor: None,
     }
   | UpdateSchoolDetails(schoolName, schoolAbout) => {
@@ -341,11 +347,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </button>
         </div>
         <div className="relative pb-1/2 md:pb-1/4 rounded-b-lg overflow-hidden">
-          {switch state.customizations |> Customizations.coverImage {
+          {switch state.customizations->Customizations.coverImage {
           | Some(image) =>
-            <img
-              className="absolute h-full w-full object-cover" src={image |> Customizations.url}
-            />
+            <img className="absolute h-full w-full object-cover" src={image->Customizations.url} />
           | None =>
             <div
               className="school-customize__cover-default absolute h-full w-full svg-bg-pattern-6"
@@ -475,6 +479,15 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                   send,
                 ),
                 t("edit_terms"),
+              )}
+            </div>
+            <div
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 ms-6 text-xs">
+              <div> {ts("code_of_conduct")->str} </div>
+              {editIcon(
+                "ms-3",
+                showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.CodeOfConduct), send),
+                t("edit_code_of_conduct"),
               )}
             </div>
             <div className="ms-6 flex items-center text-xs text-gray-600">

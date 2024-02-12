@@ -1,0 +1,37 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <section class="bg-gray-50">
+    <div class="max-w-6xl mx-auto p-4 md:p-10 ">
+      <%= link_to standing_school_path, class: "bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" do %>
+        <i class="if i-arrow-left-regular"></i>
+        <span><%= t('shared.back_link') %></span>
+      <% end %>
+      <h1 class="font-bold text-lg pt-5"><%= @standing.persisted? ? t(".edit_standing_heading", standing_name: @standing.name) : t(".add_standing_heading")%></h1>
+      <p class="text-sm text-gray-600"><%= @standing.persisted? ? t(".edit_standing_info") : t(".add_standing_info") %></p>
+    </div>
+  </section>
+  <section class="max-w-6xl mx-auto p-4 md:pb-10 md:pl-10 md:pr-10 mt-10">
+    <div class="max-w-xl">
+      <%= form_with model: @standing, url: @standing.persisted? ? school_standing_path(id: @standing.id) : school_standings_path do |f| %>
+        <div class="flex gap-2 items-center">
+          <%# There is js code related to shield color setting in standings.js  %>
+          <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-full">
+            <%= render 'shared/standing_shield', color:  @standing.color || "#4338ca", size_classes: "w-8 h-8" %>
+          </div>
+          <label for="color_picker" class="flex px-2 py-2 border border-gray-300 rounded-md cursor-pointer items-center justify-center overflow-hidden hover:border-primary-300 focus-within:border-focusColor-500 ">
+            <%= f.color_field :color, id: "color_picker", class: " w-6 h-6 bg-white cursor-pointer focus:outline-none", value: @standing.color || "#4338ca" %>
+            <i class="if i-chevron-down-light if-fw" ></i>
+          </label>
+          <div class="flex-1">
+            <%= f.text_field :name, placeholder: t(".name_placeholder"), required: true, class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500", maxLength: 25 %>
+          </div>
+        </div>
+        <div class="flex ms-32 mt-4">
+          <%= f.text_field :description, placeholder: t(".description_placeholder"), class: "w-full flex-grow py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-focusColor-500 text-sm", maxLength:150 %>
+        </div>
+        <div class="flex ms-32 mt-4">
+          <%= f.button t(".save_standing"), class: "btn btn-primary btn-large w-full max-w-3xl", data: { disable_with: t("shared.saving") } %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>

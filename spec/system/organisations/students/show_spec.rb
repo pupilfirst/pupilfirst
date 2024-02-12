@@ -271,5 +271,26 @@ feature "Organisation student details page and submissions list" do
         expect(page).not_to have_text(coach_note.note)
       end
     end
+
+    scenario "org student page does not show standing info when school standing is disabled" do
+      sign_in_user org_admin_user, referrer: org_student_path(student)
+
+      expect(page).not_to have_text("View Standing")
+    end
+
+    context "when school standing is enabled" do
+      before { school.update!(configuration: { enable_standing: true }) }
+      let!(:standing) { create :standing, school: school, default: true }
+
+      scenario "org student page shows the standing info" do
+        sign_in_user org_admin_user, referrer: org_student_path(student)
+
+        expect(page).to have_text("View Standing")
+        expect(page).to have_text(standing.name)
+
+        click_link "View Standing"
+        expect(page).to have_current_path(standing_org_student_path(student))
+      end
+    end
   end
 end

@@ -196,4 +196,10 @@ class Types::MutationType < Types::BaseObject
         null: false
   field :hide_submission, mutation: Mutations::HideSubmission, null: false
   field :remove_reaction, mutation: Mutations::RemoveReaction, null: false
+  field :archive_user_standing,
+        mutation: Mutations::ArchiveUserStanding,
+        null: false
+  field :create_user_standing,
+        mutation: Mutations::CreateUserStanding,
+        null: false
 end

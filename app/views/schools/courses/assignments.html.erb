@@ -3,18 +3,26 @@
 <% end %>
 <div class="relative" id="schoolrouter-innerpage-data">
   <div class="max-w-3xl mt-2 mx-auto mb-20">
-    <div  class="flex justify-between items-center gap-5 py-8">
-      <div class="w-3/4">
-        <p class="text-xs text-gray-500 uppercase font-semibold"><%= t(".list_title") %></p>
-        <h1 class="font-semibold text-2xl text-gray-600"><%= @course.name %></h1>
-        <p class="text-sm text-gray-600 mt-1"><%= t(".milestone_msg")%></p>
+    <div class="flex-row">
+      <div  class="flex justify-between items-center gap-5 py-8">
+        <div class="w-3/4">
+          <p class="text-xs text-gray-500 uppercase font-semibold"><%= t(".list_title") %></p>
+          <h1 class="font-semibold text-2xl text-gray-600"><%= @course.name %></h1>
+          <p class="text-sm text-gray-600 mt-1"><%= t(".milestone_msg")%></p>
+        </div>
+        <div class="px-3 md:px-4 py-2 bg-yellow-100 rounded-md border border-yellow-200 flex items-center flex-shrink-0 font-medium text-yellow-800">
+          <i class="if i-milestone-solid if-fw text-2xl text-yellow-900" ></i>
+          <span class="pointer-events-none">#</span>
+        </div>
       </div>
-      <div class="px-3 md:px-4 py-2 bg-yellow-100 rounded-md border border-yellow-200 flex items-center flex-shrink-0 font-medium text-yellow-800">
-        <i class="if i-milestone-solid if-fw text-2xl text-yellow-900" ></i>
-        <span class="pointer-events-none">#</span>
-      </div>
+      <% if @have_gaps%>
+        <div class="flex items-start gap-3 bg-yellow-100 p-2 rounded-lg ">
+          <i class="if i-info-solid text-3xl text-yellow-500 mt-2" ></i>
+          <p class="text-sm text-yellow-700 mt-1"><%= t(".milestone_gap_warning")%></p>
+        </div>
+      <% end %>
     </div>
-    <div class="pb-10">
+    <div class="pb-10 pt-4">
       <div class="rounded-lg border border-gray-300 shadow-md divide-y overflow-hidden">
         <% @milestones.each_with_index do |target, index| %>
           <div class="flex items-center target-group__target-container overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
@@ -34,7 +42,7 @@
               <p class="text-sm"><%= target.title %></p>
               <div class="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
                 <i class="if i-milestone-solid if-fw" ></i>
-                <span><%= target.milestone_number %></span>
+                <span><%= target.assignments.first.milestone_number %></span>
               </div>
             <% end %>
           </div>

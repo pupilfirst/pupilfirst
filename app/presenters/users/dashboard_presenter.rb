@@ -13,7 +13,8 @@ module Users
         user_name: current_user.name,
         preferred_name: current_user.preferred_name,
         user_title: current_user.full_title,
-        issued_certificates: issued_certificate_details
+        issued_certificates: issued_certificate_details,
+        standing: standing
       }
 
       if current_user.avatar.attached?
@@ -26,6 +27,21 @@ module Users
     end
 
     private
+
+    def standing
+      return unless Schools::Configuration.new(current_school).standing_enabled?
+
+      current_standing =
+        current_user
+          .user_standings
+          .includes(:standing)
+          .live
+          .order(created_at: :desc)
+          .first
+          &.standing || current_school.default_standing
+
+      { name: current_standing.name, color: current_standing.color }
+    end
 
     def issued_certificate_details
       current_user

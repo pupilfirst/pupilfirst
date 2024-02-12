@@ -602,6 +602,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.jsonb "configuration", default: {}, null: false
   end
 
+  create_table "standings", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.text "description"
+    t.boolean "default", default: false, null: false
+    t.datetime "archived_at"
+    t.bigint "school_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["archived_at"], name: "index_standings_on_archived_at"
+    t.index ["default"], name: "index_standings_on_default", where: "(\"default\" = true)"
+    t.index ["name", "school_id"], name: "index_standings_on_name_and_school_id", unique: true
+    t.index ["school_id"], name: "index_standings_on_school_id"
+  end
+
   create_table "startup_feedback", id: :serial, force: :cascade do |t|
     t.text "feedback"
     t.string "reference_url"
@@ -866,6 +881,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
   end
 
+  create_table "user_standings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "standing_id", null: false
+    t.text "reason"
+    t.bigint "creator_id", null: false
+    t.bigint "archiver_id"
+    t.datetime "archived_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["archived_at"], name: "index_user_standings_on_archived_at"
+    t.index ["archiver_id"], name: "index_user_standings_on_archiver_id"
+    t.index ["creator_id"], name: "index_user_standings_on_creator_id"
+    t.index ["standing_id"], name: "index_user_standings_on_standing_id"
+    t.index ["user_id"], name: "index_user_standings_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.citext "email"
     t.string "login_token"
@@ -989,6 +1020,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
+  add_foreign_key "standings", "schools"
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "students", "cohorts"
@@ -1015,6 +1047,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"
   add_foreign_key "topics", "users", column: "locked_by_id"
+  add_foreign_key "user_standings", "standings"
+  add_foreign_key "user_standings", "users"
+  add_foreign_key "user_standings", "users", column: "archiver_id"
+  add_foreign_key "user_standings", "users", column: "creator_id"
   add_foreign_key "users", "organisations"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"

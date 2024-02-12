@@ -232,5 +232,12 @@ module Types
                    null: false do
       argument :target_id, ID, required: true
     end
+    resolved_field :user_standings, [Types::UserStandingType], null: false do
+      argument :user_id, ID, required: true
+    end
+
+    resolved_field :standings, [Types::StandingType], null: false
+
+    resolved_field :is_school_standing_enabled, Boolean, null: false
   end
 end

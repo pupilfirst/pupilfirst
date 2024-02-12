@@ -49,6 +49,7 @@ class User < ApplicationRecord
            inverse_of: :recipient,
            dependent: :destroy
   has_many :discord_messages, dependent: :destroy
+  has_many :user_standings, dependent: :destroy
 
   has_many :submission_comments, dependent: :destroy
   has_many :submission_moderations, dependent: :destroy

@@ -5,6 +5,7 @@ type schoolStrings = {
   emailAddress: option<string>,
   privacyPolicy: option<string>,
   termsAndConditions: option<string>,
+  codeOfConduct: option<string>,
 }
 
 type file = {
@@ -49,6 +50,7 @@ let address = t => t.schoolStrings.address
 let emailAddress = t => t.schoolStrings.emailAddress
 let privacyPolicy = t => t.schoolStrings.privacyPolicy
 let termsAndConditions = t => t.schoolStrings.termsAndConditions
+let codeOfConduct = t => t.schoolStrings.codeOfConduct
 
 let filterLinks = (~header=false, ~footer=false, ~social=false, t) =>
   t.links->Js.Array2.filter(l =>
@@ -68,9 +70,9 @@ let unpackLinks = links =>
     }
   )
 
-let addLink = (link, t) => {...t, links: t.links->Js.Array2.concat([link])}
+let addLink = (t, link) => {...t, links: t.links->Js.Array2.concat([link])}
 
-let removeLink = (linkId, t) => {
+let removeLink = (t, linkId) => {
   ...t,
   links: t.links->Js.Array2.filter(l =>
     switch l {
@@ -82,7 +84,7 @@ let removeLink = (linkId, t) => {
   ),
 }
 
-let updateLink = (linkId, newTitle, newUrl, t) => {
+let updateLink = (t, linkId, newTitle, newUrl) => {
   ...t,
   links: t.links->Js.Array2.map(l =>
     switch l {
@@ -115,7 +117,7 @@ let optionalString = s =>
   | nonEmptyString => Some(nonEmptyString)
   }
 
-let updatePrivacyPolicy = (privacyPolicy, t) => {
+let updatePrivacyPolicy = (t, privacyPolicy) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
@@ -123,7 +125,7 @@ let updatePrivacyPolicy = (privacyPolicy, t) => {
   },
 }
 
-let updateTermsAndConditions = (termsAndConditions, t) => {
+let updateTermsAndConditions = (t, termsAndConditions) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
@@ -131,7 +133,15 @@ let updateTermsAndConditions = (termsAndConditions, t) => {
   },
 }
 
-let updateAddress = (address, t) => {
+let updateCodeOfConduct = (t, codeOfConduct) => {
+  ...t,
+  schoolStrings: {
+    ...t.schoolStrings,
+    codeOfConduct: codeOfConduct->optionalString,
+  },
+}
+
+let updateAddress = (t, address) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
@@ -139,7 +149,7 @@ let updateAddress = (address, t) => {
   },
 }
 
-let updateEmailAddress = (emailAddress, t) => {
+let updateEmailAddress = (t, emailAddress) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
@@ -166,15 +176,16 @@ let decodeImages = json => {
   }
 }
 
-let updateImages = (json, t) => {...t, schoolImages: json |> decodeImages}
+let updateImages = (t, json) => {...t, schoolImages: json->decodeImages}
 
 let decodeStrings = json => {
   open Json.Decode
   {
-    address: json |> field("address", optional(string)),
-    emailAddress: json |> field("emailAddress", optional(string)),
-    privacyPolicy: json |> field("privacyPolicy", optional(string)),
-    termsAndConditions: json |> field("termsAndConditions", optional(string)),
+    address: field("address", optional(string), json),
+    emailAddress: field("emailAddress", optional(string), json),
+    privacyPolicy: field("privacyPolicy", optional(string), json),
+    termsAndConditions: field("termsAndConditions", optional(string), json),
+    codeOfConduct: field("codeOfConduct", optional(string), json),
   }
 }
 

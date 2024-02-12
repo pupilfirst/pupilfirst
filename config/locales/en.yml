@@ -904,6 +904,7 @@ en:
       save_note: Save Note
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
+      affiliation: Affiliation
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       close_student_report: Close student report
@@ -917,11 +918,13 @@ en:
         one: 1 Quiz Attempted
         other: "%{count} Quizzes Attempted"
         zero: No Quizzes Attempted
+      student_id: Student ID
       submissions: Submissions
       targets: " Targets"
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
+      user_id: User ID
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
@@ -1434,6 +1437,7 @@ en:
       contact: Contact
       customize_link_footer: You can customize links in the footer.
       customize_link_header: You can customize links on the header.
+      edit_code_of_conduct: Edit Code of Conduct
       edit_contact_details: Edit contact details
       edit_footer_links: Edit footer links
       edit_header_links: Edit header links
@@ -1480,6 +1484,7 @@ en:
         settings:
           admins: Admins
           customization: Customization
+          standing: Standing
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -1515,6 +1520,10 @@ en:
       manage_certificates: Manage student certificates
       new_certificate_label: "Issue new certificate:"
       page_description: Actions for the student
+      pages:
+        actions: Actions
+        details: Details
+        standing: Standing
       re_activate_student:
         button: Re-Activate Student
       revoke_certificate_button: Revoke Certificate
@@ -1527,7 +1536,7 @@ en:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_characters: "%{column_name} column contains one or more invalid characters"
-        invalid_email: Email has to be valid and can't be blank
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
         invalid_team_name: Team name has to be less than 50 characters
@@ -1626,6 +1635,7 @@ en:
       pages:
         actions: Actions
         details: Details
+        standing: Standing
       personal_coaches: Personal Coaches
       pick_a_cohort: Pick a Cohort
       search_coaches_all: You have selected all available coaches!
@@ -1647,7 +1657,25 @@ en:
       title_error: Title must have at least two characters
       title_placeholder: Student, Coach, CEO, etc.
       update_student: Update Student
+    StudentStanding__Root:
+      add_entry_button: Add Entry
+      contact_admin: Please contact your school admin.
+      change_standing: Add an entry to the log
+      change_standing_info: When adding an entry, you can also change the student's standing.
+      confirm_delete: Are you sure you want to delete this standing log entry?
+      delete_standing_log: Delete Standing Log
+      empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
+      pages:
+        actions: Actions
+        details: Details
+        standing: Standing
+      reason_heading: Reason for this entry
+      reason_placeholder: This reason will be visible to the student and to organisation admins.
+      school_standing_disabled: School Standing is disabled.
+      select_standing: Select Standing
+      standing_description_missing: Selected standing has no description.
     StudentTopNav:
+      edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out
     StudentTopNav__DropDown:
@@ -1942,6 +1970,7 @@ en:
       empty_courses: You don't have any active courses right now.
       issued_on: "Issued on:"
       my_courses: My Courses
+      view_standing: View Standing
     UsersDeleteAccount:
       cancel: Cancel
       click_button_below: Please click the button below to permanently delete your account in this school
@@ -2259,6 +2288,14 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
+      email_change_in_user_standing:
+        body:
+          link_to: visit user standing page
+          main_html: <p>Your standing in %{school_name} school has been changed from <strong>%{previous_standing}</strong> to <strong>%{current_standing}</strong>. The following is the reason for the change:</p>
+          main_html_for_repeat_standing: <p>A new entry has been added to your standing log in %{school_name}. Note that your standing remains the <strong>same</strong> as before. The following is the reason for the entry:</p>
+          view_html: <p>You can %{link_to} to view your current standing.</p>
+        subject: Your standing in %{school_name} has been changed.
+        subject_no_change_in_standing: A new entry has been added to your standing log in %{school_name}.
       new_post:
         body:
           link_to: view the reply on the %{community_name} community
@@ -2301,6 +2338,8 @@ en:
       success_notification: Course archived successfully.
     archive_post:
       post_archived_notification: Post archived successfully
+    archive_user_standing:
+      success_notification: Standing log deleted successfully!
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -2374,6 +2413,10 @@ en:
       success_notification: Team created successfully
     create_topic_subscription:
       success_notification: You will be notified about all the updates.
+    create_user_standing:
+      standing_archived_error: Selected standing is no longer active. Please refresh the page and try again.
+      standing_not_found_error: Selected standing doesn't exist. Please refresh the page and try again.
+      success_notification: Standing log created successfully!
     delete_certificate:
       success_notification: Certificate has been deleted.
     delete_course_author:
@@ -2688,6 +2731,10 @@ en:
         update_calendar_button: Update calendar
       new:
         page_title: Create new calendar
+    code_of_conduct:
+      page_title: Code of Conduct Editor
+      save_code_of_conduct: Save Code of Conduct
+      update_code_of_conduct_heading: Update your school's code of conduct
     communities:
       index:
         title: Communities
@@ -2696,6 +2743,7 @@ en:
         title: Applicants
       assignments:
         list_title: Arrange milestone assignments
+        milestone_gap_warning: We have detected gaps in the numbering of your milestones. Rearranging the order below will ensure each milestone is assigned a consecutive number without any gaps.
         milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
@@ -2748,6 +2796,58 @@ en:
       students: Students
       submissions_reviewed: submissions reviewed
       title: Overview
+    standing:
+      add_another_standing: Add another standing
+      add_coc: Add CoC
+      confirm_school_standing_disable: Are you sure you want to disable standing for your school?
+      confirm_standing_deletion:
+        one: Are you sure you want to archive this standing? It has %{count} log associated with it.
+        other: Are you sure you want to archive this standing? It has %{count} logs associated with it.
+        zero: Are you sure you want to delete this standing? It has no logs associated with it.
+      default: Default
+      edit_coc: Edit CoC
+      edit_standings_heading: Edit/modify standings
+      edit_standings_info: You can edit the color, name, and description of a standing, or you can add a new standing. Students can be promoted or demoted to any standing through the "Edit Student" tab.
+      enable_standing: Enable standing for your school?
+      enabled: Enabled
+      learn_more: Learn more about standings.
+      learn_more_about_crafting_coc: Learn more about crafting a Code of Conduct.
+      page_title: Standings
+      required: Required
+      save_coc_success: Code of Conduct saved successfully!
+      standing_explanation: Use standings to communicate where a student stands with respect to your school's Code of Conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
+      toggle_standing:
+        default_standing_description: This is the default standing for all students.
+        default_standing_name: Neutral
+        school_standing_toggle_success:
+          _no: School Standing is disabled successfully!
+          _yes: School Standing is enabled successfully!
+      update_coc_heading: Add/Update your school's code of conduct
+      update_coc_info: It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
+      view_coc: View CoC
+    standings:
+      create:
+        success: Standing created successfully!
+      delete:
+        archive_success: Standing archived successfully!
+        success: Standing deleted successfully!
+      edit:
+        page_title: Edit standing
+      form:
+        add_standing_heading: Add new standing
+        add_standing_info: Add color, name and description of a standing
+        description_placeholder: Description of standing - optional
+        edit_standing_heading: Edit %{standing_name}
+        edit_standing_info: Edit color, name and description of a standing
+        name_placeholder: Name of the standing
+        save_standing: Save Standing
+        unique_name_error: should be unique within a school.
+        name_max_length_error: should not be longer than 25 characters.
+        description_max_length_error: should not be longer than 150 characters.
+      new:
+        page_title: Add new standing
+      update:
+        success: Standing updated successfully!
   services:
     courses:
       demo_content_service:
@@ -2783,6 +2883,7 @@ en:
     caption_image: A caption for the image
     close: Close
     coaches: Coaches
+    code_of_conduct: Code of Conduct
     cohort: Cohort
     cohort_overview:
       no_milestone_targets: There are no milestone targets.
@@ -2885,9 +2986,26 @@ en:
     update: Update
     updating: Updating
     uploading: Uploading
-    version: Version
+    user_standing:
+      code_of_conduct_info: At %{school_name} School, we follow code of conduct. Any positive actions will lead to a promotion in standing, while any violations will result in a demotion.
+      current_standing: Current Standing
+      current_standing_card_aria: Current standing card
+      current_standing_shield_aria: Current standing shield
+      description_tooltip: Description of the standing
+      empty_standing_info: Any entries added will be displayed here.
+      no_standing_log: There are no entries in the log.
+      page_title_org_admin: Student Standing | %{school_name}
+      page_title_user: Your Standing | %{school_name}
+      reach_us: Reach us
+      reach_us_info: If you believe there's been an error in your standing, please reach out to us at
+      reason_tooltip: Reason for the log.
+      standing: Standing
+      standing_log: Standing Log
+      standing_not_enabled: Standing is not enabled for this school.
+      view_code_of_conduct: View Code of Conduct
     versions: Versions
     view: View
+    view_standing: View Standing
   timeline_events:
     show:
       accepted: Accepted
@@ -3007,6 +3125,10 @@ en:
           error: The supplied email address and password do not match. Please check your credentials and try again.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+    standing:
+      current_standing: Current Standing
+      standing: Standing
+      standing_log: Standing Log
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       invalid_password_error: The password you entered is incorrect. Please try again.

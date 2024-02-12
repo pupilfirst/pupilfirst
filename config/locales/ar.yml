@@ -1571,7 +1571,7 @@ ar:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_characters: "%{column_name} يحتوي على حرف واحد أو أكثر غير صالح"
-        invalid_email: Email has to be valid and can't be blank
+        invalid_email: يجب أن يكون البريد الإلكتروني صالحًا وغير مكرر ولا يمكن تركه فارغًا
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
         invalid_team_name: Team name has to be less than 50 characters

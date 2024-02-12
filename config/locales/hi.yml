@@ -1482,7 +1482,7 @@ hi:
       csv_data_errors:
         invalid_affiliation: संबद्धता 250 वर्णों से कम होनी चाहिए
         invalid_characters: "%{column_name} column contains one or more invalid characters"
-        invalid_email: ईमेल मान्य होना चाहिए और खाली नहीं हो सकता
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: नाम कॉलम खाली नहीं हो सकता और 250 वर्णों के भीतर होना चाहिए
         invalid_tags: प्रति छात्र अधिकतम 5 टैग की अनुमति है, प्रत्येक 50 वर्णों की सीमा के साथ
         invalid_team_name: टीम का नाम 50 वर्णों से कम होना चाहिए

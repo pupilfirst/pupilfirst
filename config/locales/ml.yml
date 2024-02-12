@@ -1482,7 +1482,7 @@ ml:
       csv_data_errors:
         invalid_affiliation: അഫിലിയേഷൻ 250 പ്രതീകങ്ങളിൽ കുറവായിരിക്കണം
         invalid_characters: "%{column_name} column contains one or more invalid characters"
-        invalid_email: ഇമെയിൽ സാധുതയുള്ളതായിരിക്കണം, അത് ശൂന്യമാക്കാൻ പാടില്ല
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: നെയിം കോളം ശൂന്യമാക്കരുത് കൂടാതെ 250 പ്രതീകങ്ങൾക്കുള്ളിൽ ആയിരിക്കണം
         invalid_tags: ഒരു വിദ്യാർത്ഥിക്ക് പരമാവധി 5 ടാഗുകൾ അനുവദനീയമാണ്, ഓരോന്നിനും 50 പ്രതീകങ്ങൾ
         invalid_team_name: ടീമിന്റെ പേര് 50 പ്രതീകങ്ങളിൽ കുറവായിരിക്കണം

@@ -31,24 +31,12 @@ let rowNumber = t => t.rowNumber
 
 let errors = t => t.errors
 
-let emails = []
-
 let containsInvalidUTF8Characters = (text: string) => {
   let regexp = Js.Re.fromString("[^\\x00-\\x7F\\u00C0-\\u00FF\\u0600-\\u06FF]+")
   let result = Js.Re.exec_(regexp, text)
   switch result {
   | Some(_) => true
   | None => false
-  }
-}
-
-let emailAlreadyExists = (email: string) => {
-  let exists = Belt.Array.some(emails, v => v == email)
-  if exists {
-    true
-  } else {
-    emails->Belt.Array.push(email)
-    false
   }
 }
 
@@ -73,7 +61,16 @@ let affiliationError = data =>
 let teamNameError = data =>
   validateField(TeamName, true, 50, StudentsEditor__StudentCSVRow.teamName(data))
 
-let emailError = data => {
+let emailAlreadyExists = (email, allEmails) => {
+  Js.Array2.filter(allEmails, e => {
+    switch e {
+    | None => false
+    | Some(e) => e == email
+    }
+  })->Js.Array2.length > 1
+}
+
+let emailError = (data, allEmails) => {
   switch StudentsEditor__StudentCSVRow.email(data) {
   | None => [error(Email, InvalidFormat)]
   | Some(email) =>
@@ -81,7 +78,7 @@ let emailError = data => {
       ? [error(Email, InvalidFormat)]
       : containsInvalidUTF8Characters(email)
       ? [error(Email, InvalidCharacters)]
-      : emailAlreadyExists(email)
+      : emailAlreadyExists(email, allEmails)
       ? [error(Email, InvalidFormat)]
       : []
   }
@@ -100,12 +97,14 @@ let tagsError = data => {
   }
 }
 
-let parseError = studentCSVRow => {
-  studentCSVRow
+let parseError = studentCSVRows => {
+  let allEmails = Js.Array2.map(studentCSVRows, StudentsEditor__StudentCSVRow.email)
+
+  studentCSVRows
   |> Js.Array.mapi((data, index) => {
     let errors = ArrayUtils.flattenV2([
       nameError(data),
-      emailError(data),
+      emailError(data, allEmails),
       titleError(data),
       affiliationError(data),
       teamNameError(data),

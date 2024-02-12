@@ -32,6 +32,9 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "customize"} => (Settings(Customization), None)
   | list{"school", "communities"} => (Communities, None)
   | list{"school", "admins"} => (Settings(Admins), None)
+  | list{"school", "standing"} => (Settings(Standing), None)
+  | list{"school", "code_of_conduct"} => (Settings(Standing), None)
+  | list{"school", "standings", ..._tail} => (Settings(Standing), None)
   | list{"school"}
   | list{"school", "courses"}
   | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root school />))
@@ -47,6 +50,10 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "students", studentId, "actions"} => (
       SelectedCourse(Students),
       Some(<StudentActions__Root studentId />),
+    )
+  | list{"school", "students", studentId, "standing"} => (
+      SelectedCourse(Students),
+      Some(<StudentStanding__Root studentId />),
     )
   | list{"school", "teams", studentId, "details"} => (
       SelectedCourse(Teams),
@@ -80,6 +87,10 @@ let make = (~school, ~courses, ~currentUser) => {
         | list{"students", studentId, "actions"} => (
             Students,
             Some(<StudentActions__Root studentId />),
+          )
+        | list{"students", studentId, "standing"} => (
+            Students,
+            Some(<StudentStanding__Root studentId />),
           )
         | list{"teams"} => (Teams, Some(<TeamsIndex__Root courseId search={url.search} />))
         | list{"teams", "new"} => (Teams, Some(<TeamsCreator__Root courseId />))
@@ -119,7 +130,7 @@ let make = (~school, ~courses, ~currentUser) => {
   <SchoolRouter__CourseContext.Provider
     value={(
       {
-        selectedCourse: selectedCourse,
+        selectedCourse,
         setCourseId: findAndSetSelectedCourse(setSelectedCourse, courses),
       }: SchoolRouter__CourseContext.t
     )}>

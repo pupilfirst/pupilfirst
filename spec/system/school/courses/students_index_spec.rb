@@ -4,6 +4,7 @@ feature "School students index", js: true do
   include UserSpecHelper
   include NotificationHelper
   include HtmlSanitizerSpecHelper
+  include MarkdownEditorHelper
 
   let(:tag_1) { "Single Student" }
   let(:tag_2) { "Another Tag" }
@@ -773,6 +774,142 @@ feature "School students index", js: true do
       expect(
         student_with_certificate.user.reload.issued_certificates.count
       ).to eq(2)
+    end
+  end
+
+  context "When standing is disabled for the school" do
+    let!(:student) { create :student, cohort: live_cohort }
+
+    scenario "school admin visits student standing" do
+      sign_in_user school_admin.user,
+                   referrer: "/school/students/#{student.id}/standing"
+
+      expect(page).to have_text("School Standing is disabled")
+    end
+  end
+
+  context "When standing is enabled for the school" do
+    let!(:student) { create :student, cohort: live_cohort }
+    let!(:standing_1) { create :standing, school: school, default: true }
+    let!(:standing_2) { create :standing, school: school }
+    let!(:standing_3) { create :standing, school: school }
+    before { school.update!(configuration: { enable_standing: true }) }
+
+    scenario "school admin visits student standing tab with no standing logs" do
+      sign_in_user school_admin.user,
+                   referrer: "/school/students/#{student.id}/standing"
+
+      expect(page).to have_text("There are no entries in the log")
+
+      expect(page).to have_text(standing_1.name)
+    end
+
+    scenario "school admin adds an entry to the student standing log" do
+      sign_in_user school_admin.user,
+                   referrer: "/school/students/#{student.id}/standing"
+
+      expect(page).to have_text("There are no entries in the log")
+
+      expect(page).to have_select(
+        "current-standing",
+        selected: standing_1.name,
+        disabled: true
+      )
+
+      expect(page).to have_select(
+        "change-standing",
+        selected: "Select Standing"
+      )
+
+      select standing_2.name, from: "change-standing"
+
+      expect(page).to have_text(standing_2.description)
+
+      reason = Faker::Lorem.sentence
+
+      add_markdown reason
+      click_button "Add Entry"
+
+      expect(page).to have_text("Standing log created successfully!")
+
+      dismiss_notification
+
+      expect(page).to have_text(standing_2.name)
+      expect(page).to have_text(school_admin.user.name)
+      expect(page).to have_text(reason)
+
+      expect(page).to have_select(
+        "current-standing",
+        selected: standing_2.name,
+        disabled: true
+      )
+
+      expect(page).to have_select(
+        "change-standing",
+        selected: "Select Standing"
+      )
+
+      open_email(student.user.email)
+
+      expect(current_email.subject).to include(
+        "Your standing in #{school.name} has been changed"
+      )
+
+      body = sanitize_html(current_email.body)
+
+      expect(body).to have_text(
+        "\n Your standing in test school has been changed from #{standing_1.name} to #{standing_2.name}."
+      )
+
+      expect(body).to have_text(reason)
+    end
+
+    context "when there are entries in the standing log" do
+      let!(:user_standing) do
+        create :user_standing, user: student.user, standing: standing_2
+      end
+
+      scenario "school admin deletes an entry in the log" do
+        sign_in_user school_admin.user,
+                     referrer: "/school/students/#{student.id}/standing"
+
+        expect(page).to have_text(standing_2.name)
+        expect(page).to have_text(user_standing.reason)
+
+        expect(page).to have_select(
+          "current-standing",
+          selected: standing_2.name,
+          disabled: true
+        )
+
+        expect(page).to have_select(
+          "change-standing",
+          selected: "Select Standing"
+        )
+
+        accept_confirm do
+          find(
+            "button[title='Delete Standing Log#{student.user.user_standings.last.id}']"
+          ).click
+        end
+
+        expect(page).to have_text("Standing log deleted successfully")
+
+        dismiss_notification
+
+        expect(page).to have_text("There are no entries in the log")
+
+        expect(page).to have_select(
+          "current-standing",
+          selected: standing_1.name,
+          disabled: true
+        )
+
+        expect(page).to have_select(
+          "change-standing",
+          selected: "Select Standing"
+        )
+      end
     end
   end
 end

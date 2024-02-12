@@ -1,0 +1,18 @@
+<% user_standing_url = standing_user_url() %>
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @user.name) %>
+<% end %>
+<% content_for :body do %>
+  <% if @previous_standing == @current_standing %>
+    <%= t("mailers.user.email_change_in_user_standing.body.main_html_for_repeat_standing", school_name: @school.name, previous_standing: @previous_standing, current_standing: @current_standing).html_safe %>
+  <% else %>
+    <%= t("mailers.user.email_change_in_user_standing.body.main_html", school_name: @school.name, previous_standing: @previous_standing, current_standing: @current_standing)%>
+  <% end %>
+  <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
+    <blockquote style="border-inline-start: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">
+      <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@reason)).html_safe %>
+    </blockquote>
+  </div>
+  <%= t("mailers.user.email_change_in_user_standing.body.view_html", link_to: link_to(t("mailers.user.email_change_in_user_standing.body.link_to"), user_standing_url)) %>
+  <%= render 'mailers/link_fallback', url: user_standing_url %>
+<% end %>

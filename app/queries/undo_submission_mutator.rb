@@ -67,12 +67,12 @@ class UndoSubmissionMutator < ApplicationQuery
 
   # Students linked to a timeline event can delete it and submission should be live.
   def authorized?
-    target.present? && student.present? &&
+    target.present? && student.present? && timeline_event.present? &&
       !target.status(student).in?(
         [
           Targets::StatusService::STATUS_PASSED,
           Targets::StatusService::STATUS_FAILED
         ]
-      ) && timeline_event.live?
+      )
   end
 end

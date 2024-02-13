@@ -72,7 +72,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
 
   <div className="w-full">
     <div className="flex items-center justify-between mx-auto">
-      <div>
+      <div id={"show_comments-" ++ submissionId}>
         <button
           className="border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition"
           onClick={toggleComments(setShowComments)}>
@@ -95,6 +95,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
             {currentUser->CurrentUser.avatar}
           </div>
           <input
+            id={"add_comment-" ++ submissionId}
             className="appearance-none block text-sm w-full bg-white leading-tight border border-gray-300 rounded px-3 py-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
             type_="text"
             value=newComment
@@ -103,14 +104,17 @@ let make = (~currentUser, ~submissionId, ~comments) => {
             placeholder={tr("write_comment")}
             onChange=handleInputChange
           />
-          <button className="btn btn-primary text-sm" onClick={handleCreateSubmissionComment}>
+          <button
+            disabled={newComment == ""}
+            className="btn btn-primary text-sm"
+            onClick={handleCreateSubmissionComment}>
             {tr("comment")->str}
           </button>
         </div>
       </div>
       {submissionComments
       ->Js.Array2.map(comment =>
-        <div key={comment->Comment.id} className="submission-comments__comment group">
+        <div id={"comment-" ++ comment->Comment.id} className="submission-comments__comment group">
           <CoursesCurriculum__SubmissionCommentShow key={comment->Comment.id} currentUser comment />
         </div>
       )

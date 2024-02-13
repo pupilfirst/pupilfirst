@@ -74,7 +74,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
     } else {
       ""
     }}
-    ariaLabel={submission |> DiscussionSubmission.createdAtPretty}>
+    ariaLabel={"discuss_submission-" ++ submissionId}>
     {switch submission->DiscussionSubmission.pinned {
     | true =>
       <p

@@ -84,17 +84,18 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
               <span className="sr-only"> {tr("close")->str} </span>
             </button>
           </div>
-          <label className="block text-sm text-gray-600 mt-4"> {tr("provide_reason")->str} </label>
           <textarea
+            id={"report_reason-" ++ reportableId}
             className="w-full text-sm p-2 border rounded-md mt-1"
             type_="text"
             autoFocus={true}
             value={reportReason}
-            placeholder={"Share reason for reporting"}
+            placeholder={tr("share_reason")}
             onChange={updateReportReason(setReportReason)}
           />
           <div className="mt-3 sm:mt-4 sm:flex">
             <button
+              disabled={reportReason == ""}
               className="btn btn-primary"
               onClick={createModerationReport(
                 reportableType,

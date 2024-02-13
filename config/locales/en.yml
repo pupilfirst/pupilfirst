@@ -563,7 +563,7 @@ en:
     CoursesCurriculum__ModerationReportButton:
       cancel: Cancel
       close: Close
-      provide_reason: Please provide a reason for reporting
+      share_reason: Share reason for reporting
       report: Report
       reported: Reported
     CoursesCurriculum__NoticeManager:
@@ -612,7 +612,7 @@ en:
       question: Question
       submit_quiz: Submit Quiz
     CoursesCurriculum__Reactions:
-      emoji_picker: Emoji
+      emoji_picker: Add reaction
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching

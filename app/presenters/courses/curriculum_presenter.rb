@@ -56,13 +56,9 @@ module Courses
         avatar_url: current_user.avatar_url(variant: :thumb),
         is_admin: current_school_admin.present?,
         is_author: @course.course_authors.exists?(user: current_user),
-        is_coach: current_coach.present?
+        is_coach: @course.faculty.exists?(user: current_user)
       }
       user
-    end
-
-    def moderator?
-      author? || current_coach.present?
     end
 
     def author?

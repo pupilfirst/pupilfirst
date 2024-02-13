@@ -64,7 +64,7 @@ let make = (~currentUser, ~comment) => {
   let userName = comment->Comment.user->User.name
 
   let commentDisplay =
-    <div className="relative mt-4">
+    <div className="relative mt-4" ariaLabel={"comment-" ++ comment->Comment.id}>
       {switch commentHidden {
       | true =>
         <div

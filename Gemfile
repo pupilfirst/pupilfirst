@@ -108,6 +108,7 @@ group :development, :test do
   gem "webmock", "~> 3.14" # Mocking web requests.
   gem "rubocop", "~> 1.54", require: false # Ruby Style Guide.
   gem "rubocop-rails", "~> 2.20", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem 'rubocop-performance', require: false
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
   gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov

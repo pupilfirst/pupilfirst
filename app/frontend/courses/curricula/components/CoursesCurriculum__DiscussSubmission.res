@@ -139,15 +139,16 @@ let make = (~currentUser, ~submission, ~callBack) => {
       </div>
       {switch submissionHidden {
       | true =>
-        <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-px">
+        <div
+          className="absolute -translate-x-1/2 left-1/2 z-[11] flex justify-end mx-auto bottom-px">
           <p
             className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
-          {t("submission_hidden")->str}
+            {t("submission_hidden")->str}
           </p>
         </div>
       | false => React.null
       }}
-      <div className="flex space-x-2 relative z-20">
+      <div className="flex space-x-2 relative z-[70]">
         {switch currentUser->CurrentUser.isModerator {
         | false => React.null
         | true =>
@@ -214,7 +215,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
             reactions={submission->DiscussionSubmission.reactions}
           />
         </div>
-        <div className="relative">
+        <div className="relative flex-1">
           <CoursesCurriculum__SubmissionComments
             currentUser submissionId comments={submission->DiscussionSubmission.comments}
           />

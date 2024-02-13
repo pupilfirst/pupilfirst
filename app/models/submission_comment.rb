@@ -6,6 +6,11 @@ class SubmissionComment < ApplicationRecord
   has_many :reactions, as: :reactionable, dependent: :destroy
   has_many :moderation_reports, as: :reportable, dependent: :destroy
 
+  validates_with RateLimitValidator,
+                 limit: 300,
+                 scope: :user_id,
+                 time_frame: 1.hour
+
   scope :not_hidden, -> { where(hidden_at: nil) }
   scope :not_archived, -> { where(archived_at: nil) }
 end

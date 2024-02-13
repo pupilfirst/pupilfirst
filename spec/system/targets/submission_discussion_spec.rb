@@ -133,7 +133,7 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_text("Submissions by peers")
         expect(page).to_not have_text("There are no submissions yet")
 
-        expect(page).to have_text(student.name)
+        expect(page).to have_text(another_student.name)
         expect(page).to have_button("Comment")
         expect(page).to have_button("Add reaction")
 
@@ -233,6 +233,8 @@ feature "Assignment Discussion", js: true do
         page.refresh
         find(".course-overlay__body-tab-item", text: "Submit Form").click
 
+        comment_id = student.user.submission_comments.first.id
+
         find("div#show_comments-#{another_student_submission.id} button").click
         within(".submissionComments") do
           expect(page).to have_text(student.name)
@@ -242,13 +244,12 @@ feature "Assignment Discussion", js: true do
           expect(page).to_not have_button("Report")
         end
 
-        comment_id = student.user.submission_comments.first.id
         within("div#comment-#{comment_id}") do
           find("div[aria-label='comment-#{comment_id}']").hover
           expect(page).to have_button("Delete")
           click_button "Delete"
 
-          within(".blanket") do
+          within("dialog") do
             expect(page).to have_button("Delete")
             click_button "Delete"
           end

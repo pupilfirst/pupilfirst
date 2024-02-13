@@ -136,22 +136,11 @@ let make = (~currentUser, ~submission, ~callBack) => {
           </span>
         </div>
       </div>
-      {switch submissionHidden {
-      | true =>
-        <div
-          className="absolute -translate-x-1/2 left-1/2 z-[11] flex justify-end mx-auto bottom-px">
-          <p
-            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
-            {t("submission_hidden")->str}
-          </p>
-        </div>
-      | false => React.null
-      }}
-      <div className="flex space-x-2 relative z-[70]">
+      <div className="flex space-x-2 relative">
         {switch currentUser->CurrentUser.isModerator {
         | false => React.null
         | true =>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 relative z-[12]">
             <button
               onClick={pinSubmission(submission, callBack)}
               className="curriculum-discuss-submission__pin-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
@@ -186,12 +175,14 @@ let make = (~currentUser, ~submission, ~callBack) => {
             </button>
           </div>
         }}
-        <CoursesCurriculum__ModerationReportButton
-          currentUser
-          moderationReports={submission->DiscussionSubmission.moderationReports}
-          reportableId={submission->DiscussionSubmission.id}
-          reportableType={"TimelineEvent"}
-        />
+        <div className="relative z-[13]">
+          <CoursesCurriculum__ModerationReportButton
+            currentUser
+            moderationReports={submission->DiscussionSubmission.moderationReports}
+            reportableId={submission->DiscussionSubmission.id}
+            reportableType={"TimelineEvent"}
+          />
+        </div>
       </div>
     </div>
     <div className="relative">
@@ -221,5 +212,15 @@ let make = (~currentUser, ~submission, ~callBack) => {
         </div>
       </div>
     </div>
+    {switch submissionHidden {
+    | true =>
+      <div className="absolute -translate-x-1/2 left-1/2 z-[11] flex justify-end mx-auto bottom-px">
+        <p
+          className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
+          {t("submission_hidden")->str}
+        </p>
+      </div>
+    | false => React.null
+    }}
   </div>
 }

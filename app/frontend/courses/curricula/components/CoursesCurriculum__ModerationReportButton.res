@@ -67,16 +67,16 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
     acc || report->ModerationReport.userId === currentUser->CurrentUser.id
   )
 
-  <div className="relative z-50">
+  <div className="relative">
     {switch showReport {
     | false => React.null
     | true =>
       <dialog
         role="dialog"
-        className="fixed inset-0 z-[999] grid place-items-center w-full h-full bg-gray-950/75 backdrop-blur-sm ease-in duration-300">
+        className="fixed inset-0 z-[999] grid place-items-center w-full h-full bg-gray-950/75 dark:bg-gray-50/75 backdrop-blur-sm ease-in duration-300">
         <div className="max-w-xl w-full mx-auto p-4 bg-white rounded-lg shadow-lg">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold leading-tight"> {tr("report")->str} </h2>
+            <h2 className="font-semibold leading-tight text-gray-900"> {tr("report")->str} </h2>
             <button
               onClick={updateShowReport(setShowReport, false)}
               className="w-6 h-6 flex items-center justify-center rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-focusColor-500 focus:ring-offset-2 transition">

@@ -100,7 +100,7 @@ let make = (~currentUser, ~comment) => {
             {switch isModerator {
             | false => React.null
             | true =>
-              <div className="relative z-[9]">
+              <div className="relative z-[11]">
                 <button
                   onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
                   className="md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
@@ -131,7 +131,7 @@ let make = (~currentUser, ~comment) => {
                 />
               </div>
             | true =>
-              <div className="md:hidden md:group-hover:flex relative z-[9]">
+              <div className="md:hidden md:group-hover:flex relative z-[11]">
                 <button
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
                   className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
@@ -159,7 +159,7 @@ let make = (~currentUser, ~comment) => {
       {switch commentHidden {
       | true =>
         <div
-          className="absolute -translate-x-1/2 left-1/2 z-[9] flex justify-end mx-auto bottom-px">
+          className="absolute -translate-x-1/2 left-1/2 z-[10] flex justify-end mx-auto bottom-px">
           <p
             className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
             {tr("hidden")->str}

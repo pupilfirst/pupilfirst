@@ -249,7 +249,7 @@ let submissions = (
                 {switch submission->Submission.hiddenAt {
                 | Some(_) =>
                   <div
-                    className="inline-flex md:absolute z-20 justify-center md:justify-end text-xs pt-1.5">
+                    className="inline-flex md:absolute z-1 justify-center md:justify-end text-xs pt-1.5">
                     <p>
                       {("This submission was hidden by course moderators on " ++
                       Submission.hiddenAtPretty(submission))->str}

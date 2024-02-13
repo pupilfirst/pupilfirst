@@ -53,7 +53,7 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
 
 let pinnedClasses = pinned => {
   switch pinned {
-  | true => "bg-white px-6 pt-6 pb-2 rounded-lg shadow-xl border border-gray-200/75"
+  | true => "bg-white px-4 md:px-6 pt-6 pb-2 rounded-lg shadow-xl border border-gray-200/75"
   | false => "py-4"
   }
 }
@@ -68,7 +68,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
   let teamStrength = Belt.Array.length(submission->DiscussionSubmission.users)
 
   <div
-    className={"relative curriculum-discuss-submission__container group mt-12 " ++
+    className={"relative curriculum-discuss-submission__container mt-12 " ++
     pinnedClasses(submission->DiscussionSubmission.pinned) ++ if submissionHidden {
       " curriculum-discuss-submission__hidden"
     } else {
@@ -197,7 +197,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
         />
       </div>
       <div className="flex flex-col-reverse md:flex-row gap-4 items-start relative py-4 ps-11">
-        <div className="md:absolute md:left-[9.5rem] z-1">
+        <div className="md:absolute md:left-[9.5rem] z-[11]">
           <CoursesCurriculum__Reactions
             currentUser
             reactionableType="TimelineEvent"
@@ -214,7 +214,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
     </div>
     {switch submissionHidden {
     | true =>
-      <div className="absolute -translate-x-1/2 left-1/2 z-[11] flex justify-end mx-auto bottom-px">
+      <div className="absolute -translate-x-1/2 left-1/2 z-[12] flex justify-end mx-auto bottom-px">
         <p
           className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
           {t("submission_hidden")->str}

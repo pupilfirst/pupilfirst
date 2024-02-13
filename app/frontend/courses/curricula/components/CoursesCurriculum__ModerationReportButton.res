@@ -67,12 +67,13 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
     acc || report->ModerationReport.userId === currentUser->CurrentUser.id
   )
 
-  <div>
+  <div className="relative z-50">
     {switch showReport {
     | false => React.null
     | true =>
       <dialog
-        className="fixed inset-0 z-50 grid place-items-center w-full h-full bg-gray-950/75 backdrop-blur-sm ease-in duration-300">
+        role="dialog"
+        className="fixed inset-0 z-[999] grid place-items-center w-full h-full bg-gray-950/75 backdrop-blur-sm ease-in duration-300">
         <div className="max-w-xl w-full mx-auto p-4 bg-white rounded-lg shadow-lg">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold leading-tight"> {tr("report")->str} </h2>

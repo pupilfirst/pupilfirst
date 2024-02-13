@@ -67,7 +67,8 @@ let make = (~currentUser, ~comment) => {
     <div className="relative mt-4">
       {switch commentHidden {
       | true =>
-        <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-px">
+        <div
+          className="absolute -translate-x-1/2 left-1/2 z-[11] flex justify-end mx-auto bottom-px">
           <p
             className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
             {tr("hidden")->str}
@@ -81,32 +82,28 @@ let make = (~currentUser, ~comment) => {
         } else {
           "flex-1"
         }}>
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex gap-3">
-              <div
-                className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8">
-                <div
-                  className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
+        <div className="flex flex-row-reverse items-center justify-between">
+          <div className="flex space-x-2 relative z-20">
+            {switch currentUser->CurrentUser.id == comment->Comment.userId {
+            | false =>
+              <div className="">
+                <CoursesCurriculum__ModerationReportButton
+                  currentUser
+                  moderationReports={comment->Comment.moderationReports}
+                  reportableId={comment->Comment.id}
+                  reportableType={"SubmissionComment"}
                 />
               </div>
-              <div
-                className="w-8 h-8 border bg-gray-200 rounded-full flex items-center justify-center">
-                {comment->Comment.user->User.avatar}
+            | true =>
+              <div className="md:hidden md:group-hover:flex">
+                <button
+                  onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
+                  className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                  <Icon className="if i-trash-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {tr("delete")->str} </span>
+                </button>
               </div>
-              <div className="flex flex-col flex-wrap">
-                <p className="font-semibold text-xs leading-tight block md:inline-flex">
-                  {userName |> str}
-                </p>
-                <p
-                  className="text-xs text-gray-600 leading-tight pt-1"
-                  title={Comment.createdAtPretty(comment)}>
-                  {Comment.createdAtPretty(comment)->str}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex space-x-2 relative z-20">
+            }}
             {switch isModerator {
             | false => React.null
             | true =>
@@ -130,26 +127,30 @@ let make = (~currentUser, ~comment) => {
                 </button>
               </div>
             }}
-            {switch currentUser->CurrentUser.id == comment->Comment.userId {
-            | false =>
-              <div className="">
-                <CoursesCurriculum__ModerationReportButton
-                  currentUser
-                  moderationReports={comment->Comment.moderationReports}
-                  reportableId={comment->Comment.id}
-                  reportableType={"SubmissionComment"}
+          </div>
+          <div>
+            <div className="flex gap-3">
+              <div
+                className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8">
+                <div
+                  className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
                 />
               </div>
-            | true =>
-              <div className="md:hidden md:group-hover:flex">
-                <button
-                  onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
-                  className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
-                  <Icon className="if i-trash-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {tr("delete")->str} </span>
-                </button>
+              <div
+                className="w-8 h-8 border bg-gray-200 rounded-full flex items-center justify-center">
+                {comment->Comment.user->User.avatar}
               </div>
-            }}
+              <div className="flex flex-col flex-wrap">
+                <p className="font-semibold text-xs leading-tight block md:inline-flex">
+                  {userName |> str}
+                </p>
+                <p
+                  className="text-xs text-gray-600 leading-tight pt-1"
+                  title={Comment.createdAtPretty(comment)}>
+                  {Comment.createdAtPretty(comment)->str}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <MarkdownBlock

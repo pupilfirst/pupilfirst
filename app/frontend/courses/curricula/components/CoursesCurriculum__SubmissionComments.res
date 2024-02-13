@@ -83,7 +83,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
     </div>
     <div hidden={!showComments} className="submissionComments mt-4 space-y-8" key={submissionId}>
       <div className="submission-comments__comment">
-        <div className="flex items-start gap-2 relative">
+        <div className="flex gap-2 relative">
           <div
             className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8 ">
             <div
@@ -95,7 +95,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
             {currentUser->CurrentUser.avatar}
           </div>
           <input
-            className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-3 py-1.5 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+            className="appearance-none block text-sm w-full bg-white leading-tight border border-gray-300 rounded px-3 py-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
             type_="text"
             value=newComment
             maxLength=255

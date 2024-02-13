@@ -65,69 +65,13 @@ let make = (~currentUser, ~comment) => {
 
   let commentDisplay =
     <div className="relative mt-4">
-      {switch commentHidden {
-      | true =>
-        <div
-          className="absolute -translate-x-1/2 left-1/2 z-[11] flex justify-end mx-auto bottom-px">
-          <p
-            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
-            {tr("hidden")->str}
-          </p>
-        </div>
-      | false => React.null
-      }}
       <div
         className={if commentHidden {
           "relative curriculum__submission-comment-hidden rounded-b-xl"
         } else {
           "flex-1"
         }}>
-        <div className="flex flex-row-reverse items-center justify-between">
-          <div className="flex space-x-2 relative z-20">
-            {switch currentUser->CurrentUser.id == comment->Comment.userId {
-            | false =>
-              <div className="">
-                <CoursesCurriculum__ModerationReportButton
-                  currentUser
-                  moderationReports={comment->Comment.moderationReports}
-                  reportableId={comment->Comment.id}
-                  reportableType={"SubmissionComment"}
-                />
-              </div>
-            | true =>
-              <div className="md:hidden md:group-hover:flex">
-                <button
-                  onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
-                  className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
-                  <Icon className="if i-trash-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {tr("delete")->str} </span>
-                </button>
-              </div>
-            }}
-            {switch isModerator {
-            | false => React.null
-            | true =>
-              <div>
-                <button
-                  onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
-                  className="md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
-                  title={commentHidden ? "Unhide Comment" : "Hide Comment"}>
-                  {switch commentHidden {
-                  | true =>
-                    <span className="flex items-center md:space-x-1">
-                      <Icon className="if i-eye-closed-light if-fw" />
-                      <span className="hidden md:inline-block text-xs"> {tr("unhide")->str} </span>
-                    </span>
-                  | false =>
-                    <span className="flex items-center md:space-x-1">
-                      <Icon className="if i-eye-light if-fw" />
-                      <span className="hidden md:inline-block text-xs"> {tr("hide")->str} </span>
-                    </span>
-                  }}
-                </button>
-              </div>
-            }}
-          </div>
+        <div className="flex flex-row items-center justify-between">
           <div>
             <div className="flex gap-3">
               <div
@@ -152,6 +96,51 @@ let make = (~currentUser, ~comment) => {
               </div>
             </div>
           </div>
+          <div className="flex space-x-2 relative">
+            {switch isModerator {
+            | false => React.null
+            | true =>
+              <div className="relative z-[9]">
+                <button
+                  onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
+                  className="md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
+                  title={commentHidden ? "Unhide Comment" : "Hide Comment"}>
+                  {switch commentHidden {
+                  | true =>
+                    <span className="flex items-center md:space-x-1">
+                      <Icon className="if i-eye-closed-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {tr("unhide")->str} </span>
+                    </span>
+                  | false =>
+                    <span className="flex items-center md:space-x-1">
+                      <Icon className="if i-eye-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {tr("hide")->str} </span>
+                    </span>
+                  }}
+                </button>
+              </div>
+            }}
+            {switch currentUser->CurrentUser.id == comment->Comment.userId {
+            | false =>
+              <div className="relative z-[13]">
+                <CoursesCurriculum__ModerationReportButton
+                  currentUser
+                  moderationReports={comment->Comment.moderationReports}
+                  reportableId={comment->Comment.id}
+                  reportableType={"SubmissionComment"}
+                />
+              </div>
+            | true =>
+              <div className="md:hidden md:group-hover:flex relative z-[9]">
+                <button
+                  onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
+                  className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                  <Icon className="if i-trash-light if-fw" />
+                  <span className="hidden md:inline-block text-xs"> {tr("delete")->str} </span>
+                </button>
+              </div>
+            }}
+          </div>
         </div>
         <MarkdownBlock
           profile=Markdown.Permissive
@@ -167,13 +156,26 @@ let make = (~currentUser, ~comment) => {
           />
         </div>
       </div>
+      {switch commentHidden {
+      | true =>
+        <div
+          className="absolute -translate-x-1/2 left-1/2 z-[9] flex justify-end mx-auto bottom-px">
+          <p
+            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
+            {tr("hidden")->str}
+          </p>
+        </div>
+      | false => React.null
+      }}
     </div>
 
   <div>
     {switch showConfirmDelete {
     | false => React.null
     | true =>
-      <div className="blanket grid place-items-center mx-auto">
+      <dialog
+        role="dialog"
+        className="fixed inset-0 z-[999] grid place-items-center w-full h-full bg-gray-950/75 dark:bg-gray-50/75 backdrop-blur-sm ease-in duration-300">
         <div className="max-w-xl mx-auto relative p-4 bg-white rounded-lg shadow-lg">
           <div className="sm:flex sm:items-start">
             <div
@@ -227,7 +229,7 @@ let make = (~currentUser, ~comment) => {
             </button>
           </div>
         </div>
-      </div>
+      </dialog>
     }}
     {switch (commentArchived, commentHidden) {
     | (true, _) => React.null

@@ -182,7 +182,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
           )
           |> React.array}
       <div>
-        {switch targetDetails->TargetDetails.discussion {
+        {switch targetDetails->TargetDetails.allowAnonymous {
         | false => React.null
         | true =>
           <div className="mt-4 flex justify-start">

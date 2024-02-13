@@ -57,7 +57,22 @@ feature "Target Overlay", js: true do
            :with_completion_instructions,
            :with_default_checklist,
            target: target_l3,
-           role: Assignment::ROLE_TEAM
+           role: Assignment::ROLE_TEAM,
+           discussion: true,
+           allow_anonymous: true
+  end
+
+  let!(:target_no_anonymous) do
+    create :target, :with_content, target_group: target_group_l1, sort_index: 4
+  end
+  let!(:assignment_target_no_anonymous) do
+    create :assignment,
+           :with_completion_instructions,
+           :with_default_checklist,
+           target: target_no_anonymous,
+           role: Assignment::ROLE_TEAM,
+           discussion: true,
+           allow_anonymous: false
   end
 
   let!(:prerequisite_target) do
@@ -381,6 +396,85 @@ feature "Target Overlay", js: true do
     within("a[data-target-id='#{target_l3.id}']") do
       expect(page).to have_content("Completed")
     end
+  end
+
+  scenario "student submits form on a target anonymously" do
+    sign_in_user student.user, referrer: target_path(target_l3)
+
+    # This target should have a 'Submit Form' section.
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+    expect(page).to have_button("Submit", disabled: true)
+    expect(page).to have_text("Submit anonymously")
+
+    long_answer = Faker::Lorem.sentence
+    replace_markdown long_answer
+    check("anonymous")
+    click_button "Submit"
+
+    expect(page).to have_text("Your response has been saved")
+
+    dismiss_notification
+
+    # Student should be looking at their responses now.
+    expect(page).to have_content("Your Responses")
+
+    # The state of the target should change.
+    within(".course-overlay__header-title-card") do
+      expect(page).to have_content("Completed")
+    end
+
+    # The form submission should be completed
+    expect(page).to have_content("Completed")
+    expect(page).to have_content(long_answer)
+
+    # Let's check the database to make sure the submission was created with anonymous tag
+    last_submission = TimelineEvent.last
+    expect(last_submission.checklist).to eq(
+      [
+        {
+          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "title" => "Write something about your submission",
+          "result" => long_answer,
+          "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        }
+      ]
+    )
+    expect(last_submission.anonymous).to eq(true)
+
+    # The status should also be updated on the dashboard page.
+    click_button "Close"
+
+    within("a[data-target-id='#{target_l3.id}']") do
+      expect(page).to have_content("Completed")
+    end
+  end
+
+  scenario "student submits a target in which anonymous option is not enabled" do
+    sign_in_user student.user, referrer: target_path(target_no_anonymous)
+
+    # This target should have a 'Submit Form' section.
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+    expect(page).to have_button("Submit", disabled: true)
+
+    # Page should have no option to submit anonymously
+    expect(page).to_not have_text("Submit anonymously")
+
+    long_answer = Faker::Lorem.sentence
+    replace_markdown long_answer
+    click_button "Submit"
+
+    expect(page).to have_text("Your response has been saved")
+
+    dismiss_notification
+
+    # Student should be looking at their responses now.
+    expect(page).to have_content("Your Responses")
+
+    # Let's check the database to make sure the submission was created with anonymous as false
+    last_submission = TimelineEvent.last
+    expect(last_submission.anonymous).to eq(false)
   end
 
   scenario "student visits the target's link with a mangled ID" do

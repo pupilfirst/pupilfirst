@@ -1254,4 +1254,36 @@ feature "Target Details Editor", js: true do
       end
     end
   end
+
+  scenario "school admin enables discussions on a target" do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to_not have_text("Setup submission anonymity")
+
+    expect(target_1_l2.reload.assignments.first.discussion).to eq(false)
+
+    within("div#discussion") { click_button "Yes" }
+
+    expect(page).to have_text("Setup submission anonymity")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.assignments.first.discussion).to eq(true)
+    expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(false)
+
+    click_button "Student will have an option to enable anonymity"
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(true)
+  end
 end

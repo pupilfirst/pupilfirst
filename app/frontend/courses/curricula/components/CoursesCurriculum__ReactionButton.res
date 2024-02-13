@@ -41,7 +41,9 @@ let make = (~currentUser, ~reactionValue, ~reactionDetails, ~addReactionCB, ~rem
         className="modal absolute z-10 bg-gray-950 text-gray-400 border p-2 mt-9 rounded space-y-1">
         {reactionDetails["userNames"]
         ->Js.Array2.map(userName => {
-          <div className="text-xs whitespace-nowrap font-medium"> {userName->str} </div>
+          <div key={userName} className="text-xs whitespace-nowrap font-medium">
+            {userName->str}
+          </div>
         })
         ->React.array}
       </div>

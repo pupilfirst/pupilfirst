@@ -233,10 +233,15 @@ let submissionsList = (submissions, state, currentUser, callBack) => {
       : {
           Js.Array2.map(submissions, submission =>
             switch (isModerator, Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)) {
-            | (true, _) => <CoursesCurriculum__DiscussSubmission currentUser submission callBack />
+            | (true, _) =>
+              <CoursesCurriculum__DiscussSubmission
+                key={submission->DiscussionSubmission.id} currentUser submission callBack
+              />
             | (false, true) => React.null
             | (false, false) =>
-              <CoursesCurriculum__DiscussSubmission currentUser submission callBack />
+              <CoursesCurriculum__DiscussSubmission
+                key={submission->DiscussionSubmission.id} currentUser submission callBack
+              />
             }
           )
         }->React.array}

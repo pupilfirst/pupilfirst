@@ -80,8 +80,7 @@ let make = (~currentUser, ~comment) => {
           "relative curriculum__submission-comment-hidden rounded-b-xl"
         } else {
           "flex-1"
-        }}
-        key={comment->Comment.id}>
+        }}>
         <div className="flex items-center justify-between">
           <div>
             <div className="flex gap-3">

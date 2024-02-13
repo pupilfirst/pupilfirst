@@ -68,7 +68,6 @@ let make = (~currentUser, ~submission, ~callBack) => {
   let teamStrength = Belt.Array.length(submission->DiscussionSubmission.users)
 
   <div
-    key={submissionId}
     className={"relative curriculum-discuss-submission__container group mt-12 " ++
     pinnedClasses(submission->DiscussionSubmission.pinned) ++ if submissionHidden {
       " curriculum-discuss-submission__hidden"
@@ -142,7 +141,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
         <div className="absolute -translate-x-1/2 left-1/2 z-20 flex justify-end mx-auto bottom-px">
           <p
             className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
-          {t("submission_hidden")->str}
+            {t("submission_hidden")->str}
           </p>
         </div>
       | false => React.null

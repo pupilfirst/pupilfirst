@@ -120,7 +120,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
     ->Belt.Map.String.toArray
     ->Belt.Array.map(((reactionValue, reactionDetails)) => {
       <CoursesCurriculum__ReactionButton
-        currentUser reactionValue reactionDetails addReactionCB removeReactionCB
+        key={reactionValue} currentUser reactionValue reactionDetails addReactionCB removeReactionCB
       />
     })
     ->React.array}

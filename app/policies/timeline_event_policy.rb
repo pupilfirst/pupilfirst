@@ -16,7 +16,7 @@ class TimelineEventPolicy < ApplicationPolicy
 
     return false if record.archived?
 
-    return false if record.evaluation_criteria.blank?
+    # return false if record.evaluation_criteria.blank?
 
     return true if record.students.exists?(user: user)
 

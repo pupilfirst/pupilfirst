@@ -145,6 +145,38 @@ feature "Assignment Discussion", js: true do
         expect(page).to_not have_button("Hide submission")
       end
 
+      context "submission is anonymous" do
+        let!(:another_student_submission) do
+          create(
+            :timeline_event,
+            :with_owners,
+            owners: [another_student],
+            latest: true,
+            target: target,
+            anonymous: true
+          )
+        end
+        scenario "views target complete section" do
+          sign_in_user student.user, referrer: target_path(target)
+          find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+          expect(page).to have_text("Submissions by peers")
+          expect(page).to_not have_text("There are no submissions yet")
+
+          expect(page).to_not have_text(another_student.name)
+          expect(page).to have_text("Anonymous")
+          expect(page).to have_button("Comment")
+          expect(page).to have_button("Add reaction")
+
+          find(
+            "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+          ).hover
+          expect(page).to have_button("Report")
+          expect(page).to_not have_button("Pin")
+          expect(page).to_not have_button("Hide submission")
+        end
+      end
+
       scenario "reports a peer submission" do
         sign_in_user student.user, referrer: target_path(target)
         find(".course-overlay__body-tab-item", text: "Submit Form").click
@@ -406,7 +438,6 @@ feature "Assignment Discussion", js: true do
           click_button "Hide submission"
           expect(page).to_not have_button("Hide submission")
           expect(page).to have_button("Un-hide submission")
-          expect(page).to have_button("Pin", disabled: true)
           expect(page).to have_text(
             "This submission is hidden from discussions"
           )

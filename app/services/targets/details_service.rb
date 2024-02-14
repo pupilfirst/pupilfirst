@@ -194,6 +194,8 @@ module Targets
         .includes(:user, :reactions)
         .not_archived
         .where(timeline_event_id: submissions.pluck(:id))
+        .order(created_at: :desc)
+        .limit(100)
         .map do |comment|
           {
             id: comment.id,

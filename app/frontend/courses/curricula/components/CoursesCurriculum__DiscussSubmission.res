@@ -109,7 +109,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
           {switch submission->DiscussionSubmission.anonymous {
           | true =>
             <span className="font-semibold text-xs leading-tight block md:inline-flex">
-              {t("anonymous")->str}
+              {t("anonymous_name")->str}
             </span>
 
           | false =>

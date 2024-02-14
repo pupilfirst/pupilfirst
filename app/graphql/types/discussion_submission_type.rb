@@ -154,6 +154,8 @@ module Types
                   .submission_comments
                   .not_archived
                   .includes(:user, :reactions, :moderation_reports)
+                  .order(created_at: :desc)
+                  .limit(100)
                   .map do |comment|
                     {
                       id: comment.id,

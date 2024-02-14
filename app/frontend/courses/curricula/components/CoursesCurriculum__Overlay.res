@@ -107,7 +107,7 @@ let loadTargetDetails = (target, send, ()) => {
 
 module DiscussionSubmissionsQuery = %graphql(`
     query DiscussionSubmissionsQuery($targetId: ID!, $after: String) {
-      discussionSubmissions(targetId: $targetId, first: 2, after: $after) {
+      discussionSubmissions(targetId: $targetId, first: 10, after: $after) {
         nodes {
           id,
           targetId,
@@ -226,23 +226,14 @@ let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
   </p>
 
 let submissionsList = (submissions, state, currentUser, callBack) => {
-  let isModerator = currentUser->CurrentUser.isModerator
-  <div>
+  <div className="discussion-submissions__container">
     {ArrayUtils.isEmpty(submissions)
       ? <p> {t("no_peer_submissions")->str} </p>
       : {
           Js.Array2.map(submissions, submission =>
-            switch (isModerator, Belt.Option.isSome(submission->DiscussionSubmission.hiddenAt)) {
-            | (true, _) =>
-              <CoursesCurriculum__DiscussSubmission
-                key={submission->DiscussionSubmission.id} currentUser submission callBack
-              />
-            | (false, true) => React.null
-            | (false, false) =>
-              <CoursesCurriculum__DiscussSubmission
-                key={submission->DiscussionSubmission.id} currentUser submission callBack
-              />
-            }
+            <CoursesCurriculum__DiscussSubmission
+              key={submission->DiscussionSubmission.id} currentUser submission callBack
+            />
           )
         }->React.array}
     {ReactUtils.nullIf(

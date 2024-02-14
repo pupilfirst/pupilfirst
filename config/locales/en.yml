@@ -637,7 +637,7 @@ en:
       delete_confirm: Are you sure you want to delete comment?
       hidden: This comment is hidden from discussions
       hide: Hide
-      unhide: Unhide
+      unhide: Un-hide
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...

@@ -114,8 +114,8 @@ let make = (~currentUser, ~submissionId, ~comments) => {
       </div>
       {submissionComments
       ->Js.Array2.map(comment =>
-        <div id={"comment-" ++ comment->Comment.id} className="submission-comments__comment group">
-          <CoursesCurriculum__SubmissionCommentShow key={comment->Comment.id} currentUser comment />
+        <div key={"comment-" ++ comment->Comment.id} className="submission-comments__comment group">
+          <CoursesCurriculum__SubmissionCommentShow currentUser comment />
         </div>
       )
       ->React.array}

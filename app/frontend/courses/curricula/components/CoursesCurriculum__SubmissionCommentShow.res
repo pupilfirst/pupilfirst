@@ -169,7 +169,7 @@ let make = (~currentUser, ~comment) => {
       }}
     </div>
 
-  <div>
+  <div id={"comment-" ++ comment->Comment.id}>
     {switch showConfirmDelete {
     | false => React.null
     | true =>

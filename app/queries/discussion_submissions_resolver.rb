@@ -16,6 +16,9 @@ class DiscussionSubmissionsResolver < ApplicationQuery
       id: target_id
     )
 
+    #Filter hidden submissions if not moderator
+    submissions = submissions.not_hidden unless moderator?
+
     submissions.order(pinned: :desc)
   end
 
@@ -33,6 +36,12 @@ class DiscussionSubmissionsResolver < ApplicationQuery
 
     # faculty of the course
     current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+  end
+
+  def moderator?
+    current_school_admin.present? ||
+      @course.course_authors.exists?(user: current_user) ||
+      @course.faculty.exists?(user: current_user)
   end
 
   def student

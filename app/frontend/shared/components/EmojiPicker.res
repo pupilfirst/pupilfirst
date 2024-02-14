@@ -68,7 +68,7 @@ let make = (~className, ~title, ~onChange) => {
     )
   })
 
-  <div className="relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
+  <div className="md:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
     <button
       type_="button"
       ariaLabel={title}

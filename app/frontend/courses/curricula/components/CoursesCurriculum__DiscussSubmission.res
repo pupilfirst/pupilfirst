@@ -198,8 +198,8 @@ let make = (~currentUser, ~submission, ~callBack) => {
           forDiscussion=true
         />
       </div>
-      <div className="flex flex-col-reverse md:flex-row gap-4 items-start relative py-4 ps-11">
-        <div className="md:absolute md:left-[9.5rem] z-[11]">
+      <div className="flex flex-col gap-4 items-start relative py-4 ps-11">
+        <div>
           <CoursesCurriculum__Reactions
             currentUser
             reactionableType="TimelineEvent"
@@ -207,7 +207,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
             reactions={submission->DiscussionSubmission.reactions}
           />
         </div>
-        <div className="relative flex-1">
+        <div className="relative w-full">
           <CoursesCurriculum__SubmissionComments
             currentUser submissionId comments={submission->DiscussionSubmission.comments}
           />
@@ -218,7 +218,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
     | true =>
       <div className="absolute -translate-x-1/2 left-1/2 z-[12] flex justify-end mx-auto bottom-px">
         <p
-          className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
+          className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 whitespace-nowrap rounded-t-lg text-xs leading-tight italic text-gray-500">
           {t("submission_hidden")->str}
         </p>
       </div>

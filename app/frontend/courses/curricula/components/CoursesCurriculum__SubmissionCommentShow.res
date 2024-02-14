@@ -161,7 +161,7 @@ let make = (~currentUser, ~comment) => {
         <div
           className="absolute -translate-x-1/2 left-1/2 z-[10] flex justify-end mx-auto bottom-px">
           <p
-            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 rounded-t-lg text-xs leading-tight italic text-gray-500">
+            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 whitespace-nowrap rounded-t-lg text-xs leading-tight italic text-gray-500">
             {tr("hidden")->str}
           </p>
         </div>

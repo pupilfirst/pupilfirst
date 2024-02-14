@@ -7,6 +7,8 @@ open CoursesCurriculum__Types
 
 module TargetStatus = CoursesCurriculum__TargetStatus
 
+@module("../images/no-peer-submissions.svg") external noPeerSubmissionIcon: string = "default"
+
 let str = React.string
 
 let t = I18n.t(~scope="components.CoursesCurriculum__Overlay")
@@ -228,7 +230,10 @@ let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
 let submissionsList = (submissions, state, currentUser, callBack) => {
   <div className="discussion-submissions__container">
     {ArrayUtils.isEmpty(submissions)
-      ? <p> {t("no_peer_submissions")->str} </p>
+      ? <div className="bg-gray-50/50 rounded-lg mt-2 p-4">
+          <img className="w-64 mx-auto" src=noPeerSubmissionIcon />
+          <p className="text-center text-gray-600"> {t("no_peer_submissions")->str} </p>
+        </div>
       : {
           Js.Array2.map(submissions, submission =>
             <CoursesCurriculum__DiscussSubmission
@@ -701,7 +706,9 @@ let completeSection = (
       | false => React.null
       | true =>
         <div>
-          <h4 className="text-base md:text-xl mt-12"> {t("submissions_peers")->str} </h4>
+          <h4 className="text-base md:text-lg font-semibold mt-12">
+            {t("submissions_peers")->str}
+          </h4>
           <div>
             {switch state.peerSubmissions {
             | Unloaded =>

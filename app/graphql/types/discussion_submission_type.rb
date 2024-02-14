@@ -6,13 +6,13 @@ module Types
     field :checklist, GraphQL::Types::JSON, null: false
     field :files, [Types::SubmissionFileType], null: false
     field :user_names, String, null: false
-    field :users, [UserType], null: false
+    field :users, [Types::UserType], null: false
     field :team_name, String, null: true
-    field :comments, [SubmissionCommentType], null: true
-    field :reactions, [ReactionType], null: true
+    field :comments, [Types::SubmissionCommentType], null: true
+    field :reactions, [Types::ReactionType], null: true
     field :anonymous, Boolean, null: false
     field :pinned, Boolean, null: false
-    field :moderation_reports, [ModerationReportType], null: false
+    field :moderation_reports, [Types::ModerationReportType], null: false
     field :hidden_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def files
@@ -105,28 +105,14 @@ module Types
     def reactions
       BatchLoader::GraphQL
         .for(object.id)
-        .batch do |submission_ids, loader|
-          TimelineEvent
-            .includes(:reactions)
-            .where(id: submission_ids)
-            .each do |submission|
-              loader.call(
-                submission.id,
-                submission
-                  .reactions
-                  .includes(:user)
-                  .map do |reaction|
-                    {
-                      id: reaction.id,
-                      user_id: reaction.user_id,
-                      user_name: reaction.user.name,
-                      reactionable_id: reaction.reactionable_id,
-                      reactionable_type: reaction.reactionable_type,
-                      reaction_value: reaction.reaction_value,
-                      updated_at: reaction.updated_at
-                    }
-                  end
-              )
+        .batch(default_value: []) do |submission_ids, loader|
+          Reaction
+            .where(reactionable_type: "TimelineEvent")
+            .where(reactionable_id: submission_ids)
+            .each do |reaction|
+              loader.call(reaction.reactionable_id) do |memo|
+                memo |= [reaction].compact # rubocop:disable Lint/UselessAssignment
+              end
             end
         end
     end
@@ -134,48 +120,16 @@ module Types
     def comments
       BatchLoader::GraphQL
         .for(object.id)
-        .batch do |submission_ids, loader|
-          TimelineEvent
-            .includes(:submission_comments)
-            .where(id: submission_ids)
-            .each do |submission|
-              loader.call(
-                submission.id,
-                submission
-                  .submission_comments
-                  .not_archived
-                  .includes(:user, :reactions, :moderation_reports)
-                  .order(created_at: :desc)
-                  .limit(100)
-                  .map do |comment|
-                    {
-                      id: comment.id,
-                      user_id: comment.user_id,
-                      user: comment.user,
-                      submission_id: comment.timeline_event_id,
-                      comment: comment.comment,
-                      reactions:
-                        comment
-                          .reactions
-                          .includes(:user)
-                          .map do |reaction|
-                            {
-                              id: reaction.id,
-                              user_id: reaction.user_id,
-                              user_name: reaction.user.name,
-                              reactionable_id: reaction.reactionable_id,
-                              reactionable_type: reaction.reactionable_type,
-                              reaction_value: reaction.reaction_value,
-                              updated_at: reaction.updated_at
-                            }
-                          end,
-                      moderation_reports: comment.moderation_reports,
-                      created_at: comment.created_at,
-                      hidden_at: comment.hidden_at,
-                      hidden_by_id: comment.hidden_by_id
-                    }
-                  end
-              )
+        .batch(default_value: []) do |submission_ids, loader|
+          SubmissionComment
+            .not_archived
+            .where(timeline_event_id: submission_ids)
+            .order(created_at: :desc)
+            .limit(100)
+            .each do |comment|
+              loader.call(comment.timeline_event_id) do |memo|
+                memo |= [comment].compact # rubocop:disable Lint/UselessAssignment
+              end
             end
         end
     end

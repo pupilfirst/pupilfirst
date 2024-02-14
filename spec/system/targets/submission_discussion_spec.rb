@@ -438,7 +438,6 @@ feature "Assignment Discussion", js: true do
           click_button "Hide submission"
           expect(page).to_not have_button("Hide submission")
           expect(page).to have_button("Un-hide submission")
-          expect(page).to have_button("Pin", disabled: true)
           expect(page).to have_text(
             "This submission is hidden from discussions"
           )

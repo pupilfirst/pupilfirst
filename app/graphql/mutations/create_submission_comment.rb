@@ -13,20 +13,7 @@ module Mutations
           comment: @params[:comment],
           user_id: current_user.id
         )
-      {
-        comment: {
-          id: comment.id,
-          user_id: comment.user_id,
-          submission_id: comment.timeline_event_id,
-          comment: comment.comment,
-          user: current_user,
-          created_at: comment.created_at,
-          reactions: [],
-          moderation_reports: [],
-          hidden_at: comment.hidden_at,
-          hidden_by_id: comment.hidden_by_id
-        }
-      }
+      { comment: comment }
     end
 
     def query_authorized?

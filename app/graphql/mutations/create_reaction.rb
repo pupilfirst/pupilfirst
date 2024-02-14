@@ -16,16 +16,7 @@ module Mutations
           reactionable_type: @params[:reactionable_type],
           user_id: current_user.id
         )
-      {
-        reaction: {
-          id: reaction.id,
-          user_id: reaction.user_id,
-          reactionable_id: reaction.reactionable_id,
-          reactionable_type: reaction.reactionable_type,
-          reaction_value: reaction.reaction_value,
-          user_name: current_user.name
-        }
-      }
+      { reaction: reaction }
     end
 
     def query_authorized?

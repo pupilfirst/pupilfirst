@@ -132,15 +132,6 @@ module Types
     end
 
     def comments
-      reaction_attributes = [
-        :id,
-        :user_id,
-        :reactionable_id,
-        :reactionable_type,
-        :reaction_value,
-        :updated_at,
-        "users.name"
-      ]
       BatchLoader::GraphQL
         .for(object.id)
         .batch do |submission_ids, loader|
@@ -167,16 +158,15 @@ module Types
                         comment
                           .reactions
                           .includes(:user)
-                          .pluck(*reaction_attributes)
-                          .map do |id, user_id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
+                          .map do |reaction|
                             {
-                              id: id,
-                              user_id: user_id,
-                              reactionable_id: reactionable_id,
-                              reactionable_type: reactionable_type,
-                              reaction_value: reaction_value,
-                              updated_at: updated_at,
-                              user_name: user_name
+                              id: reaction.id,
+                              user_id: reaction.user_id,
+                              user_name: reaction.user.name,
+                              reactionable_id: reaction.reactionable_id,
+                              reactionable_type: reaction.reactionable_type,
+                              reaction_value: reaction.reaction_value,
+                              updated_at: reaction.updated_at
                             }
                           end,
                       moderation_reports: comment.moderation_reports,

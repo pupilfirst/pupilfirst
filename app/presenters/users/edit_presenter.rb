@@ -12,7 +12,7 @@ module Users
         preferred_name: current_user.preferred_name || "",
         about: current_user.about || "",
         locale: current_user.locale,
-        available_locales: Rails.application.credentials.locale[:available],
+        available_locales: ENV.fetch('I18N_AVAILABLE_LOCALES', 'en,ru,ar,zh-cn').split(','),
         has_current_password: current_user.encrypted_password.present?,
         avatar_url:
           if current_user.avatar.attached?

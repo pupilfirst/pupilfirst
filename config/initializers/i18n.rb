@@ -6,5 +6,5 @@ module I18nJS
   end
 end
 
-I18n.available_locales = Rails.application.credentials.locale[:available]
-I18n.default_locale = Rails.application.credentials.locale[:default]
+I18n.available_locales = ENV.fetch('I18N_AVAILABLE_LOCALES', 'en,ru,ar,zh-cn').split(',')
+I18n.default_locale = ENV.fetch('I18N_DEFAULT_LOCALE', 'en')

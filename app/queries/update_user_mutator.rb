@@ -7,7 +7,7 @@ class UpdateUserMutator < ApplicationQuery
            validates: {
              presence: true,
              inclusion: {
-               in: Rails.application.credentials.locale[:available]
+               in: ENV.fetch('I18N_AVAILABLE_LOCALES', 'en,ru,ar,zh-cn').split(',')
              }
            }
 

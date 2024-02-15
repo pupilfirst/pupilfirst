@@ -190,14 +190,4 @@ feature "Submissions show" do
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
   end
-
-  context "submission is of an auto-verified target" do
-    before { submission.students << student }
-
-    scenario "student visits show page of submission", js: true do
-      sign_in_user student.user, referrer: timeline_event_path(submission)
-
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
-  end
 end

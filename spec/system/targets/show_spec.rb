@@ -409,7 +409,7 @@ feature "Target Overlay", js: true do
 
     long_answer = Faker::Lorem.sentence
     replace_markdown long_answer
-    check("anonymous")
+    find("span", text: "Submit anonymously").click
     click_button "Submit"
 
     expect(page).to have_text("Your response has been saved")

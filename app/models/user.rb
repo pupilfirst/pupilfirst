@@ -52,7 +52,7 @@ class User < ApplicationRecord
   has_many :user_standings, dependent: :destroy
 
   has_many :submission_comments, dependent: :destroy
-  has_many :submission_moderations, dependent: :destroy
+  has_many :moderation_reports, dependent: :destroy
   has_many :reactions, dependent: :destroy
 
   # database_authenticable is required by devise_for to generate the session routes

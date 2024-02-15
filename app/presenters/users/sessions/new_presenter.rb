@@ -18,13 +18,13 @@ module Users
       end
 
       def oauth_host
-        @oauth_host ||= Rails.application.secrets.sso_domain
+        @oauth_host ||= Rails.application.credentials.sso_domain
       end
 
       def providers
         default_providers = %i[google facebook github]
 
-        if Rails.application.secrets.sso[:discord][:key].present?
+        if Rails.application.credentials.sso[:discord][:key].present?
           default_providers = default_providers + [:discord]
         end
 

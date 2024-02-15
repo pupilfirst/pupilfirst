@@ -7,7 +7,7 @@ class UpdateUserMutator < ApplicationQuery
            validates: {
              presence: true,
              inclusion: {
-               in: Rails.application.secrets.locale[:available]
+               in: Rails.application.credentials.locale[:available]
              }
            }
 

@@ -12,7 +12,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <%= ::NewRelic::Agent.browser_timing_header(content_security_policy_nonce) if Rails.env.production? && Rails.application.secrets.new_relic_license_key.present? %>
+    <%= ::NewRelic::Agent.browser_timing_header(content_security_policy_nonce) if Rails.env.production? && Rails.application.credentials.new_relic_license_key.present? %>
     <link rel="manifest" href="/manifest.json" />
     <% if content_for?(:viewport) %>
       <%= yield :viewport %>
@@ -30,7 +30,7 @@
       environment: "<%= Rails.env %>",
       defaultLocale: "<%= I18n.default_locale %>",
       locale: "<%= I18n.locale %>",
-      maxUploadFileSize: <%= Rails.application.secrets.max_upload_file_size %>,
+      maxUploadFileSize: <%= Rails.application.credentials.max_upload_file_size %>,
       rollbar: {
       accessToken: "<%= ENV['ROLLBAR_CLIENT_TOKEN'] %>",
       captureUncaught: "<%= ENV['ROLLBAR_CAPTURE_UNCAUGHT'] %>",

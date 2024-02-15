@@ -6,5 +6,5 @@ module I18nJS
   end
 end
 
-I18n.available_locales = Rails.application.secrets.locale[:available]
-I18n.default_locale = Rails.application.secrets.locale[:default]
+I18n.available_locales = Rails.application.credentials.locale[:available]
+I18n.default_locale = Rails.application.credentials.locale[:default]

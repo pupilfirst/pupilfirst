@@ -43,7 +43,7 @@ module Users
     end
 
     def applicable_schools
-      if Rails.application.secrets.delete_inactive_users_after.positive?
+      if Rails.application.credentials.delete_inactive_users_after.positive?
         School.all
       else
         School.where('configuration ? :key', key: 'delete_inactive_users_after')
@@ -84,7 +84,7 @@ module Users
 
     def deletion_period(school)
       Schools::Configuration.new(school).delete_inactive_users_after.presence ||
-        Rails.application.secrets.delete_inactive_users_after
+        Rails.application.credentials.delete_inactive_users_after
     end
   end
 end

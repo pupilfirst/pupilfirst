@@ -917,12 +917,13 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
           </span>
           {t("allow_anonymous.title") |> str}
         </label>
+        <p className="ml-6 text-sm text-gray-700">{t("allow_anonymous.sub_title") |> str}</p>
         <div id="allowAnonymous" className="flex mt-4 ms-6">
           <button
             onClick={updateAllowAnonymous(true, send)}
             className={"me-4 " ++ anonymityClasses(state.allowAnonymous)}>
             <span className="me-4">
-              <Icon className="if i-users-check-light text-3xl" />
+              <Icon className="if i-anonymous-light text-3xl" />
             </span>
             <span className="text-sm"> {t("allow_anonymous.anonymous_text") |> str} </span>
           </button>
@@ -930,7 +931,7 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
             onClick={updateAllowAnonymous(false, send)}
             className={anonymityClasses(!state.allowAnonymous)}>
             <span className="me-4">
-              <Icon className="if i-user-check-light text-2xl" />
+              <Icon className="if i-non-anonymous-light text-3xl" />
             </span>
             <span className="text-sm"> {t("allow_anonymous.no_anonymous") |> str} </span>
           </button>

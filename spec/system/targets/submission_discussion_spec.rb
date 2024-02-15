@@ -212,7 +212,12 @@ feature "Assignment Discussion", js: true do
 
         expect(page).to have_text("Submissions by peers")
 
-        click_button "Add reaction"
+        within(
+          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+        ) do
+          expect(page).to have_text(another_student.name)
+          click_button "Add reaction"
+        end
 
         find("div[data-t='emoji-picker']").hover
         within("div[data-t='emoji-picker']") do
@@ -223,13 +228,19 @@ feature "Assignment Discussion", js: true do
 
         within(
           "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ) { expect(page).to have_button("😀") }
+        ) do
+          expect(page).to have_text(another_student.name)
+          expect(page).to have_button("😀")
+        end
 
         page.refresh
         find(".course-overlay__body-tab-item", text: "Submit Form").click
         within(
           "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ) { expect(page).to have_button("😀") }
+        ) do
+          expect(page).to have_text(another_student.name)
+          expect(page).to have_button("😀")
+        end
       end
 
       context "with an existing reaction" do

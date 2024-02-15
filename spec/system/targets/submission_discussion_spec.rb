@@ -206,8 +206,30 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_text("Reported")
       end
 
-      scenario "adds and removes a new reaction" do
-        #TODO - figure out how to click on emoji picker
+      scenario "adds a new reaction" do
+        sign_in_user student.user, referrer: target_path(target)
+        find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+        expect(page).to have_text("Submissions by peers")
+
+        click_button "Add reaction"
+
+        find("div[data-t='emoji-picker']").hover
+        within("div[data-t='emoji-picker']") do
+          #TODO - change this to a specific emoji click
+          expect(page).to have_text("Smileys & People")
+          click
+        end
+
+        within(
+          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+        ) { expect(page).to have_button("😀") }
+
+        page.refresh
+        find(".course-overlay__body-tab-item", text: "Submit Form").click
+        within(
+          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+        ) { expect(page).to have_button("😀") }
       end
 
       context "with an existing reaction" do
@@ -325,9 +347,16 @@ feature "Assignment Discussion", js: true do
           expect(page).to have_text("Great work")
 
           click_button "Add reaction"
-          expect(page).to have_text("Smileys & People")
-          #TODO - figure out how to click on emoji picker
         end
+
+        find("div[data-t='emoji-picker']").hover
+        within("div[data-t='emoji-picker']") do
+          #TODO - change this to a specific emoji click
+          expect(page).to have_text("Smileys & People")
+          click
+        end
+
+        within(".submissionComments") { expect(page).to have_button("😀") }
       end
 
       context "with another student comment" do

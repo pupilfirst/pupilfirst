@@ -8,5 +8,7 @@ let make = (~className) => {
     None
   }, [className])
 
-  <i className />
+  <span key=className>
+    <i className />
+  </span>
 }

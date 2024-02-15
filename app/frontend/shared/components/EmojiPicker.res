@@ -77,15 +77,17 @@ let make = (~className, ~title, ~onChange) => {
       className={className}>
       <Icon className="if i-emoji-add-regular" />
     </button>
-    <div className={"transition " ++ emojiDivClassName(isOpen)}>
-      <Picker
-        title
-        data
-        onEmojiSelect={event => {
-          onChange(event)
-          setIsOpen(_ => false)
-        }}
-      />
-    </div>
+    <Spread props={"data-t": "emoji-picker"}>
+      <div className={"transition " ++ emojiDivClassName(isOpen)}>
+        <Picker
+          title
+          data
+          onEmojiSelect={event => {
+            onChange(event)
+            setIsOpen(_ => false)
+          }}
+        />
+      </div>
+    </Spread>
   </div>
 }

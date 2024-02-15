@@ -1,3 +1,6 @@
+// Assets
+import "~/schools/shared/shared.css";
+
 // Layout-specific JavaScript
 import "~/packs/StudentTopNavPack.bs.js";
 

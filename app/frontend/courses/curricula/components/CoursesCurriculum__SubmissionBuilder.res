@@ -185,16 +185,16 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
         {switch targetDetails->TargetDetails.allowAnonymous {
         | false => React.null
         | true =>
-          <div className="mt-4 flex justify-start">
+          <div className="mt-4 flex">
             <input
               onChange={_event => send(ToggleAnonymous)}
               checked=state.anonymous
-              className="checkbox-input"
+              className="hidden checkbox-input"
               id="anonymous"
               type_="checkbox"
             />
-            <label className="checkbox-label flex gap-2 " htmlFor="anonymous">
-              <span className="flex-shrink-0 mt-1">
+            <label className="checkbox-label flex items-center" htmlFor="anonymous">
+              <span className="flex-shrink-0">
                 <svg width="12px" height="10px" viewBox="0 0 12 10">
                   <polyline points="1.5 6 4.5 9 10.5 1" />
                 </svg>

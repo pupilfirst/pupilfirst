@@ -74,7 +74,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
     <div className="flex items-center justify-between mx-auto">
       <div id={"show_comments-" ++ submissionId}>
         <button
-          className="border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition"
+          className="flex items-center border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 transition"
           onClick={toggleComments(setShowComments)}>
           <Icon className="if i-comment-alt-light if-fw" />
           <span className="ps-1"> {tr("comment")->str} </span>

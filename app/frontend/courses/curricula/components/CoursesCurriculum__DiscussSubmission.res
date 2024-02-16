@@ -71,7 +71,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
     id={"discuss_submission-" ++ submissionId}
     className={"relative curriculum-discuss-submission__container mt-12 " ++
     pinnedClasses(submission->DiscussionSubmission.pinned) ++ if submissionHidden {
-      " curriculum-discuss-submission__hidden"
+      " curriculum-discuss-submission__hidden h-48 overflow-hidden"
     } else {
       ""
     }}
@@ -79,7 +79,13 @@ let make = (~currentUser, ~submission, ~callBack) => {
     {switch submission->DiscussionSubmission.pinned {
     | true =>
       <p
-        className="absolute bg-green-100 inline-flex items-center text-green-800 text-xs border border-green-300 px-1.5 py-0.5 leading-tight rounded-md -top-3">
+        className={"absolute bg-green-100 inline-flex items-center text-green-800 text-xs border border-green-300 px-1.5 py-0.5 leading-tight rounded-md -top-3 " ++ if (
+          submissionHidden
+        ) {
+          " hidden"
+        } else {
+          ""
+        }}>
         <Icon className="if i-pin-angle-light if-fw" />
         <span className="ps-1.5"> {t("pinned_submission")->str} </span>
       </p>

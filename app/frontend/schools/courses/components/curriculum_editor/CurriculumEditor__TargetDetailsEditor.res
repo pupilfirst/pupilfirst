@@ -892,8 +892,11 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>
-        {t("assignment_discussion.title") |> str}
+        {t("assignment_discussion.label") |> str}
       </label>
+      <HelpIcon link={t("assignment_discussion.help_url")} className="me-6">
+        {t("assignment_discussion.help") |> str}
+      </HelpIcon>
       <div id="discussion" className="flex toggle-button__group shrink-0 rounded-lg">
         <button
           onClick={updateDiscussion(true, send)} className={booleanButtonClasses(state.discussion)}>

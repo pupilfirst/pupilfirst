@@ -28,6 +28,12 @@ This is a part of what _teachers_ do - get to know your student, what they need,
 
 We can, and will continue to [build features to make the review process easier](/users/reviewing_submissions#review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
 
+#### Submissions by peers
+
+If the target has discussion enabled ( [see curriculum editor documentation](/users/curriculum_editor#enable-discussion) ) then you will see a section _Submissions by peers_ here which will display the submissions by all other students in the course. You can comment, and react to each submission and engage in meaningful discussion. You can also report a submission or comment that you believe does not follow the Code of Conduct (see [here](/users/crafting_code_of_conduct)) community behavior described by your school. This will help coaches moderate the discussions and maintain a healthy environment. Read more about moderation [here](/users/moderating_discussions).
+
+![Discussion on a student submission](../assets/taking_courses/discussion-student-submission.png)
+
 ## Participating in the Community
 
 When a community is linked to one or more courses, students in those courses can post questions in the community. In addition to this, if a community has the _Discuss Targets_ option is enabled, then students will see the _Discuss_ tab when they open targets. The tab shows questions other students have asked about the target in the past.

@@ -168,6 +168,14 @@ For those assignments where you expect students to work together and submit as a
 **Do you have any completion instructions for the student?**<br/>
 Text entered here will be displayed right next to where the students take action on a target. This will be at the top of the page that displays the quiz, or the submission form.
 
+#### Enable discussion
+
+If you want to enable students to see and discuss on submissions of other students - pick _Yes_ to the question _Do you want to enable discussion on this assignment?_. If not then pick _No_. See more about discussions feature [here](/users/taking_courses#submissions-by-peers).
+
+##### Setup submission anonymity
+
+If you picked _Yes_ to whether to enable discussions on student submissions, then you can choose whether to allow students to submit anonymously or not. If anonymous submission is allowed students can choose to submit assignments anonymously and their names won't be visible to other students in the discussion section.
+
 #### Defining steps to complete an assignment
 
 For assignments that require students to submit work for review, you can define the steps that a student needs to take to submit their work.

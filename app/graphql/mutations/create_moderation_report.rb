@@ -27,15 +27,7 @@ module Mutations
         submission
       ).deliver_later
 
-      {
-        moderation_report: {
-          id: moderation_report.id,
-          reportable_id: moderation_report.reportable_id,
-          reportable_type: moderation_report.reportable_type,
-          reason: moderation_report.reason,
-          user_id: current_user.id
-        }
-      }
+      { moderation_report: moderation_report }
     end
 
     def query_authorized?

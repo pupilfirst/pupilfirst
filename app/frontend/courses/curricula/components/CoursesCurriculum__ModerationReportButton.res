@@ -109,7 +109,7 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
             </button>
             <button
               onClick={updateShowReport(setShowReport, false)}
-              className="mt-3 inline-flex w-full justify-center rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focusColor-500">
+              className="mt-3 inline-flex w-full justify-center rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500">
               {tr("cancel")->str}
             </button>
           </div>
@@ -128,7 +128,7 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
       <button
         onClick={updateShowReport(setShowReport, true)}
         disabled={reported}
-        className="curriculum-moderation__report-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+        className="curriculum-moderation__report-button md:hidden md:group-hover:flex md:group-focus-within:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500 transition">
         <span className="flex items-center md:space-x-1">
           <Icon className="if i-flag-light if-fw" />
           <span className="hidden md:inline-block text-xs"> {tr("report")->str} </span>

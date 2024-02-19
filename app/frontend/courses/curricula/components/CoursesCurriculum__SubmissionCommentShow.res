@@ -64,7 +64,10 @@ let make = (~currentUser, ~comment) => {
   let userName = comment->Comment.user->User.name
 
   let commentDisplay =
-    <div className="relative mt-4" ariaLabel={"comment-" ++ comment->Comment.id}>
+    <div
+      className="relative mt-4 group curriculum-submission__comment focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500"
+      tabIndex=0
+      ariaLabel={"comment-" ++ comment->Comment.id}>
       <div
         className={if commentHidden {
           "relative curriculum__submission-comment-hidden rounded-b-xl"
@@ -103,7 +106,7 @@ let make = (~currentUser, ~comment) => {
               <div className="relative z-[11]">
                 <button
                   onClick={hideComment(comment->Comment.id, !commentHidden, setCommentHidden)}
-                  className="md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap"
+                  className="md:hidden md:group-hover:flex md:group-focus-within:flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-600 transition"
                   title={commentHidden ? "Unhide Comment" : "Hide Comment"}>
                   {switch commentHidden {
                   | true =>
@@ -131,10 +134,10 @@ let make = (~currentUser, ~comment) => {
                 />
               </div>
             | true =>
-              <div className="md:hidden md:group-hover:flex relative z-[11]">
+              <div className="relative z-[11]">
                 <button
                   onClick={updateShowConfirmDelete(setShowConfirmDelete, true)}
-                  className="flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                  className="md:hidden md:group-hover:flex md:group-focus-within:flex md:space-x-1 items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-600 transition">
                   <Icon className="if i-trash-light if-fw" />
                   <span className="hidden md:inline-block text-xs"> {tr("delete")->str} </span>
                 </button>

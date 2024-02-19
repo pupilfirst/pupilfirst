@@ -219,11 +219,10 @@ feature "Assignment Discussion", js: true do
           click_button "Add reaction"
         end
 
-        find("div[data-t='emoji-picker']").hover
-        within("div[data-t='emoji-picker']") do
-          #TODO - change this to a specific emoji click
+        shadow_root = find("em-emoji-picker").shadow_root
+        within(shadow_root) do
           expect(page).to have_text("Smileys & People")
-          click
+          find("button", text: "😀", match: :first).click
         end
 
         within(
@@ -360,11 +359,10 @@ feature "Assignment Discussion", js: true do
           click_button "Add reaction"
         end
 
-        find("div[data-t='emoji-picker']").hover
-        within("div[data-t='emoji-picker']") do
-          #TODO - change this to a specific emoji click
+        shadow_root = find("em-emoji-picker").shadow_root
+        within(shadow_root) do
           expect(page).to have_text("Smileys & People")
-          click
+          find("button", text: "😀", match: :first).click
         end
 
         within(".submissionComments") { expect(page).to have_button("😀") }

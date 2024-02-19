@@ -24,9 +24,8 @@ let hideComment = (submissionCommentId, hide, setCommentHidden, event) => {
   ReactEvent.Mouse.preventDefault(event)
   HideSubmissionCommentMutation.make({submissionCommentId, hide})
   |> Js.Promise.then_(response => {
-    switch response["hideSubmissionComment"]["success"] {
-    | true => setCommentHidden(_ => hide)
-    | false => ()
+    if response["hideSubmissionComment"]["success"] {
+      setCommentHidden(_ => hide)
     }
     Js.Promise.resolve()
   })
@@ -38,9 +37,8 @@ let archiveComment = (submissionCommentId, setCommentArchived, setShowConfirmDel
   setShowConfirmDelete(_ => false)
   ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
   |> Js.Promise.then_(response => {
-    switch response["archiveSubmissionComment"]["success"] {
-    | true => setCommentArchived(_ => true)
-    | false => ()
+    if response["archiveSubmissionComment"]["success"] {
+      setCommentArchived(_ => true)
     }
     Js.Promise.resolve()
   })

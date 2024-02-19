@@ -39,9 +39,7 @@ class DiscussionSubmissionsResolver < ApplicationQuery
   end
 
   def moderator?
-    current_school_admin.present? ||
-      @course.course_authors.exists?(user: current_user) ||
-      @course.faculty.exists?(user: current_user)
+    current_school_admin.present? || @course.faculty.exists?(user: current_user)
   end
 
   def student

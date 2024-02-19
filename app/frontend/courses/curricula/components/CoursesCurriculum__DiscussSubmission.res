@@ -21,15 +21,14 @@ module HideSubmissionMutation = %graphql(`
    }
    `)
 
-let pinSubmission = (submission, callBack, event) => {
+let pinSubmission = (submission, callback, event) => {
   ReactEvent.Mouse.preventDefault(event)
   let pin = !(submission->DiscussionSubmission.pinned)
   let submissionId = submission->DiscussionSubmission.id
   PinSubmissionMutation.make({pin, submissionId})
   |> Js.Promise.then_(response => {
-    switch response["pinSubmission"]["success"] {
-    | true => callBack(submission->DiscussionSubmission.targetId)
-    | false => ()
+    if response["pinSubmission"]["success"] {
+      callback(submission->DiscussionSubmission.targetId)
     }
     Js.Promise.resolve()
   })
@@ -42,9 +41,8 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
   let submissionId = submission->DiscussionSubmission.id
   HideSubmissionMutation.make({submissionId, hide})
   |> Js.Promise.then_(response => {
-    switch response["hideSubmission"]["success"] {
-    | true => setSubmissionHidden(_ => hide)
-    | false => ()
+    if response["hideSubmission"]["success"] {
+      setSubmissionHidden(_ => hide)
     }
     Js.Promise.resolve()
   })

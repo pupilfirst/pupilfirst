@@ -16,7 +16,7 @@ All the content in a course is visible to students, but whether they can attempt
 
 Levels can contain optional targets and milestones. Furthermore, targets can have dependencies on each other in the form of prerequisites, which allows further customization of the order in which students attempt targets. As an author, the structure of your content depends upon the nature of the topic you're aiming to teach.
 
-### Completing targets
+## Completing targets
 
 Students progress in a course by completing milestone targets. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
 
@@ -28,9 +28,11 @@ This is a part of what _teachers_ do - get to know your student, what they need,
 
 We can, and will continue to [build features to make the review process easier](/users/reviewing_submissions#review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
 
-#### Submissions by peers
+## Learning from peers
 
-If the target has discussion enabled ( [see curriculum editor documentation](/users/curriculum_editor#enable-discussion) ) then you will see a section _Submissions by peers_ here which will display the submissions by all other students in the course. You can comment, and react to each submission and engage in meaningful discussion. You can also report a submission or comment that you believe does not follow the Code of Conduct (see [here](/users/crafting_code_of_conduct)) community behavior described by your school. This will help coaches moderate the discussions and maintain a healthy environment. Read more about moderation [here](/users/moderating_discussions).
+If the assignment has [_Discussion_ enabled](/users/curriculum_editor#enable-discussion), then students will see a section titled _Submissions by peers_ in the same page where they author their own submissions. This section will display submissions by all other students in the course. Students can comment, and react to each submission and engage in meaningful discussion.
+
+Students can also report a submissions or comments that they believe does not follow [the Code of Conduct](/users/crafting_code_of_conduct) of the school. This will help coaches and school administrators [moderate public discussion](/users/moderating_discussions) and maintain a healthy learning environment.
 
 ![Discussion on a student submission](../assets/taking_courses/discussion-student-submission.png)
 

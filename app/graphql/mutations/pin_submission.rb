@@ -17,10 +17,7 @@ module Mutations
       return false if current_user.blank?
 
       # school admin or course author
-      if current_school_admin.present? ||
-           current_user.course_authors.where(course: course).present?
-        return true
-      end
+      return true if current_school_admin.present?
 
       # faculty of the course
       current_user.faculty&.cohorts&.exists?(id: student.cohort_id)

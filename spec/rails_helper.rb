@@ -27,7 +27,7 @@ WebMock.disable_net_connect!(
 
 # Let's spec emails.
 require "capybara/email/rspec"
-# Add support for shadowdom
+# Add support for Shadow DOM.
 require "capybara/shadowdom"
 
 # Let's spec policies.

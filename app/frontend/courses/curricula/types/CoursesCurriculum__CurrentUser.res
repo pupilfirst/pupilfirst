@@ -14,7 +14,7 @@ let isAdmin = t => t.isAdmin
 let isAuthor = t => t.isAuthor
 let isCoach = t => t.isCoach
 
-let isModerator = t => t.isAdmin || t.isAuthor || t.isCoach
+let isModerator = t => t.isAdmin || t.isCoach
 
 let decode = json => {
   open Json.Decode

@@ -44,7 +44,7 @@ let reducer = (state, action) =>
       ...state,
       targetRead,
     }
-  | PerformQuickNavigation => {targetDetails: None, tab: Learn, targetRead: false}
+  | PerformQuickNavigation => {...state, targetDetails: None, tab: Learn}
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -66,6 +66,11 @@ let loadTargetDetails = (target, send, ()) => {
     |> then_(json => send(SetTargetDetails(json |> TargetDetails.decode)) |> resolve)
   } |> ignore
 
+  None
+}
+
+let loadTargetRead = (targetRead, send, ()) => {
+  send(SetTargetRead(targetRead))
   None
 }
 
@@ -645,9 +650,10 @@ let make = (
   ~preview,
   ~author,
 ) => {
-  let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
+  let (state, send) = React.useReducer(reducer, initialState)
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
+  React.useEffect1(loadTargetRead(targetRead, send), [targetRead])
 
   React.useEffect(() => {
     ScrollLock.activate()

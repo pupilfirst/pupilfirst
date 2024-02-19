@@ -218,7 +218,7 @@ feature "Target Overlay", js: true do
 
     click_link target_l2.title
 
-    #should say marked read
+    #Closing overlay and reopening also maintains read status
     expect(page).to have_text("Marked read")
   end
 
@@ -227,6 +227,13 @@ feature "Target Overlay", js: true do
 
     expect(page).to have_button("Mark as read")
     click_button "Mark as read"
+
+    expect(page).to_not have_button("Mark as read")
+    expect(page).to have_text("Marked read")
+
+    # navigating using next and previous button maintains read status
+    click_link "Next Target"
+    click_link "Previous Target"
 
     expect(page).to_not have_button("Mark as read")
     expect(page).to have_text("Marked read")

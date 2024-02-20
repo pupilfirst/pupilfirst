@@ -65,7 +65,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
   <div
     id={"discuss_submission-" ++ submissionId}
     tabIndex=0
-    className={"relative curriculum-discuss-submission__container mt-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500 " ++
+    className={"relative curriculum-discuss-submission__container focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500 " ++
     pinnedClasses(submission->DiscussionSubmission.pinned) ++ if submissionHidden {
       " curriculum-discuss-submission__hidden max-h-48 overflow-y-hidden"
     } else {

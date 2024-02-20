@@ -298,7 +298,7 @@ let make = (
   let (showSubmissionForm, setShowSubmissionForm) = React.useState(() => false)
   let completionType = targetDetails->TargetDetails.computeCompletionType
 
-  <div>
+  <div className="max-w-3xl mx-auto">
     <div className="flex justify-between items-end border-b pb-2">
       <h4 className="text-base md:text-xl">
         {switch completionType {

@@ -657,6 +657,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["archived_at"], name: "index_submission_comments_on_archived_at"
+    t.index ["hidden_at"], name: "index_submission_comments_on_hidden_at"
     t.index ["hidden_by_id"], name: "index_submission_comments_on_hidden_by_id"
     t.index ["timeline_event_id"], name: "index_submission_comments_on_timeline_event_id"
     t.index ["user_id"], name: "index_submission_comments_on_user_id"
@@ -842,6 +844,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_085642) do
     t.datetime "hidden_at"
     t.bigint "hidden_by_id"
     t.index ["evaluator_id"], name: "index_timeline_events_on_evaluator_id"
+    t.index ["hidden_at"], name: "index_timeline_events_on_hidden_at"
     t.index ["hidden_by_id"], name: "index_timeline_events_on_hidden_by_id"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
     t.index ["target_id"], name: "index_timeline_events_on_target_id"

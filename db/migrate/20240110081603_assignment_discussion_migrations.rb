@@ -6,6 +6,7 @@ class AssignmentDiscussionMigrations < ActiveRecord::Migration[7.0]
     add_column :timeline_events, :anonymous, :boolean, default: false
     add_column :timeline_events, :pinned, :boolean, default: false
     add_column :timeline_events, :hidden_at, :datetime
+    add_index :timeline_events, :hidden_at
     add_reference :timeline_events,
                   :hidden_by,
                   foreign_key: {
@@ -17,8 +18,8 @@ class AssignmentDiscussionMigrations < ActiveRecord::Migration[7.0]
       t.references :user, null: false, foreign_key: true
       t.references :timeline_event, null: false, foreign_key: true
       t.references :hidden_by, foreign_key: { to_table: :users }
-      t.datetime :hidden_at
-      t.datetime :archived_at
+      t.datetime :hidden_at, index: true
+      t.datetime :archived_at, index: true
 
       t.timestamps
     end

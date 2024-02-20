@@ -8,6 +8,8 @@ open CoursesCurriculum__Types
 module TargetStatus = CoursesCurriculum__TargetStatus
 
 @module("../images/no-peer-submissions.svg") external noPeerSubmissionIcon: string = "default"
+@module("../images/assignment-discussion-icon.svg")
+external assignmentDiscussionIcon: string = "default"
 
 let str = React.string
 
@@ -631,77 +633,92 @@ let completeSection = (
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
   let targetId = target->Target.id
 
-  <div className="max-w-3xl mx-auto">
+  <div>
     <div className={completeSectionClasses(state.tab, completionType)}>
       {targetDetails->TargetDetails.discussion
-        ? <p> {"Discussion enabled assignment"->str} </p>
+        ? <div
+            className="bg-primary-100 max-w-3xl mx-auto rounded-lg px-4 md:px-6 py-4 flex flex-col-reverse sm:flex-row items-start md:items-center justify-between">
+            <div className="sm:me-12 mt-2 sm:mt-0">
+              <h3 className="leading-tight font-semibold">
+                {"Discussion enabled assignment."->str}
+              </h3>
+              <p className="text-sm text-gray-600 pt-1">
+                {"Join the discussion with your peers on this assignment. Your submissions are visible to others, and you can also comment and react with emojis to your fellow students' submissions."->str}
+              </p>
+            </div>
+            <div className="shrink-0 w-16 sm:w-32 me-4 sm:me-0">
+              <img className="object-contain mx-auto" src=assignmentDiscussionIcon />
+            </div>
+          </div>
         : React.null}
-      {switch (targetStatus |> TargetStatus.status, completionType) {
-      | (Pending, Evaluated) =>
-        [
-          <CoursesCurriculum__CompletionInstructions
-            key="completion-instructions" targetDetails title="Instructions"
-          />,
-          <CoursesCurriculum__SubmissionBuilder
-            key="courses-curriculum-submission-form"
-            target
-            targetDetails
-            checklist={targetDetails |> TargetDetails.checklist}
-            addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-            preview
-          />,
-        ] |> React.array
-      | (Pending, TakeQuiz) =>
-        [
-          <CoursesCurriculum__CompletionInstructions
-            key="completion-instructions" targetDetails title="Instructions"
-          />,
-          <CoursesCurriculum__Quiz
-            key="courses-curriculum-quiz"
-            target
-            targetDetails
-            addSubmissionCB=addVerifiedSubmissionCB
-            preview
-          />,
-        ] |> React.array
+      <div className="max-w-3xl mx-auto">
+        {switch (targetStatus |> TargetStatus.status, completionType) {
+        | (Pending, Evaluated) =>
+          [
+            <CoursesCurriculum__CompletionInstructions
+              key="completion-instructions" targetDetails title="Instructions"
+            />,
+            <CoursesCurriculum__SubmissionBuilder
+              key="courses-curriculum-submission-form"
+              target
+              targetDetails
+              checklist={targetDetails |> TargetDetails.checklist}
+              addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+              preview
+            />,
+          ] |> React.array
+        | (Pending, TakeQuiz) =>
+          [
+            <CoursesCurriculum__CompletionInstructions
+              key="completion-instructions" targetDetails title="Instructions"
+            />,
+            <CoursesCurriculum__Quiz
+              key="courses-curriculum-quiz"
+              target
+              targetDetails
+              addSubmissionCB=addVerifiedSubmissionCB
+              preview
+            />,
+          ] |> React.array
 
-      | (Pending, SubmitForm) =>
-        [
-          <CoursesCurriculum__CompletionInstructions
-            key="completion-instructions" targetDetails title="Instructions"
-          />,
-          <CoursesCurriculum__SubmissionBuilder
-            key="courses-curriculum-submission-form"
-            target
-            targetDetails
-            checklist={targetDetails |> TargetDetails.checklist}
-            addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-            preview
-          />,
-        ] |> React.array
+        | (Pending, SubmitForm) =>
+          [
+            <CoursesCurriculum__CompletionInstructions
+              key="completion-instructions" targetDetails title="Instructions"
+            />,
+            <CoursesCurriculum__SubmissionBuilder
+              key="courses-curriculum-submission-form"
+              target
+              targetDetails
+              checklist={targetDetails |> TargetDetails.checklist}
+              addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+              preview
+            />,
+          ] |> React.array
 
-      | (
-          PendingReview
-          | Completed
-          | Rejected
-          | Locked(CourseLocked | AccessLocked),
-          Evaluated | TakeQuiz | SubmitForm,
-        ) =>
-        <CoursesCurriculum__SubmissionsAndFeedback
-          currentUser
-          targetDetails
-          target
-          evaluationCriteria
-          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-          targetStatus
-          coaches
-          users
-          preview
-          checklist={targetDetails |> TargetDetails.checklist}
-        />
-      | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
-      | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
-      }}
+        | (
+            PendingReview
+            | Completed
+            | Rejected
+            | Locked(CourseLocked | AccessLocked),
+            Evaluated | TakeQuiz | SubmitForm,
+          ) =>
+          <CoursesCurriculum__SubmissionsAndFeedback
+            currentUser
+            targetDetails
+            target
+            evaluationCriteria
+            addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+            targetStatus
+            coaches
+            users
+            preview
+            checklist={targetDetails |> TargetDetails.checklist}
+          />
+        | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
+        | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
+        }}
+      </div>
       {targetDetails->TargetDetails.discussion
         ? <div className="border-t mt-12">
             <div className="max-w-3xl mx-auto">

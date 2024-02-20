@@ -888,7 +888,7 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
     | SubmitForm => formEditor(state, send)
     }}
     <div className="flex items-center mb-6">
-      <label className="block tracking-wide text-sm font-semibold me-6" htmlFor="discussion">
+      <label className="block tracking-wide text-sm font-semibold me-1.5" htmlFor="discussion">
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>

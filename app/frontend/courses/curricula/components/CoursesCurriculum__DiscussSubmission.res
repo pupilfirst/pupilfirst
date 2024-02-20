@@ -64,9 +64,10 @@ let make = (~currentUser, ~submission, ~callBack) => {
 
   <div
     id={"discuss_submission-" ++ submissionId}
-    className={"relative curriculum-discuss-submission__container mt-12 " ++
+    tabIndex=0
+    className={"relative curriculum-discuss-submission__container mt-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500 " ++
     pinnedClasses(submission->DiscussionSubmission.pinned) ++ if submissionHidden {
-      " curriculum-discuss-submission__hidden h-48 overflow-hidden"
+      " curriculum-discuss-submission__hidden max-h-48 overflow-y-hidden"
     } else {
       ""
     }}
@@ -136,7 +137,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
           ? <div className="flex space-x-2 relative z-[12]">
               <button
                 onClick={pinSubmission(submission, callBack)}
-                className="curriculum-discuss-submission__pin-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                className="curriculum-discuss-submission__pin-button md:hidden md:group-hover:flex md:group-focus-within:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-600 transition">
                 {submission->DiscussionSubmission.pinned
                   ? <span className="flex items-center md:space-x-1">
                       <Icon className="if i-pin-angle-light if-fw" />
@@ -149,7 +150,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
               </button>
               <button
                 onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
-                className="curriculum-discuss-submission__hide-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                className="curriculum-discuss-submission__hide-button md:hidden md:group-hover:flex md:group-focus-within:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-600 transition">
                 {submissionHidden
                   ? <span className="flex items-center md:space-x-1">
                       <Icon className="if i-eye-closed-light if-fw" />

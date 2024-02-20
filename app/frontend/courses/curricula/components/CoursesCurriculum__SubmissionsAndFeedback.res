@@ -243,7 +243,15 @@ let submissions = (
                 reaction->Reaction.reactionableId == submission->Submission.id
               )
 
-            <div className="flex flex-col-reverse gap-4 items-start relative p-4">
+            <div className="flex flex-col gap-4 items-start relative p-4">
+              <div>
+                <CoursesCurriculum__Reactions
+                  currentUser
+                  reactionableType="TimelineEvent"
+                  reactionableId={submission->Submission.id}
+                  reactions
+                />
+              </div>
               <div
                 className="curriculum-submission-comments__container relative flex w-full flex-col-reverse md:flex-row justify-end">
                 {switch submission->Submission.hiddenAt {
@@ -259,14 +267,6 @@ let submissions = (
                 }}
                 <CoursesCurriculum__SubmissionComments
                   currentUser submissionId={submission->Submission.id} comments
-                />
-              </div>
-              <div>
-                <CoursesCurriculum__Reactions
-                  currentUser
-                  reactionableType="TimelineEvent"
-                  reactionableId={submission->Submission.id}
-                  reactions
                 />
               </div>
             </div>

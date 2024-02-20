@@ -1,14 +1,24 @@
 .curriculum-discuss-submission__container:hover .curriculum-discuss-submission__pin-button {
   @apply flex;
 }
+.curriculum-discuss-submission__container:focus-within .curriculum-discuss-submission__pin-button {
+  @apply flex;
+}
 .curriculum-discuss-submission__container:hover .curriculum-discuss-submission__hide-button {
   @apply flex;
 }
-
+.curriculum-discuss-submission__container:focus-within .curriculum-discuss-submission__hide-button {
+  @apply flex;
+}
 .curriculum-discuss-submission__container:hover .curriculum-moderation__report-button:not(.submission-comments__comment .curriculum-moderation__report-button) {
   @apply flex;
 }
-
+.curriculum-discuss-submission__container:focus-within .curriculum-moderation__report-button:not(.submission-comments__comment .curriculum-moderation__report-button) {
+  @apply flex;
+}
+.curriculum-submission__comment:focus-within .curriculum-moderation__report-button {
+  @apply flex;
+}
 .curriculum-discuss-submission__hidden::before {
   content: '';
   @apply absolute inset-0 bg-gradient-to-b from-transparent via-white/75 to-white rounded-b-xl;

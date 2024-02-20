@@ -111,7 +111,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
   }
 
   let aggregatedReactions = groupByReaction(reactions)
-  let buttonClasses = "relative z-[9] px-1 md:px-2 py-0.5 md:pt-1 md:pb-0.5 flex items-center justify-center bg-white border border-gray-300 rounded-full text-gray-600 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
+  let buttonClasses = "relative z-[9] px-1 md:px-2 py-0.5 md:pt-1 md:pb-0.5 flex items-center justify-center bg-white border border-gray-300 rounded-full text-gray-600 hover:text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-500 transition "
 
   <div className="flex md:flex-row flex-wrap gap-1.5">
     {aggregatedReactions

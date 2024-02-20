@@ -634,7 +634,7 @@ en:
       close: Close
       delete: Delete
       delete_comment: Delete Comment
-      delete_confirm: Are you sure you want to delete comment?
+      delete_confirm: Are you sure you want to delete this comment?
       hidden: This comment is hidden from discussions
       hide: Hide
       unhide: Un-hide
@@ -1049,14 +1049,14 @@ en:
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
       assignment_discussion:
-        help: Enabling discussions allow students to see and engage in discussions of other student submissions
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
         label: Do you want to enable discussion on this assignment?
       allow_anonymous:
         title: Setup submission anonymity
-        sub_title: Select whether or not a student can choose to submit assignment anonymously
-        anonymous_text: Student will have an option to enable anonymity
-        no_anonymous: Students won't be able to submit anonymously
+        sub_title: Select whether or not students can choose to submit assignment anonymously
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: Choose a target group
       completion_instructions:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.

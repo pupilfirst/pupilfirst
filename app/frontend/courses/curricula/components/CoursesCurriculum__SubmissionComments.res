@@ -100,48 +100,50 @@ let make = (~currentUser, ~submissionId, ~comments) => {
         </div>
       </div>
     }}
-    <div hidden={!showComments} className="submissionComments mt-4 space-y-8" key={submissionId}>
-      <div className="submission-comments__comment">
-        <div className="flex gap-2 relative">
-          <div
-            className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8 ">
+    <Spread props={"data-submission-id": submissionId}>
+      <div hidden={!showComments} className="submissionComments mt-4 space-y-8" key={submissionId}>
+        <div className="submission-comments__comment">
+          <div className="flex gap-2 relative">
             <div
-              className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
+              className="submission-comments__line flex justify-end align-start absolute h-full -left-8 -ml-[0.5px] bottom-1 w-8 ">
+              <div
+                className="h-6 border-b cursor-pointer w-7 border-l border-gray-300 rounded-bl-3xl"
+              />
+            </div>
+            <div
+              className="w-8 h-8 shrink-0 border bg-gray-200 rounded-full flex items-center justify-center">
+              {currentUser->CurrentUser.avatar}
+            </div>
+            <input
+              id={"add_comment-" ++ submissionId}
+              className="appearance-none block text-sm w-full bg-white leading-tight border border-gray-300 rounded px-3 py-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              type_="text"
+              value=newComment
+              maxLength=255
+              autoFocus={true}
+              placeholder={tr("write_comment")}
+              onChange=handleInputChange
+            />
+            <button
+              disabled={newComment == ""}
+              className="btn btn-primary text-sm"
+              onClick={handleCreateSubmissionComment}>
+              {tr("comment_button")->str}
+            </button>
+          </div>
+        </div>
+        {submissionComments
+        ->Js.Array2.map(comment =>
+          <div key={"comment-" ++ comment->Comment.id} className="submission-comments__comment">
+            <CoursesCurriculum__SubmissionCommentShow
+              currentUser
+              comment
+              archiveCommentCB={archiveCommentCB(setSubmissionComments, submissionComments)}
             />
           </div>
-          <div
-            className="w-8 h-8 shrink-0 border bg-gray-200 rounded-full flex items-center justify-center">
-            {currentUser->CurrentUser.avatar}
-          </div>
-          <input
-            id={"add_comment-" ++ submissionId}
-            className="appearance-none block text-sm w-full bg-white leading-tight border border-gray-300 rounded px-3 py-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
-            type_="text"
-            value=newComment
-            maxLength=255
-            autoFocus={true}
-            placeholder={tr("write_comment")}
-            onChange=handleInputChange
-          />
-          <button
-            disabled={newComment == ""}
-            className="btn btn-primary text-sm"
-            onClick={handleCreateSubmissionComment}>
-            {tr("comment_button")->str}
-          </button>
-        </div>
+        )
+        ->React.array}
       </div>
-      {submissionComments
-      ->Js.Array2.map(comment =>
-        <div key={"comment-" ++ comment->Comment.id} className="submission-comments__comment">
-          <CoursesCurriculum__SubmissionCommentShow
-            currentUser
-            comment
-            archiveCommentCB={archiveCommentCB(setSubmissionComments, submissionComments)}
-          />
-        </div>
-      )
-      ->React.array}
-    </div>
+    </Spread>
   </div>
 }

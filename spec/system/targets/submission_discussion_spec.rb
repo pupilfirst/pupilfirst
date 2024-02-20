@@ -76,8 +76,6 @@ feature "Assignment Discussion", js: true do
 
           expect(page).to have_text("Your Responses")
           expect(page).to_not have_text("Submissions by peers")
-          expect(page).to_not have_button("Comment")
-          expect(page).to_not have_button("Add reaction")
         end
       end
     end
@@ -100,7 +98,7 @@ feature "Assignment Discussion", js: true do
 
         expect(page).to have_text("Your Responses")
         expect(page).to have_text("Submissions by peers")
-        expect(page).to have_button("Comment")
+        expect(page).to have_button("Comment", disabled: true)
         expect(page).to have_button("Add reaction")
 
         expect(page).to_not have_button("Report")
@@ -134,7 +132,7 @@ feature "Assignment Discussion", js: true do
         expect(page).to_not have_text("There are no submissions yet")
 
         expect(page).to have_text(another_student.name)
-        expect(page).to have_button("Comment")
+        expect(page).to have_button("Comment", disabled: true)
         expect(page).to have_button("Add reaction")
 
         find(
@@ -165,7 +163,7 @@ feature "Assignment Discussion", js: true do
 
           expect(page).to_not have_text(another_student.name)
           expect(page).to have_text("Anonymous")
-          expect(page).to have_button("Comment")
+          expect(page).to have_button("Comment", disabled: true)
           expect(page).to have_button("Add reaction")
 
           find(
@@ -281,9 +279,7 @@ feature "Assignment Discussion", js: true do
 
         expect(page).to have_text("Submissions by peers")
 
-        find("div#show_comments-#{another_student_submission.id} button").click
-
-        within(".submissionComments") do
+        within("div[data-submission-id='#{another_student_submission.id}']") do
           expect(page).to have_button("Comment", disabled: true)
           fill_in "add_comment-#{another_student_submission.id}",
                   with: "Great work"
@@ -300,7 +296,7 @@ feature "Assignment Discussion", js: true do
         comment_id = comment.id
 
         find("div#show_comments-#{another_student_submission.id} button").click
-        within(".submissionComments") do
+        within("div[data-submission-id='#{another_student_submission.id}']") do
           expect(page).to have_text(student.name)
           expect(page).to have_text("Great work")
           find("div[aria-label='comment-#{comment_id}']").hover
@@ -320,18 +316,18 @@ feature "Assignment Discussion", js: true do
           end
         end
 
-        within(".submissionComments") do
+        within("div[data-submission-id='#{another_student_submission.id}']") do
           expect(page).to_not have_text(student.name)
           expect(page).to_not have_text("Great work")
         end
 
         page.refresh
         find(".course-overlay__body-tab-item", text: "Submit Form").click
-        find("div#show_comments-#{another_student_submission.id} button").click
 
-        within(".submissionComments") do
+        within("div[data-submission-id='#{another_student_submission.id}']") do
           expect(page).to_not have_text(student.name)
           expect(page).to_not have_text("Great work")
+          expect(page).to have_button("Comment", disabled: true)
         end
 
         expect(student.user.submission_comments.first.archived_at).not_to eq(
@@ -345,9 +341,7 @@ feature "Assignment Discussion", js: true do
 
         expect(page).to have_text("Submissions by peers")
 
-        find("div#show_comments-#{another_student_submission.id} button").click
-
-        within(".submissionComments") do
+        within("div[data-submission-id='#{another_student_submission.id}']") do
           expect(page).to have_button("Comment", disabled: true)
           fill_in "add_comment-#{another_student_submission.id}",
                   with: "Great work"
@@ -442,7 +436,7 @@ feature "Assignment Discussion", js: true do
 
         within("div#discuss_submission-#{student_submission.id}") do
           expect(page).to have_text(student.name)
-          expect(page).to have_button("Comment")
+          expect(page).to have_button("Comment", disabled: true)
           expect(page).to have_button("Add reaction")
         end
 
@@ -458,7 +452,7 @@ feature "Assignment Discussion", js: true do
 
         within("div#discuss_submission-#{another_student_submission.id}") do
           expect(page).to have_text(another_student.name)
-          expect(page).to have_button("Comment")
+          expect(page).to have_button("Comment", disabled: true)
           expect(page).to have_button("Add reaction")
         end
       end
@@ -620,7 +614,9 @@ feature "Assignment Discussion", js: true do
             "div#show_comments-#{another_student_submission.id} button"
           ).click
 
-          within(".submissionComments") do
+          within(
+            "div[data-submission-id='#{another_student_submission.id}']"
+          ) do
             expect(page).to have_text(student.name)
             expect(page).to have_text(student_comment.comment)
 
@@ -637,7 +633,9 @@ feature "Assignment Discussion", js: true do
             "div#show_comments-#{another_student_submission.id} button"
           ).click
 
-          within(".submissionComments") do
+          within(
+            "div[data-submission-id='#{another_student_submission.id}']"
+          ) do
             expect(page).to have_text(student.name)
             expect(page).to have_text(student_comment.comment)
 

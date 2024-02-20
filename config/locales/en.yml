@@ -627,6 +627,7 @@ en:
       submit: Submit
       submitting: Submitting
       submit_anonymous_label: Submit anonymously
+      submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
     CoursesCurriculum__SubmissionComments:
       comment_button: Comment
       comment_text: comment

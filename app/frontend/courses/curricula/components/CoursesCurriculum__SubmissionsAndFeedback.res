@@ -120,8 +120,8 @@ let submissions = (
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
       <div className="rounded-lg bg-gray-50 border border-gray-200">
-        <div className="flex justify-between items-end">
-          <h2 className="font-semibold text-sm lg:text-base leading-tight">
+        <div className="bg-gray-100 rounded-t-lg flex justify-between items-end p-4">
+          <h2 className="font-medium text-sm lg:text-base leading-tight">
             {switch completionType {
             | SubmitForm =>
               str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
@@ -131,7 +131,7 @@ let submissions = (
               str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)
             }}
           </h2>
-          <div className="text-xs font-semibold inline-block px-3 py-1 text-gray-800 leading-tight">
+          <div className="text-xs font-mdium inline-block px-3 py-1 text-gray-800 leading-tight">
             <span className="hidden md:inline"> {str(tr("submitted_on"))} </span>
             {submission |> Submission.createdAtPretty |> str}
           </div>

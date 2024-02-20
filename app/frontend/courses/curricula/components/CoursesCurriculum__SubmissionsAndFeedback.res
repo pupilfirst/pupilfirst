@@ -299,7 +299,7 @@ let make = (
   let completionType = targetDetails->TargetDetails.computeCompletionType
 
   <div className="max-w-3xl mx-auto">
-    <div className="flex justify-between items-end border-b pb-2">
+    <div className="flex justify-between items-end border-b pb-2 mt-4">
       <h4 className="text-base md:text-xl">
         {switch completionType {
         | SubmitForm => tr("your_responses")->str

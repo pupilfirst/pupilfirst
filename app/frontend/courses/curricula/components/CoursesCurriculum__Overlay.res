@@ -631,7 +631,7 @@ let completeSection = (
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
   let targetId = target->Target.id
 
-  <div>
+  <div className="max-w-3xl mx-auto">
     <div className={completeSectionClasses(state.tab, completionType)}>
       {targetDetails->TargetDetails.discussion
         ? <p> {"Discussion enabled assignment"->str} </p>

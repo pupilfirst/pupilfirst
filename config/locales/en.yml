@@ -1055,12 +1055,12 @@ en:
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
       assignment_discussion:
-        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
         label: Do you want to enable discussion on this assignment?
       allow_anonymous:
         title: Setup submission anonymity
-        subtitle: Select whether or not students can choose to submit assignment anonymously
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
         anonymous_text: Students will have an option to share their submission anonymously
         no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: Choose a target group

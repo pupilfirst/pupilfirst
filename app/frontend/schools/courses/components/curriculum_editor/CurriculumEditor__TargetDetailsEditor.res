@@ -916,9 +916,9 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
             <span className="me-2">
               <i className="fas fa-list rtl:rotate-180 text-base" />
             </span>
-            {t("allow_anonymous.title") |> str}
+            {t("allow_anonymous.title")->str}
           </label>
-          <p className="ml-6 text-sm text-gray-700"> {t("allow_anonymous.subtitle") |> str} </p>
+          <HelpIcon className="ms-1"> {t("allow_anonymous.subtitle")->str} </HelpIcon>
           <div id="allowAnonymous" className="flex mt-4 ms-6">
             <button
               onClick={updateAllowAnonymous(true, send)}

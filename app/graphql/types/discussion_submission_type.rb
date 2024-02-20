@@ -122,10 +122,9 @@ module Types
         .for(object.id)
         .batch(default_value: []) do |submission_ids, loader|
           comments =
-            SubmissionComment.not_archived.where(
-              timeline_event_id: submission_ids
-            )
-          # if moderator share all comments, else share all current user comments plus non hidden comments from other users
+            SubmissionComment.not_archived.where(submission_id: submission_ids)
+
+          # If moderator, share all comments, else share all current user's comments plus non-hidden comments from other users.
           unless context[:moderator]
             comments =
               comments
@@ -138,7 +137,7 @@ module Types
             .order(created_at: :desc)
             .limit(100)
             .each do |comment|
-              loader.call(comment.timeline_event_id) do |memo|
+              loader.call(comment.submission_id) do |memo|
                 memo |= [comment].compact # rubocop:disable Lint/UselessAssignment
               end
             end

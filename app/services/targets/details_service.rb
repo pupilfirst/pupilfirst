@@ -193,7 +193,7 @@ module Targets
       SubmissionComment
         .includes(:user, :reactions)
         .not_archived
-        .where(timeline_event_id: submissions.pluck(:id))
+        .where(submission_id: submissions.pluck(:id))
         .order(created_at: :desc)
         .limit(100)
         .map do |comment|
@@ -201,7 +201,7 @@ module Targets
             id: comment.id,
             user_id: comment.user_id,
             user: user_details(comment.user),
-            submission_id: comment.timeline_event_id,
+            submission_id: comment.submission_id,
             comment: comment.comment,
             reactions:
               comment

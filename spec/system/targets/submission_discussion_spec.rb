@@ -366,7 +366,7 @@ feature "Assignment Discussion", js: true do
         let!(:another_student_comment) do
           create(
             :submission_comment,
-            timeline_event: another_student_submission,
+            submission: another_student_submission,
             user: another_student.user
           )
         end
@@ -537,14 +537,15 @@ feature "Assignment Discussion", js: true do
         let!(:student_comment) do
           create(
             :submission_comment,
-            timeline_event: another_student_submission,
+            submission: another_student_submission,
             user: student.user
           )
         end
+
         let!(:another_student_comment) do
           create(
             :submission_comment,
-            timeline_event: another_student_submission,
+            submission: another_student_submission,
             user: another_student.user
           )
         end

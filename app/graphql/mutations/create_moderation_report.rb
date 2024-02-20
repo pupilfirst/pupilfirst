@@ -59,7 +59,7 @@ module Mutations
       if @params[:reportable_type] == "TimelineEvent"
         @submission ||= TimelineEvent.find_by(id: @params[:reportable_id])
       else
-        @submission ||= submission_comment.timeline_event
+        @submission ||= submission_comment.submission
       end
     end
 

@@ -49,9 +49,7 @@ module Mutations
         @submission ||= TimelineEvent.find_by(id: @params[:reactionable_id])
       else
         @submission ||=
-          SubmissionComment.find_by(
-            id: @params[:reactionable_id]
-          ).timeline_event
+          SubmissionComment.find_by(id: @params[:reactionable_id]).submission
       end
     end
 

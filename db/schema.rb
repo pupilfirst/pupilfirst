@@ -651,7 +651,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_20_114713) do
   create_table "submission_comments", force: :cascade do |t|
     t.text "comment"
     t.bigint "user_id", null: false
-    t.bigint "timeline_event_id", null: false
+    t.bigint "submission_id", null: false
     t.bigint "hidden_by_id"
     t.datetime "hidden_at"
     t.datetime "archived_at"
@@ -660,7 +660,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_20_114713) do
     t.index ["archived_at"], name: "index_submission_comments_on_archived_at"
     t.index ["hidden_at"], name: "index_submission_comments_on_hidden_at"
     t.index ["hidden_by_id"], name: "index_submission_comments_on_hidden_by_id"
-    t.index ["timeline_event_id"], name: "index_submission_comments_on_timeline_event_id"
+    t.index ["submission_id"], name: "index_submission_comments_on_submission_id"
     t.index ["user_id"], name: "index_submission_comments_on_user_id"
   end
 
@@ -1029,7 +1029,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_20_114713) do
   add_foreign_key "students", "cohorts"
   add_foreign_key "students", "teams"
   add_foreign_key "students", "users"
-  add_foreign_key "submission_comments", "timeline_events"
+  add_foreign_key "submission_comments", "timeline_events", column: "submission_id"
   add_foreign_key "submission_comments", "users"
   add_foreign_key "submission_comments", "users", column: "hidden_by_id"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"

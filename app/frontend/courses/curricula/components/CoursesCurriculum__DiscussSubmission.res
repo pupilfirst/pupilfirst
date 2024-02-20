@@ -50,10 +50,7 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
 }
 
 let pinnedClasses = pinned => {
-  switch pinned {
-  | true => "bg-white px-4 md:px-6 pt-6 pb-2 rounded-lg shadow-xl border border-gray-200/75"
-  | false => "py-4"
-  }
+  pinned ? "bg-white px-4 md:px-6 pt-6 pb-2 rounded-lg shadow-xl border border-gray-200/75" : "py-4"
 }
 
 @react.component
@@ -74,30 +71,27 @@ let make = (~currentUser, ~submission, ~callBack) => {
       ""
     }}
     ariaLabel={"discuss_submission-" ++ submissionId}>
-    {switch submission->DiscussionSubmission.pinned {
-    | true =>
-      <p
-        className={"absolute bg-green-100 inline-flex items-center text-green-800 text-xs border border-green-300 px-1.5 py-0.5 leading-tight rounded-md -top-3 " ++ if (
-          submissionHidden
-        ) {
-          " hidden"
-        } else {
-          ""
-        }}>
-        <Icon className="if i-pin-angle-light if-fw" />
-        <span className="ps-1.5"> {t("pinned_submission")->str} </span>
-      </p>
-    | false => React.null
-    }}
+    {submission->DiscussionSubmission.pinned
+      ? <p
+          className={"absolute bg-green-100 inline-flex items-center text-green-800 text-xs border border-green-300 px-1.5 py-0.5 leading-tight rounded-md -top-3 " ++ if (
+            submissionHidden
+          ) {
+            " hidden"
+          } else {
+            ""
+          }}>
+          <Icon className="if i-pin-angle-light if-fw" />
+          <span className="ps-1.5"> {t("pinned_submission")->str} </span>
+        </p>
+      : React.null}
     <div className="flex items-start justify-between">
       <div className="flex gap-3">
         <div className="isolate flex -space-x-2 overflow-hidden">
           <div
             className="w-8 h-8 relative z-10 uppercase text-xs font-semibold border bg-gray-200 rounded-full flex items-center justify-center">
-            {switch submission->DiscussionSubmission.anonymous {
-            | true => <span className="font-semibold"> {t("anonymous_avatar")->str} </span>
-            | false => submission->DiscussionSubmission.firstUser->User.avatar
-            }}
+            {submission->DiscussionSubmission.anonymous
+              ? <span className="font-semibold"> {t("anonymous_avatar")->str} </span>
+              : submission->DiscussionSubmission.firstUser->User.avatar}
             <span className="font-semibold" />
           </div>
           {switch teamStrength {
@@ -110,25 +104,21 @@ let make = (~currentUser, ~submission, ~callBack) => {
           }}
         </div>
         <div className="flex flex-col flex-wrap">
-          {switch submission->DiscussionSubmission.anonymous {
-          | true =>
-            <span className="font-semibold text-xs leading-tight block md:inline-flex">
-              {t("anonymous_name")->str}
-            </span>
-
-          | false =>
-            switch DiscussionSubmission.teamName(submission) {
-            | Some(name) =>
-              <span className="font-semibold text-xs leading-tight block md:inline-flex">
-                <span className="text-gray-500"> {str(t("submitted_by_team"))} </span>
-                <span className="ms-1"> {str(name)} </span>
+          {submission->DiscussionSubmission.anonymous
+            ? <span className="font-semibold text-xs leading-tight block md:inline-flex">
+                {t("anonymous_name")->str}
               </span>
-            | None =>
-              <span className="font-semibold text-xs leading-tight block md:inline-flex">
-                {DiscussionSubmission.userNames(submission)->str}
-              </span>
-            }
-          }}
+            : switch DiscussionSubmission.teamName(submission) {
+              | Some(name) =>
+                <span className="font-semibold text-xs leading-tight block md:inline-flex">
+                  <span className="text-gray-500"> {str(t("submitted_by_team"))} </span>
+                  <span className="ms-1"> {str(name)} </span>
+                </span>
+              | None =>
+                <span className="font-semibold text-xs leading-tight block md:inline-flex">
+                  {DiscussionSubmission.userNames(submission)->str}
+                </span>
+              }}
           <span
             className="text-xs text-gray-600 leading-tight pt-1"
             title={DiscussionSubmission.createdAtPretty(submission)}>
@@ -142,44 +132,36 @@ let make = (~currentUser, ~submission, ~callBack) => {
         </div>
       </div>
       <div className="flex space-x-2 relative">
-        {switch currentUser->CurrentUser.isModerator {
-        | false => React.null
-        | true =>
-          <div className="flex space-x-2 relative z-[12]">
-            <button
-              onClick={pinSubmission(submission, callBack)}
-              className="curriculum-discuss-submission__pin-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
-              {switch submission->DiscussionSubmission.pinned {
-              | true =>
-                <span className="flex items-center md:space-x-1">
-                  <Icon className="if i-pin-angle-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {t("unpin")->str} </span>
-                </span>
-              | false =>
-                <span className="flex items-center md:space-x-1">
-                  <Icon className="if i-pin-angle-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {t("pin")->str} </span>
-                </span>
-              }}
-            </button>
-            <button
-              onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
-              className="curriculum-discuss-submission__hide-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
-              {switch submissionHidden {
-              | true =>
-                <span className="flex items-center md:space-x-1">
-                  <Icon className="if i-eye-closed-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {t("unhide")->str} </span>
-                </span>
-              | false =>
-                <span className="flex items-center md:space-x-1">
-                  <Icon className="if i-eye-light if-fw" />
-                  <span className="hidden md:inline-block text-xs"> {t("hide")->str} </span>
-                </span>
-              }}
-            </button>
-          </div>
-        }}
+        {currentUser->CurrentUser.isModerator
+          ? <div className="flex space-x-2 relative z-[12]">
+              <button
+                onClick={pinSubmission(submission, callBack)}
+                className="curriculum-discuss-submission__pin-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                {submission->DiscussionSubmission.pinned
+                  ? <span className="flex items-center md:space-x-1">
+                      <Icon className="if i-pin-angle-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {t("unpin")->str} </span>
+                    </span>
+                  : <span className="flex items-center md:space-x-1">
+                      <Icon className="if i-pin-angle-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {t("pin")->str} </span>
+                    </span>}
+              </button>
+              <button
+                onClick={hideSubmission(submission, !submissionHidden, setSubmissionHidden)}
+                className="curriculum-discuss-submission__hide-button md:hidden md:group-hover:flex items-center justify-center cursor-pointer p-1 text-sm border rounded-md text-gray-700 bg-gray-100 hover:text-gray-800 hover:bg-gray-50 focus:outline-none focus:text-gray-800 focus:bg-gray-50 whitespace-nowrap">
+                {submissionHidden
+                  ? <span className="flex items-center md:space-x-1">
+                      <Icon className="if i-eye-closed-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {t("unhide")->str} </span>
+                    </span>
+                  : <span className="flex items-center md:space-x-1">
+                      <Icon className="if i-eye-light if-fw" />
+                      <span className="hidden md:inline-block text-xs"> {t("hide")->str} </span>
+                    </span>}
+              </button>
+            </div>
+          : React.null}
         <div className="relative z-[13]">
           <CoursesCurriculum__ModerationReportButton
             currentUser
@@ -217,15 +199,14 @@ let make = (~currentUser, ~submission, ~callBack) => {
         </div>
       </div>
     </div>
-    {switch submissionHidden {
-    | true =>
-      <div className="absolute -translate-x-1/2 left-1/2 z-[12] flex justify-end mx-auto bottom-px">
-        <p
-          className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 whitespace-nowrap rounded-t-lg text-xs leading-tight italic text-gray-500">
-          {t("submission_hidden")->str}
-        </p>
-      </div>
-    | false => React.null
-    }}
+    {submissionHidden
+      ? <div
+          className="absolute -translate-x-1/2 left-1/2 z-[12] flex justify-end mx-auto bottom-px">
+          <p
+            className="px-2 py-1 bg-white/20 border border-gray-300 border-b-0 whitespace-nowrap rounded-t-lg text-xs leading-tight italic text-gray-500">
+            {t("submission_hidden")->str}
+          </p>
+        </div>
+      : React.null}
   </div>
 }

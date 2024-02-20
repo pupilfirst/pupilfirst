@@ -566,37 +566,34 @@ let learnSection = (
   <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails author courseId targetId />
     <div className="flex flex-wrap gap-4 mt-4">
-      {switch state.targetRead {
-      | true =>
-        <div
-          className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
-          <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="w-5 h-5 text-gray-500"
-              viewBox="0 0 16 16">
-              <path
-                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
-              />
-              <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
-            </svg>
-          </span>
-          <span> {str(t("marked_read"))} </span>
-        </div>
-      | false =>
-        <button
-          onClick={_ => {
-            addPageRead(targetId, markReadCB)
-            send(SetTargetRead(true))
-          }}
-          className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-          <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
-          <span> {str(t("mark_as_read"))} </span>
-        </button>
-      }}
+      {state.targetRead
+        ? <div
+            className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
+            <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="w-5 h-5 text-gray-500"
+                viewBox="0 0 16 16">
+                <path
+                  d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                />
+                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+              </svg>
+            </span>
+            <span> {str(t("marked_read"))} </span>
+          </div>
+        : <button
+            onClick={_ => {
+              addPageRead(targetId, markReadCB)
+              send(SetTargetRead(true))
+            }}
+            className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+            <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
+            <span> {str(t("mark_as_read"))} </span>
+          </button>}
       {linkToTab}
     </div>
   </div>
@@ -702,66 +699,66 @@ let completeSection = (
       | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
       | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
       }}
-      {switch targetDetails.discussion {
-      | false => React.null
-      | true =>
-        <div>
-          <h4 className="text-base md:text-lg font-semibold mt-12">
-            {t("submissions_peers")->str}
-          </h4>
-          <div>
+      {targetDetails.discussion
+        ? <div>
+            <h4 className="text-base md:text-lg font-semibold mt-12">
+              {t("submissions_peers")->str}
+            </h4>
+            <div>
+              {switch state.peerSubmissions {
+              | Unloaded =>
+                <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
+              | PartiallyLoaded(submissions, cursor) =>
+                <div>
+                  {submissionsList(
+                    submissions,
+                    state,
+                    currentUser,
+                    getDiscussionSubmissions(send, None),
+                  )}
+                  {switch state.loading {
+                  | LoadingMore =>
+                    <div>
+                      {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())}
+                    </div>
+                  | Reloading(times) =>
+                    ReactUtils.nullUnless(
+                      <div className="pb-6">
+                        <button
+                          className="btn btn-primary-ghost cursor-pointer w-full"
+                          onClick={_ => {
+                            send(BeginLoadingMore)
+                            getDiscussionSubmissions(send, Some(cursor), targetId)
+                          }}>
+                          {t("button_load_more")->str}
+                        </button>
+                      </div>,
+                      ArrayUtils.isEmpty(times),
+                    )
+                  }}
+                </div>
+              | FullyLoaded(submissions) =>
+                <div>
+                  {submissionsList(
+                    submissions,
+                    state,
+                    currentUser,
+                    getDiscussionSubmissions(send, None),
+                  )}
+                </div>
+              }}
+            </div>
             {switch state.peerSubmissions {
-            | Unloaded =>
-              <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-            | PartiallyLoaded(submissions, cursor) =>
-              <div>
-                {submissionsList(
-                  submissions,
-                  state,
-                  currentUser,
-                  getDiscussionSubmissions(send, None),
-                )}
-                {switch state.loading {
-                | LoadingMore =>
-                  <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
-                | Reloading(times) =>
-                  ReactUtils.nullUnless(
-                    <div className="pb-6">
-                      <button
-                        className="btn btn-primary-ghost cursor-pointer w-full"
-                        onClick={_ => {
-                          send(BeginLoadingMore)
-                          getDiscussionSubmissions(send, Some(cursor), targetId)
-                        }}>
-                        {t("button_load_more")->str}
-                      </button>
-                    </div>,
-                    ArrayUtils.isEmpty(times),
-                  )
-                }}
-              </div>
-            | FullyLoaded(submissions) =>
-              <div>
-                {submissionsList(
-                  submissions,
-                  state,
-                  currentUser,
-                  getDiscussionSubmissions(send, None),
-                )}
-              </div>
+            | Unloaded => React.null
+            | _ =>
+              let loading = switch state.loading {
+              | Reloading(times) => ArrayUtils.isNotEmpty(times)
+              | LoadingMore => false
+              }
+              <LoadingSpinner loading />
             }}
           </div>
-          {switch state.peerSubmissions {
-          | Unloaded => React.null
-          | _ =>
-            let loading = switch state.loading {
-            | Reloading(times) => ArrayUtils.isNotEmpty(times)
-            | LoadingMore => false
-            }
-            <LoadingSpinner loading />
-          }}
-        </div>
-      }}
+        : React.null}
     </div>
   </div>
 }

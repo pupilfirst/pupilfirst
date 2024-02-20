@@ -34,7 +34,7 @@ If the assignment has [_Discussion_ enabled](/users/curriculum_editor#enable-dis
 
 Students can also report a submissions or comments that they believe does not follow [the Code of Conduct](/users/crafting_code_of_conduct) of the school. This will help coaches and school administrators [moderate public discussion](/users/moderating_discussions) and maintain a healthy learning environment.
 
-![Discussion on a student submission](../assets/taking_courses/discussion-student-submission.png)
+![Discussion on a student submission](../assets/taking_courses/discussion_student_submission.png)
 
 ## Participating in the Community
 

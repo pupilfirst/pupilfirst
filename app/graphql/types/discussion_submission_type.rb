@@ -121,9 +121,20 @@ module Types
       BatchLoader::GraphQL
         .for(object.id)
         .batch(default_value: []) do |submission_ids, loader|
-          SubmissionComment
-            .not_archived
-            .where(timeline_event_id: submission_ids)
+          comments =
+            SubmissionComment.not_archived.where(
+              timeline_event_id: submission_ids
+            )
+          # if moderator share all comments, else share all current user comments plus non hidden comments from other users
+          unless context[:moderator]
+            comments =
+              comments
+                .where(hidden_at: nil)
+                .where.not(user: context[:current_user])
+                .or(comments.where(user: context[:current_user]))
+          end
+
+          comments
             .order(created_at: :desc)
             .limit(100)
             .each do |comment|

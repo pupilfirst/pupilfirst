@@ -32,13 +32,13 @@ let hideComment = (submissionCommentId, hide, setCommentHidden, event) => {
   |> ignore
 }
 
-let archiveComment = (submissionCommentId, setCommentArchived, setShowConfirmDelete, event) => {
+let archiveComment = (submissionCommentId, setShowConfirmDelete, archiveCommentCB, event) => {
   ReactEvent.Mouse.preventDefault(event)
   setShowConfirmDelete(_ => false)
   ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
   |> Js.Promise.then_(response => {
     if response["archiveSubmissionComment"]["success"] {
-      setCommentArchived(_ => true)
+      archiveCommentCB(submissionCommentId)
     }
     Js.Promise.resolve()
   })
@@ -51,11 +51,10 @@ let updateShowConfirmDelete = (setShowConfirmDelete, showConfirmDelete, event) =
 }
 
 @react.component
-let make = (~currentUser, ~comment) => {
+let make = (~currentUser, ~comment, ~archiveCommentCB) => {
   let (commentHidden, setCommentHidden) = React.useState(() =>
     Belt.Option.isSome(comment->Comment.hiddenAt)
   )
-  let (commentArchived, setCommentArchived) = React.useState(() => false)
   let (showConfirmDelete, setShowConfirmDelete) = React.useState(() => false)
 
   let isModerator = currentUser->CurrentUser.isModerator
@@ -210,8 +209,8 @@ let make = (~currentUser, ~comment) => {
                 className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
                 onClick={archiveComment(
                   comment->Comment.id,
-                  setCommentArchived,
                   setShowConfirmDelete,
+                  archiveCommentCB,
                 )}>
                 {tr("delete")->str}
               </button>
@@ -224,13 +223,6 @@ let make = (~currentUser, ~comment) => {
           </div>
         </dialog>
       : React.null}
-    {switch (commentArchived, commentHidden) {
-    | (true, _) => React.null
-    | (false, false) => commentDisplay
-    | (false, true) =>
-      isModerator || currentUser->CurrentUser.id == comment->Comment.userId
-        ? commentDisplay
-        : React.null
-    }}
+    {commentDisplay}
   </div>
 }

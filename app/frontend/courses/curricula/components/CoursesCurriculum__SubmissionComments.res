@@ -43,11 +43,19 @@ let toggleComments = (setShowComments, event) => {
   setShowComments(prevState => !prevState)
 }
 
+let archiveCommentCB = (setSubmissionComments, submissionComments, commentId) => {
+  let newComments =
+    submissionComments->Js.Array2.filter(comment => comment->Comment.id !== commentId)
+  setSubmissionComments(_ => newComments)
+}
+
 @react.component
 let make = (~currentUser, ~submissionId, ~comments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
   let (showComments, setShowComments) = React.useState(() => false)
   let (newComment, setNewComment) = React.useState(() => "")
+
+  let commentsCount = submissionComments->Js.Array2.length
 
   let handleInputChange = event => {
     setNewComment(ReactEvent.Form.currentTarget(event)["value"])
@@ -71,16 +79,27 @@ let make = (~currentUser, ~submissionId, ~comments) => {
   }
 
   <div className="w-full">
-    <div className="flex items-center justify-between mx-auto">
-      <div id={"show_comments-" ++ submissionId}>
-        <button
-          className="flex items-center border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-600 transition"
-          onClick={toggleComments(setShowComments)}>
-          <Icon className="if i-comment-alt-light if-fw" />
-          <span className="ps-1"> {tr("comment")->str} </span>
-        </button>
+    {switch commentsCount {
+    | 0 => {
+        showComments ? () : setShowComments(_ => true)
+        React.null
+      }
+    | count =>
+      <div className="flex items-center justify-between mx-auto">
+        <div id={"show_comments-" ++ submissionId}>
+          <button
+            className="flex items-center border border-gray-300 bg-white text-gray-600 px-3 py-1 font-medium text-xs leading-snug rounded-full hover:text-primary-500 hover:border-primary-500 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focusColor-600 transition"
+            onClick={toggleComments(setShowComments)}>
+            <Icon className="if i-comment-alt-light if-fw" />
+            <span className="ps-1">
+              {count == 1
+                ? ("1 " ++ tr("comment_text"))->str
+                : (Belt.Int.toString(count) ++ " " ++ tr("comments"))->str}
+            </span>
+          </button>
+        </div>
       </div>
-    </div>
+    }}
     <div hidden={!showComments} className="submissionComments mt-4 space-y-8" key={submissionId}>
       <div className="submission-comments__comment">
         <div className="flex gap-2 relative">
@@ -108,14 +127,18 @@ let make = (~currentUser, ~submissionId, ~comments) => {
             disabled={newComment == ""}
             className="btn btn-primary text-sm"
             onClick={handleCreateSubmissionComment}>
-            {tr("comment")->str}
+            {tr("comment_button")->str}
           </button>
         </div>
       </div>
       {submissionComments
       ->Js.Array2.map(comment =>
         <div key={"comment-" ++ comment->Comment.id} className="submission-comments__comment">
-          <CoursesCurriculum__SubmissionCommentShow currentUser comment />
+          <CoursesCurriculum__SubmissionCommentShow
+            currentUser
+            comment
+            archiveCommentCB={archiveCommentCB(setSubmissionComments, submissionComments)}
+          />
         </div>
       )
       ->React.array}

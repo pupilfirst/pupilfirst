@@ -2,6 +2,8 @@ class DiscussionSubmissionsResolver < ApplicationQuery
   property :target_id
 
   def discussion_submissions
+    # add moderator to context to be used in type fields
+    context[:moderator] = moderator?
     submissions =
       course
         .timeline_events

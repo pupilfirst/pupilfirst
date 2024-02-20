@@ -1,4 +1,4 @@
-class AssignmentDiscussionMigrations < ActiveRecord::Migration[7.0]
+class CreateAssignmentDiscussionTables < ActiveRecord::Migration[7.0]
   def change
     add_column :assignments, :discussion, :boolean, default: false
     add_column :assignments, :allow_anonymous, :boolean, default: false

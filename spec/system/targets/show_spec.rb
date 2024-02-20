@@ -267,7 +267,7 @@ feature "Target Overlay", js: true do
     find(".course-overlay__body-tab-item", text: "Complete").click
 
     # completion instructions should be show on complete section for evaluated targets
-    expect(page).to have_text(target_l1.completion_instructions)
+    expect(page).to have_text(assignment_target_l1.completion_instructions)
 
     # There should also be a link to the completion section at the bottom of content.
     find(".course-overlay__body-tab-item", text: "Learn").click
@@ -347,7 +347,7 @@ feature "Target Overlay", js: true do
     find(".course-overlay__body-tab-item", text: "Submit Form").click
 
     # completion instructions should be show on 'Submit Form' section.
-    expect(page).to have_text(target_l3.completion_instructions)
+    expect(page).to have_text(assignment_target_l3.completion_instructions)
 
     # There should also be a link to the 'Submit Form' section at the bottom of content.
     find(".course-overlay__body-tab-item", text: "Learn").click
@@ -508,7 +508,7 @@ feature "Target Overlay", js: true do
 
       # Completion instructions should be show on Take Quiz section for targets with quiz
       expect(page).to have_text("Instructions")
-      expect(page).to have_text(quiz_target.completion_instructions)
+      expect(page).to have_text(assignment_quiz_target.completion_instructions)
 
       # There should also be a link to the quiz at the bottom of content.
       find(".course-overlay__body-tab-item", text: "Learn").click

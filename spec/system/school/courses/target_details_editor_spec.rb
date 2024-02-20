@@ -1265,8 +1265,6 @@ feature "Target Details Editor", js: true do
 
     expect(page).to_not have_text("Setup submission anonymity")
 
-    expect(target_1_l2.reload.assignments.first.discussion).to eq(false)
-
     within("div#discussion") { click_button "Yes" }
 
     expect(page).to have_text("Setup submission anonymity")

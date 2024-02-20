@@ -119,159 +119,163 @@ let submissions = (
       key={submission |> Submission.id}
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
-      <div className="flex justify-between items-end">
-        <h2 className="ms-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
-          {switch completionType {
-          | SubmitForm =>
-            str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
-          | NoAssignment
-          | TakeQuiz
-          | Evaluated =>
-            str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)
-          }}
-        </h2>
-        <div
-          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 me-2 rounded-t-lg border-t border-x text-gray-800 leading-tight">
-          <span className="hidden md:inline"> {str(tr("submitted_on"))} </span>
-          {submission |> Submission.createdAtPretty |> str}
-        </div>
-      </div>
       <div className="rounded-lg bg-gray-50 border border-gray-200">
-        <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
-          <SubmissionChecklistShow
-            checklist={submission |> Submission.checklist} updateChecklistCB=None
-          />
-        </div>
-        {switch submission |> Submission.status {
-        | MarkedAsComplete => statusBar(~color="green", ~text=tr("completed"))
-        | Pending =>
-          <div
-            className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
-            <div
-              className="flex items-center justify-center font-semibold text-sm ps-2 pe-3 py-1 bg-orange-100 text-orange-600 rounded">
-              <span className="fa-stack text-orange-400 me-2 shrink-0">
-                <i className="fas fa-circle fa-stack-2x" />
-                <i className="fas fa-hourglass-half fa-stack-1x fa-inverse" />
-              </span>
-              {tr("pending_review") |> str}
-            </div>
-            {switch targetStatus |> TargetStatus.status {
-            | PendingReview =>
-              <CoursesCurriculum__UndoButton undoSubmissionCB targetId={target |> Target.id} />
-
-            | Pending
-            | Completed
-            | Rejected
-            | Locked(_) => React.null
+        <div className="flex justify-between items-end">
+          <h2 className="font-semibold text-sm lg:text-base leading-tight">
+            {switch completionType {
+            | SubmitForm =>
+              str(tr("form_response_number") ++ (totalSubmissions - index)->string_of_int)
+            | NoAssignment
+            | TakeQuiz
+            | Evaluated =>
+              str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)
             }}
+          </h2>
+          <div className="text-xs font-semibold inline-block px-3 py-1 text-gray-800 leading-tight">
+            <span className="hidden md:inline"> {str(tr("submitted_on"))} </span>
+            {submission |> Submission.createdAtPretty |> str}
           </div>
-        | Completed =>
-          gradingSection(~grades, ~evaluationCriteria, ~passed=true, ~gradeBar=curriedGradeBar)
-        | Rejected =>
-          gradingSection(~grades, ~evaluationCriteria, ~passed=false, ~gradeBar=curriedGradeBar)
-        }}
-        {targetDetails
-        |> TargetDetails.feedback
-        |> Js.Array.filter(feedback =>
-          feedback |> Feedback.submissionId == (submission |> Submission.id)
-        )
-        |> Js.Array.map(feedback => {
-          let coach =
-            Feedback.coachId(feedback)->Belt.Option.flatMap(
-              id => coaches |> Js.Array.find(c => c |> Coach.id == id),
-            )
-
-          let user = switch coach {
-          | Some(coach) => users |> Js.Array.find(up => up |> User.id == (coach |> Coach.userId))
-          | None => None
-          }
-
-          let (coachName, coachTitle, coachAvatar) = switch user {
-          | Some(user) => (User.name(user), User.title(user), User.avatar(user))
-          | None => (
-              tr("unknown_coach"),
-              None,
-              <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center">
-                <i className="fas fa-user-times" />
-              </div>,
-            )
-          }
-
-          <div className="bg-white border-t p-4 md:p-6" key={feedback |> Feedback.id}>
-            <div className="flex items-center">
-              <div
-                className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
-                coachAvatar
-              </div>
-              <div>
-                <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
-                <div>
-                  <h4
-                    className="font-semibold text-base leading-tight block md:inline-flex self-end">
-                    {coachName |> str}
-                  </h4>
-                  {switch coachTitle {
-                  | Some(title) =>
-                    <span
-                      className="block md:inline-flex text-xs text-gray-800 ms-2 leading-tight self-end">
-                      {"(" ++ (title ++ ")") |> str}
-                    </span>
-                  | None => React.null
-                  }}
-                </div>
-              </div>
-            </div>
-            <MarkdownBlock
-              profile=Markdown.Permissive className="ms-15" markdown={feedback |> Feedback.feedback}
+        </div>
+        <div>
+          <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
+            <SubmissionChecklistShow
+              checklist={submission |> Submission.checklist} updateChecklistCB=None
             />
           </div>
-        })
-        |> React.array}
-        {switch targetDetails->TargetDetails.discussion {
-        | false => React.null
-        | true => {
-            let comments =
-              targetDetails
-              ->TargetDetails.comments
-              ->Js.Array2.filter(comment =>
-                comment->Comment.submissionId == submission->Submission.id
-              )
-            let reactions =
-              targetDetails
-              ->TargetDetails.reactions
-              ->Js.Array2.filter(reaction =>
-                reaction->Reaction.reactionableId == submission->Submission.id
+          {switch submission |> Submission.status {
+          | MarkedAsComplete => statusBar(~color="green", ~text=tr("completed"))
+          | Pending =>
+            <div
+              className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
+              <div
+                className="flex items-center justify-center font-semibold text-sm ps-2 pe-3 py-1 bg-orange-100 text-orange-600 rounded">
+                <span className="fa-stack text-orange-400 me-2 shrink-0">
+                  <i className="fas fa-circle fa-stack-2x" />
+                  <i className="fas fa-hourglass-half fa-stack-1x fa-inverse" />
+                </span>
+                {tr("pending_review") |> str}
+              </div>
+              {switch targetStatus |> TargetStatus.status {
+              | PendingReview =>
+                <CoursesCurriculum__UndoButton undoSubmissionCB targetId={target |> Target.id} />
+
+              | Pending
+              | Completed
+              | Rejected
+              | Locked(_) => React.null
+              }}
+            </div>
+          | Completed =>
+            gradingSection(~grades, ~evaluationCriteria, ~passed=true, ~gradeBar=curriedGradeBar)
+          | Rejected =>
+            gradingSection(~grades, ~evaluationCriteria, ~passed=false, ~gradeBar=curriedGradeBar)
+          }}
+          {targetDetails
+          |> TargetDetails.feedback
+          |> Js.Array.filter(feedback =>
+            feedback |> Feedback.submissionId == (submission |> Submission.id)
+          )
+          |> Js.Array.map(feedback => {
+            let coach =
+              Feedback.coachId(feedback)->Belt.Option.flatMap(
+                id => coaches |> Js.Array.find(c => c |> Coach.id == id),
               )
 
-            <div className="flex flex-col gap-4 items-start relative p-4">
-              <div>
-                <CoursesCurriculum__Reactions
-                  currentUser
-                  reactionableType="TimelineEvent"
-                  reactionableId={submission->Submission.id}
-                  reactions
-                />
-              </div>
-              <div
-                className="curriculum-submission-comments__container relative flex w-full flex-col-reverse md:flex-row justify-end">
-                {switch submission->Submission.hiddenAt {
-                | Some(_) =>
-                  <div
-                    className="inline-flex md:absolute z-1 justify-center md:justify-end text-xs pt-1.5">
-                    <p>
-                      {("This submission was hidden by course moderators on " ++
-                      Submission.hiddenAtPretty(submission))->str}
-                    </p>
+            let user = switch coach {
+            | Some(coach) => users |> Js.Array.find(up => up |> User.id == (coach |> Coach.userId))
+            | None => None
+            }
+
+            let (coachName, coachTitle, coachAvatar) = switch user {
+            | Some(user) => (User.name(user), User.title(user), User.avatar(user))
+            | None => (
+                tr("unknown_coach"),
+                None,
+                <div
+                  className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center">
+                  <i className="fas fa-user-times" />
+                </div>,
+              )
+            }
+
+            <div className="bg-white border-t p-4 md:p-6" key={feedback |> Feedback.id}>
+              <div className="flex items-center">
+                <div
+                  className="shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden ltr:mr me-3 object-cover">
+                  coachAvatar
+                </div>
+                <div>
+                  <p className="text-xs leading-tight"> {"Feedback from:" |> str} </p>
+                  <div>
+                    <h4
+                      className="font-semibold text-base leading-tight block md:inline-flex self-end">
+                      {coachName |> str}
+                    </h4>
+                    {switch coachTitle {
+                    | Some(title) =>
+                      <span
+                        className="block md:inline-flex text-xs text-gray-800 ms-2 leading-tight self-end">
+                        {"(" ++ (title ++ ")") |> str}
+                      </span>
+                    | None => React.null
+                    }}
                   </div>
-                | None => React.null
-                }}
-                <CoursesCurriculum__SubmissionComments
-                  currentUser submissionId={submission->Submission.id} comments
-                />
+                </div>
               </div>
+              <MarkdownBlock
+                profile=Markdown.Permissive
+                className="ms-15"
+                markdown={feedback |> Feedback.feedback}
+              />
             </div>
-          }
-        }}
+          })
+          |> React.array}
+          {switch targetDetails->TargetDetails.discussion {
+          | false => React.null
+          | true => {
+              let comments =
+                targetDetails
+                ->TargetDetails.comments
+                ->Js.Array2.filter(comment =>
+                  comment->Comment.submissionId == submission->Submission.id
+                )
+              let reactions =
+                targetDetails
+                ->TargetDetails.reactions
+                ->Js.Array2.filter(reaction =>
+                  reaction->Reaction.reactionableId == submission->Submission.id
+                )
+
+              <div className="flex flex-col gap-4 items-start relative p-4">
+                <div>
+                  <CoursesCurriculum__Reactions
+                    currentUser
+                    reactionableType="TimelineEvent"
+                    reactionableId={submission->Submission.id}
+                    reactions
+                  />
+                </div>
+                <div
+                  className="curriculum-submission-comments__container relative flex w-full flex-col-reverse md:flex-row justify-end">
+                  {switch submission->Submission.hiddenAt {
+                  | Some(_) =>
+                    <div
+                      className="inline-flex md:absolute z-1 justify-center md:justify-end text-xs pt-1.5">
+                      <p>
+                        {("This submission was hidden by course moderators on " ++
+                        Submission.hiddenAtPretty(submission))->str}
+                      </p>
+                    </div>
+                  | None => React.null
+                  }}
+                  <CoursesCurriculum__SubmissionComments
+                    currentUser submissionId={submission->Submission.id} comments
+                  />
+                </div>
+              </div>
+            }
+          }}
+        </div>
       </div>
     </div>
   }) |> React.array
@@ -298,7 +302,7 @@ let make = (
   let (showSubmissionForm, setShowSubmissionForm) = React.useState(() => false)
   let completionType = targetDetails->TargetDetails.computeCompletionType
 
-  <div className="max-w-3xl mx-auto">
+  <div className="max-w-3xl mx-auto mt-8">
     <div className="flex justify-between items-end border-b pb-2">
       <h4 className="text-base md:text-xl">
         {switch completionType {

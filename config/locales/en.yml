@@ -625,7 +625,9 @@ en:
       submitting: Submitting
       submit_anonymous_label: Submit anonymously
     CoursesCurriculum__SubmissionComments:
-      comment: Comment
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
       hide_comments: Hide Comments
       view_comments: View Comments
       write_comment: Write your comment

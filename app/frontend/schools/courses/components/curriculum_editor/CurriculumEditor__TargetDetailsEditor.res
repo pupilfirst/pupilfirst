@@ -909,38 +909,36 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         </button>
       </div>
     </div>
-    {switch state.discussion {
-    | false => React.null
-    | true =>
-      <div className="mb-6">
-        <label
-          className="inline-block tracking-wide text-sm font-semibold" htmlFor="allowAnonymous">
-          <span className="me-2">
-            <i className="fas fa-list rtl:rotate-180 text-base" />
-          </span>
-          {t("allow_anonymous.title") |> str}
-        </label>
-        <p className="ml-6 text-sm text-gray-700">{t("allow_anonymous.sub_title") |> str}</p>
-        <div id="allowAnonymous" className="flex mt-4 ms-6">
-          <button
-            onClick={updateAllowAnonymous(true, send)}
-            className={"me-4 " ++ anonymityClasses(state.allowAnonymous)}>
-            <span className="me-4">
-              <Icon className="if i-anonymous-light text-3xl" />
+    {state.discussion
+      ? <div className="mb-6">
+          <label
+            className="inline-block tracking-wide text-sm font-semibold" htmlFor="allowAnonymous">
+            <span className="me-2">
+              <i className="fas fa-list rtl:rotate-180 text-base" />
             </span>
-            <span className="text-sm"> {t("allow_anonymous.anonymous_text") |> str} </span>
-          </button>
-          <button
-            onClick={updateAllowAnonymous(false, send)}
-            className={anonymityClasses(!state.allowAnonymous)}>
-            <span className="me-4">
-              <Icon className="if i-non-anonymous-light text-3xl" />
-            </span>
-            <span className="text-sm"> {t("allow_anonymous.no_anonymous") |> str} </span>
-          </button>
+            {t("allow_anonymous.title") |> str}
+          </label>
+          <p className="ml-6 text-sm text-gray-700"> {t("allow_anonymous.sub_title") |> str} </p>
+          <div id="allowAnonymous" className="flex mt-4 ms-6">
+            <button
+              onClick={updateAllowAnonymous(true, send)}
+              className={"me-4 " ++ anonymityClasses(state.allowAnonymous)}>
+              <span className="me-4">
+                <Icon className="if i-anonymous-light text-3xl" />
+              </span>
+              <span className="text-sm"> {t("allow_anonymous.anonymous_text") |> str} </span>
+            </button>
+            <button
+              onClick={updateAllowAnonymous(false, send)}
+              className={anonymityClasses(!state.allowAnonymous)}>
+              <span className="me-4">
+                <Icon className="if i-non-anonymous-light text-3xl" />
+              </span>
+              <span className="text-sm"> {t("allow_anonymous.no_anonymous") |> str} </span>
+            </button>
+          </div>
         </div>
-      </div>
-    }}
+      : React.null}
     <div className="mb-6">
       <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
         <span className="me-2">

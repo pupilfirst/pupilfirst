@@ -182,27 +182,25 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
           )
           |> React.array}
       <div>
-        {switch targetDetails->TargetDetails.allowAnonymous {
-        | false => React.null
-        | true =>
-          <div className="mt-4 flex">
-            <input
-              onChange={_event => send(ToggleAnonymous)}
-              checked=state.anonymous
-              className="hidden checkbox-input"
-              id="anonymous"
-              type_="checkbox"
-            />
-            <label className="checkbox-label flex items-center" htmlFor="anonymous">
-              <span className="flex-shrink-0">
-                <svg width="12px" height="10px" viewBox="0 0 12 10">
-                  <polyline points="1.5 6 4.5 9 10.5 1" />
-                </svg>
-              </span>
-              <span className="text-sm"> {tr("submit_anonymous_label")->str} </span>
-            </label>
-          </div>
-        }}
+        {targetDetails->TargetDetails.allowAnonymous
+          ? <div className="mt-4 flex">
+              <input
+                onChange={_event => send(ToggleAnonymous)}
+                checked=state.anonymous
+                className="hidden checkbox-input"
+                id="anonymous"
+                type_="checkbox"
+              />
+              <label className="checkbox-label flex items-center" htmlFor="anonymous">
+                <span className="flex-shrink-0">
+                  <svg width="12px" height="10px" viewBox="0 0 12 10">
+                    <polyline points="1.5 6 4.5 9 10.5 1" />
+                  </svg>
+                </span>
+                <span className="text-sm"> {tr("submit_anonymous_label")->str} </span>
+              </label>
+            </div>
+          : React.null}
         <div className={buttonClasses(state.checklist)}>
           <Tooltip tip={tooltipText(preview)} position=#Start disabled={!isButtonDisabled(state)}>
             <button

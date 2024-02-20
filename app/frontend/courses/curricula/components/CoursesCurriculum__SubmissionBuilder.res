@@ -182,7 +182,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
           )
           |> React.array}
       <div>
-        {targetDetails->TargetDetails.allowAnonymous
+        {targetDetails->TargetDetails.discussion && targetDetails->TargetDetails.allowAnonymous
           ? <div className="mt-4 flex">
               <input
                 onChange={_event => send(ToggleAnonymous)}

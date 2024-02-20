@@ -359,7 +359,8 @@ feature "Assignment Discussion", js: true do
           find("button", text: "😀", match: :first).click
         end
 
-        within(".submissionComments") { expect(page).to have_button("😀") }
+        expect(page).not_to have_selector("em-emoji-picker")
+        expect(page).to have_button("😀")
       end
 
       context "with another student comment" do
@@ -379,10 +380,8 @@ feature "Assignment Discussion", js: true do
             "div#show_comments-#{another_student_submission.id} button"
           ).click
 
-          within(".submissionComments") do
-            expect(page).to have_text(another_student.name)
-            expect(page).to have_text(another_student_comment.comment)
-          end
+          expect(page).to have_text(another_student.name)
+          expect(page).to have_text(another_student_comment.comment)
 
           find("div[aria-label='comment-#{another_student_comment.id}']").hover
           within("div[aria-label='comment-#{another_student_comment.id}']") do

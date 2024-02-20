@@ -101,7 +101,7 @@ let make = (~currentUser, ~submissionId, ~comments) => {
       </div>
     }}
     <Spread props={"data-submission-id": submissionId}>
-      <div hidden={!showComments} className="submissionComments mt-4 space-y-8" key={submissionId}>
+      <div hidden={!showComments} className="mt-4 space-y-8" key={submissionId}>
         <div className="submission-comments__comment">
           <div className="flex gap-2 relative">
             <div

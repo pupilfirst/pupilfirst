@@ -28,38 +28,39 @@ feature "Organisation student details page and submissions list" do
 
   let(:target_l1_1) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           evaluation_criteria: [
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
 
   let(:target_l1_2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           evaluation_criteria: [
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
-           milestone: true,
-           milestone_number: 2
+           given_milestone_number: 2
   end
 
   let(:target_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 2
+           given_evaluation_criteria: [evaluation_criterion_1],
+           given_milestone_number: 2
   end
 
   let!(:target_l3) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l3,
-           evaluation_criteria: [evaluation_criterion_2]
+           given_evaluation_criteria: [evaluation_criterion_2]
   end
 
   let(:cohort) { create :cohort, course: course }
@@ -268,6 +269,27 @@ feature "Organisation student details page and submissions list" do
         expect(page).to have_text(org_admin_user.name)
         expect(page).not_to have_text("Notes")
         expect(page).not_to have_text(coach_note.note)
+      end
+    end
+
+    scenario "org student page does not show standing info when school standing is disabled" do
+      sign_in_user org_admin_user, referrer: org_student_path(student)
+
+      expect(page).not_to have_text("View Standing")
+    end
+
+    context "when school standing is enabled" do
+      before { school.update!(configuration: { enable_standing: true }) }
+      let!(:standing) { create :standing, school: school, default: true }
+
+      scenario "org student page shows the standing info" do
+        sign_in_user org_admin_user, referrer: org_student_path(student)
+
+        expect(page).to have_text("View Standing")
+        expect(page).to have_text(standing.name)
+
+        click_link "View Standing"
+        expect(page).to have_current_path(standing_org_student_path(student))
       end
     end
   end

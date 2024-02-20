@@ -79,7 +79,7 @@ feature "Course students bulk importer", js: true do
     open_email("super@man.com")
 
     expect(current_email.subject).to have_content(
-      "You have been added as a student in #{school.name}"
+      "Super Man, you have been added as a student in #{school.name}"
     )
   end
 
@@ -123,6 +123,18 @@ feature "Course students bulk importer", js: true do
     )
   end
 
+  scenario "admin uploads a csv with invalid template header for import" do
+    sign_in_user school_admin.user,
+                 referrer: "/school/courses/#{course.id}/students/import"
+
+    # file with a invalid field name in header
+    attach_csv_file("student_import_wrong_header.csv")
+
+    expect(page).to have_text(
+      "The selected CSV file does not have a valid template"
+    )
+  end
+
   scenario "admin uploads a file that is not valid CSV" do
     sign_in_user school_admin.user,
                  referrer: "/school/courses/#{course.id}/students/import"
@@ -143,15 +155,31 @@ feature "Course students bulk importer", js: true do
     )
 
     # Only erroneous rows are displayed
-    expect(page).to_not have_text("Bat Man")
+    expect(page).not_to have_text("John Doe")
+    expect(page).to have_text("Bat Man")
     expect(page).to have_text("Super Man")
     expect(page).to have_text("tag6")
+    expect(page).to have_text("The Flash")
 
     expect(page).to have_text("Here is a summary of the errors in the sheet:")
+
     expect(page).to have_text(
       "Name column can't be blank and should be within 250 characters"
     )
-    expect(page).to have_text("Email has to be valid and can't be blank")
+
+    expect(page).to have_text(
+      "Email has to be valid, not repeated and can't be blank"
+    )
+
+    expect(page).to have_text("Team name has to be less than 50 characters")
+
+    expect(page).to have_text(
+      "Name column contains one or more invalid characters"
+    )
+
+    expect(page).to have_text(
+      "Tags column contains one or more invalid characters"
+    )
   end
 
   context "import list has a student that already exists" do

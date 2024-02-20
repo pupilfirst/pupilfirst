@@ -1,4 +1,5 @@
 open SchoolCustomize__Types
+open ThemeSwitch
 
 %%raw(`import "./SchoolCustomize__Root.css"`)
 
@@ -30,6 +31,7 @@ type rec action =
   | MoveLink(Customizations.linkId, SchoolCustomize__LinkComponent.kind, Customizations.direction)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
+  | UpdateCodeOfConduct(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
   | UpdateSchoolDetails(name, about)
@@ -38,11 +40,10 @@ type rec action =
 and name = string
 and about = option<string>
 
-let headerLogo = (schoolName, logoOnLightBg) =>
-  switch logoOnLightBg {
-  | Some(logo) =>
-    <div className="max-w-xs"> <img className="h-12" src={logo |> Customizations.url} /> </div>
-  | None => <span className="text-2xl font-bold"> {schoolName->str} </span>
+let renderLogo = (schoolName, logo, textSize, logoHeight) =>
+  switch logo {
+  | Some(logo) => <img className={logoHeight ++ " block"} src={logo->Customizations.url} />
+  | None => <span className={textSize ++ " font-bold"}> {schoolName->str} </span>
   }
 
 let headerLink = ((id, title, _, _)) =>
@@ -122,19 +123,14 @@ let emailAddress = email =>
   switch email {
   | Some(email) =>
     <div className="text-xs font-semibold mt-4">
-      {(t("reach_us_at") ++ ": ")->str} <span className="font-bold"> {email->str} </span>
+      {(t("reach_us_at") ++ ": ")->str}
+      <span className="font-bold"> {email->str} </span>
     </div>
   | None =>
     <div
       className="border border-gray-500 rounded-lg italic text-gray-400 cursor-default text-sm max-w-fc mt-4 py-2 px-4">
       {t("add_contact_email_q")->str}
     </div>
-  }
-
-let footerLogo = (schoolName, logoOnDarkBg) =>
-  switch logoOnDarkBg {
-  | Some(logo) => <img className="h-8" src={logo |> Customizations.url} />
-  | None => <span className="text-lg font-bold"> {schoolName->str} </span>
   }
 
 let editIcon = (additionalClasses, clickHandler, title) =>
@@ -175,6 +171,7 @@ let editor = (state, send, authenticityToken) =>
           customizations=state.customizations
           updatePrivacyPolicyCB={agreement => send(UpdatePrivacyPolicy(agreement))}
           updateTermsAndConditionsCB={agreement => send(UpdateTermsAndConditions(agreement))}
+          updateCodeOfConductCB={agreement => send(UpdateTermsAndConditions(agreement))}
         />
       | ContactsEditor =>
         <SchoolCustomize__ContactsEditor
@@ -204,12 +201,12 @@ let editor = (state, send, authenticityToken) =>
 
 let initialState = (customizations, schoolName, schoolAbout) => {
   visibleEditor: None,
-  customizations: customizations,
-  schoolName: schoolName,
-  schoolAbout: schoolAbout,
+  customizations,
+  schoolName,
+  schoolAbout,
 }
 
-let moveLink = (linkId, kind, direction, t) => {
+let moveLink = (t, linkId, kind, direction) => {
   // find links of similar kind
   let similarKindLinks = switch kind {
   | SchoolCustomize__LinkComponent.HeaderLink => Customizations.filterLinks(~header=true, t)
@@ -254,45 +251,49 @@ let reducer = (state, action) =>
   | CloseEditor => {...state, visibleEditor: None}
   | AddLink(link) => {
       ...state,
-      customizations: state.customizations |> Customizations.addLink(link),
+      customizations: state.customizations->Customizations.addLink(link),
     }
   | UpdateLink(linkId, title, url) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateLink(linkId, title, url),
+      customizations: state.customizations->Customizations.updateLink(linkId, title, url),
     }
   | RemoveLink(linkId) => {
       ...state,
-      customizations: state.customizations |> Customizations.removeLink(linkId),
+      customizations: state.customizations->Customizations.removeLink(linkId),
     }
   | MoveLink(id, kind, direction) => {
       ...state,
-      customizations: state.customizations |> moveLink(id, kind, direction),
+      customizations: state.customizations->moveLink(id, kind, direction),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updatePrivacyPolicy(agreement),
+      customizations: state.customizations->Customizations.updatePrivacyPolicy(agreement),
     }
   | UpdateTermsAndConditions(agreement) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateTermsAndConditions(agreement),
+      customizations: state.customizations->Customizations.updateTermsAndConditions(agreement),
+    }
+  | UpdateCodeOfConduct(agreement) => {
+      ...state,
+      customizations: state.customizations->Customizations.updateCodeOfConduct(agreement),
     }
   | UpdateAddress(address) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateAddress(address),
+      customizations: state.customizations->Customizations.updateAddress(address),
     }
   | UpdateEmailAddress(emailAddress) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateEmailAddress(emailAddress),
+      customizations: state.customizations->Customizations.updateEmailAddress(emailAddress),
     }
   | UpdateImages(json) => {
       ...state,
-      customizations: state.customizations |> Customizations.updateImages(json),
+      customizations: state.customizations->Customizations.updateImages(json),
       visibleEditor: None,
     }
   | UpdateSchoolDetails(schoolName, schoolAbout) => {
       ...state,
-      schoolName: schoolName,
-      schoolAbout: schoolAbout,
+      schoolName,
+      schoolAbout,
       visibleEditor: None,
     }
   }
@@ -309,12 +310,18 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
     reducer,
     initialState(customizations, schoolName, schoolAbout),
   )
+
+  let logo =
+    getTheme() == "light"
+      ? state.customizations->Customizations.logoOnLightBg
+      : state.customizations->Customizations.logoOnDarkBg
+
   <div className="bg-gray-50 min-h-full">
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <h1 className="font-bold"> {t("homepage")->str} </h1>
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
         <div className="flex items-center bg-gray-50 rounded p-2">
-          {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
+          <div className="max-w-xs"> {renderLogo(schoolName, logo, "2xl", "h-12")} </div>
           {editIcon("ms-6", showEditor(ImagesEditor, send), t("edit_logo_light"))}
         </div>
         <div className="flex items-center">
@@ -340,11 +347,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </button>
         </div>
         <div className="relative pb-1/2 md:pb-1/4 rounded-b-lg overflow-hidden">
-          {switch state.customizations |> Customizations.coverImage {
+          {switch state.customizations->Customizations.coverImage {
           | Some(image) =>
-            <img
-              className="absolute h-full w-full object-cover" src={image |> Customizations.url}
-            />
+            <img className="absolute h-full w-full object-cover" src={image->Customizations.url} />
           | None =>
             <div
               className="school-customize__cover-default absolute h-full w-full svg-bg-pattern-6"
@@ -451,7 +456,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div className="flex items-center border border-dashed border-gray-500 rounded p-2">
-            {footerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
+            {renderLogo(schoolName, logo, "text-lg", "h-8")}
             {editIcon("ms-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
           </div>
           <div className="flex items-center text-sm">
@@ -476,6 +481,15 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 t("edit_terms"),
               )}
             </div>
+            <div
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 ms-6 text-xs">
+              <div> {ts("code_of_conduct")->str} </div>
+              {editIcon(
+                "ms-3",
+                showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.CodeOfConduct), send),
+                t("edit_code_of_conduct"),
+              )}
+            </div>
             <div className="ms-6 flex items-center text-xs text-gray-600">
               <i className="far fa-copyright" />
               <span className="ms-1">
@@ -496,8 +510,12 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="h-3 w-3 rounded-full bg-gray-500 ms-2" />
             <div className="p-3 ms-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
-                src={state.customizations |> Customizations.icon |> Customizations.url}
-                className="h-5 w-5"
+                src={state.customizations->Customizations.iconOnLightBg->Customizations.url}
+                className="h-5 w-5 block dark:hidden"
+              />
+              <img
+                src={state.customizations->Customizations.iconOnDarkBg->Customizations.url}
+                className="h-5 w-5 hidden dark:block"
               />
               <span className="ms-1 text-xs font-semibold max-w-xs truncate">
                 {schoolName->str}

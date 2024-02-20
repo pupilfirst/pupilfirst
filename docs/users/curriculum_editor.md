@@ -49,11 +49,11 @@ After creating a target, you can click on it in the curriculum to open the targe
 
 Clicking on a target will open the _Content_ tab by default, which allows you to edit the content of the target - this the _body_ of the material that you would like your student to read or watch.
 
-![Target editor, in preview mode](../assets/curriculum_editor/target_content_editor_feiqdh.png)
+![Target editor, in preview mode](../assets/curriculum_editor/target_content_editor.png)
 
 You'll notice that the content is made up of different types of _content blocks_. If you hover over the region between any of the existing blocks, you'll find an option to insert a new content block into that space. There will always be a content block picker visible at the bottom of the existing content.
 
-![Target editor content blocks](../assets/curriculum_editor/target_editor_blocks_xnvkky.png)
+![Target editor content blocks](../assets/curriculum_editor/target_editor_blocks.png)
 
 ### Content block types
 
@@ -94,44 +94,91 @@ The audio block accepts an audio file and uses the default browser player to pla
 
 The _Details_ tab can be accessed by clicking on the tab once the editor is open, or by clicking the _details icon_ on each of the listed targets.
 
-This tab contains other basic details and configuration for the target, such as its name, whether it has prerequisites, its completion method, and its visibility to the student and other course authors.
+This tab contains other basic details and configuration for the target, such as its name, whether it has an assignment, its completion method, and its visibility to the student and other course authors.
 
-### Setting target as a milestone
+### Does this target have an assignment?
 
-You can set a target as a milestone by select _Yes_ against the setting question. This will make the target a milestone target, which means that that the student cannot complete the course without completing this target. If a course has multiple milestone targets, the student can complete the course only after completing all the milestone targets. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/users/targets#milestone-targets).
+If you would like the student to perform an action of some kind after going through the content of the target, you can set up an assignment.
 
-### Setting the method of completion
+Having an assignment means a student has to _complete_ the assignment - by taking a quiz, or submitting a customized form - to complete the target.
 
-To decide how a student can complete a target, this interface asks you a few questions:
+If you want the target to just show information from the content tab to the student, then you can answer _"No"_ to this question.
 
-**Are there any prerequisite targets?**<br/>
-You can select other targets from the course as prerequisite targets. This will _lock_ the target until the student made a submission for reviewed prerequisite targets and completes the non reviewed prerequisite targets.
+![Choosing whether a target has assignment](../assets/curriculum_editor/target_choose_assignment.png)
 
-**Will a coach review submissions on this target?**<br/>
-If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.
+### Assignment details
+
+If you choose _"Yes"_ to the above question, then all the options for an assignment will become visible.
+
+#### Setting assignment as a milestone
+
+You can set an assignment as a milestone by select _Yes_ against the setting question. This will make the assignment a milestone assignment, which means that that the student cannot complete the course without completing this assignment. If a course has multiple milestone assignment, the student can complete the course only after completing all the milestone assignments. Milestone assignments control a student's progression in the course.
+
+If an assignment is marked as milestone, it will be shown in the curriculum with a special milestone icon. The same will be reflected in courses curriculum page for students.
+
+<details>
+  <summary>What happens if I don't mark any assignment as milestone?</summary>
+  <div>
+    If a course doesn't contain at least one milestone assignment, there will be no way to track student progress in the course. A student can check their progress by keeping track of the number of milestones they have completed. Similarly, coaches track the progress of a cohort by keeping track of the number of milestones completed by the students.
+  </div>
+</details>
+
+<details>
+  <summary>What if I want my students to complete every assignment? Do I have to mark all assignments as milestones?</summary>
+  <div>
+    <p>
+      Not necessarily. Remember that you can set assignments as prerequisites for others. Technically, you can set up a chain of assignments, one depending on the completion of another to ensure that students complete all targets.
+    </p>
+    <p>
+      How you organize the content is ultimately up to you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and in what order (if any) you want students to tackle your material.
+    </p>
+  </div>
+</details>
+
+#### Setting the method of completion
+
+To decide how a student can complete an assignment, this interface asks you a few questions:
+
+**Does this assignment have any prerequisites?**<br/>
+You can select other assignment from the course as prerequisite assignments. This will _lock_ the assignment until the student made a submission for reviewed prerequisite assignments and completes the non reviewed prerequisite assignments.
+
+There are 3 other scenarios in which an assignment can be locked:
+
+1. The student has submissions queued for review with count greater than the progression limit set for the course. This is only applicable to assignments that are reviewable.
+2. The student's [access to the course](/users/students#editing-student-details) has ended, because of which they have read-only access to the course content.
+3. The course's [end date](/users/courses#creating-courses) has passed, because of which students have read-only access to the course content.
+
+**Will a coach review submissions on this assignments?**<br/>
+If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the assignment on their own, pick _No_.
 
 **Choose evaluation criteria from your list**<br/>
-This list will appear only if you've chosen to have the target's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this target.
+This list will appear only if you've chosen to have the assignment's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this assignment.
 
-**How do you want the student to complete the target?**<br/>
-If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of four ways by which a student can complete the target on their own:
+**How do you want the student to complete the assignment?**<br/>
+If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of 2 ways by which a student can complete the target on their own:
 
-1. Simply mark the target as completed: No additional steps.
-2. Visit a link to complete the target: You'll be asked for the link.
-3. Take a quiz to complete the target: You'll need to prepare a quiz - the process for this is detailed below.
-4. Submit a form to complete the target: You'll need to prepare a form with questions - the process for this is detailed below.
+1. Take a quiz to complete the target: You'll need to prepare a quiz - the process for this is detailed below.
+2. Submit a form to complete the target: You'll need to prepare a form with questions - the process for this is detailed below.
 
-**How should teams tackle this target?**<br/>
-If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed target, then all students in the team will need to pass the target individually.
+**How should teams tackle this assignment?**<br/>
+If you have students grouped into teams, then you'll probably have some assignments that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed assignment, then all students in the team will need to pass the assignment individually.
 
-For those targets where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the target, the submission will be credited to all students in the team. If work on the target is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
+For those assignments where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the assignment, the submission will be credited to all students in the team. If work on the assignment is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
 
 **Do you have any completion instructions for the student?**<br/>
-Text entered here will be displayed right next to where the students take action on a target. For targets that are simply marked as complete or completed by visiting a link, this will be at the end of the main content, next to the button that completes the target. For quizzes and reviewed submissions, this will be at the top of the page that displays the quiz, or the submission form.
+Text entered here will be displayed right next to where the students take action on a target. This will be at the top of the page that displays the quiz, or the submission form.
 
-### Defining steps to complete a target
+#### Do you want to enable discussion on this assignment?
 
-For targets that require students to submit work for review, you can define the steps that a student needs to take to submit their work.
+To foster an interactive learning environment where students can view and engage in discussions on their peers' submissions, respond to _Yes_ the prompt _Do you want to enable discussion on this assignment?_. Selecting _Yes_ will activate the discussion feature, [allowing students to participate in discussions](/users/taking_courses#submissions-by-peers). Choose _No_ (default) if you prefer to keep submissions private. For further details on utilizing the discussion feature, please refer to the linked guide
+
+#### Setup submission anonymity
+
+Upon enabling discussions for student submissions, you have the option to permit anonymous submissions. This setting empowers students to submit their assignments without revealing their identities; their names will remain concealed from peers within the discussion section. To activate this feature, simply select the option to allow students to submit anonymously.
+
+#### Defining steps to complete an assignment
+
+For assignments that require students to submit work for review, you can define the steps that a student needs to take to submit their work.
 
 Each step needs to have a _title_ and an _action type_. Together, they define how a student completes the step. The _title_ is generally used to give a short description of what's expected from the student to complete the step. These are different possible action types:
 
@@ -142,9 +189,9 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 5. **Choose from a list:** Student is shown a list of choices, from which they can pick one; you decide what the choices are. This now supports multiple selections you can configure it by checking the _Allow multiple selections_ checkbox.
 6. **Record Audio:** Allows student to record an audio with a size limit of 5MB
 
-Here's an example target consisting, of four steps to complete the target:
+Here's an example assignment consisting, of four steps to complete the assignment:
 
-![Adding a target checklist](../assets/curriculum_editor/target_checklist_editor_eguduz.png)
+![Adding an assignment checklist](../assets/curriculum_editor/target_checklist_editor.png)
 
 Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when submitting a target. In the example above, step 2 of type _Attach a Link_ is optional.
 
@@ -152,18 +199,18 @@ You can also change the order of steps, remove a particular step, or even duplic
 
 Here are some other points to keep in mind:
 
-1. The maximum number of steps allowed in a target is 25.
-2. You are allowed to create an evaluated target without any steps. However, this would mean that a student can _submit_ work on a target without actually providing any information. This would still require the coach to review an empty submission. This option can be used for cases where the work in question is done _outside_ of the platform and is known to the coach.
+1. The maximum number of steps allowed in an assignment is 25.
+2. You are allowed to create an evaluated assignment without any steps. However, this would mean that a student can _submit_ work on an assignment without actually providing any information. This would still require the coach to review an empty submission. This option can be used for cases where the work in question is done _outside_ of the platform and is known to the coach.
 
-Once all steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students for each step.
+Once all steps are defined, students can submit the assignment by executing the required steps and a coach gets to see the response from students for each step.
 
-Here's an example of how a target's steps are shown in the student submission interface and in the coach review interface:
+Here's an example of how an assignments steps are shown in the student submission interface and in the coach review interface:
 
 ![Target checklist lifecycle](../assets/curriculum_editor/target_checklist_steps_flwajd.jpg)
 
-### Preparing a quiz
+#### Preparing a quiz
 
-If you opted to let the student answer a quiz to complete the target, then you'll need to prepare one:
+If you opted to let the student answer a quiz to complete the assignment, then you'll need to prepare one:
 
 ![Preparing a quiz](../assets/curriculum_editor/quiz_preparation_bihhl9.png)
 
@@ -171,11 +218,11 @@ If you opted to let the student answer a quiz to complete the target, then you'l
 2. Every question must have at least two options.
 3. You can have any number of questions.
 
-### Preparing a form
+#### Preparing a form
 
-If you opted to let the student submit a form to complete the target, then you'll need to prepare one:
+If you opted to let the student submit a form to complete the assignment, then you'll need to prepare one:
 
-This form creation process is simillar to `Defining the steps to complete a target` process. You can add questions to the form and define the action type for each question. This form creation supports all the action types that are supported in `Defining the steps to complete a target` process.
+This form creation process is similar to `Defining steps to complete an assignment` process. You can add questions to the form and define the action type for each question. This form creation supports all the action types that are supported in `Defining steps to complete an assignment` process.
 
 The form should have at least one question and the maximum number of questions allowed in a form is 25.
 

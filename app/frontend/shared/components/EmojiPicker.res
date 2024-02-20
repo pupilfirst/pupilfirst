@@ -13,7 +13,6 @@ module Picker = {
   @module("@emoji-mart/react") @react.component
   external make: (
     ~title: string,
-    ~theme: [#light],
     ~onEmojiSelect: emojiEvent => unit,
     ~data: Js.Json.t,
   ) => React.element = "default"
@@ -21,7 +20,7 @@ module Picker = {
 
 let emojiDivClassName = isOpen => {
   switch isOpen {
-  | true => "absolute top-full -start-32 md:-translate-x-0 z-10 shadow "
+  | true => "fixed md:absolute bottom-0 inset-x-0 w-full right-0 md:right-auto md:left-0 z-[20] shadow-lg "
   | false => "hidden"
   }
 }
@@ -69,25 +68,26 @@ let make = (~className, ~title, ~onChange) => {
     )
   })
 
-  <div className="sm:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
+  <div className="md:relative inline-block" ref={ReactDOM.Ref.domRef(wrapperRef)}>
     <button
       type_="button"
       ariaLabel={title}
       title={title}
       onClick={_ => setIsOpen(prev => !prev)}
       className={className}>
-      <i className="fas fa-smile" />
+      <Icon className="if i-emoji-add-regular" />
     </button>
-    <div className={"transition-all " ++ emojiDivClassName(isOpen)}>
-      <Picker
-        title
-        data
-        onEmojiSelect={event => {
-          onChange(event)
-          setIsOpen(_ => false)
-        }}
-        theme={#light}
-      />
-    </div>
+    <Spread props={"data-t": "emoji-picker"}>
+      <div className={"transition " ++ emojiDivClassName(isOpen)}>
+        <Picker
+          title
+          data
+          onEmojiSelect={event => {
+            onChange(event)
+            setIsOpen(_ => false)
+          }}
+        />
+      </div>
+    </Spread>
   </div>
 }

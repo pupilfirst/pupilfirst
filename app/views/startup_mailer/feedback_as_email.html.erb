@@ -1,6 +1,9 @@
 <%
   timeline_event = @startup_feedback.timeline_event
+  graded = @grading_details.present?
+  has_additional_feedback = timeline_event.startup_feedback.count > 1
   target = @startup_feedback.timeline_event&.target
+  target_has_evaluation_criteria = target&.evaluation_criteria.present?
   target_url = target_url(target) if target.present?
   coach_name = @startup_feedback.faculty.name
 %>
@@ -8,26 +11,30 @@
   <%= t("shared.salutation_name", name: @students) %>
 <% end %>
 <% content_for :body do %>
-  <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission") : t("mailers.startup.feedback_as_email.body.recent_updates") %>
-  <% if @grading_details.present? %>
+  <% update_for = timeline_event.present? ? "submission" : "update" %>
+  <% if graded %>
     <p>
-    <%= t("mailers.startup.feedback_as_email.body.grading_header", coach_name: coach_name,) %>
+      <%= t("mailers.startup.feedback_as_email.header.graded", coach_name: coach_name,) %>
     </p>
     <ul style="list-style: none; margin: 0px; padding-left: 8px;">
       <% @grading_details.each do |grade_details| %>
-      <li style="padding-bottom: 8px;">
-        <%= grade_details %>
-      </li>
+        <li style="padding-bottom: 8px;">
+          <%= grade_details %>
+        </li>
       <% end %>
     </ul>
-    <p style="margin: 0px; padding-top: 16px">
-      <%= t("mailers.startup.feedback_as_email.body.grading_feedback_header", coach_name: coach_name, update_for: update_for) %>
-    </p>
-  <% else %>
+  <% elsif target_has_evaluation_criteria && !graded && !has_additional_feedback %>
     <p style="margin: 0px;">
-      <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
+      <%= t("mailers.startup.feedback_as_email.header.rejected_#{update_for}", coach_name: coach_name) %>
     </p>
   <% end %>
+  <p style="margin: 0px; padding-top: 16px">
+    <% if has_additional_feedback %>
+      <%= t("mailers.startup.feedback_as_email.body.additional_feedback", coach_name: coach_name) %>
+    <% else %>
+      <%= t("mailers.startup.feedback_as_email.body.feedback", coach_name: coach_name) %>
+    <% end %>
+  </p>
   <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
     <blockquote style="border-inline-start: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">
       <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
@@ -35,8 +42,8 @@
   </div>
   <% if target.present? %>
     <p>
-      <%= t("mailers.startup.feedback_as_email.body.view_html", link_to: link_to(t("mailers.startup.feedback_as_email.body.link_to"), target_url)) %>
+      <%= t("mailers.startup.feedback_as_email.footer_html", link: target_url, school_name: @school.name) %>
     </p>
   <% end %>
-  <%= render 'mailers/link_fallback', url: target_url %>
+  <%= render('mailers/link_fallback', url: target_url) %>
 <% end %>

@@ -336,11 +336,14 @@ describe DailyDigestService do
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
       let!(:target_1) do
-        create :target, :for_students, target_group: target_group_1
+        create :target,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_STUDENT,
+               target_group: target_group_1
       end
       let(:grade_labels_for_1) do
         [
-          { "grade" => 1, "label" => "Bad" },
+          { "grade" => 1, "label" => "Okay" },
           { "grade" => 2, "label" => "Good" },
           { "grade" => 3, "label" => "Great" },
           { "grade" => 4, "label" => "Wow" }
@@ -350,7 +353,6 @@ describe DailyDigestService do
         create :evaluation_criterion,
                course: course_1,
                max_grade: 4,
-               pass_grade: 2,
                grade_labels: grade_labels_for_1
       end
 
@@ -370,11 +372,14 @@ describe DailyDigestService do
       let(:level_2) { create :level, :one, course: course_2 }
       let(:target_group_2) { create :target_group, level: level_2 }
       let!(:target_2) do
-        create :target, :for_students, target_group: target_group_2
+        create :target,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_STUDENT,
+               target_group: target_group_2
       end
       let(:grade_labels_for_2) do
         [
-          { "grade" => 1, "label" => "Bad" },
+          { "grade" => 1, "label" => "Okay" },
           { "grade" => 2, "label" => "Good" },
           { "grade" => 3, "label" => "Great" },
           { "grade" => 4, "label" => "Wow" }
@@ -384,7 +389,6 @@ describe DailyDigestService do
         create :evaluation_criterion,
                course: course_2,
                max_grade: 4,
-               pass_grade: 2,
                grade_labels: grade_labels_for_2
       end
 
@@ -447,8 +451,8 @@ describe DailyDigestService do
                community: community_2,
                creator: t3_user
 
-        target_1.evaluation_criteria << evaluation_criterion_1
-        target_2.evaluation_criteria << evaluation_criterion_2
+        target_1.assignments.first.evaluation_criteria << evaluation_criterion_1
+        target_2.assignments.first.evaluation_criteria << evaluation_criterion_2
       end
 
       it "sends coaches info about submissions to review and community updates" do
@@ -519,11 +523,14 @@ describe DailyDigestService do
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
       let!(:target_1) do
-        create :target, :for_students, target_group: target_group_1
+        create :target,
+               :with_shared_assignment,
+               given_role: Assignment::ROLE_STUDENT,
+               target_group: target_group_1
       end
       let(:grade_labels_for_1) do
         [
-          { "grade" => 1, "label" => "Bad" },
+          { "grade" => 1, "label" => "Okay" },
           { "grade" => 2, "label" => "Good" },
           { "grade" => 3, "label" => "Great" },
           { "grade" => 4, "label" => "Wow" }
@@ -533,7 +540,6 @@ describe DailyDigestService do
         create :evaluation_criterion,
                course: course_1,
                max_grade: 4,
-               pass_grade: 2,
                grade_labels: grade_labels_for_1
       end
 

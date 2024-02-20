@@ -20,19 +20,19 @@ feature "Cohorts", js: true do
 
   let!(:target_l1) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 1
+           given_role: Target::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 1
   end
   let!(:target_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l2,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 2
+           given_role: Target::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 2
   end
 
   let(:cohort_1) { create :cohort, course: course }
@@ -207,13 +207,13 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone completed: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone completed: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
 
       expect(page).to have_text(student_1.name)
       expect(page).not_to have_text(student_2.name)
 
       find(
-        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+        "button[title='Remove selection: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(student_2.name)
     end
@@ -233,13 +233,13 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: students_cohort_path(cohort_1)
 
       fill_in "Filter", with: "M"
-      click_button "Milestone incomplete: M#{target_l1.milestone_number}: #{target_l1.title}"
+      click_button "Milestone incomplete: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
 
       expect(page).not_to have_text(student_1.name)
       expect(page).to have_text(student_2.name)
 
       find(
-        "button[title='Remove selection: M#{target_l1.milestone_number}: #{target_l1.title}']"
+        "button[title='Remove selection: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}']"
       ).click
       expect(page).to have_text(student_2.name)
       expect(page).to have_text(student_1.name)
@@ -297,14 +297,14 @@ feature "Cohorts", js: true do
       sign_in_user course_coach.user, referrer: cohort_path(cohort_1)
 
       find(
-        "a[href='#{students_cohort_path(cohort_1, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_cohort_path(cohort_1, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_current_path(
         students_cohort_path(
           cohort_1,
           milestone_completed:
-            "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}"
+            "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
         )
       )
 
@@ -313,14 +313,14 @@ feature "Cohorts", js: true do
       visit cohort_path(cohort_1)
 
       find(
-        "a[href='#{students_cohort_path(cohort_1, milestone_completed: "#{target_l2.id};M#{target_l2.milestone_number}: #{target_l2.title}")}']"
+        "a[href='#{students_cohort_path(cohort_1, milestone_completed: "#{target_l2.id};M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}")}']"
       ).click
 
       expect(page).to have_current_path(
         students_cohort_path(
           cohort_1,
           milestone_completed:
-            "#{target_l2.id};M#{target_l2.milestone_number}: #{target_l2.title}"
+            "#{target_l2.id};M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}"
         )
       )
 

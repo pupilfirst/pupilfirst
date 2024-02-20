@@ -40,7 +40,7 @@ module Schools
       private
 
       def can_be_auto_issued
-        @course.targets.live.exists?(milestone: true)
+        @course.targets.live.milestone.exists?
       end
 
       def certificates

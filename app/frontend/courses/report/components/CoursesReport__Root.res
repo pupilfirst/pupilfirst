@@ -40,22 +40,22 @@ let reducer = (state, action) =>
   switch action {
   | SelectOverviewTab => {...state, selectedTab: #Overview}
   | SelectSubmissionsTab => {...state, selectedTab: #Submissions}
-  | SaveOverviewData(overviewData) => {...state, overviewData: overviewData}
-  | SaveSubmissions(submissionsData) => {...state, submissionsData: submissionsData}
+  | SaveOverviewData(overviewData) => {...state, overviewData}
+  | SaveSubmissions(submissionsData) => {...state, submissionsData}
   | UpdateStatusFilter(status) => {
       ...state,
       submissionsFilter: {
         selectedStatus: status,
       },
     }
-  | UpdateSortDirection(sortDirection) => {...state, sortDirection: sortDirection}
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   }
 
 module StudentReportOverviewQuery = %graphql(`
     query StudentReportOverviewQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         evaluationCriteria {
-          id, name, maxGrade, passGrade
+          id, name, maxGrade
         }
         student {
           cohort {
@@ -89,7 +89,6 @@ let getOverviewData = (studentId, send, ()) => {
           ~id=evaluationCriterion.id,
           ~name=evaluationCriterion.name,
           ~maxGrade=evaluationCriterion.maxGrade,
-          ~passGrade=evaluationCriterion.passGrade,
         )
       )
 

@@ -20,9 +20,6 @@ class Types::MutationType < Types::BaseObject
   field :create_quiz_submission,
         mutation: Mutations::CreateQuizSubmission,
         null: false
-  field :auto_verify_submission,
-        mutation: Mutations::AutoVerifySubmission,
-        null: false
   field :create_submission, mutation: Mutations::CreateSubmission, null: false
   field :delete_content_block,
         mutation: Mutations::DeleteContentBlock,
@@ -82,6 +79,7 @@ class Types::MutationType < Types::BaseObject
         mutation: Mutations::UpdateImageContentBlock,
         null: false
   field :update_target, mutation: Mutations::UpdateTarget, null: false
+  field :update_assignment, mutation: Mutations::UpdateAssignment, null: false
   field :create_target_version,
         mutation: Mutations::CreateTargetVersion,
         null: false
@@ -181,5 +179,27 @@ class Types::MutationType < Types::BaseObject
         null: false
   field :initiate_password_reset,
         mutation: Mutations::InitiatePasswordReset,
+        null: false
+  field :create_submission_comment,
+        mutation: Mutations::CreateSubmissionComment,
+        null: false
+  field :create_reaction, mutation: Mutations::CreateReaction, null: false
+  field :pin_submission, mutation: Mutations::PinSubmission, null: false
+  field :create_moderation_report,
+        mutation: Mutations::CreateModerationReport,
+        null: false
+  field :hide_submission_comment,
+        mutation: Mutations::HideSubmissionComment,
+        null: false
+  field :archive_submission_comment,
+        mutation: Mutations::ArchiveSubmissionComment,
+        null: false
+  field :hide_submission, mutation: Mutations::HideSubmission, null: false
+  field :remove_reaction, mutation: Mutations::RemoveReaction, null: false
+  field :archive_user_standing,
+        mutation: Mutations::ArchiveUserStanding,
+        null: false
+  field :create_user_standing,
+        mutation: Mutations::CreateUserStanding,
         null: false
 end

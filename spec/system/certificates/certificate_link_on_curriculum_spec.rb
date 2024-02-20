@@ -15,7 +15,11 @@ feature "Certificate link on curriculum", js: true do
   let!(:student) { create :student, cohort: course.cohorts.first, user: user }
   let(:target_group) { create :target_group, level: level_1 }
   let!(:target) do
-    create :target, :with_markdown, :team, target_group: target_group
+    create :target,
+           :with_shared_assignment,
+           :with_markdown,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group
   end
 
   scenario "user sees link to issued certificate on curriculum page" do

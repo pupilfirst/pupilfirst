@@ -17,7 +17,7 @@ module CourseExports
     def target_rows
       values =
         targets.map do |target|
-          milestone = target.milestone? ? "Yes" : "No"
+          milestone = milestone?(target)
 
           [
             target_id(target),
@@ -56,7 +56,14 @@ module CourseExports
     def evaluation_criteria_ids
       @evaluation_criteria_ids ||=
         targets
-          .map { |target| target.evaluation_criteria.order(:name).pluck(:id) }
+          .map do |target|
+            assignment = target.assignments.not_archived.first
+            if assignment
+              assignment.evaluation_criteria.order(:name).pluck(:id)
+            else
+              []
+            end
+          end
           .flatten
           .uniq
     end
@@ -143,6 +150,14 @@ module CourseExports
       "oooc:=HYPERLINK(\"#{report_path(student)}\"; \"#{student.id}\")"
     end
 
+    def latest_user_standing(user)
+      user.user_standings.live.order(created_at: :desc).first
+    end
+
+    def school_default_standing(user)
+      @school_default_standing ||= user.school.default_standing
+    end
+
     def student_rows
       rows =
         students.map do |student|
@@ -158,7 +173,11 @@ module CourseExports
             student.cohort.name,
             student.tags.order(:name).pluck(:name).join(", "),
             last_seen_at(user),
-            student.completed_at&.iso8601 || ""
+            student.completed_at&.iso8601 || "",
+            latest_user_standing(user)&.standing&.name ||
+              school_default_standing(user)&.name || "",
+            latest_user_standing(user)&.reason ||
+              school_default_standing(user)&.description || ""
           ] + average_grades_for_student(student)
         end
 
@@ -173,7 +192,9 @@ module CourseExports
           "Cohort",
           "Tags",
           "Last Seen At",
-          "Course Completed At"
+          "Course Completed At",
+          "Current Standing",
+          "Current Standing Reason"
         ] + evaluation_criteria_names
       ] + rows
     end

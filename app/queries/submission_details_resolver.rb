@@ -125,7 +125,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def evaluation_criteria_fields
-    %w[name id max_grade pass_grade grade_labels]
+    %w[name id max_grade grade_labels]
   end
 
   def unique_criteria_from_target_and_submissions
@@ -165,7 +165,7 @@ class SubmissionDetailsResolver < ApplicationQuery
     end
 
     @user_is_a_coach_assigned_to_cohort =
-      current_user.faculty&.cohorts&.exists?(
+      current_user&.faculty&.cohorts&.exists?(
         id: submission.students.first.cohort_id
       )
   end

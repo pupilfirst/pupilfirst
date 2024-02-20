@@ -38,19 +38,19 @@ feature "Organisation show" do
 
   let!(:target_l1) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l1,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 1
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 1
   end
   let!(:target_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_l2,
-           role: Target::ROLE_STUDENT,
-           evaluation_criteria: [evaluation_criterion],
-           milestone: true,
-           milestone_number: 2
+           given_role: Assignment::ROLE_STUDENT,
+           given_evaluation_criteria: [evaluation_criterion],
+           given_milestone_number: 2
   end
 
   before do
@@ -100,11 +100,11 @@ feature "Organisation show" do
       expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_text(
-        "M#{target_l1.milestone_number}: #{target_l1.title}"
+        "M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
       )
 
       expect(page).to have_text(
-        "M#{target_l2.milestone_number}: #{target_l2.title}"
+        "M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}"
       )
 
       expect(page).to have_link(
@@ -118,7 +118,7 @@ feature "Organisation show" do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       find(
-        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_text(team_2.students.first.name)
@@ -164,11 +164,11 @@ feature "Organisation show" do
       expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_text(
-        "M#{target_l1.milestone_number}: #{target_l1.title}"
+        "M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
       )
 
       expect(page).to have_text(
-        "M#{target_l2.milestone_number}: #{target_l2.title}"
+        "M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}"
       )
 
       expect(page).to have_link(
@@ -182,7 +182,7 @@ feature "Organisation show" do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       find(
-        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_text(team_2.students.first.name)

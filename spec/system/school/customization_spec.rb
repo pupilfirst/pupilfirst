@@ -20,19 +20,27 @@ feature "School Customization", js: true do
     find('button[title="Edit logo (on light backgrounds)"]').click
 
     # Unhappy path.
-    attach_file "icon", image_path("high_resolution.png"), visible: false
+    attach_file "icon_on_light_bg",
+                image_path("high_resolution.png"),
+                visible: false
 
     click_button "Update Images"
 
     expect(page).to have_content(
-      "Icon must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high"
+      "Icon on light bg must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high"
     )
 
     # Happy path.
     attach_file "logo_on_light_bg",
                 image_path("logo_lipsum_on_light_bg.png"),
                 visible: false
-    attach_file "icon", image_path("icon_pupilfirst.png"), visible: false
+    attach_file "logo_on_dark_bg",
+                image_path("logo_lipsum_on_dark_bg.png"),
+                visible: false
+    attach_file "icon_on_dark_bg", image_path("icon_white.png"), visible: false
+    attach_file "icon_on_light_bg",
+                image_path("icon_pupilfirst.png"),
+                visible: false
     attach_file "cover_image", image_path("cover_image.jpg"), visible: false
 
     click_button "Update Images"
@@ -42,7 +50,7 @@ feature "School Customization", js: true do
     expect(school.reload.logo_on_light_bg.filename).to eq(
       "logo_lipsum_on_light_bg.png"
     )
-    expect(school.icon.filename).to eq("icon_pupilfirst.png")
+    expect(school.icon_on_light_bg.filename).to eq("icon_pupilfirst.png")
     expect(school.cover_image.filename).to eq("cover_image.jpg")
   end
 
@@ -198,11 +206,24 @@ feature "School Customization", js: true do
     fill_in("Body of Agreement", with: terms_and_conditions)
     click_button "Update Terms & Conditions"
     expect(page).to have_content("Terms & Conditions has been updated")
+    dismiss_notification
+
+    find('button[title="Close Editor"]').click
+
+    # Edit code of conduct.
+    find('button[title="Edit Code of Conduct"]').click
+
+    code_of_conduct = Faker::Lorem.paragraphs(number: 2).join("\n\n")
+
+    fill_in("Body of Agreement", with: code_of_conduct)
+    click_button "Update Code of Conduct"
+    expect(page).to have_content("Code of Conduct has been updated")
 
     expect(SchoolString::PrivacyPolicy.for(school)).to eq(privacy_policy)
     expect(SchoolString::TermsAndConditions.for(school)).to eq(
       terms_and_conditions
     )
+    expect(SchoolString::CodeOfConduct.for(school)).to eq(code_of_conduct)
   end
 
   scenario "school admin customizes school name and about" do

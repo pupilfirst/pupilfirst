@@ -1,13 +1,13 @@
 module SubmissionsHelper
-  GRADE_PASS = :pass
-  GRADE_FAIL = :fail
-  GRADE_NONE = :none
+  SUBMISSION_PASS = :pass
+  SUBMISSION_FAIL = :fail
+  SUBMISSION_NONE = :none
 
   def complete_target(target, student, evaluator: nil, latest: true)
     submit_target(
       target,
       student,
-      grade: GRADE_PASS,
+      submission_evaluation: SUBMISSION_PASS,
       evaluator: evaluator,
       latest: latest
     )
@@ -17,7 +17,7 @@ module SubmissionsHelper
     submit_target(
       target,
       student,
-      grade: GRADE_FAIL,
+      submission_evaluation: SUBMISSION_FAIL,
       evaluator: evaluator,
       latest: latest
     )
@@ -26,36 +26,37 @@ module SubmissionsHelper
   def submit_target(
     target,
     student,
-    grade: GRADE_NONE,
+    submission_evaluation: SUBMISSION_NONE,
     evaluator: nil,
     latest: true
   )
-    options = submission_options(target, student, grade, evaluator, latest)
+    assignment = target.assignments.first
+    options =
+      submission_options(
+        target,
+        assignment,
+        student,
+        submission_evaluation,
+        evaluator,
+        latest
+      )
 
     FactoryBot
       .create(:timeline_event, :with_owners, **options)
-      .tap { |submission| grade_submission(submission, grade, target) }
+      .tap do |submission|
+        grade_submission(submission, submission_evaluation, assignment)
+      end
   end
 
-  def grade_submission(submission, grade, target)
-    if target.evaluation_criteria.present? && grade != GRADE_NONE
-      target.evaluation_criteria.each do |ec|
-        computed_grade =
-          case grade
-          when GRADE_PASS
-            rand(ec.pass_grade..ec.max_grade)
-          else
-            (ec.pass_grade - 1).tap do |failing_grade|
-              if failing_grade.zero?
-                raise 'Spec asked for failed status on a target with non-failing criteria'
-              end
-            end
-          end
-
+  def grade_submission(submission, submission_evaluation, assignment)
+    if assignment.evaluation_criteria.present? &&
+         submission_evaluation == SUBMISSION_PASS
+      assignment.evaluation_criteria.each do |ec|
+        evaluation_grade = rand(ec.max_grade)
         create(
           :timeline_event_grade,
           timeline_event: submission,
-          grade: computed_grade,
+          grade: evaluation_grade,
           evaluation_criterion: ec
         )
       end
@@ -75,16 +76,29 @@ module SubmissionsHelper
       end
   end
 
-  def submission_options(target, student, grade, evaluator, latest)
+  def submission_options(
+    target,
+    assignment,
+    student,
+    submission_evaluation,
+    evaluator,
+    latest
+  )
     students =
-      (target.team_target? && student.team) ? student.team.students : [student]
+      (
+        if (target.team_target? && student.team)
+          student.team.students
+        else
+          [student]
+        end
+      )
 
     passed_at, evaluated_at =
-      if target.evaluation_criteria.present?
-        case grade
-        when GRADE_PASS
+      if assignment.evaluation_criteria.present?
+        case submission_evaluation
+        when SUBMISSION_PASS
           [Time.zone.now, Time.zone.now]
-        when GRADE_FAIL
+        when SUBMISSION_FAIL
           [nil, Time.zone.now]
         else
           [nil, nil]

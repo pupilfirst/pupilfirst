@@ -59,38 +59,50 @@ describe CourseExports::PrepareTeamsExportService do
 
   let!(:target_l1_evaluated) do
     create :target,
-           :team,
+           :with_shared_assignment,
            target_group: target_group_l1_milestone,
-           evaluation_criteria: [
+           given_role: Assignment::ROLE_TEAM,
+           given_evaluation_criteria: [
              evaluation_criterion_1,
              evaluation_criterion_2
            ],
            sort_index: 1,
-           milestone: true,
-           milestone_number: 1
+           given_milestone_number: 1
   end
-  let!(:target_l1_individual_mark_as_complete) do
-    create :target, :student, target_group: target_group_l1_non_milestone
-  end # Not a team target - should be excluded.
-  let!(:target_l1_mark_as_complete) do
-    create :target, :team, target_group: target_group_l1_non_milestone
-  end
-  let!(:quiz) { create :quiz, target: target_l1_quiz }
-  let!(:target_l1_quiz) do
+  let!(:target_l1_individual_submit_form) do
     create :target,
-           :team,
-           target_group: target_group_l1_milestone,
-           milestone: true,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group_l1_non_milestone
+  end # Not a team target - should be excluded.
+  let!(:target_l1_submit_form) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l1_non_milestone
+  end
+  let!(:target_l1_quiz) do
+    create :target, target_group: target_group_l1_milestone, sort_index: 0
+  end
+  let!(:assignment_target_l1_quiz) do
+    create :assignment,
+           target: target_l1_quiz,
            milestone_number: 2,
-           sort_index: 0
+           milestone: true,
+           role: Assignment::ROLE_TEAM
+  end
+  let!(:quiz_target_l1) do
+    create :quiz,
+           :with_question_and_answers,
+           assignment: assignment_target_l1_quiz
   end
   let!(:target_l2_evaluated) do
     create :target,
-           :team,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
            target_group: target_group_l2_milestone,
-           evaluation_criteria: [evaluation_criterion_1],
-           milestone: true,
-           milestone_number: 1
+           given_evaluation_criteria: [evaluation_criterion_1],
+           given_milestone_number: 1
   end
 
   let(:school) { course.school }
@@ -109,7 +121,7 @@ describe CourseExports::PrepareTeamsExportService do
   end
 
   let!(:team_1_reviewed_submission_1) do
-    complete_target target_l1_evaluated, student_1
+    fail_target target_l1_evaluated, student_1
   end
 
   let!(:team_1_reviewed_submission_2) do
@@ -148,8 +160,8 @@ describe CourseExports::PrepareTeamsExportService do
            archived_at: 1.day.ago
 
     # First student has completed everything, but has a pending submission in L2.
-    submit_target target_l1_individual_mark_as_complete, student_1
-    submit_target target_l1_mark_as_complete, student_1
+    submit_target target_l1_individual_submit_form, student_1
+    submit_target target_l1_submit_form, student_1
     submission = submit_target target_l1_quiz, student_1
     submission.update!(quiz_score: "2/2")
     submit_target target_l2_evaluated, student_1
@@ -159,7 +171,7 @@ describe CourseExports::PrepareTeamsExportService do
     submission.update!(quiz_score: "1/2")
 
     # Third student (alone in team) has only completed one target.
-    submit_target target_l1_mark_as_complete, student_3
+    submit_target target_l1_submit_form, student_3
 
     submission = submit_target target_l1_quiz, student_l2_4
     submission.update!(quiz_score: "1/2")
@@ -194,7 +206,7 @@ describe CourseExports::PrepareTeamsExportService do
         rows: [
           [
             "ID",
-            "L1T#{target_l1_mark_as_complete.id}",
+            "L1T#{target_l1_submit_form.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
@@ -202,18 +214,12 @@ describe CourseExports::PrepareTeamsExportService do
           ["Level", 1, 1, 1, 2],
           [
             "Name",
-            target_l1_mark_as_complete.title,
+            target_l1_submit_form.title,
             target_l1_quiz.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
-          [
-            "Completion Method",
-            "Mark as Complete",
-            "Take Quiz",
-            "Graded",
-            "Graded"
-          ],
+          ["Completion Method", "Submit Form", "Take Quiz", "Graded", "Graded"],
           %w[Milestone? No Yes Yes Yes],
           ["Teams with submissions", 2, 3, 3, 1],
           ["Teams pending review", 0, 0, 0, 1]
@@ -255,7 +261,7 @@ describe CourseExports::PrepareTeamsExportService do
           [
             "Team ID",
             "Team Name",
-            "L1T#{target_l1_mark_as_complete.id}",
+            "L1T#{target_l1_submit_form.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
@@ -263,11 +269,11 @@ describe CourseExports::PrepareTeamsExportService do
           [
             team_1.id,
             team_1.name,
-            "✓",
-            "2/2",
+            { "value" => "✓", "style" => "default" },
+            { "value" => "2/2", "style" => "default" },
             {
               "value" =>
-                "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)}",
+                "x;#{submission_grading(team_1_reviewed_submission_2)}",
               "style" => "passing-grade"
             },
             { "value" => "RP", "style" => "pending-grade" }
@@ -276,23 +282,24 @@ describe CourseExports::PrepareTeamsExportService do
             team_2.id,
             team_2.name,
             nil,
-            "1/2",
-            {
-              "value" => submission_grading(team_2_reviewed_submission),
-              "style" => "failing-grade"
-            },
+            { "value" => "1/2", "style" => "default" },
+            { "value" => "x", "style" => "failing-grade" },
             nil
           ],
-          [team_3.id, team_3.name, "✓", nil, nil, nil],
+          [
+            team_3.id,
+            team_3.name,
+            { "value" => "✓", "style" => "default" },
+            nil,
+            nil,
+            nil
+          ],
           [
             team_4.id,
             team_4.name,
             nil,
-            "1/2",
-            {
-              "value" => submission_grading(team_4_reviewed_submission),
-              "style" => "failing-grade"
-            },
+            { "value" => "1/2", "style" => "default" },
+            { "value" => "x", "style" => "failing-grade" },
             nil
           ]
         ]
@@ -372,7 +379,7 @@ describe CourseExports::PrepareTeamsExportService do
                 team_1.name,
                 {
                   "value" =>
-                    "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)};RP",
+                    "x;#{submission_grading(team_1_reviewed_submission_2)};RP",
                   "style" => "pending-grade"
                 },
                 { "value" => "RP", "style" => "pending-grade" }

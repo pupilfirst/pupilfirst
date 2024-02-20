@@ -42,5 +42,9 @@ module Mutations
     def coach
       @coach ||= current_user.faculty
     end
+
+    def allow_token_auth?
+      true
+    end
   end
 end

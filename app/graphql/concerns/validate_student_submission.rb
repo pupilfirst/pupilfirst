@@ -4,6 +4,7 @@ module ValidateStudentSubmission
   class EnsureSubmittability < GraphQL::Schema::Validator
     def validate(_object, context, value)
       target = Target.find_by(id: value[:target_id])
+      assignment = target.assignments.not_archived.first
       course = target.course
       student =
         context[:current_user]
@@ -13,7 +14,7 @@ module ValidateStudentSubmission
           .first
       target_status = Targets::StatusService.new(target, student).status
       submittable =
-        target.checklist.present? || target.evaluation_criteria.present?
+        assignment.checklist.present? || assignment.evaluation_criteria.present?
       submission_required =
         target_status.in?(
           [
@@ -38,9 +39,10 @@ module ValidateStudentSubmission
 
   class AttemptedMinimumQuestions < GraphQL::Schema::Validator
     def validate(_object, _context, value)
-      target = Target.find_by(id: value[:target_id])
+      assignment =
+        Target.find_by(id: value[:target_id]).assignments.not_archived.last
       checklist = value[:checklist]
-      target
+      assignment
         .checklist
         .each_with_object([]) do |c, result|
           next if c["optional"] == true
@@ -149,6 +151,7 @@ module ValidateStudentSubmission
     argument :target_id, GraphQL::Types::ID, required: true
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :file_ids, [GraphQL::Types::ID], required: true
+    argument :anonymous, GraphQL::Types::Boolean, required: true
 
     validates ValidResponse => {}
     validates ValidateFileAttachments => {}

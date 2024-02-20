@@ -19,7 +19,8 @@ module Types
     end
 
     def milestone_number
-      object.target.milestone_number
+      assignment = object.target.assignments.not_archived.first
+      assignment ? assignment.milestone_number : nil
     end
   end
 end

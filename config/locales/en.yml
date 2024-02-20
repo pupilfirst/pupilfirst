@@ -212,7 +212,7 @@ en:
         label:
           search: Search by name or email
           tag: Tag
-      onboard_as_student: OnBoard as Student
+      onboard_as_student: Onboard as Student
       show_actions: Show Actions
       show_details: "Show Details: "
       sort_criterion:
@@ -515,6 +515,7 @@ en:
       nav_long_previous_level: Previous Level
       nav_short_next_level: Next
       nav_short_previous_level: Previous
+      target_read_label: Read
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
@@ -536,6 +537,18 @@ en:
       topics_post: " community"
       topics_pre: "Topics From "
       use_community: Use the community to clear your doubts, and to help your peers!
+    CoursesCurriculum__DiscussSubmission:
+      anonymous_avatar: A
+      anonymous_name: Anonymous
+      created_at: on %{created_at}.
+      hide: Hide submission
+      pin: Pin
+      pinned_submission: Pinned Submission
+      submission_hidden: This submission is hidden from discussions
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      unhide: Un-hide submission
+      unpin: Unpin
     CoursesCurriculum__FileForm:
       another_file: Please choose another file for upload.
       cannot_attach: You cannot attach files.
@@ -547,6 +560,12 @@ en:
       smth_went_wrong: Something went wrong!
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
+    CoursesCurriculum__ModerationReportButton:
+      cancel: Cancel
+      close: Close
+      share_reason: Share reason for reporting
+      report: Report
+      reported: Reported
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
@@ -557,6 +576,7 @@ en:
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
     CoursesCurriculum__Overlay:
+      button_load_more: Load More Submissions...
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
@@ -569,20 +589,33 @@ en:
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
+      discussion_assignment_notice:
+        title: Discussion enabled assignment
+        description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
+      mark_as_read: Mark as read
+      marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: Next Target
+      no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
+      submissions_peers: Submissions by peers
     CoursesCurriculum__Quiz:
       next_question: Next Question
       question: Question
       submit_quiz: Submit Quiz
+    CoursesCurriculum__Reactions:
+      emoji_picker: Add reaction
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching
@@ -593,6 +626,24 @@ en:
       steps_submit: steps to submit this target
       submit: Submit
       submitting: Submitting
+      submit_anonymous_label: Submit anonymously
+      submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
+    CoursesCurriculum__SubmissionCommentShow:
+      cancel: Cancel
+      close: Close
+      delete: Delete
+      delete_comment: Delete Comment
+      delete_confirm: Are you sure you want to delete this comment?
+      hidden: This comment is hidden from discussions
+      hide: Hide
+      unhide: Un-hide
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...
@@ -733,10 +784,14 @@ en:
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       hide_test_report_button: Hide Test Report
-      no_more_pending_submissions: "This submission has been graded, and there are no more submissions awaiting review."
+      no_more_pending_submissions: This submission has been graded, and there are no more submissions awaiting review.
       note_help: Would you like to write a note about this %{noteAbout} ?
       note_placeholder: Did you notice something while reviewing this submission?
       page_title: "Submission #%{submission_number} | %{target_title} | %{name}"
+      reject_submission: Reject Submission
+      reject_submission_and_send_feedback: Reject submission & send feedback
+      rejection_help_note: You are marking this submission as rejected without providing any grades. Please provide your feedback along with the rejection.
+      rejection_help_note_title: "Note: "
       remove_assignment: Remove assignment
       report_description: Test Report
       review: Review
@@ -752,6 +807,7 @@ en:
         rejected: Rejected
         reviewing: Reviewing
       student: student
+      submission_acceptable: Is this submission acceptable?
       submission_number: "Submission #%{number}"
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team: "
@@ -759,8 +815,12 @@ en:
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
-      you_are_done: "You're done!"
+      undo_rejection: Undo Rejection
+      undo_rejection_notice: " has marked this submission as rejected without providing any grades."
+      undo_rejection_notice_title: "Submission Rejected:"
+      undo_rejection_warning: Are you sure you want to undo the rejection? This will return the submission to a 'Pending Review' state.
       write_a_note: Write a Note
+      you_are_done: You're done!
     CoursesReview__ReviewerManager:
       assigned_at: Assigned %{date}
       change_reviewer_and_start_review: Yes, Assign Me
@@ -850,6 +910,7 @@ en:
       save_note: Save Note
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
+      affiliation: Affiliation
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       close_student_report: Close student report
@@ -863,11 +924,13 @@ en:
         one: 1 Quiz Attempted
         other: "%{count} Quizzes Attempted"
         zero: No Quizzes Attempted
+      student_id: Student ID
       submissions: Submissions
       targets: " Targets"
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
+      user_id: User ID
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
       submitted_on: "Submitted on "
@@ -917,13 +980,13 @@ en:
       delete_block_confirm: Are you sure you want to delete this block?
       deleting: Deleting...
       editor_content_block: "Editor for content block "
+      embedded_url: Embedded URL
       move_down: Move Down
       move_up: Move Up
       save_changes: Save Changes
       undo_block_confirm: Are you sure you want to undo your changes to this block?
       undo_changes: Undo Changes
       uploading: Updating...
-      embedded_url: Embedded URL
       video: Video
     CurriculumEditor__ContentEditor:
       last_updated: Last Updated
@@ -991,6 +1054,15 @@ en:
       remove_choice: Remove Choice
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      assignment_discussion:
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
+        label: Do you want to enable discussion on this assignment?
+      allow_anonymous:
+        title: Setup submission anonymity
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: Choose a target group
       completion_instructions:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
@@ -998,7 +1070,7 @@ en:
         label: Do you have any completion instructions for the student?
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
-      empty_questions_warning: There are currently no questions for the student to submit. The target needs to have atleast one question.
+      empty_questions_warning: There are currently no questions for the student to submit. The assignment needs to have atleast one question.
       enter_valid_link: Enter a valid link
       enter_valid_title: Enter a valid title
       github_action:
@@ -1015,7 +1087,7 @@ en:
       paste_link_complete: Paste link to complete
       prepare_quiz: Prepare the quiz now.
       prepare_quiz_error: All questions must be filled in, and all questions should have at least two answers.
-      prerequisite_targets_label: Are there any prerequisite targets?
+      prerequisite_targets_label: Does this assignment have any prerequisites?
       search_criteria_all: You have selected all evaluation criteria!
       search_criteria_empty: No criteria selected
       search_criteria_placeholder: Search evaluation criteria
@@ -1032,18 +1104,19 @@ en:
         form_limit_warning: Maximum allowed questions is 25!
         help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
-        label: What steps should the student take to complete this target?
+        label: What steps should the student take to complete this assignment?
       target_group: Target Group
-      target_method_of_completion_label: How do you want the student to complete the target?
-      target_reviewed_by_coach: Will a coach review submissions on this target?
+      target_has_assignment: Does this target have an assignment?
+      target_method_of_completion_label: How do you want the student to complete the assignment?
+      target_reviewed_by_coach: Will a coach review submissions on this assignment?
       target_role:
         help: Should students in a team submit work on a target individually, or together?
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
-        label: How should teams tackle this target?
+        label: How should teams tackle this assignment?
       target_setting_milestone:
-        help: Students will not be able to complete the course until they complete this target if set as milestone.
+        help: Students complete courses by completing all its milestone assignments.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
-        label: Is this target a milestone?
+        label: Is this assignment a milestone?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -1086,6 +1159,7 @@ en:
       question: Question
       remove_question: Remove Quiz Question
     CurriculumEditor__TargetShow:
+      assignment_label: Assignment
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
@@ -1115,7 +1189,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/evaluation_criteria
         label: Grade and Labels
       important: Important
-      important_details: The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
+      important_details: The value of maximum grade cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
       label_grade_placeholder: Label for grade
       max_grade: Maximum grade is
       name_error: Enter a valid name
@@ -1322,7 +1396,9 @@ en:
       you_selected_pre: You have selected
     SchoolCustomize__ImagesEditor:
       cover_image: Cover image
-      icon: Icon
+      icon_dark_label: Icon on a dark background
+      icon_light_label: Icon on a light background
+      logo_dark_label: Logo on a dark background
       logo_light_label: Logo on a light background
       manage_images: Manage Images
       update_images: Update Images
@@ -1368,6 +1444,7 @@ en:
       contact: Contact
       customize_link_footer: You can customize links in the footer.
       customize_link_header: You can customize links on the header.
+      edit_code_of_conduct: Edit Code of Conduct
       edit_contact_details: Edit contact details
       edit_footer_links: Edit footer links
       edit_header_links: Edit header links
@@ -1414,6 +1491,7 @@ en:
         settings:
           admins: Admins
           customization: Customization
+          standing: Standing
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -1449,6 +1527,10 @@ en:
       manage_certificates: Manage student certificates
       new_certificate_label: "Issue new certificate:"
       page_description: Actions for the student
+      pages:
+        actions: Actions
+        details: Details
+        standing: Standing
       re_activate_student:
         button: Re-Activate Student
       revoke_certificate_button: Revoke Certificate
@@ -1460,7 +1542,8 @@ en:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
-        invalid_email: Email has to be valid and can't be blank
+        invalid_characters: "%{column_name} column contains one or more invalid characters"
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
         invalid_team_name: Team name has to be less than 50 characters
@@ -1559,6 +1642,7 @@ en:
       pages:
         actions: Actions
         details: Details
+        standing: Standing
       personal_coaches: Personal Coaches
       pick_a_cohort: Pick a Cohort
       search_coaches_all: You have selected all available coaches!
@@ -1580,7 +1664,25 @@ en:
       title_error: Title must have at least two characters
       title_placeholder: Student, Coach, CEO, etc.
       update_student: Update Student
+    StudentStanding__Root:
+      add_entry_button: Add Entry
+      contact_admin: Please contact your school admin.
+      change_standing: Add an entry to the log
+      change_standing_info: When adding an entry, you can also change the student's standing.
+      confirm_delete: Are you sure you want to delete this standing log entry?
+      delete_standing_log: Delete Standing Log
+      empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
+      pages:
+        actions: Actions
+        details: Details
+        standing: Standing
+      reason_heading: Reason for this entry
+      reason_placeholder: This reason will be visible to the student and to organisation admins.
+      school_standing_disabled: School Standing is disabled.
+      select_standing: Select Standing
+      standing_description_missing: Selected standing has no description.
     StudentTopNav:
+      edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out
     StudentTopNav__DropDown:
@@ -1778,20 +1880,12 @@ en:
       account: Account
       account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
       already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
+      appearance_description: Select your preferred style.
+      appearance_title: Appearance
       avatar_uploaded_notification: Avatar uploaded successfully.
-      email_change_q: Are you sure you want to change your email?
-      confirm_using_password: Please confirm using your password
-      change_account_email: Change account email
-      update_email_disabled_notice: You must set a password before you can edit your account email address.
-      update_email: Update email
       cancel: Cancel
+      change_account_email: Change account email
       change_password: Change your current password
-      set_password_button_text: Set password
-      set_up_password: Set up password
-      set_password_subtext: You have not set a password for your account.
-      forgot_password: Forgot your password?
-      reset_password_button_text: Reset password
-      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       change_photo: Change photo
       community_digest: Community Digest
       community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
@@ -1800,20 +1894,25 @@ en:
       confirm_password: Confirm password
       confirm_password_error: New password and confirmation should match and must have atleast 8 characters
       confirm_password_placeholder: Confirm new password
+      confirm_using_password: Please confirm using your password
       current_password: Current password
       current_password_placeholder: Type current password
+      dark: Dark
       delete_account: Delete account
       delete_your_account: Delete your account
       deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
       disable_email_radio: Disable
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
+      email_change_q: Are you sure you want to change your email?
       email_label: Email
       email_placeholder: Type your email
       email_sent_notification: Please check your new email. We've sent instructions to update your email address.
+      forgot_password: Forgot your password?
       incorrect_email_for_deletion: Incorrect email
       initiate_deletion: Initiate Deletion
       language: Language
+      light: Light
       localization: Localization
       manage_account: Manage your account in this school
       name_error: Name can't be blank
@@ -1825,13 +1924,22 @@ en:
       password_placeholder: Type current password
       photo: Photo
       preferred_name_placeholder: Type your preferred name
+      reset_password_button_text: Reset password
+      reset_password_subtext: If you have forgotten your password, you can reset it using the button below.
       save_changes: Save Changes
       security: Security
       select_image_limit: Please select an image with a size less than 5 MB
       select_language: Select the language that you would prefer the user interface to dislpay.
       send_email_radio: Send me a daily email
       set_password: Set password for your account
+      set_password_button_text: Set password
+      set_password_subtext: You have not set a password for your account.
+      set_up_password: Set up password
+      system: System
+      theme_title: User Interface Theme
       update_credentials: Update your login credentials for the school.
+      update_email: Update email
+      update_email_disabled_notice: You must set a password before you can edit your account email address.
       update_email_notifications: Update settings for email notifications.
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
@@ -1869,6 +1977,7 @@ en:
       empty_courses: You don't have any active courses right now.
       issued_on: "Issued on:"
       my_courses: My Courses
+      view_standing: View Standing
     UsersDeleteAccount:
       cancel: Cancel
       click_button_below: Please click the button below to permanently delete your account in this school
@@ -1892,10 +2001,10 @@ en:
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
     Zxcvbn:
-      weak: "Weak"
-      fair: "Fair"
-      medium: "Medium"
-      strong: "Strong"
+      fair: Fair
+      medium: Medium
+      strong: Strong
+      weak: Weak
   courses:
     apply:
       apply_button: Apply
@@ -1965,10 +2074,17 @@ en:
       title: Timed out
       too_long: This page took too long to load.
       try_reloading: Could you please try reloading this page?
+    something_went_wrong: Something went wrong!
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       title: Invalid Request
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    vimeo:
+      "2230": The upload type is invalid.
+      "4003": There is a problem initiating the upload.
+      "4101": Your maximum disk space has been reached.
+      "4102": Your allotted weekly quota has been reached.
+      "4104": Your allotted daily quota has been reached.
   faculty:
     index:
       coaches_at: Coaches at
@@ -2026,7 +2142,6 @@ en:
       report: Report
       review: Review
     footer_bottom:
-      logo_alt: Logo of %{school_name}
       privacy_policy: Privacy Policy
       terms_conditions: Terms & Conditions
     student_footer:
@@ -2083,6 +2198,18 @@ en:
         thanks: Thanks,
     link_fallback:
       link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+    school_contact:
+      moderation_report:
+        subject: Content reported on %{course}
+        body:
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          reported_comment: Reported comment - %{comment}
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2108,15 +2235,15 @@ en:
     startup:
       feedback_as_email:
         body:
-          grading_details_html: "%{grade_icon} %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
-          grading_feedback_header: Here is some feedback on your submission
-          grading_header: Your submission was awarded the following grades by %{coach_name}
-          link_to: the full feedback
-          main_html: Here is some feedback from %{coach_name} on your %{update_for}
-          recent_submission: recent submission
-          recent_updates: recent updates
-          view_html: You can view %{link_to}, including any files attached to the feedback.
-        subject: New feedback from %{startup_feedback} on your submission
+          additional_feedback: "Here is some additional feedback on your submission from %{coach_name}:"
+          feedback: "%{coach_name} has some feedback for you:"
+          grading_details_html: "✅ %{criteria_name}: <strong>%{grade_label}</strong> (%{grade} / %{max_grade})"
+        footer_html: You can view <a href="%{link}">the full feedback</a>, including any files attached to the feedback at %{school_name}.
+        header:
+          graded: "Your submission was awarded the following grades by %{coach_name}:"
+          rejected_submission: Your submission was rejected by %{coach_name}.
+          rejected_update: Your update was rejected by %{coach_name}.
+        subject: New feedback from %{coach_name} on your submission
     student:
       enrollment:
         body:
@@ -2124,7 +2251,7 @@ en:
           main_html: You have been enrolled as a student in the course <strong>%{course_name}</strong>, on %{school_name}.
           sign_html: You can now %{link_to}.
           team: You have also been teamed up with %{team_members}; this means that you will be expected to work together to progress in this course.
-        subject: You have been added as a student in %{school_name}
+        subject: "%{name}, you have been added as a student in %{school_name}"
     user:
       account_deletion_notification:
         body:
@@ -2139,6 +2266,15 @@ en:
         body:
           html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Your email in %{school_name} school updated successfully
+      confirm_moderation_report:
+        body:
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
@@ -2161,6 +2297,14 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
+      email_change_in_user_standing:
+        body:
+          link_to: visit user standing page
+          main_html: <p>Your standing in %{school_name} school has been changed from <strong>%{previous_standing}</strong> to <strong>%{current_standing}</strong>. The following is the reason for the change:</p>
+          main_html_for_repeat_standing: <p>A new entry has been added to your standing log in %{school_name}. Note that your standing remains the <strong>same</strong> as before. The following is the reason for the entry:</p>
+          view_html: <p>You can %{link_to} to view your current standing.</p>
+        subject: Your standing in %{school_name} has been changed.
+        subject_no_change_in_standing: A new entry has been added to your standing log in %{school_name}.
       new_post:
         body:
           link_to: view the reply on the %{community_name} community
@@ -2203,6 +2347,8 @@ en:
       success_notification: Course archived successfully.
     archive_post:
       post_archived_notification: Post archived successfully
+    archive_user_standing:
+      success_notification: Standing log deleted successfully!
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -2235,13 +2381,13 @@ en:
         description: Your feedback will be e-mailed to the student.
         title: Feedback Sent
     create_grading:
-      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      evaluation_criteria_error: Unable to grade submission without valid evaluation criteria.
       grade_recorded: Grades Recorded
       invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
       invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
       invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
-      submission_graded_error: Submission already graded
       submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      submission_reviewed_error: Submission already reviewed
       success_notification: The submission has been marked as reviewed.
     create_post:
       reply_added_notification: Reply added successfully
@@ -2266,6 +2412,8 @@ en:
       linked_file_exists_error: Some file attachments have already been linked to a submission
       missing_answer_error: "Missing answer for question: %{title}"
       success_notification: Your submission has been queued for review.
+    create_submission_comment:
+      success_notification: Comment added successfully.
     create_target:
       success_notification: Target created successfully.
     create_target_version:
@@ -2274,6 +2422,10 @@ en:
       success_notification: Team created successfully
     create_topic_subscription:
       success_notification: You will be notified about all the updates.
+    create_user_standing:
+      standing_archived_error: Selected standing is no longer active. Please refresh the page and try again.
+      standing_not_found_error: Selected standing doesn't exist. Please refresh the page and try again.
+      success_notification: Standing log created successfully!
     delete_certificate:
       success_notification: Certificate has been deleted.
     delete_course_author:
@@ -2283,6 +2435,9 @@ en:
       success_notification: Team deleted successfully
     dropout_student:
       student_updated_notification: Student updated successfully
+    evaluation_criterion:
+      name_exists: A criterion already exists with this name and maximum grade.
+      no_course: Course with ID %{course_id} does not exist; please reload this page before trying again.
     export_course_report:
       cohorts_not_found_error: Could not find cohorts with the given IDs
       course_not_found_error: Could not find a course with the given ID
@@ -2292,9 +2447,9 @@ en:
       check_inbox_notification: Check your inbox for further steps!
       deletion_init_notification: Account Deletion Initiated
     initiate_password_reset:
-      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
       email_bounced_error: The email address you supplied cannot be used because an email we sent earlier bounced.
       success_notification: Check your inbox for further steps!
+      token_generation_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -2461,7 +2616,7 @@ en:
           community: Community
     courses:
       cohorts:
-        page_title: "Cohorts | %{course_name}"
+        page_title: Cohorts | %{course_name}
       leaderboard:
         heading:
           multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
@@ -2489,6 +2644,7 @@ en:
         dashboard_link:
           title: Dashboard
       footer:
+        logo_alt: Logo of %{school_name}
         nav_links:
           dashboard: Dashboard
           home: Home
@@ -2512,7 +2668,7 @@ en:
           continue_with_discord: Continue with Discord
           continue_with_email_link: Continue with email
           continue_with_facebook: Continue with Facebook
-          continue_with_github: Continue with Github
+          continue_with_github: Continue with GitHub
           continue_with_google: Continue with Google
         page_title:
           title: Sign In
@@ -2549,6 +2705,7 @@ en:
         add_link_section_title: Add an event link (optional)
         calendar_label: Add event to
         color_label: Color
+        color_label_hint: Colors help you to differentiate different types of events at glance
         description_label: Event description
         edit_event_heading: Edit %{event_title}
         link_title_label: Event link title
@@ -2583,6 +2740,10 @@ en:
         update_calendar_button: Update calendar
       new:
         page_title: Create new calendar
+    code_of_conduct:
+      page_title: Code of Conduct Editor
+      save_code_of_conduct: Save Code of Conduct
+      update_code_of_conduct_heading: Update your school's code of conduct
     communities:
       index:
         title: Communities
@@ -2591,6 +2752,7 @@ en:
         title: Applicants
       assignments:
         list_title: Arrange milestone assignments
+        milestone_gap_warning: We have detected gaps in the numbering of your milestones. Rearranging the order below will ensure each milestone is assigned a consecutive number without any gaps.
         milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
@@ -2643,12 +2805,64 @@ en:
       students: Students
       submissions_reviewed: submissions reviewed
       title: Overview
+    standing:
+      add_another_standing: Add another standing
+      add_coc: Add CoC
+      confirm_school_standing_disable: Are you sure you want to disable standing for your school?
+      confirm_standing_deletion:
+        one: Are you sure you want to archive this standing? It has %{count} log associated with it.
+        other: Are you sure you want to archive this standing? It has %{count} logs associated with it.
+        zero: Are you sure you want to delete this standing? It has no logs associated with it.
+      default: Default
+      edit_coc: Edit CoC
+      edit_standings_heading: Edit/modify standings
+      edit_standings_info: You can edit the color, name, and description of a standing, or you can add a new standing. Students can be promoted or demoted to any standing through the "Edit Student" tab.
+      enable_standing: Enable standing for your school?
+      enabled: Enabled
+      learn_more: Learn more about standings.
+      learn_more_about_crafting_coc: Learn more about crafting a Code of Conduct.
+      page_title: Standings
+      required: Required
+      save_coc_success: Code of Conduct saved successfully!
+      standing_explanation: Use standings to communicate where a student stands with respect to your school's Code of Conduct. Positive actions should result in a promotion in standing, whereas violations should lead to a demotion.
+      toggle_standing:
+        default_standing_description: This is the default standing for all students.
+        default_standing_name: Neutral
+        school_standing_toggle_success:
+          _no: School Standing is disabled successfully!
+          _yes: School Standing is enabled successfully!
+      update_coc_heading: Add/Update your school's code of conduct
+      update_coc_info: It's beneficial to have your school's code of conduct (CoC) written in simple and easy-to-understand language.
+      view_coc: View CoC
+    standings:
+      create:
+        success: Standing created successfully!
+      delete:
+        archive_success: Standing archived successfully!
+        success: Standing deleted successfully!
+      edit:
+        page_title: Edit standing
+      form:
+        add_standing_heading: Add new standing
+        add_standing_info: Add color, name and description of a standing
+        description_placeholder: Description of standing - optional
+        edit_standing_heading: Edit %{standing_name}
+        edit_standing_info: Edit color, name and description of a standing
+        name_placeholder: Name of the standing
+        save_standing: Save Standing
+        unique_name_error: should be unique within a school.
+        name_max_length_error: should not be longer than 25 characters.
+        description_max_length_error: should not be longer than 150 characters.
+      new:
+        page_title: Add new standing
+      update:
+        success: Standing updated successfully!
   services:
     courses:
       demo_content_service:
         criterion_one: Correctness of implementation
         criterion_two: Quality of submission
-        grade_1: Bad
+        grade_1: Okay
         grade_2: Good
         grade_3: Great
         level_1: Level 1
@@ -2667,6 +2881,7 @@ en:
     _no: "No"
     _yes: "Yes"
     admin: Admin
+    affiliation: Affiliation
     all: All
     and: and
     archived: Archived
@@ -2677,6 +2892,7 @@ en:
     caption_image: A caption for the image
     close: Close
     coaches: Coaches
+    code_of_conduct: Code of Conduct
     cohort: Cohort
     cohort_overview:
       no_milestone_targets: There are no milestone targets.
@@ -2747,6 +2963,7 @@ en:
       previous: "&lsaquo; Previous"
       truncate: "&hellip;"
     pass: Pass
+    password_strength: Password Strength
     percentage: Percentage
     percentage_completed: "%{percentage}% completed"
     post: Post
@@ -2774,13 +2991,30 @@ en:
     team: Team
     team_name: Team Name
     teams: Teams
+    title: Title
     update: Update
     updating: Updating
     uploading: Uploading
-    version: Version
+    user_standing:
+      code_of_conduct_info: At %{school_name} School, we follow code of conduct. Any positive actions will lead to a promotion in standing, while any violations will result in a demotion.
+      current_standing: Current Standing
+      current_standing_card_aria: Current standing card
+      current_standing_shield_aria: Current standing shield
+      description_tooltip: Description of the standing
+      empty_standing_info: Any entries added will be displayed here.
+      no_standing_log: There are no entries in the log.
+      page_title_org_admin: Student Standing | %{school_name}
+      page_title_user: Your Standing | %{school_name}
+      reach_us: Reach us
+      reach_us_info: If you believe there's been an error in your standing, please reach out to us at
+      reason_tooltip: Reason for the log.
+      standing: Standing
+      standing_log: Standing Log
+      standing_not_enabled: Standing is not enabled for this school.
+      view_code_of_conduct: View Code of Conduct
     versions: Versions
     view: View
-    password_strength: "Password Strength"
+    view_standing: View Standing
   timeline_events:
     show:
       accepted: Accepted
@@ -2881,7 +3115,7 @@ en:
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
-        page_title: "Reset Password | %{title}"
+        page_title: Reset Password | %{title}
       sign_in_with_email:
         already_signed: You are already signed in.
         email: Continue with email
@@ -2900,14 +3134,16 @@ en:
           error: The supplied email address and password do not match. Please check your credentials and try again.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+    standing:
+      current_standing: Current Standing
+      standing: Standing
+      standing_log: Standing Log
     update_email:
       frequent_request_error: An email was sent less than two minutes ago. Please wait for a few minutes before trying again.
-      link_expired: That link has expired or is invalid. Please try again.
       invalid_password_error: The password you entered is incorrect. Please try again.
+      link_expired: That link has expired or is invalid. Please try again.
   validate_school_link_title:
     title_length_error: Please enter a non empty title with no more than 24 characters.
   validate_submission_gradable:
-    owners_should_be_active:
-      error: Cannot update inactive student submissions.
-    submission_should_be_live:
-      error: Such a submission does not exist, or it has been archived.
+    owners_should_be_active: Cannot update inactive student submissions.
+    submission_should_be_live: Such a submission does not exist, or it has been archived.

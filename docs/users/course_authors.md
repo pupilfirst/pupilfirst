@@ -6,7 +6,7 @@ sidebar_label: Course Authors
 
 You can designate certain users as _authors_ of a course. The list of authors in a course can be edited from the _Authors_ sub-menu once a course is selected.
 
-![Course Authors Page](../assets/course_authors/course_authors_page_h4lidt.png)
+![Course Authors Page](../assets/course_authors/course_authors_page.png)
 
 Authors are users who can access only the _Curriculum_ sub-menu of the courses that they're assigned to in the school administration interface. This gives these users full permissions to edit the content of your course, including creating levels, target groups and targets.
 

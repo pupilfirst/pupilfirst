@@ -1278,7 +1278,7 @@ feature "Target Details Editor", js: true do
     expect(target_1_l2.reload.assignments.first.discussion).to eq(true)
     expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(false)
 
-    click_button "Student will have an option to enable anonymity"
+    click_button "Students will have an option to share their submission anonymously"
 
     click_button "Update Target"
     expect(page).to have_text("Target updated successfully")

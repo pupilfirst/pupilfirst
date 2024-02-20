@@ -84,7 +84,7 @@ let make = (~currentUser, ~moderationReports, ~reportableId, ~reportableType) =>
             </div>
             <textarea
               id={"report_reason-" ++ reportableId}
-              className="w-full text-sm p-2 border rounded-md mt-4"
+              className="w-full text-sm text-gray-900 p-2 border rounded-md mt-4"
               type_="text"
               autoFocus={true}
               value={reportReason}

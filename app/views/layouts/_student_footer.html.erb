@@ -1,5 +1,5 @@
 <% presenter = ::Layouts::FooterPresenter.new(self) %>
-<footer class="footer__container shrink-0 border-t">
+<footer class="footer__container shrink-0 border-t print:hidden">
   <section
     class="flex flex-col md:flex-row w-full lg:max-w-5xl mx-auto justify-between items-start py-8 px-3"
   >
@@ -61,7 +61,7 @@
             <p>
               <%= t('.reach_us') %>
               <strong>
-                <!--email_off--><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor focus:outline-none focus:text-primary-500" %><!--/email_off-->
+                <!--email_off--><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor focus:outline-none focus:text-primary-500 break-words" %><!--/email_off-->
               </strong>.
             </p>
           <% end %>

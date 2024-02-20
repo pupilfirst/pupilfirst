@@ -3,7 +3,7 @@ ruby "3.2.2"
 source "https://rubygems.org"
 
 # Ruby on Rails. http://rubyonrails.org
-gem "rails", "~> 6.1.7.4"
+gem "rails", "~> 7.0.8"
 
 gem "dotenv-rails", "~> 2.8", groups: %i[development test]
 
@@ -13,7 +13,8 @@ gem "fastimage", "~> 2.2"
 gem "image_processing", "~> 1.12" # Gem to support variants in ActiveStorage
 
 gem "vite_rails", "~> 3.0" # Use Vite in Rails and bring joy to your JavaScript experience.
-gem "devise", "~> 4.7", ">= 4.7.1" # User auth library.
+gem "sprockets-rails", "~> 3.4" # Provides Sprockets implementation for Rails 4.x (and beyond) Asset Pipeline
+gem "devise", "~> 4.9", ">= 4.9.2" # User auth library.
 gem "jbuilder", "~> 2.11" # Standard part of Rails, but unused, since we don't have an API.
 gem "pg", "~> 1.2" # PostgreSQL support.
 gem "pg_search", "~> 2.3" # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
@@ -22,7 +23,7 @@ gem "turbolinks", "~> 5.2" # Quicker page navigation. https://github.com/turboli
 gem "rest-client", "~> 2.1" # Used to contact Fast Alerts' API.
 gem "valid_url", "= 0.0.4", github: "ralovets/valid_url" # URL validation: https://github.com/ralovets/valid_url
 gem "puma", "~> 5.6" # Use the Puma web server [https://github.com/puma/puma]
-gem "slowpoke", "~> 0.3" # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
+gem "slowpoke", "~> 0.5.0" # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem "delayed_job_active_record", "~> 4.1" # Delayed Job for deferring tasks.
 gem "delayed-web", "~> 0.4" # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem "seedbank", "~> 0.5" # Better organized seed data.
@@ -31,7 +32,7 @@ gem "kramdown", "~> 2.3" # kramdown is a fast, pure Ruby Markdown superset conve
 gem "motion-markdown-it", "~> 13.0" # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
 gem "motion-markdown-it-plugins", "~> 8.4" # Plugins for motion-markdown-it.
 gem "gaffe", "~> 1.2" # Custom error pages. https://github.com/mirego/gaffe
-gem "acts-as-taggable-on", "~> 9.0" # Tag a single model on several contexts.
+gem "acts-as-taggable-on", "~> 10.0" # Tag a single model on several contexts.
 gem "email_inquire", "~> 0.11" # Validate email for format, common typos and one-time email providers
 gem "titleize", "~> 1.4" # better titleizing, modifies Inflector.titleize from default rails
 gem "reform", "~> 2.6" # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
@@ -47,11 +48,11 @@ gem "kaminari", "~> 1.2" # Scope & Engine based, clean, powerful, customizable a
 gem "redis", "~> 5.0" # Redis client for use as cache store for rack-attack
 gem "rack-attack", "~> 6.6" # A rack middleware for throttling and blocking abusive requests
 gem "web-push", "~> 3.0" # Web Push library for Ruby (RFC8030).
-gem "activerecord-nulldb-adapter", "~> 0.8" # A database backend that translates database interactions into no-ops.
+gem "activerecord-nulldb-adapter", "~> 1.0" # A database backend that translates database interactions into no-ops.
 gem "discordrb", "~> 3.5" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
-gem 'octokit', '~> 6.1.1' # A Ruby toolkit for the GitHub API.
+gem "octokit", "~> 8.0" # A Ruby toolkit for the GitHub API.
 
 # OmniAuth providers
 gem "omniauth-google-oauth2", "~> 1.1" # Oauth2 strategy for Google.
@@ -69,9 +70,9 @@ gem "batch-loader", "~> 2.0" # Generic lazy batching mechanism to avoid N+1 DB q
 gem "recaptcha", "~> 5.14" # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
 # Feature toggle
-gem "flipper", "~> 0.22"
-gem "flipper-ui", "~> 0.22"
-gem "flipper-active_record", "~> 0.22"
+gem "flipper", "~> 1.0"
+gem "flipper-ui", "~> 1.0"
+gem "flipper-active_record", "~> 1.0"
 
 group :development do
   gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.
@@ -93,8 +94,9 @@ group :test do
   gem "factory_bot_rails", "~> 6.2" # A library for setting up Ruby objects as test data.
   gem "capybara", "~> 3.39" # For RSpec feature tests.
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
-  gem 'selenium-webdriver', '~> 4.11' # Ruby bindings for Selenium
+  gem "selenium-webdriver", "~> 4.11" # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
+  gem "capybara-shadowdom", "~> 0.3.0"
   gem "rspec-eventually", "~> 0.2.2" # Rspec helper to match eventually
   gem "diffy", "~> 3.4" # Easy Diffing in Ruby. https://github.com/samg/diffy
 end
@@ -116,5 +118,5 @@ group :production do
   gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
-  gem "whenever", "~> 1.0", require: false
+  gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare
 end

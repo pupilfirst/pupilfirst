@@ -65,7 +65,7 @@
 }
 
 .checkbox-label span:first-child {
-  @apply relative rounded align-middle border;
+  @apply relative rounded align-middle border border-gray-400 bg-white;
   width: 18px;
   height: 18px;
   transform: scale(1);
@@ -77,7 +77,7 @@
   top: 3px;
   left: 2px;
   fill: none;
-  stroke: #ffffff;
+  stroke: theme("colors.white");
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -161,7 +161,7 @@
 }
 
 .drawer-right {
-  background-color: white;
+  @apply bg-white;
   display: flex;
   height: 100vh;
   right: 0px;
@@ -216,10 +216,9 @@
 }
 
 .drawer-right-form {
-  background-color: #fbfafc;
   overflow-x: hidden;
   overflow-y: scroll;
-  @apply text-sm;
+  @apply text-sm bg-white;
 }
 
 .drawer-right-form__error-msg {
@@ -262,9 +261,9 @@
 .sa-toggle__menu-btn-inner,
 .sa-toggle__menu-btn-inner::before,
 .sa-toggle__menu-btn-inner::after {
+  @apply bg-black;
   width: 20px;
   height: 2px;
-  background-color: #000;
   border-radius: 4px;
   position: absolute;
   transition-property: transform;
@@ -295,14 +294,12 @@
 }
 
 .file-input-label {
-  @apply truncate py-2 cursor-pointer flex px-4 items-center font-medium rounded text-sm;
-  border: 1px dashed #d3d8e1;
-  background-color: #e6f1ff;
+  @apply truncate py-2 cursor-pointer flex px-4 items-center font-medium rounded text-sm border border-dashed border-primary-200 bg-primary-50;
 }
 
 .file-input-label:hover,
 .file-input-label:focus {
-  @apply bg-blue-100;
+  @apply bg-primary-100;
 }
 
 .toggle-button__group {
@@ -335,7 +332,7 @@
 }
 
 .toggle-button__button--active {
-  @apply bg-primary-100 text-primary-600 border-primary-500;
+  @apply bg-primary-50 text-primary-500 border-primary-500;
 }
 
 .toggle-button__button--active:not(:last-of-type) {
@@ -374,7 +371,7 @@
 
 .target-group__header--archived,
 .target-group__target--archived {
-  background-color: #fdfae5;
+  background-color: theme("colors.yellow.100");
   background-image: linear-gradient(
     to bottom right,
     rgba(0, 0, 0, 0.05) 25%,

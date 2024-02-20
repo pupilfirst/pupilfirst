@@ -1,70 +1,7 @@
-<div>
-  <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6 pb-0">
-      <div class="mt-4 overflow-x-auto">
-        <%= render 'shared/breadcrumbs', crumbs: [["My Org", "/organisations"], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]] %>
-      </div>
-      <h1 class="text-xl md:text-3xl font-bold mt-4">
-        <%= @cohort.name %>
-      </h1>
-      <p class="text-sm font-medium"><%= @cohort.course.name %></p>
-      <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
-        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('cohorts.shared.overview_link') %></p>
-        <%= link_to t('cohorts.shared.students_link'), students_organisation_cohort_path(@organisation, @cohort), class: "p-2 hover:text-primary-500 hover:bg-primary-100" %>
-      </div>
-    </div>
-  </section>
-  <section class="bg-white">
-    <div class="max-w-5xl mx-auto p-6">
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
-          <p class="text-sm text-gray-600"><%= t('.total_students') %></p>
-          <p class="text-3xl font-bold"><%= @presenter.counts[:total] %></p>
-          <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-            <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
-          <% end %>
-        </div>
-        <div class="p-5 bg-white flex flex-col gap-2 border border-gray-300 rounded-lg">
-          <p class="text-sm text-gray-600"><%= t('.students_completed') %></p>
-          <p class="text-3xl font-bold"><%= @presenter.counts[:completed] %></p>
-          <%= link_to students_organisation_cohort_path(@organisation, @cohort), class: "text-sm font-medium text-primary-500 hover:text-primary-800 hover:underline" do %>
-            <span><%= t('.view_all')%></span><i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500 ms-2" aria-hidden="true"></i>
-          <% end %>
-        </div>
-      </div>
-      <div class="p-4 bg-gray-100 rounded-lg mt-8">
-        <h3 class="text-xs font-semibold"><%= t('.distribution_heading') %></h3>
-        <div data-re-component="StudentDistribution" data-re-json="<%= @presenter.distribution.to_json %>">
-          <div class="skeleton-body-container pt-4 w-full mx-auto">
-            <div class="skeleton-body-wrapper px-3 lg:px-0">
-              <div class="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
-                <div class="flex">
-                  <div class="w-1/6">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-5/12">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-1/4">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-1/12">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                  <div class="w-1/12">
-                    <div class="skeleton-placeholder__line-sm skeleton-animate w-6 mx-auto"></div>
-                    <div class="skeleton-placeholder__line-md skeleton-animate mt-2"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<% content_for(:head) do %>
+  <title><%= @presenter.page_title %></title>
+<% end %>
+
+<div class="pb-20 md:pb-10 h-full md:h-screen overflow-y-auto">
+  <%= render 'shared/cohort_overview', students_path: students_cohort_path(@cohort), students_completed_path: students_cohort_path(@cohort, course: "Completed") %>
 </div>

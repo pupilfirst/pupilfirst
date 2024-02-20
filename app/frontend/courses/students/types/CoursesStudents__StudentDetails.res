@@ -13,15 +13,15 @@ type t = {
   id: string,
   coachNotes: array<CoursesStudents__CoachNote.t>,
   hasArchivedNotes: bool,
+  canModifyCoachNotes: bool,
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
   totalTargets: int,
   targetsCompleted: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
-  completedLevelIds: array<string>,
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
-  levels: array<Shared__Level.t>,
+  milestoneTargetsCompletionStatus: array<CoursesStudents__MilestoneTargetsCompletionStatus.t>,
   courseId: string,
 }
 
@@ -35,13 +35,13 @@ let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
 
-let levels = t => t.levels
+let canModifyCoachNotes = t => t.canModifyCoachNotes
 
 let courseId = t => t.courseId
 
 let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
-  evaluationCriterionId,
-  grade,
+  evaluationCriterionId: evaluationCriterionId,
+  grade: grade,
 }
 
 let totalTargets = t => t.totalTargets |> float_of_int
@@ -62,9 +62,9 @@ let evaluationCriteria = t => t.evaluationCriteria
 
 let averageGrades = t => t.averageGrades
 
-let completedLevelIds = t => t.completedLevelIds
-
 let gradeValue = averageGrade => averageGrade.grade
+
+let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) =>
   evaluationCriteria |> ArrayUtils.unsafeFind(
@@ -102,34 +102,34 @@ let computeAverageQuizScore = quizScores => {
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
-let makeTeam = (~id, ~name, ~students) => {id, name, students}
+let makeTeam = (~id, ~name, ~students) => {id: id, name: name, students: students}
 
 let make = (
   ~id,
   ~coachNotes,
   ~hasArchivedNotes,
+  ~canModifyCoachNotes,
   ~evaluationCriteria,
   ~totalTargets,
   ~targetsCompleted,
   ~quizScores,
   ~averageGrades,
-  ~completedLevelIds,
   ~student,
   ~team,
-  ~levels,
   ~courseId,
+  ~milestoneTargetsCompletionStatus,
 ) => {
-  id,
-  coachNotes,
-  hasArchivedNotes,
-  evaluationCriteria,
-  totalTargets,
-  targetsCompleted,
-  quizScores,
-  averageGrades,
-  completedLevelIds,
-  student,
-  team,
-  levels,
-  courseId,
+  id: id,
+  coachNotes: coachNotes,
+  hasArchivedNotes: hasArchivedNotes,
+  canModifyCoachNotes: canModifyCoachNotes,
+  evaluationCriteria: evaluationCriteria,
+  totalTargets: totalTargets,
+  targetsCompleted: targetsCompleted,
+  quizScores: quizScores,
+  averageGrades: averageGrades,
+  student: student,
+  team: team,
+  courseId: courseId,
+  milestoneTargetsCompletionStatus: milestoneTargetsCompletionStatus,
 }

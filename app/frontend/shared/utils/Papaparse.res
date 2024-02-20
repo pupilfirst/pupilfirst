@@ -14,7 +14,11 @@ module Make = (RowData: RowData) => {
 
   let errorMessage = error => error.message ++ " on row " ++ string_of_int(error.row)
 
-  type results = {"data": array<RowData.t>, "errors": array<error>}
+  type results = {
+    "data": array<RowData.t>,
+    "errors": array<error>,
+    "meta": {"fields": option<array<string>>},
+  }
 
   @deriving(abstract)
   type config = {

@@ -1,0 +1,64 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | <%= t(".title") %> </title>
+<% end %>
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div class="max-w-3xl mt-2 mx-auto mb-20">
+    <div class="flex-row">
+      <div  class="flex justify-between items-center gap-5 py-8">
+        <div class="w-3/4">
+          <p class="text-xs text-gray-500 uppercase font-semibold"><%= t(".list_title") %></p>
+          <h1 class="font-semibold text-2xl text-gray-600"><%= @course.name %></h1>
+          <p class="text-sm text-gray-600 mt-1"><%= t(".milestone_msg")%></p>
+        </div>
+        <div class="px-3 md:px-4 py-2 bg-yellow-100 rounded-md border border-yellow-200 flex items-center flex-shrink-0 font-medium text-yellow-800">
+          <i class="if i-milestone-solid if-fw text-2xl text-yellow-900" ></i>
+          <span class="pointer-events-none">#</span>
+        </div>
+      </div>
+      <% if @have_gaps%>
+        <div class="flex items-start gap-3 bg-yellow-100 p-2 rounded-lg ">
+          <i class="if i-info-solid text-3xl text-yellow-500 mt-2" ></i>
+          <p class="text-sm text-yellow-700 mt-1"><%= t(".milestone_gap_warning")%></p>
+        </div>
+      <% end %>
+    </div>
+    <div class="pb-10 pt-4">
+      <div class="rounded-lg border border-gray-300 shadow-md divide-y overflow-hidden">
+        <% @milestones.each_with_index do |target, index| %>
+          <div class="flex items-center target-group__target-container overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
+            <% unless @milestones.size < 1 %>
+              <div class="flex flex-col target-group__target-reorder relative h-full border-e border-transparent text-gray-600 justify-between items-center">
+                <%= button_to update_milestone_number_school_assignment_path(target, direction: :up, page: @page_no),
+                method: :patch, title:"Move up", class: "h-full", form_class: "flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index > 0 || !@milestones.first_page?}" do %>
+                  <i class="if i-arrow-up-solid if-fw" ></i>
+                <% end %>
+                <%= button_to update_milestone_number_school_assignment_path(target, direction: :down, page: @page_no),
+                method: :patch, title:"Move down",  class: "h-full", form_class: "flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500 #{"invisible" unless index < @milestones.size - 1 || !@milestones.last_page?}" do %>
+                  <i  class="if i-arrow-down-solid if-fw" ></i>
+                <% end %>
+              </div>
+            <% end %>
+            <%= link_to details_school_course_target_path(@course, target), class: "flex justify-between w-full items-center h-full py-5 px-4" do %>
+              <p class="text-sm"><%= target.title %></p>
+              <div class="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 border border-yellow-200 text-yellow-800 ms-2 px-1.5 md:px-2 py-1 rounded-md">
+                <i class="if i-milestone-solid if-fw" ></i>
+                <span><%= target.assignments.first.milestone_number %></span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <% if @milestones.size < 1 %>
+          <div class="flex justify-center">
+            <p class="py-6 text-sm text-gray-400 font-medium"><%= t(".no_milestones") %> </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="bg-gray-50 border-t border-gray-300 p-5 fixed bottom-0 end-0 flex flex-col items-center" style="width: calc(100% - 19.5rem)">
+      <%= paginate @milestones %>
+      <div class="text-center text-sm mt-2">
+        <%= page_entries_info @milestones, entry_name: 'Milestone' %>
+      </div>
+    </div>
+  </div>
+</div>

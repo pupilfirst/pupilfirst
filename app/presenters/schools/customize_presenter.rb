@@ -16,12 +16,9 @@ module Schools
     def school_images
       {
         logoOnLightBg: image_details(current_school.logo_on_light_bg),
-        icon:
-          if current_school.icon.attached?
-            file_details(current_school.icon)
-          else
-            { url: '/favicon.png', filename: 'pupilfirst_icon.png' }
-          end,
+        logoOnDarkBg: image_details(current_school.logo_on_dark_bg),
+        iconOnLightBg: icon_details(current_school.icon_on_light_bg),
+        iconOnDarkBg: icon_details(current_school.icon_on_dark_bg),
         coverImage: image_details(current_school.cover_image)
       }
     end
@@ -33,7 +30,9 @@ module Schools
         address: SchoolString::Address.for(current_school),
         emailAddress: SchoolString::EmailAddress.for(current_school),
         privacyPolicy: SchoolString::PrivacyPolicy.for(current_school),
-        termsAndConditions: SchoolString::TermsAndConditions.for(current_school)
+        termsAndConditions:
+          SchoolString::TermsAndConditions.for(current_school),
+        CodeOfConduct: SchoolString::CodeOfConduct.for(current_school)
       }
     end
 
@@ -43,6 +42,14 @@ module Schools
 
     def file_details(file)
       { url: view.rails_public_blob_url(file), filename: file.filename }
+    end
+
+    def icon_details(icon)
+      if icon.attached?
+        file_details(icon)
+      else
+        { url: "/favicon.png", filename: "pupilfirst_icon.png" }
+      end
     end
 
     def school_links

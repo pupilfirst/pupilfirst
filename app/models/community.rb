@@ -11,4 +11,6 @@ class Community < ApplicationRecord
   validates :name, presence: true
 
   normalize_attribute :name
+
+  validates_with RateLimitValidator, limit: 100, scope: :school_id
 end

@@ -12,12 +12,10 @@ type tabs =
 
 let selectedTabClasses = selected =>
   "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
+    selected ? "text-primary-500 bg-white border-b-transparent" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"
-
-type progressionBehavior = [#Limited | #Unlimited | #Strict]
 
 type state = {
   name: string,
@@ -31,8 +29,7 @@ type state = {
   dirty: bool,
   saving: bool,
   featured: bool,
-  progressionBehavior: progressionBehavior,
-  progressionLimit: int,
+  progressionBehavior: Course.progressionBehavior,
   highlights: array<Course.Highlight.t>,
   hasProcessingUrl: bool,
   processingUrl: string,
@@ -50,8 +47,7 @@ type action =
   | UpdatePublicSignup(bool)
   | UpdatePublicPreview(bool)
   | UpdateFeatured(bool)
-  | UpdateProgressionBehavior(progressionBehavior)
-  | UpdateProgressionLimit(int)
+  | UpdateProgressionBehavior(Course.progressionBehavior)
   | UpdateHighlights(array<Course.Highlight.t>)
   | SetHasProcessingUrl
   | ClearHasProcessingUrl
@@ -67,37 +63,31 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: false}
   | UpdateName(name, hasNameError) => {
       ...state,
-      name: name,
-      hasNameError: hasNameError,
+      name,
+      hasNameError,
       dirty: true,
     }
   | UpdateDescription(description, hasDescriptionError) => {
       ...state,
-      description: description,
-      hasDescriptionError: hasDescriptionError,
+      description,
+      hasDescriptionError,
       dirty: true,
     }
-  | UpdatePublicSignup(publicSignup) => {...state, publicSignup: publicSignup, dirty: true}
-  | UpdatePublicPreview(publicPreview) => {...state, publicPreview: publicPreview, dirty: true}
-  | UpdateAbout(about) => {...state, about: about, dirty: true}
-  | UpdateFeatured(featured) => {...state, featured: featured, dirty: true}
+  | UpdatePublicSignup(publicSignup) => {...state, publicSignup, dirty: true}
+  | UpdatePublicPreview(publicPreview) => {...state, publicPreview, dirty: true}
+  | UpdateAbout(about) => {...state, about, dirty: true}
+  | UpdateFeatured(featured) => {...state, featured, dirty: true}
   | UpdateProgressionBehavior(progressionBehavior) => {
       ...state,
-      progressionBehavior: progressionBehavior,
+      progressionBehavior,
       dirty: true,
     }
-  | UpdateProgressionLimit(progressionLimit) => {
-      ...state,
-      progressionBehavior: #Limited,
-      progressionLimit: progressionLimit,
-      dirty: true,
-    }
-  | UpdateHighlights(highlights) => {...state, highlights: highlights, dirty: true}
+  | UpdateHighlights(highlights) => {...state, highlights, dirty: true}
   | SetHasProcessingUrl => {...state, hasProcessingUrl: true, dirty: true}
   | ClearHasProcessingUrl => {...state, hasProcessingUrl: false, dirty: true}
   | UpdateProcessingUrl(processingUrl) => {
       ...state,
-      processingUrl: processingUrl,
+      processingUrl,
       dirty: true,
     }
   | SetCohortsData(cohortsData) => {...state, cohorts: cohortsData, loading: false}
@@ -109,8 +99,8 @@ let reducer = (state, action) =>
 module CourseFragment = CourseEditor__Course.Fragment
 
 module CreateCourseQuery = %graphql(`
-    mutation CreateCourseMutation($name: String!, $description: String!, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
-      createCourse(name: $name, description: $description, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
+    mutation CreateCourseMutation($name: String!, $description: String!, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionLimit: Int!, $highlights: [CourseHighlightInput!], $processingUrl: String) {
+      createCourse(name: $name, description: $description, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...CourseFragment
         }
@@ -119,8 +109,8 @@ module CreateCourseQuery = %graphql(`
   `)
 
 module UpdateCourseQuery = %graphql(`
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String, $defaultCohortId: ID!) {
-      updateCourse(id: $id, name: $name, description: $description, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl, defaultCohortId: $defaultCohortId) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionLimit: Int!, $highlights: [CourseHighlightInput!], $processingUrl: String, $defaultCohortId: ID!) {
+      updateCourse(id: $id, name: $name, description: $description, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl, defaultCohortId: $defaultCohortId) {
         course {
           ...CourseFragment
         }
@@ -174,21 +164,14 @@ let updateDescription = (send, description) => {
   send(UpdateDescription(description, hasError))
 }
 
-let saveDisabled = state =>
+let saveDisabled = (state, isNewCourse) =>
   state.hasDateError ||
   (state.hasDescriptionError ||
   (state.description == "" ||
   (state.hasNameError || (state.name == "" || (!state.dirty || state.saving))))) ||
+  state.defaultCohort->Belt.Option.isNone && !isNewCourse ||
   UrlUtils.isInvalid(true, state.processingUrl) ||
   Course.Highlight.isInValidArray(state.highlights)
-
-let progressionLimitForQuery = state =>
-  switch state.progressionBehavior {
-  | #Unlimited
-  | #Strict =>
-    None
-  | #Limited => Some(state.progressionLimit)
-  }
 
 let processingUrl = state => {
   if state.hasProcessingUrl && state.publicSignup {
@@ -219,8 +202,7 @@ let createCourse = (state, send, reloadCoursesCB) => {
     ~publicSignup=state.publicSignup,
     ~publicPreview=state.publicPreview,
     ~featured=state.featured,
-    ~progressionBehavior=state.progressionBehavior,
-    ~progressionLimit=?progressionLimitForQuery(state),
+    ~progressionLimit=Course.progressionLimit(state.progressionBehavior),
     ~highlights,
     ~processingUrl=?processingUrl(state),
     (),
@@ -265,8 +247,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~publicSignup=state.publicSignup,
     ~publicPreview=state.publicPreview,
     ~featured=state.featured,
-    ~progressionBehavior=state.progressionBehavior,
-    ~progressionLimit=?progressionLimitForQuery(state),
+    ~progressionLimit=Course.progressionLimit(state.progressionBehavior),
     ~highlights,
     ~processingUrl=?processingUrl(state),
     ~defaultCohortId=state.defaultCohort->Belt.Option.mapWithDefault("", Cohort.id),
@@ -482,7 +463,6 @@ let computeInitialState = course =>
       publicPreview: Course.publicPreview(course),
       featured: Course.featured(course),
       progressionBehavior: Course.progressionBehavior(course),
-      progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
       highlights: Course.highlights(course),
       processingUrl: Belt.Option.getWithDefault(Course.processingUrl(course), ""),
       hasProcessingUrl: Belt.Option.isSome(Course.processingUrl(course)),
@@ -502,8 +482,7 @@ let computeInitialState = course =>
       publicSignup: false,
       publicPreview: false,
       featured: true,
-      progressionBehavior: #Limited,
-      progressionLimit: 1,
+      progressionBehavior: Limited(1),
       highlights: [],
       processingUrl: "",
       hasProcessingUrl: false,
@@ -519,14 +498,24 @@ let handleSelectProgressionLimit = (send, event) => {
   switch target["value"] {
   | "1"
   | "2"
-  | "3" =>
-    send(UpdateProgressionLimit(int_of_string(target["value"])))
+  | "3"
+  | "4" =>
+    send(UpdateProgressionBehavior(Limited(int_of_string(target["value"]))))
   | otherValue => Rollbar.error("Unexpected progression limit was selected: " ++ otherValue)
   }
 }
 
-let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalClasses) => {
-  let selected = state.progressionBehavior == progressionBehavior
+let progressionBehaviorButtonClasses = (
+  state,
+  progressionBehavior: Course.progressionBehavior,
+  additionalClasses,
+) => {
+  let selected = switch (state.progressionBehavior, progressionBehavior) {
+  | (Limited(_), Limited(_)) => true
+  | (Unlimited, Unlimited) => true
+  | _ => false
+  }
+
   let defaultClasses =
     additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-50 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-focusColor-500 "
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
@@ -591,9 +580,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {t("progression_behavior.help")->str}
       </HelpIcon>
       <div className="flex mt-2">
-        <button
-          onClick={_ => send(UpdateProgressionBehavior(#Limited))}
-          className={progressionBehaviorButtonClasses(state, #Limited, "me-1")}>
+        <button className={progressionBehaviorButtonClasses(state, Limited(1), "me-1")}>
           <div className="font-bold text-xl"> {t("progression_behavior.limited.title")->str} </div>
           <div className="text-xs mt-2">
             <div> {t("progression_behavior.limited.description_start")->str} </div>
@@ -602,27 +589,26 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
               onChange={handleSelectProgressionLimit(send)}
               className="my-1 cursor-pointer inline-block appearance-none bg-white border-b-2 text-xl font-semibold border-blue-500 hover:border-gray-500 p-1 leading-tight rounded-none focus:outline-none"
               style={ReactDOM.Style.make(~textAlignLast="center", ())}
-              value={string_of_int(state.progressionLimit)}>
+              value={string_of_int(Course.progressionLimit(state.progressionBehavior))}>
+              {ReactUtils.nullUnless(
+                <option> {"-"->str} </option>,
+                state.progressionBehavior == Unlimited,
+              )}
               <option value="1"> {t("progression_behavior.limited.once")->str} </option>
               <option value="2"> {t("progression_behavior.limited.twice")->str} </option>
               <option value="3"> {t("progression_behavior.limited.thrice")->str} </option>
+              <option value="4"> {t("progression_behavior.limited.four_times")->str} </option>
             </select>
             <div> {t("progression_behavior.limited.description_end")->str} </div>
           </div>
         </button>
         <button
-          onClick={_ => send(UpdateProgressionBehavior(#Unlimited))}
-          className={progressionBehaviorButtonClasses(state, #Unlimited, "mx-1")}>
+          onClick={_ => send(UpdateProgressionBehavior(Unlimited))}
+          className={progressionBehaviorButtonClasses(state, Unlimited, "mx-1")}>
           <div className="font-bold text-xl">
             {t("progression_behavior.unlimited.title")->str}
           </div>
           <span className="text-xs"> {t("progression_behavior.unlimited.description")->str} </span>
-        </button>
-        <button
-          onClick={_ => send(UpdateProgressionBehavior(#Strict))}
-          className={progressionBehaviorButtonClasses(state, #Strict, "ms-1")}>
-          <div className="font-bold text-xl"> {t("progression_behavior.strict.title")->str} </div>
-          <span className="text-xs"> {t("progression_behavior.strict.description")->str} </span>
         </button>
       </div>
     </div>
@@ -652,7 +638,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {switch course {
         | Some(course) =>
           <button
-            disabled={saveDisabled(state)}
+            disabled={saveDisabled(state, false)}
             onClick={_ => updateCourse(state, send, updateCourseCB, course)}
             className="w-full btn btn-large btn-primary mt-3">
             {t("update_course")->str}
@@ -660,7 +646,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
 
         | None =>
           <button
-            disabled={saveDisabled(state)}
+            disabled={saveDisabled(state, true)}
             onClick={_ => createCourse(state, send, reloadCoursesCB)}
             className="w-full btn btn-large btn-primary mt-3">
             {t("create_course")->str}

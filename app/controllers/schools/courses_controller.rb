@@ -3,7 +3,7 @@ module Schools
     include CamelizeKeys
     include StringifyIds
 
-    layout 'school'
+    layout "school"
 
     # POST /courses/id/attach_images
     def attach_images
@@ -22,7 +22,7 @@ module Schools
         render json: {
                  thumbnail_url: nil,
                  cover_url: nil,
-                 error: @form.errors.full_messages.join(', ')
+                 error: @form.errors.full_messages.join(", ")
                }
       end
     end
@@ -30,9 +30,12 @@ module Schools
     # GET /courses/:id/curriculum
     def curriculum
       course =
-        scope
-          .includes(:evaluation_criteria, :levels, :target_groups, :targets)
-          .find(params[:id])
+        scope.includes(
+          :evaluation_criteria,
+          :levels,
+          :target_groups,
+          :targets
+        ).find(params[:id])
 
       @course = authorize(course, policy_class: Schools::CoursePolicy)
     end
@@ -80,9 +83,11 @@ module Schools
       cohorts = course.cohorts.where(id: params[:cohort_ids])
 
       coaches.each do |coach|
-        ::Cohorts::ManageReviewerService
-          .new(course, cohorts, notify: true)
-          .assign(coach)
+        ::Cohorts::ManageReviewerService.new(
+          course,
+          cohorts,
+          notify: true
+        ).assign(coach)
       end
 
       course_coaches =
@@ -152,7 +157,7 @@ module Schools
               )
           }
         else
-          { error: form.errors.full_messages.join(', ') }
+          { error: form.errors.full_messages.join(", ") }
         end
 
       render json: camelize_keys(stringify_ids(props))
@@ -164,7 +169,29 @@ module Schools
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
     end
 
+    # GET /school/courses/:id/assignments
+    def assignments
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @milestones =
+        @course
+          .targets
+          .includes(:assignments)
+          .live
+          .milestone
+          .order("assignments.milestone_number asc")
+          .page(params[:page])
+          .per(20)
+      @page_no = params[:page].presence || 1
+      @have_gaps = gap?(@milestones.pluck("assignments.milestone_number"))
+    end
+
     private
+
+    def gap?(numbers)
+      remains = (1..numbers.length).to_a - numbers
+      remains.present?
+    end
 
     def scope
       @scope ||=

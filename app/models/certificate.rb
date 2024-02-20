@@ -9,6 +9,8 @@ class Certificate < ApplicationRecord
 
   has_one_attached :image
 
+  validates_with RateLimitValidator, limit: 100, scope: :course_id
+
   def image_path
     Rails.application.routes.url_helpers.rails_public_blob_url(image)
   end

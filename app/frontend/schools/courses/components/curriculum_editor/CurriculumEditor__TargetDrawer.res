@@ -37,7 +37,8 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
   let confirm = dirty ? Some(t("unsaved_confirm")) : None
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
-    <i className={"fas " ++ iconClass} /> <span className="ms-2"> {title |> str} </span>
+    <i className={"fas " ++ iconClass} />
+    <span className="ms-2"> {title |> str} </span>
   </Link>
 }
 
@@ -68,9 +69,9 @@ let make = (
     let window = Webapi.Dom.window
 
     let removeEventListener = () =>
-      Webapi.Dom.Window.removeEventListener("beforeunload", beforeWindowUnload, window)
+      Webapi.Dom.Window.removeEventListener(window, "beforeunload", beforeWindowUnload)
     if dirty {
-      Webapi.Dom.Window.addEventListener("beforeunload", beforeWindowUnload, window)
+      Webapi.Dom.Window.addEventListener(window, "beforeunload", beforeWindowUnload)
     } else {
       removeEventListener()
     }
@@ -120,17 +121,19 @@ let make = (
     <SchoolAdmin__EditorDrawer
       size=SchoolAdmin__EditorDrawer.Large
       closeDrawerCB={() => confirmDirtyAction(dirty, () => closeDrawer(course))}>
-      <div>
+      <div className="h-auto">
         <div className="bg-gray-50 pt-6">
-          <div className="max-w-3xl px-3 mx-auto"> <h3> {target |> Target.title |> str} </h3> </div>
+          <div className="max-w-3xl px-3 mx-auto">
+            <h3> {target |> Target.title |> str} </h3>
+          </div>
           <div className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
             {tab(Content, selectedPage, pathPrefix, dirty, setDirty)}
             {tab(Details, selectedPage, pathPrefix, dirty, setDirty)}
             {tab(Versions, selectedPage, pathPrefix, dirty, setDirty)}
           </div>
         </div>
-        <div className="bg-white">
-          <div className="mx-auto border-t border-gray-300"> innerComponent </div>
+        <div className="bg-white h-full">
+          <div className="mx-auto border-t border-gray-300 h-full"> innerComponent </div>
         </div>
       </div>
     </SchoolAdmin__EditorDrawer>

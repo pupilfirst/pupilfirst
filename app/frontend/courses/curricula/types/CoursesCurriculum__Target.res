@@ -13,6 +13,8 @@ type t = {
   resubmittable: bool,
   prerequisiteTargetIds: array<string>,
   reviewed: bool,
+  milestone: bool,
+  hasAssignment: bool,
 }
 
 let decode = json => {
@@ -30,6 +32,8 @@ let decode = json => {
     resubmittable: json |> field("resubmittable", bool),
     prerequisiteTargetIds: json |> field("prerequisiteTargetIds", array(string)),
     reviewed: json |> field("reviewed", bool),
+    milestone: json |> field("milestone", bool),
+    hasAssignment: json |> field("hasAssignment", bool),
   }
 }
 
@@ -41,3 +45,5 @@ let targetGroupId = t => t.targetGroupId
 let prerequisiteTargetIds = t => t.prerequisiteTargetIds
 let resubmittable = t => t.resubmittable
 let reviewed = t => t.reviewed
+let milestone = t => t.milestone
+let hasAssignment = t => t.hasAssignment

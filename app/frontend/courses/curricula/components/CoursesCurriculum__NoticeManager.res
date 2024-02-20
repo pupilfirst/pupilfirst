@@ -50,82 +50,12 @@ let accessEndedMessage = () =>
     (),
   )
 
-let teamMembersPendingMessage = () =>
-  showNotice(
-    ~title=t("team_members_pending_title"),
-    ~description=t("team_members_pending_description"),
-    ~notice=Notice.TeamMembersPending,
-    (),
-  )
-
-let levelUpBlockedMessage = (currentLevelNumber, someSubmissionsRejected) => {
-  let titleKey = someSubmissionsRejected
-    ? "level_up_blocked.title_rejected"
-    : "level_up_blocked.title_pending_review"
-
-  let prefix = t(
-    ~variables=[("number", string_of_int(currentLevelNumber))],
-    "level_up_blocked.body_prefix",
-  )
-
-  let body = t(
-    someSubmissionsRejected
-      ? "level_up_blocked.body_middle_rejected"
-      : "level_up_blocked.body_middle_pending_review",
-  )
-
-  let suffix = t("level_up_blocked.body_suffix")
-
-  showNotice(
-    ~title=t(titleKey),
-    ~description=prefix ++ (body ++ suffix),
-    ~notice=Notice.LevelUpBlocked(currentLevelNumber, someSubmissionsRejected),
-    (),
-  )
-}
-
-let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => {
-  let description = t(
-    ~variables=[
-      ("currentLevel", string_of_int(currentLevelNumber)),
-      ("minimumRequiredLevel", string_of_int(minimumRequiredLevelNumber)),
-    ],
-    "level_up_limited_description",
-  )
-
-  showNotice(
-    ~title=t("level_up_limited_title"),
-    ~description,
-    ~notice=Notice.LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber),
-    (),
-  )
-}
-
-let renderLevelUp = course =>
-  <div
-    className="max-w-3xl mx-3 lg:mx-auto text-center mt-4 bg-white rounded-lg shadow px-6 pt-4 pb-8">
-    {showNotice(
-      ~title=t("level_up_title"),
-      ~description=t("level_up_description"),
-      ~notice=Notice.LevelUp,
-      ~classes="",
-      (),
-    )}
-    <CoursesCurriculum__LevelUpButton course />
-  </div>
-
 @react.component
-let make = (~notice, ~course) =>
+let make = (~notice) =>
   switch notice {
   | Notice.Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()
   | CourseComplete => courseCompleteMessage()
   | AccessEnded => accessEndedMessage()
-  | LevelUp => renderLevelUp(course)
-  | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber) =>
-    levelUpLimitedMessage(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) =>
-    levelUpBlockedMessage(currentLevelNumber, someSubmissionsRejected)
-  | TeamMembersPending => teamMembersPendingMessage()
   | Nothing => React.null
   }

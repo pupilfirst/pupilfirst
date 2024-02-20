@@ -27,7 +27,7 @@ module.exports = {
           position: "left",
         },
         {
-          href: "https://pupilfirst.com",
+          href: "https://lms.pupilfirst.org",
           label: "Home",
           position: "right",
         },
@@ -81,7 +81,7 @@ module.exports = {
           items: [
             {
               label: "Blog",
-              to: "https://blog.pupilfirst.com/",
+              to: "https://blog.pupilfirst.org/",
             },
             {
               label: "GitHub",
@@ -119,8 +119,7 @@ module.exports = {
         path: "developers",
         routeBasePath: "developers",
         sidebarPath: require.resolve("./sidebarsDevelopers.js"),
-        editUrl:
-          "https://github.com/pupilfirst/pupilfirst/edit/master/docs/",
+        editUrl: "https://github.com/pupilfirst/pupilfirst/edit/master/docs/",
         // ... other options
       },
     ],

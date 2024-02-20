@@ -23,8 +23,8 @@ let defaultTitle = tr("choose_upload")
 
 let reducer = (state, action) =>
   switch action {
-  | AttachFile(filename) => {...state, filename: filename, errors: list{}}
-  | SelectFile(filename, errors) => {...state, filename: filename, errors: errors}
+  | AttachFile(filename) => {...state, filename, errors: list{}}
+  | SelectFile(filename, errors) => {...state, filename, errors}
   | ResetForm => {...state, errors: list{}, filename: defaultTitle}
   }
 
@@ -71,7 +71,7 @@ let uploadFile = (filename, send, attachFileCB, formData) => {
 }
 
 let submitForm = (filename, formId, send, addFileAttachmentCB) => {
-  let element = Webapi.Dom.Document.getElementById(formId, Webapi.Dom.document)
+  let element = Webapi.Dom.Document.getElementById(Webapi.Dom.document, formId)
   switch element {
   | Some(element) =>
     DomUtils.FormData.create(element) |> uploadFile(filename, send, addFileAttachmentCB)
@@ -134,15 +134,14 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
     {state.errors
     |> List.map(error =>
       <div className="mt-2 text-red-700 text-sm" key=error>
-        <i className="fas fa-exclamation-circle me-2" /> <span> {error |> str} </span>
+        <i className="fas fa-exclamation-circle me-2" />
+        <span> {error |> str} </span>
       </div>
     )
     |> Array.of_list
     |> React.array}
     {state.errors |> ListUtils.isEmpty
       ? React.null
-      : <div className="px-4 mt-2 text-sm">
-          {tr("another_file") |> str}
-        </div>}
+      : <div className="px-4 mt-2 text-sm"> {tr("another_file") |> str} </div>}
   </div>
 }

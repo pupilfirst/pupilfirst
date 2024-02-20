@@ -4,25 +4,25 @@ type t = {
   createdAt: Js.Date.t,
   passedAt: option<Js.Date.t>,
   evaluatedAt: option<Js.Date.t>,
-  levelId: string,
+  milestoneNumber: option<int>,
 }
 
-let make = (~id, ~title, ~createdAt, ~passedAt, ~levelId, ~evaluatedAt) => {
+let make = (~id, ~title, ~createdAt, ~passedAt, ~evaluatedAt, ~milestoneNumber) => {
   id: id,
   title: title,
   createdAt: createdAt,
   passedAt: passedAt,
-  levelId: levelId,
   evaluatedAt: evaluatedAt,
+  milestoneNumber: milestoneNumber,
 }
 
 let id = t => t.id
 
-let levelId = t => t.levelId
-
 let title = t => t.title
 
 let evaluatedAt = t => t.evaluatedAt
+
+let milestoneNumber = t => t.milestoneNumber
 
 let sort = submissions =>
   submissions |> ArrayUtils.copyAndSort((x, y) =>
@@ -51,7 +51,7 @@ let makeFromJs = submissions => Js.Array.map(submission => {
       ~title=submission["title"],
       ~createdAt,
       ~passedAt,
-      ~levelId=submission["levelId"],
       ~evaluatedAt,
+      ~milestoneNumber=submission["milestoneNumber"],
     )
   }, submissions)

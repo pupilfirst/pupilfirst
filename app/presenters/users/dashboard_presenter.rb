@@ -13,7 +13,8 @@ module Users
         user_name: current_user.name,
         preferred_name: current_user.preferred_name,
         user_title: current_user.full_title,
-        issued_certificates: issued_certificate_details
+        issued_certificates: issued_certificate_details,
+        standing: standing
       }
 
       if current_user.avatar.attached?
@@ -26,6 +27,21 @@ module Users
     end
 
     private
+
+    def standing
+      return unless Schools::Configuration.new(current_school).standing_enabled?
+
+      current_standing =
+        current_user
+          .user_standings
+          .includes(:standing)
+          .live
+          .order(created_at: :desc)
+          .first
+          &.standing || current_school.default_standing
+
+      { name: current_standing.name, color: current_standing.color }
+    end
 
     def issued_certificate_details
       current_user
@@ -54,15 +70,21 @@ module Users
                 )
               )
               .distinct
+              .select("courses.*, LOWER(courses.name) AS lower_case_name")
+              .order("lower_case_name")
           else
-            current_school.courses.live.where(
-              id:
-                (
-                  courses_with_student_profile.pluck(:course_id) +
-                    courses_with_review_access + courses_with_author_access
-                ).uniq
-            )
-          end.with_attached_thumbnail.order(:name)
+            current_school
+              .courses
+              .live
+              .where(
+                id:
+                  (
+                    courses_with_student_profile.pluck(:course_id) +
+                      courses_with_review_access + courses_with_author_access
+                  ).uniq
+              )
+              .order("LOWER(name)")
+          end.with_attached_thumbnail
         end
     end
 
@@ -85,7 +107,9 @@ module Users
     def courses_with_review_access
       @courses_with_review_access ||=
         begin
-          if current_user.faculty.present?
+          if current_school_admin.present?
+            current_school.courses.pluck(:id)
+          elsif current_user.faculty.present?
             current_user.faculty.courses.pluck(:id)
           else
             []

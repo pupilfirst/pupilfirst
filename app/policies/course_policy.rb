@@ -24,8 +24,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    record.present? && reviewable_courses.present? &&
-      reviewable_courses.exists?(id: record)
+    (current_school_admin.present?) || (reviewable_courses&.exists?(id: record))
   end
 
   def report?
@@ -46,7 +45,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   alias process_application? apply?
-  alias students? review?
+  alias cohorts? review?
   alias calendar? curriculum?
   alias calendar_month_data? curriculum?
 

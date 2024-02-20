@@ -46,5 +46,5 @@ let encode = t => {
   }
 
   open Json.Encode
-  object_(\"@"(title, feedback))
+  object_(Belt.List.concat(title, feedback))
 }

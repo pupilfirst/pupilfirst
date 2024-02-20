@@ -31,8 +31,8 @@ module StudentSpecHelper
     latest: true
   )
     team = student.team
-
-    if target.individual_target?
+    assignment = target.assignments.not_archived.first
+    if assignment.individual_assignment?
       (team&.students || [student]).each do |student|
         create_timeline_event(
           student,
@@ -69,15 +69,14 @@ module StudentSpecHelper
     FactoryBot
       .create(:timeline_event, :with_owners, **options)
       .tap do |te|
+        evaluation_criteria = target.assignments.first.evaluation_criteria
         # Add grades for passing submissions if evaluation criteria are present.
-        if target.evaluation_criteria.present? && options[:passed_at].present?
-          te.evaluation_criteria.each do |ec|
+        if evaluation_criteria.present? && options[:passed_at].present?
+          evaluation_criteria.each do |ec|
             create(
               :timeline_event_grade,
               timeline_event: te,
-              grade:
-                grade ||
-                  rand(target.course.pass_grade..target.course.max_grade),
+              grade: grade || rand(target.course.max_grade),
               evaluation_criterion: ec
             )
           end

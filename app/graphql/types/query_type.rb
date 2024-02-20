@@ -69,13 +69,11 @@ module Types
       argument :sort_criterion,
                Types::SubmissionSortCriterionType,
                required: true
-      argument :level_id, ID, required: false
       argument :personal_coach_id, ID, required: false
       argument :assigned_coach_id, ID, required: false
       argument :reviewing_coach_id, ID, required: false
       argument :target_id, ID, required: false
       argument :search, String, required: false
-      argument :exclude_submission_id, ID, required: false
       argument :include_inactive, Boolean, required: false
     end
 
@@ -102,7 +100,6 @@ module Types
                    Types::StudentSubmissionType.connection_type,
                    null: false do
       argument :student_id, ID, required: true
-      argument :level_id, ID, required: false
       argument :status, Types::SubmissionReviewStatusType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
     end
@@ -134,6 +131,12 @@ module Types
       argument :target_id, ID, required: true
     end
 
+    resolved_field :assignment_details,
+                   Types::AssignmentDetailsType,
+                   null: true do
+      argument :target_id, ID, required: true
+    end
+
     resolved_field :coach_stats, Types::CoachStatsType, null: false do
       argument :coach_id, ID, required: true
       argument :course_id, ID, required: true
@@ -150,13 +153,6 @@ module Types
 
     resolved_field :has_archived_coach_notes, Boolean, null: false do
       argument :student_id, ID, required: true
-    end
-
-    resolved_field :student_distribution,
-                   [Types::DistributionInLevelType],
-                   null: false do
-      argument :course_id, ID, required: true
-      argument :filter_string, String, required: false
     end
 
     resolved_field :topics, Types::TopicType.connection_type, null: false do
@@ -230,5 +226,18 @@ module Types
     resolved_field :applicant, Types::ApplicantType, null: false do
       argument :applicant_id, ID, required: true
     end
+
+    resolved_field :discussion_submissions,
+                   Types::DiscussionSubmissionType.connection_type,
+                   null: false do
+      argument :target_id, ID, required: true
+    end
+    resolved_field :user_standings, [Types::UserStandingType], null: false do
+      argument :user_id, ID, required: true
+    end
+
+    resolved_field :standings, [Types::StandingType], null: false
+
+    resolved_field :is_school_standing_enabled, Boolean, null: false
   end
 end

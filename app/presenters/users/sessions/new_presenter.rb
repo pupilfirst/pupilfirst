@@ -2,7 +2,7 @@ module Users
   module Sessions
     class NewPresenter < ApplicationPresenter
       def page_title
-        "#{I18n.t('presenters.users.sessions_new.page_title.title')} | #{school_name}"
+        "#{I18n.t("presenters.users.sessions_new.page_title.title")} | #{school_name}"
       end
 
       def props
@@ -37,20 +37,20 @@ module Users
 
       def button_classes(provider)
         default_classes =
-          'flex justify-center items-center px-3 py-2 leading-snug border border-transparent rounded-lg cursor-pointer font-semibold mt-4 w-full '
+          "flex justify-center items-center px-3 py-2 leading-snug border border-transparent rounded-lg cursor-pointer font-semibold mt-4 w-full "
 
         default_classes +
           case (provider)
           when :facebook
-            'federated-sigin-in__facebook-btn hover:bg-blue-800 text-white'
+            "federated-sigin-in__facebook-btn"
           when :github
-            'federated-sigin-in__github-btn hover:bg-black text-white'
+            "federated-sigin-in__github-btn"
           when :google
-            'federated-sigin-in__google-btn hover:bg-red-600 text-white'
+            "federated-sigin-in__google-btn"
           when :discord
-            'federated-sigin-in__discord-btn hover:bg-indigo-600 text-white'
+            "federated-sigin-in__discord-btn"
           when :developer
-            'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
+            "bg-primary-500 hover:bg-primary-400 text-white"
           else
             raise_unexpected_provider(provider)
           end
@@ -60,15 +60,15 @@ module Users
         provider_key =
           case (provider)
           when :google
-            'google'
+            "google"
           when :facebook
-            'facebook'
+            "facebook"
           when :github
-            'github'
+            "github"
           when :discord
-            'discord'
+            "discord"
           when :developer
-            'developer'
+            "developer"
           else
             raise_unexpected_provider(provider)
           end
@@ -91,15 +91,15 @@ module Users
       def icon_classes(provider)
         case provider
         when :google
-          'fab fa-google'
+          "fab fa-google"
         when :facebook
-          'fab fa-facebook-f me-1'
+          "fab fa-facebook-f me-1"
         when :github
-          'fab fa-github'
+          "fab fa-github"
         when :discord
-          'fab fa-discord'
+          "fab fa-discord"
         when :developer
-          'fas fa-laptop-code'
+          "fas fa-laptop-code"
         else
           raise_unexpected_provider(provider)
         end
@@ -109,15 +109,15 @@ module Users
         key =
           case provider
           when :google
-            'continue_with_google'
+            "continue_with_google"
           when :facebook
-            'continue_with_facebook'
+            "continue_with_facebook"
           when :github
-            'continue_with_github'
+            "continue_with_github"
           when :discord
-            'continue_with_discord'
+            "continue_with_discord"
           when :developer
-            'continue_as_developer'
+            "continue_as_developer"
           else
             raise_unexpected_provider(provider)
           end

@@ -22,7 +22,7 @@ module DomUtils = {
   exception RootElementMissing(string)
   open Webapi.Dom
   let focus = id =>
-    (switch document |> Document.getElementById(id) {
+    (switch document->Document.getElementById(id) {
     | Some(el) => el
     | None => raise(RootElementMissing(id))
     } |> Element.asHtmlElement)->Belt.Option.map(HtmlElement.focus) |> ignore
@@ -155,7 +155,7 @@ module Make = (Selectable: Selectable) => {
         <button
           ariaLabel={"Remove selection: " ++ value}
           title={"Remove selection: " ++ value}
-          className="bg-black bg-opacity-5 text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
+          className="bg-gray-200 text-red-700 px-2 py-px text-xs focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
           onClick={removeSelection(onDeselect, selection)}>
           <PfIcon className="if i-times-regular" />
         </button>
@@ -185,8 +185,7 @@ module Make = (Selectable: Selectable) => {
     </div>
 
   let showHint = hint =>
-    <p
-      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2  border-t">
+    <p className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2  border-t">
       {str(hint)}
     </p>
 
@@ -222,10 +221,10 @@ module Make = (Selectable: Selectable) => {
       let curriedFunction = onWindowClick(showDropdown, setShowDropdown)
 
       let removeEventListener = () =>
-        Webapi.Dom.Window.removeEventListener("click", curriedFunction, Webapi.Dom.window)
+        Webapi.Dom.Window.removeEventListener(Webapi.Dom.window, "click", curriedFunction)
 
       if showDropdown {
-        Webapi.Dom.Window.addEventListener("click", curriedFunction, Webapi.Dom.window)
+        Webapi.Dom.Window.addEventListener(Webapi.Dom.window, "click", curriedFunction)
         Some(removeEventListener)
       } else {
         removeEventListener()

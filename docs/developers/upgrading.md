@@ -16,7 +16,34 @@ These are a list of changes that should be accounted for when upgrading an exist
 encounter any problems while following these instructions, please [create a new issue](https://github.com/pupilfirst/pupilfirst/issues/new/choose)
 on our Github repo.
 
-Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
+Your current version can be found in the Docker image tag, or in `env.PF_VERSION` in the `.github/workflows/ci.yml` file.
+
+### 2024.1
+
+The recommended method for running scheduled jobs under Docker have changed. We've switched to using a foreground process to manage scheduled jobs; [related documentation](https://docs.pupilfirst.com/developers/digitalocean#components) has been updated.
+
+### 2023.6
+
+This is not a breaking change, but you may want to perform some cleanup since we're upgrading to Rails 7.0, and replacing the use of the _ImageMagick_ library with _libvips_ - a faster, more memory-efficient image processing library which is Rails 7's default choice. Because of this change in image processor, image variants created previously using _ImageMagick_ will no longer be used.
+
+```rb
+# Run this in the `production` Rails console to delete old variants.
+ActiveStorage::VariantRecord.destroy_all
+```
+
+New variants will be created using _libvips_ when requests are made for them.
+
+### 2023.5
+
+This version removes the concept of a failure grade for submission reviews. You can either reject a submission or give a passing grade. The pass_grade field of evaluation_criterion table will be removed and so if you are using GraphQL API to create EvaluationCriterion, you need not pass pass_grade as a parameter. Also if you are using GraphQL API to reject or fail a submission you need to call the `createGrading` mutation without any `grades` parameter.
+
+### 2023.4
+
+This version introduces a fundamental shift in our course structure, decoupling student progress tracking from course levels. We're introducing 'milestones' as a replacement for levels to track progress and adjusting several functionalities accordingly, including student progress reporting, student distribution, and more. This change is not backwards compatible. This is the first phase of a multi-phase rollout of the pages feature to compose course content and keeping assignments independent of the content.
+
+### 2023.3
+
+This update addresses few security vulnerabilities in our platform of medium severity. It introduces enhanced security measures, including mandatory password confirmation for email changes, authentication for new password setting, and discreet user presence disclosure. It's vital for all users to upgrade to version 2023.3 to safeguard their accounts effectively.
 
 ### 2023.2
 

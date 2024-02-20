@@ -1,5 +1,7 @@
 %%raw(`import "./CourseEditor__Root.css"`)
 
+open ThemeSwitch
+
 @module("../../shared/images/add-new-course.svg")
 external addNewCourseSVG: string = "default"
 
@@ -86,7 +88,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateSelectedCourse(selectedCourse) => {
       ...state,
-      selectedCourse: selectedCourse,
+      selectedCourse,
     }
   | SetSearchString(string) => {
       ...state,
@@ -143,7 +145,7 @@ let reducer = (state, action) =>
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount, schoolSummary) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
@@ -154,7 +156,7 @@ let reducer = (state, action) =>
       ...state,
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
       schoolStats: Belt.Option.getWithDefault(schoolSummary, state.schoolStats),
     }
   | UpdateCourse(course) =>
@@ -172,7 +174,8 @@ let courseLink = (href, title, icon) =>
     key=href
     href
     className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-    <i className=icon /> <span className="font-semibold ms-2"> {title->str} </span>
+    <i className=icon />
+    <span className="font-semibold ms-2"> {title->str} </span>
   </a>
 
 let courseLinks = course => {
@@ -379,11 +382,12 @@ let showCourse = course => {
                 />
               }}
             </div>
-            <div
-              className="course-editor-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-10"
-              key={Course.id(course)}>
+            <div className="flex gap-2 border-b border-gray-200" key={Course.id(course)}>
+              <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
+                <PfIcon className="if i-book-solid if-fw text-primary-400" />
+              </div>
               <h4
-                className="course-editor-course__title text-white font-semibold leading-tight pe-4 text-lg md:text-xl">
+                className="w-full text-gray-900 font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
                 {str(Course.name(course))}
               </h4>
             </div>
@@ -585,7 +589,8 @@ let make = (~school) => {
     <div className="flex-1 flex flex-col">
       <div className="w-full">
         <div className="max-w-full mx-auto relative overflow-hidden">
-          <div className="bg-gradient-to-r from-secondary-500 to-secondary-600 bg-cover h-40">
+          <div
+            className="bg-gradient-to-r from-secondary-500 to-secondary-600 bg-cover h-40 lg:h-56 2xl:h-64 relative">
             {switch School.coverImageUrl(school) {
             | Some(image) =>
               <img
@@ -597,12 +602,14 @@ let make = (~school) => {
               <div className="school-customize__cover-default h-full w-full svg-bg-pattern-6" />
             }}
           </div>
-          <div className="w-full bg-white p-6">
+          <div className="w-full bg-white relative p-6 z-10">
             <div className="flex items-center max-w-4xl 2xl:max-w-5xl mx-auto justify-between">
               <div className="flex gap-6 px-6">
                 <div
                   className="school-overview__logo-container flex items-center bg-white p-3 border-4 border-white shadow-md ring-1 ring-gray-100 rounded-full -mt-16 overflow-hidden">
-                  {switch School.logoUrl(school) {
+                  {switch getTheme() == "light"
+                    ? School.logoOnLightBgUrl(school)
+                    : School.logoOnDarkBgUrl(school) {
                   | Some(url) =>
                     <img
                       className="h-9 md:h-12 object-contain flex text-sm items-center"
@@ -626,7 +633,7 @@ let make = (~school) => {
               {switch state.schoolStats {
               | Unloaded => React.null
               | Loaded(stats) =>
-                <div className="flex gap-6">
+                <div className="flex gap-6 px-6">
                   <div className="border-e pe-6">
                     <Spread props={"data-t": "school students"}>
                       <div>
@@ -653,7 +660,7 @@ let make = (~school) => {
           </div>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto w-full">
+      <div className="max-w-4xl 2xl:max-w-5xl mx-auto w-full">
         <div className="w-full sticky top-0 z-30 mt-4 px-6">
           <label
             htmlFor="search_courses"
@@ -674,7 +681,7 @@ let make = (~school) => {
           />
         </div>
       </div>
-      <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl w-full">
+      <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl 2xl:max-w-5xl w-full">
         {switch state.courses {
         | Unloaded =>
           <div className="px-2 lg:px-5 mt-8">

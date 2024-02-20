@@ -1,0 +1,62 @@
+<% presenter = ::Layouts::CourseNavPresenter.new(self, @course) %>
+<div class="flex flex-col md:flex-row h-full md:h-screen">
+  <div>
+    <div class="flex md:hidden flex-col border-e bg-white md:pt-18">
+      <div class="flex-1 flex flex-col pt-4 pb-4 md:overflow-y-auto">
+        <nav class="flex-1 px-4 bg-white">
+          <div class="relative pb-1/2 bg-gray-800 rounded-lg">
+            <% if presenter.course_thumbnail[:available] %>
+              <img class="absolute h-full w-full object-cover rounded-lg" src="<%= presenter.course_thumbnail[:url] %>" />
+            <% else %>
+              <div class="app-router-nav__course-cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "></div>
+            <% end %>
+          </div>
+          <div class="mt-4">
+            <div data-re-component="SelectLink" data-re-json="<%= presenter.course_link_props.to_json %>"></div>
+          </div>
+          <div class="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t p-1.5 z-50 overflow-y-auto">
+            <div class="flex space-x-0.5">
+              <% presenter.links.each do |link| %>
+                <%= link_to send("#{link}_course_path", @course), class: "flex space-y-1 flex-col flex-1 rounded-md items-center py-2 px-0.5 text-gray-800 font-semibold hover:text-primary-500 hover:bg-gray-50 #{request.path == send("#{link}_course_path", @course) ? "text-primary-500 bg-primary-50" : ""}", title: link.capitalize do %>
+                  <span class="text-sm"> <i class="<%= presenter.icon(link) %>"></i> </span>
+                  <p class="text-xs"><%= t(".#{link}") %></p>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div class="hidden md:flex flex-col border-e bg-white w-[18rem] pt-18">
+    <div class="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto">
+      <nav class="flex-1 px-4 bg-white">
+        <div class="relative pb-1/2 bg-gray-800 rounded-lg">
+          <% if presenter.course_thumbnail[:available] %>
+            <img class="absolute h-full w-full object-cover rounded-lg" src="<%= presenter.course_thumbnail[:url] %>" />
+          <% else %>
+            <div class="app-router-nav__course-cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "></div>
+          <% end %>
+        </div>
+        <div class="mt-4">
+          <div data-re-component="SelectLink" data-re-json="<%= presenter.course_link_props.to_json %>"></div>
+        </div>
+        <div class="mt-4 space-y-3">
+          <% presenter.links.each do |link| %>
+            <%= link_to send("#{link}_course_path", @course), class: "app-router-navbar__primary-nav-link py-3 px-2 mb-1 #{request.path == send("#{link}_course_path", @course) ? "app-router-navbar__primary-nav-link--active" : ""}", title: link.capitalize do %>
+              <span> <i class="<%= presenter.icon(link) %>"></i> </span>
+              <div class="ps-3 "><%= t(".#{link}") %></div>
+            <% end %>
+          <% end %>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <div class="flex-1">
+    <% if content_for?(:inner_wrapper) %>
+      <%= content_for(:inner_wrapper) %>
+    <% else %>
+      <%= yield %>
+    <% end %>
+  </div>
+</div>

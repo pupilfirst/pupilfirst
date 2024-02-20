@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Course Coaches Index', js: true do
+feature "Course Coaches Index", js: true do
   include UserSpecHelper
   include SubmissionsHelper
 
@@ -24,7 +24,7 @@ feature 'Course Coaches Index', js: true do
   let!(:team_c1) { create :team_with_students, cohort: cohort_1 }
   let!(:team_c2) { create :team_with_students, cohort: cohort_2 }
 
-  let!(:lone_student) { create :student, cohort: cohort_2, level: c2_level }
+  let!(:lone_student) { create :student, cohort: cohort_2 }
 
   let!(:school_admin) { create :school_admin, school: school }
 
@@ -49,7 +49,7 @@ feature 'Course Coaches Index', js: true do
            student: team_c2.students.first
   end
 
-  scenario 'school admin assigns faculty to a course' do
+  scenario "school admin assigns faculty to a course" do
     sign_in_user school_admin.user,
                  referrer: school_course_coaches_path(course_1)
 
@@ -58,14 +58,14 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text(coach_2.name)
     expect(course_1.faculty.count).to eq(2)
 
-    click_button 'Assign Coaches to Course'
+    click_button "Assign Coaches to Course"
 
-    expect(page).to have_text('No coaches selected')
+    expect(page).to have_text("No coaches selected")
 
     find("button[title='Select #{coach_4.name}']").click
 
     click_button "Select #{cohort_1.name}"
-    click_button 'Add Course Coaches'
+    click_button "Add Course Coaches"
 
     within('div[aria-label="List of course coaches"]') do
       expect(page).to have_text(coach_4.name)
@@ -80,7 +80,7 @@ feature 'Course Coaches Index', js: true do
     )
   end
 
-  scenario 'school admin removes a course coach' do
+  scenario "school admin removes a course coach" do
     sign_in_user school_admin.user,
                  referrer: school_course_coaches_path(course_1)
 
@@ -97,13 +97,13 @@ feature 'Course Coaches Index', js: true do
     expect(coach_2.students.count).to eq(0)
   end
 
-  scenario 'school admin checks teams assigned to a coach and deletes them' do
+  scenario "school admin checks teams assigned to a coach and deletes them" do
     sign_in_user school_admin.user,
                  referrer: school_course_coaches_path(course_2)
 
     expect(page).to have_text(coach_3.name)
     find("button[aria-label='View #{coach_3.name}']").click
-    expect(page).to have_text('Students assigned to coach')
+    expect(page).to have_text("Students assigned to coach")
     expect(page).to have_text(coach_3.email)
 
     expect(page).to have_text(team_c2.students.first.name)
@@ -115,18 +115,18 @@ feature 'Course Coaches Index', js: true do
 
     accept_confirm { click_button "Delete #{lone_student.name}" }
 
-    expect(page).to have_text('There are no students assigned to this coach.')
+    expect(page).to have_text("There are no students assigned to this coach.")
     expect(coach_3.students.count).to eq(0)
     expect(coach_3.courses.count).to eq(1)
     expect(course_2.faculty.count).to eq(2)
   end
 
-  scenario 'user who is not logged in gets redirected to sign in page' do
+  scenario "user who is not logged in gets redirected to sign in page" do
     visit school_course_coaches_path(course_1)
-    expect(page).to have_text('Please sign in to continue.')
+    expect(page).to have_text("Please sign in to continue.")
   end
 
-  context 'when a coach is assigned as a student coach to students in multiple courses' do
+  context "when a coach is assigned as a student coach to students in multiple courses" do
     let!(:team_c1_2) { create :team_with_students, cohort: cohort_1 }
 
     before do
@@ -136,7 +136,7 @@ feature 'Course Coaches Index', js: true do
              student: team_c1_2.students.first
     end
 
-    scenario 'user sees team assignments for coaches in the list' do
+    scenario "user sees team assignments for coaches in the list" do
       sign_in_user school_admin.user,
                    referrer: school_course_coaches_path(course_2)
 
@@ -147,7 +147,7 @@ feature 'Course Coaches Index', js: true do
     end
   end
 
-  context 'when a coach has reviewed and pending submissions' do
+  context "when a coach has reviewed and pending submissions" do
     let!(:team_c1_2) { create :team_with_students, cohort: cohort_1 }
 
     let(:target_group_c1) { create :target_group, level: c1_level }
@@ -161,24 +161,45 @@ feature 'Course Coaches Index', js: true do
     end
 
     let(:target_c1_1) do
-      create :target, :for_students, target_group: target_group_c1
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_c1
     end
     let(:target_c1_2) do
-      create :target, :for_team, target_group: target_group_c1
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_TEAM,
+             target_group: target_group_c1
     end
     let(:target_c1_3) do
-      create :target, :for_students, target_group: target_group_c1
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_c1
     end
     let(:target_c2) do
-      create :target, :for_students, target_group: target_group_c2
+      create :target,
+             :with_shared_assignment,
+             given_role: Assignment::ROLE_STUDENT,
+             target_group: target_group_c2
     end
 
     before do
       # Make all of these targets evaluated.
-      target_c1_1.evaluation_criteria << evaluation_criteria_c1
-      target_c1_2.evaluation_criteria << evaluation_criteria_c1
-      target_c1_3.evaluation_criteria << evaluation_criteria_c1
-      target_c2.evaluation_criteria << evaluation_criteria_c2
+      target_c1_1
+        .assignments
+        .first
+        .evaluation_criteria << evaluation_criteria_c1
+      target_c1_2
+        .assignments
+        .first
+        .evaluation_criteria << evaluation_criteria_c1
+      target_c1_3
+        .assignments
+        .first
+        .evaluation_criteria << evaluation_criteria_c1
+      target_c2.assignments.first.evaluation_criteria << evaluation_criteria_c2
 
       # Enroll the coach directly onto one student in this course, an another in a different course.
       create :faculty_student_enrollment,
@@ -216,7 +237,7 @@ feature 'Course Coaches Index', js: true do
       complete_target(target_c2, team_c2.students.second, evaluator: coach_1)
     end
 
-    scenario 'admin checks the counts of pending and reviewed submissions on an assigned coach' do
+    scenario "admin checks the counts of pending and reviewed submissions on an assigned coach" do
       sign_in_user school_admin.user,
                    referrer: school_course_coaches_path(course_1)
 
@@ -224,11 +245,11 @@ feature 'Course Coaches Index', js: true do
       find("button[aria-label='View #{coach_1.name}']").click
 
       within('div[aria-label="Reviewed Submissions"') do
-        expect(page).to have_text('3')
+        expect(page).to have_text("3")
       end
 
       within('div[aria-label="Pending Submissions"') do
-        expect(page).to have_text('1')
+        expect(page).to have_text("1")
       end
     end
   end

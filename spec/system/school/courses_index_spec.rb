@@ -76,11 +76,6 @@ feature "Courses Index", js: true do
       expect(course.enable_leaderboard).to eq(false)
       expect(course.public_signup).to eq(false)
       expect(course.public_preview).to eq(false)
-
-      expect(course.progression_behavior).to eq(
-        Course::PROGRESSION_BEHAVIOR_LIMITED
-      )
-
       expect(course.progression_limit).to eq(1)
       expect(course.highlights).to eq([])
       expect(course.processing_url).to eq(nil)
@@ -184,11 +179,6 @@ feature "Courses Index", js: true do
         expect(course_1.about).to eq(new_about)
         expect(course_1.public_signup).to eq(true)
         expect(course_1.public_preview).to eq(true)
-
-        expect(course_1.progression_behavior).to eq(
-          Course::PROGRESSION_BEHAVIOR_LIMITED
-        )
-
         expect(course_1.progression_limit).to eq(3)
         expect(course_1.highlights).to eq(highlights.map(&:stringify_keys))
         expect(course_1.processing_url).to eq(processing_url)
@@ -204,22 +194,15 @@ feature "Courses Index", js: true do
         click_button "Update Course"
 
         expect(page).to have_text("Course updated successfully")
-        expect(course_1.reload.progression_behavior).to eq(
-          Course::PROGRESSION_BEHAVIOR_UNLIMITED
-        )
-        expect(course_1.progression_limit).to eq(nil)
+        expect(course_1.reload.progression_limit).to eq(0)
 
         find("button[title='Edit #{course_1.name}']").click
+        select "once", from: "progression-limit"
 
-        click_button "Strict"
         click_button "Update Course"
 
         expect(page).to have_text("Course updated successfully")
-
-        expect(course_1.reload.progression_behavior).to eq(
-          Course::PROGRESSION_BEHAVIOR_STRICT
-        )
-        expect(course_1.progression_limit).to eq(nil)
+        expect(course_1.reload.progression_limit).to eq(1)
       end
 
       scenario "School admin edits images associated with the course" do
@@ -408,8 +391,7 @@ feature "Courses Index", js: true do
     end
 
     context "when students exist in a course" do
-      let!(:level) { create :level, course: course_1 }
-      let!(:student) { create :student, level: level }
+      let!(:student) { create :student, cohort: course_1.cohorts.first }
 
       scenario "school admin archives a course" do
         notification_service = prepare_developers_notification

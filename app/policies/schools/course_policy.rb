@@ -40,7 +40,7 @@ module Schools
     end
 
     alias evaluation_criteria? curriculum?
-
+    alias assignments? curriculum?
     class Scope < Scope
       def resolve
         current_school.courses

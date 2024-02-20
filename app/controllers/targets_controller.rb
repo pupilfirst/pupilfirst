@@ -9,7 +9,7 @@ class TargetsController < ApplicationController
   # GET /targets/:id/(:slug)
   def show
     @presenter = Targets::ShowPresenter.new(view_context, @target)
-    render 'courses/curriculum', layout: 'student_course'
+    render "courses/curriculum", layout: "student_course"
   end
 
   # GET /targets/:id/details
@@ -31,6 +31,19 @@ class TargetsController < ApplicationController
                  ).details
                )
              )
+  end
+
+  # POST /targets/:id/mark_as_read
+  def mark_as_read
+    student =
+      current_user
+        .students
+        .joins(:course)
+        .where(courses: { id: course.id })
+        .first if current_user.present?
+
+    student.page_reads.where(target: @target).first_or_create
+    head :ok
   end
 
   private

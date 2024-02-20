@@ -104,7 +104,6 @@ module Cohorts
         user: user,
         team: team,
         tag_list: student.tags,
-        level: first_level,
         cohort: @cohort
       )
     end
@@ -142,10 +141,6 @@ module Cohorts
 
     def course
       @course ||= @cohort.course
-    end
-
-    def first_level
-      @first_level ||= course.levels.find_by(number: 1)
     end
   end
 end

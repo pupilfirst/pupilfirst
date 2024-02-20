@@ -1,4 +1,5 @@
 exception UnexpectedSubmissionStatus(string)
+exception UnexpectedResponse(int)
 
 %%raw(`import "./CoursesCurriculum__Overlay.css"`)
 
@@ -6,9 +7,21 @@ open CoursesCurriculum__Types
 
 module TargetStatus = CoursesCurriculum__TargetStatus
 
+@module("../images/no-peer-submissions.svg") external noPeerSubmissionIcon: string = "default"
+@module("../images/assignment-discussion-icon.svg")
+external assignmentDiscussionIcon: string = "default"
+
 let str = React.string
 
 let t = I18n.t(~scope="components.CoursesCurriculum__Overlay")
+
+module Item = {
+  type t = DiscussionSubmission.t
+}
+
+module PagedSubmission = Pagination.Make(Item)
+
+type loading = Unloaded | Loading | Loaded
 
 type tab =
   | Learn
@@ -16,28 +29,47 @@ type tab =
   | Complete(TargetDetails.completionType)
 
 type state = {
+  loading: LoadingV2.t,
   targetDetails: option<TargetDetails.t>,
   tab: tab,
+  targetRead: bool,
+  peerSubmissions: PagedSubmission.t,
+  totalEntriesCount: int,
 }
 
 type action =
   | Select(tab)
   | ResetState
   | SetTargetDetails(TargetDetails.t)
+  | SetTargetRead(bool)
   | AddSubmission(Target.role)
   | PerformQuickNavigation
+  | BeginReloading
+  | BeginLoadingMore
+  | LoadSubmissions(option<string>, bool, array<DiscussionSubmission.t>, int)
 
-let initialState = {targetDetails: None, tab: Learn}
+let initialState = {
+  loading: LoadingV2.empty(),
+  targetDetails: None,
+  tab: Learn,
+  targetRead: false,
+  peerSubmissions: Unloaded,
+  totalEntriesCount: 0,
+}
 
 let reducer = (state, action) =>
   switch action {
-  | Select(tab) => {...state, tab: tab}
+  | Select(tab) => {...state, tab}
   | ResetState => initialState
   | SetTargetDetails(targetDetails) => {
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | PerformQuickNavigation => {targetDetails: None, tab: Learn}
+  | SetTargetRead(targetRead) => {
+      ...state,
+      targetRead,
+    }
+  | PerformQuickNavigation => initialState
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -45,6 +77,21 @@ let reducer = (state, action) =>
         ...state,
         targetDetails: state.targetDetails |> OptionUtils.map(TargetDetails.clearPendingUserIds),
       }
+    }
+  | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
+  | BeginLoadingMore => {...state, loading: LoadingMore}
+  | LoadSubmissions(endCursor, hasNextPage, newSubmissions, totalEntriesCount) =>
+    let updatedSubmissions = switch state.loading {
+    | LoadingMore =>
+      Js.Array2.concat(PagedSubmission.toArray(state.peerSubmissions), newSubmissions)
+    | Reloading(_) => newSubmissions
+    }
+
+    {
+      ...state,
+      peerSubmissions: PagedSubmission.make(updatedSubmissions, hasNextPage, endCursor),
+      loading: LoadingV2.setNotLoading(state.loading),
+      totalEntriesCount,
     }
   }
 
@@ -62,12 +109,154 @@ let loadTargetDetails = (target, send, ()) => {
   None
 }
 
+module DiscussionSubmissionsQuery = %graphql(`
+    query DiscussionSubmissionsQuery($targetId: ID!, $after: String) {
+      discussionSubmissions(targetId: $targetId, first: 10, after: $after) {
+        nodes {
+          id,
+          targetId,
+          createdAt,
+          hiddenAt,
+          checklist,
+          files {
+            id,
+            title,
+            url
+          },
+          userNames,
+          users {
+            id,
+            name,
+            title,
+            avatarUrl
+          }
+          teamName,
+          comments {
+            id,
+            userId,
+            submissionId,
+            comment,
+            reactions {
+              id,
+              userId,
+              reactionableId,
+              reactionValue,
+              reactionableType,
+              userName,
+              updatedAt
+            },
+            moderationReports {
+              id,
+              userId,
+              reportableId,
+              reason,
+              reportableType
+            },
+            user {
+              id
+              name
+              title
+              avatarUrl
+            },
+            createdAt
+            hiddenAt
+            hiddenById
+          },
+          reactions {
+            id,
+            userId,
+            reactionableId,
+            reactionValue,
+            reactionableType,
+            userName,
+            updatedAt
+          }
+          anonymous
+          pinned
+          moderationReports {
+            id,
+            userId,
+            reportableId,
+            reason,
+            reportableType
+          }
+        }
+        pageInfo {
+          endCursor,
+          hasNextPage
+        }
+        totalCount
+      }
+    }
+  `)
+
+let getDiscussionSubmissions = (send, cursor, targetId) => {
+  DiscussionSubmissionsQuery.make({targetId, after: cursor})
+  |> Js.Promise.then_(response => {
+    send(
+      LoadSubmissions(
+        response["discussionSubmissions"]["pageInfo"]["endCursor"],
+        response["discussionSubmissions"]["pageInfo"]["hasNextPage"],
+        Js.Array.map(DiscussionSubmission.decode, response["discussionSubmissions"]["nodes"]),
+        response["discussionSubmissions"]["totalCount"],
+      ),
+    )
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let reloadSubmissions = (send, targetId) => {
+  send(BeginReloading)
+  getDiscussionSubmissions(send, None, targetId)
+}
+
+let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
+  <p
+    tabIndex=0
+    className="inline-block mt-8 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+    {str(
+      totalSubmissionsCount == loadedSubmissionsCount
+        ? t(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")
+        : t(
+            ~count=loadedSubmissionsCount,
+            ~variables=[
+              ("total_submissions", string_of_int(totalSubmissionsCount)),
+              ("loaded_submissions_count", string_of_int(loadedSubmissionsCount)),
+            ],
+            "submissions_partially_loaded_text",
+          ),
+    )}
+  </p>
+
+let submissionsList = (submissions, state, currentUser, callBack) => {
+  <div className="discussion-submissions__container space-y-16">
+    {ArrayUtils.isEmpty(submissions)
+      ? <div className="bg-gray-50/50 rounded-lg mt-2 p-4">
+          <img className="w-64 mx-auto" src=noPeerSubmissionIcon />
+          <p className="text-center text-gray-600"> {t("no_peer_submissions")->str} </p>
+        </div>
+      : {
+          Js.Array2.map(submissions, submission =>
+            <CoursesCurriculum__DiscussSubmission
+              key={submission->DiscussionSubmission.id} currentUser submission callBack
+            />
+          )
+        }->React.array}
+    {ReactUtils.nullIf(
+      <div className="text-center pb-4">
+        {submissionsLoadedData(state.totalEntriesCount, Array.length(submissions))}
+      </div>,
+      ArrayUtils.isEmpty(submissions),
+    )}
+  </div>
+}
+
 let completionTypeToString = (completionType, targetStatus) =>
   switch (targetStatus |> TargetStatus.status, (completionType: TargetDetails.completionType)) {
   | (Pending, Evaluated) => t("completion_tab_complete")
   | (Pending, TakeQuiz) => t("completion_tab_take_quiz")
-  | (Pending, LinkToComplete) => t("completion_tab_visit_link")
-  | (Pending, MarkAsComplete) => t("completion_tab_mark_complete")
+  | (Pending, NoAssignment) => ""
   | (Pending, SubmitForm) => t("completion_tab_submit_form")
   | (
       PendingReview
@@ -93,10 +282,8 @@ let completionTypeToString = (completionType, targetStatus) =>
       SubmitForm,
     ) =>
     t("completion_tab_form_response")
-  | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-    t("completion_tab_completed")
-  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete | SubmitForm) =>
-    t("completion_tab_locked")
+  | (PendingReview | Completed | Rejected, NoAssignment) => t("completion_tab_completed")
+  | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => t("completion_tab_locked")
   }
 
 let tabToString = (targetStatus, tab) =>
@@ -117,7 +304,7 @@ let tabClasses = (selection, tab) =>
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
-    let element = Webapi.Dom.document |> Webapi.Dom.Document.getElementById("auto-verify-target")
+    let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById("auto-verify-target")
     switch element {
     | Some(e) =>
       Webapi.Dom.Element.scrollIntoView(e)
@@ -159,14 +346,13 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
       TargetDetails.submissions(targetDetails) != []
         ? tabButton(Complete(completionType), state, send, targetStatus)
         : React.null
-    | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-      tabLink(Complete(completionType), state, send, targetStatus)
+    | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
     | (Locked(_), _) => React.null
     }}
   </div>
 }
 
-let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
+let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch state.targetDetails {
   | Some(targetDetails) =>
     let newTargetDetails = targetDetails |> TargetDetails.addSubmission(submission)
@@ -177,15 +363,8 @@ let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEl
 
   switch submission |> Submission.status {
   | MarkedAsComplete =>
-    addSubmissionCB(
-      LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
-      levelUpEligibility,
-    )
-  | Pending =>
-    addSubmissionCB(
-      LatestSubmission.make(~pending=true, ~targetId=target |> Target.id),
-      levelUpEligibility,
-    )
+    addSubmissionCB(LatestSubmission.make(~pending=false, ~targetId=target |> Target.id))
+  | Pending => addSubmissionCB(LatestSubmission.make(~pending=true, ~targetId=target |> Target.id))
   | Completed =>
     raise(
       UnexpectedSubmissionStatus(
@@ -201,14 +380,7 @@ let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEl
   }
 }
 
-let addVerifiedSubmission = (
-  target,
-  state,
-  send,
-  addSubmissionCB,
-  submission,
-  levelUpEligibility,
-) => {
+let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) => {
   switch state.targetDetails {
   | Some(targetDetails) =>
     let newTargetDetails = targetDetails |> TargetDetails.addSubmission(submission)
@@ -216,10 +388,7 @@ let addVerifiedSubmission = (
   | None => ()
   }
 
-  addSubmissionCB(
-    LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
-    levelUpEligibility,
-  )
+  addSubmissionCB(LatestSubmission.make(~pending=false, ~targetId=target |> Target.id))
 }
 
 let targetStatusClass = (prefix, targetStatus) =>
@@ -237,13 +406,14 @@ let renderTargetStatus = targetStatus => {
 }
 
 let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 " ++
+  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-3 md:p-6 " ++
   targetStatusClass("course-overlay__header-title-card--", targetStatus)
 
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
-    <i className="fas fa-lock text-lg" /> <span className="ms-2"> {text |> str} </span>
+    <i className="fas fa-lock text-lg" />
+    <span className="ms-2"> {text |> str} </span>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
@@ -257,9 +427,19 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:me-6 md:text-xl">
-          {target |> Target.title |> str}
-        </h1>
+        <div
+          className="flex flex-col md:flex-row items-start md:items-center font-medium leading-snug">
+          {Target.milestone(target)
+            ? <div
+                className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-300 px-1.5 md:px-2 py-1 rounded-md mr-2">
+                <Icon className="if i-milestone-solid text-sm" />
+                <span className="ms-1"> {t("milestone_target_label") |> str} </span>
+              </div>
+            : React.null}
+          <h1 className="text-base leading-snug md:me-6 md:text-xl">
+            {target |> Target.title |> str}
+          </h1>
+        </div>
         {renderTargetStatus(targetStatus)}
       </div>
     </div>
@@ -294,9 +474,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
           className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
-          <span className="font-semibold  leading-snug">
-            {target |> Target.title |> str}
-          </span>
+          <span className="font-semibold  leading-snug"> {target |> Target.title |> str} </span>
           {renderTargetStatus(targetStatus)}
         </Link>
       })
@@ -313,7 +491,7 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
       prerequisitesIncomplete(reason, target, targets, statusOfTargets, send)
     | CourseLocked
     | AccessLocked
-    | LevelLocked(_) =>
+    | SubmissionLimitReached(_) =>
       renderLockReason(reason)
     }
   | Pending
@@ -324,13 +502,40 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
+let addPageRead = (targetId, markReadCB) => {
+  open Js.Promise
+  Fetch.fetchWithInit(
+    "/targets/" ++ (targetId ++ "/mark_as_read"),
+    Fetch.RequestInit.make(
+      ~method_=Post,
+      ~headers=Fetch.HeadersInit.makeWithArray([
+        ("X-CSRF-Token", AuthenticityToken.fromHead()),
+        ("Content-Type", "application/json"),
+      ]),
+      ~credentials=Fetch.SameOrigin,
+      (),
+    ),
+  )
+  |> then_(response => {
+    if Fetch.Response.ok(response) {
+      markReadCB(targetId)
+      resolve()
+    } else {
+      Js.Promise.reject(UnexpectedResponse(response->Fetch.Response.status))
+    }
+  })
+  |> ignore
+}
+
 let learnSection = (
   send,
+  state,
   targetDetails,
   tab,
   author,
   courseId,
   targetId,
+  markReadCB,
   targetStatus,
   completionType,
 ) => {
@@ -341,7 +546,7 @@ let learnSection = (
     Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
   | (Pending | Rejected, SubmitForm) =>
     Some((Complete(completionType), t("learn_cta_submit_form"), "fas fa-feather-alt"))
-  | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
+  | (Pending | Rejected, NoAssignment) => None
   | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
   }
 
@@ -352,13 +557,47 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
-      <span> <FaIcon classes={iconClasses ++ " me-2"} /> {str(linkText)} </span>
+      className="cursor-pointer flex rounded btn-success text-base justify-center w-full font-semibold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+      <span>
+        <FaIcon classes={iconClasses ++ " me-2"} />
+        {str(linkText)}
+      </span>
     </button>
   })
 
   <div className={overlayContentClasses(tab == Learn)}>
-    <CoursesCurriculum__Learn targetDetails author courseId targetId /> {linkToTab}
+    <CoursesCurriculum__Learn targetDetails author courseId targetId />
+    <div className="flex flex-wrap gap-4 mt-4">
+      {state.targetRead
+        ? <div
+            className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
+            <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="w-5 h-5 text-gray-500"
+                viewBox="0 0 16 16">
+                <path
+                  d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"
+                />
+                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z" />
+              </svg>
+            </span>
+            <span> {str(t("marked_read"))} </span>
+          </div>
+        : <button
+            onClick={_ => {
+              addPageRead(targetId, markReadCB)
+              send(SetTargetRead(true))
+            }}
+            className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+            <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
+            <span> {str(t("mark_as_read"))} </span>
+          </button>}
+      {linkToTab}
+    </div>
   </div>
 }
 
@@ -372,9 +611,9 @@ let discussSection = (target, targetDetails, tab) =>
 let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
   | (Learn, TargetDetails.Evaluated | TakeQuiz | SubmitForm)
-  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => "hidden"
-  | (Learn, MarkAsComplete | LinkToComplete)
-  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => ""
+  | (Discuss, Evaluated | TakeQuiz | NoAssignment | SubmitForm) => "hidden"
+  | (Learn, NoAssignment)
+  | (Complete(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => ""
   }
 
 let completeSection = (
@@ -389,78 +628,160 @@ let completeSection = (
   users,
   preview,
   completionType,
+  currentUser,
 ) => {
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
+  let targetId = target->Target.id
 
-  <div className={completeSectionClasses(state.tab, completionType)}>
-    {switch (targetStatus |> TargetStatus.status, completionType) {
-    | (Pending, Evaluated) =>
-      [
-        <CoursesCurriculum__CompletionInstructions
-          key="completion-instructions" targetDetails title="Instructions"
-        />,
-        <CoursesCurriculum__SubmissionBuilder
-          key="courses-curriculum-submission-form"
-          target
-          targetDetails
-          checklist={targetDetails |> TargetDetails.checklist}
-          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-          preview
-        />,
-      ] |> React.array
-    | (Pending, TakeQuiz) =>
-      [
-        <CoursesCurriculum__CompletionInstructions
-          key="completion-instructions" targetDetails title="Instructions"
-        />,
-        <CoursesCurriculum__Quiz
-          key="courses-curriculum-quiz"
-          target
-          targetDetails
-          addSubmissionCB=addVerifiedSubmissionCB
-          preview
-        />,
-      ] |> React.array
+  <div>
+    <div className={completeSectionClasses(state.tab, completionType)}>
+      {targetDetails->TargetDetails.discussion
+        ? <div
+            className="bg-primary-100 max-w-3xl mx-auto rounded-lg px-4 md:px-6 py-4 flex flex-col-reverse sm:flex-row items-start md:items-center justify-between">
+            <div className="sm:me-12 mt-2 sm:mt-0">
+              <h3 className="leading-tight font-semibold">
+                {t("discussion_assignment_notice.title")->str}
+              </h3>
+              <p className="text-sm text-gray-600 pt-1">
+                {t("discussion_assignment_notice.description")->str}
+              </p>
+            </div>
+            <div className="shrink-0 w-16 sm:w-32 me-4 sm:me-0">
+              <img className="object-contain mx-auto" src=assignmentDiscussionIcon />
+            </div>
+          </div>
+        : React.null}
+      <div className="max-w-3xl mx-auto">
+        {switch (targetStatus |> TargetStatus.status, completionType) {
+        | (Pending, Evaluated) =>
+          [
+            <CoursesCurriculum__CompletionInstructions
+              key="completion-instructions" targetDetails title="Instructions"
+            />,
+            <CoursesCurriculum__SubmissionBuilder
+              key="courses-curriculum-submission-form"
+              target
+              targetDetails
+              checklist={targetDetails |> TargetDetails.checklist}
+              addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+              preview
+            />,
+          ] |> React.array
+        | (Pending, TakeQuiz) =>
+          [
+            <CoursesCurriculum__CompletionInstructions
+              key="completion-instructions" targetDetails title="Instructions"
+            />,
+            <CoursesCurriculum__Quiz
+              key="courses-curriculum-quiz"
+              target
+              targetDetails
+              addSubmissionCB=addVerifiedSubmissionCB
+              preview
+            />,
+          ] |> React.array
 
-    | (Pending, SubmitForm) =>
-      [
-        <CoursesCurriculum__CompletionInstructions
-          key="completion-instructions" targetDetails title="Instructions"
-        />,
-        <CoursesCurriculum__SubmissionBuilder
-          key="courses-curriculum-submission-form"
-          target
-          targetDetails
-          checklist={targetDetails |> TargetDetails.checklist}
-          addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-          preview
-        />,
-      ] |> React.array
+        | (Pending, SubmitForm) =>
+          [
+            <CoursesCurriculum__CompletionInstructions
+              key="completion-instructions" targetDetails title="Instructions"
+            />,
+            <CoursesCurriculum__SubmissionBuilder
+              key="courses-curriculum-submission-form"
+              target
+              targetDetails
+              checklist={targetDetails |> TargetDetails.checklist}
+              addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+              preview
+            />,
+          ] |> React.array
 
-    | (
-        PendingReview
-        | Completed
-        | Rejected
-        | Locked(CourseLocked | AccessLocked),
-        Evaluated | TakeQuiz | SubmitForm,
-      ) =>
-      <CoursesCurriculum__SubmissionsAndFeedback
-        targetDetails
-        target
-        evaluationCriteria
-        addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
-        targetStatus
-        coaches
-        users
-        preview
-        checklist={targetDetails |> TargetDetails.checklist}
-      />
-    | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-      <CoursesCurriculum__AutoVerify
-        target targetDetails targetStatus addSubmissionCB=addVerifiedSubmissionCB preview
-      />
-    | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete | SubmitForm) => React.null
-    }}
+        | (
+            PendingReview
+            | Completed
+            | Rejected
+            | Locked(CourseLocked | AccessLocked),
+            Evaluated | TakeQuiz | SubmitForm,
+          ) =>
+          <CoursesCurriculum__SubmissionsAndFeedback
+            currentUser
+            targetDetails
+            target
+            evaluationCriteria
+            addSubmissionCB={addSubmission(target, state, send, addSubmissionCB)}
+            targetStatus
+            coaches
+            users
+            preview
+            checklist={targetDetails |> TargetDetails.checklist}
+          />
+        | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
+        | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
+        }}
+      </div>
+      {targetDetails->TargetDetails.discussion
+        ? <div className="border-t mt-12">
+            <div className="max-w-3xl mx-auto">
+              <h4 className="text-base md:text-lg font-semibold pt-12 pb-4">
+                {t("submissions_peers")->str}
+              </h4>
+              <div>
+                {switch state.peerSubmissions {
+                | Unloaded =>
+                  <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
+                | PartiallyLoaded(submissions, cursor) =>
+                  <div>
+                    {submissionsList(
+                      submissions,
+                      state,
+                      currentUser,
+                      getDiscussionSubmissions(send, None),
+                    )}
+                    {switch state.loading {
+                    | LoadingMore =>
+                      <div>
+                        {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())}
+                      </div>
+                    | Reloading(times) =>
+                      ReactUtils.nullUnless(
+                        <div className="pb-6">
+                          <button
+                            className="btn btn-primary-ghost cursor-pointer w-full"
+                            onClick={_ => {
+                              send(BeginLoadingMore)
+                              getDiscussionSubmissions(send, Some(cursor), targetId)
+                            }}>
+                            {t("button_load_more")->str}
+                          </button>
+                        </div>,
+                        ArrayUtils.isEmpty(times),
+                      )
+                    }}
+                  </div>
+                | FullyLoaded(submissions) =>
+                  <div>
+                    {submissionsList(
+                      submissions,
+                      state,
+                      currentUser,
+                      getDiscussionSubmissions(send, None),
+                    )}
+                  </div>
+                }}
+              </div>
+              {switch state.peerSubmissions {
+              | Unloaded => React.null
+              | _ =>
+                let loading = switch state.loading {
+                | Reloading(times) => ArrayUtils.isNotEmpty(times)
+                | LoadingMore => false
+                }
+                <LoadingSpinner loading />
+              }}
+            </div>
+          </div>
+        : React.null}
+    </div>
   </div>
 }
 
@@ -499,7 +820,7 @@ let performQuickNavigation = (send, _event) => {
   {
     open // Scroll to the top of the overlay before pushing the new URL.
     Webapi.Dom
-    switch document |> Document.getElementById("target-overlay") {
+    switch document->Document.getElementById("target-overlay") {
     | Some(element) => Webapi.Dom.Element.setScrollTop(element, 0.0)
     | None => ()
     }
@@ -516,7 +837,9 @@ let navigationLink = (direction, url, send) => {
   }
 
   let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />)
+    icon->Belt.Option.mapWithDefault(React.null, icon =>
+      <FaIcon classes={"rtl:rotate-180 fas " ++ icon} />
+    )
 
   <Link
     href=url
@@ -531,7 +854,7 @@ let navigationLink = (direction, url, send) => {
 let scrollOverlayToTop = _event => {
   let element = {
     open Webapi.Dom
-    document |> Document.getElementById("target-overlay")
+    document->Document.getElementById("target-overlay")
   }
   element->Belt.Option.mapWithDefault((), element => element->Webapi.Dom.Element.setScrollTop(0.0))
 }
@@ -541,7 +864,7 @@ let quickNavigationLinks = (targetDetails, send) => {
 
   <div className="pb-6">
     <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
+    <div className="mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
       <div className="w-1/3 me-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
@@ -552,7 +875,9 @@ let quickNavigationLinks = (targetDetails, send) => {
           onClick=scrollOverlayToTop
           className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50">
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
-          <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
+          <span className="mx-2 md:hidden">
+            <i className="fas fa-arrow-up" />
+          </span>
         </button>
       </div>
       <div className="w-1/3 ms-2">
@@ -564,15 +889,9 @@ let quickNavigationLinks = (targetDetails, send) => {
   </div>
 }
 
-let updatePendingUserIdsWhenAddingSubmission = (
-  send,
-  target,
-  addSubmissionCB,
-  submission,
-  levelUpEligibility,
-) => {
+let updatePendingUserIdsWhenAddingSubmission = (send, target, addSubmissionCB, submission) => {
   send(AddSubmission(target |> Target.role))
-  addSubmissionCB(submission, levelUpEligibility)
+  addSubmissionCB(submission)
 }
 
 @react.component
@@ -582,16 +901,23 @@ let make = (
   ~targetStatus,
   ~addSubmissionCB,
   ~targets,
+  ~targetRead,
+  ~markReadCB,
   ~statusOfTargets,
   ~users,
   ~evaluationCriteria,
   ~coaches,
   ~preview,
   ~author,
+  ~currentUser,
 ) => {
-  let (state, send) = React.useReducer(reducer, initialState)
+  let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
+  React.useEffect1(() => {
+    reloadSubmissions(send, target->Target.id)
+    None
+  }, [Target.id(target)])
 
   React.useEffect(() => {
     ScrollLock.activate()
@@ -600,7 +926,7 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
+    className="fixed z-50 top-0 start-0 w-full h-full overflow-y-scroll bg-white">
     <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
@@ -631,18 +957,24 @@ let make = (
       let completionType = targetDetails |> TargetDetails.computeCompletionType
 
       <div>
-        <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
-          {learnSection(
-            send,
-            targetDetails,
-            state.tab,
-            author,
-            Course.id(course),
-            Target.id(target),
-            targetStatus,
-            completionType,
-          )}
-          {discussSection(target, targetDetails, state.tab)}
+        <div className="mx-auto mt-6 md:mt-8 px-3 lg:px-0">
+          <div className="max-w-3xl mx-auto">
+            {learnSection(
+              send,
+              state,
+              targetDetails,
+              state.tab,
+              author,
+              Course.id(course),
+              Target.id(target),
+              markReadCB,
+              targetStatus,
+              completionType,
+            )}
+          </div>
+          <div className="max-w-3xl mx-auto">
+            {discussSection(target, targetDetails, state.tab)}
+          </div>
           {completeSection(
             state,
             send,
@@ -655,6 +987,7 @@ let make = (
             users,
             preview,
             completionType,
+            currentUser,
           )}
         </div>
         {quickNavigationLinks(targetDetails, send)}

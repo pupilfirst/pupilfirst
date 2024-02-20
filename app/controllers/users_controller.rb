@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     user =
       Users::ValidateDeletionTokenService.new(
         params[:token],
-        current_school,
+        current_school
       ).authenticate
     if user.present?
       sign_in user
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     if current_user.discord_user_id.present?
       Discord::ClearRolesJob.perform_later(
         current_user.discord_user_id,
-        current_school,
+        current_school
       )
       current_user.update!(discord_user_id: nil)
     end
@@ -62,7 +62,7 @@ class UsersController < ApplicationController
     user =
       Users::ValidateUpdateEmailTokenService.new(
         params[:token],
-        current_school,
+        current_school
       ).authenticate
 
     if user.present? && user.new_email.present?
@@ -79,16 +79,14 @@ class UsersController < ApplicationController
         metadata: {
           user_id: current_user.id,
           email: new_email,
-          old_email: old_email,
-        },
+          old_email: old_email
+        }
       )
 
-      # Send success email to user
-      UserMailer.confirm_email_update(
-        user.name,
-        user.email,
-        current_school,
-      ).deliver_now
+      # Send success email to user - both old and new email for security
+      UserMailer.confirm_email_update(user, user.email, old_email).deliver_later
+
+      UserMailer.confirm_email_update(user, old_email, old_email).deliver_later
 
       # Send notification email to admins
       current_school
@@ -98,7 +96,7 @@ class UsersController < ApplicationController
           SchoolAdminMailer.email_updated_notification(
             admin,
             user,
-            old_email,
+            old_email
           ).deliver_later
         end
 
@@ -128,5 +126,11 @@ class UsersController < ApplicationController
         session.delete(:course_requiring_discord)
         course
       end
+  end
+
+  # GET /user/standing
+  def standing
+    @presenter =
+      Users::StandingPresenter.new(view_context, authorize(current_user))
   end
 end

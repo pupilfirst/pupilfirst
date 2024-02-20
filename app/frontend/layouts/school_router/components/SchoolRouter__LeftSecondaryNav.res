@@ -32,6 +32,7 @@ let secondaryNavOption = (selectedPage, selectedCourse, page) => {
 let secondaryNavLinks = (selectedPage, selectedCourse, currentUser) => {
   let navOptionsAdmin = [
     Page.Curriculum,
+    Assignments,
     Cohorts,
     Students,
     Applicants,
@@ -61,6 +62,7 @@ let make = (~selectedPage, ~selectedCourse, ~currentUser) =>
       <div className="p-4">
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Admins))}
+        {secondaryNavOption(selectedPage, selectedCourse, Page.Settings(Standing))}
       </div>
     </div>
   | SelectedCourse(_courseSelection) =>

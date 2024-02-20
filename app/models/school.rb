@@ -6,7 +6,6 @@ class School < ApplicationRecord
   has_many :students, through: :users
   has_many :teams, through: :courses
   has_many :faculty, through: :users
-  has_many :school_admins, dependent: :destroy
   has_many :domains, dependent: :destroy
   has_many :school_strings, dependent: :destroy
   has_many :school_links, dependent: :destroy
@@ -19,6 +18,7 @@ class School < ApplicationRecord
   has_many :audit_records, dependent: :destroy
   has_many :calendars, through: :courses
   has_many :calendar_events, through: :calendars
+  has_many :standings, dependent: :destroy
 
   acts_as_taggable_on :student_tags
   acts_as_taggable_on :user_tags
@@ -27,34 +27,44 @@ class School < ApplicationRecord
 
   has_one_attached :logo_on_light_bg
   has_one_attached :logo_on_dark_bg
-  has_one_attached :icon
+  has_one_attached :icon_on_light_bg
+  has_one_attached :icon_on_dark_bg
   has_one_attached :cover_image
+
+  def school_admins
+    SchoolAdmin.joins(:user).where(users: { school_id: id })
+  end
 
   def logo_variant(variant, background: :light)
     logo = background == :light ? logo_on_light_bg : logo_on_dark_bg
 
     case variant
     when :mid
-      logo.variant(auto_orient: true, gravity: 'center', resize: '200x200>')
-        .processed
+      logo.variant(resize_to_limit: [nil, 200]).processed
     when :high
-      logo.variant(auto_orient: true, gravity: 'center', resize: '500x500>')
-        .processed
+      logo.variant(resize_to_limit: [nil, 500]).processed
     when :thumb
-      logo.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
-        .processed
+      logo.variant(resize_to_limit: [nil, 100]).processed
     else
       logo
     end
   end
 
-  def icon_variant(variant)
+  def icon_variant(variant, background: :light)
+    icon = background == :light ? icon_on_light_bg : icon_on_dark_bg
     case variant
     when :thumb
-      icon.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
-        .processed
+      icon.variant(resize_to_limit: [100, 100]).processed
     else
       icon
     end
+  end
+
+  def email
+    SchoolString::EmailAddress.for(self)
+  end
+
+  def default_standing
+    standings.find_by(default: true)
   end
 end

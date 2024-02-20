@@ -1,0 +1,42 @@
+<div class="md:pt-18 bg-gray-50">
+  <section class="bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4 pt-4 md:px-6 md:pt-6">
+      <% if @organisation %>
+        <div class="mt-4 overflow-x-auto">
+          <%= render 'shared/breadcrumbs', crumbs: [[t('shared.my_org'), '/organisations'], [@organisation.name, organisation_path(@organisation)], [@cohort.course.name, active_cohorts_organisation_course_path(@organisation, @cohort.course)], [@cohort.name]]  %>
+        </div>
+      <% end %>
+      <h1 class="text-xl md:text-3xl font-bold mt-4 break-words">
+        <%= @cohort.name %>
+      </h1>
+      <p class="text-sm font-medium"><%= @cohort.course.name %></p>
+      <div class="mt-6 flex gap-4 items-center border-b border-gray-300 text-sm">
+        <%= link_to t('shared.cohort_overview.overview_link'), overview_path, class: 'p-2 hover:text-primary-500 hover:bg-primary-100' %>
+        <p class="p-2 border-b-2 border-primary-500 text-primary-500 font-semibold"><%= t('shared.cohort_overview.students_link') %></p>
+      </div>
+    </div>
+  </section>
+  <section class="bg-white">
+    <div class="max-w-5xl mx-auto p-4 md:p-6">
+      <div class="mt-2 md:sticky top-18 z-10">
+        <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
+      </div>
+      <div class="grid grid-flow-row gap-4 grid-cols-1 md:grid-cols-2  auto-rows-max mt-4">
+        <% @presenter.students.each do |student| %>
+          <%= render 'shared/student', student: student, filters: @presenter.filters_in_url %>
+        <% end %>
+      </div>
+      <div class="mt-6 flex items-center justify-center">
+        <%= paginate @presenter.students %>
+      </div>
+      <% if @presenter.students.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4">
+          <%= t('shared.cohort_students.pagination_notice', page_start: kaminari_page_start(@presenter.students), page_end: kaminari_page_end(@presenter.students), count: @presenter.students.total_count) %>
+        </div>
+      <% end %>
+      <% if @presenter.students.empty? %>
+        <div class="text-center text-sm italic mt-4"><%= t('shared.cohort_students.nothing_to_show') %></div>
+      <% end %>
+    </div>
+  </section>
+</div>

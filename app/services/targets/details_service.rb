@@ -9,23 +9,54 @@ module Targets
     end
 
     def details
+      details = default_props
       if @student.present?
-        {
-          pending_user_ids: pending_user_ids,
-          submissions: details_for_submissions,
-          feedback: feedback_for_submissions,
-          grading: grading,
-          **default_props
-        }
+        details =
+          details.update(
+            {
+              pending_user_ids: pending_user_ids,
+              submissions: details_for_submissions,
+              feedback: feedback_for_submissions,
+              grading: grading
+            }
+          )
       else
-        {
-          pending_user_ids: [],
-          submissions: [],
-          feedback: [],
-          grading: [],
-          **default_props
-        }
+        details =
+          details.update(
+            { pending_user_ids: [], submissions: [], feedback: [], grading: [] }
+          )
       end
+
+      if assignment.present?
+        details =
+          details.update(
+            {
+              quiz_questions: quiz_questions,
+              evaluated: assignment.evaluation_criteria.exists?,
+              completion_instructions: assignment.completion_instructions,
+              checklist: assignment.checklist,
+              comments: comments_for_submissions,
+              reactions: reactions_for_submissions,
+              discussion: assignment.discussion?,
+              allow_anonymous: assignment.allow_anonymous?
+            }
+          )
+      else
+        details =
+          details.update(
+            {
+              quiz_questions: [],
+              evaluated: false,
+              completion_instructions: nil,
+              checklist: [],
+              comments: [],
+              reactions: [],
+              discussion: false,
+              allow_anonymous: false
+            }
+          )
+      end
+      details
     end
 
     private
@@ -33,13 +64,8 @@ module Targets
     def default_props
       {
         navigation: links_to_adjacent_targets,
-        quiz_questions: quiz_questions,
         content_blocks: content_blocks,
-        communities: community_details,
-        link_to_complete: @target.link_to_complete,
-        evaluated: @target.evaluation_criteria.exists?,
-        completion_instructions: @target.completion_instructions,
-        checklist: @target.checklist
+        communities: community_details
       }
     end
 
@@ -52,22 +78,28 @@ module Targets
           .target_groups
           .joins(:targets)
           .merge(Target.live)
-          .order('target_groups.sort_index', 'targets.sort_index')
-          .pluck('targets.id')
+          .order("target_groups.sort_index", "targets.sort_index")
+          .pluck("targets.id")
 
       target_index = sorted_target_ids.index(@target.id)
 
       if target_index.present?
-        previous_target_id = sorted_target_ids[target_index - 1] if target_index
-          .positive?
+        previous_target_id =
+          sorted_target_ids[target_index - 1] if target_index.positive?
         next_target_id = sorted_target_ids[target_index + 1]
 
-        links[:previous] =
-          "/targets/#{previous_target_id}" if previous_target_id.present?
+        links[
+          :previous
+        ] = "/targets/#{previous_target_id}" if previous_target_id.present?
         links[:next] = "/targets/#{next_target_id}" if next_target_id.present?
       end
 
       links
+    end
+
+    def assignment
+      return @assignment if defined?(@assignment)
+      @assignment = @target.assignments.not_archived.first
     end
 
     def communities
@@ -88,7 +120,7 @@ module Targets
         .live
         .joins(:target)
         .where(targets: { id: @target })
-        .order('last_activity_at DESC NULLs FIRST')
+        .order("last_activity_at DESC NULLs FIRST")
         .first(3)
         .map { |topic| { id: topic.id, title: topic.title } }
     end
@@ -118,6 +150,7 @@ module Targets
           created_at: submission.created_at,
           status: submission.status,
           checklist: submission.checklist,
+          hidden_at: submission.hidden_at,
           files: files(submission)
         }
       end
@@ -140,6 +173,81 @@ module Targets
       end
     end
 
+    def user_details(user)
+      details = user.attributes.slice("id", "name", "title")
+      details["avatar_url"] = user.avatar_url(variant: :thumb)
+      details
+    end
+
+    def comments_for_submissions
+      #TODO - clean up this code using the list of attributes
+      reaction_attributes = [
+        :id,
+        :user_id,
+        :reactionable_id,
+        :reactionable_type,
+        :reaction_value,
+        :updated_at,
+        "users.name"
+      ]
+      SubmissionComment
+        .includes(:user, :reactions)
+        .not_archived
+        .where(submission_id: submissions.pluck(:id))
+        .order(created_at: :desc)
+        .limit(100)
+        .map do |comment|
+          {
+            id: comment.id,
+            user_id: comment.user_id,
+            user: user_details(comment.user),
+            submission_id: comment.submission_id,
+            comment: comment.comment,
+            reactions:
+              comment
+                .reactions
+                .includes(:user)
+                .pluck(*reaction_attributes)
+                .map do |id, user_id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
+                  {
+                    id: id,
+                    user_id: user_id,
+                    reactionable_id: reactionable_id,
+                    reactionable_type: reactionable_type,
+                    reaction_value: reaction_value,
+                    updated_at: updated_at,
+                    user_name: user_name
+                  }
+                end,
+            moderation_reports:
+              comment.moderation_reports.map do |report|
+                report.attributes.transform_values(&:to_s)
+              end,
+            created_at: comment.created_at,
+            hidden_at: comment.hidden_at,
+            hidden_by_id: comment.hidden_by_id
+          }
+        end
+    end
+
+    def reactions_for_submissions
+      Reaction
+        .includes(:user)
+        .where(reactionable_type: "TimelineEvent")
+        .where(reactionable_id: submissions.pluck(:id))
+        .map do |reaction|
+          {
+            id: reaction.id,
+            user_id: reaction.user_id,
+            user_name: reaction.user.name,
+            reactionable_id: reaction.reactionable_id,
+            reactionable_type: reaction.reactionable_type,
+            reaction_value: reaction.reaction_value,
+            updated_at: reaction.updated_at
+          }
+        end
+    end
+
     def feedback_for_submissions
       StartupFeedback
         .where(timeline_event_id: submissions.pluck(:id))
@@ -154,22 +262,19 @@ module Targets
     end
 
     def files(submission)
-      submission
-        .timeline_event_files
-        .with_attached_file
-        .map do |file|
-          {
-            id: file.id,
-            name: file.file.filename,
-            url: url_helpers.download_timeline_event_file_path(file)
-          }
-        end
+      submission.timeline_event_files.with_attached_file.map do |file|
+        {
+          id: file.id,
+          name: file.file.filename,
+          url: url_helpers.download_timeline_event_file_path(file)
+        }
+      end
     end
 
     def quiz_questions
-      return [] if @target.quiz.blank?
+      return [] if assignment.quiz.blank?
 
-      @target
+      assignment
         .quiz
         .quiz_questions
         .includes(:answer_options)
@@ -186,31 +291,27 @@ module Targets
 
     def answer_options(question)
       question.answer_options.map do |answer|
-        answer.attributes.slice('id', 'value')
+        answer.attributes.slice("id", "value")
       end
     end
 
     def content_blocks
       return [] if @target.current_content_blocks.blank?
 
-      @target
-        .current_content_blocks
-        .with_attached_file
-        .map do |content_block|
-          cb =
-            content_block.attributes.slice(
-              'id',
-              'block_type',
-              'content',
-              'sort_index'
-            )
-          if content_block.file.attached?
-            cb['file_url'] =
-              url_helpers.rails_public_blob_url(content_block.file)
-            cb['filename'] = content_block.file.filename
-          end
-          cb
+      @target.current_content_blocks.with_attached_file.map do |content_block|
+        cb =
+          content_block.attributes.slice(
+            "id",
+            "block_type",
+            "content",
+            "sort_index"
+          )
+        if content_block.file.attached?
+          cb["file_url"] = url_helpers.rails_public_blob_url(content_block.file)
+          cb["filename"] = content_block.file.filename
         end
+        cb
+      end
     end
 
     def grading

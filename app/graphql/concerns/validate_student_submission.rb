@@ -4,22 +4,23 @@ module ValidateStudentSubmission
   class EnsureSubmittability < GraphQL::Schema::Validator
     def validate(_object, context, value)
       target = Target.find_by(id: value[:target_id])
+      assignment = target.assignments.not_archived.first
       course = target.course
       student =
         context[:current_user]
           .students
-          .joins(:level)
-          .where(levels: { course_id: course })
+          .joins(:cohort)
+          .where(cohorts: { course_id: course })
           .first
       target_status = Targets::StatusService.new(target, student).status
       submittable =
-        target.checklist.present? || target.evaluation_criteria.present?
+        assignment.checklist.present? || assignment.evaluation_criteria.present?
       submission_required =
         target_status.in?(
           [
             Targets::StatusService::STATUS_PENDING,
-            Targets::StatusService::STATUS_FAILED,
-          ],
+            Targets::StatusService::STATUS_FAILED
+          ]
         )
       submitted_but_resubmittable =
         target.resubmittable? &&
@@ -31,16 +32,17 @@ module ValidateStudentSubmission
 
       I18n.t(
         "mutations.create_submission.blocked_submission_status_error",
-        target_status: target_status,
+        target_status: target_status
       )
     end
   end
 
   class AttemptedMinimumQuestions < GraphQL::Schema::Validator
     def validate(_object, _context, value)
-      target = Target.find_by(id: value[:target_id])
+      assignment =
+        Target.find_by(id: value[:target_id]).assignments.not_archived.last
       checklist = value[:checklist]
-      target
+      assignment
         .checklist
         .each_with_object([]) do |c, result|
           next if c["optional"] == true
@@ -53,7 +55,7 @@ module ValidateStudentSubmission
 
           result << I18n.t(
             "mutations.create_submission.missing_answer_error",
-            title: c["title"],
+            title: c["title"]
           )
         end
     end
@@ -112,7 +114,7 @@ module ValidateStudentSubmission
       combine(
         maximum_three_attachments_per_item,
         valid_file_ids_in_checklist,
-        all_files_are_new,
+        all_files_are_new
       )
     end
 
@@ -149,6 +151,7 @@ module ValidateStudentSubmission
     argument :target_id, GraphQL::Types::ID, required: true
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :file_ids, [GraphQL::Types::ID], required: true
+    argument :anonymous, GraphQL::Types::Boolean, required: true
 
     validates ValidResponse => {}
     validates ValidateFileAttachments => {}

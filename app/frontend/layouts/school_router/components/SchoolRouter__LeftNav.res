@@ -4,6 +4,8 @@ let t = I18n.t(~scope="components.SchoolAdminNavbar__Root")
 
 open SchoolRouter__Types
 
+open ThemeSwitch
+
 let str = React.string
 
 let containerClasses = shrunk => {
@@ -114,6 +116,12 @@ let secondaryNav = (currentUser, selectedCourse, selectedPage) =>
   | _ => React.null
   }
 
+let renderIcon = school => {
+  getTheme() == "light"
+    ? <img src={School.iconOnLightBgUrl(school)} alt={"Icon of " ++ School.name(school)} />
+    : <img src={School.iconOnDarkBgUrl(school)} alt={"Icon of " ++ School.name(school)} />
+}
+
 @react.component
 let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
   let selectedCourse = React.useContext(SchoolRouter__CourseContext.context).selectedCourse
@@ -125,13 +133,13 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
             {Page.shrunk(selectedPage)
               ? <div className="bg-white flex items-center justify-center px-3 py-1 rounded">
                   {User.isAuthor(currentUser)
-                    ? <img src={School.iconUrl(school)} alt={School.name(school)} />
-                    : <a className="text-xs" href="/school">
-                        <img src={School.iconUrl(school)} alt={School.name(school)} />
-                      </a>}
+                    ? renderIcon(school)
+                    : <a className="text-xs" href="/school"> {renderIcon(school)} </a>}
                 </div>
               : {
-                  switch School.logoUrl(school) {
+                  switch getTheme() == "light"
+                    ? School.logoOnLightBgUrl(school)
+                    : School.logoOnDarkBgUrl(school) {
                   | Some(url) =>
                     <img
                       className="h-10 object-contain text-sm"
@@ -165,19 +173,17 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                     className="px-2 pt-3 pb-1 text-xs font-semibold text-gray-400 border-t-2 border-gray-100">
                     {"Courses"->str}
                   </div>
-                  {Js.Array.map(
-                    course =>
-                      <li key={Course.id(course)}>
-                        <a
-                          ariaLabel={Course.name(course)}
-                          href={"/school/courses/" ++ Course.id(course) ++ "/students"}
-                          className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex gap-2 items-center hover:bg-gray-50 hover:text-primary-500">
-                          <Avatar name={Course.name(course)} className="w-5 h-5 shrink-0" />
-                          <span className="inline-block"> {str(Course.name(course))} </span>
-                        </a>
-                      </li>,
-                    Js.Array.filter(course => !Course.ended(course), courses),
-                  )->React.array}
+                  {Js.Array.map(course =>
+                    <li key={Course.id(course)}>
+                      <a
+                        ariaLabel={Course.name(course)}
+                        href={"/school/courses/" ++ Course.id(course) ++ "/students"}
+                        className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex gap-2 items-center hover:bg-gray-50 hover:text-primary-500">
+                        <Avatar name={Course.name(course)} className="w-5 h-5 shrink-0" />
+                        <span className="inline-block"> {str(Course.name(course))} </span>
+                      </a>
+                    </li>
+                  , Js.Array.filter(course => !Course.ended(course), courses))->React.array}
                 </ul>,
                 Page.shrunk(selectedPage),
               )}

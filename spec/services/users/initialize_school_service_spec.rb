@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Users::InitializeSchoolService do
   subject { described_class.new(user, course) }
@@ -10,17 +10,19 @@ describe Users::InitializeSchoolService do
   let(:course) { create :course, school: school }
 
   let(:level_one) { create :level, :one, course: course }
-  let(:target_group_l1_1) do
-    create :target_group, level: level_one, milestone: true
-  end
+  let(:target_group_l1_1) { create :target_group, level: level_one }
   let!(:target_l1_1_1) do
-    create :target, :with_content, :for_team, target_group: target_group_l1_1
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group_l1_1
   end
 
-  let(:new_name) { Faker::Lorem.words(number: 2).join(' ') }
+  let(:new_name) { Faker::Lorem.words(number: 2).join(" ") }
 
-  describe '#execute' do
-    it 'create initializes a school with a new course, coach, student and community' do
+  describe "#execute" do
+    it "create initializes a school with a new course, coach, student and community" do
       # user should not have a student or coach profile
       expect(user.students).to eq([])
       expect(user.faculty).to eq(nil)

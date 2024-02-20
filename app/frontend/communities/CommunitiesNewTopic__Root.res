@@ -255,7 +255,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   <DisablingCover disabled=state.saving>
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 md:pt-18">
       <div className="flex-1 flex flex-col">
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
@@ -306,7 +306,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   />
                 </div>
                 {ReactUtils.nullIf(
-                  <div className="w-1/4">
+                  <div className="md:w-1/4">
                     <label
                       className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                       htmlFor="topic_category">

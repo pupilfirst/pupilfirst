@@ -16,34 +16,58 @@ class TimelineEvent < ApplicationRecord
   belongs_to :target
   belongs_to :evaluator, class_name: "Faculty", optional: true
   belongs_to :reviewer, class_name: "Faculty", optional: true
+  belongs_to :hidden_by, class_name: "User", optional: true
 
-  has_many :target_evaluation_criteria, through: :target
-  has_many :evaluation_criteria, through: :target_evaluation_criteria
+  has_many :evaluation_criteria, through: :target
   has_many :startup_feedback, dependent: :destroy
   has_many :timeline_event_files, dependent: :destroy
   has_many :timeline_event_grades, dependent: :destroy
   has_many :timeline_event_owners, dependent: :destroy
   has_many :students, through: :timeline_event_owners
+  has_many :reactions, as: :reactionable, dependent: :destroy
+  has_many :moderation_reports, as: :reportable, dependent: :destroy
   has_one :course, through: :target
+
   has_many :submission_reports,
            foreign_key: "submission_id",
            inverse_of: :submission,
            dependent: :destroy
 
+  has_many :submission_comments,
+           dependent: :destroy,
+           inverse_of: "submission",
+           foreign_key: "submission_id"
+
   delegate :title, to: :target
 
-  scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
+  scope :not_auto_verified,
+        -> {
+          left_joins(:evaluation_criteria)
+            .where.not(evaluation_criteria: { id: nil })
+            .distinct
+        }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :live, -> { where(archived_at: nil) }
   scope :failed, -> { where(passed_at: nil).where.not(evaluated_at: nil) }
-  scope :pending_review, -> { not_auto_verified.where(evaluated_at: nil) }
+  scope :pending_review, -> { live.not_auto_verified.where(evaluated_at: nil) }
   scope :evaluated_by_faculty, -> { where.not(evaluated_at: nil) }
   scope :from_students,
         ->(students) {
           joins(:timeline_event_owners).where(
             timeline_event_owners: {
               student: students
+            }
+          )
+        }
+  scope :not_hidden, -> { where(hidden_at: nil) }
+  scope :discussion_enabled,
+        -> {
+          joins(target: :assignments).where(
+            target: {
+              assignments: {
+                discussion: true
+              }
             }
           )
         }
@@ -65,7 +89,7 @@ class TimelineEvent < ApplicationRecord
   attr_accessor :files
 
   def reviewed?
-    timeline_event_grades.present?
+    evaluated_at.present? || passed_at.present?
   end
 
   def overall_grade_from_score
@@ -80,6 +104,10 @@ class TimelineEvent < ApplicationRecord
 
   def passed?
     passed_at.present?
+  end
+
+  def evaluated?
+    evaluated_at.present?
   end
 
   def team_submission?

@@ -13,7 +13,6 @@ module PagedStudents = Pagination.Make(Item)
 type state = {
   loading: LoadingV2.t,
   students: PagedStudents.t,
-  levels: array<Level.t>,
   totalEntriesCount: int,
 }
 
@@ -31,7 +30,6 @@ let reducer = (state, action) =>
     }
 
     {
-      ...state,
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
       totalEntriesCount: totalEntriesCount,
@@ -40,7 +38,6 @@ let reducer = (state, action) =>
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
   }
 
-module LevelFragment = Shared__Level.Fragment
 module CohortFragment = Cohort.Fragment
 module AdminUserFragment = Admin__User.Fragment
 
@@ -52,9 +49,6 @@ module CourseStudentsQuery = %graphql(`
           taggings
           user {
             ...AdminUserFragment
-          }
-          level {
-            ...LevelFragment
           }
           cohort {
             ...CohortFragment
@@ -89,7 +83,6 @@ let getStudents = (send, courseId, cursor, params) => {
             ~id=studentDetails.id,
             ~taggings=studentDetails.taggings,
             ~user=Admin__User.makeFromFragment(studentDetails.user),
-            ~level=Shared__Level.makeFromFragment(studentDetails.level),
             ~cohort=Cohort.makeFromFragment(studentDetails.cohort),
           )
         ),
@@ -104,7 +97,6 @@ let getStudents = (send, courseId, cursor, params) => {
 let computeInitialState = () => {
   loading: LoadingV2.empty(),
   students: Unloaded,
-  levels: [],
   totalEntriesCount: 0,
 }
 
@@ -114,7 +106,7 @@ let reloadStudents = (courseId, send, params) => {
 }
 
 let onSelect = (key, value, params) => {
-  Webapi.Url.URLSearchParams.set(key, value, params)
+  Webapi.Url.URLSearchParams.set(params, key, value)
   RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
 }
 
@@ -166,13 +158,6 @@ let studentsList = (params, students) => {
                       params,
                       ~value=Cohort.filterValue(StudentInfo.cohort(student)),
                     )}
-                    {showTag(
-                      "level",
-                      Level.shortName(StudentInfo.level(student)),
-                      "bg-yellow-100 text-yellow-900",
-                      params,
-                      ~value=Level.filterValue(StudentInfo.level(student)),
-                    )}
                     {StudentInfo.taggings(student)
                     ->Js.Array2.map(tag => {
                       showTag("student_tags", tag, "bg-gray-200 text-gray-900", params)
@@ -214,7 +199,6 @@ let studentsList = (params, students) => {
 let makeFilters = () => {
   [
     CourseResourcesFilter.makeFilter("cohort", t("cohort"), DataLoad(#Cohort), "green"),
-    CourseResourcesFilter.makeFilter("level", t("level"), DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
       "Student Tag",

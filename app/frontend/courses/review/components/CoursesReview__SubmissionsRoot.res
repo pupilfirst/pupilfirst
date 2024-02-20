@@ -10,7 +10,7 @@ module UserProxyFragment = UserProxy.Fragment
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime, inactiveSubmissionReviewAllowedDays
+        targetId, targetTitle, createdAt, submissionReportPollTime
         students {
           id
           name
@@ -27,7 +27,7 @@ module SubmissionDetailsQuery = %graphql(`
           targetUrl
         }
         evaluationCriteria{
-          id, name, maxGrade, passGrade, gradeLabels { grade label}
+          id, name, maxGrade, gradeLabels { grade label}
         },
         reviewChecklist{
           title
@@ -58,7 +58,8 @@ module SubmissionDetailsQuery = %graphql(`
         }
         teamName
         courseId
-        preview
+        reviewable
+        warning
         reviewerDetails{
           assignedAt
           user {
@@ -115,7 +116,8 @@ let make = (~submissionId, ~currentUser) => {
 
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
-  <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
+  <div
+    className="flex-1 md:flex md:flex-col md:overflow-hidden fixed z-[50] inset-0 overflow-y-auto bg-white">
     {switch state {
     | Loaded(submissionDetails) =>
       <CoursesReview__Editor

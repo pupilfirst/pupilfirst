@@ -228,7 +228,7 @@ let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
   </p>
 
 let submissionsList = (submissions, state, currentUser, callBack) => {
-  <div className="discussion-submissions__container">
+  <div className="discussion-submissions__container space-y-16">
     {ArrayUtils.isEmpty(submissions)
       ? <div className="bg-gray-50/50 rounded-lg mt-2 p-4">
           <img className="w-64 mx-auto" src=noPeerSubmissionIcon />
@@ -700,63 +700,65 @@ let completeSection = (
       | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
       }}
       {targetDetails.discussion
-        ? <div>
-            <h4 className="text-base md:text-lg font-semibold mt-12">
-              {t("submissions_peers")->str}
-            </h4>
-            <div>
+        ? <div className="border-t mt-12">
+            <div className="max-w-3xl mx-auto">
+              <h4 className="text-base md:text-lg font-semibold pt-12 pb-4">
+                {t("submissions_peers")->str}
+              </h4>
+              <div>
+                {switch state.peerSubmissions {
+                | Unloaded =>
+                  <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
+                | PartiallyLoaded(submissions, cursor) =>
+                  <div>
+                    {submissionsList(
+                      submissions,
+                      state,
+                      currentUser,
+                      getDiscussionSubmissions(send, None),
+                    )}
+                    {switch state.loading {
+                    | LoadingMore =>
+                      <div>
+                        {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())}
+                      </div>
+                    | Reloading(times) =>
+                      ReactUtils.nullUnless(
+                        <div className="pb-6">
+                          <button
+                            className="btn btn-primary-ghost cursor-pointer w-full"
+                            onClick={_ => {
+                              send(BeginLoadingMore)
+                              getDiscussionSubmissions(send, Some(cursor), targetId)
+                            }}>
+                            {t("button_load_more")->str}
+                          </button>
+                        </div>,
+                        ArrayUtils.isEmpty(times),
+                      )
+                    }}
+                  </div>
+                | FullyLoaded(submissions) =>
+                  <div>
+                    {submissionsList(
+                      submissions,
+                      state,
+                      currentUser,
+                      getDiscussionSubmissions(send, None),
+                    )}
+                  </div>
+                }}
+              </div>
               {switch state.peerSubmissions {
-              | Unloaded =>
-                <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-              | PartiallyLoaded(submissions, cursor) =>
-                <div>
-                  {submissionsList(
-                    submissions,
-                    state,
-                    currentUser,
-                    getDiscussionSubmissions(send, None),
-                  )}
-                  {switch state.loading {
-                  | LoadingMore =>
-                    <div>
-                      {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())}
-                    </div>
-                  | Reloading(times) =>
-                    ReactUtils.nullUnless(
-                      <div className="pb-6">
-                        <button
-                          className="btn btn-primary-ghost cursor-pointer w-full"
-                          onClick={_ => {
-                            send(BeginLoadingMore)
-                            getDiscussionSubmissions(send, Some(cursor), targetId)
-                          }}>
-                          {t("button_load_more")->str}
-                        </button>
-                      </div>,
-                      ArrayUtils.isEmpty(times),
-                    )
-                  }}
-                </div>
-              | FullyLoaded(submissions) =>
-                <div>
-                  {submissionsList(
-                    submissions,
-                    state,
-                    currentUser,
-                    getDiscussionSubmissions(send, None),
-                  )}
-                </div>
+              | Unloaded => React.null
+              | _ =>
+                let loading = switch state.loading {
+                | Reloading(times) => ArrayUtils.isNotEmpty(times)
+                | LoadingMore => false
+                }
+                <LoadingSpinner loading />
               }}
             </div>
-            {switch state.peerSubmissions {
-            | Unloaded => React.null
-            | _ =>
-              let loading = switch state.loading {
-              | Reloading(times) => ArrayUtils.isNotEmpty(times)
-              | LoadingMore => false
-              }
-              <LoadingSpinner loading />
-            }}
           </div>
         : React.null}
     </div>
@@ -842,7 +844,7 @@ let quickNavigationLinks = (targetDetails, send) => {
 
   <div className="pb-6">
     <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
+    <div className="mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
       <div className="w-1/3 me-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
@@ -935,20 +937,24 @@ let make = (
       let completionType = targetDetails |> TargetDetails.computeCompletionType
 
       <div>
-        <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
-          {learnSection(
-            send,
-            state,
-            targetDetails,
-            state.tab,
-            author,
-            Course.id(course),
-            Target.id(target),
-            markReadCB,
-            targetStatus,
-            completionType,
-          )}
-          {discussSection(target, targetDetails, state.tab)}
+        <div className="mx-auto mt-6 md:mt-8 px-3 lg:px-0">
+          <div className="max-w-3xl mx-auto">
+            {learnSection(
+              send,
+              state,
+              targetDetails,
+              state.tab,
+              author,
+              Course.id(course),
+              Target.id(target),
+              markReadCB,
+              targetStatus,
+              completionType,
+            )}
+          </div>
+          <div className="max-w-3xl mx-auto">
+            {discussSection(target, targetDetails, state.tab)}
+          </div>
           {completeSection(
             state,
             send,

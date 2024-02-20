@@ -26,9 +26,7 @@ let handleEmpty = () =>
   <div className="flex flex-col justify-center items-center bg-white px-3 py-10">
     <i className="fa fa-comments text-5xl text-gray-600 mb-2 " />
     <div className="text-center">
-      <h4 className="font-bold">
-        {tr("no_discussion") |> str}
-      </h4>
+      <h4 className="font-bold"> {tr("no_discussion") |> str} </h4>
       <p> {tr("use_community") |> str} </p>
     </div>
   </div>
@@ -60,11 +58,14 @@ let communityTitle = community =>
 
 @react.component
 let make = (~targetId, ~communities) =>
-  <div className=""> {communities |> Js.Array.map(community => {
+  <div>
+    {communities
+    |> Js.Array.map(community => {
       let communityId = community |> Community.id
       <div key=communityId className="mt-12 bg-gray-50 px-6 py-4 rounded-lg">
         <div className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
-          <div> {communityTitle(community)} </div> {actionButtons(community, targetId)}
+          <div> {communityTitle(community)} </div>
+          {actionButtons(community, targetId)}
         </div>
         <div className="justify-between rounded-lg overflow-hidden shadow">
           {switch community |> Community.topics {
@@ -73,4 +74,6 @@ let make = (~targetId, ~communities) =>
           }}
         </div>
       </div>
-    }) |> React.array} </div>
+    })
+    |> React.array}
+  </div>

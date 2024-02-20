@@ -633,6 +633,9 @@ let completeSection = (
 
   <div>
     <div className={completeSectionClasses(state.tab, completionType)}>
+      {targetDetails->TargetDetails.discussion
+        ? <p> {"Discussion enabled assignment"->str} </p>
+        : React.null}
       {switch (targetStatus |> TargetStatus.status, completionType) {
       | (Pending, Evaluated) =>
         [
@@ -699,7 +702,7 @@ let completeSection = (
       | (Pending | PendingReview | Completed | Rejected, NoAssignment) => React.null
       | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
       }}
-      {targetDetails.discussion
+      {targetDetails->TargetDetails.discussion
         ? <div className="border-t mt-12">
             <div className="max-w-3xl mx-auto">
               <h4 className="text-base md:text-lg font-semibold pt-12 pb-4">

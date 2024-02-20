@@ -29,5 +29,9 @@ module Mutations
     def resource_school
       standing_log&.user&.school
     end
+
+    def allow_token_auth?
+      true
+    end
   end
 end

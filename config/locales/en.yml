@@ -589,6 +589,9 @@ en:
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
+      discussion_assignment_notice:
+        title: Discussion enabled assignment
+        description: Your assignment will be shared with peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz

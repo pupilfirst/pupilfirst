@@ -640,10 +640,10 @@ let completeSection = (
             className="bg-primary-100 max-w-3xl mx-auto rounded-lg px-4 md:px-6 py-4 flex flex-col-reverse sm:flex-row items-start md:items-center justify-between">
             <div className="sm:me-12 mt-2 sm:mt-0">
               <h3 className="leading-tight font-semibold">
-                {"Discussion enabled assignment."->str}
+                {t("discussion_assignment_notice.title")->str}
               </h3>
               <p className="text-sm text-gray-600 pt-1">
-                {"Join the discussion with your peers on this assignment. Your submissions are visible to others, and you can also comment and react with emojis to your fellow students' submissions."->str}
+                {t("discussion_assignment_notice.description")->str}
               </p>
             </div>
             <div className="shrink-0 w-16 sm:w-32 me-4 sm:me-0">

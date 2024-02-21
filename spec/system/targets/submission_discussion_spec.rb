@@ -7,10 +7,8 @@ feature "Assignment Discussion", js: true do
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
   let!(:cohort) { create :cohort, course: course }
-
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
-
   let!(:team) { create :team_with_students, cohort: cohort }
   let!(:student) { team.students.first }
   let!(:student_same_team) { create :student, cohort: cohort, team: team }
@@ -21,6 +19,7 @@ feature "Assignment Discussion", js: true do
   let!(:target) do
     create :target, :with_content, target_group: target_group, sort_index: 0
   end
+
   let!(:assignment_target) do
     create :assignment,
            :with_completion_instructions,
@@ -33,581 +32,538 @@ feature "Assignment Discussion", js: true do
 
   before do
     create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
+
     school.school_strings.create!(
       key: SchoolString::EmailAddress.key,
       value: "test@school.com"
     )
   end
 
-  context "when the user is a student" do
-    context "when discussion is disabled" do
-      let!(:assignment_target) do
-        create :assignment,
-               :with_completion_instructions,
-               :with_default_checklist,
-               target: target,
-               role: Assignment::ROLE_STUDENT,
-               discussion: false,
-               allow_anonymous: false
-      end
+  scenario "the first student visits a new assignment's page" do
+    sign_in_user student.user, referrer: target_path(target)
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
 
-      scenario "views the target complete section" do
-        sign_in_user student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
+    expect(page).to have_text("Submissions by peers")
+    expect(page).to have_text("There are no submissions yet")
+  end
 
-        expect(page).to_not have_text("Submissions by peers")
-      end
-
-      context "with own submission" do
-        let!(:submission_student) do
-          create(
-            :timeline_event,
-            :with_owners,
-            owners: [student],
-            latest: true,
-            target: target
-          )
-        end
-
-        scenario "views target complete section" do
-          sign_in_user student.user, referrer: target_path(target)
-
-          find(".course-overlay__body-tab-item", text: "Form Responses").click
-
-          expect(page).to have_text("Your Responses")
-          expect(page).to_not have_text("Submissions by peers")
-        end
-      end
+  context "when a student has a submission" do
+    let!(:student_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [student],
+        latest: true,
+        target: target
+      )
     end
 
-    context "with own submission" do
-      let!(:student_submission) do
-        create(
-          :timeline_event,
-          :with_owners,
-          owners: [student],
-          latest: true,
-          target: target
-        )
-      end
+    scenario "student can react to and comment on, but not report their own submission" do
+      sign_in_user student.user, referrer: target_path(target)
 
-      scenario "views target complete section" do
-        sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Form Responses").click
 
-        find(".course-overlay__body-tab-item", text: "Form Responses").click
+      expect(page).to have_text("Your Responses")
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to have_button("Comment", disabled: true)
+      expect(page).to have_button("Add reaction")
 
-        expect(page).to have_text("Your Responses")
-        expect(page).to have_text("Submissions by peers")
-        expect(page).to have_button("Comment", disabled: true)
-        expect(page).to have_button("Add reaction")
+      expect(page).to_not have_button("Report")
+    end
+  end
 
-        expect(page).to_not have_button("Report")
-      end
+  context "with a submission from a different student" do
+    let!(:another_student_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [another_student],
+        latest: true,
+        target: target
+      )
     end
 
-    scenario "views target complete with no peer submissions" do
+    scenario "student views assigment page with peer's submission, without the option to pin or hide it" do
       sign_in_user student.user, referrer: target_path(target)
       find(".course-overlay__body-tab-item", text: "Submit Form").click
 
       expect(page).to have_text("Submissions by peers")
-      expect(page).to have_text("There are no submissions yet")
+      expect(page).to_not have_text("There are no submissions yet")
+      expect(page).to have_text(another_student.name)
+      expect(page).to have_button("Comment", disabled: true)
+      expect(page).to have_button("Add reaction")
+
+      find(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ).hover
+
+      expect(page).to have_button("Report")
+      expect(page).to_not have_button("Pin")
+      expect(page).to_not have_button("Hide submission")
     end
 
-    context "with peer submissions" do
+    context "when that submission is anonymous" do
       let!(:another_student_submission) do
         create(
           :timeline_event,
           :with_owners,
           owners: [another_student],
           latest: true,
-          target: target
+          target: target,
+          anonymous: true
         )
       end
 
-      scenario "views target complete section" do
+      scenario "student views assigment page with the peer submission, minus the identity of the other student" do
         sign_in_user student.user, referrer: target_path(target)
         find(".course-overlay__body-tab-item", text: "Submit Form").click
 
         expect(page).to have_text("Submissions by peers")
         expect(page).to_not have_text("There are no submissions yet")
 
+        expect(page).to_not have_text(another_student.name)
+        expect(page).to have_text("Anonymous")
+      end
+    end
+
+    scenario "student reports their peer's submission" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+
+      find(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ).hover
+      expect(page).to have_button("Report")
+      click_button "Report"
+
+      within("dialog") do
+        expect(page).to have_button("Report", disabled: true)
+        fill_in "report_reason-#{another_student_submission.id}",
+                with: "Offensive content"
+        click_button "Report"
+      end
+
+      expect(page).to have_text("Reported")
+      open_email(student.email)
+      expect(current_email.body).to include(
+        "Your report of the content on the discussions for target"
+      )
+      page.refresh
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      expect(page).to have_text("Reported")
+    end
+
+    scenario "student adds reaction to peer's submission" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) do
         expect(page).to have_text(another_student.name)
+        click_button "Add reaction"
+      end
+
+      shadow_root = find("em-emoji-picker").shadow_root
+      within(shadow_root) do
+        expect(page).to have_text("Smileys & People")
+        find("button", text: "😀", match: :first).click
+      end
+
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) do
+        expect(page).to have_text(another_student.name)
+        expect(page).to have_button("😀")
+      end
+
+      page.refresh
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) do
+        expect(page).to have_text(another_student.name)
+        expect(page).to have_button("😀")
+      end
+    end
+
+    context "when that submission has an existing reaction" do
+      let!(:existing_reaction) do
+        create(
+          :reaction,
+          reactionable: another_student_submission,
+          user: another_student.user,
+          reaction_value: "😀"
+        )
+      end
+
+      scenario "student adds to the existing reaction, and then removes it" do
+        sign_in_user student.user, referrer: target_path(target)
+        find(".course-overlay__body-tab-item", text: "Submit Form").click
+        expect(page).to have_text("Submissions by peers")
+
+        expect(page).to have_button("😀")
+        click_button "😀"
+
+        find("button > span", text: "😀").hover
+        within(".modal") do
+          expect(page).to have_text(another_student.name)
+          expect(page).to have_text(student.name)
+        end
+
+        click_button "😀"
+        find("button > span", text: "😀").hover
+        within(".modal") do
+          expect(page).to have_text(another_student.name)
+          expect(page).to_not have_text(student.name)
+        end
+      end
+    end
+
+    scenario "student adds and deletes a comment on peer's submission" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+
+      within("div[data-submission-id='#{another_student_submission.id}']") do
         expect(page).to have_button("Comment", disabled: true)
-        expect(page).to have_button("Add reaction")
 
-        find(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ).hover
-        expect(page).to have_button("Report")
-        expect(page).to_not have_button("Pin")
-        expect(page).to_not have_button("Hide submission")
+        fill_in "add_comment-#{another_student_submission.id}",
+                with: "Great work!"
+        click_button "Comment"
+
+        expect(page).to have_text(student.name)
+        expect(page).to have_text("Great work!")
       end
 
-      context "submission is anonymous" do
-        let!(:another_student_submission) do
-          create(
-            :timeline_event,
-            :with_owners,
-            owners: [another_student],
-            latest: true,
-            target: target,
-            anonymous: true
-          )
-        end
-        scenario "views target complete section" do
-          sign_in_user student.user, referrer: target_path(target)
-          find(".course-overlay__body-tab-item", text: "Submit Form").click
+      page.refresh
 
-          expect(page).to have_text("Submissions by peers")
-          expect(page).to_not have_text("There are no submissions yet")
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
 
-          expect(page).to_not have_text(another_student.name)
-          expect(page).to have_text("Anonymous")
-          expect(page).to have_button("Comment", disabled: true)
-          expect(page).to have_button("Add reaction")
+      comment = student.user.submission_comments.first
+      comment_id = comment.id
 
-          find(
-            "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-          ).hover
-          expect(page).to have_button("Report")
-          expect(page).to_not have_button("Pin")
-          expect(page).to_not have_button("Hide submission")
+      find("div#show_comments-#{another_student_submission.id} button").click
+
+      within("div[data-submission-id='#{another_student_submission.id}']") do
+        expect(page).to have_text(student.name)
+        expect(page).to have_text("Great work!")
+
+        find("div[aria-label='comment-#{comment_id}']").hover
+
+        expect(page).to have_button("Delete")
+        expect(page).to_not have_button("Report")
+        expect(page).to_not have_button("Hide")
+      end
+
+      within("div#comment-#{comment_id}") do
+        find("div[aria-label='comment-#{comment_id}']").hover
+        expect(page).to have_button("Delete")
+        click_button "Delete"
+
+        within("dialog") do
+          expect(page).to have_button("Delete")
+          click_button "Delete"
         end
       end
 
-      scenario "reports a peer submission" do
+      within("div[data-submission-id='#{another_student_submission.id}']") do
+        expect(page).to_not have_text(student.name)
+        expect(page).to_not have_text("Great work!")
+      end
+
+      page.refresh
+
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      within("div[data-submission-id='#{another_student_submission.id}']") do
+        expect(page).to_not have_text(student.name)
+        expect(page).to_not have_text("Great work!")
+        expect(page).to have_button("Comment", disabled: true)
+      end
+
+      expect(student.user.submission_comments.first.archived_at).not_to eq(nil)
+    end
+
+    scenario "student adds a reaction to their own comment" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+
+      within("div[data-submission-id='#{another_student_submission.id}']") do
+        expect(page).to have_button("Comment", disabled: true)
+        fill_in "add_comment-#{another_student_submission.id}",
+                with: "Great work!"
+        click_button "Comment"
+
+        expect(page).to have_text(student.name)
+        expect(page).to have_text("Great work!")
+
+        click_button "Add reaction"
+      end
+
+      shadow_root = find("em-emoji-picker").shadow_root
+      within(shadow_root) do
+        expect(page).to have_text("Smileys & People")
+        find("button", text: "😀", match: :first).click
+      end
+
+      expect(page).not_to have_selector("em-emoji-picker")
+      expect(page).to have_button("😀")
+    end
+
+    context "when that submission already has a comment" do
+      let!(:another_student_comment) do
+        create(
+          :submission_comment,
+          submission: another_student_submission,
+          user: another_student.user
+        )
+      end
+
+      scenario "student reports the comment" do
         sign_in_user student.user, referrer: target_path(target)
         find(".course-overlay__body-tab-item", text: "Submit Form").click
 
         expect(page).to have_text("Submissions by peers")
+        find("div#show_comments-#{another_student_submission.id} button").click
 
-        find(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ).hover
-        expect(page).to have_button("Report")
-        click_button "Report"
+        expect(page).to have_text(another_student.name)
+        expect(page).to have_text(another_student_comment.comment)
+
+        find("div[aria-label='comment-#{another_student_comment.id}']").hover
+        within("div[aria-label='comment-#{another_student_comment.id}']") do
+          expect(page).to_not have_button("Delete")
+          expect(page).to have_button("Report")
+          click_button "Report"
+        end
 
         within("dialog") do
           expect(page).to have_button("Report", disabled: true)
-          fill_in "report_reason-#{another_student_submission.id}",
+          fill_in "report_reason-#{another_student_comment.id}",
                   with: "Offensive content"
           click_button "Report"
         end
 
-        expect(page).to have_text("Reported")
-        open_email(student.email)
-        expect(current_email.body).to include(
-          "Your report of the content on the discussions for target"
-        )
-        page.refresh
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-        expect(page).to have_text("Reported")
-      end
-
-      scenario "adds a new reaction" do
-        sign_in_user student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-        expect(page).to have_text("Submissions by peers")
-
-        within(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ) do
-          expect(page).to have_text(another_student.name)
-          click_button "Add reaction"
-        end
-
-        shadow_root = find("em-emoji-picker").shadow_root
-        within(shadow_root) do
-          expect(page).to have_text("Smileys & People")
-          find("button", text: "😀", match: :first).click
-        end
-
-        within(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ) do
-          expect(page).to have_text(another_student.name)
-          expect(page).to have_button("😀")
-        end
-
-        page.refresh
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-        within(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ) do
-          expect(page).to have_text(another_student.name)
-          expect(page).to have_button("😀")
-        end
-      end
-
-      context "with an existing reaction" do
-        let!(:existing_reaction) do
-          create(
-            :reaction,
-            reactionable: another_student_submission,
-            user: another_student.user,
-            reaction_value: "😀"
-          )
-        end
-
-        scenario "adds and removes the existing reaction" do
-          sign_in_user student.user, referrer: target_path(target)
-          find(".course-overlay__body-tab-item", text: "Submit Form").click
-          expect(page).to have_text("Submissions by peers")
-
-          expect(page).to have_button("😀")
-          click_button "😀"
-
-          find("button > span", text: "😀").hover
-          within(".modal") do
-            expect(page).to have_text(another_student.name)
-            expect(page).to have_text(student.name)
-          end
-
-          click_button "😀"
-          find("button > span", text: "😀").hover
-          within(".modal") do
-            expect(page).to have_text(another_student.name)
-            expect(page).to_not have_text(student.name)
-          end
-        end
-      end
-
-      scenario "adds and deletes a comment on a peer submission" do
-        sign_in_user student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-        expect(page).to have_text("Submissions by peers")
-
-        within("div[data-submission-id='#{another_student_submission.id}']") do
-          expect(page).to have_button("Comment", disabled: true)
-          fill_in "add_comment-#{another_student_submission.id}",
-                  with: "Great work"
-          click_button "Comment"
-
-          expect(page).to have_text(student.name)
-          expect(page).to have_text("Great work")
-        end
-
-        page.refresh
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-        comment = student.user.submission_comments.first
-        comment_id = comment.id
-
-        find("div#show_comments-#{another_student_submission.id} button").click
-        within("div[data-submission-id='#{another_student_submission.id}']") do
-          expect(page).to have_text(student.name)
-          expect(page).to have_text("Great work")
-          find("div[aria-label='comment-#{comment_id}']").hover
-          expect(page).to have_button("Delete")
-          expect(page).to_not have_button("Report")
-          expect(page).to_not have_button("Hide")
-        end
-
-        within("div#comment-#{comment_id}") do
-          find("div[aria-label='comment-#{comment_id}']").hover
-          expect(page).to have_button("Delete")
-          click_button "Delete"
-
-          within("dialog") do
-            expect(page).to have_button("Delete")
-            click_button "Delete"
-          end
-        end
-
-        within("div[data-submission-id='#{another_student_submission.id}']") do
-          expect(page).to_not have_text(student.name)
-          expect(page).to_not have_text("Great work")
-        end
-
-        page.refresh
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-        within("div[data-submission-id='#{another_student_submission.id}']") do
-          expect(page).to_not have_text(student.name)
-          expect(page).to_not have_text("Great work")
-          expect(page).to have_button("Comment", disabled: true)
-        end
-
-        expect(student.user.submission_comments.first.archived_at).not_to eq(
-          nil
-        )
-      end
-
-      scenario "adds new reaction to own comment" do
-        sign_in_user student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-        expect(page).to have_text("Submissions by peers")
-
-        within("div[data-submission-id='#{another_student_submission.id}']") do
-          expect(page).to have_button("Comment", disabled: true)
-          fill_in "add_comment-#{another_student_submission.id}",
-                  with: "Great work"
-          click_button "Comment"
-
-          expect(page).to have_text(student.name)
-          expect(page).to have_text("Great work")
-
-          click_button "Add reaction"
-        end
-
-        shadow_root = find("em-emoji-picker").shadow_root
-        within(shadow_root) do
-          expect(page).to have_text("Smileys & People")
-          find("button", text: "😀", match: :first).click
-        end
-
-        expect(page).not_to have_selector("em-emoji-picker")
-        expect(page).to have_button("😀")
-      end
-
-      context "with another student comment" do
-        let!(:another_student_comment) do
-          create(
-            :submission_comment,
-            submission: another_student_submission,
-            user: another_student.user
-          )
-        end
-        scenario "reports the comment" do
-          sign_in_user student.user, referrer: target_path(target)
-          find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-          expect(page).to have_text("Submissions by peers")
-          find(
-            "div#show_comments-#{another_student_submission.id} button"
-          ).click
-
-          expect(page).to have_text(another_student.name)
-          expect(page).to have_text(another_student_comment.comment)
-
-          find("div[aria-label='comment-#{another_student_comment.id}']").hover
-          within("div[aria-label='comment-#{another_student_comment.id}']") do
-            expect(page).to_not have_button("Delete")
-            expect(page).to have_button("Report")
-            click_button "Report"
-          end
-
-          within("dialog") do
-            expect(page).to have_button("Report", disabled: true)
-            fill_in "report_reason-#{another_student_comment.id}",
-                    with: "Offensive content"
-            click_button "Report"
-          end
-
-          within("div[aria-label='comment-#{another_student_comment.id}']") do
-            expect(page).to have_text("Reported")
-          end
+        within("div[aria-label='comment-#{another_student_comment.id}']") do
+          expect(page).to have_text("Reported")
         end
       end
     end
   end
 
-  context "when the user is a school admin" do
-    context "with peer submissions" do
-      let!(:student_submission) do
-        create(
-          :timeline_event,
-          :with_owners,
-          owners: [student],
-          latest: true,
-          target: target
-        )
+  context "with submissions from two students" do
+    let!(:student_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [student],
+        latest: true,
+        target: target
+      )
+    end
+
+    let!(:another_student_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [another_student],
+        latest: true,
+        target: target
+      )
+    end
+
+    scenario "school admin views submissions on the Submit Form tab with all moderation options" do
+      sign_in_user school_admin.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to_not have_text("There are no submissions yet")
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        expect(page).to have_text(student.name)
+        expect(page).to have_button("Comment", disabled: true)
+        expect(page).to have_button("Add reaction")
       end
-      let!(:another_student_submission) do
+
+      find(
+        "div[aria-label='discuss_submission-#{student_submission.id}']"
+      ).hover
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        expect(page).to have_button("Pin")
+        expect(page).to have_button("Hide submission")
+        expect(page).to have_button("Report")
+      end
+
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        expect(page).to have_text(another_student.name)
+        expect(page).to have_button("Comment", disabled: true)
+        expect(page).to have_button("Add reaction")
+      end
+    end
+
+    scenario "school admin hides a submission" do
+      sign_in_user school_admin.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      expect(page).to have_text("Submissions by peers")
+
+      find(
+        "div[aria-label='discuss_submission-#{student_submission.id}']"
+      ).hover
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        click_button "Hide submission"
+        expect(page).to_not have_button("Hide submission")
+        expect(page).to have_button("Un-hide submission")
+        expect(page).to have_text("This submission is hidden from discussions")
+      end
+
+      expect(student_submission.reload.hidden_at).to_not eq(nil)
+      expect(student_submission.reload.hidden_by_id).to eq(school_admin.user.id)
+
+      sign_in_user another_student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Form Responses").click
+      expect(page).to have_text("Submissions by peers")
+
+      expect(page).to_not have_text(student.name)
+      expect(page).to have_text("There are no submissions yet")
+    end
+
+    scenario "school admin pins and unpins a submission" do
+      sign_in_user school_admin.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+      expect(page).to have_text("Submissions by peers")
+
+      find(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ).hover
+
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        click_button "Pin"
+        expect(page).to have_text("Pinned Submission")
+      end
+
+      expect(another_student_submission.reload.pinned).to eq(true)
+
+      find(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ).hover
+
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        expect(page).to_not have_button("Pin")
+        click_button "Unpin"
+        expect(page).to_not have_text("Pinned Submission")
+      end
+
+      expect(another_student_submission.reload.pinned).to eq(false)
+
+      find(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ).hover
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        click_button "Pin"
+        expect(page).to have_text("Pinned Submission")
+      end
+
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Form Responses").click
+      expect(page).to have_text("Submissions by peers")
+
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        expect(page).to have_text("Pinned Submission")
+      end
+    end
+
+    context "with comments on a submission" do
+      let!(:student_comment) do
         create(
-          :timeline_event,
-          :with_owners,
-          owners: [another_student],
-          latest: true,
-          target: target
+          :submission_comment,
+          submission: another_student_submission,
+          user: student.user
         )
       end
 
-      scenario "views target complete section" do
+      let!(:another_student_comment) do
+        create(
+          :submission_comment,
+          submission: another_student_submission,
+          user: another_student.user
+        )
+      end
+
+      scenario "school admin hides and unhides comments" do
         sign_in_user school_admin.user, referrer: target_path(target)
         find(".course-overlay__body-tab-item", text: "Submit Form").click
 
         expect(page).to have_text("Submissions by peers")
-        expect(page).to_not have_text("There are no submissions yet")
+        find("div#show_comments-#{another_student_submission.id} button").click
 
-        within("div#discuss_submission-#{student_submission.id}") do
+        find("div[aria-label='comment-#{student_comment.id}']").hover
+        within("div#comment-#{student_comment.id}") do
           expect(page).to have_text(student.name)
-          expect(page).to have_button("Comment", disabled: true)
-          expect(page).to have_button("Add reaction")
-        end
-
-        find(
-          "div[aria-label='discuss_submission-#{student_submission.id}']"
-        ).hover
-
-        within("div#discuss_submission-#{student_submission.id}") do
-          expect(page).to have_button("Pin")
-          expect(page).to have_button("Hide submission")
+          expect(page).to have_text(student_comment.comment)
+          expect(page).to_not have_button("Delete")
           expect(page).to have_button("Report")
+          expect(page).to have_button("Hide")
         end
 
-        within("div#discuss_submission-#{another_student_submission.id}") do
+        find("div[aria-label='comment-#{another_student_comment.id}']").hover
+
+        within("div#comment-#{another_student_comment.id}") do
           expect(page).to have_text(another_student.name)
-          expect(page).to have_button("Comment", disabled: true)
-          expect(page).to have_button("Add reaction")
-        end
-      end
+          expect(page).to have_text(another_student_comment.comment)
+          expect(page).to_not have_button("Delete")
 
-      scenario "hides a submission" do
-        sign_in_user school_admin.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-        expect(page).to have_text("Submissions by peers")
+          click_button "Hide"
 
-        find(
-          "div[aria-label='discuss_submission-#{student_submission.id}']"
-        ).hover
-
-        within("div#discuss_submission-#{student_submission.id}") do
-          click_button "Hide submission"
-          expect(page).to_not have_button("Hide submission")
-          expect(page).to have_button("Un-hide submission")
-          expect(page).to have_text(
-            "This submission is hidden from discussions"
-          )
+          expect(page).to have_text("This comment is hidden from discussions")
+          expect(page).to_not have_button("Hide")
+          expect(page).to have_button("Un-hide")
         end
 
-        expect(student_submission.reload.hidden_at).to_not eq(nil)
-        expect(student_submission.reload.hidden_by_id).to eq(
+        expect(another_student_comment.reload.hidden_at).to_not eq(nil)
+
+        expect(another_student_comment.reload.hidden_by_id).to eq(
           school_admin.user.id
         )
 
-        sign_in_user another_student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Form Responses").click
-        expect(page).to have_text("Submissions by peers")
+        within("div#comment-#{another_student_comment.id}") do
+          click_button "Un-hide"
 
-        expect(page).to_not have_text(student.name)
-        expect(page).to have_text("There are no submissions yet")
-      end
-
-      scenario "pins and unpins a submission" do
-        sign_in_user school_admin.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-        expect(page).to have_text("Submissions by peers")
-
-        find(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ).hover
-
-        within("div#discuss_submission-#{another_student_submission.id}") do
-          click_button "Pin"
-          expect(page).to have_text("Pinned Submission")
+          expect(page).to_not have_text(
+            "This comment is hidden from discussions"
+          )
+          expect(page).to_not have_button("Un-hide")
+          expect(page).to have_button("Hide")
         end
 
-        expect(another_student_submission.reload.pinned).to eq(true)
+        expect(another_student_comment.reload.hidden_at).to eq(nil)
+        expect(another_student_comment.reload.hidden_by_id).to eq(nil)
 
-        find(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ).hover
-
-        within("div#discuss_submission-#{another_student_submission.id}") do
-          expect(page).to_not have_button("Pin")
-          click_button "Unpin"
-          expect(page).to_not have_text("Pinned Submission")
-        end
-
-        expect(another_student_submission.reload.pinned).to eq(false)
-
-        find(
-          "div[aria-label='discuss_submission-#{another_student_submission.id}']"
-        ).hover
-        within("div#discuss_submission-#{another_student_submission.id}") do
-          click_button "Pin"
-          expect(page).to have_text("Pinned Submission")
-        end
-
-        sign_in_user student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Form Responses").click
-        expect(page).to have_text("Submissions by peers")
-
-        within("div#discuss_submission-#{another_student_submission.id}") do
-          expect(page).to have_text("Pinned Submission")
+        within("div#comment-#{another_student_comment.id}") do
+          click_button "Hide"
+          expect(page).to have_text("This comment is hidden from discussions")
         end
       end
 
-      context "with other student comments" do
-        let!(:student_comment) do
-          create(
-            :submission_comment,
-            submission: another_student_submission,
-            user: student.user
+      context "when a student's comment has been hidden" do
+        before do
+          another_student_comment.update!(
+            hidden_at: 1.minute.ago,
+            hidden_by: school_admin.user
           )
         end
-
-        let!(:another_student_comment) do
-          create(
-            :submission_comment,
-            submission: another_student_submission,
-            user: another_student.user
-          )
-        end
-
-        scenario "hides one of the comment" do
-          sign_in_user school_admin.user, referrer: target_path(target)
-          find(".course-overlay__body-tab-item", text: "Submit Form").click
-
-          expect(page).to have_text("Submissions by peers")
-          find(
-            "div#show_comments-#{another_student_submission.id} button"
-          ).click
-
-          find("div[aria-label='comment-#{student_comment.id}']").hover
-          within("div#comment-#{student_comment.id}") do
-            expect(page).to have_text(student.name)
-            expect(page).to have_text(student_comment.comment)
-            expect(page).to_not have_button("Delete")
-            expect(page).to have_button("Report")
-            expect(page).to have_button("Hide")
-          end
-
-          find("div[aria-label='comment-#{another_student_comment.id}']").hover
-          within("div#comment-#{another_student_comment.id}") do
-            expect(page).to have_text(another_student.name)
-            expect(page).to have_text(another_student_comment.comment)
-            expect(page).to_not have_button("Delete")
-            expect(page).to have_button("Report")
-            expect(page).to have_button("Hide")
-          end
-
-          within("div#comment-#{another_student_comment.id}") do
-            click_button "Hide"
-            expect(page).to have_text("This comment is hidden from discussions")
-            expect(page).to_not have_button("Hide")
-            expect(page).to have_button("Un-hide")
-          end
-
-          expect(another_student_comment.reload.hidden_at).to_not eq(nil)
-          expect(another_student_comment.reload.hidden_by_id).to eq(
-            school_admin.user.id
-          )
-
-          within("div#comment-#{another_student_comment.id}") do
-            click_button "Un-hide"
-            expect(page).to_not have_text(
-              "This comment is hidden from discussions"
-            )
-            expect(page).to_not have_button("Un-hide")
-            expect(page).to have_button("Hide")
-          end
-
-          expect(another_student_comment.reload.hidden_at).to eq(nil)
-          expect(another_student_comment.reload.hidden_by_id).to eq(nil)
-
-          within("div#comment-#{another_student_comment.id}") do
-            click_button "Hide"
-            expect(page).to have_text("This comment is hidden from discussions")
-          end
-
-          #Another user is not able to see the hidden comments
+        scenario "a different student is not able to see the hidden comment" do
           sign_in_user student.user, referrer: target_path(target)
           find(".course-overlay__body-tab-item", text: "Form Responses").click
+
           expect(page).to have_text("Submissions by peers")
 
           find(
@@ -623,8 +579,9 @@ feature "Assignment Discussion", js: true do
             expect(page).to_not have_text(another_student.name)
             expect(page).to_not have_text(another_student_comment.comment)
           end
+        end
 
-          #User whose comment is hidden can see that it is hidden, but can't Un-hide
+        scenario "student whose comment is hidden can see that it is hidden, but can't un-hide it" do
           sign_in_user another_student.user, referrer: target_path(target)
           find(".course-overlay__body-tab-item", text: "Form Responses").click
           expect(page).to have_text("Submissions by peers")
@@ -644,12 +601,32 @@ feature "Assignment Discussion", js: true do
           end
 
           find("div[aria-label='comment-#{another_student_comment.id}']").hover
+
           within("div#comment-#{another_student_comment.id}") do
             expect(page).to have_text("This comment is hidden from discussions")
             expect(page).to_not have_button("Un-hide")
           end
         end
       end
+    end
+  end
+
+  context "when the discussion feature is disabled" do
+    let!(:assignment_target) do
+      create :assignment,
+             :with_completion_instructions,
+             :with_default_checklist,
+             target: target,
+             role: Assignment::ROLE_STUDENT,
+             discussion: false,
+             allow_anonymous: false
+    end
+
+    scenario "student is not shown the option to view submissions from peers" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to_not have_text("Submissions by peers")
     end
   end
 end

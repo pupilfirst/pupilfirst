@@ -536,6 +536,18 @@ ta:
       topics_post: " சமூக"
       topics_pre: "தலைப்புகள் "
       use_community: உங்கள் சந்தேகங்களைத் தீர்க்கவும், உங்கள் சகாக்களுக்கு உதவவும் சமூகத்தைப் பயன்படுத்துங்கள்!
+    CoursesCurriculum__DiscussSubmission:
+      anonymous_avatar: A
+      anonymous_name: Anonymous
+      created_at: on %{created_at}.
+      hide: Hide submission
+      pin: Pin
+      pinned_submission: Pinned Submission
+      submission_hidden: This submission is hidden from discussions
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      unhide: Un-hide submission
+      unpin: Unpin
     CoursesCurriculum__FileForm:
       another_file: பதிவேற்ற மற்றொரு கோப்பைத் தேர்ந்தெடுக்கவும்.
       cannot_attach: நீங்கள் கோப்புகளை இணைக்க முடியாது.
@@ -547,6 +559,12 @@ ta:
       smth_went_wrong: ஏதோ தவறு நடைபெற்றிருக்கிறது!
     CoursesCurriculum__Learn:
       edit_target_button: உள்ளடக்கத்தைத் திருத்தவும்
+    CoursesCurriculum__ModerationReportButton:
+      cancel: Cancel
+      close: Close
+      share_reason: Share reason for reporting
+      report: Report
+      reported: Reported
     CoursesCurriculum__NoticeManager:
       access_ended_description: நீங்கள் இப்போது பாடநெறிக்கு வரம்புக்குட்பட்ட அணுகல் மட்டுமே உள்ளது. நீங்கள் உள்ளடக்கத்தை முன்னோட்டமிட அனுமதிக்கப்படுகிறீர்கள், ஆனால் எந்த இலக்கையும் முடிக்க முடியாது.
       access_ended_title: முன்னோட்டம்/வரையறுக்கப்பட்ட அணுகல்
@@ -557,6 +575,7 @@ ta:
       preview_mode_description: இந்தப் பாடத்திட்டத்திற்கான முன்னோட்டப் பயன்முறையை அணுகுகிறீர்கள்
       preview_mode_title: முன்னோட்ட முறை
     CoursesCurriculum__Overlay:
+      button_load_more: Load More Submissions...
       close_button: நெருக்கமான
       completion_tab_complete: முழுமை
       completion_tab_completed: நிறைவு
@@ -569,6 +588,9 @@ ta:
       completion_tab_take_quiz: வினாடி வினா எடுக்கவும்
       completion_tab_visit_link: முடிக்க இணைப்பைப் பார்வையிடவும்
       discuss_tab: விவாதிக்கவும்
+      discussion_assignment_notice:
+        title: Discussion enabled assignment
+        description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: மதிப்பாய்விற்கு வேலையைச் சமர்ப்பிக்கவும்
       learn_cta_take_quiz: வினாடி வினா எடுங்கள்
@@ -577,14 +599,22 @@ ta:
       marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: அடுத்த இலக்கு
+      no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "இந்த இலக்கை இன்னும் முடிக்காத குழு உறுப்பினர்கள் உங்களிடம் உள்ளனர்:"
       preview_mode_text: நீங்கள் தற்போது இந்தப் பாடத்திட்டத்தின் முன்னோட்டத்தைப் பார்க்கிறீர்கள்.
       previous_target_button: முந்தைய இலக்கு
       scroll_to_top: மேலே உருட்டவும்
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
+      submissions_peers: Submissions by peers
     CoursesCurriculum__Quiz:
       next_question: அடுத்த கேள்வி
       question: கேள்வி
       submit_quiz: வினாடி வினாவைச் சமர்ப்பிக்கவும்
+    CoursesCurriculum__Reactions:
+      emoji_picker: Add reaction
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: நீங்கள் முன்னோட்ட பயன்முறையை அணுகுகிறீர்கள்
       attaching: இணைக்கிறது
@@ -595,6 +625,24 @@ ta:
       steps_submit: இந்த இலக்கை சமர்பிப்பதற்கான படிகள்
       submit: சமர்ப்பிக்கவும்
       submitting: சமர்ப்பிக்கிறது
+      submit_anonymous_label: Submit anonymously
+      submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
+    CoursesCurriculum__SubmissionCommentShow:
+      cancel: Cancel
+      close: Close
+      delete: Delete
+      delete_comment: Delete Comment
+      delete_confirm: Are you sure you want to delete this comment?
+      hidden: This comment is hidden from discussions
+      hide: Hide
+      unhide: Un-hide
     CoursesCurriculum__SubmissionItem:
       link_error: இது சரியான URL போல் இல்லை.
       link_placeholder: https://... இல் தொடங்கி முழு URL ஐ உள்ளிடவும்
@@ -1003,6 +1051,15 @@ ta:
       remove_choice: தேர்வை அகற்று
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      assignment_discussion:
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion'
+        label: Do you want to enable discussion on this assignment?
+      allow_anonymous:
+        title: Setup submission anonymity
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: இலக்கு குழுவைத் தேர்ந்தெடுக்கவும்
       completion_instructions:
         help: முக்கியமான ஒன்றைப் பற்றி மாணவருக்கு நினைவூட்ட இதைப் பயன்படுத்தவும். மாணவர்கள் இலக்கை நிறைவு செய்யும் இடத்திற்கு அருகில் இந்த வழிமுறைகள் காட்டப்படும்.
@@ -2135,6 +2192,18 @@ ta:
         thanks: நன்றி,
     link_fallback:
       link_fallback: "மேலே உள்ள இணைப்பைக் கிளிக் செய்ய முடியாவிட்டால், உங்கள் உலாவியின் முகவரிப் பட்டியில் பின்வரும் இணைப்பை நகலெடுத்து ஒட்டவும்:"
+    school_contact:
+      moderation_report:
+        subject: Content reported on %{course}
+        body:
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          reported_comment: Reported comment - %{comment}
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2191,6 +2260,15 @@ ta:
         body:
           html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: '%{school_name} பள்ளியில் உங்கள் மின்னஞ்சல் வெற்றிகரமாக புதுப்பிக்கப்பட்டது'
+      confirm_moderation_report:
+        body:
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
           asked: '%{days_ago} நாட்களுக்கு முன்பு கேட்டார்.'
@@ -2328,6 +2406,8 @@ ta:
       linked_file_exists_error: சில கோப்பு இணைப்புகள் ஏற்கனவே சமர்ப்பிப்புடன் இணைக்கப்பட்டுள்ளன
       missing_answer_error: "கேள்விக்கான பதில் இல்லை: %{title}"
       success_notification: உங்கள் சமர்ப்பிப்பு மதிப்பாய்வுக்காக வரிசையில் வைக்கப்பட்டுள்ளது.
+    create_submission_comment:
+      success_notification: Comment added successfully.
     create_target:
       success_notification: இலக்கு வெற்றிகரமாக உருவாக்கப்பட்டது.
     create_target_version:

@@ -39,12 +39,39 @@ module Courses
 
     def default_props
       {
+        current_user: user_details,
         author: author?,
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,
         targets: targets,
         access_locked_levels: access_locked_levels
+      }
+    end
+
+    def user_details
+      if current_user.present?
+        {
+          id: current_user.id,
+          name: current_user.name,
+          avatar_url: current_user.avatar_url(variant: :thumb),
+          is_admin: current_school_admin.present?,
+          is_author: @course.course_authors.exists?(user: current_user),
+          is_coach: @course.faculty.exists?(user: current_user)
+        }
+      else
+        user_details_for_preview_mode
+      end
+    end
+
+    def user_details_for_preview_mode
+      {
+        id: "-1",
+        name: current_user&.name || "John Doe",
+        avatar_url: nil,
+        is_admin: false,
+        is_author: false,
+        is_coach: false
       }
     end
 

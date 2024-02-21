@@ -19,7 +19,11 @@ module.exports = {
       "course_authors",
       "calendars",
     ],
-    Coaching: ["reviewing_submissions", "cohort_reports"],
+    Coaching: [
+      "reviewing_submissions",
+      "cohort_reports",
+      "moderating_discussions",
+    ],
     Learning: ["signing_up", "taking_courses"],
     "Additional Reading": [
       "user_profile",

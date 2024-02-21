@@ -65,7 +65,7 @@
 }
 
 .checkbox-label span:first-child {
-  @apply relative rounded align-middle border;
+  @apply relative rounded align-middle border border-gray-400 bg-white;
   width: 18px;
   height: 18px;
   transform: scale(1);

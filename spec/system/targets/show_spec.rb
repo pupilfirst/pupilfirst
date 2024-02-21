@@ -57,7 +57,9 @@ feature "Target Overlay", js: true do
            :with_completion_instructions,
            :with_default_checklist,
            target: target_l3,
-           role: Assignment::ROLE_TEAM
+           role: Assignment::ROLE_TEAM,
+           discussion: true,
+           allow_anonymous: true
   end
 
   let!(:prerequisite_target) do
@@ -252,7 +254,7 @@ feature "Target Overlay", js: true do
     find(".course-overlay__body-tab-item", text: "Complete").click
 
     # completion instructions should be show on complete section for evaluated targets
-    expect(page).to have_text(target_l1.completion_instructions)
+    expect(page).to have_text(assignment_target_l1.completion_instructions)
 
     # There should also be a link to the completion section at the bottom of content.
     find(".course-overlay__body-tab-item", text: "Learn").click
@@ -295,6 +297,8 @@ feature "Target Overlay", js: true do
       ]
     )
 
+    expect(last_submission.anonymous).to eq(false)
+
     # The status should also be updated on the dashboard page.
     click_button "Close"
 
@@ -332,11 +336,14 @@ feature "Target Overlay", js: true do
     find(".course-overlay__body-tab-item", text: "Submit Form").click
 
     # completion instructions should be show on 'Submit Form' section.
-    expect(page).to have_text(target_l3.completion_instructions)
+    expect(page).to have_text(assignment_target_l3.completion_instructions)
 
     # There should also be a link to the 'Submit Form' section at the bottom of content.
     find(".course-overlay__body-tab-item", text: "Learn").click
     find(".curriculum-overlay__learn-submit-btn", text: "Submit Form").click
+
+    # This assignemnt should display the option to submit anonymously - we won't test it just now.
+    expect(page).to have_text("Submit anonymously")
 
     expect(page).to have_button("Submit", disabled: true)
 
@@ -375,12 +382,33 @@ feature "Target Overlay", js: true do
       ]
     )
 
+    expect(last_submission.anonymous).to eq(false)
+
     # The status should also be updated on the dashboard page.
     click_button "Close"
 
     within("a[data-target-id='#{target_l3.id}']") do
       expect(page).to have_content("Completed")
     end
+  end
+
+  scenario "student submits form on a discussion assignment anonymously" do
+    sign_in_user student.user, referrer: target_path(target_l3)
+
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+    replace_markdown "Short answer"
+
+    # Select the submit anonymously option.
+    find("span", text: "Submit anonymously").click
+    click_button "Submit"
+
+    expect(page).to have_text("Your response has been saved")
+
+    dismiss_notification
+
+    # The last submission should have been created with the anonymous flag.
+    expect(TimelineEvent.last.anonymous).to eq(true)
   end
 
   scenario "student visits the target's link with a mangled ID" do
@@ -414,7 +442,7 @@ feature "Target Overlay", js: true do
 
       # Completion instructions should be show on Take Quiz section for targets with quiz
       expect(page).to have_text("Instructions")
-      expect(page).to have_text(quiz_target.completion_instructions)
+      expect(page).to have_text(assignment_quiz_target.completion_instructions)
 
       # There should also be a link to the quiz at the bottom of content.
       find(".course-overlay__body-tab-item", text: "Learn").click

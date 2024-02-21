@@ -43,6 +43,8 @@ type state = {
   assignmentDetails: option<AssignmentDetails.t>,
   milestone: bool,
   hasAssignment: bool,
+  discussion: bool,
+  allowAnonymous: bool,
 }
 
 type action =
@@ -74,6 +76,8 @@ type action =
   | ResetEditor
   | UpdateMilestone(bool)
   | UpdateHasAssignment(bool)
+  | UpdateDiscussion(bool)
+  | UpdateAllowAnonymous(bool)
 
 module TargetDetailsQuery = %graphql(`
     query TargetDetailsQuery($targetId: ID!) {
@@ -105,6 +109,8 @@ module AssignmentDetailsQuery = %graphql(`
         checklist
         milestone
         archived
+        discussion
+        allowAnonymous
       }
   }
 `)
@@ -183,6 +189,8 @@ let reducer = (state, action) =>
       assignmentDetails: Some(assignmentDetails),
       milestone: assignmentDetails.milestone,
       hasAssignment: !assignmentDetails.archived,
+      discussion: assignmentDetails.discussion,
+      allowAnonymous: assignmentDetails.allowAnonymous,
     }
   | UpdateTitle(title) => {...state, title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
@@ -284,6 +292,16 @@ let reducer = (state, action) =>
       hasAssignment,
       dirty: true,
     }
+  | UpdateDiscussion(discussion) => {
+      ...state,
+      discussion,
+      dirty: true,
+    }
+  | UpdateAllowAnonymous(allowAnonymous) => {
+      ...state,
+      allowAnonymous,
+      dirty: true,
+    }
   }
 
 let updateTitle = (send, event) => {
@@ -362,6 +380,13 @@ let booleanButtonClasses = bool => {
 }
 
 let targetRoleClasses = selected =>
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer  focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+    selected
+      ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
+      : "border-gray-300 hover:bg-gray-50 bg-white"
+  )
+
+let anonymityClasses = selected =>
   "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer  focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
@@ -465,6 +490,16 @@ let updateMethodOfCompletion = (methodOfCompletion, send, event) => {
 let updateHasAssignment = (hasAssignment, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateHasAssignment(hasAssignment))
+}
+
+let updateDiscussion = (discussion, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateDiscussion(discussion))
+}
+
+let updateAllowAnonymous = (allowAnonymous, send, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(UpdateAllowAnonymous(allowAnonymous))
 }
 
 let updateMilestone = (milestone, send, event) => {
@@ -852,6 +887,58 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
     | TakeQuiz => quizEditor(state, send)
     | SubmitForm => formEditor(state, send)
     }}
+    <div className="flex items-center mb-6">
+      <label className="block tracking-wide text-sm font-semibold me-1.5" htmlFor="discussion">
+        <span className="me-2">
+          <i className="fas fa-list rtl:rotate-180 text-base" />
+        </span>
+        {t("assignment_discussion.label") |> str}
+      </label>
+      <HelpIcon link={t("assignment_discussion.help_url")} className="me-6">
+        {t("assignment_discussion.help") |> str}
+      </HelpIcon>
+      <div id="discussion" className="flex toggle-button__group shrink-0 rounded-lg">
+        <button
+          onClick={updateDiscussion(true, send)} className={booleanButtonClasses(state.discussion)}>
+          {ts("_yes") |> str}
+        </button>
+        <button
+          onClick={updateDiscussion(false, send)}
+          className={booleanButtonClasses(!state.discussion)}>
+          {ts("_no") |> str}
+        </button>
+      </div>
+    </div>
+    {state.discussion
+      ? <div className="mb-6">
+          <label
+            className="inline-block tracking-wide text-sm font-semibold" htmlFor="allowAnonymous">
+            <span className="me-2">
+              <i className="fas fa-list rtl:rotate-180 text-base" />
+            </span>
+            {t("allow_anonymous.title")->str}
+          </label>
+          <HelpIcon className="ms-1"> {t("allow_anonymous.subtitle")->str} </HelpIcon>
+          <div id="allowAnonymous" className="flex mt-4 ms-6">
+            <button
+              onClick={updateAllowAnonymous(true, send)}
+              className={"me-4 " ++ anonymityClasses(state.allowAnonymous)}>
+              <span className="me-4">
+                <Icon className="if i-anonymous-light text-3xl" />
+              </span>
+              <span className="text-sm"> {t("allow_anonymous.anonymous_text") |> str} </span>
+            </button>
+            <button
+              onClick={updateAllowAnonymous(false, send)}
+              className={anonymityClasses(!state.allowAnonymous)}>
+              <span className="me-4">
+                <Icon className="if i-non-anonymous-light text-3xl" />
+              </span>
+              <span className="text-sm"> {t("allow_anonymous.no_anonymous") |> str} </span>
+            </button>
+          </div>
+        </div>
+      : React.null}
     <div className="mb-6">
       <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
         <span className="me-2">
@@ -951,11 +1038,11 @@ let isValidMethodOfCompletion = state =>
   }
 
 module UpdateTargetAssignmentQuery = %graphql(`
-   mutation UpdateTargetAssignmentMutation($id: ID!, $targetGroupId: ID!, $title: String!, $visibility: String!, $targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean!, $archived: Boolean ) {
+   mutation UpdateTargetAssignmentMutation($id: ID!, $targetGroupId: ID!, $title: String!, $visibility: String!, $targetId: ID!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [AssignmentQuizInput!]!, $completionInstructions: String, $checklist: JSON!, $milestone: Boolean!, $archived: Boolean, $discussion: Boolean!, $allowAnonymous: Boolean ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, visibility: $visibility)    {
         sortIndex
        }
-     updateAssignment(targetId: $targetId, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, checklist: $checklist, milestone: $milestone, archived: $archived)    {
+     updateAssignment(targetId: $targetId, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, checklist: $checklist, milestone: $milestone, archived: $archived, discussion: $discussion, allowAnonymous: $allowAnonymous)    {
         id
        }
      }
@@ -1043,6 +1130,8 @@ let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
     ~milestone=state.milestone,
     ~archived=!state.hasAssignment,
+    ~discussion=state.discussion,
+    ~allowAnonymous=state.allowAnonymous,
     (),
   )
 
@@ -1104,6 +1193,8 @@ let make = (
       assignmentDetails: None,
       milestone: false,
       hasAssignment: false,
+      discussion: false,
+      allowAnonymous: false,
     },
   )
   let targetId = target->Target.id

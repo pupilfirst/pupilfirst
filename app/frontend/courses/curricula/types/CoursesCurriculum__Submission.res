@@ -11,12 +11,14 @@ type t = {
   createdAt: Js.Date.t,
   status: status,
   checklist: array<SubmissionChecklistItem.t>,
+  hiddenAt: option<Js.Date.t>,
 }
 
 let id = t => t.id
 let createdAt = t => t.createdAt
 let status = t => t.status
 let checklist = t => t.checklist
+let hiddenAt = t => t.hiddenAt
 
 let pending = t =>
   switch t.status {
@@ -27,6 +29,11 @@ let pending = t =>
   }
 
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
+let hiddenAtPretty = t =>
+  switch t.hiddenAt {
+  | Some(hiddenAt) => hiddenAt->DateFns.format("MMMM d, yyyy")
+  | None => ""
+  }
 
 let sort = ts =>
   ts |> ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
@@ -51,12 +58,14 @@ let decode = json => {
         ),
       ),
     ),
+    hiddenAt: json |> optional(field("hiddenAt", DateFns.decodeISO)),
   }
 }
 
-let make = (~id, ~createdAt, ~status, ~checklist) => {
-  id: id,
-  createdAt: createdAt,
-  status: status,
-  checklist: checklist,
+let make = (~id, ~createdAt, ~status, ~checklist, ~hiddenAt) => {
+  id,
+  createdAt,
+  status,
+  checklist,
+  hiddenAt,
 }

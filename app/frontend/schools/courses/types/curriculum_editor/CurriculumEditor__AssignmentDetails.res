@@ -14,6 +14,8 @@ type t = {
   completionInstructions: option<string>,
   milestone: bool,
   archived: bool,
+  discussion: bool,
+  allowAnonymous: bool,
 }
 
 let role = t => t.role
@@ -27,6 +29,10 @@ let evaluationCriteria = t => t.evaluationCriteria
 let milestone = t => t.milestone
 
 let archived = t => t.archived
+
+let discussion = t => t.discussion
+
+let allowAnonymous = t => t.allowAnonymous
 
 let roleAsString = role =>
   switch role {
@@ -52,4 +58,6 @@ let makeFromJs = assignmentData => {
   checklist: assignmentData["checklist"] |> Json.Decode.array(TargetChecklistItem.decode),
   milestone: assignmentData["milestone"],
   archived: assignmentData["archived"],
+  discussion: assignmentData["discussion"],
+  allowAnonymous: assignmentData["allowAnonymous"],
 }

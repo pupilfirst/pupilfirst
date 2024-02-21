@@ -91,6 +91,24 @@ class UserMailer < SchoolMailer
     )
   end
 
+  # Email send to the person confirming his report of submission or comment
+  def confirm_moderation_report(moderation_report, submission)
+    @moderation_report = moderation_report
+    @submission = submission
+
+    @user = moderation_report.user
+    @reported_item = moderation_report.reportable
+    @school = @user.school
+
+    simple_mail(
+      @user.email,
+      I18n.t(
+        "mailers.user.confirm_moderation_report.subject",
+        school_name: @school.name
+      )
+    )
+  end
+
   def email_change_in_user_standing(
     user,
     current_standing,

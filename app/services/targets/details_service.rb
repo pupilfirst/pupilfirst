@@ -34,7 +34,11 @@ module Targets
               quiz_questions: quiz_questions,
               evaluated: assignment.evaluation_criteria.exists?,
               completion_instructions: assignment.completion_instructions,
-              checklist: assignment.checklist
+              checklist: assignment.checklist,
+              comments: comments_for_submissions,
+              reactions: reactions_for_submissions,
+              discussion: assignment.discussion?,
+              allow_anonymous: assignment.allow_anonymous?
             }
           )
       else
@@ -44,7 +48,11 @@ module Targets
               quiz_questions: [],
               evaluated: false,
               completion_instructions: nil,
-              checklist: []
+              checklist: [],
+              comments: [],
+              reactions: [],
+              discussion: false,
+              allow_anonymous: false
             }
           )
       end
@@ -142,6 +150,7 @@ module Targets
           created_at: submission.created_at,
           status: submission.status,
           checklist: submission.checklist,
+          hidden_at: submission.hidden_at,
           files: files(submission)
         }
       end
@@ -162,6 +171,81 @@ module Targets
           submission.student_ids.sort == @student.team_student_ids
         end
       end
+    end
+
+    def user_details(user)
+      details = user.attributes.slice("id", "name", "title")
+      details["avatar_url"] = user.avatar_url(variant: :thumb)
+      details
+    end
+
+    def comments_for_submissions
+      #TODO - clean up this code using the list of attributes
+      reaction_attributes = [
+        :id,
+        :user_id,
+        :reactionable_id,
+        :reactionable_type,
+        :reaction_value,
+        :updated_at,
+        "users.name"
+      ]
+      SubmissionComment
+        .includes(:user, :reactions)
+        .not_archived
+        .where(submission_id: submissions.pluck(:id))
+        .order(created_at: :desc)
+        .limit(100)
+        .map do |comment|
+          {
+            id: comment.id,
+            user_id: comment.user_id,
+            user: user_details(comment.user),
+            submission_id: comment.submission_id,
+            comment: comment.comment,
+            reactions:
+              comment
+                .reactions
+                .includes(:user)
+                .pluck(*reaction_attributes)
+                .map do |id, user_id, reactionable_id, reactionable_type, reaction_value, updated_at, user_name|
+                  {
+                    id: id,
+                    user_id: user_id,
+                    reactionable_id: reactionable_id,
+                    reactionable_type: reactionable_type,
+                    reaction_value: reaction_value,
+                    updated_at: updated_at,
+                    user_name: user_name
+                  }
+                end,
+            moderation_reports:
+              comment.moderation_reports.map do |report|
+                report.attributes.transform_values(&:to_s)
+              end,
+            created_at: comment.created_at,
+            hidden_at: comment.hidden_at,
+            hidden_by_id: comment.hidden_by_id
+          }
+        end
+    end
+
+    def reactions_for_submissions
+      Reaction
+        .includes(:user)
+        .where(reactionable_type: "TimelineEvent")
+        .where(reactionable_id: submissions.pluck(:id))
+        .map do |reaction|
+          {
+            id: reaction.id,
+            user_id: reaction.user_id,
+            user_name: reaction.user.name,
+            reactionable_id: reaction.reactionable_id,
+            reactionable_type: reaction.reactionable_type,
+            reaction_value: reaction.reaction_value,
+            updated_at: reaction.updated_at
+          }
+        end
     end
 
     def feedback_for_submissions

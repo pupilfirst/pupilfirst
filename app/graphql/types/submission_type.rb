@@ -17,6 +17,7 @@ module Types
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :anonymous, Boolean, null: false
 
     def title
       object.target.title
@@ -31,7 +32,7 @@ module Types
     end
 
     def user_names
-      object.students.map { |student| student.user.name }.join(', ')
+      object.students.map { |student| student.user.name }.join(", ")
     end
 
     def feedback_sent
@@ -56,21 +57,18 @@ module Types
     end
 
     def files
-      object
-        .timeline_event_files
-        .with_attached_file
-        .map do |file|
-          {
-            id: file.id,
-            title: file.file.filename,
-            url:
-              Rails
-                .application
-                .routes
-                .url_helpers
-                .download_timeline_event_file_path(file)
-          }
-        end
+      object.timeline_event_files.with_attached_file.map do |file|
+        {
+          id: file.id,
+          title: file.file.filename,
+          url:
+            Rails
+              .application
+              .routes
+              .url_helpers
+              .download_timeline_event_file_path(file)
+        }
+      end
     end
 
     def students_have_same_team

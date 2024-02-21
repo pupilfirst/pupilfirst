@@ -17,10 +17,17 @@ after "development:evaluation_criteria", "development:target_groups" do
     submittable_assignment =
       submittable_target.assignments.create!(
         role: Assignment.valid_roles.sample,
+        discussion: true,
         checklist: [
           {
             kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            title: "Write something about your submission",
+            title:
+              "# This is the heading for a question\n\n_And this is its body._",
+            optional: false
+          },
+          {
+            kind: Target::CHECKLIST_KIND_LINK,
+            title: "A second question, to test multiple questions",
             optional: false
           }
         ]

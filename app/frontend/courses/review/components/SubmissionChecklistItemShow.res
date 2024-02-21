@@ -123,25 +123,29 @@ let statusButton = (index, status, callback, checklist) =>
 let cardBodyClasses = pending => "ps-7 md:ps-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
-let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist) => {
+let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~showTitle=true) => {
   let status = ChecklistItem.status(checklistItem)
 
   <div ariaLabel={ChecklistItem.title(checklistItem)}>
-    <div className="text-sm font-medium">
-      <div className="flex items-start space-x-2">
-        <div className="flex items-start w-full gap-3">
-          <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
-          <div className="overflow-x-auto">
-            <MarkdownBlock
-              profile=Markdown.Permissive
-              markdown={ChecklistItem.title(checklistItem)}
-              className="block tracking-wide"
-            />
+    {switch showTitle {
+    | false => React.null
+    | true =>
+      <div className="text-sm font-medium">
+        <div className="flex items-start space-x-2">
+          <div className="flex items-start w-full gap-3">
+            <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
+            <div className="overflow-x-auto">
+              <MarkdownBlock
+                profile=Markdown.Permissive
+                markdown={ChecklistItem.title(checklistItem)}
+                className="block tracking-wide"
+              />
+            </div>
           </div>
+          {statusIcon(updateChecklistCB, status)}
         </div>
-        {statusIcon(updateChecklistCB, status)}
       </div>
-    </div>
+    }}
     <div className="ps-7 mt-2 text-sm">
       <div>
         {switch ChecklistItem.result(checklistItem) {

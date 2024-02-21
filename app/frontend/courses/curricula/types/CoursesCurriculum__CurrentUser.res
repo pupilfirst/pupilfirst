@@ -23,8 +23,8 @@ let decode = json => {
     name: json |> field("name", string),
     avatarUrl: json |> optional(field("avatarUrl", string)),
     isAdmin: field("isAdmin", bool, json),
-    isAuthor: field("isAdmin", bool, json),
-    isCoach: field("isAdmin", bool, json),
+    isAuthor: field("isAuthor", bool, json),
+    isCoach: field("isCoach", bool, json),
   }
 }
 

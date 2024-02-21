@@ -20,7 +20,7 @@ module Mutations
       return true if current_school_admin.present?
 
       # faculty of the course
-      current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+      course.faculty.exists?(user: current_user)
     end
 
     def submission

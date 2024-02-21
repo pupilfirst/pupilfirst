@@ -409,6 +409,36 @@ feature "Assignment Discussion", js: true do
       end
     end
 
+    scenario "course coach views submissions on the Submit Form tab with all moderation options" do
+      sign_in_user coach.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to_not have_text("There are no submissions yet")
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        expect(page).to have_text(student.name)
+        expect(page).to have_button("Comment", disabled: true)
+        expect(page).to have_button("Add reaction")
+      end
+
+      find(
+        "div[aria-label='discuss_submission-#{student_submission.id}']"
+      ).hover
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        expect(page).to have_button("Pin")
+        expect(page).to have_button("Hide submission")
+        expect(page).to have_button("Report")
+      end
+
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        expect(page).to have_text(another_student.name)
+        expect(page).to have_button("Comment", disabled: true)
+        expect(page).to have_button("Add reaction")
+      end
+    end
+
     scenario "school admin hides a submission" do
       sign_in_user school_admin.user, referrer: target_path(target)
       find(".course-overlay__body-tab-item", text: "Submit Form").click

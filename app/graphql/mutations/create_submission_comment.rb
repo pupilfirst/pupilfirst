@@ -25,11 +25,11 @@ module Mutations
         return true
       end
 
-      # student of the course
-      return true if current_user.id == student.user_id
-
       # faculty of the course
-      current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+      return true if course.faculty.exists?(user: current_user)
+
+      # student of the course
+      current_user.id == student&.user_id
     end
 
     def student
@@ -37,8 +37,7 @@ module Mutations
         current_user
           .students
           .joins(:cohort)
-          .where(cohorts: { course_id: course })
-          .first
+          .find_by(cohorts: { course_id: course })
     end
 
     def submission

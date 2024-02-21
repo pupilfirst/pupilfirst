@@ -27,11 +27,11 @@ module Mutations
       return true if current_school_admin.present?
 
       # faculty of the course
-      current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+      course.faculty.exists?(user: current_user)
     end
 
     def submission
-      @submission ||= submission_comment.timeline_event
+      @submission ||= submission_comment.submission
     end
 
     def submission_comment

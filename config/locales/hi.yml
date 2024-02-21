@@ -536,6 +536,18 @@ hi:
       topics_post: " समुदाय"
       topics_pre: "से विषय "
       use_community: अपनी शंकाओं को दूर करने और अपने साथियों की मदद करने के लिए समुदाय का उपयोग करें!
+    CoursesCurriculum__DiscussSubmission:
+      anonymous_avatar: A
+      anonymous_name: Anonymous
+      created_at: on %{created_at}.
+      hide: Hide submission
+      pin: Pin
+      pinned_submission: Pinned Submission
+      submission_hidden: This submission is hidden from discussions
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      unhide: Un-hide submission
+      unpin: Unpin
     CoursesCurriculum__FileForm:
       another_file: कृपया अपलोड करने के लिए कोई अन्य फ़ाइल चुनें।
       cannot_attach: आप फ़ाइलें संलग्न नहीं कर सकते।
@@ -547,6 +559,12 @@ hi:
       smth_went_wrong: कुछ गलत हो गया!
     CoursesCurriculum__Learn:
       edit_target_button: सामग्री संपादित करें
+    CoursesCurriculum__ModerationReportButton:
+      cancel: Cancel
+      close: Close
+      share_reason: Share reason for reporting
+      report: Report
+      reported: Reported
     CoursesCurriculum__NoticeManager:
       access_ended_description: अब आपके पास पाठ्यक्रम तक सीमित पहुंच है। आपको सामग्री का पूर्वावलोकन करने की अनुमति है लेकिन कोई लक्ष्य पूरा नहीं कर सकते।
       access_ended_title: पूर्वावलोकन/सीमित पहुंच
@@ -557,6 +575,7 @@ hi:
       preview_mode_description: आप इस पाठ्यक्रम के लिए पूर्वावलोकन मोड का उपयोग कर रहे हैं
       preview_mode_title: पूर्वावलोकन मोड
     CoursesCurriculum__Overlay:
+      button_load_more: Load More Submissions...
       close_button: बंद करना
       completion_tab_complete: पूरा
       completion_tab_completed: पूरा हुआ
@@ -569,6 +588,9 @@ hi:
       completion_tab_take_quiz: प्रश्नोत्तरी लें
       completion_tab_visit_link: पूरा करने के लिए लिंक पर जाएं
       discuss_tab: विचार-विमर्श करना
+      discussion_assignment_notice:
+        title: Discussion enabled assignment
+        description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: समीक्षा के लिए कार्य सबमिट करें
       learn_cta_take_quiz: कोई प्रश्नोत्तरी लें
@@ -577,14 +599,22 @@ hi:
       marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: अगला निशाना
+      no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "आपके पास टीम के सदस्य हैं जिन्होंने अभी तक इस लक्ष्य को पूरा नहीं किया है:"
       preview_mode_text: आप वर्तमान में इस पाठ्यक्रम का पूर्वावलोकन देख रहे हैं।
       previous_target_button: पिछला लक्ष्य
       scroll_to_top: शीर्ष तक स्क्रॉल करें
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
+      submissions_peers: Submissions by peers
     CoursesCurriculum__Quiz:
       next_question: अगला सवाल
       question: प्रश्न
       submit_quiz: प्रश्नोत्तरी भेजो
+    CoursesCurriculum__Reactions:
+      emoji_picker: Add reaction
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: आप पूर्वावलोकन मोड तक पहुंच रहे हैं
       attaching: अटैच किया जा रहा
@@ -595,6 +625,24 @@ hi:
       steps_submit: इस लक्ष्य को प्रस्तुत करने के लिए कदम
       submit: प्रस्तुत करना
       submitting: भेजने से
+      submit_anonymous_label: Submit anonymously
+      submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
+    CoursesCurriculum__SubmissionCommentShow:
+      cancel: Cancel
+      close: Close
+      delete: Delete
+      delete_comment: Delete Comment
+      delete_confirm: Are you sure you want to delete this comment?
+      hidden: This comment is hidden from discussions
+      hide: Hide
+      unhide: Un-hide
     CoursesCurriculum__SubmissionItem:
       link_error: यह एक मान्य यूआरएल की तरह नहीं दिखता है।
       link_placeholder: https:// से शुरू होने वाला पूरा यूआरएल टाइप करें...
@@ -1003,6 +1051,15 @@ hi:
       remove_choice: पसंद हटाएं
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      assignment_discussion:
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion'
+        label: Do you want to enable discussion on this assignment?
+      allow_anonymous:
+        title: Setup submission anonymity
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: एक लक्ष्य समूह चुनें
       completion_instructions:
         help: इसका उपयोग विद्यार्थी को किसी महत्वपूर्ण बात के बारे में याद दिलाने के लिए करें। जहां छात्र लक्ष्य पूरा करते हैं, वहां ये निर्देश प्रदर्शित किए जाएंगे।
@@ -2135,6 +2192,18 @@ hi:
         thanks: धन्यवाद,
     link_fallback:
       link_fallback: "यदि आप ऊपर दिए गए लिंक पर क्लिक करने में असमर्थ हैं, तो कृपया निम्न लिंक को अपने ब्राउज़र के पता बार में कॉपी और पेस्ट करें:"
+    school_contact:
+      moderation_report:
+        subject: Content reported on %{course}
+        body:
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          reported_comment: Reported comment - %{comment}
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2191,6 +2260,15 @@ hi:
         body:
           html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: '%{school_name} स्कूल में आपका ईमेल सफलतापूर्वक अपडेट किया गया'
+      confirm_moderation_report:
+        body:
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
           asked: '%{days_ago} दिन पहले पूछा।'
@@ -2328,6 +2406,8 @@ hi:
       linked_file_exists_error: कुछ फ़ाइल अटैचमेंट पहले ही सबमिशन से लिंक किए जा चुके हैं
       missing_answer_error: "प्रश्न के लिए अनुपलब्ध उत्तर: %{title}"
       success_notification: आपके सबमिशन को समीक्षा के लिए कतार में खड़ा कर दिया गया है।
+    create_submission_comment:
+      success_notification: Comment added successfully.
     create_target:
       success_notification: लक्ष्य सफलतापूर्वक बनाया गया।
     create_target_version:

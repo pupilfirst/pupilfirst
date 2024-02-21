@@ -536,6 +536,18 @@ ml:
       topics_post: " സമൂഹം"
       topics_pre: "ഇതിൽ നിന്നുള്ള വിഷയങ്ങൾ "
       use_community: നിങ്ങളുടെ സംശയങ്ങൾ ദൂരീകരിക്കുന്നതിനും നിങ്ങളുടെ സമപ്രായക്കാരെ സഹായിക്കുന്നതിനും സമൂഹത്തെ ഉപയോഗിക്കുക!
+    CoursesCurriculum__DiscussSubmission:
+      anonymous_avatar: A
+      anonymous_name: Anonymous
+      created_at: on %{created_at}.
+      hide: Hide submission
+      pin: Pin
+      pinned_submission: Pinned Submission
+      submission_hidden: This submission is hidden from discussions
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      unhide: Un-hide submission
+      unpin: Unpin
     CoursesCurriculum__FileForm:
       another_file: അപ്‌ലോഡ് ചെയ്യുന്നതിന് ദയവായി മറ്റൊരു ഫയൽ തിരഞ്ഞെടുക്കുക.
       cannot_attach: നിങ്ങൾക്ക് ഫയലുകൾ അറ്റാച്ചുചെയ്യാൻ കഴിയില്ല.
@@ -547,6 +559,12 @@ ml:
       smth_went_wrong: എന്തോ കുഴപ്പം സംഭവിച്ചു!
     CoursesCurriculum__Learn:
       edit_target_button: ഉള്ളടക്കം എഡിറ്റ് ചെയ്യുക
+    CoursesCurriculum__ModerationReportButton:
+      cancel: Cancel
+      close: Close
+      share_reason: Share reason for reporting
+      report: Report
+      reported: Reported
     CoursesCurriculum__NoticeManager:
       access_ended_description: നിങ്ങൾക്ക് ഇപ്പോൾ കോഴ്‌സിലേക്ക് പരിമിതമായ ആക്‌സസ് മാത്രമേയുള്ളൂ. നിങ്ങൾക്ക് ഉള്ളടക്കം പ്രിവ്യൂ ചെയ്യാൻ അനുവാദമുണ്ട് എന്നാൽ ഒരു ലക്ഷ്യവും പൂർത്തിയാക്കാൻ കഴിയില്ല.
       access_ended_title: പ്രിവ്യൂ/ലിമിറ്റഡ് ആക്സസ്
@@ -557,6 +575,7 @@ ml:
       preview_mode_description: നിങ്ങൾ ഈ കോഴ്‌സിനായി പ്രിവ്യൂ മോഡിലേക്ക് പ്രവേശിക്കുകയാണ്
       preview_mode_title: പ്രിവ്യൂ മോഡ്
     CoursesCurriculum__Overlay:
+      button_load_more: Load More Submissions...
       close_button: അടയ്ക്കുക
       completion_tab_complete: പൂർത്തിയാക്കുക
       completion_tab_completed: പൂർത്തിയാക്കി
@@ -569,6 +588,9 @@ ml:
       completion_tab_take_quiz: ക്വിസ് എടുക്കുക
       completion_tab_visit_link: പൂർത്തിയാക്കാൻ ലിങ്ക് സന്ദർശിക്കുക
       discuss_tab: ചർച്ച ചെയ്യുക
+      discussion_assignment_notice:
+        title: Discussion enabled assignment
+        description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: അവലോകനത്തിനായി ജോലി സമർപ്പിക്കുക
       learn_cta_take_quiz: ഒരു ക്വിസ് എടുക്കുക
@@ -577,14 +599,22 @@ ml:
       marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: അടുത്ത ലക്ഷ്യം
+      no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "ഈ ടാർഗെറ്റ് പൂർത്തിയാക്കാൻ ഇനിയും നിങ്ങൾക്ക് ടീം അംഗങ്ങളുണ്ട്:"
       preview_mode_text: നിങ്ങൾ നിലവിൽ ഈ കോഴ്സിന്റെ പ്രിവ്യൂ നോക്കുകയാണ്.
       previous_target_button: മുമ്പത്തെ ലക്ഷ്യം
       scroll_to_top: മുകളിലേക്ക് സ്ക്രോൾ ചെയ്യുക
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
+      submissions_peers: Submissions by peers
     CoursesCurriculum__Quiz:
       next_question: അടുത്ത ചോദ്യം
       question: ചോദ്യം
       submit_quiz: ക്വിസ് സമർപ്പിക്കുക
+    CoursesCurriculum__Reactions:
+      emoji_picker: Add reaction
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: നിങ്ങൾ പ്രിവ്യൂ മോഡിലേക്ക് പ്രവേശിക്കുകയാണ്
       attaching: അറ്റാച്ചുചെയ്യുന്നു
@@ -595,6 +625,24 @@ ml:
       steps_submit: ഈ ലക്ഷ്യം സമർപ്പിക്കുന്നതിനുള്ള നടപടികൾ
       submit: സമർപ്പിക്കുക
       submitting: സമർപ്പിക്കുന്നു
+      submit_anonymous_label: Submit anonymously
+      submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
+    CoursesCurriculum__SubmissionCommentShow:
+      cancel: Cancel
+      close: Close
+      delete: Delete
+      delete_comment: Delete Comment
+      delete_confirm: Are you sure you want to delete this comment?
+      hidden: This comment is hidden from discussions
+      hide: Hide
+      unhide: Un-hide
     CoursesCurriculum__SubmissionItem:
       link_error: ഇതൊരു സാധുവായ URL പോലെ തോന്നുന്നില്ല.
       link_placeholder: https://... എന്ന് തുടങ്ങുന്ന പൂർണ്ണ URL ടൈപ്പ് ചെയ്യുക
@@ -1003,6 +1051,15 @@ ml:
       remove_choice: ചോയ്സ് നീക്കം ചെയ്യുക
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      assignment_discussion:
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
+        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion'
+        label: Do you want to enable discussion on this assignment?
+      allow_anonymous:
+        title: Setup submission anonymity
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: ഒരു ടാർഗെറ്റ് ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക
       completion_instructions:
         help: പ്രധാനപ്പെട്ട ഒരു കാര്യത്തെക്കുറിച്ച് വിദ്യാർത്ഥിയെ ഓർമ്മിപ്പിക്കാൻ ഇത് ഉപയോഗിക്കുക. വിദ്യാർത്ഥികൾ ലക്ഷ്യം പൂർത്തീകരിക്കുന്ന സ്ഥലത്തിന് സമീപം ഈ നിർദ്ദേശങ്ങൾ പ്രദർശിപ്പിക്കും.
@@ -2135,6 +2192,18 @@ ml:
         thanks: നന്ദി,
     link_fallback:
       link_fallback: "മുകളിലെ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യാൻ നിങ്ങൾക്ക് കഴിയുന്നില്ലെങ്കിൽ, നിങ്ങളുടെ ബ്രൗസറിന്റെ വിലാസ ബാറിൽ ഇനിപ്പറയുന്ന ലിങ്ക് പകർത്തി ഒട്ടിക്കുക:"
+    school_contact:
+      moderation_report:
+        subject: Content reported on %{course}
+        body:
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          reported_comment: Reported comment - %{comment}
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2191,6 +2260,15 @@ ml:
         body:
           html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: '%{school_name} സ്കൂളിലെ നിങ്ങളുടെ ഇമെയിൽ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു'
+      confirm_moderation_report:
+        body:
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
           asked: '%{days_ago} ദിവസം മുമ്പ് ചോദിച്ചു.'
@@ -2328,6 +2406,8 @@ ml:
       linked_file_exists_error: ചില ഫയൽ അറ്റാച്ച്‌മെന്റുകൾ ഇതിനകം ഒരു സമർപ്പണവുമായി ലിങ്ക് ചെയ്തിട്ടുണ്ട്
       missing_answer_error: "ചോദ്യത്തിനുള്ള ഉത്തരം വിട്ടുപോയിരിക്കുന്നു: %{title}"
       success_notification: നിങ്ങളുടെ സമർപ്പണം അവലോകനത്തിനായി ക്യൂവിലാണ്.
+    create_submission_comment:
+      success_notification: Comment added successfully.
     create_target:
       success_notification: ലക്ഷ്യം വിജയകരമായി സൃഷ്ടിച്ചു.
     create_target_version:

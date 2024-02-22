@@ -19,10 +19,10 @@ type t = {
   checklist: array<TargetChecklistItem.t>,
   discussion: bool,
   allowAnonymous: bool,
-  targetRead: bool,
 }
 
 let submissions = t => t.submissions
+
 let pendingUserIds = t => t.pendingUserIds
 let feedback = t => t.feedback
 let navigation = t => (t.navigation.previous, t.navigation.next)
@@ -31,7 +31,6 @@ let discussion = t => t.discussion
 let allowAnonymous = t => t.allowAnonymous
 let comments = t => t.comments
 let reactions = t => t.reactions
-let targetRead = t => t.targetRead
 
 type completionType =
   | Evaluated
@@ -67,7 +66,6 @@ let decode = json => {
     checklist: json |> field("checklist", array(TargetChecklistItem.decode)),
     discussion: json |> field("discussion", bool),
     allowAnonymous: json |> field("allowAnonymous", bool),
-    targetRead: json |> field("targetRead", bool),
   }
 }
 
@@ -101,5 +99,3 @@ let addSubmission = (submission, t) => {
 }
 
 let clearPendingUserIds = t => {...t, pendingUserIds: []}
-
-let updateTargetRead = (t, targetRead) => {...t, targetRead}

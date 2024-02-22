@@ -40,7 +40,6 @@ type action =
   | Select(tab)
   | ResetState
   | SetTargetDetails(TargetDetails.t)
-  | SetTargetRead(bool)
   | AddSubmission(Target.role)
   | PerformQuickNavigation
   | BeginReloading
@@ -63,15 +62,6 @@ let reducer = (state, action) =>
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | SetTargetRead(targetRead) =>
-    state.targetDetails->Belt.Option.mapWithDefault(state, targetDetails => {
-      let newTargetDetails = TargetDetails.updateTargetRead(targetDetails, targetRead)
-
-      {
-        ...state,
-        targetDetails: Some(newTargetDetails),
-      }
-    })
   | PerformQuickNavigation => initialState
   | AddSubmission(role) =>
     switch role {
@@ -534,6 +524,7 @@ let learnSection = (
   send,
   state,
   targetDetails,
+  targetRead,
   tab,
   author,
   courseId,
@@ -571,7 +562,7 @@ let learnSection = (
   <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails author courseId targetId />
     <div className="flex flex-wrap gap-4 mt-4">
-      {state.targetDetails->Belt.Option.mapWithDefault(false, TargetDetails.targetRead)
+      {targetRead
         ? <div
             className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
             <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
@@ -593,7 +584,6 @@ let learnSection = (
         : <button
             onClick={_ => {
               addPageRead(targetId, markReadCB)
-              send(SetTargetRead(true))
             }}
             className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
             <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
@@ -904,6 +894,7 @@ let make = (
   ~targetStatus,
   ~addSubmissionCB,
   ~targets,
+  ~targetRead,
   ~markReadCB,
   ~statusOfTargets,
   ~users,
@@ -968,6 +959,7 @@ let make = (
               send,
               state,
               targetDetails,
+              targetRead,
               state.tab,
               author,
               Course.id(course),

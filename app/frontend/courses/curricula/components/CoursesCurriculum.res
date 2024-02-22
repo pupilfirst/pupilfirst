@@ -387,12 +387,14 @@ let make = (
           ts => ts |> TargetStatus.targetId == (target |> Target.id),
           "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
         )
+      let targetRead = Js.Array.includes(target->Target.id, state.targetsRead)
       <CoursesCurriculum__Overlay
         target
         course
         targetStatus
         addSubmissionCB={addSubmission(setState)}
         targets
+        targetRead
         markReadCB={addMarkRead(setState)}
         statusOfTargets=state.statusOfTargets
         users

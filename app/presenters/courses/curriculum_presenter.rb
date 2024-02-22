@@ -167,7 +167,7 @@ module Courses
     end
 
     def targets
-      attributes = %w[id title target_group_id sort_index resubmittable]
+      attributes = %w[id title target_group_id sort_index]
 
       scope =
         @course
@@ -187,6 +187,7 @@ module Courses
           assignment = target.assignments.not_archived.first
           if assignment
             details[:role] = assignment.role
+            details[:resubmittable] = assignment.checklist.present?
             details[:milestone] = assignment.milestone
             details[:reviewed] = assignment.evaluation_criteria.present?
             details[:has_assignment] = true
@@ -195,6 +196,7 @@ module Courses
             ] = assignment.prerequisite_assignments.pluck(:target_id)
           else
             details[:role] = Assignment::ROLE_STUDENT
+            details[:resubmittable] = false
             details[:milestone] = false
             details[:reviewed] = false
             details[:has_assignment] = false

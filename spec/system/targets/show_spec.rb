@@ -120,7 +120,6 @@ feature "Target Overlay", js: true do
            :with_content,
            target_group: target_group_l1,
            days_to_complete: 60,
-           resubmittable: false,
            sort_index: 3
   end
   let!(:assignment_quiz_target) do
@@ -487,6 +486,10 @@ feature "Target Overlay", js: true do
       end
 
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
+      expect(page).not_to have_selector(
+        "button",
+        text: "Add another submission"
+      )
 
       submission = TimelineEvent.last
 
@@ -644,40 +647,6 @@ feature "Target Overlay", js: true do
       # There should be a cancel button to go back to viewing submissions.
       click_button "Cancel"
       expect(page).to have_content(submission_1.checklist.first["title"])
-    end
-
-    context "when the target is non-resubmittable" do
-      before { target_l1.update(resubmittable: false) }
-
-      scenario "student cannot resubmit non-resubmittable passed target" do
-        sign_in_user student.user, referrer: target_path(target_l1)
-
-        find(
-          ".course-overlay__body-tab-item",
-          text: "Submissions & Feedback"
-        ).click
-
-        expect(page).not_to have_selector(
-          "button",
-          text: "Add another submission"
-        )
-      end
-
-      scenario "student can resubmit non-resubmittable target if its failed" do
-        # Make the first failed submission the latest, and the only one.
-        submission_2.destroy!
-
-        submission_1.timeline_event_owners.update_all(latest: true) # rubocop:disable Rails/SkipsModelValidations
-
-        sign_in_user student.user, referrer: target_path(target_l1)
-
-        find(
-          ".course-overlay__body-tab-item",
-          text: "Submissions & Feedback"
-        ).click
-
-        expect(page).to have_selector("button", text: "Add another submission")
-      end
     end
   end
 

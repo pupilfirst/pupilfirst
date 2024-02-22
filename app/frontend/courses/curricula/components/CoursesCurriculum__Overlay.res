@@ -719,7 +719,7 @@ let completeSection = (
         | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
         }}
       </div>
-      {targetDetails->TargetDetails.discussion
+      {targetDetails->TargetDetails.discussion && currentUser->CurrentUser.isParticipant
         ? <div className="border-t mt-12">
             <div className="max-w-3xl mx-auto">
               <h4 className="text-base md:text-lg font-semibold pt-12 pb-4">
@@ -914,8 +914,15 @@ let make = (
   let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
+  // Load peer submissions only if the target has discussion enabled and the current user is a participant.
   React.useEffect1(() => {
-    reloadSubmissions(send, target->Target.id)
+    switch state.targetDetails {
+    | Some(targetDetails) =>
+      if targetDetails->TargetDetails.discussion && currentUser->CurrentUser.isParticipant {
+        reloadSubmissions(send, target->Target.id)
+      }
+    | None => ()
+    }
     None
   }, [Target.id(target)])
 

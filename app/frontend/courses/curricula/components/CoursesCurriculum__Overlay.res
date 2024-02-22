@@ -532,6 +532,7 @@ let learnSection = (
   markReadCB,
   targetStatus,
   completionType,
+  preview,
 ) => {
   let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
   | (Pending | Rejected, TargetDetails.Evaluated) =>
@@ -585,7 +586,8 @@ let learnSection = (
             onClick={_ => {
               addPageRead(targetId, markReadCB)
             }}
-            className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+            className="btn btn-default flex space-x-2 text-base w-full p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn"
+            disabled={preview || !TargetStatus.readable(targetStatus)}>
             <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
             <span> {str(t("mark_as_read"))} </span>
           </button>}
@@ -967,6 +969,7 @@ let make = (
               markReadCB,
               targetStatus,
               completionType,
+              preview,
             )}
           </div>
           <div className="max-w-3xl mx-auto">

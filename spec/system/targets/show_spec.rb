@@ -26,7 +26,11 @@ feature "Target Overlay", js: true do
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
-  let!(:team) { create :team_with_students, cohort: cohort }
+
+  let!(:team) do
+    create :team_with_students, cohort: cohort, avoid_special_characters: true
+  end
+
   let!(:student) { team.students.first }
   let!(:target_group_l0) { create :target_group, level: level_0 }
   let!(:target_group_l1) { create :target_group, level: level_1 }

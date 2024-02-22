@@ -5,7 +5,7 @@ feature "Assignment Discussion", js: true do
   include NotificationHelper
 
   let(:school) { create :school, :current }
-  let(:course) { create :course, school: school }
+  let(:course) { create :course, school: school, public_preview: true }
   let!(:cohort) { create :cohort, course: course }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
@@ -15,6 +15,8 @@ feature "Assignment Discussion", js: true do
   let!(:another_student) { create :student, cohort: cohort }
   let(:coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
+
+  let!(:preview_student) { create :student }
 
   let!(:target) do
     create :target, :with_content, target_group: target_group, sort_index: 0
@@ -37,6 +39,13 @@ feature "Assignment Discussion", js: true do
       key: SchoolString::EmailAddress.key,
       value: "test@school.com"
     )
+  end
+
+  scenario "student with only preview access visits a new assignment's page" do
+    sign_in_user preview_student.user, referrer: target_path(target)
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+    expect(page).to_not have_text("Submissions by peers")
   end
 
   scenario "the first student visits a new assignment's page" do

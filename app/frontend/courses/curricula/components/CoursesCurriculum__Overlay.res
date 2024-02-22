@@ -916,12 +916,8 @@ let make = (
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
   // Load peer submissions only if the target has discussion enabled and the current user is a participant.
   React.useEffect1(() => {
-    switch state.targetDetails {
-    | Some(targetDetails) =>
-      if targetDetails->TargetDetails.discussion && currentUser->CurrentUser.isParticipant {
-        reloadSubmissions(send, target->Target.id)
-      }
-    | None => ()
+    if currentUser->CurrentUser.isParticipant {
+      reloadSubmissions(send, target->Target.id)
     }
     None
   }, [Target.id(target)])

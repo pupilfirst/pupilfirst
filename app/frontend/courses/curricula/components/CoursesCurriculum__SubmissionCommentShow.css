@@ -1,6 +1,6 @@
 .curriculum__submission-comment-hidden::before {
   content: "";
-  @apply absolute inset-0 bg-gradient-to-b from-transparent to-white rounded-b-xl;
+  @apply absolute inset-0 bg-gradient-to-b from-transparent via-white/75 to-white rounded-b-xl;
   z-index: 10;
 }
 

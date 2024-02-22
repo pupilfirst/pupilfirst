@@ -522,7 +522,6 @@ let addPageRead = (targetId, markReadCB) => {
 
 let learnSection = (
   send,
-  state,
   targetDetails,
   targetRead,
   tab,
@@ -959,7 +958,6 @@ let make = (
           <div className="max-w-3xl mx-auto">
             {learnSection(
               send,
-              state,
               targetDetails,
               targetRead,
               state.tab,

@@ -210,17 +210,17 @@ feature "Target Overlay", js: true do
     expect(page).to_not have_button("Mark as read")
     expect(page).to have_text("Marked read")
 
+    # Let's close the overlay and check whether the index page reflects the change.
     click_button "Close"
 
     within("a[data-target-id='#{target_l2.id}']") do
-      #marking as read a target without assignment should change the status to completed
       expect(page).to have_content("Completed")
       expect(find('span[title="Marked read"]')).to be_present
     end
 
+    # Re-opening the target overlay for the same target should show the status as read.
     click_link target_l2.title
 
-    #should say marked read
     expect(page).to have_text("Marked read")
   end
 
@@ -232,6 +232,18 @@ feature "Target Overlay", js: true do
 
     expect(page).to_not have_button("Mark as read")
     expect(page).to have_text("Marked read")
+
+    # Performing quick navigation between targets should preserve the read status of the target.
+    click_link "Next Target"
+
+    # This next target should not be marked as read.
+    expect(page).to have_button("Mark as read")
+
+    click_link "Previous Target"
+
+    # And we should be back to the original target, which should still be marked as read.
+    expect(page).to have_text("Marked read")
+    expect(page).to_not have_button("Mark as read")
 
     click_button "Close"
 

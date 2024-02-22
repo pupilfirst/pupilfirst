@@ -17,13 +17,20 @@ module Targets
               pending_user_ids: pending_user_ids,
               submissions: details_for_submissions,
               feedback: feedback_for_submissions,
-              grading: grading
+              grading: grading,
+              targetRead: target_read?
             }
           )
       else
         details =
           details.update(
-            { pending_user_ids: [], submissions: [], feedback: [], grading: [] }
+            {
+              pending_user_ids: [],
+              submissions: [],
+              feedback: [],
+              grading: [],
+              targetRead: false
+            }
           )
       end
 
@@ -67,6 +74,12 @@ module Targets
         content_blocks: content_blocks,
         communities: community_details
       }
+    end
+
+    def target_read?
+      return false if @student.blank?
+
+      @student.page_reads.where(target_id: @target.id).exists?
     end
 
     def links_to_adjacent_targets

@@ -32,7 +32,6 @@ type state = {
   loading: LoadingV2.t,
   targetDetails: option<TargetDetails.t>,
   tab: tab,
-  targetRead: bool,
   peerSubmissions: PagedSubmission.t,
   totalEntriesCount: int,
 }
@@ -52,7 +51,6 @@ let initialState = {
   loading: LoadingV2.empty(),
   targetDetails: None,
   tab: Learn,
-  targetRead: false,
   peerSubmissions: Unloaded,
   totalEntriesCount: 0,
 }
@@ -65,10 +63,15 @@ let reducer = (state, action) =>
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | SetTargetRead(targetRead) => {
-      ...state,
-      targetRead,
-    }
+  | SetTargetRead(targetRead) =>
+    state.targetDetails->Belt.Option.mapWithDefault(state, targetDetails => {
+      let newTargetDetails = TargetDetails.updateTargetRead(targetDetails, targetRead)
+
+      {
+        ...state,
+        targetDetails: Some(newTargetDetails),
+      }
+    })
   | PerformQuickNavigation => initialState
   | AddSubmission(role) =>
     switch role {
@@ -568,7 +571,7 @@ let learnSection = (
   <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails author courseId targetId />
     <div className="flex flex-wrap gap-4 mt-4">
-      {state.targetRead
+      {state.targetDetails->Belt.Option.mapWithDefault(false, TargetDetails.targetRead)
         ? <div
             className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
             <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
@@ -901,7 +904,6 @@ let make = (
   ~targetStatus,
   ~addSubmissionCB,
   ~targets,
-  ~targetRead,
   ~markReadCB,
   ~statusOfTargets,
   ~users,
@@ -911,7 +913,7 @@ let make = (
   ~author,
   ~currentUser,
 ) => {
-  let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
+  let (state, send) = React.useReducer(reducer, initialState)
 
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
   // Load peer submissions only if the target has discussion enabled and the current user is a participant.

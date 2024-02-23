@@ -16,8 +16,6 @@ feature "Assignment Discussion", js: true do
   let(:coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
 
-  let!(:preview_student) { create :student }
-
   let!(:target) do
     create :target, :with_content, target_group: target_group, sort_index: 0
   end
@@ -41,10 +39,12 @@ feature "Assignment Discussion", js: true do
     )
   end
 
-  scenario "student with only preview access visits a new assignment's page" do
-    sign_in_user preview_student.user, referrer: target_path(target)
+  scenario "a member of public views a preview of the discussion assignment" do
+    visit target_path(target)
+
     find(".course-overlay__body-tab-item", text: "Submit Form").click
 
+    expect(page).to have_text("Discussion enabled assignment")
     expect(page).to_not have_text("Submissions by peers")
   end
 

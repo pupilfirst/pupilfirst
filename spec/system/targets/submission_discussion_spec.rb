@@ -190,6 +190,7 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_button("😀")
       end
 
+      # Check that the reaction is visible after a page refresh
       page.refresh
       find(".course-overlay__body-tab-item", text: "Submit Form").click
       within(
@@ -198,6 +199,30 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_text(another_student.name)
         expect(page).to have_button("😀")
       end
+
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) do
+        expect(page).to have_text(another_student.name)
+        click_button "Add reaction"
+      end
+
+      # Attempt to add the same reaction again via the emoji picker.
+      within(find("em-emoji-picker").shadow_root) do
+        find("button", text: "😀", match: :first).click
+      end
+
+      expect(page).not_to have_selector("em-emoji-picker")
+      sleep 0.5 # Wait for the server to process the request
+
+      reaction_count =
+        student
+          .user
+          .reactions
+          .where(reactionable: another_student_submission)
+          .count
+
+      expect(reaction_count).to eq(1)
     end
 
     context "when that submission has an existing reaction" do

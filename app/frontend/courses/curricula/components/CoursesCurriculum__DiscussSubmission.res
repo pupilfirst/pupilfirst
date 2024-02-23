@@ -50,7 +50,9 @@ let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
 }
 
 let pinnedClasses = pinned => {
-  pinned ? "bg-white px-4 md:px-6 pt-6 pb-2 rounded-lg shadow-xl border border-gray-200/75" : "py-4"
+  pinned
+    ? "bg-white px-4 md:px-6 pt-6 pb-2 rounded-lg shadow-xl dark:shadow-2xl border border-gray-200/75 dark:border-gray-200"
+    : "py-4"
 }
 
 @react.component

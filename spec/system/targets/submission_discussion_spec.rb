@@ -5,7 +5,7 @@ feature "Assignment Discussion", js: true do
   include NotificationHelper
 
   let(:school) { create :school, :current }
-  let(:course) { create :course, school: school }
+  let(:course) { create :course, school: school, public_preview: true }
   let!(:cohort) { create :cohort, course: course }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
@@ -37,6 +37,15 @@ feature "Assignment Discussion", js: true do
       key: SchoolString::EmailAddress.key,
       value: "test@school.com"
     )
+  end
+
+  scenario "a member of public views a preview of the discussion assignment" do
+    visit target_path(target)
+
+    find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+    expect(page).to have_text("Discussion enabled assignment")
+    expect(page).to_not have_text("Submissions by peers")
   end
 
   scenario "the first student visits a new assignment's page" do
@@ -181,6 +190,7 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_button("😀")
       end
 
+      # Check that the reaction is visible after a page refresh
       page.refresh
       find(".course-overlay__body-tab-item", text: "Submit Form").click
       within(
@@ -189,6 +199,30 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_text(another_student.name)
         expect(page).to have_button("😀")
       end
+
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) do
+        expect(page).to have_text(another_student.name)
+        click_button "Add reaction"
+      end
+
+      # Attempt to add the same reaction again via the emoji picker.
+      within(find("em-emoji-picker").shadow_root) do
+        find("button", text: "😀", match: :first).click
+      end
+
+      expect(page).not_to have_selector("em-emoji-picker")
+      sleep 0.5 # Wait for the server to process the request
+
+      reaction_count =
+        student
+          .user
+          .reactions
+          .where(reactionable: another_student_submission)
+          .count
+
+      expect(reaction_count).to eq(1)
     end
 
     context "when that submission has an existing reaction" do
@@ -381,6 +415,36 @@ feature "Assignment Discussion", js: true do
 
     scenario "school admin views submissions on the Submit Form tab with all moderation options" do
       sign_in_user school_admin.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to_not have_text("There are no submissions yet")
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        expect(page).to have_text(student.name)
+        expect(page).to have_button("Comment", disabled: true)
+        expect(page).to have_button("Add reaction")
+      end
+
+      find(
+        "div[aria-label='discuss_submission-#{student_submission.id}']"
+      ).hover
+
+      within("div#discuss_submission-#{student_submission.id}") do
+        expect(page).to have_button("Pin")
+        expect(page).to have_button("Hide submission")
+        expect(page).to have_button("Report")
+      end
+
+      within("div#discuss_submission-#{another_student_submission.id}") do
+        expect(page).to have_text(another_student.name)
+        expect(page).to have_button("Comment", disabled: true)
+        expect(page).to have_button("Add reaction")
+      end
+    end
+
+    scenario "course coach views submissions on the Submit Form tab with all moderation options" do
+      sign_in_user coach.user, referrer: target_path(target)
       find(".course-overlay__body-tab-item", text: "Submit Form").click
 
       expect(page).to have_text("Submissions by peers")
@@ -608,6 +672,43 @@ feature "Assignment Discussion", js: true do
           end
         end
       end
+    end
+  end
+
+  context "with more than 10 peer submissions" do
+    let!(:another_student_submissions) do
+      create_list(
+        :timeline_event,
+        14,
+        :with_owners,
+        owners: [another_student],
+        target: target
+      )
+    end
+    let!(:another_student_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [another_student],
+        latest: true,
+        target: target
+      )
+    end
+
+    scenario "student views the first 10 submissions, and then loads more" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to have_content("Showing 10 of 15 submissions")
+
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) { expect(page).to have_text(another_student.name) }
+
+      click_button "Load More"
+
+      expect(page).to have_text("Showing all 15 submissions")
     end
   end
 

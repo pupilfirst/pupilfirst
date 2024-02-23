@@ -9,30 +9,29 @@ module Mutations
     field :reaction, Types::ReactionType, null: false
 
     def resolve(_params)
-      reaction =
-        Reaction.create(
-          reaction_value: @params[:reaction_value],
-          reactionable_id: @params[:reactionable_id],
-          reactionable_type: @params[:reactionable_type],
-          user_id: current_user.id
-        )
-      { reaction: reaction }
+      params = {
+        reaction_value: @params[:reaction_value],
+        reactionable_id: @params[:reactionable_id],
+        reactionable_type: @params[:reactionable_type],
+        user_id: current_user.id
+      }
+      reaction = Reaction.new(params)
+      r = reaction.save ? reaction : Reaction.find_by!(params)
+      { reaction: r }
     end
 
     def query_authorized?
       return false if current_user.blank?
 
-      # school admin or course author
-      if current_school_admin.present? ||
-           current_user.course_authors.where(course: course).present?
-        return true
-      end
+      return false if course&.school != current_school
 
-      # student of the course
-      return true if current_user.id == student.user_id
+      return true if current_school_admin.present?
 
-      # faculty of the course
-      current_user.faculty&.cohorts&.exists?(id: student.cohort_id)
+      return true if current_user.course_authors.where(course: course).present?
+
+      return true if course.faculty.exists?(user: current_user)
+
+      student.present?
     end
 
     def student
@@ -40,8 +39,7 @@ module Mutations
         current_user
           .students
           .joins(:cohort)
-          .where(cohorts: { course_id: course })
-          .first
+          .find_by(cohorts: { course_id: course })
     end
 
     def submission

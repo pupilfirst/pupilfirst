@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_20_114713) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_23_120822) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -452,6 +452,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_20_114713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["reportable_type", "reportable_id"], name: "index_moderation_reports_on_reportable"
+    t.index ["user_id", "reportable_type", "reportable_id"], name: "index_moderation_reports_on_user_and_reportable", unique: true
     t.index ["user_id"], name: "index_moderation_reports_on_user_id"
   end
 
@@ -555,6 +556,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_20_114713) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["reactionable_type", "reactionable_id"], name: "index_reactions_on_reactionable"
+    t.index ["user_id", "reactionable_type", "reactionable_id", "reaction_value"], name: "index_reactions_on_user_and_reactionable", unique: true
     t.index ["user_id"], name: "index_reactions_on_user_id"
   end
 

@@ -86,13 +86,42 @@ module Courses
           :timeline_event_id
         )
 
+      delete_submission_discussion_data(submission_ids)
+
       TimelineEventFile
         .joins(timeline_event: { students: :course })
         .where(courses: { id: @course.id })
         .delete_all
       timeline_event_owners.delete_all
       StartupFeedback.where(timeline_event_id: submission_ids).delete_all
-      TimelineEvent.where(id: submission_ids).destroy_all
+      TimelineEvent.where(id: submission_ids).delete_all
+    end
+
+    def delete_submission_discussion_data(submission_ids)
+      # delete all reactions on the submissions
+      Reaction.where(
+        reactionable_type: "TimelineEvent",
+        reactionable_id: submission_ids
+      ).delete_all
+
+      # delete all comments on the submissions
+      comment_ids =
+        SubmissionComment.where(submission_id: submission_ids).pluck(:id)
+      Reaction.where(
+        reactionable_type: "SubmissionComment",
+        reactionable_id: comment_ids
+      ).delete_all
+      ModerationReport.where(
+        reportable_type: "SubmissionComment",
+        reportable_id: comment_ids
+      ).delete_all
+      SubmissionComment.where(id: comment_ids).delete_all
+
+      # delete all reports on the submissions
+      ModerationReport.where(
+        reportable_type: "TimelineEvent",
+        reportable_id: submission_ids
+      ).delete_all
     end
 
     def delete_content
@@ -142,7 +171,7 @@ module Courses
       cohort_ids = @course.cohorts.select(:id)
       student_ids = Student.where(cohort_id: cohort_ids).select(:id)
 
-      # clean up submissions
+      # clean up submissions and page reads
       delete_submissions
       delete_page_reads
 

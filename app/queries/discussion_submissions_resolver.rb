@@ -27,6 +27,8 @@ class DiscussionSubmissionsResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
+    return false if course&.school != current_school
+
     # school admin or course author
     if current_school_admin.present? ||
          current_user.course_authors.where(course: course).present?

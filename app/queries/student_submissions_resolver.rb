@@ -13,6 +13,8 @@ class StudentSubmissionsResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
+    return false if student&.school != current_school
+
     return false if student.blank?
 
     return true if current_user.id == student.user_id

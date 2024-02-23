@@ -31,6 +31,8 @@ module Mutations
     end
 
     def query_authorized?
+      return false if course&.school != current_school
+
       return false if current_user.blank?
 
       # school admin or course author

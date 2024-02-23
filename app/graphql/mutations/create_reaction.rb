@@ -15,13 +15,9 @@ module Mutations
         reactionable_type: @params[:reactionable_type],
         user_id: current_user.id
       }
-      reaction =
-        begin
-          Reaction.create!(params)
-        rescue ActiveRecord::RecordNotUnique => _e
-          Reaction.find_by!(params)
-        end
-      { reaction: reaction }
+      reaction = Reaction.new(params)
+      r = reaction.save ? reaction : Reaction.find_by!(params)
+      { reaction: r }
     end
 
     def query_authorized?

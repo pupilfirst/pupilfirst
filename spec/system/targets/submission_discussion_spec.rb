@@ -681,8 +681,6 @@ feature "Assignment Discussion", js: true do
         "div[aria-label='discuss_submission-#{another_student_submission.id}']"
       ) { expect(page).to have_text(another_student.name) }
 
-      expect(page).to have_text("Load More")
-
       click_button "Load More"
 
       expect(page).to have_text("Showing all 15 submissions")

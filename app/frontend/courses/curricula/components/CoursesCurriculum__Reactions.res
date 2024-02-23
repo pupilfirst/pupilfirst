@@ -60,7 +60,14 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
     CreateReactionMutation.make({reactionValue, reactionableId, reactionableType})
     |> Js.Promise.then_(response => {
       switch response["createReaction"]["reaction"] {
-      | Some(reaction) => setReactions(reactions => Js.Array2.concat([reaction], reactions))
+      | Some(reaction) => {
+          let existingReaction = Js.Array2.find(reactions, existingReaction =>
+            existingReaction->Reaction.id === reaction->Reaction.id
+          )
+          Belt.Option.isNone(existingReaction)
+            ? setReactions(reactions => Js.Array2.concat([reaction], reactions))
+            : ()
+        }
       | None => ()
       }
       Js.Promise.resolve()

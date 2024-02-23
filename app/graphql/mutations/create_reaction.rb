@@ -9,13 +9,18 @@ module Mutations
     field :reaction, Types::ReactionType, null: false
 
     def resolve(_params)
+      params = {
+        reaction_value: @params[:reaction_value],
+        reactionable_id: @params[:reactionable_id],
+        reactionable_type: @params[:reactionable_type],
+        user_id: current_user.id
+      }
       reaction =
-        Reaction.create(
-          reaction_value: @params[:reaction_value],
-          reactionable_id: @params[:reactionable_id],
-          reactionable_type: @params[:reactionable_type],
-          user_id: current_user.id
-        )
+        begin
+          Reaction.create!(params)
+        rescue ActiveRecord::RecordNotUnique => _e
+          Reaction.find_by!(params)
+        end
       { reaction: reaction }
     end
 

@@ -21,7 +21,7 @@ class DiscussionSubmissionsResolver < ApplicationQuery
     #Filter hidden submissions if not moderator
     submissions = submissions.not_hidden unless moderator?
 
-    submissions.order(pinned: :desc)
+    submissions.order(pinned: :desc, created_at: :desc)
   end
 
   def authorized?

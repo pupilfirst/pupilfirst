@@ -650,6 +650,45 @@ feature "Assignment Discussion", js: true do
     end
   end
 
+  context "with more than 10 peer submissions" do
+    let!(:another_student_submissions) do
+      create_list(
+        :timeline_event,
+        14,
+        :with_owners,
+        owners: [another_student],
+        target: target
+      )
+    end
+    let!(:another_student_submission) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [another_student],
+        latest: true,
+        target: target
+      )
+    end
+
+    scenario "student views the first 10 submissions, and then loads more" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to have_content("Showing 10 of 15 submissions")
+
+      within(
+        "div[aria-label='discuss_submission-#{another_student_submission.id}']"
+      ) { expect(page).to have_text(another_student.name) }
+
+      expect(page).to have_text("Load More")
+
+      click_button "Load More"
+
+      expect(page).to have_text("Showing all 15 submissions")
+    end
+  end
+
   context "when the discussion feature is disabled" do
     let!(:assignment_target) do
       create :assignment,

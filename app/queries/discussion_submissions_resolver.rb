@@ -29,17 +29,13 @@ class DiscussionSubmissionsResolver < ApplicationQuery
 
     return false if course&.school != current_school
 
-    # school admin or course author
-    if current_school_admin.present? ||
-         current_user.course_authors.where(course: course).present?
-      return true
-    end
+    return true if current_school_admin.present?
 
-    # faculty of the course
+    return true if current_user.course_authors.where(course: course).present?
+
     return true if course.faculty.exists?(user: current_user)
 
-    # student of the course
-    current_user.id == student&.user_id
+    student.present?
   end
 
   def moderator?

@@ -21,14 +21,12 @@ module Mutations
     end
 
     def query_authorized?
-      return false if course&.school != current_school
-
       return false if current_user.blank?
 
-      # school admin or course author
+      return false if course&.school != current_school
+
       return true if current_school_admin.present?
 
-      # faculty of the course
       course.faculty.exists?(user: current_user)
     end
 

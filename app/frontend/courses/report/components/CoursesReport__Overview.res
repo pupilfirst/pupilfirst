@@ -266,7 +266,7 @@ let make = (~overviewData, ~coaches) =>
                   </div>
                   <div className="flex-shrink-0">
                     <span
-                      className={"text-xs font-medium " ++ {
+                      className={"text-xs font-medium inline-flex items-center " ++ {
                         data->CoursesReport__MilestoneTargetCompletionStatus.completed
                           ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
                           : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"

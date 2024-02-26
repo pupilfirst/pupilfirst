@@ -57,7 +57,8 @@ module Courses
           avatar_url: current_user.avatar_url(variant: :thumb),
           is_admin: current_school_admin.present?,
           is_author: @course.course_authors.exists?(user: current_user),
-          is_coach: @course.faculty.exists?(user: current_user)
+          is_coach: @course.faculty.exists?(user: current_user),
+          is_student: current_student.present?
         }
       else
         user_details_for_preview_mode
@@ -71,7 +72,8 @@ module Courses
         avatar_url: nil,
         is_admin: false,
         is_author: false,
-        is_coach: false
+        is_coach: false,
+        is_student: false
       }
     end
 

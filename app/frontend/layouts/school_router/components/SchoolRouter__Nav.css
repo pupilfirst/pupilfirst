@@ -51,9 +51,9 @@
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--color-primary-500);
   border-radius: 2px;
   animation: scale--bottom 0.3s ease-out;
+  @apply bg-primary-500;
 }
 
 .school-admin-navbar__primary-nav--shrunk
@@ -75,9 +75,9 @@
   top: 50%;
   left: 0px;
   transform: translateY(-50%);
-  background-color: var(--color-primary-500);
   border-radius: 2px;
   animation: scale 0.3s ease-out;
+  @apply bg-primary-500;
 }
 
 .school-admin-navbar__primary-nav-link--active:hover {

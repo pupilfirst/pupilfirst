@@ -635,7 +635,7 @@ let make = (~studentId, ~userId) => {
                       className="flex gap-2 mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
                       <div>
                         <span
-                          className={"text-xs font-medium " ++ {
+                          className={"text-xs font-medium inline-flex items-center " ++ {
                             data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
                               ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
                               : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"

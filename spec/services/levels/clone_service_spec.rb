@@ -75,7 +75,9 @@ describe Levels::CloneService do
     create :assignment,
            prerequisite_assignments: [prerequisite_target.assignments.first],
            role: Assignment::ROLE_TEAM,
-           target: target_l1_2
+           target: target_l1_2,
+           discussion: true,
+           allow_anonymous: true
   end
 
   let(:target_l2_1) do
@@ -171,7 +173,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
@@ -232,7 +236,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       ).to match_array(original_assignments)
 
@@ -316,7 +322,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
@@ -375,7 +383,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       ).to match_array(original_assignments)
 

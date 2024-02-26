@@ -34,9 +34,9 @@
   top: 50%;
   @apply start-0;
   transform: translateY(-50%);
-  background-color: var(--color-primary-500);
   border-radius: 2px;
   animation: scale 0.3s ease-out;
+  @apply bg-primary-500;
 }
 
 .app-router-navbar__primary-nav-link--active:hover {

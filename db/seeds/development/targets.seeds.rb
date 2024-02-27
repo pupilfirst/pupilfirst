@@ -20,13 +20,13 @@ after "development:evaluation_criteria", "development:target_groups" do
         discussion: true,
         checklist: [
           {
-            kind: Target::CHECKLIST_KIND_LONG_TEXT,
+            kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
             title:
               "# This is the heading for a question\n\n_And this is its body._",
             optional: false
           },
           {
-            kind: Target::CHECKLIST_KIND_LINK,
+            kind: Assignment::CHECKLIST_KIND_LINK,
             title: "A second question, to test multiple questions",
             optional: false
           }
@@ -94,7 +94,7 @@ after "development:evaluation_criteria", "development:target_groups" do
         role: Assignment.valid_roles.sample,
         checklist: [
           {
-            kind: Target::CHECKLIST_KIND_MULTI_CHOICE,
+            kind: Assignment::CHECKLIST_KIND_MULTI_CHOICE,
             title: "Do you play any sport?",
             optional: false,
             metadata: {
@@ -103,19 +103,19 @@ after "development:evaluation_criteria", "development:target_groups" do
             }
           },
           {
-            kind: Target::CHECKLIST_KIND_LONG_TEXT,
+            kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
             title: "Describe your experience playing sports",
             optional: false
           },
           {
-            kind: Target::CHECKLIST_KIND_SHORT_TEXT,
+            kind: Assignment::CHECKLIST_KIND_SHORT_TEXT,
             title: "Are you early bird or night owl?",
             optional: false,
             metadata: {
             }
           },
           {
-            kind: Target::CHECKLIST_KIND_LINK,
+            kind: Assignment::CHECKLIST_KIND_LINK,
             title: "Please, fill your github link",
             optional: true,
             metadata: {

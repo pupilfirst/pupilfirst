@@ -46,7 +46,6 @@ module Courses
     def create_target(target_group)
       target =
         Target.create!(
-          role: Target::ROLE_STUDENT,
           title: I18n.t("services.courses.demo_content_service.target_name"),
           target_action_type: Target::TYPE_TODO,
           target_group: target_group,

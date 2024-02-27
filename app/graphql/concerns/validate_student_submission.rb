@@ -68,7 +68,7 @@ module ValidateStudentSubmission
       if checklist.respond_to?(:all?) &&
            checklist.all? { |item|
              item["title"].is_a?(String) &&
-               item["kind"].in?(Target.valid_checklist_kind_types) &&
+               item["kind"].in?(Assignment.valid_checklist_kind_types) &&
                item["status"] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER &&
                item["result"].present? &&
                valid_result(item["kind"], item["result"], value[:file_ids])
@@ -81,16 +81,16 @@ module ValidateStudentSubmission
 
     def valid_result(kind, result, file_ids)
       case kind
-      when Target::CHECKLIST_KIND_FILES
+      when Assignment::CHECKLIST_KIND_FILES
         (result - file_ids).empty?
-      when Target::CHECKLIST_KIND_AUDIO
+      when Assignment::CHECKLIST_KIND_AUDIO
         (result.split - file_ids).empty?
-      when Target::CHECKLIST_KIND_LINK
+      when Assignment::CHECKLIST_KIND_LINK
         result.length >= 3 && result.length <= 2048
-      when Target::CHECKLIST_KIND_LONG_TEXT
+      when Assignment::CHECKLIST_KIND_LONG_TEXT
         result.length >= 1 && result.length <= 10_000
-      when Target::CHECKLIST_KIND_MULTI_CHOICE,
-           Target::CHECKLIST_KIND_SHORT_TEXT
+      when Assignment::CHECKLIST_KIND_MULTI_CHOICE,
+           Assignment::CHECKLIST_KIND_SHORT_TEXT
         result.length >= 1 && result.length <= 500
       else
         false

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_23_120822) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_27_162656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -744,10 +744,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_23_120822) do
   end
 
   create_table "targets", id: :serial, force: :cascade do |t|
-    t.string "role"
     t.string "title"
     t.text "description"
-    t.string "completion_instructions"
     t.string "resource_url"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -770,8 +768,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_23_120822) do
     t.jsonb "review_checklist", default: []
     t.jsonb "checklist", default: []
     t.text "action_config"
-    t.boolean "milestone", default: false
-    t.integer "milestone_number"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
     t.index ["target_group_id"], name: "index_targets_on_target_group_id"

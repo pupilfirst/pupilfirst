@@ -47,12 +47,14 @@ class Assignment < ApplicationRecord
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates_with RateLimitValidator, limit: 2, scope: :target_id
 
+  validate :milestone_should_have_a_number
+
   def milestone_should_have_a_number
     return unless milestone?
 
     return if milestone_number.present?
 
-    errors.add(:milestone_number, "must be present for milestone targets")
+    errors.add(:milestone_number, "must be present for milestone assignments")
   end
 
   def quiz?

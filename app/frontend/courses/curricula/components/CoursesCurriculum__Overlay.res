@@ -910,11 +910,15 @@ let make = (
   React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
   // Load peer submissions only if the target has discussion enabled and the current user is a participant.
   React.useEffect1(() => {
-    if currentUser->CurrentUser.isParticipant {
-      reloadSubmissions(send, target->Target.id)
+    switch state.targetDetails {
+    | Some(targetDetails) =>
+      if currentUser->CurrentUser.isParticipant && targetDetails->TargetDetails.discussion {
+        reloadSubmissions(send, target->Target.id)
+      }
+    | None => ()
     }
     None
-  }, [Target.id(target)])
+  }, [state.targetDetails])
 
   React.useEffect(() => {
     ScrollLock.activate()

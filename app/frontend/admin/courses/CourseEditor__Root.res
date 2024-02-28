@@ -184,8 +184,7 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
     ~skipSchoolStatsLoad,
     (),
   )
-  CoursesQuery.fetch(variables)
-  -> Js.Promise2.then((response: CoursesQuery.t) => {
+  CoursesQuery.fetch(variables)->Js.Promise2.then((response: CoursesQuery.t) => {
     let responseCourses = Belt.SortArray.stableSortBy(response.courses.nodes, (a, b) =>
       a.sortIndex - b.sortIndex
     )
@@ -214,8 +213,7 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
       ),
     )
     Js.Promise.resolve()
-  })
-  |> ignore
+  }) |> ignore
 }
 
 let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) => {
@@ -229,8 +227,7 @@ let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) =>
       | Down => #Down
       },
     },
-  )
-  -> Js.Promise2.then(_ => {
+  )->Js.Promise2.then(_ => {
     let index = Js.Array.indexOf(course, Pagination.toArray(state.courses))
     let newCourses =
       direction == Up
@@ -238,8 +235,7 @@ let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) =>
         : ArrayUtils.swapDown(index, Pagination.toArray(state.courses))
     send(ReorderCourses(newCourses))
     Js.Promise.resolve()
-  })
-  |> ignore
+  }) |> ignore
 }
 
 let updateCourse = (send, course) => {
@@ -251,9 +247,9 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
-    <i className=icon />
-    <span className="font-semibold ms-2"> {title->str} </span>
+    title
+    className="cursor-pointer w-10 h-10 flex items-center text-lg justify-center bg-gray-800 text-white border border-gray-500 rounded-full hover:text-primary-100 hover:bg-primary-950 focus:outline-none focus:text-primary-500 focus:bg-gray-50 transition">
+    <PfIcon className=icon />
   </a>
 
 let courseLinks = course => {
@@ -262,23 +258,13 @@ let courseLinks = course => {
     courseLink(
       "/courses/" ++ Course.id(course) ++ "/curriculum",
       t("course_links.view_as_student"),
-      "fas fa-eye",
+      "if i-eye-light if-fw",
     ),
+    courseLink(baseUrl ++ "/students", t("course_links.manage_students"), "if i-users-light if-fw"),
     courseLink(
-      baseUrl ++ "/curriculum",
-      t("course_links.edit_curriculum"),
-      "fas fa-fw fa-check-square",
-    ),
-    courseLink(
-      baseUrl ++ "/students",
-      t("course_links.manage_students"),
-      "fas fa-fw fa-users fa-fw",
-    ),
-    courseLink(baseUrl ++ "/coaches", t("course_links.manage_coaches"), "fas fa-fw fa-user fa-fw"),
-    courseLink(
-      baseUrl ++ "/exports",
-      t("course_links.download_reports"),
-      "fas fa-fw fa-file fa-fw",
+      baseUrl ++ "/calendar_events",
+      t("course_links.view_calendar"),
+      "if i-calendar-light if-fw",
     ),
   ]
 }
@@ -392,68 +378,40 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )->str}
   </div>
 
-let dropdownSelected =
-  <button
-    className="text-white md:text-gray-900 bg-gray-900 md:bg-gray-100 appearance-none flex items-center justify-between hover:bg-gray-800 md:hover:bg-gray-50 hover:text-gray-50 focus:bg-gray-50 md:hover:text-primary-500 focus:outline-none focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 ">
-    <span> {str(t("quick_links"))} </span>
-    <i className="fas fa-chevron-down text-xs ms-3 font-semibold" />
-  </button>
 let showCourse = (course, index, state, send) => {
   <Spread key={Course.id(course)} props={"data-t": Course.name(course)}>
     <div className="w-full relative mb-8">
-      <div className="flex flex-row shadow bg-white rounded-lg">
-        <div className="flex flex-col bg-gray-100">
-          <button
-            ariaLabel={t("move_up")}
-            title={t("move_up")}
-            disabled={index == 0}
-            onClick={e => handleMoveCourse(~course, ~direction=Up, ~send, ~state)}
-            className={"p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500"}>
-            <FaIcon classes="fas fa-arrow-up" />
-          </button>
-          <button
-            ariaLabel={t("move_down")}
-            title={t("move_down")}
-            onClick={e => handleMoveCourse(~course, ~direction=Down, ~send, ~state)}
-            disabled={index == state.totalEntriesCount - 1}
-            className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
-            <FaIcon classes="fas fa-arrow-down" />
-          </button>
-        </div>
-        <div className="flex flex-col w-1/2 mr-8">
-          {switch Course.thumbnail(course) {
-          | Some(image) =>
-            <img className="h-full object-cover rounded-lg" src={Course.imageUrl(image)} />
-          | None =>
-            <div
-              className="course-editor-course__cover rounded-lg h-full w-full svg-bg-pattern-1"
-            />
-          }}
-        </div>
-        <div className="flex flex-col w-1/2">
-          <div className="flex gap-2 border-b border-gray-200" key={Course.id(course)}>
-            <div className="block h-min ms-6 pt-3 pb-2 px-2 bg-primary-100 rounded-b-full">
-              <PfIcon className="if i-book-solid if-fw text-primary-400" />
-            </div>
-            <h4
-              className="w-full text-gray-900 font-semibold leading-tight pe-6 py-3 text-lg md:text-xl">
-              {str(Course.name(course))}
-            </h4>
-          </div>
-          {ReactUtils.nullIf(
-            <div className="px-4 pt-4">
-              <a
-                ariaLabel={t("view_public_page") ++ " " ++ Course.name(course)}
-                href={"/courses/" ++ Course.id(course)}
-                target="_blank"
-                className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
-                <Icon className="if i-external-link-solid me-2 rtl:-rotate-90" />
-                <span> {t("view_public_page")->str} </span>
-              </a>
-            </div>,
-            Belt.Option.isSome(Course.archivedAt(course)),
-          )}
-          <p className="text-sm px-4 py-2 text-gray-600"> {str(Course.description(course))} </p>
+      <div
+        className="absolute top-5 -start-10 flex flex-col bg-gray-100 rounded-s-md overflow-hidden">
+        <button
+          ariaLabel={t("move_up")}
+          title={t("move_up")}
+          disabled={index == 0}
+          onClick={e => handleMoveCourse(~course, ~direction=Up, ~send, ~state)}
+          className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (
+            index == 0 ? " hidden" : " "
+          )}>
+          <PfIcon className="if i-arrow-up-light if-fw" />
+        </button>
+        <button
+          ariaLabel={t("move_down")}
+          title={t("move_down")}
+          onClick={e => handleMoveCourse(~course, ~direction=Down, ~send, ~state)}
+          disabled={index == state.totalEntriesCount - 1}
+          className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (
+            index == state.totalEntriesCount - 1 ? " hidden" : " "
+          )}>
+          <PfIcon className="if i-arrow-down-light if-fw" />
+        </button>
+      </div>
+      <div className="bg-white rounded-lg border border-gray-200 grid grid-cols-1 md:grid-cols-2">
+        <div className="flex flex-col">
+          <h4
+            key={Course.id(course)}
+            className="mt-5 md:mt-0 w-full text-gray-900 font-semibold leading-tight px-4 pt-5 text-lg md:text-xl">
+            {str(Course.name(course))}
+          </h4>
+          <p className="text-sm px-4 mt-2 text-gray-600"> {str(Course.description(course))} </p>
           <div className="grid grid-cols-3 py-4 divide-x rtl:divide-x-reverse divide-gray-300">
             <Spread props={"data-t": `${Course.name(course)} cohorts count`}>
               <div className="flex-1 px-4">
@@ -480,16 +438,6 @@ let showCourse = (course, index, state, send) => {
               </div>
             </Spread>
           </div>
-          {ReactUtils.nullIf(
-            <div className="px-4">
-              <Dropdown
-                className="col-span-2 w-full"
-                selected={dropdownSelected}
-                contents={courseLinks(course)}
-              />
-            </div>,
-            Belt.Option.isSome(Course.archivedAt(course)),
-          )}
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 p-4">
             <a
               title={"View Course"}
@@ -502,7 +450,7 @@ let showCourse = (course, index, state, send) => {
             </a>
             <button
               title={ts("edit") ++ " " ++ Course.name(course)}
-              className="btn btn-default px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"
+              className="btn border border-primary-200 px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"
               onClick={_ =>
                 RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
               <div>
@@ -510,6 +458,39 @@ let showCourse = (course, index, state, send) => {
                 <span className="font-semibold"> {str(t("edit_course_details"))} </span>
               </div>
             </button>
+          </div>
+        </div>
+        <div className="row-start-1 md:row-start-auto w-full pt-1/2 relative self-center">
+          {switch Course.thumbnail(course) {
+          | Some(image) =>
+            <img
+              className="absolute top-0 md:-end-4 object-cover rounded-xl"
+              src={Course.imageUrl(image)}
+            />
+          | None =>
+            <div
+              className="course-editor-course__cover md:ms-4 w-full absolute inset-0 rounded-xl object-cover svg-bg-pattern-1"
+            />
+          }}
+          <div className="absolute start-1 md:start-5 -bottom-5">
+            {ReactUtils.nullIf(
+              <div className="flex gap-1 px-4 pt-4">
+                {courseLinks(course)
+                |> Array.mapi((index, content) =>
+                  <div key={"links-" ++ (index |> string_of_int)}> content </div>
+                )
+                |> React.array}
+                <a
+                  ariaLabel={t("view_public_page") ++ " " ++ Course.name(course)}
+                  href={"/courses/" ++ Course.id(course)}
+                  target="_blank"
+                  className="cursor-pointer px-3 h-10 flex items-center gap-2 text-lg justify-center bg-gray-800 text-white border border-gray-500 rounded-full hover:text-primary-100 hover:bg-primary-950 focus:outline-none focus:text-primary-500 focus:bg-gray-50 transition">
+                  <PfIcon className="if i-external-link-light if-fw" />
+                  <span className="text-xs"> {t("view_public_page")->str} </span>
+                </a>
+              </div>,
+              Belt.Option.isSome(Course.archivedAt(course)),
+            )}
           </div>
         </div>
       </div>
@@ -521,20 +502,20 @@ let showCourses = (courses, state, send) => {
   <div className="w-full">
     <div className="flex flex-col mt-8">
       <div
-        className="bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg mb-8 text-center">
-        <EmptyState
-          title={t("add_new_course")}
-          description={t("create_description")}
-          primaryAction={<button
-            className="btn btn-primary btn-lg"
+        className="bg-gray-100 flex flex-col md:flex-row p-5 items-center gap-3 border-2 border-gray-300 border-dashed rounded-lg mb-8 text-center">
+        <img src={addNewCourseSVG} className="flex-1 h-28 md:h-50 object-contain" />
+        <div className="flex-1 flex flex-col">
+          <h2 className="text-lg font-semibold"> {t("add_new_course")->str} </h2>
+          <p className="text-sm text-gray-600"> {t("create_description")->str} </p>
+          <button
+            className="btn btn-primary btn-lg mt-4"
             onClick={_ => {
               RescriptReactRouter.push("/school/courses/new")
             }}>
             <PfIcon className="if i-plus-circle-regular if-fw" />
             <span className="font-semibold ms-1"> {str(t("add_new_course"))} </span>
-          </button>}
-          image={<img src={addNewCourseSVG} className="h-50" />}
-        />
+          </button>
+        </div>
       </div>
       {courses
       ->Js.Array2.mapi((course, index) => showCourse(course, index, state, send))
@@ -730,7 +711,7 @@ let make = (~school) => {
           />
         </div>
       </div>
-      <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl 2xl:max-w-5xl w-full">
+      <div id="courses" className="px-8 pb-4 mx-auto max-w-4xl 2xl:max-w-5xl w-full">
         {switch state.courses {
         | Unloaded =>
           <div className="px-2 lg:px-5 mt-8">

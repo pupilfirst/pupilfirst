@@ -116,8 +116,7 @@ describe Levels::CloneService do
     create :target,
            :with_content,
            target_group: target_group_l1_1,
-           days_to_complete: 60,
-           resubmittable: false
+           days_to_complete: 60
   end
   let!(:assignment_quiz_target) do
     create :assignment,

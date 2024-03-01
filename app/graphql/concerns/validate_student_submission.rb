@@ -23,7 +23,7 @@ module ValidateStudentSubmission
           ]
         )
       submitted_but_resubmittable =
-        target.resubmittable? &&
+        assignment.checklist.present? &&
           target_status == Targets::StatusService::STATUS_PASSED
 
       if submittable && (submission_required || submitted_but_resubmittable)

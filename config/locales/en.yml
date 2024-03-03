@@ -537,6 +537,18 @@ en:
       topics_post: " community"
       topics_pre: "Topics From "
       use_community: Use the community to clear your doubts, and to help your peers!
+    CoursesCurriculum__DiscussSubmission:
+      anonymous_avatar: A
+      anonymous_name: Anonymous
+      created_at: on %{created_at}.
+      hide: Hide submission
+      pin: Pin
+      pinned_submission: Pinned Submission
+      submission_hidden: This submission is hidden from discussions
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      unhide: Un-hide submission
+      unpin: Unpin
     CoursesCurriculum__FileForm:
       another_file: Please choose another file for upload.
       cannot_attach: You cannot attach files.
@@ -548,6 +560,12 @@ en:
       smth_went_wrong: Something went wrong!
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
+    CoursesCurriculum__ModerationReportButton:
+      cancel: Cancel
+      close: Close
+      share_reason: Share reason for reporting
+      report: Report
+      reported: Reported
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
@@ -558,6 +576,7 @@ en:
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
     CoursesCurriculum__Overlay:
+      button_load_more: Load More Submissions...
       close_button: Close
       completion_tab_complete: Complete
       completion_tab_completed: Completed
@@ -570,6 +589,9 @@ en:
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
+      discussion_assignment_notice:
+        title: Discussion enabled assignment
+        description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
@@ -578,14 +600,22 @@ en:
       marked_read: Marked read
       milestone_target_label: Milestone
       next_target_button: Next Target
+      no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
+      submissions_peers: Submissions by peers
     CoursesCurriculum__Quiz:
       next_question: Next Question
       question: Question
       submit_quiz: Submit Quiz
+    CoursesCurriculum__Reactions:
+      emoji_picker: Add reaction
     CoursesCurriculum__SubmissionBuilder:
       accessing_preview: You are accessing the preview mode
       attaching: Attaching
@@ -596,6 +626,24 @@ en:
       steps_submit: steps to submit this target
       submit: Submit
       submitting: Submitting
+      submit_anonymous_label: Submit anonymously
+      submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
+    CoursesCurriculum__SubmissionCommentShow:
+      cancel: Cancel
+      close: Close
+      delete: Delete
+      delete_comment: Delete Comment
+      delete_confirm: Are you sure you want to delete this comment?
+      hidden: This comment is hidden from discussions
+      hide: Hide
+      unhide: Un-hide
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...
@@ -1006,6 +1054,15 @@ en:
       remove_choice: Remove Choice
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      assignment_discussion:
+        help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
+        label: Do you want to enable discussion on this assignment?
+      allow_anonymous:
+        title: Setup submission anonymity
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: Choose a target group
       completion_instructions:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
@@ -1486,7 +1543,7 @@ en:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_characters: "%{column_name} column contains one or more invalid characters"
-        invalid_email: Email has to be valid and can't be blank
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
         invalid_team_name: Team name has to be less than 50 characters
@@ -2141,6 +2198,18 @@ en:
         thanks: Thanks,
     link_fallback:
       link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+    school_contact:
+      moderation_report:
+        subject: Content reported on %{course}
+        body:
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          reported_comment: Reported comment - %{comment}
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2197,6 +2266,15 @@ en:
         body:
           html: <p> Your email address in <strong>%{school_name}</strong> has been successfully updated from <strong>%{old_email}</strong> to <strong>%{new_email}</strong>. </p>
         subject: Your email in %{school_name} school updated successfully
+      confirm_moderation_report:
+        body:
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          reported_comment: Reported comment - %{comment}
+          comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
+          report_reason: Reporting reason - %{reason}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+        subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
           asked: asked %{days_ago} days ago.
@@ -2334,6 +2412,8 @@ en:
       linked_file_exists_error: Some file attachments have already been linked to a submission
       missing_answer_error: "Missing answer for question: %{title}"
       success_notification: Your submission has been queued for review.
+    create_submission_comment:
+      success_notification: Comment added successfully.
     create_target:
       success_notification: Target created successfully.
     create_target_version:

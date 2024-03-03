@@ -178,19 +178,14 @@ let onClickSplit = (state, send, _event) => {
   send(ClickSplit)
 }
 
-let insertAt = (textToInsert, position, sourceText) => {
-  let sourceTextArray = Js.String.castToArrayLike(sourceText)
-  let head =
-    Js.Array2.from(sourceTextArray)
-    ->Js.Array2.slice(~start=0, ~end_=position)
-    ->Js.Array2.joinWith("")
-
-  let tail =
-    Js.Array2.from(sourceTextArray)
-    ->Js.Array2.slice(~start=position, ~end_=Js.String.length(sourceText))
-    ->Js.Array2.joinWith("")
-
-  head ++ textToInsert ++ tail
+let insertAt = (char, pos, str) => {
+  if pos < 0 || pos > Js.String2.length(str) {
+    str // If the position is out of bounds, return the original string
+  } else {
+    let before = Js.String2.substring(str, ~from=0, ~to_=pos)
+    let after = Js.String2.substr(str, ~from=pos)
+    before ++ char ++ after
+  }
 }
 
 let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
@@ -327,7 +322,7 @@ let controls = (disabled, value, state, send, onChange) => {
   selectionStart.current = currentSelectionStart
 
   let handleEmojiChange = (e: EmojiPicker.emojiEvent) => {
-    onChange(valueReference.current |> insertAt(e.native, selectionStart.current))
+    e.native->insertAt(selectionStart.current, valueReference.current)->onChange
   }
 
   <div className={controlsContainerClasses(state.mode)}>

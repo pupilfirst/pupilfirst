@@ -249,6 +249,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
 
 @react.component
 let make = (
+  ~currentUser,
   ~author,
   ~course,
   ~levels,
@@ -401,6 +402,7 @@ let make = (
         coaches
         preview
         author
+        currentUser
       />
 
     | None => React.null

@@ -13,12 +13,15 @@ class StudentSubmissionsResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
+    return false if student&.school != current_school
+
     return false if student.blank?
 
     return true if current_user.id == student.user_id
 
-    current_school_admin.present? ||
-      (coach.present? && coach.courses.exists?(id: student.course))
+    return true if current_school_admin.present?
+
+    student.course.faculty.exists?(user: current_user)
   end
 
   def applicable_submissions
@@ -29,10 +32,6 @@ class StudentSubmissionsResolver < ApplicationQuery
 
   def student
     @student ||= Student.find_by(id: student_id)
-  end
-
-  def coach
-    @coach ||= current_user.faculty
   end
 
   def filter_by_status(status, submissions)

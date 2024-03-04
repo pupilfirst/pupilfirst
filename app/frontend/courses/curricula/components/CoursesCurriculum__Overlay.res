@@ -91,17 +91,6 @@ let reducer = (state, action) =>
 let closeOverlay = course =>
   RescriptReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
 
-let loadTargetDetails = (target, send, ()) => {
-  {
-    open Js.Promise
-    Fetch.fetch("/targets/" ++ ((target |> Target.id) ++ "/details_v2"))
-    |> then_(Fetch.Response.json)
-    |> then_(json => send(SetTargetDetails(json |> TargetDetails.decode)) |> resolve)
-  } |> ignore
-
-  None
-}
-
 module DiscussionSubmissionsQuery = %graphql(`
     query DiscussionSubmissionsQuery($targetId: ID!, $after: String) {
       discussionSubmissions(targetId: $targetId, first: 10, after: $after) {
@@ -202,6 +191,29 @@ let getDiscussionSubmissions = (send, cursor, targetId) => {
 let reloadSubmissions = (send, targetId) => {
   send(BeginReloading)
   getDiscussionSubmissions(send, None, targetId)
+}
+
+let loadTargetDetails = (target, currentUser, send, ()) => {
+  {
+    open Js.Promise
+
+    Fetch.fetch("/targets/" ++ ((target |> Target.id) ++ "/details_v2"))
+    |> then_(Fetch.Response.json)
+    |> then_(json => {
+      let targetDetails = TargetDetails.decode(json)
+
+      send(SetTargetDetails(targetDetails))
+
+      // Load peer submissions only if the target has discussion enabled and the current user is a participant.
+      if CurrentUser.isParticipant(currentUser) && TargetDetails.discussion(targetDetails) {
+        reloadSubmissions(send, Target.id(target))
+      }
+
+      resolve(targetDetails)
+    })
+  } |> ignore
+
+  None
 }
 
 let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
@@ -907,14 +919,7 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
-  React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
-  // Load peer submissions only if the target has discussion enabled and the current user is a participant.
-  React.useEffect1(() => {
-    if currentUser->CurrentUser.isParticipant {
-      reloadSubmissions(send, target->Target.id)
-    }
-    None
-  }, [Target.id(target)])
+  React.useEffect1(loadTargetDetails(target, currentUser, send), [Target.id(target)])
 
   React.useEffect(() => {
     ScrollLock.activate()

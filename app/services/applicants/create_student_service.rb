@@ -38,7 +38,7 @@ module Applicants
         school
           .users
           .with_email(@applicant.email)
-          .first_or_create!(email: @applicant.email, title: "Student")
+          .create_or_find_by!(email: @applicant.email, title: "Student")
       user.regenerate_login_token
       user.update!(name: @applicant.name)
 

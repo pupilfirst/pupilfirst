@@ -42,7 +42,7 @@ class TargetsController < ApplicationController
         .where(courses: { id: course.id })
         .first if current_user.present?
 
-    student.page_reads.where(target: @target).first_or_create
+    student.page_reads.create_or_find_by(target: @target)
     head :ok
   end
 

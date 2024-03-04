@@ -29,7 +29,7 @@ module Users
     end
 
     def mark_email_bounced
-      BounceReport.where(email: params[:Email]).first_or_create!(
+      BounceReport.where(email: params[:Email]).create_or_find_by!(
         bounce_type: params[:Type]
       )
     end

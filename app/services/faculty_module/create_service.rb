@@ -11,7 +11,7 @@ module FacultyModule
         User.where(
           email: @faculty_params[:email],
           school: school
-        ).first_or_create!(title: "Coach")
+        ).create_or_find_by!(title: "Coach")
 
       return user.faculty if user.faculty.present?
 

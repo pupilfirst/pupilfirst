@@ -766,7 +766,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_27_162656) do
     t.boolean "resubmittable", default: true
     t.string "visibility"
     t.jsonb "review_checklist", default: []
-    t.jsonb "checklist", default: []
     t.text "action_config"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"

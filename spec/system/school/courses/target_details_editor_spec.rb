@@ -1044,12 +1044,12 @@ feature "Target Details Editor", js: true do
       dismiss_notification
 
       target = quiz_target.reload
+      assignment = target.assignments.first
       expected_checklist = []
-      expect(target.checklist).to eq(expected_checklist)
+
+      expect(assignment.checklist).to eq(expected_checklist)
       expect(target.quiz).to eq(nil)
-      expect(target.assignments.first.evaluation_criteria.first).to eq(
-        evaluation_criterion
-      )
+      expect(assignment.evaluation_criteria.first).to eq(evaluation_criterion)
 
       # Check only the graded submissions are preserved on switching to an evaluated target
       expect(target.timeline_events.count).to eq(1)

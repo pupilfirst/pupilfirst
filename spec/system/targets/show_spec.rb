@@ -98,14 +98,7 @@ feature "Target Overlay", js: true do
            :with_content,
            target_group: target_group_l2,
            given_role: Assignment::ROLE_TEAM,
-           given_evaluation_criteria: [criterion_1],
-           checklist: [
-             {
-               kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
-               title: "Write something about your target submission",
-               optional: false
-             }
-           ]
+           given_evaluation_criteria: [criterion_1]
   end
 
   let!(:quiz) { create :quiz }

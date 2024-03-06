@@ -40,7 +40,7 @@
 
 .student-overlay__doughnut-chart.purple
   .student-overlay__doughnut-chart-stroke {
-  stroke: var(--color-primary-500);
+  @apply stroke-primary-500;
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-stroke {
@@ -53,7 +53,7 @@
 }
 
 .student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-text {
-  fill: var(--color-primary-500);
+  @apply fill-primary-500;
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-text {

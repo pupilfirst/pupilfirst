@@ -27,6 +27,8 @@ WebMock.disable_net_connect!(
 
 # Let's spec emails.
 require "capybara/email/rspec"
+# Add support for Shadow DOM.
+require "capybara/shadowdom"
 
 # Let's spec policies.
 require "pundit/rspec"
@@ -141,7 +143,7 @@ end
 
 Capybara.register_driver :headless_firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
-  options.add_argument('-headless')
+  options.add_argument("-headless")
 
   Capybara::Selenium::Driver.new app, browser: :firefox, options: options
 end

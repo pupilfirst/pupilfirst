@@ -9,7 +9,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     submittable_target =
       target_group.targets.create!(
         title: Faker::Lorem.sentence,
-        resubmittable: true,
         visibility: "live",
         sort_index: 0
       )
@@ -17,10 +16,17 @@ after "development:evaluation_criteria", "development:target_groups" do
     submittable_assignment =
       submittable_target.assignments.create!(
         role: Assignment.valid_roles.sample,
+        discussion: true,
         checklist: [
           {
             kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            title: "Write something about your submission",
+            title:
+              "# This is the heading for a question\n\n_And this is its body._",
+            optional: false
+          },
+          {
+            kind: Target::CHECKLIST_KIND_LINK,
+            title: "A second question, to test multiple questions",
             optional: false
           }
         ]
@@ -40,7 +46,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     quiz_target =
       target_group.targets.create!(
         title: "Quiz: #{Faker::Lorem.sentence}",
-        resubmittable: false,
         visibility: "live",
         sort_index: 2
       )
@@ -61,7 +66,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     # Create two other targets in archived and draft state.
     target_group.targets.create!(
       title: Faker::Lorem.sentence,
-      resubmittable: true,
       visibility: "archived",
       safe_to_change_visibility: true,
       sort_index: 3
@@ -69,7 +73,6 @@ after "development:evaluation_criteria", "development:target_groups" do
 
     target_group.targets.create!(
       title: Faker::Lorem.sentence,
-      resubmittable: true,
       visibility: "draft",
       safe_to_change_visibility: true,
       sort_index: 4
@@ -78,7 +81,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     form_submission =
       target_group.targets.create!(
         title: "Form: #{Faker::Lorem.sentence}",
-        resubmittable: true,
         visibility: "live",
         sort_index: 5
       )

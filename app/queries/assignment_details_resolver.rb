@@ -14,7 +14,9 @@ class AssignmentDetailsResolver < ApplicationQuery
         completion_instructions: assignment.completion_instructions,
         checklist: assignment.checklist,
         milestone: assignment.milestone?,
-        archived: assignment.archived?
+        archived: assignment.archived?,
+        discussion: assignment.discussion?,
+        allow_anonymous: assignment.allow_anonymous?
       }
     else
       nil

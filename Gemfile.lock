@@ -165,6 +165,8 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
+    capybara-shadowdom (0.3.0)
+      capybara
     childprocess (4.1.0)
     cloudflare-rails (5.0.1)
       actionpack (>= 6.1, < 7.2.0)
@@ -724,6 +726,7 @@ DEPENDENCIES
   capybara (~> 3.39)
   capybara-email (~> 3.0)
   capybara-screenshot (~> 1.0)
+  capybara-shadowdom (~> 0.3.0)
   cloudflare-rails (~> 5.0)
   coderay (~> 1.1)
   debug (~> 1.8.0)

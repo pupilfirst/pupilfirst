@@ -1,0 +1,35 @@
+<%
+  target = @submission.target
+  target_url = target_url(target) if target.present?
+%>
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @user.name) %>
+<% end %>
+<% content_for :body do %>
+  <p>
+    <%= t("mailers.user.confirm_moderation_report.body.main_html", target_name: target.title) %>
+  </p>
+  <% if @moderation_report.reportable_type == "SubmissionComment" %>
+    <div>
+      <p>
+        <%= t("mailers.user.confirm_moderation_report.body.reported_comment", comment: @reported_item.comment) %>
+      </p>
+      <p>
+        <%= t("mailers.user.confirm_moderation_report.body.comment_details", comment_created_by: @reported_item.user.name, comment_created_at: @reported_item.created_at.strftime("%Y-%m-%d %H:%M"), submission_made_by: @submission.student.name, target_name: target.title) %>
+      </p>
+    </div>
+  <% else %>
+    <p>
+      <%= t("mailers.user.confirm_moderation_report.body.submission_details", submission_created_by: @reported_item.student.name, submission_created_at: @reported_item.created_at.strftime("%Y-%m-%d %H:%M"), target_name: target.title) %>
+    </p>
+  <% end %>
+  <p>
+    <%= t("mailers.user.confirm_moderation_report.body.report_reason", reason: @moderation_report.reason) %>
+  </p>
+  <% if target.present? %>
+    <p>
+      <%= t("mailers.user.confirm_moderation_report.body.footer_html", link: target_url) %>
+    </p>
+  <% end %>
+  <%= render('mailers/link_fallback', url: target_url) %>
+<% end %>

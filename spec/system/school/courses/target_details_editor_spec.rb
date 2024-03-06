@@ -1048,7 +1048,7 @@ feature "Target Details Editor", js: true do
       expected_checklist = []
 
       expect(assignment.checklist).to eq(expected_checklist)
-      expect(target.quiz).to eq(nil)
+      expect(assignment.quiz).to eq(nil)
       expect(assignment.evaluation_criteria.first).to eq(evaluation_criterion)
 
       # Check only the graded submissions are preserved on switching to an evaluated target

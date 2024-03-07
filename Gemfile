@@ -96,6 +96,7 @@ group :test do
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
   gem "selenium-webdriver", "~> 4.11" # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
+  gem 'capybara-shadowdom', "~> 0.3.0"
   gem "rspec-eventually", "~> 0.2.2" # Rspec helper to match eventually
   gem "diffy", "~> 3.4" # Easy Diffing in Ruby. https://github.com/samg/diffy
 end
@@ -117,4 +118,5 @@ group :production do
   gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
+  gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare
 end

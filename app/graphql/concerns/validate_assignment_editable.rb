@@ -142,6 +142,8 @@ module ValidateAssignmentEditable
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :milestone, GraphQL::Types::Boolean, required: true
     argument :archived, GraphQL::Types::Boolean, required: false
+    argument :discussion, GraphQL::Types::Boolean, required: true
+    argument :allow_anonymous, GraphQL::Types::Boolean, required: false
 
     validates ValidateAssignmentAndEvaluationCriteria => {}
     validates PrerequisitesNotArchived => {}
@@ -161,7 +163,9 @@ module ValidateAssignmentEditable
       completion_instructions: @params[:completion_instructions],
       checklist: @params[:checklist],
       milestone: @params[:milestone],
-      archived: @params[:archived]
+      archived: @params[:archived],
+      discussion: @params[:discussion],
+      allow_anonymous: @params[:allow_anonymous]
     }
   end
 end

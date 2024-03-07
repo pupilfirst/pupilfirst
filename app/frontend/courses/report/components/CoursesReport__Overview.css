@@ -64,7 +64,7 @@
 
 .courses-report-overview__doughnut-chart.purple
   .courses-report-overview__doughnut-chart-stroke {
-  stroke: var(--color-primary-500);
+  @apply stroke-primary-500;
 }
 
 .courses-milestone-complete__doughnut-chart
@@ -84,7 +84,7 @@
 
 .courses-report-overview__doughnut-chart.purple
   .courses-report-overview__doughnut-chart-text {
-  fill: var(--color-primary-500);
+  @apply fill-primary-500;
 }
 
 .courses-report-overview__doughnut-chart.pink

@@ -181,6 +181,22 @@ class Types::MutationType < Types::BaseObject
   field :initiate_password_reset,
         mutation: Mutations::InitiatePasswordReset,
         null: false
+  field :create_submission_comment,
+        mutation: Mutations::CreateSubmissionComment,
+        null: false
+  field :create_reaction, mutation: Mutations::CreateReaction, null: false
+  field :pin_submission, mutation: Mutations::PinSubmission, null: false
+  field :create_moderation_report,
+        mutation: Mutations::CreateModerationReport,
+        null: false
+  field :hide_submission_comment,
+        mutation: Mutations::HideSubmissionComment,
+        null: false
+  field :archive_submission_comment,
+        mutation: Mutations::ArchiveSubmissionComment,
+        null: false
+  field :hide_submission, mutation: Mutations::HideSubmission, null: false
+  field :remove_reaction, mutation: Mutations::RemoveReaction, null: false
   field :archive_user_standing,
         mutation: Mutations::ArchiveUserStanding,
         null: false

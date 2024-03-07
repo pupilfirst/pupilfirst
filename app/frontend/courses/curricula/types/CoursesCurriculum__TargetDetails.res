@@ -10,11 +10,15 @@ type t = {
   quizQuestions: array<CoursesCurriculum__QuizQuestion.t>,
   contentBlocks: array<ContentBlock.t>,
   communities: array<CoursesCurriculum__Community.t>,
+  comments: array<CoursesCurriculum__SubmissionComment.t>,
+  reactions: array<CoursesCurriculum__Reaction.t>,
   evaluated: bool,
   grading: array<CoursesCurriculum__Grade.t>,
   completionInstructions: option<string>,
   navigation: navigation,
   checklist: array<TargetChecklistItem.t>,
+  discussion: bool,
+  allowAnonymous: bool,
 }
 
 let submissions = t => t.submissions
@@ -23,6 +27,10 @@ let pendingUserIds = t => t.pendingUserIds
 let feedback = t => t.feedback
 let navigation = t => (t.navigation.previous, t.navigation.next)
 let checklist = t => t.checklist
+let discussion = t => t.discussion
+let allowAnonymous = t => t.allowAnonymous
+let comments = t => t.comments
+let reactions = t => t.reactions
 
 type completionType =
   | Evaluated
@@ -47,6 +55,8 @@ let decode = json => {
     quizQuestions: json |> field("quizQuestions", array(CoursesCurriculum__QuizQuestion.decode)),
     contentBlocks: json |> field("contentBlocks", array(ContentBlock.decode)),
     communities: json |> field("communities", array(CoursesCurriculum__Community.decode)),
+    comments: json |> field("comments", array(CoursesCurriculum__SubmissionComment.decode)),
+    reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
     evaluated: json |> field("evaluated", bool),
     grading: json |> field("grading", array(CoursesCurriculum__Grade.decode)),
     completionInstructions: json
@@ -54,6 +64,8 @@ let decode = json => {
     |> Js.Null.toOption,
     navigation: json |> field("navigation", decodeNavigation),
     checklist: json |> field("checklist", array(TargetChecklistItem.decode)),
+    discussion: json |> field("discussion", bool),
+    allowAnonymous: json |> field("allowAnonymous", bool),
   }
 }
 

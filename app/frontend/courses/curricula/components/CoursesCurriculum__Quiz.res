@@ -33,6 +33,7 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
           ~createdAt=DateFns.decodeISO(submission["createdAt"]),
           ~status=Submission.MarkedAsComplete,
           ~checklist,
+          ~hiddenAt=None,
         ),
       )
     | None => setSaving(_ => false)

@@ -39,12 +39,41 @@ module Courses
 
     def default_props
       {
+        current_user: user_details,
         author: author?,
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,
         targets: targets,
         access_locked_levels: access_locked_levels
+      }
+    end
+
+    def user_details
+      if current_user.present?
+        {
+          id: current_user.id,
+          name: current_user.name,
+          avatar_url: current_user.avatar_url(variant: :thumb),
+          is_admin: current_school_admin.present?,
+          is_author: @course.course_authors.exists?(user: current_user),
+          is_coach: @course.faculty.exists?(user: current_user),
+          is_student: current_student.present?
+        }
+      else
+        user_details_for_preview_mode
+      end
+    end
+
+    def user_details_for_preview_mode
+      {
+        id: "-1",
+        name: current_user&.name || "John Doe",
+        avatar_url: nil,
+        is_admin: false,
+        is_author: false,
+        is_coach: false,
+        is_student: false
       }
     end
 
@@ -140,7 +169,7 @@ module Courses
     end
 
     def targets
-      attributes = %w[id title target_group_id sort_index resubmittable]
+      attributes = %w[id title target_group_id sort_index]
 
       scope =
         @course
@@ -160,6 +189,7 @@ module Courses
           assignment = target.assignments.not_archived.first
           if assignment
             details[:role] = assignment.role
+            details[:resubmittable] = assignment.checklist.present?
             details[:milestone] = assignment.milestone
             details[:reviewed] = assignment.evaluation_criteria.present?
             details[:has_assignment] = true
@@ -168,6 +198,7 @@ module Courses
             ] = assignment.prerequisite_assignments.pluck(:target_id)
           else
             details[:role] = Assignment::ROLE_STUDENT
+            details[:resubmittable] = false
             details[:milestone] = false
             details[:reviewed] = false
             details[:has_assignment] = false

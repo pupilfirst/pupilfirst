@@ -158,7 +158,7 @@ module Types
             .includes(thumbnail_attachment: :blob, cover_attachment: :blob)
             .where(id: course_ids)
             .each do |course|
-              if course.cover.attached?
+              if course.thumbnail.attached?
                 loader.call(course.id, image_details(course.thumbnail))
               end
             end

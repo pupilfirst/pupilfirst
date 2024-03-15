@@ -267,7 +267,7 @@ feature "Submission Builder", js: true do
 
     last_submission = TimelineEvent.last
     last_submission_file_ids =
-      last_submission.timeline_event_files.map(&:id).map(&:to_s)
+      last_submission.timeline_event_files.map { |f| f.id.to_s }
     checklist_item = last_submission.checklist.first
 
     expect(last_submission.timeline_event_files.last.user).to eq(student.user)
@@ -487,7 +487,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.timeline_event_files.count).to eq(3)
 
     item_1_submission_file_ids =
-      last_submission.timeline_event_files.first(2).map(&:id).map(&:to_s)
+      last_submission.timeline_event_files.first(2).map { |f| f.id.to_s }
     item_2_submission_file_ids =
       last_submission.timeline_event_files.last.id.to_s.split
     checklist_item_1 = last_submission.checklist.first
@@ -841,7 +841,7 @@ feature "Submission Builder", js: true do
 
     last_submission = TimelineEvent.last
     last_submission_file_ids =
-      last_submission.timeline_event_files.map(&:id).map(&:to_s)
+      last_submission.timeline_event_files.map { |x| x.id.to_s }
     checklist_item = last_submission.checklist.first
 
     expect(checklist_item["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
@@ -1060,7 +1060,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.timeline_event_files.count).to eq(3)
 
     item_1_submission_file_ids =
-      last_submission.timeline_event_files.first(2).map(&:id).map(&:to_s)
+      last_submission.timeline_event_files.first(2).map { |f| f.id.to_s }
     item_2_submission_file_ids =
       last_submission.timeline_event_files.last.id.to_s.split
     checklist_item_1 = last_submission.checklist.first

@@ -7,10 +7,13 @@ AllCops:
     - "log/**/*"
     - "node_modules/**/*"
     - "vendor/**/*"
+    - bin/**/*
 
 # Rails specific
 
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-performance
 
 Rails/OutputSafety:
   Enabled: false # This disallows .html_safe

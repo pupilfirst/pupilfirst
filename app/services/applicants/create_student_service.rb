@@ -36,7 +36,7 @@ module Applicants
       # Create a user and generate a login token.
       user = school.users.with_email(@applicant.email).first
       user =
-        User.create(
+        User.create!(
           school: school,
           email: @applicant.email,
           title: "Student"

@@ -20,7 +20,6 @@ describe Courses::DemoContentService do
       target_group = level.target_groups.first
       expect(target_group.name).to eq("Demo Target Group")
       expect(target_group.description).to eq("Description of demo target group")
-      expect(target_group.milestone).to eq(true)
 
       # Create a target in the target group
       expect(target_group.targets.count).to eq(1)

@@ -711,7 +711,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_15_101852) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "sort_index"
-    t.boolean "milestone"
     t.integer "level_id"
     t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"

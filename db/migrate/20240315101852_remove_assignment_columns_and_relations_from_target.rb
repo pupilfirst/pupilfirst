@@ -12,5 +12,7 @@ class RemoveAssignmentColumnsAndRelationsFromTarget < ActiveRecord::Migration[
 
     drop_table :target_prerequisites
     drop_table :target_evaluation_criteria
+
+    remove_column :target_groups, :milestone, :boolean
   end
 end

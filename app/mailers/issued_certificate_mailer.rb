@@ -9,7 +9,10 @@ class IssuedCertificateMailer < SchoolMailer
     @school = @issued_certificate.user.school
     simple_mail(
       @issued_certificate.user.email,
-      I18n.t('mailers.issued_certificate.issued.subject')
+      I18n.t(
+        "mailers.issued_certificate.issued.subject",
+        name: @issued_certificate.name
+      )
     )
   end
 end

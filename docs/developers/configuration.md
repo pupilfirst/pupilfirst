@@ -177,7 +177,6 @@ To set `CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED`, follow the steps below:
 ### Sign in with OAuth
 
 ```
-
 GOOGLE_OAUTH2_CLIENT_ID
 GOOGLE_OAUTH2_CLIENT_SECRET
 FACEBOOK_KEY
@@ -187,7 +186,6 @@ GITHUB_SECRET
 DISCORD_KEY
 DISCORD_SECRET
 SSO_DOMAIN
-
 ```
 
 > **Warning:** These instructions, for signing in with OAuth, are _rough_. This feature will need to be made configurable before its documentation can be expanded / re-written.
@@ -196,13 +194,11 @@ SSO_DOMAIN
 2. Set credentials for OAuth apps - the required environment variables and listed above, and inside `example.env`.
 3. Set the `SSO_DOMAIN` environment variable to your fully qualified domain name (`your.school.domain`, for example).
 
-### Rollbar
+### Error monitoring with Rollbar
 
 ```
-
 ROLLBAR_CLIENT_TOKEN
 ROLLBAR_SERVER_TOKEN
-
 ```
 
 [Rollbar](https://rollbar.com) can be used to monitor both server-side and client-side errors. Because of this, two separate tokens are required:
@@ -212,12 +208,19 @@ ROLLBAR_SERVER_TOKEN
 
 You can find both of these tokens by going to your project's **Settings** > **Project Access Tokens**.
 
+### Performance and error monitor with Sentry
+
+```bash
+# Set this key to enable logging with Sentry.
+SENTRY_DSN=dsn_from_sentry
+```
+
+To enable performance and error monitoring with Sentry, set `SENTRY_DSN`.
+
 ### Performance and error monitoring with New Relic
 
 ```
-
 NEW_RELIC_LICENSE_KEY
-
 ```
 
 To enable performance and error monitoring with [New Relic](https://newrelic.com/), sign up for a New Relic account and configure its credentials using the `NEW_RELIC_LICENSE_KEY` key.
@@ -225,11 +228,9 @@ To enable performance and error monitoring with [New Relic](https://newrelic.com
 ### API rate limiting
 
 ```
-
 GRAPH_API_RATE_LIMIT
 GRAPH_API_RATE_PERIOD
 REDIS_URL
-
 ```
 
 At minimum, to enable rate limiting on the API, you need to set the `REDIS_URL` to a Redis connection string. The `_LIMIT` and `_PERIOD` keys default to 300 requests per 60 seconds.
@@ -237,10 +238,8 @@ At minimum, to enable rate limiting on the API, you need to set the `REDIS_URL` 
 ### Direct Upload to Vimeo
 
 ```
-
 VIMEO_ACCESS_TOKEN
 VIMEO_ACCOUNT_TYPE
-
 ```
 
 To enable direct uploads to a Vimeo account from the curriculum editor, add the `VIMEO_ACCESS_TOKEN` and `VIMEO_ACCOUNT_TYPE` (`basic`, `plus`, `pro`, `business`, `premium`) environment variables.
@@ -260,7 +259,6 @@ Make sure that the access token has the following scopes enabled:
 If you're using the API to review and reject submissions, it's possible that students may repeatedly submit values that get rejected by automation. To be notified of such events, so that you can manually intervene, set the following two environment variables to notify all _human_ coaches in a course about a bot repeatedly rejecting submissions.
 
 ```
-
 # Comma-separated IDs of bot coaches (`faculty` table) members used to review submissions.
 
 BOT_EVALUATOR_IDS=1,2,3
@@ -268,7 +266,6 @@ BOT_EVALUATOR_IDS=1,2,3
 # Every n-th rejected submission by a bot will trigger an email to all non-bot coaches in a course.
 
 BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD=4
-
 ```
 
 To deactivate this feature, simply avoid setting the `BOT_EVALUATOR_IDS` environment variable, or set `BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD` to zero.

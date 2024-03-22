@@ -715,9 +715,7 @@ let make = (~school) => {
         {switch state.courses {
         | Unloaded =>
           <div className="px-2 lg:px-5 mt-8">
-            <div className="grid grid-cols-2 gap-x-10 gap-y-8">
-              {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.imageCard())}
-            </div>
+            <div> {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.imageCard())} </div>
           </div>
         | PartiallyLoaded(courses, cursor) =>
           <div>

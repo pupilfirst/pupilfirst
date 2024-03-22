@@ -804,7 +804,6 @@ DEPENDENCIES
   seedbank (~> 0.5)
   selenium-webdriver (~> 4.11)
   sentry-rails (~> 5.17)
-  sentry-ruby (~> 5.17)
   simplecov (~> 0.21)
   slowpoke (~> 0.5.0)
   sprockets-rails (~> 3.4)

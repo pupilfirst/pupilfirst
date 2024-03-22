@@ -75,7 +75,6 @@ gem "flipper-active_record", "~> 1.0"
 
 # Error tracking
 gem "rollbar", "~> 3.4", require: false # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
-gem "sentry-ruby", "~> 5.17", require: false # A gem that provides a client interface for the Sentry error logger.
 gem "sentry-rails", "~> 5.17", require: false # A gem that provides Rails integration for the Sentry error logger.
 
 group :development do

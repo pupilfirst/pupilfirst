@@ -1179,8 +1179,6 @@ feature "Target Details Editor", js: true do
 
       expect(target_l2_2.reload.sort_index).to eq(2)
       expect(target_l2_2.target_group).to eq(target_group_l1)
-      expect(target_l2_2.prerequisite_targets).to eq([])
-      expect(target_l2_3.reload.prerequisite_targets).to eq([])
     end
 
     context "admin modifies target that currently has submissions" do

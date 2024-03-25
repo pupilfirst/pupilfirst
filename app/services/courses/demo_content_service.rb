@@ -38,7 +38,6 @@ module Courses
             "services.courses.demo_content_service.target_group_description"
           ),
         sort_index: 1,
-        milestone: true,
         level: level
       )
     end

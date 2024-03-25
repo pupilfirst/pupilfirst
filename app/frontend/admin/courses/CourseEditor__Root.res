@@ -723,7 +723,7 @@ let make = (~school) => {
             {switch state.loading {
             | LoadingMore =>
               <div className="px-2 lg:px-5">
-                <div className="grid grid-cols-2 gap-x-10">
+                <div>
                   {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.imageCard())}
                 </div>
               </div>

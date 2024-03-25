@@ -157,7 +157,7 @@ module Users
     # supplied to the omniauth provider login path. This method detects and removes that default.
     def origin
       supplied_origin = request.env["omniauth.origin"]
-      %r{users/sign_in}.match?(supplied_origin) ? nil : supplied_origin
+      supplied_origin.include?('users/sign_in') ? nil : supplied_origin
     end
 
     # Omniauth returns authentication details in the 'omniauth.auth' request environment variable after the provider

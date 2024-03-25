@@ -5,7 +5,7 @@ WORKDIR /build
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.4.13'
+RUN gem install bundler -v '2.5.7'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
@@ -91,7 +91,7 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
 USER www-data
 
 # Let's also upgrade bundler to the same version used in the build.
-RUN gem install bundler -v '2.4.13'
+RUN gem install bundler -v '2.5.7'
 
 WORKDIR /app
 COPY --chown=www-data:www-data . /app

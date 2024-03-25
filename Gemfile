@@ -96,6 +96,7 @@ group :test do
   gem "capybara-email", "~> 3.0" # Test ActionMailer and Mailer messages with Capybara
   gem "selenium-webdriver", "~> 4.11" # Ruby bindings for Selenium
   gem "capybara-screenshot", "~> 1.0" # Save screenshots on failure!
+  gem 'capybara-shadowdom', "~> 0.3.0"
   gem "rspec-eventually", "~> 0.2.2" # Rspec helper to match eventually
   gem "diffy", "~> 3.4" # Easy Diffing in Ruby. https://github.com/samg/diffy
 end
@@ -108,6 +109,7 @@ group :development, :test do
   gem "webmock", "~> 3.14" # Mocking web requests.
   gem "rubocop", "~> 1.54", require: false # Ruby Style Guide.
   gem "rubocop-rails", "~> 2.20", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
+  gem 'rubocop-performance', require: false
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
   gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov

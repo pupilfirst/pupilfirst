@@ -1,0 +1,43 @@
+.curriculum-discuss-submission__container:hover
+  .curriculum-discuss-submission__pin-button {
+  @apply flex;
+}
+.curriculum-discuss-submission__container:focus-within
+  .curriculum-discuss-submission__pin-button {
+  @apply flex;
+}
+.curriculum-discuss-submission__container:hover
+  .curriculum-discuss-submission__hide-button {
+  @apply flex;
+}
+.curriculum-discuss-submission__container:focus-within
+  .curriculum-discuss-submission__hide-button {
+  @apply flex;
+}
+.curriculum-discuss-submission__container:hover
+  .curriculum-moderation__report-button:not(
+    .submission-comments__comment .curriculum-moderation__report-button
+  ) {
+  @apply flex;
+}
+.curriculum-discuss-submission__container:focus-within
+  .curriculum-moderation__report-button:not(
+    .submission-comments__comment .curriculum-moderation__report-button
+  ) {
+  @apply flex;
+}
+.curriculum-submission__comment:focus-within
+  .curriculum-moderation__report-button {
+  @apply flex;
+}
+.curriculum-discuss-submission__hidden::before {
+  content: "";
+  @apply absolute inset-0 bg-gradient-to-b from-transparent via-white/75 to-white rounded-b-xl;
+  z-index: 12;
+}
+
+.curriculum-discuss-submission__hidden::after {
+  content: "";
+  @apply h-px w-full absolute inset-x-0 bottom-0 bg-gradient-to-r from-transparent via-gray-300 to-transparent;
+  z-index: 12;
+}

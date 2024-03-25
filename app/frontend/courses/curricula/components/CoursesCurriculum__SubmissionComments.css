@@ -1,0 +1,3 @@
+.submission-comments__comment:last-child .submission-comments__line {
+  @apply bg-white;
+}

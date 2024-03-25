@@ -34,11 +34,13 @@ module Applicants
 
     def create_new_student(tags)
       # Create a user and generate a login token.
+      user = school.users.with_email(@applicant.email).first
       user =
-        school
-          .users
-          .with_email(@applicant.email)
-          .first_or_create!(email: @applicant.email, title: "Student")
+        User.create!(
+          school: school,
+          email: @applicant.email,
+          title: "Student"
+        ) if user.nil?
       user.regenerate_login_token
       user.update!(name: @applicant.name)
 

@@ -5,6 +5,7 @@ type t = {
   isAdmin: bool,
   isAuthor: bool,
   isCoach: bool,
+  isStudent: bool,
 }
 
 let id = t => t.id
@@ -13,8 +14,10 @@ let avatarUrl = t => t.avatarUrl
 let isAdmin = t => t.isAdmin
 let isAuthor = t => t.isAuthor
 let isCoach = t => t.isCoach
+let isStudent = t => t.isStudent
 
 let isModerator = t => t.isAdmin || t.isCoach
+let isParticipant = t => t.isAdmin || t.isAuthor || t.isCoach || t.isStudent
 
 let decode = json => {
   open Json.Decode
@@ -23,8 +26,9 @@ let decode = json => {
     name: json |> field("name", string),
     avatarUrl: json |> optional(field("avatarUrl", string)),
     isAdmin: field("isAdmin", bool, json),
-    isAuthor: field("isAdmin", bool, json),
-    isCoach: field("isAdmin", bool, json),
+    isAuthor: field("isAuthor", bool, json),
+    isCoach: field("isCoach", bool, json),
+    isStudent: field("isStudent", bool, json),
   }
 }
 

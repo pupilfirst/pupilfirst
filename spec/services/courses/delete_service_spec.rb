@@ -88,6 +88,22 @@ describe Courses::DeleteService do
            timeline_event: submission_c1
   end
 
+  #create moderation reports on submission
+  let!(:moderation_report_c1) do
+    create :moderation_report, user: coach_c1.user, reportable: submission_c1
+  end
+  #create submission comments
+  let!(:submission_comment_c1) do
+    create :submission_comment,
+           user: course_author_c1.user,
+           submission: submission_c1
+  end
+
+  #create reactions on submissions
+  let!(:reaction_c1) do
+    create :reaction, user: student_c1.user, reactionable: submission_c1
+  end
+
   # Course 2 - should be left untouched.
   let(:course_2) do
     create :course, :with_default_cohort, name: "Course to preserve"
@@ -166,6 +182,21 @@ describe Courses::DeleteService do
            faculty: common_coach,
            timeline_event: submission_c2
   end
+  #create moderation reports on submission
+  let!(:moderation_report_c2) do
+    create :moderation_report, user: coach_c2.user, reportable: submission_c2
+  end
+  #create submission comments
+  let!(:submission_comment_c2) do
+    create :submission_comment,
+           user: course_author_c2.user,
+           submission: submission_c2
+  end
+
+  #create reactions on submissions
+  let!(:reaction_c2) do
+    create :reaction, user: student_c2.user, reactionable: submission_c2
+  end
 
   before do
     # Tag the course exports.
@@ -215,7 +246,10 @@ describe Courses::DeleteService do
       [Proc.new { TimelineEventOwner.count }, 2, 1],
       [Proc.new { TimelineEventFile.count }, 2, 1],
       [Proc.new { StartupFeedback.count }, 2, 1],
-      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2]
+      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2],
+      [Proc.new { SubmissionComment.count }, 2, 1],
+      [Proc.new { ModerationReport.count }, 2, 1],
+      [Proc.new { Reaction.count }, 2, 1]
     ]
   end
 
@@ -248,6 +282,9 @@ describe Courses::DeleteService do
       expect { submission_c2.reload }.not_to raise_error
       expect { submission_file_c2.reload }.not_to raise_error
       expect { feedback_c2.reload }.not_to raise_error
+      expect { submission_comment_c2.reload }.not_to raise_error
+      expect { moderation_report_c2.reload }.not_to raise_error
+      expect { reaction_c2.reload }.not_to raise_error
 
       expect(topic_c1.reload.target_id).to eq(nil)
       expect(topic_c2.reload.target_id).to eq(target_reviewed_c2.id)

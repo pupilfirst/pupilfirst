@@ -32,7 +32,6 @@ type state = {
   loading: LoadingV2.t,
   targetDetails: option<TargetDetails.t>,
   tab: tab,
-  targetRead: bool,
   peerSubmissions: PagedSubmission.t,
   totalEntriesCount: int,
 }
@@ -41,7 +40,6 @@ type action =
   | Select(tab)
   | ResetState
   | SetTargetDetails(TargetDetails.t)
-  | SetTargetRead(bool)
   | AddSubmission(Target.role)
   | PerformQuickNavigation
   | BeginReloading
@@ -52,7 +50,6 @@ let initialState = {
   loading: LoadingV2.empty(),
   targetDetails: None,
   tab: Learn,
-  targetRead: false,
   peerSubmissions: Unloaded,
   totalEntriesCount: 0,
 }
@@ -64,10 +61,6 @@ let reducer = (state, action) =>
   | SetTargetDetails(targetDetails) => {
       ...state,
       targetDetails: Some(targetDetails),
-    }
-  | SetTargetRead(targetRead) => {
-      ...state,
-      targetRead,
     }
   | PerformQuickNavigation => initialState
   | AddSubmission(role) =>
@@ -97,17 +90,6 @@ let reducer = (state, action) =>
 
 let closeOverlay = course =>
   RescriptReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
-
-let loadTargetDetails = (target, send, ()) => {
-  {
-    open Js.Promise
-    Fetch.fetch("/targets/" ++ ((target |> Target.id) ++ "/details_v2"))
-    |> then_(Fetch.Response.json)
-    |> then_(json => send(SetTargetDetails(json |> TargetDetails.decode)) |> resolve)
-  } |> ignore
-
-  None
-}
 
 module DiscussionSubmissionsQuery = %graphql(`
     query DiscussionSubmissionsQuery($targetId: ID!, $after: String) {
@@ -209,6 +191,29 @@ let getDiscussionSubmissions = (send, cursor, targetId) => {
 let reloadSubmissions = (send, targetId) => {
   send(BeginReloading)
   getDiscussionSubmissions(send, None, targetId)
+}
+
+let loadTargetDetails = (target, currentUser, send, ()) => {
+  {
+    open Js.Promise
+
+    Fetch.fetch("/targets/" ++ ((target |> Target.id) ++ "/details_v2"))
+    |> then_(Fetch.Response.json)
+    |> then_(json => {
+      let targetDetails = TargetDetails.decode(json)
+
+      send(SetTargetDetails(targetDetails))
+
+      // Load peer submissions only if the target has discussion enabled and the current user is a participant.
+      if CurrentUser.isParticipant(currentUser) && TargetDetails.discussion(targetDetails) {
+        reloadSubmissions(send, Target.id(target))
+      }
+
+      resolve(targetDetails)
+    })
+  } |> ignore
+
+  None
 }
 
 let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
@@ -529,8 +534,8 @@ let addPageRead = (targetId, markReadCB) => {
 
 let learnSection = (
   send,
-  state,
   targetDetails,
+  targetRead,
   tab,
   author,
   courseId,
@@ -538,6 +543,7 @@ let learnSection = (
   markReadCB,
   targetStatus,
   completionType,
+  preview,
 ) => {
   let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
   | (Pending | Rejected, TargetDetails.Evaluated) =>
@@ -568,7 +574,7 @@ let learnSection = (
   <div className={overlayContentClasses(tab == Learn)}>
     <CoursesCurriculum__Learn targetDetails author courseId targetId />
     <div className="flex flex-wrap gap-4 mt-4">
-      {state.targetRead
+      {targetRead
         ? <div
             className="flex rounded text-base italic space-x-2 bg-gray-50 text-gray-600 items-center justify-center w-full font-semibold p-3">
             <span title="Marked read" className="w-5 h-5 flex items-center justify-center">
@@ -590,9 +596,9 @@ let learnSection = (
         : <button
             onClick={_ => {
               addPageRead(targetId, markReadCB)
-              send(SetTargetRead(true))
             }}
-            className="cursor-pointer flex space-x-2 rounded btn-default text-base items-center justify-center w-full font-semibold p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn">
+            className="btn btn-default flex space-x-2 text-base w-full p-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 curriculum-overlay__learn-submit-btn"
+            disabled={preview || !TargetStatus.readable(targetStatus)}>
             <span className="w-2 h-2 inline-block rounded-full bg-blue-600" />
             <span> {str(t("mark_as_read"))} </span>
           </button>}
@@ -719,7 +725,7 @@ let completeSection = (
         | (Locked(_), Evaluated | TakeQuiz | NoAssignment | SubmitForm) => React.null
         }}
       </div>
-      {targetDetails->TargetDetails.discussion
+      {targetDetails->TargetDetails.discussion && currentUser->CurrentUser.isParticipant
         ? <div className="border-t mt-12">
             <div className="max-w-3xl mx-auto">
               <h4 className="text-base md:text-lg font-semibold pt-12 pb-4">
@@ -911,13 +917,9 @@ let make = (
   ~author,
   ~currentUser,
 ) => {
-  let (state, send) = React.useReducer(reducer, {...initialState, targetRead})
+  let (state, send) = React.useReducer(reducer, initialState)
 
-  React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
-  React.useEffect1(() => {
-    reloadSubmissions(send, target->Target.id)
-    None
-  }, [Target.id(target)])
+  React.useEffect1(loadTargetDetails(target, currentUser, send), [Target.id(target)])
 
   React.useEffect(() => {
     ScrollLock.activate()
@@ -961,8 +963,8 @@ let make = (
           <div className="max-w-3xl mx-auto">
             {learnSection(
               send,
-              state,
               targetDetails,
+              targetRead,
               state.tab,
               author,
               Course.id(course),
@@ -970,6 +972,7 @@ let make = (
               markReadCB,
               targetStatus,
               completionType,
+              preview,
             )}
           </div>
           <div className="max-w-3xl mx-auto">

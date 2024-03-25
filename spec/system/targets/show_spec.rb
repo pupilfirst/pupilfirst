@@ -26,7 +26,11 @@ feature "Target Overlay", js: true do
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
-  let!(:team) { create :team_with_students, cohort: cohort }
+
+  let!(:team) do
+    create :team_with_students, cohort: cohort, avoid_special_characters: true
+  end
+
   let!(:student) { team.students.first }
   let!(:target_group_l0) { create :target_group, level: level_0 }
   let!(:target_group_l1) { create :target_group, level: level_1 }
@@ -120,7 +124,6 @@ feature "Target Overlay", js: true do
            :with_content,
            target_group: target_group_l1,
            days_to_complete: 60,
-           resubmittable: false,
            sort_index: 3
   end
   let!(:assignment_quiz_target) do
@@ -210,17 +213,17 @@ feature "Target Overlay", js: true do
     expect(page).to_not have_button("Mark as read")
     expect(page).to have_text("Marked read")
 
+    # Let's close the overlay and check whether the index page reflects the change.
     click_button "Close"
 
     within("a[data-target-id='#{target_l2.id}']") do
-      #marking as read a target without assignment should change the status to completed
       expect(page).to have_content("Completed")
       expect(find('span[title="Marked read"]')).to be_present
     end
 
+    # Re-opening the target overlay for the same target should show the status as read.
     click_link target_l2.title
 
-    #should say marked read
     expect(page).to have_text("Marked read")
   end
 
@@ -232,6 +235,18 @@ feature "Target Overlay", js: true do
 
     expect(page).to_not have_button("Mark as read")
     expect(page).to have_text("Marked read")
+
+    # Performing quick navigation between targets should preserve the read status of the target.
+    click_link "Next Target"
+
+    # This next target should not be marked as read.
+    expect(page).to have_button("Mark as read")
+
+    click_link "Previous Target"
+
+    # And we should be back to the original target, which should still be marked as read.
+    expect(page).to have_text("Marked read")
+    expect(page).to_not have_button("Mark as read")
 
     click_button "Close"
 
@@ -487,6 +502,10 @@ feature "Target Overlay", js: true do
       end
 
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
+      expect(page).not_to have_selector(
+        "button",
+        text: "Add another submission"
+      )
 
       submission = TimelineEvent.last
 
@@ -645,40 +664,6 @@ feature "Target Overlay", js: true do
       click_button "Cancel"
       expect(page).to have_content(submission_1.checklist.first["title"])
     end
-
-    context "when the target is non-resubmittable" do
-      before { target_l1.update(resubmittable: false) }
-
-      scenario "student cannot resubmit non-resubmittable passed target" do
-        sign_in_user student.user, referrer: target_path(target_l1)
-
-        find(
-          ".course-overlay__body-tab-item",
-          text: "Submissions & Feedback"
-        ).click
-
-        expect(page).not_to have_selector(
-          "button",
-          text: "Add another submission"
-        )
-      end
-
-      scenario "student can resubmit non-resubmittable target if its failed" do
-        # Make the first failed submission the latest, and the only one.
-        submission_2.destroy!
-
-        submission_1.timeline_event_owners.update_all(latest: true) # rubocop:disable Rails/SkipsModelValidations
-
-        sign_in_user student.user, referrer: target_path(target_l1)
-
-        find(
-          ".course-overlay__body-tab-item",
-          text: "Submissions & Feedback"
-        ).click
-
-        expect(page).to have_selector("button", text: "Add another submission")
-      end
-    end
   end
 
   context "when some team members haven't completed an individual target" do
@@ -723,14 +708,18 @@ feature "Target Overlay", js: true do
 
   context "when a pending target has prerequisites" do
     let!(:target_l1) do
-      create :target, :with_content, target_group: target_group_l1
+      create :target,
+             :with_shared_assignment,
+             :with_content,
+             target_group: target_group_l1,
+             given_role: Assignment::ROLE_STUDENT,
+             given_evaluation_criteria: [criterion_1, criterion_2]
     end
-    let!(:assignment_target_l1) do
-      create :assignment,
-             :with_completion_instructions,
-             target: target_l1,
-             role: Assignment::ROLE_TEAM,
-             prerequisite_assignments: [prerequisite_target.assignments.first]
+
+    before do
+      target_l1.assignments.first.prerequisite_assignments << [
+        prerequisite_target.assignments.first
+      ]
     end
 
     scenario "student navigates to a prerequisite target" do
@@ -743,6 +732,9 @@ feature "Target Overlay", js: true do
       expect(page).to have_content(
         "This target has prerequisites that are incomplete."
       )
+
+      # It should be possible to mark this target as read.
+      expect(page).to have_button("Mark as read")
 
       # It should be possible to navigate to the prerequisite target.
       within(".course-overlay__prerequisite-targets") do
@@ -773,7 +765,9 @@ feature "Target Overlay", js: true do
         ".course-overlay__body-tab-item",
         text: "Complete"
       )
+
       expect(page).not_to have_selector("a", text: "Submit work for review")
+      expect(page).to have_button("Mark as read", disabled: true)
     end
 
     scenario "student views a submitted target" do
@@ -822,11 +816,14 @@ feature "Target Overlay", js: true do
       expect(page).to have_content(
         "You have only limited access to the course now. You are allowed preview the content but cannot complete any target."
       )
+
       expect(page).not_to have_selector(
         ".course-overlay__body-tab-item",
         text: "Complete"
       )
+
       expect(page).not_to have_selector("a", text: "Submit work for review")
+      expect(page).to have_button("Mark as read", disabled: true)
     end
   end
 
@@ -998,6 +995,7 @@ feature "Target Overlay", js: true do
         expect(page).to have_content(
           "You are currently looking at a preview of this course."
         )
+
         expect(page).to have_link(
           "Edit Content",
           href:
@@ -1006,6 +1004,8 @@ feature "Target Overlay", js: true do
               id: target_l1.id
             )
         )
+
+        expect(page).to have_button("Mark as read", disabled: true)
 
         # This target should have a 'Complete' section.
         find(".course-overlay__body-tab-item", text: "Complete").click

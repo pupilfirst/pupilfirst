@@ -207,3 +207,15 @@ let allAttempted = ts =>
 let allComplete = ts => Belt.Array.every(ts, t => t.status == Completed)
 
 let anyRejected = ts => Belt.Array.some(ts, t => t.status == Rejected)
+
+let readable = t =>
+  switch t.status {
+  | Pending
+  | PendingReview
+  | Completed
+  | Rejected => true
+  | Locked(CourseLocked)
+  | Locked(AccessLocked) => false
+  | Locked(SubmissionLimitReached(_))
+  | Locked(PrerequisitesIncomplete) => true
+  }

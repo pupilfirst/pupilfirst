@@ -760,37 +760,37 @@ feature "Submission review overlay", js: true do
       answer_5 = [submission_file_attachment.id.to_s]
       answer_6 = submission_audio_attachment.id.to_s
       submission_checklist_long_text = {
-        "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+        "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
         "title" => question_1,
         "result" => answer_1,
         "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_link = {
-        "kind" => Target::CHECKLIST_KIND_LINK,
+        "kind" => Assignment::CHECKLIST_KIND_LINK,
         "title" => question_2,
         "result" => answer_2,
         "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_choice = {
-        "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
+        "kind" => Assignment::CHECKLIST_KIND_MULTI_CHOICE,
         "title" => question_3,
         "result" => [answer_3],
         "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_short_text = {
-        "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+        "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
         "title" => question_4,
         "result" => answer_4,
         "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_files = {
-        "kind" => Target::CHECKLIST_KIND_FILES,
+        "kind" => Assignment::CHECKLIST_KIND_FILES,
         "title" => question_5,
         "result" => answer_5,
         "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
       submission_checklist_audio = {
-        "kind" => Target::CHECKLIST_KIND_AUDIO,
+        "kind" => Assignment::CHECKLIST_KIND_AUDIO,
         "title" => question_6,
         "result" => answer_6,
         "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -874,13 +874,13 @@ feature "Submission review overlay", js: true do
       new_checklist = [
         submission_checklist_long_text,
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => question_2,
           "result" => answer_2,
           "status" => TimelineEvent::CHECKLIST_STATUS_FAILED
         },
         {
-          "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
+          "kind" => Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           "title" => question_3,
           "result" => [answer_3],
           "status" => TimelineEvent::CHECKLIST_STATUS_FAILED
@@ -888,7 +888,7 @@ feature "Submission review overlay", js: true do
         submission_checklist_short_text,
         submission_checklist_files,
         {
-          "kind" => Target::CHECKLIST_KIND_AUDIO,
+          "kind" => Assignment::CHECKLIST_KIND_AUDIO,
           "title" => question_6,
           "result" => answer_6,
           "status" => TimelineEvent::CHECKLIST_STATUS_FAILED

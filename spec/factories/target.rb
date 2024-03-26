@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :target do
     title { Faker::Lorem.words(number: 6).join " " }
-    role { Target.valid_roles.sample }
     target_group
     sequence(:sort_index)
     visibility { Target::VISIBILITY_LIVE }

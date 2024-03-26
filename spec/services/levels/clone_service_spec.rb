@@ -143,8 +143,7 @@ describe Levels::CloneService do
     quiz_question_1.update!(correct_answer: q1_answer_2)
     quiz_question_2.update!(correct_answer: q2_answer_4)
 
-    # set prerequisite target
-    target_l1_2.prerequisite_targets << prerequisite_target
+    # Set evaluation criteria for assignments
     target_l1_2.assignments.first.evaluation_criteria << ec_1
 
     # attach images

@@ -1,6 +1,4 @@
 class EvaluationCriterion < ApplicationRecord
-  has_many :target_evaluation_criteria, dependent: :restrict_with_error
-  has_many :targets, through: :target_evaluation_criteria
   has_many :assignments_evaluation_criteria, dependent: :restrict_with_error
   has_many :assignments, through: :assignments_evaluation_criteria
   has_many :timeline_event_grades, dependent: :restrict_with_error

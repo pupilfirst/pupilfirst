@@ -70,7 +70,7 @@ module Mutations
         if @checklist.respond_to?(:all?) &&
              @checklist.all? { |item|
                item["title"].is_a?(String) &&
-                 item["kind"].in?(Target.valid_checklist_kind_types) &&
+                 item["kind"].in?(Assignment.valid_checklist_kind_types) &&
                  item["status"].in?(
                    [
                      TimelineEvent::CHECKLIST_STATUS_FAILED,

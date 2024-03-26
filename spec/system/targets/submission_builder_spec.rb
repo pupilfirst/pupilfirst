@@ -52,7 +52,7 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question,
-          kind: Target::CHECKLIST_KIND_LONG_TEXT,
+          kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
           optional: false
         }
       ]
@@ -83,7 +83,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => question,
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -102,7 +102,7 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question,
-          kind: Target::CHECKLIST_KIND_SHORT_TEXT,
+          kind: Assignment::CHECKLIST_KIND_SHORT_TEXT,
           optional: false
         }
       ]
@@ -133,7 +133,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
           "title" => question,
           "result" => short_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -150,7 +150,11 @@ feature "Submission Builder", js: true do
     question = Faker::Lorem.sentence
     target_assignment.update!(
       checklist: [
-        { title: question, kind: Target::CHECKLIST_KIND_LINK, optional: false }
+        {
+          title: question,
+          kind: Assignment::CHECKLIST_KIND_LINK,
+          optional: false
+        }
       ]
     )
     link = "https://example.com?q=1"
@@ -182,7 +186,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => question,
           "result" => link,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -199,7 +203,11 @@ feature "Submission Builder", js: true do
     question = Faker::Lorem.sentence
     target_assignment.update!(
       checklist: [
-        { title: question, kind: Target::CHECKLIST_KIND_FILES, optional: false }
+        {
+          title: question,
+          kind: Assignment::CHECKLIST_KIND_FILES,
+          optional: false
+        }
       ]
     )
 
@@ -263,7 +271,7 @@ feature "Submission Builder", js: true do
     checklist_item = last_submission.checklist.first
 
     expect(last_submission.timeline_event_files.last.user).to eq(student.user)
-    expect(checklist_item["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
     expect(checklist_item["title"]).to eq(question)
     expect(checklist_item["result"]).to match_array(last_submission_file_ids)
     expect(checklist_item["status"]).to eq(
@@ -286,7 +294,7 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question,
-          kind: Target::CHECKLIST_KIND_MULTI_CHOICE,
+          kind: Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           optional: false,
           metadata: {
             allowMultiple: false,
@@ -319,7 +327,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
+          "kind" => Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           "title" => question,
           "result" => [answer],
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -339,10 +347,14 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question_1,
-          kind: Target::CHECKLIST_KIND_LONG_TEXT,
+          kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
           optional: false
         },
-        { title: question_2, kind: Target::CHECKLIST_KIND_LINK, optional: true }
+        {
+          title: question_2,
+          kind: Assignment::CHECKLIST_KIND_LINK,
+          optional: true
+        }
       ]
     )
     long_answer = Faker::Lorem.sentence
@@ -391,7 +403,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => question_1,
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -412,12 +424,12 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question_1,
-          kind: Target::CHECKLIST_KIND_FILES,
+          kind: Assignment::CHECKLIST_KIND_FILES,
           optional: false
         },
         {
           title: question_2,
-          kind: Target::CHECKLIST_KIND_FILES,
+          kind: Assignment::CHECKLIST_KIND_FILES,
           optional: false
         }
       ]
@@ -481,7 +493,7 @@ feature "Submission Builder", js: true do
     checklist_item_1 = last_submission.checklist.first
     checklist_item_2 = last_submission.checklist.last
 
-    expect(checklist_item_1["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item_1["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
     expect(checklist_item_1["title"]).to eq(question_1)
     expect(checklist_item_1["result"]).to match_array(
       item_1_submission_file_ids
@@ -490,7 +502,7 @@ feature "Submission Builder", js: true do
       TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
     )
 
-    expect(checklist_item_2["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item_2["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
     expect(checklist_item_2["title"]).to eq(question_2)
     expect(checklist_item_2["result"]).to match_array(
       item_2_submission_file_ids
@@ -529,7 +541,11 @@ feature "Submission Builder", js: true do
     question = Faker::Lorem.sentence
     target_assignment.update!(
       checklist: [
-        { title: question, kind: Target::CHECKLIST_KIND_AUDIO, optional: false }
+        {
+          title: question,
+          kind: Assignment::CHECKLIST_KIND_AUDIO,
+          optional: false
+        }
       ]
     )
 
@@ -591,7 +607,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => "Write something about your submission",
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -610,7 +626,7 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question,
-          kind: Target::CHECKLIST_KIND_LONG_TEXT,
+          kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
           optional: false
         }
       ]
@@ -641,7 +657,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => question,
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -660,7 +676,7 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question,
-          kind: Target::CHECKLIST_KIND_SHORT_TEXT,
+          kind: Assignment::CHECKLIST_KIND_SHORT_TEXT,
           optional: false
         }
       ]
@@ -691,7 +707,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
           "title" => question,
           "result" => short_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -708,7 +724,11 @@ feature "Submission Builder", js: true do
     question = Faker::Lorem.sentence
     form_submission_target_assignment.update!(
       checklist: [
-        { title: question, kind: Target::CHECKLIST_KIND_LINK, optional: false }
+        {
+          title: question,
+          kind: Assignment::CHECKLIST_KIND_LINK,
+          optional: false
+        }
       ]
     )
     link = "https://example.com?q=1"
@@ -740,7 +760,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => question,
           "result" => link,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -757,7 +777,11 @@ feature "Submission Builder", js: true do
     question = Faker::Lorem.sentence
     form_submission_target_assignment.update!(
       checklist: [
-        { title: question, kind: Target::CHECKLIST_KIND_FILES, optional: false }
+        {
+          title: question,
+          kind: Assignment::CHECKLIST_KIND_FILES,
+          optional: false
+        }
       ]
     )
 
@@ -820,7 +844,7 @@ feature "Submission Builder", js: true do
       last_submission.timeline_event_files.map { |x| x.id.to_s }
     checklist_item = last_submission.checklist.first
 
-    expect(checklist_item["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
     expect(checklist_item["title"]).to eq(question)
     expect(checklist_item["result"]).to match_array(last_submission_file_ids)
     expect(checklist_item["status"]).to eq(
@@ -843,7 +867,7 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question,
-          kind: Target::CHECKLIST_KIND_MULTI_CHOICE,
+          kind: Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           optional: false,
           metadata: {
             allowMultiple: false,
@@ -876,7 +900,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
+          "kind" => Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           "title" => question,
           "result" => [answer],
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -896,10 +920,14 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question_1,
-          kind: Target::CHECKLIST_KIND_LONG_TEXT,
+          kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
           optional: false
         },
-        { title: question_2, kind: Target::CHECKLIST_KIND_LINK, optional: true }
+        {
+          title: question_2,
+          kind: Assignment::CHECKLIST_KIND_LINK,
+          optional: true
+        }
       ]
     )
     long_answer = Faker::Lorem.sentence
@@ -948,7 +976,7 @@ feature "Submission Builder", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => question_1,
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -969,12 +997,12 @@ feature "Submission Builder", js: true do
       checklist: [
         {
           title: question_1,
-          kind: Target::CHECKLIST_KIND_FILES,
+          kind: Assignment::CHECKLIST_KIND_FILES,
           optional: false
         },
         {
           title: question_2,
-          kind: Target::CHECKLIST_KIND_FILES,
+          kind: Assignment::CHECKLIST_KIND_FILES,
           optional: false
         }
       ]
@@ -1038,7 +1066,7 @@ feature "Submission Builder", js: true do
     checklist_item_1 = last_submission.checklist.first
     checklist_item_2 = last_submission.checklist.last
 
-    expect(checklist_item_1["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item_1["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
     expect(checklist_item_1["title"]).to eq(question_1)
     expect(checklist_item_1["result"]).to match_array(
       item_1_submission_file_ids
@@ -1047,7 +1075,7 @@ feature "Submission Builder", js: true do
       TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
     )
 
-    expect(checklist_item_2["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item_2["kind"]).to eq(Assignment::CHECKLIST_KIND_FILES)
     expect(checklist_item_2["title"]).to eq(question_2)
     expect(checklist_item_2["result"]).to match_array(
       item_2_submission_file_ids
@@ -1086,7 +1114,11 @@ feature "Submission Builder", js: true do
     question = Faker::Lorem.sentence
     form_submission_target_assignment.update!(
       checklist: [
-        { title: question, kind: Target::CHECKLIST_KIND_AUDIO, optional: false }
+        {
+          title: question,
+          kind: Assignment::CHECKLIST_KIND_AUDIO,
+          optional: false
+        }
       ]
     )
 
@@ -1107,6 +1139,8 @@ feature "Submission Builder", js: true do
       expect(page).to have_css("audio", count: 1)
       expect(page).to have_text("Record Again")
     end
+
+    sleep 0.5
 
     click_button "Submit"
 

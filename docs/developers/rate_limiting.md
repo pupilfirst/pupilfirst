@@ -45,7 +45,6 @@ These are the rate limits applied to the creation of all kinds of resources stor
 | SubmissionReport                  | Submission    | Each submission can receive up to 25 reports hourly.          |
 | Target                            | TargetGroup   | Each target group can have up to 100 targets.                 |
 | TargetGroup                       | Level         | Each level can contain up to 25 target groups.                |
-| TargetPrerequisite                | Target        | Each target can have up to 25 prerequisites.                  |
 | TargetVersion                     | Target        | Each target can get up to 25 versions daily.                  |
 | Team                              | Cohort        | Each cohort can form up to 2,500 teams hourly.                |
 | TimelineEventFile                 | User          | Each user can upload up to 50 files hourly.                   |

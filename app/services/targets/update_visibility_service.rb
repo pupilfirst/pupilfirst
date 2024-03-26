@@ -1,5 +1,5 @@
 module Targets
-  # Clean-up references to the target in the TargetPrerequisite join table.
+  # Clean-up references to the target through AssignmentPrerequisite join table.
   class UpdateVisibilityService
     def initialize(target, visibility)
       @target = target

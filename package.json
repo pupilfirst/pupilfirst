@@ -87,5 +87,5 @@
     "re:build": "rescript",
     "re:watch": "rescript clean && rescript build -w"
   },
-  "packageManager": "yarn@4.0.0"
+  "packageManager": "yarn@4.1.1"
 }

@@ -37,7 +37,7 @@ WORKDIR /app
 # Install gems.
 COPY --chown=www-data:www-data Gemfile .
 COPY --chown=www-data:www-data Gemfile.lock .
-RUN gem install bundler -v '2.4.13'
+RUN gem install bundler -v '2.5.7'
 RUN bundle install -j4
 
 # Install JS dependencies using Yarn.

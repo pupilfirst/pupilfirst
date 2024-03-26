@@ -5,7 +5,7 @@ const i18n = new I18n(translations);
 
 i18n.enableFallback = true;
 i18n.missingTranslationPrefix = "Missing translation: ";
-i18n.defaultLocale = window.pupilfirst.defaultLocale;
+i18n.defaultLocale = "en";
 i18n.locale = window.pupilfirst.locale;
 
 export default i18n;

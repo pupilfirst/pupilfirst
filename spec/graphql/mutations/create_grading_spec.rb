@@ -31,7 +31,7 @@ describe Mutations::CreateGrading, type: :request do
 
   before(:each) do
     @headers = request_spec_headers(user)
-    Rails.application.secrets.inactive_submission_review_allowed_days = 10
+    Rails.application.credentials.inactive_submission_review_allowed_days = 10
   end
 
   context "When grading has valid data" do
@@ -237,7 +237,7 @@ describe Mutations::CreateGrading, type: :request do
 
   context "When submission owners are inactive" do
     before do
-      Rails.application.secrets.inactive_submission_review_allowed_days = 10
+      Rails.application.credentials.inactive_submission_review_allowed_days = 10
       submission.students.first.update!(dropped_out_at: DateTime.now)
       submission.update!(created_at: DateTime.now - 11.days)
     end

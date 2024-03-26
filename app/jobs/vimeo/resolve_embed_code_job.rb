@@ -9,7 +9,7 @@ module Vimeo
 
       embed_code =
         ContentBlocks::ResolveEmbedCodeService.new(embed_block).execute
-      max_attempts = Rails.application.secrets.vimeo_embed_max_retry_attempts
+      max_attempts = Rails.application.credentials.vimeo_embed_max_retry_attempts
       if embed_code.nil? && attempt < max_attempts
         Vimeo::ResolveEmbedCodeJob
           .set(wait: (5 * attempt).minutes)

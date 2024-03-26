@@ -25,7 +25,6 @@ I18N_AVAILABLE_LOCALES=en,ru
 I18N_DEFAULT_LOCALE=en
 
 RAILS_ENV=production
-RAILS_LOG_TO_STDOUT=true
 RAILS_SERVE_STATIC_FILES=true
 
 # Generate this value from the command line using `rake secret`.

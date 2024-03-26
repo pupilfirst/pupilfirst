@@ -39,7 +39,7 @@ class Feature < ApplicationRecord
     def overridden?
       return false if @skip_override
 
-      Rails.env.development? || Rails.env.test?
+      Rails.env.local?
     end
   end
 

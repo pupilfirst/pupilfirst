@@ -89,7 +89,7 @@ module Schools
 
         @vimeo_access_token =
           Schools::Configuration::Vimeo.new(@course.school).configured? ||
-            Rails.application.secrets.vimeo_access_token.present?
+            Rails.application.credentials.vimeo_access_token.present?
       end
 
       def vimeo_plan
@@ -98,11 +98,11 @@ module Schools
         Schools::Configuration::Vimeo
           .new(@course.school)
           .account_type
-          .presence || Rails.application.secrets.vimeo_account_type
+          .presence || Rails.application.credentials.vimeo_account_type
       end
 
       def markdown_curriculum_editor_max_length
-        Rails.application.secrets.markdown_curriculum_editor_max_length
+        Rails.application.credentials.markdown_curriculum_editor_max_length
       end
     end
   end

@@ -79,7 +79,8 @@ module ValidateCourseEditable
       progression_limit: @params[:progression_limit],
       highlights: @params[:highlights].presence || [],
       processing_url: @params[:processing_url],
-      default_cohort_id: @params[:default_cohort_id]
+      default_cohort_id: @params[:default_cohort_id],
+      sort_index: current_school.courses.maximum(:sort_index).to_i + 1
     }
   end
 end

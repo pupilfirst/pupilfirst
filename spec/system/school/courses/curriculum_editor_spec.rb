@@ -4,7 +4,6 @@ feature "Curriculum Editor", js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
-  include FlipperHelper
 
   # Setup a course with a single student target, ...
   let!(:school) { create :school, :current }
@@ -310,7 +309,8 @@ feature "Curriculum Editor", js: true do
   end
 
   context "with the clone_level feature enabled" do
-    around { |example| with_features(:clone_level) { example.run } }
+    before { Flipper[:clone_level].enable }
+    after { Flipper[:clone_level].disable }
 
     let!(:target_1) do
       create :target, :with_content, target_group: target_group_1
